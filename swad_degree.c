@@ -602,8 +602,8 @@ void Deg_WriteSelectorOfDegree (void)
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">"
-	              "<option value=\"\"");
+   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Deg.DegCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
@@ -838,10 +838,10 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">"
-			    "<option value=\"%u\" selected=\"selected\">%s</option>"
+			    " onchange=\"document.getElementById('%s').submit();return false;\">",
+		  Gbl.Form.Id);
+	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
-		  Gbl.Form.Id,
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
 		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),

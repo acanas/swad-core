@@ -1377,7 +1377,8 @@ void Ins_WriteSelectorOfInstitution (void)
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"\"");
+   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Ins.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
@@ -1563,10 +1564,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_StartForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">"
-			    "<option value=\"%u\" selected=\"selected\">%s</option>"
+			    " onchange=\"document.getElementById('%s').submit();return false;\">",
+		  Gbl.Form.Id);
+	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
-		  Gbl.Form.Id,
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),

@@ -540,9 +540,9 @@ static void Dpt_ListDepartmentsForEdition (void)
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\""
-	                 "onchange=\"document.getElementById('%s').submit();return false;\">"
-                         "<option value=\"0\"",
+	                 "onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"<option value=\"0\"");
       if (Dpt->InsCod == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
@@ -918,8 +918,8 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Institution *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\">"
-                      "<option value=\"0\"");
+   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\">");
+   fprintf (Gbl.F.Out,"<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);

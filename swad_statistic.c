@@ -453,8 +453,8 @@ void Sta_AskShowCrsHits (void)
          /* Number of rows per page */
          // To use getElementById in Firefox, it's necessary to have the id attribute
          HTM_LABEL_Begin (NULL);
-         fprintf (Gbl.F.Out,"(%s: <select id=\"RowsPage\" name=\"RowsPage\"",
-                  Txt_results_per_page);
+         fprintf (Gbl.F.Out,"(%s: ",Txt_results_per_page);
+         fprintf (Gbl.F.Out,"<select id=\"RowsPage\" name=\"RowsPage\"");
          if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
          fprintf (Gbl.F.Out,">");
@@ -2077,10 +2077,9 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
      }
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<select name=\"ColorType\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Color_of_the_graphic);
+   fprintf (Gbl.F.Out,"<select name=\"ColorType\""
                       " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Txt_Color_of_the_graphic,
             Gbl.Form.Id);
    for (ColorType = (Sta_ColorType_t) 0;
 	ColorType < Sta_NUM_COLOR_TYPES;

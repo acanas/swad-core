@@ -1197,8 +1197,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select name=\"ExamHour\">"
-	                 "<option value=\"0\"");
+      fprintf (Gbl.F.Out,"<select name=\"ExamHour\">");
+      fprintf (Gbl.F.Out,"<option value=\"0\"");
       if (Gbl.ExamAnns.ExaDat.StartTime.Hour == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">-</option>");

@@ -1158,7 +1158,8 @@ void HTM_TEXTAREA_End (void)
 /********************************** Selectors ********************************/
 /*****************************************************************************/
 
-void HTM_SELECT_Begin (const char *fmt,...)
+void HTM_SELECT_Begin (bool SubmitOnChange,
+		       const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1178,7 +1179,7 @@ void HTM_SELECT_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<select %s>",Attr);
+	 fprintf (Gbl.F.Out,"<select %s",Attr);
 
 	 free ((void *) Attr);
 	}
@@ -1188,12 +1189,18 @@ void HTM_SELECT_Begin (const char *fmt,...)
    else
       HTM_SELECT_BeginWithoutAttr ();
 
+
+   if (SubmitOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
+	       Gbl.Form.Id);
+
+   fprintf (Gbl.F.Out," />");
    // HTM_SELECT_NestingLevel++;
   }
 
 static void HTM_SELECT_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<select>");
+   fprintf (Gbl.F.Out,"<select");
   }
 
 void HTM_SELECT_End (void)

@@ -1325,9 +1325,9 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">"
-                         "<option value=\"N\"",
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
                Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"<option value=\"N\"");
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
@@ -1347,9 +1347,9 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">"
-                         "<option value=\"N\"",
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
                Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"<option value=\"N\"");
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
@@ -2505,8 +2505,8 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Is it mandatory to register in any groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
-                      " style=\"width:150px;\">"
-                      "<option value=\"N\"");
+                      " style=\"width:150px;\">");
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
@@ -2522,8 +2522,8 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Is it possible to register in multiple groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
-                      " style=\"width:150px;\">"
-                      "<option value=\"N\"");
+                      " style=\"width:150px;\">");
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"

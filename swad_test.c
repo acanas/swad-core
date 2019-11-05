@@ -3515,11 +3515,10 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
    extern const char *Txt_TF_QST[2];
 
    /***** Write selector for the answer *****/
-   fprintf (Gbl.F.Out,"<select name=\"Ans%06u\">"
-                      "<option value=\"\" selected=\"selected\">&nbsp;</option>"
+   fprintf (Gbl.F.Out,"<select name=\"Ans%06u\">",NumQst);
+   fprintf (Gbl.F.Out,"<option value=\"\" selected=\"selected\">&nbsp;</option>"
                       "<option value=\"T\">%s</option>"
                       "<option value=\"F\">%s</option>",
-            NumQst,
             Txt_TF_QST[0],
             Txt_TF_QST[1]);
    HTM_SELECT_End ();

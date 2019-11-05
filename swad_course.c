@@ -892,8 +892,8 @@ void Crs_WriteSelectorOfCourse (void)
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">"
-	              "<option value=\"\"");
+   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Crs.CrsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
@@ -1556,10 +1556,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActChgCrsSta);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			       " onchange=\"document.getElementById('%s').submit();return false;\">"
-			       "<option value=\"%u\" selected=\"selected\">%s</option>"
+			       " onchange=\"document.getElementById('%s').submit();return false;\">",
+		     Gbl.Form.Id);
+	    fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			       "<option value=\"%u\">%s</option>",
-		     Gbl.Form.Id,
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
 		     Txt_COURSE_STATUS[Crs_STATUS_PENDING],
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
@@ -3289,9 +3289,9 @@ void Crs_AskRemoveOldCrss (void)
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s&nbsp;"
-	              "<select name=\"Months\">",
+   fprintf (Gbl.F.Out,"%s&nbsp;",
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+   fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i++)

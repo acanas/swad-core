@@ -1406,7 +1406,8 @@ void Ctr_WriteSelectorOfCentre (void)
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"\"");
+   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Ctr.CtrCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
@@ -1624,10 +1625,10 @@ static void Ctr_ListCentresForEdition (void)
 	 Frm_StartForm (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">"
-			    "<option value=\"%u\" selected=\"selected\">%s</option>"
+			    " onchange=\"document.getElementById('%s').submit();return false;\">",
+		  Gbl.Form.Id);
+	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
-		  Gbl.Form.Id,
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),
@@ -2502,8 +2503,8 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Place *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\">"
-                      "<option value=\"0\"");
+   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\">");
+   fprintf (Gbl.F.Out,"<option value=\"0\"");
    if (Ctr_EditingCtr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);

@@ -3036,8 +3036,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 								               Rol_GST;		// If user don't belong to any course
 
 	       /***** Selector of role *****/
-	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
-	                          "<option value=\"%u\" selected=\"selected\""
+	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
 		                  " disabled=\"disabled\">%s</option>",
 			(unsigned) DefaultRoleInForm,
 			Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
@@ -3092,8 +3092,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 {
 		  case Rol_SYS_ADM:
 		     /***** Selector of role *****/
-		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
-		                        "<option value=\"%u\""
+		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+		     fprintf (Gbl.F.Out,"<option value=\"%u\""
 			                " selected=\"selected\">%s</option>",
 			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 		     HTM_SELECT_End ();
@@ -3280,8 +3280,8 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 
    /***** Selector of country *****/
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-	              " class=\"REC_C2_BOT_INPUT\" required=\"required\">"
-		      "<option value=\"\">%s</option>"
+	              " class=\"REC_C2_BOT_INPUT\" required=\"required\">");
+   fprintf (Gbl.F.Out,"<option value=\"\">%s</option>"
 		      "<option value=\"0\"",
 	    Txt_Country);
    if (UsrDat->CtyCod == 0)
@@ -4019,9 +4019,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">"
-                      "<option value=\"-1\"",
+	              " onchange=\"document.getElementById('%s').submit();return false;\">",
 	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\"></option>");
@@ -4062,9 +4062,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">"
-                      "<option value=\"-1\"",
+	              " onchange=\"document.getElementById('%s').submit();return false;\">",
 	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
@@ -4112,9 +4112,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">"
-			 "<option value=\"-1\"",
+			 " onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"<option value=\"-1\"");
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"

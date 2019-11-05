@@ -1233,9 +1233,9 @@ void Cty_WriteSelectorOfCountry (void)
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeIns);
    fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" class=\"HIE_SEL\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">"
-                      "<option value=\"\"",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
 	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Cty.CtyCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
