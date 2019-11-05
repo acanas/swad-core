@@ -474,8 +474,6 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    bool PutClassSelect;
 
    Frm_StartForm (ActChgMyRol);
-   HTM_SELECT_Begin (true,
-		     "name=\"MyRole\"%s");
    PutClassSelect = false;
    if (ClassSelect)
       if (ClassSelect[0])
