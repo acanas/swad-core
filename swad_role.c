@@ -490,7 +490,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 

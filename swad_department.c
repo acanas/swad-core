@@ -554,7 +554,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                   Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
                 	                                       "",
                   Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -931,7 +931,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod ? " selected=\"selected\"" :
         	                                                                     "",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Department short name *****/
@@ -1151,7 +1151,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
      }
 
    /* End selector */
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
 
    /***** Free list of departments *****/
    Dpt_FreeListDepartments ();

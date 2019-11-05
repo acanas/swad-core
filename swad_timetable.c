@@ -1613,7 +1613,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		        TT_ClassTypeDB[CT],
 		        Txt_TIMETABLE_CLASS_TYPES[CT]);
 	      }
-	 fprintf (Gbl.F.Out,"</select>");
+	 HTM_SELECT_End ();
 
 	 if (IntervalType == TT_FREE_INTERVAL)
 	   {
@@ -1659,7 +1659,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		        (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
 		        Gbl.TimeTable.Config.Range.MinutesPerInterval);	// Minutes
 	      }
-	    fprintf (Gbl.F.Out,"</select>");
+	    HTM_SELECT_End ();
 
 	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
 	      {
@@ -1701,7 +1701,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	             fprintf (Gbl.F.Out,"</option>");
                     }
                  }
-	       fprintf (Gbl.F.Out,"</select>");
+	       HTM_SELECT_End ();
 
 	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />");

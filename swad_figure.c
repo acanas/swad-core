@@ -237,7 +237,7 @@ void Fig_ReqShowFigures (void)
 	                 "</option>",
                Txt_FIGURE_TYPES[FigureType]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/

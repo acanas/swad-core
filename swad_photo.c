@@ -1809,7 +1809,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -1874,7 +1874,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -1939,7 +1939,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -2049,7 +2049,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                   Txt_time,
                   StrEstimatedTimeToComputeAvgPhoto);
         }
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
 
       /* End form and contextual menu */
       Frm_EndForm ();

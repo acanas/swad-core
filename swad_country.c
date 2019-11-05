@@ -1272,7 +1272,7 @@ void Cty_WriteSelectorOfCountry (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 

@@ -345,7 +345,7 @@ void Rec_ListFieldsRecordsForEdition (void)
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
         }
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
       HTM_TR_End ();
@@ -410,7 +410,7 @@ void Rec_ShowFormCreateRecordField (void)
 	       Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
      }
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1504,8 +1504,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",i);
      }
-   fprintf (Gbl.F.Out,"</select> %s)",
-            Txt_record_cards_per_page);
+   HTM_SELECT_End ();
+   fprintf (Gbl.F.Out," %s)",Txt_record_cards_per_page);
    HTM_LABEL_End ();
   }
 
@@ -2942,7 +2942,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       fprintf (Gbl.F.Out,">%s</option>",
 			Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 	      }
-	    fprintf (Gbl.F.Out,"</select>");
+	    HTM_SELECT_End ();
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
             if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -3025,7 +3025,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  default: // The rest of users can not register other users
 		     break;
 		 }
-	       fprintf (Gbl.F.Out,"</select>");
+	       HTM_SELECT_End ();
 	      }
 	    else				// No course selected
 	      {
@@ -3038,10 +3038,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       /***** Selector of role *****/
 	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
 	                          "<option value=\"%u\" selected=\"selected\""
-		                  " disabled=\"disabled\">%s</option>"
-	                          "</select>",
+		                  " disabled=\"disabled\">%s</option>",
 			(unsigned) DefaultRoleInForm,
 			Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
+	       HTM_SELECT_End ();
 	      }
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
@@ -3082,7 +3082,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			fprintf (Gbl.F.Out,">%s</option>",
 				 Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 		       }
-		     fprintf (Gbl.F.Out,"</select>");
+		     HTM_SELECT_End ();
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
@@ -3094,9 +3094,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     /***** Selector of role *****/
 		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
 		                        "<option value=\"%u\""
-			                " selected=\"selected\">%s</option>"
-		                        "</select>",
+			                " selected=\"selected\">%s</option>",
 			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+		     HTM_SELECT_End ();
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
@@ -3298,7 +3298,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4036,7 +4036,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -4084,7 +4084,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Hierarchy.Cty.Inss.Lst[NumIns].FullName);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -4134,7 +4134,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].FullName);
 	}
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 

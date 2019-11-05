@@ -1335,9 +1335,9 @@ static void Grp_ListGroupTypesForEdition (void)
                Txt_It_is_optional_to_choose_a_group);
       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>"
-	                 "</select>",
+      fprintf (Gbl.F.Out,">%s</option>",
                Txt_It_is_mandatory_to_choose_a_group);
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1357,9 +1357,9 @@ static void Grp_ListGroupTypesForEdition (void)
                Txt_A_student_can_only_belong_to_one_group);
       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>"
-	                 "</select>",
+      fprintf (Gbl.F.Out,">%s</option>",
                Txt_A_student_can_belong_to_several_groups);
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1565,7 +1565,7 @@ static void Grp_ListGroupsForEdition (void)
            }
 
          /* End selector */
-         fprintf (Gbl.F.Out,"</select>");
+         HTM_SELECT_End ();
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1615,7 +1615,7 @@ static void Grp_ListGroupsForEdition (void)
 	   }
 
 	 /* End selector */
-	 fprintf (Gbl.F.Out,"</select>");
+	 HTM_SELECT_End ();
          Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -2514,9 +2514,9 @@ static void Grp_PutFormToCreateGroupType (void)
             Txt_It_is_optional_to_choose_a_group);
    if (Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>"
-	              "</select>",
+   fprintf (Gbl.F.Out,">%s</option>",
             Txt_It_is_mandatory_to_choose_a_group);
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Is it possible to register in multiple groups of this type? *****/
@@ -2531,9 +2531,9 @@ static void Grp_PutFormToCreateGroupType (void)
             Txt_A_student_can_only_belong_to_one_group);
    if (Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>"
-	              "</select>",
+   fprintf (Gbl.F.Out,">%s</option>",
             Txt_A_student_can_belong_to_several_groups);
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Open time *****/
@@ -2643,7 +2643,7 @@ static void Grp_PutFormToCreateGroup (void)
      }
 
    /* End selector */
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Group name *****/
@@ -2685,7 +2685,7 @@ static void Grp_PutFormToCreateGroup (void)
      }
 
    /* End selector */
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Current number of users in this group *****/

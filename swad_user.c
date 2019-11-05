@@ -8954,9 +8954,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
      }
 
    /***** End selector *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "%s",
-            Txt_columns);
+   HTM_SELECT_End ();
+   fprintf (Gbl.F.Out,"%s",Txt_columns);
    HTM_LABEL_End ();
   }
 

@@ -431,7 +431,7 @@ void Sta_AskShowCrsHits (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
-         fprintf (Gbl.F.Out,"</select>");
+         HTM_SELECT_End ();
          HTM_LABEL_End ();
 
          /***** Separator *****/
@@ -467,7 +467,8 @@ void Sta_AskShowCrsHits (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%lu",RowsPerPage[i]);
            }
-         fprintf (Gbl.F.Out,"</select>)");
+         HTM_SELECT_End ();
+         fprintf (Gbl.F.Out,")");
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -557,7 +558,7 @@ void Sta_AskShowGblHits (void)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_ROLE_STATS[RoleStat]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -619,7 +620,7 @@ void Sta_AskShowGblHits (void)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -694,7 +695,7 @@ static void Sta_WriteSelectorCountType (void)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
   }
 
 /*****************************************************************************/
@@ -736,7 +737,7 @@ static void Sta_WriteSelectorAction (void)
       fprintf (Gbl.F.Out,"%s",
                Act_GetActionTextFromDB (Act_GetActCod (Action),ActTxt));
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2090,7 +2091,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_COLOR_TYPES[ColorType]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_TD_End ();

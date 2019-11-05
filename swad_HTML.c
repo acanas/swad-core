@@ -66,6 +66,7 @@ static unsigned HTM_A_NestingLevel = 0;
 static unsigned HTM_SCRIPT_NestingLevel = 0;
 static unsigned HTM_LABEL_NestingLevel = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
+// static unsigned HTM_SELECT_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -90,6 +91,8 @@ static void HTM_A_BeginWithoutAttr (void);
 static void HTM_LABEL_BeginWithoutAttr (void);
 
 static void HTM_TEXTAREA_BeginWithoutAttr (void);
+
+static void HTM_SELECT_BeginWithoutAttr (void);
 
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
@@ -1149,6 +1152,58 @@ void HTM_TEXTAREA_End (void)
    fprintf (Gbl.F.Out,"</textarea>");
 
    HTM_TEXTAREA_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/********************************** Selectors ********************************/
+/*****************************************************************************/
+
+void HTM_SELECT_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<select %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         HTM_SELECT_BeginWithoutAttr ();
+     }
+   else
+      HTM_SELECT_BeginWithoutAttr ();
+
+   // HTM_SELECT_NestingLevel++;
+  }
+
+static void HTM_SELECT_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<select>");
+  }
+
+void HTM_SELECT_End (void)
+  {
+   // if (HTM_SELECT_NestingLevel == 0)	// No SELECT open
+   //   Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SELECT.");
+
+   fprintf (Gbl.F.Out,"</select>");
+
+   // HTM_SELECT_NestingLevel--;
   }
 
 /*****************************************************************************/

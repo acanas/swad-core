@@ -381,7 +381,7 @@ static void Ins_Configuration (bool PrintView)
 		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod ? " selected=\"selected\"" :
 									     "",
 		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of countries */
@@ -1418,7 +1418,7 @@ void Ins_WriteSelectorOfInstitution (void)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -1565,13 +1565,13 @@ static void Ins_ListInstitutionsForEdition (void)
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();return false;\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>"
-			    "</select>",
+			    "<option value=\"%u\">%s</option>",
 		  Gbl.Form.Id,
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
+	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything

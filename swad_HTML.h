@@ -113,6 +113,9 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 
+void HTM_SELECT_Begin (const char *fmt,...);
+void HTM_SELECT_End (void);
+
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	      const char *fmt,...);
 

@@ -1132,7 +1132,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	                    "</option>",
 	          Year,Txt_YEAR_OF_DEGREE[Year]);
 	}
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
      }
    else
       fprintf (Gbl.F.Out,"%s",
@@ -1212,8 +1212,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
 	}
-      fprintf (Gbl.F.Out,"</select>"
-	                 "<select name=\"ExamMinute\">");
+      HTM_SELECT_End ();
+      fprintf (Gbl.F.Out,"<select name=\"ExamMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
@@ -1223,7 +1223,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
 	}
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.StartTime.Hour)
       fprintf (Gbl.F.Out,"%2u:%02u",
@@ -1254,8 +1254,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
 	}
-      fprintf (Gbl.F.Out,"</select>"
-	                 "<select name=\"DurationMinute\">");
+      HTM_SELECT_End ();
+      fprintf (Gbl.F.Out,"<select name=\"DurationMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
@@ -1265,7 +1265,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
 	}
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.Duration.Hour ||
             Gbl.ExamAnns.ExaDat.Duration.Minute)

@@ -600,7 +600,7 @@ static void Hld_ListHolidaysForEdition (void)
                   Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
                 	                                       "",
                   Gbl.Plcs.Lst[NumPlc].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -619,7 +619,7 @@ static void Hld_ListHolidaysForEdition (void)
                   HolidayType == Hld->HldTyp ? " selected=\"selected\"" :
                 	                       "",
                   Txt_HOLIDAY_TYPES[HolidayType]);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -999,7 +999,7 @@ static void Hld_PutFormToCreateHoliday (void)
                Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod ? " selected=\"selected\"" :
         	                                                       "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Holiday type *****/
@@ -1013,7 +1013,7 @@ static void Hld_PutFormToCreateHoliday (void)
                HolidayType == Hld_EditingHld->HldTyp ? " selected=\"selected\"" :
         	                                       "",
                Txt_HOLIDAY_TYPES[HolidayType]);
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Holiday date / Non school period start date *****/

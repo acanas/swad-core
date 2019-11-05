@@ -815,7 +815,8 @@ void Enr_AskRemoveOldUsrs (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
-   fprintf (Gbl.F.Out,"</select>&nbsp;");
+   HTM_SELECT_End ();
+   fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

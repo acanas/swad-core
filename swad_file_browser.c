@@ -9587,7 +9587,7 @@ void Brw_ShowFileMetadata (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
 	    fprintf (Gbl.F.Out,">%s</option>",Txt_Public_open_educational_resource_OER_for_everyone);
 
-	    fprintf (Gbl.F.Out,"</select>");
+	    HTM_SELECT_End ();
 	   }
 	 else		// I can not edit file properties
 	    fprintf (Gbl.F.Out,"%s",
@@ -9621,7 +9621,7 @@ void Brw_ShowFileMetadata (void)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
 	       fprintf (Gbl.F.Out,">%s</option>",Txt_LICENSES[License]);
 	      }
-	    fprintf (Gbl.F.Out,"</select>");
+	    HTM_SELECT_End ();
 	   }
 	 else		// I can not edit file properties
 	    fprintf (Gbl.F.Out,"%s",Txt_LICENSES[FileMetadata.License]);
@@ -12144,7 +12144,8 @@ void Brw_AskRemoveOldFiles (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
-   fprintf (Gbl.F.Out,"</select>&nbsp;");
+   HTM_SELECT_End ();
+   fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

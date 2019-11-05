@@ -265,7 +265,7 @@ static void Crs_Configuration (bool PrintView)
 		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod ? " selected=\"selected\"" :
 										          "",
 		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of degrees of the current centre */
@@ -355,7 +355,7 @@ static void Crs_Configuration (bool PrintView)
 		  Year == Gbl.Hierarchy.Crs.Year ? " selected=\"selected\"" :
 						    "",
 		  Txt_YEAR_OF_DEGREE[Year]);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
      }
    else
@@ -934,7 +934,7 @@ void Crs_WriteSelectorOfCourse (void)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -1114,7 +1114,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	       Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -1494,7 +1494,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			YearAux == Crs->Year ? " selected=\"selected\"" :
 					       "",
 			Txt_YEAR_OF_DEGREE[YearAux]);
-	    fprintf (Gbl.F.Out,"</select>");
+	    HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1558,13 +1558,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			       " onchange=\"document.getElementById('%s').submit();return false;\">"
 			       "<option value=\"%u\" selected=\"selected\">%s</option>"
-			       "<option value=\"%u\">%s</option>"
-			       "</select>",
+			       "<option value=\"%u\">%s</option>",
 		     Gbl.Form.Id,
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
 		     Txt_COURSE_STATUS[Crs_STATUS_PENDING],
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
 		     Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
+	    HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
          else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
@@ -1686,7 +1686,7 @@ static void Crs_PutFormToCreateCourse (void)
 	       Year == Crs_EditingCrs->Year ? " selected=\"selected\"" :
 				              "",
 	       Txt_YEAR_OF_DEGREE[Year]);
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Course short name *****/
@@ -3301,7 +3301,8 @@ void Crs_AskRemoveOldCrss (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",i);
      }
-   fprintf (Gbl.F.Out,"</select>&nbsp;");
+   HTM_SELECT_End ();
+   fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

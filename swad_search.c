@@ -177,7 +177,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Titles[WhatToSearch]);
         }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_LABEL_End ();
 
    /***** Magnifying glass icon *****/

@@ -369,7 +369,7 @@ static void Deg_Configuration (bool PrintView)
 		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? " selected=\"selected\"" :
 									     "",
 		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of centres */
@@ -645,7 +645,7 @@ void Deg_WriteSelectorOfDegree (void)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -783,7 +783,7 @@ static void Deg_ListDegreesForEdition (void)
 			                                     "",
 		     DegTyp->DegTypName);
 	   }
-	 fprintf (Gbl.F.Out,"</select>");
+	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else
@@ -840,13 +840,13 @@ static void Deg_ListDegreesForEdition (void)
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();return false;\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>"
-			    "</select>",
+			    "<option value=\"%u\">%s</option>",
 		  Gbl.Form.Id,
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
 		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),
 		  Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
+	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
@@ -982,7 +982,7 @@ static void Deg_PutFormToCreateDegree (void)
 		                                                "",
 	       DegTyp->DegTypName);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Degree WWW *****/

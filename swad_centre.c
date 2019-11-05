@@ -440,7 +440,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod ? " selected=\"selected\"" :
 									     "",
 		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of institutions */
@@ -540,7 +540,7 @@ static void Ctr_Configuration (bool PrintView)
 		  (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod) ? " selected=\"selected\"" :
 									       "",
 		  Gbl.Plcs.Lst[NumPlc].ShrtName);
-      fprintf (Gbl.F.Out,"</select>");
+      HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of places */
@@ -1447,7 +1447,7 @@ void Ctr_WriteSelectorOfCentre (void)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -1531,7 +1531,7 @@ static void Ctr_ListCentresForEdition (void)
 		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
 			                                            "",
 		     Gbl.Plcs.Lst[NumPlc].ShrtName);
-	 fprintf (Gbl.F.Out,"</select>");
+	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else
@@ -1626,13 +1626,13 @@ static void Ctr_ListCentresForEdition (void)
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();return false;\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>"
-			    "</select>",
+			    "<option value=\"%u\">%s</option>",
 		  Gbl.Form.Id,
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
+	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
@@ -2515,7 +2515,7 @@ static void Ctr_PutFormToCreateCentre (void)
                (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod) ? " selected=\"selected\"" :
         	                                                         "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    /***** Centre short name *****/

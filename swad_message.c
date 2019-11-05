@@ -2633,7 +2633,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_LABEL_End ();
   }
 

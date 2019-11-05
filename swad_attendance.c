@@ -1143,7 +1143,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    fprintf (Gbl.F.Out,">%s</option>",
 	    Txt_Visible_MALE_PLURAL);
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
    HTM_TR_End ();
 

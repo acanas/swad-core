@@ -3353,7 +3353,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3390,7 +3390,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_PROJECT_STATUS[Proposal]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

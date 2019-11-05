@@ -29,6 +29,7 @@
 
 #include "swad_config.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_scope.h"
 
@@ -162,7 +163,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	   }
 	}
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
   }
 
 /*****************************************************************************/

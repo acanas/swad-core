@@ -29,6 +29,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_setting.h"
 
@@ -128,7 +129,7 @@ void Lan_PutSelectorToSelectLanguage (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STR_LANG_NAME[Lan]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 

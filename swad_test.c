@@ -3518,11 +3518,11 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
    fprintf (Gbl.F.Out,"<select name=\"Ans%06u\">"
                       "<option value=\"\" selected=\"selected\">&nbsp;</option>"
                       "<option value=\"T\">%s</option>"
-                      "<option value=\"F\">%s</option>"
-                      "</select>",
+                      "<option value=\"F\">%s</option>",
             NumQst,
             Txt_TF_QST[0],
             Txt_TF_QST[1]);
+   HTM_SELECT_End ();
   }
 
 /*****************************************************************************/
@@ -5116,9 +5116,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       if (TagNotFound && Gbl.Test.Tags.Txt[NumTag][0])
          fprintf (Gbl.F.Out,"<option value=\"%s\" selected=\"selected\">%s</option>",
                   Gbl.Test.Tags.Txt[NumTag],Gbl.Test.Tags.Txt[NumTag]);
-      fprintf (Gbl.F.Out,"<option value=\"\">[%s]</option>"
-	                 "</select>",
-               Txt_new_tag);
+      fprintf (Gbl.F.Out,"<option value=\"\">[%s]</option>",Txt_new_tag);
+      HTM_SELECT_End ();
       HTM_TD_End ();
 
       /***** Input of a new tag *****/

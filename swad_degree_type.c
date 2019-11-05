@@ -129,7 +129,7 @@ void DT_WriteSelectorDegreeTypes (void)
       fprintf (Gbl.F.Out,">%s</option>",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
      }
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_SELECT_End ();
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
