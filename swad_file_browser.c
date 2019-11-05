@@ -3285,7 +3285,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 
          /* Select this group */
-         HTM_LI_Begin ("class=\%s\"",
+         HTM_LI_Begin ("class=\"%s\"",
 		       (IsGroupZone &&
                         GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
                                                                 "BROWSER_TITLE_LIGHT");
