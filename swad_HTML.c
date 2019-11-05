@@ -843,9 +843,9 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"search\" id=\"%s\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"%s\""
 		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Name,MaxLength,Value);
+	    Name,MaxLength,Value);
 
    if (fmt)
      {
