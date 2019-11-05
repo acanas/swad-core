@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.53.2 (2019-11-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.53.3 (2019-11-05)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -498,6 +498,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 
+	Version 19.54:    Nov 05, 2019	Code refactoring in HTML select options. (? lines)
+	Version 19.53.3:  Nov 05, 2019	Fixed bug in HTML form to upload files, reported by Eva Martínez Ortigosa. (246013 lines)
 	Version 19.53.2:  Nov 05, 2019	Fixed bug in HTML input search. (246011 lines)
 	Version 19.53.1:  Nov 05, 2019	Fixed bug in role selector. (246010 lines)
 	Version 19.53:    Nov 05, 2019	Code refactoring in HTML selects. (246011 lines)
