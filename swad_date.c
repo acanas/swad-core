@@ -562,15 +562,22 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Year *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sYear\" name=\"%sYear\""
-                      " onchange=\""
-                      "adjustDateForm('%s');"
-                      "setUTCFromLocalDateTimeForm('%s');",
-	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sYear\" name=\"%sYear\""
+			" onchange=\""
+			"adjustDateForm('%s');"
+			"setUTCFromLocalDateTimeForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+			Id,ParamName,Id,Id,
+                        Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sYear\" name=\"%sYear\""
+			" onchange=\""
+			"adjustDateForm('%s');"
+			"setUTCFromLocalDateTimeForm('%s');",
+			Id,ParamName,Id,Id);
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
@@ -581,15 +588,22 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Month *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sMonth\" name=\"%sMonth\""
-                      " onchange=\""
-                      "adjustDateForm('%s');"
-                      "setUTCFromLocalDateTimeForm('%s');",
-	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sMonth\" name=\"%sMonth\""
+                        " onchange=\""
+                        "adjustDateForm('%s');"
+                        "setUTCFromLocalDateTimeForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+	                Id,ParamName,Id,Id,
+                        Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sMonth\" name=\"%sMonth\""
+                        " onchange=\""
+                        "adjustDateForm('%s');"
+                        "setUTCFromLocalDateTimeForm('%s');",
+	                Id,ParamName,Id,Id);
    for (Month = 1;
 	Month <= 12;
 	Month++)
@@ -600,13 +614,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Day *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sDay\" name=\"%sDay\""
-	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-            Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sDay\" name=\"%sDay\""
+	                " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+                        Id,ParamName,Id,
+			Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sDay\" name=\"%sDay\""
+	                " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+                        Id,ParamName,Id);
    for (Day = 1;
 	Day <= 31;
 	Day++)
@@ -617,13 +636,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Hour *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sHour\" name=\"%sHour\""
-                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-            Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sHour\" name=\"%sHour\""
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+                        Id,ParamName,Id,
+                        Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sHour\" name=\"%sHour\""
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+                        Id,ParamName,Id);
    for (Hour = 0;
 	Hour <= 23;
 	Hour++)
@@ -634,13 +658,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Minute *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sMinute\" name=\"%sMinute\""
-                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-	    Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sMinute\" name=\"%sMinute\""
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+	                Id,ParamName,Id,
+			Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sMinute\" name=\"%sMinute\""
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	                Id,ParamName,Id);
 
    for (Minute = 0;
 	Minute < 60;
@@ -655,13 +684,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (FormSeconds == Dat_FORM_SECONDS_ON)
      {
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<select id=\"%sSecond\" name=\"%sSecond\""
-			 " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-	       Id,ParamName,Id);
       if (SubmitFormOnChange)
-	 fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-		  Gbl.Form.Id);
-      fprintf (Gbl.F.Out,"\">");
+	 HTM_SELECT_Begin (false,
+			   "id=\"%sSecond\" name=\"%sSecond\""
+			   " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+	                   "document.getElementById('%s').submit();return false;",
+	                   Id,ParamName,Id,
+			   Gbl.Form.Id);
+      else
+	 HTM_SELECT_Begin (false,
+			   "id=\"%sSecond\" name=\"%sSecond\""
+			   " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	                   Id,ParamName,Id);
       for (Second = 0;
 	   Second <= 59;
 	   Second++)
@@ -826,16 +860,22 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Year *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sYear\" name=\"%sYear\""
-                      " onchange=\"adjustDateForm('%s');",
-	    Id,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sYear\" name=\"%sYear\"%s"
+                        " onchange=\"adjustDateForm('%s');",
+                        "document.getElementById('%s').submit();return false;",
+	                Id,Id,
+			Disabled ? " disabled=\"disabled\"" : "",
+			Id,
+			Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sYear\" name=\"%sYear\"%s"
+                        " onchange=\"adjustDateForm('%s');",
+	                Id,Id,
+			Disabled ? " disabled=\"disabled\"" : "",
+			Id);
    fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
    for (Year = FirstYear;
 	Year <= LastYear;
@@ -851,16 +891,22 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Month *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sMonth\" name=\"%sMonth\""
-                      " onchange=\"adjustDateForm('%s');",
-	    Id,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"%sMonth\" name=\"%sMonth\"%s"
+                        " onchange=\"adjustDateForm('%s');"
+                        "document.getElementById('%s').submit();return false;",
+	                Id,Id,
+			Disabled ? " disabled=\"disabled\"" : "",
+			Id,
+			Gbl.Form.Id);
+   else
+      HTM_SELECT_Begin (false,
+			"id=\"%sMonth\" name=\"%sMonth\"%s"
+                        " onchange=\"adjustDateForm('%s');",
+	                Id,Id,
+			Disabled ? " disabled=\"disabled\"" : "",
+			Id);
    fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
    for (Month = 1;
 	Month <= 12;
@@ -876,13 +922,10 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Day *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select id=\"%sDay\" name=\"%sDay\"",Id,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+   HTM_SELECT_Begin (SubmitFormOnChange,
+		     "id=\"%sDay\" name=\"%sDay\"%s",
+		     Id,Id,
+		     Disabled ? " disabled=\"disabled\"" : "");
    fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
    NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
 	                                               ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :

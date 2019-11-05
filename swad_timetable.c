@@ -1596,9 +1596,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
          Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
 
 	 /***** Class type *****/
-	 fprintf (Gbl.F.Out,"<select name=\"TTTyp\" class=\"TT_TYP\""
-	                    " onchange=\"document.getElementById('%s').submit();return false;\">",
-	          Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"TTTyp\" class=\"TT_TYP\"");
 	 for (CT = (TT_ClassType_t) 0;
 	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
 	      CT++)
@@ -1636,9 +1635,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 else
 	   {
 	    /***** Class duration *****/
-	    fprintf (Gbl.F.Out,"<select name=\"TTDur\" class=\"TT_DUR\""
-		               " onchange=\"document.getElementById('%s').submit();return false;\">",
-		     Gbl.Form.Id);
+	    HTM_SELECT_Begin (true,
+			      "name=\"TTDur\" class=\"TT_DUR\"");
             for (i = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
         	 i < Gbl.TimeTable.Config.IntervalsPerDay;
         	 i++)
@@ -1668,11 +1666,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Group);
 	       HTM_LABEL_End ();
-	       fprintf (Gbl.F.Out,"<select id=\"TTGrp%s\" name=\"TTGrp\""
-	                          " class=\"TT_GRP\""
-		                  " onchange=\"document.getElementById('%s').submit();return false;\">",
-			CellStr,
-			Gbl.Form.Id);
+	       HTM_SELECT_Begin (true,
+				 "id=\"TTGrp%s\" name=\"TTGrp\""
+				 " class=\"TT_GRP\"",
+			         CellStr);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
 	       if (GrpCod <= 0)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");

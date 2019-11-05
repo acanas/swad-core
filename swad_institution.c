@@ -369,10 +369,9 @@ static void Ins_Configuration (bool PrintView)
 
       /* Put form to select country */
       Frm_StartForm (ActChgInsCtyCfg);
-      fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthCtyCod\" name=\"OthCtyCod\""
+		        " class=\"INPUT_SHORT_NAME\"");
       for (NumCty = 0;
 	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	   NumCty++)
@@ -1371,13 +1370,13 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCtr);
-   fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    else
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
+			" disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Ins.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1563,9 +1562,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">",
-		  Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),

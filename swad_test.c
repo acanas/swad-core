@@ -3515,7 +3515,8 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
    extern const char *Txt_TF_QST[2];
 
    /***** Write selector for the answer *****/
-   fprintf (Gbl.F.Out,"<select name=\"Ans%06u\">",NumQst);
+   HTM_SELECT_Begin (false,
+		     "name=\"Ans%06u\"",NumQst);
    fprintf (Gbl.F.Out,"<option value=\"\" selected=\"selected\">&nbsp;</option>"
                       "<option value=\"T\">%s</option>"
                       "<option value=\"F\">%s</option>",
@@ -5087,9 +5088,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /***** Write the tags already existing in a selector *****/
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<select id=\"SelDesc%u\" name=\"SelDesc%u\""
-	                 " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\">",
-               NumTag,NumTag,NumTag);
+      HTM_SELECT_Begin (false,
+			"id=\"SelDesc%u\" name=\"SelDesc%u\""
+	                " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
+                        NumTag,NumTag,NumTag);
       fprintf (Gbl.F.Out,"<option value=\"\">&nbsp;</option>");
       mysql_data_seek (mysql_res,0);
       TagNotFound = true;

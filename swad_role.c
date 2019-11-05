@@ -471,14 +471,21 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
+   bool PutClassSelect;
 
    Frm_StartForm (ActChgMyRol);
-   fprintf (Gbl.F.Out,"<select name=\"MyRole\"");
+   HTM_SELECT_Begin (true,
+		     "name=\"MyRole\"%s");
+   PutClassSelect = false;
    if (ClassSelect)
       if (ClassSelect[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",ClassSelect);
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+	 PutClassSelect = true;
+   if (PutClassSelect)
+      HTM_SELECT_Begin (true,
+			"name=\"MyRole\" class=\"%s\"",ClassSelect);
+   else
+      HTM_SELECT_Begin (true,
+			"name=\"MyRole\"");
    for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;
         Role++)

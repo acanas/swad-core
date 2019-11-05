@@ -332,9 +332,8 @@ void Rec_ListFieldsRecordsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgVisFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      fprintf (Gbl.F.Out,"<select name=\"Visibility\""
-                         " onchange=\"document.getElementById('%s').submit();return false;\">",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"Visibility\"");
       for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
 	   Vis++)
@@ -398,7 +397,8 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Visibility to students *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"Visibility\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Visibility\"");
    for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
 	Vis++)
@@ -409,7 +409,6 @@ void Rec_ShowFormCreateRecordField (void)
       fprintf (Gbl.F.Out,">%s</option>",
 	       Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
      }
-
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -1494,7 +1493,9 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 			Txt_Print);
    Frm_LinkFormEnd ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"(<select name=\"RecsPerPag\">");
+   fprintf (Gbl.F.Out,"(");
+   HTM_SELECT_Begin (false,
+		     "name=\"RecsPerPag\"");
    for (i = Rec_MIN_RECORDS_PER_PAGE;
         i <= Rec_MAX_RECORDS_PER_PAGE;
         i++)
@@ -2931,7 +2932,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       DefaultRoleInForm = Rol_STD;	// Request sign up as a student
 
 	    /***** Selector of role *****/
-	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+	    HTM_SELECT_Begin (false,
+			      "id=\"Role\" name=\"Role\"");
 	    for (Role = Rol_STD;
 		 Role <= Rol_TCH;
 		 Role++)
@@ -2992,7 +2994,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 }
 
 	       /***** Selector of role *****/
-	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+	       HTM_SELECT_Begin (false,
+				 "id=\"Role\" name=\"Role\"");
 	       switch (Gbl.Usrs.Me.Role.Logged)
 		 {
 		  case Rol_GST:
@@ -3036,7 +3039,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 								               Rol_GST;		// If user don't belong to any course
 
 	       /***** Selector of role *****/
-	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+	       HTM_SELECT_Begin (false,
+				 "id=\"Role\" name=\"Role\"");
 	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
 		                  " disabled=\"disabled\">%s</option>",
 			(unsigned) DefaultRoleInForm,
@@ -3071,7 +3075,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		       }
 
 		     /***** Selector of role *****/
-		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+		     HTM_SELECT_Begin (false,
+				       "id=\"Role\" name=\"Role\"");
 		     for (Role = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
@@ -3092,7 +3097,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 {
 		  case Rol_SYS_ADM:
 		     /***** Selector of role *****/
-		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+		     HTM_SELECT_Begin (false,
+				       "id=\"Role\" name=\"Role\"");
 		     fprintf (Gbl.F.Out,"<option value=\"%u\""
 			                " selected=\"selected\">%s</option>",
 			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
@@ -3279,8 +3285,9 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
 
    /***** Selector of country *****/
-   fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-	              " class=\"REC_C2_BOT_INPUT\" required=\"required\">");
+   HTM_SELECT_Begin (false,
+		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
+	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
    fprintf (Gbl.F.Out,"<option value=\"\">%s</option>"
 		      "<option value=\"0\"",
 	    Txt_Country);
@@ -4017,10 +4024,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /* Begin form to select the country of my institution */
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
-   fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">",
-	    Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
+		     " class=\"REC_C2_BOT_INPUT\"");
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -4060,10 +4066,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /* Begin form to select institution */
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-   fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
-		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">",
-	    Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"OthInsCod\" name=\"OthInsCod\""
+		     " class=\"REC_C2_BOT_INPUT\"");
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -4110,10 +4115,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       /* Begin form to select centre */
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-      fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
-		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthCtrCod\" name=\"OthCtrCod\""
+		        " class=\"REC_C2_BOT_INPUT\"");
       fprintf (Gbl.F.Out,"<option value=\"-1\"");
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");

@@ -1323,10 +1323,9 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
-	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"MandatoryEnrolment\""
+	                " style=\"width:150px;\"");
       fprintf (Gbl.F.Out,"<option value=\"N\"");
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1345,10 +1344,9 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
-	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"MultipleEnrolment\""
+	                " style=\"width:150px;\"");
       fprintf (Gbl.F.Out,"<option value=\"N\"");
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1548,9 +1546,8 @@ static void Grp_ListGroupsForEdition (void)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:100px;\""
-                            " onchange=\"document.getElementById('%s').submit();return false;\">",
-                  Gbl.Form.Id);
+         HTM_SELECT_Begin (true,
+			   "name=\"GrpTypCod\" style=\"width:100px;\"");
 
          /* Options for group types */
          for (NumTipGrpAux = 0;
@@ -1583,9 +1580,8 @@ static void Grp_ListGroupsForEdition (void)
 	 HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpCla,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-	 fprintf (Gbl.F.Out,"<select name=\"ClaCod\" style=\"width:100px;\""
-                            " onchange=\"document.getElementById('%s').submit();return false;\">",
-                  Gbl.Form.Id);
+         HTM_SELECT_Begin (true,
+			   "name=\"ClaCod\" style=\"width:100px;\"");
 
 	 /* Option for no assigned classroom */
 	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
@@ -2504,8 +2500,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it mandatory to register in any groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
-                      " style=\"width:150px;\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"MandatoryEnrolment\" style=\"width:150px;\"");
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2521,8 +2517,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it possible to register in multiple groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
-                      " style=\"width:150px;\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"MultipleEnrolment\" style=\"width:150px;\"");
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2626,7 +2622,8 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Group type *****/
    /* Start selector */
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:100px;\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"GrpTypCod\" style=\"width:100px;\"");
 
    /* Options for group types */
    for (NumGrpTyp = 0;
@@ -2655,7 +2652,8 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Classroom *****/
    /* Start selector */
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"ClaCod\" style=\"width:100px;\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"ClaCod\" style=\"width:100px;\"");
 
    /* Option for no assigned classroom */
    fprintf (Gbl.F.Out,"<option value=\"-1\"");

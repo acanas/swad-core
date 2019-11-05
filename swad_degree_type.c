@@ -110,9 +110,8 @@ void DT_WriteSelectorDegreeTypes (void)
    DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
-   fprintf (Gbl.F.Out,"<select id=\"OthDegTypCod\" name=\"OthDegTypCod\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\"");
 
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Stat.DegTypCod == -1L)

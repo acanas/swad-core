@@ -428,10 +428,9 @@ static void Ctr_Configuration (bool PrintView)
 
       /* Put form to select institution */
       Frm_StartForm (ActChgCtrInsCfg);
-      fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthInsCod\" name=\"OthInsCod\""
+			" class=\"INPUT_SHORT_NAME\"");
       for (NumIns = 0;
 	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
@@ -525,9 +524,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /* Put form to select place */
       Frm_StartForm (ActChgCtrPlcCfg);
-      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
       fprintf (Gbl.F.Out,"<option value=\"0\"");
       if (Gbl.Hierarchy.Ctr.PlcCod == 0)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1400,13 +1398,14 @@ void Ctr_WriteSelectorOfCentre (void)
 
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeDeg);
-   fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
+
    if (Gbl.Hierarchy.Ins.InsCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
    else
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
+			" disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Ctr.CtrCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1517,9 +1516,8 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">",
-		  Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"PlcCod\" class=\"PLC_SEL\"");
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
 	 if (Ctr->PlcCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1624,9 +1622,8 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">",
-		  Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
@@ -2503,7 +2500,8 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Place *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"PlcCod\" class=\"PLC_SEL\">");
    fprintf (Gbl.F.Out,"<option value=\"0\"");
    if (Ctr_EditingCtr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");

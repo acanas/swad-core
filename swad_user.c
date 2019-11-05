@@ -8938,9 +8938,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** Start selector *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<select name=\"ColsClassPhoto\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-	    Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "name=\"ColsClassPhoto\"");
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
    for (Cols = 1;

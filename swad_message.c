@@ -2616,7 +2616,8 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
-   fprintf (Gbl.F.Out,"<select name=\"FilterCrsCod\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"FilterCrsCod\"");
    fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Msg.FilterCrsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");

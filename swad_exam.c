@@ -1119,7 +1119,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select id=\"Year\" name=\"Year\">");
+      HTM_SELECT_Begin (false,
+			"id=\"Year\" name=\"Year\"");
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
 	   Year++)
@@ -1197,7 +1198,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select name=\"ExamHour\">");
+      HTM_SELECT_Begin (false,
+			"name=\"ExamHour\"");
       fprintf (Gbl.F.Out,"<option value=\"0\"");
       if (Gbl.ExamAnns.ExaDat.StartTime.Hour == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1213,7 +1215,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                   Hour,Txt_hours_ABBREVIATION);
 	}
       HTM_SELECT_End ();
-      fprintf (Gbl.F.Out,"<select name=\"ExamMinute\">");
+
+      HTM_SELECT_Begin (false,
+			"name=\"ExamMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
@@ -1243,7 +1247,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select name=\"DurationHour\">");
+      HTM_SELECT_Begin (false,
+			"name=\"DurationHour\">");
       for (Hour = 0;
 	   Hour <= 8;
 	   Hour++)
@@ -1255,7 +1260,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                   Hour,Txt_hours_ABBREVIATION);
 	}
       HTM_SELECT_End ();
-      fprintf (Gbl.F.Out,"<select name=\"DurationMinute\">");
+
+      HTM_SELECT_Begin (false,
+			"name=\"DurationMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)

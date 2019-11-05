@@ -805,7 +805,8 @@ void Enr_AskRemoveOldUsrs (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",
             Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
-   fprintf (Gbl.F.Out,"<select name=\"Months\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Months\"");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months++)

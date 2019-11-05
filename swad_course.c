@@ -253,10 +253,9 @@ static void Crs_Configuration (bool PrintView)
 
       /* Put form to select degree */
       Frm_StartForm (ActChgCrsDegCfg);
-      fprintf (Gbl.F.Out,"<select id=\"OthDegCod\" name=\"OthDegCod\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthDegCod\" name=\"OthDegCod\""
+			" class=\"INPUT_SHORT_NAME\"");
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
@@ -344,9 +343,8 @@ static void Crs_Configuration (bool PrintView)
    if (IsForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
-      fprintf (Gbl.F.Out,"<select id=\"OthCrsYear\" name=\"OthCrsYear\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthCrsYear\" name=\"OthCrsYear\"");
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
            Year++)
@@ -886,13 +884,13 @@ void Crs_WriteSelectorOfCourse (void)
 
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrsInf);
-   fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Deg.DegCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    else
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"crs\" name=\"crs\" class=\"HIE_SEL\""
+			" disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Crs.CrsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1059,9 +1057,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
                                                ActReqSch);
 
    /***** Start selector of courses *****/
-   fprintf (Gbl.F.Out,"<select id=\"my_courses\" name=\"crs\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"my_courses\" name=\"crs\"");
 
    /***** Write an option when no course selected *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
@@ -1483,9 +1480,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgCrsYea);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\""
-			       " onchange=\"document.getElementById('%s').submit();return false;\">",
-		     Gbl.Form.Id);
+	    HTM_SELECT_Begin (true,
+			      "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
 	    for (YearAux = 0;
 		 YearAux <= Deg_MAX_YEARS_PER_DEGREE;
 		 YearAux++)	// All the years are permitted because it's possible to move this course to another degree (with other active years)
@@ -1555,9 +1551,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgCrsSta);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			       " onchange=\"document.getElementById('%s').submit();return false;\">",
-		     Gbl.Form.Id);
+	    HTM_SELECT_Begin (true,
+			      "name=\"Status\" class=\"INPUT_STATUS\"");
 	    fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			       "<option value=\"%u\">%s</option>",
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
@@ -1677,7 +1672,8 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Year *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
         Year++)
@@ -3291,7 +3287,8 @@ void Crs_AskRemoveOldCrss (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-   fprintf (Gbl.F.Out,"<select name=\"Months\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Months\"");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i++)

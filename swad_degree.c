@@ -357,10 +357,9 @@ static void Deg_Configuration (bool PrintView)
 
       /* Put form to select centre */
       Frm_StartForm (ActChgDegCtrCfg);
-      fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"OthCtrCod\" name=\"OthCtrCod\""
+			" class=\"INPUT_SHORT_NAME\"");
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
@@ -596,13 +595,13 @@ void Deg_WriteSelectorOfDegree (void)
 
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrs);
-   fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    else
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_SELECT_Begin (false,
+			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\""
+			" disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"<option value=\"\"");
    if (Gbl.Hierarchy.Deg.DegCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -769,9 +768,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">",
-		  Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
 	 for (NumDegTyp = 0;
 	      NumDegTyp < Gbl.DegTypes.Num;
 	      NumDegTyp++)
@@ -837,9 +835,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();return false;\">",
-		  Gbl.Form.Id);
+	 HTM_SELECT_Begin (true,
+			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>",
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
@@ -970,7 +967,8 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)

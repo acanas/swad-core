@@ -3341,7 +3341,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"Assigned\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Assigned\"");
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
    if (Prj->Assigned == Prj_ASSIGNED)
@@ -3379,7 +3380,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"Proposal\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Proposal\"");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	Proposal++)

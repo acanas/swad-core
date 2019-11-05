@@ -116,10 +116,8 @@ void Lan_PutSelectorToSelectLanguage (void)
    Lan_Language_t Lan;
 
    Frm_StartForm (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\""
-	              " style=\"width:112px; margin:0;\""
-	              " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "name=\"Lan\" style=\"width:112px; margin:0;\"");
    for (Lan = (Lan_Language_t) 1;
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)

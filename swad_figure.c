@@ -222,7 +222,8 @@ void Fig_ReqShowFigures (void)
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Statistic);
-   fprintf (Gbl.F.Out,"<select name=\"FigureType\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"FigureType\"");
    for (FigureType = (Fig_FigureType_t) 0;
 	FigureType < Fig_NUM_FIGURES;
 	FigureType++)

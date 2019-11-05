@@ -1797,9 +1797,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
-   fprintf (Gbl.F.Out,"<select id=\"AvgType\" name=\"AvgType\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"AvgType\" name=\"AvgType\"");
    for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAvg++)
@@ -1862,9 +1861,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
-   fprintf (Gbl.F.Out,"<select id=\"PhotoSize\" name=\"PhotoSize\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"PhotoSize\" name=\"PhotoSize\"");
    for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
 	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
 	PhoSi++)
@@ -1927,9 +1925,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamsPrefsAboutUsrList ();
-   fprintf (Gbl.F.Out,"<select id=\"Order\" name=\"Order\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "id=\"Order\" name=\"Order\"");
    for (Order = (Pho_HowOrderDegrees_t) 0;
 	Order < Pho_NUM_HOW_ORDER_DEGREES;
 	Order++)
@@ -2025,7 +2022,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Frm_LinkFormEnd ();
 
       /* Selector with all the degrees with students */
-      fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");
+      HTM_SELECT_Begin (false,
+			"name=\"OthDegCod\"");
       for (NumDeg = 0;
 	   NumDeg < Degs.Num;
 	   NumDeg++)

@@ -418,9 +418,9 @@ void Sta_AskShowCrsHits (void)
          Sta_WriteSelectorCountType ();
 
          HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-                            "<select id=\"GroupedBy\" name=\"GroupedBy\">",
-                  Txt_distributed_by);
+         fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_distributed_by);
+         HTM_SELECT_Begin (false,
+		           "id=\"GroupedBy\" name=\"GroupedBy\"");
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
               ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
               ClicksGroupedBy++)
@@ -454,10 +454,9 @@ void Sta_AskShowCrsHits (void)
          // To use getElementById in Firefox, it's necessary to have the id attribute
          HTM_LABEL_Begin (NULL);
          fprintf (Gbl.F.Out,"(%s: ",Txt_results_per_page);
-         fprintf (Gbl.F.Out,"<select id=\"RowsPage\" name=\"RowsPage\"");
-         if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            fprintf (Gbl.F.Out," disabled=\"disabled\"");
-         fprintf (Gbl.F.Out,">");
+         HTM_SELECT_Begin (false,
+		           "id=\"RowsPage\" name=\"RowsPage\"%s",
+                           Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" : " disabled=\"disabled\"");
          for (i = 0;
               i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
@@ -548,7 +547,8 @@ void Sta_AskShowGblHits (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\" class=\"STAT_SEL\">");
+   HTM_SELECT_Begin (false,
+		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
 	RoleStat++)
@@ -609,7 +609,8 @@ void Sta_AskShowGblHits (void)
        Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
       Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
-   fprintf (Gbl.F.Out,"<select name=\"GroupedBy\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"GroupedBy\"");
    for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
 	ClicksGroupedBy++)
@@ -685,7 +686,8 @@ static void Sta_WriteSelectorCountType (void)
    Sta_CountType_t StatCountType;
 
    /**** Count type *****/
-   fprintf (Gbl.F.Out,"<select id=\"CountType\" name=\"CountType\">");
+   HTM_SELECT_Begin (false,
+		     "id=\"CountType\" name=\"CountType\"");
    for (StatCountType = (Sta_CountType_t) 0;
 	StatCountType < Sta_NUM_COUNT_TYPES;
 	StatCountType++)
@@ -720,7 +722,8 @@ static void Sta_WriteSelectorAction (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\">");
+   HTM_SELECT_Begin (false,
+		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
    for (Action = (Act_Action_t) 0;
 	Action < Act_NUM_ACTIONS;
 	Action++)
@@ -2078,9 +2081,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Color_of_the_graphic);
-   fprintf (Gbl.F.Out,"<select name=\"ColorType\""
-                      " onchange=\"document.getElementById('%s').submit();return false;\">",
-            Gbl.Form.Id);
+   HTM_SELECT_Begin (true,
+		     "name=\"ColorType\"");
    for (ColorType = (Sta_ColorType_t) 0;
 	ColorType < Sta_NUM_COLOR_TYPES;
 	ColorType++)

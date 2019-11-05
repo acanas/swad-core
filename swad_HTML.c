@@ -66,7 +66,7 @@ static unsigned HTM_A_NestingLevel = 0;
 static unsigned HTM_SCRIPT_NestingLevel = 0;
 static unsigned HTM_LABEL_NestingLevel = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
-// static unsigned HTM_SELECT_NestingLevel = 0;
+static unsigned HTM_SELECT_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -1195,7 +1195,7 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
 	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
-   // HTM_SELECT_NestingLevel++;
+   HTM_SELECT_NestingLevel++;
   }
 
 static void HTM_SELECT_BeginWithoutAttr (void)
@@ -1205,12 +1205,12 @@ static void HTM_SELECT_BeginWithoutAttr (void)
 
 void HTM_SELECT_End (void)
   {
-   // if (HTM_SELECT_NestingLevel == 0)	// No SELECT open
-   //   Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SELECT.");
+   if (HTM_SELECT_NestingLevel == 0)	// No SELECT open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SELECT.");
 
    fprintf (Gbl.F.Out,"</select>");
 
-   // HTM_SELECT_NestingLevel--;
+   HTM_SELECT_NestingLevel--;
   }
 
 /*****************************************************************************/

@@ -9575,7 +9575,8 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
-	    fprintf (Gbl.F.Out,"<select id=\"PublicFile\" name=\"PublicFile\">");
+	    HTM_SELECT_Begin (false,
+			      "id=\"PublicFile\" name=\"PublicFile\"");
 
 	    fprintf (Gbl.F.Out,"<option value=\"N\"");
 	    if (!FileMetadata.IsPublic)
@@ -9610,8 +9611,8 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    fprintf (Gbl.F.Out,"<select id=\"License\" name=\"License\">");
-
+	    HTM_SELECT_Begin (false,
+			      "id=\"License\" name=\"License\">");
 	    for (License = 0;
 		 License < Brw_NUM_LICENSES;
 		 License++)
@@ -12134,7 +12135,8 @@ void Brw_AskRemoveOldFiles (void)
    /***** Form to request number of months (to remove files older) *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-   fprintf (Gbl.F.Out,"<select name=\"Months\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"Months\"");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
         Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
         Months++)

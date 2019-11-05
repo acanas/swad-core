@@ -74,11 +74,8 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
    Hie_Level_t Scope;
    bool WriteScope;
 
-   fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\"",ParamName,ParamName);
-   if (SendOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,">");
+   HTM_SELECT_Begin (SendOnChange,
+		     "id=\"%s\" name=\"%s\"",ParamName,ParamName);
 
    for (Scope = (Hie_Level_t) 0;
 	Scope < Hie_NUM_LEVELS;

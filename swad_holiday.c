@@ -585,9 +585,8 @@ static void Hld_ListHolidaysForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_COD\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"PlcCod\" class=\"PLC_COD\"");
       fprintf (Gbl.F.Out,"<option value=\"-1\"");
       if (Hld->PlcCod <= 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -608,9 +607,8 @@ static void Hld_ListHolidaysForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\""
-	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"HldTyp\" style=\"width:62px;\"");
       for (HolidayType = (Hld_HolidayType_t) 0;
 	   HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	   HolidayType++)
@@ -986,7 +984,8 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday place *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_COD\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"PlcCod\" class=\"PLC_COD\"");
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Hld_EditingHld->PlcCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1004,7 +1003,8 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday type *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"HldTyp\" style=\"width:62px;\"");
    for (HolidayType = (Hld_HolidayType_t) 0;
 	HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	HolidayType++)

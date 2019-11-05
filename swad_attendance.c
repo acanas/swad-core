@@ -1129,7 +1129,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<select id=\"ComTchVisible\" name=\"ComTchVisible\">");
+   HTM_SELECT_Begin (false,
+		     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Att.CommentTchVisible)

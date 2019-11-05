@@ -539,9 +539,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\""
-	                 "onchange=\"document.getElementById('%s').submit();return false;\">",
-	       Gbl.Form.Id);
+      HTM_SELECT_Begin (true,
+			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
       fprintf (Gbl.F.Out,"<option value=\"0\"");
       if (Dpt->InsCod == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -918,7 +917,8 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Institution *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\">");
+   HTM_SELECT_Begin (false,
+		     "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
    fprintf (Gbl.F.Out,"<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1104,14 +1104,9 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Start selector */
-   fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\""
-	              " class=\"%s\"",
-	    Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,
-	    SelectClass);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
+   HTM_SELECT_Begin (SubmitFormOnChange,
+		     "id=\"%s\" name=\"%s\" class=\"%s\"",
+		     Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,SelectClass);
 
    if (FirstOption <= 0)
      {
