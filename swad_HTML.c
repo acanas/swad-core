@@ -1213,6 +1213,56 @@ void HTM_SELECT_End (void)
    HTM_SELECT_NestingLevel--;
   }
 
+void HTM_OPTION (HTM_Type_t Type,void *ValuePtr,bool Selected,bool Disabled,
+		 const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Content;
+
+   fprintf (Gbl.F.Out,"<option value=\"");
+   switch (Type)
+     {
+      case HTM_Type_UNSIGNED:
+	 fprintf (Gbl.F.Out,"%u",*((unsigned *) ValuePtr));
+	 break;
+      case HTM_Type_LONG:
+	 fprintf (Gbl.F.Out,"%ld",*((long *) ValuePtr));
+	 break;
+      case HTM_Type_STRING:
+	 fprintf (Gbl.F.Out,"%s",(char *) ValuePtr);
+	 break;
+     }
+   fprintf (Gbl.F.Out,"\"");
+   if (Selected)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Content,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"%s",Content);
+
+	 free ((void *) Content);
+	}
+     }
+
+   fprintf (Gbl.F.Out,"</option>");
+  }
+
 /*****************************************************************************/
 /********************************** Images ***********************************/
 /*****************************************************************************/

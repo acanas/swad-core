@@ -35,6 +35,13 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   HTM_Type_UNSIGNED,
+   HTM_Type_LONG,
+   HTM_Type_STRING,
+  } HTM_Type_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -116,6 +123,8 @@ void HTM_TEXTAREA_End (void);
 void HTM_SELECT_Begin (bool SubmitOnChange,
 		       const char *fmt,...);
 void HTM_SELECT_End (void);
+void HTM_OPTION (HTM_Type_t Type,void *ValuePtr,bool Selected,bool Disabled,
+		 const char *fmt,...);
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	      const char *fmt,...);

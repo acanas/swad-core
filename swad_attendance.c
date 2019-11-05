@@ -1131,19 +1131,10 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
-
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (!Att.CommentTchVisible)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-	    Txt_Hidden_MALE_PLURAL);
-
-   fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Att.CommentTchVisible)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-	    Txt_Visible_MALE_PLURAL);
-
+   HTM_OPTION (HTM_Type_STRING,(void *) "N",!Att.CommentTchVisible,false,
+	       "%s",Txt_Hidden_MALE_PLURAL);
+   HTM_OPTION (HTM_Type_STRING,(void *) "Y",Att.CommentTchVisible,false,
+	       "%s",Txt_Visible_MALE_PLURAL);
    HTM_SELECT_End ();
    HTM_TD_End ();
    HTM_TR_End ();

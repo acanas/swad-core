@@ -354,9 +354,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Frm_SetAnchorStr (Asg.AsgCod,&Anchor);
 
    /***** Write first row of data of this assignment *****/
-   /* Forms to remove/edit this assignment */
    HTM_TR_Begin (NULL);
 
+   /* Forms to remove/edit this assignment */
    if (PrintView)
       HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
    else
@@ -414,11 +414,12 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* Assignment folder */
    if (PrintView)
-      HTM_TD_Begin ("class=\"DAT LT");
+      HTM_TD_Begin ("class=\"DAT LT\"");
    else
-      HTM_TD_Begin ("class=\"DAT LT COLOR%u",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
+
    HTM_TD_End ();
 
    HTM_TR_End ();

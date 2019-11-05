@@ -434,11 +434,9 @@ static void Ctr_Configuration (bool PrintView)
       for (NumIns = 0;
 	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod ? " selected=\"selected\"" :
-									     "",
-		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+	             "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
@@ -526,18 +524,15 @@ static void Ctr_Configuration (bool PrintView)
       Frm_StartForm (ActChgCtrPlcCfg);
       HTM_SELECT_Begin (true,
 			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
-      fprintf (Gbl.F.Out,"<option value=\"0\"");
-      if (Gbl.Hierarchy.Ctr.PlcCod == 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
+      HTM_OPTION (HTM_Type_STRING,(void *) "0",
+		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
+		  "%s",Txt_Another_place);
       for (NumPlc = 0;
 	   NumPlc < Gbl.Plcs.Num;
 	   NumPlc++)
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Plcs.Lst[NumPlc].PlcCod,
-		  (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod) ? " selected=\"selected\"" :
-									       "",
-		  Gbl.Plcs.Lst[NumPlc].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+		     Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
+		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
