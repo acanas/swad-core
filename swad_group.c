@@ -4472,7 +4472,8 @@ void Grp_ChangeMandatGrpTyp (void)
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
       DB_QueryUPDATE ("can not update enrolment type of a type of group",
-		      "UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
+		      "UPDATE crs_grp_types SET Mandatory='%c'"
+		      " WHERE GrpTypCod=%ld",
                       NewMandatoryEnrolment ? 'Y' :
         	                              'N',
                       Gbl.Crs.Grps.GrpTyp.GrpTypCod);

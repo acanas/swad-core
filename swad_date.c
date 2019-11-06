@@ -554,7 +554,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       5,   // Dat_FORM_SECONDS_OFF
       1,   // Dat_FORM_SECONDS_ON
      };
-   char *ParamTimeUTC;
+   char *IdTimeUTC;
 
    /***** Begin table *****/
    HTM_TABLE_Begin (NULL);
@@ -708,10 +708,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_TABLE_End ();
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
-   if (asprintf (&ParamTimeUTC,"%sTimeUTC",Id) < 0)
+   if (asprintf (&IdTimeUTC,"%sTimeUTC",Id) < 0)
       Lay_NotEnoughMemoryExit ();
-   Par_PutHiddenParamLong (ParamTimeUTC,ParamTimeUTC,(long) TimeUTC);
-   free (ParamTimeUTC);
+   Par_PutHiddenParamLong (IdTimeUTC,"OpenTimeUTC",(long) TimeUTC);
+   free (IdTimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
