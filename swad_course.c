@@ -259,11 +259,9 @@ static void Crs_Configuration (bool PrintView)
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod,
-		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod ? " selected=\"selected\"" :
-										          "",
-		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod,
+		     Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod,false,
+		     "%s",Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
@@ -348,11 +346,9 @@ static void Crs_Configuration (bool PrintView)
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
            Year++)
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-		  Year,
-		  Year == Gbl.Hierarchy.Crs.Year ? " selected=\"selected\"" :
-						    "",
-		  Txt_YEAR_OF_DEGREE[Year]);
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Year,
+		     Year == Gbl.Hierarchy.Crs.Year,false,
+		     "%s",Txt_YEAR_OF_DEGREE[Year]);
       HTM_SELECT_End ();
       Frm_EndForm ();
      }
@@ -891,11 +887,8 @@ void Crs_WriteSelectorOfCourse (void)
       HTM_SELECT_Begin (false,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Hierarchy.Crs.CrsCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
-            Txt_Course);
+   HTM_OPTION (HTM_Type_STRING,(void *) "",Gbl.Hierarchy.Crs.CrsCod < 0,true,
+	       "[%s]",Txt_Course);
 
    if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
@@ -920,11 +913,10 @@ void Crs_WriteSelectorOfCourse (void)
             Lay_ShowErrorAndExit ("Wrong course.");
 
          /* Write option */
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"",CrsCod);
-         if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-             (CrsCod == Gbl.Hierarchy.Crs.CrsCod))
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &CrsCod,
+		     Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+                     CrsCod == Gbl.Hierarchy.Crs.CrsCod,false,
+		     "%s",row[1]);
         }
 
       /***** Free structure that stores the query result *****/
@@ -1062,11 +1054,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Write an option when no course selected *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
-      fprintf (Gbl.F.Out,"<option value=\"-1\""
-	                 " disabled=\"disabled\" selected=\"selected\">"
-			 "%s"
-			 "</option>",
-	       Txt_Course);
+      HTM_OPTION (HTM_Type_STRING,(void *) "-1",true,true,
+		  "%s",Txt_Course);
 
    if (Gbl.Usrs.Me.MyCrss.Num)
      {
@@ -1088,11 +1077,9 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	    LastDegCod = DegCod;
 	   }
 
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-                  Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
-         if (CrsCod == Gbl.Hierarchy.Crs.CrsCod)	// Course selected
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",CrsShortName);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod,
+		     CrsCod == Gbl.Hierarchy.Crs.CrsCod,false,	// Course selected
+		     "%s",CrsShortName);
         }
 
       if (LastDegCod > 0)
@@ -1103,12 +1090,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
           when I don't belong to it *****/
    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
        !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
-      fprintf (Gbl.F.Out,"<option value=\"%ld\""
-	                 " disabled=\"disabled\" selected=\"selected\">"
-			 "%s"
-			 "</option>",
-	       Gbl.Hierarchy.Crs.CrsCod,
-	       Gbl.Hierarchy.Crs.ShrtName);
+      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Crs.CrsCod,true,true,
+		  "%s",Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End form *****/
    HTM_SELECT_End ();
@@ -1424,6 +1407,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    struct UsrData UsrDat;
    bool ICanEdit;
    Crs_StatusTxt_t StatusTxt;
+   unsigned Status;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1485,11 +1469,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    for (YearAux = 0;
 		 YearAux <= Deg_MAX_YEARS_PER_DEGREE;
 		 YearAux++)	// All the years are permitted because it's possible to move this course to another degree (with other active years)
-	       fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-			YearAux,
-			YearAux == Crs->Year ? " selected=\"selected\"" :
-					       "",
-			Txt_YEAR_OF_DEGREE[YearAux]);
+	       HTM_OPTION (HTM_Type_UNSIGNED,(void *) &YearAux,
+			   YearAux == Crs->Year,false,
+		           "%s",Txt_YEAR_OF_DEGREE[YearAux]);
 	    HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
@@ -1553,12 +1535,15 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    HTM_SELECT_Begin (true,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
-	    fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
-			       "<option value=\"%u\">%s</option>",
-		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
-		     Txt_COURSE_STATUS[Crs_STATUS_PENDING],
-		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
-		     Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
+
+	    Status = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING);
+	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,true,false,
+			"%s",Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
+
+	    Status = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE);
+	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,false,false,
+			"%s",Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
+
 	    HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
@@ -1677,11 +1662,9 @@ static void Crs_PutFormToCreateCourse (void)
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
         Year++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-	       Year,
-	       Year == Crs_EditingCrs->Year ? " selected=\"selected\"" :
-				              "",
-	       Txt_YEAR_OF_DEGREE[Year]);
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Year,
+		  Year == Crs_EditingCrs->Year,false,
+		  "%s",Txt_YEAR_OF_DEGREE[Year]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -3292,12 +3275,9 @@ void Crs_AskRemoveOldCrss (void)
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if (i == MonthsWithoutAccess)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",i);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &i,
+		  i == MonthsWithoutAccess,false,
+		  "%u",i);
    HTM_SELECT_End ();
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,

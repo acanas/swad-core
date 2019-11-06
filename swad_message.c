@@ -2618,21 +2618,17 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    fprintf (Gbl.F.Out,"%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
    HTM_SELECT_Begin (false,
 		     "name=\"FilterCrsCod\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Msg.FilterCrsCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_any_course);
+   HTM_OPTION (HTM_Type_STRING,(void *) "",
+	       Gbl.Msg.FilterCrsCod < 0,false,
+	       "%s",Txt_any_course);
 
-   /***** Write an option for each user's course  *****/
+   /***** Write an option for each origin course *****/
    for (NumOriginCrs = 0;
 	NumOriginCrs < Gbl.Msg.NumCourses;
 	NumOriginCrs++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Msg.Courses[NumOriginCrs].CrsCod);
-      if (Gbl.Msg.Courses[NumOriginCrs].CrsCod == Gbl.Msg.FilterCrsCod)
-        fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
-      fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
-     }
+      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Msg.Courses[NumOriginCrs].CrsCod,
+		  Gbl.Msg.Courses[NumOriginCrs].CrsCod == Gbl.Msg.FilterCrsCod,false,
+		  "%s",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
    HTM_SELECT_End ();
    HTM_LABEL_End ();
   }

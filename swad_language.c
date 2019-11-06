@@ -114,6 +114,7 @@ void Lan_PutSelectorToSelectLanguage (void)
   {
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
+   unsigned LanUnsigned;
 
    Frm_StartForm (ActReqChgLan);
    HTM_SELECT_Begin (true,
@@ -122,10 +123,10 @@ void Lan_PutSelectorToSelectLanguage (void)
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Lan);
-      if (Lan == Gbl.Prefs.Language)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_STR_LANG_NAME[Lan]);
+      LanUnsigned = (unsigned) Lan;
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &LanUnsigned,
+		  Lan == Gbl.Prefs.Language,false,
+		  "%s",Txt_STR_LANG_NAME[Lan]);
      }
    HTM_SELECT_End ();
    Frm_EndForm ();

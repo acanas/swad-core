@@ -132,6 +132,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	Txt_my_documents,				// Sch_SEARCH_MY_DOCUMENTS
      };
    Sch_WhatToSearch_t WhatToSearch;
+   unsigned WTS;
 
    /***** Begin box *****/
    HTM_DIV_Begin ("class=\"CM\"");
@@ -171,12 +172,10 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
         WhatToSearch++)
       if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
 	{
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"",
-		  (unsigned) WhatToSearch);
-	 if (Gbl.Search.WhatToSearch == WhatToSearch)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",
-		  Titles[WhatToSearch]);
+	 WTS = (unsigned) WhatToSearch;
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &WTS,
+		     Gbl.Search.WhatToSearch == WhatToSearch,false,
+		     "%s",Titles[WhatToSearch]);
         }
    HTM_SELECT_End ();
    HTM_LABEL_End ();

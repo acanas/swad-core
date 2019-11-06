@@ -3343,17 +3343,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"Assigned\"");
-
-   fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Prj->Assigned == Prj_ASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
-
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj->Assigned == Prj_NONASSIG)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
-
+   HTM_OPTION (HTM_Type_STRING,(void *) "Y",Prj->Assigned == Prj_ASSIGNED,false,
+	       "%s",Txt_Yes);
+   HTM_OPTION (HTM_Type_STRING,(void *) "N",Prj->Assigned == Prj_NONASSIG,false,
+	       "%s",Txt_No);
    HTM_SELECT_End ();
    HTM_TD_End ();
 

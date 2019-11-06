@@ -471,6 +471,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
+   unsigned RoleUnsigned;
    bool PutClassSelect;
 
    Frm_StartForm (ActChgMyRol);
@@ -489,11 +490,10 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
         Role++)
      if (Gbl.Usrs.Me.Role.Available & (1 << Role))
         {
-         fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-         if (Role == Gbl.Usrs.Me.Role.Logged)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",
-                  Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+	 RoleUnsigned = (unsigned) Role;
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+		     Role == Gbl.Usrs.Me.Role.Logged,false,
+		     "%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
    HTM_SELECT_End ();
    Frm_EndForm ();

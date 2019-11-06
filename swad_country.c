@@ -1234,11 +1234,8 @@ void Cty_WriteSelectorOfCountry (void)
    Frm_StartFormGoTo (ActSeeIns);
    HTM_SELECT_Begin (true,
 		     "id=\"cty\" name=\"cty\" class=\"HIE_SEL\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Hierarchy.Cty.CtyCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
-            Txt_Country);
+   HTM_OPTION (HTM_Type_STRING,(void *) "",Gbl.Hierarchy.Cty.CtyCod < 0,true,
+	       "[%s]",Txt_Country);
 
    /***** Get countries from database *****/
    NumCtys = (unsigned) DB_QuerySELECT (&mysql_res,"can not get countries",
@@ -1261,10 +1258,9 @@ void Cty_WriteSelectorOfCountry (void)
          Lay_ShowErrorAndExit ("Wrong code of country.");
 
       /* Write option */
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",CtyCod);
-      if (CtyCod == Gbl.Hierarchy.Cty.CtyCod)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",row[1]);
+      HTM_OPTION (HTM_Type_LONG,(void *) &CtyCod,
+		  CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
+		  "%s",row[1]);
      }
 
    /***** Free structure that stores the query result *****/

@@ -8945,12 +8945,9 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    for (Cols = 1;
         Cols <= Usr_CLASS_PHOTO_COLS_MAX;
         Cols++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if (Cols == Gbl.Usrs.ClassPhoto.Cols)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Cols);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Cols,
+		  Cols == Gbl.Usrs.ClassPhoto.Cols,false,
+		  "%u",Cols);
 
    /***** End selector *****/
    HTM_SELECT_End ();
