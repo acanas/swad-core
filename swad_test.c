@@ -3517,11 +3517,9 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
    /***** Write selector for the answer *****/
    HTM_SELECT_Begin (false,
 		     "name=\"Ans%06u\"",NumQst);
-   fprintf (Gbl.F.Out,"<option value=\"\" selected=\"selected\">&nbsp;</option>"
-                      "<option value=\"T\">%s</option>"
-                      "<option value=\"F\">%s</option>",
-            Txt_TF_QST[0],
-            Txt_TF_QST[1]);
+   HTM_OPTION (HTM_Type_STRING,"" ,true ,false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",false,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",false,false,"%s",Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
 
@@ -5032,7 +5030,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    unsigned NumOpt;
    Tst_AnswerType_t AnsType;
    unsigned NumTag;
-   bool TagNotFound;
+   bool IsThisTag;
+   bool TagFound;
    bool OptionsDisabled;
    bool AnswerHasContent;
    bool DisplayRightColumn;
@@ -5092,9 +5091,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 			"id=\"SelDesc%u\" name=\"SelDesc%u\""
 	                " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
                         NumTag,NumTag,NumTag);
-      fprintf (Gbl.F.Out,"<option value=\"\">&nbsp;</option>");
+      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
       mysql_data_seek (mysql_res,0);
-      TagNotFound = true;
+      TagFound = false;
       for (NumRow = 1;
 	   NumRow <= NumRows;
 	   NumRow++)
@@ -5105,19 +5104,25 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	 row[1] TagTxt
 	 row[2] TagHidden
 	 */
-         fprintf (Gbl.F.Out,"<option value=\"%s\"",row[1]);
+         IsThisTag = false;
          if (!strcasecmp (Gbl.Test.Tags.Txt[NumTag],row[1]))
            {
   	    fprintf (Gbl.F.Out," selected=\"selected\"");
-            TagNotFound = false;
+  	    IsThisTag = true;
+            TagFound = true;
            }
-         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+         HTM_OPTION (HTM_Type_STRING,row[1],
+		     IsThisTag,false,
+		     "%s",row[1]);
         }
       /* If it's a new tag received from the form */
-      if (TagNotFound && Gbl.Test.Tags.Txt[NumTag][0])
-         fprintf (Gbl.F.Out,"<option value=\"%s\" selected=\"selected\">%s</option>",
-                  Gbl.Test.Tags.Txt[NumTag],Gbl.Test.Tags.Txt[NumTag]);
-      fprintf (Gbl.F.Out,"<option value=\"\">[%s]</option>",Txt_new_tag);
+      if (!TagFound && Gbl.Test.Tags.Txt[NumTag][0])
+         HTM_OPTION (HTM_Type_STRING,Gbl.Test.Tags.Txt[NumTag],
+		     true,false,
+		     "%s",Gbl.Test.Tags.Txt[NumTag]);
+      HTM_OPTION (HTM_Type_STRING,"",
+		  false,false,
+		  "[%s]",Txt_new_tag);
       HTM_SELECT_End ();
       HTM_TD_End ();
 
