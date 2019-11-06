@@ -1401,11 +1401,9 @@ void Ctr_WriteSelectorOfCentre (void)
       HTM_SELECT_Begin (false,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Hierarchy.Ctr.CtrCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
-            Txt_Centre);
+   HTM_OPTION (HTM_Type_STRING,(void *) "",
+	       Gbl.Hierarchy.Ctr.CtrCod < 0,true,
+	       "[%s]",Txt_Centre);
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
@@ -1430,11 +1428,10 @@ void Ctr_WriteSelectorOfCentre (void)
             Lay_ShowErrorAndExit ("Wrong code of centre.");
 
          /* Write option */
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"",CtrCod);
-         if (Gbl.Hierarchy.Ctr.CtrCod > 0 &&
-             CtrCod == Gbl.Hierarchy.Ctr.CtrCod)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+	 HTM_OPTION (HTM_Type_LONG,(void *) &CtrCod,
+		     Gbl.Hierarchy.Ctr.CtrCod > 0 &&
+                     CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+		     "%s",row[1]);
         }
 
       /***** Free structure that stores the query result *****/
@@ -1461,6 +1458,7 @@ static void Ctr_ListCentresForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    Ctr_StatusTxt_t StatusTxt;
+   unsigned Status;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1513,18 +1511,15 @@ static void Ctr_ListCentresForEdition (void)
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 HTM_SELECT_Begin (true,
 			   "name=\"PlcCod\" class=\"PLC_SEL\"");
-	 fprintf (Gbl.F.Out,"<option value=\"0\"");
-	 if (Ctr->PlcCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
+	 HTM_OPTION (HTM_Type_STRING,(void *) "0",
+		     Ctr->PlcCod == 0,false,
+		     "%s",Txt_Another_place);
 	 for (NumPlc = 0;
 	      NumPlc < Gbl.Plcs.Num;
 	      NumPlc++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Plcs.Lst[NumPlc].PlcCod,
-		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
-			                                            "",
-		     Gbl.Plcs.Lst[NumPlc].ShrtName);
+	    HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+			Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
+			"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
@@ -1619,12 +1614,17 @@ static void Ctr_ListCentresForEdition (void)
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 HTM_SELECT_Begin (true,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
-	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>",
-		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
-		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
-		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),
-		  Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
+
+	 Status = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,
+		     true,false,
+		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
+
+	 Status = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,
+		     false,false,
+		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
+
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
@@ -2497,18 +2497,15 @@ static void Ctr_PutFormToCreateCentre (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"PlcCod\" class=\"PLC_SEL\">");
-   fprintf (Gbl.F.Out,"<option value=\"0\"");
-   if (Ctr_EditingCtr->PlcCod == 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
+   HTM_OPTION (HTM_Type_STRING,(void *) "0",
+	       Ctr_EditingCtr->PlcCod == 0,false,
+	       "%s",Txt_Another_place);
    for (NumPlc = 0;
 	NumPlc < Gbl.Plcs.Num;
 	NumPlc++)
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-               Gbl.Plcs.Lst[NumPlc].PlcCod,
-               (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod) ? " selected=\"selected\"" :
-        	                                                         "",
-               Gbl.Plcs.Lst[NumPlc].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+		  Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
+		  "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
