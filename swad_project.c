@@ -3253,6 +3253,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Save_changes;
    extern const char *Txt_Members;
    Prj_Proposal_t Proposal;
+   unsigned ProposalUnsigned;
    unsigned NumRoleToShow;
 
    /***** Start project box *****/
@@ -3379,11 +3380,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	Proposal++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",
-               (unsigned) Proposal);
-      if (Prj->Proposal == Proposal)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_PROJECT_STATUS[Proposal]);
+      ProposalUnsigned = (unsigned) Proposal;
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ProposalUnsigned,
+		  Prj->Proposal == Proposal,false,
+		  "%s",Txt_PROJECT_STATUS[Proposal]);
      }
    HTM_SELECT_End ();
    HTM_TD_End ();

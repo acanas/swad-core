@@ -1407,7 +1407,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    struct UsrData UsrDat;
    bool ICanEdit;
    Crs_StatusTxt_t StatusTxt;
-   unsigned Status;
+   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1536,12 +1536,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_SELECT_Begin (true,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
-	    Status = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING);
-	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,true,false,
+	    StatusUnsigned = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING);
+	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,true,false,
 			"%s",Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
 
-	    Status = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE);
-	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,false,false,
+	    StatusUnsigned = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE);
+	    HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,false,false,
 			"%s",Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
 
 	    HTM_SELECT_End ();

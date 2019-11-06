@@ -1458,7 +1458,7 @@ static void Ctr_ListCentresForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    Ctr_StatusTxt_t StatusTxt;
-   unsigned Status;
+   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1615,14 +1615,12 @@ static void Ctr_ListCentresForEdition (void)
 	 HTM_SELECT_Begin (true,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 
-	 Status = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,
-		     true,false,
+	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,true,false,
 		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
 
-	 Status = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Status,
-		     false,false,
+	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,false,false,
 		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
 
 	 HTM_SELECT_End ();

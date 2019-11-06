@@ -286,6 +286,7 @@ void Rec_ListFieldsRecordsForEdition (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
+   unsigned VisUnsigned;
    char StrNumLines[10 + 1];
 
    /***** Write heading *****/
@@ -338,11 +339,10 @@ void Rec_ListFieldsRecordsForEdition (void)
 	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
 	   Vis++)
         {
-         fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Vis);
-         if (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Vis)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",
-                  Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+	 VisUnsigned = (unsigned) Vis;
+	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &VisUnsigned,
+		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Vis,false,
+		     "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
         }
       HTM_SELECT_End ();
       Frm_EndForm ();
@@ -362,6 +362,7 @@ void Rec_ShowFormCreateRecordField (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
+   unsigned VisUnsigned;
    char StrNumLines[10 + 1];
 
    /***** Begin form *****/
@@ -403,11 +404,10 @@ void Rec_ShowFormCreateRecordField (void)
 	Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
 	Vis++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Vis);
-      if (Gbl.Crs.Records.Field.Visibility == Vis)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+      VisUnsigned = (unsigned) Vis;
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &VisUnsigned,
+		  Gbl.Crs.Records.Field.Visibility == Vis,false,
+		  "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
      }
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -1499,12 +1499,9 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    for (i = Rec_MIN_RECORDS_PER_PAGE;
         i <= Rec_MAX_RECORDS_PER_PAGE;
         i++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if (i == Gbl.Usrs.Listing.RecsPerPag)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",i);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &i,
+		  i == Gbl.Usrs.Listing.RecsPerPag,false,
+		  "%u",i);
    HTM_SELECT_End ();
    fprintf (Gbl.F.Out," %s)",Txt_record_cards_per_page);
    HTM_LABEL_End ();
@@ -2902,6 +2899,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    bool SexForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
    Rol_Role_t DefaultRoleInForm;
    Rol_Role_t Role;
+   unsigned RoleUnsigned;
    Usr_Sex_t Sex;
 
    HTM_TR_Begin (NULL);
@@ -2938,11 +2936,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 Role <= Rol_TCH;
 		 Role++)
 	      {
-	       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-	       if (Role == DefaultRoleInForm)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out,">%s</option>",
-			Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+	       RoleUnsigned = (unsigned) Role;
+	       HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+			   Role == DefaultRoleInForm,false,
+			   "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 	      }
 	    HTM_SELECT_End ();
 	    break;
@@ -3002,12 +2999,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol_USR:
 		  case Rol_STD:
 		  case Rol_NET:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\""
-			                " selected=\"selected\""
-			                " disabled=\"disabled\">"
-			                "%s</option>",
-			      (unsigned) Gbl.Usrs.Me.Role.Logged,
-			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
+		     RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
+		     HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,true,true,
+				 "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
 		     break;
 		  case Rol_TCH:
 		  case Rol_DEG_ADM:
@@ -3018,11 +3012,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  Role <= Rol_TCH;
 			  Role++)
 		       {
-			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			if (Role == DefaultRoleInForm)
-			   fprintf (Gbl.F.Out," selected=\"selected\"");
-			fprintf (Gbl.F.Out,">%s</option>",
-				 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+			RoleUnsigned = (unsigned) Role;
+			HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+				    Role == DefaultRoleInForm,false,
+				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
 		     break;
 		  default: // The rest of users can not register other users
@@ -3041,10 +3034,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       /***** Selector of role *****/
 	       HTM_SELECT_Begin (false,
 				 "id=\"Role\" name=\"Role\"");
-	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
-		                  " disabled=\"disabled\">%s</option>",
-			(unsigned) DefaultRoleInForm,
-			Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
+	       RoleUnsigned = (unsigned) DefaultRoleInForm;
+	       HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,true,true,
+			   "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
 	       HTM_SELECT_End ();
 	      }
 	    break;
@@ -3081,11 +3073,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  Role <= Rol_TCH;
 			  Role++)
 		       {
-			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			if (Role == DefaultRoleInForm)
-			   fprintf (Gbl.F.Out," selected=\"selected\"");
-			fprintf (Gbl.F.Out,">%s</option>",
-				 Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
+			RoleUnsigned = (unsigned) Role;
+			HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+				    Role == DefaultRoleInForm,false,
+				    "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 		       }
 		     HTM_SELECT_End ();
 		     break;
@@ -3099,9 +3090,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (false,
 				       "id=\"Role\" name=\"Role\"");
-		     fprintf (Gbl.F.Out,"<option value=\"%u\""
-			                " selected=\"selected\">%s</option>",
-			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+		     RoleUnsigned = (unsigned) Rol_GST;
+		     HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+				 true,false,
+				 "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 		     HTM_SELECT_End ();
 		     break;
 		  default:	// The rest of users can not register other users
@@ -3288,23 +3280,16 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
    HTM_SELECT_Begin (false,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
-   fprintf (Gbl.F.Out,"<option value=\"\">%s</option>"
-		      "<option value=\"0\"",
-	    Txt_Country);
-   if (UsrDat->CtyCod == 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
+   HTM_OPTION (HTM_Type_STRING,(void *) "",false,false,
+	       "%s",Txt_Country);
+   HTM_OPTION (HTM_Type_STRING,(void *) "0",UsrDat->CtyCod == 0,false,
+	       "%s",Txt_Another_country);
    for (NumCty = 0;
 	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod);
-      if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-     }
+      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
+		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -4027,21 +4012,15 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SELECT_Begin (true,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\"></option>");
+   HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+	       Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
+	       NULL);
    for (NumCty = 0;
 	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod);
-      if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-     }
+      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
+		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -4069,26 +4048,18 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SELECT_Begin (true,
 		     "id=\"OthInsCod\" name=\"OthInsCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
-		      "<option value=\"0\"");
-   if (Gbl.Usrs.Me.UsrDat.InsCod == 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-	    Txt_Another_institution);
+   HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+	       Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
+	       NULL);
+   HTM_OPTION (HTM_Type_STRING,(void *) "0",
+	       Gbl.Usrs.Me.UsrDat.InsCod == 0,false,
+	       "%s",Txt_Another_institution);
    for (NumIns = 0;
 	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	NumIns++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod);
-      if (Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Hierarchy.Cty.Inss.Lst[NumIns].FullName);
-     }
+      HTM_OPTION (HTM_Type_LONG,(void *) Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
+		  "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].FullName);
    HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -4118,26 +4089,18 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_SELECT_Begin (true,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
 		        " class=\"REC_C2_BOT_INPUT\"");
-      fprintf (Gbl.F.Out,"<option value=\"-1\"");
-      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
-			 "<option value=\"0\"");
-      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Txt_Another_centre);
+      HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
+		  NULL);
+      HTM_OPTION (HTM_Type_STRING,(void *) "0",
+		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
+		  Txt_Another_centre);
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
-	{
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod);
-	 if (Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",
-		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].FullName);
-	}
+	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
+		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].FullName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
