@@ -1783,6 +1783,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
+   unsigned TypeOfAvgUnsigned;
 
    HTM_TR_Begin (NULL);
 
@@ -1803,10 +1804,10 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAvg++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) TypeOfAvg);
-      if (TypeOfAvg == Gbl.Stat.DegPhotos.TypeOfAverage)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
+      TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
+      HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
+		  TypeOfAvg == Gbl.Stat.DegPhotos.TypeOfAverage,false,
+		  "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    HTM_SELECT_End ();
    Frm_EndForm ();
@@ -1847,6 +1848,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
+   unsigned PhoSiUnsigned;
 
    HTM_TR_Begin (NULL);
 
@@ -1867,10 +1869,10 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
 	PhoSi++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) PhoSi);
-      if (PhoSi == Gbl.Stat.DegPhotos.HowComputePhotoSize)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
+      PhoSiUnsigned = (unsigned) PhoSi;
+      HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
+		  PhoSi == Gbl.Stat.DegPhotos.HowComputePhotoSize,false,
+		  "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
    HTM_SELECT_End ();
    Frm_EndForm ();
@@ -1911,6 +1913,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
+   unsigned OrderUnsigned;
 
    HTM_TR_Begin (NULL);
 
@@ -1931,10 +1934,10 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 	Order < Pho_NUM_HOW_ORDER_DEGREES;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Order);
-      if (Order == Gbl.Stat.DegPhotos.HowOrderDegrees)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
+      OrderUnsigned = (unsigned) Order;
+      HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
+		  Order == Gbl.Stat.DegPhotos.HowOrderDegrees,false,
+		  "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
    HTM_SELECT_End ();
    Frm_EndForm ();
@@ -1997,6 +2000,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    struct Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
+   bool Selected;
+   bool Disabled;
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -2037,15 +2042,17 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
             Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
                            EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s (%s: %s)</option>",
-                  Degs.Lst[NumDeg].DegCod,
-                  Degs.Lst[NumDeg].DegCod == Deg.DegCod ? " selected=\"selected\"" :
-                                                          ((Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
-                                                          Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
-                                                                	                                                     ""),
-                  Degs.Lst[NumDeg].ShrtName,
-                  Txt_time,
-                  StrEstimatedTimeToComputeAvgPhoto);
+         Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
+         if (Selected)
+            Disabled = false;
+         else
+            // Too recently computed ?
+            Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
+                       Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
+	 HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
+		     "%s (%s: %s)",
+		     Degs.Lst[NumDeg].ShrtName,
+                     Txt_time,StrEstimatedTimeToComputeAvgPhoto);
         }
       HTM_SELECT_End ();
 

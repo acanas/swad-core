@@ -1124,20 +1124,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
 	   Year++)
-        {
-	 fprintf (Gbl.F.Out,"<option");
-	 if (Gbl.ExamAnns.ExaDat.Year == Year)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out," value=\"%u\">"
-	                    "%s"
-	                    "</option>",
-	          Year,Txt_YEAR_OF_DEGREE[Year]);
-	}
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+		     Gbl.ExamAnns.ExaDat.Year == Year,false,
+		     "%s",Txt_YEAR_OF_DEGREE[Year]);
       HTM_SELECT_End ();
      }
    else
-      fprintf (Gbl.F.Out,"%s",
-               Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
+      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1200,20 +1193,15 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      {
       HTM_SELECT_Begin (false,
 			"name=\"ExamHour\"");
-      fprintf (Gbl.F.Out,"<option value=\"0\"");
-      if (Gbl.ExamAnns.ExaDat.StartTime.Hour == 0)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">-</option>");
+      HTM_OPTION (HTM_Type_STRING,"0",
+		  Gbl.ExamAnns.ExaDat.StartTime.Hour == 0,false,
+		  "-");
       for (Hour = 7;
 	   Hour <= 22;
 	   Hour++)
-        {
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
-	 if (Gbl.ExamAnns.ExaDat.StartTime.Hour == Hour)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%02u %s</option>",
-                  Hour,Txt_hours_ABBREVIATION);
-	}
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
+		     Gbl.ExamAnns.ExaDat.StartTime.Hour == Hour,false,
+		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
       HTM_SELECT_End ();
 
       HTM_SELECT_Begin (false,
@@ -1221,12 +1209,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
-        {
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
-	 if (Gbl.ExamAnns.ExaDat.StartTime.Minute == Minute)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
-	}
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
+		     Gbl.ExamAnns.ExaDat.StartTime.Minute == Minute,false,
+		     "%02u &#39;",Minute);
       HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.StartTime.Hour)
@@ -1252,13 +1237,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       for (Hour = 0;
 	   Hour <= 8;
 	   Hour++)
-        {
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
-	 if (Gbl.ExamAnns.ExaDat.Duration.Hour == Hour)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%02u %s</option>",
-                  Hour,Txt_hours_ABBREVIATION);
-	}
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
+		     Gbl.ExamAnns.ExaDat.Duration.Hour == Hour,false,
+		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
       HTM_SELECT_End ();
 
       HTM_SELECT_Begin (false,
@@ -1266,12 +1247,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
-        {
-	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
-	 if (Gbl.ExamAnns.ExaDat.Duration.Minute == Minute)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
-	}
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
+		     Gbl.ExamAnns.ExaDat.Duration.Minute == Minute,false,
+		     "%02u &#39;",Minute);
       HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.Duration.Hour ||

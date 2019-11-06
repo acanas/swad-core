@@ -9370,6 +9370,7 @@ void Brw_ShowFileMetadata (void)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    Brw_License_t License;
+   unsigned LicenseUnsigned;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -9577,17 +9578,12 @@ void Brw_ShowFileMetadata (void)
 	   {
 	    HTM_SELECT_Begin (false,
 			      "id=\"PublicFile\" name=\"PublicFile\"");
-
-	    fprintf (Gbl.F.Out,"<option value=\"N\"");
-	    if (!FileMetadata.IsPublic)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",Txt_Private_available_to_certain_users_identified);
-
-	    fprintf (Gbl.F.Out,"<option value=\"Y\"");
-	    if (FileMetadata.IsPublic)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",Txt_Public_open_educational_resource_OER_for_everyone);
-
+	    HTM_OPTION (HTM_Type_STRING,"N",
+			!FileMetadata.IsPublic,false,
+			"%s",Txt_Private_available_to_certain_users_identified);
+	    HTM_OPTION (HTM_Type_STRING,"Y",
+			FileMetadata.IsPublic,false,
+			"%s",Txt_Public_open_educational_resource_OER_for_everyone);
 	    HTM_SELECT_End ();
 	   }
 	 else		// I can not edit file properties
@@ -9617,10 +9613,10 @@ void Brw_ShowFileMetadata (void)
 		 License < Brw_NUM_LICENSES;
 		 License++)
 	      {
-	       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) License);
-	       if (License == FileMetadata.License)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out,">%s</option>",Txt_LICENSES[License]);
+	       LicenseUnsigned = (unsigned) License;
+	       HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
+			   License == FileMetadata.License,false,
+			   "%s",Txt_LICENSES[License]);
 	      }
 	    HTM_SELECT_End ();
 	   }
@@ -12140,12 +12136,9 @@ void Brw_AskRemoveOldFiles (void)
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
         Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
         Months++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if (Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Months);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,&Months,
+		  Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
+		  "%u",Months);
    HTM_SELECT_End ();
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
