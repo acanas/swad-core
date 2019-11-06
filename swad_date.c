@@ -518,7 +518,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
                                                    Id[StartEndTime],
 	                                           TimeUTC[StartEndTime],
-	                                           Gbl.Now.Date.Year - 1,
+	                                           Cfg_LOG_START_YEAR,
 	                                           Gbl.Now.Date.Year + 1,
 				                   FormSeconds,
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
@@ -568,7 +568,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			" onchange=\""
 			"adjustDateForm('%s');"
 			"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
 			Id,ParamName,Id,Id,
                         Gbl.Form.Id);
    else
@@ -576,7 +576,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			"id=\"%sYear\" name=\"%sYear\""
 			" onchange=\""
 			"adjustDateForm('%s');"
-			"setUTCFromLocalDateTimeForm('%s');",
+			"setUTCFromLocalDateTimeForm('%s');\"",
 			Id,ParamName,Id,Id);
    for (Year = FirstYear;
 	Year <= LastYear;
@@ -594,7 +594,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                         " onchange=\""
                         "adjustDateForm('%s');"
                         "setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
 	                Id,ParamName,Id,Id,
                         Gbl.Form.Id);
    else
@@ -602,7 +602,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			"id=\"%sMonth\" name=\"%sMonth\""
                         " onchange=\""
                         "adjustDateForm('%s');"
-                        "setUTCFromLocalDateTimeForm('%s');",
+                        "setUTCFromLocalDateTimeForm('%s');\"",
 	                Id,ParamName,Id,Id);
    for (Month = 1;
 	Month <= 12;
@@ -618,13 +618,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       HTM_SELECT_Begin (false,
 			"id=\"%sDay\" name=\"%sDay\""
 	                " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
                         Id,ParamName,Id,
 			Gbl.Form.Id);
    else
       HTM_SELECT_Begin (false,
 			"id=\"%sDay\" name=\"%sDay\""
-	                " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	                " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
                         Id,ParamName,Id);
    for (Day = 1;
 	Day <= 31;
@@ -640,13 +640,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       HTM_SELECT_Begin (false,
 			"id=\"%sHour\" name=\"%sHour\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
                         Id,ParamName,Id,
                         Gbl.Form.Id);
    else
       HTM_SELECT_Begin (false,
 			"id=\"%sHour\" name=\"%sHour\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
                         Id,ParamName,Id);
    for (Hour = 0;
 	Hour <= 23;
@@ -662,13 +662,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       HTM_SELECT_Begin (false,
 			"id=\"%sMinute\" name=\"%sMinute\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
 	                Id,ParamName,Id,
 			Gbl.Form.Id);
    else
       HTM_SELECT_Begin (false,
 			"id=\"%sMinute\" name=\"%sMinute\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+                        " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 	                Id,ParamName,Id);
 
    for (Minute = 0;
@@ -688,13 +688,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	 HTM_SELECT_Begin (false,
 			   "id=\"%sSecond\" name=\"%sSecond\""
 			   " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-	                   "document.getElementById('%s').submit();return false;",
+	                   "document.getElementById('%s').submit();return false;\"",
 	                   Id,ParamName,Id,
 			   Gbl.Form.Id);
       else
 	 HTM_SELECT_Begin (false,
 			   "id=\"%sSecond\" name=\"%sSecond\""
-			   " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+			   " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 	                   Id,ParamName,Id);
       for (Second = 0;
 	   Second <= 59;
@@ -717,7 +717,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"setLocalDateTimeFormFromUTC('%s',%ld);"
+   fprintf (Gbl.F.Out,"setLocalDateTimeFormFromUTC('%s',%ld);\n"
 	              "adjustDateForm('%s');",
 	    Id,(long) TimeUTC,Id);
    switch (SetHMS)
