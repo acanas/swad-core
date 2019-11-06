@@ -758,7 +758,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x6);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
      }
 
    /* Event */
@@ -1080,7 +1080,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 				OrderBySubQuery[Gbl.Agenda.SelectedOrder]);
 
       /* Free allocated memory for subquery */
-      free ((void *) UsrSubQuery);
+      free (UsrSubQuery);
 
       if (NumRows) // Events found...
 	{
@@ -1199,7 +1199,7 @@ void Agd_FreeListEvents (void)
    if (Gbl.Agenda.LstIsRead && Gbl.Agenda.LstAgdCods)
      {
       /***** Free memory used by the list of events *****/
-      free ((void *) Gbl.Agenda.LstAgdCods);
+      free (Gbl.Agenda.LstAgdCods);
       Gbl.Agenda.LstAgdCods = NULL;
       Gbl.Agenda.Num = 0;
       Gbl.Agenda.LstIsRead = false;

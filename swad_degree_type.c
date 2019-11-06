@@ -112,22 +112,15 @@ void DT_WriteSelectorDegreeTypes (void)
    /* List degree types */
    HTM_SELECT_Begin (true,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\"");
-
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Stat.DegTypCod == -1L)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Any_type_of_degree);
-
+   HTM_OPTION (HTM_Type_STRING,"-1",
+	       Gbl.Stat.DegTypCod == -1L,false,
+	       "%s",Txt_Any_type_of_degree);
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.DegTypes.Lst[NumDegTyp].DegTypCod );
-      if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod  == Gbl.Stat.DegTypCod)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
-     }
-
+      HTM_OPTION (HTM_Type_LONG,&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod,
+		  Gbl.DegTypes.Lst[NumDegTyp].DegTypCod  == Gbl.Stat.DegTypCod,false,
+		  "%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
    HTM_SELECT_End ();
 
    /***** Free list of degree types *****/
@@ -712,7 +705,7 @@ void DT_FreeListDegreeTypes (void)
    /***** Free memory used by the list of degree types *****/
    if (Gbl.DegTypes.Lst)
      {
-      free ((void *) Gbl.DegTypes.Lst);
+      free (Gbl.DegTypes.Lst);
       Gbl.DegTypes.Lst = NULL;
       Gbl.DegTypes.Num = 0;
      }
@@ -1047,7 +1040,7 @@ static void DT_EditingDegreeTypeDestructor (void)
    /***** Free memory used for degree type *****/
    if (DT_EditingDegTyp != NULL)
      {
-      free ((void *) DT_EditingDegTyp);
+      free (DT_EditingDegTyp);
       DT_EditingDegTyp = NULL;
      }
   }

@@ -1148,7 +1148,7 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   free (OnSubmit);
   }
 
 /*****************************************************************************/

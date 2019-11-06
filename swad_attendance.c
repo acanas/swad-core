@@ -431,7 +431,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
      }
 
    /* Attendance event title */
@@ -806,7 +806,7 @@ void Att_FreeListAttEvents (void)
    if (Gbl.AttEvents.LstIsRead && Gbl.AttEvents.Lst)
      {
       /***** Free memory used by the list of attendance events *****/
-      free ((void *) Gbl.AttEvents.Lst);
+      free (Gbl.AttEvents.Lst);
       Gbl.AttEvents.Lst = NULL;
       Gbl.AttEvents.Num = 0;
       Gbl.AttEvents.LstIsRead = false;
@@ -1131,9 +1131,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "N",!Att.CommentTchVisible,false,
+   HTM_OPTION (HTM_Type_STRING,"N",!Att.CommentTchVisible,false,
 	       "%s",Txt_Hidden_MALE_PLURAL);
-   HTM_OPTION (HTM_Type_STRING,(void *) "Y",Att.CommentTchVisible,false,
+   HTM_OPTION (HTM_Type_STRING,"Y",Att.CommentTchVisible,false,
 	       "%s",Txt_Visible_MALE_PLURAL);
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -2225,7 +2225,7 @@ static void Att_PutParamsCodGrps (long AttCod)
         }
 
       Par_PutHiddenParamString (NULL,"GrpCods",GrpCods);
-      free ((void *) GrpCods);
+      free (GrpCods);
      }
    else
       /***** Write the boolean parameter that indicates if all the groups must be listed *****/
@@ -2478,7 +2478,7 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
 				AttCod,SubQueryAllUsrs);
 
       /***** Free memory for subquery string *****/
-      free ((void *) SubQueryAllUsrs);
+      free (SubQueryAllUsrs);
      }
    return NumStdsInAttEvent;
   }
@@ -2744,7 +2744,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    Box_BoxEnd ();
 
    /***** Free memory for list of attendance events selected *****/
-   free ((void *) Gbl.AttEvents.StrAttCodsSelected);
+   free (Gbl.AttEvents.StrAttCodsSelected);
 
    /***** Free list of groups selected *****/
    Grp_FreeListCodSelectedGrps ();
@@ -2830,10 +2830,10 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       Box_BoxEnd ();
 
       /***** Free memory for list of attendance events selected *****/
-      free ((void *) Gbl.AttEvents.StrAttCodsSelected);
+      free (Gbl.AttEvents.StrAttCodsSelected);
 
       /***** Free list of user codes *****/
-      free ((void *) LstSelectedUsrCods);
+      free (LstSelectedUsrCods);
 
       /***** Free list of groups selected *****/
       Grp_FreeListCodSelectedGrps ();
@@ -3138,7 +3138,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
 
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
@@ -3583,7 +3583,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
-         free ((void *) Id);
+         free (Id);
 
 	 HTM_TR_End ();
 

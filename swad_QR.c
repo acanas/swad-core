@@ -120,7 +120,7 @@ void QR_ImageQRCode (const char *QRString)
    HTM_IMG (URL,NULL,QRString,
 	    "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
 	    QR_CODE_SIZE,QR_CODE_SIZE);
-   free ((void *) URL);
+   free (URL);
 
    HTM_DIV_End ();
   }
@@ -143,7 +143,7 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (URL,NULL,Txt_Shortcut,
 	    "style=\"width:%upx;height:%upx;\"",Size,Size);
-   free ((void *) URL);
+   free (URL);
   }
 
 /*****************************************************************************/
@@ -165,7 +165,7 @@ void QR_ExamAnnnouncement (void)
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (URL,NULL,Txt_Link_to_announcement_of_exam,
 	    "style=\"width:250px;height:250px;\"");
-   free ((void *) URL);
+   free (URL);
 
    HTM_DIV_End ();
   }

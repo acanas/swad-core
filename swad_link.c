@@ -393,7 +393,7 @@ void Lnk_FreeListLinks (void)
    if (Gbl.Links.Lst)
      {
       /***** Free memory used by the list of links *****/
-      free ((void *) Gbl.Links.Lst);
+      free (Gbl.Links.Lst);
       Gbl.Links.Lst = NULL;
       Gbl.Links.Num = 0;
      }
@@ -883,7 +883,7 @@ static void Lnk_EditingLinkDestructor (void)
    /***** Free memory used for link *****/
    if (Lnk_EditingLnk != NULL)
      {
-      free ((void *) Lnk_EditingLnk);
+      free (Lnk_EditingLnk);
       Lnk_EditingLnk = NULL;
      }
   }

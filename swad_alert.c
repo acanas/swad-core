@@ -184,14 +184,14 @@ static void Ale_ResetAlert (size_t i)
 	 /***** Free memory allocated for text *****/
 	 if (Gbl.Alerts.List[i].Text)
 	   {
-	    free ((void *) Gbl.Alerts.List[i].Text);
+	    free (Gbl.Alerts.List[i].Text);
 	    Gbl.Alerts.List[i].Text = NULL;
 	   }
 
 	 /***** Free memory allocated for section *****/
 	 if (Gbl.Alerts.List[i].Section)
 	   {
-	    free ((void *) Gbl.Alerts.List[i].Section);
+	    free (Gbl.Alerts.List[i].Section);
 	    Gbl.Alerts.List[i].Section = NULL;
 	   }
 	}
@@ -276,7 +276,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
       Ale_ShowFixAlert (AlertType,Txt);
 
       /***** Free text *****/
-      free ((void *) Txt);
+      free (Txt);
      }
   }
 
@@ -352,7 +352,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
                             FuncParams,Button,TxtButton);
 
    /***** Free text *****/
-   free ((void *) Txt);
+   free (Txt);
   }
 
 /*****************************************************************************/
@@ -378,7 +378,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
    Ale_ShowFixAlertAndButton1 (AlertType,Txt);
 
    /***** Free text *****/
-   free ((void *) Txt);
+   free (Txt);
   }
 
 /*****************************************************************************/

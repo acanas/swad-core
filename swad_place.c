@@ -502,7 +502,7 @@ void Plc_FreeListPlaces (void)
    if (Gbl.Plcs.Lst)
      {
       /***** Free memory used by the list of places in institution *****/
-      free ((void *) Gbl.Plcs.Lst);
+      free (Gbl.Plcs.Lst);
       Gbl.Plcs.Lst = NULL;
       Gbl.Plcs.Num = 0;
      }
@@ -948,7 +948,7 @@ static void Plc_EditingPlaceDestructor (void)
    /***** Free memory used for place *****/
    if (Plc_EditingPlc != NULL)
      {
-      free ((void *) Plc_EditingPlc);
+      free (Plc_EditingPlc);
       Plc_EditingPlc = NULL;
      }
   }

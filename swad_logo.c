@@ -183,8 +183,8 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
 			             "",
 		     ClassNotEmpty ? Class :
 			             "");
-	    free ((void *) Icon);
-            free ((void *) URL);
+	    free (Icon);
+            free (URL);
 	   }
 	}
      }

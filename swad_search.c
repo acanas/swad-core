@@ -173,7 +173,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
       if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
 	{
 	 WTS = (unsigned) WhatToSearch;
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &WTS,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
 		     Gbl.Search.WhatToSearch == WhatToSearch,false,
 		     "%s",Titles[WhatToSearch]);
         }

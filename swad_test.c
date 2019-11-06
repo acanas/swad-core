@@ -1104,7 +1104,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
    HTM_DIV_End ();
 
    /***** Free memory allocated for the stem *****/
-   free ((void *) StemRigorousHTML);
+   free (StemRigorousHTML);
   }
 
 /*****************************************************************************/
@@ -1198,7 +1198,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	 HTM_DIV_End ();
 
 	 /***** Free memory allocated for the feedback *****/
-	 free ((void *) FeedbackRigorousHTML);
+	 free (FeedbackRigorousHTML);
 	}
   }
 
@@ -2922,7 +2922,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3131,7 +3131,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3398,9 +3398,9 @@ void Tst_WriteAnswersEdit (long QstCod)
             HTM_TR_End ();
 
 	    /* Free memory allocated for the answer and the feedback */
-	    free ((void *) Answer);
+	    free (Answer);
 	    if (LengthFeedback)
-	       free ((void *) Feedback);
+	       free (Feedback);
            }
          HTM_TABLE_End ();
 	 break;
@@ -4963,7 +4963,7 @@ void Tst_FreeTagsList (void)
   {
    if (Gbl.Test.Tags.List)
      {
-      free ((void *) Gbl.Test.Tags.List);
+      free (Gbl.Test.Tags.List);
       Gbl.Test.Tags.List = NULL;
       Gbl.Test.Tags.Num = 0;
      }
@@ -5532,12 +5532,12 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
   {
    if (Gbl.Test.Answer.Options[NumOpt].Text)
      {
-      free ((void *) Gbl.Test.Answer.Options[NumOpt].Text);
+      free (Gbl.Test.Answer.Options[NumOpt].Text);
       Gbl.Test.Answer.Options[NumOpt].Text = NULL;
      }
    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
      {
-      free ((void *) Gbl.Test.Answer.Options[NumOpt].Feedback);
+      free (Gbl.Test.Answer.Options[NumOpt].Feedback);
       Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
      }
   }
@@ -7763,7 +7763,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,false,0x7);
 	 HTM_TD_End ();
-         free ((void *) Id);
+         free (Id);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)

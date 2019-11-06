@@ -358,7 +358,7 @@ void Ban_FreeListBanners (void)
    if (Gbl.Banners.Lst)
      {
       /***** Free memory used by the list of banners *****/
-      free ((void *) Gbl.Banners.Lst);
+      free (Gbl.Banners.Lst);
       Gbl.Banners.Lst = NULL;
       Gbl.Banners.Num = 0;
      }
@@ -1092,7 +1092,7 @@ static void Ban_EditingBannerDestructor (void)
    /***** Free memory used for place *****/
    if (Ban_EditingBan != NULL)
      {
-      free ((void *) Ban_EditingBan);
+      free (Ban_EditingBan);
       Ban_EditingBan = NULL;
      }
   }

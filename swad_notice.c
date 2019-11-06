@@ -702,7 +702,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,false,0x6);
-   free ((void *) Id);
+   free (Id);
    HTM_DIV_End ();
 
    /***** Write the content of the notice *****/

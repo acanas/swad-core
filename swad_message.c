@@ -2050,7 +2050,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 				SubQuery);
 
    /***** Free memory used for subquery *****/
-   free ((void *) SubQuery);
+   free (SubQuery);
 
    return NumMsgs;
   }
@@ -2618,7 +2618,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    fprintf (Gbl.F.Out,"%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
    HTM_SELECT_Begin (false,
 		     "name=\"FilterCrsCod\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "",
+   HTM_OPTION (HTM_Type_STRING,"",
 	       Gbl.Msg.FilterCrsCod < 0,false,
 	       "%s",Txt_any_course);
 
@@ -2626,7 +2626,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    for (NumOriginCrs = 0;
 	NumOriginCrs < Gbl.Msg.NumCourses;
 	NumOriginCrs++)
-      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Msg.Courses[NumOriginCrs].CrsCod,
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Msg.Courses[NumOriginCrs].CrsCod,
 		  Gbl.Msg.Courses[NumOriginCrs].CrsCod == Gbl.Msg.FilterCrsCod,false,
 		  "%s",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
    HTM_SELECT_End ();
@@ -3616,7 +3616,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
    /***** End cell *****/
    HTM_TD_End ();
 
-   free ((void *) Id);
+   free (Id);
   }
 
 /*****************************************************************************/

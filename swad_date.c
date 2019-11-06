@@ -172,7 +172,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);
-   free ((void *) Id);
+   free (Id);
   }
 
 /*****************************************************************************/
@@ -581,8 +581,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
-               Year,Year);
+      HTM_OPTION (HTM_Type_UNSIGNED,&Year,false,false,
+		  "%u",Year);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -607,8 +607,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    for (Month = 1;
 	Month <= 12;
 	Month++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
-               Month,Txt_MONTHS_SMALL[Month - 1]);
+      HTM_OPTION (HTM_Type_UNSIGNED,&Month,false,false,
+		  "%s",Txt_MONTHS_SMALL[Month - 1]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -629,8 +629,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    for (Day = 1;
 	Day <= 31;
 	Day++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
-               Day,Day);
+      HTM_OPTION (HTM_Type_UNSIGNED,&Day,false,false,
+		  "%u",Day);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -651,8 +651,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    for (Hour = 0;
 	Hour <= 23;
 	Hour++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u h</option>",
-               Hour,Hour);
+      HTM_OPTION (HTM_Type_UNSIGNED,&Hour,false,false,
+		  "%02u h",Hour);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -670,13 +670,11 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			"id=\"%sMinute\" name=\"%sMinute\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 	                Id,ParamName,Id);
-
    for (Minute = 0;
 	Minute < 60;
 	Minute += MinutesIInterval[FormSeconds])
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
-               Minute,Minute);
-
+      HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
+		  "%02u &#39;",Minute);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -699,8 +697,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       for (Second = 0;
 	   Second <= 59;
 	   Second++)
-	 fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &quot;</option>",
-		  Second,Second);
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
+		     "%02u &quot;",Second);
       HTM_SELECT_End ();
       HTM_TD_End ();
      }
@@ -713,7 +711,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (asprintf (&ParamTimeUTC,"%sTimeUTC",Id) < 0)
       Lay_NotEnoughMemoryExit ();
    Par_PutHiddenParamLong (ParamTimeUTC,ParamTimeUTC,(long) TimeUTC);
-   free ((void *) ParamTimeUTC);
+   free (ParamTimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
@@ -876,16 +874,14 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id);
-   fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
+   HTM_OPTION (HTM_Type_STRING,"0",false,false,
+	       "-");
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Year);
-      if (Year == DateSelected->Year)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Year);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+		  Year == DateSelected->Year,false,
+		  "%u",Year);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -907,16 +903,14 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id);
-   fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
-   for (Month = 1;
+   HTM_OPTION (HTM_Type_STRING,"0",false,false,
+	       "-");
+   for (Month  =  1;
 	Month <= 12;
 	Month++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Month);
-      if (Month == DateSelected->Month)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,&Month,
+		  Month == DateSelected->Month,false,
+		  "%u",Txt_MONTHS_SMALL[Month - 1]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -926,19 +920,17 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		     "id=\"%sDay\" name=\"%sDay\"%s",
 		     Id,Id,
 		     Disabled ? " disabled=\"disabled\"" : "");
-   fprintf (Gbl.F.Out,"<option value=\"0\">-</option>");
+   HTM_OPTION (HTM_Type_STRING,"0",false,false,
+	       "-");
    NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
 	                                               ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
 	                                        	                             Dat_NumDaysMonth[DateSelected->Month]);
-   for (Day = 1;
+   for (Day  = 1;
 	Day <= NumDaysSelectedMonth;
 	Day++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Day);
-      if (Day == DateSelected->Day)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Day);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+		  Day == DateSelected->Day,false,
+		  "%u",Day);
    HTM_SELECT_End ();
    HTM_TD_End ();
 

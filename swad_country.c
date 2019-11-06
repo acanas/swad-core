@@ -860,8 +860,8 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,Icon,Cty->Name[Gbl.Prefs.Language],
 	       "class=\"%s\"",Class);
-      free ((void *) Icon);
-      free ((void *) URL);
+      free (Icon);
+      free (URL);
      }
    else
       Ico_PutIcon ("tr16x16.gif",Cty->Name[Gbl.Prefs.Language],Class);
@@ -1128,7 +1128,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
    /***** Free memory for subquery *****/
    if (OrderBySubQuery)
-      free ((void *) OrderBySubQuery);
+      free (OrderBySubQuery);
 
    if (NumRows) // Countries found...
      {
@@ -1234,7 +1234,7 @@ void Cty_WriteSelectorOfCountry (void)
    Frm_StartFormGoTo (ActSeeIns);
    HTM_SELECT_Begin (true,
 		     "id=\"cty\" name=\"cty\" class=\"HIE_SEL\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "",Gbl.Hierarchy.Cty.CtyCod < 0,true,
+   HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Cty.CtyCod < 0,true,
 	       "[%s]",Txt_Country);
 
    /***** Get countries from database *****/
@@ -1258,7 +1258,7 @@ void Cty_WriteSelectorOfCountry (void)
          Lay_ShowErrorAndExit ("Wrong code of country.");
 
       /* Write option */
-      HTM_OPTION (HTM_Type_LONG,(void *) &CtyCod,
+      HTM_OPTION (HTM_Type_LONG,&CtyCod,
 		  CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
 		  "%s",row[1]);
      }
@@ -1568,7 +1568,7 @@ static void Cty_FreeMapAttribution (char **MapAttribution)
   {
    if (*MapAttribution)
      {
-      free ((void *) *MapAttribution);
+      free (*MapAttribution);
       *MapAttribution = NULL;
      }
   }
@@ -1582,7 +1582,7 @@ void Cty_FreeListCountries (void)
    if (Gbl.Hierarchy.Sys.Ctys.Lst)
      {
       /***** Free memory used by the list of courses in institution *****/
-      free ((void *) Gbl.Hierarchy.Sys.Ctys.Lst);
+      free (Gbl.Hierarchy.Sys.Ctys.Lst);
       Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
       Gbl.Hierarchy.Sys.Ctys.Num = 0;
      }
@@ -2508,7 +2508,7 @@ static void Cty_EditingCountryDestructor (void)
    /***** Free memory used for country *****/
    if (Cty_EditingCty != NULL)
      {
-      free ((void *) Cty_EditingCty);
+      free (Cty_EditingCty);
       Cty_EditingCty = NULL;
      }
   }

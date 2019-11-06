@@ -439,7 +439,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x7);
 	    HTM_TD_End ();
-            free ((void *) Id);
+            free (Id);
            }
 
          /* Write match title */
@@ -794,7 +794,7 @@ void McR_ShowOneMchResult (void)
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
-         free ((void *) Id);
+         free (Id);
 
 	 HTM_TR_End ();
 	}

@@ -122,42 +122,42 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	    switch (Scope)
 	      {
 	       case Hie_SYS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_System,
 			      Cfg_PLATFORM_SHORT_NAME);
 		  break;
 	       case Hie_CTY:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_Country,
 			      Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 		  break;
 	       case Hie_INS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_Institution,
 			      Gbl.Hierarchy.Ins.ShrtName);
 		  break;
 	       case Hie_CTR:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_Centre,
 			      Gbl.Hierarchy.Ctr.ShrtName);
 		  break;
 	       case Hie_DEG:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_Degree,
 			      Gbl.Hierarchy.Deg.ShrtName);
 		  break;
 	       case Hie_CRS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ScopeUnsigned,
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
 			      Txt_Course,

@@ -530,7 +530,7 @@ void Hld_FreeListHolidays (void)
    if (Gbl.Hlds.LstIsRead && Gbl.Hlds.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free ((void *) Gbl.Hlds.Lst);
+      free (Gbl.Hlds.Lst);
       Gbl.Hlds.Lst = NULL;
       Gbl.Hlds.Num = 0;
       Gbl.Hlds.LstIsRead = false;
@@ -1196,7 +1196,7 @@ static void Hld_EditingHolidayDestructor (void)
    /***** Free memory used for holiday *****/
    if (Hld_EditingHld != NULL)
      {
-      free ((void *) Hld_EditingHld);
+      free (Hld_EditingHld);
       Hld_EditingHld = NULL;
      }
   }

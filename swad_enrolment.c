@@ -810,12 +810,9 @@ void Enr_AskRemoveOldUsrs (void)
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if (Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Months);
-     }
+      HTM_OPTION (HTM_Type_UNSIGNED,&Months,
+		  Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
+		  "%u",Months);
    HTM_SELECT_End ();
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,

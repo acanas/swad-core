@@ -340,7 +340,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	   Vis++)
         {
 	 VisUnsigned = (unsigned) Vis;
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &VisUnsigned,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
 		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Vis,false,
 		     "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
         }
@@ -405,7 +405,7 @@ void Rec_ShowFormCreateRecordField (void)
 	Vis++)
      {
       VisUnsigned = (unsigned) Vis;
-      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &VisUnsigned,
+      HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
 		  Gbl.Crs.Records.Field.Visibility == Vis,false,
 		  "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
      }
@@ -918,7 +918,7 @@ void Rec_FreeListFields (void)
       if (--Gbl.Crs.Records.LstFields.NestedCalls == 0)
          if (Gbl.Crs.Records.LstFields.Lst)
            {
-            free ((void *) Gbl.Crs.Records.LstFields.Lst);
+            free (Gbl.Crs.Records.LstFields.Lst);
             Gbl.Crs.Records.LstFields.Lst = NULL;
             Gbl.Crs.Records.LstFields.Num = 0;
            }
@@ -1499,7 +1499,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    for (i = Rec_MIN_RECORDS_PER_PAGE;
         i <= Rec_MAX_RECORDS_PER_PAGE;
         i++)
-      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &i,
+      HTM_OPTION (HTM_Type_UNSIGNED,&i,
 		  i == Gbl.Usrs.Listing.RecsPerPag,false,
 		  "%u",i);
    HTM_SELECT_End ();
@@ -2025,7 +2025,7 @@ void Rec_FreeMemFieldsRecordsCrs (void)
          /* Free memory of the text of the field */
          if (Gbl.Crs.Records.LstFields.Lst[NumField].Text)
            {
-            free ((void *) Gbl.Crs.Records.LstFields.Lst[NumField].Text);
+            free (Gbl.Crs.Records.LstFields.Lst[NumField].Text);
             Gbl.Crs.Records.LstFields.Lst[NumField].Text = NULL;
            }
   }
@@ -2937,7 +2937,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 Role++)
 	      {
 	       RoleUnsigned = (unsigned) Role;
-	       HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 			   Role == DefaultRoleInForm,false,
 			   "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 	      }
@@ -3000,7 +3000,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol_STD:
 		  case Rol_NET:
 		     RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
-		     HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,true,true,
+		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
 				 "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
 		     break;
 		  case Rol_TCH:
@@ -3013,7 +3013,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  Role++)
 		       {
 			RoleUnsigned = (unsigned) Role;
-			HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 				    Role == DefaultRoleInForm,false,
 				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
@@ -3035,7 +3035,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       HTM_SELECT_Begin (false,
 				 "id=\"Role\" name=\"Role\"");
 	       RoleUnsigned = (unsigned) DefaultRoleInForm;
-	       HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,true,true,
+	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
 			   "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
 	       HTM_SELECT_End ();
 	      }
@@ -3074,7 +3074,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  Role++)
 		       {
 			RoleUnsigned = (unsigned) Role;
-			HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 				    Role == DefaultRoleInForm,false,
 				    "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 		       }
@@ -3091,7 +3091,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     HTM_SELECT_Begin (false,
 				       "id=\"Role\" name=\"Role\"");
 		     RoleUnsigned = (unsigned) Rol_GST;
-		     HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 				 true,false,
 				 "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 		     HTM_SELECT_End ();
@@ -3280,14 +3280,14 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
    HTM_SELECT_Begin (false,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "",false,false,
+   HTM_OPTION (HTM_Type_STRING,"",false,false,
 	       "%s",Txt_Country);
-   HTM_OPTION (HTM_Type_STRING,(void *) "0",UsrDat->CtyCod == 0,false,
+   HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
 	       "%s",Txt_Another_country);
    for (NumCty = 0;
 	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
 		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
 		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
@@ -4012,13 +4012,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SELECT_Begin (true,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+   HTM_OPTION (HTM_Type_STRING,"-1",
 	       Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
 	       NULL);
    for (NumCty = 0;
 	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
 		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
 		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
@@ -4048,16 +4048,16 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SELECT_Begin (true,
 		     "id=\"OthInsCod\" name=\"OthInsCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+   HTM_OPTION (HTM_Type_STRING,"-1",
 	       Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
 	       NULL);
-   HTM_OPTION (HTM_Type_STRING,(void *) "0",
+   HTM_OPTION (HTM_Type_STRING,"0",
 	       Gbl.Usrs.Me.UsrDat.InsCod == 0,false,
 	       "%s",Txt_Another_institution);
    for (NumIns = 0;
 	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	NumIns++)
-      HTM_OPTION (HTM_Type_LONG,(void *) Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
 		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
 		  "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].FullName);
    HTM_SELECT_End ();
@@ -4089,16 +4089,16 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_SELECT_Begin (true,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
 		        " class=\"REC_C2_BOT_INPUT\"");
-      HTM_OPTION (HTM_Type_STRING,(void *) "-1",
+      HTM_OPTION (HTM_Type_STRING,"-1",
 		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
 		  NULL);
-      HTM_OPTION (HTM_Type_STRING,(void *) "0",
+      HTM_OPTION (HTM_Type_STRING,"0",
 		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
 		  Txt_Another_centre);
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
 		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
 		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].FullName);
       HTM_SELECT_End ();

@@ -455,7 +455,7 @@ void Cla_FreeListClassrooms (void)
    if (Gbl.Classrooms.Lst)
      {
       /***** Free memory used by the list of classrooms in institution *****/
-      free ((void *) Gbl.Classrooms.Lst);
+      free (Gbl.Classrooms.Lst);
       Gbl.Classrooms.Lst = NULL;
       Gbl.Classrooms.Num = 0;
      }
@@ -1060,7 +1060,7 @@ static void Cla_EditingClassroomDestructor (void)
    /***** Free memory used for classroom *****/
    if (Cla_EditingCla != NULL)
      {
-      free ((void *) Cla_EditingCla);
+      free (Cla_EditingCla);
       Cla_EditingCla = NULL;
      }
   }

@@ -334,7 +334,7 @@ void Frm_FreeAnchorStr (char *Anchor)
   {
    if (Anchor)
      {
-      free ((void *) Anchor);
+      free (Anchor);
       Anchor = NULL;
      }
   }

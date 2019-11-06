@@ -146,7 +146,7 @@ void Plg_ListPlugins (void)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
 	       "class=\"ICO40x40\"");
-      free ((void *) Icon);
+      free (Icon);
       HTM_A_End ();
       HTM_TD_End ();
 
@@ -369,7 +369,7 @@ void Plg_FreeListPlugins (void)
    if (Gbl.Plugins.Lst)
      {
       /***** Free memory used by the list of plugins *****/
-      free ((void *) Gbl.Plugins.Lst);
+      free (Gbl.Plugins.Lst);
       Gbl.Plugins.Lst = NULL;
       Gbl.Plugins.Num = 0;
      }
@@ -419,7 +419,7 @@ static void Plg_ListPluginsForEdition (void)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Gbl.Plugins.Lst[NumPlg].Name,
 	       "class=\"ICO40x40\"");
-      free ((void *) Icon);
+      free (Icon);
       HTM_TD_End ();
 
       /* Plugin name */
@@ -1074,7 +1074,7 @@ static void Plg_EditingPluginDestructor (void)
    /***** Free memory used for plugin *****/
    if (Plg_EditingPlg != NULL)
      {
-      free ((void *) Plg_EditingPlg);
+      free (Plg_EditingPlg);
       Plg_EditingPlg = NULL;
      }
   }

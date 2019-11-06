@@ -491,7 +491,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /* End date/time */
    if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
@@ -515,7 +515,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,false,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /* Survey title */
    if (ShowOnlyThisSvyComplete)
@@ -1002,7 +1002,7 @@ static void Svy_GetListSurveys (void)
    for (Scope  = Hie_SYS;
 	Scope <= Hie_CRS;
 	Scope++)
-      free ((void *) SubQuery[Scope]);
+      free (SubQuery[Scope]);
 
    if (NumRows) // Surveys found...
      {
@@ -1420,7 +1420,7 @@ void Svy_FreeListSurveys (void)
    if (Gbl.Svys.LstIsRead && Gbl.Svys.LstSvyCods)
      {
       /***** Free memory used by the list of surveys *****/
-      free ((void *) Gbl.Svys.LstSvyCods);
+      free (Gbl.Svys.LstSvyCods);
       Gbl.Svys.LstSvyCods = NULL;
       Gbl.Svys.Num = 0;
       Gbl.Svys.LstIsRead = false;
@@ -2954,7 +2954,7 @@ static void Svy_FreeTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned Num
   {
    if (SvyQst->AnsChoice[NumAns].Text)
      {
-      free ((void *) SvyQst->AnsChoice[NumAns].Text);
+      free (SvyQst->AnsChoice[NumAns].Text);
       SvyQst->AnsChoice[NumAns].Text = NULL;
      }
   }
@@ -3386,7 +3386,7 @@ static void Svy_WriteQstStem (const char *Stem)
    fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */
-   free ((void *) HeadingRigorousHTML);
+   free (HeadingRigorousHTML);
   }
 
 /*****************************************************************************/

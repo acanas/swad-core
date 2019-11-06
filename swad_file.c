@@ -288,12 +288,12 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
      {
       BytesToCopy = (RemainingBytesToCopy >= NUM_BYTES_PER_CHUNK) ? NUM_BYTES_PER_CHUNK :
 	                                                            RemainingBytesToCopy;
-      if (fread ((void *) Bytes,1,BytesToCopy,Gbl.F.Tmp) != BytesToCopy)
+      if (fread (Bytes,1,BytesToCopy,Gbl.F.Tmp) != BytesToCopy)
 	{
          fclose (FileDataTmp);
 	 return false;
 	}
-      if (fwrite ((void *) Bytes,sizeof (Bytes[0]),BytesToCopy,FileDataTmp) != BytesToCopy)
+      if (fwrite (Bytes,sizeof (Bytes[0]),BytesToCopy,FileDataTmp) != BytesToCopy)
 	{
          fclose (FileDataTmp);
 	 return false;
@@ -450,9 +450,9 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
 				  Path,FileList[NumFile]->d_name);
 			Fil_RemoveTree (PathFileRel);
 		       }
-		     free ((void *) FileList[NumFile]);
+		     free (FileList[NumFile]);
 		    }
-		  free ((void *) FileList);
+		  free (FileList);
 		 }
 	       else
 		  Lay_ShowErrorAndExit ("Error while scanning directory.");
@@ -516,9 +516,9 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 			    Path,FileList[NumFile]->d_name);
 		  Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
 		 }
-	       free ((void *) FileList[NumFile]);
+	       free (FileList[NumFile]);
 	      }
-	    free ((void *) FileList);
+	    free (FileList);
 
 	    if (RemoveDirectory)
 	       /* Remove the directory itself */
@@ -568,8 +568,8 @@ void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt)
    unsigned char Bytes[NUM_BYTES_PER_CHUNK];
    size_t NumBytesRead;
 
-   while ((NumBytesRead = fread ((void *) Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_CHUNK,FileSrc)))
-      fwrite ((void *) Bytes,sizeof (Bytes[0]),NumBytesRead,FileTgt);
+   while ((NumBytesRead = fread (Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_CHUNK,FileSrc)))
+      fwrite (Bytes,sizeof (Bytes[0]),NumBytesRead,FileTgt);
   }
 
 /*****************************************************************************/

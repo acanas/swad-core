@@ -435,7 +435,7 @@ void Gam_ShowOneGame (long GamCod,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
      }
 
    /***** Game title and main data *****/
@@ -693,7 +693,7 @@ void Gam_GetListGames (void)
 			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
 
    /***** Free allocated memory for subquery *****/
-   free ((void *) HiddenSubQuery);
+   free (HiddenSubQuery);
 
    if (NumRows) // Games found...
      {
@@ -837,7 +837,7 @@ void Gam_FreeListGames (void)
    if (Gbl.Games.LstIsRead && Gbl.Games.LstGamCods)
      {
       /***** Free memory used by the list of games *****/
-      free ((void *) Gbl.Games.LstGamCods);
+      free (Gbl.Games.LstGamCods);
       Gbl.Games.LstGamCods = NULL;
       Gbl.Games.Num = 0;
       Gbl.Games.LstIsRead = false;
@@ -1900,7 +1900,7 @@ static void Gam_FreeListsSelectedQuestions (void)
   {
    if (Gbl.Games.ListQuestions)
      {
-      free ((void *) Gbl.Games.ListQuestions);
+      free (Gbl.Games.ListQuestions);
       Gbl.Games.ListQuestions = NULL;
      }
   }

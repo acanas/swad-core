@@ -236,7 +236,7 @@ static void Med_FreeMediaURL (struct Media *Media)
    // Media->URL is initialized to NULL in constructor
    if (Media->URL)
      {
-      free ((void *) Media->URL);
+      free (Media->URL);
       Media->URL = NULL;
      }
   }
@@ -250,7 +250,7 @@ static void Med_FreeMediaTitle (struct Media *Media)
    // Media->Title is initialized to NULL in constructor
    if (Media->Title)
      {
-      free ((void *) Media->Title);
+      free (Media->Title);
       Media->Title = NULL;
      }
   }
@@ -507,7 +507,7 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
       Lay_NotEnoughMemoryExit ();
    Par_PutHiddenParamUnsignedDisabled (Id,ParamUploadMedia->FormType,
 			               (unsigned) MediaUploader->FormType);
-   free ((void *) Id);
+   free (Id);
    }
 
 /*****************************************************************************/
@@ -1557,7 +1557,7 @@ static void Med_ShowJPG (struct Media *Media,
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,FileNameMedia,Media->Title,
 	       "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
-      free ((void *) URL);
+      free (URL);
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
@@ -1641,9 +1641,9 @@ static void Med_ShowGIF (struct Media *Media,
 	 fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
 
       /***** Free URLs *****/
-      free ((void *) URL_PNG);
-      free ((void *) URL_GIF);
-      free ((void *) URL);
+      free (URL_PNG);
+      free (URL_GIF);
+      free (URL);
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_File_not_found);

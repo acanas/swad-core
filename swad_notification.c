@@ -592,7 +592,7 @@ void Ntf_ShowMyNotifications (void)
 
             if (ContentStr != NULL)
               {
-               free ((void *) ContentStr);
+               free (ContentStr);
                ContentStr = NULL;
               }
            }

@@ -89,7 +89,7 @@ void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned 
 void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    if (ListMFUActions->Actions != NULL)
-      free ((void *) ListMFUActions->Actions);
+      free (ListMFUActions->Actions);
   }
 
 /*****************************************************************************/

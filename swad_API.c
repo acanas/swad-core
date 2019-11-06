@@ -2849,7 +2849,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		     Att.AttCod,SubQueryAllUsrs);
 
       /* Free memory for subquery string */
-      free ((void *) SubQueryAllUsrs);
+      free (SubQueryAllUsrs);
 
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
@@ -3089,7 +3089,7 @@ int swad__getNotifications (struct soap *soap,
                       Length);
 
             /* Free memory used by content string */
-            free ((void *) ContentStr);
+            free (ContentStr);
             ContentStr = NULL;
            }
 	}
@@ -4751,9 +4751,9 @@ static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	      }
 	   }
 
-	 free ((void *) FileList[NumFile]);
+	 free (FileList[NumFile]);
 	}
-      free ((void *) FileList);
+      free (FileList);
      }
   }
 
@@ -5082,7 +5082,7 @@ int swad__getMarks (struct soap *soap,
       getMarksOut->content = (char *) soap_malloc (Gbl.soap,Length + 1);
       Str_Copy (getMarksOut->content,ContentStr,
                 Length);
-      free ((void *) ContentStr);
+      free (ContentStr);
       ContentStr = NULL;
      }
    else

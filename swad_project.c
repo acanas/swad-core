@@ -1122,7 +1122,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /* Modification date/time */
    UniqueId++;
@@ -1143,7 +1143,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /* Project title */
    switch (ProjectView)
@@ -1501,7 +1501,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /***** End date/time *****/
    UniqueId++;
@@ -1513,7 +1513,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
-   free ((void *) Id);
+   free (Id);
 
    /***** Project title *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",
@@ -2743,9 +2743,9 @@ void Prj_GetListProjects (void)
 	   }
 
       /* Free allocated memory for subqueries */
-      free ((void *) PreNonSubQuery);
-      free ((void *) HidVisSubQuery);
-      free ((void *) DptCodSubQuery);
+      free (PreNonSubQuery);
+      free (HidVisSubQuery);
+      free (DptCodSubQuery);
 
       if (NumRows) // Projects found...
 	{
@@ -2972,7 +2972,7 @@ void Prj_FreeListProjects (void)
    if (Gbl.Prjs.LstIsRead && Gbl.Prjs.LstPrjCods)
      {
       /***** Free memory used by the list of projects *****/
-      free ((void *) Gbl.Prjs.LstPrjCods);
+      free (Gbl.Prjs.LstPrjCods);
       Gbl.Prjs.LstPrjCods = NULL;
       Gbl.Prjs.Num = 0;
       Gbl.Prjs.LstIsRead = false;
@@ -3344,9 +3344,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"Assigned\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "Y",Prj->Assigned == Prj_ASSIGNED,false,
+   HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
 	       "%s",Txt_Yes);
-   HTM_OPTION (HTM_Type_STRING,(void *) "N",Prj->Assigned == Prj_NONASSIG,false,
+   HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
 	       "%s",Txt_No);
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -3381,7 +3381,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	Proposal++)
      {
       ProposalUnsigned = (unsigned) Proposal;
-      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &ProposalUnsigned,
+      HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
 		  Prj->Proposal == Proposal,false,
 		  "%s",Txt_PROJECT_STATUS[Proposal]);
      }
@@ -3487,17 +3487,17 @@ void Prj_FreeMemProject (struct Project *Prj)
   {
    if (Prj->Description)
      {
-      free ((void *) Prj->Description);
+      free (Prj->Description);
       Prj->Description = NULL;
      }
    if (Prj->Knowledge)
      {
-      free ((void *) Prj->Knowledge);
+      free (Prj->Knowledge);
       Prj->Knowledge = NULL;
      }
    if (Prj->Materials)
      {
-      free ((void *) Prj->Materials);
+      free (Prj->Materials);
       Prj->Materials = NULL;
      }
   }
@@ -4046,7 +4046,7 @@ static void Prj_FormLockUnlock (const struct Project *Prj)
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   free (OnSubmit);
   }
 
 /*****************************************************************************/

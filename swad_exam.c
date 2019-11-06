@@ -232,37 +232,37 @@ void Exa_FreeMemExamAnnouncement (void)
   {
    if (Gbl.ExamAnns.ExaDat.Place)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.Place);
+      free (Gbl.ExamAnns.ExaDat.Place);
       Gbl.ExamAnns.ExaDat.Place = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.Mode)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.Mode);
+      free (Gbl.ExamAnns.ExaDat.Mode);
       Gbl.ExamAnns.ExaDat.Mode = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.Structure)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.Structure);
+      free (Gbl.ExamAnns.ExaDat.Structure);
       Gbl.ExamAnns.ExaDat.Structure = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.DocRequired)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.DocRequired);
+      free (Gbl.ExamAnns.ExaDat.DocRequired);
       Gbl.ExamAnns.ExaDat.DocRequired = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.MatRequired)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.MatRequired);
+      free (Gbl.ExamAnns.ExaDat.MatRequired);
       Gbl.ExamAnns.ExaDat.MatRequired = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.MatAllowed)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.MatAllowed);
+      free (Gbl.ExamAnns.ExaDat.MatAllowed);
       Gbl.ExamAnns.ExaDat.MatAllowed = NULL;
      }
    if (Gbl.ExamAnns.ExaDat.OtherInfo)
      {
-      free ((void *) Gbl.ExamAnns.ExaDat.OtherInfo);
+      free (Gbl.ExamAnns.ExaDat.OtherInfo);
       Gbl.ExamAnns.ExaDat.OtherInfo = NULL;
      }
   }
@@ -802,7 +802,7 @@ void Exa_FreeListExamAnnouncements (void)
   {
    if (Gbl.ExamAnns.Lst)
      {
-      free ((void *) Gbl.ExamAnns.Lst);
+      free (Gbl.ExamAnns.Lst);
       Gbl.ExamAnns.Lst = NULL;
       Gbl.ExamAnns.NumExaAnns = 0;
      }

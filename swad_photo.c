@@ -788,7 +788,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_Faces_detected,
 	    "usemap=\"#faces_map\"");
-   free ((void *) Img);
+   free (Img);
    HTM_DIV_End ();
 
    /***** End alert *****/
@@ -902,7 +902,7 @@ static void Pho_UpdatePhoto2 (void)
       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
 	       "style=\"width:%upx;height:%upx;\"",
 	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
-      free ((void *) Img);
+      free (Img);
       fprintf (Gbl.F.Out,"<br />%s",Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
       HTM_TD_End ();
      }

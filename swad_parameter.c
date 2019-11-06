@@ -148,7 +148,7 @@ bool Par_GetQueryString (void)
 	    return false;
 
 	 /* Copy query string from stdin */
-         if (fread ((void *) Gbl.Params.QueryString,sizeof (char),Gbl.Params.ContentLength,stdin) != Gbl.Params.ContentLength)
+         if (fread (Gbl.Params.QueryString,sizeof (char),Gbl.Params.ContentLength,stdin) != Gbl.Params.ContentLength)
            {
             Gbl.Params.QueryString[0] = '\0';
             return false;
@@ -471,12 +471,12 @@ void Par_FreeParams (void)
 	Param = NextParam)
      {
       NextParam = Param->Next;
-      free ((void *) Param);
+      free (Param);
      }
 
    /***** Free query string *****/
    if (Gbl.Params.QueryString)
-      free ((void *) Gbl.Params.QueryString);
+      free (Gbl.Params.QueryString);
   }
 
 /*****************************************************************************/
@@ -603,7 +603,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		            PtrDst)
 		          {
 			   fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
-			   if (fread ((void *) PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) !=
+			   if (fread (PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) !=
 			       Param->Value.Length)
 			      Lay_ShowErrorAndExit ("Error while getting value of parameter.");
 		          }

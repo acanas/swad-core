@@ -5298,9 +5298,9 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
 	      }
 	   }
-	 free ((void *) FileList[NumFile]);
+	 free (FileList[NumFile]);
 	}
-      free ((void *) FileList);
+      free (FileList);
      }
    else
       Lay_ShowErrorAndExit ("Error while scanning directory.");
@@ -5382,8 +5382,8 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
 			  NumFileInSubdir++)
-			free ((void *) SubdirFileList[NumFileInSubdir]);
-		     free ((void *) SubdirFileList);
+			free (SubdirFileList[NumFileInSubdir]);
+		     free (SubdirFileList);
 		    }
 		  else
 		     Lay_ShowErrorAndExit ("Error while scanning directory.");
@@ -5408,9 +5408,9 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	                                Brw_ICON_TREE_NOTHING);
 	      }
 	   }
-	 free ((void *) FileList[NumFile]);
+	 free (FileList[NumFile]);
 	}
-      free ((void *) FileList);
+      free (FileList);
      }
    else
       Lay_ShowErrorAndExit ("Error while scanning directory.");
@@ -5657,7 +5657,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       Brw_WriteFileOrFolderPublisher (Level,FileMetadata.PublisherUsrCod);
 
    /***** End this row *****/
-   free ((void *) Anchor);
+   free (Anchor);
    HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -6200,9 +6200,9 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	       "class=\"CONTEXT_OPT ICO_HIGHLIGHT %s\"",
 	       (Size == 16) ? "CONTEXT_ICO_16x16" :
 			      "ICO40x40");
-      free ((void *) Title);
-      free ((void *) Icon);
-      free ((void *) URL);
+      free (Title);
+      free (Icon);
+      free (URL);
      }
   }
 
@@ -6397,7 +6397,7 @@ static void Brw_WriteDatesAssignment (void)
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
-      free ((void *) Id);
+      free (Id);
 
       /***** Arrow *****/
       fprintf (Gbl.F.Out,"&rarr;");
@@ -6410,7 +6410,7 @@ static void Brw_WriteDatesAssignment (void)
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,false,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
-      free ((void *) Id);
+      free (Id);
      }
    else
       fprintf (Gbl.F.Out,"&nbsp;(%s)",Txt_unknown_assignment);
@@ -6451,7 +6451,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x6);
-      free ((void *) Id);
+      free (Id);
      }
    HTM_TD_End ();
   }
@@ -8242,9 +8242,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 						FirstFilCod))
 		     CopyIsGoingSuccessful = false;
 		 }
-	       free ((void *) FileList[NumFile]);
+	       free (FileList[NumFile]);
 	      }
-	    free ((void *) FileList);
+	    free (FileList);
 	   }
 	 else
 	    Lay_ShowErrorAndExit ("Error while scanning directory.");
@@ -12296,9 +12296,9 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 		  (Removed->NumFiles)++;	// It's a file
 	      }
 	   }
-	 free ((void *) FileList[NumFile]);
+	 free (FileList[NumFile]);
 	}
-      free ((void *) FileList);
+      free (FileList);
 
       if (Level > 1)	// If not root folder
 	{
@@ -12312,8 +12312,8 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 	       for (NumFile = 0;
 		    NumFile < NumFiles;
 		    NumFile++)
-		  free ((void *) FileList[NumFile]);
-	       free ((void *) FileList);
+		  free (FileList[NumFile]);
+	       free (FileList);
 	      }
 	    else
 	       Lay_ShowErrorAndExit ("Error while scanning directory.");

@@ -456,7 +456,7 @@ void Mai_FreeListMailDomains (void)
    if (Gbl.Mails.Lst)
      {
       /***** Free memory used by the list of mail domains *****/
-      free ((void *) Gbl.Mails.Lst);
+      free (Gbl.Mails.Lst);
       Gbl.Mails.Lst = NULL;
       Gbl.Mails.Num = 0;
      }
@@ -1939,7 +1939,7 @@ static void Mai_EditingMailDomainDestructor (void)
    /***** Free memory used for mail domain *****/
    if (Mai_EditingMai != NULL)
      {
-      free ((void *) Mai_EditingMai);
+      free (Mai_EditingMai);
       Mai_EditingMai = NULL;
      }
   }

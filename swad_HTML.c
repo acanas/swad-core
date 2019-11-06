@@ -122,7 +122,7 @@ void HTM_TABLE_Begin (const char *fmt,...)
 
 	 HTM_TABLE_NestingLevel++;
 
-	 free ((void *) Class);
+	 free (Class);
 	}
       else
          HTM_TABLE_BeginWithoutAttr ();
@@ -247,7 +247,7 @@ void HTM_TR_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<tr %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_TR_BeginWithoutAttr ();
@@ -347,7 +347,7 @@ static void HTM_TH_BeginAttr (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<th %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_TH_BeginWithoutAttr ();
@@ -412,7 +412,7 @@ void HTM_TD_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<td %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_TD_BeginWithoutAttr ();
@@ -490,7 +490,7 @@ void HTM_DIV_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<div %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_DIV_BeginWithoutAttr ();
@@ -584,7 +584,7 @@ void HTM_UL_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<ul %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_UL_BeginWithoutAttr ();
@@ -636,7 +636,7 @@ void HTM_LI_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<li %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_LI_BeginWithoutAttr ();
@@ -688,7 +688,7 @@ void HTM_A_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<a %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_A_BeginWithoutAttr ();
@@ -768,7 +768,7 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<label %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_LABEL_BeginWithoutAttr ();
@@ -825,7 +825,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -863,7 +863,7 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -897,7 +897,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -935,7 +935,7 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -969,7 +969,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -1057,7 +1057,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -1092,7 +1092,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 
@@ -1128,7 +1128,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<textarea %s>",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_TEXTAREA_BeginWithoutAttr ();
@@ -1181,7 +1181,7 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<select %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
       else
          HTM_SELECT_BeginWithoutAttr ();
@@ -1213,7 +1213,7 @@ void HTM_SELECT_End (void)
    HTM_SELECT_NestingLevel--;
   }
 
-void HTM_OPTION (HTM_Type_t Type,void *ValuePtr,bool Selected,bool Disabled,
+void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disabled,
 		 const char *fmt,...)
   {
    va_list ap;
@@ -1256,7 +1256,7 @@ void HTM_OPTION (HTM_Type_t Type,void *ValuePtr,bool Selected,bool Disabled,
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"%s",Content);
 
-	 free ((void *) Content);
+	 free (Content);
 	}
      }
 
@@ -1306,7 +1306,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	 /***** Print attributes *****/
 	 fprintf (Gbl.F.Out," %s",Attr);
 
-	 free ((void *) Attr);
+	 free (Attr);
 	}
      }
 

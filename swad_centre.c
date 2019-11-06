@@ -372,8 +372,8 @@ static void Ctr_Configuration (bool PrintView)
       HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
 	       "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
 			                  "CENTRE_PHOTO_SHOW");
-      free ((void *) Icon);
-      free ((void *) URL);
+      free (Icon);
+      free (URL);
       if (PutLink)
 	 HTM_A_End ();
       HTM_DIV_End ();
@@ -434,7 +434,7 @@ static void Ctr_Configuration (bool PrintView)
       for (NumIns = 0;
 	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
 		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
 	             "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       HTM_SELECT_End ();
@@ -524,13 +524,13 @@ static void Ctr_Configuration (bool PrintView)
       Frm_StartForm (ActChgCtrPlcCfg);
       HTM_SELECT_Begin (true,
 			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
-      HTM_OPTION (HTM_Type_STRING,(void *) "0",
+      HTM_OPTION (HTM_Type_STRING,"0",
 		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
 		  "%s",Txt_Another_place);
       for (NumPlc = 0;
 	   NumPlc < Gbl.Plcs.Num;
 	   NumPlc++)
-	 HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
 		     Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
 		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
       HTM_SELECT_End ();
@@ -1358,7 +1358,7 @@ static void Ctr_FreePhotoAttribution (char **PhotoAttribution)
   {
    if (*PhotoAttribution)
      {
-      free ((void *) *PhotoAttribution);
+      free (*PhotoAttribution);
       *PhotoAttribution = NULL;
      }
   }
@@ -1372,7 +1372,7 @@ void Ctr_FreeListCentres (void)
    if (Gbl.Hierarchy.Ins.Ctrs.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free ((void *) Gbl.Hierarchy.Ins.Ctrs.Lst);
+      free (Gbl.Hierarchy.Ins.Ctrs.Lst);
       Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
       Gbl.Hierarchy.Ins.Ctrs.Num = 0;
      }
@@ -1401,7 +1401,7 @@ void Ctr_WriteSelectorOfCentre (void)
       HTM_SELECT_Begin (false,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
-   HTM_OPTION (HTM_Type_STRING,(void *) "",
+   HTM_OPTION (HTM_Type_STRING,"",
 	       Gbl.Hierarchy.Ctr.CtrCod < 0,true,
 	       "[%s]",Txt_Centre);
 
@@ -1428,7 +1428,7 @@ void Ctr_WriteSelectorOfCentre (void)
             Lay_ShowErrorAndExit ("Wrong code of centre.");
 
          /* Write option */
-	 HTM_OPTION (HTM_Type_LONG,(void *) &CtrCod,
+	 HTM_OPTION (HTM_Type_LONG,&CtrCod,
 		     Gbl.Hierarchy.Ctr.CtrCod > 0 &&
                      CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
 		     "%s",row[1]);
@@ -1511,13 +1511,13 @@ static void Ctr_ListCentresForEdition (void)
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 HTM_SELECT_Begin (true,
 			   "name=\"PlcCod\" class=\"PLC_SEL\"");
-	 HTM_OPTION (HTM_Type_STRING,(void *) "0",
+	 HTM_OPTION (HTM_Type_STRING,"0",
 		     Ctr->PlcCod == 0,false,
 		     "%s",Txt_Another_place);
 	 for (NumPlc = 0;
 	      NumPlc < Gbl.Plcs.Num;
 	      NumPlc++)
-	    HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+	    HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
 			Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
 			"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
 	 HTM_SELECT_End ();
@@ -1616,11 +1616,11 @@ static void Ctr_ListCentresForEdition (void)
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,true,false,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
 		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
 
 	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &StatusUnsigned,false,false,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
 		     "%s",Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
 
 	 HTM_SELECT_End ();
@@ -2495,13 +2495,13 @@ static void Ctr_PutFormToCreateCentre (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"PlcCod\" class=\"PLC_SEL\">");
-   HTM_OPTION (HTM_Type_STRING,(void *) "0",
+   HTM_OPTION (HTM_Type_STRING,"0",
 	       Ctr_EditingCtr->PlcCod == 0,false,
 	       "%s",Txt_Another_place);
    for (NumPlc = 0;
 	NumPlc < Gbl.Plcs.Num;
 	NumPlc++)
-      HTM_OPTION (HTM_Type_LONG,(void *) &Gbl.Plcs.Lst[NumPlc].PlcCod,
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
 		  Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
 		  "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
    HTM_SELECT_End ();
@@ -2953,7 +2953,7 @@ static void Ctr_EditingCentreDestructor (void)
    /***** Free memory used for centre *****/
    if (Ctr_EditingCtr != NULL)
      {
-      free ((void *) Ctr_EditingCtr);
+      free (Ctr_EditingCtr);
       Ctr_EditingCtr = NULL;
      }
   }

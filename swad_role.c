@@ -491,7 +491,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
      if (Gbl.Usrs.Me.Role.Available & (1 << Role))
         {
 	 RoleUnsigned = (unsigned) Role;
-	 HTM_OPTION (HTM_Type_UNSIGNED,(void *) &RoleUnsigned,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 		     Role == Gbl.Usrs.Me.Role.Logged,false,
 		     "%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }

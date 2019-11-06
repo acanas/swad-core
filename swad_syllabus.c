@@ -466,7 +466,7 @@ void Syl_FreeListItemsSyllabus (void)
   {
    if (LstItemsSyllabus.Lst)
      {
-      free ((void *) LstItemsSyllabus.Lst);
+      free (LstItemsSyllabus.Lst);
       LstItemsSyllabus.Lst = NULL;
       LstItemsSyllabus.NumItems = 0;
      }
@@ -781,7 +781,7 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
 
       /* Copy file content into buffer */
       fseek (FileHTMLTmp,0L,SEEK_SET);
-      if (fread ((void *) *HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);

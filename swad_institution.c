@@ -1349,7 +1349,7 @@ void Ins_FreeListInstitutions (void)
    if (Gbl.Hierarchy.Cty.Inss.Lst)
      {
       /***** Free memory used by the list of institutions *****/
-      free ((void *) Gbl.Hierarchy.Cty.Inss.Lst);
+      free (Gbl.Hierarchy.Cty.Inss.Lst);
       Gbl.Hierarchy.Cty.Inss.Lst = NULL;
       Gbl.Hierarchy.Cty.Inss.Num = 0;
      }
@@ -2572,7 +2572,7 @@ static void Ins_EditingInstitutionDestructor (void)
    /***** Free memory used for institution *****/
    if (Ins_EditingIns != NULL)
      {
-      free ((void *) Ins_EditingIns);
+      free (Ins_EditingIns);
       Ins_EditingIns = NULL;
      }
   }

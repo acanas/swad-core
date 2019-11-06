@@ -218,7 +218,7 @@ static void TT_FreeTimeTable (void)
 	Weekday++)
       if (TT_TimeTable[Weekday])
 	{
-         free ((void *) TT_TimeTable[Weekday]);
+         free (TT_TimeTable[Weekday]);
          TT_TimeTable[Weekday] = NULL;
 	}
   }
@@ -1406,7 +1406,7 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
 
    if (TopCall)	// Top call, non recursive call
       /****** Free space used by list of intervals already checked *****/
-      free ((void *) TT_IntervalsChecked);
+      free (TT_IntervalsChecked);
 
    return ColumnsToDraw;
   }
@@ -1457,6 +1457,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    struct Course Crs;
    struct GroupType *GrpTyp;
    struct Group *Grp;
+   char *Classroom;
 
    /***** Compute row span and background color depending on hour type *****/
    switch (IntervalType)
@@ -1523,9 +1524,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    HTM_TD_Begin ("%s%sclass=\"%s\"",RowSpanStr,ColSpanStr,ClassStr);
 
    /* Free allocated memory for rowspan, colspan and class strings */
-   free ((void *) RowSpanStr);
-   free ((void *) ColSpanStr);
-   free ((void *) ClassStr);
+   free (RowSpanStr);
+   free (ColSpanStr);
+   free (ClassStr);
 
    /***** Form to modify this cell *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT)
@@ -1604,14 +1605,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if ((CT == TT_FREE) ||
 		((Gbl.TimeTable.View == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
 		((Gbl.TimeTable.View == TT_TUT_EDIT) && (CT == TT_TUTORING)))
-	      {
-	       fprintf (Gbl.F.Out,"<option");
-	       if (CT == ClassType)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out," value=\"%s\">%s</option>",
-		        TT_ClassTypeDB[CT],
-		        Txt_TIMETABLE_CLASS_TYPES[CT]);
-	      }
+	       HTM_OPTION (HTM_Type_STRING,TT_ClassTypeDB[CT],
+			   CT == ClassType,false,
+			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
 	 HTM_SELECT_End ();
 
 	 if (IntervalType == TT_FREE_INTERVAL)
@@ -1630,7 +1626,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		          Gbl.TimeTable.Config.Range.MinutesPerInterval) < 0)	// Minutes
 	       Lay_NotEnoughMemoryExit ();
 	    Par_PutHiddenParamString (NULL,"TTDur",TTDur);
-	    free ((void *) TTDur);
+	    free (TTDur);
 	   }
 	 else
 	   {
@@ -1648,15 +1644,12 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    for (Dur = 0;
 		 Dur <= MaxDuration;
 		 Dur++)
-	      {
-	       fprintf (Gbl.F.Out,"<option");
-	       if (Dur == DurationNumIntervals)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out,">%u:%02u</option>",
-		        (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-		        (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
-		        Gbl.TimeTable.Config.Range.MinutesPerInterval);	// Minutes
-	      }
+	       HTM_OPTION (HTM_Type_STRING,"",
+			   Dur == DurationNumIntervals,false,
+			   "%u:%02u",
+			   (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
+		           (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
+		           Gbl.TimeTable.Config.Range.MinutesPerInterval);	// Minutes
 	    HTM_SELECT_End ();
 
 	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
@@ -1670,10 +1663,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 				 "id=\"TTGrp%s\" name=\"TTGrp\""
 				 " class=\"TT_GRP\"",
 			         CellStr);
-               fprintf (Gbl.F.Out,"<option value=\"-1\"");
-	       if (GrpCod <= 0)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-               fprintf (Gbl.F.Out,">%s</option>",Txt_All_groups);
+	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
+			   "%s",Txt_All_groups);
                for (NumGrpTyp = 0;
         	    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
         	    NumGrpTyp++)
@@ -1685,17 +1676,21 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                        NumGrp++)
                     {
                      Grp = &GrpTyp->LstGrps[NumGrp];
-
-	             fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	        	      Grp->GrpCod);
-	             if (GrpCod == Grp->GrpCod)
-		        fprintf (Gbl.F.Out," selected=\"selected\"");
-	             fprintf (Gbl.F.Out,">%s %s",
-	        	      GrpTyp->GrpTypName,Grp->GrpName);
-	             if (Grp->Classroom.ClaCod > 0)
-	                fprintf (Gbl.F.Out," (%s)",
-	                         Grp->Classroom.ShrtName);
-	             fprintf (Gbl.F.Out,"</option>");
+		     if (Grp->Classroom.ClaCod > 0)
+		       {
+			if (asprintf (&Classroom," (%s)",Grp->Classroom.ShrtName) < 0)
+			   Lay_NotEnoughMemoryExit ();
+		       }
+		     else
+		       {
+			if (asprintf (&Classroom,"%s","") < 0)
+			   Lay_NotEnoughMemoryExit ();
+		       }
+		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
+				 GrpCod == Grp->GrpCod,false,
+				 "%s %s%s",
+				 GrpTyp->GrpTypName,Grp->GrpName,Classroom);
+	             free (Classroom);
                     }
                  }
 	       HTM_SELECT_End ();
@@ -1733,7 +1728,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	   }
 
 	 /***** Free allocated unique string for this cell used in labels *****/
-	 free ((void *) CellStr);
+	 free (CellStr);
 
 	 break;
      }

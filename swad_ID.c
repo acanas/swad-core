@@ -156,7 +156,7 @@ void ID_FreeListIDs (struct UsrData *UsrDat)
   {
    /***** Free list *****/
    if (UsrDat->IDs.Num && UsrDat->IDs.List)
-      free ((void *) UsrDat->IDs.List);
+      free (UsrDat->IDs.List);
 
    /***** Reset list *****/
    UsrDat->IDs.List = NULL;
@@ -236,7 +236,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	                        	               "");
 
       /***** Free memory for subquery string *****/
-      free ((void *) SubQueryAllUsrs);
+      free (SubQueryAllUsrs);
 
       if (ListUsrCods->NumUsrs)
         {

@@ -457,7 +457,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
    else
      {
       /***** Read file contents into XML buffer *****/
-      if (fread ((void *) XMLBuffer,sizeof (char),(size_t) FileSize,Gbl.Test.XML.FileXML))
+      if (fread (XMLBuffer,sizeof (char),(size_t) FileSize,Gbl.Test.XML.FileXML))
          XMLBuffer[FileSize] = '\0';
       else
          XMLBuffer[0] = '\0';
@@ -1148,9 +1148,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             HTM_TR_End ();
 
 	    /* Free memory allocated for the answer and the feedback */
-	    free ((void *) AnswerText);
+	    free (AnswerText);
             if (AnswerFeedbackLength)
-	       free ((void *) AnswerFeedback);
+	       free (AnswerFeedback);
            }
          HTM_TABLE_End ();
 	 break;

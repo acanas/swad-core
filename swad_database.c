@@ -3333,7 +3333,7 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3411,7 +3411,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3438,7 +3438,7 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3468,7 +3468,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3495,7 +3495,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
    }
@@ -3522,7 +3522,7 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3549,7 +3549,7 @@ void DB_Query (const char *MsgError,const char *fmt,...)
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
+   free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }

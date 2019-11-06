@@ -505,7 +505,7 @@ void Grp_PutParamsCodGrps (void)
         }
 
       Par_PutHiddenParamString (NULL,"GrpCods",GrpCods);
-      free ((void *) GrpCods);
+      free (GrpCods);
      }
   }
 
@@ -607,7 +607,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	}
 
       /***** Free memory used for the list of groups to show *****/
-      free ((void *) ParamLstCodGrps);
+      free (ParamLstCodGrps);
      }
   }
 
@@ -621,7 +621,7 @@ void Grp_FreeListCodSelectedGrps (void)
       if (--Gbl.Crs.Grps.LstGrpsSel.NestedCalls == 0)
          if (Gbl.Crs.Grps.LstGrpsSel.GrpCods)
            {
-            free ((void *) Gbl.Crs.Grps.LstGrpsSel.GrpCods);
+            free (Gbl.Crs.Grps.LstGrpsSel.GrpCods);
             Gbl.Crs.Grps.LstGrpsSel.GrpCods = NULL;
             Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
            }
@@ -1067,7 +1067,7 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
 
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType)
   {
-   free ((void *) *AlreadyExistsGroupOfType);
+   free (*AlreadyExistsGroupOfType);
    *AlreadyExistsGroupOfType = NULL;
   }
 
@@ -2357,7 +2357,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
-      free ((void *) Id);
+      free (Id);
      }
    HTM_TD_End ();
    HTM_TR_End ();
@@ -2992,14 +2992,14 @@ void Grp_FreeListGrpTypesAndGrps (void)
                GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
                if (GrpTyp->LstGrps)
                  {
-                  free ((void *) GrpTyp->LstGrps);
+                  free (GrpTyp->LstGrps);
 		  GrpTyp->LstGrps = NULL;
 		  GrpTyp->NumGrps = 0;
                  }
               }
 
 	    /***** Free memory used by the list of group types *****/
-            free ((void *) Gbl.Crs.Grps.GrpTypes.LstGrpTypes);
+            free (Gbl.Crs.Grps.GrpTypes.LstGrpTypes);
             Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
             Gbl.Crs.Grps.GrpTypes.Num = 0;
            }
@@ -3533,7 +3533,7 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
 			     SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Free allocated memory for subquery *****/
-   free ((void *) SubQueryGrpTypes);
+   free (SubQueryGrpTypes);
 
    return (NumGrpTypes != 0);
   }
@@ -4944,12 +4944,12 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */
-         free ((void *) LstStrCodGrps[NumGrpTyp]);
+         free (LstStrCodGrps[NumGrpTyp]);
         }
      }
 
    /***** Free memory used by the lists of group codes of each type *****/
-   free ((void *) LstStrCodGrps);
+   free (LstStrCodGrps);
   }
 
 /*****************************************************************************/
@@ -4959,7 +4959,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps)
   {
    if (LstGrps->NumGrps && LstGrps->GrpCods)
-      free ((void *) LstGrps->GrpCods);
+      free (LstGrps->GrpCods);
    LstGrps->GrpCods = NULL;
    LstGrps->NumGrps = 0;
   }

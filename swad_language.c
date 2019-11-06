@@ -124,7 +124,7 @@ void Lan_PutSelectorToSelectLanguage (void)
 	Lan++)
      {
       LanUnsigned = (unsigned) Lan;
-      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &LanUnsigned,
+      HTM_OPTION (HTM_Type_UNSIGNED,&LanUnsigned,
 		  Lan == Gbl.Prefs.Language,false,
 		  "%s",Txt_STR_LANG_NAME[Lan]);
      }

@@ -512,7 +512,7 @@ void XML_FreeTree (struct XMLElement *ParentElem)
    /***** Free memory allocated for TagName *****/
    if (ParentElem->TagName)
      {
-      free ((void *) ParentElem->TagName);
+      free (ParentElem->TagName);
       ParentElem->TagName = NULL;
       ParentElem->TagNameLength = (size_t) 0;
      }
@@ -522,16 +522,16 @@ void XML_FreeTree (struct XMLElement *ParentElem)
    while (Attribute)
      {
       NextAttrib = Attribute->Next;
-      free ((void *) Attribute->AttributeName);
-      free ((void *) Attribute->Content);
-      free ((void *) Attribute);
+      free (Attribute->AttributeName);
+      free (Attribute->Content);
+      free (Attribute);
       Attribute = NextAttrib;
      }
 
    /***** Free memory allocated for Content *****/
    if (ParentElem->Content)
      {
-      free ((void *) ParentElem->Content);
+      free (ParentElem->Content);
       ParentElem->Content = NULL;
       ParentElem->ContentLength = (size_t) 0;
      }

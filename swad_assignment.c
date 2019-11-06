@@ -394,7 +394,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
      }
 
    /* Assignment title */
@@ -844,7 +844,7 @@ void Asg_FreeListAssignments (void)
    if (Gbl.Asgs.LstIsRead && Gbl.Asgs.LstAsgCods)
      {
       /***** Free memory used by the list of assignments *****/
-      free ((void *) Gbl.Asgs.LstAsgCods);
+      free (Gbl.Asgs.LstAsgCods);
       Gbl.Asgs.LstAsgCods = NULL;
       Gbl.Asgs.Num = 0;
       Gbl.Asgs.LstIsRead = false;

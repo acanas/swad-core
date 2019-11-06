@@ -254,7 +254,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 					   SubQuery);
 
    /* Free allocated memory for subquery */
-   free ((void *) SubQuery);
+   free (SubQuery);
 
    /***** Begin box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
@@ -560,7 +560,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
      }
   }
 
@@ -2818,8 +2818,8 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
 	    "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
    fprintf (Gbl.F.Out,"&nbsp;%u",NumUsrs);
-   free ((void *) Title);
-   free ((void *) Icon);
+   free (Title);
+   free (Icon);
    HTM_TD_End ();
 
    HTM_TR_End ();

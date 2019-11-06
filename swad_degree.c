@@ -363,11 +363,9 @@ static void Deg_Configuration (bool PrintView)
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
-		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? " selected=\"selected\"" :
-									     "",
-		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+		     "%s",Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
@@ -602,11 +600,9 @@ void Deg_WriteSelectorOfDegree (void)
       HTM_SELECT_Begin (false,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Hierarchy.Deg.DegCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
-            Txt_Degree);
+   HTM_OPTION (HTM_Type_STRING,"",
+	       Gbl.Hierarchy.Deg.DegCod < 0,true,
+	       "[%s]",Txt_Degree);
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
@@ -632,11 +628,10 @@ void Deg_WriteSelectorOfDegree (void)
             Lay_ShowErrorAndExit ("Wrong degree.");
 
          /* Write option */
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"",DegCod);
-         if (Gbl.Hierarchy.Deg.DegCod > 0 &&
-             (DegCod == Gbl.Hierarchy.Deg.DegCod))
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+	 HTM_OPTION (HTM_Type_LONG,&DegCod,
+		     Gbl.Hierarchy.Deg.DegCod > 0 &&
+                     DegCod == Gbl.Hierarchy.Deg.DegCod,false,
+		     "%s",row[1]);
         }
 
       /***** Free structure that stores the query result *****/
@@ -688,6 +683,7 @@ static void Deg_ListDegreesForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    Deg_StatusTxt_t StatusTxt;
+   unsigned StatusUnsigned;
    unsigned NumCrss;
 
    /***** Initialize structure with user's data *****/
@@ -775,11 +771,10 @@ static void Deg_ListDegreesForEdition (void)
 	      NumDegTyp++)
 	   {
 	    DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     DegTyp->DegTypCod,
-		     (DegTyp->DegTypCod == Deg->DegTypCod) ? " selected=\"selected\"" :
-			                                     "",
-		     DegTyp->DegTypName);
+	    HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+			Gbl.Hierarchy.Deg.DegCod > 0 &&
+			DegTyp->DegTypCod == Deg->DegTypCod,false,
+			"%s",DegTyp->DegTypName);
 	   }
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
@@ -837,12 +832,12 @@ static void Deg_ListDegreesForEdition (void)
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 HTM_SELECT_Begin (true,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
-	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>",
-		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
-		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
-		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),
-		  Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
+	 StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING);
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+		     "%s",Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
+	 StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE);
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+		     "%s",Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
@@ -974,11 +969,9 @@ static void Deg_PutFormToCreateDegree (void)
 	NumDegTyp++)
      {
       DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-	       DegTyp->DegTypCod,
-	       DegTyp->DegTypCod == Deg_EditingDeg->DegTypCod ? " selected=\"selected\"" :
-		                                                "",
-	       DegTyp->DegTypName);
+      HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+		  DegTyp->DegTypCod == Deg_EditingDeg->DegTypCod,false,
+		  "%s",DegTyp->DegTypName);
      }
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -1466,7 +1459,7 @@ void Deg_FreeListDegs (struct ListDegrees *Degs)
   {
    if (Degs->Lst)
      {
-      free ((void *) Degs->Lst);
+      free (Degs->Lst);
       Degs->Lst = NULL;
       Degs->Num = 0;
      }
@@ -2616,7 +2609,7 @@ static void Deg_EditingDegreeDestructor (void)
    /***** Free memory used for degree *****/
    if (Deg_EditingDeg != NULL)
      {
-      free ((void *) Deg_EditingDeg);
+      free (Deg_EditingDeg);
       Deg_EditingDeg = NULL;
      }
   }

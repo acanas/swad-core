@@ -1732,7 +1732,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x7);
       HTM_TD_End ();
-      free ((void *) Id);
+      free (Id);
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)
@@ -2394,7 +2394,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float Hits
       HTM_TD_End ();
 
       /***** Free memory allocated for string *****/
-      free ((void *) Str);
+      free (Str);
      }
   }
 
@@ -3847,7 +3847,7 @@ static void Sta_DrawBarNumHits (char Color,
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,NULL,
 	       "style=\"width:%upx;height:10px;\"",BarWidth);
-      free ((void *) Icon);
+      free (Icon);
 
       /***** Write the number of hits *****/
       fprintf (Gbl.F.Out,"&nbsp;");

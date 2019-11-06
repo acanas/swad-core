@@ -387,7 +387,7 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat)
    /***** Free memory allocated for comments *****/
    if (UsrDat->Comments)
      {
-      free ((void *) UsrDat->Comments);
+      free (UsrDat->Comments);
       UsrDat->Comments = NULL;
      }
 
@@ -424,7 +424,7 @@ void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods)
   {
    if (ListUsrCods->NumUsrs && ListUsrCods->Lst)
      {
-      free ((void *) ListUsrCods->Lst);
+      free (ListUsrCods->Lst);
       ListUsrCods->Lst = NULL;
       ListUsrCods->NumUsrs = 0;
      }
@@ -4586,7 +4586,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
 
       /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
-      free ((void *) AddStdsWithoutGroupOf);
+      free (AddStdsWithoutGroupOf);
 
       /***** Free list of groups types in current course *****/
       Grp_FreeListGrpTypesAndGrps ();
@@ -5607,7 +5607,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
       /***** Free the list itself *****/
       if (Gbl.Usrs.LstUsrs[Role].Lst)
         {
-         free ((void *) Gbl.Usrs.LstUsrs[Role].Lst);
+         free (Gbl.Usrs.LstUsrs[Role].Lst);
          Gbl.Usrs.LstUsrs[Role].Lst = NULL;
         }
 
@@ -6017,7 +6017,7 @@ void Usr_FreeListsSelectedUsrsCods (void)
 	   Role++)
 	 if (Gbl.Usrs.Selected.List[Role])
 	   {
-	    free ((void *) Gbl.Usrs.Selected.List[Role]);
+	    free (Gbl.Usrs.Selected.List[Role]);
 	    Gbl.Usrs.Selected.List[Role] = NULL;
 	   }
 
@@ -6050,7 +6050,7 @@ void Usr_FreeListOtherRecipients (void)
   {
    if (Gbl.Usrs.ListOtherRecipients)
      {
-      free ((void *) Gbl.Usrs.ListOtherRecipients);
+      free (Gbl.Usrs.ListOtherRecipients);
       Gbl.Usrs.ListOtherRecipients = NULL;
      }
   }
@@ -6559,7 +6559,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
-      free ((void *) GroupNames);
+      free (GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -6936,7 +6936,7 @@ void Usr_ListAllDataStds (void)
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Hie_CRS)
-         free ((void *) GroupNames);
+         free (GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -8945,7 +8945,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    for (Cols = 1;
         Cols <= Usr_CLASS_PHOTO_COLS_MAX;
         Cols++)
-      HTM_OPTION (HTM_Type_UNSIGNED,(void *) &Cols,
+      HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
 		  Cols == Gbl.Usrs.ClassPhoto.Cols,false,
 		  "%u",Cols);
 

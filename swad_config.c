@@ -93,7 +93,7 @@ void Cfg_GetConfigFromFile (void)
      }
 
    /* Copy file content into buffer */
-   if (fread ((void *) Config,sizeof (char),Length,FileCfg) != Length)
+   if (fread (Config,sizeof (char),Length,FileCfg) != Length)
      {
       fclose (FileCfg);
       Lay_ShowErrorAndExit ("Can not read config.");

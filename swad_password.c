@@ -583,7 +583,7 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
 
    /***** Free subquery *****/
    if (UsrCod > 0)
-      free ((void *) SubQuery);
+      free (SubQuery);
 
    return NumUsrs;
   }

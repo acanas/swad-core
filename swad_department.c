@@ -465,7 +465,7 @@ void Dpt_FreeListDepartments (void)
   {
    if (Gbl.Dpts.Lst)
       /***** Free memory used by the list of departments *****/
-      free ((void *) Gbl.Dpts.Lst);
+      free (Gbl.Dpts.Lst);
 
    Gbl.Dpts.Lst = NULL;
    Gbl.Dpts.Num = 0;
@@ -541,18 +541,14 @@ static void Dpt_ListDepartmentsForEdition (void)
       Dpt_PutParamDptCod (Dpt->DptCod);
       HTM_SELECT_Begin (true,
 			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
-      fprintf (Gbl.F.Out,"<option value=\"0\"");
-      if (Dpt->InsCod == 0)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
+      HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
+		  "%s",Txt_Another_institution);
       for (NumIns = 0;
 	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
-                	                                       "",
-                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
+		     "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -919,18 +915,14 @@ static void Dpt_PutFormToCreateDepartment (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
-   fprintf (Gbl.F.Out,"<option value=\"0\"");
-   if (Dpt_EditingDpt->InsCod == 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
+   HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
+	       "%s",Txt_Another_institution);
    for (NumIns = 0;
 	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	NumIns++)
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod ? " selected=\"selected\"" :
-        	                                                                     "",
-               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
+		  "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -1118,32 +1110,22 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	    if (TextWhenNoDptSelected[0])
 	       NoDptSelectable = true;
 
-	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
-	 if (DptCod < 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 if (!NoDptSelectable)
-	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
-	 fprintf (Gbl.F.Out,">%s</option>",TextWhenNoDptSelected);
+	 HTM_OPTION (HTM_Type_STRING,"-1",DptCod < 0,!NoDptSelectable,
+		     "%s",TextWhenNoDptSelected);
 	}
 
       /* Another department selected (different to all departments listed) */
-      fprintf (Gbl.F.Out,"<option value=\"0\"");
-      if (DptCod == 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Txt_Another_department);
+      HTM_OPTION (HTM_Type_STRING,"0",DptCod == 0,false,
+		  "%s",Txt_Another_department);
      }
 
    /* List all departments */
    for (NumDpt = 0;
 	NumDpt < Gbl.Dpts.Num;
 	NumDpt++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Dpts.Lst[NumDpt].DptCod);
-      if (Gbl.Dpts.Lst[NumDpt].DptCod == DptCod)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Gbl.Dpts.Lst[NumDpt].FullName);
-     }
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Dpts.Lst[NumDpt].DptCod,
+		  Gbl.Dpts.Lst[NumDpt].DptCod == DptCod,false,
+		  "%s",Gbl.Dpts.Lst[NumDpt].FullName);
 
    /* End selector */
    HTM_SELECT_End ();
@@ -1180,7 +1162,7 @@ static void Dpt_EditingDepartmentDestructor (void)
    /***** Free memory used for department *****/
    if (Dpt_EditingDpt != NULL)
      {
-      free ((void *) Dpt_EditingDpt);
+      free (Dpt_EditingDpt);
       Dpt_EditingDpt = NULL;
      }
   }

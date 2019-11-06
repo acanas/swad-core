@@ -480,9 +480,9 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	NumLink++)
      {
       if (Links[NumLink].Anchor1Nick)
-	 free ((void *) Links[NumLink].Anchor1Nick);
+	 free (Links[NumLink].Anchor1Nick);
       if (Links[NumLink].Anchor2Nick)
-	 free ((void *) Links[NumLink].Anchor2Nick);
+	 free (Links[NumLink].Anchor2Nick);
      }
   }
 
@@ -893,7 +893,7 @@ void Str_WriteFloatNumToFile (FILE *FileDst,float Number)
    fprintf (FileDst,"%s",Str);
 
    /***** Free memory allocated for string *****/
-   free ((void *) Str);
+   free (Str);
   }
 
 /*****************************************************************************/
@@ -1501,7 +1501,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
       Str[LengthStrDst] = '\0';
 
       /***** Free memory used for the destination string *****/
-      free ((void *) StrDst);
+      free (StrDst);
      }
 
    if (RemoveLeadingAndTrailingSpaces)

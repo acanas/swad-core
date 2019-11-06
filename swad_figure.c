@@ -196,6 +196,7 @@ void Fig_ReqShowFigures (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
    Fig_FigureType_t FigureType;
+   unsigned FigureTypeUnsigned;
 
    /***** Form to show statistic *****/
    Frm_StartForm (ActSeeUseGbl);
@@ -228,14 +229,10 @@ void Fig_ReqShowFigures (void)
 	FigureType < Fig_NUM_FIGURES;
 	FigureType++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",
-               (unsigned) FigureType);
-      if (FigureType == Gbl.Figures.FigureType)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out," />"
-	                 "%s"
-	                 "</option>",
-               Txt_FIGURE_TYPES[FigureType]);
+      FigureTypeUnsigned = (unsigned) FigureType;
+      HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
+		  FigureType == Gbl.Figures.FigureType,false,
+		  "%s",Txt_FIGURE_TYPES[FigureType]);
      }
    HTM_SELECT_End ();
    HTM_LABEL_End ();
@@ -4057,7 +4054,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 		 ForumName1,ForumName2) < 0)
       Lay_NotEnoughMemoryExit ();
    Ico_PutIcon (Icon,ForumName,"ICO16x16");
-   free ((void *) ForumName);
+   free (ForumName);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
@@ -4219,7 +4216,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 	            (1 << NotifyEvent)) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[NotifyEvent] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Get number of notifications by email from database */
       switch (Gbl.Scope.Current)
@@ -4694,7 +4691,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 NumUsrs[Visibility] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-	 free ((void *) SubQuery);
+	 free (SubQuery);
 
 	 /* Update total number of users */
 	 NumUsrsTotal += NumUsrs[Visibility];
@@ -4782,7 +4779,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 	            AcceptedInDB[i]) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[i] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[i];
@@ -4858,7 +4855,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 		    Lan_STR_LANG_ID[Lan]) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[Lan] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Lan];
@@ -4938,7 +4935,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		       (unsigned) FirstDayOfWeek) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 NumUsrs[FirstDayOfWeek] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-	 free ((void *) SubQuery);
+	 free (SubQuery);
 
 	 /* Update total number of users */
 	 NumUsrsTotal += NumUsrs[FirstDayOfWeek];
@@ -4960,8 +4957,8 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		       Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 Ico_PutIcon (Icon,Title,"ICO40x40");
-	 free ((void *) Title);
-	 free ((void *) Icon);
+	 free (Title);
+	 free (Icon);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5021,7 +5018,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	            (unsigned) Format) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[Format] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Format];
@@ -5099,7 +5096,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	            Ico_IconSetId[IconSet]) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[IconSet] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[IconSet];
@@ -5118,7 +5115,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
 	       "class=\"ICO40x40\"");
-      free ((void *) URL);
+      free (URL);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5180,7 +5177,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 	            (unsigned) Menu) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[Menu] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Menu];
@@ -5257,7 +5254,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 		    The_ThemeId[Theme]) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[Theme] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Theme];
@@ -5276,7 +5273,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
 	       "style=\"width:40px;height:25px;\"");
-      free ((void *) URL);
+      free (URL);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5338,7 +5335,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	            SideCols) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[SideCols] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      free (SubQuery);
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[SideCols];
@@ -5357,7 +5354,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
 	       "style=\"width:40px;height:25px;\"");
-      free ((void *) Icon);
+      free (Icon);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

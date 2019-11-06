@@ -904,7 +904,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
 	}
 
       /* Copy file content into buffer */
-      if (fread ((void *) *HTMLBuffer,sizeof (char),Length,FileHTML) != Length)
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTML) != Length)
 	{
 	 fclose (FileHTML);
          return soap_receiver_fault (Gbl.soap,
@@ -2015,7 +2015,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
 
       /***** Copy file content into buffer *****/
       fseek (FileHTMLTmp,0L,SEEK_SET);
-      if (fread ((void *) *HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
