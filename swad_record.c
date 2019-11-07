@@ -3833,7 +3833,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (FirstName);
    // First name is mandatory, so avoid overwriting first name with empty string
-   if (Surname1[0])		// New first name not empty
+   if (FirstName[0])		// New first name not empty
       Str_Copy (UsrDat->FirstName,FirstName,
                 Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
