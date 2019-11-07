@@ -11661,7 +11661,8 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    unsigned NumCrssWorksRemoved = 0;
    struct Course Crs;
 

@@ -1799,7 +1799,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    long CrsCod;
    char PathDeg[PATH_MAX + 1];
 

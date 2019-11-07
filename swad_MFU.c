@@ -102,7 +102,8 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    long ActCod;
    Act_Action_t Action;
 

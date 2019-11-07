@@ -511,7 +511,8 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
    bool FieldIsRepeated = false;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
 
    /* Query database */
    if ((NumRows = Rec_GetAllFieldsInCurrCrs (&mysql_res)) > 0)	// If se han encontrado groups...

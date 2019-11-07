@@ -245,7 +245,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    extern const char *Txt_No_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
 
    /***** Get chat rooms with connected users from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get chat rooms"

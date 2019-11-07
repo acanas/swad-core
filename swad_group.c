@@ -2129,7 +2129,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 		"GrpCod%ld",
 		GrpTyp->GrpTypCod);
       HTM_INPUT_CHECKBOX (StrGrpCod,false,
-			  "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			  "id=\"Grp%ld\" value=\"%ld\"%s",
 			  Grp->GrpCod,Grp->GrpCod,
 			  UsrBelongsToThisGroup ? " checked=\"checked\"" : "");	// I can not register
 

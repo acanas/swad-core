@@ -1771,7 +1771,8 @@ static void Tst_ShowFormEditTags (void)
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    long TagCod;
 
    /***** Get current tags in current course *****/
@@ -4794,7 +4795,8 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 void Tst_GetAndWriteTagsQst (long QstCod)
   {
    extern const char *Txt_no_tags;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 

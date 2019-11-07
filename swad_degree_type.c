@@ -883,7 +883,8 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    long DegCod;
 
    /***** Get degrees of a type from database *****/

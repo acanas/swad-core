@@ -1501,7 +1501,8 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    struct UsrData UsrDat;
    unsigned NumNotif;
    unsigned NumTotalNotif = 0;
