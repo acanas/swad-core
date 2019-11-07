@@ -1326,16 +1326,12 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_SELECT_Begin (true,
 			"name=\"MandatoryEnrolment\""
 	                " style=\"width:150px;\"");
-      fprintf (Gbl.F.Out,"<option value=\"N\"");
-      if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>"
-	                 "<option value=\"Y\"",
-               Txt_It_is_optional_to_choose_a_group);
-      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-               Txt_It_is_mandatory_to_choose_a_group);
+      HTM_OPTION (HTM_Type_STRING,"N",
+		  !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
+		  "%s",Txt_It_is_optional_to_choose_a_group);
+      HTM_OPTION (HTM_Type_STRING,"Y",
+		  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
+		  "%s",Txt_It_is_mandatory_to_choose_a_group);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -1347,16 +1343,12 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_SELECT_Begin (true,
 			"name=\"MultipleEnrolment\""
 	                " style=\"width:150px;\"");
-      fprintf (Gbl.F.Out,"<option value=\"N\"");
-      if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>"
-	                 "<option value=\"Y\"",
-               Txt_A_student_can_only_belong_to_one_group);
-      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-               Txt_A_student_can_belong_to_several_groups);
+      HTM_OPTION (HTM_Type_STRING,"N",
+		  !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
+		  "%s",Txt_A_student_can_only_belong_to_one_group);
+      HTM_OPTION (HTM_Type_STRING,"Y",
+		  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
+		  "%s",Txt_A_student_can_belong_to_several_groups);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -1555,10 +1547,9 @@ static void Grp_ListGroupsForEdition (void)
               NumTipGrpAux++)
            {
             GrpTypAux = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumTipGrpAux];
-            fprintf (Gbl.F.Out,"<option value=\"%ld\"",GrpTypAux->GrpTypCod);
-            if (GrpTypAux->GrpTypCod == GrpTyp->GrpTypCod)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-            fprintf (Gbl.F.Out,">%s</option>",GrpTypAux->GrpTypName);
+	    HTM_OPTION (HTM_Type_LONG,&GrpTypAux->GrpTypCod,
+			GrpTypAux->GrpTypCod == GrpTyp->GrpTypCod,false,
+			"%s",GrpTypAux->GrpTypName);
            }
 
          /* End selector */
@@ -1584,31 +1575,22 @@ static void Grp_ListGroupsForEdition (void)
 			   "name=\"ClaCod\" style=\"width:100px;\"");
 
 	 /* Option for no assigned classroom */
-	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
-	 if (Grp->Classroom.ClaCod < 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",
-		  Txt_No_assigned_classroom);
+	 HTM_OPTION (HTM_Type_STRING,"-1",
+		     Grp->Classroom.ClaCod < 0,false,
+		     "%s",Txt_No_assigned_classroom);
 
 	 /* Option for another classroom */
-	 fprintf (Gbl.F.Out,"<option value=\"0\"");
-	 if (Grp->Classroom.ClaCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",
-		  Txt_Another_classroom);
+	 HTM_OPTION (HTM_Type_STRING,"0",
+		     Grp->Classroom.ClaCod == 0,false,
+		     "%s",Txt_Another_classroom);
 
 	 /* Options for classrooms */
 	 for (NumCla = 0;
 	      NumCla < Gbl.Classrooms.Num;
 	      NumCla++)
-	   {
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-		     Gbl.Classrooms.Lst[NumCla].ClaCod);
-	    if (Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->Classroom.ClaCod)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",
-		     Gbl.Classrooms.Lst[NumCla].ShrtName);
-	   }
+	    HTM_OPTION (HTM_Type_LONG,&Gbl.Classrooms.Lst[NumCla].ClaCod,
+			Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->Classroom.ClaCod,false,
+			"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
 
 	 /* End selector */
 	 HTM_SELECT_End ();
@@ -2502,16 +2484,12 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"MandatoryEnrolment\" style=\"width:150px;\"");
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (!Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>"
-	              "<option value=\"Y\"",
-            Txt_It_is_optional_to_choose_a_group);
-   if (Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-            Txt_It_is_mandatory_to_choose_a_group);
+   HTM_OPTION (HTM_Type_STRING,"N",
+	       !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
+	       "%s",Txt_It_is_optional_to_choose_a_group);
+   HTM_OPTION (HTM_Type_STRING,"Y",
+	       Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
+	       "%s",Txt_It_is_mandatory_to_choose_a_group);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -2519,16 +2497,12 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"MultipleEnrolment\" style=\"width:150px;\"");
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (!Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>"
-	              "<option value=\"Y\"",
-            Txt_A_student_can_only_belong_to_one_group);
-   if (Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-            Txt_A_student_can_belong_to_several_groups);
+   HTM_OPTION (HTM_Type_STRING,"N",
+	       !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
+	       "%s",Txt_A_student_can_only_belong_to_one_group);
+   HTM_OPTION (HTM_Type_STRING,"Y",
+	       Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
+	       "%s",Txt_A_student_can_belong_to_several_groups);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -2629,15 +2603,10 @@ static void Grp_PutFormToCreateGroup (void)
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
-	  Gbl.Crs.Grps.GrpTyp.GrpTypCod)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
-     }
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
+		  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
+	          Gbl.Crs.Grps.GrpTyp.GrpTypCod,false,
+		  "%s",Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 
    /* End selector */
    HTM_SELECT_End ();
@@ -2656,31 +2625,20 @@ static void Grp_PutFormToCreateGroup (void)
 		     "name=\"ClaCod\" style=\"width:100px;\"");
 
    /* Option for no assigned classroom */
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Crs.Grps.ClaCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-	    Txt_No_assigned_classroom);
+   HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.ClaCod < 0,false,
+	       "%s",Txt_No_assigned_classroom);
 
    /* Option for another classroom */
-   fprintf (Gbl.F.Out,"<option value=\"0\"");
-   if (Gbl.Crs.Grps.ClaCod == 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",
-	    Txt_Another_classroom);
+   HTM_OPTION (HTM_Type_STRING,"0",Gbl.Crs.Grps.ClaCod == 0,false,
+	       "%s",Txt_Another_classroom);
 
    /* Options for classrooms */
    for (NumCla = 0;
 	NumCla < Gbl.Classrooms.Num;
 	NumCla++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Classrooms.Lst[NumCla].ClaCod);
-      if (Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Classrooms.Lst[NumCla].ShrtName);
-     }
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Classrooms.Lst[NumCla].ClaCod,
+		  Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod,false,
+		  "%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
 
    /* End selector */
    HTM_SELECT_End ();

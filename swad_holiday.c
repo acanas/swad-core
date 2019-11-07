@@ -551,6 +551,7 @@ static void Hld_ListHolidaysForEdition (void)
    unsigned NumPlc;
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
+   unsigned HolidayTypeUnsigned;
 
    /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
@@ -587,18 +588,14 @@ static void Hld_ListHolidaysForEdition (void)
       Hld_PutParamHldCod (Hld->HldCod);
       HTM_SELECT_Begin (true,
 			"name=\"PlcCod\" class=\"PLC_COD\"");
-      fprintf (Gbl.F.Out,"<option value=\"-1\"");
-      if (Hld->PlcCod <= 0)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_All_places);
+      HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
+		  "%s",Txt_All_places);
       for (NumPlc = 0;
 	   NumPlc < Gbl.Plcs.Num;
 	   NumPlc++)
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-                  Gbl.Plcs.Lst[NumPlc].PlcCod,
-                  Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
-                	                                       "",
-                  Gbl.Plcs.Lst[NumPlc].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
+		     Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod,false,
+		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -612,11 +609,12 @@ static void Hld_ListHolidaysForEdition (void)
       for (HolidayType = (Hld_HolidayType_t) 0;
 	   HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	   HolidayType++)
-         fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-                  (unsigned) HolidayType,
-                  HolidayType == Hld->HldTyp ? " selected=\"selected\"" :
-                	                       "",
-                  Txt_HOLIDAY_TYPES[HolidayType]);
+	{
+	 HolidayTypeUnsigned = (unsigned) HolidayType;
+	 HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
+		     HolidayType == Hld->HldTyp,false,
+		     "%s",Txt_HOLIDAY_TYPES[HolidayType]);
+	}
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -961,6 +959,7 @@ static void Hld_PutFormToCreateHoliday (void)
    extern const char *Txt_Create_holiday;
    unsigned NumPlc;
    Hld_HolidayType_t HolidayType;
+   unsigned HolidayTypeUnsigned;
 
    /***** Begin form *****/
    Frm_StartForm (ActNewHld);
@@ -986,18 +985,14 @@ static void Hld_PutFormToCreateHoliday (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"PlcCod\" class=\"PLC_COD\"");
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Hld_EditingHld->PlcCod <= 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_All_places);
+   HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
+	       "%s",Txt_All_places);
    for (NumPlc = 0;
 	NumPlc < Gbl.Plcs.Num;
 	NumPlc++)
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-               Gbl.Plcs.Lst[NumPlc].PlcCod,
-               Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod ? " selected=\"selected\"" :
-        	                                                       "",
-               Gbl.Plcs.Lst[NumPlc].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
+		  Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod,false,
+		  "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -1008,11 +1003,12 @@ static void Hld_PutFormToCreateHoliday (void)
    for (HolidayType = (Hld_HolidayType_t) 0;
 	HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	HolidayType++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-               (unsigned) HolidayType,
-               HolidayType == Hld_EditingHld->HldTyp ? " selected=\"selected\"" :
-        	                                       "",
-               Txt_HOLIDAY_TYPES[HolidayType]);
+     {
+      HolidayTypeUnsigned = (unsigned) HolidayType;
+      HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
+		  HolidayType == Hld_EditingHld->HldTyp,false,
+		  "%s",Txt_HOLIDAY_TYPES[HolidayType]);
+     }
    HTM_SELECT_End ();
    HTM_TD_End ();
 

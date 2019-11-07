@@ -375,11 +375,9 @@ static void Ins_Configuration (bool PrintView)
       for (NumCty = 0;
 	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	   NumCty++)
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod ? " selected=\"selected\"" :
-									     "",
-		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+		     Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
+		     "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
@@ -1377,11 +1375,9 @@ void Ins_WriteSelectorOfInstitution (void)
       HTM_SELECT_Begin (false,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"<option value=\"\"");
-   if (Gbl.Hierarchy.Ins.InsCod < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
-            Txt_Institution);
+   HTM_OPTION (HTM_Type_STRING,"",
+	       Gbl.Hierarchy.Ins.InsCod < 0,true,
+	       "[%s]",Txt_Institution);
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
@@ -1407,10 +1403,10 @@ void Ins_WriteSelectorOfInstitution (void)
             Lay_ShowErrorAndExit ("Wrong code of institution.");
 
          /* Write option */
-         fprintf (Gbl.F.Out,"<option value=\"%ld\"",InsCod);
-         if (Gbl.Hierarchy.Ins.InsCod > 0 && InsCod == Gbl.Hierarchy.Ins.InsCod)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+	 HTM_OPTION (HTM_Type_LONG,&InsCod,
+		     Gbl.Hierarchy.Ins.InsCod > 0 &&
+		     InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+		     "%s",row[1]);
         }
 
       /***** Free structure that stores the query result *****/
@@ -1435,6 +1431,7 @@ static void Ins_ListInstitutionsForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    Ins_StatusTxt_t StatusTxt;
+   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1564,12 +1561,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 HTM_SELECT_Begin (true,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
-	 fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
-			    "<option value=\"%u\">%s</option>",
-		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),
-		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
-		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),
-		  Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
+	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
+	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
