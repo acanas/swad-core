@@ -635,12 +635,15 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
 
    /***** Write total mark ****/
    HTM_DIV_Begin ("class=\"DAT CM\"");
-   fprintf (Gbl.F.Out,"%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>",
-	    Txt_Score,
-	    (TotalScoreOverSCORE_MAX >= (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
-					                                          "ANS_BAD",
+   fprintf (Gbl.F.Out,"%s: ",Txt_Score);
+   HTM_SPAN_Begin ("class=\"%s\"",
+	           (TotalScoreOverSCORE_MAX >=
+	            (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
+					                      "ANS_BAD");
+   fprintf (Gbl.F.Out,"%.2lf (%.2lf %s %u)",
 	    TotalScore,
 	    TotalScoreOverSCORE_MAX,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   HTM_SPAN_End ();
    HTM_DIV_End ();
   }
 
@@ -3301,8 +3304,9 @@ void Tst_WriteAnswersEdit (long QstCod)
       case Tst_ANS_INT:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">(%ld)</span>",
-                  Tst_GetIntAnsFromStr (row[1]));
+         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+         fprintf (Gbl.F.Out,"(%ld)",Tst_GetIntAnsFromStr (row[1]));
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
 	 if (Gbl.Test.Answer.NumOptions != 2)
@@ -3315,15 +3319,18 @@ void Tst_WriteAnswersEdit (long QstCod)
             row = mysql_fetch_row (mysql_res);
             FloatNum[i] = Tst_GetFloatAnsFromStr (row[1]);
            }
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">([%lg; %lg])</span>",
-                  FloatNum[0],FloatNum[1]);
+         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+         fprintf (Gbl.F.Out,"([%lg; %lg])",FloatNum[0],FloatNum[1]);
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">(");
+         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+         fprintf (Gbl.F.Out,"(");
          Tst_WriteAnsTF (row[1][0]);
-         fprintf (Gbl.F.Out,")</span>");
+         fprintf (Gbl.F.Out,")");
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -3620,11 +3627,21 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_0\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
       else if (AnsTF == row[1][0])	// If correct
-         fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_OK\"");
+         fprintf (Gbl.F.Out,"%.2lf",1.0);
+	}
       else				// If wrong
-         fprintf (Gbl.F.Out,"ANS_BAD\">%.2lf",-1.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
+         fprintf (Gbl.F.Out,"%.2lf",-1.0);
+	}
+      HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
 
@@ -3879,12 +3896,13 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
-         fprintf (Gbl.F.Out,"ANS_0");
+         HTM_SPAN_Begin ("class=\"ANS_0\"");
       else if (*ScoreThisQst > 0.0)
-         fprintf (Gbl.F.Out,"ANS_OK");
+         HTM_SPAN_Begin ("class=\"ANS_OK\"");
       else
-         fprintf (Gbl.F.Out,"ANS_BAD");
-      fprintf (Gbl.F.Out,"\">%.2lf",*ScoreThisQst);
+         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
+      fprintf (Gbl.F.Out,"%.2lf",*ScoreThisQst);
+      HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
 
@@ -4397,11 +4415,21 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
-      else if (Correct)				// If correct
-         fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
-      else					// If wrong
-         fprintf (Gbl.F.Out,"ANS_BAD\">%.2lf",0.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_0\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
+      else if (Correct)					// If correct
+	{
+         HTM_SPAN_Begin ("class=\"ANS_OK\"");
+         fprintf (Gbl.F.Out,"%.2lf",1.0);
+	}
+      else						// If wrong
+	{
+         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
+      HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
 
@@ -4516,11 +4544,21 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
-      else if (IntAnswerUsr == IntAnswerCorr)	// If correct
-         fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
-      else					// If wrong
-         fprintf (Gbl.F.Out,"ANS_BAD\">%.2lf",0.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_0\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
+      else if (IntAnswerUsr == IntAnswerCorr)		// If correct
+	{
+         HTM_SPAN_Begin ("class=\"ANS_OK\"");
+         fprintf (Gbl.F.Out,"%.2lf",1.0);
+	}
+      else						// If wrong
+	{
+         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
+      HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
 
@@ -4649,12 +4687,22 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
+	{
+         HTM_SPAN_Begin ("class=\"ANS_0\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
       else if (FloatAnsUsr >= FloatAnsCorr[0] &&
-               FloatAnsUsr <= FloatAnsCorr[1])	// If correct (inside the interval)
-         fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
-      else					// If wrong (outside the interval)
-         fprintf (Gbl.F.Out,"ANS_BAD\">%.2lf",0.0);
+               FloatAnsUsr <= FloatAnsCorr[1])		// If correct (inside the interval)
+	{
+         HTM_SPAN_Begin ("class=\"ANS_OK\"");
+         fprintf (Gbl.F.Out,"%.2lf",1.0);
+	}
+      else						// If wrong (outside the interval)
+	{
+         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
+         fprintf (Gbl.F.Out,"%.2lf",0.0);
+	}
+      HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
 
@@ -4690,12 +4738,11 @@ static void Tst_WriteScoreStart (unsigned ColSpan)
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LM\"",ColSpan);
-   fprintf (Gbl.F.Out,"%s: <span class=\"",Txt_Score);
+   fprintf (Gbl.F.Out,"%s: ",Txt_Score);
   }
 
 static void Tst_WriteScoreEnd (void)
   {
-   fprintf (Gbl.F.Out,"</span>");
    HTM_TD_End ();
    HTM_TR_End ();
   }
@@ -4767,8 +4814,11 @@ void Tst_GetAndWriteTagsQst (long QstCod)
       HTM_UL_End ();
      }
    else
-      fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">(%s)</span>",
-               Txt_no_tags);
+     {
+      HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+      fprintf (Gbl.F.Out,"(%s)",Txt_no_tags);
+      HTM_SPAN_End ();
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

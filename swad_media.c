@@ -1631,9 +1631,9 @@ static void Med_ShowGIF (struct Media *Media,
 		  "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
 
 	 /* Overlay with GIF label */
-	 fprintf (Gbl.F.Out,"<span class=\"MED_PLAY_ICO\">"
-			    "GIF"
-			    "</span>");
+	 HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
+	 fprintf (Gbl.F.Out,"GIF");
+	 HTM_SPAN_End ();
 
 	 HTM_DIV_End ();
 	}

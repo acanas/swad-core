@@ -81,6 +81,9 @@ void HTM_ARTICLE_End (void);
 void HTM_SECTION_Begin (const char *SectionId);
 void HTM_SECTION_End (void);
 
+void HTM_SPAN_Begin (const char *fmt,...);
+void HTM_SPAN_End (void);
+
 void HTM_UL_Begin (const char *fmt,...);
 void HTM_UL_End (void);
 

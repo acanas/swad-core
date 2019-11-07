@@ -475,7 +475,8 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
       /* Create unique id */
       Frm_SetUniqueId (IdFirstClickTime);
 
-      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
+      HTM_SPAN_Begin ("id=\"%s\"",IdFirstClickTime);
+      HTM_SPAN_End ();
       if (UsrFigures->NumDays > 0)
         {
 	 fprintf (Gbl.F.Out,"&nbsp;(");

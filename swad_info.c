@@ -1166,8 +1166,11 @@ void Inf_FormsToSelSendInfo (void)
       fprintf (Gbl.F.Out,"%s",Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       HTM_LABEL_End ();
       if (Txt_INFO_SRC_HELP[InfoSrc])
-         fprintf (Gbl.F.Out,"<span class=\"DAT\"><br />(%s)</span>",
-                  Txt_INFO_SRC_HELP[InfoSrc]);
+	{
+         HTM_SPAN_Begin ("class=\"DAT\"");
+         fprintf (Gbl.F.Out,"<br />(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
+         HTM_SPAN_End ();
+	}
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
       HTM_TD_End ();

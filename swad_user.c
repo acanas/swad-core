@@ -3495,10 +3495,16 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Put a form to change my role *****/
    if (Rol_GetNumAvailableRoles () == 1)
-      fprintf (Gbl.F.Out,"<span class=\"DAT\">%s:&nbsp;</span>"
-	                 "<span class=\"DAT_N_BOLD\">%s</span>",
-               Txt_Role,
+     {
+      HTM_SPAN_Begin ("class=\"DAT\"");
+      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Role);
+      HTM_SPAN_End ();
+
+      HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+      fprintf (Gbl.F.Out,"%s",
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      HTM_SPAN_End ();
+     }
    else
      {
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);

@@ -1401,8 +1401,11 @@ static void TL_PutLinkToViewNewPublications (void)
    HTM_A_Begin ("href=\"\" class=\"%s\""
                 " onclick=\"moveNewTimelineToTimeline();return false;\"",
 	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s (<span id=\"view_new_posts_count\">0</span>)",
-	    Txt_See_new_activity);
+   fprintf (Gbl.F.Out,"%s (",Txt_See_new_activity);
+   HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
+   fprintf (Gbl.F.Out,"0");
+   HTM_SPAN_End ();
+   fprintf (Gbl.F.Out,")");
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -2322,9 +2325,15 @@ static void TL_PutFormToWriteNewPost (void)
 
    /* Write author's full name and nickname */
    HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
-   fprintf (Gbl.F.Out,"<span class=\"DAT_N_BOLD\">%s</span>"
-		      "<span class=\"DAT_LIGHT\"> @%s</span>",
-	    Gbl.Usrs.Me.UsrDat.FullName,Gbl.Usrs.Me.UsrDat.Nickname);
+
+   HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Me.UsrDat.FullName);
+   HTM_SPAN_End ();
+
+   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+   fprintf (Gbl.F.Out," @%s",Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_SPAN_End ();
+
    HTM_DIV_End ();
 
    /***** Form to write the post *****/

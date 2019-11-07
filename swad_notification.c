@@ -500,8 +500,11 @@ void Ntf_ShowMyNotifications (void)
             Frm_EndForm ();
            }
          else
-            fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
-                     ClassAnchor,Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+           {
+            HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
+            fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            HTM_SPAN_End ();
+           }
          HTM_TD_End ();
 
          /* Write user (from) */
@@ -520,7 +523,7 @@ void Ntf_ShowMyNotifications (void)
             if (PutLink)
                Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
-               fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
+               HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
             if (PutLink)
               {
@@ -528,7 +531,7 @@ void Ntf_ShowMyNotifications (void)
                Frm_EndForm ();
               }
             else
-               fprintf (Gbl.F.Out,"</span>");
+               HTM_SPAN_End ();
            }
          else
            {
@@ -538,7 +541,7 @@ void Ntf_ShowMyNotifications (void)
             if (PutLink)
                Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
-               fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
+               HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
 
             if (Crs.CrsCod > 0)
                fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
@@ -557,7 +560,7 @@ void Ntf_ShowMyNotifications (void)
                Frm_EndForm ();
               }
             else
-               fprintf (Gbl.F.Out,"</span>");
+               HTM_SPAN_End ();
            }
          HTM_TD_End ();
 
@@ -2049,20 +2052,24 @@ void Ntf_WriteNumberOfNewNtfs (void)
 			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf",NULL);
 
    /***** Number of unseen notifications *****/
-   fprintf (Gbl.F.Out,"<span id=\"notif_all\">%u&nbsp;%s<br /></span>",
+   HTM_SPAN_Begin ("id=\"notif_all\"");
+   fprintf (Gbl.F.Out,"%u&nbsp;%s<br />",
 	    NumUnseenNtfs,
 	    NumUnseenNtfs == 1 ? Txt_notification :
 				 Txt_notifications);
+   HTM_SPAN_End ();
 
    /***** Icon and number of new notifications *****/
    if (NumNewNtfs)
      {
       HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
 	       "class=\"ICO16x16\"");
-      fprintf (Gbl.F.Out,"&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
-	       NumNewNtfs,
+      fprintf (Gbl.F.Out,"&nbsp;%u",NumNewNtfs);
+      HTM_SPAN_Begin ("id=\"notif_new\"");
+      fprintf (Gbl.F.Out,"&nbsp;%s",
 	       NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
 				 Txt_NOTIF_new_PLURAL);
+      HTM_SPAN_End ();
      }
 
    /***** End form *****/

@@ -159,8 +159,8 @@ static void Dat_PutIconsDateFormat (void)
 
 void Dat_PutSpanDateFormat (Dat_Format_t Format)
   {
-   fprintf (Gbl.F.Out,"<span id=\"date_format_%u\"></span>",
-	    (unsigned) Format);
+   HTM_SPAN_Begin ("id=\"date_format_%u\"",(unsigned) Format);
+   HTM_SPAN_End ();
   }
 
 void Dat_PutScriptDateFormat (Dat_Format_t Format)
@@ -318,8 +318,9 @@ void Dat_ShowClientLocalTime (void)
    HTM_DIV_Begin ("id=\"current_month\"");
    Frm_StartForm (ActSeeCal);
    Frm_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
-   fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
-                      "</span>");
+   HTM_SPAN_Begin ("id=\"current_month_txt\"");
+   // JavaScript will write HTML here
+   HTM_SPAN_End ();
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -331,8 +332,9 @@ void Dat_ShowClientLocalTime (void)
       Frm_StartForm (ActSeeMyAgd);
       Frm_LinkFormSubmit (Txt_Show_agenda,"CURRENT_DAY",NULL);
      }
-   fprintf (Gbl.F.Out,"<span id=\"current_day_txt\">"	// JavaScript will write HTML here
-		      "</span>");
+   HTM_SPAN_Begin ("id=\"current_day_txt\"");
+   // JavaScript will write HTML here
+   HTM_SPAN_End ();
    if (Gbl.Usrs.Me.Logged)
      {
       Frm_LinkFormEnd ();

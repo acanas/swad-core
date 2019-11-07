@@ -1047,7 +1047,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      fprintf (Gbl.F.Out,"<span class=\"%s\">",StyleTitle);
+      HTM_SPAN_Begin ("class=\"%s\"",StyleTitle);
    else
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
                    Ins.WWW,StyleTitle);
@@ -1055,7 +1055,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    fprintf (Gbl.F.Out,"<br />%s",
             Ins.FullName);
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      fprintf (Gbl.F.Out,"</span>");
+      HTM_SPAN_End ();
    else
       HTM_A_End ();
    HTM_TD_End ();

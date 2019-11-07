@@ -2270,8 +2270,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_CHECKBOX ("GrpCods",false,
-		       "id=\"Grp%ld\" value=\"%ld\"%s%s onclick=\"checkParent(this,'AllGroups')\"",
-		       -(GrpTyp->GrpTypCod),-(GrpTyp->GrpTypCod),
+		       "id=\"Grp%ld\" value=\"%ld\"%s"
+		       " onclick=\"checkParent(this,'AllGroups')\"",
+		       -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
 		       ICanSelUnselGroup ? (Checked ? " checked=\"checked\"" : "") :
 			                   " disabled=\"disabled\"");
    HTM_TD_End ();
@@ -2332,10 +2333,9 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       UniqueId++;
       if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      fprintf (Gbl.F.Out,"<br />%s: "
-                         "<span id=\"%s\"></span>",
-               Txt_Opening_of_groups,
-               Id);
+      fprintf (Gbl.F.Out,"<br />%s: ",Txt_Opening_of_groups);
+      HTM_SPAN_Begin ("id=\"%s\"",Id);
+      HTM_SPAN_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);

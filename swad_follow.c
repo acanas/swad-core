@@ -610,9 +610,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
         	                                       "FOLLOW_NUM",NULL);
      }
    else
-      fprintf (Gbl.F.Out,"<span class=\"%s\">",
-	       (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-					    "FOLLOW_NUM");
+      HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
+					                          "FOLLOW_NUM");
    fprintf (Gbl.F.Out,"%u",NumUsrs);
    if (NumUsrs)
      {
@@ -620,7 +619,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Frm_EndForm ();
      }
    else
-      fprintf (Gbl.F.Out,"</span>");
+      HTM_SPAN_End ();
 
    /***** Text *****/
    HTM_DIV_Begin ("class=\"%s\"",

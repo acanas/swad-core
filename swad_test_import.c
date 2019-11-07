@@ -1039,8 +1039,11 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TABLE_End ();
      }
    else	// no tags for this question
-      fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;(%s)&nbsp;</span>",
-               ClassData,Txt_no_tags);
+     {
+      HTM_SPAN_Begin ("class=\"%s\"",ClassData);
+      fprintf (Gbl.F.Out,"&nbsp;(%s)&nbsp;",Txt_no_tags);
+      HTM_SPAN_End ();
+     }
 
    HTM_TD_End ();
 
@@ -1067,17 +1070,23 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         fprintf (Gbl.F.Out,"<span class=\"%s\">(%ld)</span>",
-                  ClassStem,Gbl.Test.Answer.Integer);
+         HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
+         fprintf (Gbl.F.Out,"(%ld)",Gbl.Test.Answer.Integer);
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
-         fprintf (Gbl.F.Out,"<span class=\"%s\">([%lg; %lg])</span>",
-                  ClassStem,Gbl.Test.Answer.FloatingPoint[0],Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
+         fprintf (Gbl.F.Out,"([%lg; %lg])",
+		  Gbl.Test.Answer.FloatingPoint[0],
+		  Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
-         fprintf (Gbl.F.Out,"<span class=\"%s\">(",ClassStem);
+         HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
+         fprintf (Gbl.F.Out,"(");
          Tst_WriteAnsTF (Gbl.Test.Answer.TF);
-         fprintf (Gbl.F.Out,")</span>");
+         fprintf (Gbl.F.Out,")");
+         HTM_SPAN_End ();
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:

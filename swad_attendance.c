@@ -3132,7 +3132,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
-      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
+      HTM_SPAN_Begin ("id=\"%s\"",Id);
+      HTM_SPAN_End ();
       HTM_LABEL_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -3575,10 +3576,9 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"<span id=\"%s\"></span>"
-	                    "<br />%s",
-	          Id,
-	          Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	 HTM_SPAN_End ();
+	 fprintf (Gbl.F.Out,"<br />%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);

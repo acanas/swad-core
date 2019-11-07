@@ -305,17 +305,21 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    HTM_DIV_Begin ("class=\"TITLE_REPORT DAT\"");
 
    /***** User *****/
-   fprintf (Gbl.F.Out,"%s: <span class=\"DAT_N_BOLD\">%s</span>",
-	    Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
-	    Gbl.Usrs.Me.UsrDat.FullName);
+   fprintf (Gbl.F.Out,"%s: ",Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
+   HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Me.UsrDat.FullName);
+   HTM_SPAN_End ();
 
    /***** Report date *****/
    if (CurrentTimeUTC)
+     {
       fprintf (Gbl.F.Out,"<br />"
-			 "%s: <span class=\"DAT_N\">%s %s UTC</span>",
-	       Txt_Date,
-	       CurrentTimeUTC->StrDate,
-	       CurrentTimeUTC->StrTime);
+			 "%s: ",Txt_Date);
+      HTM_SPAN_Begin ("class=\"DAT_N\"");
+      fprintf (Gbl.F.Out,"%s %s UTC",CurrentTimeUTC->StrDate,
+	                             CurrentTimeUTC->StrTime);
+      HTM_SPAN_End ();
+     }
 
    HTM_DIV_End ();
   }

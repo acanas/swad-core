@@ -242,7 +242,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          Frm_LinkFormSubmit (Gbl.Title,Font,NULL);
         }
       else
-         fprintf (Gbl.F.Out,"<span class=\"%s\">",Font);
+         HTM_SPAN_Begin ("class=\"%s\"",Font);
       if (FirstMsgEnabled)
          fprintf (Gbl.F.Out,"%s",Subject);
       else
@@ -253,7 +253,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"</span>");
+	 HTM_SPAN_End ();
       HTM_DIV_End ();
      }
 
@@ -355,7 +355,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
-            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
+           {
+            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_SPAN_End ();
+           }
         }
 
       /***** Posible link to page left *****/
@@ -451,7 +455,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
-            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
+           {
+            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_SPAN_End ();
+           }
         }
 
       /***** Loop to put links to the pages around the current one *****/
@@ -463,10 +471,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	           Txt_Page_X_of_Y,
 		   NumPage,Pagination->NumPags);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
-            fprintf (Gbl.F.Out,"<span title=\"%s\" class=\"PAG_CUR %s\">"
-                               "%u"
-                               "</span>",
-                     Gbl.Title,Font,NumPage);
+           {
+            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Gbl.Title,Font);
+            fprintf (Gbl.F.Out,"%u",NumPage);
+            HTM_SPAN_End ();
+           }
          else
            {
             switch (WhatPaginate)
@@ -561,7 +570,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	  Pagination->RightPage < Pagination->NumPags)
         {
          if (Pagination->RightPage > Pagination->EndPage + 1)
-            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
+           {
+            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_SPAN_End ();
+           }
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
@@ -655,7 +668,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
       if (Pagination->EndPage < Pagination->NumPags)
         {
          if (Pagination->NumPags > Pagination->RightPage + 1)
-            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
+           {
+            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_SPAN_End ();
+           }
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:

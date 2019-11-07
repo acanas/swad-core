@@ -1803,8 +1803,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          fprintf (Gbl.F.Out,"%s:",Gbl.Crs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-            fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
+           {
+            HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+            fprintf (Gbl.F.Out," (%s)",
                      Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+            HTM_SPAN_End ();
+           }
          HTM_TD_End ();
 
          /* Get the text of the field */

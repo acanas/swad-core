@@ -6271,13 +6271,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
          if ((Level == 1) &&
              (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
               Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
-            fprintf (Gbl.F.Out,"<span title=\"%s\">",
-                     Gbl.FileBrowser.Asg.Title);
+            HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
          fprintf (Gbl.F.Out,"<strong>%s</strong>&nbsp;",FileNameToShow);
          if ((Level == 1) &&
              (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
               Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
-            fprintf (Gbl.F.Out,"</span>");
+            HTM_SPAN_End ();
         }
 
       /***** End cell *****/
@@ -6392,11 +6391,11 @@ static void Brw_WriteDatesAssignment (void)
       /***** Write start date *****/
       if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
+      HTM_SPAN_Begin ("id=\"%s\"",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x7);
-      fprintf (Gbl.F.Out,"</span>");
+      HTM_SPAN_End ();
       free (Id);
 
       /***** Arrow *****/
@@ -6405,11 +6404,11 @@ static void Brw_WriteDatesAssignment (void)
       /***** Write end date *****/
       if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
+      HTM_SPAN_Begin ("id=\"%s\"",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,false,false,0x7);
-      fprintf (Gbl.F.Out,"</span>");
+      HTM_SPAN_End ();
       free (Id);
      }
    else
@@ -6447,7 +6446,8 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       UniqueId++;
       if (asprintf (&Id,"filedate%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
+      HTM_SPAN_Begin ("id=\"%s\"",Id);
+      HTM_SPAN_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x6);
@@ -8386,9 +8386,11 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Brw_PutImplicitParamsFileBrowser ();
 
    HTM_DIV_Begin ("class=\"dz-message\"");
-   fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s</span>",
-            Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+   HTM_SPAN_End ();
    HTM_DIV_End ();
+
    fprintf (Gbl.F.Out,"</form>");
 
    /***** Put button to refresh file browser after upload *****/

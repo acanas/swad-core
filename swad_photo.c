@@ -1252,12 +1252,23 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
         {
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
 	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE\"");
-	 fprintf (Gbl.F.Out,"<span class=\"DAT_N_BOLD\">%u</span>"
-			    "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
-			    "<span class=\"DAT_N_BOLD\">%u</span>"
-			    "<span class=\"DAT_SMALL\">&nbsp;%s</span>",
-		  NumFollowing,Txt_Following,
-		  NumFollowers,Txt_Followers);
+
+	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+	 fprintf (Gbl.F.Out,"%u",NumFollowing);
+	 HTM_SPAN_End ();
+
+	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_Following);
+	 HTM_SPAN_End ();
+
+	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+	 fprintf (Gbl.F.Out,"%u",NumFollowers);
+	 HTM_SPAN_End ();
+
+	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+	 fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Followers);
+	 HTM_SPAN_End ();
+
 	 HTM_DIV_End ();
         }
 
@@ -2411,11 +2422,16 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Txt_photos;
 
-   fprintf (Gbl.F.Out,"<span class=\"DAT\">%d&nbsp;</span>"
-                      "<span class=\"DAT_SMALL\">(%d&nbsp;%s,&nbsp;%d%%)</span>",
-            NumStds,NumStdsWithPhoto,Txt_photos,
+   HTM_SPAN_Begin ("class=\"DAT\"");
+   fprintf (Gbl.F.Out,"%d&nbsp;",NumStds);
+   HTM_SPAN_End ();
+
+   HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+   fprintf (Gbl.F.Out,"(%d&nbsp;%s,&nbsp;%d%%)",
+            NumStdsWithPhoto,Txt_photos,
             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
         	          0);
+   HTM_SPAN_End ();
   }
 
 /*****************************************************************************/

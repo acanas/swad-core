@@ -386,14 +386,14 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
       if (NumID)
 	 fprintf (Gbl.F.Out,"<br />");
 
-      fprintf (Gbl.F.Out,"<span class=\"%s\">",
-	       UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-						   "USR_ID_NC");
+      HTM_SPAN_Begin ("class=\"%s\"",
+	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+						          "USR_ID_NC");
       if (ICanSeeUsrID)
 	 fprintf (Gbl.F.Out,"%s",UsrDat->IDs.List[NumID].ID);
       else
 	 fprintf (Gbl.F.Out,"********");
-      fprintf (Gbl.F.Out,"</span>");
+      HTM_SPAN_End ();
 
       if (ICanConfirmUsrID &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
@@ -655,13 +655,15 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
                 UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
                                                     Txt_ID_X_not_confirmed,
                 UsrDat->IDs.List[NumID].ID);
-      fprintf (Gbl.F.Out,"<span class=\"%s\" title=\"%s\">%s%s</span>",
-               UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-                                                   "USR_ID_NC",
-               Gbl.Title,
+      HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
+                      UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+                                                          "USR_ID_NC",
+                      Gbl.Title);
+      fprintf (Gbl.F.Out,"%s%s",
                UsrDat->IDs.List[NumID].ID,
 	       UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
 		                                   "");
+      HTM_SPAN_End ();
       if (NumID == UsrDat->IDs.Num - 1)
 	{
 	 HTM_TD_End ();

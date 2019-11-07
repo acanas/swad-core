@@ -693,7 +693,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
    if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
       Lay_NotEnoughMemoryExit ();
-   fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
+   HTM_SPAN_Begin ("id=\"%s\"",Id);
+   HTM_SPAN_End ();
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       Frm_LinkFormEnd ();

@@ -573,7 +573,9 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match->Title);
+   HTM_SPAN_Begin ("class=\"ASG_TITLE\"");
+   fprintf (Gbl.F.Out,"%s",Match->Title);
+   HTM_SPAN_End ();
 
    /***** Groups whose students can answer this match *****/
    if (Gbl.Crs.Grps.NumGrps)

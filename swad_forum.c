@@ -1240,11 +1240,11 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	        Enabled ? Txt_FORUM_Post_X_allowed :
 			  Txt_FORUM_Post_X_banned,
 	        PstNum);
-      fprintf (Gbl.F.Out,"<span title=\"%s\">",Gbl.Title);	// TODO: Remove?
+      HTM_SPAN_Begin ("title=\"%s\"",Gbl.Title);	// TODO: Remove?
       Ico_PutIcon (Enabled ? "eye.svg" :
 			     "eye-slash.svg",
 	           Gbl.Title,"ICO_HIDDEN ICO16x16");
-      fprintf (Gbl.F.Out,"</span>");				// TODO: Remove?
+      HTM_SPAN_End ();					// TODO: Remove?
      }
 
    /***** Form to remove post *****/
