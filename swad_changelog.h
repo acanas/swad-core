@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.55.2 (2019-11-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.55.3 (2019-11-07)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 
+	Version 19.55.3:  Nov 07, 2019	Fixed bug in form to edit user's web/social networks. (246071 lines)
 	Version 19.55.2:  Nov 07, 2019	Fixed bug creating user's record.
 					Fixed bug creating user's account. (246070 lines)
 	Version 19.55.1:  Nov 07, 2019	Fixed bug in groups. (246068 lines)

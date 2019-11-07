@@ -334,7 +334,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       snprintf (StrName,sizeof (StrName),
 		"URL%u",
 		(unsigned) NumURL);
-      HTM_INPUT_URL ("WWW",StrName,false,
+      HTM_INPUT_URL (StrName,URL,false,
 		     "class=\"REC_C2_BOT_INPUT\"");
       HTM_TD_End ();
 
