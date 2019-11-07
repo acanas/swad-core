@@ -868,7 +868,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       HTM_SELECT_Begin (false,
 			"id=\"%sYear\" name=\"%sYear\"%s"
                         " onchange=\"adjustDateForm('%s');",
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id,
@@ -876,7 +876,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    else
       HTM_SELECT_Begin (false,
 			"id=\"%sYear\" name=\"%sYear\"%s"
-                        " onchange=\"adjustDateForm('%s');",
+                        " onchange=\"adjustDateForm('%s');\"",
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id);
@@ -897,7 +897,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       HTM_SELECT_Begin (false,
 			"id=\"%sMonth\" name=\"%sMonth\"%s"
                         " onchange=\"adjustDateForm('%s');"
-                        "document.getElementById('%s').submit();return false;",
+                        "document.getElementById('%s').submit();return false;\"",
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id,
@@ -905,7 +905,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    else
       HTM_SELECT_Begin (false,
 			"id=\"%sMonth\" name=\"%sMonth\"%s"
-                        " onchange=\"adjustDateForm('%s');",
+                        " onchange=\"adjustDateForm('%s');\"",
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",
 			Id);
@@ -916,7 +916,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	Month++)
       HTM_OPTION (HTM_Type_UNSIGNED,&Month,
 		  Month == DateSelected->Month,false,
-		  "%u",Txt_MONTHS_SMALL[Month - 1]);
+		  "%s",Txt_MONTHS_SMALL[Month - 1]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
