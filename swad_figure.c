@@ -2535,9 +2535,9 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
-   char StrNumCrss[10 + 1];
-   char StrNumGrps[10 + 1];
-   char StrNumUsrs[10 + 1];
+   char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
 	                                     "DAT";
@@ -2546,7 +2546,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
       Str_Copy (StrNumCrss,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
    else
       snprintf (StrNumCrss,sizeof (StrNumCrss),
 	        "%d",
@@ -2554,7 +2554,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    if (SizeOfFileZones->NumGrps == -1)	// Not applicable
       Str_Copy (StrNumGrps,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
    else
       snprintf (StrNumGrps,sizeof (StrNumGrps),
 	        "%d",
@@ -2562,7 +2562,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
       Str_Copy (StrNumUsrs,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
    else
       snprintf (StrNumUsrs,sizeof (StrNumUsrs),
 	        "%d",
@@ -2609,8 +2609,8 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
-   char StrNumFoldersPerCrs[10 + 1];
-   char StrNumFilesPerCrs[10 + 1];
+   char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
 	                                     "DAT";
@@ -2618,9 +2618,9 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
      {
       Str_Copy (StrNumFoldersPerCrs,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
       Str_Copy (StrNumFilesPerCrs,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
       Str_Copy (FileSizePerCrsStr,"-",
                 Fil_MAX_BYTES_FILE_SIZE_STRING);
      }
@@ -2667,8 +2667,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
-   char StrNumFoldersPerUsr[10 + 1];
-   char StrNumFilesPerUsr[10 + 1];
+   char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
 	                                     "DAT";
@@ -2676,9 +2676,9 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
      {
       Str_Copy (StrNumFoldersPerUsr,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
       Str_Copy (StrNumFilesPerUsr,"-",
-                10);
+                Cns_MAX_DECIMAL_DIGITS_UINT);
       Str_Copy (FileSizePerUsrStr,"-",
                 Fil_MAX_BYTES_FILE_SIZE_STRING);
      }

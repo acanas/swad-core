@@ -56,6 +56,43 @@
 
 #define Cns_BYTES_SESSION_ID	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
+/*
+The maximum number of decimal digits d of an integer of b bits
+(signed or unsigned) matches the number of digits of the number 2^b.
+
+In the case of signed numbers, an extra character must be added for the sign.
+The number of decimal digits of a number X can be calculated as log_10(X), rounded up.
+
+Therefore, log_10(2^b) = b * log_10(2) = b * 0.301029995663981
+
+If s is the size in bytes of a certain type of integer,
+given by the sizeof operator, its size b in bits will be b = (s * 8).
+
+The maximum number of decimal digits will be (s * 8) * 0.301029995663981, rounded up.
+Rounding up will consist of truncating (converting to an integer), and adding 1.
+
+Unfortunately, the use of floating point may cause problems
+when evaluating the expressions as constants. It's necessary to modify them,
+for example by multiplying by 2 ^ 11 and dividing by 2 ^ 8,
+so that all calculations should be performed by the preprocessor with integers.
+*/
+
+#define LOG2_x_2_11 616	// log10(2) * 2^11
+
+#define Cns_MAX_DECIMAL_DIGITS_UCHAR		(((sizeof (unsigned char     ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DECIMAL_DIGITS_USHORT		(((sizeof (unsigned short    ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DECIMAL_DIGITS_UINT		(((sizeof (unsigned int      ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DECIMAL_DIGITS_ULONG		(((sizeof (unsigned long     ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DECIMAL_DIGITS_ULONGLONG	(((sizeof (unsigned long long) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DECIMAL_DIGITS_UINT128		(((sizeof (unsigned __int128 ) * LOG2_x_2_11) >> 8) + 1)
+
+#define Cns_MAX_DECIMAL_DIGITS_CHAR		(1 + Cns_MAX_DECIMAL_DIGITS_UCHAR    )
+#define Cns_MAX_DECIMAL_DIGITS_SHORT		(1 + Cns_MAX_DECIMAL_DIGITS_USHORT   )
+#define Cns_MAX_DECIMAL_DIGITS_INT		(1 + Cns_MAX_DECIMAL_DIGITS_UINT     )
+#define Cns_MAX_DECIMAL_DIGITS_LONG		(1 + Cns_MAX_DECIMAL_DIGITS_ULONG    )
+#define Cns_MAX_DECIMAL_DIGITS_LONGLONG		(1 + Cns_MAX_DECIMAL_DIGITS_ULONGLONG)
+#define Cns_MAX_DECIMAL_DIGITS_INT128		(1 + Cns_MAX_DECIMAL_DIGITS_UINT128  )
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/

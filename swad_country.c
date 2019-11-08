@@ -2026,7 +2026,7 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    Lan_Language_t Lan;
-   char StrCtyCod[20 + 1];
+   char StrCtyCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char StrName[32];
 
    /***** Begin form *****/
@@ -2053,7 +2053,7 @@ static void Cty_PutFormToCreateCountry (void)
 		Cty_EditingCty->CtyCod);
    else
       StrCtyCod[0] = '\0';
-   HTM_INPUT_TEXT ("OthCtyCod",10,StrCtyCod,false,
+   HTM_INPUT_TEXT ("OthCtyCod",3,StrCtyCod,false,
 		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 

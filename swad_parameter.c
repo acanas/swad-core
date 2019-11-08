@@ -82,7 +82,7 @@ bool Par_GetQueryString (void)
   {
    char Method[Par_MAX_BYTES_METHOD + 1];
    char ContentType[Par_MAX_BYTES_CONTENT_TYPE + 1];
-   char UnsignedLongStr[10 + 1];
+   char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
    unsigned long UnsignedLong;
 
    Str_Copy (Method,getenv ("REQUEST_METHOD"),
@@ -112,7 +112,7 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_LENGTH"))
 	{
          Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),
-                   10);
+                   Cns_MAX_DECIMAL_DIGITS_ULONG);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
          Gbl.Params.ContentLength = (size_t) UnsignedLong;
@@ -665,7 +665,7 @@ void Par_GetMainParameters (void)
    long ActCod;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char URL[PATH_MAX + 1];
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
    Gbl.Hierarchy.Cty.CtyCod =
@@ -815,7 +815,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParToText ("cty",LongStr,1 + 10);
+   Par_GetParToText ("cty",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "cty" available
      {
       Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -826,7 +826,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParToText ("ins",LongStr,1 + 10);
+   Par_GetParToText ("ins",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "ins" available
      {
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -836,7 +836,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get centre if exists (from menu) *****/
-   Par_GetParToText ("ctr",LongStr,1 + 10);
+   Par_GetParToText ("ctr",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "ctr" available
      {
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -845,7 +845,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParToText ("deg",LongStr,1 + 10);
+   Par_GetParToText ("deg",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -853,7 +853,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParToText ("crs",LongStr,1 + 10);
+   Par_GetParToText ("crs",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "crs" available
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
@@ -892,11 +892,11 @@ unsigned long Par_GetParToUnsignedLong (const char *ParamName,
                                         unsigned long Max,
                                         unsigned long Default)
   {
-   char UnsignedLongStr[20 + 1];
+   char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
    unsigned long UnsignedLongNum;
 
    /***** Get parameter with unsigned number *****/
-   Par_GetParToText (ParamName,UnsignedLongStr,10);
+   Par_GetParToText (ParamName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
    if (sscanf (UnsignedLongStr,"%lu",&UnsignedLongNum) == 1)
       if (UnsignedLongNum >= Min && UnsignedLongNum <= Max)
          return UnsignedLongNum;
@@ -910,10 +910,10 @@ unsigned long Par_GetParToUnsignedLong (const char *ParamName,
 
 long Par_GetParToLong (const char *ParamName)
   {
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Get parameter with long number *****/
-   Par_GetParToText (ParamName,LongStr,1 + 10);
+   Par_GetParToText (ParamName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 

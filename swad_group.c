@@ -151,7 +151,7 @@ static void Grp_PutParamRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
-static void Grp_WriteMaxStds (char Str[10 + 1],unsigned MaxStudents);
+static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
 static long Grp_GetParamGrpTypCod (void);
 static long Grp_GetParamGrpCod (void);
 static void Grp_PutParamGrpTypCod (long GrpTypCod);
@@ -476,7 +476,7 @@ void Grp_PutParamsCodGrps (void)
    unsigned NumGrpSel;
    size_t MaxLengthGrpCods;
    char *GrpCods;
-   char GrpCod[20 + 1];
+   char GrpCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Write the boolean parameter that indicates if all the groups must be listed *****/
    Par_PutHiddenParamChar ("AllGroups",
@@ -527,7 +527,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
 
-   if (Gbl.Crs.Grps.NumGrps &&		// This course has groups and...
+   if (Gbl.Crs.Grps.NumGrps &&			// This course has groups and...
        !Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// ...I haven't selected any group
      {
       /***** I I haven't selected any group, show by default the groups I belong to *****/
@@ -566,9 +566,9 @@ void Grp_GetParCodsSeveralGrps (void)
   {
    char *ParamLstCodGrps;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrp;
-   unsigned long MaxSizeLstGrpCods = ((1 + 10 + 1) * Gbl.Crs.Grps.NumGrps) - 1;
+   unsigned long MaxSizeLstGrpCods = ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.NumGrps) - 1;
 
    /***** Reset number of groups selected *****/
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
@@ -588,7 +588,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	 for (Ptr = ParamLstCodGrps, NumGrp = 0;
 	      *Ptr;
 	      NumGrp++)
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
 	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
@@ -600,7 +600,7 @@ void Grp_GetParCodsSeveralGrps (void)
 		 *Ptr;
 		 NumGrp++)
 	      {
-	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	       Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }
@@ -1473,7 +1473,7 @@ static void Grp_ListGroupsForEdition (void)
    struct GroupType *GrpTypAux;
    struct Group *Grp;
    Rol_Role_t Role;
-   char StrMaxStudents[10 + 1];
+   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -1612,7 +1612,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-	 HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,true,
+	 HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,true,
 			 "size=\"3\"");
          Frm_EndForm ();
          HTM_TD_End ();
@@ -2370,7 +2370,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    extern const char *Txt_Group_X_closed;
    int Vacant;
    Rol_Role_t Role;
-   char StrMaxStudents[10 + 1];
+   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write icon to show if group is open or closed *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2564,7 +2564,7 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumGrpTyp;
    unsigned NumCla;
    Rol_Role_t Role;
-   char StrMaxStudents[10 + 1];
+   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin form *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
@@ -2657,7 +2657,7 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Maximum number of students *****/
    HTM_TD_Begin ("class=\"CM\"");
    Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
-   HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,false,
+   HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,false,
 		   "size=\"3\"");
    HTM_TD_End ();
 
@@ -4614,10 +4614,10 @@ void Grp_ChangeMaxStdsGrp (void)
 /************* Write the maximum number of students in a group ***************/
 /*****************************************************************************/
 
-static void Grp_WriteMaxStds (char Str[10 + 1],unsigned MaxStudents)
+static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents)
   {
    if (MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
-      snprintf (Str,10 + 1,
+      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,
 		"%u",
 		MaxStudents);
    else
@@ -4842,8 +4842,8 @@ void Grp_PutParamGrpCod (long GrpCod)
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
   {
    unsigned NumGrpTyp;
-   char Param[8 + 10 + 1];
-   char LongStr[1 + 10 + 1];
+   char Param[6 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char **LstStrCodGrps;
    const char *Ptr;
    unsigned NumGrpWanted;
@@ -4859,7 +4859,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 	NumGrpTyp++)
      {
       /***** Allocate memory for the list of group codes of this type *****/
-      if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((1 + 10 + 1) *
+      if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) *
                                                                  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -4868,14 +4868,14 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 	        "GrpCod%ld",
                 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],
-                             ((1 + 10 + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
+                             ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])
         {
          /***** Count the number of groups selected of this type of LstCodGrps[NumGrpTyp] *****/
          for (Ptr = LstStrCodGrps[NumGrpTyp], NumGrpWanted = 0;
               *Ptr;
               NumGrpWanted++)
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 
          /***** Add the number of groups selected of this type to the number of groups selected total *****/
          LstGrpsWanted->NumGrps += NumGrpWanted;
@@ -4899,7 +4899,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
               *Ptr;
               NumGrpWanted++)
            {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */

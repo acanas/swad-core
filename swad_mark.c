@@ -112,7 +112,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct MarksProperties Marks;
-   char StrHeadOrFoot[10 + 1];
+   char StrHeadOrFoot[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
@@ -133,7 +133,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Header);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],5,StrHeadOrFoot,true,
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,true,
 		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
                       Gbl.RowEvenOdd);
       HTM_LABEL_End ();
@@ -152,7 +152,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Footer);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],5,StrHeadOrFoot,true,
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,true,
 		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
                       Gbl.RowEvenOdd);
       HTM_LABEL_End ();
@@ -240,7 +240,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_number_of_rows_is_now_X;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    long Cod;
    unsigned NumRows;
 
@@ -248,7 +248,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
-   Par_GetParToText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,10);
+   Par_GetParToText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/

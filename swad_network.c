@@ -272,7 +272,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char StrName[32];
 
    /***** Start section *****/

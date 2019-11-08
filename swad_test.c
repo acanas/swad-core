@@ -593,7 +593,7 @@ void Tst_AssessTest (void)
 static void Tst_GetQuestionsAndAnswersFromForm (void)
   {
    unsigned NumQst;
-   char StrQstIndOrAns[3 + 10 + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
+   char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
    /***** Get questions and answers *****/
    for (NumQst = 0;
@@ -1885,7 +1885,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_Save_changes;
    Tst_Pluggable_t Pluggable;
    Tst_Feedback_t Feedback;
-   char StrMinTimeNxtTstPerQst[20 + 1];
+   char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
 
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
@@ -1957,7 +1957,7 @@ static void Tst_ShowFormConfigTst (void)
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
-   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",7,StrMinTimeNxtTstPerQst,false,
+   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,false,
 		   "size=\"7\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2006,7 +2006,7 @@ static void Tst_ShowFormConfigTst (void)
 static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
                                      unsigned Value)
   {
-   char StrValue[10 + 1];
+   char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
@@ -2020,7 +2020,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    snprintf (StrValue,sizeof (StrValue),
 	     "%u",
 	     Value);
-   HTM_INPUT_TEXT (Field,3,StrValue,false,
+   HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,false,
 		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2307,7 +2307,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    Tst_AnswerType_t AnsType;
    bool Checked;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *Ptr;
 
    HTM_TR_Begin (NULL);
@@ -2348,7 +2348,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
+         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
          if (Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
            {
             Checked = true;
@@ -2453,10 +2453,10 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG + 1];
-   char LongStr[1 + 10 + 1];
-   char UnsignedStr[10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Tst_AnswerType_t AnsType;
-   char CrsCodStr[1 + 10 + 1];
+   char CrsCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Allocate space for query *****/
    if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
@@ -2621,9 +2621,9 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG + 1];
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Tst_AnswerType_t AnsType;
-   char StrNumQsts[10 + 1];
+   char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Allocate space for query *****/
    if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
@@ -3980,14 +3980,14 @@ void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ON
   {
    unsigned NumOpt;
    const char *Ptr;
-   char StrOneIndex[10 + 1];
+   char StrOneIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Get indexes from string *****/
    for (NumOpt = 0, Ptr = StrIndexesOneQst;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
 	 Lay_ShowErrorAndExit ("Wrong index of answer.");
@@ -4012,7 +4012,7 @@ void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ON
   {
    unsigned NumOpt;
    const char *Ptr;
-   char StrOneAnswer[10 + 1];
+   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned AnsUsr;
 
    /***** Initialize all answers to false *****/
@@ -4026,7 +4026,7 @@ void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ON
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,10);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
 	 Lay_ShowErrorAndExit ("Bad user's answer.");
@@ -4837,7 +4837,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
    extern const char *Txt_The_number_of_questions_must_be_in_the_interval_X;
    bool Error = false;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned UnsignedNum;
 
    /***** Tags *****/
@@ -4903,7 +4903,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	 Dat_GetIniEndDatesFromForm ();
 
 	 /* Get ordering criteria */
-	 Par_GetParMultiToText ("Order",UnsignedStr,10);
+	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
 												       0);
@@ -4992,13 +4992,13 @@ static int Tst_CountNumAnswerTypesInList (void)
   {
    const char *Ptr;
    int NumAnsTypes = 0;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
    Ptr = Gbl.Test.ListAnsTypes;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
       Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
       NumAnsTypes++;
      }
@@ -5087,8 +5087,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    bool OptionsDisabled;
    bool AnswerHasContent;
    bool DisplayRightColumn;
-   char StrTagTxt[6 + 10 + 1];
-   char StrInteger[20 + 1];
+   char StrTagTxt[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrInteger[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -5269,7 +5269,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
 	     Gbl.Test.Answer.Integer);
-   HTM_INPUT_TEXT ("AnsInt",11,StrInteger,false,
+   HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,false,
 		   "size=\"11\" required=\"required\"%s",
                    Gbl.Test.AnswerType == Tst_ANS_INT ? "" :
                                                         " disabled=\"disabled\"");
@@ -5907,10 +5907,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
-   char UnsignedStr[10 + 1];
-   char TagStr[6 + 10 + 1];
-   char AnsStr[6 + 10 + 1];
-   char FbStr[5 + 10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrMultiAns[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
@@ -5978,7 +5978,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1 + 10);
+	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,
+			   Cns_MAX_DECIMAL_DIGITS_LONG);
 	 break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
@@ -6063,7 +6064,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
-  	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
+  	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
 	          Lay_ShowErrorAndExit ("Wrong selected answer.");
                if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)

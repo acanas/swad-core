@@ -227,7 +227,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    extern const char *Txt_Save_changes;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    unsigned NumNicks;
    unsigned NumNick;
    Act_Action_t NextAction;

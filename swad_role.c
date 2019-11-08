@@ -580,7 +580,7 @@ unsigned Rol_GetSelectedRoles (void)
   {
    char StrRoles[Rol_NUM_ROLES * (10 + 1)];
    const char *Ptr;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Rol_Role_t Role;
    unsigned Roles;
 
@@ -596,7 +596,7 @@ unsigned Rol_GetSelectedRoles (void)
    for (Ptr = StrRoles;
         *Ptr;)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
       Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
       if (Role != Rol_UNK)
          Roles |= (1 << Role);

@@ -2209,6 +2209,7 @@ static void Att_PutParamsCodGrps (long AttCod)
       MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
       if ((GrpCods = (char *) malloc (MaxLengthGrpCods + 1)) == NULL)
 	 Lay_NotEnoughMemoryExit ();
+      GrpCods[0] = '\0';
 
       /* Get groups */
       for (NumGrp = 0;
@@ -2245,7 +2246,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    extern const char *Txt_Your_comment_has_been_updated;
    struct AttendanceEvent Att;
    bool Present;
-   char CommentParamName[10 + 10 + 1];
+   char CommentParamName[10 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2307,7 +2308,7 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct UsrData UsrData;
-   char CommentParamName[10 + 10 + 1];
+   char CommentParamName[10 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2439,7 +2440,7 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumUsrsInList)
   {
    char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + 1 + 10 + 1];
+   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumUsr;
    unsigned NumStdsInAttEvent = 0;
    size_t MaxLength;
@@ -2447,7 +2448,7 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
    if (NumUsrsInList)
      {
       /***** Allocate space for subquery *****/
-      MaxLength = 256 + NumUsrsInList * (1 + 1 + 10);
+      MaxLength = 256 + NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
       if ((SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       SubQueryAllUsrs[0] = '\0';
@@ -2893,7 +2894,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumAttEvent;
    const char *Ptr;
    long AttCod;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrpsInThisEvent;
@@ -2902,7 +2903,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1 + 10 + 1);
+   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
@@ -2924,7 +2925,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	   )
 	{
 	 /* Get next attendance event selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each event in *StrAttCodsSelected as selected */
@@ -3293,7 +3294,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
    unsigned NumAttEvent;
-   char StrNumAttEvent[10 + 1];
+   char StrNumAttEvent[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 

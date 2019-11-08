@@ -297,7 +297,7 @@ static void Ind_GetParamNumIndicators (void)
   {
    unsigned Ind;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long Indicator;
 
    /***** Get parameter multiple with list of indicators selected *****/
@@ -318,7 +318,7 @@ static void Ind_GetParamNumIndicators (void)
 	   )
 	{
 	 /* Get next indicator selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Indicator = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each indicator in list StrIndicatorsSelected as selected */

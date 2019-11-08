@@ -1900,7 +1900,7 @@ int swad__sendMyGroups (struct soap *soap,
    int ReturnCode;
    struct ListCodGrps LstGrpsIWant;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrp;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1954,7 +1954,7 @@ int swad__sendMyGroups (struct soap *soap,
       for (NumGrp = 0, Ptr = myGroups;
 	   *Ptr;
 	   NumGrp++)
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       LstGrpsIWant.NumGrps = NumGrp;
 
       if (LstGrpsIWant.NumGrps)	// If I have selected groups...
@@ -1967,7 +1967,7 @@ int swad__sendMyGroups (struct soap *soap,
               NumGrp++)
 	   {
 	    /* Find next string in text until comma (leading and trailing spaces are removed) */
-            Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+            Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	    LstGrpsIWant.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	   }
         }
@@ -2286,7 +2286,7 @@ static void API_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    long NumGrps;
    long NumGrp;
    long GrpCod;
-   char GrpCodStr[10 + 1];
+   char GrpCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    size_t Length;
 
    /***** Get list of groups *****/
@@ -2508,14 +2508,14 @@ int swad__removeAttendanceEvent (struct soap *soap,
 static void API_GetLstGrpsSel (const char *Groups)
   {
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrp;
 
    /***** Count number of groups *****/
    for (Ptr = Groups, NumGrp = 0;
 	*Ptr;
 	NumGrp++)
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
    /***** Create a list of groups selected *****/
@@ -2531,7 +2531,7 @@ static void API_GetLstGrpsSel (const char *Groups)
 	   *Ptr;
 	   )
 	{
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	 if (Grp_CheckIfGroupBelongsToCourse (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Crs.CrsCod))
 	    NumGrp++;
@@ -2737,11 +2737,11 @@ int swad__sendAttendanceUsers (struct soap *soap,
    int ReturnCode;
    struct AttendanceEvent Att;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    struct UsrData UsrDat;
    unsigned NumCodsInList;
    char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + 1 + 10 + 1];
+   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    size_t Length = 0;	// Initialized to avoid warning
 
    /***** Initializations *****/
@@ -2790,10 +2790,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	   *Ptr;
 	   NumCodsInList++)
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 
       /* Allocate subquery used to mark not present users as absent */
-      Length = 256 + NumCodsInList * (1 + 1 + 10 + 1) - 1;
+      Length = 256 + NumCodsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
       if ((SubQueryAllUsrs = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
@@ -2806,7 +2806,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
 	 if (Usr_ChkIfUsrCodExists (UsrDat.UsrCod))
 	    // The user must belong to course,
@@ -3159,7 +3159,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
   {
    int ReturnCode;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumNtf;
    unsigned NumNtfsMarkedAsRead = 0;
    long NtfCod;
@@ -3192,7 +3192,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	   NumNtf++)
 	{
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
@@ -4097,9 +4097,9 @@ int swad__getTrivialQuestion (struct soap *soap,
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    int ReturnCode;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1];
-   char DegStr[ 1 + 1 + 1 + 10 + 1 + 1];
+   char DegStr[ 1 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + 1];
    //   DegStr=",   '   - number '  \0"
    long DegCod;
    bool FirstDegree = true;
@@ -4137,7 +4137,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 
       /* Check if degree code from string is a valid code */
       if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
@@ -4496,7 +4496,7 @@ static void API_GetListGrpsInGameFromDB (long GamCod,char **ListGroups)
    long NumGrps;
    long NumGrp;
    long GrpCod;
-   char GrpCodStr[10 + 1];
+   char GrpCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    size_t Length;
 
    /***** Get list of groups *****/

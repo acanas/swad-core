@@ -359,7 +359,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrWidth[10 + 2 + 1];
+   char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char PathRelRSSFile[PATH_MAX + 1];
    long NotCod;
    unsigned long NumNot;

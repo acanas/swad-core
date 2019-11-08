@@ -1471,7 +1471,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    unsigned NumAns;
    long LongNum;
    unsigned AnsInd;
-   char StrOneAnswer[10 + 1];
+   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/

@@ -1103,12 +1103,12 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
 /****** Get number of users with some given roles in courses of a user *******/
 /*****************************************************************************/
 
-#define Usr_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (10 + 1))
+#define Usr_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      unsigned OthersRoles)
   {
    Rol_Role_t Role;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char OthersRolesStr[Usr_MAX_BYTES_ROLES_STR + 1];
    char SubQueryRole[64];
    unsigned NumUsrs;
@@ -4427,7 +4427,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrpSel;
    long GrpCod;
    unsigned NumGrpTyp;
@@ -9052,7 +9052,7 @@ unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
 
 unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles)
   {
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char SubQueryRoles[Usr_MAX_BYTES_SUBQUERY_ROLES + 1];
    bool AnyUserInCourses;
    Rol_Role_t Role;

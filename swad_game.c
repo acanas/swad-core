@@ -56,7 +56,7 @@ extern struct Globals Gbl;
 #define Gam_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
 #define Gam_MAX_BYTES_ANSWER	((Gam_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-#define Gam_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Gam_NUM_ANS_TYPES - 1) * (1 + 10))
+// #define Gam_MAX_BYTES_LIST_ANSWER_TYPES	(Gam_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 
 const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
   {
@@ -67,7 +67,7 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_MAX_ANSWERS_PER_QUESTION	10
 
 #define Gam_MAX_SELECTED_QUESTIONS		1000
-#define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
+#define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -1631,7 +1631,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MYSQL_ROW row;
    unsigned QstInd;
    unsigned MaxQstInd;
-   char StrQstInd[10 + 1];
+   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Get maximum question index *****/
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);
@@ -1819,7 +1819,7 @@ void Gam_AddTstQuestionsToGame (void)
    extern const char *Txt_No_questions_have_been_added;
    struct Game Game;
    const char *Ptr;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
    unsigned MaxQstInd;
 
@@ -1846,7 +1846,7 @@ void Gam_AddTstQuestionsToGame (void)
 	 while (*Ptr)
 	   {
 	    /* Get next code */
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	    if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	       Lay_ShowErrorAndExit ("Wrong question code.");
 
@@ -1913,14 +1913,14 @@ static unsigned Gam_CountNumQuestionsInList (void)
   {
    const char *Ptr;
    unsigned NumQuestions = 0;
-   char LongStr[1 + 10 + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
 
    /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
    Ptr = Gbl.Games.ListQuestions;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if (sscanf (LongStr,"%ld",&QstCod) != 1)
          Lay_ShowErrorAndExit ("Wrong question code.");
       NumQuestions++;

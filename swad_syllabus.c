@@ -942,7 +942,7 @@ static void Syl_PutParamNumItem (void)
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
   {
    int N;
-   char InStr[1 + 10 + 1];
+   char InStr[Cns_MAX_DECIMAL_DIGITS_INT + 1];
 
    if (StrDst)
       StrDst[0] = '\0';

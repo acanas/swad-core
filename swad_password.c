@@ -648,7 +648,7 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Current_password;
    extern const char *Txt_Change_password;
    extern const char *Txt_Set_password;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
    /***** Start section *****/

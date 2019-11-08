@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 #define Svy_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
 #define Svy_MAX_BYTES_ANSWER	((Svy_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-#define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
+#define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(Svy_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 
 const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =
   {
@@ -3688,9 +3688,9 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
    unsigned NumQsts;
    long QstCod;
    char ParamName[3 + 10 + 6 + 1];
-   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION * (10 + 1)];
+   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1)];
    const char *Ptr;
-   char UnsignedStr[10 + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned AnsInd;
 
    /***** Get questions of this survey from database *****/
@@ -3720,11 +3720,11 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 		   (unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
          Par_GetParMultiToText (ParamName,StrAnswersIndexes,
-                                Svy_MAX_ANSWERS_PER_QUESTION * (10 + 1));
+                                Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
          Ptr = StrAnswersIndexes;
          while (*Ptr)
            {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
+            Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
             if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
                // Parameter exists ==> user has checked this answer
                // 		   ==> store it in database

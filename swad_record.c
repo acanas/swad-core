@@ -287,7 +287,7 @@ void Rec_ListFieldsRecordsForEdition (void)
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
-   char StrNumLines[10 + 1];
+   char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -324,7 +324,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       snprintf (StrNumLines,sizeof (StrNumLines),
 		"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
-      HTM_INPUT_TEXT ("NumLines",2,StrNumLines,true,
+      HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,true,
 		      "size=\"2\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -363,7 +363,7 @@ void Rec_ShowFormCreateRecordField (void)
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
-   char StrNumLines[10 + 1];
+   char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin form *****/
    Frm_StartForm (ActNewFie);
@@ -392,7 +392,7 @@ void Rec_ShowFormCreateRecordField (void)
    snprintf (StrNumLines,sizeof (StrNumLines),
 	     "%u",
 	     Gbl.Crs.Records.Field.NumLines);
-   HTM_INPUT_TEXT ("NumLines",2,StrNumLines,false,
+   HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,false,
 		   "size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
@@ -491,15 +491,15 @@ void Rec_ReceiveFormField (void)
 
 unsigned Rec_ConvertToNumLinesField (const char *StrNumLines)
   {
-   int NumLines;
+   unsigned NumLines;
 
-   if (sscanf (StrNumLines,"%d",&NumLines) != 1)
+   if (sscanf (StrNumLines,"%u",&NumLines) != 1)
       return Rec_DEF_LINES_IN_EDITION_FIELD;
    else if (NumLines < Rec_MIN_LINES_IN_EDITION_FIELD)
       return Rec_MIN_LINES_IN_EDITION_FIELD;
    else if (NumLines > Rec_MAX_LINES_IN_EDITION_FIELD)
       return Rec_MAX_LINES_IN_EDITION_FIELD;
-   return (unsigned) NumLines;
+   return NumLines;
   }
 
 /*****************************************************************************/
@@ -1285,7 +1285,7 @@ static void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-   char Width[10 + 2 + 1];
+   char Width[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    bool ShowOfficeHours;
 
    /***** Width for office hours *****/
@@ -1370,7 +1370,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    struct UsrData UsrDat;
    char RecordSectionId[32];
    bool ShowOfficeHours;
-   char Width[10 + 2 + 1];
+   char Width[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedUsrsCods ();
@@ -1667,7 +1667,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       NULL,					// Rec_CRS_PRINT_SEVERAL_RECORDS
 		// Rec_CRS_RECORD_PRINT
      };
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool ItsMe;
    bool ICanEdit = false;
    unsigned NumField;
@@ -1890,7 +1890,7 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
 void Rec_GetFieldsCrsRecordFromForm (void)
   {
    unsigned NumField;
-   char FieldParamName[5 + 10 + 1];
+   char FieldParamName[5 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
@@ -2171,7 +2171,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       NULL,					// Rol_INS_ADM
       NULL,					// Rol_SYS_ADM
      };
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *ClassForm = "REC_DAT";
    bool ItsMe;
    bool IAmLoggedAsTeacherOrSysAdm;
@@ -3981,7 +3981,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);

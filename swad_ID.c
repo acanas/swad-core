@@ -510,7 +510,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
@@ -542,7 +542,7 @@ void ID_ShowFormChangeOtherUsrID (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);

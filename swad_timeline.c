@@ -2918,7 +2918,7 @@ static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
                                            TL_HowMany_t HowMany)
   {
    extern const char *Txt_View_all_USERS;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    switch (HowMany)
      {
@@ -2937,7 +2937,7 @@ static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
 static void TL_PutFormToShaNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_Share;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
@@ -2948,7 +2948,7 @@ static void TL_PutFormToShaNote (const struct TL_Note *SocNot)
 static void TL_PutFormToUnsNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_TIMELINE_NOTE_Shared;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
@@ -2964,7 +2964,7 @@ static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
                                           TL_HowMany_t HowMany)
   {
    extern const char *Txt_View_all_USERS;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    switch (HowMany)
      {
@@ -2983,7 +2983,7 @@ static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
 static void TL_PutFormToFavNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_Mark_as_favourite;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
@@ -2994,7 +2994,7 @@ static void TL_PutFormToFavNote (const struct TL_Note *SocNot)
 static void TL_PutFormToUnfNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_TIMELINE_NOTE_Favourite;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to unfav (remove mark as favourite) note *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
@@ -3010,7 +3010,7 @@ static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
                                              TL_HowMany_t HowMany)
   {
    extern const char *Txt_View_all_USERS;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    switch (HowMany)
      {
@@ -3029,7 +3029,7 @@ static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
 static void TL_PutFormToFavComment (const struct TL_Comment *SocCom)
   {
    extern const char *Txt_Mark_as_favourite;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark comment as favourite *****/
    sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
@@ -3040,7 +3040,7 @@ static void TL_PutFormToFavComment (const struct TL_Comment *SocCom)
 static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom)
   {
    extern const char *Txt_TIMELINE_NOTE_Favourite;
-   char ParamCod[6 + 1 + 10 + 1];
+   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to unfav (remove mark as favourite) comment *****/
    sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);

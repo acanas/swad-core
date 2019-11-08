@@ -75,7 +75,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Cla_CheckIfClassroomNameExists (const char *FieldName,const char *Name,long ClaCod);
 static void Cla_UpdateClaNameDB (long ClaCod,const char *FieldName,const char *NewClaName);
 
-static void Cla_WriteCapacity (char Str[10 + 1],unsigned Capacity);
+static void Cla_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
 
 static void Cla_PutFormToCreateClassroom (void);
 static void Cla_PutHeadClassrooms (void);
@@ -100,7 +100,7 @@ void Cla_SeeClassrooms (void)
    Cla_Order_t Order;
    unsigned NumCla;
    unsigned RowEvenOdd;
-   char StrCapacity[10 + 1];
+   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
@@ -469,7 +469,7 @@ static void Cla_ListClassroomsForEdition (void)
   {
    unsigned NumCla;
    struct Classroom *Cla;
-   char StrCapacity[10 + 1];
+   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -520,7 +520,7 @@ static void Cla_ListClassroomsForEdition (void)
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       Cla_WriteCapacity (StrCapacity,Cla->Capacity);
-      HTM_INPUT_TEXT ("Capacity",10,StrCapacity,true,
+      HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,true,
 		      "size=\"3\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -803,10 +803,10 @@ void Cla_ChangeCapacity (void)
 /****************** Write seating capacity of a classroom ********************/
 /*****************************************************************************/
 
-static void Cla_WriteCapacity (char Str[10 + 1],unsigned Capacity)
+static void Cla_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity)
   {
    if (Capacity <= Cla_MAX_CAPACITY)
-      snprintf (Str,10 + 1,
+      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,
 		"%u",
 		Capacity);
    else
@@ -881,7 +881,7 @@ static void Cla_PutFormToCreateClassroom (void)
   {
    extern const char *Txt_New_classroom;
    extern const char *Txt_Create_classroom;
-   char StrCapacity[10 + 1];
+   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin form *****/
    Frm_StartForm (ActNewCla);
@@ -918,7 +918,7 @@ static void Cla_PutFormToCreateClassroom (void)
    /***** Seating capacity *****/
    HTM_TD_Begin ("class=\"LM\"");
    Cla_WriteCapacity (StrCapacity,Cla_EditingCla->Capacity);
-   HTM_INPUT_TEXT ("Capacity",10,StrCapacity,false,
+   HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,false,
 		   "size=\"3\"");
    HTM_TD_End ();
 

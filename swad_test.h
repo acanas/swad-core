@@ -98,7 +98,7 @@ struct Tst_Config
   };
 
 #define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Tst_NUM_ANS_TYPES - 1) * (1 + 10))
+#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 typedef enum
   {
    Tst_ANS_INT             = 0,

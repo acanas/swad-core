@@ -1142,7 +1142,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Email;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
@@ -1174,7 +1174,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Email;
-   char StrRecordWidth[10 + 1];
+   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
