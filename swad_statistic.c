@@ -297,7 +297,7 @@ void Sta_AskShowCrsHits (void)
    extern const char *Txt_results_per_page;
    extern const char *Txt_Show_hits;
    extern const char *Txt_No_teachers_or_students_found;
-   static unsigned long RowsPerPage[] =
+   static unsigned RowsPerPage[] =
      {
       Sta_MIN_ROWS_PER_PAGE * 1,
       Sta_MIN_ROWS_PER_PAGE * 2,
@@ -315,7 +315,8 @@ void Sta_AskShowCrsHits (void)
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
-   unsigned long i;
+   unsigned ClicksGroupedByUnsigned;
+   size_t i;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -425,11 +426,10 @@ void Sta_AskShowCrsHits (void)
               ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
               ClicksGroupedBy++)
            {
-            fprintf (Gbl.F.Out,"<option value=\"%u\"",
-                     (unsigned) ClicksGroupedBy);
-            if (ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-            fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+            ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
+            HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
+			ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy,false,
+	                "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
          HTM_SELECT_End ();
          HTM_LABEL_End ();
@@ -460,12 +460,9 @@ void Sta_AskShowCrsHits (void)
          for (i = 0;
               i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
-           {
-            fprintf (Gbl.F.Out,"<option");
-            if (RowsPerPage[i] == Gbl.Stat.RowsPerPage)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-            fprintf (Gbl.F.Out,">%lu",RowsPerPage[i]);
-           }
+            HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
+			RowsPerPage[i] == Gbl.Stat.RowsPerPage,false,
+	                "%u",RowsPerPage[i]);
          HTM_SELECT_End ();
          fprintf (Gbl.F.Out,")");
          HTM_LABEL_End ();
@@ -519,7 +516,9 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
    Sta_Role_t RoleStat;
+   unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
+   unsigned ClicksGroupedByUnsigned;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -553,10 +552,10 @@ void Sta_AskShowGblHits (void)
 	RoleStat < Sta_NUM_ROLES_STAT;
 	RoleStat++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) RoleStat);
-      if (RoleStat == Gbl.Stat.Role)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_ROLE_STATS[RoleStat]);
+      RoleStatUnsigned = (unsigned) RoleStat;
+      HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
+		  RoleStat == Gbl.Stat.Role,false,
+		  "%s",Txt_ROLE_STATS[RoleStat]);
      }
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -615,11 +614,10 @@ void Sta_AskShowGblHits (void)
 	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
 	ClicksGroupedBy++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",
-	       (unsigned) ClicksGroupedBy);
-      if (ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+      ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
+      HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
+		  ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy,false,
+		  "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
    HTM_SELECT_End ();
    HTM_LABEL_End ();
@@ -684,6 +682,7 @@ static void Sta_WriteSelectorCountType (void)
   {
    extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    Sta_CountType_t StatCountType;
+   unsigned StatCountTypeUnsigned;
 
    /**** Count type *****/
    HTM_SELECT_Begin (false,
@@ -692,10 +691,10 @@ static void Sta_WriteSelectorCountType (void)
 	StatCountType < Sta_NUM_COUNT_TYPES;
 	StatCountType++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) StatCountType);
-      if (StatCountType == Gbl.Stat.CountType)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
+      StatCountTypeUnsigned = (unsigned) StatCountType;
+      HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
+		  StatCountType == Gbl.Stat.CountType,false,
+		  "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
      }
    HTM_SELECT_End ();
   }
@@ -708,8 +707,10 @@ static void Sta_WriteSelectorAction (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Action;
+   extern const char *Txt_Any_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Act_Action_t Action;
+   unsigned ActionUnsigned;
    Tab_Tab_t Tab;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
@@ -724,21 +725,19 @@ static void Sta_WriteSelectorAction (void)
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
-   for (Action = (Act_Action_t) 0;
+   HTM_OPTION (HTM_Type_STRING,"0",Gbl.Stat.NumAction == 0,false,
+	       "%s",Txt_Any_action);
+   for (Action = (Act_Action_t) 1;
 	Action < Act_NUM_ACTIONS;
 	Action++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Action);
-      if (Action == Gbl.Stat.NumAction)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">");
-      if (Action)
-         fprintf (Gbl.F.Out,"%u: ",(unsigned) Action);
       Tab = Act_GetTab (Act_GetSuperAction (Action));
-      if (Txt_TABS_TXT[Tab])
-         fprintf (Gbl.F.Out,"%s &gt; ",Txt_TABS_TXT[Tab]);
-      fprintf (Gbl.F.Out,"%s",
-               Act_GetActionTextFromDB (Act_GetActCod (Action),ActTxt));
+      Act_GetActionTextFromDB (Act_GetActCod (Action),ActTxt);
+
+      ActionUnsigned = (unsigned) Action;
+      HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
+		  Action == Gbl.Stat.NumAction,false,
+		  "%u: %s &gt; %s",(unsigned) Action,Txt_TABS_TXT[Tab],ActTxt);
      }
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -901,10 +900,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	                                                 0);
 
 	    /****** Get the number of rows per page ******/
-	    Gbl.Stat.RowsPerPage = Par_GetParToUnsignedLong ("RowsPage",
-	                                                     Sta_MIN_ROWS_PER_PAGE,
-	                                                     Sta_MAX_ROWS_PER_PAGE,
-	                                                     Sta_DEF_ROWS_PER_PAGE);
+	    Gbl.Stat.RowsPerPage =
+	    (unsigned) Par_GetParToUnsignedLong ("RowsPage",
+	                                         Sta_MIN_ROWS_PER_PAGE,
+	                                         Sta_MAX_ROWS_PER_PAGE,
+	                                         Sta_DEF_ROWS_PER_PAGE);
 	   }
 
 	 /****** Get lists of selected users ******/
@@ -1609,7 +1609,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
       Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
       Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
-      Par_PutHiddenParamLong (NULL,"RowsPage",Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
    HTM_TD_Begin ("class=\"LM\"");
@@ -2041,6 +2041,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_DAYS_SMALL[7];
    Sta_ColorType_t ColorType;
+   unsigned ColorTypeUnsigned;
    Sta_ColorType_t SelectedColorType;
    unsigned long NumRow;
    struct Date PreviousReadDate;
@@ -2087,10 +2088,10 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	ColorType < Sta_NUM_COLOR_TYPES;
 	ColorType++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) ColorType);
-      if (ColorType == SelectedColorType)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_STAT_COLOR_TYPES[ColorType]);
+      ColorTypeUnsigned = (unsigned) ColorType;
+      HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
+		  ColorType == SelectedColorType,false,
+		  "%s",Txt_STAT_COLOR_TYPES[ColorType]);
      }
    HTM_SELECT_End ();
    HTM_LABEL_End ();

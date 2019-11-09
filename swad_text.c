@@ -1925,6 +1925,27 @@ const char *Txt_Answers =		// Answers of test
 	"Respostas";
 #endif
 
+const char *Txt_Any_action =
+#if   L==1	// ca
+	"Qualsevol acci&oacute;";
+#elif L==2	// de
+	"Alle Handlung";
+#elif L==3	// en
+	"Any action";
+#elif L==4	// es
+	"Cualquier acci&oacute;n";
+#elif L==5	// fr
+	"Toute action";
+#elif L==6	// gn
+	"Cualquier acci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Qualsiasi azione";
+#elif L==8	// pl
+	"Wszystkie  dzia&lstrok;ania";
+#elif L==9	// pt
+	"Qualquer a&ccedil;&atilde;o";
+#endif
+
 const char *Txt_any_course =
 #if   L==1	// ca
 	"qualsevol assignatura";
@@ -1946,27 +1967,6 @@ const char *Txt_any_course =
 	"qualquer disciplina";
 #endif
 
-const char *Txt_Any_type_of_degree =
-#if   L==1	// ca
-	"Qualsevol tipus de titulaci&oacute;";
-#elif L==2	// de
-	"Alle Abschlussart";
-#elif L==3	// en
-	"grau";
-#elif L==4	// es
-	"Cualquier tipo de titulaci&oacute;n";
-#elif L==5	// fr
-	"Tout type d'&eacute;tude";
-#elif L==6	// gn
-	"Cualquier tipo de titulaci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Qualsiasi tipo di laurea";
-#elif L==8	// pl
-	"Dowolny rodzaj stopnia";
-#elif L==9	// pt
-	"Qualquer tipo de grau";
-#endif
-
 const char *Txt_Any_department =
 #if   L==1	// ca
 	"Qualsevol departament";
@@ -1986,6 +1986,27 @@ const char *Txt_Any_department =
 	"Wszystkie dzia&lstrok;y";
 #elif L==9	// pt
 	"Qualquer departamento";
+#endif
+
+const char *Txt_Any_type_of_degree =
+#if   L==1	// ca
+	"Qualsevol tipus de titulaci&oacute;";
+#elif L==2	// de
+	"Alle Abschlussart";
+#elif L==3	// en
+	"grau";
+#elif L==4	// es
+	"Cualquier tipo de titulaci&oacute;n";
+#elif L==5	// fr
+	"Tout type d'&eacute;tude";
+#elif L==6	// gn
+	"Cualquier tipo de titulaci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Qualsiasi tipo di laurea";
+#elif L==8	// pl
+	"Dowolny rodzaj stopnia";
+#elif L==9	// pt
+	"Qualquer tipo de grau";
 #endif
 
 const char *Txt_any_user =
@@ -39398,25 +39419,25 @@ const char *Txt_Show_office_hours =
 	"Mostrar hor&aacute;rios tutor";
 #endif
 
-const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %lu in the following sentences
+const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Mostrar %lu clics anteriores";		// Necessita traduccio
+	"Mostrar %u clics anteriores";		// Necessita traduccio
 #elif L==2	// de
-	"Show previous %lu clicks";		// Need Übersetzung
+	"Show previous %u clicks";		// Need Übersetzung
 #elif L==3	// en
-	"Show previous %lu clicks";
+	"Show previous %u clicks";
 #elif L==4	// es
-	"Mostrar %lu clics anteriores";
+	"Mostrar %u clics anteriores";
 #elif L==5	// fr
-	"Show previous %lu clicks";		// Besoin de traduction
+	"Show previous %u clicks";		// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar %lu clics anteriores";		// Okoteve traducción
+	"Mostrar %u clics anteriores";		// Okoteve traducción
 #elif L==7	// it
-	"Mostra %lu scatti precedenti";
+	"Mostra %u scatti precedenti";
 #elif L==8	// pl
-	"Show previous %lu clicks";		// Potrzebujesz tlumaczenie
+	"Show previous %u clicks";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Mostrar %lu cliques anteriores";
+	"Mostrar %u cliques anteriores";
 #endif
 
 const char *Txt_Show_questions =
@@ -42179,7 +42200,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
    {
 	// TabUnk
-	NULL
+	""
 	,
 	// TabStr
 #if   L==1	// ca

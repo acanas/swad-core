@@ -349,7 +349,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Stat.Role            = Sta_ROLE_DEFAULT;
    Gbl.Stat.NumAction       = Sta_NUM_ACTION_DEFAULT;
    Gbl.Stat.RowsPerPage     = Sta_DEF_ROWS_PER_PAGE;
-   Gbl.Figures.FigureType      = Fig_FIGURE_TYPE_DEF;
+   Gbl.Figures.FigureType   = Fig_FIGURE_TYPE_DEF;
 
    Gbl.Scope.Current = Hie_CRS;
 

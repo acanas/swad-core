@@ -736,7 +736,7 @@ struct Globals
       Act_Action_t NumAction;
       unsigned long FirstRow;
       unsigned long LastRow;
-      unsigned long RowsPerPage;
+      unsigned RowsPerPage;
       long DegTypCod;
       long DptCod;
       char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
