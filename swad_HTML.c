@@ -72,6 +72,7 @@ static unsigned HTM_LABEL_NestingLevel    = 0;
 static unsigned HTM_BUTTON_NestingLevel   = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 static unsigned HTM_SELECT_NestingLevel   = 0;
+static unsigned HTM_OPTGROUP_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -1376,6 +1377,23 @@ void HTM_SELECT_End (void)
    fprintf (Gbl.F.Out,"</select>");
 
    HTM_SELECT_NestingLevel--;
+  }
+
+void HTM_OPTGROUP_Begin (const char *Label)
+  {
+   fprintf (Gbl.F.Out,"<optgroup label=\"%s\">",Label);
+
+   HTM_OPTGROUP_NestingLevel++;
+  }
+
+void HTM_OPTGROUP_End (void)
+  {
+   if (HTM_OPTGROUP_NestingLevel == 0)	// No OPTGROUP open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened OPTGROUP.");
+
+   fprintf (Gbl.F.Out,"</optgroup>");
+
+   HTM_OPTGROUP_NestingLevel--;
   }
 
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disabled,

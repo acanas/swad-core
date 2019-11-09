@@ -139,6 +139,8 @@ void HTM_TEXTAREA_End (void);
 void HTM_SELECT_Begin (bool SubmitOnChange,
 		       const char *fmt,...);
 void HTM_SELECT_End (void);
+void HTM_OPTGROUP_Begin (const char *Label);
+void HTM_OPTGROUP_End (void);
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disabled,
 		 const char *fmt,...);
 

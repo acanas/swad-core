@@ -1072,8 +1072,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	 if (DegCod != LastDegCod)
 	   {
 	    if (LastDegCod > 0)
-	       fprintf (Gbl.F.Out,"</optgroup>");
-	    fprintf (Gbl.F.Out,"<optgroup label=\"%s\">",DegShortName);
+	       HTM_OPTGROUP_End ();
+	    HTM_OPTGROUP_Begin (DegShortName);
 	    LastDegCod = DegCod;
 	   }
 
@@ -1083,7 +1083,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
         }
 
       if (LastDegCod > 0)
-	 fprintf (Gbl.F.Out,"</optgroup>");
+	 HTM_OPTGROUP_End ();
      }
 
    /***** Write an option with the current course
