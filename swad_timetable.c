@@ -1555,7 +1555,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		  fprintf (Gbl.F.Out,"%s",
 		           Crs.ShrtName[0] ? Crs.ShrtName :
 			                     Txt_unknown_removed_course);
-		  fprintf (Gbl.F.Out,"<br />");
+		  HTM_BR ();
         	 }
               }
 
@@ -1570,13 +1570,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
 		GrpCod > 0)
 	      {
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
 	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpTypName);
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
 	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpName);
 	       if (GrpDat.Classroom.ClaCod > 0)
 		 {
-		  fprintf (Gbl.F.Out,"<br />");
+		  HTM_BR ();
 		  fprintf (Gbl.F.Out,"(%s)",GrpDat.Classroom.ShrtName);
 		 }
 	      }
@@ -1585,7 +1585,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Info)
 	       if (Info[0])
 		 {
-		  fprintf (Gbl.F.Out,"<br />");
+		  HTM_BR ();
 	          fprintf (Gbl.F.Out,"<br />%s",Info);
 		 }
 
@@ -1664,7 +1664,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
 	      {
 	       /***** Group *****/
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Group);
 	       HTM_LABEL_End ();
@@ -1705,7 +1705,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       HTM_SELECT_End ();
 
 	       /***** Info *****/
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();
@@ -1722,7 +1722,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
 	       /***** Info *****/
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();

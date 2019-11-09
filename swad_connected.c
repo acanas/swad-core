@@ -207,7 +207,7 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 
    if (UsrsTotal)
      {
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"%u %s",
 	       UsrsTotal,
 	       (UsrsTotal == 1) ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :

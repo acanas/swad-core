@@ -284,7 +284,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Write user's ID and name *****/
    HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %s",Txt_ID,ID);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s: ",Txt_Name);
    if (UsrDat->FullName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FullName);

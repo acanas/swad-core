@@ -895,7 +895,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   {
    /***** Write first name and surname 1 *****/
    fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
 
    /***** Write surname2 if exists *****/
@@ -8904,12 +8904,12 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	    fprintf (Gbl.F.Out,"%s",UsrDat.FirstName);
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
-	 fprintf (Gbl.F.Out,"<br />");
+	 HTM_BR ();
 	 if (UsrDat.Surname1[0])
 	    fprintf (Gbl.F.Out,"%s",UsrDat.Surname1);
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
-	 fprintf (Gbl.F.Out,"<br />");
+	 HTM_BR ();
 	 if (UsrDat.Surname2[0])
 	    fprintf (Gbl.F.Out,"%s",UsrDat.Surname2);
 	 else
@@ -9712,14 +9712,14 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    ID_WriteUsrIDs (UsrDat,NULL);
 
    /***** Show user's name *****/
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
      {
       fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
      }
 

@@ -903,7 +903,7 @@ static void Pho_UpdatePhoto2 (void)
 	       "style=\"width:%upx;height:%upx;\"",
 	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
       free (Img);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"%s",Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
       HTM_TD_End ();
      }
@@ -2542,11 +2542,11 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
    fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"(%d%%)",
             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
         	          0);

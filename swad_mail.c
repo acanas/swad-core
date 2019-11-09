@@ -1326,7 +1326,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       /* Form to change user's email */
       if (NumEmail > 1 || (ItsMe && !Confirmed))
 	{
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
 	 if (ItsMe)
 	    Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
@@ -1392,7 +1392,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
      }
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
 	            "size=\"18\"");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();

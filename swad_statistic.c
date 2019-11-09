@@ -435,7 +435,7 @@ void Sta_AskShowCrsHits (void)
          HTM_LABEL_End ();
 
          /***** Separator *****/
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
 
          /***** Option b) Listing of detailed clicks to this course *****/
          HTM_LABEL_Begin (NULL);
@@ -2854,9 +2854,9 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
      {
       fprintf (Gbl.F.Out,"%u%%",(unsigned) (((Hits->Num * 100.0) /
 		                             Hits->Total) + 0.5));
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       Str_WriteFloatNumToFile (Gbl.F.Out,Hits->Num);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
          BarHeight = 1;
@@ -2866,12 +2866,12 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
    else
      {
       fprintf (Gbl.F.Out,"0%%");
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"0");
      }
 
    /* Write the hour */
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%uh",Hour);
    HTM_TD_End ();
   }

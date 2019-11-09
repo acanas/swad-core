@@ -200,7 +200,7 @@ void Dup_ListDuplicateUsrs (void)
             if (NumInformants > 1)
               {
 	       fprintf (Gbl.F.Out,"%s: %u",Txt_Informants,NumInformants);
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
               }
 
             /* Button to view users similar to this */

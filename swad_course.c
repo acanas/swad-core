@@ -227,7 +227,7 @@ static void Crs_Configuration (bool PrintView)
                  Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       HTM_A_End ();
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
    HTM_DIV_End ();
 

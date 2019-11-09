@@ -3388,7 +3388,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       if (PermissionThreadDeletion[Gbl.Forum.ForumSelected.Type] &
 	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
         {
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
          Frm_StartFormAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
                               For_REMOVE_THREAD_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -3405,7 +3405,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       /***** Put button to cut the thread for moving it to another forum *****/
       if (ICanMoveThreads)
         {
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
          Frm_StartFormAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current

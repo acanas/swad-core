@@ -3387,7 +3387,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    ID_WriteUsrIDs (UsrDat,NULL);
 
    /***** Show user's name *****/
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
 
    Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
@@ -3400,7 +3400,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Show user's email *****/
    if (UsrDat->Email[0])
      {
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\" class=\"AUTHOR_TXT\"",
 	           UsrDat->Email);
       fprintf (Gbl.F.Out,"%s",UsrDat->Email);

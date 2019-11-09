@@ -1076,7 +1076,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 
 	 if (PrjIsFaulty)
 	   {
-	    fprintf (Gbl.F.Out,"<br />");
+	    HTM_BR ();
 	    Prj_PutWarningIcon ();
 	   }
 

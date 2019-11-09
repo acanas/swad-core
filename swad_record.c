@@ -1757,9 +1757,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
    HTM_TD_Begin ("class=\"REC_HEAD CM\"");
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
    HTM_TD_End ();
 
@@ -2759,11 +2759,11 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 
    /***** First name *****/
    fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
 
    /***** Surname 1 *****/
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
 
    /***** Surname 2 *****/
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname2);

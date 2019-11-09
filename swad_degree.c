@@ -329,7 +329,7 @@ static void Deg_Configuration (bool PrintView)
 	           Gbl.Hierarchy.Deg.FullName);
    Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
 		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
    if (PutLink)
       HTM_A_End ();

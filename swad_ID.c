@@ -384,7 +384,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 	NumID++)
      {
       if (NumID)
-	 fprintf (Gbl.F.Out,"<br />");
+	 HTM_BR ();
 
       HTM_SPAN_Begin ("class=\"%s\"",
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
@@ -614,7 +614,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else	// NumID >= 1
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
 
       if (UsrDat->IDs.Num > 1)	// I have two or more IDs
 	{
@@ -720,7 +720,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		                        "",	// Show the most recent ID
 		      false,
 		      "size=\"18\"");
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();
       HTM_TD_End ();

@@ -3579,7 +3579,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	 HTM_SPAN_End ();
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
 	 fprintf (Gbl.F.Out,"%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,

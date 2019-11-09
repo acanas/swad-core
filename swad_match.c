@@ -2161,7 +2161,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
 						     Match->Status.QstInd);
    HTM_DIV_Begin ("class=\"MCH_NUM_ANSWERERS\"");
    fprintf (Gbl.F.Out,"%s",Txt_MATCH_respond);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"<strong>");
    if (Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)

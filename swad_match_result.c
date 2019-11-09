@@ -340,9 +340,9 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
    fprintf (Gbl.F.Out,"%s",Txt_Score);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s<br />",Txt_out_of_PART_OF_A_SCORE);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
@@ -771,7 +771,7 @@ void McR_ShowOneMchResult (void)
       if (UsrDat->FirstName[0])
 	 fprintf (Gbl.F.Out,", %s",
 		  UsrDat->FirstName);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,

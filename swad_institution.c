@@ -342,7 +342,7 @@ static void Ins_Configuration (bool PrintView)
 	           Gbl.Hierarchy.Ins.FullName);
    Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
 		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
    if (PutLink)
       HTM_A_End ();
@@ -881,7 +881,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH_Empty (1);
@@ -2280,7 +2280,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH (1,1,"LM",Txt_Requester);

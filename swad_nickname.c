@@ -332,7 +332,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       /* Form to change the nickname */
       if (NumNick > 1)
 	{
-         fprintf (Gbl.F.Out,"<br />");
+         HTM_BR ();
 	 if (ItsMe)
 	    Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 	 else
@@ -404,7 +404,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
 		   NicknameWithArroba,false,
 		   "size=\"18\"");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save_changes);	// I have no nickname yet);
    Frm_EndForm ();

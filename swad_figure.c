@@ -218,7 +218,7 @@ void Fig_ReqShowFigures (void)
    Sco_GetScope ("ScopeFig");
    Sco_PutSelectorScope ("ScopeFig",false);
    HTM_LABEL_End ();
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -596,31 +596,31 @@ static void Fig_WriteHeadHierarchy (void)
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_Countries);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_Institutions);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("building.svg",Txt_Centres,"CONTEXT_ICO_x16");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_Centres);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_Degrees);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("list-ol.svg",Txt_Courses,"CONTEXT_ICO_x16");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_Courses);
    HTM_TH_End ();
 
@@ -1425,7 +1425,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Write link to institution *****/
 	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
-	       fprintf (Gbl.F.Out,"<br />");
+	       HTM_BR ();
                fprintf (Gbl.F.Out,"%u",NumberThisRow);
                HTM_TD_End ();
 
@@ -2499,19 +2499,19 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Folders);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Files);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Size);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_course);
    HTM_TH_End ();
 
@@ -2532,19 +2532,19 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Folders);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Files);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Size);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 

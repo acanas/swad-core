@@ -2966,7 +2966,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 		Title,"ICO16x16");
 
    /***** Form to delete message *****/
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
    Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsOneMsg);

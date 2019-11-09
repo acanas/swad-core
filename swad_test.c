@@ -1140,7 +1140,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_No_image_video);
       HTM_LABEL_End ();
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
 
       /***** Choice 2: Current media *****/
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -1917,7 +1917,7 @@ static void Tst_ShowFormConfigTst (void)
 		       Pluggable == Gbl.Test.Config.Pluggable ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_TST_PLUGGABLE[Pluggable]);
       HTM_LABEL_End ();
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
      }
    HTM_TD_End ();
 
@@ -1982,7 +1982,7 @@ static void Tst_ShowFormConfigTst (void)
 		       Feedback == Gbl.Test.Config.Feedback ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_FEEDBACK[Feedback]);
       HTM_LABEL_End ();
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
      }
    HTM_TD_End ();
 
@@ -5213,14 +5213,14 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	               " rows=\"5\" required=\"required\"");
    fprintf (Gbl.F.Out,"%s",Stem);
    HTM_TEXTAREA_End ();
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
                               false);
 
    /***** Feedback *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s (%s):",Txt_Feedback,Txt_optional);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
       if (Feedback[0])
@@ -5250,7 +5250,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		       AnsType == Gbl.Test.AnswerType ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
      }
    HTM_TD_End ();
 
@@ -5418,7 +5418,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       /* Feedback */
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s (%s):",Txt_Feedback,Txt_optional);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
 			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 				                   "");
@@ -7709,9 +7709,9 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
    fprintf (Gbl.F.Out,"%s",Txt_Score);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Txt_out_of_PART_OF_A_SCORE);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
@@ -8143,7 +8143,7 @@ void Tst_ShowOneTstResult (void)
       if (Gbl.Usrs.Other.UsrDat.FirstName[0])
 	 fprintf (Gbl.F.Out,", %s",
 		  Gbl.Usrs.Other.UsrDat.FirstName);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 							   NULL,

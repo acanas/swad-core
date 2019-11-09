@@ -1444,7 +1444,7 @@ static void Grp_WriteHeadingGroupTypes (void)
    HTM_TH (1,1,"BM",NULL);
    HTM_TH_Begin (1,1,"CM");
    fprintf (Gbl.F.Out,"%s",Txt_Type_of_group);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"(%s)",Txt_eg_Lectures_Practicals);
    HTM_TH_End ();
    HTM_TH (1,1,"CM",Txt_Mandatory_enrolment);
@@ -1649,7 +1649,7 @@ static void Grp_WriteHeadingGroups (void)
    HTM_TH (1,1,"CM",Txt_Type_BR_of_group);
    HTM_TH_Begin (1,1,"CM");
    fprintf (Gbl.F.Out,"%s",Txt_Group_name);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"(%s)",Txt_eg_A_B);
    HTM_TH_End ();
    HTM_TH (1,1,"CM",Txt_Classroom);
@@ -2331,14 +2331,14 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    /***** Name of group type *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"9\" class=\"GRP_TITLE LM\"");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
      {
       UniqueId++;
       if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"%s: ",Txt_Opening_of_groups);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       HTM_SPAN_End ();

@@ -279,7 +279,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	        Report->Permalink,
 	        Txt_Report);
    Ico_PutIcon ("file-alt.svg",Txt_Report,"ICO64x64");
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    fprintf (Gbl.F.Out,"%s",Report->FilenameReport);
    HTM_A_End ();
    HTM_DIV_End ();
@@ -314,7 +314,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    /***** Report date *****/
    if (CurrentTimeUTC)
      {
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
       fprintf (Gbl.F.Out,"%s: ",Txt_Date);
       HTM_SPAN_Begin ("class=\"DAT_N\"");
       fprintf (Gbl.F.Out,"%s %s UTC",CurrentTimeUTC->StrDate,
@@ -849,7 +849,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"%ld&nbsp;%s",
                Report->UsrFigures.NumClicks - NumClicks,
                Txt_Other_actions);
-      fprintf (Gbl.F.Out,"<br />");
+      HTM_BR ();
      }
 
    /***** Free structure that stores the query result *****/

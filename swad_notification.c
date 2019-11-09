@@ -2058,7 +2058,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	    NumUnseenNtfs,
 	    NumUnseenNtfs == 1 ? Txt_notification :
 				 Txt_notifications);
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_BR ();
    HTM_SPAN_End ();
 
    /***** Icon and number of new notifications *****/
