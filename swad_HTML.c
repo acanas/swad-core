@@ -69,6 +69,7 @@ static unsigned HTM_DD_NestingLevel       = 0;
 static unsigned HTM_A_NestingLevel        = 0;
 static unsigned HTM_SCRIPT_NestingLevel   = 0;
 static unsigned HTM_LABEL_NestingLevel    = 0;
+static unsigned HTM_BUTTON_NestingLevel   = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 static unsigned HTM_SELECT_NestingLevel   = 0;
 
@@ -1213,6 +1214,27 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
    fprintf (Gbl.F.Out," />");
+  }
+
+/*****************************************************************************/
+/********************************** Buttons **********************************/
+/*****************************************************************************/
+
+void HTM_BUTTON_Begin (const char *Class)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"%s\">",Class);
+
+   HTM_BUTTON_NestingLevel++;
+  }
+
+void HTM_BUTTON_End (void)
+  {
+   if (HTM_BUTTON_NestingLevel == 0)	// No BUTTON open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened BUTTON.");
+
+   fprintf (Gbl.F.Out,"</button>");
+
+   HTM_BUTTON_NestingLevel--;
   }
 
 /*****************************************************************************/

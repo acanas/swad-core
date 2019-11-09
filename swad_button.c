@@ -100,53 +100,47 @@ void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
 void Btn_PutCreateButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT BT_CREATE");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutCreateButtonInline (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CREATE");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
   }
 
 void Btn_PutConfirmButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT BT_CONFIRM");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutConfirmButtonInline (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CONFIRM");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
   }
 
 void Btn_PutRemoveButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT BT_REMOVE");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutRemoveButtonInline (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_REMOVE\">"
-                      "%s"
-                      "</button>",
-            TxtButton);
+   HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_REMOVE");
+   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_BUTTON_End ();
   }
