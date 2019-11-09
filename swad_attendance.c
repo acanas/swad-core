@@ -3599,25 +3599,32 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
-	    fprintf (Gbl.F.Out,"<dl>");
+
+	    HTM_DL_Begin ();
 	    if (ShowCommentStd)
 	      {
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentStd,Cns_MAX_BYTES_TEXT,false);
-	       fprintf (Gbl.F.Out,"<dt>%s:</dt><dd>%s</dd>",
-			Txt_Student_comment,
-			CommentStd);
+	       HTM_DT_Begin ();
+	       fprintf (Gbl.F.Out,"%s:",Txt_Student_comment);
+	       HTM_DT_End ();
+	       HTM_DD_Begin ();
+	       fprintf (Gbl.F.Out,"%s",CommentStd);
+	       HTM_DD_End ();
 	      }
 	    if (ShowCommentTch)
 	      {
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentTch,Cns_MAX_BYTES_TEXT,false);
-	       fprintf (Gbl.F.Out,"<dt>%s:</dt>"
-		                  "<dd>%s</dd>",
-			Txt_Teachers_comment,
-			CommentTch);
+	       HTM_DT_Begin ();
+	       fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
+	       HTM_DT_End ();
+	       HTM_DD_Begin ();
+	       fprintf (Gbl.F.Out,"%s",CommentTch);
+	       HTM_DD_End ();
 	      }
-	    fprintf (Gbl.F.Out,"</dl>");
+	    HTM_DL_End ();
+
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();

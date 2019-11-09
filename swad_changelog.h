@@ -469,9 +469,6 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: En resultados de test y de juegos, en preguntas modificadas se podría mostrar la puntuación obtenida en la pregunta (ahora no sale)
 // TODO: Al crear un nuevo juego, debería irse a la pantalla de añadir preguntas (la misma opción que sale cuando pulsas en editar un juego existente)
 
-// TODO: Refactorize SELECT and OPTION
-// TODO: Refactorize DL, DT, DD
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -490,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.56 (2019-11-08)"
+#define Log_PLATFORM_VERSION	"SWAD 19.57 (2019-11-09)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -498,6 +495,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 
+	Version 19.57:    Nov 09, 2019	Code refactoring in HTML definition lists. (246156 lines)
 	Version 19.56:    Nov 08, 2019	Fixed bug in groups.
 					New constants for sizes of numerical strings. (246104 lines)
 	Version 19.55.4:  Nov 07, 2019	Fixed bugs in dates. (246072 lines)

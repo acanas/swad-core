@@ -63,6 +63,9 @@ static unsigned HTM_DIV_NestingLevel      = 0;
 static unsigned HTM_SPAN_NestingLevel     = 0;
 static unsigned HTM_UL_NestingLevel       = 0;
 static unsigned HTM_LI_NestingLevel       = 0;
+static unsigned HTM_DL_NestingLevel       = 0;
+static unsigned HTM_DT_NestingLevel       = 0;
+static unsigned HTM_DD_NestingLevel       = 0;
 static unsigned HTM_A_NestingLevel        = 0;
 static unsigned HTM_SCRIPT_NestingLevel   = 0;
 static unsigned HTM_LABEL_NestingLevel    = 0;
@@ -715,6 +718,61 @@ void HTM_LI_End (void)
    fprintf (Gbl.F.Out,"</li>");
 
    HTM_LI_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/****************************** Definition lists *****************************/
+/*****************************************************************************/
+
+void HTM_DL_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<dl>");
+
+   HTM_DL_NestingLevel++;
+  }
+
+void HTM_DL_End (void)
+  {
+   if (HTM_DL_NestingLevel == 0)	// No DL open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DL.");
+
+   fprintf (Gbl.F.Out,"</dl>");
+
+   HTM_DL_NestingLevel--;
+  }
+
+void HTM_DT_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<dt>");
+
+   HTM_DT_NestingLevel++;
+  }
+
+void HTM_DT_End (void)
+  {
+   if (HTM_DL_NestingLevel == 0)	// No DT open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DT.");
+
+   fprintf (Gbl.F.Out,"</dt>");
+
+   HTM_DT_NestingLevel--;
+  }
+
+void HTM_DD_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<dd>");
+
+   HTM_DD_NestingLevel++;
+  }
+
+void HTM_DD_End (void)
+  {
+   if (HTM_DD_NestingLevel == 0)	// No DD open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DD.");
+
+   fprintf (Gbl.F.Out,"</dd>");
+
+   HTM_DD_NestingLevel--;
   }
 
 /*****************************************************************************/

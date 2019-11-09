@@ -90,6 +90,13 @@ void HTM_UL_End (void);
 void HTM_LI_Begin (const char *fmt,...);
 void HTM_LI_End (void);
 
+void HTM_DL_Begin (void);
+void HTM_DL_End (void);
+void HTM_DT_Begin (void);
+void HTM_DT_End (void);
+void HTM_DD_Begin (void);
+void HTM_DD_End (void);
+
 void HTM_A_Begin (const char *fmt,...);
 void HTM_A_End (void);
 
