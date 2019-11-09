@@ -857,6 +857,36 @@ void HTM_SCRIPT_End (void)
   }
 
 /*****************************************************************************/
+/********************************* Parameters ********************************/
+/*****************************************************************************/
+
+void HTM_PARAM (const char *Name,
+		const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Value;
+
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Value,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"\n<param name=\"%s\" value=\"%s\">",Name,Value);
+
+	 free (Value);
+	}
+  }
+
+/*****************************************************************************/
 /*********************************** Labels **********************************/
 /*****************************************************************************/
 

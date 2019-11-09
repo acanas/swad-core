@@ -593,25 +593,16 @@ void Cht_OpenChatWindow (void)
                                              Str_NO_SKIP_HTML_COMMENTS);
 
    /***** Write parameters *****/
-   fprintf (Gbl.F.Out,"\n<param name=\"nick\" value=\"N%s\">",
-	    Gbl.Session.Id);
-   fprintf (Gbl.F.Out,"\n<param name=\"realname\" value=\"%s\">",
-	    UsrName);
-   fprintf (Gbl.F.Out,"\n<param name=\"host\" value=\"%s\">",
-	    Gbl.IP);
-   fprintf (Gbl.F.Out,"\n<param name=\"server_name\" value=\"%s\">",
-	    Cfg_PLATFORM_SERVER);
-   fprintf (Gbl.F.Out,"\n<param name=\"port\" value=\"5000\">");
-   fprintf (Gbl.F.Out,"\n<param name=\"image_bl\" value=\"%s/usr_bl.jpg\">",
-	    Cfg_URL_ICON_PUBLIC);
-   fprintf (Gbl.F.Out,"\n<param name=\"image_url\" value=\"%s/%s.jpg\">",
-	    Cfg_URL_PHOTO_PUBLIC,Gbl.Usrs.Me.UsrDat.Photo);
-   fprintf (Gbl.F.Out,"\n<param name=\"channel_name\" value=\"%s\">",
-	    ListRoomCodes);
-   fprintf (Gbl.F.Out,"\n<param name=\"tab\" value=\"%s\">",
-	    ListRoomShrtNames);
-   fprintf (Gbl.F.Out,"\n<param name=\"topic\" value=\"%s\">",
-	    ListRoomFullNames);
+   HTM_PARAM ("nick","N%s",Gbl.Session.Id);
+   HTM_PARAM ("realname","%s",UsrName);
+   HTM_PARAM ("host","%s",Gbl.IP);
+   HTM_PARAM ("server_name","%s",Cfg_PLATFORM_SERVER);
+   HTM_PARAM ("port","%u",5000);
+   HTM_PARAM ("image_bl","%s/usr_bl.jpg",Cfg_URL_ICON_PUBLIC);
+   HTM_PARAM ("image_url","%s/%s.jpg",Cfg_URL_PHOTO_PUBLIC,Gbl.Usrs.Me.UsrDat.Photo);
+   HTM_PARAM ("channel_name","%s",ListRoomCodes);
+   HTM_PARAM ("tab","%s",ListRoomShrtNames);
+   HTM_PARAM ("topic","%s",ListRoomFullNames);
 
    /***** Copy index.html file until the end *****/
    Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"</html>",

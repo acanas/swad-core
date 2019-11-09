@@ -103,6 +103,9 @@ void HTM_A_End (void);
 void HTM_SCRIPT_Begin (const char *URL,const char *CharSet);
 void HTM_SCRIPT_End (void);
 
+void HTM_PARAM (const char *Name,
+		const char *fmt,...);
+
 void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
 
