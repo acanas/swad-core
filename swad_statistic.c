@@ -2852,9 +2852,9 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
    /* Draw bar with a height porportional to the number of clicks */
    if (Hits->Num > 0.0)
      {
-      fprintf (Gbl.F.Out,"%u%%<br />",
-	       (unsigned) (((Hits->Num * 100.0) /
-		            Hits->Total) + 0.5));
+      fprintf (Gbl.F.Out,"%u%%",(unsigned) (((Hits->Num * 100.0) /
+		                             Hits->Total) + 0.5));
+      fprintf (Gbl.F.Out,"<br />");
       Str_WriteFloatNumToFile (Gbl.F.Out,Hits->Num);
       fprintf (Gbl.F.Out,"<br />");
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
@@ -2864,10 +2864,15 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 	       "style=\"width:10px;height:%upx;\"",BarHeight);
      }
    else
-      fprintf (Gbl.F.Out,"0%%<br />0");
+     {
+      fprintf (Gbl.F.Out,"0%%");
+      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"0");
+     }
 
    /* Write the hour */
-   fprintf (Gbl.F.Out,"<br />%uh",Hour);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%uh",Hour);
    HTM_TD_End ();
   }
 

@@ -206,11 +206,13 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    if (UsrsTotal)
-      fprintf (Gbl.F.Out,"<br />"
-			 "%u %s",
+     {
+      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"%u %s",
 	       UsrsTotal,
 	       (UsrsTotal == 1) ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
 				  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+     }
   }
 
 /*****************************************************************************/

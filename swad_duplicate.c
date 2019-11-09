@@ -198,9 +198,10 @@ void Dup_ListDuplicateUsrs (void)
 	    if (sscanf (row[1],"%u",&NumInformants) != 1)
 	       Lay_ShowErrorAndExit ("Wrong number of informants.");
             if (NumInformants > 1)
-	       fprintf (Gbl.F.Out,"%s: %u<br />",
-			Txt_Informants,
-			NumInformants);
+              {
+	       fprintf (Gbl.F.Out,"%s: %u",Txt_Informants,NumInformants);
+	       fprintf (Gbl.F.Out,"<br />");
+              }
 
             /* Button to view users similar to this */
 	    Dup_PutButtonToViewSimilarUsrs (&UsrDat);

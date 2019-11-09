@@ -339,7 +339,11 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Total_BR_score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
-   fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   fprintf (Gbl.F.Out,"%s",Txt_Score);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s<br />",Txt_out_of_PART_OF_A_SCORE);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 

@@ -2054,10 +2054,11 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Number of unseen notifications *****/
    HTM_SPAN_Begin ("id=\"notif_all\"");
-   fprintf (Gbl.F.Out,"%u&nbsp;%s<br />",
+   fprintf (Gbl.F.Out,"%u&nbsp;%s",
 	    NumUnseenNtfs,
 	    NumUnseenNtfs == 1 ? Txt_notification :
 				 Txt_notifications);
+   fprintf (Gbl.F.Out,"<br />");
    HTM_SPAN_End ();
 
    /***** Icon and number of new notifications *****/

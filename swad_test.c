@@ -5219,7 +5219,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Feedback *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s (%s):<br />",Txt_Feedback,Txt_optional);
+   fprintf (Gbl.F.Out,"%s (%s):",Txt_Feedback,Txt_optional);
+   fprintf (Gbl.F.Out,"<br />");
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
       if (Feedback[0])
@@ -5416,7 +5417,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /* Feedback */
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s (%s):<br />",Txt_Feedback,Txt_optional);
+      fprintf (Gbl.F.Out,"%s (%s):",Txt_Feedback,Txt_optional);
+      fprintf (Gbl.F.Out,"<br />");
       HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
 			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 				                   "");
@@ -7706,7 +7708,11 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_TH (1,1,"RT",Txt_Total_BR_score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
-   fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   fprintf (Gbl.F.Out,"%s",Txt_Score);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Txt_out_of_PART_OF_A_SCORE);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 

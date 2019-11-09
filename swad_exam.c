@@ -1052,8 +1052,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
                    Ins.WWW,StyleTitle);
    Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />%s",
-            Ins.FullName);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Ins.FullName);
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       HTM_SPAN_End ();
    else
@@ -1076,9 +1076,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Title *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
-   fprintf (Gbl.F.Out,"&nbsp;<br />"
-	              "<strong>%s</strong>",
-            Txt_EXAM_ANNOUNCEMENT);
+   fprintf (Gbl.F.Out,"&nbsp;");
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"<strong>%s</strong>",Txt_EXAM_ANNOUNCEMENT);
    HTM_TD_End ();
    HTM_TR_End ();
 

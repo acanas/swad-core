@@ -688,9 +688,9 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+<br />%s",
-	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
 
    HTM_TR_End ();

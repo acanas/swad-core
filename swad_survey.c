@@ -643,7 +643,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Users' roles who can answer the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   fprintf (Gbl.F.Out,"%s:<br />",Txt_Users);
+   fprintf (Gbl.F.Out,"%s:",Txt_Users);
+   fprintf (Gbl.F.Out,"<br />");
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
 			   1 << Rol_TCH,

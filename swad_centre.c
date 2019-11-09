@@ -345,7 +345,8 @@ static void Ctr_Configuration (bool PrintView)
 	           Gbl.Hierarchy.Ctr.FullName);
    Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ctr.FullName);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
@@ -2605,9 +2606,9 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+<br />%s",
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 
@@ -2642,9 +2643,9 @@ static void Ctr_PutHeadCentresForEdition (void)
    HTM_TH (1,1,"RM",Txt_Users);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+<br />%s",
-	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH (1,1,"LM",Txt_Requester);
    HTM_TH_Empty (1);

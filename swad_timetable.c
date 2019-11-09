@@ -1551,9 +1551,12 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                Crs_GetDataOfCourseByCod (&Crs);
                if (ClassType == TT_LECTURE ||
                    ClassType == TT_PRACTICAL)
-		  fprintf (Gbl.F.Out,"%s<br />",
+        	 {
+		  fprintf (Gbl.F.Out,"%s",
 		           Crs.ShrtName[0] ? Crs.ShrtName :
 			                     Txt_unknown_removed_course);
+		  fprintf (Gbl.F.Out,"<br />");
+        	 }
               }
 
 	    /***** Type of class and duration *****/
@@ -1567,18 +1570,24 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
 		GrpCod > 0)
 	      {
-	       fprintf (Gbl.F.Out,"<br />%s"
-				  "<br />%s",
-			GrpDat.GrpTypName,GrpDat.GrpName);
+	       fprintf (Gbl.F.Out,"<br />");
+	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpTypName);
+	       fprintf (Gbl.F.Out,"<br />");
+	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpName);
 	       if (GrpDat.Classroom.ClaCod > 0)
-		  fprintf (Gbl.F.Out,"<br />(%s)",
-			   GrpDat.Classroom.ShrtName);
+		 {
+		  fprintf (Gbl.F.Out,"<br />");
+		  fprintf (Gbl.F.Out,"(%s)",GrpDat.Classroom.ShrtName);
+		 }
 	      }
 
 	    /***** Info *****/
 	    if (Info)
 	       if (Info[0])
+		 {
+		  fprintf (Gbl.F.Out,"<br />");
 	          fprintf (Gbl.F.Out,"<br />%s",Info);
+		 }
 
 	    /***** End cell *****/
             HTM_DIV_End ();

@@ -279,7 +279,8 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	        Report->Permalink,
 	        Txt_Report);
    Ico_PutIcon ("file-alt.svg",Txt_Report,"ICO64x64");
-   fprintf (Gbl.F.Out,"<br />%s",Report->FilenameReport);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",Report->FilenameReport);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -313,8 +314,8 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    /***** Report date *****/
    if (CurrentTimeUTC)
      {
-      fprintf (Gbl.F.Out,"<br />"
-			 "%s: ",Txt_Date);
+      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"%s: ",Txt_Date);
       HTM_SPAN_Begin ("class=\"DAT_N\"");
       fprintf (Gbl.F.Out,"%s %s UTC",CurrentTimeUTC->StrDate,
 	                             CurrentTimeUTC->StrTime);
@@ -844,9 +845,12 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 
    /***** Draw bar for the rest of the clicks *****/
    if ((unsigned long) Report->UsrFigures.NumClicks > NumClicks)
-      fprintf (Gbl.F.Rep,"%ld&nbsp;%s<br />",
+     {
+      fprintf (Gbl.F.Rep,"%ld&nbsp;%s",
                Report->UsrFigures.NumClicks - NumClicks,
                Txt_Other_actions);
+      fprintf (Gbl.F.Out,"<br />");
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

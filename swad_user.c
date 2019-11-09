@@ -894,7 +894,9 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   {
    /***** Write first name and surname 1 *****/
-   fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
+   fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
@@ -9710,11 +9712,16 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    ID_WriteUsrIDs (UsrDat,NULL);
 
    /***** Show user's name *****/
-   fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
+   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
-      fprintf (Gbl.F.Out,",<br />%s",UsrDat->FirstName);
+     {
+      fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
+     }
 
    /***** End form *****/
    Frm_EndForm ();

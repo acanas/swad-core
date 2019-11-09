@@ -1662,7 +1662,9 @@ void Lay_AdvertisementMobile (void)
       HTM_TD_Begin ("class=\"DAT CM\"");
       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	           " class=\"DAT\"");
-      fprintf (Gbl.F.Out,"%s<br /><br />",Txt_Stay_connected_with_SWADroid);
+      fprintf (Gbl.F.Out,"%s",Txt_Stay_connected_with_SWADroid);
+      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"<br />");
       HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,
 	       "style=\"width:250px; height:375px;\"");
       HTM_A_End ();
