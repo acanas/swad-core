@@ -84,8 +84,7 @@ void Coo_EditMyPrefsOnCookies (void)
    HTM_INPUT_CHECKBOX ("cookies",true,
 		       "value=\"Y\"%s",
 		       Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",
-	    Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
+   HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
    HTM_LABEL_End ();
 
    /* End container */

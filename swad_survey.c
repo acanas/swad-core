@@ -263,7 +263,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+	 HTM_Txt (Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 Frm_LinkFormEnd ();
@@ -531,7 +531,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Frm_LinkFormSubmit (Txt_View_survey,
                        Svy.Status.Visible ? "ASG_TITLE" :
 	                                    "ASG_TITLE_LIGHT",NULL);
-   fprintf (Gbl.F.Out,"%s",Svy.Title);
+   HTM_Txt (Svy.Title);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
@@ -620,7 +620,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
          Lay_ShowErrorAndExit ("Wrong survey scope.");
          break;
       case Hie_SYS:	// System
-         fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_SHORT_NAME);
+         HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 break;
       case Hie_CTY:	// Country
          fprintf (Gbl.F.Out,"%s %s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
@@ -664,7 +664,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
         	                                          "DAT_LIGHT");
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -734,12 +734,12 @@ static void Svy_WriteStatus (struct Survey *Svy)
    if (Svy->Status.Visible)
      {
       HTM_LI_Begin ("class=\"STATUS_GREEN\"");
-      fprintf (Gbl.F.Out,"%s",Txt_Visible_survey);
+      HTM_Txt (Txt_Visible_survey);
      }
    else
      {
       HTM_LI_Begin ("class=\"STATUS_RED_LIGHT\"");
-      fprintf (Gbl.F.Out,"%s",Txt_Hidden_survey);
+      HTM_Txt (Txt_Hidden_survey);
      }
    HTM_LI_End ();
 
@@ -749,14 +749,14 @@ static void Svy_WriteStatus (struct Survey *Svy)
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_GREEN" :
         	                          "STATUS_GREEN_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_Open_survey);
+      HTM_Txt (Txt_Open_survey);
      }
    else
      {
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_RED" :
         	                          "STATUS_RED_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_Closed_survey);
+      HTM_Txt (Txt_Closed_survey);
      }
    HTM_LI_End ();
 
@@ -766,14 +766,14 @@ static void Svy_WriteStatus (struct Survey *Svy)
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_GREEN" :
         	                          "STATUS_GREEN_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_Type_of_user_allowed);
+      HTM_Txt (Txt_SURVEY_Type_of_user_allowed);
      }
    else
      {
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_RED" :
         	                          "STATUS_RED_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_Type_of_user_not_allowed);
+      HTM_Txt (Txt_SURVEY_Type_of_user_not_allowed);
      }
    HTM_LI_End ();
 
@@ -783,14 +783,14 @@ static void Svy_WriteStatus (struct Survey *Svy)
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_GREEN" :
         	                          "STATUS_GREEN_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
+      HTM_Txt (Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
      }
    else
      {
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_RED" :
         	                          "STATUS_RED_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
+      HTM_Txt (Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
      }
    HTM_LI_End ();
 
@@ -800,14 +800,14 @@ static void Svy_WriteStatus (struct Survey *Svy)
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_GREEN" :
         	                          "STATUS_GREEN_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_have_already_answered);
+      HTM_Txt (Txt_SURVEY_You_have_already_answered);
      }
    else
      {
       HTM_LI_Begin ("class=\"%s\"",
                     Svy->Status.Visible ? "STATUS_RED" :
         	                          "STATUS_RED_LIGHT");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_have_not_answered);
+      HTM_Txt (Txt_SURVEY_You_have_not_answered);
      }
    HTM_LI_End ();
 
@@ -1938,7 +1938,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewSurvey)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -2728,7 +2728,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -2751,7 +2751,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 		       "value=\"%u\"%s",
 		       (unsigned) AnsType,
 		       AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
+      HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_BR ();
      }
@@ -2786,7 +2786,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
                           NumAns,NumAns);
       if (SvyQst->AnsChoice[NumAns].Text)
-         fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
+         HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
       HTM_TEXTAREA_End ();
       HTM_TD_End ();
 
@@ -3289,7 +3289,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
          /* Write the question type (row[2]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
          HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-         fprintf (Gbl.F.Out,"%s",Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
+         HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
          HTM_TD_End ();
 
          /* Write the stem (row[3]) and the answers of this question */
@@ -3384,7 +3384,7 @@ static void Svy_WriteQstStem (const char *Stem)
                      HeadingRigorousHTML,Length,false);
 
    /* Write the stem */
-   fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
+   HTM_Txt (HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */
    free (HeadingRigorousHTML);
@@ -3475,7 +3475,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 HTM_TD_Begin ("class=\"LT\"");
 	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
 		          (unsigned) SvyQst->QstCod,NumAns);
-	 fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
+	 HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 

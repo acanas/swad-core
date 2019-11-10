@@ -427,8 +427,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%s",
-            (Role == Rol_UNK) ? Txt_Total :
+   HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
         	                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
@@ -460,7 +459,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+   HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
@@ -597,31 +596,31 @@ static void Fig_WriteHeadHierarchy (void)
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_Countries);
+   HTM_Txt (Txt_Countries);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_Institutions);
+   HTM_Txt (Txt_Institutions);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("building.svg",Txt_Centres,"CONTEXT_ICO_x16");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_Centres);
+   HTM_Txt (Txt_Centres);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_Degrees);
+   HTM_Txt (Txt_Degrees);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    Ico_PutIcon ("list-ol.svg",Txt_Courses,"CONTEXT_ICO_x16");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_Courses);
+   HTM_Txt (Txt_Courses);
    HTM_TH_End ();
 
    HTM_TR_End ();
@@ -1482,7 +1481,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 				40,NULL,true);
 	          fprintf (Gbl.F.Out,"&nbsp;");
 		 }
-	       fprintf (Gbl.F.Out,"%s",Ins.FullName);
+	       HTM_Txt (Ins.FullName);
 	       Frm_LinkFormEnd ();
 	       Frm_EndForm ();
 	       HTM_TD_End ();
@@ -2500,19 +2499,19 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Folders);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_course);
+   HTM_Txt (Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Files);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_course);
+   HTM_Txt (Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Size);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_course);
+   HTM_Txt (Txt_course);
    HTM_TH_End ();
 
    HTM_TR_End ();
@@ -2533,19 +2532,19 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Folders);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
+   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Files);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
+   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/",Txt_Size);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_user[Usr_SEX_UNKNOWN]);
+   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TR_End ();
@@ -2595,19 +2594,19 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s LM\"",Class);
-   fprintf (Gbl.F.Out,"%s",NameOfFileZones);
+   HTM_Txt (NameOfFileZones);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumCrss);
+   HTM_Txt (StrNumCrss);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumGrps);
+   HTM_Txt (StrNumGrps);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumUsrs);
+   HTM_Txt (StrNumUsrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
@@ -2623,7 +2622,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",FileSizeStr);
+   HTM_Txt (FileSizeStr);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2669,19 +2668,19 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s LM\"",Class);
-   fprintf (Gbl.F.Out,"%s",NameOfFileZones);
+   HTM_Txt (NameOfFileZones);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumFoldersPerCrs);
+   HTM_Txt (StrNumFoldersPerCrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumFilesPerCrs);
+   HTM_Txt (StrNumFilesPerCrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",FileSizePerCrsStr);
+   HTM_Txt (FileSizePerCrsStr);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2727,19 +2726,19 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s LM\"",Class);
-   fprintf (Gbl.F.Out,"%s",NameOfFileZones);
+   HTM_Txt (NameOfFileZones);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumFoldersPerUsr);
+   HTM_Txt (StrNumFoldersPerUsr);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",StrNumFilesPerUsr);
+   HTM_Txt (StrNumFilesPerUsr);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%s",FileSizePerUsrStr);
+   HTM_Txt (FileSizePerUsrStr);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2782,7 +2781,7 @@ static void Fig_GetAndShowOERsStats (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_LICENSES[License]);
+      HTM_Txt (Txt_LICENSES[License]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3099,7 +3098,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3148,7 +3147,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3402,7 +3401,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[NoteType]);
+      HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3523,7 +3522,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3692,8 +3691,8 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Fol == 0 ? Txt_Followed :
-        	                         Txt_Followers);
+      HTM_Txt (Fol == 0 ? Txt_Followed :
+        	          Txt_Followers);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3823,7 +3822,7 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_FollowPerFollow[Fol]);
+      HTM_Txt (Txt_FollowPerFollow[Fol]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4142,7 +4141,7 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -4345,7 +4344,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+      HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4374,7 +4373,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -4525,7 +4524,7 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_MSGS_Sent);
+   HTM_Txt (Txt_MSGS_Sent);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4549,7 +4548,7 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_MSGS_Received);
+   HTM_Txt (Txt_MSGS_Received);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4730,7 +4729,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	 HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"DAT LM\"");
-         fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
+         HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4817,7 +4816,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s CM\"",AcceptedClass[i]);
-      fprintf (Gbl.F.Out,"%s",AcceptedSymbol[i]);
+      HTM_Txt (AcceptedSymbol[i]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4893,7 +4892,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_STR_LANG_NAME[Lan]);
+      HTM_Txt (Txt_STR_LANG_NAME[Lan]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

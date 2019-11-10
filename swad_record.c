@@ -1756,11 +1756,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_HEAD CM\"");
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
+   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+   HTM_Txt (UsrDat->FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1833,7 +1833,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
                                 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)
-               fprintf (Gbl.F.Out,"%s",row[0]);
+               HTM_Txt (row[0]);
             HTM_TEXTAREA_End ();
            }
          else			// Show without form
@@ -1844,7 +1844,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                          Cns_MAX_BYTES_TEXT);
                Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                  Text,Cns_MAX_BYTES_TEXT,false);
-               fprintf (Gbl.F.Out,"%s",Text);
+               HTM_Txt (Text);
               }
             else
                fprintf (Gbl.F.Out,"-");
@@ -2721,7 +2721,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 Frm_LinkFormSubmit (Ins->FullName,"REC_HEAD",NULL);
 	}
-      fprintf (Gbl.F.Out,"%s",Ins->FullName);
+      HTM_Txt (Ins->FullName);
       if (PutFormLinks)
 	{
          Frm_LinkFormEnd ();
@@ -2758,15 +2758,15 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    HTM_DIV_Begin ("class=\"REC_NAME\"");
 
    /***** First name *****/
-   fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
+   HTM_Txt (UsrDat->FirstName);
    HTM_BR ();
 
    /***** Surname 1 *****/
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    HTM_BR ();
 
    /***** Surname 2 *****/
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname2);
+   HTM_Txt (UsrDat->Surname2);
 
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -2855,11 +2855,11 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	{
 	 HTM_A_Begin ("href=\"mailto:%s\" class=\"REC_DAT_BOLD\"",UsrDat->Email);
-	 fprintf (Gbl.F.Out,"%s",UsrDat->Email);
+	 HTM_Txt (UsrDat->Email);
          HTM_A_End ();
         }
       else
-	 fprintf (Gbl.F.Out,"********");
+	 HTM_Txt ("********");
       HTM_DIV_End ();
      }
    HTM_TD_End ();
@@ -3144,8 +3144,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
-      fprintf (Gbl.F.Out,"%s",
-	       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
       HTM_TD_End ();
      }
 
@@ -3167,7 +3166,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Surname1\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s",Txt_Surname_1);
+   HTM_Txt (Txt_Surname_1);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":");
@@ -3232,7 +3231,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"FirstName\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s",Txt_First_name);
+   HTM_Txt (Txt_First_name);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":");
@@ -3276,7 +3275,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s",Txt_Country);
+   HTM_Txt (Txt_Country);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":");
@@ -3331,7 +3330,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 			 UsrDat->OriginPlace,false,
 			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->OriginPlace[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
+	 HTM_Txt (UsrDat->OriginPlace);
      }
    HTM_TD_End ();
 
@@ -3364,7 +3363,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
 			    &(UsrDat->Birthday),
 			    false,false);
       else if (UsrDat->StrBirthday[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
+	 HTM_Txt (UsrDat->StrBirthday);
      }
    HTM_TD_End ();
 
@@ -3397,7 +3396,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 			 UsrDat->LocalAddress,false,
 			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalAddress[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
+	 HTM_Txt (UsrDat->LocalAddress);
      }
    HTM_TD_End ();
 
@@ -3431,7 +3430,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
       else if (UsrDat->LocalPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->LocalPhone);
-	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
+	 HTM_Txt (UsrDat->LocalPhone);
 	 HTM_A_End ();
 	}
      }
@@ -3466,7 +3465,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 			 UsrDat->FamilyAddress,false,
 			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyAddress[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
+	 HTM_Txt (UsrDat->FamilyAddress);
      }
    HTM_TD_End ();
 
@@ -3500,7 +3499,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
       else if (UsrDat->FamilyPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->FamilyPhone);
-	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
+	 HTM_Txt (UsrDat->FamilyPhone);
 	 HTM_A_End ();
 	}
      }
@@ -3534,14 +3533,14 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 	{
 	 HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
 	                     " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
-	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	 HTM_Txt (UsrDat->Comments);
 	 HTM_TEXTAREA_End ();
 	}
       else if (UsrDat->Comments[0])
 	{
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
 			   UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
-	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	 HTM_Txt (UsrDat->Comments);
 	}
      }
    HTM_TD_End ();
@@ -3595,7 +3594,7 @@ static void Rec_ShowInstitution (struct Instit *Ins,
 	 if (Ins->WWW[0])
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
 		         Ins->WWW);
-	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
+	 HTM_Txt (Ins->FullName);
 	 if (Ins->WWW[0])
 	    HTM_A_End ();
 	}
@@ -3630,7 +3629,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
 	 if (Ctr.WWW[0])
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
 		         Ctr.WWW);
-	 fprintf (Gbl.F.Out,"%s",Ctr.FullName);
+	 HTM_Txt (Ctr.FullName);
 	 if (Ctr.WWW[0])
 	    HTM_A_End ();
 	}
@@ -3666,7 +3665,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 	 if (Dpt.WWW[0])
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
 		         Dpt.WWW);
-	 fprintf (Gbl.F.Out,"%s",Dpt.FullName);
+	 HTM_Txt (Dpt.FullName);
 	 if (Dpt.WWW[0])
 	    HTM_A_End ();
 	}
@@ -3693,7 +3692,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ShowData)
-      fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
+      HTM_Txt (UsrDat->Tch.Office);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3719,7 +3718,7 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
      {
       HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",
 	           UsrDat->Tch.OfficePhone);
-      fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
+      HTM_Txt (UsrDat->Tch.OfficePhone);
       HTM_A_End ();
      }
    HTM_TD_End ();
@@ -3738,7 +3737,7 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
                 Cfg_URL_DATA_PROTECTION_PUBLIC);
-   fprintf (Gbl.F.Out,"%s",Txt_DATA_PROTECTION_CLAUSE);
+   HTM_Txt (Txt_DATA_PROTECTION_CLAUSE);
    HTM_A_End ();
    HTM_DIV_End ();
   }

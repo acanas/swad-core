@@ -621,7 +621,7 @@ static void Lay_WriteScripts (void)
      }
 
    /***** Script for Google Analytics *****/
-   fprintf (Gbl.F.Out,"%s",Cfg_GOOGLE_ANALYTICS);
+   HTM_Txt (Cfg_GOOGLE_ANALYTICS);
   }
 
 // Change page title
@@ -939,7 +939,7 @@ static void Lay_WritePageTopHeading (void)
 
    HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
    Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"%s",Txt_TAGLINE_BR);
+   HTM_Txt (Txt_TAGLINE_BR);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_tagline
 
@@ -1036,7 +1036,7 @@ static void Lay_WriteTitleAction (void)
 
    /***** Subtitle *****/
    HTM_DIV_Begin ("class=\"%s\"",The_ClassSubtitleAction[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",Act_GetSubtitleAction (Gbl.Action.Act));
+   HTM_Txt (Act_GetSubtitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
    /***** Container end *****/
@@ -1417,7 +1417,7 @@ static void Lay_WriteAboutZone (void)
 	    "style=\"width:%upx; height:%upx;\"",
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"%s",Cfg_ABOUT_NAME);
+   HTM_Txt (Cfg_ABOUT_NAME);
    HTM_DIV_End ();
    HTM_A_End ();
 
@@ -1426,7 +1426,7 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"%s: ",Txt_Questions_and_problems);
    HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
 	        Cfg_PLATFORM_RESPONSIBLE_EMAIL);
-   fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+   HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -1594,7 +1594,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
                       Ins.WWW);
-      fprintf (Gbl.F.Out,"%s",Ins.FullName);
+      HTM_Txt (Ins.FullName);
       if (!PrintView)
          HTM_A_End ();
      }
@@ -1605,14 +1605,14 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
                       Deg.WWW);
-      fprintf (Gbl.F.Out,"%s",Deg.FullName);
+      HTM_Txt (Deg.FullName);
       if (!PrintView)
          HTM_A_End ();
      }
    HTM_BR ();
    if (CrsCod > 0)
      {
-      fprintf (Gbl.F.Out,"%s",Crs.FullName);
+      HTM_Txt (Crs.FullName);
       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
         {
          HTM_BR ();
@@ -1662,7 +1662,7 @@ void Lay_AdvertisementMobile (void)
       HTM_TD_Begin ("class=\"DAT CM\"");
       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	           " class=\"DAT\"");
-      fprintf (Gbl.F.Out,"%s",Txt_Stay_connected_with_SWADroid);
+      HTM_Txt (Txt_Stay_connected_with_SWADroid);
       HTM_BR ();
       HTM_BR ();
       HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,

@@ -815,14 +815,14 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	    Frm_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       fprintf (Gbl.F.Out,"<u>");
-            fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
+            HTM_Txt (Txt_PROJECT_ORDER[Order]);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       fprintf (Gbl.F.Out,"</u>");
 	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    break;
 	 default:
-            fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
+            HTM_Txt (Txt_PROJECT_ORDER[Order]);
 	    break;
 	}
 
@@ -1163,12 +1163,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 Frm_StartForm (ActAdmDocPrj);
 	 Prj_PutCurrentParams ();
 	 Frm_LinkFormSubmit (Txt_Project_files,ClassTitle,NULL);
-	 fprintf (Gbl.F.Out,"%s",Prj->Title);
+	 HTM_Txt (Prj->Title);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Prj->Title);
+	 HTM_Txt (Prj->Title);
      }
    if (Faults.WrongTitle)
       Prj_PutWarningIcon ();
@@ -1321,7 +1321,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassData);
 	 break;
      }
-   fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
+   HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1519,7 +1519,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",
 		 ClassData,
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",Prj->Title);
+   HTM_Txt (Prj->Title);
    HTM_TD_End ();
 
    /***** Department *****/
@@ -1527,8 +1527,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Assigned? *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",(Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
-        	                                             Txt_No);
+   HTM_Txt ((Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
+        	                              Txt_No);
    HTM_TD_End ();
 
    /***** Number of students *****/
@@ -1544,7 +1544,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Proposal *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
+   HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
    HTM_TD_End ();
 
    /***** Write rows of data of this project *****/
@@ -1602,7 +1602,7 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    if (PutLink)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
 	           Dpt.WWW,ClassData);
-   fprintf (Gbl.F.Out,"%s",Dpt.FullName);
+   HTM_Txt (Dpt.FullName);
    if (PutLink)
       HTM_A_End ();
    HTM_TD_End ();
@@ -1624,7 +1624,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
 
    /***** Show department *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",Dpt.FullName);
+   HTM_Txt (Dpt.FullName);
    HTM_TD_End ();
   }
 
@@ -1694,7 +1694,7 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 		       ClassData);
 	 break;
      }
-   fprintf (Gbl.F.Out,"%s",TxtField);
+   HTM_Txt (TxtField);
    if (Warning)
       Prj_PutWarningIcon ();
    HTM_TD_End ();
@@ -1717,7 +1717,7 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
 
    /***** Write text *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",TxtField);
+   HTM_Txt (TxtField);
    HTM_TD_End ();
   }
 
@@ -1777,7 +1777,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
      }
    if (PutLink)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prj->URL);
-   fprintf (Gbl.F.Out,"%s",Prj->URL);
+   HTM_Txt (Prj->URL);
    if (PutLink)
       HTM_A_End ();
    HTM_TD_End ();
@@ -1795,7 +1795,7 @@ static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
 
    /***** Show URL *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",Prj->URL);
+   HTM_Txt (Prj->URL);
    HTM_TD_End ();
   }
 
@@ -1953,7 +1953,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 
 	    /* Write user's name */
 	    HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
-	    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
+	    HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
 	    HTM_TD_End ();
 
 	    /* End row for this user */
@@ -2037,7 +2037,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 	   {
 	    /* Write user's name in "Surname1 Surname2, FirstName" format */
             HTM_LI_Begin (NULL);
-            fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.Surname1);
+            HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
                fprintf (Gbl.F.Out," %s",Gbl.Usrs.Other.UsrDat.Surname2);
             fprintf (Gbl.F.Out,", %s",Gbl.Usrs.Other.UsrDat.FirstName);
@@ -3456,7 +3456,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"%s",
                        Id,Id,NumRows,Required ? " required=\"required\"" :
                 	                        "");
-   fprintf (Gbl.F.Out,"%s",TxtField);
+   HTM_Txt (TxtField);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -3756,7 +3756,7 @@ void Prj_ShowFormConfig (void)
    HTM_INPUT_CHECKBOX ("Editable",false,
 		       "id=\"Editable\" value=\"Y\"%s",
 		       Gbl.Prjs.Config.Editable ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",Txt_Editable_by_non_editing_teachers);
+   HTM_Txt (Txt_Editable_by_non_editing_teachers);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

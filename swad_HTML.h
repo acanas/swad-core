@@ -149,4 +149,6 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 
 void HTM_BR (void);
 
+void HTM_Txt (const char *Txt);
+
 #endif

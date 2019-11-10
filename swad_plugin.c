@@ -153,7 +153,7 @@ void Plg_ListPlugins (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
                    URL,Plg->Name);
-      fprintf (Gbl.F.Out,"%s",Plg->Name);
+      HTM_Txt (Plg->Name);
       HTM_A_End ();
       HTM_TD_End ();
 

@@ -190,7 +190,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Number of pending institutions (row[1]) */
          HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 fprintf (Gbl.F.Out,"%s",row[1]);
+	 HTM_Txt (row[1]);
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -269,7 +269,7 @@ static void Cty_Configuration (bool PrintView)
 	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
 	           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
@@ -300,7 +300,7 @@ static void Cty_Configuration (bool PrintView)
 			     " onchange=\"document.getElementById('%s').submit();return false;\"",
 		             Gbl.Form.Id);
 	 if (MapAttribution)
-	    fprintf (Gbl.F.Out,"%s",MapAttribution);
+	    HTM_Txt (MapAttribution);
 	 HTM_TEXTAREA_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
@@ -308,7 +308,7 @@ static void Cty_Configuration (bool PrintView)
       else if (MapAttribution)
 	{
 	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-	 fprintf (Gbl.F.Out,"%s",MapAttribution);
+	 HTM_Txt (MapAttribution);
 	 HTM_DIV_End ();
 	}
 
@@ -330,7 +330,7 @@ static void Cty_Configuration (bool PrintView)
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
       HTM_A_End ();
    HTM_TD_End ();
@@ -561,7 +561,7 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Other_countries);
+   HTM_Txt (Txt_Other_countries);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -597,7 +597,7 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Country_unspecified);
+   HTM_Txt (Txt_Country_unspecified);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -672,7 +672,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
-      fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
+      HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
       if (OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
@@ -690,7 +690,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
 
    HTM_TR_End ();
@@ -1294,13 +1294,13 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       Cty_PutParamCtyCod (CtyCod);
       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 		          ClassLink,NULL);
-      fprintf (Gbl.F.Out,"%s",CtyName);
+      HTM_Txt (CtyName);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    else
       /***** Write country name without link *****/
-      fprintf (Gbl.F.Out,"%s",CtyName);
+      HTM_Txt (CtyName);
   }
 
 /*****************************************************************************/
@@ -1634,7 +1634,7 @@ static void Cty_ListCountriesForEdition (void)
 
       /* Alphabetic country code with 2 letters (ISO 3166-1) */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      fprintf (Gbl.F.Out,"%s",Cty->Alpha2);
+      HTM_Txt (Cty->Alpha2);
       HTM_TD_End ();
 
       HTM_TD_Empty (3);
@@ -2086,7 +2086,7 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* Language */
       HTM_TD_Begin ("class=\"DAT RT\"");
-      fprintf (Gbl.F.Out,"%s",Txt_STR_LANG_NAME[Lan]);
+      HTM_Txt (Txt_STR_LANG_NAME[Lan]);
       HTM_TD_End ();
 
       /* Name */

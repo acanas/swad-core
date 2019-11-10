@@ -1560,7 +1560,7 @@ static void Med_ShowJPG (struct Media *Media,
       free (URL);
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+      HTM_Txt (Txt_File_not_found);
   }
 
 /*****************************************************************************/
@@ -1638,7 +1638,7 @@ static void Med_ShowGIF (struct Media *Media,
 	 HTM_DIV_End ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+	 HTM_Txt (Txt_File_not_found);
 
       /***** Free URLs *****/
       free (URL_PNG);
@@ -1646,7 +1646,7 @@ static void Med_ShowGIF (struct Media *Media,
       free (URL);
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+      HTM_Txt (Txt_File_not_found);
   }
 
 /*****************************************************************************/
@@ -1698,7 +1698,7 @@ static void Med_ShowVideo (struct Media *Media,
 	                 "</video>");
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+      HTM_Txt (Txt_File_not_found);
   }
 
 /*****************************************************************************/

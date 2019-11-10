@@ -141,7 +141,7 @@ void Tab_DrawTabs (void)
 	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
 			NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"%s",Txt_TABS_TXT[NumTab]);
+	 HTM_Txt (Txt_TABS_TXT[NumTab]);
 	 HTM_DIV_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();

@@ -154,7 +154,7 @@ void Syl_PutFormWhichSyllabus (void)
 		       "value=\"%u\"%s",
 		       (unsigned) WhichSyllabus,
 		       WhichSyllabus == Gbl.Syllabus.WhichSyllabus ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
+      HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }
@@ -718,7 +718,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 		    LstItemsSyllabus.NumLevels - Level + 1,
 		    StyleSyllabus[Level],
 		    Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%s",Text);
+      HTM_Txt (Text);
       HTM_TD_End ();
      }
 

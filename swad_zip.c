@@ -589,7 +589,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
 	        URL,FileName);
-   fprintf (Gbl.F.Out,"%s",FileName);
+   HTM_Txt (FileName);
    HTM_A_End ();
    HTM_TD_End ();
 
@@ -604,7 +604,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",FileSizeStr);
+   HTM_Txt (FileSizeStr);
    if (UncompressedSize)
      {
       Fil_WriteFileSizeFull ((double) UncompressedSize,FileSizeStr);

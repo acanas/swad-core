@@ -574,7 +574,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
 
    /***** Title *****/
    HTM_SPAN_Begin ("class=\"ASG_TITLE\"");
-   fprintf (Gbl.F.Out,"%s",Match->Title);
+   HTM_Txt (Match->Title);
    HTM_SPAN_End ();
 
    /***** Groups whose students can answer this match *****/
@@ -2160,7 +2160,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
 						     Match->Status.QstInd);
    HTM_DIV_Begin ("class=\"MCH_NUM_ANSWERERS\"");
-   fprintf (Gbl.F.Out,"%s",Txt_MATCH_respond);
+   HTM_Txt (Txt_MATCH_respond);
    HTM_BR ();
    fprintf (Gbl.F.Out,"<strong>");
    if (Match->Status.QstInd > 0 &&
@@ -2272,9 +2272,9 @@ static void Mch_ShowNumQstInMatch (struct Match *Match)
 
    HTM_DIV_Begin ("class=\"MCH_NUM_QST\"");
    if (Match->Status.QstInd == 0)				// Not started
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_Start);
+      HTM_Txt (Txt_MATCH_Start);
    else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
+      HTM_Txt (Txt_MATCH_End);
    else
       fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
    HTM_DIV_End ();
@@ -2443,7 +2443,7 @@ static void Mch_ShowMatchTitle (struct Match *Match)
   {
    /***** Match title *****/
    HTM_DIV_Begin ("class=\"MCH_TOP\"");
-   fprintf (Gbl.F.Out,"%s",Match->Title);
+   HTM_Txt (Match->Title);
    HTM_DIV_End ();
   }
 
@@ -3371,7 +3371,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
    HTM_TABLE_End ();
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s",Gbl.Title);
+   HTM_Txt (Gbl.Title);
 
    /***** End container *****/
    HTM_DIV_End ();

@@ -217,7 +217,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
    Frm_LinkFormSubmit (Txt_System,ClassTxt,NULL);
-   fprintf (Gbl.F.Out,"%s",Txt_System);
+   HTM_Txt (Txt_System);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -234,7 +234,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -250,7 +250,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select countries *****/
       Frm_StartFormGoTo (ActSeeCty);
       Frm_LinkFormSubmit (Txt_Country,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_Country);
+      HTM_Txt (Txt_Country);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -268,7 +268,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Ins.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -284,7 +284,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select institutions *****/
       Frm_StartFormGoTo (ActSeeIns);
       Frm_LinkFormSubmit (Txt_Institution,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_Institution);
+      HTM_Txt (Txt_Institution);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -298,7 +298,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Hidden institution *****/
-      fprintf (Gbl.F.Out,"%s",Txt_Institution);
+      HTM_Txt (Txt_Institution);
 
       HTM_DIV_End ();
      }
@@ -314,7 +314,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Ctr.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -330,7 +330,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select centres *****/
       Frm_StartFormGoTo (ActSeeCtr);
       Frm_LinkFormSubmit (Txt_Centre,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_Centre);
+      HTM_Txt (Txt_Centre);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -344,7 +344,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Hidden centre *****/
-      fprintf (Gbl.F.Out,"%s",Txt_Centre);
+      HTM_Txt (Txt_Centre);
 
       HTM_DIV_End ();
      }
@@ -360,7 +360,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Deg.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -376,7 +376,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select degrees *****/
       Frm_StartFormGoTo (ActSeeDeg);
       Frm_LinkFormSubmit (Txt_Degree,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      HTM_Txt (Txt_Degree);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -390,7 +390,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Hidden degree *****/
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      HTM_Txt (Txt_Degree);
 
       HTM_DIV_End ();
      }
@@ -450,8 +450,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       HTM_DIV_Begin ("id=\"big_full_name\"");
-      fprintf (Gbl.F.Out,"%s",		// Full name
-		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :
+      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
@@ -463,8 +462,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("id=\"big_short_name\"");
-      fprintf (Gbl.F.Out,"%s",		// Short name
-		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :
+      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.ShrtName :
@@ -483,8 +481,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("id=\"big_short_name\"");
-      fprintf (Gbl.F.Out,"%s",		// Short name
-	       Cfg_PLATFORM_SHORT_NAME);
+      HTM_Txt (Cfg_PLATFORM_SHORT_NAME);// Short name
       HTM_DIV_End ();
      }
    HTM_DIV_End ();

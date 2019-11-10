@@ -894,9 +894,9 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   {
    /***** Write first name and surname 1 *****/
-   fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
+   HTM_Txt (UsrDat->FirstName);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
@@ -2804,7 +2804,7 @@ void Usr_WriteLoggedUsrHead (void)
      {
       Frm_StartForm (ActFrmRolSes);
       Frm_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,":&nbsp;");
@@ -3503,8 +3503,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       HTM_SPAN_End ();
 
       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-      fprintf (Gbl.F.Out,"%s",
-               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       HTM_SPAN_End ();
      }
    else
@@ -3654,8 +3653,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 				       "USR_LIST_NUM",
 		    UsrDat->Accepted ? Txt_Enrolment_confirmed :
 				       Txt_Enrolment_not_confirmed);
-   fprintf (Gbl.F.Out,"%s",UsrDat->Accepted ? "&check;" :
-        	                              "&cross;");
+   HTM_Txt (UsrDat->Accepted ? "&check;" :
+        	               "&cross;");
    HTM_TD_End ();
 
    /***** Write number of user in the list *****/
@@ -4121,7 +4120,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 			           "DAT_SMALL_NOBR");
 
    /***** Write data *****/
-   fprintf (Gbl.F.Out,"%s",Data);
+   HTM_Txt (Data);
    if (NonBreak)
       fprintf (Gbl.F.Out,"&nbsp;");
 
@@ -6401,7 +6400,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
    HTM_INPUT_CHECKBOX ("WithPhotos",true,
 		       "value=\"Y\"%s",
 		       Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",Txt_Display_photos);
+   HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
   }
 
@@ -8348,7 +8347,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
 		    "value=\"%u\"%s",
 		    (unsigned) ListUsrsAction,
 		    ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",Label);
+   HTM_Txt (Label);
    HTM_LABEL_End ();
    HTM_LI_End ();
   }
@@ -8901,17 +8900,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /* Name */
 	 if (UsrDat.FirstName[0])
-	    fprintf (Gbl.F.Out,"%s",UsrDat.FirstName);
+	    HTM_Txt (UsrDat.FirstName);
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
 	 HTM_BR ();
 	 if (UsrDat.Surname1[0])
-	    fprintf (Gbl.F.Out,"%s",UsrDat.Surname1);
+	    HTM_Txt (UsrDat.Surname1);
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
 	 HTM_BR ();
 	 if (UsrDat.Surname2[0])
-	    fprintf (Gbl.F.Out,"%s",UsrDat.Surname2);
+	    HTM_Txt (UsrDat.Surname2);
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
 
@@ -8959,7 +8958,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** End selector *****/
    HTM_SELECT_End ();
-   fprintf (Gbl.F.Out,"%s",Txt_columns);
+   HTM_Txt (Txt_columns);
    HTM_LABEL_End ();
   }
 
@@ -9655,7 +9654,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s\"",Hidden ? "AUTHOR_TXT_LIGHT" :
         	                                        "AUTHOR_TXT");
-   fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+   HTM_Txt (UsrDat.FullName);
    HTM_DIV_End ();
 
    /***** Free memory used for user's data *****/
@@ -9713,14 +9712,14 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
    /***** Show user's name *****/
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
      {
       fprintf (Gbl.F.Out,",");
       HTM_BR ();
-      fprintf (Gbl.F.Out,"%s",UsrDat->FirstName);
+      HTM_Txt (UsrDat->FirstName);
      }
 
    /***** End form *****/

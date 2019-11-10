@@ -181,7 +181,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 			  (unsigned) Visibility,
 			  Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" : "",
 			  Action == ActUnk ? " disabled=\"disabled\"" : "");
-	 fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
+	 HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();
 	}

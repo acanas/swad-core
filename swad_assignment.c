@@ -223,7 +223,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
-      fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+      HTM_Txt (Txt_START_END_TIME[Order]);
       if (!PrintView)
 	{
 	 if (Order == Gbl.Asgs.SelectedOrder)
@@ -408,7 +408,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 				 "ASG_TITLE",
 		    Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
-   fprintf (Gbl.F.Out,"%s",Asg.Title);
+   HTM_Txt (Asg.Title);
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -448,7 +448,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
    HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
         	                                  "DAT");
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -537,7 +537,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 		      Txt_Folder);
 
    /***** Folder name *****/
-   fprintf (Gbl.F.Out,"%s",Asg->Folder);
+   HTM_Txt (Asg->Folder);
   }
 
 /*****************************************************************************/
@@ -1212,7 +1212,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewAssignment)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 

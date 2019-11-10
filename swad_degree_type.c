@@ -331,7 +331,7 @@ static void DT_ListDegreeTypesForSeeing (void)
 
       /* Name of degree type */
       HTM_TD_Begin ("class=\"DAT_N LM %s\"",BgColor);
-      fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+      HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
       HTM_TD_End ();
 
       /* Number of degrees of this type */
@@ -519,7 +519,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       Frm_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
+      HTM_Txt (Txt_DEGREE_TYPES_ORDER[Order]);
       if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       Frm_LinkFormEnd ();

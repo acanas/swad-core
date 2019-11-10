@@ -580,7 +580,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],Net_WebsAndSocialNetworksTitle[Web],
 	          "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
-	 fprintf (Gbl.F.Out,"%s",Net_WebsAndSocialNetworksTitle[Web]);
+	 HTM_Txt (Net_WebsAndSocialNetworksTitle[Web]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");

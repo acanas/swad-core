@@ -244,7 +244,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
       else
          HTM_SPAN_Begin ("class=\"%s\"",Font);
       if (FirstMsgEnabled)
-         fprintf (Gbl.F.Out,"%s",Subject);
+         HTM_Txt (Subject);
       else
          fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
       if (LinkToPagCurrent)

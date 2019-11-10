@@ -127,7 +127,7 @@ void Cla_SeeClassrooms (void)
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Classrooms.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_CLASSROOMS_ORDER[Order]);
+      HTM_Txt (Txt_CLASSROOMS_ORDER[Order]);
       if (Order == Gbl.Classrooms.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       Frm_LinkFormEnd ();
@@ -145,23 +145,23 @@ void Cla_SeeClassrooms (void)
 
       /* Short name */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
+      HTM_Txt (Gbl.Classrooms.Lst[NumCla].ShrtName);
       HTM_TD_End ();
 
       /* Full name */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].FullName);
+      HTM_Txt (Gbl.Classrooms.Lst[NumCla].FullName);
       HTM_TD_End ();
 
       /* Capacity */
       HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
       Cla_WriteCapacity (StrCapacity,Gbl.Classrooms.Lst[NumCla].Capacity);
-      fprintf (Gbl.F.Out,"%s",StrCapacity);
+      HTM_Txt (StrCapacity);
       HTM_TD_End ();
 
       /* Location */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].Location);
+      HTM_Txt (Gbl.Classrooms.Lst[NumCla].Location);
       HTM_TD_End ();
 
       HTM_TR_End ();

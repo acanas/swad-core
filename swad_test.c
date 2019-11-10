@@ -908,14 +908,13 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
         {
          row = mysql_fetch_row (mysql_res);
          HTM_LI_Begin (NULL);
-         fprintf (Gbl.F.Out,"%s",row[0]);
+         HTM_Txt (row[0]);
          HTM_LI_End ();
         }
       HTM_UL_End ();
      }
    else
-      fprintf (Gbl.F.Out,"%s",
-               Txt_no_tags);
+      HTM_Txt (Txt_no_tags);
   }
 
 /*****************************************************************************/
@@ -994,7 +993,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%s",Txt_Question_removed);
+	 HTM_Txt (Txt_Question_removed);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1043,7 +1042,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
    HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-   fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -1103,7 +1102,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Write the stem *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassStem);
-   fprintf (Gbl.F.Out,"%s",StemRigorousHTML);
+   HTM_Txt (StemRigorousHTML);
    HTM_DIV_End ();
 
    /***** Free memory allocated for the stem *****/
@@ -1138,7 +1137,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 		       "value=\"%u\"%s",
 		       (unsigned) Med_ACTION_NO_MEDIA,
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_No_image_video);
+      HTM_Txt (Txt_No_image_video);
       HTM_LABEL_End ();
       HTM_BR ();
 
@@ -1148,7 +1147,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 		       "value=\"%u\"%s checked=\"checked\"",
 		       (unsigned) Med_ACTION_KEEP_MEDIA,
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_Current_image_video);
+      HTM_Txt (Txt_Current_image_video);
       HTM_LABEL_End ();
       Med_ShowMedia (Media,
 	             "TEST_MED_EDIT_ONE_CONTAINER",
@@ -1197,7 +1196,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 
 	 /***** Write the feedback *****/
 	 HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
-	 fprintf (Gbl.F.Out,"%s",FeedbackRigorousHTML);
+	 HTM_Txt (FeedbackRigorousHTML);
 	 HTM_DIV_End ();
 
 	 /***** Free memory allocated for the feedback *****/
@@ -1915,7 +1914,7 @@ static void Tst_ShowFormConfigTst (void)
 		       "value=\"%u\"%s",
 		       (unsigned) Pluggable,
 		       Pluggable == Gbl.Test.Config.Pluggable ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_TST_PLUGGABLE[Pluggable]);
+      HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
       HTM_LABEL_End ();
       HTM_BR ();
      }
@@ -1980,7 +1979,7 @@ static void Tst_ShowFormConfigTst (void)
 		       "value=\"%u\"%s",
 		       (unsigned) Feedback,
 		       Feedback == Gbl.Test.Config.Feedback ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_FEEDBACK[Feedback]);
+      HTM_Txt (Txt_TST_STR_FEEDBACK[Feedback]);
       HTM_LABEL_End ();
       HTM_BR ();
      }
@@ -2012,7 +2011,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"%s\" class=\"DAT\"",Field);
-   fprintf (Gbl.F.Out,"%s",Label);
+   HTM_Txt (Label);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2835,7 +2834,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"<u>");
         }
-      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ORDER_SHORT[Order]);
+      HTM_Txt (Txt_TST_STR_ORDER_SHORT[Order]);
       if (NumRows > 1)
         {
          if (Order == Gbl.Test.SelectedOrder)
@@ -2906,7 +2905,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_DIV_End ();
 
       HTM_TD_End ();
@@ -3389,7 +3388,7 @@ void Tst_WriteAnswersEdit (long QstCod)
 
             /* Write the text of the answer and the media */
             HTM_DIV_Begin ("class=\"TEST_EDI\"");
-            fprintf (Gbl.F.Out,"%s",Answer);
+            HTM_Txt (Answer);
 	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
 	                   "TEST_MED_EDIT_LIST_CONTAINER",
 	                   "TEST_MED_EDIT_LIST");
@@ -3398,7 +3397,7 @@ void Tst_WriteAnswersEdit (long QstCod)
             /* Write the text of the feedback */
             HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
             if (LengthFeedback)
-	       fprintf (Gbl.F.Out,"%s",Feedback);
+	       HTM_Txt (Feedback);
             HTM_DIV_End ();
 
             HTM_TD_End ();
@@ -3542,10 +3541,10 @@ void Tst_WriteAnsTF (char AnsTF)
    switch (AnsTF)
      {
       case 'T':		// true
-         fprintf (Gbl.F.Out,"%s",Txt_TF_QST[0]);
+         HTM_Txt (Txt_TF_QST[0]);
          break;
       case 'F':		// false
-         fprintf (Gbl.F.Out,"%s",Txt_TF_QST[1]);
+         HTM_Txt (Txt_TF_QST[1]);
          break;
       default:		// no answer
          fprintf (Gbl.F.Out,"&nbsp;");
@@ -3746,7 +3745,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
-      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
+      HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONTAINER",
@@ -3834,7 +3833,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
 	 HTM_TD_Begin ("class=\"%s CT\" title=\"%s\"",
 		       Ans.Class,Txt_TST_Answer_given_by_the_user);
-	 fprintf (Gbl.F.Out,"%s",Ans.Str);
+	 HTM_Txt (Ans.Str);
 	 HTM_TD_End ();
         }
       else	// This answer has NOT been selected by the user
@@ -3870,7 +3869,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"LT\"");
 
       HTM_DIV_Begin ("class=\"ANS_TXT\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
                      "TEST_MED_SHOW");
@@ -3881,7 +3880,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
 	       HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
-	       fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
+	       HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
 	       HTM_DIV_End ();
 	      }
 
@@ -4191,7 +4190,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",QstInd,NumOpt,Class);
-      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
@@ -4338,7 +4337,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 			  (Correct ? "ANS_OK" :
 				     "ANS_BAD") :
                           "ANS_0");
-      fprintf (Gbl.F.Out,"%s",Gbl.Test.StrAnswersOneQst[NumQst]);
+      HTM_Txt (Gbl.Test.StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
       HTM_TD_Begin (NULL);
@@ -4366,7 +4365,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          HTM_TD_Begin ("class=\"LT\"");
 
          HTM_DIV_Begin ("class=\"ANS_0\"");
-         fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
+         HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 
 	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
@@ -4374,7 +4373,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
 		  HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
-		  fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
+		  HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Feedback);
 		  HTM_DIV_End ();
 		 }
 
@@ -4721,11 +4720,11 @@ static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_User[UsrDat->Sex]);
+   HTM_Txt (Txt_User[UsrDat->Sex]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+   HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
   }
 
@@ -4810,7 +4809,7 @@ void Tst_GetAndWriteTagsQst (long QstCod)
         {
          row = mysql_fetch_row (mysql_res);
          HTM_LI_Begin (NULL);
-         fprintf (Gbl.F.Out,"%s",row[0]);
+         HTM_Txt (row[0]);
          HTM_LI_End ();
         }
       HTM_UL_End ();
@@ -5211,7 +5210,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
 	               " rows=\"5\" required=\"required\"");
-   fprintf (Gbl.F.Out,"%s",Stem);
+   HTM_Txt (Stem);
    HTM_TEXTAREA_End ();
    HTM_BR ();
    Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
@@ -5224,7 +5223,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
       if (Feedback[0])
-	 fprintf (Gbl.F.Out,"%s",Feedback);
+	 HTM_Txt (Feedback);
    HTM_TEXTAREA_End ();
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -5311,7 +5310,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		       Gbl.Test.Shuffle ? " checked=\"checked\"" : "",
    		       Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
                        Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" : "");
-   fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
+   HTM_Txt (Txt_Shuffle);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -5407,7 +5406,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 	                	                   "");
       if (AnswerHasContent)
-         fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
+         HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
       HTM_TEXTAREA_End ();
 
       /* Media */
@@ -5424,7 +5423,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 				                   "");
       if (Gbl.Test.Answer.Options[NumOpt].Feedback)
          if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
-            fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
+            HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Feedback);
       HTM_TEXTAREA_End ();
       HTM_LABEL_End ();
 
@@ -5490,7 +5489,7 @@ static void Tst_PutTFInputField (const char *Label,char Value)
 		    Value,
 		    Gbl.Test.Answer.TF == Value ? " checked=\"checked\"" : "",
 		    Gbl.Test.AnswerType == Tst_ANS_TRUE_FALSE ? "" : " disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"%s",Label);
+   HTM_Txt (Label);
    HTM_LABEL_End ();
   }
 
@@ -7708,9 +7707,9 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_TH (1,1,"RT",Txt_Total_BR_score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
-   fprintf (Gbl.F.Out,"%s",Txt_Score);
+   HTM_Txt (Txt_Score);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_out_of_PART_OF_A_SCORE);
+   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
    HTM_BR ();
    fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
    HTM_TH_End ();
@@ -8291,7 +8290,7 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	    fprintf (Gbl.F.Out,"%s",Txt_Question_modified);
+	    HTM_Txt (Txt_Question_modified);
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -8320,7 +8319,7 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%s",Txt_Question_removed);
+	 HTM_Txt (Txt_Question_removed);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

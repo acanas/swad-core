@@ -339,7 +339,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Total_BR_score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
-   fprintf (Gbl.F.Out,"%s",Txt_Score);
+   HTM_Txt (Txt_Score);
    HTM_BR ();
    fprintf (Gbl.F.Out,"%s<br />",Txt_out_of_PART_OF_A_SCORE);
    HTM_BR ();
@@ -448,7 +448,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 
          /* Write match title */
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%s",Match.Title);
+	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
          /* Get number of questions (row[3]) */

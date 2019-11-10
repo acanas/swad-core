@@ -1443,7 +1443,7 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    HTM_TH (1,1,"BM",NULL);
    HTM_TH_Begin (1,1,"CM");
-   fprintf (Gbl.F.Out,"%s",Txt_Type_of_group);
+   HTM_Txt (Txt_Type_of_group);
    HTM_BR ();
    fprintf (Gbl.F.Out,"(%s)",Txt_eg_Lectures_Practicals);
    HTM_TH_End ();
@@ -1648,7 +1648,7 @@ static void Grp_WriteHeadingGroups (void)
    HTM_TH (1,1,"BM",NULL);
    HTM_TH (1,1,"CM",Txt_Type_BR_of_group);
    HTM_TH_Begin (1,1,"CM");
-   fprintf (Gbl.F.Out,"%s",Txt_Group_name);
+   HTM_Txt (Txt_Group_name);
    HTM_BR ();
    fprintf (Gbl.F.Out,"(%s)",Txt_eg_A_B);
    HTM_TH_End ();
@@ -2288,7 +2288,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    /* Group name = students with no group */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_LABEL_Begin ("for=\"Grp%ld\"",-GrpTyp->GrpTypCod);
-   fprintf (Gbl.F.Out,"%s",Txt_users_with_no_group);
+   HTM_Txt (Txt_users_with_no_group);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2332,7 +2332,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"9\" class=\"GRP_TITLE LM\"");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",GrpTyp->GrpTypName);
+   HTM_Txt (GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
      {
       UniqueId++;
@@ -2398,7 +2398,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    else
       HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"DAT\"",Grp->GrpCod);
-   fprintf (Gbl.F.Out,"%s",Grp->GrpName);
+   HTM_Txt (Grp->GrpName);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2407,7 +2407,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       HTM_TD_Begin ("class=\"DAT LM LIGHT_BLUE\"");
    else
       HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Grp->Classroom.ShrtName);
+   HTM_Txt (Grp->Classroom.ShrtName);
    HTM_TD_End ();
 
    /***** Current number of users in this group *****/

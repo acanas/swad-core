@@ -280,13 +280,12 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	        Txt_Report);
    Ico_PutIcon ("file-alt.svg",Txt_Report,"ICO64x64");
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Report->FilenameReport);
+   HTM_Txt (Report->FilenameReport);
    HTM_A_End ();
    HTM_DIV_End ();
 
    HTM_DIV_Begin ("class=\"DAT_LIGHT\"");
-   fprintf (Gbl.F.Out,"%s",
-            Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
+   HTM_Txt (Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
    HTM_DIV_End ();
 
    /***** End box *****/
@@ -308,7 +307,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    /***** User *****/
    fprintf (Gbl.F.Out,"%s: ",Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
    HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Me.UsrDat.FullName);
+   HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
    HTM_SPAN_End ();
 
    /***** Report date *****/

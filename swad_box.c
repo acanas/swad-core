@@ -197,7 +197,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       HTM_DIV_Begin ("class=\"FRAME_TITLE %s\"",
 	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
 		                      "FRAME_TITLE_BIG");
-      fprintf (Gbl.F.Out,"%s",Title);
+      HTM_Txt (Title);
       HTM_DIV_End ();
      }
   }

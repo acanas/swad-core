@@ -904,7 +904,7 @@ static void Pho_UpdatePhoto2 (void)
 	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
       free (Img);
       HTM_BR ();
-      fprintf (Gbl.F.Out,"%s",Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
+      HTM_Txt (Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
       HTM_TD_End ();
      }
    HTM_TR_End ();
@@ -1242,8 +1242,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
 	 HTM_DIV_Begin ("class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\"",
 		        Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole]);
-	 fprintf (Gbl.F.Out,"%s",
-		  MainDegreeShrtName);
+	 HTM_Txt (MainDegreeShrtName);
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
 	}
@@ -2512,7 +2511,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
 	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N\"");
-	    fprintf (Gbl.F.Out,"%s",PhotoCaption);
+	    HTM_Txt (PhotoCaption);
 	    HTM_DIV_End ();
 	    HTM_DIV_End ();
 	   }
@@ -2541,7 +2540,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
-   fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
+   HTM_Txt (Deg->ShrtName);
    HTM_BR ();
    fprintf (Gbl.F.Out,"%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
    HTM_BR ();

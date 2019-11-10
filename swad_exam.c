@@ -1053,7 +1053,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                    Ins.WWW,StyleTitle);
    Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Ins.FullName);
+   HTM_Txt (Ins.FullName);
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       HTM_SPAN_End ();
    else
@@ -1067,7 +1067,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
                    Gbl.Hierarchy.Deg.WWW,StyleTitle);
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       HTM_A_End ();
    HTM_TD_End ();
@@ -1130,7 +1130,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_SELECT_End ();
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
+      HTM_Txt (Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1149,7 +1149,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_INPUT_TEXT ("ExamSession",Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session,false,
 		      "size=\"30\"");
    else
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Session);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1176,7 +1176,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,
                              StrExamDate);
       HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
-      fprintf (Gbl.F.Out,"%s",StrExamDate);
+      HTM_Txt (StrExamDate);
       HTM_TD_End ();
      }
    HTM_TR_End ();
@@ -1297,8 +1297,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
-      fprintf (Gbl.F.Out,"%s",
-               Gbl.ExamAnns.ExaDat.Place);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Place);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1306,7 +1305,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.Place,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Place);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Place);
      }
    HTM_TD_End ();
 
@@ -1325,7 +1324,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Mode);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Mode);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1333,7 +1332,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.Mode,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Mode);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Mode);
      }
    HTM_TD_End ();
 
@@ -1352,7 +1351,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Structure);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Structure);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1360,7 +1359,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.Structure,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Structure);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.Structure);
      }
    HTM_TD_End ();
 
@@ -1379,7 +1378,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.DocRequired);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.DocRequired);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1387,7 +1386,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.DocRequired,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.DocRequired);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.DocRequired);
      }
    HTM_TD_End ();
 
@@ -1406,7 +1405,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatRequired);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.MatRequired);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1414,7 +1413,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.MatRequired,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatRequired);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.MatRequired);
      }
    HTM_TD_End ();
 
@@ -1433,7 +1432,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatAllowed);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.MatAllowed);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1441,7 +1440,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.MatAllowed,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatAllowed);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.MatAllowed);
      }
    HTM_TD_End ();
 
@@ -1460,7 +1459,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.OtherInfo);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.OtherInfo);
       HTM_TEXTAREA_End ();
      }
    else
@@ -1468,7 +1467,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.ExamAnns.ExaDat.OtherInfo,
                         Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.OtherInfo);
+      HTM_Txt (Gbl.ExamAnns.ExaDat.OtherInfo);
      }
    HTM_TD_End ();
 

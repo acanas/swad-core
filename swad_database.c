@@ -3238,7 +3238,7 @@ mysql> DESCRIBE ws_keys;
 static void DB_CreateTable (const char *Query)
   {
    HTM_LI_Begin ("class=\"DAT\"");
-   fprintf (Gbl.F.Out,"%s",Query);
+   HTM_Txt (Query);
    HTM_LI_End ();
 
    if (mysql_query (&Gbl.mysql,Query))

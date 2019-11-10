@@ -3269,7 +3269,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    HTM_INPUT_RADIO ("GrpCod",true,
 		    "value=\"-1\"%s",
 		    IsCourseZone ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
+   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
    HTM_LABEL_End ();
    HTM_LI_End ();
 
@@ -3390,7 +3390,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    HTM_BR ();
 
    Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
@@ -3403,7 +3403,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
       HTM_BR ();
       HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\" class=\"AUTHOR_TXT\"",
 	           UsrDat->Email);
-      fprintf (Gbl.F.Out,"%s",UsrDat->Email);
+      HTM_Txt (UsrDat->Email);
       HTM_A_End ();
      }
    Frm_EndForm ();
@@ -4061,7 +4061,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    if (Subtitle[0])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
-      fprintf (Gbl.F.Out,"%s",Subtitle);
+      HTM_Txt (Subtitle);
       HTM_DIV_End ();
      }
   }
@@ -6304,7 +6304,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	                   Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
 	                                                               Txt_Download,
 			  Gbl.FileBrowser.TxtStyle,NULL);
-      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+      HTM_Txt (FileNameToShow);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -8387,7 +8387,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    HTM_DIV_Begin ("class=\"dz-message\"");
    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+   HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
    HTM_SPAN_End ();
    HTM_DIV_End ();
 
@@ -9522,12 +9522,11 @@ void Brw_ShowFileMetadata (void)
 	                      "PHOTO15x20",Pho_ZOOM,false);
 
 	    /* Write name */
-	    fprintf (Gbl.F.Out,"%s",
-		     PublisherUsrDat.FullName);
+	    HTM_Txt (PublisherUsrDat.FullName);
 	   }
 	 else
 	    /* Unknown publisher */
-	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -9545,7 +9544,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 fprintf (Gbl.F.Out,"%s",FileSizeStr);
+	 HTM_Txt (FileSizeStr);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -9589,8 +9588,7 @@ void Brw_ShowFileMetadata (void)
 	    HTM_SELECT_End ();
 	   }
 	 else		// I can not edit file properties
-	    fprintf (Gbl.F.Out,"%s",
-	             FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
+	    HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
 					     Txt_Private_available_to_certain_users_identified);
 	 HTM_TD_End ();
 
@@ -9623,7 +9621,7 @@ void Brw_ShowFileMetadata (void)
 	    HTM_SELECT_End ();
 	   }
 	 else		// I can not edit file properties
-	    fprintf (Gbl.F.Out,"%s",Txt_LICENSES[FileMetadata.License]);
+	    HTM_Txt (Txt_LICENSES[FileMetadata.License]);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -10066,7 +10064,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"DAT",NULL);
 
       /* Name of the file of marks */
-      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+      HTM_Txt (FileNameToShow);
 
       /* Link end and form end */
       Frm_LinkFormEnd ();
@@ -10077,7 +10075,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
 	           URL,FileNameToShow);
-      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+      HTM_Txt (FileNameToShow);
       HTM_A_End ();
      }
   }
@@ -11972,7 +11970,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	           Txt_Go_to_X,
 		   CrsShortName);
 	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%s",CrsShortName);
+	 HTM_Txt (CrsShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -12024,7 +12022,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	}
 
       HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
-      fprintf (Gbl.F.Out,"%s",Title);
+      HTM_Txt (Title);
       HTM_TD_End ();
 
       /***** Get the name of the file to show *****/

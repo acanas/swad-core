@@ -132,7 +132,7 @@ void Dpt_SeeDepts (void)
       Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Dpts.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
+      HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
       if (Order == Gbl.Dpts.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       Frm_LinkFormEnd ();
@@ -153,7 +153,7 @@ void Dpt_SeeDepts (void)
       HTM_TD_Begin ("class=\"LM\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
 	           Gbl.Dpts.Lst[NumDpt].WWW);
-      fprintf (Gbl.F.Out,"%s",Gbl.Dpts.Lst[NumDpt].FullName);
+      HTM_Txt (Gbl.Dpts.Lst[NumDpt].FullName);
       HTM_A_End ();
       HTM_TD_End ();
 
@@ -180,7 +180,7 @@ void Dpt_SeeDepts (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Other_departments);
+   HTM_Txt (Txt_Other_departments);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -194,7 +194,7 @@ void Dpt_SeeDepts (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%s",Txt_Department_unspecified);
+   HTM_Txt (Txt_Department_unspecified);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");

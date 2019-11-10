@@ -218,7 +218,7 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Number of pending courses (row[1]) */
          HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 fprintf (Gbl.F.Out,"%s",row[1]);
+	 HTM_Txt (row[1]);
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -330,7 +330,7 @@ static void Deg_Configuration (bool PrintView)
    Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
 		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
@@ -373,7 +373,7 @@ static void Deg_Configuration (bool PrintView)
       Ctr_FreeListCentres ();
      }
    else	// I can not move degree to another centre
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
+      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -399,7 +399,7 @@ static void Deg_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit degree full name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+      HTM_Txt (Gbl.Hierarchy.Deg.FullName);
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -425,7 +425,7 @@ static void Deg_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit degree short name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -455,7 +455,7 @@ static void Deg_Configuration (bool PrintView)
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
 	           Gbl.Hierarchy.Deg.WWW);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.WWW);
+      HTM_Txt (Gbl.Hierarchy.Deg.WWW);
       HTM_A_End ();
       HTM_DIV_End ();
      }
@@ -741,7 +741,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
+	 HTM_Txt (Deg->ShrtName);
       HTM_TD_End ();
 
       /* Degree full name */
@@ -755,7 +755,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Deg->FullName);
+	 HTM_Txt (Deg->FullName);
       HTM_TD_End ();
 
       /* Degree type */
@@ -784,7 +784,7 @@ static void Deg_ListDegreesForEdition (void)
 	      NumDegTyp < Gbl.DegTypes.Num;
 	      NumDegTyp++)
 	    if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
-	       fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+	       HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
       HTM_TD_End ();
 
       /* Degree WWW */
@@ -804,7 +804,7 @@ static void Deg_ListDegreesForEdition (void)
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
 		      Deg->WWW,Deg->WWW);
-         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_Txt (WWW);
          HTM_A_End ();
          HTM_DIV_End ();
 	}
@@ -842,7 +842,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
-	 fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
+	 HTM_Txt (Txt_DEGREE_STATUS[StatusTxt]);
       HTM_TD_End ();
       HTM_TR_End ();
      }
@@ -1226,8 +1226,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		 TxtClassNormal,BgColor,
 		 NumCrss ? Txt_DEGREE_With_courses :
 			   Txt_DEGREE_Without_courses);
-   fprintf (Gbl.F.Out,"%s",NumCrss ? "&check;" :
-		                     "&nbsp;");
+   HTM_Txt (NumCrss ? "&check;" :
+		      "&nbsp;");
    HTM_TD_End ();
 
    /***** Number of degree in this list *****/
@@ -1243,7 +1243,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Type of degree *****/
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%s",DegTyp.DegTypName);
+   HTM_Txt (DegTyp.DegTypName);
    HTM_TD_End ();
 
    /***** Current number of courses in this degree *****/
@@ -1255,7 +1255,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Deg_STATUS_ACTIVE) // If active ==> do not show anything
-      fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
+      HTM_Txt (Txt_DEGREE_STATUS[StatusTxt]);
    HTM_TD_End ();
 
    HTM_TR_End ();

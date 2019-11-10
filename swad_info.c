@@ -613,7 +613,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
          Frm_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                              The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
-         fprintf (Gbl.F.Out,"%s",Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
+         HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
@@ -1163,7 +1163,7 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",
 	               (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s",Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+      HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       HTM_LABEL_End ();
       if (Txt_INFO_SRC_HELP[InfoSrc])
 	{
@@ -1803,7 +1803,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /***** Write text *****/
-      fprintf (Gbl.F.Out,"%s",TxtHTML);
+      HTM_Txt (TxtHTML);
 
       /***** End box *****/
       HTM_DIV_End ();
@@ -2078,7 +2078,7 @@ void Inf_EditPlainTxtInfo (void)
    HTM_DIV_Begin ("class=\"CM\"");
    Lay_HelpPlainEditor ();
    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
-   fprintf (Gbl.F.Out,"%s",TxtHTML);
+   HTM_Txt (TxtHTML);
    HTM_TEXTAREA_End ();
    HTM_DIV_End ();
 
@@ -2128,7 +2128,7 @@ void Inf_EditRichTxtInfo (void)
    HTM_DIV_Begin ("class=\"CM\"");
    Lay_HelpRichEditor ();
    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
-   fprintf (Gbl.F.Out,"%s",TxtHTML);
+   HTM_Txt (TxtHTML);
    HTM_TEXTAREA_End ();
    HTM_DIV_End ();
 

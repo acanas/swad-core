@@ -215,7 +215,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          /* Number of pending degrees (row[1]) */
          HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 fprintf (Gbl.F.Out,"%s",row[1]);
+	 HTM_Txt (row[1]);
          HTM_TD_End ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -346,7 +346,7 @@ static void Ctr_Configuration (bool PrintView)
    Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
+   HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
@@ -391,7 +391,7 @@ static void Ctr_Configuration (bool PrintView)
 			     " onchange=\"document.getElementById('%s').submit();return false;\"",
 		             Gbl.Form.Id);
 	 if (PhotoAttribution)
-	    fprintf (Gbl.F.Out,"%s",PhotoAttribution);
+	    HTM_Txt (PhotoAttribution);
 	 HTM_TEXTAREA_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
@@ -399,7 +399,7 @@ static void Ctr_Configuration (bool PrintView)
       else if (PhotoAttribution)
 	{
 	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-	 fprintf (Gbl.F.Out,"%s",PhotoAttribution);
+	 HTM_Txt (PhotoAttribution);
 	 HTM_DIV_End ();
 	}
 
@@ -445,7 +445,7 @@ static void Ctr_Configuration (bool PrintView)
       Ins_FreeListInstitutions ();
      }
    else	// I can not move centre to another institution
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
+      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -471,7 +471,7 @@ static void Ctr_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit centre full name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
+      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -497,7 +497,7 @@ static void Ctr_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit centre short name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -541,7 +541,7 @@ static void Ctr_Configuration (bool PrintView)
       Plc_FreeListPlaces ();
      }
    else	// I can not change centre place
-      fprintf (Gbl.F.Out,"%s",Plc.FullName);
+      HTM_Txt (Plc.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -572,7 +572,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
 	           Gbl.Hierarchy.Ctr.WWW);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.WWW);
+      HTM_Txt (Gbl.Hierarchy.Ctr.WWW);
       HTM_A_End ();
       HTM_DIV_End ();
      }
@@ -917,7 +917,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Place *****/
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%s",Plc.ShrtName);
+   HTM_Txt (Plc.ShrtName);
    HTM_TD_End ();
 
    /***** Number of degrees *****/
@@ -1529,7 +1529,7 @@ static void Ctr_ListCentresForEdition (void)
 	      NumPlc < Gbl.Plcs.Num;
 	      NumPlc++)
 	    if (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod)
-	       fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+	       HTM_Txt (Gbl.Plcs.Lst[NumPlc].ShrtName);
       HTM_TD_End ();
 
       /* Centre short name */
@@ -1543,7 +1543,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ctr->ShrtName);
+	 HTM_Txt (Ctr->ShrtName);
       HTM_TD_End ();
 
       /* Centre full name */
@@ -1557,7 +1557,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ctr->FullName);
+	 HTM_Txt (Ctr->FullName);
       HTM_TD_End ();
 
       /* Centre WWW */
@@ -1577,7 +1577,7 @@ static void Ctr_ListCentresForEdition (void)
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\""
                       " class=\"DAT\" title=\"%s\"",Ctr->WWW,Ctr->WWW);
-         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_Txt (WWW);
          HTM_A_End ();
          HTM_DIV_End ();
 	}
@@ -1628,7 +1628,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
-	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
+	 HTM_Txt (Txt_CENTRE_STATUS[StatusTxt]);
       HTM_TD_End ();
       HTM_TR_End ();
      }
@@ -2591,7 +2591,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
-      fprintf (Gbl.F.Out,"%s",Txt_CENTRES_ORDER[Order]);
+      HTM_Txt (Txt_CENTRES_ORDER[Order]);
       if (OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
@@ -2608,7 +2608,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 
@@ -2645,7 +2645,7 @@ static void Ctr_PutHeadCentresForEdition (void)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH (1,1,"LM",Txt_Requester);
    HTM_TH_Empty (1);

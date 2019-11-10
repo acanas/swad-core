@@ -205,7 +205,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
          /* Number of pending centres (row[1]) */
          HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-         fprintf (Gbl.F.Out,"%s",row[1]);
+         HTM_Txt (row[1]);
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -343,7 +343,7 @@ static void Ins_Configuration (bool PrintView)
    Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
 		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
+   HTM_Txt (Gbl.Hierarchy.Ins.FullName);
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
@@ -386,7 +386,7 @@ static void Ins_Configuration (bool PrintView)
       Cty_FreeListCountries ();
      }
    else	// I can not move institution to another country
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -412,7 +412,7 @@ static void Ins_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit institution full name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
+      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -438,7 +438,7 @@ static void Ins_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit institution short name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -469,7 +469,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\">",
 	           Gbl.Hierarchy.Ins.WWW);
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.WWW);
+      HTM_Txt (Gbl.Hierarchy.Ins.WWW);
       HTM_A_End ();
       HTM_DIV_End ();
      }
@@ -825,7 +825,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
-      fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
+      HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -864,7 +864,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
-      fprintf (Gbl.F.Out,"%s",Txt_INSTITUTIONS_ORDER[Order]);
+      HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
       if (OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
@@ -882,7 +882,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 
@@ -1490,7 +1490,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ins->ShrtName);
+	 HTM_Txt (Ins->ShrtName);
       HTM_TD_End ();
 
       /* Institution full name */
@@ -1504,7 +1504,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_EndForm ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
+	 HTM_Txt (Ins->FullName);
       HTM_TD_End ();
 
       /* Institution WWW */
@@ -1525,7 +1525,7 @@ static void Ins_ListInstitutionsForEdition (void)
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
 		      Ins->WWW,Ins->WWW);
-         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_Txt (WWW);
          HTM_A_End ();
          HTM_DIV_End ();
 	}
@@ -1573,7 +1573,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_EndForm ();
 	}
       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
-	 fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
+	 HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
       HTM_TD_End ();
       HTM_TR_End ();
      }
@@ -2281,7 +2281,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
    HTM_TH (1,1,"LM",Txt_Requester);
    HTM_TH_Empty (1);

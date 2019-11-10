@@ -1620,7 +1620,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	 /* Write note summary */
 	 TL_GetNoteSummary (SocNot,SummaryStr);
 	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 fprintf (Gbl.F.Out,"%s",SummaryStr);
+	 HTM_Txt (SummaryStr);
 	 HTM_DIV_End ();
 	}
 
@@ -1722,7 +1722,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 					   Txt_Another_user_s_profile,
 				   "TL_TOP_PUBLISHER");
-	 fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+	 HTM_Txt (UsrDat.FullName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
@@ -1755,7 +1755,7 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_N_BOLD");
-   fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+   HTM_Txt (UsrDat->FullName);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -1947,7 +1947,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
      {
       /***** Do not put form *****/
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
-      fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      HTM_Txt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
       HTM_DIV_End ();
@@ -2327,7 +2327,7 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
 
    HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Me.UsrDat.FullName);
+   HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
@@ -2833,7 +2833,7 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_BOLD");
-   fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+   HTM_Txt (UsrDat->FullName);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 

@@ -126,7 +126,7 @@ void Plc_SeePlaces (void)
 	 Frm_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_PLACES_ORDER[Order]);
+	 HTM_Txt (Txt_PLACES_ORDER[Order]);
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 Frm_LinkFormEnd ();
@@ -145,7 +145,7 @@ void Plc_SeePlaces (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].FullName);
+	 HTM_Txt (Gbl.Plcs.Lst[NumPlc].FullName);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -168,7 +168,7 @@ void Plc_SeePlaces (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_Other_places);
+      HTM_Txt (Txt_Other_places);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -182,7 +182,7 @@ void Plc_SeePlaces (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%s",Txt_Place_unspecified);
+      HTM_Txt (Txt_Place_unspecified);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

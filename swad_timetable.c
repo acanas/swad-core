@@ -240,7 +240,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
                  Gbl.Usrs.Me.UsrDat.FullName);
         break;
       case Grp_ALL_GROUPS:
-        fprintf (Gbl.F.Out,"%s",Txt_All_groups);
+        HTM_Txt (Txt_All_groups);
         break;
      }
    HTM_DIV_End ();
@@ -1316,7 +1316,7 @@ static void TT_TimeTableDrawDaysCells (void)
 		    Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
 				   "TT_DAY",	// Monday to Saturday
 		    TT_PERCENT_WIDTH_OF_A_DAY);
-      fprintf (Gbl.F.Out,"%s",Txt_DAYS_CAPS[Weekday]);
+      HTM_Txt (Txt_DAYS_CAPS[Weekday]);
       HTM_TD_End ();
      }
   }
@@ -1552,8 +1552,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                if (ClassType == TT_LECTURE ||
                    ClassType == TT_PRACTICAL)
         	 {
-		  fprintf (Gbl.F.Out,"%s",
-		           Crs.ShrtName[0] ? Crs.ShrtName :
+		  HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
 			                     Txt_unknown_removed_course);
 		  HTM_BR ();
         	 }
@@ -1571,9 +1570,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		GrpCod > 0)
 	      {
 	       HTM_BR ();
-	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpTypName);
+	       HTM_Txt (GrpDat.GrpTypName);
 	       HTM_BR ();
-	       fprintf (Gbl.F.Out,"%s",GrpDat.GrpName);
+	       HTM_Txt (GrpDat.GrpName);
 	       if (GrpDat.Classroom.ClaCod > 0)
 		 {
 		  HTM_BR ();
@@ -1666,7 +1665,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Group *****/
 	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
-	       fprintf (Gbl.F.Out,"%s",Txt_Group);
+	       HTM_Txt (Txt_Group);
 	       HTM_LABEL_End ();
 	       HTM_SELECT_Begin (true,
 				 "id=\"TTGrp%s\" name=\"TTGrp\""
@@ -1707,7 +1706,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Info *****/
 	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
-	       fprintf (Gbl.F.Out,"%s",Txt_Info);
+	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
@@ -1724,7 +1723,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Info *****/
 	       HTM_BR ();
 	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
-	       fprintf (Gbl.F.Out,"%s",Txt_Info);
+	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
                fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""

@@ -495,14 +495,14 @@ void Ntf_ShowMyNotifications (void)
          if (PutLink)
            {
             Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
-            fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             Frm_LinkFormEnd ();
             Frm_EndForm ();
            }
          else
            {
             HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
-            fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             HTM_SPAN_End ();
            }
          HTM_TD_End ();
@@ -569,7 +569,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Write status (sent by email / pending to be sent by email) */
          HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
-         fprintf (Gbl.F.Out,"%s",Txt_NOTIFICATION_STATUS[StatusTxt]);
+         HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -588,7 +588,7 @@ void Ntf_ShowMyNotifications (void)
             HTM_TD_End ();
 
             HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
-            fprintf (Gbl.F.Out,"%s",SummaryStr);
+            HTM_Txt (SummaryStr);
             HTM_TD_End ();
 
             HTM_TR_End ();

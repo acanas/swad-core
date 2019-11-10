@@ -710,7 +710,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF\"");
-      fprintf (Gbl.F.Out,"%s",Content);
+      HTM_Txt (Content);
       HTM_DIV_End ();
 
       /* Put form to view full notice */
@@ -724,7 +724,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    else
      {
       HTM_DIV_Begin ("class=\"%s\"",TextClass[Status]);
-      fprintf (Gbl.F.Out,"%s",Content);
+      HTM_Txt (Content);
       HTM_DIV_End ();
      }
 

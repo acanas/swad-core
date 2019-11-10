@@ -279,11 +279,11 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"DAT LM\"");
-         fprintf (Gbl.F.Out,"%s",row[0]);
+         HTM_Txt (row[0]);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-         fprintf (Gbl.F.Out,"%s",row[1]);
+         HTM_Txt (row[1]);
 	 HTM_TD_End ();
 
          HTM_TR_End ();

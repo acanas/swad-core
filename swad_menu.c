@@ -373,7 +373,7 @@ void Mnu_WriteMenuThisTab (void)
 			Gbl.Prefs.URLIconSet,
 			Act_GetIcon (NumAct));
 	 HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",The_ClassTxtMenu[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"%s",Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
+	 HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
 

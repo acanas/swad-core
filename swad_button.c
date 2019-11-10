@@ -101,7 +101,7 @@ void Btn_PutCreateButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_BUTTON_Begin ("BT_SUBMIT BT_CREATE");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
@@ -109,7 +109,7 @@ void Btn_PutCreateButton (const char *TxtButton)
 void Btn_PutCreateButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CREATE");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
 
@@ -117,7 +117,7 @@ void Btn_PutConfirmButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_BUTTON_Begin ("BT_SUBMIT BT_CONFIRM");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
@@ -125,7 +125,7 @@ void Btn_PutConfirmButton (const char *TxtButton)
 void Btn_PutConfirmButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CONFIRM");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
 
@@ -133,7 +133,7 @@ void Btn_PutRemoveButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_BUTTON_Begin ("BT_SUBMIT BT_REMOVE");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
@@ -141,6 +141,6 @@ void Btn_PutRemoveButton (const char *TxtButton)
 void Btn_PutRemoveButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_REMOVE");
-   fprintf (Gbl.F.Out,"%s",TxtButton);
+   HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }

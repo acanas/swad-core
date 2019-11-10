@@ -1031,7 +1031,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	 HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-         fprintf (Gbl.F.Out,"%s",Gbl.Test.Tags.Txt[NumTag]);
+         HTM_Txt (Gbl.Test.Tags.Txt[NumTag]);
          HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1142,13 +1142,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             HTM_TD_Begin ("class=\"LT\"");
 
             HTM_DIV_Begin ("class=\"%s\"",ClassStem);
-            fprintf (Gbl.F.Out,"%s",AnswerText);
+            HTM_Txt (AnswerText);
             HTM_DIV_End ();
 
             if (AnswerFeedbackLength)
               {
 	       HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
-	       fprintf (Gbl.F.Out,"%s",AnswerFeedback);
+	       HTM_Txt (AnswerFeedback);
 	       HTM_DIV_End ();
               }
 

@@ -453,7 +453,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
 		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
 						   "DAT_SMALL_NOBR");
-   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
+   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
    /***** Hidden parameter with user's nickname *****/
@@ -501,7 +501,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 	               " class=\"MSG_RECIPIENTS\" rows=\"2\" placeholder=\"%s\"",
                        Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.ListOtherRecipients[0])
-      fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
+      HTM_Txt (Gbl.Usrs.ListOtherRecipients);
    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
 						// and there's no list of explicit recipients,
 						// write @nickname of original sender
@@ -577,7 +577,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /* Write subject */
       if (!SubjectAndContentComeFromForm)
 	 fprintf (Gbl.F.Out,"Re: ");
-      fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
+      HTM_Txt (Gbl.Msg.Subject);
 
       HTM_TEXTAREA_End ();
       HTM_TD_End ();
@@ -613,7 +613,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    else	// It's not a reply
      {
       /* End message subject */
-      fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
+      HTM_Txt (Gbl.Msg.Subject);
 
       HTM_TEXTAREA_End ();
       HTM_TD_End ();
@@ -2694,7 +2694,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",false,
 		       "value=\"Y\"%s",
 		       Gbl.Msg.ShowOnlyUnreadMsgs ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"%s",Txt_only_unread_messages);
+   HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
   }
 
@@ -3165,7 +3165,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
 
    /***** Write subject *****/
    if (Subject[0])
-      fprintf (Gbl.F.Out,"%s",Subject);
+      HTM_Txt (Subject);
    else
       fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
 
@@ -3280,14 +3280,14 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-            fprintf (Gbl.F.Out,"(");
+            HTM_Txt ("(");
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
             Frm_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
-            fprintf (Gbl.F.Out,"%s",Crs.ShrtName);
+            HTM_Txt (Crs.ShrtName);
             Frm_LinkFormEnd ();
-            fprintf (Gbl.F.Out,")");
+            HTM_Txt (")");
             HTM_DIV_End ();
             Frm_EndForm ();
            }
@@ -3375,7 +3375,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    HTM_TD_Begin ("class=\"AUTHOR_TXT LM\"");
    if (UsrDat->UsrCod > 0)
      {
-      fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+      HTM_Txt (UsrDat->FullName);
       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 	{
          fprintf (Gbl.F.Out,"&nbsp;");
@@ -3534,7 +3534,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
                 	                                      "AUTHOR_TXT_NEW");
          if (UsrValid)
-            fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+            HTM_Txt (UsrDat.FullName);
          else
             fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
          HTM_TD_End ();
@@ -3633,7 +3633,7 @@ void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks
    if (ChangeBRToRet)
       Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Gbl.F.Out,Content);
    else
-      fprintf (Gbl.F.Out,"%s",Content);
+      HTM_Txt (Content);
   }
 
 /*****************************************************************************/
@@ -3870,7 +3870,7 @@ void Msg_ListBannedUsrs (void)
 
             /* Write user's full name */
             HTM_TD_Begin ("class=\"DAT LM\"");
-            fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+            HTM_Txt (UsrDat.FullName);
             HTM_TD_End ();
 
             HTM_TR_End ();

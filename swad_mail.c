@@ -140,7 +140,7 @@ void Mai_SeeMailDomains (void)
       Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Order]);
+      HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"</u>");
       Frm_LinkFormEnd ();
@@ -159,11 +159,11 @@ void Mai_SeeMailDomains (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.Mails.Lst[NumMai].Domain);
+      HTM_Txt (Gbl.Mails.Lst[NumMai].Domain);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      fprintf (Gbl.F.Out,"%s",Gbl.Mails.Lst[NumMai].Info);
+      HTM_Txt (Gbl.Mails.Lst[NumMai].Info);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT\"");
@@ -955,7 +955,7 @@ static void Mai_ListEmails (void)
 			Mai_MAX_BYTES_STR_ADDR);
 	    HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
 		         UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
-	    fprintf (Gbl.F.Out,"%s",UsrDat.Email);
+	    HTM_Txt (UsrDat.Email);
 	    HTM_A_End ();
 
 	    NumAcceptedUsrsWithEmail++;
@@ -1312,7 +1312,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Frm_EndForm ();
 
       /* Email */
-      fprintf (Gbl.F.Out,"%s",row[0]);
+      HTM_Txt (row[0]);
 
       /* Email confirmed? */
       if (Confirmed)

@@ -199,7 +199,7 @@ static void Lnk_WriteListOfLinks (void)
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\"",
 	           Gbl.Links.Lst[NumLnk].WWW,
 	           Gbl.Links.Lst[NumLnk].FullName);
-      fprintf (Gbl.F.Out,"%s",Gbl.Links.Lst[NumLnk].ShrtName);
+      HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
       HTM_A_End ();
       HTM_LI_End ();
      }

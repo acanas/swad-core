@@ -432,7 +432,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    else
       HTM_DIV_Begin ("class=\"ALERT_TXT\" style=\"background-image:url('%s/%s');\"",
 	             Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_DIV_End ();
   }
 

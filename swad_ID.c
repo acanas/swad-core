@@ -390,9 +390,9 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 						          "USR_ID_NC");
       if (ICanSeeUsrID)
-	 fprintf (Gbl.F.Out,"%s",UsrDat->IDs.List[NumID].ID);
+	 HTM_Txt (UsrDat->IDs.List[NumID].ID);
       else
-	 fprintf (Gbl.F.Out,"********");
+	 HTM_Txt ("********");
       HTM_SPAN_End ();
 
       if (ICanConfirmUsrID &&

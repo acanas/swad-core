@@ -31,6 +31,7 @@
 
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -150,7 +151,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
 
       /* Put basic form parameters */
       Frm_SetParamsForm (ParamsStr,NextAction,PutParameterLocationIfNoSesion);
-      fprintf (Gbl.F.Out,"%s",ParamsStr);
+      HTM_Txt (ParamsStr);
 
       Gbl.Form.Inside = true;
      }

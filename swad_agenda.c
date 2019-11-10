@@ -592,7 +592,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+      HTM_Txt (Txt_START_END_TIME[Order]);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       Frm_LinkFormEnd ();
@@ -767,7 +767,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 				   "ASG_TITLE",
 		 Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
-   fprintf (Gbl.F.Out,"%s",AgdEvent.Event);
+   HTM_Txt (AgdEvent.Event);
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -775,7 +775,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
         	                                   "ASG_TITLE");
-   fprintf (Gbl.F.Out,"%s",AgdEvent.Location);
+   HTM_Txt (AgdEvent.Location);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -806,7 +806,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
         	                                       "DAT");
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -1544,7 +1544,7 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewEvent)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 

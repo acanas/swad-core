@@ -227,7 +227,7 @@ static void Gam_ListAllGames (void)
 	 Frm_LinkFormSubmit (Txt_GAMES_ORDER_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_GAMES_ORDER[Order]);
+	 HTM_Txt (Txt_GAMES_ORDER[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 Frm_LinkFormEnd ();
@@ -452,7 +452,7 @@ void Gam_ShowOneGame (long GamCod,
    Frm_LinkFormSubmit (Txt_View_game,
                        Game.Hidden ? "ASG_TITLE_LIGHT":
                 	             "ASG_TITLE",NULL);
-   fprintf (Gbl.F.Out,"%s",Game.Title);
+   HTM_Txt (Game.Title);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
@@ -510,7 +510,7 @@ void Gam_ShowOneGame (long GamCod,
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR %s\"",Game.Hidden ? "DAT_LIGHT" :
         	                                   "DAT");
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -1163,7 +1163,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewGame)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -1732,13 +1732,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Write number of question */
       HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-      fprintf (Gbl.F.Out,"%s",StrQstInd);
+      HTM_Txt (StrQstInd);
       HTM_DIV_End ();
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_DIV_End ();
 
       HTM_TD_End ();

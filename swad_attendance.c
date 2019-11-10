@@ -256,7 +256,7 @@ static void Att_ShowAllAttEvents (void)
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+	 HTM_Txt (Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 Frm_LinkFormEnd ();
@@ -485,7 +485,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
    HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "DAT_LIGHT" :
         	                               "DAT");
-   fprintf (Gbl.F.Out,"%s",Description);
+   HTM_Txt (Description);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -1151,7 +1151,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"5\"");
    if (!ItsANewAttEvent)
-      fprintf (Gbl.F.Out,"%s",Description);
+      HTM_Txt (Description);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -2119,7 +2119,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
@@ -2131,14 +2131,14 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      {
       HTM_TEXTAREA_Begin ("name=\"CommentStd%ld\" cols=\"40\" rows=\"3\"",
 	                  UsrDat->UsrCod);
-      fprintf (Gbl.F.Out,"%s",CommentStd);
+      HTM_Txt (CommentStd);
       HTM_TEXTAREA_End ();
      }
    else				// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         CommentStd,Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",CommentStd);
+      HTM_Txt (CommentStd);
      }
    HTM_TD_End ();
 
@@ -2148,14 +2148,14 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      {
       HTM_TEXTAREA_Begin ("name=\"CommentTch%ld\" cols=\"40\" rows=\"3\"",
 			  UsrDat->UsrCod);
-      fprintf (Gbl.F.Out,"%s",CommentTch);
+      HTM_Txt (CommentTch);
       HTM_TEXTAREA_End ();
      }
    else	if (Att->CommentTchVisible)	// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         CommentTch,Cns_MAX_BYTES_TEXT,false);
-      fprintf (Gbl.F.Out,"%s",CommentTch);
+      HTM_Txt (CommentTch);
      }
    HTM_TD_End ();
    HTM_TR_End ();
@@ -2175,7 +2175,7 @@ static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
    Frm_LinkFormSubmit (Title,LinkStyle,NULL);
-   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_Txt (Txt);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
@@ -3143,7 +3143,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       free (Id);
 
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
+      HTM_Txt (Gbl.AttEvents.Lst[NumAttEvent].Title);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3373,7 +3373,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    fprintf (Gbl.F.Out,", %s",
@@ -3530,7 +3530,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    HTM_TD_Begin ("class=\"%s LM\"",
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL");
-   fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
+   HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
@@ -3580,7 +3580,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	 HTM_SPAN_End ();
          HTM_BR ();
-	 fprintf (Gbl.F.Out,"%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 HTM_Txt (Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -3610,7 +3610,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       fprintf (Gbl.F.Out,"%s:",Txt_Student_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
-	       fprintf (Gbl.F.Out,"%s",CommentStd);
+	       HTM_Txt (CommentStd);
 	       HTM_DD_End ();
 	      }
 	    if (ShowCommentTch)
@@ -3621,7 +3621,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
-	       fprintf (Gbl.F.Out,"%s",CommentTch);
+	       HTM_Txt (CommentTch);
 	       HTM_DD_End ();
 	      }
 	    HTM_DL_End ();

@@ -228,7 +228,7 @@ static void Crs_Configuration (bool PrintView)
    if (PutLink)
       HTM_A_End ();
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
+   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
    HTM_DIV_End ();
 
    /***** Begin table *****/
@@ -270,7 +270,7 @@ static void Crs_Configuration (bool PrintView)
       Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
      }
    else	// I can not move course to another degree
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+      HTM_Txt (Gbl.Hierarchy.Deg.FullName);
 
    HTM_TD_End ();
 
@@ -297,7 +297,7 @@ static void Crs_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit course full name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
+      HTM_Txt (Gbl.Hierarchy.Crs.FullName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -323,7 +323,7 @@ static void Crs_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not edit course short name
-      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.ShrtName);
+      HTM_Txt (Gbl.Hierarchy.Crs.ShrtName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -354,9 +354,8 @@ static void Crs_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else
-      fprintf (Gbl.F.Out,"%s",
-               Gbl.Hierarchy.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year] :
-	                                 Txt_Not_applicable);
+      HTM_Txt (Gbl.Hierarchy.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year] :
+	                                Txt_Not_applicable);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -383,7 +382,7 @@ static void Crs_Configuration (bool PrintView)
          Frm_EndForm ();
 	}
       else
-         fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.InstitutionalCrsCod);
+         HTM_Txt (Gbl.Hierarchy.Crs.InstitutionalCrsCod);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1236,20 +1235,18 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 		       TxtClassNormal,BgColor,
 		       Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					       Txt_COURSE_Without_users);
-	 fprintf (Gbl.F.Out,"%s",Crs->NumUsrs[Rol_UNK] ? "&check;" :
-				                         "&nbsp;");
+	 HTM_Txt (Crs->NumUsrs[Rol_UNK] ? "&check;" :
+				          "&nbsp;");
 	 HTM_TD_End ();
 
 	 /* Institutional code of the course */
-	 HTM_TD_Begin ("class=\"%s CM %s\"",
-		            TxtClassNormal,BgColor);
-	 fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
+	 HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+	 HTM_Txt (Crs->InstitutionalCrsCod);
 	 HTM_TD_End ();
 
 	 /* Course year */
-	 HTM_TD_Begin ("class=\"%s CM %s\"",
-		            TxtClassNormal,BgColor);
-	 fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
+	 HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+	 HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
 	 HTM_TD_End ();
 
 	 /* Course full name */
@@ -1260,7 +1257,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	           Txt_Go_to_X,
 		   Crs->FullName);
 	 Frm_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
-	 fprintf (Gbl.F.Out,"%s",Crs->FullName);
+	 HTM_Txt (Crs->FullName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
@@ -1280,7 +1277,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
 	 HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
 	 if (StatusTxt != Crs_STATUS_ACTIVE) // If active ==> do not show anything
-	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
+	    HTM_Txt (Txt_COURSE_STATUS[StatusTxt]);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1456,7 +1453,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_EndForm ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
+	    HTM_Txt (Crs->InstitutionalCrsCod);
 	 HTM_TD_End ();
 
 	 /* Course year */
@@ -1477,7 +1474,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_EndForm ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
+	    HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
 	 HTM_TD_End ();
 
 	 /* Course short name */
@@ -1491,7 +1488,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_EndForm ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"%s",Crs->ShrtName);
+	    HTM_Txt (Crs->ShrtName);
 	 HTM_TD_End ();
 
 	 /* Course full name */
@@ -1505,7 +1502,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_EndForm ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"%s",Crs->FullName);
+	    HTM_Txt (Crs->FullName);
 	 HTM_TD_End ();
 
 	 /* Current number of teachers in this course */
@@ -1549,7 +1546,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_EndForm ();
 	   }
          else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
-	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
+	    HTM_Txt (Txt_COURSE_STATUS[StatusTxt]);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3157,8 +3154,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 		    BgColor,
 		    Accepted ? Txt_Enrolment_confirmed :
 			       Txt_Enrolment_not_confirmed);
-      fprintf (Gbl.F.Out,"%s",
-               Accepted ? "&check;" :
+      HTM_Txt (Accepted ? "&check;" :
         	          "&cross;");
       HTM_TD_End ();
      }
@@ -3185,7 +3181,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Write year (row[4]) *****/
    HTM_TD_Begin ("class=\"%s CT %s\"",Style,BgColor);
-   fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
+   HTM_Txt (Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
    HTM_TD_End ();
 
    /***** Write course full name (row[5]) *****/
@@ -3196,7 +3192,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     Txt_Go_to_X,
 	     row[6]);
    Frm_LinkFormSubmit (Gbl.Title,Style,NULL);
-   fprintf (Gbl.F.Out,"%s",row[5]);
+   HTM_Txt (row[5]);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_TD_End ();

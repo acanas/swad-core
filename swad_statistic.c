@@ -443,8 +443,7 @@ void Sta_AskShowCrsHits (void)
 			  "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
 			  (unsigned) Sta_CLICKS_DETAILED,
 			  Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" : "");
-         fprintf (Gbl.F.Out,"%s",
-                  Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
+         HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();
 
          /* Separator */
@@ -1777,7 +1776,7 @@ static void Sta_WriteLogComments (long LogCod)
      {
       /***** Get and write comments *****/
       row = mysql_fetch_row (mysql_res);
-      fprintf (Gbl.F.Out,"%s",row[0]);
+      HTM_Txt (row[0]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3196,7 +3195,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong plugin code.");
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (Plg_GetDataOfPluginByCod (&Plg))
-         fprintf (Gbl.F.Out,"%s",Plg.Name);
+         HTM_Txt (Plg.Name);
       else
          fprintf (Gbl.F.Out,"?");
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3777,7 +3776,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                    Txt_Go_to_X,
 		   Crs.FullName);
          Frm_LinkFormSubmit (Gbl.Title,"LOG",NULL);
-         fprintf (Gbl.F.Out,"%s",Crs.ShrtName);
+         HTM_Txt (Crs.ShrtName);
          Frm_LinkFormEnd ();
         }
       else
@@ -4100,7 +4099,7 @@ void Sta_GetAndShowLastClicks (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",row[0]);				// Click
+      HTM_Txt (row[0]);				// Click
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);		// Elapsed time
@@ -4108,30 +4107,30 @@ void Sta_GetAndShowLastClicks (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",					// Role
+      HTM_Txt (					// Role
 	       Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",Cty.Name[Gbl.Prefs.Language]);	// Country
+      HTM_Txt (Cty.Name[Gbl.Prefs.Language]);	// Country
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",Ins.ShrtName);			// Institution
+      HTM_Txt (Ins.ShrtName);			// Institution
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",Ctr.ShrtName);			// Centre
+      HTM_Txt (Ctr.ShrtName);			// Centre
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-      fprintf (Gbl.F.Out,"%s",Deg.ShrtName);			// Degree
+      HTM_Txt (Deg.ShrtName);			// Degree
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
       if (row[8])
 	 if (row[8][0])
-	    fprintf (Gbl.F.Out,"%s",row[8]);			// Action
+	    HTM_Txt (row[8]);			// Action
       HTM_TD_End ();
 
       HTM_TR_End ();

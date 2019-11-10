@@ -290,7 +290,7 @@ void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt
    HTM_TH_Begin (RowSpan,ColSpan,Class);
    if (Txt)
       if (Txt[0])
-         fprintf (Gbl.F.Out,"%s",Txt);
+         HTM_Txt (Txt);
    HTM_TH_End ();
   }
 
@@ -1413,7 +1413,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	 fprintf (Gbl.F.Out,"%ld",*((long *) ValuePtr));
 	 break;
       case HTM_Type_STRING:
-	 fprintf (Gbl.F.Out,"%s",(char *) ValuePtr);
+	 HTM_Txt ((char *) ValuePtr);
 	 break;
      }
    fprintf (Gbl.F.Out,"\"");
@@ -1437,7 +1437,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"%s",Content);
+	 HTM_Txt (Content);
 
 	 free (Content);
 	}
@@ -1503,4 +1503,13 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 void HTM_BR (void)
   {
    fprintf (Gbl.F.Out,"<br   />");
+  }
+
+/*****************************************************************************/
+/********************************** Text *************************************/
+/*****************************************************************************/
+
+void HTM_Txt (const char *Txt)
+  {
+   fprintf (Gbl.F.Out,"%s",Txt);
   }

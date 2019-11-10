@@ -1200,7 +1200,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    if (Enabled)
      {
       if (Subject[0])
-         fprintf (Gbl.F.Out,"%s",Subject);
+         HTM_Txt (Subject);
       else
          fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
      }
@@ -1294,7 +1294,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
       Med_ShowMedia (&Media,"FOR_IMG_CONTAINER","FOR_IMG");
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
+      HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -1759,7 +1759,7 @@ static void For_PutFormWhichForums (void)
 		       "value=\"%u\"%s",
 		       (unsigned) ForumSet,
 		       (ForumSet == Gbl.Forum.ForumSet) ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"%s",Txt_FORUM_WHICH_FORUM[ForumSet]);
+      HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }
@@ -2554,7 +2554,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	 Frm_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);
+	 HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
          if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"</u>");
          Frm_LinkFormEnd ();

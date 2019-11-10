@@ -726,7 +726,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Step 1: List of students to be enroled / removed *****/
    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",Txt_Step_1_Provide_a_list_of_users);
+   HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
    HTM_DIV_End ();
 
    Ale_ShowAlert (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
@@ -734,13 +734,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Step 2: Put different actions to register/remove users to/from current course *****/
    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",Txt_Step_2_Select_the_desired_action);
+   HTM_Txt (Txt_Step_2_Select_the_desired_action);
    HTM_DIV_End ();
    Enr_PutActionsRegRemSeveralUsrs ();
 
    /***** Step 3: Select groups in which register / remove users *****/
    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",Txt_Step_3_Optionally_select_groups);
+   HTM_Txt (Txt_Step_3_Optionally_select_groups);
    HTM_DIV_End ();
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
@@ -757,7 +757,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Step 4: Confirm register / remove students *****/
    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",Txt_Step_4_Confirm_the_enrolment_removing);
+   HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
    HTM_DIV_End ();
    Pwd_AskForConfirmationOnDangerousAction ();
 
@@ -957,7 +957,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       HTM_INPUT_RADIO ("RegRemAction",false,
 		       " value=\"%u\" checked=\"checked\"",
 		       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
-      fprintf (Gbl.F.Out,"%s",Txt_Register_the_users_indicated_in_step_1);
+      HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
       HTM_LABEL_End ();
       HTM_LI_End ();
 
@@ -966,7 +966,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       HTM_INPUT_RADIO ("RegRemAction",false,
 		       " value=\"%u\"",
 		       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
-      fprintf (Gbl.F.Out,"%s",Txt_Remove_the_users_indicated_in_step_1);
+      HTM_Txt (Txt_Remove_the_users_indicated_in_step_1);
       HTM_LABEL_End ();
       HTM_LI_End ();
 
@@ -975,7 +975,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       HTM_INPUT_RADIO ("RegRemAction",false,
 		       " value=\"%u\"",
 		       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
-      fprintf (Gbl.F.Out,"%s",Txt_Remove_the_users_not_indicated_in_step_1);
+      HTM_Txt (Txt_Remove_the_users_not_indicated_in_step_1);
       HTM_LABEL_End ();
       HTM_LI_End ();
 
@@ -984,8 +984,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       HTM_INPUT_RADIO ("RegRemAction",false,
 		       " value=\"%u\"",
 		       (unsigned) Enr_UPDATE_USRS_IN_CRS);
-      fprintf (Gbl.F.Out,"%s",
-	       Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
+      HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }
@@ -998,8 +997,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       HTM_INPUT_RADIO ("RegRemAction",false,
 		       " value=\"%u\"",
 		       (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
-      fprintf (Gbl.F.Out,"%s",
-               Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
+      HTM_Txt (Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }
@@ -1652,7 +1650,7 @@ static void Enr_PutActionRepUsrAsDup (bool *OptionChecked)
    extern const char *Txt_Report_possible_duplicate_user;
 
    Enr_StartRegRemOneUsrAction (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,OptionChecked);
-   fprintf (Gbl.F.Out,"%s",Txt_Report_possible_duplicate_user);
+   HTM_Txt (Txt_Report_possible_duplicate_user);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1734,8 +1732,7 @@ static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Eliminate_user_account;
 
    Enr_StartRegRemOneUsrAction (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,OptionChecked);
-   fprintf (Gbl.F.Out,"%s",
-	    ItsMe ? Txt_Eliminate_my_user_account :
+   HTM_Txt (ItsMe ? Txt_Eliminate_my_user_account :
 		    Txt_Eliminate_user_account);
    Enr_EndRegRemOneUsrAction ();
   }
@@ -2878,7 +2875,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Requested role (row[3]) *****/
             HTM_TD_Begin ("class=\"DAT LT\"");
-            fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
+            HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
             HTM_TD_End ();
 
             /***** Request time (row[4]) *****/

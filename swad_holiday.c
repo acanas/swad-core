@@ -128,7 +128,7 @@ void Hld_SeeHolidays (void)
 	    Frm_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       fprintf (Gbl.F.Out,"<u>");
-	    fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
+	    HTM_Txt (Txt_HOLIDAYS_ORDER[Order]);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       fprintf (Gbl.F.Out,"</u>");
 	    Frm_LinkFormEnd ();
@@ -154,8 +154,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    fprintf (Gbl.F.Out,"%s",
-		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
+	    HTM_Txt (Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 							Gbl.Hlds.Lst[NumHld].PlaceFullName);
 	    HTM_TD_End ();
 
@@ -172,7 +171,7 @@ void Hld_SeeHolidays (void)
 		  break;
 	       case Hld_NON_SCHOOL_PERIOD:
 	          Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].EndDate,StrDate);
-		  fprintf (Gbl.F.Out,"%s",StrDate);
+		  HTM_Txt (StrDate);
 		  break;
 	      }
 	    HTM_TD_End ();

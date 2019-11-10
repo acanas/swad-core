@@ -213,7 +213,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       /***** Title with link to suggest more users to follow *****/
       Frm_StartForm (ActSeeSocPrf);
       Frm_LinkFormSubmit (Txt_Who_to_follow,"CONNECTED_TXT",NULL);
-      fprintf (Gbl.F.Out,"%s",Txt_Who_to_follow);
+      HTM_Txt (Txt_Who_to_follow);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -525,7 +525,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    /* User follows me? */
    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT\"");
    if (UsrFollowsMe)
-      fprintf (Gbl.F.Out,"%s",Txt_FOLLOWS_YOU);
+      HTM_Txt (Txt_FOLLOWS_YOU);
    HTM_DIV_End ();
 
    /* Number of followed */
@@ -635,7 +635,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
         	                                       The_ClassFormOutBox    [Gbl.Prefs.Theme],
 			  NULL);
      }
-   fprintf (Gbl.F.Out,"%s",Title);
+   HTM_Txt (Title);
    if (NumUsrs)
      {
       Frm_LinkFormEnd ();
