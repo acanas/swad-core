@@ -989,7 +989,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
          HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",NumQst + 1);
+	 HTM_Unsigned (NumQst + 1);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -1036,7 +1036,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
 
    /***** Write number of question *****/
    HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-   fprintf (Gbl.F.Out,"%u",NumQst + 1);
+   HTM_Unsigned (NumQst + 1);
    HTM_DIV_End ();
 
    /***** Write answer type (row[2]) *****/
@@ -7711,7 +7711,7 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_BR ();
    HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
+   HTM_Unsigned (Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 
@@ -7851,13 +7851,13 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
-	    fprintf (Gbl.F.Out,"%u",NumQstsInThisTest);
+	    HTM_Unsigned (NumQstsInThisTest);
 	 HTM_TD_End ();
 
          /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
-	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisTest);
+	    HTM_Unsigned (NumQstsNotBlankInThisTest);
 	 HTM_TD_End ();
 
 	 /* Write score */
@@ -7981,13 +7981,13 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
    /***** Write total number of questions *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumExams)
-      fprintf (Gbl.F.Out,"%u",NumTotalQsts);
+      HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
    /***** Write total number of questions not blank *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumExams)
-      fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
+      HTM_Unsigned (NumTotalQstsNotBlank);
    HTM_TD_End ();
 
    /***** Write total score *****/
@@ -8285,7 +8285,7 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
 	    HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	    fprintf (Gbl.F.Out,"%u",NumQst + 1);
+	    HTM_Unsigned (NumQst + 1);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -8314,7 +8314,7 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
          HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",NumQst + 1);
+	 HTM_Unsigned (NumQst + 1);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);

@@ -583,7 +583,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",NumUsrs);
+	 HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");

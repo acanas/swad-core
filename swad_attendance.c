@@ -456,7 +456,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 		    Att->Hidden ? "ASG_TITLE_LIGHT" :
 				  "ASG_TITLE",
 		    Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",Att->NumStdsTotal);
+   HTM_Unsigned (Att->NumStdsTotal);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2092,7 +2092,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		 UsrDat->Accepted ? "DAT_N" :
 				    "DAT",
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",NumUsr);
+   HTM_Unsigned (NumUsr);
    HTM_TD_End ();
 
    /***** Show student's photo *****/
@@ -3147,7 +3147,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%u",Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
+      HTM_Unsigned (Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3257,15 +3257,14 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
 	 if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	   {
 	    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-	    fprintf (Gbl.F.Out,"%u",
-		     Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
+	    HTM_Unsigned (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
 	    HTM_TD_End ();
 
 	    Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
 	   }
 
       HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-      fprintf (Gbl.F.Out,"%u",Total);
+      HTM_Unsigned (Total);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3346,7 +3345,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 		 UsrDat->Accepted ? "DAT_N" :
 				    "DAT",
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",NumUsr + 1);
+   HTM_Unsigned (NumUsr + 1);
    HTM_TD_End ();
 
    /***** Show user's photo *****/
@@ -3402,7 +3401,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 
    /***** Last column with the number of times this user is present *****/
    HTM_TD_Begin ("class=\"DAT_N RM COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",NumTimesPresent);
+   HTM_Unsigned (NumTimesPresent);
    HTM_TD_End ();
 
    HTM_TR_End ();

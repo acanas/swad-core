@@ -626,7 +626,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -646,7 +646,7 @@ static void Ctr_Configuration (bool PrintView)
 		Txt_Degrees_of_CENTRE_X,
 		Gbl.Hierarchy.Ctr.ShrtName);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -661,7 +661,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -747,7 +747,7 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -900,7 +900,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of centre in this list *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumCtr);
+   HTM_Unsigned (NumCtr);
    HTM_TD_End ();
 
    /***** Centre logo and name *****/
@@ -911,7 +911,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users who claim to belong to this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
+   HTM_Unsigned (Ctr->NumUsrsWhoClaimToBelongToCtr);
    HTM_TD_End ();
 
    /***** Place *****/
@@ -921,17 +921,17 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of degrees *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
+   HTM_Unsigned (Ctr->Degs.Num);
    HTM_TD_End ();
 
    /***** Number of courses *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ctr->NumCrss);
+   HTM_Unsigned (Ctr->NumCrss);
    HTM_TD_End ();
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
+   HTM_Unsigned (Ctr->NumUsrs);
    HTM_TD_End ();
 
    /***** Centre status *****/
@@ -1584,17 +1584,17 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Number of users who claim to belong to this centre */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
+      HTM_Unsigned (Ctr->NumUsrsWhoClaimToBelongToCtr);
       HTM_TD_End ();
 
       /* Number of degrees */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
+      HTM_Unsigned (Ctr->Degs.Num);
       HTM_TD_End ();
 
       /* Number of users in courses of this centre */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
+      HTM_Unsigned (Ctr->NumUsrs);
       HTM_TD_End ();
 
       /* Centre requester */

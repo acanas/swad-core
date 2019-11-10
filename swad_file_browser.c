@@ -9636,7 +9636,7 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    fprintf (Gbl.F.Out,"%u",FileMetadata.NumMyViews);
+	    HTM_Unsigned (FileMetadata.NumMyViews);
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -9667,7 +9667,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 fprintf (Gbl.F.Out,"%u",FileMetadata.NumPublicViews);
+	 HTM_Unsigned (FileMetadata.NumPublicViews);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

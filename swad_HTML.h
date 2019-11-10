@@ -151,5 +151,6 @@ void HTM_BR (void);
 
 void HTM_Txt (const char *Txt);
 void HTM_TxtColon (const char *Txt);
+void HTM_Unsigned (unsigned Num);
 
 #endif

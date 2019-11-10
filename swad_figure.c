@@ -432,7 +432,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%u",NumUsrs);
+   HTM_Unsigned (NumUsrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
@@ -463,7 +463,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsNotBelongingToAnyCrs ());
+   HTM_Unsigned (Usr_GetNumUsrsNotBelongingToAnyCrs ());
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
@@ -1425,7 +1425,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
 	       HTM_BR ();
-               fprintf (Gbl.F.Out,"%u",NumberThisRow);
+               HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
 
 	       /***** End user's cell *****/
@@ -1465,7 +1465,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       if (NumberThisRow != NumberLastRow)
 		  NumOrder = NumIns;
 	       HTM_TD_Begin ("class=\"DAT RM\"");
-	       fprintf (Gbl.F.Out,"%u",NumOrder);
+	       HTM_Unsigned (NumOrder);
 	       HTM_TD_End ();
 
 	       /***** Write link to institution *****/
@@ -1488,7 +1488,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write statistic *****/
 	       HTM_TD_Begin ("class=\"DAT RM\"");
-	       fprintf (Gbl.F.Out,"%u",NumberThisRow);
+	       HTM_Unsigned (NumberThisRow);
 	       HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -2610,7 +2610,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%u",SizeOfFileZones->MaxLevels);
+   HTM_Unsigned (SizeOfFileZones->MaxLevels);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
@@ -2971,11 +2971,11 @@ static void Fig_GetAndShowAssignmentsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumAssignments);
+   HTM_Unsigned (NumAssignments);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumCoursesWithAssignments);
+   HTM_Unsigned (NumCoursesWithAssignments);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -2983,7 +2983,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumNotif);
+   HTM_Unsigned (NumNotif);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3029,11 +3029,11 @@ static void Fig_GetAndShowProjectsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumProjects);
+   HTM_Unsigned (NumProjects);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumCoursesWithProjects);
+   HTM_Unsigned (NumCoursesWithProjects);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3102,7 +3102,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
+      HTM_Unsigned (Stats.NumCoursesWithQuestions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3114,7 +3114,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
+      HTM_Unsigned (Stats.NumQsts);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3151,7 +3151,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
+   HTM_Unsigned (Stats.NumCoursesWithQuestions);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3163,7 +3163,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
+   HTM_Unsigned (Stats.NumQsts);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3229,11 +3229,11 @@ static void Fig_GetAndShowGamesStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumGames);
+   HTM_Unsigned (NumGames);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumCoursesWithGames);
+   HTM_Unsigned (NumCoursesWithGames);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3409,7 +3409,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs);
+      HTM_Unsigned (NumUsrs);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3530,7 +3530,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",NumUsrs);
+   HTM_Unsigned (NumUsrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3696,7 +3696,7 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs);
+      HTM_Unsigned (NumUsrs);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4085,19 +4085,19 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%u",NumForums);
+   HTM_Unsigned (NumForums);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%u",NumThreads);
+   HTM_Unsigned (NumThreads);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%u",NumPosts);
+   HTM_Unsigned (NumPosts);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%u",NumUsrsToBeNotifiedByEMail);
+   HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
@@ -4145,19 +4145,19 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",FiguresForum->NumForums);
+   HTM_Unsigned (FiguresForum->NumForums);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",FiguresForum->NumThreads);
+   HTM_Unsigned (FiguresForum->NumThreads);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",FiguresForum->NumPosts);
+   HTM_Unsigned (FiguresForum->NumPosts);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",FiguresForum->NumUsrsToBeNotifiedByEMail);
+   HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -4348,7 +4348,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[NotifyEvent]);
+      HTM_Unsigned (NumUsrs[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4359,11 +4359,11 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumEvents[NotifyEvent]);
+      HTM_Unsigned (NumEvents[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumMails[NotifyEvent]);
+      HTM_Unsigned (NumMails[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -4377,7 +4377,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
+   HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -4388,11 +4388,11 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",NumEventsTotal);
+   HTM_Unsigned (NumEventsTotal);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMailsTotal);
+   HTM_Unsigned (NumMailsTotal);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4453,23 +4453,23 @@ static void Fig_GetAndShowNoticesStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumNotices[Not_ACTIVE_NOTICE]);
+   HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumNotices[Not_OBSOLETE_NOTICE]);
+   HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumNoticesDeleted);
+   HTM_Unsigned (NumNoticesDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N RM\"");
-   fprintf (Gbl.F.Out,"%u", NumTotalNotices);
+   HTM_Unsigned ( NumTotalNotices);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumTotalNotifications);
+   HTM_Unsigned (NumTotalNotifications);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4528,15 +4528,15 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted);
+   HTM_Unsigned (NumMsgsSentNotDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsSentDeleted);
+   HTM_Unsigned (NumMsgsSentDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+   HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4552,19 +4552,19 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted);
+   HTM_Unsigned (NumMsgsReceivedNotDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndDeleted);
+   HTM_Unsigned (NumMsgsReceivedAndDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
+   HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndNotified);
+   HTM_Unsigned (NumMsgsReceivedAndNotified);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4619,11 +4619,11 @@ static void Fig_GetAndShowSurveysStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumSurveys);
+   HTM_Unsigned (NumSurveys);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumCoursesWithSurveys);
+   HTM_Unsigned (NumCoursesWithSurveys);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4635,7 +4635,7 @@ static void Fig_GetAndShowSurveysStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumNotif);
+   HTM_Unsigned (NumNotif);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4733,7 +4733,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",NumUsrs[Visibility]);
+	 HTM_Unsigned (NumUsrs[Visibility]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4820,7 +4820,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[i]);
+      HTM_Unsigned (NumUsrs[i]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4896,7 +4896,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[Lan]);
+      HTM_Unsigned (NumUsrs[Lan]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4985,7 +4985,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",NumUsrs[FirstDayOfWeek]);
+	 HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5060,7 +5060,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[Format]);
+      HTM_Unsigned (NumUsrs[Format]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5142,7 +5142,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[IconSet]);
+      HTM_Unsigned (NumUsrs[IconSet]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5218,7 +5218,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[Menu]);
+      HTM_Unsigned (NumUsrs[Menu]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5300,7 +5300,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[Theme]);
+      HTM_Unsigned (NumUsrs[Theme]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5381,7 +5381,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumUsrs[SideCols]);
+      HTM_Unsigned (NumUsrs[SideCols]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

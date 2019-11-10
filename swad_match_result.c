@@ -343,7 +343,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_BR ();
    fprintf (Gbl.F.Out,"%s<br />",Txt_out_of_PART_OF_A_SCORE);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%u",Tst_SCORE_MAX);
+   HTM_Unsigned (Tst_SCORE_MAX);
    HTM_TH_End ();
    HTM_TH_Empty (1);
 
@@ -473,12 +473,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",NumQstsInThisResult);
+	 HTM_Unsigned (NumQstsInThisResult);
 	 HTM_TD_End ();
 
          /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisResult);
+	 HTM_Unsigned (NumQstsNotBlankInThisResult);
 	 HTM_TD_End ();
 
 	 /* Write score */
@@ -574,13 +574,13 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    /***** Write total number of questions *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
-      fprintf (Gbl.F.Out,"%u",NumTotalQsts);
+      HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
    /***** Write total number of questions not blank *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
-      fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
+      HTM_Unsigned (NumTotalQstsNotBlank);
    HTM_TD_End ();
 
    /***** Write total score *****/

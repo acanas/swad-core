@@ -451,7 +451,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Pagination->LeftPage,
                    Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u",Pagination->LeftPage);
+         HTM_Unsigned (Pagination->LeftPage);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
@@ -473,7 +473,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
             HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Gbl.Title,Font);
-            fprintf (Gbl.F.Out,"%u",NumPage);
+            HTM_Unsigned (NumPage);
             HTM_SPAN_End ();
            }
          else
@@ -559,7 +559,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   break;
               }
             Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-            fprintf (Gbl.F.Out,"%u",NumPage);
+            HTM_Unsigned (NumPage);
             Frm_LinkFormEnd ();
             Frm_EndForm ();
            }
@@ -659,7 +659,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->RightPage,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u",Pagination->RightPage);
+         HTM_Unsigned (Pagination->RightPage);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
         }
@@ -757,7 +757,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->NumPags,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u",Pagination->NumPags);
+         HTM_Unsigned (Pagination->NumPags);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
         }

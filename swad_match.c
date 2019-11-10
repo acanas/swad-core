@@ -656,7 +656,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
+   HTM_Unsigned (Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
    HTM_TD_End ();
   }
 
@@ -2165,9 +2165,9 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<strong>");
    if (Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
-      fprintf (Gbl.F.Out,"%u",NumAnswerersQst);
+      HTM_Unsigned (NumAnswerersQst);
    else
-      fprintf (Gbl.F.Out,"-");
+      HTM_Txt ("-");
    if (Match->Status.Playing)
      {
       /* Get current number of players */

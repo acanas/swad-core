@@ -278,7 +278,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",NumUsr);
+   HTM_Unsigned (NumUsr);
    HTM_TD_End ();
 
    /***** Write user's ID and name *****/

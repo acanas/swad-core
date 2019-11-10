@@ -2855,7 +2855,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Number of teachers in the course *****/
             HTM_TD_Begin ("class=\"DAT RT\"");
-            fprintf (Gbl.F.Out,"%u",Crs.NumUsrs[Rol_TCH]);
+            HTM_Unsigned (Crs.NumUsrs[Rol_TCH]);
             HTM_TD_End ();
 
             /***** User photo *****/

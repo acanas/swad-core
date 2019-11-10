@@ -523,7 +523,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -542,7 +542,7 @@ static void Ins_Configuration (bool PrintView)
 		Txt_Centres_of_INSTITUTION_X,
 		Gbl.Hierarchy.Ins.ShrtName);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -557,7 +557,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -570,7 +570,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -583,7 +583,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+      HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -637,7 +637,7 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -780,7 +780,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /***** Number of institution in this list *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumIns);
+   HTM_Unsigned (NumIns);
    HTM_TD_End ();
 
    /***** Institution logo and name *****/
@@ -792,32 +792,32 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    /***** Stats *****/
    /* Number of users who claim to belong to this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->NumUsrsWhoClaimToBelongToIns);
+   HTM_Unsigned (Ins->NumUsrsWhoClaimToBelongToIns);
    HTM_TD_End ();
 
    /* Number of centres in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->Ctrs.Num);
+   HTM_Unsigned (Ins->Ctrs.Num);
    HTM_TD_End ();
 
    /* Number of degrees in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->NumDegs);
+   HTM_Unsigned (Ins->NumDegs);
    HTM_TD_End ();
 
    /* Number of courses in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->NumCrss);
+   HTM_Unsigned (Ins->NumCrss);
    HTM_TD_End ();
 
    /* Number of departments in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->NumDpts);
+   HTM_Unsigned (Ins->NumDpts);
    HTM_TD_End ();
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",Ins->NumUsrs);
+   HTM_Unsigned (Ins->NumUsrs);
    HTM_TD_End ();
 
    /***** Institution status *****/
@@ -1532,17 +1532,17 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of users who claim to belong to this institution */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ins->NumUsrsWhoClaimToBelongToIns);
+      HTM_Unsigned (Ins->NumUsrsWhoClaimToBelongToIns);
       HTM_TD_End ();
 
       /* Number of centres */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ins->Ctrs.Num);
+      HTM_Unsigned (Ins->Ctrs.Num);
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ins->NumUsrs);
+      HTM_Unsigned (Ins->NumUsrs);
       HTM_TD_End ();
 
       /* Institution requester */

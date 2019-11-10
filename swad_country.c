@@ -383,8 +383,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",
-	       Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -404,7 +403,7 @@ static void Cty_Configuration (bool PrintView)
 		Txt_Institutions_of_COUNTRY_X,
 		Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -419,7 +418,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_Unsigned (Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -432,7 +431,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_Unsigned (Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -445,7 +444,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_Unsigned (Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -491,8 +490,7 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%u",
-            Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -563,27 +561,27 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Cty_GetNumUsrsWhoClaimToBelongToCty (0));
+   HTM_Unsigned (Cty_GetNumUsrsWhoClaimToBelongToCty (0));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (0));
+   HTM_Unsigned (Ins_GetNumInssInCty (0));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (0));
+   HTM_Unsigned (Ctr_GetNumCtrsInCty (0));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (0));
+   HTM_Unsigned (Deg_GetNumDegsInCty (0));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (0));
+   HTM_Unsigned (Crs_GetNumCrssInCty (0));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -599,23 +597,23 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Cty_GetNumUsrsWhoClaimToBelongToCty (-1L));
+   HTM_Unsigned (Cty_GetNumUsrsWhoClaimToBelongToCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (-1L));
+   HTM_Unsigned (Ins_GetNumInssInCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (-1L));
+   HTM_Unsigned (Ctr_GetNumCtrsInCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (-1L));
+   HTM_Unsigned (Deg_GetNumDegsInCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (-1L));
+   HTM_Unsigned (Crs_GetNumCrssInCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -709,7 +707,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
    /***** Number of country in this list *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",NumCty);
+   HTM_Unsigned (NumCty);
    HTM_TD_End ();
 
    /***** Country map (and link to WWW if exists) *****/
@@ -722,27 +720,27 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
    /* Write stats of this country */
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->NumUsrsWhoClaimToBelongToCty);
+   HTM_Unsigned (Cty->NumUsrsWhoClaimToBelongToCty);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->Inss.Num);
+   HTM_Unsigned (Cty->Inss.Num);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->NumCtrs);
+   HTM_Unsigned (Cty->NumCtrs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->NumDegs);
+   HTM_Unsigned (Cty->NumDegs);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->NumCrss);
+   HTM_Unsigned (Cty->NumCrss);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   fprintf (Gbl.F.Out,"%u",Cty->NumUsrs);
+   HTM_Unsigned (Cty->NumUsrs);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1639,12 +1637,12 @@ static void Cty_ListCountriesForEdition (void)
 
       /* Number of users */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      fprintf (Gbl.F.Out,"%u",Cty->NumUsrsWhoClaimToBelongToCty);
+      HTM_Unsigned (Cty->NumUsrsWhoClaimToBelongToCty);
       HTM_TD_End ();
 
       /* Number of institutions */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      fprintf (Gbl.F.Out,"%u",Cty->Inss.Num);
+      HTM_Unsigned (Cty->Inss.Num);
       HTM_TD_End ();
 
       HTM_TR_End ();

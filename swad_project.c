@@ -1072,7 +1072,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
       case Prj_LIST_PROJECTS:
 	 HTM_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT COLOR%u\"",
 		       Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",NumIndex);
+	 HTM_Unsigned (NumIndex);
 
 	 if (PrjIsFaulty)
 	   {
@@ -1246,7 +1246,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassData);
          break;
      }
-   fprintf (Gbl.F.Out,"%u",Prj->NumStds);
+   HTM_Unsigned (Prj->NumStds);
    if (Faults.WrongNumStds)
       Prj_PutWarningIcon ();
    HTM_TD_End ();
@@ -1533,7 +1533,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Number of students *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",Prj->NumStds);
+   HTM_Unsigned (Prj->NumStds);
    HTM_TD_End ();
 
    /***** Project members *****/

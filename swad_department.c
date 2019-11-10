@@ -158,7 +158,7 @@ void Dpt_SeeDepts (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Gbl.Dpts.Lst[NumDpt].NumTchs);
+      HTM_Unsigned (Gbl.Dpts.Lst[NumDpt].NumTchs);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -184,7 +184,7 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",NumTchsInOtherDpts);
+   HTM_Unsigned (NumTchsInOtherDpts);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -198,11 +198,10 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%u",
-	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
-						1 << Rol_NET |
-						1 << Rol_TCH) -
-	    NumTchsInsWithDpt);
+   HTM_Unsigned (Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
+						     1 << Rol_NET |
+						     1 << Rol_TCH) -
+	         NumTchsInsWithDpt);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -582,7 +581,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Number of teachers */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Dpt->NumTchs);
+      HTM_Unsigned (Dpt->NumTchs);
       HTM_TD_End ();
 
       HTM_TR_End ();

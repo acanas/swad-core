@@ -612,7 +612,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    else
       HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
 					                          "FOLLOW_NUM");
-   fprintf (Gbl.F.Out,"%u",NumUsrs);
+   HTM_Unsigned (NumUsrs);
    if (NumUsrs)
      {
       Frm_LinkFormEnd ();

@@ -479,7 +479,7 @@ void Gam_ShowOneGame (long GamCod,
                 	             "ASG_TITLE",NULL);
    if (ShowOnlyThisGame)
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Matches);
-   fprintf (Gbl.F.Out,"%u",Game.NumMchs);
+   HTM_Unsigned (Game.NumMchs);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 

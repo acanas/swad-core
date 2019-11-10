@@ -1502,7 +1502,7 @@ void Lay_RefreshNotifsAndConnected (void)
      }
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)
-      fprintf (Gbl.F.Out,"%u",Gbl.Usrs.Connected.NumUsrsToList);
+      HTM_Unsigned (Gbl.Usrs.Connected.NumUsrsToList);
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)
       for (NumUsr = 0;

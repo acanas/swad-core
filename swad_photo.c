@@ -1254,7 +1254,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE\"");
 
 	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-	 fprintf (Gbl.F.Out,"%u",NumFollowing);
+	 HTM_Unsigned (NumFollowing);
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
@@ -1262,7 +1262,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-	 fprintf (Gbl.F.Out,"%u",NumFollowers);
+	 HTM_Unsigned (NumFollowers);
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
@@ -2262,7 +2262,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 	 /***** Show logo and name of this degree *****/
 	 HTM_TD_Begin ("class=\"DAT RM COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u",++NumDegsNotEmpty);
+	 HTM_Unsigned (++NumDegsNotEmpty);
 	 HTM_TD_End ();
 
 	 /***** Show logo and name of this degree *****/

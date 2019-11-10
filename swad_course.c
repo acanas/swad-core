@@ -503,7 +503,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%u",Gbl.Hierarchy.Crs.NumUsrs[Role]);
+   HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1264,13 +1264,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Current number of teachers in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_TCH] +
-		                 Crs->NumUsrs[Rol_NET]);
+	 HTM_Unsigned (Crs->NumUsrs[Rol_TCH] +
+		       Crs->NumUsrs[Rol_NET]);
 	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_STD]);
+	 HTM_Unsigned (Crs->NumUsrs[Rol_STD]);
 	 HTM_TD_End ();
 
 	 /* Course status */
@@ -1507,13 +1507,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	 /* Current number of teachers in this course */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_TCH] +
-				 Crs->NumUsrs[Rol_NET]);
+	 HTM_Unsigned (Crs->NumUsrs[Rol_TCH] +
+		       Crs->NumUsrs[Rol_NET]);
 	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_STD]);
+	 HTM_Unsigned (Crs->NumUsrs[Rol_STD]);
 	 HTM_TD_End ();
 
 	 /* Course requester */
@@ -3161,7 +3161,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Write number of course in this search *****/
    HTM_TD_Begin ("class=\"%s RT %s\"",StyleNoBR,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumCrs);
+   HTM_Unsigned (NumCrs);
    HTM_TD_End ();
 
    /***** Write degree logo, degree short name (row[2])
@@ -3199,12 +3199,12 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Write number of teachers in course *****/
    HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumTchs);
+   HTM_Unsigned (NumTchs);
    HTM_TD_End ();
 
    /***** Write number of students in course *****/
    HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumStds);
+   HTM_Unsigned (NumStds);
    HTM_TD_End ();
 
    HTM_TR_End ();

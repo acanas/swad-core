@@ -1389,7 +1389,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Number of groups of this type */
       HTM_TD_Begin ("class=\"DAT CM\"");
-      fprintf (Gbl.F.Out,"%u",Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
+      HTM_Unsigned (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2440,9 +2440,8 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
      {
       Vacant = (int) Grp->MaxStudents - (int) Grp->NumUsrs[Rol_STD];
-      fprintf (Gbl.F.Out,"%u",
-               Vacant > 0 ? (unsigned) Vacant :
-        	                       0);
+      HTM_Unsigned (Vacant > 0 ? (unsigned) Vacant :
+        	                 0);
      }
    HTM_TD_End ();
   }

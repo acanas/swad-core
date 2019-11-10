@@ -515,7 +515,7 @@ static void Deg_Configuration (bool PrintView)
 		Txt_Courses_of_DEGREE_X,
 		Gbl.Hierarchy.Deg.ShrtName);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
+      HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -570,8 +570,7 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"%u",
-            Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -811,7 +810,7 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Current number of courses in this degree */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumCrss);
+      HTM_Unsigned (NumCrss);
       HTM_TD_End ();
 
       /* Degree requester */
@@ -1231,7 +1230,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Number of degree in this list *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumDeg);
+   HTM_Unsigned (NumDeg);
    HTM_TD_End ();
 
    /***** Degree logo and name *****/
@@ -1247,7 +1246,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Current number of courses in this degree *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   fprintf (Gbl.F.Out,"%u",NumCrss);
+   HTM_Unsigned (NumCrss);
    HTM_TD_End ();
 
    /***** Degree status *****/

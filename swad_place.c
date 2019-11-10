@@ -149,7 +149,7 @@ void Plc_SeePlaces (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%u",Gbl.Plcs.Lst[NumPlc].NumCtrs);
+	 HTM_Unsigned (Gbl.Plcs.Lst[NumPlc].NumCtrs);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -172,7 +172,7 @@ void Plc_SeePlaces (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",NumCtrsInOtherPlcs);
+      HTM_Unsigned (NumCtrsInOtherPlcs);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -186,7 +186,7 @@ void Plc_SeePlaces (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
+      HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	                      NumCtrsWithPlc);
       HTM_TD_End ();
 
@@ -568,7 +568,7 @@ static void Plc_ListPlacesForEdition (void)
 
       /* Number of centres */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Plc->NumCtrs);
+      HTM_Unsigned (Plc->NumCtrs);
       HTM_TD_End ();
 
       HTM_TR_End ();

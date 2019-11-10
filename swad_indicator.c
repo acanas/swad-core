@@ -676,12 +676,12 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 
       HTM_TD_Begin ("class=\"%s\"",Class);
       HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
-      fprintf (Gbl.F.Out,"%u",Ind);
+      HTM_Unsigned (Ind);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-      fprintf (Gbl.F.Out,"%u",NumCrssWithIndicatorYes[Ind]);
+      HTM_Unsigned (NumCrssWithIndicatorYes[Ind]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
@@ -704,7 +704,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u",NumCrss);
+   HTM_Unsigned (NumCrss);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -942,7 +942,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							        "DAT_SMALL_RED"),
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumIndicators);
+		  HTM_Unsigned (Indicators.NumIndicators);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
@@ -1051,14 +1051,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        NumTchs != 0 ? "DAT_SMALL_GREEN" :
 					       "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",NumTchs);
+		  HTM_Unsigned (NumTchs);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
 			        NumStds != 0 ? "DAT_SMALL_GREEN" :
 					       "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",NumStds);
+		  HTM_Unsigned (NumStds);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
@@ -1066,7 +1066,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							        "DAT_SMALL_RED"),
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumIndicators);
+		  HTM_Unsigned (Indicators.NumIndicators);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
@@ -1118,7 +1118,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
 								   "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumAssignments);
+		  HTM_Unsigned (Indicators.NumAssignments);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
@@ -1151,21 +1151,21 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
 							       "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumThreads);
+		  HTM_Unsigned (Indicators.NumThreads);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
 			        (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
 							     "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumPosts);
+		  HTM_Unsigned (Indicators.NumPosts);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
 			        (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
 								      "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%u",Indicators.NumMsgsSentByTchs);
+		  HTM_Unsigned (Indicators.NumMsgsSentByTchs);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",

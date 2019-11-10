@@ -3283,7 +3283,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
          if (sscanf (row[1],"%u",&(SvyQst->QstInd)) != 1)
             Lay_ShowErrorAndExit ("Error: wrong question index.");
          HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-         fprintf (Gbl.F.Out,"%u",SvyQst->QstInd + 1);
+         HTM_Unsigned (SvyQst->QstInd + 1);
          HTM_TD_End ();
 
          /* Write the question type (row[2]) */

@@ -167,7 +167,7 @@ void Mai_SeeMailDomains (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT\"");
-      fprintf (Gbl.F.Out,"%u",Gbl.Mails.Lst[NumMai].NumUsrs);
+      HTM_Unsigned (Gbl.Mails.Lst[NumMai].NumUsrs);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -522,7 +522,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Number of users */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Mai->NumUsrs);
+      HTM_Unsigned (Mai->NumUsrs);
       HTM_TD_End ();
 
       HTM_TR_End ();

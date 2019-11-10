@@ -3662,7 +3662,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 	         UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				    "USR_LIST_NUM",
 	         BgColor);
-   fprintf (Gbl.F.Out,"%u",NumUsr);
+   HTM_Unsigned (NumUsr);
    HTM_TD_End ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
@@ -4006,7 +4006,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write number of user *****/
    HTM_TD_Begin ("class=\"USR_LIST_NUM_N CM COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u",NumUsr);
+   HTM_Unsigned (NumUsr);
    HTM_TD_End ();
 
    if (Gbl.Usrs.Listing.WithPhotos)

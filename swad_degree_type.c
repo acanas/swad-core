@@ -326,7 +326,7 @@ static void DT_ListDegreeTypesForSeeing (void)
 
       /* Number of degree type in this list */
       HTM_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
-      fprintf (Gbl.F.Out,"%u",NumDegTyp + 1);
+      HTM_Unsigned (NumDegTyp + 1);
       HTM_TD_End ();
 
       /* Name of degree type */
@@ -336,7 +336,7 @@ static void DT_ListDegreeTypesForSeeing (void)
 
       /* Number of degrees of this type */
       HTM_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
-      fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -422,7 +422,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Number of degrees of this type */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
       HTM_TD_End ();
 
       HTM_TR_End ();
