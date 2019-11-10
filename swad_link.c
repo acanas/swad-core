@@ -433,7 +433,7 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld",Lnk->LnkCod);
+      HTM_Long (Lnk->LnkCod);
       HTM_TD_End ();
 
       /* Link short name */

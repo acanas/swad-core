@@ -499,7 +499,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Mail code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld",Mai->MaiCod);
+      HTM_Long (Mai->MaiCod);
       HTM_TD_End ();
 
       /* Mail domain */

@@ -4497,7 +4497,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 		        (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
 						         "ANS_BAD") :
 		        "ANS_0");
-         fprintf (Gbl.F.Out,"%ld",IntAnswerUsr);
+         HTM_Long (IntAnswerUsr);
          HTM_TD_End ();
 	}
       else
@@ -4515,9 +4515,9 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-      fprintf (Gbl.F.Out,"%ld",IntAnswerCorr);
+      HTM_Long (IntAnswerCorr);
    else
-      fprintf (Gbl.F.Out,"?");
+      HTM_Txt ("?");
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -407,7 +407,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Degree type code */
       HTM_TD_Begin ("class=\"DAT CODE\"");
-      fprintf (Gbl.F.Out,"%ld",Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+      HTM_Long (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       HTM_TD_End ();
 
       /* Name of degree type */

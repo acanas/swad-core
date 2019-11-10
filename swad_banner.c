@@ -437,7 +437,7 @@ static void Ban_ListBannersForEdition (void)
 		    Ban->Hidden ? "DAT_LIGHT" :
 				  "DAT");
       HTM_ARTICLE_Begin (Anchor);
-      fprintf (Gbl.F.Out,"%ld",Ban->BanCod);
+      HTM_Long (Ban->BanCod);
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 

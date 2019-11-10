@@ -545,7 +545,7 @@ static void Plc_ListPlacesForEdition (void)
 
       /* Place code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld",Plc->PlcCod);
+      HTM_Long (Plc->PlcCod);
       HTM_TD_End ();
 
       /* Place short name */

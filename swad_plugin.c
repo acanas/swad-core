@@ -408,7 +408,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld",Plg->PlgCod);
+      HTM_Long (Plg->PlgCod);
       HTM_TD_End ();
 
       /* Plugin logo */

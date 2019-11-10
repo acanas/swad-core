@@ -1410,7 +1410,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	 HTM_Unsigned (*((unsigned *) ValuePtr));
 	 break;
       case HTM_Type_LONG:
-	 fprintf (Gbl.F.Out,"%ld",*((long *) ValuePtr));
+	 HTM_Long (*((long *) ValuePtr));
 	 break;
       case HTM_Type_STRING:
 	 HTM_Txt ((char *) ValuePtr);
@@ -1523,4 +1523,9 @@ void HTM_TxtColon (const char *Txt)
 void HTM_Unsigned (unsigned Num)
   {
    fprintf (Gbl.F.Out,"%u",Num);
+  }
+
+void HTM_Long (long Num)
+  {
+   fprintf (Gbl.F.Out,"%ld",Num);
   }

@@ -395,7 +395,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"%ld",Gbl.Hierarchy.Crs.CrsCod);
+      HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1438,7 +1438,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	 /* Course code */
 	 HTM_TD_Begin ("class=\"DAT CODE\"");
-	 fprintf (Gbl.F.Out,"%ld",Crs->CrsCod);
+	 HTM_Long (Crs->CrsCod);
 	 HTM_TD_End ();
 
 	 /* Institutional code of the course */

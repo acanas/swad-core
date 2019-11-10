@@ -1495,7 +1495,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Centre code */
       HTM_TD_Begin ("class=\"DAT CODE\"");
-      fprintf (Gbl.F.Out,"%ld",Ctr->CtrCod);
+      HTM_Long (Ctr->CtrCod);
       HTM_TD_End ();
 
       /* Centre logo */

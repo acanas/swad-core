@@ -494,7 +494,7 @@ static void Cla_ListClassroomsForEdition (void)
 
       /* Classroom code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld",Cla->ClaCod);
+      HTM_Long (Cla->ClaCod);
       HTM_TD_End ();
 
       /* Classroom short name */

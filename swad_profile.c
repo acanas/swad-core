@@ -1561,7 +1561,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 
 	 HTM_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%ld",Figure);
+	 HTM_Long (Figure);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

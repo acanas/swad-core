@@ -720,7 +720,7 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree code */
       HTM_TD_Begin ("class=\"DAT CODE\"");
-      fprintf (Gbl.F.Out,"%ld",Deg->DegCod);
+      HTM_Long (Deg->DegCod);
       HTM_TD_End ();
 
       /* Degree logo */

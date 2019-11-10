@@ -1470,7 +1470,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Institution code */
       HTM_TD_Begin ("class=\"DAT CODE\"");
-      fprintf (Gbl.F.Out,"%ld",Ins->InsCod);
+      HTM_Long (Ins->InsCod);
       HTM_TD_End ();
 
       /* Institution logo */
