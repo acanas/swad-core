@@ -611,8 +611,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
-   fprintf (Gbl.F.Out,"%s: ",NumRows == 1 ? Txt_Group  :
-                                            Txt_Groups);
+   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -626,12 +626,12 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
+         HTM_TxtNBSPTxt (row[0],row[1]);
 
          if (NumRows >= 2)
            {
             if (NumRow == NumRows-2)
-               fprintf (Gbl.F.Out," %s ",Txt_and);
+               HTM_TxtF (" %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
                   HTM_Txt (", ");
@@ -639,8 +639,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
         }
      }
    else
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -676,7 +675,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
      {
       /* Current question index / total of questions */
       HTM_DIV_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
+      HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
       HTM_DIV_End ();
      }
 
@@ -1268,7 +1267,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_INPUT_CHECKBOX ("WholeCrs",true,
 			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
 			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
-      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2153,7 +2152,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       Dat_WriteHoursMinutesSeconds (&Time);
      }
    else
-      fprintf (Gbl.F.Out,"-");
+      HTM_Txt ("-");
    HTM_DIV_End ();
 
    /***** Number of users who have answered this question *****/
@@ -2162,7 +2161,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    HTM_DIV_Begin ("class=\"MCH_NUM_ANSWERERS\"");
    HTM_Txt (Txt_MATCH_respond);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"<strong>");
+   HTM_STRONG_Begin ();
    if (Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
       HTM_Unsigned (NumAnswerersQst);
@@ -2174,10 +2173,9 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       Mch_GetNumPlayers (Match);
 
       /* Show current number of players */
-      fprintf (Gbl.F.Out,"/%u",
-	       Match->Status.NumPlayers);
+      HTM_TxtF ("/%u",Match->Status.NumPlayers);
      }
-   fprintf (Gbl.F.Out,"</strong>");
+   HTM_STRONG_End ();
    HTM_DIV_End ();
   }
 
@@ -2276,7 +2274,7 @@ static void Mch_ShowNumQstInMatch (struct Match *Match)
    else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
       HTM_Txt (Txt_MATCH_End);
    else
-      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
+      HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
    HTM_DIV_End ();
   }
 
@@ -2420,11 +2418,10 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 		" onclick=\"document.getElementById('%s').submit();return false;\"",
 	        Txt_View_results,
 	        Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>"
-	              "&nbsp;%s",
-	    Match->Status.ShowQstResults ? "fas fa-toggle-on" :
-		                           "fas fa-toggle-off",
-	    Txt_View_results);
+   HTM_TxtF ("<i class=\"%s\"></i>",
+	     Match->Status.ShowQstResults ? "fas fa-toggle-on" :
+		                            "fas fa-toggle-off");
+   HTM_NBSPTxt (Txt_View_results);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -2547,6 +2544,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
    struct Mch_UsrAnswer UsrAnswer;
    unsigned NumOptions;
    unsigned NumOpt;
+   char *Class;
 
    /***** Show question *****/
    /* Write buttons for answers? */
@@ -2586,17 +2584,23 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 	    Mch_PutParamNumOpt (NumOpt);		// Number of button
-	    fprintf (Gbl.F.Out,"<button type=\"submit\""
-			       " onmousedown=\"document.getElementById('%s').submit();return false;\""
-			       " class=\"",
-		     Gbl.Form.Id);
+
 	    if (UsrAnswer.NumOpt == (int) NumOpt)	// Student's answer
-	       fprintf (Gbl.F.Out,"MCH_STD_ANSWER_SELECTED ");
-	    fprintf (Gbl.F.Out,"MCH_STD_BUTTON BT_%c\">"
-			       "%c"
-			       "</button>",
-		     'A' + (char) NumOpt,
-		     'a' + (char) NumOpt);
+	      {
+	       if (asprintf (&Class,"MCH_STD_ANSWER_SELECTED "
+	                            "MCH_STD_BUTTON BT_%c",'A' + (char) NumOpt) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
+	    else
+	      {
+	       if (asprintf (&Class,"MCH_STD_BUTTON BT_%c",'A' + (char) NumOpt) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
+	    HTM_BUTTON_Begin (Class,true);
+	    HTM_TxtF ("%c",'a' + (char) NumOpt);
+	    HTM_BUTTON_End ();
+	    free (Class);
+
 	    Frm_EndForm ();
 
 	    /* End table cell */
@@ -2734,12 +2738,12 @@ static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxSco
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
    if (NumRow == 0)
      {
-      Str_WriteFloatNumToFile (Gbl.F.Out,MaxScore);
+      Str_WriteDoubleNumToFile (Gbl.F.Out,MaxScore);
       HTM_NBSP ();
      }
    else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
      {
-      Str_WriteFloatNumToFile (Gbl.F.Out,MinScore);
+      Str_WriteDoubleNumToFile (Gbl.F.Out,MinScore);
       HTM_NBSP ();
      }
    HTM_TD_End ();
@@ -2804,7 +2808,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 
    /* Write score */
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
-   Str_WriteFloatNumToFile (Gbl.F.Out,Score);
+   Str_WriteDoubleNumToFile (Gbl.F.Out,Score);
    HTM_NBSP ();
    HTM_TD_End ();
 
@@ -2819,7 +2823,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
 	    "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
-   fprintf (Gbl.F.Out,"&nbsp;%u",NumUsrs);
+   HTM_TxtF ("&nbsp;%u",NumUsrs);
    free (Title);
    free (Icon);
    HTM_TD_End ();
@@ -2878,7 +2882,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
 	        " onclick=\"document.getElementById('%s').submit();return false;\"",
 		Txt,Id);
-   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Icon);
+   HTM_TxtF ("<i class=\"%s\"></i>",Icon);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -2891,7 +2895,7 @@ static void Mch_PutBigButtonOff (const char *Icon)
    /***** Put inactive icon *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
    HTM_DIV_Begin ("class=\"MCH_BUTTON_OFF\"");
-   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Icon);
+   HTM_TxtF ("<i class=\"%s\"></i>",Icon);
    HTM_DIV_End ();
    HTM_DIV_End ();
   }
@@ -2904,7 +2908,7 @@ static void Mch_PutBigButtonClose (void)
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
    HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
 	        " onclick=\"window.close();return false;\"\"",Txt_Close);
-   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Mch_ICON_CLOSE);
+   HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -3339,7 +3343,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
                 NumAnswerersAns,
-                (unsigned) ((((float) NumAnswerersAns * 100.0) / (float) NumAnswerersQst) + 0.5),
+                (unsigned) ((((double) NumAnswerersAns * 100.0) / (double) NumAnswerersQst) + 0.5),
                 Txt_of_PART_OF_A_TOTAL,NumAnswerersQst);
    else
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -3351,8 +3355,8 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    if (NumAnswerersAns && NumAnswerersQst)
-      BarWidth = (unsigned) ((((float) NumAnswerersAns * (float) Mch_MAX_BAR_WIDTH) /
-	                       (float) NumAnswerersQst) + 0.5);
+      BarWidth = (unsigned) ((((double) NumAnswerersAns * (double) Mch_MAX_BAR_WIDTH) /
+	                       (double) NumAnswerersQst) + 0.5);
 
    /***** Bar proportional to number of users *****/
    HTM_TABLE_BeginWide ();

@@ -1504,7 +1504,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 		  i == Gbl.Usrs.Listing.RecsPerPag,false,
 		  "%u",i);
    HTM_SELECT_End ();
-   fprintf (Gbl.F.Out," %s)",Txt_record_cards_per_page);
+   HTM_TxtF (" %s)",Txt_record_cards_per_page);
    HTM_LABEL_End ();
   }
 
@@ -1808,8 +1808,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
            {
             HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-            fprintf (Gbl.F.Out," (%s)",
-                     Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+            HTM_TxtF (" (%s)",
+                      Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
             HTM_SPAN_End ();
            }
          HTM_TD_End ();
@@ -1847,7 +1847,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                HTM_Txt (Text);
               }
             else
-               fprintf (Gbl.F.Out,"-");
+               HTM_Txt ("-");
            }
          HTM_TD_End ();
          HTM_TR_End ();
@@ -2796,7 +2796,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 			             Txt_Another_user_s_profile,
 			     "REC_NICK",NULL);
 	}
-      fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+      HTM_TxtF ("@%s",UsrDat->Nickname);
       if (PutFormLinks)
 	{
 	 Frm_LinkFormEnd ();
@@ -3118,7 +3118,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      {
       /***** Form to select a sex *****/
       HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s*:",Txt_Sex);
+      HTM_TxtF ("%s*:",Txt_Sex);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3131,7 +3131,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  "value=\"%u\"%s  required=\"required\"",
 			  (unsigned) Sex,
 			  Sex == Gbl.Usrs.Me.UsrDat.Sex ? " checked=\"checked\"" : "");
-	 fprintf (Gbl.F.Out,"%s %s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
+	 HTM_TxtNBSPTxt (Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
 	 HTM_LABEL_End ();
 	}
       HTM_TD_End ();
@@ -3168,8 +3168,8 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    HTM_LABEL_Begin ("for=\"Surname1\" class=\"%s\"",ClassForm);
    HTM_Txt (Txt_Surname_1);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":");
+      HTM_Txt ("*");
+   HTM_Txt (":");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3180,7 +3180,11 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->Surname1[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
+     {
+      HTM_STRONG_Begin ();
+      HTM_Txt (UsrDat->Surname1);
+      HTM_STRONG_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3210,7 +3214,11 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 		      UsrDat->Surname2,false,
 		      "class=\"REC_C2_BOT_INPUT\"");
    else if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
+     {
+      HTM_STRONG_Begin ();
+      HTM_Txt (UsrDat->Surname2);
+      HTM_STRONG_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3233,8 +3241,8 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    HTM_LABEL_Begin ("for=\"FirstName\" class=\"%s\"",ClassForm);
    HTM_Txt (Txt_First_name);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":");
+      HTM_Txt ("*");
+   HTM_Txt (":");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3246,7 +3254,11 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->FirstName[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
+     {
+      HTM_STRONG_Begin ();
+      HTM_Txt (UsrDat->FirstName);
+      HTM_STRONG_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3277,8 +3289,8 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
    HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",ClassForm);
    HTM_Txt (Txt_Country);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":");
+      HTM_Txt ("*");
+   HTM_Txt (":");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -4002,7 +4014,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s*:",Txt_Country);
+   HTM_TxtF ("%s*:",Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -4040,7 +4052,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s*:",Txt_Institution);
+   HTM_TxtF ("%s*:",Txt_Institution);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -4081,7 +4093,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s*:",Txt_Centre);
+      HTM_TxtF ("%s*:",Txt_Centre);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -4120,7 +4132,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Dpt_PARAM_DPT_COD_NAME,ClassForm);
-      fprintf (Gbl.F.Out,"%s*:",Txt_Department);
+      HTM_TxtF ("%s*:",Txt_Department);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

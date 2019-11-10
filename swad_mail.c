@@ -971,13 +971,13 @@ static void Mai_ListEmails (void)
 
    /***** Show a message with the number of users with email ****/
    HTM_DIV_Begin ("class=\"DAT CM\"");
-   fprintf (Gbl.F.Out,Txt_X_users_who_have_email,NumUsrsWithEmail);
+   HTM_TxtF (Txt_X_users_who_have_email,NumUsrsWithEmail);
    HTM_DIV_End ();
 
    /***** Show a message with the number of users who have accepted and have email ****/
    HTM_DIV_Begin ("class=\"DAT CM\"");
-   fprintf (Gbl.F.Out,Txt_X_users_who_have_accepted_and_who_have_email,
-	    NumAcceptedUsrsWithEmail);
+   HTM_TxtF (Txt_X_users_who_have_accepted_and_who_have_email,
+	     NumAcceptedUsrsWithEmail);
    HTM_DIV_End ();
 
    /***** Contextual menu *****/

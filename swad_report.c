@@ -305,7 +305,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    HTM_DIV_Begin ("class=\"TITLE_REPORT DAT\"");
 
    /***** User *****/
-   fprintf (Gbl.F.Out,"%s: ",Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
+   HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
    HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
    HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
    HTM_SPAN_End ();
@@ -314,10 +314,10 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    if (CurrentTimeUTC)
      {
       HTM_BR ();
-      fprintf (Gbl.F.Out,"%s: ",Txt_Date);
+      HTM_TxtColonNBSP (Txt_Date);
       HTM_SPAN_Begin ("class=\"DAT_N\"");
-      fprintf (Gbl.F.Out,"%s %s UTC",CurrentTimeUTC->StrDate,
-	                             CurrentTimeUTC->StrTime);
+      HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
+	                    CurrentTimeUTC->StrTime);
       HTM_SPAN_End ();
      }
 
@@ -651,9 +651,9 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNumToFile (Gbl.F.Rep,
-	                    (float) Report->UsrFigures.NumClicks /
-			    (float) Report->UsrFigures.NumDays);
+	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
+	                           (double) Report->UsrFigures.NumClicks /
+			           (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -686,9 +686,9 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNumToFile (Gbl.F.Rep,
-	                    (float) Report->UsrFigures.NumFileViews /
-			    (float) Report->UsrFigures.NumDays);
+	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
+	                           (double) Report->UsrFigures.NumFileViews /
+			           (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -707,9 +707,9 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNumToFile (Gbl.F.Rep,
-	                    (float) Report->UsrFigures.NumForPst /
-			    (float) Report->UsrFigures.NumDays);
+	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
+	                           (double) Report->UsrFigures.NumForPst /
+			           (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -728,9 +728,9 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNumToFile (Gbl.F.Rep,
-	                    (float) Report->UsrFigures.NumMsgSnt /
-			    (float) Report->UsrFigures.NumDays);
+	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
+	                           (double) Report->UsrFigures.NumMsgSnt /
+			           (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -1364,7 +1364,8 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
    if (HitsNum)
      {
       /***** Draw bar with a with proportional to the number of hits *****/
-      BarWidth = (unsigned) ((((float) HitsNum * (float) MaxBarWidth) / (float) HitsMax) + 0.5);
+      BarWidth = (unsigned) ((((double) HitsNum * (double) MaxBarWidth) /
+	                       (double) HitsMax) + 0.5);
       if (BarWidth)
 	{
          fprintf (Gbl.F.Rep,"<strong>");
@@ -1377,7 +1378,7 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
 
       /***** Write the number of hits *****/
       fprintf (Gbl.F.Rep,"&nbsp;");
-      Str_WriteFloatNumToFile (Gbl.F.Rep,HitsNum);
+      Str_WriteDoubleNumToFile (Gbl.F.Rep,HitsNum);
      }
   }
 

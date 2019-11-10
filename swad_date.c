@@ -351,9 +351,9 @@ void Dat_ShowClientLocalTime (void)
 
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"secondsSince1970UTC = %ld;\n"
-                      "writeLocalClock();\n",
-            (long) Gbl.StartExecutionTimeUTC);
+   HTM_TxtF ("secondsSince1970UTC = %ld;\n"
+             "writeLocalClock();\n",
+             (long) Gbl.StartExecutionTimeUTC);
    HTM_SCRIPT_End ();
   }
 
@@ -721,18 +721,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"setLocalDateTimeFormFromUTC('%s',%ld);\n"
-	              "adjustDateForm('%s');",
-	    Id,(long) TimeUTC,Id);
+   HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"
+	     "adjustDateForm('%s');",
+	     Id,(long) TimeUTC,Id);
    switch (SetHMS)
      {
       case Dat_HMS_TO_000000:
 	 // Set HH:MM:SS form selectors to 00:00:00
-	 fprintf (Gbl.F.Out,"setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
+	 HTM_TxtF ("setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
 	 break;
       case Dat_HMS_TO_235959:
 	 // Set HH:MM:SS form selectors to 23:59:59
-	 fprintf (Gbl.F.Out,"setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
+	 HTM_TxtF ("setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
 	 break;
       default:
 	 break;
@@ -761,8 +761,8 @@ void Dat_PutHiddenParBrowserTZDiff (void)
    Par_PutHiddenParamString ("BrowserTZName","BrowserTZName","");
    Par_PutHiddenParamLong ("BrowserTZDiff","BrowserTZDiff",0);
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"setTZname('BrowserTZName');"
-		      "setTZ('BrowserTZDiff');");
+   HTM_TxtF ("setTZname('BrowserTZName');"
+	     "setTZ('BrowserTZDiff');");
    HTM_SCRIPT_End ();
   }
 
@@ -1580,27 +1580,27 @@ void Dat_WriteScriptMonths (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    unsigned NumMonth;
 
-   fprintf (Gbl.F.Out,"\tvar Months = [");
+   HTM_Txt ("\tvar Months = [");
    for (NumMonth = 0;
 	NumMonth < 12;
 	NumMonth++)
      {
       if (NumMonth)
-	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL[NumMonth]);
+	 HTM_Comma ();
+      HTM_TxtF ("'%s'",Txt_MONTHS_SMALL[NumMonth]);
      }
-   fprintf (Gbl.F.Out,"];\n");
+   HTM_Txt ("];\n");
 
-   fprintf (Gbl.F.Out,"\tvar MonthsShort = [");
+   HTM_Txt ("\tvar MonthsShort = [");
    for (NumMonth = 0;
 	NumMonth < 12;
 	NumMonth++)
      {
       if (NumMonth)
-	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
+	 HTM_Comma ();
+      HTM_TxtF ("'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
      }
-   fprintf (Gbl.F.Out,"];\n");
+   HTM_Txt ("];\n");
   }
 
 /*****************************************************************************/
@@ -1614,17 +1614,11 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 
    Seconds %= 60;
    if (Hours)
-      fprintf (Gbl.F.Out,"%ld:%02ld'%02ld&quot;",
-               (long) Hours,
-               (long) Minutes,
-               (long) Seconds);
+      HTM_TxtF ("%ld:%02ld'%02ld&quot;",(long) Hours,(long) Minutes,(long) Seconds);
    else if (Minutes)
-      fprintf (Gbl.F.Out,"%ld'%02ld&quot;",
-               (long) Minutes,
-               (long) Seconds);
+      HTM_TxtF ("%ld'%02ld&quot;",(long) Minutes,(long) Seconds);
    else
-      fprintf (Gbl.F.Out,"%ld&quot;",
-               (long) Seconds);
+      HTM_TxtF ("%ld&quot;",(long) Seconds);
   }
 
 /*****************************************************************************/
@@ -1634,17 +1628,11 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 void Dat_WriteHoursMinutesSeconds (struct Time *Time)
   {
    if (Time->Hour)
-      fprintf (Gbl.F.Out,"%u:%02u'%02u&quot;",
-               Time->Hour,
-               Time->Minute,
-               Time->Second);
+      HTM_TxtF ("%u:%02u'%02u&quot;",Time->Hour,Time->Minute,Time->Second);
    else if (Time->Minute)
-      fprintf (Gbl.F.Out,"%u'%02u&quot;",
-               Time->Minute,
-               Time->Second);
+      HTM_TxtF ("%u'%02u&quot;",Time->Minute,Time->Second);
    else
-      fprintf (Gbl.F.Out,"%u&quot;",
-               Time->Second);
+      HTM_TxtF ("%u&quot;",Time->Second);
   }
 
 /*****************************************************************************/
@@ -1665,14 +1653,14 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC('%s',%ld,%u,'%s','%s',%s,%s,0x%x);",
-	    Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
-	    WriteToday ? Txt_Today :
-		         "",
-	    WriteDateOnSameDay ? "true" :
-		                 "false",
-	    WriteWeekDay ? "true" :
-		           "false",
-	    WriteHMS);
+   HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s','%s',%s,%s,0x%x);",
+	     Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
+	     WriteToday ? Txt_Today :
+		          "",
+	     WriteDateOnSameDay ? "true" :
+		                  "false",
+	     WriteWeekDay ? "true" :
+		            "false",
+	     WriteHMS);
    HTM_SCRIPT_End ();
   }

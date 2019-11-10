@@ -100,7 +100,7 @@ void Tab_DrawTabs (void)
 
    /***** Start tabs container *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<nav id=\"tabs\">");
+   HTM_Txt ("<nav id=\"tabs\">");
    HTM_UL_Begin ("class=\"TAB_LIST\"");
 
    /***** Draw the tabs *****/
@@ -153,7 +153,7 @@ void Tab_DrawTabs (void)
 
    /***** End tabs container *****/
    HTM_UL_End ();
-   fprintf (Gbl.F.Out,"</nav>");
+   HTM_Txt ("</nav>");
    HTM_DIV_End ();
   }
 

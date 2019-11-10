@@ -228,7 +228,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to see institutions of this country *****/
       Frm_StartFormGoTo (ActSeeIns);
@@ -245,7 +245,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select countries *****/
       Frm_StartFormGoTo (ActSeeCty);
@@ -262,7 +262,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to see centres of this institution *****/
       Frm_StartFormGoTo (ActSeeCtr);
@@ -279,7 +279,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select institutions *****/
       Frm_StartFormGoTo (ActSeeIns);
@@ -295,7 +295,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Hidden institution *****/
       HTM_Txt (Txt_Institution);
@@ -308,7 +308,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to see degrees of this centre *****/
       Frm_StartFormGoTo (ActSeeDeg);
@@ -325,7 +325,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select centres *****/
       Frm_StartFormGoTo (ActSeeCtr);
@@ -341,7 +341,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Hidden centre *****/
       HTM_Txt (Txt_Centre);
@@ -354,7 +354,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to see courses of this degree *****/
       Frm_StartFormGoTo (ActSeeCrs);
@@ -371,7 +371,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select degrees *****/
       Frm_StartFormGoTo (ActSeeDeg);
@@ -387,7 +387,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
       /***** Hidden degree *****/
       HTM_Txt (Txt_Degree);
@@ -402,7 +402,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 		  ClassTxt);
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
+   HTM_Txt ("&nbsp;&gt;&nbsp;");
 
    HTM_DIV_End ();
   }
@@ -416,8 +416,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    extern const char *The_ClassCourse[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
 
-   fprintf (Gbl.F.Out,"<h1 id=\"main_title\" class=\"%s\">",
-	    The_ClassCourse[Gbl.Prefs.Theme]);
+   HTM_TxtF ("<h1 id=\"main_title\" class=\"%s\">",The_ClassCourse[Gbl.Prefs.Theme]);
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
@@ -458,7 +457,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-      fprintf (Gbl.F.Out," / ");	// To separate
+      HTM_Txt (" / ");	// To separate
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("id=\"big_short_name\"");
@@ -471,21 +470,21 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
      }
    else	// No country specified ==> home page
      {
-      HTM_DIV_Begin ("id=\"big_full_name\"");
-      fprintf (Gbl.F.Out,"%s: %s",	// Full name
-	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+      HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
+      HTM_TxtColonNBSP (Cfg_PLATFORM_SHORT_NAME);
+      HTM_Txt (Txt_TAGLINE);
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-      fprintf (Gbl.F.Out," / ");	// To separate
+      HTM_Txt (" / ");	// To separate
       HTM_DIV_End ();
 
-      HTM_DIV_Begin ("id=\"big_short_name\"");
-      HTM_Txt (Cfg_PLATFORM_SHORT_NAME);// Short name
+      HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
+      HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
       HTM_DIV_End ();
      }
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"</h1>");
+   HTM_TxtF ("</h1>");
   }
 
 /*****************************************************************************/

@@ -475,8 +475,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
 unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles);
 unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
-float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
-float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
+double Usr_GetNumCrssPerUsr (Rol_Role_t Role);
+double Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
 bool Usr_CheckIfUsrBanned (long UsrCod);
 void Usr_RemoveUsrFromUsrBanned (long UsrCod);

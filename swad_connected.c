@@ -169,10 +169,9 @@ void Con_ShowGlobalConnectedUsrs (void)
    Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 
    /* Write total number of sessions */
-   fprintf (Gbl.F.Out,"%u %s",
-            Gbl.Session.NumSessions,
-            (Gbl.Session.NumSessions == 1) ? Txt_session :
-        	                             Txt_sessions);
+   HTM_UnsignedNBSPTxt (Gbl.Session.NumSessions,
+                         Gbl.Session.NumSessions == 1 ? Txt_session :
+        	                                        Txt_sessions);
    /* End link to view more details about connected users */
    Frm_LinkFormEnd ();
    Frm_EndForm ();
@@ -182,10 +181,10 @@ void Con_ShowGlobalConnectedUsrs (void)
       HTM_DIV_Begin ("class=\"CONNECTED_LIST\"");
 
       /***** Write total number of users *****/
-      fprintf (Gbl.F.Out,"%u %s:",
-	       NumUsrsTotal,
-	       (NumUsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-				     Txt_users[Usr_SEX_UNKNOWN]);
+      HTM_TxtF ("%u %s:",
+	         NumUsrsTotal,
+	         (NumUsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
+				       Txt_users[Usr_SEX_UNKNOWN]);
 
       /***** Write total number of users with each role *****/
       for (Role  = Rol_GST, NumUsrsTotal = 0;
@@ -208,10 +207,9 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
    if (UsrsTotal)
      {
       HTM_BR ();
-      fprintf (Gbl.F.Out,"%u %s",
-	       UsrsTotal,
-	       (UsrsTotal == 1) ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
-				  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+      HTM_UnsignedNBSPTxt (UsrsTotal,
+			    UsrsTotal == 1 ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
+					     Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
      }
   }
 
@@ -269,7 +267,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    HTM_DIV_Begin ("class=\"CONNECTED_TXT\"");
-   fprintf (Gbl.F.Out,"%u %s ",Usrs.NumUsrs,Txt_from);
+   HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
 
    /* Put form to change scope */
    Frm_StartForm (ActLstCon);
@@ -321,7 +319,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   fprintf (Gbl.F.Out,"%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+   HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -355,10 +353,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
      {
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-      fprintf (Gbl.F.Out,"%u %s",
-	       Usrs.NumUsrs,
-	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
-				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+      HTM_UnsignedNBSPTxt (Usrs.NumUsrs,
+			    Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+					        Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
       HTM_TD_End ();
       HTM_TR_End ();
 
@@ -390,10 +387,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
-      fprintf (Gbl.F.Out,"%u %s",
-	       NumUsrsThisRole,
-	       (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-					Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+      HTM_UnsignedNBSPTxt (NumUsrsThisRole,
+			    NumUsrsThisRole == 1 ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
+						   Txt_ROLES_PLURAL_abc[Role][UsrSex]);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1101,12 +1097,11 @@ void Con_WriteScriptClockConnected (void)
   {
    unsigned NumUsr;
 
-   fprintf (Gbl.F.Out,"\tNumUsrsCon = %u;\n",
-            Gbl.Usrs.Connected.NumUsrsToList);
+   HTM_TxtF ("\tNumUsrsCon = %u;\n",Gbl.Usrs.Connected.NumUsrsToList);
    for (NumUsr = 0;
 	NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	NumUsr++)
-      fprintf (Gbl.F.Out,"\tListSeconds[%u] = %ld;\n",
-               NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
-   fprintf (Gbl.F.Out,"\twriteClockConnected();\n");
+      HTM_TxtF ("\tListSeconds[%u] = %ld;\n",
+                NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
+   HTM_Txt ("\twriteClockConnected();\n");
   }

@@ -33,6 +33,7 @@
 #include "swad_action.h"
 #include "swad_config.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_setting.h"
@@ -1043,21 +1044,21 @@ void Par_ReplaceCommaBySeparatorMultiple (char *Str)
 
 void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
-         fprintf (Gbl.F.Out," id=\"%s\"",Id);
-   fprintf (Gbl.F.Out," name=\"%s\" value=\"%u\" />",ParamName,Value);
+         HTM_TxtF (" id=\"%s\"",Id);
+   HTM_TxtF (" name=\"%s\" value=\"%u\" />",ParamName,Value);
   }
 
 void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
-         fprintf (Gbl.F.Out," id=\"%s\"",Id);
-   fprintf (Gbl.F.Out," name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
-	    ParamName,Value);
+         HTM_TxtF (" id=\"%s\"",Id);
+   HTM_TxtF (" name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
+	     ParamName,Value);
   }
 
 /*****************************************************************************/
@@ -1066,11 +1067,11 @@ void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,un
 
 void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
-         fprintf (Gbl.F.Out," id=\"%s\"",Id);
-   fprintf (Gbl.F.Out," name=\"%s\" value=\"%ld\" />",ParamName,Value);
+         HTM_TxtF (" id=\"%s\"",Id);
+   HTM_TxtF (" name=\"%s\" value=\"%ld\" />",ParamName,Value);
   }
 
 /*****************************************************************************/
@@ -1079,8 +1080,8 @@ void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value)
 
 void Par_PutHiddenParamChar (const char *ParamName,char Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"%s\" value=\"%c\" />",
-            ParamName,Value);
+   HTM_TxtF ("<input type=\"hidden\" name=\"%s\" value=\"%c\" />",
+             ParamName,Value);
   }
 
 /*****************************************************************************/
@@ -1089,9 +1090,9 @@ void Par_PutHiddenParamChar (const char *ParamName,char Value)
 
 void Par_PutHiddenParamString (const char *Id,const char *ParamName,const char *Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
-         fprintf (Gbl.F.Out," id=\"%s\"",Id);
-   fprintf (Gbl.F.Out," name=\"%s\" value=\"%s\" />",ParamName,Value);
+         HTM_TxtF (" id=\"%s\"",Id);
+   HTM_TxtF (" name=\"%s\" value=\"%s\" />",ParamName,Value);
   }

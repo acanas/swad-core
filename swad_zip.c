@@ -573,7 +573,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                 URL,FileName);
    HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
 	    "class=\"ICO40x40\"");
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileName);
+   HTM_NBSPTxtNBSP (FileName);
    Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
    HTM_A_End ();
    HTM_TD_End ();
@@ -608,8 +608,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    if (UncompressedSize)
      {
       Fil_WriteFileSizeFull ((double) UncompressedSize,FileSizeStr);
-      fprintf (Gbl.F.Out," (%s %s)",
-               FileSizeStr,Txt_FILE_uncompressed);
+      HTM_TxtF (" (%s %s)",FileSizeStr,Txt_FILE_uncompressed);
      }
    HTM_TD_End ();
 

@@ -125,10 +125,10 @@ struct Tst_Stats
    unsigned NumCoursesWithQuestions;
    unsigned NumCoursesWithPluggableQuestions;
    unsigned NumQsts;
-   float AvgQstsPerCourse;
+   double AvgQstsPerCourse;
    unsigned long NumHits;
-   float AvgHitsPerCourse;
-   float AvgHitsPerQuestion;
+   double AvgHitsPerCourse;
+   double AvgHitsPerQuestion;
    double TotalScore;
    double AvgScorePerQuestion;
   };

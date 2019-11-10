@@ -207,7 +207,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Compute stats for anywhere, degree or course? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 	               1 << Hie_INS |
@@ -222,7 +222,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Statistic);
+   HTM_TxtColonNBSP (Txt_Statistic);
    HTM_SELECT_Begin (false,
 		     "name=\"FigureType\"");
    for (FigureType = (Fig_FigureType_t) 0;
@@ -404,8 +404,8 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumUsrs;
-   float NumCrssPerUsr;
-   float NumUsrsPerCrs;
+   double NumCrssPerUsr;
+   double NumUsrsPerCrs;
    char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RB" :
 	                             "DAT RB";
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
@@ -436,11 +436,11 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%.2f",NumCrssPerUsr);
+   HTM_Double (NumCrssPerUsr);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%.2f",NumUsrsPerCrs);
+   HTM_Double (NumUsrsPerCrs);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -467,11 +467,11 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%.2f",0.0);
+   HTM_Double (0.0);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   fprintf (Gbl.F.Out,"%.2f",0.0);
+   HTM_Double (0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -977,7 +977,8 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
 
    /***** Write text *****/
    HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
-   fprintf (Gbl.F.Out,"%s%s",Text1,Text2);
+   HTM_Txt (Text1);
+   HTM_Txt (Text2);
    HTM_TD_End ();
 
    /***** Write number of countries *****/
@@ -996,9 +997,9 @@ static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
    /***** Write number *****/
    HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
    if (Num >= 0)
-      fprintf (Gbl.F.Out,"%d",Num);
+      HTM_Unsigned ((unsigned) Num);
    else		// < 0 ==> do not show number
-      fprintf (Gbl.F.Out,"-");
+      HTM_Txt ("-");
    HTM_TD_End ();
   }
 
@@ -2497,19 +2498,19 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    HTM_TH (1,1,"LM",Txt_File_zones);
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Folders);
+   HTM_TxtF ("%s/",Txt_Folders);
    HTM_BR ();
    HTM_Txt (Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Files);
+   HTM_TxtF ("%s/",Txt_Files);
    HTM_BR ();
    HTM_Txt (Txt_course);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Size);
+   HTM_TxtF ("%s/",Txt_Size);
    HTM_BR ();
    HTM_Txt (Txt_course);
    HTM_TH_End ();
@@ -2530,19 +2531,19 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    HTM_TH (1,1,"LM",Txt_File_zones);
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Folders);
+   HTM_TxtF ("%s/",Txt_Folders);
    HTM_BR ();
    HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Files);
+   HTM_TxtF ("%s/",Txt_Files);
    HTM_BR ();
    HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s/",Txt_Size);
+   HTM_TxtF ("%s/",Txt_Size);
    HTM_BR ();
    HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
    HTM_TH_End ();
@@ -2946,12 +2947,13 @@ static void Fig_GetAndShowAssignmentsStats (void)
    unsigned NumAssignments;
    unsigned NumNotif;
    unsigned NumCoursesWithAssignments = 0;
-   float NumAssignmentsPerCourse = 0.0;
+   double NumAssignmentsPerCourse = 0.0;
 
    /***** Get the number of assignments from this location *****/
    if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
       if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
-         NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
+         NumAssignmentsPerCourse = (double) NumAssignments /
+	                           (double) NumCoursesWithAssignments;
 
    /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,
@@ -2979,7 +2981,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumAssignmentsPerCourse);
+   HTM_Double (NumAssignmentsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3005,12 +3007,13 @@ static void Fig_GetAndShowProjectsStats (void)
    extern const char *Txt_Average_number_BR_of_projects_BR_per_course;
    unsigned NumProjects;
    unsigned NumCoursesWithProjects = 0;
-   float NumProjectsPerCourse = 0.0;
+   double NumProjectsPerCourse = 0.0;
 
    /***** Get the number of projects from this location *****/
    if ((NumProjects = Prj_GetNumProjects (Gbl.Scope.Current)))
       if ((NumCoursesWithProjects = Prj_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
-         NumProjectsPerCourse = (float) NumProjects / (float) NumCoursesWithProjects;
+         NumProjectsPerCourse = (double) NumProjects /
+	                        (double) NumCoursesWithProjects;
 
    /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_PROJECTS],NULL,
@@ -3037,7 +3040,7 @@ static void Fig_GetAndShowProjectsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumProjectsPerCourse);
+   HTM_Double (NumProjectsPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3106,11 +3109,11 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%u (%.1f%%)",
-               Stats.NumCoursesWithPluggableQuestions,
-               Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-        	                               (float) Stats.NumCoursesWithQuestions :
-        	                               0.0);
+      HTM_TxtF ("%u (%.1lf%%)",
+                Stats.NumCoursesWithPluggableQuestions,
+                Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+        	                                (double) Stats.NumCoursesWithQuestions :
+        	                                0.0);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3118,7 +3121,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
+      HTM_Double (Stats.AvgQstsPerCourse);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3126,15 +3129,15 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
+      HTM_Double (Stats.AvgHitsPerCourse);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
+      HTM_Double (Stats.AvgHitsPerQuestion);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
+      HTM_Double (Stats.AvgScorePerQuestion);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3155,11 +3158,11 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%u (%.1f%%)",
-            Stats.NumCoursesWithPluggableQuestions,
-            Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-        	                            (float) Stats.NumCoursesWithQuestions :
-        	                            0.0);
+   HTM_TxtF ("%u (%.1f%%)",
+             Stats.NumCoursesWithPluggableQuestions,
+             Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+        	                             (double) Stats.NumCoursesWithQuestions :
+        	                             0.0);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3167,7 +3170,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
+   HTM_Double (Stats.AvgQstsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3175,15 +3178,15 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
+   HTM_Double (Stats.AvgHitsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
+   HTM_Double (Stats.AvgHitsPerQuestion);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
+   HTM_Double (Stats.AvgScorePerQuestion);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3205,12 +3208,12 @@ static void Fig_GetAndShowGamesStats (void)
    extern const char *Txt_Average_number_BR_of_games_BR_per_course;
    unsigned NumGames;
    unsigned NumCoursesWithGames = 0;
-   float NumGamesPerCourse = 0.0;
+   double NumGamesPerCourse = 0.0;
 
    /***** Get the number of games from this location *****/
    if ((NumGames = Gam_GetNumGames (Gbl.Scope.Current)))
       if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
-         NumGamesPerCourse = (float) NumGames / (float) NumCoursesWithGames;
+         NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
 
    /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_GAMES],NULL,
@@ -3237,7 +3240,7 @@ static void Fig_GetAndShowGamesStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumGamesPerCourse);
+   HTM_Double (NumGamesPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3413,15 +3416,14 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
-        	              0.0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+	                             (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%.2f",
-               NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
-        	         0.0);
+      HTM_Double (NumUsrs ? (double) NumSocialNotes / (double) NumUsrs :
+        	            0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3534,15 +3536,14 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%5.2f%%",
-	    NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
-			   0.0);
+   HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+	                          (double) NumUsrsTotal :
+			          0.0);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",
-	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
-		      0.0);
+   HTM_Double (NumUsrs ? (double) NumSocialNotes / (double) NumUsrs :
+		         0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3575,7 +3576,7 @@ static void Fig_GetAndShowFollowStats (void)
    unsigned Fol;
    unsigned NumUsrsTotal;
    unsigned NumUsrs;
-   float Average;
+   double Average;
 
    /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_FOLLOW],NULL,
@@ -3700,10 +3701,9 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0.0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3813,7 +3813,7 @@ static void Fig_GetAndShowFollowStats (void)
 
       /***** Get average *****/
       row = mysql_fetch_row (mysql_res);
-      Average = Str_GetFloatNumFromStr (row[0]);
+      Average = Str_GetDoubleNumFromStr (row[0]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -3826,7 +3826,7 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f",Average);
+      HTM_Double (Average);
       HTM_TD_End ();
 
       HTM_TD_Empty (1);
@@ -4045,9 +4045,9 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    unsigned NumThreads;
    unsigned NumPosts;
    unsigned NumUsrsToBeNotifiedByEMail;
-   float NumThrsPerForum;
-   float NumPostsPerThread;
-   float NumPostsPerForum;
+   double NumThrsPerForum;
+   double NumPostsPerThread;
+   double NumPostsPerForum;
    char *ForumName;
 
    /***** Compute number of forums, number of threads and number of posts *****/
@@ -4056,11 +4056,11 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    NumPosts   = For_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
-   NumThrsPerForum = (NumForums ? (float) NumThreads / (float) NumForums :
+   NumThrsPerForum = (NumForums ? (double) NumThreads / (double) NumForums :
 	                          0.0);
-   NumPostsPerThread = (NumThreads ? (float) NumPosts / (float) NumThreads :
+   NumPostsPerThread = (NumThreads ? (double) NumPosts / (double) NumThreads :
 	                             0.0);
-   NumPostsPerForum = (NumForums ? (float) NumPosts / (float) NumForums :
+   NumPostsPerForum = (NumForums ? (double) NumPosts / (double) NumForums :
 	                           0.0);
 
    /***** Update total stats *****/
@@ -4081,7 +4081,8 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
-   fprintf (Gbl.F.Out,"%s%s",ForumName1,ForumName2);
+   HTM_Txt (ForumName1);
+   HTM_Txt (ForumName2);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
@@ -4101,15 +4102,15 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
+   HTM_Double (NumThrsPerForum);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
+   HTM_Double (NumPostsPerThread);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
+   HTM_Double (NumPostsPerForum);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4122,17 +4123,20 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
   {
    extern const char *Txt_Total;
-   float NumThrsPerForum;
-   float NumPostsPerThread;
-   float NumPostsPerForum;
+   double NumThrsPerForum;
+   double NumPostsPerThread;
+   double NumPostsPerForum;
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
-   NumThrsPerForum  = (FiguresForum->NumForums ? (float) FiguresForum->NumThreads / (float) FiguresForum->NumForums :
-	                                       0.0);
-   NumPostsPerThread = (FiguresForum->NumThreads ? (float) FiguresForum->NumPosts / (float) FiguresForum->NumThreads :
+   NumThrsPerForum  = (FiguresForum->NumForums ? (double) FiguresForum->NumThreads /
+	                                         (double) FiguresForum->NumForums :
 	                                         0.0);
-   NumPostsPerForum = (FiguresForum->NumForums ? (float) FiguresForum->NumPosts / (float) FiguresForum->NumForums :
-	                                       0.0);
+   NumPostsPerThread = (FiguresForum->NumThreads ? (double) FiguresForum->NumPosts /
+	                                           (double) FiguresForum->NumThreads :
+	                                           0.0);
+   NumPostsPerForum = (FiguresForum->NumForums ? (double) FiguresForum->NumPosts /
+	                                         (double) FiguresForum->NumForums :
+	                                         0.0);
 
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
@@ -4161,15 +4165,15 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
+   HTM_Double (NumThrsPerForum);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
+   HTM_Double (NumPostsPerThread);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
+   HTM_Double (NumPostsPerForum);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4352,10 +4356,9 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[NotifyEvent] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0.0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4381,10 +4384,9 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%5.2f%%",
-            NumUsrsTotal ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
-        	           (float) NumUsrsTotal :
-        	           0.0);
+   HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+        	                  (double) NumUsrsTotal :
+        	                  0.0);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -4540,7 +4542,7 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"-");
+   HTM_Txt ("-");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4589,14 +4591,15 @@ static void Fig_GetAndShowSurveysStats (void)
    unsigned NumSurveys;
    unsigned NumNotif;
    unsigned NumCoursesWithSurveys = 0;
-   float NumSurveysPerCourse = 0.0;
-   float NumQstsPerSurvey = 0.0;
+   double NumSurveysPerCourse = 0.0;
+   double NumQstsPerSurvey = 0.0;
 
    /***** Get the number of surveys and the average number of questions per survey from this location *****/
    if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
       if ((NumCoursesWithSurveys = Svy_GetNumCoursesWithCrsSurveys (Gbl.Scope.Current)) != 0)
-         NumSurveysPerCourse = (float) NumSurveys / (float) NumCoursesWithSurveys;
+         NumSurveysPerCourse = (double) NumSurveys /
+	                       (double) NumCoursesWithSurveys;
       NumQstsPerSurvey = Svy_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
      }
 
@@ -4627,11 +4630,11 @@ static void Fig_GetAndShowSurveysStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumSurveysPerCourse);
+   HTM_Double (NumSurveysPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"%.2f",NumQstsPerSurvey);
+   HTM_Double (NumQstsPerSurvey);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -4737,10 +4740,9 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%5.2f%%",
-		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
-				 (float) NumUsrsTotal :
-				 0);
+	 HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
+				        (double) NumUsrsTotal :
+				        0.0);
 	 HTM_TD_End ();
 
          HTM_TR_End ();
@@ -4824,10 +4826,9 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -4900,10 +4901,9 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -4989,10 +4989,9 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%5.2f%%",
-		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
-				 (float) NumUsrsTotal :
-				 0);
+	 HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
+				        (double) NumUsrsTotal :
+				         0.0);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -5064,10 +5063,9 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-	       NumUsrsTotal ? (float) NumUsrs[Format] * 100.0 /
-			      (float) NumUsrsTotal :
-			      0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
+			             (double) NumUsrsTotal :
+			             0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -5146,10 +5144,9 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -5222,10 +5219,9 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -5304,10 +5300,9 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -5385,10 +5380,9 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%5.2f%%",
-               NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
+        	                     (double) NumUsrsTotal :
+        	                     0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();

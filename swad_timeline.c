@@ -1401,7 +1401,7 @@ static void TL_PutLinkToViewNewPublications (void)
    HTM_A_Begin ("href=\"\" class=\"%s\""
                 " onclick=\"moveNewTimelineToTimeline();return false;\"",
 	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s (",Txt_See_new_activity);
+   HTM_TxtF ("%s (",Txt_See_new_activity);
    HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
    HTM_Unsigned (0);
    HTM_SPAN_End ();
@@ -1581,21 +1581,24 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShrtName);
+		  HTM_TxtColonNBSP (Txt_Institution);
+		  HTM_Txt (Ins.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShrtName);
+		  HTM_TxtColonNBSP (Txt_Centre);
+		  HTM_Txt (Ctr.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShrtName);
+		  HTM_TxtColonNBSP (Txt_Degree);
+		  HTM_Txt (Deg.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -1604,13 +1607,15 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
+		  HTM_TxtColonNBSP (Txt_Course);
+		  HTM_Txt (Crs.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
+		  HTM_TxtColonNBSP (Txt_Forum);
+		  HTM_Txt (ForumName);
 		  HTM_DIV_End ();
 		  break;
 	       default:
@@ -1727,7 +1732,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 Frm_EndForm ();
 
 	 /***** Show action made *****/
-         fprintf (Gbl.F.Out," %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
+         HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
 
          HTM_DIV_End ();
 	}
@@ -1765,7 +1770,7 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
-   fprintf (Gbl.F.Out," @%s",UsrDat->Nickname);
+   HTM_TxtF (" @%s",UsrDat->Nickname);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -1949,7 +1954,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
       HTM_Txt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
-         fprintf (Gbl.F.Out," (%s)",Txt_not_available);
+         HTM_TxtF (" (%s)",Txt_not_available);
       HTM_DIV_End ();
      }
    else			// Not inside another form
@@ -2331,7 +2336,7 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   fprintf (Gbl.F.Out," @%s",Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_TxtF (" @%s",Gbl.Usrs.Me.UsrDat.Nickname);
    HTM_SPAN_End ();
 
    HTM_DIV_End ();
@@ -2389,11 +2394,9 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
 
    /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<button type=\"submit\""
-	              " class=\"BT_SUBMIT_INLINE BT_CREATE\">"
-		      "%s"
-		      "</button>",
-	    Txt_Post);
+   HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CREATE",false);
+   HTM_Txt (Txt_Post);
+   HTM_BUTTON_End ();
 
    /***** End hidden div *****/
    HTM_DIV_End ();
@@ -2843,7 +2846,7 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
-   fprintf (Gbl.F.Out," @%s",UsrDat->Nickname);
+   HTM_TxtF (" @%s",UsrDat->Nickname);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -4610,7 +4613,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
 static void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of users who have marked this note as favourite *****/
-   fprintf (Gbl.F.Out,"&nbsp;%u",NumUsrs);
+   HTM_NBSPUnsigned (NumUsrs);
   }
 
 static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,

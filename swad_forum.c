@@ -1202,10 +1202,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
       if (Subject[0])
          HTM_Txt (Subject);
       else
-         fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
+         HTM_TxtF ("[%s]",Txt_no_subject);
      }
    else
-      fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
+      HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -1448,10 +1448,8 @@ static void For_WriteNumberOfPosts (long UsrCod)
 			     (unsigned) Gbl.Forum.ForumSelected.Type,SubQuery);
 
    /***** Write number of threads and number of posts *****/
-   if (NumPsts == 1)
-      fprintf (Gbl.F.Out,"[1 %s]",Txt_FORUM_post);
-   else
-      fprintf (Gbl.F.Out,"[%u %s]",NumPsts,Txt_FORUM_posts);
+   HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
+	                                      Txt_FORUM_posts);
 
    /***** End table cell *****/
    HTM_DIV_End ();
@@ -2362,26 +2360,24 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
    extern const char *Txt_with_new_posts;
 
    /***** Write number of threads and number of posts *****/
-   fprintf (Gbl.F.Out," [");
+   HTM_Txt (" [");
    if (NumThrs == 1)
      {
-      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
+      HTM_UnsignedNBSPTxt (1,Txt_thread);
       if (NumThrsWithNewPosts)
-         fprintf (Gbl.F.Out,", 1 %s",Txt_with_new_posts);
-      fprintf (Gbl.F.Out,"; ");
-      if (NumPosts == 1)
-         fprintf (Gbl.F.Out,"1 %s",Txt_FORUM_post);
-      else
-         fprintf (Gbl.F.Out,"%u %s",NumPosts,Txt_FORUM_posts);
+         HTM_TxtF (", 1 %s",Txt_with_new_posts);
+      HTM_Txt ("; ");
+      HTM_UnsignedNBSPTxt (NumPosts,NumPosts == 1 ? Txt_FORUM_post :
+                                                    Txt_FORUM_posts);
      }
    else
      {
-      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
+      HTM_UnsignedNBSPTxt (NumThrs,Txt_threads);
       if (NumThrsWithNewPosts)
-         fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-      fprintf (Gbl.F.Out,"; %u %s",NumPosts,Txt_FORUM_posts);
+         HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
+      HTM_TxtF ("; %u %s",NumPosts,Txt_FORUM_posts);
      }
-   fprintf (Gbl.F.Out,"]");
+   HTM_Txt ("]");
   }
 
 /*****************************************************************************/
@@ -2395,14 +2391,14 @@ static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts
    extern const char *Txt_with_new_posts;
 
    /***** Write number of threads and number of posts *****/
-   fprintf (Gbl.F.Out," [");
+   HTM_Txt (" [");
    if (NumThrs == 1)
-      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
+      HTM_UnsignedNBSPTxt (1,Txt_thread);
    else
-      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
+      HTM_UnsignedNBSPTxt (NumThrs,Txt_threads);
    if (NumThrsWithNewPosts)
-      fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-   fprintf (Gbl.F.Out,"]");
+      HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
+   HTM_Txt ("]");
   }
 
 /*****************************************************************************/
@@ -3475,22 +3471,22 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Write number of posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumPosts);
+      HTM_UnsignedNBSP (Thr.NumPosts);
       HTM_TD_End ();
 
       /***** Write number of new posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumUnreadPosts);
+      HTM_UnsignedNBSP (Thr.NumUnreadPosts);
       HTM_TD_End ();
 
       /***** Write number of users who have write posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumWriters);
+      HTM_UnsignedNBSP (Thr.NumWriters);
       HTM_TD_End ();
 
       /***** Write number of users who have read this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumReaders);
+      HTM_UnsignedNBSP (Thr.NumReaders);
       HTM_TD_End ();
 
       HTM_TR_End ();

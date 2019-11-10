@@ -460,7 +460,8 @@ void Gam_ShowOneGame (long GamCod,
    /* Number of questions */
    HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   fprintf (Gbl.F.Out,"%s: %u",Txt_No_of_questions,Game.NumQsts);
+   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_Unsigned (Game.NumQsts);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -478,7 +479,7 @@ void Gam_ShowOneGame (long GamCod,
                        Game.Hidden ? "ASG_TITLE_LIGHT" :
                 	             "ASG_TITLE",NULL);
    if (ShowOnlyThisGame)
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Matches);
+      HTM_TxtColonNBSP (Txt_Matches);
    HTM_Unsigned (Game.NumMchs);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
@@ -1745,7 +1746,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Write question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%ld&nbsp;",Gbl.Test.QstCod);
+      HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
       HTM_TD_End ();
 
       /* Write the question tags */
@@ -2410,11 +2411,11 @@ unsigned Gam_GetNumGames (Hie_Level_t Scope)
 /************* Get average number of questions per course game ***************/
 /*****************************************************************************/
 
-float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
+double Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   float NumQstsPerGame;
+   double NumQstsPerGame;
 
    /***** Get number of questions per game from database *****/
    switch (Scope)
@@ -2494,7 +2495,7 @@ float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
-   NumQstsPerGame = Str_GetFloatNumFromStr (row[0]);
+   NumQstsPerGame = Str_GetDoubleNumFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

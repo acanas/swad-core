@@ -379,7 +379,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       FuncParams ();
    HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_nick_email_or_ID);
+   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
    HTM_LABEL_End ();
 
    HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",false,
@@ -804,8 +804,7 @@ void Enr_AskRemoveOldUsrs (void)
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s&nbsp;",
-            Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
+   HTM_TxtNBSP (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
    HTM_SELECT_Begin (false,
 		     "name=\"Months\"");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -816,8 +815,8 @@ void Enr_AskRemoveOldUsrs (void)
 		  "%u",Months);
    HTM_SELECT_End ();
    HTM_NBSP ();
-   fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
-            Cfg_PLATFORM_SHORT_NAME);
+   HTM_TxtF (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
+             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
@@ -1588,12 +1587,11 @@ static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
    extern const char *Txt_Register_USER_in_the_course_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
-				       Txt_Modify_user_in_the_course_X) :
-			      (ItsMe ? Txt_Register_me_in_X :
-				       Txt_Register_USER_in_the_course_X),
-	    Gbl.Hierarchy.Crs.ShrtName);
+   HTM_TxtF (UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
+				        Txt_Modify_user_in_the_course_X) :
+			       (ItsMe ? Txt_Register_me_in_X :
+				        Txt_Register_USER_in_the_course_X),
+	     Gbl.Hierarchy.Crs.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1606,9 +1604,8 @@ static void Enr_PutActionRegOneDegAdm (bool *OptionChecked)
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_DEGREE_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    Txt_Register_USER_as_an_administrator_of_the_degree_X,
-	    Gbl.Hierarchy.Deg.ShrtName);
+   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
+	     Gbl.Hierarchy.Deg.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1621,9 +1618,8 @@ static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked)
    extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_CENTRE_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    Txt_Register_USER_as_an_administrator_of_the_centre_X,
-	    Gbl.Hierarchy.Ctr.ShrtName);
+   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_centre_X,
+	     Gbl.Hierarchy.Ctr.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1636,8 +1632,8 @@ static void Enr_PutActionRegOneInsAdm (bool *OptionChecked)
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_INSTITUTION_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,Txt_Register_USER_as_an_administrator_of_the_institution_X,
-	    Gbl.Hierarchy.Ins.ShrtName);
+   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
+	     Gbl.Hierarchy.Ins.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1664,10 +1660,9 @@ static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_USER_from_THE_COURSE_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_USR_FROM_CRS,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
-		    Txt_Remove_USER_from_THE_COURSE_X,
-	    Gbl.Hierarchy.Crs.ShrtName);
+   HTM_TxtF (ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
+		     Txt_Remove_USER_from_THE_COURSE_X,
+	     Gbl.Hierarchy.Crs.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1681,10 +1676,9 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-		    Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-	    Gbl.Hierarchy.Deg.ShrtName);
+   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
+		     Txt_Remove_USER_as_an_administrator_of_the_degree_X,
+	     Gbl.Hierarchy.Deg.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1698,10 +1692,9 @@ static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_CENTRE_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
-		    Txt_Remove_USER_as_an_administrator_of_the_centre_X,
-	    Gbl.Hierarchy.Ctr.ShrtName);
+   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
+		     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
+	     Gbl.Hierarchy.Ctr.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -1715,10 +1708,9 @@ static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
 
    Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
-   fprintf (Gbl.F.Out,
-	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-		    Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-	    Gbl.Hierarchy.Ins.ShrtName);
+   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
+		     Txt_Remove_USER_as_an_administrator_of_the_institution_X,
+	     Gbl.Hierarchy.Ins.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
 
@@ -2848,7 +2840,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	      Txt_Go_to_X,
 		      Crs.FullName);
             Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-            fprintf (Gbl.F.Out,"%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
+            HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             Frm_LinkFormEnd ();
             Frm_EndForm ();
             HTM_TD_End ();

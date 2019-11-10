@@ -659,10 +659,9 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
                       UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
                                                           "USR_ID_NC",
                       Gbl.Title);
-      fprintf (Gbl.F.Out,"%s%s",
-               UsrDat->IDs.List[NumID].ID,
-	       UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
-		                                   "");
+      HTM_Txt (UsrDat->IDs.List[NumID].ID);
+      HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
+		                                    "");
       HTM_SPAN_End ();
       if (NumID == UsrDat->IDs.Num - 1)
 	{

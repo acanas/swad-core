@@ -129,7 +129,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                                                ActChgNumRowHeaCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Header);
+      HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Header);
@@ -148,7 +148,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	                                       ActChgNumRowFooCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Footer);
+      HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Footer);
@@ -661,7 +661,7 @@ void Mrk_ShowMyMarks (void)
              Instead, delegate to the meta directive
              (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
              that is typically included in the HTML document header. */
-         fprintf (Gbl.F.Out,"Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
+         HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
          Gbl.Layout.HTMLStartWritten = true;
 
          /* Copy HTML to output file */

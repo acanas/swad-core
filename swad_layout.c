@@ -133,7 +133,7 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Action.UsesAJAX)
      // Don't generate a full HTML page, only the content of a DIV or similar
      {
-      fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
+      HTM_Txt ("Content-Type: text/html; charset=windows-1252\r\n\r\n");
       Gbl.Layout.WritingHTMLStart = false;
       Gbl.Layout.HTMLStartWritten = Gbl.Layout.DivsEndWritten = true;
       return;
@@ -157,57 +157,52 @@ void Lay_WriteStartOfPage (void)
    /***** Write start of HTML code *****/
    // WARNING: It is necessary to comment the line 'AddDefaultCharset UTF8'
    // in httpd.conf to enable meta tag
-   fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
-                      "<head>\n"
-                      "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
-                      "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
-                      "<meta name=\"keywords\" content=\""
-                      "%s,"
-                      "SWAD,"
-                      "shared workspace at a distance,"
-                      "educational platform,"
-                      "sistema web de apoyo a la docencia,"
-                      "plataforma educativa,"
-                      "campus virtual,"
-                      "SWADroid,"
-                      "LMS,"
-                      "Learning Management System\" />\n",
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Cfg_PLATFORM_SHORT_NAME);
+   HTM_TxtF ("<html lang=\"%s\">\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   HTM_Txt ("<head>\n"
+            "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
+            "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
+            "<meta name=\"keywords\" content=\"");
+   HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+   HTM_Txt (","
+            "SWAD,"
+            "shared workspace at a distance,"
+            "educational platform,"
+            "sistema web de apoyo a la docencia,"
+            "plataforma educativa,"
+            "campus virtual,"
+            "SWADroid,"
+            "LMS,"
+            "Learning Management System\" />\n");
 
    /* Viewport (used for responsive design) */
-   fprintf (Gbl.F.Out,"<meta name=\"viewport\""
-	              " content=\"width=device-width, initial-scale=1.0\">\n");
+   HTM_Txt ("<meta name=\"viewport\""
+	    " content=\"width=device-width, initial-scale=1.0\">\n");
 
    /* Title */
    Lay_WritePageTitle ();
 
    /* Canonical URL */
-   fprintf (Gbl.F.Out,"<link rel=\"canonical\""
-	              " href=\"%s\" />\n",
-	    Cfg_URL_SWAD_CGI);
+   HTM_TxtF ("<link rel=\"canonical\" href=\"%s\" />\n",Cfg_URL_SWAD_CGI);
 
    /* Favicon */
-   fprintf (Gbl.F.Out,"<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n"
-                      "<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\" />\n",
-	    Cfg_URL_ICON_PUBLIC,
-	    Cfg_URL_ICON_PUBLIC);
+   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n",
+	     Cfg_URL_ICON_PUBLIC);
+   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\" />\n",
+	     Cfg_URL_ICON_PUBLIC);
 
    /* Style sheet for SWAD */
-   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
-	              " href=\"%s/%s\""
-	              " type=\"text/css\" />\n",
-            Cfg_URL_SWAD_PUBLIC,CSS_FILE);
+   HTM_TxtF ("<link rel=\"stylesheet\" href=\"%s/%s\" type=\"text/css\" />\n",
+             Cfg_URL_SWAD_PUBLIC,CSS_FILE);
 
    /* Style sheets for Font Awesome */
-   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
-	              " href=\"%s/fontawesome/css/fontawesome.css\""
-	              " type=\"text/css\" />\n",
-            Cfg_URL_SWAD_PUBLIC);
-   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
-	              " href=\"%s/fontawesome/css/solid.css\""
-	              " type=\"text/css\" />\n",
-            Cfg_URL_SWAD_PUBLIC);
+   HTM_TxtF ("<link rel=\"stylesheet\""
+	     " href=\"%s/fontawesome/css/fontawesome.css\""
+	     " type=\"text/css\" />\n",
+             Cfg_URL_SWAD_PUBLIC);
+   HTM_TxtF ("<link rel=\"stylesheet\""
+	     " href=\"%s/fontawesome/css/solid.css\""
+	     " type=\"text/css\" />\n",
+             Cfg_URL_SWAD_PUBLIC);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
    // The public directory dropzone must hold:
@@ -238,10 +233,10 @@ void Lay_WriteStartOfPage (void)
       case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
-	 fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
-			    " href=\"%s/dropzone/css/dropzone.css\""
-			    " type=\"text/css\" />\n",
-		  Cfg_URL_SWAD_PUBLIC);
+	 HTM_TxtF ("<link rel=\"stylesheet\""
+		   " href=\"%s/dropzone/css/dropzone.css\""
+		   " type=\"text/css\" />\n",
+		   Cfg_URL_SWAD_PUBLIC);
 	 break;
       default:
 	 break;
@@ -261,14 +256,14 @@ void Lay_WriteStartOfPage (void)
    /* Write initial scripts depending on the action */
    Lay_WriteScripts ();
 
-   fprintf (Gbl.F.Out,"</head>\n");
+   HTM_Txt ("</head>\n");
 
    /***** HTML body *****/
    BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
+	 HTM_Txt ("<body onload=\"init();\">\n");
 	 HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
 	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
 	          "class=\"IMG_USR\" id=\"zoomImg\"");
@@ -278,13 +273,13 @@ void Lay_WriteStartOfPage (void)
 	 break;
       case Act_BRW_NEW_TAB:
       case Act_BRW_2ND_TAB:
-	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
+	 HTM_Txt ("<body onload=\"init();\">\n");
 	 Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
 	 Gbl.Layout.DivsEndWritten   = true;
 	 return;
       default:
-	 fprintf (Gbl.F.Out,"<body>\n");
+	 HTM_Txt ("<body>\n");
 	 Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
 	 Gbl.Layout.DivsEndWritten   = true;
@@ -306,9 +301,9 @@ void Lay_WriteStartOfPage (void)
    /* Left column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
      {
-      fprintf (Gbl.F.Out,"<aside id=\"left_col\">");
+      HTM_Txt ("<aside id=\"left_col\">");
       Lay_ShowLeftColumn ();
-      fprintf (Gbl.F.Out,"</aside>");
+      HTM_Txt ("</aside>");
      }
 
    /* Right column */
@@ -318,9 +313,9 @@ void Lay_WriteStartOfPage (void)
    // is that central column may hold a lot of content drawn slowly.
    if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
      {
-      fprintf (Gbl.F.Out,"<aside id=\"right_col\">");
+      HTM_Txt ("<aside id=\"right_col\">");
       Lay_ShowRightColumn ();
-      fprintf (Gbl.F.Out,"</aside>");
+      HTM_Txt ("</aside>");
      }
 
    /* Central (main) column */
@@ -423,22 +418,21 @@ static void Lay_WritePageTitle (void)
   {
    extern const char *Txt_TAGLINE;
 
-   fprintf (Gbl.F.Out,"<title>");
+   HTM_Txt ("<title>");
 
    if (Gbl.Params.GetMethod && Gbl.Hierarchy.Deg.DegCod > 0)
      {
-      fprintf (Gbl.F.Out,"%s &gt; %s",
-	       Cfg_PLATFORM_SHORT_NAME,
-	       Gbl.Hierarchy.Deg.ShrtName);
+      HTM_TxtF ("%s &gt; %s",Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
       if (Gbl.Hierarchy.Level == Hie_CRS)
-         fprintf (Gbl.F.Out," &gt; %s",
-                  Gbl.Hierarchy.Crs.ShrtName);
+         HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
      }
    else
-      fprintf (Gbl.F.Out,"%s: %s",
-	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+     {
+      HTM_TxtColonNBSP (Cfg_PLATFORM_SHORT_NAME);
+      HTM_Txt (Txt_TAGLINE);
+     }
 
-   fprintf (Gbl.F.Out,"</title>\n");
+   HTM_Txt ("</title>\n");
   }
 
 /*****************************************************************************/
@@ -449,25 +443,25 @@ static void Lay_WriteRedirToMyLangOnLogIn (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
-	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Act_GetActCod (ActLogInLan),
-	    Gbl.Session.Id);
+   HTM_TxtF ("<meta http-equiv=\"refresh\""
+	     " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	     Act_GetActCod (ActLogInLan),
+	     Gbl.Session.Id);
   }
 
 static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
-	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Act_GetActCod (ActLogInUsrAgdLan),
-	    Gbl.Session.Id,
-	    Gbl.Usrs.Other.UsrDat.Nickname);
+   HTM_TxtF ("<meta http-equiv=\"refresh\""
+	     " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	     Act_GetActCod (ActLogInUsrAgdLan),
+	     Gbl.Session.Id,
+	     Gbl.Usrs.Other.UsrDat.Nickname);
   }
 
 /*****************************************************************************/
@@ -516,52 +510,52 @@ static void Lay_WriteScripts (void)
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
 
-      fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
+      HTM_Txt ("\tvar DAYS_CAPS = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
 	   DayOfWeek++)
 	{
 	 if (DayOfWeek)
-	    fprintf (Gbl.F.Out,",");
-	 fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+	    HTM_Comma ();
+	 HTM_TxtF ("'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
 	}
-      fprintf (Gbl.F.Out,"];\n");
+      HTM_Txt ("];\n");
 
-      fprintf (Gbl.F.Out,"	var DAYS = [");
+      HTM_Txt ("\tvar DAYS = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
 	   DayOfWeek++)
 	{
 	 if (DayOfWeek)
-	    fprintf (Gbl.F.Out,",");
-	 fprintf (Gbl.F.Out,"'%s'",Txt_DAYS_SMALL[DayOfWeek]);
+	    HTM_Comma ();
+	 HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
 	}
-      fprintf (Gbl.F.Out,"];\n");
+      HTM_Txt ("];\n");
 
-      fprintf (Gbl.F.Out,"	var STR_EXAM = '");
-      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
-      fprintf (Gbl.F.Out,"';\n");
+      HTM_Txt ("\tvar STR_EXAM = '");
+      HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
+      HTM_Txt ("';\n");
 
-      fprintf (Gbl.F.Out,"	var Hlds = [];\n");
+      HTM_Txt ("\tvar Hlds = [];\n");
       for (NumHld = 0;
 	   NumHld < Gbl.Hlds.Num;
 	   NumHld++)
-	 fprintf (Gbl.F.Out,"	Hlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
-		  Gbl.Hlds.Lst[NumHld].PlcCod,
-		  (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
-		  Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
-		  Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
-		  Gbl.Hlds.Lst[NumHld].Name);
+	 HTM_TxtF ("\tHlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
+		   Gbl.Hlds.Lst[NumHld].PlcCod,
+		   (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
+		   Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
+		   Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
+		   Gbl.Hlds.Lst[NumHld].Name);
 
-      fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
+      HTM_TxtF ("\var LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
 	   NumExamAnnouncement < Gbl.ExamAnns.NumExaAnns;
 	   NumExamAnnouncement++)
-	 fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExaCod,
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
+	 HTM_TxtF ("LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
+		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExaCod,
+		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
+		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
+		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
 
       HTM_SCRIPT_End ();
 
@@ -708,36 +702,35 @@ static void Lay_WriteScriptInit (void)
    Dat_WriteScriptMonths ();
 
    if (RefreshNewTimeline)	// Refresh new timeline via AJAX
-      fprintf (Gbl.F.Out,"\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
+      HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
    else if (RefreshMatchStd)	// Refresh match via AJAX
-      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
+      HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
    else if (RefreshMatchTch)	// Refresh match via AJAX
-      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
+      HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
    /***** Function init () ******/
-   fprintf (Gbl.F.Out,"function init(){\n");
+   HTM_Txt ("function init(){\n");
 
-   fprintf (Gbl.F.Out,"\tActionAJAX = \"%s\";\n",
-            Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   HTM_TxtF ("\tActionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
    if (RefreshConnected)	// Refresh connected users via AJAX
      {
       Con_WriteScriptClockConnected ();
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshConnected()\",%lu);\n",
-	       Gbl.Usrs.Connected.TimeToRefreshInMs);
+      HTM_TxtF ("\tsetTimeout(\"refreshConnected()\",%lu);\n",
+	        Gbl.Usrs.Connected.TimeToRefreshInMs);
      }
 
    if (RefreshLastClicks)	// Refresh last clicks via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
-               Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+      HTM_TxtF ("\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
+                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    else if (RefreshMatchStd)	// Refresh match for a student via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
+      HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
    else if (RefreshMatchTch)	// Refresh match for a teacher via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
+      HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
+      HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
 
-   fprintf (Gbl.F.Out,"}\n");
+   HTM_Txt ("}\n");
 
    HTM_SCRIPT_End ();
   }
@@ -753,26 +746,26 @@ static void Lay_WriteScriptParamsAJAX (void)
 
    /***** Parameters with code of session and current course code *****/
    // Refresh parameters
-   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
-                      "var RefreshParamCrsCod = \"crs=%ld\";\n",
-	    Gbl.Session.Id,
-	    Gbl.Hierarchy.Crs.CrsCod);
+   HTM_TxtF ("var RefreshParamIdSes = \"ses=%s\";\n"
+             "var RefreshParamCrsCod = \"crs=%ld\";\n",
+	     Gbl.Session.Id,
+	     Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Parameter to refresh connected users *****/
    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       // Refresh parameter
-      fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
-	       Act_GetActCod (ActRefCon));
+      HTM_TxtF ("var RefreshParamNxtActCon = \"act=%ld\";\n",
+	        Act_GetActCod (ActRefCon));
 
    /***** Parameters related with expanding/contracting folders in file browsers *****/
    if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
       /* In all the actions related to file browsers ==>
 	 put parameters used by AJAX */
       // Refresh parameters
-      fprintf (Gbl.F.Out,"var RefreshParamExpand = \"act=%ld\";\n"
-			 "var RefreshParamContract = \"act=%ld\";\n",
-	       Act_GetActCod (Brw_GetActionExpand   ()),
-	       Act_GetActCod (Brw_GetActionContract ()));
+      HTM_TxtF ("var RefreshParamExpand = \"act=%ld\";\n"
+		"var RefreshParamContract = \"act=%ld\";\n",
+	        Act_GetActCod (Brw_GetActionExpand   ()),
+	        Act_GetActCod (Brw_GetActionContract ()));
 
    /***** Parameters related with other actions *****/
    switch (Gbl.Action.Act)
@@ -788,12 +781,12 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 /* In all the actions related to view or editing global timeline ==>
 	    put parameters used by AJAX */
 	 // Refresh parameters
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
-		  Act_GetActCod (ActRefNewSocPubGbl),
-		  Act_GetActCod (ActRefOldSocPubGbl),
-		  (unsigned) Gbl.Timeline.WhichUsrs);
+	 HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+		   "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+	           "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
+		   Act_GetActCod (ActRefNewSocPubGbl),
+		   Act_GetActCod (ActRefOldSocPubGbl),
+		   (unsigned) Gbl.Timeline.WhichUsrs);
 	 break;
       /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:
@@ -811,19 +804,19 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
 				       Gbl.Usrs.Other.UsrDat.Nickname);
 	 // Refresh parameters
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
-		  Act_GetActCod (ActRefOldSocPubUsr),
-		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
+		   Act_GetActCod (ActRefOldSocPubUsr),
+		   Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:
       case ActAnsMchQstStd:
 	 // Refresh parameters
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
-			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		  Act_GetActCod (ActRefMchStd),
-		  Gbl.Games.MchCodBeingPlayed);
+	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
+	           "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		   Act_GetActCod (ActRefMchStd),
+		   Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMch:
@@ -834,18 +827,18 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActChgNumColMch:
       case ActChgVisResMchQst:
 	 // Handle keys in keyboard/presenter
-	 fprintf (Gbl.F.Out,"document.addEventListener(\"keydown\",handleMatchKeys);\n");
+	 HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
 	 // Refresh parameters
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
-			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		  Act_GetActCod (ActRefMchTch),
-		  Gbl.Games.MchCodBeingPlayed);
+	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
+		   "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		   Act_GetActCod (ActRefMchTch),
+		   Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameter related with clicks refreshing */
       case ActLstClk:
 	 // Refresh parameter
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActLstClk = \"act=%ld\";\n",
-		  Act_GetActCod (ActRefLstClk));
+	 HTM_TxtF ("var RefreshParamNxtActLstClk = \"act=%ld\";\n",
+		   Act_GetActCod (ActRefLstClk));
 	 break;
       default:
 	 break;
@@ -865,16 +858,16 @@ static void Lay_WriteScriptCustomDropzone (void)
    // "myAwesomeDropzone" is the camelized version of the HTML element's ID
    // Add a line "forceFallback: true,\n" to test classic upload
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"Dropzone.options.myAwesomeDropzone = {\n"
-	              "maxFiles: 100,\n"
-		      "parallelUploads: 100,\n"
-		      "maxFilesize: %lu,\n"
-		      "fallback: function() {\n"
-		      "document.getElementById('dropzone-upload').style.display='none';\n"
-		      "document.getElementById('classic-upload').style.display='block';\n"
-		      "}\n"
-		      "};\n",
-            (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
+   HTM_TxtF ("Dropzone.options.myAwesomeDropzone = {\n"
+	     "maxFiles: 100,\n"
+	     "parallelUploads: 100,\n"
+	     "maxFilesize: %lu,\n"
+	     "fallback: function() {\n"
+	     "document.getElementById('dropzone-upload').style.display='none';\n"
+	     "document.getElementById('classic-upload').style.display='block';\n"
+	     "}\n"
+	     "};\n",
+             (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
    HTM_SCRIPT_End ();
   }
 
@@ -908,7 +901,7 @@ static void Lay_WritePageTopHeading (void)
       };
 
    /***** Start header *****/
-   fprintf (Gbl.F.Out,"<header>");
+   HTM_Txt ("<header>");
 
    /***** 1st. row *****/
    /* Start 1st. row */
@@ -996,7 +989,7 @@ static void Lay_WritePageTopHeading (void)
    HTM_DIV_End ();
 
    /***** End header *****/
-   fprintf (Gbl.F.Out,"</header>");
+   HTM_Txt ("</header>");
   }
 
 /*****************************************************************************/
@@ -1005,11 +998,11 @@ static void Lay_WritePageTopHeading (void)
 
 static void Lay_WriteBreadcrumb (void)
   {
-   fprintf (Gbl.F.Out,"<nav id=\"breadcrumb\">");
+   HTM_Txt ("<nav id=\"breadcrumb\">");
    Crs_PutIconToSelectMyCoursesInBreadcrumb ();
    Hie_WriteHierarchyInBreadcrumb ();
    Crs_WriteSelectorMyCoursesInBreadcrumb ();
-   fprintf (Gbl.F.Out,"</nav>");
+   HTM_Txt ("</nav>");
   }
 
 /*****************************************************************************/
@@ -1029,9 +1022,8 @@ static void Lay_WriteTitleAction (void)
 
    /***** Title *****/
    HTM_DIV_Begin ("class=\"%s\"",The_ClassTitleAction[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s &gt; %s",
-	    Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
-	    Act_GetTitleAction (Gbl.Action.Act));
+   HTM_TxtF ("%s &gt; %s",Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
+	                  Act_GetTitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
    /***** Subtitle *****/
@@ -1183,8 +1175,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+   HTM_Txt (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
@@ -1200,8 +1192,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    Frm_EndForm ();
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+   HTM_Txt (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
   }
 
 /*****************************************************************************/
@@ -1217,8 +1209,8 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+   HTM_Txt (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
@@ -1234,8 +1226,8 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
    Frm_EndForm ();
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+   HTM_TxtF (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
   }
 
 /*****************************************************************************/
@@ -1252,8 +1244,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Separator *****/
    if (Text)
-      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+      HTM_Txt (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
    Frm_StartForm (NextAction);
@@ -1288,8 +1280,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Separator *****/
    if (Text)
-      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
-				// jumping to the next line on narrow screens
+      HTM_Txt (" ");	// This space is necessary to enable
+			// jumping to the next line on narrow screens
   }
 
 /*****************************************************************************/
@@ -1382,8 +1374,8 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	       Lay_WriteAboutZone ();
 
-	    fprintf (Gbl.F.Out,"</body>\n"
-			       "</html>\n");
+	    HTM_Txt ("</body>\n"
+		     "</html>\n");
 	    Gbl.Layout.HTMLEndWritten = true;
 	   }
 	}
@@ -1408,7 +1400,7 @@ static void Lay_WriteAboutZone (void)
    extern const char *Txt_Questions_and_problems;
 
    /***** Start about zone *****/
-   fprintf (Gbl.F.Out,"<address id=\"about_zone\" class=\"ABOUT\">");
+   HTM_Txt ("<address id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
    HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
@@ -1422,7 +1414,7 @@ static void Lay_WriteAboutZone (void)
 
    /***** Questions and problems *****/
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"%s: ",Txt_Questions_and_problems);
+   HTM_TxtColonNBSP (Txt_Questions_and_problems);
    HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
 	        Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);
@@ -1434,9 +1426,12 @@ static void Lay_WriteAboutZone (void)
 
    /* About */
    HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
-   fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
+   HTM_TxtF (Txt_About_X,Log_PLATFORM_VERSION);
    HTM_A_End ();
-   fprintf (Gbl.F.Out,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+   for (size_t i = 0;
+	i < 5;
+	i++)
+      HTM_NBSP ();
 
    /* Time to generate and send page */
    Sta_WriteTimeToGenerateAndSendPage ();
@@ -1444,7 +1439,7 @@ static void Lay_WriteAboutZone (void)
    HTM_DIV_End ();
 
    /***** End about zone *****/
-   fprintf (Gbl.F.Out,"</address>");	// about_zone
+   HTM_Txt ("</address>");	// about_zone
   }
 
 /*****************************************************************************/
@@ -1488,26 +1483,26 @@ void Lay_RefreshNotifsAndConnected (void)
       Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE		,Cfg_TIME_TO_DELETE_TEST_TMP_FILES	,false);
 
    /***** Send, before the HTML, the refresh time *****/
-   fprintf (Gbl.F.Out,"%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
+   HTM_TxtF ("%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
    if (Gbl.Usrs.Me.Logged)
       Ntf_WriteNumberOfNewNtfs ();
-   fprintf (Gbl.F.Out,"|");
+   HTM_Txt ("|");
    Con_ShowGlobalConnectedUsrs ();
-   fprintf (Gbl.F.Out,"|");
+   HTM_Txt ("|");
    if (ShowConnected)
      {
       Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
-   fprintf (Gbl.F.Out,"|");
+   HTM_Txt ("|");
    if (ShowConnected)
       HTM_Unsigned (Gbl.Usrs.Connected.NumUsrsToList);
-   fprintf (Gbl.F.Out,"|");
+   HTM_Txt ("|");
    if (ShowConnected)
       for (NumUsr = 0;
 	   NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	   NumUsr++)
-         fprintf (Gbl.F.Out,"%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
+         HTM_TxtF ("%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
   }
 
 /*****************************************************************************/
@@ -1519,7 +1514,7 @@ void Lay_RefreshLastClicks (void)
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
      {
       /***** Send, before the HTML, the refresh time *****/
-      fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+      HTM_TxtF ("%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
 
       /***** Get and show last clicks *****/
       Sta_GetAndShowLastClicks ();
@@ -1537,13 +1532,13 @@ static void Lay_WriteFootFromHTMLFile (void)
    /***** Open file with the HTML page for the chat *****/
    if ((FileHTML = fopen (Cfg_PATH_AND_FILE_REL_HTML_PRIVATE,"rb")))
      {
-      fprintf (Gbl.F.Out,"<footer id=\"foot_zone\">");
+      HTM_Txt ("<footer id=\"foot_zone\">");
 
       /***** Copy HTML to output file *****/
       Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
       fclose (FileHTML);
 
-      fprintf (Gbl.F.Out,"</footer>");
+      HTM_Txt ("</footer>");
      }
   }
 
@@ -1600,7 +1595,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    if (DegCod > 0)
      {
       if (Ins.InsCod > 0)
-         fprintf (Gbl.F.Out," - ");
+         HTM_Txt (" - ");
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
                       Deg.WWW);
@@ -1729,14 +1724,14 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    extern const char *Txt_Equation_centered;
 
    HTM_DIV_Begin ("class=\"HELP_EDIT\"");
-   fprintf (Gbl.F.Out,"%s: %s"
-                      " "
-                      "%s: <code>%s</code>"
-                      " "
-                      "%s: <code>%s</code>",
-            Txt_Text,Text,
-            Txt_Inline_math,InlineMath,
-            Txt_Equation_centered,Equation);
+   HTM_TxtF ("%s: %s"
+             " "
+             "%s: <code>%s</code>"
+             " "
+             "%s: <code>%s</code>",
+             Txt_Text,Text,
+             Txt_Inline_math,InlineMath,
+             Txt_Equation_centered,Equation);
    HTM_DIV_End ();
   }
 

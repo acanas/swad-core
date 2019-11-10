@@ -1210,7 +1210,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Att_CheckIfAttEventIsAssociatedToGrps (AttCod) ? "" : " checked=\"checked\"");
-      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1517,9 +1517,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   fprintf (Gbl.F.Out,"%s: ",
-            (NumGrps == 1) ? Txt_Group  :
-                             Txt_Groups);
+   HTM_TxtColonNBSP ((NumGrps == 1) ? Txt_Group  :
+                                      Txt_Groups);
 
    /***** Write groups *****/
    if (NumGrps) // Groups found...
@@ -1533,18 +1532,18 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name (row[0]) and group name (row[1]) */
-         fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
+         HTM_TxtNBSPTxt (row[0],row[1]);
 
          /* Write the name of the classroom (row[2]) */
 	 if (row[2])	// May be NULL because of LEFT JOIN
 	    if (row[2][0])
-               fprintf (Gbl.F.Out," (%s)",row[2]);
+               HTM_TxtF (" (%s)",row[2]);
 
 	 /* Write separator */
          if (NumGrps >= 2)
            {
             if (NumGrp == NumGrps - 2)
-               fprintf (Gbl.F.Out," %s ",Txt_and);
+               HTM_TxtF (" %s ",Txt_and);
             if (NumGrps >= 3)
               if (NumGrp < NumGrps - 2)
                   HTM_Txt (", ");
@@ -1552,8 +1551,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
         }
      }
    else
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -2121,8 +2119,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		 Gbl.RowEvenOdd);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-     fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
-   fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
+      HTM_NBSPTxt (UsrDat->Surname2);
+   HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
    /***** Student's comment: write form or text */
@@ -3125,7 +3123,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
-      fprintf (Gbl.F.Out,"%u:",NumAttEvent + 1);
+      HTM_UnsignedColon (NumAttEvent + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3374,9 +3372,8 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 		 Gbl.RowEvenOdd);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-     fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
-   fprintf (Gbl.F.Out,", %s",
-	    UsrDat->FirstName);
+      HTM_NBSPTxt (UsrDat->Surname2);
+   HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
    /***** Check/cross to show if the user is present/absent *****/
@@ -3421,12 +3418,12 @@ static void Att_PutCheckOrCross (bool Present)
    if (Present)
      {
       HTM_DIV_Begin ("class=\"ATT_CHECK\" title=\"%s\"",Txt_Present);
-      fprintf (Gbl.F.Out,"&check;");
+      HTM_Txt ("&check;");
      }
    else
      {
       HTM_DIV_Begin ("class=\"ATT_CROSS\" title=\"%s\"",Txt_Absent);
-      fprintf (Gbl.F.Out,"&cross;");
+      HTM_Txt ("&cross;");
      }
    HTM_DIV_End ();
   }
@@ -3503,7 +3500,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 		 UsrDat->Accepted ? "DAT_N" :
 				    "DAT",
 		 Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%u:",NumUsr);
+   HTM_UnsignedColon (NumUsr);
    HTM_TD_End ();
 
    /***** Show student's photo *****/
@@ -3531,8 +3528,8 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 				    "DAT_SMALL");
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
-   fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
+      HTM_NBSPTxt (UsrDat->Surname2);
+   HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3566,7 +3563,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 		       Present ? "DAT_GREEN" :
 				 "DAT_RED",
 		       Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%u:",NumAttEvent + 1);
+	 HTM_UnsignedColon (NumAttEvent + 1);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);

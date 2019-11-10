@@ -150,7 +150,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    /***** Form to request user's ID for possible account already created *****/
    Frm_StartForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_ID);
+   HTM_TxtColonNBSP (Txt_ID);
    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",false,
 		   "size=\"18\" required=\"required\"");
    HTM_LABEL_End ();
@@ -283,13 +283,22 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
    /***** Write user's ID and name *****/
    HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s: %s",Txt_ID,ID);
+   HTM_TxtColonNBSP (Txt_ID);
+   HTM_Txt (ID);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s: ",Txt_Name);
+   HTM_TxtColonNBSP (Txt_Name);
    if (UsrDat->FullName[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FullName);
+     {
+      HTM_STRONG_Begin ();
+      HTM_Txt (UsrDat->FullName);
+      HTM_STRONG_End ();
+     }
    else
-      fprintf (Gbl.F.Out,"<em>%s</em>",Txt_yet_unnamed);
+     {
+      HTM_EM_Begin ();
+      HTM_Txt (Txt_yet_unnamed);
+      HTM_EM_End ();
+     }
    HTM_TD_End ();
 
    /***** Button to login with this account *****/

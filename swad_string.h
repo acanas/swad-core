@@ -92,10 +92,10 @@ char *Str_ConvertToLowerText (char *Str);
 char Str_ConvertToUpperLetter (char Ch);
 char Str_ConvertToLowerLetter (char Ch);
 
-void Str_WriteFloatNumToFile (FILE *FileDst,float Number);
-void Str_FloatNumToStr (char **Str,float Number);
+void Str_WriteDoubleNumToFile (FILE *FileDst,double Number);
+void Str_DoubleNumToStr (char **Str,double Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
-float Str_GetFloatNumFromStr (const char *Str);
+double Str_GetDoubleNumFromStr (const char *Str);
 void Str_SetDecimalPointToUS (void);
 void Str_SetDecimalPointToLocal (void);
 

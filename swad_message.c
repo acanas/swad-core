@@ -506,7 +506,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 						// and there's no list of explicit recipients,
 						// write @nickname of original sender
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
-         fprintf (Gbl.F.Out,"@%s",Nickname);
+         HTM_TxtF ("@%s",Nickname);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -576,7 +576,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 
       /* Write subject */
       if (!SubjectAndContentComeFromForm)
-	 fprintf (Gbl.F.Out,"Re: ");
+	 HTM_Txt ("Re: ");
       HTM_Txt (Gbl.Msg.Subject);
 
       HTM_TEXTAREA_End ();
@@ -602,11 +602,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
          if we don't put the initial '\n' ==> the form will be sent starting
          by "Lorem", without the white line */
-      fprintf (Gbl.F.Out,"\n");
+      HTM_Txt ("\n");
 
       if (!SubjectAndContentComeFromForm)
-	 fprintf (Gbl.F.Out,"\n\n----- %s -----\n",
-		  Txt_Original_message);
+	 HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
 
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
      }
@@ -638,7 +637,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
          if we don't put the initial '\n' ==> the form will be sent starting
          by "Lorem", without the white line */
-      fprintf (Gbl.F.Out,"\n%s",Content);
+      HTM_TxtF ("\n%s",Content);
      }
 
    HTM_TEXTAREA_End ();
@@ -2615,7 +2614,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtNBSP (TxtSelector[Gbl.Msg.TypeOfMessages]);
    HTM_SELECT_Begin (false,
 		     "name=\"FilterCrsCod\"");
    HTM_OPTION (HTM_Type_STRING,"",
@@ -2657,7 +2656,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtColonNBSP (TxtFromTo[Gbl.Msg.TypeOfMessages]);
    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 		     Gbl.Msg.FilterFromTo,
 	             "size=\"20\"");
@@ -2667,7 +2666,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter message content *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
+   HTM_TxtColonNBSP (Txt_MSG_Content);
    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 		     Gbl.Msg.FilterContent,
 	             "size=\"20\"");
@@ -3021,7 +3020,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "From:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_From);
+      HTM_TxtColonNBSP (Txt_MSG_From);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3034,7 +3033,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_To);
+      HTM_TxtColonNBSP (Txt_MSG_To);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3047,7 +3046,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "Content:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
+      HTM_TxtColonNBSP (Txt_MSG_Content);
       HTM_TD_End ();
 
       /***** Initialize image *****/
@@ -3133,7 +3132,7 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
    HTM_TD_Begin ("class=\"%s CT\" style=\"width:45px;\"",
 		 NewMsg ? "MSG_TIT_BG_NEW" :
 			  "MSG_TIT_BG");
-   fprintf (Gbl.F.Out,"%lu:",MsgNum);
+   HTM_TxtF ("%lu:",MsgNum);
    HTM_TD_End ();
   }
 
@@ -3167,7 +3166,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    if (Subject[0])
       HTM_Txt (Subject);
    else
-      fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
+      HTM_TxtF ("[%s]",Txt_no_subject);
 
    /***** End form to expand the message *****/
    Frm_LinkFormEnd ();
@@ -3271,7 +3270,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-            fprintf (Gbl.F.Out,"(%s)",Txt_from_this_course);
+            HTM_TxtF ("(%s)",Txt_from_this_course);
             HTM_DIV_End ();
            }
          else	// Message sent from another course
@@ -3296,7 +3295,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-      fprintf (Gbl.F.Out,"(%s)",Txt_no_course_of_origin);
+      HTM_TxtF ("(%s)",Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
 
@@ -3388,8 +3387,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 	}
      }
    else
-      fprintf (Gbl.F.Out,"[%s]",
-               Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+      HTM_TxtF ("[%s]",
+                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3536,7 +3535,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          if (UsrValid)
             HTM_Txt (UsrDat.FullName);
          else
-            fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
+            HTM_TxtF ("[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -3549,10 +3548,10 @@ static void Msg_WriteMsgTo (long MsgCod)
          HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
-	 fprintf (Gbl.F.Out,"[%u %s]",
-                  NumRecipientsUnknown,
-                  (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
-                                                Txt_unknown_recipients);
+	 HTM_TxtF ("[%u %s]",
+                   NumRecipientsUnknown,
+                   (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
+                                                 Txt_unknown_recipients);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3570,8 +3569,8 @@ static void Msg_WriteMsgTo (long MsgCod)
          Msg_PutHiddenParamsOneMsg ();
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
          Frm_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
-         fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
-                  NumRecipientsKnown - NumRecipientsToShow);
+         HTM_TxtF (Txt_and_X_other_recipients,
+                   NumRecipientsKnown - NumRecipientsToShow);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_TD_End ();

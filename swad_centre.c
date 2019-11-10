@@ -592,10 +592,10 @@ static void Ctr_Configuration (bool PrintView)
 	        Cfg_URL_SWAD_CGI,
 	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	        Gbl.Hierarchy.Ctr.CtrCod);
-   fprintf (Gbl.F.Out,"%s/%s?ctr=%ld",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_TxtF ("%s/%s?ctr=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Ctr.CtrCod);
    HTM_A_End ();
    HTM_TD_End ();
 
@@ -938,7 +938,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
-      fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
+      HTM_Txt (Txt_CENTRE_STATUS[StatusTxt]);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2297,8 +2297,8 @@ void Ctr_RequestPhoto (void)
 
    /***** Upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_File_with_the_photo);
-   HTM_INPUT_FILE ("image/*",true);
+   HTM_TxtColonNBSP (Txt_File_with_the_photo);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 
    /***** End box *****/
@@ -2605,7 +2605,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
    HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
@@ -2642,7 +2642,7 @@ static void Ctr_PutHeadCentresForEdition (void)
    HTM_TH (1,1,"RM",Txt_Users);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
    HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();

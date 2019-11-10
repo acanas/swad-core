@@ -32,6 +32,7 @@
 
 #include "swad_changelog.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/
@@ -421,20 +422,19 @@ void XML_PrintTree (struct XMLElement *ParentElem)
       for (i = 1;
 	   i < Level;
 	   i++)
-         fprintf (Gbl.F.Out,"   ");
-      fprintf (Gbl.F.Out,"&lt;%s",
-               ParentElem->TagName ? ParentElem->TagName :
-        	                     "");
+         HTM_Txt ("   ");
+      HTM_TxtF ("&lt;%s",ParentElem->TagName ? ParentElem->TagName :
+        	                               "");
 
       /* Print attributes */
       for (Attribute = ParentElem->FirstAttribute;
 	   Attribute != NULL;
 	   Attribute = Attribute->Next)
-         fprintf (Gbl.F.Out," %s=&quot;%s&quot;",
-                  Attribute->AttributeName,
-                  Attribute->Content);
+         HTM_TxtF (" %s=&quot;%s&quot;",
+                   Attribute->AttributeName,
+                   Attribute->Content);
 
-      fprintf (Gbl.F.Out,"&gt;\n");
+      HTM_Txt ("&gt;\n");
 
       /***** Print content *****/
       if (ParentElem->Content)
@@ -442,8 +442,8 @@ void XML_PrintTree (struct XMLElement *ParentElem)
          for (i = 1;
               i < Level;
               i++)
-            fprintf (Gbl.F.Out,"   ");
-         fprintf (Gbl.F.Out,"%s\n",ParentElem->Content);
+            HTM_Txt ("   ");
+         HTM_TxtF ("%s\n",ParentElem->Content);
         }
      }
 
@@ -462,10 +462,9 @@ void XML_PrintTree (struct XMLElement *ParentElem)
       for (i = 1;
 	   i < Level;
 	   i++)
-         fprintf (Gbl.F.Out,"   ");
-      fprintf (Gbl.F.Out,"&lt;/%s&gt;\n",
-               ParentElem->TagName ? ParentElem->TagName :
-        	                     "");
+         HTM_Txt ("   ");
+      HTM_TxtF ("&lt;/%s&gt;\n",ParentElem->TagName ? ParentElem->TagName :
+        	                                      "");
      }
 
    Level--;

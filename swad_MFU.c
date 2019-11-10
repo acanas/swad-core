@@ -248,7 +248,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
-         fprintf (Gbl.F.Out," %s",TabMenuStr);
+         HTM_NBSPTxt (TabMenuStr);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
@@ -280,7 +280,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    HTM_DIV_Begin ("id=\"MFU_actions\"");
    Frm_StartForm (ActMFUAct);
    Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
-   fprintf (Gbl.F.Out," %s",Txt_Frequent_ACTIONS);
+   HTM_NBSPTxt (Txt_Frequent_ACTIONS);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -309,7 +309,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
-	 fprintf (Gbl.F.Out," %s",MenuStr);
+	 HTM_NBSPTxt (MenuStr);
 	 Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
@@ -334,7 +334,7 @@ void MFU_UpdateMFUActions (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   float Score;
+   double Score;
    long ActCod;
    Act_Action_t SuperAction;
 
@@ -358,7 +358,7 @@ void MFU_UpdateMFUActions (void)
 		       Gbl.Usrs.Me.UsrDat.UsrCod,ActCod))
      {
       row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%f",&Score) != 1)
+      if (sscanf (row[0],"%lf",&Score) != 1)
          Lay_ShowErrorAndExit ("Error when getting score for current action.");
       Score *= MFU_INCREASE_FACTOR;
       if (Score > MFU_MAX_SCORE)

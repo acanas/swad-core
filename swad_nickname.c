@@ -323,7 +323,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	}
 
       /* Nickname */
-      fprintf (Gbl.F.Out,"@%s",row[0]);
+      HTM_TxtF ("@%s",row[0]);
 
       /* Link to QR code */
       if (NumNick == 1 && UsrDat->Nickname[0])

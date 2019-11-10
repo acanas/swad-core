@@ -119,6 +119,6 @@ void Svy_ReceiveSurveyAnswers (void);
 
 unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Level_t Scope);
 unsigned Svy_GetNumCrsSurveys (Hie_Level_t Scope,unsigned *NumNotif);
-float Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope);
+double Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope);
 
 #endif

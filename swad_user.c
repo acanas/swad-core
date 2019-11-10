@@ -900,7 +900,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      HTM_NBSPTxt (UsrDat->Surname2);
   }
 
 /*****************************************************************************/
@@ -2807,7 +2807,7 @@ void Usr_WriteLoggedUsrHead (void)
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,":&nbsp;");
+      HTM_TxtNBSP (":");
      }
    else
      {
@@ -3499,7 +3499,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    if (Rol_GetNumAvailableRoles () == 1)
      {
       HTM_SPAN_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Role);
+      HTM_TxtColonNBSP (Txt_Role);
       HTM_SPAN_End ();
 
       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
@@ -3509,7 +3509,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    else
      {
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Role);
+      HTM_TxtColonNBSP (Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
       HTM_LABEL_End ();
      }
@@ -6135,7 +6135,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
                        Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
                                                         NULL);
    Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-   fprintf (Gbl.F.Out," %s",Txt_USR_LIST_TYPES[ListType]);
+   HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
    Frm_LinkFormEnd ();
 
    /***** End form *****/
@@ -6876,9 +6876,8 @@ void Usr_ListAllDataStds (void)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {
                   HTM_TH_Begin (1,1,"LM LIGHT_BLUE");
-                  fprintf (Gbl.F.Out,"%s %s",
-                           Txt_Group,
-                           Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+                  HTM_TxtNBSPTxt (Txt_Group,
+                                   Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                   HTM_TH_End ();
         	 }
 
@@ -6906,8 +6905,8 @@ void Usr_ListAllDataStds (void)
                  NumField++)
               {
                HTM_TH_Begin (1,1,"LM VERY_LIGHT_BLUE");
-               fprintf (Gbl.F.Out,"(%s)",
-                        Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+               HTM_TxtF ("(%s)",
+                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
                HTM_TH_End ();
               }
            }
@@ -7322,7 +7321,7 @@ void Usr_ListDataAdms (void)
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -7789,7 +7788,7 @@ void Usr_SeeGuests (void)
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
+      HTM_TxtColonNBSP (Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       HTM_LABEL_End ();
       Frm_EndForm ();
@@ -7934,7 +7933,7 @@ void Usr_SeeStudents (void)
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
+	 HTM_TxtColonNBSP (Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 HTM_LABEL_End ();
 	 Frm_EndForm ();
@@ -8107,7 +8106,7 @@ void Usr_SeeTeachers (void)
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -9273,11 +9272,11 @@ unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
+double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   float NumCrssPerUsr;
+   double NumCrssPerUsr;
 
    /***** Get number of courses per user from database *****/
    switch (Gbl.Scope.Current)
@@ -9406,7 +9405,7 @@ float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
-   NumCrssPerUsr = Str_GetFloatNumFromStr (row[0]);
+   NumCrssPerUsr = Str_GetDoubleNumFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -9418,11 +9417,11 @@ float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
+double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   float NumUsrsPerCrs;
+   double NumUsrsPerCrs;
 
    /***** Get number of users per course from database *****/
    switch (Gbl.Scope.Current)
@@ -9546,13 +9545,13 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	 switch (Role)
 	   {
 	    case Rol_UNK:
-	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Any user
+	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Any user
 	    case Rol_STD:
-	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_STD];	// Students
+	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_STD];	// Students
 	    case Rol_NET:
-	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
+	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
 	    case Rol_TCH:
-	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Teachers
+	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Teachers
 	    default:
 	       Rol_WrongRoleExit ();
 	       break;	// Not reached
@@ -9565,7 +9564,7 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
    /***** Get number of users *****/
    row = mysql_fetch_row (mysql_res);
-   NumUsrsPerCrs = Str_GetFloatNumFromStr (row[0]);
+   NumUsrsPerCrs = Str_GetDoubleNumFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -9713,10 +9712,10 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      HTM_NBSPTxt (UsrDat->Surname2);
    if (UsrDat->FirstName[0])
      {
-      fprintf (Gbl.F.Out,",");
+      HTM_Comma ();
       HTM_BR ();
       HTM_Txt (UsrDat->FirstName);
      }

@@ -142,8 +142,8 @@ void TsI_ShowFormImportQstsFromXML (void)
    /***** Write a form to import questions *****/
    Frm_StartForm (ActImpTstQst);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_XML_file);
-   HTM_INPUT_FILE (".xml",true);
+   HTM_TxtColonNBSP (Txt_XML_file);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",true,NULL);
    HTM_LABEL_End ();
    Frm_EndForm ();
 
@@ -1011,7 +1011,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    /***** Write number of question *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    if (!QuestionExists)
-      fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
+      HTM_UnsignedNBSP (++NumNonExistingQst);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
@@ -1027,7 +1027,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-	 fprintf (Gbl.F.Out,"&nbsp;&#8226;&nbsp;");
+	 HTM_NBSPTxtNBSP ("&#8226;");
 	 HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"%s LT\"",ClassData);
@@ -1041,7 +1041,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    else	// no tags for this question
      {
       HTM_SPAN_Begin ("class=\"%s\"",ClassData);
-      fprintf (Gbl.F.Out,"&nbsp;(%s)&nbsp;",Txt_no_tags);
+      HTM_TxtF ("&nbsp;(%s)&nbsp;",Txt_no_tags);
       HTM_SPAN_End ();
      }
 
@@ -1049,7 +1049,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question type *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   HTM_TxtNBSP (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    HTM_TD_End ();
 
    /***** Write if shuffle is enabled *****/
@@ -1071,14 +1071,14 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
      {
       case Tst_ANS_INT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-         fprintf (Gbl.F.Out,"(%ld)",Gbl.Test.Answer.Integer);
+         HTM_TxtF ("(%ld)",Gbl.Test.Answer.Integer);
          HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-         fprintf (Gbl.F.Out,"([%lg; %lg])",
-		  Gbl.Test.Answer.FloatingPoint[0],
-		  Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_TxtF ("([%lg; %lg])",
+		   Gbl.Test.Answer.FloatingPoint[0],
+		   Gbl.Test.Answer.FloatingPoint[1]);
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
@@ -1135,7 +1135,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Write the number of option */
             HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-            fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
+            HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
             HTM_TD_End ();
 
             /* Write the text and the feedback of the answer */

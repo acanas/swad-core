@@ -341,7 +341,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH_Begin (1,1,"RT");
    HTM_Txt (Txt_Score);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%s<br />",Txt_out_of_PART_OF_A_SCORE);
+   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
    HTM_BR ();
    HTM_Unsigned (Tst_SCORE_MAX);
    HTM_TH_End ();
@@ -484,25 +484,23 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    fprintf (Gbl.F.Out,"%.2lf",
-		     ScoreInThisResult);
+	    HTM_Double (ScoreInThisResult);
 	 HTM_TD_End ();
 
          /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
-			                   0.0);
+	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult /
+		                              (double) NumQstsInThisResult :
+			                      0.0);
 	 HTM_TD_End ();
 
          /* Write score over Tst_SCORE_MAX */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX /
-			                   (double) NumQstsInThisResult :
-			                   0.0);
+	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX /
+			                      (double) NumQstsInThisResult :
+			                      0.0);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -568,7 +566,8 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s: %u",Txt_Matches,NumResults);
+   HTM_TxtColonNBSP (Txt_Matches);
+   HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
@@ -586,24 +585,22 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
-      fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllResults);
+      HTM_Double (TotalScoreOfAllResults);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
-      fprintf (Gbl.F.Out,"%.2lf",
-	       NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
-			      0.0);
+      HTM_Double (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
+			         0.0);
    HTM_TD_End ();
 
    /***** Write score over Tst_SCORE_MAX *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
-      fprintf (Gbl.F.Out,"%.2lf",
-	       NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
-			      (double) NumTotalQsts :
-			      0.0);
+      HTM_Double (NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
+			         (double) NumTotalQsts :
+			         0.0);
    HTM_TD_End ();
 
    /***** Last cell *****/
@@ -763,14 +760,11 @@ void McR_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       ID_WriteUsrIDs (UsrDat,NULL);
-      fprintf (Gbl.F.Out," %s",
-	       UsrDat->Surname1);
+      HTM_NBSPTxt (UsrDat->Surname1);
       if (UsrDat->Surname2[0])
-	 fprintf (Gbl.F.Out," %s",
-		  UsrDat->Surname2);
+	 HTM_NBSPTxt (UsrDat->Surname2);
       if (UsrDat->FirstName[0])
-	 fprintf (Gbl.F.Out,", %s",
-		  UsrDat->FirstName);
+	 HTM_TxtF (", %s",UsrDat->FirstName);
       HTM_BR ();
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -811,8 +805,7 @@ void McR_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      fprintf (Gbl.F.Out,"%u (%u %s)",
-	       NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+      HTM_TxtF ("%u (%u %s)",NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -826,14 +819,15 @@ void McR_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
-		  TotalScore,
-		  NumQsts ? TotalScore * Tst_SCORE_MAX / (double) NumQsts :
-			    0.0);
+	{
+	 HTM_Double (TotalScore);
+	 HTM_Txt (" (");
+	 HTM_Double (NumQsts ? TotalScore * Tst_SCORE_MAX / (double) NumQsts :
+			       0.0);
+	}
       else
-	 fprintf (Gbl.F.Out,"? (?");	// No feedback
-      fprintf (Gbl.F.Out," %s %u)",
-	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+	 HTM_Txt ("? (?");	// No feedback
+      HTM_TxtF (" %s %u)",Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
       HTM_TD_End ();
 
       HTM_TR_End ();

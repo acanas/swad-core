@@ -315,8 +315,8 @@ void Log_RequestLogo (Hie_Level_t Scope)
 
    /***** Upload logo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_File_with_the_logo);
-   HTM_INPUT_FILE ("image/png",true);
+   HTM_TxtColonNBSP (Txt_File_with_the_logo);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",true,NULL);
    HTM_LABEL_End ();
 
    /***** End box *****/

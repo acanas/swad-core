@@ -489,10 +489,10 @@ static void Ins_Configuration (bool PrintView)
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.Hierarchy.Ins.InsCod);
-   fprintf (Gbl.F.Out,"%s/%s?ins=%ld",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Ins.InsCod);
+   HTM_TxtF ("%s/%s?ins=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Ins.InsCod);
    HTM_A_End ();
    HTM_TD_End ();
 
@@ -879,7 +879,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
    HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
@@ -1125,7 +1125,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
    Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
    /***** Write institution short name and country name *****/
-   fprintf (Gbl.F.Out,"%s (%s)",Ins.ShrtName,CtyName);
+   HTM_TxtF ("%s (%s)",Ins.ShrtName,CtyName);
   }
 
 /*****************************************************************************/
@@ -2278,7 +2278,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TH (1,1,"RM",Txt_Users);
    HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
    HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();

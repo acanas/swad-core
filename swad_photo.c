@@ -336,8 +336,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
    /***** Form to upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_File_with_the_photo);
-   HTM_INPUT_FILE ("image/*",true);
+   HTM_TxtColonNBSP (Txt_File_with_the_photo);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 
    /***** End form *****/
@@ -751,7 +751,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
      }
 
    /***** Create map *****/
-   fprintf (Gbl.F.Out,"<map name=\"faces_map\">\n");
+   HTM_Txt ("<map name=\"faces_map\">\n");
    if (NumFacesTotal)
      {
       /***** Read again the file with coordinates and create area shapes *****/
@@ -766,17 +766,17 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
             snprintf (FormId,sizeof (FormId),
         	      "form_%d",
 		      NumLastForm + NumFace);
-            fprintf (Gbl.F.Out,"<area shape=\"circle\""
-                               " href=\"\""
-                               " onclick=\"javascript:document.getElementById('%s').submit();return false;\""
-                               " coords=\"%u,%u,%u\">\n",
-                     FormId,X,Y,Radius);
+            HTM_TxtF ("<area shape=\"circle\""
+                      " href=\"\""
+                      " onclick=\"javascript:document.getElementById('%s').submit();return false;\""
+                      " coords=\"%u,%u,%u\">\n",
+                      FormId,X,Y,Radius);
            }
         }
       /***** Close text file with text for image map *****/
       fclose (FileTxtMap);
      }
-   fprintf (Gbl.F.Out,"</map>\n");
+   HTM_Txt ("</map>\n");
 
    /***** Show map photo *****/
    snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),
@@ -1215,7 +1215,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       if (UsrDat->Nickname[0])
 	{
 	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL_N\"");
-	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+	 HTM_TxtF ("@%s",UsrDat->Nickname);
 	 HTM_DIV_End ();
 	}
 
@@ -1258,7 +1258,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_Following);
+	 HTM_NBSPTxtNBSP (Txt_Following);
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
@@ -2111,7 +2111,7 @@ static void Pho_GetMaxStdsPerDegree (void)
 
       if (row[2] == NULL)
 	 Gbl.Stat.DegPhotos.MaxPercent = -1.0;
-      else if (sscanf (row[2],"%f",&Gbl.Stat.DegPhotos.MaxPercent) != 1)
+      else if (sscanf (row[2],"%lf",&Gbl.Stat.DegPhotos.MaxPercent) != 1)
 	 Gbl.Stat.DegPhotos.MaxPercent = -1.0;
 
       /***** Free structure that stores the query result *****/
@@ -2423,14 +2423,14 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
    extern const char *Txt_photos;
 
    HTM_SPAN_Begin ("class=\"DAT\"");
-   fprintf (Gbl.F.Out,"%d&nbsp;",NumStds);
+   HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-   fprintf (Gbl.F.Out,"(%d&nbsp;%s,&nbsp;%d%%)",
-            NumStdsWithPhoto,Txt_photos,
-            NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-        	          0);
+   HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
+             NumStdsWithPhoto,Txt_photos,
+             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+        	           0);
    HTM_SPAN_End ();
   }
 
@@ -2542,13 +2542,13 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
    HTM_Txt (Deg->ShrtName);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
+   HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
+   HTM_TxtF ("%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
    HTM_BR ();
-   fprintf (Gbl.F.Out,"(%d%%)",
-            NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-        	          0);
+   HTM_TxtF ("(%d%%)",
+             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+        	           0);
    HTM_DIV_End ();
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
@@ -2578,13 +2578,13 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
      {
       case Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS:
          if (Gbl.Stat.DegPhotos.MaxStds > 0)
-            PhotoPixels = (unsigned) (((float) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
+            PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
         	                       Gbl.Stat.DegPhotos.MaxStds) * NumStds +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
       case Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS:
          if (Gbl.Stat.DegPhotos.MaxStdsWithPhoto > 0)
-            PhotoPixels = (unsigned) (((float) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
+            PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
         	                       Gbl.Stat.DegPhotos.MaxStdsWithPhoto) * NumStdsWithPhoto +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
@@ -2592,9 +2592,9 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
          if (Gbl.Stat.DegPhotos.MaxPercent > 0.0)
            {
             if (NumStds)
-               PhotoPixels = (unsigned) (((float) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
+               PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
         	                          Gbl.Stat.DegPhotos.MaxPercent) *
-        	                         ((float) NumStdsWithPhoto / NumStds) +
+        	                         ((double) NumStdsWithPhoto / NumStds) +
         	                         MIN_PIXELS_PHOTO + 0.5);
             else
               {

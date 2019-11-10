@@ -84,9 +84,10 @@ void HTM_SECTION_End (void);
 void HTM_SPAN_Begin (const char *fmt,...);
 void HTM_SPAN_End (void);
 
+void HTM_OL_Begin (void);
+void HTM_OL_End (void);
 void HTM_UL_Begin (const char *fmt,...);
 void HTM_UL_End (void);
-
 void HTM_LI_Begin (const char *fmt,...);
 void HTM_LI_End (void);
 
@@ -119,7 +120,8 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	              const char *fmt,...);
 void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...);
-void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange);
+void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
+	             const char *fmt,...);
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
 void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
@@ -130,7 +132,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 		         const char *fmt,...);
 
-void HTM_BUTTON_Begin (const char *Class);
+void HTM_BUTTON_Begin (const char *Class,bool SubmitOnMouseDown);
 void HTM_BUTTON_End (void);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);
@@ -147,17 +149,35 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	      const char *fmt,...);
 
+void HTM_STRONG_Begin (void);
+void HTM_STRONG_End (void);
+
+void HTM_EM_Begin (void);
+void HTM_EM_End (void);
+
 void HTM_U_Begin (void);
 void HTM_U_End (void);
 
 void HTM_BR (void);
 
+void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
 void HTM_TxtColon (const char *Txt);
+void HTM_TxtColonNBSP (const char *Txt);
+void HTM_TxtNBSPTxt (const char *Txt1,const char *Txt2);
 void HTM_NBSPTxt (const char *Txt);
+void HTM_TxtNBSP (const char *Txt);
+void HTM_NBSPTxtNBSP (const char *Txt);
 void HTM_NBSP (void);
+void HTM_Comma (void);
 void HTM_Unsigned (unsigned Num);
+void HTM_UnsignedColon (unsigned Num);
+void HTM_NBSPUnsigned (unsigned Num);
+void HTM_UnsignedNBSP (unsigned Num);
+void HTM_UnsignedNBSPTxt (unsigned Num,const char *Txt);
 void HTM_UnsignedLong (unsigned long Num);
 void HTM_Long (long Num);
+void HTM_Double (double Num);
+void HTM_Percentage (double Percentage);
 
 #endif

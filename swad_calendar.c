@@ -215,17 +215,17 @@ void Cal_DrawCurrentMonth (void)
 
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"	Gbl_HTMLContent = '';"
-	              "	DrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
-	    Gbl.Prefs.FirstDayOfWeek,
-	    (long) Gbl.StartExecutionTimeUTC,
-	    Gbl.Hierarchy.Ctr.PlcCod,
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   HTM_Txt ("\tGbl_HTMLContent = '';");
+   HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
+	     Gbl.Prefs.FirstDayOfWeek,
+	     (long) Gbl.StartExecutionTimeUTC,
+	     Gbl.Hierarchy.Ctr.PlcCod,
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
-   fprintf (Gbl.F.Out,"'%s',",ParamsStr);
+   HTM_TxtF ("'%s',",ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
-   fprintf (Gbl.F.Out,"'%s');",ParamsStr);
+   HTM_TxtF ("'%s');",ParamsStr);
    HTM_SCRIPT_End ();
   }
 
@@ -283,20 +283,19 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"	Gbl_HTMLContent = '';"
-	              "	Cal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
-	    Gbl.Prefs.FirstDayOfWeek,
-	    (long) Gbl.StartExecutionTimeUTC,
-	    Gbl.Hierarchy.Ctr.PlcCod,
-	    PrintView ? "true" :
-		        "false",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   HTM_Txt ("\tGbl_HTMLContent = '';");
+   HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
+	     Gbl.Prefs.FirstDayOfWeek,
+	     (long) Gbl.StartExecutionTimeUTC,
+	     Gbl.Hierarchy.Ctr.PlcCod,
+	     PrintView ? "true" :
+		         "false",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
-   fprintf (Gbl.F.Out,"'%s',",
-            ParamsStr);
+   HTM_TxtF ("'%s',",ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
-   fprintf (Gbl.F.Out,"'%s');",ParamsStr);
+   HTM_TxtF ("'%s');",ParamsStr);
    HTM_SCRIPT_End ();
 
    /***** End box *****/

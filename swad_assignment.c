@@ -1271,7 +1271,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Asg_CheckIfAsgIsAssociatedToGrps (AsgCod) ? "" : " checked=\"checked\"");
-      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1633,8 +1633,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   fprintf (Gbl.F.Out,"%s: ",(NumRows == 1) ? Txt_Group  :
-                                              Txt_Groups);
+   HTM_TxtColonNBSP ((NumRows == 1) ? Txt_Group  :
+                                      Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -1648,12 +1648,12 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
+         HTM_TxtNBSPTxt (row[0],row[1]);
 
          if (NumRows >= 2)
            {
             if (NumRow == NumRows-2)
-               fprintf (Gbl.F.Out," %s ",Txt_and);
+               HTM_TxtF (" %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
                   HTM_Txt (", ");
@@ -1661,8 +1661,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
         }
      }
    else
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 

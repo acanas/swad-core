@@ -146,9 +146,8 @@ void Ind_ReqIndicatorsCourses (void)
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    DT_WriteSelectorDegreeTypes ();
-   fprintf (Gbl.F.Out," (");
-   fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
-            Cfg_PLATFORM_SHORT_NAME);
+   HTM_Txt (" (");
+   HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
    HTM_Txt (")");
    HTM_TD_End ();
 
@@ -685,9 +684,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-      fprintf (Gbl.F.Out,"(%.1f%%)",
-               NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
-        	         0.0);
+      HTM_TxtF ("(%.1f%%)",
+                NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
+                          (double) NumCrss :
+        	          0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -708,7 +708,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"(%.1f%%)",100.0);
+   HTM_TxtF ("(%.1f%%)",100.0);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -778,19 +778,19 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
          HTM_TH_Begin (1,2,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
+         HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
          HTM_TH_End ();
          HTM_TH_Begin (1,2,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
+         HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
          HTM_TH_End ();
          HTM_TH_Begin (1,2,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
+         HTM_TxtF ("(C) %s",Txt_Online_tutoring);
          HTM_TH_End ();
          HTM_TH_Begin (1,2,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
+         HTM_TxtF ("(D) %s",Txt_Materials);
          HTM_TH_End ();
          HTM_TH_Begin (1,2,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
+         HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
          HTM_TH_End ();
 
          HTM_TR_End ();
@@ -827,19 +827,19 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
          HTM_TH_Begin (1,5,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
+         HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
          HTM_TH_End ();
          HTM_TH_Begin (1,5,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
+         HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
          HTM_TH_End ();
          HTM_TH_Begin (1,5,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
+         HTM_TxtF ("(C) %s",Txt_Online_tutoring);
          HTM_TH_End ();
          HTM_TH_Begin (1,4,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
+         HTM_TxtF ("(D) %s",Txt_Materials);
          HTM_TH_End ();
          HTM_TH_Begin (1,4,"CT COLOR0");
-         fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
+         HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
          HTM_TH_End ();
 
          HTM_TR_End ();
@@ -932,8 +932,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
 		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
+			    Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  HTM_A_End ();
 		  HTM_TD_End ();
 
@@ -1042,8 +1042,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
 		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
+			    Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  HTM_A_End ();
 		  HTM_TD_End ();
 

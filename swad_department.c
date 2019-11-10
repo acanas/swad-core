@@ -531,7 +531,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Department code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld&nbsp;",Dpt->DptCod);
+      HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
       HTM_TD_End ();
 
       /* Institution */

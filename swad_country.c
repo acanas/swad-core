@@ -349,10 +349,10 @@ static void Cty_Configuration (bool PrintView)
 	        Cfg_URL_SWAD_CGI,
 	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	        Gbl.Hierarchy.Cty.CtyCod);
-   fprintf (Gbl.F.Out,"%s/%s?cty=%ld",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Cty.CtyCod);
+   HTM_TxtF ("%s/%s?cty=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Cty.CtyCod);
    HTM_A_End ();
    HTM_TD_End ();
 
@@ -684,7 +684,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
    HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    HTM_TH_End ();
@@ -825,7 +825,8 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Write country name *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_NAME);
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)",CountryName,Cty->Alpha2);
+   HTM_NBSPTxtNBSP (CountryName);
+   HTM_TxtF ("(%s)",Cty->Alpha2);
 
    /***** End link *****/
    Frm_LinkFormEnd ();
@@ -897,17 +898,17 @@ void Cty_WriteScriptGoogleGeochart (void)
    HTM_SCRIPT_End ();
 
    HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out,"	google.load('visualization', '1', {'packages': ['geochart']});\n"
-                      "	google.setOnLoadCallback(drawRegionsMap);\n"
-                      "	function drawRegionsMap() {\n"
-                      "	var data = new google.visualization.DataTable();\n"
-                      "	data.addColumn('string', '%s');\n"
-                      "	data.addColumn('number', '%s');\n"
-                      "	data.addColumn('number', '%s');\n"
-                      "	data.addRows([\n",
-            Txt_Country_NO_HTML,
-            Txt_Users_NO_HTML,
-            Txt_Institutions_NO_HTML);
+   HTM_TxtF ("	google.load('visualization', '1', {'packages': ['geochart']});\n"
+             "	google.setOnLoadCallback(drawRegionsMap);\n"
+             "	function drawRegionsMap() {\n"
+             "	var data = new google.visualization.DataTable();\n"
+             "	data.addColumn('string', '%s');\n"
+             "	data.addColumn('number', '%s');\n"
+             "	data.addColumn('number', '%s');\n"
+             "	data.addRows([\n",
+             Txt_Country_NO_HTML,
+             Txt_Users_NO_HTML,
+             Txt_Institutions_NO_HTML);
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;
@@ -916,28 +917,28 @@ void Cty_WriteScriptGoogleGeochart (void)
       if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty)
         {
          /* Write data of this country */
-         fprintf (Gbl.F.Out,"	['%s', %u, %u],\n",
-                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Alpha2,
-                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
-                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Inss.Num);
+         HTM_TxtF ("	['%s', %u, %u],\n",
+                   Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Alpha2,
+                   Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
+                   Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Inss.Num);
          if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty > MaxUsrsInCountry)
             MaxUsrsInCountry = Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
          NumCtysWithUsrs++;
         }
 
    /***** Write end of the script *****/
-   fprintf (Gbl.F.Out,"	]);\n"
-                      "	var options = {\n"
-                      "		width:600,\n"
-                      "		height:360,\n"
-                      "		backgroundColor:'white',\n"
-                      "		datalessRegionColor:'white',\n"
-                      "		colorAxis:{colors:['#EAF1F4','#4D88A1'],minValue:0,maxValue:%u}};\n"
-                      "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
-                      "	chart.draw(data, options);\n"
-                      "	};\n",
-            NumCtysWithUsrs ? MaxUsrsInCountry :
-        	              0);
+   HTM_TxtF ("	]);\n"
+             "	var options = {\n"
+             "		width:600,\n"
+             "		height:360,\n"
+             "		backgroundColor:'white',\n"
+             "		datalessRegionColor:'white',\n"
+             "		colorAxis:{colors:['#EAF1F4','#4D88A1'],minValue:0,maxValue:%u}};\n"
+             "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
+             "	chart.draw(data, options);\n"
+             "	};\n",
+             NumCtysWithUsrs ? MaxUsrsInCountry :
+        	               0);
    HTM_SCRIPT_End ();
   }
 
@@ -1625,7 +1626,7 @@ static void Cty_ListCountriesForEdition (void)
 
       /* Numerical country code (ISO 3166-1) */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      fprintf (Gbl.F.Out,"%03ld",Cty->CtyCod);
+      HTM_TxtF ("%03ld",Cty->CtyCod);
       HTM_TD_End ();
 
       /* Alphabetic country code with 2 letters (ISO 3166-1) */

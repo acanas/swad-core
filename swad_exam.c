@@ -1078,7 +1078,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
    HTM_NBSP ();
    HTM_BR ();
-   fprintf (Gbl.F.Out,"<strong>%s</strong>",Txt_EXAM_ANNOUNCEMENT);
+   HTM_STRONG_Begin ();
+   HTM_Txt (Txt_EXAM_ANNOUNCEMENT);
+   HTM_STRONG_End ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -1102,7 +1104,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,Gbl.ExamAnns.ExaDat.CrsFullName,false,
 		      "size=\"30\"");
    else
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",Gbl.ExamAnns.ExaDat.CrsFullName);
+     {
+      HTM_STRONG_Begin ();
+      HTM_Txt (Gbl.ExamAnns.ExaDat.CrsFullName);
+      HTM_STRONG_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1215,9 +1221,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.StartTime.Hour)
-      fprintf (Gbl.F.Out,"%2u:%02u",
-               Gbl.ExamAnns.ExaDat.StartTime.Hour,
-               Gbl.ExamAnns.ExaDat.StartTime.Minute);
+      HTM_TxtF ("%2u:%02u",Gbl.ExamAnns.ExaDat.StartTime.Hour,
+                           Gbl.ExamAnns.ExaDat.StartTime.Minute);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1258,26 +1263,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       if (Gbl.ExamAnns.ExaDat.Duration.Hour)
         {
          if (Gbl.ExamAnns.ExaDat.Duration.Minute)
-            fprintf (Gbl.F.Out,"%u %s %u &#39;",
-                     Gbl.ExamAnns.ExaDat.Duration.Hour,
-                     Txt_hours_ABBREVIATION,
-                     Gbl.ExamAnns.ExaDat.Duration.Minute);
+            HTM_TxtF ("%u %s %u &#39;",Gbl.ExamAnns.ExaDat.Duration.Hour,
+                                       Txt_hours_ABBREVIATION,
+                                       Gbl.ExamAnns.ExaDat.Duration.Minute);
          else
-           {
-            if (Gbl.ExamAnns.ExaDat.Duration.Hour == 1)
-               fprintf (Gbl.F.Out,"1 %s",Txt_hour);
-            else
-               fprintf (Gbl.F.Out,"%u %s",
-                        Gbl.ExamAnns.ExaDat.Duration.Hour,Txt_hours);
-           }
+            HTM_UnsignedNBSPTxt (Gbl.ExamAnns.ExaDat.Duration.Hour,
+				 Gbl.ExamAnns.ExaDat.Duration.Hour == 1 ? Txt_hour :
+					                                  Txt_hours);
         }
       else if (Gbl.ExamAnns.ExaDat.Duration.Minute)
         {
-         if (Gbl.ExamAnns.ExaDat.Duration.Minute == 1)
-            fprintf (Gbl.F.Out,"1 %s",Txt_minute);
-         else
-            fprintf (Gbl.F.Out,"%u %s",
-                     Gbl.ExamAnns.ExaDat.Duration.Minute,Txt_minutes);
+         HTM_UnsignedNBSPTxt (Gbl.ExamAnns.ExaDat.Duration.Minute,
+			      Gbl.ExamAnns.ExaDat.Duration.Minute == 1 ? Txt_minute :
+				                                         Txt_minutes);
         }
      }
    HTM_TD_End ();

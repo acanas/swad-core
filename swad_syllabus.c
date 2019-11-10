@@ -525,18 +525,17 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
 		      Box_NOT_CLOSABLE,0);
 
    /***** Set width of columns of the table *****/
-   fprintf (Gbl.F.Out,"<colgroup>");
+   HTM_Txt ("<colgroup>");
    for (i = 0;
 	i < NumButtons;
 	i++)
-      fprintf (Gbl.F.Out,"<col width=\"12\" />");
+      HTM_Txt ("<col width=\"12\" />");
    for (i = 1;
 	i <= LstItemsSyllabus.NumLevels;
 	i++)
-      fprintf (Gbl.F.Out,"<col width=\"%d\" />",
-	       i * Syl_WIDTH_NUM_SYLLABUS);
-   fprintf (Gbl.F.Out,"<col width=\"*\" />"
-                      "</colgroup>");
+      HTM_TxtF ("<col width=\"%d\" />",i * Syl_WIDTH_NUM_SYLLABUS);
+   HTM_Txt ("<col width=\"*\" />");
+   HTM_Txt ("</colgroup>");
 
    if (LstItemsSyllabus.NumItems)
       /***** Loop writing all items of the syllabus *****/
@@ -710,7 +709,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
 	 HTM_NBSP ();
-      fprintf (Gbl.F.Out,"%s&nbsp;",StrItemCod);
+      HTM_TxtNBSP (StrItemCod);
       HTM_TD_End ();
 
       /***** Text of the item *****/
@@ -919,9 +918,9 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 		   "size=\"60\" placeholder=\"%s\"",
 	           Txt_Enter_a_new_item_here);
    if (NewItem)
-      fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\" />",
-	    Gbl.Form.Id);
+      HTM_Txt (" autofocus=\"autofocus\"");
+   HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\" />",
+	     Gbl.Form.Id);
    Frm_EndForm ();
    HTM_TD_End ();
   }

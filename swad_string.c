@@ -882,12 +882,12 @@ char Str_ConvertToLowerLetter (char Ch)
 /*** Write a number in floating point with the correct accuracy to a file ****/
 /*****************************************************************************/
 
-void Str_WriteFloatNumToFile (FILE *FileDst,float Number)
+void Str_WriteDoubleNumToFile (FILE *FileDst,double Number)
   {
    char *Str;
 
    /***** Write from floating point number to string *****/
-   Str_FloatNumToStr (&Str,Number);
+   Str_DoubleNumToStr (&Str,Number);
 
    /***** Write number from string to file *****/
    fprintf (FileDst,"%s",Str);
@@ -901,13 +901,13 @@ void Str_WriteFloatNumToFile (FILE *FileDst,float Number)
 /*****************************************************************************/
 // Str should be freed after calling this function
 
-void Str_FloatNumToStr (char **Str,float Number)
+void Str_DoubleNumToStr (char **Str,double Number)
   {
    double IntegerPart;
    double FractionaryPart;
    char *Format;
 
-   FractionaryPart = fabs (modf ((double) Number,&IntegerPart));
+   FractionaryPart = fabs (modf (Number,&IntegerPart));
 
    if (FractionaryPart == 0.0)
      {
@@ -917,19 +917,19 @@ void Str_FloatNumToStr (char **Str,float Number)
    else
      {
       if (IntegerPart != 0.0)
-         Format = "%.1f";
+         Format = "%.1lf";
       else if (FractionaryPart >= 0.095)
-         Format = "%.2f";
+         Format = "%.2lf";
       else if (FractionaryPart >= 0.0095)
-         Format = "%.3f";
+         Format = "%.3lf";
       else if (FractionaryPart >= 0.00095)
-         Format = "%.4f";
+         Format = "%.4lf";
       else if (FractionaryPart >= 0.000095)
-         Format = "%.5f";
+         Format = "%.5lf";
       else if (FractionaryPart >= 0.0000095)
-         Format = "%.6f";
+         Format = "%.6lf";
       else
-         Format = "%e";
+         Format = "%le";
       if (asprintf (Str,Format,Number) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
@@ -953,14 +953,14 @@ void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str)
 /************** Read a number in floating point from a string ****************/
 /*****************************************************************************/
 
-float Str_GetFloatNumFromStr (const char *Str)
+double Str_GetDoubleNumFromStr (const char *Str)
   {
-   float Num;
+   double Num;
 
    if (Str)
      {
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (Str,"%f",&Num) != 1)
+      if (sscanf (Str,"%lf",&Num) != 1)
          Lay_ShowErrorAndExit ("Bad floating point format.");
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
@@ -2899,7 +2899,8 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
    for (i = 0;
 	i <Length;
 	i++)
-      Str[i] = CharTable[(unsigned) (((float) rand () * (float) (NUM_ALPHANUM_CHARS-1)) / (float) RAND_MAX + 0.5)];
+      Str[i] = CharTable[(unsigned) (((double) rand () * (double) (NUM_ALPHANUM_CHARS-1)) /
+	                              (double) RAND_MAX + 0.5)];
    Str[Length] = '\0';
   }
 

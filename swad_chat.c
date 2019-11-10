@@ -131,7 +131,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Title of top level *****/
    HTM_LI_Begin ("class=\"DAT\"");
    Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
-   fprintf (Gbl.F.Out," %s",Txt_Chat_rooms);
+   HTM_NBSPTxt (Txt_Chat_rooms);
    HTM_LI_End ();
 
    /***** Link to chat available for all the users *****/
@@ -320,16 +320,14 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
    unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
 
    if (NumUsrsInRoom)
-      fprintf (Gbl.F.Out,"<strong>");
-   fprintf (Gbl.F.Out," %s",RoomFullName);
+      HTM_STRONG_Begin ();
+   HTM_NBSPTxt (RoomFullName);
    if (NumUsrsInRoom > 1)
-      fprintf (Gbl.F.Out," [%d %s]",
-               NumUsrsInRoom,Txt_connected_PLURAL);
+      HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
    else if (NumUsrsInRoom == 1)
-      fprintf (Gbl.F.Out," [1 %s]",
-               Txt_connected_SINGULAR);
+      HTM_TxtF (" [1 %s]",Txt_connected_SINGULAR);
    if (NumUsrsInRoom)
-      fprintf (Gbl.F.Out,"</strong>");
+      HTM_STRONG_End ();
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_LI_End ();
@@ -582,7 +580,7 @@ void Cht_OpenChatWindow (void)
       Lay_ShowErrorAndExit ("Can not open chat.");
 
    /***** Start writing the index.html file to the output *****/
-   fprintf (Gbl.F.Out,"Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
+   HTM_Txt ("Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
 
    Gbl.Layout.HTMLStartWritten = true;
 

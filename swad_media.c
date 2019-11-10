@@ -432,37 +432,29 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Media file *****/
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
-	              " name=\"%s\" accept=\"image/,video/\""
-	              " class=\"%s\" disabled=\"disabled\""
-	              " style=\"display:none;\" />",
-	    Id,
-            ParamUploadMedia.File,
-	    ClassInput);
+   HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",false,	// <id>_fil
+		   "id=\"%s_fil\" class=\"%s\""
+		   " disabled=\"disabled\" style=\"display:none;\"",
+		   Id,ClassInput);
    HTM_DIV_End ();						// <id>_fil
 
    /***** Media URL *****/
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
-		      " name=\"%s\" placeholder=\"%s\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\""
-	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />",
-	    Id,
-            ParamUploadMedia.URL,Txt_Link,
-            ClassInput,Cns_MAX_CHARS_WWW);
+   HTM_INPUT_URL (ParamUploadMedia.URL,"",false,		// <id>_url
+	          "id=\"%s_url\" class=\"%s\""
+		  " placeholder=\"%s\" maxlength=\"%u\""
+	          " disabled=\"disabled\" style=\"display:none;\"",
+                  Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
    HTM_DIV_End ();						// <id>_url
 
    /***** Media title *****/
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
-		      " name=\"%s\" placeholder=\"%s\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\""
-	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />",
-	    Id,
-            ParamUploadMedia.Title,Txt_Title_attribution,
-            ClassInput,Med_MAX_CHARS_TITLE);
+   HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",false,	// <id>_tit
+	           "id=\"%s_tit\" class=\"%s\""
+	           " placeholder=\"%s\""
+	           " disabled=\"disabled\""
+	           " style=\"display:none;\"",
+		   Id,ClassInput,Txt_Title_attribution);
    HTM_DIV_End ();						// <id>_tit
 
    /***** End box *****/
@@ -1632,7 +1624,7 @@ static void Med_ShowGIF (struct Media *Media,
 
 	 /* Overlay with GIF label */
 	 HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
-	 fprintf (Gbl.F.Out,"GIF");
+	 HTM_Txt ("GIF");
 	 HTM_SPAN_End ();
 
 	 HTM_DIV_End ();
@@ -1686,16 +1678,16 @@ static void Med_ShowVideo (struct Media *Media,
 		FileNameMediaPriv);
 
       /***** Show media *****/
-      fprintf (Gbl.F.Out,"<video src=\"%s\""
-			 " preload=\"metadata\" controls=\"controls\""
-			 " class=\"%s\"",
-	       URL_Video,ClassMedia);
+      HTM_TxtF ("<video src=\"%s\""
+		" preload=\"metadata\" controls=\"controls\""
+		" class=\"%s\"",
+	        URL_Video,ClassMedia);
       if (Media->Title)
 	 if (Media->Title[0])
-	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-      fprintf (Gbl.F.Out," lazyload=\"on\">"	// Lazy load of the media
-                         "Your browser does not support HTML5 video."
-	                 "</video>");
+	    HTM_TxtF (" title=\"%s\"",Media->Title);
+      HTM_Txt (" lazyload=\"on\">"	// Lazy load of the media
+               "Your browser does not support HTML5 video."
+	       "</video>");
      }
    else
       HTM_Txt (Txt_File_not_found);
@@ -1721,18 +1713,18 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 	 // 	gyroscope; picture-in-picture" allowfullscreen>
 	 // </iframe>
 	 HTM_DIV_Begin ("class=\"MED_VIDEO_CONT\"");
-	 fprintf (Gbl.F.Out,"<iframe src=\"https://www.youtube.com/embed/%s\""
-			    " frameborder=\"0\""
-			    " allow=\"accelerometer; autoplay; encrypted-media;"
-			    " gyroscope; picture-in-picture\""
-			    " allowfullscreen=\"allowfullscreen\""
-			    " class=\"%s\"",
-		  Media->Name,ClassMedia);
+	 HTM_TxtF ("<iframe src=\"https://www.youtube.com/embed/%s\""
+		   " frameborder=\"0\""
+		   " allow=\"accelerometer; autoplay; encrypted-media;"
+		   " gyroscope; picture-in-picture\""
+		   " allowfullscreen=\"allowfullscreen\""
+		   " class=\"%s\"",
+		   Media->Name,ClassMedia);
 	 if (Media->Title)
 	    if (Media->Title[0])
-	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-	 fprintf (Gbl.F.Out,">"
-			    "</iframe>");
+	       HTM_TxtF (" title=\"%s\"",Media->Title);
+	 HTM_Txt (">"
+		  "</iframe>");
 	 HTM_DIV_End ();
         }
       else
@@ -1761,17 +1753,17 @@ static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
 	 // 	allowfullscreen>
 	 // </iframe>
 	 HTM_DIV_Begin ("class=\"MED_EMBED_CONT\"");
-	 fprintf (Gbl.F.Out,"<iframe src=\"%s\""
-			    " frameborder=\"0\""
-	 	            " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
-			    " allowfullscreen=\"allowfullscreen\""
-			    " class=\"%s\"",
-		 Media->URL,ClassMedia);
+	 HTM_TxtF ("<iframe src=\"%s\""
+		   " frameborder=\"0\""
+	 	   " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
+		   " allowfullscreen=\"allowfullscreen\""
+		   " class=\"%s\"",
+		   Media->URL,ClassMedia);
 	 if (Media->Title)
 	    if (Media->Title[0])
-	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-	 fprintf (Gbl.F.Out,">"
-			    "</iframe>");
+	       HTM_TxtF (" title=\"%s\"",Media->Title);
+	 HTM_Txt (">"
+		  "</iframe>");
 	 HTM_DIV_End ();
         }
       else

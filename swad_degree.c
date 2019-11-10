@@ -474,10 +474,10 @@ static void Deg_Configuration (bool PrintView)
 	        Cfg_URL_SWAD_CGI,
 	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	        Gbl.Hierarchy.Deg.DegCod);
-   fprintf (Gbl.F.Out,"%s/%s?deg=%ld",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Deg.DegCod);
+   HTM_TxtF ("%s/%s?deg=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Deg.DegCod);
    HTM_A_End ();
    HTM_TD_End ();
 

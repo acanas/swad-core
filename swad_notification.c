@@ -524,7 +524,8 @@ void Ntf_ShowMyNotifications (void)
                Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
+            HTM_TxtColonNBSP (Txt_Forum);
+            HTM_Txt (ForumName);
             if (PutLink)
               {
                Frm_LinkFormEnd ();
@@ -544,15 +545,27 @@ void Ntf_ShowMyNotifications (void)
                HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
 
             if (Crs.CrsCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
+              {
+               HTM_TxtColonNBSP (Txt_Course);
+               HTM_Txt (Crs.ShrtName);
+              }
             else if (Deg.DegCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShrtName);
+              {
+               HTM_TxtColonNBSP (Txt_Degree);
+               HTM_Txt (Deg.ShrtName);
+              }
             else if (Ctr.CtrCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShrtName);
+              {
+               HTM_TxtColonNBSP (Txt_Centre);
+               HTM_Txt (Ctr.ShrtName);
+              }
             else if (Ins.InsCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShrtName);
+              {
+               HTM_TxtColonNBSP (Txt_Institution);
+               HTM_Txt (Ins.ShrtName);
+              }
             else
-               fprintf (Gbl.F.Out,"-");
+               HTM_Txt ("-");
 
             if (PutLink)
               {
@@ -2054,10 +2067,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Number of unseen notifications *****/
    HTM_SPAN_Begin ("id=\"notif_all\"");
-   fprintf (Gbl.F.Out,"%u&nbsp;%s",
-	    NumUnseenNtfs,
-	    NumUnseenNtfs == 1 ? Txt_notification :
-				 Txt_notifications);
+   HTM_UnsignedNBSPTxt (NumUnseenNtfs,NumUnseenNtfs == 1 ? Txt_notification :
+				                           Txt_notifications);
    HTM_BR ();
    HTM_SPAN_End ();
 
@@ -2066,7 +2077,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
      {
       HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
 	       "class=\"ICO16x16\"");
-      fprintf (Gbl.F.Out,"&nbsp;%u",NumNewNtfs);
+      HTM_TxtF ("&nbsp;%u",NumNewNtfs);
       HTM_SPAN_Begin ("id=\"notif_new\"");
       HTM_NBSPTxt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
 				     Txt_NOTIF_new_PLURAL);

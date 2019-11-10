@@ -748,7 +748,7 @@ struct Globals
          Pho_HowOrderDegrees_t HowOrderDegrees;
          int MaxStds;
          int MaxStdsWithPhoto;
-         float MaxPercent;
+         double MaxPercent;
         } DegPhotos;
      } Stat;
    struct

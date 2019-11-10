@@ -61,6 +61,7 @@ static unsigned HTM_TH_NestingLevel       = 0;
 static unsigned HTM_TD_NestingLevel       = 0;
 static unsigned HTM_DIV_NestingLevel      = 0;
 static unsigned HTM_SPAN_NestingLevel     = 0;
+static unsigned HTM_OL_NestingLevel       = 0;
 static unsigned HTM_UL_NestingLevel       = 0;
 static unsigned HTM_LI_NestingLevel       = 0;
 static unsigned HTM_DL_NestingLevel       = 0;
@@ -73,6 +74,8 @@ static unsigned HTM_BUTTON_NestingLevel   = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 static unsigned HTM_SELECT_NestingLevel   = 0;
 static unsigned HTM_OPTGROUP_NestingLevel = 0;
+static unsigned HTM_STRONG_NestingLevel   = 0;
+static unsigned HTM_EM_NestingLevel       = 0;
 static unsigned HTM_U_NestingLevel        = 0;
 
 /*****************************************************************************/
@@ -620,8 +623,25 @@ void HTM_SPAN_End (void)
   }
 
 /*****************************************************************************/
-/****************************** Unordered lists ******************************/
+/*********************************** Lists ***********************************/
 /*****************************************************************************/
+
+void HTM_OL_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<ol>");
+
+   HTM_OL_NestingLevel++;
+  }
+
+void HTM_OL_End (void)
+  {
+   if (HTM_OL_NestingLevel == 0)	// No OL open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened OL.");
+
+   fprintf (Gbl.F.Out,"</ol>");
+
+   HTM_OL_NestingLevel--;
+  }
 
 void HTM_UL_Begin (const char *fmt,...)
   {
@@ -1126,10 +1146,36 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
    fprintf (Gbl.F.Out," />");
   }
 
-void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange)
+void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
+	             const char *fmt,...)
   {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" accept=\"%s\"",
-	    Fil_NAME_OF_PARAM_FILENAME_ORG,Accept);
+	    Name,Accept);
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free (Attr);
+	}
+     }
+
    if (SubmitOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
@@ -1245,6 +1291,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
    if (SubmitOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
+
    fprintf (Gbl.F.Out," />");
   }
 
@@ -1252,9 +1299,15 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 /********************************** Buttons **********************************/
 /*****************************************************************************/
 
-void HTM_BUTTON_Begin (const char *Class)
+void HTM_BUTTON_Begin (const char *Class,bool SubmitOnMouseDown)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"%s\">",Class);
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"%s\"",Class);
+
+   if (SubmitOnMouseDown)
+      fprintf (Gbl.F.Out," onmousedown=\"document.getElementById('%s').submit();return false;\"",
+	       Gbl.Form.Id);
+
+   fprintf (Gbl.F.Out," />");
 
    HTM_BUTTON_NestingLevel++;
   }
@@ -1498,12 +1551,54 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
   }
 
 /*****************************************************************************/
+/********************************** Strong ***********************************/
+/*****************************************************************************/
+
+void HTM_STRONG_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<strong>");
+
+   HTM_STRONG_NestingLevel++;
+  }
+
+void HTM_STRONG_End (void)
+  {
+   if (HTM_STRONG_NestingLevel == 0)	// No STRONG open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened STRONG.");
+
+   fprintf (Gbl.F.Out,"</strong>");
+
+   HTM_STRONG_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/********************************** Emphasis *********************************/
+/*****************************************************************************/
+
+void HTM_EM_Begin (void)
+  {
+   fprintf (Gbl.F.Out,"<em>");
+
+   HTM_EM_NestingLevel++;
+  }
+
+void HTM_EM_End (void)
+  {
+   if (HTM_EM_NestingLevel == 0)	// No EM open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened EM.");
+
+   fprintf (Gbl.F.Out,"</em>");
+
+   HTM_EM_NestingLevel--;
+  }
+
+/*****************************************************************************/
 /******************************* Underlines **********************************/
 /*****************************************************************************/
 
 void HTM_U_Begin (void)
   {
-   HTM_U_Begin ();
+   fprintf (Gbl.F.Out,"<u>");
 
    HTM_U_NestingLevel++;
   }
@@ -1513,7 +1608,7 @@ void HTM_U_End (void)
    if (HTM_U_NestingLevel == 0)	// No U open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened U.");
 
-   HTM_U_End ();
+   fprintf (Gbl.F.Out,"</u>");
 
    HTM_U_NestingLevel--;
   }
@@ -1531,6 +1626,31 @@ void HTM_BR (void)
 /********************************** Text *************************************/
 /*****************************************************************************/
 
+void HTM_TxtF (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 HTM_Txt (Attr);
+
+	 free (Attr);
+	}
+  }
+
 void HTM_Txt (const char *Txt)
   {
    fputs (Txt,Gbl.F.Out);
@@ -1542,10 +1662,37 @@ void HTM_TxtColon (const char *Txt)
    HTM_Txt (":");
   }
 
+void HTM_TxtColonNBSP (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_Txt (":");
+   HTM_NBSP ();
+  }
+
+void HTM_TxtNBSPTxt (const char *Txt1,const char *Txt2)
+  {
+   HTM_Txt (Txt1);
+   HTM_NBSP ();
+   HTM_Txt (Txt2);
+  }
+
 void HTM_NBSPTxt (const char *Txt)
   {
    HTM_NBSP ();
    HTM_Txt (Txt);
+  }
+
+void HTM_TxtNBSP (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_NBSP ();
+  }
+
+void HTM_NBSPTxtNBSP (const char *Txt)
+  {
+   HTM_NBSP ();
+   HTM_Txt (Txt);
+   HTM_NBSP ();
   }
 
 void HTM_NBSP (void)
@@ -1553,9 +1700,39 @@ void HTM_NBSP (void)
    HTM_Txt ("&nbsp;");
   }
 
+void HTM_Comma (void)
+  {
+   HTM_Txt (",");
+  }
+
 void HTM_Unsigned (unsigned Num)
   {
    fprintf (Gbl.F.Out,"%u",Num);
+  }
+
+void HTM_UnsignedColon (unsigned Num)
+  {
+   HTM_Unsigned (Num);
+   HTM_Txt (":");
+  }
+
+void HTM_NBSPUnsigned (unsigned Num)
+  {
+   HTM_NBSP ();
+   HTM_Unsigned (Num);
+  }
+
+void HTM_UnsignedNBSP (unsigned Num)
+  {
+   HTM_Unsigned (Num);
+   HTM_NBSP ();
+  }
+
+void HTM_UnsignedNBSPTxt (unsigned Num,const char *Txt)
+  {
+   HTM_Unsigned (Num);
+   HTM_NBSP ();
+   HTM_Txt (Txt);
   }
 
 void HTM_UnsignedLong (unsigned long Num)
@@ -1566,4 +1743,14 @@ void HTM_UnsignedLong (unsigned long Num)
 void HTM_Long (long Num)
   {
    fprintf (Gbl.F.Out,"%ld",Num);
+  }
+
+void HTM_Double (double Num)
+  {
+   fprintf (Gbl.F.Out,"%.2lf",Num);
+  }
+
+void HTM_Percentage (double Percentage)
+  {
+   fprintf (Gbl.F.Out,"%5.2lf%%",Percentage);
   }

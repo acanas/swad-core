@@ -126,28 +126,28 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
    if (!Gbl.Form.Inside)
      {
       /* Begin form */
-      fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+      HTM_TxtF ("<form method=\"post\" action=\"%s/%s",
+	        Cfg_URL_SWAD_CGI,
+	        Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       if (Anchor)
 	 if (Anchor[0])
-            fprintf (Gbl.F.Out,"#%s",Anchor);
-      fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
+            HTM_TxtF ("#%s",Anchor);
+      HTM_TxtF ("\" id=\"%s\"",Id);
       if (OnSubmit)
          if (OnSubmit[0])
-            fprintf (Gbl.F.Out," onsubmit=\"%s;\"",OnSubmit);
+            HTM_TxtF (" onsubmit=\"%s;\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
 	 case Act_BRW_NEW_TAB:
 	 case Act_DOWNLD_FILE:
-	    fprintf (Gbl.F.Out," target=\"_blank\"");
+	    HTM_Txt (" target=\"_blank\"");
 	    break;
 	 default:
 	    break;
 	}
       if (Act_GetContentType (NextAction) == Act_CONT_DATA)
-	 fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
-      fprintf (Gbl.F.Out," accept-charset=\"windows-1252\">");
+	 HTM_Txt (" enctype=\"multipart/form-data\"");
+      HTM_Txt (" accept-charset=\"windows-1252\">");
 
       /* Put basic form parameters */
       Frm_SetParamsForm (ParamsStr,NextAction,PutParameterLocationIfNoSesion);
@@ -226,7 +226,7 @@ void Frm_EndForm (void)
   {
    if (Gbl.Form.Inside)
      {
-      fprintf (Gbl.F.Out,"</form>");
+      HTM_Txt ("</form>");
       Gbl.Form.Inside = false;
      }
   }
@@ -254,46 +254,46 @@ void Frm_LinkFormSubmitUnique (const char *Title,const char *LinkClass)
 void Frm_LinkFormSubmitId (const char *Title,const char *LinkClass,
                            const char *Id,const char *OnSubmit)
   {
-   fprintf (Gbl.F.Out,"<a href=\"\"");
+   HTM_Txt ("<a href=\"\"");
    if (Title)
       if (Title[0])
-         fprintf (Gbl.F.Out," title=\"%s\"",Title);
+         HTM_TxtF (" title=\"%s\"",Title);
    if (LinkClass)
       if (LinkClass[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",LinkClass);
-   fprintf (Gbl.F.Out," onclick=\"");
+         HTM_TxtF (" class=\"%s\"",LinkClass);
+   HTM_Txt (" onclick=\"");
    if (OnSubmit)	// JavaScript function to be called
 			// before submitting the form
       if (OnSubmit[0])
-         fprintf (Gbl.F.Out,"%s;",OnSubmit);
-   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;\">",
-	    Id);
+         HTM_TxtF ("%s;",OnSubmit);
+   HTM_TxtF ("document.getElementById('%s').submit();return false;\">",
+	     Id);
   }
 
 void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
                                  const char *OnSubmit)
   {
-   fprintf (Gbl.F.Out,"<a href=\"\"");
+   HTM_Txt ("<a href=\"\"");
    if (Title)
       if (Title[0])
-         fprintf (Gbl.F.Out," title=\"%s\"",Title);
+         HTM_TxtF (" title=\"%s\"",Title);
    if (LinkClass)
       if (LinkClass[0])
-	 fprintf (Gbl.F.Out," class=\"%s\"",LinkClass);
-   fprintf (Gbl.F.Out," onclick=\"");
+	 HTM_TxtF (" class=\"%s\"",LinkClass);
+   HTM_Txt (" onclick=\"");
    if (OnSubmit)	// JavaScript function to be called
 			// before submitting the form
       if (OnSubmit[0])
-         fprintf (Gbl.F.Out,"%s;",OnSubmit);
-   fprintf (Gbl.F.Out,"AnimateIcon(%d);"
-		      "document.getElementById('%s').submit();return false;\">",
-	    Gbl.Form.Num,
-	    Gbl.Form.Id);
+         HTM_TxtF ("%s;",OnSubmit);
+   HTM_TxtF ("AnimateIcon(%d);"
+             "document.getElementById('%s').submit();return false;\">",
+	     Gbl.Form.Num,
+	     Gbl.Form.Id);
   }
 
 void Frm_LinkFormEnd (void)
   {
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_Txt ("</a>");
   }
 
 /*****************************************************************************/

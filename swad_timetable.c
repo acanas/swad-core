@@ -236,8 +236,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    switch (Gbl.Crs.Grps.WhichGrps)
      {
       case Grp_MY_GROUPS:
-        fprintf (Gbl.F.Out,Txt_Groups_OF_A_USER,
-                 Gbl.Usrs.Me.UsrDat.FullName);
+        HTM_TxtF (Txt_Groups_OF_A_USER,Gbl.Usrs.Me.UsrDat.FullName);
         break;
       case Grp_ALL_GROUPS:
         HTM_Txt (Txt_All_groups);
@@ -1136,7 +1135,7 @@ static void TT_DrawTimeTable (void)
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
+   HTM_TxtF ("%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    HTM_TD_End ();
 
    TT_DrawCellAlignTimeTable ();
@@ -1145,7 +1144,7 @@ static void TT_DrawTimeTable (void)
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
+   HTM_TxtF ("%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1331,7 +1330,7 @@ static void TT_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Ali
 		 Min ? "TT_HOUR_SMALL" :
 		       "TT_HOUR_BIG",
 		 Align);
-   fprintf (Gbl.F.Out,"%02u:%02u",Hour,Min);
+   HTM_TxtF ("%02u:%02u",Hour,Min);
    HTM_TD_End ();
   }
 
@@ -1559,11 +1558,11 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
               }
 
 	    /***** Type of class and duration *****/
-	    fprintf (Gbl.F.Out,"%s (%u:%02u)",
-		     Txt_TIMETABLE_CLASS_TYPES[ClassType],
-	             (DurationNumIntervals / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-	             (DurationNumIntervals % Gbl.TimeTable.Config.IntervalsPerHour) *
-	             Gbl.TimeTable.Config.Range.MinutesPerInterval);			// Minutes
+	    HTM_TxtF ("%s (%u:%02u)",
+		      Txt_TIMETABLE_CLASS_TYPES[ClassType],
+	              (DurationNumIntervals / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
+	              (DurationNumIntervals % Gbl.TimeTable.Config.IntervalsPerHour) *
+	              Gbl.TimeTable.Config.Range.MinutesPerInterval);			// Minutes
 
 	    /***** Group *****/
 	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
@@ -1576,7 +1575,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       if (GrpDat.Classroom.ClaCod > 0)
 		 {
 		  HTM_BR ();
-		  fprintf (Gbl.F.Out,"(%s)",GrpDat.Classroom.ShrtName);
+		  HTM_TxtF ("(%s)",GrpDat.Classroom.ShrtName);
 		 }
 	      }
 
@@ -1585,7 +1584,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       if (Info[0])
 		 {
 		  HTM_BR ();
-	          fprintf (Gbl.F.Out,"<br />%s",Info);
+	          HTM_Txt (Info);
 		 }
 
 	    /***** End cell *****/
@@ -1708,15 +1707,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
 	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
-	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
-	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
-	                          " value=\"%s\" class=\"TT_INF\""
-		                  " onchange=\"document.getElementById('%s').submit();return false;\" />",
-			CellStr,
-			TT_MAX_CHARS_INFO,
-			Info ? Info :
-			       "",
-			Gbl.Form.Id);
+	       HTM_INPUT_TEXT ("TTInf",TT_MAX_CHARS_INFO,Info ? Info :
+			                                        "",true,
+	                       "id=\"TTInf%s\" size=\"1\" class=\"TT_INF\"",
+			       CellStr);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
@@ -1725,13 +1719,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
 	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
-               fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
-                                  " type=\"text\" size=\"12\" maxlength=\"%u\""
-                                  " value=\"%s\" class=\"TT_INF\""
-		                  " onchange=\"document.getElementById('%s').submit();return false;\" />",
-			CellStr,
-			TT_MAX_CHARS_INFO,Info,
-			Gbl.Form.Id);
+	       HTM_INPUT_TEXT ("TTInf",TT_MAX_CHARS_INFO,Info,true,
+	                       "id=\"TTInf%s\" size=\"12\" class=\"TT_INF\"",
+			       CellStr);
 	      }
 	   }
 

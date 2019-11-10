@@ -587,9 +587,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 fprintf (Gbl.F.Out,"%.2f%%",
-		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
-			         0.0);
+	 HTM_Percentage (NumUsrsTotal ? 100.0 * (double) NumUsrs /
+	                                (double) NumUsrsTotal :
+			                0.0);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

@@ -246,7 +246,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
       if (FirstMsgEnabled)
          HTM_Txt (Subject);
       else
-         fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
+         HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
       if (LinkToPagCurrent)
 	{
 	 Frm_LinkFormEnd ();
@@ -351,13 +351,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"1");
+         HTM_Unsigned (1);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
             HTM_SPAN_Begin ("class=\"%s\"",Font);
-            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
         }
@@ -457,7 +457,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",Font);
-            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
         }
@@ -572,7 +572,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->RightPage > Pagination->EndPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",Font);
-            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)
@@ -670,7 +670,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->NumPags > Pagination->RightPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",Font);
-            fprintf (Gbl.F.Out,"&hellip;");
+            HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)

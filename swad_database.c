@@ -90,7 +90,7 @@ void DB_CreateTablesIfNotExist (void)
 
    /***** Information message *****/
    Ale_ShowAlert (Ale_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
-   fprintf (Gbl.F.Out,"<ol>");
+   HTM_OL_Begin ();
 
    /***** Table IP_prefs *****/
 /*
@@ -3227,7 +3227,7 @@ mysql> DESCRIBE ws_keys;
 		   "INDEX(LastTime))");
 
    /***** Show success message *****/
-   fprintf (Gbl.F.Out,"</ol>");
+   HTM_OL_End ();
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_tables_in_the_database_that_did_not_exist);
   }
 

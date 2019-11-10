@@ -1206,8 +1206,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassData);
          break;
      }
-   fprintf (Gbl.F.Out,"%s&nbsp;",(Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
-        	                                                   Txt_No);
+   HTM_TxtNBSP (Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
+        	                                Txt_No);
    Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],
 		   Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj->Assigned]);
 
@@ -2036,8 +2036,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
             HTM_LI_Begin (NULL);
             HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-               fprintf (Gbl.F.Out," %s",Gbl.Usrs.Other.UsrDat.Surname2);
-            fprintf (Gbl.F.Out,", %s",Gbl.Usrs.Other.UsrDat.FirstName);
+               HTM_NBSPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
+            HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
             HTM_LI_End ();
 	   }
 	}

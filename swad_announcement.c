@@ -345,11 +345,10 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	 if (Roles & (1 << Role))
 	   {
 	    if (SomeRolesAreSelected)
-	       fprintf (Gbl.F.Out,",");
+	       HTM_Comma ();
 	    SomeRolesAreSelected = true;
-	    fprintf (Gbl.F.Out," %s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	    HTM_NBSPTxt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	   }
-      fprintf (Gbl.F.Out,"</p>");
      }
    else
       /***** Put form to mark announcement as seen *****/
@@ -416,7 +415,7 @@ void Ann_ShowFormAnnouncement (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s: ",Txt_Users);
+   HTM_TxtColonNBSP (Txt_Users);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");

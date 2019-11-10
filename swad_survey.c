@@ -538,13 +538,13 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /* Number of questions and number of distinct users who have already answered this survey */
    HTM_DIV_Begin ("class=\"%s\"",
-            Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT");
-   fprintf (Gbl.F.Out,"%s: %u; %s: %u",
-            Txt_No_of_questions,
-            Svy.NumQsts,
-            Txt_No_of_users,
-            Svy.NumUsrs);
+                  Svy.Status.Visible ? "ASG_GRP" :
+        	                       "ASG_GRP_LIGHT");
+   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_Unsigned (Svy.NumQsts);
+   HTM_Txt ("; ");
+   HTM_TxtColonNBSP (Txt_No_of_users);
+   HTM_Unsigned (Svy.NumUsrs);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -613,7 +613,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Scope of the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    switch (Svy.Scope)
      {
       case Hie_UNK:	// Unknown
@@ -623,19 +623,19 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
          HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 break;
       case Hie_CTY:	// Country
-         fprintf (Gbl.F.Out,"%s %s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+         HTM_TxtNBSPTxt (Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 break;
       case Hie_INS:	// Institution
-         fprintf (Gbl.F.Out,"%s %s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
+         HTM_TxtNBSPTxt (Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
 	 break;
       case Hie_CTR:	// Centre
-         fprintf (Gbl.F.Out,"%s %s",Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
+         HTM_TxtNBSPTxt (Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
 	 break;
       case Hie_DEG:	// Degree
-         fprintf (Gbl.F.Out,"%s %s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
+         HTM_TxtNBSPTxt (Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
  	 break;
       case Hie_CRS:	// Course
-	 fprintf (Gbl.F.Out,"%s %s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
+	 HTM_TxtNBSPTxt (Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
    HTM_DIV_End ();
@@ -2095,7 +2095,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",false,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" : " checked=\"checked\"");
-      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2465,8 +2465,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
         	                                       "ASG_GRP_LIGHT");
-   fprintf (Gbl.F.Out,"%s: ",NumRows == 1 ? Txt_Group  :
-                                            Txt_Groups);
+   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -2480,12 +2480,12 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
+         HTM_TxtNBSPTxt (row[0],row[1]);
 
          if (NumRows >= 2)
            {
             if (NumRow == NumRows-2)
-               fprintf (Gbl.F.Out," %s ",Txt_and);
+               HTM_TxtF (" %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
                   HTM_Txt (", ");
@@ -2493,8 +2493,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
         }
      }
    else
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -2777,7 +2776,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TD_Begin ("class=\"RT\"");
       HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\">",
                        NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%u)",NumAns + 1);
+      HTM_TxtF ("%u)",NumAns + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3467,7 +3466,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 HTM_TD_Begin ("class=\"SVY_OPT LT\"");
 	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
 		          (unsigned) SvyQst->QstCod,NumAns);
-	 fprintf (Gbl.F.Out,"%u)",NumAns + 1);
+	 HTM_TxtF ("%u)",NumAns + 1);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -3512,7 +3511,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
                 NumUsrs,
-                (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
+                (unsigned) ((((double) NumUsrs * 100.0) / (double) MaxUsrs) + 0.5),
                 Txt_of_PART_OF_A_TOTAL,MaxUsrs);
    else
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -3523,8 +3522,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    if (NumUsrs && MaxUsrs)
-      BarWidth = (unsigned) ((((float) NumUsrs * (float) Svy_MAX_BAR_WIDTH) /
-	                       (float) MaxUsrs) + 0.5);
+      BarWidth = (unsigned) ((((double) NumUsrs * (double) Svy_MAX_BAR_WIDTH) /
+	                       (double) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Gbl.Title,
@@ -4002,11 +4001,11 @@ unsigned Svy_GetNumCrsSurveys (Hie_Level_t Scope,unsigned *NumNotif)
 /************ Get average number of questions per course survey **************/
 /*****************************************************************************/
 
-float Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope)
+double Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   float NumQstsPerSurvey;
+   double NumQstsPerSurvey;
 
    /***** Get number of questions per survey from database *****/
    switch (Scope)
@@ -4102,7 +4101,7 @@ float Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope)
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
-   NumQstsPerSurvey = Str_GetFloatNumFromStr (row[0]);
+   NumQstsPerSurvey = Str_GetDoubleNumFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

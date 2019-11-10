@@ -413,10 +413,10 @@ static void Crs_Configuration (bool PrintView)
                 Cfg_URL_SWAD_CGI,
                 Lan_STR_LANG_ID[Gbl.Prefs.Language],
                 Gbl.Hierarchy.Crs.CrsCod);
-   fprintf (Gbl.F.Out,"%s/%s?crs=%ld",
-            Cfg_URL_SWAD_CGI,
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Hierarchy.Crs.CrsCod);
+   HTM_TxtF ("%s/%s?crs=%ld",
+             Cfg_URL_SWAD_CGI,
+             Lan_STR_LANG_ID[Gbl.Prefs.Language],
+             Gbl.Hierarchy.Crs.CrsCod);
    HTM_A_End ();
    HTM_TD_End ();
 
@@ -461,7 +461,7 @@ static void Crs_Configuration (bool PrintView)
                 Indicators.NumIndicators,
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%s ",Gbl.Title);
+      HTM_TxtNBSP (Gbl.Title);
       Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
         	                                                      "exclamation-triangle.svg",
 		   Gbl.Title,"ICO16x16");
@@ -1750,7 +1750,7 @@ static void Crs_PutHeadCoursesForEdition (void)
    HTM_TH (1,1,"BM",NULL);
    HTM_TH (1,1,"RM",Txt_Code);
    HTM_TH_Begin (1,1,"CM");
-   fprintf (Gbl.F.Out,"%s (%s)",Txt_Institutional_code,Txt_optional);
+   HTM_TxtF ("%s (%s)",Txt_Institutional_code,Txt_optional);
    HTM_TH_End ();
    HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
    HTM_TH (1,1,"LM",Txt_Short_name_of_the_course);
@@ -3174,7 +3174,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     row[2]);
    Frm_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-   fprintf (Gbl.F.Out," %s (%s)",row[2],row[6]);
+   HTM_TxtF (" %s (%s)",row[2],row[6]);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -3265,8 +3265,7 @@ void Crs_AskRemoveOldCrss (void)
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s&nbsp;",
-            Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+   HTM_TxtNBSP (Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
    HTM_SELECT_Begin (false,
 		     "name=\"Months\"");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
@@ -3277,8 +3276,8 @@ void Crs_AskRemoveOldCrss (void)
 		  "%u",i);
    HTM_SELECT_End ();
    HTM_NBSP ();
-   fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
-            Cfg_PLATFORM_SHORT_NAME);
+   HTM_TxtF (Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
+             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/

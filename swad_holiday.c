@@ -138,7 +138,7 @@ void Hld_SeeHolidays (void)
 	   }
 
 	 HTM_TH_Begin (1,1,"LM");
-	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_End_date);
+	 HTM_NBSPTxtNBSP (Txt_End_date);
 	 HTM_TH_End ();
 
 	 HTM_TH (1,1,"LM",Txt_Holiday);
@@ -578,7 +578,7 @@ static void Hld_ListHolidaysForEdition (void)
 
       /* Holiday code */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%ld&nbsp;",Hld->HldCod);
+      HTM_TxtF ("%ld&nbsp;",Hld->HldCod);
       HTM_TD_End ();
 
       /* Holiday place */

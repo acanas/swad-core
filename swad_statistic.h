@@ -121,9 +121,9 @@ typedef enum
 
 struct Sta_Hits
   {
-   float Num;
-   float Max;
-   float Total;
+   double Num;
+   double Max;
+   double Total;
   };
 
 /*****************************************************************************/
