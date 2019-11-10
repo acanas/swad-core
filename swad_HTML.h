@@ -147,6 +147,9 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	      const char *fmt,...);
 
+void HTM_U_Begin (void);
+void HTM_U_End (void);
+
 void HTM_BR (void);
 
 void HTM_Txt (const char *Txt);

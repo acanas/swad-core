@@ -3197,7 +3197,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
       if (Plg_GetDataOfPluginByCod (&Plg))
          HTM_Txt (Plg.Name);
       else
-         fprintf (Gbl.F.Out,"?");
+         HTM_Txt ("?");
       HTM_NBSP ();
       HTM_TD_End ();
 

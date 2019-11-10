@@ -126,10 +126,10 @@ void Cla_SeeClassrooms (void)
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Classrooms.SelectedOrder)
-	 fprintf (Gbl.F.Out,"<u>");
+	 HTM_U_Begin ();
       HTM_Txt (Txt_CLASSROOMS_ORDER[Order]);
       if (Order == Gbl.Classrooms.SelectedOrder)
-	 fprintf (Gbl.F.Out,"</u>");
+	 HTM_U_End ();
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TH_End ();

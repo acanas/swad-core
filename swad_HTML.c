@@ -73,6 +73,7 @@ static unsigned HTM_BUTTON_NestingLevel   = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 static unsigned HTM_SELECT_NestingLevel   = 0;
 static unsigned HTM_OPTGROUP_NestingLevel = 0;
+static unsigned HTM_U_NestingLevel        = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -1494,6 +1495,27 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
      }
 
    fprintf (Gbl.F.Out," />");
+  }
+
+/*****************************************************************************/
+/******************************* Underlines **********************************/
+/*****************************************************************************/
+
+void HTM_U_Begin (void)
+  {
+   HTM_U_Begin ();
+
+   HTM_U_NestingLevel++;
+  }
+
+void HTM_U_End (void)
+  {
+   if (HTM_U_NestingLevel == 0)	// No U open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened U.");
+
+   HTM_U_End ();
+
+   HTM_U_NestingLevel--;
   }
 
 /*****************************************************************************/

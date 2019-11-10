@@ -125,10 +125,10 @@ void Plc_SeePlaces (void)
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Plcs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
+	    HTM_U_Begin ();
 	 HTM_Txt (Txt_PLACES_ORDER[Order]);
 	 if (Order == Gbl.Plcs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
+	    HTM_U_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 

@@ -221,13 +221,13 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
+	    HTM_U_Begin ();
 	}
       HTM_Txt (Txt_START_END_TIME[Order]);
       if (!PrintView)
 	{
 	 if (Order == Gbl.Asgs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
+	    HTM_U_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}

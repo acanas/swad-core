@@ -591,10 +591,10 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 
       Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
-	 fprintf (Gbl.F.Out,"<u>");
+	 HTM_U_Begin ();
       HTM_Txt (Txt_START_END_TIME[Order]);
       if (Order == Gbl.Agenda.SelectedOrder)
-	 fprintf (Gbl.F.Out,"</u>");
+	 HTM_U_End ();
       Frm_LinkFormEnd ();
 
       Frm_EndForm ();

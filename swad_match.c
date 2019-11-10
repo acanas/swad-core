@@ -634,7 +634,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
                fprintf (Gbl.F.Out," %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
-                  fprintf (Gbl.F.Out,", ");
+                  HTM_Txt (", ");
            }
         }
      }

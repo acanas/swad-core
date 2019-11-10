@@ -201,7 +201,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
             fprintf (Gbl.F.Out," %s ",Txt_and);
          if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 3)
             if (NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps-2)
-               fprintf (Gbl.F.Out,", ");
+               HTM_Txt (", ");
         }
      }
   }

@@ -518,10 +518,10 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* Link with the head of this column */
       Frm_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == SelectedOrder)
-	 fprintf (Gbl.F.Out,"<u>");
+	 HTM_U_Begin ();
       HTM_Txt (Txt_DEGREE_TYPES_ORDER[Order]);
       if (Order == SelectedOrder)
-	 fprintf (Gbl.F.Out,"</u>");
+	 HTM_U_End ();
       Frm_LinkFormEnd ();
 
       /* End form */

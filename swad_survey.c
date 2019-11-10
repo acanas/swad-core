@@ -262,10 +262,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
+	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Svys.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
+	    HTM_U_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
@@ -2488,7 +2488,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
                fprintf (Gbl.F.Out," %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
-                  fprintf (Gbl.F.Out,", ");
+                  HTM_Txt (", ");
            }
         }
      }

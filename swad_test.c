@@ -2832,13 +2832,13 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          Frm_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Test.SelectedOrder)
-            fprintf (Gbl.F.Out,"<u>");
+            HTM_U_Begin ();
         }
       HTM_Txt (Txt_TST_STR_ORDER_SHORT[Order]);
       if (NumRows > 1)
         {
          if (Order == Gbl.Test.SelectedOrder)
-            fprintf (Gbl.F.Out,"</u>");
+            HTM_U_End ();
          Frm_LinkFormEnd ();
          Frm_EndForm ();
         }
@@ -3615,7 +3615,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
    else
-      fprintf (Gbl.F.Out,"?");
+      HTM_Txt ("?");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3856,7 +3856,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       else
 	{
 	 HTM_TD_Begin ("class=\"ANS_0 CT\"");
-	 fprintf (Gbl.F.Out,"?");
+	 HTM_Txt ("?");
          HTM_TD_End ();
 	}
 
@@ -4504,7 +4504,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
         {
          Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
          HTM_TD_Begin ("class=\"ANS_0 CM\"");
-         fprintf (Gbl.F.Out,"?");
+         HTM_Txt ("?");
          HTM_TD_End ();
         }
      }
@@ -4646,7 +4646,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       else				// Not a floating point number
 	{
          HTM_TD_Begin ("class=\"ANS_0 CM\"");
-         fprintf (Gbl.F.Out,"?");
+         HTM_Txt ("?");
 	}
      }
    else					// If user has omitted the answer
@@ -4659,7 +4659,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"[%lg; %lg]",FloatAnsCorr[0],FloatAnsCorr[1]);
    else
-      fprintf (Gbl.F.Out,"?");
+      HTM_Txt ("?");
    HTM_TD_End ();
 
    HTM_TR_End ();

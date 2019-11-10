@@ -814,10 +814,10 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 			   -1L);
 	    Frm_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
 	    if (Order == Gbl.Prjs.SelectedOrder)
-	       fprintf (Gbl.F.Out,"<u>");
+	       HTM_U_Begin ();
             HTM_Txt (Txt_PROJECT_ORDER[Order]);
 	    if (Order == Gbl.Prjs.SelectedOrder)
-	       fprintf (Gbl.F.Out,"</u>");
+	       HTM_U_End ();
 	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    break;

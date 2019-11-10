@@ -139,10 +139,10 @@ void Mai_SeeMailDomains (void)
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
-         fprintf (Gbl.F.Out,"<u>");
+         HTM_U_Begin ();
       HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrder)
-         fprintf (Gbl.F.Out,"</u>");
+         HTM_U_End ();
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -941,7 +941,7 @@ static void Mai_ListEmails (void)
 	   {
 	    if (NumAcceptedUsrsWithEmail > 0)
 	      {
-	       fprintf (Gbl.F.Out,", ");
+	       HTM_Txt (", ");
 	       LengthStrAddr ++;
 	       if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 		  Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");

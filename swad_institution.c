@@ -861,13 +861,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
+	    HTM_U_Begin ();
 	}
       HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
       if (OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
+	    HTM_U_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}

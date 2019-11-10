@@ -226,10 +226,10 @@ static void Gam_ListAllGames (void)
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_GAMES_ORDER_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
+	    HTM_U_Begin ();
 	 HTM_Txt (Txt_GAMES_ORDER[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
+	    HTM_U_End ();
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 

@@ -2553,10 +2553,10 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 				      -1L);
 	 Frm_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Forum.ThreadsOrder)
-            fprintf (Gbl.F.Out,"<u>");
+            HTM_U_Begin ();
 	 HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
          if (Order == Gbl.Forum.ThreadsOrder)
-            fprintf (Gbl.F.Out,"</u>");
+            HTM_U_End ();
          Frm_LinkFormEnd ();
          Frm_EndForm ();
 

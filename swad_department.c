@@ -131,10 +131,10 @@ void Dpt_SeeDepts (void)
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Dpts.SelectedOrder)
-	 fprintf (Gbl.F.Out,"<u>");
+	 HTM_U_Begin ();
       HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
       if (Order == Gbl.Dpts.SelectedOrder)
-	 fprintf (Gbl.F.Out,"</u>");
+	 HTM_U_End ();
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
