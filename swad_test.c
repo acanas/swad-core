@@ -471,7 +471,7 @@ void Tst_ShowNewTest (void)
 	    HTM_INPUT_CHECKBOX ("Save",false,
 				"value=\"Y\"%s",
 				Gbl.Test.AllowTeachers ? " checked=\"checked\"" : "");
-	    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
+	    HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
 	    HTM_LABEL_End ();
 	    HTM_DIV_End ();
 
@@ -1699,7 +1699,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    HTM_INPUT_CHECKBOX ("AllTags",false,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
 		       Gbl.Test.Tags.All ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_tags);
+   HTM_NBSPTxt (Txt_All_tags);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1747,7 +1747,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 			  row[1],
 			  Checked ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"&nbsp;%s",row[1]);
+      HTM_NBSPTxt (row[1]);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2330,7 +2330,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    HTM_INPUT_CHECKBOX ("AllAnsTypes",false,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
 		       Gbl.Test.AllAnsTypes ? " checked=\"checked\"" : "");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_types_of_answers);
+   HTM_NBSPTxt (Txt_All_types_of_answers);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2360,7 +2360,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 			  "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
 			  (unsigned) AnsType,
 			  Checked ? " checked=\"checked\"" : "");
-      fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+      HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

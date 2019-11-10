@@ -2102,7 +2102,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
       default:
          break;
      }
-   fprintf (Gbl.F.Out,"&nbsp;%s",ForumName);
+   HTM_NBSPTxt (ForumName);
 
    /***** Write total number of threads and posts in this forum *****/
    if (ShowNumOfPosts)

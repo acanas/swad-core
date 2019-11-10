@@ -257,7 +257,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
 
    /***** Degree logo and name *****/
    Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
-   fprintf (Gbl.F.Out,"&nbsp;%s",Deg->FullName);
+   HTM_NBSPTxt (Deg->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();
@@ -2472,7 +2472,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	   {
 	    case Hie_SYS:	// System
 	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
-	       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_all_degrees);
+	       HTM_NBSPTxt (Txt_all_degrees);
 	       break;
 	    case Hie_INS:	// Institution
 	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);

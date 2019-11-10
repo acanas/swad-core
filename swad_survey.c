@@ -3531,7 +3531,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	    "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Title);
+   HTM_NBSPTxt (Gbl.Title);
 
    HTM_TD_End ();
   }

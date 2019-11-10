@@ -6433,7 +6433,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       FileSizeStr[0] = '\0';
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"&nbsp;%s",FileSizeStr);
+   HTM_NBSPTxt (FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
@@ -11920,7 +11920,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   InsShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s",InsShortName);
+	 HTM_NBSPTxt (InsShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -11937,7 +11937,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   CtrShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s",CtrShortName);
+	 HTM_NBSPTxt (CtrShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -11954,7 +11954,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   DegShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s",DegShortName);
+	 HTM_NBSPTxt (DegShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -12078,7 +12078,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
-      fprintf (Gbl.F.Out,"&nbsp;%s",FileNameToShow);
+      HTM_NBSPTxt (FileNameToShow);
       Frm_LinkFormEnd ();
 
       /* End form */

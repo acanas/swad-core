@@ -1266,7 +1266,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Followers);
+	 HTM_NBSPTxt (Txt_Followers);
 	 HTM_SPAN_End ();
 
 	 HTM_DIV_End ();
@@ -2273,7 +2273,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 else	// Pho_DEGREES_PRINT
 	   {
 	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-	    fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	    HTM_NBSPTxt (Deg.FullName);
 	   }
 	 HTM_TD_End ();
 

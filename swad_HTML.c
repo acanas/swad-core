@@ -1520,6 +1520,12 @@ void HTM_TxtColon (const char *Txt)
    HTM_Txt (":");
   }
 
+void HTM_NBSPTxt (const char *Txt)
+  {
+   HTM_NBSP ();
+   HTM_Txt (Txt);
+  }
+
 void HTM_NBSP (void)
   {
    HTM_Txt ("&nbsp;");

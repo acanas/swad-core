@@ -253,7 +253,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
 
    /***** Centre logo and name *****/
    Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
-   fprintf (Gbl.F.Out,"&nbsp;%s",Ctr->FullName);
+   HTM_NBSPTxt (Ctr->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();

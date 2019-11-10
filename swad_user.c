@@ -2823,7 +2823,7 @@ void Usr_WriteLoggedUsrHead (void)
 
    /***** User's name *****/
    if (Gbl.Usrs.Me.UsrDat.FirstName[0])
-      fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Usrs.Me.UsrDat.FirstName);
+      HTM_NBSPTxt (Gbl.Usrs.Me.UsrDat.FirstName);
 
    HTM_DIV_End ();
   }

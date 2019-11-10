@@ -571,7 +571,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                   ClassNormal,
 		       NULL);
    Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_System);
+   HTM_NBSPTxt (Txt_System);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_LI_End ();
@@ -603,7 +603,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			  Highlight ? ClassHighlight :
         	                      ClassNormal,NULL);
       Cty_DrawCountryMap (&Cty,"ICO16x16");
-      fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
+      HTM_NBSPTxt (Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_LI_End ();
@@ -636,7 +636,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
+	 HTM_NBSPTxt (Ins.FullName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_LI_End ();
@@ -669,7 +669,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
-	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
+	    HTM_NBSPTxt (Ctr.FullName);
 	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    HTM_LI_End ();
@@ -702,7 +702,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
-	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	       HTM_NBSPTxt (Deg.FullName);
 	       Frm_LinkFormEnd ();
 	       Frm_EndForm ();
 	       HTM_LI_End ();
@@ -738,7 +738,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
 		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
-		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
+		  HTM_NBSPTxt (Crs.FullName);
 		  Frm_LinkFormEnd ();
 		  Frm_EndForm ();
 

@@ -461,7 +461,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
 			                   " disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_groups);
+   HTM_NBSPTxt (Txt_All_groups);
    HTM_LABEL_End ();
    HTM_DIV_End ();
   }

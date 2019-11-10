@@ -160,7 +160,7 @@ void Hld_SeeHolidays (void)
 
 	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    fprintf (Gbl.F.Out,"&nbsp;%s",StrDate);
+	    HTM_NBSPTxt (StrDate);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -177,7 +177,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Hlds.Lst[NumHld].Name);
+	    HTM_NBSPTxt (Gbl.Hlds.Lst[NumHld].Name);
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();

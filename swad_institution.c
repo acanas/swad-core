@@ -267,7 +267,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
    /***** Institution logo and name *****/
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
-   fprintf (Gbl.F.Out,"&nbsp;%s",Ins->FullName);
+   HTM_NBSPTxt (Ins->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();

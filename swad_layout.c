@@ -1277,8 +1277,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    /***** Text *****/
    if (Text)
       if (Text[0])
-	 fprintf (Gbl.F.Out,"&nbsp;%s",
-		  Text);
+	 HTM_NBSPTxt (Text);
 
    /***** End label and container *****/
    HTM_LABEL_End ();

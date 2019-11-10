@@ -1434,7 +1434,7 @@ static void TL_PutLinkToViewOldPublications (void)
 	    "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
 	    "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_See_more);
+   HTM_NBSPTxt (Txt_See_more);
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -2029,7 +2029,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 		The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
       Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
       Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
-      fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      HTM_NBSPTxt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
