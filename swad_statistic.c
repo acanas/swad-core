@@ -3374,7 +3374,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       /* Write ranking of this country */
       HTM_TD_Begin ("class=\"LOG RM\"");
       if (CtyCod > 0)
-         fprintf (Gbl.F.Out,"%lu",++Ranking);
+         HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 
@@ -3464,7 +3464,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       /* Write ranking of this institution */
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (InsCod > 0)
-         fprintf (Gbl.F.Out,"%lu",++Ranking);
+         HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 
@@ -3556,7 +3556,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       /* Write ranking of this centre */
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CtrCod > 0)
-         fprintf (Gbl.F.Out,"%lu",++Ranking);
+         HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 
@@ -3648,7 +3648,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       /* Write ranking of this degree */
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (DegCod > 0)
-         fprintf (Gbl.F.Out,"%lu",++Ranking);
+         HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 
@@ -3752,7 +3752,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       /* Write ranking of this course */
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CrsOK)
-         fprintf (Gbl.F.Out,"%lu",++Ranking);
+         HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 

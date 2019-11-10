@@ -157,6 +157,7 @@ void HTM_TxtColon (const char *Txt);
 void HTM_NBSPTxt (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Unsigned (unsigned Num);
+void HTM_UnsignedLong (unsigned long Num);
 void HTM_Long (long Num);
 
 #endif

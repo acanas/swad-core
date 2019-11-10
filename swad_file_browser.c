@@ -11906,7 +11906,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Write number of document in this search *****/
       HTM_TD_Begin ("class=\"DAT RT %s\"",BgColor);
-      fprintf (Gbl.F.Out,"%lu",++(*NumDocsNotHidden));
+      HTM_UnsignedLong (++(*NumDocsNotHidden));
       HTM_TD_End ();
 
       /***** Write institution logo, institution short name *****/

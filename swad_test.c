@@ -2899,7 +2899,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write number of question */
       HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-      fprintf (Gbl.F.Out,"%lu",NumRow + 1);
+      HTM_UnsignedLong (NumRow + 1);
       HTM_DIV_End ();
 
       /* Write answer type (row[2]) */
@@ -2987,7 +2987,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write number of times this question has been answered */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%lu",NumHitsThisQst);
+      HTM_UnsignedLong (NumHitsThisQst);
       HTM_TD_End ();
 
       /* Write average score */
@@ -3001,7 +3001,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write number of times this question has been answered (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"%lu",NumHitsNotBlankThisQst);
+      HTM_UnsignedLong (NumHitsNotBlankThisQst);
       HTM_TD_End ();
 
       /* Write average score (not blank) */

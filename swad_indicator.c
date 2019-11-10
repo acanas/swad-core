@@ -1125,14 +1125,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
 								        "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%lu",Indicators.NumFilesAssignments);
+		  HTM_UnsignedLong (Indicators.NumFilesAssignments);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
 			        (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
 								  "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%lu",Indicators.NumFilesWorks);
+		  HTM_UnsignedLong (Indicators.NumFilesWorks);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
@@ -1184,14 +1184,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			        (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
 									    "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%lu",Indicators.NumFilesInDocumentZones);
+		  HTM_UnsignedLong (Indicators.NumFilesInDocumentZones);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
 			        (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
 									  "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"%lu",Indicators.NumFilesInSharedZones);
+		  HTM_UnsignedLong (Indicators.NumFilesInSharedZones);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",

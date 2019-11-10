@@ -2834,7 +2834,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             /***** Number *****/
             HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("class=\"DAT RT\"");
-	    fprintf (Gbl.F.Out,"%lu",NumReqs - NumReq);
+	    HTM_UnsignedLong (NumReqs - NumReq);
 	    HTM_TD_End ();
 
             /***** Link to course *****/

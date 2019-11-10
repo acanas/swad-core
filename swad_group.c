@@ -2302,7 +2302,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	Role--)
      {
       HTM_TD_Begin ("class=\"DAT CM\"");
-      fprintf (Gbl.F.Out,"%lu",Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
+      HTM_UnsignedLong (Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
       HTM_TD_End ();
      }
 

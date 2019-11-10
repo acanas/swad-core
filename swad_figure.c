@@ -2614,11 +2614,11 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFolders);
+   HTM_UnsignedLong (SizeOfFileZones->NumFolders);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
-   fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFiles);
+   HTM_UnsignedLong (SizeOfFileZones->NumFiles);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s RM\"",Class);
@@ -2785,11 +2785,11 @@ static void Fig_GetAndShowOERsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%lu",NumFiles[0]);
+      HTM_UnsignedLong (NumFiles[0]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%lu",NumFiles[1]);
+      HTM_UnsignedLong (NumFiles[1]);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3122,7 +3122,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
+      HTM_UnsignedLong (Stats.NumHits);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3171,7 +3171,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
+   HTM_UnsignedLong (Stats.NumHits);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3405,7 +3405,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
+      HTM_UnsignedLong (NumSocialNotes);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3526,7 +3526,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
+   HTM_UnsignedLong (NumSocialNotes);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");

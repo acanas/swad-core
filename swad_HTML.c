@@ -1558,6 +1558,11 @@ void HTM_Unsigned (unsigned Num)
    fprintf (Gbl.F.Out,"%u",Num);
   }
 
+void HTM_UnsignedLong (unsigned long Num)
+  {
+   fprintf (Gbl.F.Out,"%lu",Num);
+  }
+
 void HTM_Long (long Num)
   {
    fprintf (Gbl.F.Out,"%ld",Num);
