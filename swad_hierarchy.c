@@ -104,7 +104,7 @@ void Hie_WriteMenuHierarchy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"cty\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Country);
+   HTM_TxtColon (Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -122,7 +122,7 @@ void Hie_WriteMenuHierarchy (void)
 
       HTM_TD_Begin ("class=\"RM\"");
       HTM_LABEL_Begin ("for=\"ins\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Institution);
+      HTM_TxtColon (Txt_Institution);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -140,7 +140,7 @@ void Hie_WriteMenuHierarchy (void)
 
          HTM_TD_Begin ("class=\"RM\"");
          HTM_LABEL_Begin ("for=\"ctr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_Centre);
+         HTM_TxtColon (Txt_Centre);
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -159,7 +159,7 @@ void Hie_WriteMenuHierarchy (void)
 	    HTM_TD_Begin ("class=\"RM\"");
 	    HTM_LABEL_Begin ("for=\"deg\" class=\"%s\"",
 			     The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"%s:",Txt_Degree);
+	    HTM_TxtColon (Txt_Degree);
 	    HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -178,7 +178,7 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TD_Begin ("class=\"RM\"");
 	       HTM_LABEL_Begin ("for=\"crs\" class=\"%s\"",
 			        The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       fprintf (Gbl.F.Out,"%s:",Txt_Course);
+	       HTM_TxtColon (Txt_Course);
 	       HTM_LABEL_End ();
 	       HTM_TD_End ();
 

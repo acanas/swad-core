@@ -1803,7 +1803,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		       ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
 					   "REC_DAT_SMALL",
 		       Gbl.RowEvenOdd);
-         fprintf (Gbl.F.Out,"%s:",Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+         HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
            {
@@ -2845,7 +2845,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Email);
+   HTM_TxtColon (Txt_Email);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -2879,7 +2879,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RT %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_ID);
+   HTM_TxtColon (Txt_ID);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LT\"");
@@ -2921,7 +2921,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s:",Txt_Role);
+      HTM_TxtColon (Txt_Role);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3140,7 +3140,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      {
       /***** No form, only text *****/
       HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s:",Txt_Role);
+      HTM_TxtColon (Txt_Role);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3200,7 +3200,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Surname2\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Surname_2);
+   HTM_TxtColon (Txt_Surname_2);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3318,7 +3318,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"OriginPlace\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Place_of_origin);
+   HTM_TxtColon (Txt_Place_of_origin);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3350,7 +3350,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Date_of_birth);
+   HTM_TxtColon (Txt_Date_of_birth);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3384,7 +3384,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"LocalAddress\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Local_address);
+   HTM_TxtColon (Txt_Local_address);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3417,7 +3417,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"LocalPhone\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Phone);
+   HTM_TxtColon (Txt_Phone);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3453,7 +3453,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"FamilyAddress\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Family_address);
+   HTM_TxtColon (Txt_Family_address);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3486,7 +3486,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"FamilyPhone\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Phone);
+   HTM_TxtColon (Txt_Phone);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3522,7 +3522,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
    HTM_LABEL_Begin ("for=\"Comments\" class=\"%s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_USER_comments);
+   HTM_TxtColon (Txt_USER_comments);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3584,7 +3584,7 @@ static void Rec_ShowInstitution (struct Instit *Ins,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Institution);
+   HTM_TxtColon (Txt_Institution);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3616,7 +3616,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Centre);
+   HTM_TxtColon (Txt_Centre);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3652,7 +3652,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Department);
+   HTM_TxtColon (Txt_Department);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3687,7 +3687,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Office);
+   HTM_TxtColon (Txt_Office);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -3710,7 +3710,7 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   fprintf (Gbl.F.Out,"%s:",Txt_Phone);
+   HTM_TxtColon (Txt_Phone);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
@@ -4142,7 +4142,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"Office\" class=\"%s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s:",Txt_Office);
+      HTM_TxtColon (Txt_Office);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -4160,7 +4160,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"OfficePhone\" class=\"%s\"",ClassForm);
-      fprintf (Gbl.F.Out,"%s:",Txt_Phone);
+      HTM_TxtColon (Txt_Phone);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

@@ -338,7 +338,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ShowAllAnnouncements)
      {
       /* Users' roles who can view this announcement */
-      fprintf (Gbl.F.Out,"%s:",Txt_Users);
+      HTM_TxtColon (Txt_Users);
       for (Role = Rol_UNK, SomeRolesAreSelected = false;
 	   Role <= Rol_TCH;
 	   Role++)
@@ -455,7 +455,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Field,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Label);
+   HTM_TxtColon (Label);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

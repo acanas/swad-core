@@ -1140,7 +1140,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Title);
+   HTM_TxtColon (Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1156,7 +1156,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Description);
+   HTM_TxtColon (Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

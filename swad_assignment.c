@@ -1169,7 +1169,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Title);
+   HTM_TxtColon (Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1187,12 +1187,12 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Upload_files_QUESTION);
+   HTM_TxtColon (Txt_Upload_files_QUESTION);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
-   fprintf (Gbl.F.Out,"%s:",Txt_Folder);
+   HTM_TxtColon (Txt_Folder);
    HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,false,
 		   "size=\"30\"");
    HTM_LABEL_End ();
@@ -1205,7 +1205,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Description);
+   HTM_TxtColon (Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1255,7 +1255,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");

@@ -920,7 +920,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"UsrsIDs\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_List_of_nicks_emails_or_IDs);
+   HTM_TxtColon (Txt_List_of_nicks_emails_or_IDs);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2272,7 +2272,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeEnr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Scope);
+   HTM_TxtColon (Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2287,7 +2287,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Users);
+   HTM_TxtColon (Txt_Users);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

@@ -686,7 +686,7 @@ void Pwd_ShowFormChgMyPwd (void)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"UsrPwd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Current_password);
+      HTM_TxtColon (Txt_Current_password);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -735,7 +735,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    /***** Label ****/
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Paswd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Password);
+   HTM_TxtColon (Txt_Password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -765,7 +765,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd1\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_New_password);
+   HTM_TxtColon (Txt_New_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -783,7 +783,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd2\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Retype_new_password);
+   HTM_TxtColon (Txt_Retype_new_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

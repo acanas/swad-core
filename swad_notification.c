@@ -1941,7 +1941,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+      HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");

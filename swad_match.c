@@ -1202,7 +1202,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Title);
+   HTM_TxtColon (Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1254,7 +1254,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");

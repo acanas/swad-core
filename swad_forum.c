@@ -3903,7 +3903,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Subject\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_MSG_Subject);
+   HTM_TxtColon (Txt_MSG_Subject);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3921,7 +3921,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Content\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_MSG_Content);
+   HTM_TxtColon (Txt_MSG_Content);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

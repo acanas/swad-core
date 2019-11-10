@@ -1105,7 +1105,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Title);
+   HTM_TxtColon (Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1124,7 +1124,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"ComTchVisible\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
+   HTM_TxtColon (Txt_Teachers_comment);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1144,7 +1144,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Description);
+   HTM_TxtColon (Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1194,7 +1194,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -3248,7 +3248,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
       HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N_LINE_TOP RM\"",
 		    Gbl.Usrs.Listing.WithPhotos ? 4 :
 						  3);
-      fprintf (Gbl.F.Out,"%s:",Txt_Number_of_users);
+      HTM_TxtColon (Txt_Number_of_users);
       HTM_TD_End ();
 
       for (NumAttEvent = 0, Total = 0;
@@ -3607,7 +3607,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentStd,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       fprintf (Gbl.F.Out,"%s:",Txt_Student_comment);
+	       HTM_TxtColon (Txt_Student_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentStd);
@@ -3618,7 +3618,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentTch,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
+	       HTM_TxtColon (Txt_Teachers_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentTch);

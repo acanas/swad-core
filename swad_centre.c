@@ -415,7 +415,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Institution);
+   HTM_TxtColon (Txt_Institution);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -455,7 +455,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Centre);
+   HTM_TxtColon (Txt_Centre);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -481,7 +481,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Short_name);
+   HTM_TxtColon (Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -508,7 +508,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Place);
+   HTM_TxtColon (Txt_Place);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -551,7 +551,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Web);
+   HTM_TxtColon (Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -584,7 +584,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
+   HTM_TxtColon (Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -607,7 +607,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
+      HTM_TxtColon (Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -622,7 +622,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Users_of_the_centre);
+      HTM_TxtColon (Txt_Users_of_the_centre);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -635,7 +635,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Degrees);
+      HTM_TxtColon (Txt_Degrees);
       HTM_TD_End ();
 
       /* Form to go to see degrees of this centre */
@@ -657,7 +657,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Courses);
+      HTM_TxtColon (Txt_Courses);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -742,9 +742,8 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",
-	    (Role == Rol_UNK) ? Txt_Users_in_courses :
-		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
+		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

@@ -365,7 +365,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"NewNick\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Nickname);
+   HTM_TxtColon (Txt_Nickname);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -383,7 +383,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"NewEmail\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Email);
+   HTM_TxtColon (Txt_Email);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

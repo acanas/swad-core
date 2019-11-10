@@ -239,7 +239,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Degree);
+   HTM_TxtColon (Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -281,7 +281,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Course);
+   HTM_TxtColon (Txt_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -307,7 +307,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Short_name);
+   HTM_TxtColon (Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -334,7 +334,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthCrsYear\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Year_OF_A_DEGREE);
+   HTM_TxtColon (Txt_Year_OF_A_DEGREE);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -367,7 +367,7 @@ static void Crs_Configuration (bool PrintView)
 
       HTM_TD_Begin ("class=\"RM\"");
       HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Institutional_code);
+      HTM_TxtColon (Txt_Institutional_code);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -391,7 +391,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Internal_code);
+      HTM_TxtColon (Txt_Internal_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -405,7 +405,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
+   HTM_TxtColon (Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -428,7 +428,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
+      HTM_TxtColon (Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -451,7 +451,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Indicators);
+      HTM_TxtColon (Txt_Indicators);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -499,7 +499,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtColon (Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2989,7 +2989,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      fprintf (Gbl.F.Out,"%s:",Gbl.Title);
+      HTM_TxtColon (Gbl.Title);
       HTM_TH_End ();
 
       HTM_TR_End ();

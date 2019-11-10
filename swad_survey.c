@@ -643,7 +643,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Users' roles who can answer the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   fprintf (Gbl.F.Out,"%s:",Txt_Users);
+   HTM_TxtColon (Txt_Users);
    HTM_BR ();
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -1895,7 +1895,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeSvy\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Scope);
+   HTM_TxtColon (Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1912,7 +1912,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Title);
+   HTM_TxtColon (Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1931,7 +1931,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Description);
+   HTM_TxtColon (Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1948,7 +1948,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Users);
+   HTM_TxtColon (Txt_Users);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2080,7 +2080,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -2722,7 +2722,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Wording);
+   HTM_TxtColon (Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2738,7 +2738,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Type);
+   HTM_TxtColon (Txt_Type);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);

@@ -1502,7 +1502,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 
 void HTM_BR (void)
   {
-   fprintf (Gbl.F.Out,"<br   />");
+   fprintf (Gbl.F.Out,"<br />");
   }
 
 /*****************************************************************************/
@@ -1511,5 +1511,11 @@ void HTM_BR (void)
 
 void HTM_Txt (const char *Txt)
   {
-   fprintf (Gbl.F.Out,"%s",Txt);
+   fputs (Txt,Gbl.F.Out);
+  }
+
+void HTM_TxtColon (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_Txt (":");
   }

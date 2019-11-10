@@ -6307,9 +6307,8 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
-   fprintf (Gbl.F.Out,"%s:",
-	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-                                                  Txt_ROLES_PLURAL_Abc[Role][Sex]);
+   HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
+                                                       Txt_ROLES_PLURAL_Abc[Role][Sex]);
    HTM_LABEL_End ();
 
    HTM_TH_End ();

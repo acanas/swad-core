@@ -583,7 +583,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Filename);
+   HTM_TxtColon (Txt_Filename);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -600,7 +600,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_File_size);
+   HTM_TxtColon (Txt_File_size);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

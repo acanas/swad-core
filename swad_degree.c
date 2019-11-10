@@ -343,7 +343,7 @@ static void Deg_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Centre);
+   HTM_TxtColon (Txt_Centre);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -382,7 +382,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Degree);
+   HTM_TxtColon (Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -408,7 +408,7 @@ static void Deg_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Short_name);
+   HTM_TxtColon (Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -434,7 +434,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Web);
+   HTM_TxtColon (Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -466,7 +466,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
+   HTM_TxtColon (Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -489,7 +489,7 @@ static void Deg_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
+      HTM_TxtColon (Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -504,7 +504,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_Courses);
+      HTM_TxtColon (Txt_Courses);
       HTM_TD_End ();
 
       /* Form to go to see courses of this degree */
@@ -565,9 +565,8 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",
-	    (Role == Rol_UNK) ? Txt_Users_in_courses :
-		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
+		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

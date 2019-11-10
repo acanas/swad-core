@@ -377,7 +377,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_Users);
+         HTM_TxtColon (Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -400,7 +400,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_Show);
+         HTM_TxtColon (Txt_Show);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -540,7 +540,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Users);
+   HTM_TxtColon (Txt_Users);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -569,7 +569,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeSta\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Scope);
+   HTM_TxtColon (Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -592,7 +592,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"CountType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Show);
+   HTM_TxtColon (Txt_Show);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -717,7 +717,7 @@ static void Sta_WriteSelectorAction (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"StatAct\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Action);
+   HTM_TxtColon (Txt_Action);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

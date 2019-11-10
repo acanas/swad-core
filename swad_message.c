@@ -293,7 +293,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_MSG_To);
+   HTM_TxtColon (Txt_MSG_To);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -486,8 +486,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
    HTM_LABEL_Begin ("for=\"OtherRecipients\"");
-   fprintf (Gbl.F.Out,"%s:",StdsAndTchsWritten ? Txt_Other_recipients :
-				                 Txt_Recipients);
+   HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
+				      Txt_Recipients);
    HTM_LABEL_End ();
    HTM_TH_End ();
 
@@ -538,7 +538,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MsgSubject\" class=\"%s\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_MSG_Subject);
+   HTM_TxtColon (Txt_MSG_Subject);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -590,7 +590,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_Begin ("class=\"RT\"");
       HTM_LABEL_Begin ("for=\"MsgContent\" class=\"%s\"",
 	               The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_MSG_Content);
+      HTM_TxtColon (Txt_MSG_Content);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -626,7 +626,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_Begin ("class=\"RT\"");
       HTM_LABEL_Begin ("for=\"MsgContent\" class=\"%s\"",
                        The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s:",Txt_MSG_Content);
+      HTM_TxtColon (Txt_MSG_Content);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

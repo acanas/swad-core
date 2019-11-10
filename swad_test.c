@@ -355,7 +355,7 @@ void Tst_ShowFormAskTst (void)
 
          HTM_TD_Begin ("class=\"RM\"");
          HTM_LABEL_Begin ("for=\"NumQst\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_No_of_questions);
+         HTM_TxtColon (Txt_No_of_questions);
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -1680,7 +1680,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Tags);
+   HTM_TxtColon (Txt_Tags);
    HTM_TD_End ();
 
    /***** Select all tags *****/
@@ -1901,7 +1901,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Plugins);
+   HTM_TxtColon (Txt_Plugins);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1926,7 +1926,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_No_of_questions);
+   HTM_TxtColon (Txt_No_of_questions);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1948,7 +1948,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MinTimeNxtTstPerQst\" class=\"%s\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Minimum_time_seconds_per_question_between_two_tests);
+   HTM_TxtColon (Txt_Minimum_time_seconds_per_question_between_two_tests);
     HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1966,7 +1966,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Feedback_to_students);
+   HTM_TxtColon (Txt_Feedback_to_students);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -2313,7 +2313,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Types_of_answers);
+   HTM_TxtColon (Txt_Types_of_answers);
    HTM_TD_End ();
 
    /***** Select all types of answers *****/
@@ -5124,7 +5124,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Tags);
+   HTM_TxtColon (Txt_Tags);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -5203,7 +5203,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Stem\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Wording);
+   HTM_TxtColon (Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -5234,7 +5234,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Type);
+   HTM_TxtColon (Txt_Type);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -5260,7 +5260,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Answers);
+   HTM_TxtColon (Txt_Answers);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -7491,7 +7491,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_Users);
+         HTM_TxtColon (Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -8128,8 +8128,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",
-	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
+      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -8155,7 +8154,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Date);
+      HTM_TxtColon (Txt_Date);
       HTM_TD_End ();
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
@@ -8170,7 +8169,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Questions);
+      HTM_TxtColon (Txt_Questions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -8184,7 +8183,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Score);
+      HTM_TxtColon (Txt_Score);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -8205,7 +8204,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Tags);
+      HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");

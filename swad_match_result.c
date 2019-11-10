@@ -209,7 +209,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s:",Txt_Users);
+         HTM_TxtColon (Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -758,7 +758,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -788,7 +788,7 @@ void McR_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[StartEndTime]);
+	 HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
@@ -807,7 +807,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Questions);
+      HTM_TxtColon (Txt_Questions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -821,7 +821,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Score);
+      HTM_TxtColon (Txt_Score);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -842,7 +842,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      fprintf (Gbl.F.Out,"%s:",Txt_Tags);
+      HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");

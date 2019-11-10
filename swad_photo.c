@@ -1800,7 +1800,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"AvgType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Average_type);
+   HTM_TxtColon (Txt_Average_type);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1865,7 +1865,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"PhotoSize\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Size_of_photos);
+   HTM_TxtColon (Txt_Size_of_photos);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1930,7 +1930,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Order\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Sort_degrees_by);
+   HTM_TxtColon (Txt_Sort_degrees_by);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
