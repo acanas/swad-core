@@ -1494,7 +1494,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 			Txt_Print);
    Frm_LinkFormEnd ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"(");
+   HTM_Txt ("(");
    HTM_SELECT_Begin (false,
 		     "name=\"RecsPerPag\"");
    for (i = Rec_MIN_RECORDS_PER_PAGE;

@@ -546,7 +546,7 @@ void Cty_ListCountries2 (void)
    /***** Separation row *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"8\" class=\"DAT CM\"");
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -617,7 +617,7 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2063,12 +2063,12 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** Number of users *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Number of institutions *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    HTM_TR_End ();

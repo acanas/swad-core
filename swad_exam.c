@@ -1076,7 +1076,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Title *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_BR ();
    fprintf (Gbl.F.Out,"<strong>%s</strong>",Txt_EXAM_ANNOUNCEMENT);
    HTM_TD_End ();
@@ -1084,7 +1084,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s LM\"",StyleNormal);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
    HTM_TR_End ();
 

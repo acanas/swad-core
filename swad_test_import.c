@@ -1083,9 +1083,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          break;
       case Tst_ANS_TRUE_FALSE:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-         fprintf (Gbl.F.Out,"(");
+         HTM_Txt ("(");
          Tst_WriteAnsTF (Gbl.Test.Answer.TF);
-         fprintf (Gbl.F.Out,")");
+         HTM_Txt (")");
          HTM_SPAN_End ();
          break;
       case Tst_ANS_UNIQUE_CHOICE:

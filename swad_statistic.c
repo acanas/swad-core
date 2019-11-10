@@ -463,7 +463,7 @@ void Sta_AskShowCrsHits (void)
 			RowsPerPage[i] == Gbl.Stat.RowsPerPage,false,
 	                "%u",RowsPerPage[i]);
          HTM_SELECT_End ();
-         fprintf (Gbl.F.Out,")");
+         HTM_Txt (")");
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -1708,7 +1708,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the user's ID if user is a student */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write the first name and the surnames */
@@ -1848,7 +1848,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       /* Write the user's ID if user is a student in current course */
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write the name and the surnames */
@@ -1884,7 +1884,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  NULL,
 	          "class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
 		  BarWidth);
-	 fprintf (Gbl.F.Out,"&nbsp;");
+	 HTM_NBSP ();
 	}
       Str_WriteFloatNumToFile (Gbl.F.Out,Hits.Num);
       HTM_TD_End ();
@@ -2326,7 +2326,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
    HTM_TD_Begin ("colspan=\"%u\" class=\"LOG LB\" style=\"width:%upx;\"",
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    for (Interval = 1;
@@ -2867,7 +2867,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
      {
       fprintf (Gbl.F.Out,"0%%");
       HTM_BR ();
-      fprintf (Gbl.F.Out,"0");
+      HTM_Unsigned (0);
      }
 
    /* Write the hour */
@@ -3198,7 +3198,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
          HTM_Txt (Plg.Name);
       else
          fprintf (Gbl.F.Out,"?");
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
@@ -3375,7 +3375,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RM\"");
       if (CtyCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write country */
@@ -3465,7 +3465,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (InsCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write institution */
@@ -3557,7 +3557,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CtrCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write centre */
@@ -3649,7 +3649,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3753,7 +3753,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CrsOK)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3781,7 +3781,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
         }
       else
          fprintf (Gbl.F.Out,"-");
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       if (CrsOK)
          Frm_EndForm ();
       HTM_TD_End ();
@@ -3855,7 +3855,7 @@ static void Sta_DrawBarNumHits (char Color,
       free (Icon);
 
       /***** Write the number of hits *****/
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       Str_WriteFloatNumToFile (Gbl.F.Out,HitsNum);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
                (unsigned) (((HitsNum * 100.0) /

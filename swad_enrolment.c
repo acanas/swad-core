@@ -815,7 +815,7 @@ void Enr_AskRemoveOldUsrs (void)
 		  Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
 		  "%u",Months);
    HTM_SELECT_End ();
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

@@ -3327,9 +3327,9 @@ void Tst_WriteAnswersEdit (long QstCod)
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
-         fprintf (Gbl.F.Out,"(");
+         HTM_Txt ("(");
          Tst_WriteAnsTF (row[1][0]);
-         fprintf (Gbl.F.Out,")");
+         HTM_Txt (")");
          HTM_SPAN_End ();
          break;
       case Tst_ANS_UNIQUE_CHOICE:
@@ -3547,7 +3547,7 @@ void Tst_WriteAnsTF (char AnsTF)
          HTM_Txt (Txt_TF_QST[1]);
          break;
       default:		// no answer
-         fprintf (Gbl.F.Out,"&nbsp;");
+         HTM_NBSP ();
          break;
      }
   }

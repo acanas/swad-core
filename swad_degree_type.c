@@ -478,7 +478,7 @@ static void DT_PutFormToCreateDegreeType (void)
 
    /***** Number of degrees of this degree type ****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    HTM_TR_End ();

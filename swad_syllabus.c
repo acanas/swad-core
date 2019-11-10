@@ -709,7 +709,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 		    StyleSyllabus[Level],Gbl.RowEvenOdd,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
-	 fprintf (Gbl.F.Out,"&nbsp;");
+	 HTM_NBSP ();
       fprintf (Gbl.F.Out,"%s&nbsp;",StrItemCod);
       HTM_TD_End ();
 
@@ -900,9 +900,9 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 		    StyleSyllabus[Level],Gbl.RowEvenOdd,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
-	 fprintf (Gbl.F.Out,"&nbsp;");
+	 HTM_NBSP ();
       Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_TD_End ();
      }
 

@@ -4125,7 +4125,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
       Brw_StoreSizeOfFileTreeInDB ();
      }
    else
-     fprintf (Gbl.F.Out,"&nbsp;");	// Blank to occupy the same space as the text for the browser size
+      HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }
@@ -6256,7 +6256,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	}
 
       /***** Write name of the folder *****/
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
 	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,true,
@@ -6293,7 +6293,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
       HTM_DIV_Begin ("class=\"FILENAME\"");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
@@ -6439,7 +6439,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
    /***** Write the date *****/
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
        Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
      {
@@ -11809,13 +11809,13 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       /* Number of documents not hidden found */
       HTM_TH_Begin (1,7,"CM");
-      fprintf (Gbl.F.Out,"(");
+      HTM_Txt ("(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_hidden_document);
       else
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
-      fprintf (Gbl.F.Out,")");
+      HTM_Txt (")");
       HTM_TH_End ();
 
       HTM_TR_End ();
@@ -12141,7 +12141,7 @@ void Brw_AskRemoveOldFiles (void)
 		  Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
 		  "%u",Months);
    HTM_SELECT_End ();
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

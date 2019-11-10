@@ -2527,17 +2527,17 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Number of users who claim to belong to this centre *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Number of degrees *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Centre requester *****/

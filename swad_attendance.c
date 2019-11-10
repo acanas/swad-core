@@ -1547,7 +1547,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
                fprintf (Gbl.F.Out," %s ",Txt_and);
             if (NumGrps >= 3)
               if (NumGrp < NumGrps - 2)
-                  fprintf (Gbl.F.Out,", ");
+                  HTM_Txt (", ");
            }
         }
      }

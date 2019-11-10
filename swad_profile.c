@@ -500,7 +500,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 			(UsrFigures->NumDays == 1) ? Txt_day :
 						     Txt_days);
 	   }
-	 fprintf (Gbl.F.Out,")");
+	 HTM_Txt (")");
         }
       Dat_WriteLocalDateHMSFromUTC (IdFirstClickTime,UsrFigures->FirstClickTimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -606,7 +606,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
-	 fprintf (Gbl.F.Out,")");
+	 HTM_Txt (")");
 	}
      }
    else	// Number of clicks is unknown

@@ -1403,9 +1403,9 @@ static void TL_PutLinkToViewNewPublications (void)
 	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s (",Txt_See_new_activity);
    HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_SPAN_End ();
-   fprintf (Gbl.F.Out,")");
+   HTM_Txt (")");
    HTM_A_End ();
    HTM_DIV_End ();
   }

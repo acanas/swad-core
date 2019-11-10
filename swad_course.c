@@ -1680,12 +1680,12 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Current number of teachers in this course *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Current number of students in this course *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Course requester *****/
@@ -3276,7 +3276,7 @@ void Crs_AskRemoveOldCrss (void)
 		  i == MonthsWithoutAccess,false,
 		  "%u",i);
    HTM_SELECT_End ();
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

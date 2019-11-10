@@ -2812,7 +2812,7 @@ void Usr_WriteLoggedUsrHead (void)
    else
      {
       Rol_PutFormToChangeMyRole ("SEL_ROLE");
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
      }
 
    /***** Show my photo *****/
@@ -3725,7 +3725,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /****** Write user's ID ******/
    HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of guest's main data *****/
@@ -3829,7 +3829,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main student's data *****/
@@ -3948,7 +3948,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main teacher's data *****/
@@ -4026,7 +4026,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main administrator's data *****/
@@ -4122,7 +4122,7 @@ static void Usr_WriteUsrData (const char *BgColor,
    /***** Write data *****/
    HTM_Txt (Data);
    if (NonBreak)
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
 
    /***** End link *****/
    if (Link)
@@ -8901,17 +8901,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 if (UsrDat.FirstName[0])
 	    HTM_Txt (UsrDat.FirstName);
 	 else
-	    fprintf (Gbl.F.Out,"&nbsp;");
+	    HTM_NBSP ();
 	 HTM_BR ();
 	 if (UsrDat.Surname1[0])
 	    HTM_Txt (UsrDat.Surname1);
 	 else
-	    fprintf (Gbl.F.Out,"&nbsp;");
+	    HTM_NBSP ();
 	 HTM_BR ();
 	 if (UsrDat.Surname2[0])
 	    HTM_Txt (UsrDat.Surname2);
 	 else
-	    fprintf (Gbl.F.Out,"&nbsp;");
+	    HTM_NBSP ();
 
 	 HTM_DIV_End ();
 

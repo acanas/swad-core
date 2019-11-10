@@ -149,7 +149,7 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,")");
+   HTM_Txt (")");
    HTM_TD_End ();
 
    HTM_TR_End ();

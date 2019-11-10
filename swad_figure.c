@@ -1479,7 +1479,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		 {
 		  Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,
 				40,NULL,true);
-	          fprintf (Gbl.F.Out,"&nbsp;");
+	          HTM_NBSP ();
 		 }
 	       HTM_Txt (Ins.FullName);
 	       Frm_LinkFormEnd ();

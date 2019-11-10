@@ -2221,17 +2221,17 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Number of users who claim to belong to this institution ****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Number of centres *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Number of users in courses of this institution ****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Institution requester *****/

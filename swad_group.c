@@ -2541,7 +2541,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Number of groups of this type *****/
    HTM_TD_Begin ("class=\"DAT CM\"");
-   fprintf (Gbl.F.Out,"0");	// It's a new group type ==> 0 groups
+   HTM_Unsigned (0);	// It's a new group type ==> 0 groups
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2655,7 +2655,7 @@ static void Grp_PutFormToCreateGroup (void)
 	Role--)
      {
       HTM_TD_Begin ("class=\"DAT CM\"");
-      fprintf (Gbl.F.Out,"0");
+      HTM_Unsigned (0);
       HTM_TD_End ();
      }
 

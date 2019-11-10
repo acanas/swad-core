@@ -212,7 +212,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
 
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);

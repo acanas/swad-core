@@ -2735,12 +2735,12 @@ static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxSco
    if (NumRow == 0)
      {
       Str_WriteFloatNumToFile (Gbl.F.Out,MaxScore);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
      }
    else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
      {
       Str_WriteFloatNumToFile (Gbl.F.Out,MinScore);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      HTM_NBSP ();
      }
    HTM_TD_End ();
 
@@ -2805,7 +2805,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    /* Write score */
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
    Str_WriteFloatNumToFile (Gbl.F.Out,Score);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /* Draw bar and write number of users for this score */

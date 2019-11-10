@@ -1656,7 +1656,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
                fprintf (Gbl.F.Out," %s ",Txt_and);
             if (NumRows >= 3)
               if (NumRow < NumRows-2)
-                  fprintf (Gbl.F.Out,", ");
+                  HTM_Txt (", ");
            }
         }
      }

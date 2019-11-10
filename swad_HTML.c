@@ -1520,6 +1520,11 @@ void HTM_TxtColon (const char *Txt)
    HTM_Txt (":");
   }
 
+void HTM_NBSP (void)
+  {
+   HTM_Txt ("&nbsp;");
+  }
+
 void HTM_Unsigned (unsigned Num)
   {
    fprintf (Gbl.F.Out,"%u",Num);

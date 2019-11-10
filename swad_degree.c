@@ -982,7 +982,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Current number of courses in this degree *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   fprintf (Gbl.F.Out,"0");
+   HTM_Unsigned (0);
    HTM_TD_End ();
 
    /***** Degree requester *****/
