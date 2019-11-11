@@ -363,7 +363,7 @@ void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title
 
 void Ico_PutIconLink (const char *Icon,const char *Title)
   {
-   HTM_INPUT_IMAGE (Icon,Title,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16");
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16");
   }
 
 /*****************************************************************************/
@@ -385,7 +385,7 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,const char *Title)
   {
-   HTM_INPUT_IMAGE (Icon,Title,"ICO_HIGHLIGHT ICOx20");
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,"ICO_HIGHLIGHT ICOx20");
   }
 
 /*****************************************************************************/

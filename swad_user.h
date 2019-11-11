@@ -142,6 +142,15 @@ typedef enum
    Usr_OTHER,
   } Usr_MeOrOther_t;
 
+#define Usr_NUM_WHO 3
+typedef enum
+  {
+   Usr_WHO_ME,
+   Usr_WHO_SOME,
+   Usr_WHO_ALL,
+  } Usr_Who_t;
+#define Usr_WHO_DEFAULT Usr_WHO_ALL
+
 // Related with user's data
 struct UsrData
   {
@@ -486,5 +495,7 @@ void Usr_PrintUsrQRCode (void);
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 
 void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
+
+void Usr_PutWhoIcon (Usr_Who_t Who);
 
 #endif

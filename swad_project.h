@@ -40,14 +40,8 @@
 #define Prj_EDITABLE_DEFAULT true
 
 /***** Filters to list projects *****/
-/* My projects / all projects */
-#define Prj_NUM_WHOSE_PROJECTS 2
-typedef enum
-  {
-   Prj_MY__PROJECTS,
-   Prj_ALL_PROJECTS,
-  } Prj_WhoseProjects_t;
-#define Prj_FILTER_WHOSE_PROJECTS_DEFAULT	Prj_MY__PROJECTS
+/* My projects / selected users' projects / all projects */
+#define Prj_FILTER_WHOSE_PROJECTS_DEFAULT	Usr_WHO_ME
 
 /* Assigned projects / non-assigned projects */
 #define Prj_NUM_ASSIGNED_NONASSIG 2
@@ -95,7 +89,8 @@ typedef enum
 /* Struct with all filters */
 struct Prj_Filter
   {
-   Prj_WhoseProjects_t My_All;	// Show my / all projects
+   // Prj_WhoseProjects_t My_All;	// Show my / all projects
+   Usr_Who_t Who;		// Show my / some / all projects
    unsigned Assign;		// Show assigned / non assigned projects
    unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects

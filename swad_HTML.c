@@ -1188,11 +1188,15 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
 	    Name,Value,Attr);
   }
 
-void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class)
+void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class)
   {
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\" class=\"%s\" />",
-	    Cfg_URL_ICON_PUBLIC,ImgFile,
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s",URL);
+   if (Icon)
+      if (Icon[0])
+         fprintf (Gbl.F.Out,"/%s",Icon);
+   fprintf (Gbl.F.Out,"\"");
+
+   fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" class=\"%s\" />",
 	    Title,Title,Class);
   }
 

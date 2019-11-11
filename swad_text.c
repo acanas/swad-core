@@ -30944,7 +30944,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 	"Projetos sem falhas"
 #endif
 	};
-
+/*
 const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
 	{
 	 // Prj_MY__PROJECTS
@@ -30989,7 +30989,7 @@ const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
 	"Todos os projetos"
 #endif
 	};
-
+*/
 const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
 	 // Prj_ASSIGNED

@@ -9725,3 +9725,31 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    HTM_TD_End ();
   }
 
+/*****************************************************************************/
+/********** Show a setting selector for me / selected users / all ************/
+/*****************************************************************************/
+
+void Usr_PutWhoIcon (Usr_Who_t Who)
+  {
+   switch (Who)
+     {
+      case Usr_WHO_ME:
+         HTM_INPUT_IMAGE (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
+						    Cfg_URL_ICON_PUBLIC,
+			  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
+						    "usr_bl.jpg",
+		          "Yo",						// TODO: Need translation!!!!
+	                  "ICO_HIGHLIGHT PHOTO15x20");
+	 break;
+      case Usr_WHO_SOME:
+         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
+			  "Usuarios seleccionados",	// TODO: Need translation!!!!
+			  "ICO_HIGHLIGHT ICOx20");
+	 break;
+      case Usr_WHO_ALL:
+         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"users.svg",
+			  "Todos",				// TODO: Need translation!!!!
+			  "ICO_HIGHLIGHT ICOx20");
+	 break;
+     }
+  }

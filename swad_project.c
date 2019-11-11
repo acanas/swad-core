@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /***** Parameters used to filter listing of projects *****/
-#define Prj_PARAM_MY__ALL_NAME	"My_All"
+#define Prj_PARAM_WHO_NAME	"Who"
 #define Prj_PARAM_PRE_NON_NAME	"PreNon"
 #define Prj_PARAM_HID_VIS_NAME	"HidVis"
 #define Prj_PARAM_FAULTIN_NAME	"Faulti"
@@ -134,7 +134,7 @@ static void Prj_ShowFormToFilterByWarning (void);
 static void Prj_ShowFormToFilterByDpt (void);
 
 static void Prj_PutCurrentParams (void);
-static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All);
+static void Prj_PutHiddenParamWho (Usr_Who_t Who);
 static void Prj_PutHiddenParamAssign (unsigned Assign);
 static void Prj_PutHiddenParamHidden (unsigned Hidden);
 static void Prj_PutHiddenParamFaulti (unsigned Faulti);
@@ -407,7 +407,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
 /*****************************************************************************/
 /*** Show form to choice whether to show only my projects or all projects ****/
 /*****************************************************************************/
-
+/*
 static void Prj_ShowFormToFilterByMy_All (void)
   {
    extern const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS];
@@ -444,6 +444,39 @@ static void Prj_ShowFormToFilterByMy_All (void)
      }
    Set_EndOneSettingSelector ();
   }
+*/
+
+static void Prj_ShowFormToFilterByMy_All (void)
+  {
+   struct Prj_Filter Filter;
+   Usr_Who_t Who;
+
+   Set_StartOneSettingSelector ();
+   for (Who  = (Usr_Who_t) 0;
+	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
+	Who++)
+     {
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Prjs.Filter.Who == Who) ? "PREF_ON" :
+						    "PREF_OFF");
+      Frm_StartForm (ActSeePrj);
+      Filter.Who    = Who;
+      Filter.Assign = Gbl.Prjs.Filter.Assign;
+      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
+      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
+      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+      Prj_PutParams (&Filter,
+                     Gbl.Prjs.SelectedOrder,
+                     Gbl.Prjs.CurrentPage,
+                     -1L);
+
+      Usr_PutWhoIcon (Who);
+
+      Frm_EndForm ();
+      HTM_DIV_End ();
+     }
+   Set_EndOneSettingSelector ();
+  }
 
 /*****************************************************************************/
 /*********** Show form to select assigned / non-assigned projects ************/
@@ -464,7 +497,7 @@ static void Prj_ShowFormToFilterByAssign (void)
 		     (Gbl.Prjs.Filter.Assign & (1 << Assign)) ? "PREF_ON" :
 								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
-      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.Who    = Gbl.Prjs.Filter.Who;
       Filter.Assign = Gbl.Prjs.Filter.Assign ^ (1 << Assign);	// Toggle
       Filter.Hidden = Gbl.Prjs.Filter.Hidden;
       Filter.Faulti = Gbl.Prjs.Filter.Faulti;
@@ -505,7 +538,7 @@ static void Prj_ShowFormToFilterByHidden (void)
 		     (Gbl.Prjs.Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
 								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
-      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.Who    = Gbl.Prjs.Filter.Who;
       Filter.Assign = Gbl.Prjs.Filter.Assign;
       Filter.Hidden = Gbl.Prjs.Filter.Hidden ^ (1 << HidVis);	// Toggle
       Filter.Faulti = Gbl.Prjs.Filter.Faulti;
@@ -546,7 +579,7 @@ static void Prj_ShowFormToFilterByWarning (void)
 		     (Gbl.Prjs.Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
 								    "PREF_OFF");
       Frm_StartForm (ActSeePrj);
-      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.Who    = Gbl.Prjs.Filter.Who;
       Filter.Assign = Gbl.Prjs.Filter.Assign;
       Filter.Hidden = Gbl.Prjs.Filter.Hidden;
       Filter.Faulti = Gbl.Prjs.Filter.Faulti ^ (1 << Faultiness);	// Toggle
@@ -575,7 +608,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
    Frm_StartForm (ActSeePrj);
-   Filter.My_All = Gbl.Prjs.Filter.My_All;
+   Filter.Who    = Gbl.Prjs.Filter.Who;
    Filter.Assign = Gbl.Prjs.Filter.Assign;
    Filter.Hidden = Gbl.Prjs.Filter.Hidden;
    Filter.Faulti = Gbl.Prjs.Filter.Faulti;
@@ -620,8 +653,8 @@ void Prj_PutParams (struct Prj_Filter *Filter,
                     long PrjCod)
   {
    /***** Put filter parameters (which projects to show) *****/
-   if (Filter->My_All != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
-      Prj_PutHiddenParamMy_All (Filter->My_All);
+   if (Filter->Who != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
+      Prj_PutHiddenParamWho (Filter->Who);
 
    if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
 	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
@@ -659,9 +692,9 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 /*********************** Put hidden params for projects **********************/
 /*****************************************************************************/
 
-static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All)
+static void Prj_PutHiddenParamWho (Usr_Who_t Who)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_MY__ALL_NAME,(unsigned) My_All);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_WHO_NAME,(unsigned) Who);
   }
 
 static void Prj_PutHiddenParamAssign (unsigned Assign)
@@ -690,10 +723,10 @@ static void Prj_PutHiddenParamDptCod (long DptCod)
 
 static void Prj_GetHiddenParamMy_All (void)
   {
-   Gbl.Prjs.Filter.My_All = (Prj_WhoseProjects_t) Par_GetParToUnsignedLong (Prj_PARAM_MY__ALL_NAME,
-                                                                            0,
-                                                                            Prj_NUM_WHOSE_PROJECTS - 1,
-                                                                            Prj_FILTER_WHOSE_PROJECTS_DEFAULT);
+   Gbl.Prjs.Filter.Who = (Usr_Who_t) Par_GetParToUnsignedLong (Prj_PARAM_WHO_NAME,
+                                                               0,
+                                                               Usr_NUM_WHO - 1,
+                                                               Prj_FILTER_WHOSE_PROJECTS_DEFAULT);
   }
 
 static void Prj_GetHiddenParamPreNon (void)
@@ -2674,70 +2707,76 @@ void Prj_GetListProjects (void)
 	}
 
       /* Query */
-      if (Gbl.Prjs.Filter.My_All == Prj_MY__PROJECTS)
-	 switch (Gbl.Prjs.SelectedOrder)
-	   {
-	    case Prj_ORDER_START_TIME:
-	    case Prj_ORDER_END_TIME:
-	    case Prj_ORDER_TITLE:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					 "SELECT projects.PrjCod"
-					 " FROM projects,prj_usr"
-					 " WHERE projects.CrsCod=%ld"
-					 "%s%s%s"
-					 " AND projects.PrjCod=prj_usr.PrjCod"
-					 " AND prj_usr.UsrCod=%ld"
-					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-	       break;
-	    case Prj_ORDER_DEPARTMENT:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					 "SELECT projects.PrjCod"
-					 " FROM prj_usr,projects LEFT JOIN departments"
-					 " ON projects.DptCod=departments.DptCod"
-					 " WHERE projects.CrsCod=%ld"
-					 "%s%s%s"
-					 " AND projects.PrjCod=prj_usr.PrjCod"
-					 " AND prj_usr.UsrCod=%ld"
-					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-	       break;
-	   }
-      else	// Gbl.Prjs.My_All == Prj_ALL_PROJECTS
-	 switch (Gbl.Prjs.SelectedOrder)
-	   {
-	    case Prj_ORDER_START_TIME:
-	    case Prj_ORDER_END_TIME:
-	    case Prj_ORDER_TITLE:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					 "SELECT projects.PrjCod"
-					 " FROM projects"
-					 " WHERE projects.CrsCod=%ld"
-					 "%s%s%s"
-					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-	       break;
-	    case Prj_ORDER_DEPARTMENT:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					 "SELECT projects.PrjCod"
-					 " FROM projects LEFT JOIN departments"
-					 " ON projects.DptCod=departments.DptCod"
-					 " WHERE projects.CrsCod=%ld"
-					 "%s%s%s"
-					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-	       break;
-	   }
+      switch (Gbl.Prjs.Filter.Who)
+        {
+	 case Usr_WHO_ME:
+	    switch (Gbl.Prjs.SelectedOrder)
+	      {
+	       case Prj_ORDER_START_TIME:
+	       case Prj_ORDER_END_TIME:
+	       case Prj_ORDER_TITLE:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM projects,prj_usr"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " AND projects.PrjCod=prj_usr.PrjCod"
+					    " AND prj_usr.UsrCod=%ld"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    Gbl.Usrs.Me.UsrDat.UsrCod,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	       case Prj_ORDER_DEPARTMENT:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM prj_usr,projects LEFT JOIN departments"
+					    " ON projects.DptCod=departments.DptCod"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " AND projects.PrjCod=prj_usr.PrjCod"
+					    " AND prj_usr.UsrCod=%ld"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    Gbl.Usrs.Me.UsrDat.UsrCod,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	      }
+	    break;
+         case Usr_WHO_SOME:
+         case Usr_WHO_ALL:
+	    switch (Gbl.Prjs.SelectedOrder)
+	      {
+	       case Prj_ORDER_START_TIME:
+	       case Prj_ORDER_END_TIME:
+	       case Prj_ORDER_TITLE:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM projects"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	       case Prj_ORDER_DEPARTMENT:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM projects LEFT JOIN departments"
+					    " ON projects.DptCod=departments.DptCod"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	      }
+	    break;
+        }
 
       /* Free allocated memory for subqueries */
       free (PreNonSubQuery);
