@@ -1499,7 +1499,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,true,0x7);
+				 true,true,false,0x7);
    HTM_TD_End ();
    free (Id);
 
@@ -1511,7 +1511,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
 				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,true,0x7);
+				 true,true,false,0x7);
    HTM_TD_End ();
    free (Id);
 

@@ -487,9 +487,23 @@ static void Lay_WriteScripts (void)
    /***** Write script to set parameters needed by AJAX *****/
    Lay_WriteScriptParamsAJAX ();
 
+   /***** Write script to initialize variables used to draw dates *****/
+   HTM_SCRIPT_Begin (NULL,NULL);
+   HTM_Txt ("\tvar DAYS = [");
+   for (DayOfWeek = 0;
+	DayOfWeek < 7;
+	DayOfWeek++)
+     {
+      if (DayOfWeek)
+	 HTM_Comma ();
+      HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
+     }
+   HTM_Txt ("];\n");
+   HTM_SCRIPT_End ();
+
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||	// Left column visible
-       (Gbl.Hierarchy.Ins.InsCod > 0 &&		// Institution selected
+       (Gbl.Hierarchy.Ins.InsCod > 0 &&			// Institution selected
         (Gbl.Action.Act == ActSeeCal ||			// Viewing calendar
          Gbl.Action.Act == ActPrnCal ||			// Printing calendar
          Gbl.Action.Act == ActChgCal1stDay)))		// Changing first day
@@ -515,17 +529,6 @@ static void Lay_WriteScripts (void)
 	 if (DayOfWeek)
 	    HTM_Comma ();
 	 HTM_TxtF ("'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
-	}
-      HTM_Txt ("];\n");
-
-      HTM_Txt ("\tvar DAYS = [");
-      for (DayOfWeek = 0;
-	   DayOfWeek < 7;
-	   DayOfWeek++)
-	{
-	 if (DayOfWeek)
-	    HTM_Comma ();
-	 HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
 	}
       HTM_Txt ("];\n");
 
@@ -1395,6 +1398,7 @@ static void Lay_WriteAboutZone (void)
   {
    extern const char *Txt_About_X;
    extern const char *Txt_Questions_and_problems;
+   unsigned i;
 
    /***** Start about zone *****/
    HTM_Txt ("<address id=\"about_zone\" class=\"ABOUT\">");
@@ -1425,7 +1429,7 @@ static void Lay_WriteAboutZone (void)
    HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
    HTM_TxtF (Txt_About_X,Log_PLATFORM_VERSION);
    HTM_A_End ();
-   for (size_t i = 0;
+   for (i = 0;
 	i < 5;
 	i++)
       HTM_Space ();
