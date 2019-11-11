@@ -30944,52 +30944,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 	"Projetos sem falhas"
 #endif
 	};
-/*
-const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
-	{
-	 // Prj_MY__PROJECTS
-#if   L==1	// ca
-	"Nom&eacute;s els meus projectes"
-#elif L==2	// de
-	"Nur meine Projekte"
-#elif L==3	// en
-	"Only my projects"
-#elif L==4	// es
-	"Solo mis proyectos"
-#elif L==5	// fr
-	"Uniquement mes projets"
-#elif L==6	// gn
-	"Solo mis proyectos"	// Okoteve traducción
-#elif L==7	// it
-	"Solo i miei progetti"
-#elif L==8	// pl
-	"Tylko moje projekty"
-#elif L==9	// pt
-	"Apenas os meus projetos"
-#endif
-	,
-	// Prj_ALL_PROJECTS
-#if   L==1	// ca
-	"Tots els projectes"
-#elif L==2	// de
-	"Alle Projekte"
-#elif L==3	// en
-	"All projects"
-#elif L==4	// es
-	"Todos los proyectos"
-#elif L==5	// fr
-	"Tous les projets"
-#elif L==6	// gn
-	"Todos los proyectos"	// Okoteve traducción
-#elif L==7	// it
-	"Tutti i progetti"
-#elif L==8	// pl
-	"Wszystkie projekty"
-#elif L==9	// pt
-	"Todos os projetos"
-#endif
-	};
-*/
+
 const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
 	 // Prj_ASSIGNED
@@ -49784,54 +49739,6 @@ const char *Txt_TIMELINE_posts =
 	"publica&ccedil;&otilde;es";
 #endif
 
-const char *Txt_TIMELINE_WHICH_USERS[TL_NUM_WHICH_USRS] =
-   {
-	 // TL_USRS_UNKNOWN
-	 NULL
-	 ,
-	 // TL_USRS_FOLLOWED
-#if   L==1	// ca
-	"Usuaris que segueixo"
-#elif L==2	// de
-	"Benutzer Ich folge"
-#elif L==3	// en
-	"Users I'm following"
-#elif L==4	// es
-	"Usuarios que sigo"
-#elif L==5	// fr
-	"Utilisateurs qui je suis"
-#elif L==6	// gn
-	"Usuarios que sigo"	// Okoteve traducción
-#elif L==7	// it
-	"Utenti che sto seguenti"
-#elif L==8	// pl
-	"U&zdot;ytkownicy, kt&oacute;rzy mam nast&eogon;puj&aogon;ce"
-#elif L==9	// pt
-	"Usu&aacute;rios que estou seguindo"
-#endif
-	 ,
-	 // TL_USRS_ALL
-#if   L==1	// ca
-	 "Tots els usuaris"
-#elif L==2	// de
-	 "Alle Benutzer"
-#elif L==3	// en
-	 "All users"
-#elif L==4	// es
-	 "Todos los usuarios"
-#elif L==5	// fr
-	 "Tous les utilisateurs"
-#elif L==6	// gn
-	 "Todos los usuarios"	// Okoteve traducción
-#elif L==7	// it
-	 "Tutti gli utenti"
-#elif L==8	// pl
-	 "Wszyscy u&zdot;ytkownicy"
-#elif L==9	// pt
-	 "Todos os usu&aacute;rios"
-#endif
-	};
-
 const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	{
 	// TT_COURSE_TIMETABLE
@@ -53270,6 +53177,96 @@ const char *Txt_Where_s_USER =
 #elif L==9	// pt
 	"Onde est&aacute; %s?";
 #endif
+
+const char *Txt_WHO[Usr_NUM_WHO] =
+	{
+	 //    Usr_WHO_UNKNOWN
+	 NULL
+	 ,
+	 //    Usr_WHO_ME
+#if   L==1	// ca
+	"Jo"
+#elif L==2	// de
+	"Mich"
+#elif L==3	// en
+	"Me"
+#elif L==4	// es
+	"Yo"
+#elif L==5	// fr
+	"Moi"
+#elif L==6	// gn
+	"Che"
+#elif L==7	// it
+	"Me"
+#elif L==8	// pl
+	"Mnie"
+#elif L==9	// pt
+	"Eu"
+#endif
+	,
+	//    Usr_WHO_SOME
+#if   L==1	// ca
+	"Usuaris seleccionats"
+#elif L==2	// de
+	"Ausgew&auml;hlte Benutzer"
+#elif L==3	// en
+	"Selected users"
+#elif L==4	// es
+	"Usuarios seleccionados"
+#elif L==5	// fr
+	"Utilisateurs s&eacute;lectionn&eacute;s"
+#elif L==6	// gn
+	"Usuarios seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Utenti selezionati"
+#elif L==8	// pl
+	"Wybrani u&zdot;ytkownicy"
+#elif L==9	// pt
+	"Usu&aacute;rios selecionados"
+#endif
+	,
+	 // Usr_WHO_FOLLOWED
+#if   L==1	// ca
+	"Usuaris que segueixo"
+#elif L==2	// de
+	"Benutzer Ich folge"
+#elif L==3	// en
+	"Users I'm following"
+#elif L==4	// es
+	"Usuarios que sigo"
+#elif L==5	// fr
+	"Utilisateurs qui je suis"
+#elif L==6	// gn
+	"Usuarios que sigo"	// Okoteve traducción
+#elif L==7	// it
+	"Utenti che sto seguenti"
+#elif L==8	// pl
+	"U&zdot;ytkownicy, kt&oacute;rzy mam nast&eogon;puj&aogon;ce"
+#elif L==9	// pt
+	"Usu&aacute;rios que estou seguindo"
+#endif
+	 ,
+	 // Usr_WHO_ALL
+#if   L==1	// ca
+	 "Tots els usuaris"
+#elif L==2	// de
+	 "Alle Benutzer"
+#elif L==3	// en
+	 "All users"
+#elif L==4	// es
+	 "Todos los usuarios"
+#elif L==5	// fr
+	 "Tous les utilisateurs"
+#elif L==6	// gn
+	 "Todos los usuarios"	// Okoteve traducción
+#elif L==7	// it
+	 "Tutti gli utenti"
+#elif L==8	// pl
+	 "Wszyscy u&zdot;ytkownicy"
+#elif L==9	// pt
+	 "Todos os usu&aacute;rios"
+#endif
+	};
 
 const char *Txt_Who_to_follow =
 #if   L==1	// ca

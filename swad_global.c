@@ -304,7 +304,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Projects */
    Gbl.Prjs.Config.Editable = Prj_EDITABLE_DEFAULT;
-   Gbl.Prjs.Filter.My_All = Prj_FILTER_WHOSE_PROJECTS_DEFAULT;
+   Gbl.Prjs.Filter.Who    = Prj_FILTER_WHO_DEFAULT;
    Gbl.Prjs.Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
 	                    Prj_FILTER_NONASSIG_DEFAULT;
    Gbl.Prjs.Filter.Hidden = Prj_FILTER_HIDDEN_DEFAULT |
@@ -370,7 +370,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Games.ListQuestions = NULL;
 
    /* Public activity */
-   Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
+   Gbl.Timeline.Who = TL_DEFAULT_WHO;
 
    /* Forums */
    Gbl.Forum.ForumSet = For_DEFAULT_FORUM_SET;

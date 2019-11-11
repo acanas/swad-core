@@ -58,7 +58,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /***** Parameters used to filter listing of projects *****/
-#define Prj_PARAM_WHO_NAME	"Who"
 #define Prj_PARAM_PRE_NON_NAME	"PreNon"
 #define Prj_PARAM_HID_VIS_NAME	"HidVis"
 #define Prj_PARAM_FAULTIN_NAME	"Faulti"
@@ -134,17 +133,16 @@ static void Prj_ShowFormToFilterByWarning (void);
 static void Prj_ShowFormToFilterByDpt (void);
 
 static void Prj_PutCurrentParams (void);
-static void Prj_PutHiddenParamWho (Usr_Who_t Who);
 static void Prj_PutHiddenParamAssign (unsigned Assign);
 static void Prj_PutHiddenParamHidden (unsigned Hidden);
 static void Prj_PutHiddenParamFaulti (unsigned Faulti);
 static void Prj_PutHiddenParamDptCod (long DptCod);
-static void Prj_GetHiddenParamMy_All (void);
 static void Prj_GetHiddenParamPreNon (void);
 static void Prj_GetHiddenParamHidVis (void);
 static void Prj_GetHiddenParamFaulti (void);
 static void Prj_GetHiddenParamDptCod (void);
 static void Prj_GetParams (void);
+static void Prj_GetParamWho (void);
 
 static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView);
 static void Prj_ShowTableAllProjectsHead (void);
@@ -407,74 +405,38 @@ static void Prj_ShowProjectsInCurrentPage (void)
 /*****************************************************************************/
 /*** Show form to choice whether to show only my projects or all projects ****/
 /*****************************************************************************/
-/*
-static void Prj_ShowFormToFilterByMy_All (void)
-  {
-   extern const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS];
-   struct Prj_Filter Filter;
-   Prj_WhoseProjects_t My_All;
-   static const char *WhoseProjectsIcon[Prj_NUM_WHOSE_PROJECTS] =
-     {
-      "mysitemap.png",	// Prj_MY__PROJECTS
-      "sitemap.svg",	// Prj_ALL_PROJECTS
-     };
-
-   Set_StartOneSettingSelector ();
-   for (My_All =  (Prj_WhoseProjects_t) 0;
-	My_All <= (Prj_WhoseProjects_t) (Prj_NUM_WHOSE_PROJECTS - 1);
-	My_All++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
-							  "PREF_OFF");
-      Frm_StartForm (ActSeePrj);
-      Filter.My_All = My_All;
-      Filter.Assign = Gbl.Prjs.Filter.Assign;
-      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
-      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
-      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
-      Prj_PutParams (&Filter,
-                     Gbl.Prjs.SelectedOrder,
-                     Gbl.Prjs.CurrentPage,
-                     -1L);
-      Ico_PutSettingIconLink (WhoseProjectsIcon[My_All],
-	                      Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   Set_EndOneSettingSelector ();
-  }
-*/
 
 static void Prj_ShowFormToFilterByMy_All (void)
   {
    struct Prj_Filter Filter;
    Usr_Who_t Who;
+   unsigned Mask = 1 << Usr_WHO_ME   |
+	           1 << Usr_WHO_SELECTED |
+		   1 << Usr_WHO_ALL;
 
    Set_StartOneSettingSelector ();
-   for (Who  = (Usr_Who_t) 0;
+   for (Who  = (Usr_Who_t) 1;
 	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
 	Who++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Gbl.Prjs.Filter.Who == Who) ? "PREF_ON" :
-						    "PREF_OFF");
-      Frm_StartForm (ActSeePrj);
-      Filter.Who    = Who;
-      Filter.Assign = Gbl.Prjs.Filter.Assign;
-      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
-      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
-      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
-      Prj_PutParams (&Filter,
-                     Gbl.Prjs.SelectedOrder,
-                     Gbl.Prjs.CurrentPage,
-                     -1L);
-
-      Usr_PutWhoIcon (Who);
-
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
+      if (Mask & (1 << Who))
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",
+			(Gbl.Prjs.Filter.Who == Who) ? "PREF_ON" :
+						       "PREF_OFF");
+	 Frm_StartForm (ActSeePrj);
+	 Filter.Who    = Who;
+	 Filter.Assign = Gbl.Prjs.Filter.Assign;
+	 Filter.Hidden = Gbl.Prjs.Filter.Hidden;
+	 Filter.Faulti = Gbl.Prjs.Filter.Faulti;
+	 Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Gbl.Prjs.SelectedOrder,
+			Gbl.Prjs.CurrentPage,
+			-1L);
+	 Usr_PutWhoIcon (Who);
+	 Frm_EndForm ();
+	 HTM_DIV_End ();
+	}
    Set_EndOneSettingSelector ();
   }
 
@@ -653,8 +615,8 @@ void Prj_PutParams (struct Prj_Filter *Filter,
                     long PrjCod)
   {
    /***** Put filter parameters (which projects to show) *****/
-   if (Filter->Who != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
-      Prj_PutHiddenParamWho (Filter->Who);
+   if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
+      Usr_PutHiddenParamWho (Filter->Who);
 
    if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
 	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
@@ -692,11 +654,6 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 /*********************** Put hidden params for projects **********************/
 /*****************************************************************************/
 
-static void Prj_PutHiddenParamWho (Usr_Who_t Who)
-  {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_WHO_NAME,(unsigned) Who);
-  }
-
 static void Prj_PutHiddenParamAssign (unsigned Assign)
   {
    Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_PRE_NON_NAME,Assign);
@@ -720,14 +677,6 @@ static void Prj_PutHiddenParamDptCod (long DptCod)
 /*****************************************************************************/
 /*********************** Get hidden params for projects **********************/
 /*****************************************************************************/
-
-static void Prj_GetHiddenParamMy_All (void)
-  {
-   Gbl.Prjs.Filter.Who = (Usr_Who_t) Par_GetParToUnsignedLong (Prj_PARAM_WHO_NAME,
-                                                               0,
-                                                               Usr_NUM_WHO - 1,
-                                                               Prj_FILTER_WHOSE_PROJECTS_DEFAULT);
-  }
 
 static void Prj_GetHiddenParamPreNon (void)
   {
@@ -784,7 +733,7 @@ static void Prj_GetHiddenParamDptCod (void)
 static void Prj_GetParams (void)
   {
    /***** Get filter (which projects to show) *****/
-   Prj_GetHiddenParamMy_All ();
+   Prj_GetParamWho ();
    Prj_GetHiddenParamPreNon ();
    Prj_GetHiddenParamHidVis ();
    Prj_GetHiddenParamFaulti ();
@@ -793,6 +742,24 @@ static void Prj_GetParams (void)
    /***** Get order and page *****/
    Prj_GetParamPrjOrder ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+  }
+
+/*****************************************************************************/
+/************* Get parameter with whose users' projects to view **************/
+/*****************************************************************************/
+
+static void Prj_GetParamWho (void)
+  {
+   /***** Get which users I want to see *****/
+   Gbl.Prjs.Filter.Who = Usr_GetHiddenParamWho ();
+
+   /***** If parameter Who is not present, get it from database *****/
+   // if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
+   //   Gbl.Prjs.Filter.Who = Prj_GetWhoFromDB ();
+
+   /***** If parameter Who is unknown, set it to default *****/
+   if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
+      Gbl.Prjs.Filter.Who = Prj_FILTER_WHO_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -2745,7 +2712,7 @@ void Prj_GetListProjects (void)
 		  break;
 	      }
 	    break;
-         case Usr_WHO_SOME:
+         case Usr_WHO_SELECTED:
          case Usr_WHO_ALL:
 	    switch (Gbl.Prjs.SelectedOrder)
 	      {
@@ -2775,6 +2742,9 @@ void Prj_GetListProjects (void)
 					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 		  break;
 	      }
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong parameter which users.");
 	    break;
         }
 

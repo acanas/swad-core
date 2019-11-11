@@ -166,10 +166,9 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			   const char *ParamCod,
 			   const char *Icon,const char *Title);
 
-static void TL_PutFormWhichUsrs (void);
-static void TL_PutParamWhichUsrs (void);
-static void TL_GetParamsWhichUsrs (void);
-static TL_WhichUsrs_t TL_GetWhichUsrsFromDB (void);
+static void TL_PutFormWho (void);
+static void TL_GetParamWho (void);
+static Usr_Who_t TL_GetWhoFromDB (void);
 static void TL_SaveWhichUsersInDB (void);
 
 static void TL_ShowWarningYouDontFollowAnyUser (void);
@@ -318,7 +317,7 @@ void TL_ShowTimelineGbl1 (void)
    TL_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   TL_GetParamsWhichUsrs ();
+   TL_GetParamWho ();
 
    /***** Save which users in database *****/
    if (Gbl.Action.Act == ActSeeSocTmlGbl)	// Only in action to see global timeline
@@ -458,7 +457,7 @@ void TL_RefreshNewTimelineGbl (void)
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
      {
       /***** Get which users *****/
-      TL_GetParamsWhichUsrs ();
+      TL_GetParamWho ();
 
       /***** Build query to get timeline *****/
       TL_BuildQueryToGetTimeline (&Query,
@@ -480,7 +479,7 @@ void TL_RefreshNewTimelineGbl (void)
 void TL_RefreshOldTimelineGbl (void)
   {
    /***** Get which users *****/
-   TL_GetParamsWhichUsrs ();
+   TL_GetParamWho ();
 
    /***** Show old publications *****/
    TL_GetAndShowOldTimeline (TL_TIMELINE_GBL);
@@ -591,9 +590,13 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
       case TL_TIMELINE_GBL:	// Show the global timeline
-	 switch (Gbl.Timeline.WhichUsrs)
+	 switch (Gbl.Timeline.Who)
 	   {
-	    case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
+	    case Usr_WHO_ME:	// Show my timeline
+	       sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
+	                Gbl.Usrs.Me.UsrDat.UsrCod);
+               break;
+	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
 	       DB_Query ("can not create temporary table",
 		         "CREATE TEMPORARY TABLE publishers "
 			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
@@ -606,7 +609,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 
 	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
 	       break;
-	    case TL_USRS_ALL:	// Show the timeline of all users
+	    case Usr_WHO_ALL:	// Show the timeline of all users
 	       SubQueryPublishers[0] = '\0';
 	       break;
 	    default:
@@ -724,14 +727,15 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		        RangePubsToGet.Bottom);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Timeline.WhichUsrs)
+	       switch (Gbl.Timeline.Who)
 		 {
-		  case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",
+		  case Usr_WHO_ME:	// Show my timeline
+		  case Usr_WHO_ALL:	// Show the timeline of all users
+		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
 			      RangePubsToGet.Bottom);
 		     break;
-		  case TL_USRS_ALL:		// Show the timeline of all users
-		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",
 			      RangePubsToGet.Bottom);
 		     break;
 		  default:
@@ -751,14 +755,15 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		        RangePubsToGet.Top);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Timeline.WhichUsrs)
+	       switch (Gbl.Timeline.Who)
 		 {
-		  case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",
+		  case Usr_WHO_ME:	// Show my timeline
+		  case Usr_WHO_ALL:	// Show the timeline of all users
+		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
 			      RangePubsToGet.Top);
 		     break;
-		  case TL_USRS_ALL:	// Show the timeline of all users
-		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",
 			      RangePubsToGet.Top);
 		     break;
 		  default:
@@ -786,9 +791,20 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 				       SubQueryAlreadyExists);
 	    break;
 	 case TL_TIMELINE_GBL:	// Show the global timeline
-	    switch (Gbl.Timeline.WhichUsrs)
+	    switch (Gbl.Timeline.Who)
 	      {
-	       case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
+	       case Usr_WHO_ME:		// Show my timeline
+		  NumPubs =
+		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
+					     "SELECT PubCod,NotCod"
+					     " FROM social_pubs"
+					     " WHERE %s%s%s%s"
+					     " ORDER BY PubCod DESC LIMIT 1",
+					     SubQueryRangeBottom,SubQueryRangeTop,
+					     SubQueryPublishers,
+					     SubQueryAlreadyExists);
+		  break;
+	       case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod"
@@ -799,7 +815,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 					     SubQueryPublishers,
 					     SubQueryAlreadyExists);
 		  break;
-	       case TL_USRS_ALL:	// Show the timeline of all users
+	       case Usr_WHO_ALL:	// Show the timeline of all users
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod"
@@ -1001,7 +1017,7 @@ static void TL_ShowTimeline (char *Query,
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
-      TL_PutFormWhichUsrs ();
+      TL_PutFormWho ();
 
    /***** Form to write a new post *****/
    if (GlobalTimeline || ItsMe)
@@ -1090,7 +1106,7 @@ static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
    else
      {
       Frm_StartForm (ActionGbl);
-      TL_PutParamWhichUsrs ();
+      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
      }
   }
 
@@ -1155,82 +1171,66 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 /******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
-static void TL_PutFormWhichUsrs (void)
+static void TL_PutFormWho (void)
   {
-   extern const char *Txt_TIMELINE_WHICH_USERS[TL_NUM_WHICH_USRS];
-   TL_WhichUsrs_t WhichUsrs;
-   static const char *Icon[TL_NUM_WHICH_USRS] =
-     {
-      NULL,		// TL_USRS_UNKNOWN
-      "user-check.svg",	// TL_USRS_FOLLOWED
-      "users.svg",	// TL_USRS_ALL
-     };
+   Usr_Who_t Who;
+   unsigned Mask = 1 << Usr_WHO_ME       |
+	           1 << Usr_WHO_FOLLOWED |
+		   1 << Usr_WHO_ALL;
 
    /***** Setting selector for which users *****/
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
-   for (WhichUsrs = (TL_WhichUsrs_t) 1;
-	WhichUsrs < TL_NUM_WHICH_USRS;
-	WhichUsrs++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     WhichUsrs == Gbl.Timeline.WhichUsrs ? "PREF_ON" :
-							   "PREF_OFF");
-      Frm_StartForm (ActSeeSocTmlGbl);
-      Par_PutHiddenParamUnsigned (NULL,"WhichUsrs",WhichUsrs);
-      Ico_PutSettingIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
+   for (Who  = (Usr_Who_t) 0;
+	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
+	Who++)
+      if (Mask & (1 << Who))
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",
+			Who == Gbl.Timeline.Who ? "PREF_ON" :
+						  "PREF_OFF");
+	 Frm_StartForm (ActSeeSocTmlGbl);
+	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+	 Usr_PutWhoIcon (Who);
+	 Frm_EndForm ();
+	 HTM_DIV_End ();
+	}
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
 
    /***** Show warning if I do not follow anyone *****/
-   if (Gbl.Timeline.WhichUsrs == TL_USRS_FOLLOWED)
+   if (Gbl.Timeline.Who == Usr_WHO_FOLLOWED)
       TL_ShowWarningYouDontFollowAnyUser ();
-  }
-
-/*****************************************************************************/
-/***** Put hidden parameter with which users to view in global timeline ******/
-/*****************************************************************************/
-
-static void TL_PutParamWhichUsrs (void)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"WhichUsrs",Gbl.Timeline.WhichUsrs);
   }
 
 /*****************************************************************************/
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-static void TL_GetParamsWhichUsrs (void)
+static void TL_GetParamWho (void)
   {
    /***** Get which users I want to see *****/
-   Gbl.Timeline.WhichUsrs = (TL_WhichUsrs_t)
-	                   Par_GetParToUnsignedLong ("WhichUsrs",
-                                                     1,
-                                                     TL_NUM_WHICH_USRS - 1,
-                                                     (unsigned long) TL_USRS_UNKNOWN);
+   Gbl.Timeline.Who = Usr_GetHiddenParamWho ();
 
-   /***** If parameter WhichUsrs is not present, get it from database *****/
-   if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
-      Gbl.Timeline.WhichUsrs = TL_GetWhichUsrsFromDB ();
+   /***** If parameter Who is not present, get it from database *****/
+   if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
+      Gbl.Timeline.Who = TL_GetWhoFromDB ();
 
-   /***** If parameter WhichUsrs is unknown, set it to default *****/
-   if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
-      Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
+   /***** If parameter Who is unknown, set it to default *****/
+   if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
+      Gbl.Timeline.Who = TL_DEFAULT_WHO;
   }
 
 /*****************************************************************************/
 /********** Get user's last data from database giving a user's code **********/
 /*****************************************************************************/
 
-static TL_WhichUsrs_t TL_GetWhichUsrsFromDB (void)
+static Usr_Who_t TL_GetWhoFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
-   TL_WhichUsrs_t WhichUsrs = TL_USRS_UNKNOWN;
+   Usr_Who_t Who = Usr_WHO_UNKNOWN;
 
    /***** Get which users from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get timeline users from user's last data",
@@ -1240,16 +1240,16 @@ static TL_WhichUsrs_t TL_GetWhichUsrsFromDB (void)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get which users */
+      /* Get who */
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < TL_NUM_WHICH_USRS)
-            WhichUsrs = (TL_WhichUsrs_t) UnsignedNum;
+         if (UnsignedNum < Usr_NUM_WHO)
+            Who = (Usr_Who_t) UnsignedNum;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return WhichUsrs;
+   return Who;
   }
 
 /*****************************************************************************/
@@ -1260,15 +1260,15 @@ static void TL_SaveWhichUsersInDB (void)
   {
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
-	 Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
+      if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
+	 Gbl.Timeline.Who = TL_DEFAULT_WHO;
 
       /***** Update which users in database *****/
-      // WhichUsrs is stored in usr_last for next time I log in
+      // Who is stored in usr_last for next time I log in
       DB_QueryUPDATE ("can not update timeline users in user's last data",
 		      "UPDATE usr_last SET TimelineUsrs=%u"
 		      " WHERE UsrCod=%ld",
-		      (unsigned) Gbl.Timeline.WhichUsrs,
+		      (unsigned) Gbl.Timeline.Who,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
   }
@@ -3834,7 +3834,7 @@ static void TL_PutParamsRemoveNote (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
    else
-      TL_PutParamWhichUsrs ();
+      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
    TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
   }
 
@@ -4147,7 +4147,7 @@ static void TL_PutParamsRemoveCommment (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
    else
-      TL_PutParamWhichUsrs ();
+      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
    TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);
   }
 

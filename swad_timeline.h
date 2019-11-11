@@ -42,14 +42,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_NUM_WHICH_USRS 3
-typedef enum
-  {
-   TL_USRS_UNKNOWN  = 0,
-   TL_USRS_FOLLOWED = 1,
-   TL_USRS_ALL      = 2,
-  } TL_WhichUsrs_t;	// Which users I want to see: only users I follow or all users
-#define TL_DEFAULT_WHICH_USRS	TL_USRS_FOLLOWED
+#define TL_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
 #define TL_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,

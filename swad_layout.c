@@ -783,10 +783,10 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 // Refresh parameters
 	 HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 		   "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-	           "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
+	           "var RefreshParamWho = \"Who=%u\";\n",
 		   Act_GetActCod (ActRefNewSocPubGbl),
 		   Act_GetActCod (ActRefOldSocPubGbl),
-		   (unsigned) Gbl.Timeline.WhichUsrs);
+		   (unsigned) Gbl.Timeline.Who);
 	 break;
       /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:

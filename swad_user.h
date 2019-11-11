@@ -142,11 +142,13 @@ typedef enum
    Usr_OTHER,
   } Usr_MeOrOther_t;
 
-#define Usr_NUM_WHO 3
+#define Usr_NUM_WHO 5
 typedef enum
   {
+   Usr_WHO_UNKNOWN,
    Usr_WHO_ME,
-   Usr_WHO_SOME,
+   Usr_WHO_SELECTED,
+   Usr_WHO_FOLLOWED,
    Usr_WHO_ALL,
   } Usr_Who_t;
 #define Usr_WHO_DEFAULT Usr_WHO_ALL
@@ -497,5 +499,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
 
 void Usr_PutWhoIcon (Usr_Who_t Who);
+void Usr_PutHiddenParamWho (Usr_Who_t Who);
+Usr_Who_t Usr_GetHiddenParamWho (void);
 
 #endif

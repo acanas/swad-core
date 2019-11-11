@@ -487,14 +487,21 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.64 (2019-11-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.65 (2019-11-12)"
 #define CSS_FILE		"swad19.47.css"
-#define JS_FILE			"swad19.39.js"
+#define JS_FILE			"swad19.65.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
+
+	Version 19.65:    Nov 12, 2019	Changes in selection of users in timeline. (246451 lines)
+					4 changes necessary in database:
+UPDATE usr_last SET TimelineUsrs=13 WHERE TimelineUsrs=1;
+UPDATE usr_last SET TimelineUsrs=14 WHERE TimelineUsrs=2;
+UPDATE usr_last SET TimelineUsrs=3 WHERE TimelineUsrs=13;
+UPDATE usr_last SET TimelineUsrs=4 WHERE TimelineUsrs=14;
 
 	Version 19.64:    Nov 11, 2019	Changes in selection of me / all users. (246459 lines)
 	Version 19.63.2:  Nov 11, 2019	Fixed bug showing dates. (246386 lines)

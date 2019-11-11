@@ -579,7 +579,7 @@ struct Globals
      } AttEvents;
    struct
      {
-      TL_WhichUsrs_t WhichUsrs;
+      Usr_Who_t Who;
       long NotCod;		// Used as parameter about social note to be edited, removed...
       long PubCod;		// Used as parameter about social publishing to be edited, removed...
      } Timeline;

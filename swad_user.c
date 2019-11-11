@@ -9731,25 +9731,51 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
 void Usr_PutWhoIcon (Usr_Who_t Who)
   {
+   extern const char *Txt_WHO[Usr_NUM_WHO];
+
    switch (Who)
      {
+      case Usr_WHO_UNKNOWN:
+	 break;
       case Usr_WHO_ME:
          HTM_INPUT_IMAGE (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
 						    Cfg_URL_ICON_PUBLIC,
 			  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
 						    "usr_bl.jpg",
-		          "Yo",						// TODO: Need translation!!!!
+		          Txt_WHO[Who],
 	                  "ICO_HIGHLIGHT PHOTO15x20");
 	 break;
-      case Usr_WHO_SOME:
+      case Usr_WHO_SELECTED:
+      case Usr_WHO_FOLLOWED:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-			  "Usuarios seleccionados",	// TODO: Need translation!!!!
+			  Txt_WHO[Who],
 			  "ICO_HIGHLIGHT ICOx20");
 	 break;
       case Usr_WHO_ALL:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"users.svg",
-			  "Todos",				// TODO: Need translation!!!!
+			  Txt_WHO[Who],
 			  "ICO_HIGHLIGHT ICOx20");
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/*************** Put hidden param for which users are involved ***************/
+/*****************************************************************************/
+
+void Usr_PutHiddenParamWho (Usr_Who_t Who)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+  }
+
+/*****************************************************************************/
+/*************** Get hidden param for which users are involved ***************/
+/*****************************************************************************/
+
+Usr_Who_t Usr_GetHiddenParamWho (void)
+  {
+   return (Usr_Who_t) Par_GetParToUnsignedLong ("Who",
+                                                1,
+                                                Usr_NUM_WHO - 1,
+                                                Usr_WHO_UNKNOWN);
   }

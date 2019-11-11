@@ -663,7 +663,7 @@ function refreshNewTL () {
 	if (objXMLHttpReqNewTL) {
 		var RefreshParams = RefreshParamNxtActNewPub + '&' +
 							RefreshParamIdSes + '&' +
-							RefreshParamWhichUsrs;
+							RefreshParamWho;
 
 		objXMLHttpReqNewTL.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
 		objXMLHttpReqNewTL.open('POST',ActionAJAX,true);
@@ -753,9 +753,9 @@ function refreshOldTimeline () {
 			if (RefreshParamUsr.length)
 				RefreshParams += '&' + RefreshParamUsr;
 		}
-		if (typeof RefreshParamWhichUsrs !== 'undefined') {
-			if (RefreshParamWhichUsrs.length)
-				RefreshParams += '&' + RefreshParamWhichUsrs;
+		if (typeof RefreshParamWho !== 'undefined') {
+			if (RefreshParamWho.length)
+				RefreshParams += '&' + RefreshParamWho;
 		}
 
 		objXMLHttpReqOldTL.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
