@@ -460,8 +460,7 @@ void Gam_ShowOneGame (long GamCod,
    /* Number of questions */
    HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_No_of_questions);
-   HTM_Unsigned (Game.NumQsts);
+   HTM_TxtF ("%s:&nbsp;%u",Txt_No_of_questions,Game.NumQsts);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -479,7 +478,7 @@ void Gam_ShowOneGame (long GamCod,
                        Game.Hidden ? "ASG_TITLE_LIGHT" :
                 	             "ASG_TITLE",NULL);
    if (ShowOnlyThisGame)
-      HTM_TxtColonNBSP (Txt_Matches);
+      HTM_TxtF ("%s:&nbsp;",Txt_Matches);
    HTM_Unsigned (Game.NumMchs);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
@@ -1141,7 +1140,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1157,7 +1156,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Description);
+   HTM_TxtF ("%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

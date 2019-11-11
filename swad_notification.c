@@ -524,8 +524,7 @@ void Ntf_ShowMyNotifications (void)
                Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
-            HTM_TxtColonNBSP (Txt_Forum);
-            HTM_Txt (ForumName);
+            HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
             if (PutLink)
               {
                Frm_LinkFormEnd ();
@@ -545,27 +544,15 @@ void Ntf_ShowMyNotifications (void)
                HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
 
             if (Crs.CrsCod > 0)
-              {
-               HTM_TxtColonNBSP (Txt_Course);
-               HTM_Txt (Crs.ShrtName);
-              }
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
             else if (Deg.DegCod > 0)
-              {
-               HTM_TxtColonNBSP (Txt_Degree);
-               HTM_Txt (Deg.ShrtName);
-              }
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg.ShrtName);
             else if (Ctr.CtrCod > 0)
-              {
-               HTM_TxtColonNBSP (Txt_Centre);
-               HTM_Txt (Ctr.ShrtName);
-              }
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr.ShrtName);
             else if (Ins.InsCod > 0)
-              {
-               HTM_TxtColonNBSP (Txt_Institution);
-               HTM_Txt (Ins.ShrtName);
-              }
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins.ShrtName);
             else
-               HTM_Txt ("-");
+               HTM_Hyphen ();
 
             if (PutLink)
               {
@@ -1954,7 +1941,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+      HTM_TxtF ("%s:",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");
@@ -2067,8 +2054,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Number of unseen notifications *****/
    HTM_SPAN_Begin ("id=\"notif_all\"");
-   HTM_UnsignedNBSPTxt (NumUnseenNtfs,NumUnseenNtfs == 1 ? Txt_notification :
-				                           Txt_notifications);
+   HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,NumUnseenNtfs == 1 ? Txt_notification :
+				                             Txt_notifications);
    HTM_BR ();
    HTM_SPAN_End ();
 
@@ -2079,8 +2066,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	       "class=\"ICO16x16\"");
       HTM_TxtF ("&nbsp;%u",NumNewNtfs);
       HTM_SPAN_Begin ("id=\"notif_new\"");
-      HTM_NBSPTxt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-				     Txt_NOTIF_new_PLURAL);
+      HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+				             Txt_NOTIF_new_PLURAL);
       HTM_SPAN_End ();
      }
 

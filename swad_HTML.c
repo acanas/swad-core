@@ -1656,48 +1656,14 @@ void HTM_Txt (const char *Txt)
    fputs (Txt,Gbl.F.Out);
   }
 
-void HTM_TxtColon (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_Txt (":");
-  }
-
-void HTM_TxtColonNBSP (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_Txt (":");
-   HTM_NBSP ();
-  }
-
-void HTM_TxtNBSPTxt (const char *Txt1,const char *Txt2)
-  {
-   HTM_Txt (Txt1);
-   HTM_NBSP ();
-   HTM_Txt (Txt2);
-  }
-
-void HTM_NBSPTxt (const char *Txt)
-  {
-   HTM_NBSP ();
-   HTM_Txt (Txt);
-  }
-
-void HTM_TxtNBSP (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_NBSP ();
-  }
-
-void HTM_NBSPTxtNBSP (const char *Txt)
-  {
-   HTM_NBSP ();
-   HTM_Txt (Txt);
-   HTM_NBSP ();
-  }
-
-void HTM_NBSP (void)
+void HTM_Space (void)
   {
    HTM_Txt ("&nbsp;");
+  }
+
+void HTM_Colon (void)
+  {
+   HTM_Txt (":");
   }
 
 void HTM_Comma (void)
@@ -1705,34 +1671,24 @@ void HTM_Comma (void)
    HTM_Txt (",");
   }
 
+void HTM_Hyphen (void)
+  {
+   HTM_Txt ("-");
+  }
+
+void HTM_Asterisk (void)
+  {
+   HTM_Txt ("*");
+  }
+
 void HTM_Unsigned (unsigned Num)
   {
    fprintf (Gbl.F.Out,"%u",Num);
   }
 
-void HTM_UnsignedColon (unsigned Num)
+void HTM_Int (int Num)
   {
-   HTM_Unsigned (Num);
-   HTM_Txt (":");
-  }
-
-void HTM_NBSPUnsigned (unsigned Num)
-  {
-   HTM_NBSP ();
-   HTM_Unsigned (Num);
-  }
-
-void HTM_UnsignedNBSP (unsigned Num)
-  {
-   HTM_Unsigned (Num);
-   HTM_NBSP ();
-  }
-
-void HTM_UnsignedNBSPTxt (unsigned Num,const char *Txt)
-  {
-   HTM_Unsigned (Num);
-   HTM_NBSP ();
-   HTM_Txt (Txt);
+   fprintf (Gbl.F.Out,"%d",Num);
   }
 
 void HTM_UnsignedLong (unsigned long Num)

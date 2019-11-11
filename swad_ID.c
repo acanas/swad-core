@@ -607,7 +607,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
 	 HTM_LABEL_Begin ("for=\"UsrID\" class=\"%s\"",
 		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_ID);
+	 HTM_TxtF ("%s:",Txt_ID);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -687,8 +687,8 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
       HTM_LABEL_Begin ("for=\"NewID\" class=\"%s\"",
 	               The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
-		                      Txt_ID);		// The first user's ID
+      HTM_TxtF ("%s:",UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
+		                        Txt_ID);		// The first user's ID
       HTM_LABEL_End ();
       HTM_TD_End ();
 

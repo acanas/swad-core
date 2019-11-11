@@ -142,7 +142,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    /***** Write a form to import questions *****/
    Frm_StartForm (ActImpTstQst);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_XML_file);
+   HTM_TxtF ("%s:&nbsp;",Txt_XML_file);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",true,NULL);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -1011,7 +1011,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    /***** Write number of question *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    if (!QuestionExists)
-      HTM_UnsignedNBSP (++NumNonExistingQst);
+      HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
@@ -1027,7 +1027,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-	 HTM_NBSPTxtNBSP ("&#8226;");
+	 HTM_TxtF ("&nbsp;%s&nbsp;","&#8226;");
 	 HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"%s LT\"",ClassData);
@@ -1049,7 +1049,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question type *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_TxtNBSP (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    HTM_TD_End ();
 
    /***** Write if shuffle is enabled *****/

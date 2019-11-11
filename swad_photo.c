@@ -336,7 +336,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
    /***** Form to upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File_with_the_photo);
+   HTM_TxtF ("%s:&nbsp;",Txt_File_with_the_photo);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 
@@ -1258,7 +1258,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 HTM_NBSPTxtNBSP (Txt_Following);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_Following);
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
@@ -1266,7 +1266,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 HTM_NBSPTxt (Txt_Followers);
+	 HTM_TxtF ("&nbsp;%s",Txt_Followers);
 	 HTM_SPAN_End ();
 
 	 HTM_DIV_End ();
@@ -1800,7 +1800,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"AvgType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Average_type);
+   HTM_TxtF ("%s:",Txt_Average_type);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1865,7 +1865,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"PhotoSize\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Size_of_photos);
+   HTM_TxtF ("%s:",Txt_Size_of_photos);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1930,7 +1930,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Order\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Sort_degrees_by);
+   HTM_TxtF ("%s:",Txt_Sort_degrees_by);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2273,7 +2273,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 else	// Pho_DEGREES_PRINT
 	   {
 	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-	    HTM_NBSPTxt (Deg.FullName);
+	    HTM_TxtF ("&nbsp;%s",Deg.FullName);
 	   }
 	 HTM_TD_End ();
 

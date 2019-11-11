@@ -124,7 +124,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeInd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Scope);
+   HTM_TxtF ("%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -140,7 +140,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthDegTypCod\" class=\"%s\"",
 	            The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Types_of_degree);
+   HTM_TxtF ("%s:",Txt_Types_of_degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -159,7 +159,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
 	            Dpt_PARAM_DPT_COD_NAME,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Department);
+   HTM_TxtF ("%s:",Txt_Department);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -189,7 +189,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_No_of_indicators);
+   HTM_TxtF ("%s:",Txt_No_of_indicators);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

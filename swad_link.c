@@ -166,7 +166,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 
       Frm_StartForm (ActSeeLnk);
       Frm_LinkFormSubmit (Txt_Links,NULL,NULL);
-      HTM_NBSPTxt (Txt_Links);
+      HTM_TxtF ("&nbsp;%s",Txt_Links);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 

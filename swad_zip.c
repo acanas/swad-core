@@ -573,7 +573,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                 URL,FileName);
    HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
 	    "class=\"ICO40x40\"");
-   HTM_NBSPTxtNBSP (FileName);
+   HTM_TxtF ("&nbsp;%s&nbsp;",FileName);
    Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
    HTM_A_End ();
    HTM_TD_End ();
@@ -583,7 +583,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Filename);
+   HTM_TxtF ("%s:",Txt_Filename);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -600,7 +600,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_File_size);
+   HTM_TxtF ("%s:",Txt_File_size);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

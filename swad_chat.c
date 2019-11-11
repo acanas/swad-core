@@ -131,7 +131,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Title of top level *****/
    HTM_LI_Begin ("class=\"DAT\"");
    Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
-   HTM_NBSPTxt (Txt_Chat_rooms);
+   HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
    HTM_LI_End ();
 
    /***** Link to chat available for all the users *****/
@@ -321,7 +321,7 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 
    if (NumUsrsInRoom)
       HTM_STRONG_Begin ();
-   HTM_NBSPTxt (RoomFullName);
+   HTM_TxtF ("&nbsp;%s",RoomFullName);
    if (NumUsrsInRoom > 1)
       HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
    else if (NumUsrsInRoom == 1)

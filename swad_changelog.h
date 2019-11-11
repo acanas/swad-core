@@ -487,27 +487,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.62 (2019-11-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.63 (2019-11-11)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
-// TODO: Check the following texts in HTM
-"-"
-" "
-"/%u"
-"%u/%u"
-"@%s"
-"%d"
-":"
-"*"
-"%s*:"
-"(%s)"
-"[%s]"
-"%ld&nbsp;"
+// TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
+	Version 19.63:    Nov 11, 2019	Code refactoring in HTML. (246384 lines)
 	Version 19.62:    Nov 11, 2019	Code refactoring in HTML.
 					Floats converted to doubles. (? lines)
 	Version 19.61.8:  Nov 10, 2019	Code refactoring in HTML. (246428 lines)

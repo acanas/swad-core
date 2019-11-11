@@ -138,7 +138,7 @@ void Hld_SeeHolidays (void)
 	   }
 
 	 HTM_TH_Begin (1,1,"LM");
-	 HTM_NBSPTxtNBSP (Txt_End_date);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_End_date);
 	 HTM_TH_End ();
 
 	 HTM_TH (1,1,"LM",Txt_Holiday);
@@ -160,11 +160,11 @@ void Hld_SeeHolidays (void)
 
 	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_NBSPTxt (StrDate);
+	    HTM_TxtF ("&nbsp;%s",StrDate);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_NBSP ();
+	    HTM_Space ();
 	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	      {
 	       case Hld_HOLIDAY:
@@ -177,7 +177,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_NBSPTxt (Gbl.Hlds.Lst[NumHld].Name);
+	    HTM_TxtF ("&nbsp;%s",Gbl.Hlds.Lst[NumHld].Name);
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();

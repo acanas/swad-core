@@ -323,7 +323,7 @@ static void Cty_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Country);
+   HTM_TxtF ("%s:",Txt_Country);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -341,7 +341,7 @@ static void Cty_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Shortcut);
+   HTM_TxtF ("%s:",Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -364,7 +364,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_QR_code);
+      HTM_TxtF ("%s:",Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -379,7 +379,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Users_of_the_country);
+      HTM_TxtF ("%s:",Txt_Users_of_the_country);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -392,7 +392,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Institutions);
+      HTM_TxtF ("%s:",Txt_Institutions);
       HTM_TD_End ();
 
       /* Form to go to see institutions of this country */
@@ -414,7 +414,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Centres);
+      HTM_TxtF ("%s:",Txt_Centres);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -427,7 +427,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Degrees);
+      HTM_TxtF ("%s:",Txt_Degrees);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -440,7 +440,7 @@ static void Cty_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Courses);
+      HTM_TxtF ("%s:",Txt_Courses);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -485,8 +485,8 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
-		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -546,7 +546,7 @@ void Cty_ListCountries2 (void)
    /***** Separation row *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"8\" class=\"DAT CM\"");
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -825,7 +825,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Write country name *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_NAME);
-   HTM_NBSPTxtNBSP (CountryName);
+   HTM_TxtF ("&nbsp;%s&nbsp;",CountryName);
    HTM_TxtF ("(%s)",Cty->Alpha2);
 
    /***** End link *****/
@@ -1657,7 +1657,7 @@ static void Cty_ListCountriesForEdition (void)
 
 	 /* Language */
          HTM_TD_Begin ("class=\"DAT RM\"");
-         HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
+         HTM_TxtF ("%s:",Txt_STR_LANG_NAME[Lan]);
          HTM_TD_End ();
 
          /* Name */

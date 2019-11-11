@@ -375,7 +375,7 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
    Ico_PutIcon (Icon,Text,"CONTEXT_ICO_x16");
-   HTM_NBSPTxt (Text);
+   HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }
 
@@ -444,7 +444,7 @@ void Ico_PutCalculateIconWithText (const char *Text)
 	    "class=\"ICO20x20\" style=\"display:none;\""		// Animated icon hidden
 	    " id=\"updating_%d\"",Gbl.Form.Num);
 
-   HTM_NBSPTxt (Text);
+   HTM_TxtF ("&nbsp;%s",Text);
 
    HTM_DIV_End ();
   }

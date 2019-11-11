@@ -540,10 +540,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_DIV_Begin ("class=\"%s\"",
                   Svy.Status.Visible ? "ASG_GRP" :
         	                       "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_TxtF ("%s:&nbsp;",Txt_No_of_questions);
    HTM_Unsigned (Svy.NumQsts);
    HTM_Txt ("; ");
-   HTM_TxtColonNBSP (Txt_No_of_users);
+   HTM_TxtF ("%s:&nbsp;",Txt_No_of_users);
    HTM_Unsigned (Svy.NumUsrs);
    HTM_DIV_End ();
 
@@ -613,7 +613,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Scope of the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (Txt_Scope);
+   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
    switch (Svy.Scope)
      {
       case Hie_UNK:	// Unknown
@@ -623,19 +623,19 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
          HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 break;
       case Hie_CTY:	// Country
-         HTM_TxtNBSPTxt (Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+         HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 break;
       case Hie_INS:	// Institution
-         HTM_TxtNBSPTxt (Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
+         HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
 	 break;
       case Hie_CTR:	// Centre
-         HTM_TxtNBSPTxt (Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
+         HTM_TxtF ("%s&nbsp;%s",Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
 	 break;
       case Hie_DEG:	// Degree
-         HTM_TxtNBSPTxt (Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
+         HTM_TxtF ("%s&nbsp;%s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
  	 break;
       case Hie_CRS:	// Course
-	 HTM_TxtNBSPTxt (Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
    HTM_DIV_End ();
@@ -643,7 +643,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Users' roles who can answer the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   HTM_TxtColon (Txt_Users);
+   HTM_TxtF ("%s:",Txt_Users);
    HTM_BR ();
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -1895,7 +1895,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeSvy\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Scope);
+   HTM_TxtF ("%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1912,7 +1912,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1931,7 +1931,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Description);
+   HTM_TxtF ("%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1948,7 +1948,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Users);
+   HTM_TxtF ("%s:",Txt_Users);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2080,7 +2080,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
+      HTM_TxtF ("%s:",Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -2095,7 +2095,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",false,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" : " checked=\"checked\"");
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2465,8 +2465,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
         	                                       "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
-                                    Txt_Groups);
+   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
+                                        Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -2480,7 +2480,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         HTM_TxtNBSPTxt (row[0],row[1]);
+         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
          if (NumRows >= 2)
            {
@@ -2493,7 +2493,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
         }
      }
    else
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -2721,7 +2721,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Wording);
+   HTM_TxtF ("%s:",Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2737,7 +2737,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Type);
+   HTM_TxtF ("%s:",Txt_Type);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -3530,7 +3530,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	    "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
    /***** Write the number of users *****/
-   HTM_NBSPTxt (Gbl.Title);
+   HTM_TxtF ("&nbsp;%s",Gbl.Title);
 
    HTM_TD_End ();
   }

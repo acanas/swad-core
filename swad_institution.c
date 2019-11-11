@@ -267,7 +267,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
    /***** Institution logo and name *****/
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
-   HTM_NBSPTxt (Ins->FullName);
+   HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();
@@ -356,7 +356,7 @@ static void Ins_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Country);
+   HTM_TxtF ("%s:",Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -396,7 +396,7 @@ static void Ins_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Institution);
+   HTM_TxtF ("%s:",Txt_Institution);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -422,7 +422,7 @@ static void Ins_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Short_name);
+   HTM_TxtF ("%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -448,7 +448,7 @@ static void Ins_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Web);
+   HTM_TxtF ("%s:",Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -481,7 +481,7 @@ static void Ins_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Shortcut);
+   HTM_TxtF ("%s:",Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -504,7 +504,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_QR_code);
+      HTM_TxtF ("%s:",Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -519,7 +519,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Users_of_the_institution);
+      HTM_TxtF ("%s:",Txt_Users_of_the_institution);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -531,7 +531,7 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Number of centres *****/
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Centres);
+      HTM_TxtF ("%s:",Txt_Centres);
       HTM_TD_End ();
 
       /* Form to go to see centres of this institution */
@@ -553,7 +553,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Degrees);
+      HTM_TxtF ("%s:",Txt_Degrees);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -566,7 +566,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Courses);
+      HTM_TxtF ("%s:",Txt_Courses);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -579,7 +579,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Departments);
+      HTM_TxtF ("%s:",Txt_Departments);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -632,8 +632,8 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
-		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -1125,7 +1125,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
    Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
    /***** Write institution short name and country name *****/
-   HTM_TxtF ("%s (%s)",Ins.ShrtName,CtyName);
+   HTM_TxtF ("%s&nbsp;(%s)",Ins.ShrtName,CtyName);
   }
 
 /*****************************************************************************/

@@ -611,8 +611,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
-                                    Txt_Groups);
+   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
+                                        Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -626,7 +626,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         HTM_TxtNBSPTxt (row[0],row[1]);
+         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
          if (NumRows >= 2)
            {
@@ -639,7 +639,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
         }
      }
    else
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -1201,7 +1201,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1253,7 +1253,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
+      HTM_TxtF ("%s:",Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -1267,7 +1267,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_INPUT_CHECKBOX ("WholeCrs",true,
 			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
 			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2152,7 +2152,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       Dat_WriteHoursMinutesSeconds (&Time);
      }
    else
-      HTM_Txt ("-");
+      HTM_Hyphen ();
    HTM_DIV_End ();
 
    /***** Number of users who have answered this question *****/
@@ -2166,7 +2166,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
       HTM_Unsigned (NumAnswerersQst);
    else
-      HTM_Txt ("-");
+      HTM_Hyphen ();
    if (Match->Status.Playing)
      {
       /* Get current number of players */
@@ -2421,7 +2421,7 @@ static void Mch_PutCheckboxResult (struct Match *Match)
    HTM_TxtF ("<i class=\"%s\"></i>",
 	     Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 		                            "fas fa-toggle-off");
-   HTM_NBSPTxt (Txt_View_results);
+   HTM_TxtF ("&nbsp;%s",Txt_View_results);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -2739,12 +2739,12 @@ static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxSco
    if (NumRow == 0)
      {
       Str_WriteDoubleNumToFile (Gbl.F.Out,MaxScore);
-      HTM_NBSP ();
+      HTM_Space ();
      }
    else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
      {
       Str_WriteDoubleNumToFile (Gbl.F.Out,MinScore);
-      HTM_NBSP ();
+      HTM_Space ();
      }
    HTM_TD_End ();
 
@@ -2809,7 +2809,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    /* Write score */
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
    Str_WriteDoubleNumToFile (Gbl.F.Out,Score);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
 
    /* Draw bar and write number of users for this score */

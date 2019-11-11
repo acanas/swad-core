@@ -104,7 +104,7 @@ void Hie_WriteMenuHierarchy (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"cty\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Country);
+   HTM_TxtF ("%s:",Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -122,7 +122,7 @@ void Hie_WriteMenuHierarchy (void)
 
       HTM_TD_Begin ("class=\"RM\"");
       HTM_LABEL_Begin ("for=\"ins\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Institution);
+      HTM_TxtF ("%s:",Txt_Institution);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -140,7 +140,7 @@ void Hie_WriteMenuHierarchy (void)
 
          HTM_TD_Begin ("class=\"RM\"");
          HTM_LABEL_Begin ("for=\"ctr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Centre);
+         HTM_TxtF ("%s:",Txt_Centre);
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -159,7 +159,7 @@ void Hie_WriteMenuHierarchy (void)
 	    HTM_TD_Begin ("class=\"RM\"");
 	    HTM_LABEL_Begin ("for=\"deg\" class=\"%s\"",
 			     The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtColon (Txt_Degree);
+	    HTM_TxtF ("%s:",Txt_Degree);
 	    HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -178,7 +178,7 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TD_Begin ("class=\"RM\"");
 	       HTM_LABEL_Begin ("for=\"crs\" class=\"%s\"",
 			        The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       HTM_TxtColon (Txt_Course);
+	       HTM_TxtF ("%s:",Txt_Course);
 	       HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -212,7 +212,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
-   HTM_NBSP ();
+   HTM_Space ();
 
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
@@ -416,7 +416,8 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    extern const char *The_ClassCourse[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
 
-   HTM_TxtF ("<h1 id=\"main_title\" class=\"%s\">",The_ClassCourse[Gbl.Prefs.Theme]);
+   HTM_TxtF ("<h1 id=\"main_title\" class=\"%s\">",
+	     The_ClassCourse[Gbl.Prefs.Theme]);
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
@@ -471,8 +472,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    else	// No country specified ==> home page
      {
       HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
-      HTM_TxtColonNBSP (Cfg_PLATFORM_SHORT_NAME);
-      HTM_Txt (Txt_TAGLINE);
+      HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"NOT_SHOWN\"");

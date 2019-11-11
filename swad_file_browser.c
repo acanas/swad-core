@@ -3300,7 +3300,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			  GrpDat.GrpCod,
 			  (IsGroupZone &&
 			   GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? " checked=\"checked\"" : "");
-	 HTM_TxtNBSPTxt (GrpDat.GrpTypName,GrpDat.GrpName);
+	 HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();
         }
@@ -3392,7 +3392,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
       HTM_TxtF (", %s",UsrDat->FirstName);
    Frm_LinkFormEnd ();
@@ -4125,7 +4125,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
       Brw_StoreSizeOfFileTreeInDB ();
      }
    else
-      HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
+      HTM_Space ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }
@@ -6256,7 +6256,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	}
 
       /***** Write name of the folder *****/
-      HTM_NBSP ();
+      HTM_Space ();
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
 	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,true,
@@ -6275,7 +6275,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
          HTM_STRONG_Begin ();
          HTM_Txt (FileNameToShow);
          HTM_STRONG_End ();
-         HTM_NBSP ();
+         HTM_Space ();
          if ((Level == 1) &&
              (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
               Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
@@ -6296,7 +6296,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_DIV_Begin ("class=\"FILENAME\"");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
@@ -6436,13 +6436,13 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       FileSizeStr[0] = '\0';
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   HTM_NBSPTxt (FileSizeStr);
+   HTM_TxtF ("&nbsp;%s",FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   HTM_NBSP ();
+   HTM_Space ();
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
        Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
      {
@@ -8339,7 +8339,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Folder *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Folder);
+   HTM_TxtF ("%s:&nbsp;",Txt_Folder);
    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",false,
 		   "size=\"30\" required=\"required\"");
    HTM_LABEL_End ();
@@ -8505,7 +8505,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"NewLinkURL\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_URL);
+   HTM_TxtF ("%s:&nbsp;",Txt_URL);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -9499,7 +9499,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Filename);
+	 HTM_TxtF ("%s:",Txt_Filename);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -9512,7 +9512,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Uploaded_by);
+	 HTM_TxtF ("%s:",Txt_Uploaded_by);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -9543,7 +9543,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_File_size);
+	 HTM_TxtF ("%s:",Txt_File_size);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -9556,7 +9556,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Date_of_creation);
+	 HTM_TxtF ("%s:",Txt_Date_of_creation);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
@@ -9573,7 +9573,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"RM\"");
 	 HTM_LABEL_Begin ("for=\"PublicFile\" class=\"%s\"",
 		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Availability);
+	 HTM_TxtF ("%s:",Txt_Availability);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -9603,7 +9603,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"RM\"");
 	 HTM_LABEL_Begin ("for=\"License\" class=\"%s\"",
 		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_License);
+	 HTM_TxtF ("%s:",Txt_License);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -9635,7 +9635,7 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtColon (Txt_My_views);
+	    HTM_TxtF ("%s:",Txt_My_views);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -9649,15 +9649,15 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Identified_views);
+	 HTM_TxtF ("%s:",Txt_Identified_views);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 HTM_UnsignedNBSP (FileMetadata.NumViewsFromLoggedUsrs);
+	 HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 	 HTM_TxtF ("(%u %s)",
 		   FileMetadata.NumLoggedUsrs,
-		   (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-			                               Txt_users[Usr_SEX_UNKNOWN]);
+		   FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+			                             Txt_users[Usr_SEX_UNKNOWN]);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -9666,7 +9666,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Public_views);
+	 HTM_TxtF ("%s:",Txt_Public_views);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -10019,7 +10019,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
       /* Name of the file of marks, link end and form end */
-      HTM_NBSPTxtNBSP (FileNameToShow);
+      HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
       Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
       Frm_LinkFormEnd ();
       Frm_EndForm ();
@@ -10033,7 +10033,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
-      HTM_NBSPTxtNBSP (FileNameToShow);
+      HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
       Ico_PutIcon ("download.svg",Title,"ICO40x40");
       HTM_A_End ();
      }
@@ -11921,7 +11921,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   InsShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CT",true);
-	 HTM_NBSPTxt (InsShortName);
+	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -11938,7 +11938,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   CtrShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CT",true);
-	 HTM_NBSPTxt (CtrShortName);
+	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -11955,7 +11955,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   DegShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CT",true);
-	 HTM_NBSPTxt (DegShortName);
+	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
@@ -12079,7 +12079,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
-      HTM_NBSPTxt (FileNameToShow);
+      HTM_TxtF ("&nbsp;%s",FileNameToShow);
       Frm_LinkFormEnd ();
 
       /* End form */
@@ -12132,7 +12132,7 @@ void Brw_AskRemoveOldFiles (void)
 
    /***** Form to request number of months (to remove files older) *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtNBSP (Txt_Remove_files_older_than_PART_1_OF_2);
+   HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
    HTM_SELECT_Begin (false,
 		     "name=\"Months\"");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
@@ -12142,7 +12142,7 @@ void Brw_AskRemoveOldFiles (void)
 		  Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
 		  "%u",Months);
    HTM_SELECT_End ();
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TxtF (Txt_Remove_files_older_than_PART_2_OF_2,
              Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

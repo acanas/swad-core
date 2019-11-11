@@ -900,7 +900,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
   }
 
 /*****************************************************************************/
@@ -2807,12 +2807,12 @@ void Usr_WriteLoggedUsrHead (void)
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
-      HTM_TxtNBSP (":");
+      HTM_TxtF ("%s&nbsp;",":");
      }
    else
      {
       Rol_PutFormToChangeMyRole ("SEL_ROLE");
-      HTM_NBSP ();
+      HTM_Space ();
      }
 
    /***** Show my photo *****/
@@ -2823,7 +2823,7 @@ void Usr_WriteLoggedUsrHead (void)
 
    /***** User's name *****/
    if (Gbl.Usrs.Me.UsrDat.FirstName[0])
-      HTM_NBSPTxt (Gbl.Usrs.Me.UsrDat.FirstName);
+      HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Me.UsrDat.FirstName);
 
    HTM_DIV_End ();
   }
@@ -3499,7 +3499,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    if (Rol_GetNumAvailableRoles () == 1)
      {
       HTM_SPAN_Begin ("class=\"DAT\"");
-      HTM_TxtColonNBSP (Txt_Role);
+      HTM_TxtF ("%s:&nbsp;",Txt_Role);
       HTM_SPAN_End ();
 
       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
@@ -3509,7 +3509,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    else
      {
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColonNBSP (Txt_Role);
+      HTM_TxtF ("%s:&nbsp;",Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
       HTM_LABEL_End ();
      }
@@ -3725,7 +3725,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /****** Write user's ID ******/
    HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
 
    /***** Write rest of guest's main data *****/
@@ -3829,7 +3829,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
 
    /***** Write rest of main student's data *****/
@@ -3948,7 +3948,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
 
    /***** Write rest of main teacher's data *****/
@@ -4026,7 +4026,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
 
    /***** Write rest of main administrator's data *****/
@@ -4122,7 +4122,7 @@ static void Usr_WriteUsrData (const char *BgColor,
    /***** Write data *****/
    HTM_Txt (Data);
    if (NonBreak)
-      HTM_NBSP ();
+      HTM_Space ();
 
    /***** End link *****/
    if (Link)
@@ -6135,7 +6135,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
                        Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
                                                         NULL);
    Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-   HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
+   HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
    Frm_LinkFormEnd ();
 
    /***** End form *****/
@@ -6307,8 +6307,8 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
-   HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-                                                       Txt_ROLES_PLURAL_Abc[Role][Sex]);
+   HTM_TxtF ("%s:",Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
+                                                         Txt_ROLES_PLURAL_Abc[Role][Sex]);
    HTM_LABEL_End ();
 
    HTM_TH_End ();
@@ -6876,8 +6876,9 @@ void Usr_ListAllDataStds (void)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {
                   HTM_TH_Begin (1,1,"LM LIGHT_BLUE");
-                  HTM_TxtNBSPTxt (Txt_Group,
-                                   Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+                  HTM_TxtF ("%s&nbsp;%s",
+			    Txt_Group,
+                            Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                   HTM_TH_End ();
         	 }
 
@@ -6905,8 +6906,7 @@ void Usr_ListAllDataStds (void)
                  NumField++)
               {
                HTM_TH_Begin (1,1,"LM VERY_LIGHT_BLUE");
-               HTM_TxtF ("(%s)",
-                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+               HTM_TxtF ("(%s)",Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
                HTM_TH_End ();
               }
            }
@@ -7321,7 +7321,7 @@ void Usr_ListDataAdms (void)
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Scope);
+   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -7788,7 +7788,7 @@ void Usr_SeeGuests (void)
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColonNBSP (Txt_Scope);
+      HTM_TxtF ("%s:&nbsp;",Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       HTM_LABEL_End ();
       Frm_EndForm ();
@@ -7933,7 +7933,7 @@ void Usr_SeeStudents (void)
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColonNBSP (Txt_Scope);
+	 HTM_TxtF ("%s:&nbsp;",Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 HTM_LABEL_End ();
 	 Frm_EndForm ();
@@ -8106,7 +8106,7 @@ void Usr_SeeTeachers (void)
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Scope);
+   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -8900,17 +8900,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 if (UsrDat.FirstName[0])
 	    HTM_Txt (UsrDat.FirstName);
 	 else
-	    HTM_NBSP ();
+	    HTM_Space ();
 	 HTM_BR ();
 	 if (UsrDat.Surname1[0])
 	    HTM_Txt (UsrDat.Surname1);
 	 else
-	    HTM_NBSP ();
+	    HTM_Space ();
 	 HTM_BR ();
 	 if (UsrDat.Surname2[0])
 	    HTM_Txt (UsrDat.Surname2);
 	 else
-	    HTM_NBSP ();
+	    HTM_Space ();
 
 	 HTM_DIV_End ();
 
@@ -9712,7 +9712,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
      {
       HTM_Comma ();

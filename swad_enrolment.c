@@ -379,7 +379,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       FuncParams ();
    HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
+   HTM_TxtF ("%s:&nbsp;",Txt_nick_email_or_ID);
    HTM_LABEL_End ();
 
    HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",false,
@@ -804,7 +804,7 @@ void Enr_AskRemoveOldUsrs (void)
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtNBSP (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
+   HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
    HTM_SELECT_Begin (false,
 		     "name=\"Months\"");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -814,7 +814,7 @@ void Enr_AskRemoveOldUsrs (void)
 		  Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
 		  "%u",Months);
    HTM_SELECT_End ();
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TxtF (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
              Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();
@@ -919,7 +919,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"UsrsIDs\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_List_of_nicks_emails_or_IDs);
+   HTM_TxtF ("%s:",Txt_List_of_nicks_emails_or_IDs);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2264,7 +2264,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeEnr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Scope);
+   HTM_TxtF ("%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2279,7 +2279,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Users);
+   HTM_TxtF ("%s:",Txt_Users);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

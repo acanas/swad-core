@@ -427,10 +427,7 @@ static void Lay_WritePageTitle (void)
          HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
      }
    else
-     {
-      HTM_TxtColonNBSP (Cfg_PLATFORM_SHORT_NAME);
-      HTM_Txt (Txt_TAGLINE);
-     }
+      HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
 
    HTM_Txt ("</title>\n");
   }
@@ -1226,7 +1223,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
    Frm_EndForm ();
 
    /***** Separator *****/
-   HTM_TxtF (" ");	// This space is necessary to enable
+   HTM_Txt (" ");	// This space is necessary to enable
 			// jumping to the next line on narrow screens
   }
 
@@ -1269,7 +1266,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    /***** Text *****/
    if (Text)
       if (Text[0])
-	 HTM_NBSPTxt (Text);
+	 HTM_TxtF ("&nbsp;%s",Text);
 
    /***** End label and container *****/
    HTM_LABEL_End ();
@@ -1414,7 +1411,7 @@ static void Lay_WriteAboutZone (void)
 
    /***** Questions and problems *****/
    HTM_DIV_Begin (NULL);
-   HTM_TxtColonNBSP (Txt_Questions_and_problems);
+   HTM_TxtF ("%s:&nbsp;",Txt_Questions_and_problems);
    HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
 	        Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);
@@ -1431,7 +1428,7 @@ static void Lay_WriteAboutZone (void)
    for (size_t i = 0;
 	i < 5;
 	i++)
-      HTM_NBSP ();
+      HTM_Space ();
 
    /* Time to generate and send page */
    Sta_WriteTimeToGenerateAndSendPage ();

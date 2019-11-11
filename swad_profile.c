@@ -206,7 +206,7 @@ void Prf_RequestUserProfile (void)
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Nickname);
+   HTM_TxtF ("%s:&nbsp;",Txt_Nickname);
 
    snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
 	     "@%s",
@@ -479,7 +479,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
       HTM_SPAN_End ();
       if (UsrFigures->NumDays > 0)
         {
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 NumYears = UsrFigures->NumDays / 365;
 	 if (NumYears)
 	    HTM_TxtF ("%d&nbsp;%s",
@@ -532,7 +532,7 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 
    Prf_StartListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
-   HTM_UnsignedNBSPTxt (NumCrss,Txt_courses_ABBREVIATION);
+   HTM_TxtF ("%u&nbsp;%s",NumCrss,Txt_courses_ABBREVIATION);
 
    if (NumCrss)
       HTM_TxtF ("&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
@@ -568,11 +568,11 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
 
    Prf_StartListItem (Txt_Files_uploaded,"file.svg");
 
-   HTM_UnsignedNBSPTxt (NumFiles,(NumFiles == 1) ? Txt_file :
+   HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
 		                                   Txt_files);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_Txt ("(");
-   HTM_UnsignedNBSPTxt (NumPublicFiles,Txt_public_FILES);
+   HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
    HTM_Txt (")");
 
    Prf_EndListItem ();
@@ -595,12 +595,12 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
    if (UsrFigures->NumClicks >= 0)
      {
       HTM_Long (UsrFigures->NumClicks);
-      HTM_NBSPTxtNBSP (Txt_clicks);
+      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_clicks);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
 		       Prf_GetNumUsrsWithFigure ("NumClicks"));
       if (UsrFigures->NumDays > 0)
 	{
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,
 			           (double) UsrFigures->NumClicks /
 			           (double) UsrFigures->NumDays);
@@ -635,16 +635,16 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
    if (UsrFigures->NumFileViews >= 0)
      {
       HTM_Long (UsrFigures->NumFileViews);
-      HTM_NBSPTxtNBSP ((UsrFigures->NumFileViews == 1) ? Txt_download :
+      HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
 						         Txt_downloads);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
 		       Prf_GetNumUsrsWithFigure ("NumFileViews"));
       if (UsrFigures->NumDays > 0)
 	{
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			    (float) UsrFigures->NumFileViews /
-			    (float) UsrFigures->NumDays);
+			           (double) UsrFigures->NumFileViews /
+			           (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -673,16 +673,16 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
    if (UsrFigures->NumSocPub >= 0)
      {
       HTM_Long (UsrFigures->NumSocPub);
-      HTM_NBSPTxtNBSP (UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
-					            Txt_TIMELINE_posts);
+      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
+					                      Txt_TIMELINE_posts);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
 		       Prf_GetNumUsrsWithFigure ("NumSocPub"));
       if (UsrFigures->NumDays > 0)
 	{
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			    (float) UsrFigures->NumSocPub /
-			    (float) UsrFigures->NumDays);
+			           (double) UsrFigures->NumSocPub /
+			           (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -711,16 +711,16 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
    if (UsrFigures->NumForPst >= 0)
      {
       HTM_Long (UsrFigures->NumForPst);
-      HTM_NBSPTxtNBSP (UsrFigures->NumForPst == 1 ? Txt_FORUM_post :
-					            Txt_FORUM_posts);
+      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForPst == 1 ? Txt_FORUM_post :
+					                      Txt_FORUM_posts);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
 		       Prf_GetNumUsrsWithFigure ("NumForPst"));
       if (UsrFigures->NumDays > 0)
 	{
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			    (float) UsrFigures->NumForPst /
-			    (float) UsrFigures->NumDays);
+			           (double) UsrFigures->NumForPst /
+			           (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -749,16 +749,16 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
    if (UsrFigures->NumMsgSnt >= 0)
      {
       HTM_Long (UsrFigures->NumMsgSnt);
-      HTM_NBSPTxtNBSP (UsrFigures->NumMsgSnt == 1 ? Txt_message :
-					            Txt_messages);
+      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMsgSnt == 1 ? Txt_message :
+					                      Txt_messages);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
 		       Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
       if (UsrFigures->NumDays > 0)
 	{
-	 HTM_NBSPTxt ("(");
+	 HTM_TxtF ("&nbsp;%s","(");
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			    (float) UsrFigures->NumMsgSnt /
-			    (float) UsrFigures->NumDays);
+			           (double) UsrFigures->NumMsgSnt /
+			           (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }

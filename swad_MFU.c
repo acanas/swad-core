@@ -248,7 +248,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
-         HTM_NBSPTxt (TabMenuStr);
+         HTM_TxtF ("&nbsp;%s",TabMenuStr);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
@@ -280,7 +280,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    HTM_DIV_Begin ("id=\"MFU_actions\"");
    Frm_StartForm (ActMFUAct);
    Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
-   HTM_NBSPTxt (Txt_Frequent_ACTIONS);
+   HTM_TxtF ("&nbsp;%s",Txt_Frequent_ACTIONS);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
 
@@ -309,7 +309,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
-	 HTM_NBSPTxt (MenuStr);
+	 HTM_TxtF ("&nbsp;%s",MenuStr);
 	 Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();

@@ -1105,7 +1105,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1124,7 +1124,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"ComTchVisible\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Teachers_comment);
+   HTM_TxtF ("%s:",Txt_Teachers_comment);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1144,7 +1144,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Description);
+   HTM_TxtF ("%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1194,7 +1194,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
+      HTM_TxtF ("%s:",Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -1210,7 +1210,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Att_CheckIfAttEventIsAssociatedToGrps (AttCod) ? "" : " checked=\"checked\"");
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1517,8 +1517,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtColonNBSP ((NumGrps == 1) ? Txt_Group  :
-                                      Txt_Groups);
+   HTM_TxtF ("%s:&nbsp;",NumGrps == 1 ? Txt_Group  :
+                                        Txt_Groups);
 
    /***** Write groups *****/
    if (NumGrps) // Groups found...
@@ -1532,12 +1532,12 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name (row[0]) and group name (row[1]) */
-         HTM_TxtNBSPTxt (row[0],row[1]);
+         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
          /* Write the name of the classroom (row[2]) */
 	 if (row[2])	// May be NULL because of LEFT JOIN
 	    if (row[2][0])
-               HTM_TxtF (" (%s)",row[2]);
+               HTM_TxtF ("&nbsp;(%s)",row[2]);
 
 	 /* Write separator */
          if (NumGrps >= 2)
@@ -1551,7 +1551,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
         }
      }
    else
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -2119,7 +2119,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		 Gbl.RowEvenOdd);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
@@ -3123,7 +3123,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
-      HTM_UnsignedColon (NumAttEvent + 1);
+      HTM_TxtF ("%u:",NumAttEvent + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3246,7 +3246,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
       HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N_LINE_TOP RM\"",
 		    Gbl.Usrs.Listing.WithPhotos ? 4 :
 						  3);
-      HTM_TxtColon (Txt_Number_of_users);
+      HTM_TxtF ("%s:",Txt_Number_of_users);
       HTM_TD_End ();
 
       for (NumAttEvent = 0, Total = 0;
@@ -3372,7 +3372,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 		 Gbl.RowEvenOdd);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
@@ -3500,7 +3500,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 		 UsrDat->Accepted ? "DAT_N" :
 				    "DAT",
 		 Gbl.RowEvenOdd);
-   HTM_UnsignedColon (NumUsr);
+   HTM_TxtF ("%u:",NumUsr);
    HTM_TD_End ();
 
    /***** Show student's photo *****/
@@ -3528,7 +3528,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 				    "DAT_SMALL");
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_NBSPTxt (UsrDat->Surname2);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    HTM_TxtF (", %s",UsrDat->FirstName);
    HTM_TD_End ();
 
@@ -3563,7 +3563,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 		       Present ? "DAT_GREEN" :
 				 "DAT_RED",
 		       Gbl.RowEvenOdd);
-	 HTM_UnsignedColon (NumAttEvent + 1);
+	 HTM_TxtF ("%u:",NumAttEvent + 1);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
@@ -3603,7 +3603,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentStd,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       HTM_TxtColon (Txt_Student_comment);
+	       HTM_TxtF ("%s:",Txt_Student_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentStd);
@@ -3614,7 +3614,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentTch,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       HTM_TxtColon (Txt_Teachers_comment);
+	       HTM_TxtF ("%s:",Txt_Teachers_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentTch);

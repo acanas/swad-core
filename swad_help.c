@@ -274,7 +274,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
    /***** Description *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_TxtColon (Description);
+   HTM_TxtF ("%s:",Description);
    HTM_TD_End ();
 
    /***** Button *****/

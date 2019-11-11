@@ -253,7 +253,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
 
    /***** Centre logo and name *****/
    Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
-   HTM_NBSPTxt (Ctr->FullName);
+   HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();
@@ -415,7 +415,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Institution);
+   HTM_TxtF ("%s:",Txt_Institution);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -455,7 +455,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Centre);
+   HTM_TxtF ("%s:",Txt_Centre);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -481,7 +481,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Short_name);
+   HTM_TxtF ("%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -508,7 +508,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Place);
+   HTM_TxtF ("%s:",Txt_Place);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -551,7 +551,7 @@ static void Ctr_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Web);
+   HTM_TxtF ("%s:",Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -584,7 +584,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Shortcut);
+   HTM_TxtF ("%s:",Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -607,7 +607,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_QR_code);
+      HTM_TxtF ("%s:",Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -622,7 +622,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Users_of_the_centre);
+      HTM_TxtF ("%s:",Txt_Users_of_the_centre);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -635,7 +635,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Degrees);
+      HTM_TxtF ("%s:",Txt_Degrees);
       HTM_TD_End ();
 
       /* Form to go to see degrees of this centre */
@@ -657,7 +657,7 @@ static void Ctr_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Courses);
+      HTM_TxtF ("%s:",Txt_Courses);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -742,8 +742,8 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
-		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2297,7 +2297,7 @@ void Ctr_RequestPhoto (void)
 
    /***** Upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File_with_the_photo);
+   HTM_TxtF ("%s:&nbsp;",Txt_File_with_the_photo);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 

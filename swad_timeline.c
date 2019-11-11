@@ -1434,7 +1434,7 @@ static void TL_PutLinkToViewOldPublications (void)
 	    "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
 	    "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
-   HTM_NBSPTxt (Txt_See_more);
+   HTM_TxtF ("&nbsp;%s",Txt_See_more);
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -1581,24 +1581,21 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtColonNBSP (Txt_Institution);
-		  HTM_Txt (Ins.ShrtName);
+		  HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtColonNBSP (Txt_Centre);
-		  HTM_Txt (Ctr.ShrtName);
+		  HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtColonNBSP (Txt_Degree);
-		  HTM_Txt (Deg.ShrtName);
+		  HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -1607,15 +1604,13 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtColonNBSP (Txt_Course);
-		  HTM_Txt (Crs.ShrtName);
+		  HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
 		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtColonNBSP (Txt_Forum);
-		  HTM_Txt (ForumName);
+		  HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 		  HTM_DIV_End ();
 		  break;
 	       default:
@@ -1954,7 +1949,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
       HTM_Txt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
-         HTM_TxtF (" (%s)",Txt_not_available);
+         HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
       HTM_DIV_End ();
      }
    else			// Not inside another form
@@ -2034,7 +2029,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 		The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
       Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
       Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
-      HTM_NBSPTxt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 
@@ -4613,7 +4608,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
 static void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of users who have marked this note as favourite *****/
-   HTM_NBSPUnsigned (NumUsrs);
+   HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
 static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,

@@ -239,7 +239,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Degree);
+   HTM_TxtF ("%s:",Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -281,7 +281,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Course);
+   HTM_TxtF ("%s:",Txt_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -307,7 +307,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Short_name);
+   HTM_TxtF ("%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -334,7 +334,7 @@ static void Crs_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthCrsYear\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Year_OF_A_DEGREE);
+   HTM_TxtF ("%s:",Txt_Year_OF_A_DEGREE);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -367,7 +367,7 @@ static void Crs_Configuration (bool PrintView)
 
       HTM_TD_Begin ("class=\"RM\"");
       HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Institutional_code);
+      HTM_TxtF ("%s:",Txt_Institutional_code);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -391,7 +391,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Internal_code);
+      HTM_TxtF ("%s:",Txt_Internal_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -405,7 +405,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Shortcut);
+   HTM_TxtF ("%s:",Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -428,7 +428,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_QR_code);
+      HTM_TxtF ("%s:",Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -451,7 +451,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Indicators);
+      HTM_TxtF ("%s:",Txt_Indicators);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -461,7 +461,7 @@ static void Crs_Configuration (bool PrintView)
                 Indicators.NumIndicators,
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      HTM_TxtNBSP (Gbl.Title);
+      HTM_TxtF ("%s&nbsp;",Gbl.Title);
       Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
         	                                                      "exclamation-triangle.svg",
 		   Gbl.Title,"ICO16x16");
@@ -499,7 +499,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtF ("%s:",Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -571,7 +571,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                   ClassNormal,
 		       NULL);
    Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
-   HTM_NBSPTxt (Txt_System);
+   HTM_TxtF ("&nbsp;%s",Txt_System);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_LI_End ();
@@ -603,7 +603,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			  Highlight ? ClassHighlight :
         	                      ClassNormal,NULL);
       Cty_DrawCountryMap (&Cty,"ICO16x16");
-      HTM_NBSPTxt (Cty.Name[Gbl.Prefs.Language]);
+      HTM_TxtF ("&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_LI_End ();
@@ -636,7 +636,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
-	 HTM_NBSPTxt (Ins.FullName);
+	 HTM_TxtF ("&nbsp;%s",Ins.FullName);
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_LI_End ();
@@ -669,7 +669,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
-	    HTM_NBSPTxt (Ctr.FullName);
+	    HTM_TxtF ("&nbsp;%s",Ctr.FullName);
 	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    HTM_LI_End ();
@@ -702,7 +702,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
-	       HTM_NBSPTxt (Deg.FullName);
+	       HTM_TxtF ("&nbsp;%s",Deg.FullName);
 	       Frm_LinkFormEnd ();
 	       Frm_EndForm ();
 	       HTM_LI_End ();
@@ -738,7 +738,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
 		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
-		  HTM_NBSPTxt (Crs.FullName);
+		  HTM_TxtF ("&nbsp;%s",Crs.FullName);
 		  Frm_LinkFormEnd ();
 		  Frm_EndForm ();
 
@@ -1750,7 +1750,7 @@ static void Crs_PutHeadCoursesForEdition (void)
    HTM_TH (1,1,"BM",NULL);
    HTM_TH (1,1,"RM",Txt_Code);
    HTM_TH_Begin (1,1,"CM");
-   HTM_TxtF ("%s (%s)",Txt_Institutional_code,Txt_optional);
+   HTM_TxtF ("%s&nbsp;(%s)",Txt_Institutional_code,Txt_optional);
    HTM_TH_End ();
    HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
    HTM_TH (1,1,"LM",Txt_Short_name_of_the_course);
@@ -2989,7 +2989,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      HTM_TxtColon (Gbl.Title);
+      HTM_TxtF ("%s:",Gbl.Title);
       HTM_TH_End ();
 
       HTM_TR_End ();
@@ -3174,7 +3174,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     row[2]);
    Frm_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-   HTM_TxtF (" %s (%s)",row[2],row[6]);
+   HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -3265,7 +3265,7 @@ void Crs_AskRemoveOldCrss (void)
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtNBSP (Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+   HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
    HTM_SELECT_Begin (false,
 		     "name=\"Months\"");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
@@ -3275,7 +3275,7 @@ void Crs_AskRemoveOldCrss (void)
 		  i == MonthsWithoutAccess,false,
 		  "%u",i);
    HTM_SELECT_End ();
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TxtF (Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
              Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

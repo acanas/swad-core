@@ -293,7 +293,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_MSG_To);
+   HTM_TxtF ("%s:",Txt_MSG_To);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -486,8 +486,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
    HTM_LABEL_Begin ("for=\"OtherRecipients\"");
-   HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
-				      Txt_Recipients);
+   HTM_TxtF ("%s:",StdsAndTchsWritten ? Txt_Other_recipients :
+				        Txt_Recipients);
    HTM_LABEL_End ();
    HTM_TH_End ();
 
@@ -538,7 +538,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MsgSubject\" class=\"%s\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_MSG_Subject);
+   HTM_TxtF ("%s:",Txt_MSG_Subject);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -590,7 +590,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_Begin ("class=\"RT\"");
       HTM_LABEL_Begin ("for=\"MsgContent\" class=\"%s\"",
 	               The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_MSG_Content);
+      HTM_TxtF ("%s:",Txt_MSG_Content);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -625,7 +625,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_Begin ("class=\"RT\"");
       HTM_LABEL_Begin ("for=\"MsgContent\" class=\"%s\"",
                        The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_MSG_Content);
+      HTM_TxtF ("%s:",Txt_MSG_Content);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2614,7 +2614,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtNBSP (TxtSelector[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtF ("%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
    HTM_SELECT_Begin (false,
 		     "name=\"FilterCrsCod\"");
    HTM_OPTION (HTM_Type_STRING,"",
@@ -2656,7 +2656,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (TxtFromTo[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtF ("%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 		     Gbl.Msg.FilterFromTo,
 	             "size=\"20\"");
@@ -2666,7 +2666,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter message content *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_MSG_Content);
+   HTM_TxtF ("%s:&nbsp;",Txt_MSG_Content);
    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 		     Gbl.Msg.FilterContent,
 	             "size=\"20\"");
@@ -3020,7 +3020,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "From:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_From);
+      HTM_TxtF ("%s:&nbsp;",Txt_MSG_From);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3033,7 +3033,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_To);
+      HTM_TxtF ("%s:&nbsp;",Txt_MSG_To);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3046,7 +3046,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "Content:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_Content);
+      HTM_TxtF ("%s:&nbsp;",Txt_MSG_Content);
       HTM_TD_End ();
 
       /***** Initialize image *****/
@@ -3377,7 +3377,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
       HTM_Txt (UsrDat->FullName);
       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 	{
-         HTM_NBSP ();
+         HTM_Space ();
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned
             Msg_PutFormToUnbanSender (UsrDat);
@@ -3387,8 +3387,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 	}
      }
    else
-      HTM_TxtF ("[%s]",
-                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+      HTM_TxtF ("[%s]",Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    HTM_TD_End ();
 
    HTM_TR_End ();

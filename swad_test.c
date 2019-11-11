@@ -355,7 +355,7 @@ void Tst_ShowFormAskTst (void)
 
          HTM_TD_Begin ("class=\"RM\"");
          HTM_LABEL_Begin ("for=\"NumQst\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_No_of_questions);
+         HTM_TxtF ("%s:",Txt_No_of_questions);
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -471,7 +471,7 @@ void Tst_ShowNewTest (void)
 	    HTM_INPUT_CHECKBOX ("Save",false,
 				"value=\"Y\"%s",
 				Gbl.Test.AllowTeachers ? " checked=\"checked\"" : "");
-	    HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
+	    HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
 	    HTM_LABEL_End ();
 	    HTM_DIV_End ();
 
@@ -635,7 +635,7 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
 
    /***** Write total mark ****/
    HTM_DIV_Begin ("class=\"DAT CM\"");
-   HTM_TxtColonNBSP (Txt_Score);
+   HTM_TxtF ("%s:&nbsp;",Txt_Score);
    HTM_SPAN_Begin ("class=\"%s\"",
 	           (TotalScoreOverSCORE_MAX >=
 	            (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
@@ -1162,7 +1162,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 		       UniqueId,
 		       (unsigned) Med_ACTION_NEW_MEDIA,
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      HTM_TxtColonNBSP (Txt_Change_image_video);
+      HTM_TxtF ("%s:&nbsp;",Txt_Change_image_video);
       HTM_LABEL_End ();
       Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
 
@@ -1681,7 +1681,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Tags);
+   HTM_TxtF ("%s:",Txt_Tags);
    HTM_TD_End ();
 
    /***** Select all tags *****/
@@ -1700,7 +1700,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    HTM_INPUT_CHECKBOX ("AllTags",false,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
 		       Gbl.Test.Tags.All ? " checked=\"checked\"" : "");
-   HTM_NBSPTxt (Txt_All_tags);
+   HTM_TxtF ("&nbsp;%s",Txt_All_tags);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1748,7 +1748,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 			  row[1],
 			  Checked ? " checked=\"checked\"" : "");
-      HTM_NBSPTxt (row[1]);
+      HTM_TxtF ("&nbsp;%s",row[1]);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1902,7 +1902,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Plugins);
+   HTM_TxtF ("%s:",Txt_Plugins);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1927,7 +1927,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_No_of_questions);
+   HTM_TxtF ("%s:",Txt_No_of_questions);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1949,8 +1949,8 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MinTimeNxtTstPerQst\" class=\"%s\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Minimum_time_seconds_per_question_between_two_tests);
-    HTM_LABEL_End ();
+   HTM_TxtF ("%s:",Txt_Minimum_time_seconds_per_question_between_two_tests);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1967,7 +1967,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Feedback_to_students);
+   HTM_TxtF ("%s:",Txt_Feedback_to_students);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -2314,7 +2314,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Types_of_answers);
+   HTM_TxtF ("%s:",Txt_Types_of_answers);
    HTM_TD_End ();
 
    /***** Select all types of answers *****/
@@ -2331,7 +2331,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    HTM_INPUT_CHECKBOX ("AllAnsTypes",false,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
 		       Gbl.Test.AllAnsTypes ? " checked=\"checked\"" : "");
-   HTM_NBSPTxt (Txt_All_types_of_answers);
+   HTM_TxtF ("&nbsp;%s",Txt_All_types_of_answers);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2361,7 +2361,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 			  "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
 			  (unsigned) AnsType,
 			  Checked ? " checked=\"checked\"" : "");
-      HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+      HTM_TxtF ("&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3143,7 +3143,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       /* Write the question type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtNBSP (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_TD_End ();
 
       /* Write if shuffle is enabled (row[3]) */
@@ -3546,7 +3546,7 @@ void Tst_WriteAnsTF (char AnsTF)
          HTM_Txt (Txt_TF_QST[1]);
          break;
       default:		// no answer
-         HTM_NBSP ();
+         HTM_Space ();
          break;
      }
   }
@@ -4737,7 +4737,7 @@ static void Tst_WriteScoreStart (unsigned ColSpan)
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LM\"",ColSpan);
-   HTM_TxtColonNBSP (Txt_Score);
+   HTM_TxtF ("%s:&nbsp;",Txt_Score);
   }
 
 static void Tst_WriteScoreEnd (void)
@@ -5123,7 +5123,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Tags);
+   HTM_TxtF ("%s:",Txt_Tags);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -5202,7 +5202,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Stem\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Wording);
+   HTM_TxtF ("%s:",Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -5217,7 +5217,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Feedback *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s (%s):",Txt_Feedback,Txt_optional);
+   HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
    HTM_BR ();
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
@@ -5233,7 +5233,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Type);
+   HTM_TxtF ("%s:",Txt_Type);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -5246,7 +5246,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		       "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
 		       (unsigned) AnsType,
 		       AnsType == Gbl.Test.AnswerType ? " checked=\"checked\"" : "");
-      HTM_TxtNBSP (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_BR ();
      }
@@ -5259,12 +5259,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Answers);
+   HTM_TxtF ("%s:",Txt_Answers);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Integer_number);
+   HTM_TxtF ("%s:&nbsp;",Txt_Integer_number);
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
 	     Gbl.Test.Answer.Integer);
@@ -5415,7 +5415,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /* Feedback */
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s (%s):",Txt_Feedback,Txt_optional);
+      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
       HTM_BR ();
       HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
 			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
@@ -5460,14 +5460,14 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   char StrFloat[32];
+   char StrDouble[32];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtNBSP (Label);
-   snprintf (StrFloat,sizeof (StrFloat),
+   HTM_TxtF ("%s&nbsp;",Label);
+   snprintf (StrDouble,sizeof (StrDouble),
 	     "%lg",
 	     Value);
-   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrFloat,false,
+   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,false,
 		   "size=\"11\" required=\"required\"%s",
                    Gbl.Test.AnswerType == Tst_ANS_FLOAT ? "" :
                                                           " disabled=\"disabled\"");
@@ -7490,7 +7490,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Users);
+         HTM_TxtF ("%s:",Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -7974,7 +7974,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
 
    /***** Row title *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Visible_tests);
+   HTM_TxtF ("%s:&nbsp;",Txt_Visible_tests);
    HTM_Unsigned (NumExams);
    HTM_TD_End ();
 
@@ -8126,14 +8126,14 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
+      HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-      HTM_NBSPTxt (Gbl.Usrs.Other.UsrDat.Surname1);
+      HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-	 HTM_NBSPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
+	 HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
       if (Gbl.Usrs.Other.UsrDat.FirstName[0])
 	 HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
       HTM_BR ();
@@ -8149,7 +8149,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Date);
+      HTM_TxtF ("%s:",Txt_Date);
       HTM_TD_End ();
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
@@ -8164,7 +8164,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Questions);
+      HTM_TxtF ("%s:",Txt_Questions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -8178,7 +8178,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Score);
+      HTM_TxtF ("%s:",Txt_Score);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -8201,7 +8201,7 @@ void Tst_ShowOneTstResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Tags);
+      HTM_TxtF ("%s:",Txt_Tags);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");

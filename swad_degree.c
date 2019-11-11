@@ -257,7 +257,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
 
    /***** Degree logo and name *****/
    Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
-   HTM_NBSPTxt (Deg->FullName);
+   HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
    /***** End link *****/
    Frm_LinkFormEnd ();
@@ -343,7 +343,7 @@ static void Deg_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Centre);
+   HTM_TxtF ("%s:",Txt_Centre);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -382,7 +382,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Degree);
+   HTM_TxtF ("%s:",Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -408,7 +408,7 @@ static void Deg_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Short_name);
+   HTM_TxtF ("%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -434,7 +434,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Web);
+   HTM_TxtF ("%s:",Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -466,7 +466,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Shortcut);
+   HTM_TxtF ("%s:",Txt_Shortcut);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -489,7 +489,7 @@ static void Deg_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_QR_code);
+      HTM_TxtF ("%s:",Txt_QR_code);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -504,7 +504,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Courses);
+      HTM_TxtF ("%s:",Txt_Courses);
       HTM_TD_End ();
 
       /* Form to go to see courses of this degree */
@@ -565,8 +565,8 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Role == Rol_UNK ? Txt_Users_in_courses :
-		                   Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2472,7 +2472,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	   {
 	    case Hie_SYS:	// System
 	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
-	       HTM_NBSPTxt (Txt_all_degrees);
+	       HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 	       break;
 	    case Hie_INS:	// Institution
 	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);

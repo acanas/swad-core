@@ -338,7 +338,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ShowAllAnnouncements)
      {
       /* Users' roles who can view this announcement */
-      HTM_TxtColon (Txt_Users);
+      HTM_TxtF ("%s:",Txt_Users);
       for (Role = Rol_UNK, SomeRolesAreSelected = false;
 	   Role <= Rol_TCH;
 	   Role++)
@@ -347,7 +347,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    if (SomeRolesAreSelected)
 	       HTM_Comma ();
 	    SomeRolesAreSelected = true;
-	    HTM_NBSPTxt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	    HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	   }
      }
    else
@@ -415,7 +415,7 @@ void Ann_ShowFormAnnouncement (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Users);
+   HTM_TxtF ("%s:&nbsp;",Txt_Users);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
@@ -454,7 +454,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Field,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Label);
+   HTM_TxtF ("%s:",Label);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

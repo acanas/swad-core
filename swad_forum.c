@@ -2100,7 +2100,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
       default:
          break;
      }
-   HTM_NBSPTxt (ForumName);
+   HTM_TxtF ("&nbsp;%s",ForumName);
 
    /***** Write total number of threads and posts in this forum *****/
    if (ShowNumOfPosts)
@@ -2363,16 +2363,15 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
    HTM_Txt (" [");
    if (NumThrs == 1)
      {
-      HTM_UnsignedNBSPTxt (1,Txt_thread);
+      HTM_TxtF ("%u&nbsp;%s",1,Txt_thread);
       if (NumThrsWithNewPosts)
          HTM_TxtF (", 1 %s",Txt_with_new_posts);
-      HTM_Txt ("; ");
-      HTM_UnsignedNBSPTxt (NumPosts,NumPosts == 1 ? Txt_FORUM_post :
-                                                    Txt_FORUM_posts);
+      HTM_TxtF ("; %u&nbsp;%s",NumPosts,NumPosts == 1 ? Txt_FORUM_post :
+                                                        Txt_FORUM_posts);
      }
    else
      {
-      HTM_UnsignedNBSPTxt (NumThrs,Txt_threads);
+      HTM_TxtF ("%u&nbsp;%s",NumThrs,Txt_threads);
       if (NumThrsWithNewPosts)
          HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
       HTM_TxtF ("; %u %s",NumPosts,Txt_FORUM_posts);
@@ -2392,10 +2391,8 @@ static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts
 
    /***** Write number of threads and number of posts *****/
    HTM_Txt (" [");
-   if (NumThrs == 1)
-      HTM_UnsignedNBSPTxt (1,Txt_thread);
-   else
-      HTM_UnsignedNBSPTxt (NumThrs,Txt_threads);
+   HTM_TxtF ("%u&nbsp;%s",NumThrs,NumThrs == 1 ? Txt_thread :
+			                         Txt_threads);
    if (NumThrsWithNewPosts)
       HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
    HTM_Txt ("]");
@@ -3471,22 +3468,22 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Write number of posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_UnsignedNBSP (Thr.NumPosts);
+      HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
       HTM_TD_End ();
 
       /***** Write number of new posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_UnsignedNBSP (Thr.NumUnreadPosts);
+      HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
       HTM_TD_End ();
 
       /***** Write number of users who have write posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_UnsignedNBSP (Thr.NumWriters);
+      HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
       HTM_TD_End ();
 
       /***** Write number of users who have read this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_UnsignedNBSP (Thr.NumReaders);
+      HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3899,7 +3896,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Subject\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_MSG_Subject);
+   HTM_TxtF ("%s:",Txt_MSG_Subject);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3917,7 +3914,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Content\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_MSG_Content);
+   HTM_TxtF ("%s:",Txt_MSG_Content);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

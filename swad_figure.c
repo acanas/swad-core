@@ -207,7 +207,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Compute stats for anywhere, degree or course? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Scope);
+   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 	               1 << Hie_INS |
@@ -222,7 +222,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Statistic);
+   HTM_TxtF ("%s:&nbsp;",Txt_Statistic);
    HTM_SELECT_Begin (false,
 		     "name=\"FigureType\"");
    for (FigureType = (Fig_FigureType_t) 0;
@@ -999,7 +999,7 @@ static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
    if (Num >= 0)
       HTM_Unsigned ((unsigned) Num);
    else		// < 0 ==> do not show number
-      HTM_Txt ("-");
+      HTM_Hyphen ();
    HTM_TD_End ();
   }
 
@@ -1480,7 +1480,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		 {
 		  Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,
 				40,NULL,true);
-	          HTM_NBSP ();
+	          HTM_Space ();
 		 }
 	       HTM_Txt (Ins.FullName);
 	       Frm_LinkFormEnd ();
@@ -4542,7 +4542,7 @@ static void Fig_GetAndShowMsgsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Txt ("-");
+   HTM_Hyphen ();
    HTM_TD_End ();
 
    HTM_TR_End ();

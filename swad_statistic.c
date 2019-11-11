@@ -377,7 +377,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Users);
+         HTM_TxtF ("%s:",Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -400,7 +400,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Show);
+         HTM_TxtF ("%s:",Txt_Show);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -419,7 +419,7 @@ void Sta_AskShowCrsHits (void)
          Sta_WriteSelectorCountType ();
 
          HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_NBSPTxtNBSP (Txt_distributed_by);
+         HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
          HTM_SELECT_Begin (false,
 		           "id=\"GroupedBy\" name=\"GroupedBy\"");
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
@@ -540,7 +540,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Users);
+   HTM_TxtF ("%s:",Txt_Users);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -569,7 +569,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"ScopeSta\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Scope);
+   HTM_TxtF ("%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -592,7 +592,7 @@ void Sta_AskShowGblHits (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"CountType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Show);
+   HTM_TxtF ("%s:",Txt_Show);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -601,7 +601,7 @@ void Sta_AskShowGblHits (void)
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_NBSPTxtNBSP (Txt_distributed_by);
+   HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
    if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
        Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
@@ -717,7 +717,7 @@ static void Sta_WriteSelectorAction (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"StatAct\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Action);
+   HTM_TxtF ("%s:",Txt_Action);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1712,18 +1712,18 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the user's ID if user is a student */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write the first name and the surnames */
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtNBSP (UsrDat.FullName);
+      HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
       HTM_TD_End ();
 
       /* Write the user's role */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtNBSP (RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
-		                                 "?");
+      HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
+		                                         "?");
       HTM_TD_End ();
 
       /* Write the date-time (row[3]) */
@@ -1742,7 +1742,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       if (ActCod >= 0)
 	{
          HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-         HTM_TxtNBSP (Act_GetActionTextFromDB (ActCod,ActTxt));
+         HTM_TxtF ("%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
 	}
       else
 	{
@@ -1851,17 +1851,17 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       /* Write the user's ID if user is a student in current course */
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write the name and the surnames */
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtNBSP (UsrDat.FullName);
+      HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
       HTM_TD_End ();
 
       /* Write user's role */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtNBSP (Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs.Role][UsrDat.Sex]);
+      HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs.Role][UsrDat.Sex]);
       HTM_TD_End ();
 
       /* Write the number of clicks */
@@ -1886,7 +1886,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  NULL,
 	          "class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
 		  BarWidth);
-	 HTM_NBSP ();
+	 HTM_Space ();
 	}
       Str_WriteDoubleNumToFile (Gbl.F.Out,Hits.Num);
       HTM_TD_End ();
@@ -1965,13 +1965,13 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 	 Dat_ConvDateToDateStr (&Date,StrDate);
          HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
 					                          "LOG");
-         HTM_TxtNBSP (StrDate);
+         HTM_TxtF ("%s&nbsp;",StrDate);
          HTM_TD_End ();
 
          /* Write the day of the week */
          HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
 					                         "LOG");
-         HTM_TxtNBSP (Txt_DAYS_SMALL[NumDayWeek]);
+         HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
          HTM_TD_End ();
 
          /* Draw bar proportional to number of hits */
@@ -2004,13 +2004,13 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
       Dat_ConvDateToDateStr (&Date,StrDate);
       HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
 					                       "LOG");
-      HTM_TxtNBSP (StrDate);
+      HTM_TxtF ("%s&nbsp;",StrDate);
       HTM_TD_End ();
 
       /* Write the day of the week */
       HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
 					                      "LOG");
-      HTM_TxtNBSP (Txt_DAYS_SMALL[NumDayWeek]);
+      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
@@ -2082,7 +2082,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
      }
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
+   HTM_TxtF ("%s:&nbsp;",Txt_Color_of_the_graphic);
    HTM_SELECT_Begin (true,
 		     "name=\"ColorType\"");
    for (ColorType = (Sta_ColorType_t) 0;
@@ -2183,14 +2183,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
             /* Write the date */
             Dat_ConvDateToDateStr (&Date,StrDate);
             HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-						                     "LOG");
-            HTM_TxtNBSP (StrDate);
+						              "LOG");
+            HTM_TxtF ("%s&nbsp;",StrDate);
             HTM_TD_End ();
 
             /* Write the day of the week */
             HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-						                    "LOG");
-            HTM_TxtNBSP (Txt_DAYS_SMALL[NumDayWeek]);
+						              "LOG");
+            HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
             HTM_TD_End ();
 
             /* Draw a cell with the color proportional to the number of clicks */
@@ -2231,14 +2231,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
       HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                       "LOG");
-      HTM_TxtNBSP (StrDate);
+					                "LOG");
+      HTM_TxtF ("%s&nbsp;",StrDate);
       HTM_TD_End ();
 
       /* Write the day of the week */
       HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                      "LOG");
-      HTM_TxtNBSP (Txt_DAYS_SMALL[NumDayWeek]);
+					                "LOG");
+      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       HTM_TD_End ();
 
       /* Draw the color proporcional al number of clicks */
@@ -2267,14 +2267,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
       HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                       "LOG");
-      HTM_TxtNBSP (StrDate);
+					                "LOG");
+      HTM_TxtF ("%s&nbsp;",StrDate);
       HTM_TD_End ();
 
       /* Write the day of the week */
       HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                      "LOG");
-      HTM_TxtNBSP (Txt_DAYS_SMALL[NumDayWeek]);
+					                "LOG");
+      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       HTM_TD_End ();
 
       /* Draw the color proportional to number of clicks */
@@ -2867,7 +2867,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
      }
    else
      {
-      HTM_TxtF ("0%%");
+      HTM_Txt ("0%");
       HTM_BR ();
       HTM_Unsigned (0);
      }
@@ -3143,7 +3143,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
 
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (ActCod >= 0)
-         HTM_TxtNBSP (Act_GetActionTextFromDB (ActCod,ActTxt));
+         HTM_TxtF ("%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
       else
          HTM_Txt ("?&nbsp;");
       HTM_TD_End ();
@@ -3200,7 +3200,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
          HTM_Txt (Plg.Name);
       else
          HTM_Txt ("?");
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
@@ -3252,7 +3252,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong function code.");
 
       HTM_TD_Begin ("class=\"LOG LT\"");
-      HTM_TxtNBSP (API_GetFunctionNameFromFunCod (FunCod));
+      HTM_TxtF ("%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
@@ -3377,7 +3377,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RM\"");
       if (CtyCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write country */
@@ -3467,7 +3467,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (InsCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write institution */
@@ -3559,7 +3559,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CtrCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write centre */
@@ -3651,7 +3651,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (DegCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3755,7 +3755,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CrsOK)
          HTM_UnsignedLong (++Ranking);
-      HTM_NBSP ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3763,8 +3763,11 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
 
       /* Write degree year */
       HTM_TD_Begin ("class=\"LOG CT\"");
-      HTM_TxtNBSP (CrsOK ? Txt_YEAR_OF_DEGREE[Crs.Year] :
-        	           "-");
+      if (CrsOK)
+         HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Year]);
+      else
+	 HTM_Hyphen ();
+      HTM_Space ();
       HTM_TD_End ();
 
       /* Write course, including link */
@@ -3781,8 +3784,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          Frm_LinkFormEnd ();
         }
       else
-         HTM_Txt ("-");
-      HTM_NBSP ();
+         HTM_Hyphen ();
+      HTM_Space ();
       if (CrsOK)
          Frm_EndForm ();
       HTM_TD_End ();
@@ -3856,17 +3859,16 @@ static void Sta_DrawBarNumHits (char Color,
       free (Icon);
 
       /***** Write the number of hits *****/
-      HTM_NBSP ();
+      HTM_Space ();
       Str_WriteDoubleNumToFile (Gbl.F.Out,HitsNum);
-      HTM_TxtF ("&nbsp;(%u",
-                (unsigned) (((HitsNum * 100.0) /
-        	             HitsTotal) + 0.5));
+      HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
+        	                          HitsTotal) + 0.5));
      }
    else
       /***** Write the number of clicks *****/
       HTM_Txt ("0&nbsp;(0");
 
-   HTM_TxtF ("%%)&nbsp;");
+   HTM_Txt ("%)&nbsp;");
 
    HTM_TD_End ();
   }

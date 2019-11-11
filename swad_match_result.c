@@ -209,7 +209,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Users);
+         HTM_TxtF ("%s:",Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -566,7 +566,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Matches);
+   HTM_TxtF ("%s:&nbsp;",Txt_Matches);
    HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
@@ -755,14 +755,14 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       ID_WriteUsrIDs (UsrDat,NULL);
-      HTM_NBSPTxt (UsrDat->Surname1);
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
       if (UsrDat->Surname2[0])
-	 HTM_NBSPTxt (UsrDat->Surname2);
+	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
       if (UsrDat->FirstName[0])
 	 HTM_TxtF (", %s",UsrDat->FirstName);
       HTM_BR ();
@@ -782,7 +782,7 @@ void McR_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+	 HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
@@ -801,7 +801,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Questions);
+      HTM_TxtF ("%s:",Txt_Questions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -814,7 +814,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Score);
+      HTM_TxtF ("%s:",Txt_Score);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -836,7 +836,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Tags);
+      HTM_TxtF ("%s:",Txt_Tags);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");

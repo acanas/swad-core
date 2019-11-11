@@ -1192,7 +1192,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassLabel);
          break;
      }
-   HTM_TxtColon (Txt_Assigned_QUESTION);
+   HTM_TxtF ("%s:",Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1206,8 +1206,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassData);
          break;
      }
-   HTM_TxtNBSP (Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
-        	                                Txt_No);
+   HTM_TxtF ("%s&nbsp;",Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
+        	                                        Txt_No);
    Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],
 		   Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj->Assigned]);
 
@@ -1232,7 +1232,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassLabel);
          break;
      }
-   HTM_TxtColon (Txt_Number_of_students);
+   HTM_TxtF ("%s:",Txt_Number_of_students);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1306,7 +1306,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
      }
-   HTM_TxtColon (Txt_Proposal);
+   HTM_TxtF ("%s:",Txt_Proposal);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1666,7 +1666,7 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 	 // Not applicable
 	 break;
      }
-   HTM_TxtColon (Label);
+   HTM_TxtF ("%s:",Label);
    HTM_TD_End ();
 
    /***** Change text format *****/
@@ -1761,7 +1761,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 	 // Not applicable
 	 break;
      }
-   HTM_TxtColon (Txt_URL);
+   HTM_TxtF ("%s:",Txt_URL);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1874,22 +1874,22 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
 			  ClassLabel,Gbl.RowEvenOdd);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_PRINT_ONE_PROJECT:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
 	    HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
-	    HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtF ("%s:",Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	}
       HTM_TD_End ();
@@ -2036,7 +2036,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
             HTM_LI_Begin (NULL);
             HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-               HTM_NBSPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
+               HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
             HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
             HTM_LI_End ();
 	   }
@@ -3298,7 +3298,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3316,7 +3316,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
 		    Dpt_PARAM_DPT_COD_NAME,
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Department);
+   HTM_TxtF ("%s:",Txt_Department);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3335,7 +3335,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Assigned_QUESTION);
+   HTM_TxtF ("%s:",Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3354,7 +3354,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Number_of_students);
+   HTM_TxtF ("%s:",Txt_Number_of_students);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3367,7 +3367,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Proposal);
+   HTM_TxtF ("%s:",Txt_Proposal);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3407,7 +3407,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_URL);
+   HTM_TxtF ("%s:",Txt_URL);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3445,7 +3445,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Label);
+   HTM_TxtF ("%s:",Label);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -3745,7 +3745,7 @@ void Prj_ShowFormConfig (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Editable);
+   HTM_TxtF ("%s:",Txt_Editable);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

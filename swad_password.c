@@ -283,7 +283,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** User's ID/nickname *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
+   HTM_TxtF ("%s:&nbsp;",Txt_nick_email_or_ID);
    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,false,
 		   "size=\"8\" required=\"required\"");
    HTM_LABEL_End ();
@@ -686,7 +686,7 @@ void Pwd_ShowFormChgMyPwd (void)
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       HTM_LABEL_Begin ("for=\"UsrPwd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Current_password);
+      HTM_TxtF ("%s:",Txt_Current_password);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -735,7 +735,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    /***** Label ****/
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Paswd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Password);
+   HTM_TxtF ("%s:",Txt_Password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -765,7 +765,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd1\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_New_password);
+   HTM_TxtF ("%s:",Txt_New_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -783,7 +783,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd2\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Retype_new_password);
+   HTM_TxtF ("%s:",Txt_Retype_new_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -872,7 +872,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
    /***** Password *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
+   HTM_TxtF ("%s:&nbsp;",Txt_For_security_enter_your_password);
    HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true);
    HTM_LABEL_End ();
 

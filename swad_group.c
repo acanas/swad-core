@@ -171,8 +171,8 @@ void Grp_WriteNamesOfSelectedGrps (void)
    struct GroupData GrpDat;
 
    /***** Show the selected groups *****/
-   HTM_TxtColonNBSP (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
-                                                            Txt_Groups);
+   HTM_TxtF ("%s:&nbsp;",Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
+                                                                Txt_Groups);
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
@@ -181,15 +181,14 @@ void Grp_WriteNamesOfSelectedGrps (void)
         {
          GrpDat.GrpCod = GrpCod;
          Grp_GetDataOfGroupByCod (&GrpDat);
-         HTM_TxtNBSPTxt (GrpDat.GrpTypName,GrpDat.GrpName);
+         HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
          Gbl.Crs.Grps.GrpTyp.GrpTypCod = -GrpCod;
          Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
-         HTM_TxtF ("%s (%s)",
-                  Gbl.Crs.Grps.GrpTyp.GrpTypName,
-                  Txt_users_with_no_group);
+         HTM_TxtF ("%s&nbsp;(%s)",Gbl.Crs.Grps.GrpTyp.GrpTypName,
+                                  Txt_users_with_no_group);
         }
 
       if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 2)
@@ -458,7 +457,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
 			                   " disabled=\"disabled\"");
-   HTM_NBSPTxt (Txt_All_groups);
+   HTM_TxtF ("&nbsp;%s",Txt_All_groups);
    HTM_LABEL_End ();
    HTM_DIV_End ();
   }
@@ -1602,7 +1601,7 @@ static void Grp_ListGroupsForEdition (void)
               Role--)
            {
 	    HTM_TD_Begin ("class=\"DAT CM\"");
-	    HTM_TxtF ("%d",Grp->NumUsrs[Role]);
+	    HTM_Int (Grp->NumUsrs[Role]);
 	    HTM_TD_End ();
            }
 
@@ -2336,7 +2335,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_BR ();
-      HTM_TxtColonNBSP (Txt_Opening_of_groups);
+      HTM_TxtF ("%s:&nbsp;",Txt_Opening_of_groups);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       HTM_SPAN_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
@@ -2416,7 +2415,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	 HTM_TD_Begin ("class=\"DAT CM LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"DAT CM\"");
-      HTM_TxtF ("%d",Grp->NumUsrs[Role]);
+      HTM_Int (Grp->NumUsrs[Role]);
       HTM_TD_End ();
      }
 
@@ -2426,7 +2425,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    else
       HTM_TD_Begin ("class=\"DAT CM\"");
    Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-   HTM_TxtNBSP (StrMaxStudents);
+   HTM_TxtF ("%s&nbsp;",StrMaxStudents);
    HTM_TD_End ();
 
    /***** Vacants in this group *****/

@@ -1076,7 +1076,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Title *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_BR ();
    HTM_STRONG_Begin ();
    HTM_Txt (Txt_EXAM_ANNOUNCEMENT);
@@ -1086,7 +1086,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s LM\"",StyleNormal);
-   HTM_NBSP ();
+   HTM_Space ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -1095,7 +1095,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"CrsName\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Course);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1118,7 +1118,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Year\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1146,7 +1146,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"ExamSession\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Session);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Session);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1164,7 +1164,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Exam_date);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Exam_date);
    HTM_TD_End ();
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
@@ -1191,7 +1191,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Start_time);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Start_time);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1231,7 +1231,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1267,15 +1267,15 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                                        Txt_hours_ABBREVIATION,
                                        Gbl.ExamAnns.ExaDat.Duration.Minute);
          else
-            HTM_UnsignedNBSPTxt (Gbl.ExamAnns.ExaDat.Duration.Hour,
-				 Gbl.ExamAnns.ExaDat.Duration.Hour == 1 ? Txt_hour :
-					                                  Txt_hours);
+            HTM_TxtF ("%u&nbsp;%s",Gbl.ExamAnns.ExaDat.Duration.Hour,
+				   Gbl.ExamAnns.ExaDat.Duration.Hour == 1 ? Txt_hour :
+					                                    Txt_hours);
         }
       else if (Gbl.ExamAnns.ExaDat.Duration.Minute)
         {
-         HTM_UnsignedNBSPTxt (Gbl.ExamAnns.ExaDat.Duration.Minute,
-			      Gbl.ExamAnns.ExaDat.Duration.Minute == 1 ? Txt_minute :
-				                                         Txt_minutes);
+         HTM_TxtF ("%u&nbsp;%s",Gbl.ExamAnns.ExaDat.Duration.Minute,
+			        Gbl.ExamAnns.ExaDat.Duration.Minute == 1 ? Txt_minute :
+				                                           Txt_minutes);
         }
      }
    HTM_TD_End ();
@@ -1287,7 +1287,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Place\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1314,7 +1314,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"ExamMode\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Mode);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Mode);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1341,7 +1341,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Structure\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1368,7 +1368,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"DocRequired\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Documentation_required);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Documentation_required);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1395,7 +1395,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MatRequired\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Material_required);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Material_required);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1422,7 +1422,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"MatAllowed\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Material_allowed);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Material_allowed);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1449,7 +1449,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"OtherInfo\" class=\"%s\"",StyleForm);
-   HTM_TxtColon (Txt_EXAM_ANNOUNCEMENT_Other_information);
+   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Other_information);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

@@ -1169,7 +1169,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Title);
+   HTM_TxtF ("%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1187,12 +1187,12 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Upload_files_QUESTION);
+   HTM_TxtF ("%s:",Txt_Upload_files_QUESTION);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
-   HTM_TxtColon (Txt_Folder);
+   HTM_TxtF ("%s:",Txt_Folder);
    HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,false,
 		   "size=\"30\"");
    HTM_LABEL_End ();
@@ -1205,7 +1205,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Description);
+   HTM_TxtF ("%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1255,7 +1255,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
+      HTM_TxtF ("%s:",Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -1271,7 +1271,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Asg_CheckIfAsgIsAssociatedToGrps (AsgCod) ? "" : " checked=\"checked\"");
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1633,8 +1633,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtColonNBSP ((NumRows == 1) ? Txt_Group  :
-                                      Txt_Groups);
+   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
+                                        Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -1648,7 +1648,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
          row = mysql_fetch_row (mysql_res);
 
          /* Write group type name and group name */
-         HTM_TxtNBSPTxt (row[0],row[1]);
+         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
          if (NumRows >= 2)
            {
@@ -1661,7 +1661,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
         }
      }
    else
-      HTM_TxtNBSPTxt (Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
