@@ -25,8 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
-
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_config.h"

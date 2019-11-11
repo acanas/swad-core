@@ -483,9 +483,10 @@ void Grp_PutParamsCodGrps (void)
    if (!Gbl.Usrs.ClassPhoto.AllGroups &&
        Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
-      MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (1 + 20) - 1;
+      MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
       if ((GrpCods = (char *) malloc (MaxLengthGrpCods + 1)) == NULL)
 	 Lay_NotEnoughMemoryExit ();
+      GrpCods[0] = '\0';
 
       for (NumGrpSel = 0;
 	   NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
@@ -3026,21 +3027,17 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get data of a type of group from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get type of group",
-			     "SELECT GrpTypName,"
-				    "Mandatory,"
-				    "Multiple,"
-				    "MustBeOpened,"
-				    "UNIX_TIMESTAMP(OpenTime)"
+   if (DB_QuerySELECT (&mysql_res,"can not get type of group",
+			     "SELECT GrpTypName,"		// row[0]
+				    "Mandatory,"		// row[1]
+				    "Multiple,"			// row[2]
+				    "MustBeOpened,"		// row[3]
+				    "UNIX_TIMESTAMP(OpenTime)"	// row[4]
 			     " FROM crs_grp_types"
 			     " WHERE CrsCod=%ld AND GrpTypCod=%ld",
-			     Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod);
-
-   /***** Count number of rows in result *****/
-   if (NumRows != 1)
+			     Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting type of group.");
 
    /***** Get some data of group type *****/
@@ -3072,7 +3069,7 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
 		       "SELECT Multiple FROM crs_grp_types"
 		       " WHERE GrpTypCod=%ld",
                        GrpTypCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting type of group.");
+      Lay_ShowErrorAndExit ("Error when getting type of enrolment.");
 
    /***** Get multiple enrolment *****/
    row = mysql_fetch_row (mysql_res);

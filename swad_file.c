@@ -31,7 +31,7 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <stdio.h>		// For FILE,fprintf
-#include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
+#include <stdlib.h>		// For exit, system, free, etc.
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir

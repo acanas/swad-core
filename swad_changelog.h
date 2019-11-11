@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.63 (2019-11-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.63.1 (2019-11-11)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -496,6 +496,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
+	Version 19.63.1:  Nov 11, 2019	Fixed bug in lists, reported by Javier Fernández Baldomero. (246381 lines)
 	Version 19.63:    Nov 11, 2019	Code refactoring in HTML. (246384 lines)
 	Version 19.62:    Nov 11, 2019	Code refactoring in HTML.
 					Floats converted to doubles. (? lines)

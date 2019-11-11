@@ -27,7 +27,7 @@
 
 #include <linux/stddef.h>	// For NULL
 #include <locale.h>		// For setlocale
-#include <stdlib.h>		// For exit, system, malloc, calloc, free, etc
+#include <stdlib.h>		// For exit
 #include <string.h>		// For string functions
 #include <sys/time.h>		// For gettimeofday
 #include <sys/types.h>		// For getpid

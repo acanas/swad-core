@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
-#include <stdlib.h>		// For exit, system, malloc, calloc, free, etc
+#include <stdlib.h>		// For exit
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
