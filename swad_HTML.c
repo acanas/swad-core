@@ -863,7 +863,7 @@ void HTM_SCRIPT_Begin (const char *URL,const char *CharSet)
    if (CharSet)
       if (CharSet[0])
          fprintf (Gbl.F.Out," charset=\"%s\"",CharSet);
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,">\n");
 
    HTM_SCRIPT_NestingLevel++;
   }
@@ -873,7 +873,7 @@ void HTM_SCRIPT_End (void)
    if (HTM_SCRIPT_NestingLevel == 0)	// No SCRIPT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SCRIPT.");
 
-   fprintf (Gbl.F.Out,"</script>");
+   fprintf (Gbl.F.Out,"</script>\n");
 
    HTM_SCRIPT_NestingLevel--;
   }

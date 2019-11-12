@@ -547,7 +547,7 @@ static void Lay_WriteScripts (void)
 		   Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
 		   Gbl.Hlds.Lst[NumHld].Name);
 
-      HTM_TxtF ("\var LstExamAnnouncements = [];\n");
+      HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
 	   NumExamAnnouncement < Gbl.ExamAnns.NumExaAnns;
 	   NumExamAnnouncement++)
