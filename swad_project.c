@@ -227,13 +227,17 @@ static void Prj_LockProjectEditionInDB (long PrjCod);
 static void Prj_UnlockProjectEditionInDB (long PrjCod);
 
 /*****************************************************************************/
-/***************************** List all projects *****************************/
+/******************************* List projects *******************************/
 /*****************************************************************************/
 
 void Prj_SeeProjects (void)
   {
    /***** Get parameters *****/
    Prj_GetParams ();
+
+   /***** Select users? *****/
+   if (Gbl.Prjs.Filter.SelUsrs)
+      Ale_ShowAlert (Ale_INFO,"Vamos a seleccionar usuarios...");
 
    /***** Show all the projects *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -760,6 +764,11 @@ static void Prj_GetParamWho (void)
    /***** If parameter Who is unknown, set it to default *****/
    if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
       Gbl.Prjs.Filter.Who = Prj_FILTER_WHO_DEFAULT;
+
+   /***** Select users? *****/
+   Gbl.Prjs.Filter.SelUsrs = false;
+   if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
+      Gbl.Prjs.Filter.SelUsrs = Par_GetParToBool ("SelUsrs");
   }
 
 /*****************************************************************************/
