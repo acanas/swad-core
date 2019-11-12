@@ -124,6 +124,10 @@ struct Prj_Faults
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prj_ReqListUsrsToSelect (void);
+static void Prj_ShowProjectsOfSelectedUsrs (void);
+static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
+
 static void Prj_ShowProjectsInCurrentPage (void);
 
 static void Prj_ShowFormToFilterByMy_All (void);
@@ -227,7 +231,7 @@ static void Prj_LockProjectEditionInDB (long PrjCod);
 static void Prj_UnlockProjectEditionInDB (long PrjCod);
 
 /*****************************************************************************/
-/******************************* List projects *******************************/
+/******************************* Show projects *******************************/
 /*****************************************************************************/
 
 void Prj_SeeProjects (void)
@@ -235,12 +239,115 @@ void Prj_SeeProjects (void)
    /***** Get parameters *****/
    Prj_GetParams ();
 
-   /***** Select users? *****/
-   if (Gbl.Prjs.Filter.SelUsrs)
-      Ale_ShowAlert (Ale_INFO,"Vamos a seleccionar usuarios...");
+   /***** Show projects *****/
+   switch (Gbl.Prjs.Filter.Who)
+     {
+      case Usr_WHO_ME:
+      case Usr_WHO_ALL:
+	 /***** Show projects *****/
+         Prj_ShowProjectsInCurrentPage ();
+	 break;
+      case Usr_WHO_SELECTED:
+         if (Gbl.Prjs.Filter.ReqUsrs)
+	    /***** List users to select some of them *****/
+            Prj_ReqListUsrsToSelect ();
+         if (Gbl.Prjs.Filter.SelUsrs)	// Some users should have been selected
+	    /***** Show projects *****/
+            Prj_ShowProjectsOfSelectedUsrs ();
+         break;
+      default:
+	 break;
+     }
+  }
 
-   /***** Show all the projects *****/
-   Prj_ShowProjectsInCurrentPage ();
+/*****************************************************************************/
+/**************************** List users to select ***************************/
+/*****************************************************************************/
+
+static void Prj_ReqListUsrsToSelect (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   extern const char *Txt_Projects;
+   extern const char *Txt_View_projects;
+
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (ActSeePrj,Prj_PutCurrentParams,
+				     Txt_Projects,
+	                             Hlp_ASSESSMENT_Projects,
+	                             Txt_View_projects);
+  }
+
+/*****************************************************************************/
+/******************** Show projects of selected users ************************/
+/*****************************************************************************/
+
+static void Prj_ShowProjectsOfSelectedUsrs (void)
+  {
+   extern const char *Txt_You_must_select_one_ore_more_users;
+   unsigned NumUsrsInList;
+   long *LstSelectedUsrCods;
+
+   /***** Get list of selected students if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /* Check the number of students to list */
+   if ((NumUsrsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
+     {
+      /***** Get list of groups selected ******/
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+      /***** Get list of students selected to show their attendances *****/
+      Prj_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+
+      /***** Show projects *****/
+      Prj_ShowProjectsInCurrentPage ();
+
+      /***** Free list of user codes *****/
+      free (LstSelectedUsrCods);
+
+      /***** Free list of groups selected *****/
+      Grp_FreeListCodSelectedGrps ();
+     }
+   else	// No users selected
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Prj_ReqListUsrsToSelect ();		// ...show again the form
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+  }
+
+/*****************************************************************************/
+/************* Get list of users selected to show their projects *************/
+/*****************************************************************************/
+
+static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods)
+  {
+   unsigned NumUsr;
+   const char *Ptr;
+   struct UsrData UsrDat;
+
+   /***** Create list of user codes *****/
+   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumUsrsInList,sizeof (long))) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
+   for (NumUsr = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+	NumUsr < NumUsrsInList && *Ptr;
+	NumUsr++)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -622,6 +729,9 @@ void Prj_PutParams (struct Prj_Filter *Filter,
    if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
       Usr_PutHiddenParamWho (Filter->Who);
 
+   if (Filter->Who == Usr_WHO_SELECTED)
+      Par_PutHiddenParamChar ("SelUsrs",'Y');
+
    if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
 	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
       Prj_PutHiddenParamAssign (Filter->Assign);
@@ -766,9 +876,13 @@ static void Prj_GetParamWho (void)
       Gbl.Prjs.Filter.Who = Prj_FILTER_WHO_DEFAULT;
 
    /***** Select users? *****/
+   Gbl.Prjs.Filter.ReqUsrs = false;
    Gbl.Prjs.Filter.SelUsrs = false;
    if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
-      Gbl.Prjs.Filter.SelUsrs = Par_GetParToBool ("SelUsrs");
+     {
+      Gbl.Prjs.Filter.ReqUsrs = Par_GetParToBool ("RequestUsrs");
+      Gbl.Prjs.Filter.SelUsrs = Par_GetParToBool ("SelectedUsrs");
+     }
   }
 
 /*****************************************************************************/

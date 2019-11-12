@@ -284,7 +284,7 @@ void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
    if (OnSubmit)	// JavaScript function to be called
 			// before submitting the form
       if (OnSubmit[0])
-         HTM_TxtF ("%s;",OnSubmit);
+         HTM_TxtF ("%s",OnSubmit);
    HTM_TxtF ("AnimateIcon(%d);"
              "document.getElementById('%s').submit();return false;\">",
 	     Gbl.Form.Num,

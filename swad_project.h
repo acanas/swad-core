@@ -90,7 +90,8 @@ typedef enum
 struct Prj_Filter
   {
    Usr_Who_t Who;		// Show my / selected users' / all projects
-   bool SelUsrs;		// Select users to view their projects?
+   bool ReqUsrs;		// Request selection of users to view their projects?
+   bool SelUsrs;		// Are there selected users to view their projects?
    unsigned Assign;		// Show assigned / non assigned projects
    unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects

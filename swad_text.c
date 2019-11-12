@@ -52695,6 +52695,27 @@ const char *Txt_View_matches_results =
 	"Ver resultados de partidas";
 #endif
 
+const char *Txt_View_projects =
+#if   L==1	// ca
+	"Veure projectes";
+#elif L==2	// de
+	"Anzeigen Projekte";
+#elif L==3	// en
+	"View projects";
+#elif L==4	// es
+	"Ver proyectos";
+#elif L==5	// fr
+	"Voir projets";
+#elif L==6	// gn
+	"Ver proyectos";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi progetti";
+#elif L==8	// pl
+	"Zobacz projekty";
+#elif L==9	// pt
+	"Ver projetos";
+#endif
+
 const char *Txt_View_record_and_office_hours =
 #if   L==1	// ca
 	"Veure fitxa i horari de tutories";

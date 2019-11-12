@@ -6200,7 +6200,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
             FuncParams ();
          Grp_PutParamsCodGrps ();
          Gbl.FileBrowser.FullTree = true;	// By default, show all files
-         Brw_PutHiddenParamFullTreeIfSelected ();
+         Brw_PutHiddenParamFullTreeIfSelected ();	// TODO: Put this parameter only in file browser
+         Par_PutHiddenParamChar ("SelectedUsrs",'Y');
 
          /* Put list of users to select some of them */
          HTM_TABLE_BeginCenter ();
@@ -9747,7 +9748,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 	                  "ICO_HIGHLIGHT PHOTO15x20");
 	 break;
       case Usr_WHO_SELECTED:
-	 Par_PutHiddenParamChar ("SelUsrs",'Y');
+	 Par_PutHiddenParamChar ("RequestUsrs",'Y');
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 			  Txt_WHO[Who],
 			  "ICO_HIGHLIGHT ICOx20");

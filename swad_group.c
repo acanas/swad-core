@@ -409,7 +409,8 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
    Frm_LinkFormSubmitAnimated (Txt_Update_users,
 			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-			       "CopyMessageToHiddenFields();");
+			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+                                                                NULL);
    Ico_PutCalculateIconWithText (Txt_Update_users);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();
