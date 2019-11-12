@@ -324,7 +324,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-		   " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
+		   " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Deg.WWW,
 	           Gbl.Hierarchy.Deg.FullName);
    Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
