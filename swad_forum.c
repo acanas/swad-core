@@ -3904,7 +3904,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 		   IsReply ? Subject :
 		             "",false,
-		   "class=\"MSG_SUBJECT\" required=\"required\"");
+		   "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -717,7 +717,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		      UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                        "",	// Show the most recent ID
 		      false,
-		      "size=\"18\"");
+		      "id=\"NewID\" size=\"18\"");
       HTM_BR ();
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();

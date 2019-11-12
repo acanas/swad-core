@@ -3176,7 +3176,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
       HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,false,
-		      "class=\"REC_C2_BOT_INPUT\"%s",
+		      "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\"%s",
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->Surname1[0])
@@ -3212,7 +3212,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
    if (ICanEdit)
       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 		      UsrDat->Surname2,false,
-		      "class=\"REC_C2_BOT_INPUT\"");
+		      "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
    else if (UsrDat->Surname2[0])
      {
       HTM_STRONG_Begin ();
@@ -3250,7 +3250,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    if (ICanEdit)
       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 		      UsrDat->FirstName,false,
-		      "class=\"REC_C2_BOT_INPUT\"%s",
+		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\"%s",
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->FirstName[0])
@@ -3340,7 +3340,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->OriginPlace,false,
-			 "class=\"REC_C2_BOT_INPUT\"");
+			 "id=\"OriginPlace\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->OriginPlace[0])
 	 HTM_Txt (UsrDat->OriginPlace);
      }
@@ -3406,7 +3406,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->LocalAddress,false,
-			 "class=\"REC_C2_BOT_INPUT\"");
+			 "id=\"LocalAddress\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalAddress[0])
 	 HTM_Txt (UsrDat->LocalAddress);
      }
@@ -3438,7 +3438,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
      {
       if (ICanEdit)
 	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,false,
-	                " class=\"REC_C2_BOT_INPUT\"");
+	                "id=\"LocalPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->LocalPhone);
@@ -3475,7 +3475,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->FamilyAddress,false,
-			 "class=\"REC_C2_BOT_INPUT\"");
+			 "id=\"FamilyAddress\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyAddress[0])
 	 HTM_Txt (UsrDat->FamilyAddress);
      }
@@ -3507,7 +3507,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
      {
       if (ICanEdit)
 	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,false,
-	                " class=\"REC_C2_BOT_INPUT\"");
+	                "id=\"FamilyPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->FamilyPhone);
@@ -4161,7 +4161,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,true,
-		      "class=\"REC_C2_BOT_INPUT\"");
+		      "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -4179,7 +4179,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
       HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,true,
-		     " class=\"REC_C2_BOT_INPUT\"");
+		     "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");
       Frm_EndForm ();
       HTM_TD_End ();
 

@@ -380,7 +380,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
 		   NewNicknameWithArroba,false,
-		   "size=\"18\" placeholder=\"%s\" required=\"required\"",
+		   "id=\"NewNick\" size=\"18\" placeholder=\"%s\" required=\"required\"",
 		   Txt_HELP_nickname);
    HTM_TD_End ();
 
@@ -397,7 +397,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
-	            "size=\"18\" placeholder=\"%s\" required=\"required\"",
+	            "id=\"NewEmail\" size=\"18\" placeholder=\"%s\" required=\"required\"",
                     Txt_HELP_email);
    HTM_TD_End ();
 

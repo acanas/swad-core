@@ -691,7 +691,8 @@ void Pwd_ShowFormChgMyPwd (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true);
+      HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
+			  "id=\"UsrPwd\"");
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -741,7 +742,8 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    /***** Input ****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true);
+   HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
+		       "id=\"Paswd\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -771,7 +773,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* Input */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-   HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true);
+   HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
+		       "id=\"Paswd1\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -789,7 +792,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* Input */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-   HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true);
+   HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
+		       "id=\"Paswd2\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -873,7 +877,8 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    /***** Password *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:&nbsp;",Txt_For_security_enter_your_password);
-   HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true);
+   HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
+		       NULL);
    HTM_LABEL_End ();
 
    HTM_DIV_End ();

@@ -318,11 +318,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Row for this web / social network *****/
+      snprintf (StrName,sizeof (StrName),
+		"URL%u",
+		(unsigned) NumURL);
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-      HTM_LABEL_Begin ("for=\"URL%u\" class=\"%s\"",
-	               (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+	               StrName,The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],Net_WebsAndSocialNetworksTitle[NumURL],
 	       "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
       HTM_TxtF ("%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
@@ -330,11 +333,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      snprintf (StrName,sizeof (StrName),
-		"URL%u",
-		(unsigned) NumURL);
       HTM_INPUT_URL (StrName,URL,false,
-		     "class=\"REC_C2_BOT_INPUT\"");
+		     "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",StrName);
       HTM_TD_End ();
 
       HTM_TR_End ();

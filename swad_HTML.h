@@ -125,8 +125,10 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
-			 const char *AutoComplete,bool Required);
-void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled);
+			 const char *AutoComplete,bool Required,
+	                 const char *fmt,...);
+void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled,
+	               const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,

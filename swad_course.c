@@ -293,7 +293,7 @@ static void Crs_Configuration (bool PrintView)
       /* Form to change course full name */
       Frm_StartForm (ActRenCrsFulCfg);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Crs.FullName,true,
-		      "class=\"INPUT_FULL_NAME\"");
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit course full name
@@ -319,7 +319,7 @@ static void Crs_Configuration (bool PrintView)
       /* Form to change course short name */
       Frm_StartForm (ActRenCrsShoCfg);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Crs.ShrtName,true,
-		      "class=\"INPUT_SHORT_NAME\"");
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit course short name
@@ -377,7 +377,7 @@ static void Crs_Configuration (bool PrintView)
          Frm_StartForm (ActChgInsCrsCodCfg);
 	 HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 			 Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
-			 "size=\"%u\"",
+			 "id=\"InsCrsCod\" size=\"%u\"",
 			 Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
          Frm_EndForm ();
 	}

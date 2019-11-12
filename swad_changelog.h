@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.65.3 (2019-11-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.65.4 (2019-11-12)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.65.js"
 /*
@@ -496,6 +496,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
+	Version 19.65.4:  Nov 12, 2019	Fixed bug in HTML input texts. (246505 lines)
 	Version 19.65.3:  Nov 12, 2019	Fixed bug in listing of students' works. (246455 lines)
 	Version 19.65.2:  Nov 12, 2019	Fixed bug in JavaScript. (246454 lines)
 	Version 19.65.1:  Nov 12, 2019	Fixed bug in degree configuration. (246452 lines)

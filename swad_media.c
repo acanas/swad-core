@@ -387,10 +387,10 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    Frm_SetUniqueId (Id);
 
    /***** Start media uploader container *****/
-   HTM_DIV_Begin ("class=\"MED_UPLOADER\"");		// container
+   HTM_DIV_Begin ("class=\"MED_UPLOADER\"");			// container
 
    /***** Icon 'clip' *****/
-   HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);		// <id>_med_ico
+   HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);			// <id>_med_ico
    HTM_A_Begin ("href=\"\" onclick=\"mediaActivateMediaUploader('%s');return false;\"",
                 Id);
    Ico_PutIcon ("paperclip.svg",Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
@@ -452,8 +452,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",false,	// <id>_tit
 	           "id=\"%s_tit\" class=\"%s\""
 	           " placeholder=\"%s\""
-	           " disabled=\"disabled\""
-	           " style=\"display:none;\"",
+	           " disabled=\"disabled\" style=\"display:none;\"",
 		   Id,ClassInput,Txt_Title_attribution);
    HTM_DIV_End ();						// <id>_tit
 
@@ -461,10 +460,10 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    Box_BoxEnd ();
 
    /***** End media uploader *****/
-   HTM_DIV_End ();				// container <id>_med_upl
+   HTM_DIV_End ();						// container <id>_med_upl
 
    /***** End media uploader container *****/
-   HTM_DIV_End ();				// container
+   HTM_DIV_End ();						// container
   }
 
 /*****************************************************************************/

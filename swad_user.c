@@ -2613,7 +2613,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,false,
-		   "size=\"18\" placeholder=\"%s\""
+		   "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
 		   " autofocus=\"autofocus\" required=\"required\"",
 	           Txt_nick_email_or_ID);
    HTM_DIV_End ();
@@ -2623,7 +2623,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_LABEL_Begin ("for=\"UsrPwd\"");
    Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
-   HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false);
+   HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
+		       "id=\"UsrPwd\"");
    HTM_DIV_End ();
 
    /***** End table, send button and end box *****/

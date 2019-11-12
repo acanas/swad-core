@@ -8529,7 +8529,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",false,
-		   "size=\"30\"");
+		   "id=\"NewLinkName\" size=\"30\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

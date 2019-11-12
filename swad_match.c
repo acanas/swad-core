@@ -1207,7 +1207,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,
-		   "size=\"45\" required=\"required\"");
+		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

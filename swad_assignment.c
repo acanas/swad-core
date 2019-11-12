@@ -1175,7 +1175,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
-		   "size=\"45\" required=\"required\"");
+		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

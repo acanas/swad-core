@@ -1918,7 +1918,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,false,
-		   "size=\"45\" required=\"required\"");
+		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -467,7 +467,7 @@ static void Ctr_Configuration (bool PrintView)
       /* Form to change centre full name */
       Frm_StartForm (ActRenCtrFulCfg);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,true,
-		      "class=\"INPUT_FULL_NAME\"");
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit centre full name
@@ -493,7 +493,7 @@ static void Ctr_Configuration (bool PrintView)
       /* Form to change centre short name */
       Frm_StartForm (ActRenCtrShoCfg);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,true,
-		      "class=\"INPUT_SHORT_NAME\"");
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit centre short name

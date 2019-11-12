@@ -971,9 +971,9 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"%s\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
 		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Name,MaxLength,Value);
+	    Name,MaxLength,Value);
 
    if (fmt)
      {
@@ -1043,9 +1043,9 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"tel\" id=\"%s\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"%s\""
 		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Name,Usr_MAX_CHARS_PHONE,Value);
+	    Name,Usr_MAX_CHARS_PHONE,Value);
 
    if (fmt)
      {
@@ -1081,9 +1081,9 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"email\" id=\"%s\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"email\" name=\"%s\""
 		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Name,MaxLength,Value);
+	    Name,MaxLength,Value);
 
    if (fmt)
      {
@@ -1115,9 +1115,9 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"url\" id=\"%s\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"%s\""
 		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Name,Cns_MAX_CHARS_WWW,Value);
+	    Name,Cns_MAX_CHARS_WWW,Value);
 
    if (fmt)
      {
@@ -1201,11 +1201,16 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const c
   }
 
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
-			 const char *AutoComplete,bool Required)
+			 const char *AutoComplete,bool Required,
+	                 const char *fmt,...)
   {
-   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"%s\" name=\"%s\""
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   fprintf (Gbl.F.Out,"<input type=\"password\" name=\"%s\""
                       " size=\"18\" maxlength=\"%u\"",
-	    Name,Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
+	    Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
    if (PlaceHolder)
       if (PlaceHolder[0])
 	 fprintf (Gbl.F.Out," placeholder=\"%s\"",PlaceHolder);
@@ -1214,17 +1219,64 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
          fprintf (Gbl.F.Out," autocomplete=\"%s\"",AutoComplete);
    if (Required)
       fprintf (Gbl.F.Out," required=\"required\"");
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free (Attr);
+	}
+     }
+
    fprintf (Gbl.F.Out," />");
   }
 
-void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled)
+void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled,
+	               const char *fmt,...)
   {
-   fprintf (Gbl.F.Out,"<input type=\"number\" id=\"%s\" name=\"%s\""
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"%s\""
 	              " min=\"%ld\" max=\"%ld\" value=\"%ld\"",
-	    Name,Name,
+	    Name,
 	    Min,Max,Value);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free (Attr);
+	}
+     }
+
    fprintf (Gbl.F.Out," />");
   }
 

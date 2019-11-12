@@ -395,7 +395,7 @@ static void Deg_Configuration (bool PrintView)
       /* Form to change degree full name */
       Frm_StartForm (ActRenDegFulCfg);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,true,
-		      "class=\"INPUT_FULL_NAME\"");
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit degree full name
@@ -421,7 +421,7 @@ static void Deg_Configuration (bool PrintView)
       /* Form to change degree short name */
       Frm_StartForm (ActRenDegShoCfg);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,true,
-		      "class=\"INPUT_SHORT_NAME\"");
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit degree short name

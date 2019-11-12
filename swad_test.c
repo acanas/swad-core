@@ -364,7 +364,8 @@ void Tst_ShowFormAskTst (void)
 			   (long) Gbl.Test.Config.Min,
 			   (long) Gbl.Test.Config.Max,
 			   (long) Gbl.Test.Config.Def,
-                           Gbl.Test.Config.Min == Gbl.Test.Config.Max);
+                           Gbl.Test.Config.Min == Gbl.Test.Config.Max,
+			   "id=\"NumQst\"");
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -1958,7 +1959,7 @@ static void Tst_ShowFormConfigTst (void)
              "%lu",
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
    HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,false,
-		   "size=\"7\" required=\"required\"");
+		   "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2021,7 +2022,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 	     "%u",
 	     Value);
    HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,false,
-		   "size=\"3\" required=\"required\"");
+		   "id=\"%s\" size=\"3\" required=\"required\"",Field);
    HTM_TD_End ();
 
    HTM_TR_End ();

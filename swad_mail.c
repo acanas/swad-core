@@ -1390,7 +1390,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
-	            "size=\"18\"");
+	            "id=\"NewEmail\" size=\"18\"");
    HTM_BR ();
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
