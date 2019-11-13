@@ -134,7 +134,6 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView);
 
-static void Att_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
 
 static void Att_PutIconsMyAttList (void);
@@ -2767,9 +2766,10 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
    /***** Get list of selected students if not already got *****/
    Usr_GetListsSelectedUsrsCods ();
+   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
 
-   /* Check the number of students to list */
-   if ((NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ()))
+   /***** Get list of users selected to show their attendance *****/
+   if (NumUsrsInList)
      {
       /***** Get boolean parameter that indicates if details must be shown *****/
       Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
@@ -2778,7 +2778,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get list of students selected to show their attendances *****/
-      Att_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+      Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
 
       /***** Get number of students in each event *****/
       for (NumAttEvent = 0;
@@ -2820,7 +2820,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       free (Gbl.AttEvents.StrAttCodsSelected);
 
       /***** Free list of user codes *****/
-      free (LstSelectedUsrCods);
+      Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
 
       /***** Free list of groups selected *****/
       Grp_FreeListCodSelectedGrps ();
@@ -2836,38 +2836,6 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();
-  }
-
-/*****************************************************************************/
-/********** Get list of students selected to show their attendances **********/
-/*****************************************************************************/
-
-static void Att_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods)
-  {
-   unsigned NumUsr;
-   const char *Ptr;
-   struct UsrData UsrDat;
-
-   /***** Create list of user codes *****/
-   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumUsrsInList,sizeof (long))) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
-   for (NumUsr = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-	NumUsr < NumUsrsInList && *Ptr;
-	NumUsr++)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
