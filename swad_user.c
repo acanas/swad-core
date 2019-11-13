@@ -6188,20 +6188,27 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
      {
       if (Usr_GetIfShowBigList (NumTotalUsrs,FuncParams,NULL))
         {
-	 /* Form to select type of list used for select several users */
+	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (FuncParams);
 
-	 /***** Put link to register students *****/
+	 /***** Link to register students *****/
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
+	 /***** Form to select users ****/
          /* Begin form */
          Frm_StartForm (NextAction);
+
+         /* Hidden parameters */
          if (FuncParams)
             FuncParams ();
          Grp_PutParamsCodGrps ();
-         Gbl.FileBrowser.FullTree = true;	// By default, show all files
-         Brw_PutHiddenParamFullTreeIfSelected ();	// TODO: Put this parameter only in file browser
-         Par_PutHiddenParamChar ("SelectedUsrs",'Y');
+         Par_PutHiddenParamChar ("SelectedUsrs",'Y');	// This parameter says to receiver of form
+							// that some users should be selected
+         if (NextAction == ActAdmAsgWrkCrs)
+           {
+            Gbl.FileBrowser.FullTree = true;	// By default, show all files
+            Brw_PutHiddenParamFullTreeIfSelected ();
+           }
 
          /* Put list of users to select some of them */
          HTM_TABLE_BeginCenter ();

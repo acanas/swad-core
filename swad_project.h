@@ -159,7 +159,7 @@ struct Project
 /*****************************************************************************/
 
 void Prj_SeeProjects (void);
-void Prj_ShowTableAllProjects (void);
+void Prj_ShowTableSelectedProjects (void);
 
 void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
@@ -199,7 +199,6 @@ void Prj_RequestEditPrj (void);
 void Prj_AllocMemProject (struct Project *Prj);
 void Prj_FreeMemProject (struct Project *Prj);
 
-void Prj_GetListProjects (void);
 void Prj_GetDataOfProjectByCod (struct Project *Prj);
 long Prj_GetCourseOfProject (long PrjCod);
 void Prj_FreeListProjects (void);
@@ -215,10 +214,10 @@ void Prj_RecFormProject (void);
 
 void Prj_ShowFormConfig (void);
 void Prj_ReceiveConfigPrj (void);
-void Prj_ReqLockAllProjectsEdition (void);
-void Prj_ReqUnlockAllProjectsEdition (void);
-void Prj_LockAllProjectsEdition (void);
-void Prj_UnlockAllProjectsEdition (void);
+void Prj_ReqLockSelectedProjectsEdition (void);
+void Prj_ReqUnlockSelectedProjectsEdition (void);
+void Prj_LockSelectedProjectsEdition (void);
+void Prj_UnlockSelectedProjectsEdition (void);
 void Prj_LockProjectEdition (void);
 void Prj_UnlockProjectEdition (void);
 

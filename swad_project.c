@@ -125,7 +125,6 @@ struct Prj_Faults
 /*****************************************************************************/
 
 static void Prj_ReqListUsrsToSelect (void);
-static void Prj_ShowProjectsOfSelectedUsrs (void);
 static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
 
 static void Prj_ShowProjectsInCurrentPage (void);
@@ -207,6 +206,8 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
 
 static bool Prj_CheckIfICanEditProject (const struct Project *Prj);
 
+static void Prj_GetListProjects (void);
+
 static void Prj_ResetProject (struct Project *Prj);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
@@ -244,16 +245,16 @@ void Prj_SeeProjects (void)
      {
       case Usr_WHO_ME:
       case Usr_WHO_ALL:
-	 /***** Show projects *****/
+	 /* Show my projects / all projects */
          Prj_ShowProjectsInCurrentPage ();
 	 break;
       case Usr_WHO_SELECTED:
-         if (Gbl.Prjs.Filter.ReqUsrs)
-	    /***** List users to select some of them *****/
+         if (Gbl.Prjs.Filter.ReqUsrs)	// Request the selection of users
+	    /* List users to select some of them */
             Prj_ReqListUsrsToSelect ();
          if (Gbl.Prjs.Filter.SelUsrs)	// Some users should have been selected
-	    /***** Show projects *****/
-            Prj_ShowProjectsOfSelectedUsrs ();
+	    /* Show projects of selected users */
+            Prj_ShowProjectsInCurrentPage ();
          break;
       default:
 	 break;
@@ -275,47 +276,6 @@ static void Prj_ReqListUsrsToSelect (void)
 				     Txt_Projects,
 	                             Hlp_ASSESSMENT_Projects,
 	                             Txt_View_projects);
-  }
-
-/*****************************************************************************/
-/******************** Show projects of selected users ************************/
-/*****************************************************************************/
-
-static void Prj_ShowProjectsOfSelectedUsrs (void)
-  {
-   extern const char *Txt_You_must_select_one_ore_more_users;
-   unsigned NumUsrsInList;
-   long *LstSelectedUsrCods;
-
-   /***** Get list of selected students if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
-
-   /* Check the number of students to list */
-   if ((NumUsrsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
-     {
-      /***** Get list of groups selected ******/
-      Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-      /***** Get list of students selected to show their attendances *****/
-      Prj_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
-
-      /***** Show projects *****/
-      Prj_ShowProjectsInCurrentPage ();
-
-      /***** Free list of user codes *****/
-      free (LstSelectedUsrCods);
-
-      /***** Free list of groups selected *****/
-      Grp_FreeListCodSelectedGrps ();
-     }
-   else	// No users selected
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      Prj_ReqListUsrsToSelect ();		// ...show again the form
-     }
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -351,10 +311,10 @@ static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelecte
   }
 
 /*****************************************************************************/
-/************************ Show all projects in a table ***********************/
+/********************** Show selected projects in a table ********************/
 /*****************************************************************************/
 
-void Prj_ShowTableAllProjects (void)
+void Prj_ShowTableSelectedProjects (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;
@@ -2694,7 +2654,7 @@ static bool Prj_CheckIfICanEditProject (const struct Project *Prj)
 /************************** List all the projects ****************************/
 /*****************************************************************************/
 
-void Prj_GetListProjects (void)
+static void Prj_GetListProjects (void)
   {
    char *PreNonSubQuery;
    char *HidVisSubQuery;
@@ -2720,6 +2680,8 @@ void Prj_GetListProjects (void)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumUsrsInList;
+   long *LstSelectedUsrCods;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumPrjsFromDB;
    unsigned NumPrjsAfterFilter = 0;
@@ -2727,10 +2689,20 @@ void Prj_GetListProjects (void)
    struct Prj_Faults Faults;
    long PrjCod;
 
+   /***** Get list of selected users' codes if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedUsrs ();
+
+   /***** Get list of users selected to show their projects *****/
+   if (NumUsrsInList)
+      Prj_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+
+   // TODO: Filter by selected users if any
+
+   /***** Get list of projects from database *****/
    if (Gbl.Prjs.LstIsRead)
       Prj_FreeListProjects ();
 
-   /***** Get list of projects from database *****/
    if (Gbl.Prjs.Filter.Assign &&	// Any selector is on
        Gbl.Prjs.Filter.Hidden &&	// Any selector is on
        Gbl.Prjs.Filter.Faulti)		// Any selector is on
@@ -2919,6 +2891,13 @@ void Prj_GetListProjects (void)
 
    Gbl.Prjs.Num = NumPrjsAfterFilter;
    Gbl.Prjs.LstIsRead = true;
+
+   /***** Free list of user codes *****/
+   if (NumUsrsInList)
+      free (LstSelectedUsrCods);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -4001,10 +3980,10 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
   }
 
 /*****************************************************************************/
-/************ Request locking/unlocking edition of all projects **************/
+/********** Request locking/unlocking edition of selected projects ***********/
 /*****************************************************************************/
 
-void Prj_ReqLockAllProjectsEdition (void)
+void Prj_ReqLockSelectedProjectsEdition (void)
   {
    extern const char *Txt_Lock_editing;
    extern const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects;
@@ -4038,7 +4017,7 @@ void Prj_ReqLockAllProjectsEdition (void)
    Prj_ShowProjectsInCurrentPage ();
   }
 
-void Prj_ReqUnlockAllProjectsEdition (void)
+void Prj_ReqUnlockSelectedProjectsEdition (void)
   {
    extern const char *Txt_Unlock_editing;
    extern const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects;
@@ -4073,10 +4052,10 @@ void Prj_ReqUnlockAllProjectsEdition (void)
   }
 
 /*****************************************************************************/
-/******************* Lock/unlock edition of all projects *********************/
+/***************** Lock/unlock edition of selected projects ******************/
 /*****************************************************************************/
 
-void Prj_LockAllProjectsEdition (void)
+void Prj_LockSelectedProjectsEdition (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;
@@ -4109,7 +4088,7 @@ void Prj_LockAllProjectsEdition (void)
    Prj_ShowProjectsInCurrentPage ();
   }
 
-void Prj_UnlockAllProjectsEdition (void)
+void Prj_UnlockSelectedProjectsEdition (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;

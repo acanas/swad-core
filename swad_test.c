@@ -5183,8 +5183,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		"TagTxt%u",
 		NumTag);
       HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Gbl.Test.Tags.Txt[NumTag],false,
-		      "class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
-	              NumTag);
+		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
+	              StrTagTxt,NumTag);
       HTM_TD_End ();
 
       HTM_TR_End ();
