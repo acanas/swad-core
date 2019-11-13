@@ -501,5 +501,9 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
 void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutHiddenParamWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetHiddenParamWho (void);
+void Usr_PutHiddenParamRequestUsrs (void);
+bool Usr_GetHiddenParamRequestUsrs (void);
+void Usr_PutHiddenParamSelectedUsrs (void);
+bool Usr_GetHiddenParamSelectedUsrs (void);
 
 #endif

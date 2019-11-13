@@ -6199,16 +6199,15 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
          Frm_StartForm (NextAction);
 
          /* Hidden parameters */
-         if (FuncParams)
-            FuncParams ();
          Grp_PutParamsCodGrps ();
-         Par_PutHiddenParamChar ("SelectedUsrs",'Y');	// This parameter says to receiver of form
-							// that some users should be selected
+         Usr_PutHiddenParamSelectedUsrs ();
          if (NextAction == ActAdmAsgWrkCrs)
            {
             Gbl.FileBrowser.FullTree = true;	// By default, show all files
             Brw_PutHiddenParamFullTreeIfSelected ();
            }
+         if (FuncParams)
+            FuncParams ();
 
          /* Put list of users to select some of them */
          HTM_TABLE_BeginCenter ();
@@ -9755,7 +9754,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 	                  "ICO_HIGHLIGHT PHOTO15x20");
 	 break;
       case Usr_WHO_SELECTED:
-	 Par_PutHiddenParamChar ("RequestUsrs",'Y');
+	 Usr_PutHiddenParamRequestUsrs ();
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 			  Txt_WHO[Who],
 			  "ICO_HIGHLIGHT ICOx20");
@@ -9792,4 +9791,32 @@ Usr_Who_t Usr_GetHiddenParamWho (void)
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/************* Put hidden param to request a form to select users ************/
+/*****************************************************************************/
+
+void Usr_PutHiddenParamRequestUsrs (void)
+  {
+   Par_PutHiddenParamChar ("RequestUsrs",'Y');
+  }
+
+bool Usr_GetHiddenParamRequestUsrs (void)
+  {
+   return Par_GetParToBool ("RequestUsrs");
+  }
+
+/*****************************************************************************/
+/**** Hidden param to indicate that some users should have been selected *****/
+/*****************************************************************************/
+
+void Usr_PutHiddenParamSelectedUsrs (void)
+  {
+   Par_PutHiddenParamChar ("SelectedUsrs",'Y');
+  }
+
+bool Usr_GetHiddenParamSelectedUsrs (void)
+  {
+   return Par_GetParToBool ("SelectedUsrs");
   }

@@ -689,9 +689,6 @@ void Prj_PutParams (struct Prj_Filter *Filter,
    if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
       Usr_PutHiddenParamWho (Filter->Who);
 
-   if (Filter->Who == Usr_WHO_SELECTED)
-      Par_PutHiddenParamChar ("SelUsrs",'Y');
-
    if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
 	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
       Prj_PutHiddenParamAssign (Filter->Assign);
@@ -835,13 +832,16 @@ static void Prj_GetParamWho (void)
    if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
       Gbl.Prjs.Filter.Who = Prj_FILTER_WHO_DEFAULT;
 
-   /***** Select users? *****/
-   Gbl.Prjs.Filter.ReqUsrs = false;
-   Gbl.Prjs.Filter.SelUsrs = false;
+   /***** Request users? / Some users should have been selected? *****/
    if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
      {
-      Gbl.Prjs.Filter.ReqUsrs = Par_GetParToBool ("RequestUsrs");
-      Gbl.Prjs.Filter.SelUsrs = Par_GetParToBool ("SelectedUsrs");
+      Gbl.Prjs.Filter.ReqUsrs = Usr_GetHiddenParamRequestUsrs ();
+      Gbl.Prjs.Filter.SelUsrs = Usr_GetHiddenParamSelectedUsrs ();
+     }
+   else
+     {
+      Gbl.Prjs.Filter.ReqUsrs = false;
+      Gbl.Prjs.Filter.SelUsrs = false;
      }
   }
 

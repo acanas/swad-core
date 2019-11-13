@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.66.2 (2019-11-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.66.3 (2019-11-13)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.65.js"
 /*
@@ -496,7 +496,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
-	Version 19.66.3:  Nov 13, 2019	Filter projects by selected users. (? lines)
+	Version 19.66.4:  Nov 13, 2019	Filter projects by selected users. (? lines)
+	Version 19.66.3:  Nov 13, 2019	Filter projects by selected users. Not finished. (246656 lines)
 	Version 19.66.2:  Nov 13, 2019	Fixed bug in edition of test question. (246628 lines)
 	Version 19.66.1:  Nov 13, 2019	Filter projects by selected users. Not finished. (246627 lines)
 	Version 19.66:    Nov 13, 2019	Changes in selection of which users in projects. (246638 lines)

@@ -383,6 +383,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
    Usr_PutParamsPrefsAboutUsrList ();
+   Usr_PutHiddenParamRequestUsrs ();
    if (FuncParams)
       FuncParams ();
 
