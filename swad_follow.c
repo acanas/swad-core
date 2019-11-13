@@ -1103,7 +1103,7 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 void Fol_RequestUnfollowStds (void)
@@ -1147,7 +1147,7 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1239,7 +1239,7 @@ void Fol_FollowUsrs ()
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Show alert *****/
    if (NumFollowed == 1)
@@ -1286,7 +1286,7 @@ void Fol_UnfollowUsrs (void)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Show alert *****/
    if (NumUnfollowed == 1)

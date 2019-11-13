@@ -205,7 +205,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
                                                      const char *OnSubmit);
 static void Usr_PutParamsConfirmIWantToSeeBigList (void);
 
-static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role);
+static void Usr_AllocateListSelectedEncryptedUsrCods (Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
 static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
@@ -5723,7 +5723,7 @@ void Usr_GetListsSelectedUsrsCods (void)
    if (!Gbl.Usrs.Selected.Filled)	// Get list only if not already got
      {
       /***** Get possible list of all selected users *****/
-      Usr_AllocateListSelectedUsrCod (Rol_UNK);
+      Usr_AllocateListSelectedEncryptedUsrCods (Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
 	 Ses_GetHiddenParFromDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
@@ -5742,7 +5742,7 @@ void Usr_GetListsSelectedUsrsCods (void)
 	 if (Usr_ParamUsrCod[Role])
 	   {
 	    /* Get parameter with selected users with this role */
-	    Usr_AllocateListSelectedUsrCod (Role);
+	    Usr_AllocateListSelectedEncryptedUsrCods (Role);
 	    Par_GetParMultiToText (Usr_ParamUsrCod[Role],Gbl.Usrs.Selected.List[Role],
 				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
@@ -5900,7 +5900,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	       Usr_GetUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Really only EncryptedUsrCod is needed
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindUsrCodInListOfSelectedUsrs (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
+               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
 
@@ -5951,7 +5951,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 // Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Selected.List[Rol_UNK]
 
-bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
+bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -5974,7 +5974,7 @@ bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
 /************ Count number of valid users' IDs in encrypted list *************/
 /*****************************************************************************/
 
-unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void)
   {
    const char *Ptr;
    unsigned NumUsrs = 0;
@@ -5998,7 +5998,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role)
+static void Usr_AllocateListSelectedEncryptedUsrCods (Rol_Role_t Role)
   {
    if (!Gbl.Usrs.Selected.List[Role])
      {
@@ -6013,7 +6013,7 @@ static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role)
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-void Usr_FreeListsSelectedUsrsCods (void)
+void Usr_FreeListsSelectedEncryptedUsrsCods (void)
   {
    Rol_Role_t Role;
 
@@ -6034,6 +6034,89 @@ void Usr_FreeListsSelectedUsrsCods (void)
       // Lists of encrypted codes of users selected from form
       // are now marked as not filled
      }
+  }
+
+/*****************************************************************************/
+/************* Get list of users selected to show their projects *************/
+/*****************************************************************************/
+
+void Usr_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods)
+  {
+   unsigned NumUsr;
+   const char *Ptr;
+   struct UsrData UsrDat;
+
+   /***** Create list of user codes *****/
+   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumUsrsInList,sizeof (long))) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
+   for (NumUsr = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+	NumUsr < NumUsrsInList && *Ptr;
+	NumUsr++)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
+  {
+   if (LstSelectedUsrCods)
+      free (LstSelectedUsrCods);
+  }
+
+/*****************************************************************************/
+/******** Create subquery string with users' codes separated by commas *******/
+/******** from list of users' codes                                    *******/
+/*****************************************************************************/
+
+void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
+				unsigned NumUsrsInList,
+				char **SubQueryAllUsrs)
+  {
+   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   unsigned NumUsr;
+   size_t MaxLength;
+
+   if (NumUsrsInList)
+     {
+      /***** Allocate space for subquery *****/
+      MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
+      if ((*SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      (*SubQueryAllUsrs)[0] = '\0';
+
+      /***** Count number of students registered in an event in database *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrsInList;
+	   NumUsr++)
+	 if (NumUsr)
+	   {
+	    snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
+		      ",%ld",
+		      LstSelectedUsrCods[NumUsr]);
+	    Str_Concat (*SubQueryAllUsrs,SubQueryOneUsr,
+			MaxLength);
+	   }
+	 else
+	    snprintf (*SubQueryAllUsrs,sizeof (SubQueryOneUsr),
+		      "%ld",
+		      LstSelectedUsrCods[NumUsr]);
+     }
+  }
+
+void Usr_FreeSubqueryUsrCods (char *SubQueryAllUsrs)
+  {
+   free (SubQueryAllUsrs);
   }
 
 /*****************************************************************************/
@@ -6254,7 +6337,7 @@ void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
    Usr_GetListsSelectedUsrsCods ();
 
    /***** Check number of users *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
       FuncWhenUsrsSelected ();
    else	// If no users are selected...
      {
@@ -6265,7 +6348,7 @@ void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -6378,7 +6461,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = true;
       else
 	 /* Check if user is in lists of selected users */
-	 CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (EncryptedUsrCod);
+	 CheckboxChecked = Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (EncryptedUsrCod);
 
       /***** Check box *****/
       HTM_INPUT_CHECKBOX (Usr_ParamUsrCod[Role],false,
@@ -8371,7 +8454,7 @@ void Usr_DoActionOnSeveralUsrs1 (void)
    Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of users */
-   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())// If no users selected...
+   if (!Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())// If no users selected...
      {						// ...write warning notice
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_select_one_ore_more_users);

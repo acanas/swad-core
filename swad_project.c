@@ -125,7 +125,6 @@ struct Prj_Faults
 /*****************************************************************************/
 
 static void Prj_ReqListUsrsToSelect (void);
-static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
 
 static void Prj_ShowProjectsInCurrentPage (void);
 
@@ -276,38 +275,6 @@ static void Prj_ReqListUsrsToSelect (void)
 				     Txt_Projects,
 	                             Hlp_ASSESSMENT_Projects,
 	                             Txt_View_projects);
-  }
-
-/*****************************************************************************/
-/************* Get list of users selected to show their projects *************/
-/*****************************************************************************/
-
-static void Prj_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods)
-  {
-   unsigned NumUsr;
-   const char *Ptr;
-   struct UsrData UsrDat;
-
-   /***** Create list of user codes *****/
-   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumUsrsInList,sizeof (long))) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
-   for (NumUsr = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-	NumUsr < NumUsrsInList && *Ptr;
-	NumUsr++)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -2691,13 +2658,11 @@ static void Prj_GetListProjects (void)
 
    /***** Get list of selected users' codes if not already got *****/
    Usr_GetListsSelectedUsrsCods ();
-   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedUsrs ();
+   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
 
    /***** Get list of users selected to show their projects *****/
    if (NumUsrsInList)
-      Prj_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
-
-   // TODO: Filter by selected users if any
+      Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
 
    /***** Get list of projects from database *****/
    if (Gbl.Prjs.LstIsRead)
@@ -2808,6 +2773,41 @@ static void Prj_GetListProjects (void)
 	      }
 	    break;
          case Usr_WHO_SELECTED:
+	    switch (Gbl.Prjs.SelectedOrder)
+	      {
+	       case Prj_ORDER_START_TIME:
+	       case Prj_ORDER_END_TIME:
+	       case Prj_ORDER_TITLE:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM projects,prj_usr"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " AND projects.PrjCod=prj_usr.PrjCod"
+					    " AND prj_usr.UsrCod=%ld"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    Gbl.Usrs.Me.UsrDat.UsrCod,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	       case Prj_ORDER_DEPARTMENT:
+		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					    "SELECT projects.PrjCod"
+					    " FROM prj_usr,projects LEFT JOIN departments"
+					    " ON projects.DptCod=departments.DptCod"
+					    " WHERE projects.CrsCod=%ld"
+					    "%s%s%s"
+					    " AND projects.PrjCod=prj_usr.PrjCod"
+					    " AND prj_usr.UsrCod=%ld"
+					    " ORDER BY %s",
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					    Gbl.Usrs.Me.UsrDat.UsrCod,
+					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		  break;
+	      }
+	    break;
          case Usr_WHO_ALL:
 	    switch (Gbl.Prjs.SelectedOrder)
 	      {
@@ -2894,10 +2894,10 @@ static void Prj_GetListProjects (void)
 
    /***** Free list of user codes *****/
    if (NumUsrsInList)
-      free (LstSelectedUsrCods);
+      Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/

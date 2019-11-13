@@ -7532,7 +7532,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -7646,7 +7646,7 @@ void Tst_ShowUsrsTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Check the number of users whose tests results will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
      {
       /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Results,NULL,
@@ -7680,7 +7680,7 @@ void Tst_ShowUsrsTstResults (void)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/

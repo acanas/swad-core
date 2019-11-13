@@ -1280,16 +1280,16 @@ Users:
        1064. ActCnfID_Std		Confirm another user's ID
        1065. ActCnfID_Tch		Confirm another user's ID
 
-       1066.  ActFrmAccOth		Show forms to the change another user's account
-       1067.  ActFrmAccStd		Show forms to the change another user's account
-       1068.  ActFrmAccTch		Show forms to the change another user's account
+       1066. ActFrmAccOth		Show forms to the change another user's account
+       1067. ActFrmAccStd		Show forms to the change another user's account
+       1068. ActFrmAccTch		Show forms to the change another user's account
 
-       1069.  ActRemOldNicOth		Remove one of another user's old nicknames
-       1070.  ActRemOldNicStd		Remove one of another user's old nicknames
-       1071.  ActRemOldNicTch		Remove one of another user's old nicknames
-       1072.  ActChgNicOth		Change another user's nickname
-       1073.  ActChgNicStd		Change another user's nickname
-       1074.  ActChgNicTch		Change another user's nickname
+       1069. ActRemOldNicOth		Remove one of another user's old nicknames
+       1070. ActRemOldNicStd		Remove one of another user's old nicknames
+       1071. ActRemOldNicTch		Remove one of another user's old nicknames
+       1072. ActChgNicOth		Change another user's nickname
+       1073. ActChgNicStd		Change another user's nickname
+       1074. ActChgNicTch		Change another user's nickname
 
        1075. ActRemID_Oth		Remove one of the IDs of another user
        1076. ActRemID_Std		Remove one of the IDs of another user

@@ -119,7 +119,9 @@ static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
 				 const char *LinkStyle);
 static void Att_PutParamsCodGrps (long AttCod);
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
-static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumUsrsInList);
+static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
+							 long LstSelectedUsrCods[],
+							 unsigned NumUsrsInList);
 static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
 static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod);
 static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,
@@ -2362,7 +2364,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** Free memory *****/
       /* Free memory used by list of selected students' codes */
-      Usr_FreeListsSelectedUsrsCods ();
+      Usr_FreeListsSelectedEncryptedUsrsCods ();
 
       // 5. Delete from att_usr all the students marked as Remove=true
       // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
@@ -2432,43 +2434,24 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
   }
 
 /*****************************************************************************/
-/******* Get number of students from a list who attended to an event *********/
+/********* Get number of users from a list who attended to an event **********/
 /*****************************************************************************/
 
-static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumUsrsInList)
+static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
+							 long LstSelectedUsrCods[],
+							 unsigned NumUsrsInList)
   {
-   char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   unsigned NumUsr;
-   unsigned NumStdsInAttEvent = 0;
-   size_t MaxLength;
+   char *SubQueryAllUsrs;
+   unsigned NumUsrsInAttEvent;
 
    if (NumUsrsInList)
      {
-      /***** Allocate space for subquery *****/
-      MaxLength = 256 + NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
-      if ((SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
-      SubQueryAllUsrs[0] = '\0';
+      /***** Create subquery string *****/
+      Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
+				 &SubQueryAllUsrs);
 
-      /***** Count number of students registered in an event in database *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrsInList;
-	   NumUsr++)
-	 if (NumUsr)
-	   {
-	    snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
-		      ",%ld",
-		      LstSelectedUsrCods[NumUsr]);
-	    Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,
-			MaxLength);
-	   }
-	 else
-	    snprintf (SubQueryAllUsrs,sizeof (SubQueryOneUsr),
-		      "%ld",
-		      LstSelectedUsrCods[NumUsr]);
-
-      NumStdsInAttEvent =
+      /***** Get number of users in attendance event from database ****/
+      NumUsrsInAttEvent =
       (unsigned) DB_QueryCOUNT ("can not get number of students"
 			        " from a list who are registered in an event",
 				"SELECT COUNT(*) FROM att_usr"
@@ -2477,9 +2460,12 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
 				AttCod,SubQueryAllUsrs);
 
       /***** Free memory for subquery string *****/
-      free (SubQueryAllUsrs);
+      Usr_FreeSubqueryUsrCods (SubQueryAllUsrs);
      }
-   return NumStdsInAttEvent;
+   else
+      NumUsrsInAttEvent = 0;
+
+   return NumUsrsInAttEvent;
   }
 
 /*****************************************************************************/
@@ -2712,8 +2698,9 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
       /* Get number of students in this event */
-      Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
-												&Gbl.Usrs.Me.UsrDat.UsrCod,1);
+      Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList =
+      Att_GetNumUsrsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+					       &Gbl.Usrs.Me.UsrDat.UsrCod,1);
 
    /***** Get list of attendance events selected *****/
    Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
@@ -2782,7 +2769,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of students to list */
-   if ((NumUsrsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
+   if ((NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ()))
      {
       /***** Get boolean parameter that indicates if details must be shown *****/
       Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
@@ -2798,8 +2785,9 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	   NumAttEvent < Gbl.AttEvents.Num;
 	   NumAttEvent++)
 	 /* Get number of students in this event */
-	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
-												   LstSelectedUsrCods,NumUsrsInList);
+	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList =
+	 Att_GetNumUsrsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+						  LstSelectedUsrCods,NumUsrsInList);
 
       /***** Get list of attendance events selected *****/
       Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
@@ -2844,7 +2832,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

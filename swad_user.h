@@ -432,9 +432,19 @@ void Usr_PutHiddenParSelectedUsrsCods (void);
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void);
 void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
-bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind);
-unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void);
-void Usr_FreeListsSelectedUsrsCods (void);
+
+bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind);
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void);
+void Usr_FreeListsSelectedEncryptedUsrsCods (void);
+
+void Usr_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
+void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
+
+void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
+				unsigned NumUsrsInList,
+				char **SubQueryAllUsrs);
+void Usr_FreeSubqueryUsrCods (char *SubQueryAllUsrs);
+
 void Usr_FreeListOtherRecipients (void);
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void));

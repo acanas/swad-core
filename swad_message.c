@@ -350,7 +350,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -728,7 +728,7 @@ void Msg_RecMsgFromUsr (void)
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
    /***** Check number of recipients *****/
-   if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedUsrs ()))
+   if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ()))
      {
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
           NumRecipients > Cfg_MAX_RECIPIENTS)
@@ -847,7 +847,7 @@ void Msg_RecMsgFromUsr (void)
    /***** Free memory *****/
    /* Free memory used for list of users */
    Usr_FreeListOtherRecipients ();
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)

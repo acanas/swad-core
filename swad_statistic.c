@@ -916,11 +916,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
-	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// Error: there are no users selected
+	 if (!Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// Error: there are no users selected
 	   {
 	    /* Write warning message, clean and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-            Usr_FreeListsSelectedUsrsCods ();
+            Usr_FreeListsSelectedEncryptedUsrsCods ();
 	    return;
 	   }
 	 break;
@@ -1495,7 +1495,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Free memory used by list of selected users' codes *****/
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_FreeListsSelectedUsrsCods ();
+      Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Write time zone used in the calculation of these statistics *****/
    switch (Gbl.Stat.ClicksGroupedBy)

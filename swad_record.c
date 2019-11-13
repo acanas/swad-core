@@ -1035,7 +1035,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1080,7 +1080,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    Frm_StartForm (ActPrnRecSevStd);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
    Usr_PutHiddenParSelectedUsrsCods ();
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
@@ -1259,7 +1259,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    Rec_FreeListFields ();
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1312,7 +1312,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Frm_StartForm (ActPrnRecSevTch);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
    Usr_PutHiddenParSelectedUsrsCods ();
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
    Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
 	                                                       'N');
@@ -1474,7 +1474,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/

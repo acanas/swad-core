@@ -525,7 +525,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
-	    Usr_FreeListsSelectedUsrsCods ();
+	    Usr_FreeListsSelectedEncryptedUsrsCods ();
 	    break;
 	 default:
 	    break;

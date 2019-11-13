@@ -250,7 +250,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -274,7 +274,7 @@ void McR_ShowUsrsMchResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Check the number of users whose matches results will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
      {
       /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Results,NULL,
@@ -308,7 +308,7 @@ void McR_ShowUsrsMchResults (void)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
