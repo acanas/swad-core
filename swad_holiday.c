@@ -164,7 +164,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_Space ();
+	    HTM_NBSP ();
 	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	      {
 	       case Hld_HOLIDAY:

@@ -1712,7 +1712,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the user's ID if user is a student */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write the first name and the surnames */
@@ -1851,7 +1851,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       /* Write the user's ID if user is a student in current course */
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write the name and the surnames */
@@ -1886,7 +1886,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  NULL,
 	          "class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
 		  BarWidth);
-	 HTM_Space ();
+	 HTM_NBSP ();
 	}
       Str_WriteDoubleNumToFile (Gbl.F.Out,Hits.Num);
       HTM_TD_End ();
@@ -3200,7 +3200,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
          HTM_Txt (Plg.Name);
       else
          HTM_Txt ("?");
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
@@ -3377,7 +3377,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RM\"");
       if (CtyCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write country */
@@ -3467,7 +3467,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (InsCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write institution */
@@ -3559,7 +3559,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CtrCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write centre */
@@ -3651,7 +3651,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (DegCod > 0)
          HTM_UnsignedLong (++Ranking);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3755,7 +3755,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CrsOK)
          HTM_UnsignedLong (++Ranking);
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write degree */
@@ -3767,7 +3767,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Year]);
       else
 	 HTM_Hyphen ();
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_TD_End ();
 
       /* Write course, including link */
@@ -3785,7 +3785,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
         }
       else
          HTM_Hyphen ();
-      HTM_Space ();
+      HTM_NBSP ();
       if (CrsOK)
          Frm_EndForm ();
       HTM_TD_End ();
@@ -3859,7 +3859,7 @@ static void Sta_DrawBarNumHits (char Color,
       free (Icon);
 
       /***** Write the number of hits *****/
-      HTM_Space ();
+      HTM_NBSP ();
       Str_WriteDoubleNumToFile (Gbl.F.Out,HitsNum);
       HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
         	                          HitsTotal) + 0.5));

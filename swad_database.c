@@ -3290,10 +3290,7 @@ void DB_BuildQuery (char **Query,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
   }
 
@@ -3311,10 +3308,7 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError);
@@ -3369,10 +3363,7 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Make query "SELECT COUNT(*) FROM..." *****/
@@ -3403,10 +3394,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
@@ -3430,10 +3418,7 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
@@ -3460,10 +3445,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
@@ -3487,10 +3469,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
@@ -3514,10 +3493,7 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
@@ -3541,10 +3517,7 @@ void DB_Query (const char *MsgError,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/

@@ -1808,7 +1808,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
            {
             HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-            HTM_Space ();
+            HTM_NBSP ();
             HTM_TxtF ("(%s)",Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
             HTM_SPAN_End ();
            }

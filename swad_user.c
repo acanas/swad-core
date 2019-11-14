@@ -2808,13 +2808,11 @@ void Usr_WriteLoggedUsrHead (void)
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
-      HTM_TxtF ("%s&nbsp;",":");
+      HTM_Colon ();
      }
    else
-     {
       Rol_PutFormToChangeMyRole ("SEL_ROLE");
-      HTM_Space ();
-     }
+   HTM_NBSP ();
 
    /***** Show my photo *****/
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
@@ -3726,7 +3724,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /****** Write user's ID ******/
    HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of guest's main data *****/
@@ -3830,7 +3828,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main student's data *****/
@@ -3949,7 +3947,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main teacher's data *****/
@@ -4027,7 +4025,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main administrator's data *****/
@@ -4123,7 +4121,7 @@ static void Usr_WriteUsrData (const char *BgColor,
    /***** Write data *****/
    HTM_Txt (Data);
    if (NonBreak)
-      HTM_Space ();
+      HTM_NBSP ();
 
    /***** End link *****/
    if (Link)
@@ -5702,7 +5700,8 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void)
    /***** Create list of user codes and put encrypted user code in it *****/
    if (!Gbl.Usrs.Selected.List[Rol_UNK])
      {
-      if ((Gbl.Usrs.Selected.List[Rol_UNK] = (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
+      if ((Gbl.Usrs.Selected.List[Rol_UNK] =
+	   (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -5736,7 +5735,7 @@ void Usr_GetListsSelectedUsrsCods (void)
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
       /***** Get list of selected users for each possible role *****/
-      for (Role = Rol_TCH;		// From the highest possible role of selected users...
+      for (Role  = Rol_TCH;	// From the highest possible role of selected users...
 	   Role >= Rol_GST;	// ...downto the lowest possible role of selected users
 	   Role--)
 	 if (Usr_ParamUsrCod[Role])
@@ -9011,17 +9010,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 if (UsrDat.FirstName[0])
 	    HTM_Txt (UsrDat.FirstName);
 	 else
-	    HTM_Space ();
+	    HTM_NBSP ();
 	 HTM_BR ();
 	 if (UsrDat.Surname1[0])
 	    HTM_Txt (UsrDat.Surname1);
 	 else
-	    HTM_Space ();
+	    HTM_NBSP ();
 	 HTM_BR ();
 	 if (UsrDat.Surname2[0])
 	    HTM_Txt (UsrDat.Surname2);
 	 else
-	    HTM_Space ();
+	    HTM_NBSP ();
 
 	 HTM_DIV_End ();
 

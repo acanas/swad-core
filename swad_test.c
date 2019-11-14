@@ -3547,7 +3547,7 @@ void Tst_WriteAnsTF (char AnsTF)
          HTM_Txt (Txt_TF_QST[1]);
          break;
       default:		// no answer
-         HTM_Space ();
+         HTM_NBSP ();
          break;
      }
   }

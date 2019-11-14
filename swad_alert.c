@@ -106,10 +106,7 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Gbl.Alerts.List[i].Text,fmt,ap);
    va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
   }
 
@@ -267,9 +264,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
       va_start (ap,fmt);
       NumBytesPrinted = vasprintf (&Txt,fmt,ap);
       va_end (ap);
-      if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+      if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	 Lay_NotEnoughMemoryExit ();
 
       /***** Show alert *****/
@@ -341,9 +336,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Txt,fmt,ap);
    va_end (ap);
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /****** Print fix alert and button ******/
@@ -369,9 +362,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Txt,fmt,ap);
    va_end (ap);
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
    /****** Print start of fix alert and button ******/

@@ -4127,7 +4127,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
       Brw_StoreSizeOfFileTreeInDB ();
      }
    else
-      HTM_Space ();	// Blank to occupy the same space as the text for the browser size
+      HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }
@@ -6258,7 +6258,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	}
 
       /***** Write name of the folder *****/
-      HTM_Space ();
+      HTM_NBSP ();
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
 	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,true,
@@ -6277,7 +6277,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
          HTM_STRONG_Begin ();
          HTM_Txt (FileNameToShow);
          HTM_STRONG_End ();
-         HTM_Space ();
+         HTM_NBSP ();
          if ((Level == 1) &&
              (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
               Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
@@ -6298,7 +6298,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
-      HTM_Space ();
+      HTM_NBSP ();
       HTM_DIV_Begin ("class=\"FILENAME\"");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
@@ -6444,7 +6444,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
    /***** Write the date *****/
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   HTM_Space ();
+   HTM_NBSP ();
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
        Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
      {
@@ -12144,7 +12144,7 @@ void Brw_AskRemoveOldFiles (void)
 		  Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
 		  "%u",Months);
    HTM_SELECT_End ();
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TxtF (Txt_Remove_files_older_than_PART_2_OF_2,
              Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

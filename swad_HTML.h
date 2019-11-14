@@ -164,7 +164,7 @@ void HTM_BR (void);
 
 void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
-void HTM_Space (void);
+void HTM_NBSP (void);
 void HTM_Colon (void);
 void HTM_Comma (void);
 void HTM_Hyphen (void);

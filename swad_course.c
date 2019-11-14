@@ -3275,7 +3275,7 @@ void Crs_AskRemoveOldCrss (void)
 		  i == MonthsWithoutAccess,false,
 		  "%u",i);
    HTM_SELECT_End ();
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TxtF (Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
              Cfg_PLATFORM_SHORT_NAME);
    HTM_LABEL_End ();

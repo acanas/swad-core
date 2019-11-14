@@ -3377,7 +3377,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
       HTM_Txt (UsrDat->FullName);
       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 	{
-         HTM_Space ();
+         HTM_NBSP ();
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned
             Msg_PutFormToUnbanSender (UsrDat);

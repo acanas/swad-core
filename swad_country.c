@@ -546,7 +546,7 @@ void Cty_ListCountries2 (void)
    /***** Separation row *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"8\" class=\"DAT CM\"");
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
    HTM_TR_End ();
 

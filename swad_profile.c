@@ -570,7 +570,7 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
 
    HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
 		                                   Txt_files);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_Txt ("(");
    HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
    HTM_Txt (")");

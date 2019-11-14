@@ -1076,7 +1076,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Title *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_BR ();
    HTM_STRONG_Begin ();
    HTM_Txt (Txt_EXAM_ANNOUNCEMENT);
@@ -1086,7 +1086,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"%s LM\"",StyleNormal);
-   HTM_Space ();
+   HTM_NBSP ();
    HTM_TD_End ();
    HTM_TR_End ();
 

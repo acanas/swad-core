@@ -123,10 +123,7 @@ void HTM_TABLE_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Class,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				      // or some other error occurs,
-				      // vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -250,10 +247,7 @@ void HTM_TR_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -350,10 +344,7 @@ static void HTM_TH_BeginAttr (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -415,10 +406,7 @@ void HTM_TD_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -493,10 +481,7 @@ void HTM_DIV_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -587,10 +572,7 @@ void HTM_SPAN_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -656,10 +638,7 @@ void HTM_UL_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -708,10 +687,7 @@ void HTM_LI_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -815,10 +791,7 @@ void HTM_A_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -895,10 +868,7 @@ void HTM_PARAM (const char *Name,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Value,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -925,10 +895,7 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -982,10 +949,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1020,10 +984,7 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1054,10 +1015,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1092,10 +1050,7 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1126,10 +1081,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1163,10 +1115,7 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1227,10 +1176,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1264,10 +1210,7 @@ void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabl
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1296,10 +1239,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1331,10 +1271,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1395,10 +1332,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -1448,10 +1382,7 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -1540,10 +1471,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Content,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -1590,10 +1518,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
@@ -1694,10 +1619,7 @@ void HTM_TxtF (const char *fmt,...)
 	 va_start (ap,fmt);
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
@@ -1712,7 +1634,7 @@ void HTM_Txt (const char *Txt)
    fputs (Txt,Gbl.F.Out);
   }
 
-void HTM_Space (void)
+void HTM_NBSP (void)
   {
    HTM_Txt ("&nbsp;");
   }

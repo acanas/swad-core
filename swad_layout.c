@@ -1432,7 +1432,7 @@ static void Lay_WriteAboutZone (void)
    for (i = 0;
 	i < 5;
 	i++)
-      HTM_Space ();
+      HTM_NBSP ();
 
    /* Time to generate and send page */
    Sta_WriteTimeToGenerateAndSendPage ();
