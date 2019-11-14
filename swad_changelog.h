@@ -487,13 +487,17 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.67.1 (2019-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.68 (2019-11-14)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.65.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
+
+	Version 19.68:    Nov 14, 2019	Code refactoring in projects. (246642 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1805','es','N','Seleccionar usuarios para ver sus proyectos');
 
 	Version 19.67.1:  Nov 14, 2019	Code refactoring in HTML. (246651 lines)
 	Version 19.67:    Nov 14, 2019	Filter projects by selected users. (246729 lines)

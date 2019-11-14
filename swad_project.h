@@ -90,7 +90,6 @@ typedef enum
 struct Prj_Filter
   {
    Usr_Who_t Who;		// Show my / selected users' / all projects
-   bool ReqUsrs;		// Request selection of users to view their projects?
    unsigned Assign;		// Show assigned / non assigned projects
    unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects
@@ -157,8 +156,9 @@ struct Project
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Prj_ListUsrsToSelect (void);
 void Prj_SeeProjects (void);
-void Prj_ShowTableSelectedProjects (void);
+void Prj_ShowTableSelectedPrjs (void);
 
 void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
@@ -213,12 +213,12 @@ void Prj_RecFormProject (void);
 
 void Prj_ShowFormConfig (void);
 void Prj_ReceiveConfigPrj (void);
-void Prj_ReqLockSelectedProjectsEdition (void);
-void Prj_ReqUnlockSelectedProjectsEdition (void);
-void Prj_LockSelectedProjectsEdition (void);
-void Prj_UnlockSelectedProjectsEdition (void);
+void Prj_ReqLockSelectedPrjsEdition (void);
+void Prj_ReqUnloSelectedPrjsEdition (void);
+void Prj_LockSelectedPrjsEdition (void);
+void Prj_UnloSelectedPrjsEdition (void);
 void Prj_LockProjectEdition (void);
-void Prj_UnlockProjectEdition (void);
+void Prj_UnloProjectEdition (void);
 
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);

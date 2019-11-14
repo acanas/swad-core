@@ -9856,11 +9856,6 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 	                  "ICO_HIGHLIGHT PHOTO15x20");
 	 break;
       case Usr_WHO_SELECTED:
-	 Usr_PutHiddenParamRequestUsrs ();
-         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-			  Txt_WHO[Who],
-			  "ICO_HIGHLIGHT ICOx20");
-         break;
       case Usr_WHO_FOLLOWED:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 			  Txt_WHO[Who],
@@ -9893,18 +9888,4 @@ Usr_Who_t Usr_GetHiddenParamWho (void)
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);
-  }
-
-/*****************************************************************************/
-/************* Put hidden param to request a form to select users ************/
-/*****************************************************************************/
-
-void Usr_PutHiddenParamRequestUsrs (void)
-  {
-   Par_PutHiddenParamChar ("RequestUsrs",'Y');
-  }
-
-bool Usr_GetHiddenParamRequestUsrs (void)
-  {
-   return Par_GetParToBool ("RequestUsrs");
   }

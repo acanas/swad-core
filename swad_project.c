@@ -124,8 +124,8 @@ struct Prj_Faults
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prj_ReqUsrsToSelect (void);
 static void Prj_GetSelectedUsrsAndShowPrjs (void);
-static void Prj_ReqListUsrsToSelect (void);
 
 static void Prj_ShowProjectsInCurrentPage (void);
 
@@ -232,6 +232,32 @@ static void Prj_LockProjectEditionInDB (long PrjCod);
 static void Prj_UnlockProjectEditionInDB (long PrjCod);
 
 /*****************************************************************************/
+/**************************** List users to select ***************************/
+/*****************************************************************************/
+
+void Prj_ListUsrsToSelect (void)
+  {
+   /***** Get parameters *****/
+   Prj_GetParams ();
+
+   /***** Show list of users to select some of them *****/
+   Prj_ReqUsrsToSelect ();
+  }
+
+static void Prj_ReqUsrsToSelect (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   extern const char *Txt_Projects;
+   extern const char *Txt_View_projects;
+
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (ActSeePrj,Prj_PutCurrentParams,
+				     Txt_Projects,
+	                             Hlp_ASSESSMENT_Projects,
+	                             Txt_View_projects);
+  }
+
+/*****************************************************************************/
 /******************************* Show projects *******************************/
 /*****************************************************************************/
 
@@ -249,10 +275,10 @@ void Prj_SeeProjects (void)
          Prj_ShowProjectsInCurrentPage ();
 	 break;
       case Usr_WHO_SELECTED:
-         if (Gbl.Prjs.Filter.ReqUsrs)	// Request the selection of users
+         // if (Gbl.Prjs.Filter.ReqUsrs)	// Request the selection of users
 	    /* List users to select some of them */
-            Prj_ReqListUsrsToSelect ();
-         else
+         //   Prj_ReqListUsrsToSelect ();
+         //else
 	    /* Show projects of selected users */
             Prj_GetSelectedUsrsAndShowPrjs ();
          break;
@@ -268,31 +294,14 @@ void Prj_SeeProjects (void)
 static void Prj_GetSelectedUsrsAndShowPrjs (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (Prj_ShowProjectsInCurrentPage,// when user(s) selected
-                                  Prj_ReqListUsrsToSelect);	// when no user selected
-  }
-
-/*****************************************************************************/
-/**************************** List users to select ***************************/
-/*****************************************************************************/
-
-static void Prj_ReqListUsrsToSelect (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Projects;
-   extern const char *Txt_Projects;
-   extern const char *Txt_View_projects;
-
-   /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActSeePrj,Prj_PutCurrentParams,
-				     Txt_Projects,
-	                             Hlp_ASSESSMENT_Projects,
-	                             Txt_View_projects);
+                                  Prj_ReqUsrsToSelect);	// when no user selected
   }
 
 /*****************************************************************************/
 /********************** Show selected projects in a table ********************/
 /*****************************************************************************/
 
-void Prj_ShowTableSelectedProjects (void)
+void Prj_ShowTableSelectedPrjs (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;
@@ -472,7 +481,8 @@ static void Prj_ShowFormToFilterByMy_All (void)
 	 HTM_DIV_Begin ("class=\"%s\"",
 			(Gbl.Prjs.Filter.Who == Who) ? "PREF_ON" :
 						       "PREF_OFF");
-	 Frm_StartForm (ActSeePrj);
+	 Frm_StartForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
+	                                          ActSeePrj);
 	 Filter.Who    = Who;
 	 Filter.Assign = Gbl.Prjs.Filter.Assign;
 	 Filter.Hidden = Gbl.Prjs.Filter.Hidden;
@@ -813,12 +823,6 @@ static void Prj_GetParamWho (void)
    /***** If parameter Who is unknown, set it to default *****/
    if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
       Gbl.Prjs.Filter.Who = Prj_FILTER_WHO_DEFAULT;
-
-   /***** Request users? / Some users should have been selected? *****/
-   if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
-      Gbl.Prjs.Filter.ReqUsrs = Usr_GetHiddenParamRequestUsrs ();
-   else
-      Gbl.Prjs.Filter.ReqUsrs = false;
   }
 
 /*****************************************************************************/
@@ -4010,7 +4014,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
 /********** Request locking/unlocking edition of selected projects ***********/
 /*****************************************************************************/
 
-void Prj_ReqLockSelectedProjectsEdition (void)
+void Prj_ReqLockSelectedPrjsEdition (void)
   {
    extern const char *Txt_Lock_editing;
    extern const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects;
@@ -4044,7 +4048,7 @@ void Prj_ReqLockSelectedProjectsEdition (void)
    Prj_ShowProjectsInCurrentPage ();
   }
 
-void Prj_ReqUnlockSelectedProjectsEdition (void)
+void Prj_ReqUnloSelectedPrjsEdition (void)
   {
    extern const char *Txt_Unlock_editing;
    extern const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects;
@@ -4082,7 +4086,7 @@ void Prj_ReqUnlockSelectedProjectsEdition (void)
 /***************** Lock/unlock edition of selected projects ******************/
 /*****************************************************************************/
 
-void Prj_LockSelectedProjectsEdition (void)
+void Prj_LockSelectedPrjsEdition (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;
@@ -4115,7 +4119,7 @@ void Prj_LockSelectedProjectsEdition (void)
    Prj_ShowProjectsInCurrentPage ();
   }
 
-void Prj_UnlockSelectedProjectsEdition (void)
+void Prj_UnloSelectedPrjsEdition (void)
   {
    extern const char *Txt_No_projects;
    unsigned NumPrj;
@@ -4244,7 +4248,7 @@ static void Prj_LockProjectEditionInDB (long PrjCod)
 /************************* Unlock edition of a project ***********************/
 /*****************************************************************************/
 
-void Prj_UnlockProjectEdition (void)
+void Prj_UnloProjectEdition (void)
   {
    struct Project Prj;
 
