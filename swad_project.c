@@ -2774,8 +2774,7 @@ static void Prj_GetListProjects (void)
 	      }
 	    break;
          case Usr_WHO_SELECTED:
-	    /* Get list of selected users' codes if not already got */
-	    // Usr_GetListsSelectedUsrsCods ();
+            /* Count number of valid users in list of encrypted user codes */
 	    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
 
 	    if (NumUsrsInList)
@@ -2833,9 +2832,6 @@ static void Prj_GetListProjects (void)
 	      }
 	    else
 	       NumRows = 0;
-
-	    /* Free memory used by list of selected users' codes */
-	    // Usr_FreeListsSelectedEncryptedUsrsCods ();
 	    break;
          case Usr_WHO_ALL:
 	    /* Get list of projects */

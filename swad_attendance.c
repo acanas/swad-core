@@ -66,14 +66,17 @@ extern struct Globals Gbl;
 
 typedef enum
   {
-   Att_NORMAL_VIEW_ONLY_ME,
-   Att_NORMAL_VIEW_STUDENTS,
-   Att_PRINT_VIEW,
+   Att_VIEW_ONLY_ME,	// View only me
+   Att_VIEW_SEL_USR,	// View selected users
+   Att_PRNT_ONLY_ME,	// Print only me
+   Att_PRNT_SEL_USR,	// Print selected users
   } Att_TypeOfView_t;
 
 /*****************************************************************************/
 /****************************** Private variables ****************************/
 /*****************************************************************************/
+
+Att_TypeOfView_t Att_TypeOfView;
 
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
@@ -131,8 +134,9 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
-static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
-static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView);
+static void Att_ListOrPrintMyAttendanceCrs (void);
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (void);
+static void Att_ListOrPrintUsrsAttendanceCrs (void);
 
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
 
@@ -142,11 +146,10 @@ static void Att_PutIconsStdsAttList (void);
 static void Att_PutParamsToPrintStdsList (void);
 
 static void Att_PutButtonToShowDetails (void);
-static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView);
+static void Att_ListEventsToSelect (void);
 static void Att_PutIconToEditAttEvents (void);
 static void Att_PutIconToViewAttEvents (void);
-static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
-                                         unsigned NumUsrsInList,
+static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *UsrDat);
@@ -2644,7 +2647,7 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 /********** Request listing attendance of users to several events ************/
 /*****************************************************************************/
 
-void Usr_ReqListStdsAttendanceCrs (void)
+void Att_ReqListUsrsAttendanceCrs (void)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
@@ -2667,17 +2670,19 @@ void Usr_ReqListStdsAttendanceCrs (void)
 /********** List my attendance (I am a student) to several events ************/
 /*****************************************************************************/
 
-void Usr_ListMyAttendanceCrs (void)
+void Att_ListMyAttendanceCrs (void)
   {
-   Usr_ListOrPrintMyAttendanceCrs (Att_NORMAL_VIEW_ONLY_ME);
+   Att_TypeOfView = Att_VIEW_ONLY_ME;
+   Att_ListOrPrintMyAttendanceCrs ();
   }
 
-void Usr_PrintMyAttendanceCrs (void)
+void Att_PrintMyAttendanceCrs (void)
   {
-   Usr_ListOrPrintMyAttendanceCrs (Att_PRINT_VIEW);
+   Att_TypeOfView = Att_PRNT_ONLY_ME;
+   Att_ListOrPrintMyAttendanceCrs ();
   }
 
-static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
+static void Att_ListOrPrintMyAttendanceCrs (void)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
@@ -2706,20 +2711,20 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,
-                 TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Att_PutIconsMyAttList :
-                                                         NULL,
-                 TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Hlp_USERS_Attendance_attendance_list :
-                                                         NULL,
+                 Att_TypeOfView == Att_VIEW_ONLY_ME ? Att_PutIconsMyAttList :
+                                                      NULL,
+                 Att_TypeOfView == Att_VIEW_ONLY_ME ? Hlp_USERS_Attendance_attendance_list :
+                                                      NULL,
                  Box_NOT_CLOSABLE);
 
    /***** List events to select *****/
-   Att_ListEventsToSelect (TypeOfView);
+   Att_ListEventsToSelect ();
 
    /***** Get my preference about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** Show table with attendances for every student in list *****/
-   Att_ListUsrsAttendanceTable (TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+   Att_ListUsrsAttendanceTable (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show details or put button to show details *****/
    if (Gbl.AttEvents.ShowDetails)
@@ -2742,43 +2747,49 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 /*************** List attendance of users to several events ******************/
 /*****************************************************************************/
 
-void Usr_ListUsrsAttendanceCrs (void)
+void Att_ListUsrsAttendanceCrs (void)
   {
-   Usr_ListOrPrintUsrsAttendanceCrs (Att_NORMAL_VIEW_STUDENTS);
+   Att_TypeOfView = Att_VIEW_SEL_USR;
+   Att_GetUsrsAndListOrPrintAttendanceCrs ();
   }
 
-void Usr_PrintUsrsAttendanceCrs (void)
+void Att_PrintUsrsAttendanceCrs (void)
   {
-   Usr_ListOrPrintUsrsAttendanceCrs (Att_PRINT_VIEW);
+   Att_TypeOfView = Att_PRNT_SEL_USR;
+   Att_GetUsrsAndListOrPrintAttendanceCrs ();
   }
 
-static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (void)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (Att_ListOrPrintUsrsAttendanceCrs,
+                                  Att_ReqListUsrsAttendanceCrs);
+  }
+
+static void Att_ListOrPrintUsrsAttendanceCrs (void)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
-   extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
 
-   /***** Get list of attendance events *****/
-   Att_GetListAttEvents (Att_OLDEST_FIRST);
+   /***** Get parameters *****/
+   /* Get boolean parameter that indicates if details must be shown */
+   Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
 
-   /***** Get list of selected students if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
+   /* Get list of groups selected */
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Count number of valid users in list of encrypted user codes *****/
    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
 
-   /***** Get list of users selected to show their attendance *****/
    if (NumUsrsInList)
      {
-      /***** Get boolean parameter that indicates if details must be shown *****/
-      Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
-
-      /***** Get list of groups selected ******/
-      Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
       /***** Get list of students selected to show their attendances *****/
       Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+
+      /***** Get list of attendance events *****/
+      Att_GetListAttEvents (Att_OLDEST_FIRST);
 
       /***** Get number of students in each event *****/
       for (NumAttEvent = 0;
@@ -2794,20 +2805,20 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Attendance_list,
-	            TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconsStdsAttList :
-						             NULL,
-		    TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Hlp_USERS_Attendance_attendance_list :
-						             NULL,
+		    Att_TypeOfView == Att_VIEW_SEL_USR ? Att_PutIconsStdsAttList :
+							 NULL,
+		    Att_TypeOfView == Att_VIEW_SEL_USR ? Hlp_USERS_Attendance_attendance_list :
+							 NULL,
 		    Box_NOT_CLOSABLE);
 
       /***** List events to select *****/
-      Att_ListEventsToSelect (TypeOfView);
+      Att_ListEventsToSelect ();
 
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
       /***** Show table with attendances for every student in list *****/
-      Att_ListUsrsAttendanceTable (TypeOfView,NumUsrsInList,LstSelectedUsrCods);
+      Att_ListUsrsAttendanceTable (NumUsrsInList,LstSelectedUsrCods);
 
       /***** Show details or put button to show details *****/
       if (Gbl.AttEvents.ShowDetails)
@@ -2819,23 +2830,15 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       /***** Free memory for list of attendance events selected *****/
       free (Gbl.AttEvents.StrAttCodsSelected);
 
+      /***** Free list of attendance events *****/
+      Att_FreeListAttEvents ();
+
       /***** Free list of user codes *****/
       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
-
-      /***** Free list of groups selected *****/
-      Grp_FreeListCodSelectedGrps ();
-     }
-   else	// No students selected
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      Usr_ReqListStdsAttendanceCrs ();		// ...show again the form
      }
 
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
-
-   /***** Free list of attendance events *****/
-   Att_FreeListAttEvents ();
+   /***** Free list of groups selected *****/
+   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/
@@ -3017,7 +3020,7 @@ static void Att_PutButtonToShowDetails (void)
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
 
-static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
+static void Att_ListEventsToSelect (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Events;
@@ -3027,14 +3030,14 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    unsigned UniqueId;
    char *Id;
    unsigned NumAttEvent;
-   bool NormalView = (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-                      TypeOfView == Att_NORMAL_VIEW_STUDENTS);
+   bool NormalView = (Att_TypeOfView == Att_VIEW_ONLY_ME ||
+                      Att_TypeOfView == Att_VIEW_SEL_USR);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Events,
-	          TypeOfView == Att_NORMAL_VIEW_ONLY_ME  ? Att_PutIconToViewAttEvents :
-	         (TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconToEditAttEvents :
-	                     	                           NULL),
+	          Att_TypeOfView == Att_VIEW_ONLY_ME ? Att_PutIconToViewAttEvents :
+	         (Att_TypeOfView == Att_VIEW_SEL_USR ? Att_PutIconToEditAttEvents :
+	                     	                       NULL),
                  NULL,
 		 Box_NOT_CLOSABLE);
 
@@ -3156,8 +3159,7 @@ static void Att_PutIconToViewAttEvents (void)
 /************ Show table with attendances for every user in list *************/
 /*****************************************************************************/
 
-static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
-                                         unsigned NumUsrsInList,
+static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods)
   {
    extern const char *Txt_Number_of_users;
@@ -3165,8 +3167,9 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
    unsigned NumUsr;
    unsigned NumAttEvent;
    unsigned Total;
-   bool PutButtonShowDetails = (TypeOfView != Att_PRINT_VIEW &&
-	                        !Gbl.AttEvents.ShowDetails);
+   bool PutButtonShowDetails = (Att_TypeOfView == Att_VIEW_ONLY_ME ||
+	                        Att_TypeOfView == Att_VIEW_SEL_USR) &&
+	                        !Gbl.AttEvents.ShowDetails;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);

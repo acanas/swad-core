@@ -8473,113 +8473,112 @@ void Usr_DoActionOnSeveralUsrs1 (void)
    Usr_GetListsSelectedUsrsCods ();
 
    /* Check if there are selected users */
-   if (!Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())// If no users selected...
-     {						// ...write warning notice
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_select_one_ore_more_users);
-      return;
-     }
-
-   /* Get the action to do */
-   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_OPTION_UNKNOWN);
-
-   /***** Change action depending on my selection *****/
-   Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
-
-   switch (Gbl.Usrs.Selected.Option)
+   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())
      {
-      case Usr_OPTION_RECORDS:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevGst:
-	       Gbl.Action.Act = ActSeeRecSevGst;
-	       break;
-	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActSeeRecSevStd;
-	       break;
-	    case ActDoActOnSevTch:
-	       Gbl.Action.Act = ActSeeRecSevTch;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_HOMEWORK:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	    case ActDoActOnSevTch:
-	       Gbl.Action.Act = ActAdmAsgWrkCrs;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_ATTENDANCE:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActSeeLstUsrAtt;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_MESSAGE:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	    case ActDoActOnSevTch:
-	       Gbl.Action.Act = ActReqMsgUsr;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_EMAIL:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActMaiUsr;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_FOLLOW:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActReqFolSevStd;
-               break;
-	    case ActDoActOnSevTch:
-	       Gbl.Action.Act = ActReqFolSevTch;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      case Usr_OPTION_UNFOLLOW:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActReqUnfSevStd;
-               break;
-	    case ActDoActOnSevTch:
-	       Gbl.Action.Act = ActReqUnfSevTch;
-	       break;
-	    default:
-               break;
-	   }
-	 break;
-      default:
-	 break;
-     }
+      /* Get the action to do */
+      Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_OPTION_UNKNOWN);
 
-   if (Gbl.Action.Act == Gbl.Action.Original)	// Fail, no change in action
-      Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
-   else						// Success, action has changed
-      Tab_SetCurrentTab ();
+      /***** Change action depending on my selection *****/
+      Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
+
+      switch (Gbl.Usrs.Selected.Option)
+	{
+	 case Usr_OPTION_RECORDS:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevGst:
+		  Gbl.Action.Act = ActSeeRecSevGst;
+		  break;
+	       case ActDoActOnSevStd:
+		  Gbl.Action.Act = ActSeeRecSevStd;
+		  break;
+	       case ActDoActOnSevTch:
+		  Gbl.Action.Act = ActSeeRecSevTch;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_HOMEWORK:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+	       case ActDoActOnSevTch:
+		  Gbl.Action.Act = ActAdmAsgWrkCrs;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_ATTENDANCE:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+		  Gbl.Action.Act = ActSeeLstUsrAtt;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_MESSAGE:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+	       case ActDoActOnSevTch:
+		  Gbl.Action.Act = ActReqMsgUsr;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_EMAIL:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+		  Gbl.Action.Act = ActMaiUsr;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_FOLLOW:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+		  Gbl.Action.Act = ActReqFolSevStd;
+		  break;
+	       case ActDoActOnSevTch:
+		  Gbl.Action.Act = ActReqFolSevTch;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_UNFOLLOW:
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActDoActOnSevStd:
+		  Gbl.Action.Act = ActReqUnfSevStd;
+		  break;
+	       case ActDoActOnSevTch:
+		  Gbl.Action.Act = ActReqUnfSevTch;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 default:
+	    break;
+	}
+
+      if (Gbl.Action.Act == Gbl.Action.Original)	// Fail, no change in action
+	 Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
+      else						// Success, action has changed
+	 Tab_SetCurrentTab ();
+     }
+   else							// If no users selected...
+      Ale_CreateAlert (Ale_WARNING,NULL,		// ...write warning notice
+	               Txt_You_must_select_one_ore_more_users);
   }
 
 void Usr_DoActionOnSeveralUsrs2 (void)
@@ -8604,6 +8603,9 @@ void Usr_DoActionOnSeveralUsrs2 (void)
       default:
 	 break;
      }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/
