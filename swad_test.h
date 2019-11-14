@@ -211,7 +211,7 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 void Tst_SelUsrsToViewUsrsTstResults (void);
 void Tst_SelDatesToSeeMyTstResults (void);
 void Tst_ShowMyTstResults (void);
-void Tst_ShowUsrsTstResults (void);
+void Tst_GetUsrsAndShowTstResults (void);
 void Tst_ShowOneTstResult (void);
 void Tst_ShowTestResult (struct UsrData *UsrDat,
 			 unsigned NumQsts,time_t TstTimeUTC);

@@ -69,6 +69,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void McR_ShowUsrsMchResults (void);
 static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther);
 static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
@@ -257,58 +258,50 @@ void McR_SelUsrsToViewUsrsMchResults (void)
   }
 
 /*****************************************************************************/
+/****************** Get users and show their matches results *****************/
+/*****************************************************************************/
+
+void McR_GetUsrsAndShowMchResults (void)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (McR_ShowUsrsMchResults,
+                                  McR_SelUsrsToViewUsrsMchResults);
+  }
+
+/*****************************************************************************/
 /****************** Show matches results for several users *******************/
 /*****************************************************************************/
 
-void McR_ShowUsrsMchResults (void)
+static void McR_ShowUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
-
-   /***** Get list of the selected users's IDs *****/
-   Usr_GetListsSelectedUsrsCods ();
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
-   /***** Check the number of users whose matches results will be shown *****/
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
+   /***** Begin box and table *****/
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+		      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+
+   /***** Header of the table with the list of users *****/
+   McR_ShowHeaderMchResults (Usr_OTHER);
+
+   /***** List the matches results of the selected users *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
      {
-      /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Results,NULL,
-                         Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
-
-      /***** Header of the table with the list of users *****/
-      McR_ShowHeaderMchResults (Usr_OTHER);
-
-      /***** List the matches results of the selected users *****/
-      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-      while (*Ptr)
-	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
-	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
-	       /***** Show matches results *****/
-	       McR_ShowMchResults (Usr_OTHER);
-	}
-
-      /***** End table and box *****/
-      Box_EndBoxTable ();
-     }
-   else	// If no users are selected...
-     {
-      // ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      // ...and show again the form
-      McR_SelUsrsToViewUsrsMchResults ();
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
+	 if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	    /***** Show matches results *****/
+	    McR_ShowMchResults (Usr_OTHER);
      }
 
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   /***** End table and box *****/
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

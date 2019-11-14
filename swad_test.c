@@ -283,6 +283,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 static long Tst_CreateTestResultInDB (void);
 static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score);
+static void Tst_ShowUsrsTstResults (void);
 static void Tst_ShowHeaderTestResults (void);
 static void Tst_ShowTstResults (struct UsrData *UsrDat);
 static void Tst_PutParamTstCod (long TstCod);
@@ -7629,58 +7630,50 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
   }
 
 /*****************************************************************************/
+/******************* Get users and show their test results *******************/
+/*****************************************************************************/
+
+void Tst_GetUsrsAndShowTstResults (void)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (Tst_ShowUsrsTstResults,
+                                  Tst_SelUsrsToViewUsrsTstResults);
+  }
+
+/*****************************************************************************/
 /******************** Show test results for several users ********************/
 /*****************************************************************************/
 
-void Tst_ShowUsrsTstResults (void)
+static void Tst_ShowUsrsTstResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
-   extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
-
-   /***** Get list of the selected users's IDs *****/
-   Usr_GetListsSelectedUsrsCods ();
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
-   /***** Check the number of users whose tests results will be shown *****/
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
+   /***** Begin box and table *****/
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
+
+   /***** Header of the table with the list of users *****/
+   Tst_ShowHeaderTestResults ();
+
+   /***** List the test exams of the selected users *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
      {
-      /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Results,NULL,
-                         Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-
-      /***** Header of the table with the list of users *****/
-      Tst_ShowHeaderTestResults ();
-
-      /***** List the test exams of the selected users *****/
-      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-      while (*Ptr)
-	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
-	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-	       /***** Show test results *****/
-	       Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
-	}
-
-      /***** End table and box *****/
-      Box_EndBoxTable ();
-     }
-   else	// If no users are selected...
-     {
-      // ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      // ...and show again the form
-      Tst_SelUsrsToViewUsrsTstResults ();
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
+	 if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
+	    /***** Show test results *****/
+	    Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
      }
 
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   /***** End table and box *****/
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

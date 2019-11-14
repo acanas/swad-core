@@ -275,12 +275,8 @@ void Prj_SeeProjects (void)
          Prj_ShowProjectsInCurrentPage ();
 	 break;
       case Usr_WHO_SELECTED:
-         // if (Gbl.Prjs.Filter.ReqUsrs)	// Request the selection of users
-	    /* List users to select some of them */
-         //   Prj_ReqListUsrsToSelect ();
-         //else
-	    /* Show projects of selected users */
-            Prj_GetSelectedUsrsAndShowPrjs ();
+	 /* Get selected users and show their projects */
+         Prj_GetSelectedUsrsAndShowPrjs ();
          break;
       default:
 	 break;
@@ -294,7 +290,7 @@ void Prj_SeeProjects (void)
 static void Prj_GetSelectedUsrsAndShowPrjs (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (Prj_ShowProjectsInCurrentPage,// when user(s) selected
-                                  Prj_ReqUsrsToSelect);	// when no user selected
+                                  Prj_ReqUsrsToSelect);		// when no user selected
   }
 
 /*****************************************************************************/
@@ -815,10 +811,6 @@ static void Prj_GetParamWho (void)
   {
    /***** Get which users I want to see *****/
    Gbl.Prjs.Filter.Who = Usr_GetHiddenParamWho ();
-
-   /***** If parameter Who is not present, get it from database *****/
-   // if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)
-   //   Gbl.Prjs.Filter.Who = Prj_GetWhoFromDB ();
 
    /***** If parameter Who is unknown, set it to default *****/
    if (Gbl.Prjs.Filter.Who == Usr_WHO_UNKNOWN)

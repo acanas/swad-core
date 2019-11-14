@@ -39,7 +39,7 @@ void McR_PutFormToViewMchResults (Act_Action_t Action);
 void McR_SelDatesToSeeMyMchResults (void);
 void McR_ShowMyMchResults (void);
 void McR_SelUsrsToViewUsrsMchResults (void);
-void McR_ShowUsrsMchResults (void);
+void McR_GetUsrsAndShowMchResults (void);
 void McR_ShowOneMchResult (void);
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 					unsigned *NumQsts,unsigned *NumQstsNotBlank);
