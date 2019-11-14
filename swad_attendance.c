@@ -2440,14 +2440,14 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 							 long LstSelectedUsrCods[],
 							 unsigned NumUsrsInList)
   {
-   char *SubQueryAllUsrs;
+   char *SubQueryUsrs;
    unsigned NumUsrsInAttEvent;
 
    if (NumUsrsInList)
      {
       /***** Create subquery string *****/
       Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
-				 &SubQueryAllUsrs);
+				 &SubQueryUsrs);
 
       /***** Get number of users in attendance event from database ****/
       NumUsrsInAttEvent =
@@ -2456,10 +2456,10 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 				"SELECT COUNT(*) FROM att_usr"
 				" WHERE AttCod=%ld"
 				" AND UsrCod IN (%s) AND Present='Y'",
-				AttCod,SubQueryAllUsrs);
+				AttCod,SubQueryUsrs);
 
       /***** Free memory for subquery string *****/
-      Usr_FreeSubqueryUsrCods (SubQueryAllUsrs);
+      Usr_FreeSubqueryUsrCods (SubQueryUsrs);
      }
    else
       NumUsrsInAttEvent = 0;

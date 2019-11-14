@@ -7646,7 +7646,7 @@ void Tst_ShowUsrsTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Check the number of users whose tests results will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
+   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
      {
       /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Results,NULL,

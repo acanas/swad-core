@@ -434,6 +434,7 @@ void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
 bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind);
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (void);
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void);
 void Usr_FreeListsSelectedEncryptedUsrsCods (void);
 
@@ -442,8 +443,8 @@ void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
 
 void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 				unsigned NumUsrsInList,
-				char **SubQueryAllUsrs);
-void Usr_FreeSubqueryUsrCods (char *SubQueryAllUsrs);
+				char **SubQueryUsrs);
+void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);
 
@@ -513,7 +514,5 @@ void Usr_PutHiddenParamWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetHiddenParamWho (void);
 void Usr_PutHiddenParamRequestUsrs (void);
 bool Usr_GetHiddenParamRequestUsrs (void);
-void Usr_PutHiddenParamSelectedUsrs (void);
-bool Usr_GetHiddenParamSelectedUsrs (void);
 
 #endif

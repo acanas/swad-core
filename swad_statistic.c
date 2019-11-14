@@ -916,7 +916,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
-	 if (!Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// Error: there are no users selected
+	 if (!Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// Error: there are no users selected
 	   {
 	    /* Write warning message, clean and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);

@@ -124,6 +124,7 @@ struct Prj_Faults
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prj_GetSelectedUsrsAndShowPrjs (void);
 static void Prj_ReqListUsrsToSelect (void);
 
 static void Prj_ShowProjectsInCurrentPage (void);
@@ -251,13 +252,23 @@ void Prj_SeeProjects (void)
          if (Gbl.Prjs.Filter.ReqUsrs)	// Request the selection of users
 	    /* List users to select some of them */
             Prj_ReqListUsrsToSelect ();
-         if (Gbl.Prjs.Filter.SelUsrs)	// Some users should have been selected
+         else
 	    /* Show projects of selected users */
-            Prj_ShowProjectsInCurrentPage ();
+            Prj_GetSelectedUsrsAndShowPrjs ();
          break;
       default:
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/****** Get and check list of selected users, and show users' projects *******/
+/*****************************************************************************/
+
+static void Prj_GetSelectedUsrsAndShowPrjs (void)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (Prj_ShowProjectsInCurrentPage,// when user(s) selected
+                                  Prj_ReqListUsrsToSelect);	// when no user selected
   }
 
 /*****************************************************************************/
@@ -686,6 +697,10 @@ void Prj_PutParams (struct Prj_Filter *Filter,
    /***** Put another user's code *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
+
+   /***** Put selected users' codes *****/
+   if (Filter->Who == Usr_WHO_SELECTED)
+      Usr_PutHiddenParSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -801,15 +816,9 @@ static void Prj_GetParamWho (void)
 
    /***** Request users? / Some users should have been selected? *****/
    if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
-     {
       Gbl.Prjs.Filter.ReqUsrs = Usr_GetHiddenParamRequestUsrs ();
-      Gbl.Prjs.Filter.SelUsrs = Usr_GetHiddenParamSelectedUsrs ();
-     }
    else
-     {
       Gbl.Prjs.Filter.ReqUsrs = false;
-      Gbl.Prjs.Filter.SelUsrs = false;
-     }
   }
 
 /*****************************************************************************/
@@ -2645,24 +2654,17 @@ static void Prj_GetListProjects (void)
       "projects.ModifTime DESC,"
       "projects.Title",
      };
-   MYSQL_RES *mysql_res;
+   MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
    MYSQL_ROW row;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
+   char *SubQueryUsrs;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumPrjsFromDB;
    unsigned NumPrjsAfterFilter = 0;
    unsigned NumPrj;
    struct Prj_Faults Faults;
    long PrjCod;
-
-   /***** Get list of selected users' codes if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
-   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
-
-   /***** Get list of users selected to show their projects *****/
-   if (NumUsrsInList)
-      Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
 
    /***** Get list of projects from database *****/
    if (Gbl.Prjs.LstIsRead)
@@ -2737,6 +2739,7 @@ static void Prj_GetListProjects (void)
       switch (Gbl.Prjs.Filter.Who)
         {
 	 case Usr_WHO_ME:
+	    /* Get list of projects */
 	    switch (Gbl.Prjs.SelectedOrder)
 	      {
 	       case Prj_ORDER_START_TIME:
@@ -2749,6 +2752,7 @@ static void Prj_GetListProjects (void)
 					    "%s%s%s"
 					    " AND projects.PrjCod=prj_usr.PrjCod"
 					    " AND prj_usr.UsrCod=%ld"
+					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -2764,6 +2768,7 @@ static void Prj_GetListProjects (void)
 					    "%s%s%s"
 					    " AND projects.PrjCod=prj_usr.PrjCod"
 					    " AND prj_usr.UsrCod=%ld"
+					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -2773,42 +2778,71 @@ static void Prj_GetListProjects (void)
 	      }
 	    break;
          case Usr_WHO_SELECTED:
-	    switch (Gbl.Prjs.SelectedOrder)
+	    /* Get list of selected users' codes if not already got */
+	    // Usr_GetListsSelectedUsrsCods ();
+	    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
+
+	    if (NumUsrsInList)
 	      {
-	       case Prj_ORDER_START_TIME:
-	       case Prj_ORDER_END_TIME:
-	       case Prj_ORDER_TITLE:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					    " FROM projects,prj_usr"
-					    " WHERE projects.CrsCod=%ld"
-					    "%s%s%s"
-					    " AND projects.PrjCod=prj_usr.PrjCod"
-					    " AND prj_usr.UsrCod=%ld"
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    Gbl.Usrs.Me.UsrDat.UsrCod,
-					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-		  break;
-	       case Prj_ORDER_DEPARTMENT:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					    " FROM prj_usr,projects LEFT JOIN departments"
-					    " ON projects.DptCod=departments.DptCod"
-					    " WHERE projects.CrsCod=%ld"
-					    "%s%s%s"
-					    " AND projects.PrjCod=prj_usr.PrjCod"
-					    " AND prj_usr.UsrCod=%ld"
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    Gbl.Usrs.Me.UsrDat.UsrCod,
-					    OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
-		  break;
+	       /* Get list of users selected to show their projects */
+	       Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+
+	       /* Create subquery string */
+	       Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
+					  &SubQueryUsrs);
+
+	       /* Get list of projects */
+	       switch (Gbl.Prjs.SelectedOrder)
+		 {
+		  case Prj_ORDER_START_TIME:
+		  case Prj_ORDER_END_TIME:
+		  case Prj_ORDER_TITLE:
+		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					       "SELECT projects.PrjCod"
+					       " FROM projects,prj_usr"
+					       " WHERE projects.CrsCod=%ld"
+					       "%s%s%s"
+					       " AND projects.PrjCod=prj_usr.PrjCod"
+					       " AND prj_usr.UsrCod IN (%s)"
+					       " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					       " ORDER BY %s",
+					       Gbl.Hierarchy.Crs.CrsCod,
+					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					       SubQueryUsrs,
+					       OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		     break;
+		  case Prj_ORDER_DEPARTMENT:
+		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
+					       "SELECT projects.PrjCod"
+					       " FROM prj_usr,projects LEFT JOIN departments"
+					       " ON projects.DptCod=departments.DptCod"
+					       " WHERE projects.CrsCod=%ld"
+					       "%s%s%s"
+					       " AND projects.PrjCod=prj_usr.PrjCod"
+					       " AND prj_usr.UsrCod IN (%s)"
+					       " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					       " ORDER BY %s",
+					       Gbl.Hierarchy.Crs.CrsCod,
+					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+					       SubQueryUsrs,
+					       OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
+		     break;
+		 }
+
+	       /* Free memory for subquery string */
+	       Usr_FreeSubqueryUsrCods (SubQueryUsrs);
+
+	       /* Free list of user codes */
+	       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
 	      }
+	    else
+	       NumRows = 0;
+
+	    /* Free memory used by list of selected users' codes */
+	    // Usr_FreeListsSelectedEncryptedUsrsCods ();
 	    break;
          case Usr_WHO_ALL:
+	    /* Get list of projects */
 	    switch (Gbl.Prjs.SelectedOrder)
 	      {
 	       case Prj_ORDER_START_TIME:
@@ -2891,13 +2925,6 @@ static void Prj_GetListProjects (void)
 
    Gbl.Prjs.Num = NumPrjsAfterFilter;
    Gbl.Prjs.LstIsRead = true;
-
-   /***** Free list of user codes *****/
-   if (NumUsrsInList)
-      Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
   }
 
 /*****************************************************************************/

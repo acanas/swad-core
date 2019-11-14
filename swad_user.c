@@ -5971,7 +5971,30 @@ bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *Encry
   }
 
 /*****************************************************************************/
-/************ Count number of valid users' IDs in encrypted list *************/
+/******* Check if there are valid users in list of encrypted user codes ******/
+/*****************************************************************************/
+
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (void)
+  {
+   const char *Ptr;
+   struct UsrData UsrDat;
+
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK]
+          to check if there are valid users *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      if (UsrDat.UsrCod > 0)
+         return true;
+     }
+   return false;
+  }
+
+/*****************************************************************************/
+/******** Count number of valid users in list of encrypted user codes ********/
 /*****************************************************************************/
 
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void)
@@ -5980,7 +6003,8 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void)
    unsigned NumUsrs = 0;
    struct UsrData UsrDat;
 
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] to count the number of users *****/
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK]
+          to count the number of users *****/
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
@@ -6081,42 +6105,39 @@ void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
 
 void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 				unsigned NumUsrsInList,
-				char **SubQueryAllUsrs)
+				char **SubQueryUsrs)
   {
    char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumUsr;
    size_t MaxLength;
 
-   if (NumUsrsInList)
-     {
-      /***** Allocate space for subquery *****/
-      MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
-      if ((*SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
-      (*SubQueryAllUsrs)[0] = '\0';
+   /***** Allocate space for subquery *****/
+   MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
+   if ((*SubQueryUsrs = (char *) malloc (MaxLength + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+   (*SubQueryUsrs)[0] = '\0';
 
-      /***** Count number of students registered in an event in database *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrsInList;
-	   NumUsr++)
-	 if (NumUsr)
-	   {
-	    snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
-		      ",%ld",
-		      LstSelectedUsrCods[NumUsr]);
-	    Str_Concat (*SubQueryAllUsrs,SubQueryOneUsr,
-			MaxLength);
-	   }
-	 else
-	    snprintf (*SubQueryAllUsrs,sizeof (SubQueryOneUsr),
-		      "%ld",
-		      LstSelectedUsrCods[NumUsr]);
-     }
+   /***** Build subquery *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrsInList;
+	NumUsr++)
+      if (NumUsr)
+	{
+	 snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
+		   ",%ld",
+		   LstSelectedUsrCods[NumUsr]);
+	 Str_Concat (*SubQueryUsrs,SubQueryOneUsr,
+		     MaxLength);
+	}
+      else
+	 snprintf (*SubQueryUsrs,sizeof (SubQueryOneUsr),
+		   "%ld",
+		   LstSelectedUsrCods[NumUsr]);
   }
 
-void Usr_FreeSubqueryUsrCods (char *SubQueryAllUsrs)
+void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs)
   {
-   free (SubQueryAllUsrs);
+   free (SubQueryUsrs);
   }
 
 /*****************************************************************************/
@@ -6283,7 +6304,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 
          /* Hidden parameters */
          Grp_PutParamsCodGrps ();
-         Usr_PutHiddenParamSelectedUsrs ();
          if (NextAction == ActAdmAsgWrkCrs)
            {
             Gbl.FileBrowser.FullTree = true;	// By default, show all files
@@ -6337,7 +6357,7 @@ void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
    Usr_GetListsSelectedUsrsCods ();
 
    /***** Check number of users *****/
-   if (Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
+   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
       FuncWhenUsrsSelected ();
    else	// If no users are selected...
      {
@@ -8453,8 +8473,8 @@ void Usr_DoActionOnSeveralUsrs1 (void)
    /* Get list of selected users */
    Usr_GetListsSelectedUsrsCods ();
 
-   /* Check the number of users */
-   if (!Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ())// If no users selected...
+   /* Check if there are selected users */
+   if (!Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())// If no users selected...
      {						// ...write warning notice
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_select_one_ore_more_users);
@@ -9888,18 +9908,4 @@ void Usr_PutHiddenParamRequestUsrs (void)
 bool Usr_GetHiddenParamRequestUsrs (void)
   {
    return Par_GetParToBool ("RequestUsrs");
-  }
-
-/*****************************************************************************/
-/**** Hidden param to indicate that some users should have been selected *****/
-/*****************************************************************************/
-
-void Usr_PutHiddenParamSelectedUsrs (void)
-  {
-   Par_PutHiddenParamChar ("SelectedUsrs",'Y');
-  }
-
-bool Usr_GetHiddenParamSelectedUsrs (void)
-  {
-   return Par_GetParToBool ("SelectedUsrs");
   }
