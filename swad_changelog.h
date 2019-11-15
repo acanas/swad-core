@@ -488,13 +488,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.69 (2019-11-15)"
+#define Log_PLATFORM_VERSION	"SWAD 19.69.1 (2019-11-15)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.65.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 
+	Version 19.69.1:  Nov 15, 2019	Fixed bugs in lists of users and hidden parameters. (246760 lines)
 	Version 19.69:    Nov 15, 2019	Code refactoring related with lists of users and hidden parameters. (246752 lines)
 	Version 19.68.2:  Nov 14, 2019	Code refactoring in users and attendance. (246625 lines)
 	Version 19.68.1:  Nov 14, 2019	Code refactoring in match results.

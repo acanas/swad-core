@@ -2276,7 +2276,8 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
      };
    char TxtButton[Lay_MAX_BYTES_TITLE + 1];
 
-   /***** Get project code *****/
+   /***** Get parameters *****/
+   Prj_GetParams ();
    if ((Gbl.Prjs.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -2351,7 +2352,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Add the selected users to project *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   Ptr = Prj_MembersToAdd.List[Rol_UNK];
    while (*Ptr)
      {
       /* Get next user */
@@ -2382,6 +2383,9 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 			Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]);
         }
      }
+
+   /***** Free memory used by lists of selected encrypted users' codes *****/
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Prj_MembersToAdd);
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);

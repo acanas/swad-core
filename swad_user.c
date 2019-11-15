@@ -209,7 +209,7 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void);
 
 static void Usr_BuildParamName (char **ParamName,
 				const char *ParamRoot,
-				struct SelectedUsrs *SelectedUsrs);
+				const char *ParamSuffix);
 
 static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs,
 						      Rol_Role_t Role);
@@ -5722,7 +5722,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs)
    /* Build name of the parameter.
       Sometimes a unique action needs several distinct lists of users,
       so, it's necessary to use distinct names for the parameters. */
-   Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs);
+   Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs->ParamSuffix);
 
    /* Put the parameter *****/
    if (Gbl.Session.IsOpen)
@@ -5750,7 +5750,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
       /***** Build name of the parameter.
 	     Sometimes a unique action needs several distinct lists of users,
 	     so, it's necessary to use distinct names for the parameters. *****/
-      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs);
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs->ParamSuffix);
 
       /***** Get possible list of all selected users *****/
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
@@ -5765,16 +5765,25 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 	 Par_GetParMultiToText (ParamName,SelectedUsrs->List[Rol_UNK],
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
+      /***** Free allocated memory for parameter name *****/
+      free (ParamName);
+
       /***** Get list of selected users for each possible role *****/
       for (Role  = Rol_TCH;	// From the highest possible role of selected users...
 	   Role >= Rol_GST;	// ...downto the lowest possible role of selected users
 	   Role--)
 	 if (Usr_ParamUsrCod[Role])
 	   {
+            /* Build name of the parameter */
+	    Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
+
 	    /* Get parameter with selected users with this role */
 	    Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Role);
-	    Par_GetParMultiToText (Usr_ParamUsrCod[Role],SelectedUsrs->List[Role],
+	    Par_GetParMultiToText (ParamName,SelectedUsrs->List[Role],
 				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+
+	    /* Free allocated memory for parameter name */
+	    free (ParamName);
 
 	    /* Add selected users with this role
 	       to the list with all selected users */
@@ -5792,9 +5801,6 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 	      }
 	   }
 
-      /***** Free allocated memory for parameter name *****/
-      free (ParamName);
-
       /***** List is filled *****/
       SelectedUsrs->Filled = true;
      }
@@ -5802,14 +5808,14 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 
 static void Usr_BuildParamName (char **ParamName,
 				const char *ParamRoot,
-				struct SelectedUsrs *SelectedUsrs)
+				const char *ParamSuffix)
   {
    /* Build name of the parameter.
       Sometimes a unique action needs several distinct lists of users,
       so, it's necessary to use distinct names for the parameters. */
-   if (SelectedUsrs->ParamSuffix)
+   if (ParamSuffix)
      {
-      if (asprintf (ParamName,"%s%s",ParamRoot,SelectedUsrs->ParamSuffix) < 0)
+      if (asprintf (ParamName,"%s%s",ParamRoot,ParamSuffix) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
@@ -5952,7 +5958,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	       Usr_GetUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Really only EncryptedUsrCod is needed
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
+               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EncryptedUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
 
@@ -6001,16 +6007,17 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 /************** Find if encrypted user's code is yet in list *****************/
 /*****************************************************************************/
-// Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Selected.List[Rol_UNK]
+// Returns true if EncryptedUsrCodToFind is in list
 
-bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind)
+bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
+							       struct SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
-   if (Gbl.Usrs.Selected.List[Rol_UNK])
+   if (SelectedUsrs->List[Rol_UNK])
      {
-      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+      Ptr = SelectedUsrs->List[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,
@@ -6085,7 +6092,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
   }
 
 /*****************************************************************************/
-/*********** Free memory used by lists of selected users' codes **************/
+/******* Free memory used by lists of selected encrypted users' codes ********/
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
@@ -6411,9 +6418,6 @@ void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
 
    /***** Get lists of the selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (SelectedUsrs);
-   Ale_ShowAlert (Ale_INFO,"DEBUG: SelectedUsrs->List[Rol_UNK] = %s;",
-		  SelectedUsrs->List[Rol_UNK]);
-   Lay_ShowErrorAndExit ("DEBUG: Usr_GetSelectedUsrsAndGoToAct ()");
 
    /***** Check number of users *****/
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
@@ -6474,7 +6478,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
    HTM_LABEL_Begin (NULL);
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
      {
-      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs);
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],false,
 			  "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
 			  ParamName);
@@ -6548,10 +6552,10 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = true;
       else
 	 /* Check if user is in lists of selected users */
-	 CheckboxChecked = Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (EncryptedUsrCod);
+	 CheckboxChecked = Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (EncryptedUsrCod,SelectedUsrs);
 
       /***** Check box *****/
-      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs);
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
       HTM_INPUT_CHECKBOX (ParamName,false,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,

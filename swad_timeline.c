@@ -2618,14 +2618,15 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 
 	 /***** Link to toggle on/off comments *****/
 	 HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-			" style=\"display:none;\">",	// Initially hidden
+			" style=\"display:none;\"",	// Initially hidden
 		        IdComments);
 	 TL_PutIconToToggleComments (IdComments,"angle-down.svg",
-	                              Txt_See_only_the_latest_COMMENTS);
+	                             Txt_See_only_the_latest_COMMENTS);
 	 HTM_DIV_End ();
 
 	 /***** First list with comments initially hidden *****/
-	 HTM_UL_Begin ("id=\"com_%s\" class=\"LIST_LEFT\" style=\"display:none;\"",	// Initially hidden
+	 HTM_UL_Begin ("id=\"com_%s\" class=\"LIST_LEFT\""
+	               " style=\"display:none;\"",	// Initially hidden
 		       IdComments);
 	 for (NumCom = 0;
 	      NumCom < NumCommentsInitiallyHidden;
