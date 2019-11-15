@@ -483,7 +483,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	 case ActSeeRecSevGst:
 	 case ActSeeRecSevStd:
 	 case ActSeeRecSevTch:
-	    Usr_PutHiddenParSelectedUsrsCods ();
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    break;
 	 default:
 	    break;

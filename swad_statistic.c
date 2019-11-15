@@ -382,9 +382,9 @@ void Sta_AskShowCrsHits (void)
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TABLE_Begin (NULL);
-         Usr_ListUsersToSelect (Rol_TCH);
-         Usr_ListUsersToSelect (Rol_NET);
-         Usr_ListUsersToSelect (Rol_STD);
+         Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
          HTM_TABLE_End ();
          HTM_TD_End ();
 
@@ -907,7 +907,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 
 	 /****** Get lists of selected users ******/
-	 Usr_GetListsSelectedUsrsCods ();
+	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Show the form again *****/
 	 Sta_AskShowCrsHits ();
@@ -916,11 +916,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
-	 if (!Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// Error: there are no users selected
+	 if (!Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))	// Error: there are no users selected
 	   {
 	    /* Write warning message, clean and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-            Usr_FreeListsSelectedEncryptedUsrsCods ();
+            Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	    return;
 	   }
 	 break;
@@ -1495,7 +1495,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Free memory used by list of selected users' codes *****/
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_FreeListsSelectedEncryptedUsrsCods ();
+      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Write time zone used in the calculation of these statistics *****/
    switch (Gbl.Stat.ClicksGroupedBy)
@@ -1609,7 +1609,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
       Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
       Par_PutHiddenParamUnsigned (NULL,"RowsPage",Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
    HTM_TD_Begin ("class=\"LM\"");
    if (FirstRow > 1)
@@ -1647,7 +1647,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
       Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
       Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
    HTM_TD_Begin ("class=\"RM\"");
    if (LastRow < NumRows)
@@ -2074,7 +2074,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Gbl.Stat.Role);

@@ -264,6 +264,14 @@ struct ListUsrs
    unsigned NumUsrs;		// Number of users in the list
   };
 
+struct SelectedUsrs
+  {
+   char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
+   bool Filled;			// If lists are already filled/readed
+   char *ParamSuffix;
+   Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
+  };
+
 struct ListUsrCods
   {
    long *Lst;		// List of users' codes
@@ -396,7 +404,8 @@ void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role);
+                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
+			      struct SelectedUsrs *SelectedUsrs);
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
@@ -428,17 +437,20 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
                            void (*FuncParams) (void),
                            const char *OnSubmit);
 
-void Usr_PutHiddenParSelectedUsrsCods (void);
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void);
-void Usr_GetListsSelectedUsrsCods (void);
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *SelectedUsrs);
+void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs);
+void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs);
+
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
 bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind);
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (void);
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void);
-void Usr_FreeListsSelectedEncryptedUsrsCods (void);
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs);
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs);
+void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs);
 
-void Usr_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods);
+void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
+				 unsigned NumUsrsInList,
+				 long **LstSelectedUsrCods);
 void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
 
 void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
@@ -449,18 +461,19 @@ void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 void Usr_FreeListOtherRecipients (void);
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void));
-void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
-void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams) (),
+void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
+				       Act_Action_t NextAction,void (*FuncParams) (),
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton);
-void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
+void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
+				    void (*FuncWhenUsrsSelected) (),
                                     void (*FuncWhenNoUsrsSelected) ());
-void Usr_ListUsersToSelect (Rol_Role_t Role);
+void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs);
 
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);

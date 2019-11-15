@@ -108,6 +108,28 @@ static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
    ActLckPrj,	// Prj_UNLOCKED
   };
 
+/***** List of users to select one or more members
+       to be added to a project *****/
+struct SelectedUsrs Prj_MembersToAdd =
+  {
+   .List =
+     {
+      NULL,	// Rol_UNK
+      NULL,	// Rol_GST
+      NULL,	// Rol_USR
+      NULL,	// Rol_STD
+      NULL,	// Rol_NET
+      NULL,	// Rol_TCH
+      NULL,	// Rol_DEG_ADM
+      NULL,	// Rol_CTR_ADM
+      NULL,	// Rol_INS_ADM
+      NULL,	// Rol_SYS_ADM
+     },
+   .Filled      = false,
+   .ParamSuffix = "Member",
+   .Option      = Usr_OPTION_UNKNOWN,
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -125,9 +147,9 @@ struct Prj_Faults
 /*****************************************************************************/
 
 static void Prj_ReqUsrsToSelect (void);
-static void Prj_GetSelectedUsrsAndShowPrjs (void);
-
-static void Prj_ShowProjectsInCurrentPage (void);
+static void Prj_GetSelectedUsrsAndShowTheirPrjs (void);
+static void Prj_ShowProjects (void);
+static void Prj_ShowPrjsInCurrentPage (void);
 
 static void Prj_ShowFormToFilterByMy_All (void);
 static void Prj_ShowFormToFilterByAssign (void);
@@ -251,14 +273,15 @@ static void Prj_ReqUsrsToSelect (void)
    extern const char *Txt_View_projects;
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActSeePrj,Prj_PutCurrentParams,
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeePrj,Prj_PutCurrentParams,
 				     Txt_Projects,
 	                             Hlp_ASSESSMENT_Projects,
 	                             Txt_View_projects);
   }
 
 /*****************************************************************************/
-/******************************* Show projects *******************************/
+/******************* Get parameters and show projects ************************/
 /*****************************************************************************/
 
 void Prj_SeeProjects (void)
@@ -267,16 +290,25 @@ void Prj_SeeProjects (void)
    Prj_GetParams ();
 
    /***** Show projects *****/
+   Prj_ShowProjects ();
+  }
+
+/*****************************************************************************/
+/******************************* Show projects *******************************/
+/*****************************************************************************/
+
+static void Prj_ShowProjects (void)
+  {
    switch (Gbl.Prjs.Filter.Who)
      {
       case Usr_WHO_ME:
       case Usr_WHO_ALL:
 	 /* Show my projects / all projects */
-         Prj_ShowProjectsInCurrentPage ();
+         Prj_ShowPrjsInCurrentPage ();
 	 break;
       case Usr_WHO_SELECTED:
 	 /* Get selected users and show their projects */
-         Prj_GetSelectedUsrsAndShowPrjs ();
+         Prj_GetSelectedUsrsAndShowTheirPrjs ();
          break;
       default:
 	 break;
@@ -287,9 +319,10 @@ void Prj_SeeProjects (void)
 /****** Get and check list of selected users, and show users' projects *******/
 /*****************************************************************************/
 
-static void Prj_GetSelectedUsrsAndShowPrjs (void)
+static void Prj_GetSelectedUsrsAndShowTheirPrjs (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Prj_ShowProjectsInCurrentPage,// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Prj_ShowPrjsInCurrentPage,	// when user(s) selected
                                   Prj_ReqUsrsToSelect);		// when no user selected
   }
 
@@ -344,7 +377,7 @@ void Prj_ShowTableSelectedPrjs (void)
 /****************** Show the projects in current page ************************/
 /*****************************************************************************/
 
-static void Prj_ShowProjectsInCurrentPage (void)
+static void Prj_ShowPrjsInCurrentPage (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
@@ -706,7 +739,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put selected users' codes *****/
    if (Filter->Who == Usr_WHO_SELECTED)
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
@@ -801,6 +834,10 @@ static void Prj_GetParams (void)
    /***** Get order and page *****/
    Prj_GetParamPrjOrder ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+
+   /***** Get selected users *****/
+   if (Gbl.Prjs.Filter.Who == Usr_WHO_SELECTED)
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
@@ -2247,7 +2284,8 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
    snprintf (TxtButton,sizeof (TxtButton),
 	     Txt_Add_USERS,
 	     Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
-   Usr_PutFormToSelectUsrsToGoToAct (ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
+   Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
+				     ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton);
@@ -2262,19 +2300,22 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
 
 void Prj_GetSelectedUsrsAndAddStds (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Prj_AddStds,		// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
+				  Prj_AddStds,		// when user(s) selected
                                   Prj_ReqAddStds);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddTuts (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Prj_AddTuts,		// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
+				  Prj_AddTuts,		// when user(s) selected
                                   Prj_ReqAddTuts);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddEvls (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Prj_AddEvls,		// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
+				  Prj_AddEvls,		// when user(s) selected
                                   Prj_ReqAddEvls);	// when no user selected
   }
 
@@ -2775,12 +2816,12 @@ static void Prj_GetListProjects (void)
 	    break;
          case Usr_WHO_SELECTED:
             /* Count number of valid users in list of encrypted user codes */
-	    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
+	    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
 	    if (NumUsrsInList)
 	      {
 	       /* Get list of users selected to show their projects */
-	       Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+	       Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
 
 	       /* Create subquery string */
 	       Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
@@ -3162,7 +3203,7 @@ void Prj_ReqRemProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/
@@ -3225,7 +3266,7 @@ void Prj_RemoveProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/
@@ -3260,14 +3301,14 @@ void Prj_HideProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/
-/****************************** Show a project *******************************/
+/****************************** Unhide a project *****************************/
 /*****************************************************************************/
 
-void Prj_ShowProject (void)
+void Prj_UnhideProject (void)
   {
    struct Project Prj;
 
@@ -3295,7 +3336,7 @@ void Prj_ShowProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/
@@ -3352,7 +3393,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
@@ -4033,7 +4074,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
       Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 void Prj_ReqUnloSelectedPrjsEdition (void)
@@ -4067,7 +4108,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
       Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/
@@ -4104,7 +4145,7 @@ void Prj_LockSelectedPrjsEdition (void)
       Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 void Prj_UnloSelectedPrjsEdition (void)
@@ -4137,7 +4178,7 @@ void Prj_UnloSelectedPrjsEdition (void)
       Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
-   Prj_ShowProjectsInCurrentPage ();
+   Prj_ShowProjects ();
   }
 
 /*****************************************************************************/

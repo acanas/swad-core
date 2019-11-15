@@ -215,9 +215,9 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TABLE_BeginPadding (2);
-         Usr_ListUsersToSelect (Rol_TCH);
-         Usr_ListUsersToSelect (Rol_NET);
-         Usr_ListUsersToSelect (Rol_STD);
+         Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
          HTM_TABLE_End ();
          HTM_TD_End ();
 
@@ -251,7 +251,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -263,7 +263,8 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 
 void McR_GetUsrsAndShowMchResults (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (McR_ShowUsrsMchResults,
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  McR_ShowUsrsMchResults,
                                   McR_SelUsrsToViewUsrsMchResults);
   }
 

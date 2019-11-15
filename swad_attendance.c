@@ -2335,7 +2335,7 @@ void Att_RegisterStudentsInAttEvent (void)
          Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove = true;
 
       /***** 3. Get list of students marked as present by me: Gbl.Usrs.Selected.List[Rol_STD] *****/
-      Usr_GetListsSelectedUsrsCods ();
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrData);
@@ -2366,7 +2366,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** Free memory *****/
       /* Free memory used by list of selected students' codes */
-      Usr_FreeListsSelectedEncryptedUsrsCods ();
+      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
       // 5. Delete from att_usr all the students marked as Remove=true
       // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
@@ -2657,7 +2657,8 @@ void Att_ReqListUsrsAttendanceCrs (void)
    Att_GetListAttEvents (Att_OLDEST_FIRST);
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActSeeLstUsrAtt,NULL,
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeLstUsrAtt,NULL,
 				     Txt_Attendance_list,
 	                             Hlp_USERS_Attendance_attendance_list,
 	                             Txt_View_attendance);
@@ -2761,7 +2762,8 @@ void Att_PrintUsrsAttendanceCrs (void)
 
 static void Att_GetUsrsAndListOrPrintAttendanceCrs (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Att_ListOrPrintUsrsAttendanceCrs,
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Att_ListOrPrintUsrsAttendanceCrs,
                                   Att_ReqListUsrsAttendanceCrs);
   }
 
@@ -2781,12 +2783,12 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Count number of valid users in list of encrypted user codes *****/
-   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ();
+   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
    if (NumUsrsInList)
      {
       /***** Get list of students selected to show their attendances *****/
-      Usr_GetListSelectedUsrCods (NumUsrsInList,&LstSelectedUsrCods);
+      Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
 
       /***** Get list of attendance events *****/
       Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2990,7 +2992,7 @@ static void Att_PutParamsToPrintStdsList (void)
    if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParSelectedUsrsCods ();
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3008,7 +3010,7 @@ static void Att_PutButtonToShowDetails (void)
    Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParSelectedUsrsCods ();
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3047,7 +3049,7 @@ static void Att_ListEventsToSelect (void)
      {
       Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
       Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
 
    /***** Begin table *****/

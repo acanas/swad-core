@@ -7497,9 +7497,9 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TABLE_BeginPadding (2);
-         Usr_ListUsersToSelect (Rol_TCH);
-         Usr_ListUsersToSelect (Rol_NET);
-         Usr_ListUsersToSelect (Rol_STD);
+         Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
+         Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
          HTM_TABLE_End ();
          HTM_TD_End ();
 
@@ -7533,7 +7533,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -7635,7 +7635,8 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
 
 void Tst_GetUsrsAndShowTstResults (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Tst_ShowUsrsTstResults,
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Tst_ShowUsrsTstResults,
                                   Tst_SelUsrsToViewUsrsTstResults);
   }
 

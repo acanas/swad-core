@@ -25,10 +25,12 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isalnum, isdigit, etc.
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -205,23 +207,31 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
                                                      const char *OnSubmit);
 static void Usr_PutParamsConfirmIWantToSeeBigList (void);
 
-static void Usr_AllocateListSelectedEncryptedUsrCods (Rol_Role_t Role);
+static void Usr_BuildParamName (char **ParamName,
+				const char *ParamRoot,
+				struct SelectedUsrs *SelectedUsrs);
+
+static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs,
+						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
 static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
                                          Usr_ShowUsrsType_t ListType);
-
+static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
+			                     struct SelectedUsrs *SelectedUsrs);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
-
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
-                                         bool UsrIsTheMsgSender);
+                                         bool UsrIsTheMsgSender,
+					 struct SelectedUsrs *SelectedUsrs);
 static void Usr_PutCheckboxListWithPhotos (void);
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
-static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr);
-static void Usr_ListUsrsForSelection (Rol_Role_t Role);
+static void Usr_ListMainDataTchs (Rol_Role_t Role,
+				  bool PutCheckBoxToSelectUsr);
+static void Usr_ListUsrsForSelection (Rol_Role_t Role,
+				      struct SelectedUsrs *SelectedUsrs);
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns);
@@ -263,7 +273,9 @@ static void Usr_ShowStdsAllDataParams (void);
 static void Usr_ShowTchsAllDataParams (void);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
-                                Rol_Role_t Role,bool PutCheckBoxToSelectUsr);
+                                Rol_Role_t Role,
+				struct SelectedUsrs *SelectedUsrs,
+				bool PutCheckBoxToSelectUsr);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -3607,7 +3619,8 @@ static void Usr_InsertMyLastData (void)
 #define Usr_MAX_BYTES_BG_COLOR (16 - 1)
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role)
+                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
+			      struct SelectedUsrs *SelectedUsrs)
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
@@ -3634,7 +3647,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    if (PutCheckBoxToSelectUsr)
      {
       HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-      Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
+      Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender,
+				   SelectedUsrs);
       HTM_TD_End ();
      }
 
@@ -5676,62 +5690,79 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void)
   }
 
 /*****************************************************************************/
+/************ Create list of selected users with one given user **************/
+/*****************************************************************************/
+
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *SelectedUsrs)
+  {
+   /***** Create list of user codes and put encrypted user code in it *****/
+   if (!SelectedUsrs->List[Rol_UNK])
+     {
+      if ((SelectedUsrs->List[Rol_UNK] =
+	   (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      SelectedUsrs->Filled = true;
+     }
+  }
+
+/*****************************************************************************/
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParSelectedUsrsCods (void)
+void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs)
   {
+   char *ParamName;
+
    /***** Put a parameter indicating that a list of several users is present *****/
    Par_PutHiddenParamChar ("MultiUsrs",'Y');
 
    /***** Put a parameter with the encrypted user codes of several users *****/
+   /* Build name of the parameter.
+      Sometimes a unique action needs several distinct lists of users,
+      so, it's necessary to use distinct names for the parameters. */
+   Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs);
+
+   /* Put the parameter *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
+      Ses_InsertHiddenParInDB (ParamName,SelectedUsrs->List[Rol_UNK]);
    else
-      Par_PutHiddenParamString (NULL,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
-  }
+      Par_PutHiddenParamString (NULL,ParamName,SelectedUsrs->List[Rol_UNK]);
 
-/*****************************************************************************/
-/**************** Create list of selected users with one given user ************************/
-/*****************************************************************************/
-
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void)
-  {
-   /***** Create list of user codes and put encrypted user code in it *****/
-   if (!Gbl.Usrs.Selected.List[Rol_UNK])
-     {
-      if ((Gbl.Usrs.Selected.List[Rol_UNK] =
-	   (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
-      Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Gbl.Usrs.Selected.Filled = true;
-     }
+   /***** Free allocated memory for parameter name *****/
+   free (ParamName);
   }
 
 /*****************************************************************************/
 /************************* Get list of selected users ************************/
 /*****************************************************************************/
 
-void Usr_GetListsSelectedUsrsCods (void)
+void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
+   char *ParamName;
    unsigned Length;
    Rol_Role_t Role;
 
-   if (!Gbl.Usrs.Selected.Filled)	// Get list only if not already got
+   if (!SelectedUsrs->Filled)	// Get list only if not already got
      {
+      /***** Build name of the parameter.
+	     Sometimes a unique action needs several distinct lists of users,
+	     so, it's necessary to use distinct names for the parameters. *****/
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs);
+
       /***** Get possible list of all selected users *****/
-      Usr_AllocateListSelectedEncryptedUsrCods (Rol_UNK);
+      Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 Ses_GetHiddenParFromDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
+	 Ses_GetHiddenParFromDB (ParamName,SelectedUsrs->List[Rol_UNK],
 				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Selected.List[Rol_UNK],
+	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
 	}
       else
-	 Par_GetParMultiToText (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
+	 Par_GetParMultiToText (ParamName,SelectedUsrs->List[Rol_UNK],
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
       /***** Get list of selected users for each possible role *****/
@@ -5741,28 +5772,50 @@ void Usr_GetListsSelectedUsrsCods (void)
 	 if (Usr_ParamUsrCod[Role])
 	   {
 	    /* Get parameter with selected users with this role */
-	    Usr_AllocateListSelectedEncryptedUsrCods (Role);
-	    Par_GetParMultiToText (Usr_ParamUsrCod[Role],Gbl.Usrs.Selected.List[Role],
+	    Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Role);
+	    Par_GetParMultiToText (Usr_ParamUsrCod[Role],SelectedUsrs->List[Role],
 				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
 	    /* Add selected users with this role
 	       to the list with all selected users */
-	    if (Gbl.Usrs.Selected.List[Role][0])
+	    if (SelectedUsrs->List[Role][0])
 	      {
-	       if (Gbl.Usrs.Selected.List[Rol_UNK][0])
-		  if ((Length = strlen (Gbl.Usrs.Selected.List[Rol_UNK])) <
+	       if (SelectedUsrs->List[Rol_UNK][0])
+		  if ((Length = strlen (SelectedUsrs->List[Rol_UNK])) <
 		      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
 		    {
-		     Gbl.Usrs.Selected.List[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE[0];
-		     Gbl.Usrs.Selected.List[Rol_UNK][Length + 1] = '\0';
+		     SelectedUsrs->List[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE[0];
+		     SelectedUsrs->List[Rol_UNK][Length + 1] = '\0';
 		    }
-	       Str_Concat (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Selected.List[Role],
+	       Str_Concat (SelectedUsrs->List[Rol_UNK],SelectedUsrs->List[Role],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	      }
 	   }
 
+      /***** Free allocated memory for parameter name *****/
+      free (ParamName);
+
       /***** List is filled *****/
-      Gbl.Usrs.Selected.Filled = true;
+      SelectedUsrs->Filled = true;
+     }
+  }
+
+static void Usr_BuildParamName (char **ParamName,
+				const char *ParamRoot,
+				struct SelectedUsrs *SelectedUsrs)
+  {
+   /* Build name of the parameter.
+      Sometimes a unique action needs several distinct lists of users,
+      so, it's necessary to use distinct names for the parameters. */
+   if (SelectedUsrs->ParamSuffix)
+     {
+      if (asprintf (ParamName,"%s%s",ParamRoot,SelectedUsrs->ParamSuffix) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (ParamName,"%s",ParamRoot) < 0)
+	 Lay_NotEnoughMemoryExit ();
      }
   }
 
@@ -5789,7 +5842,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
    /***** Get list of selected encrypted users's codes if not already got.
           This list is necessary to add encrypted user's codes at the end. *****/
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    LengthSelectedUsrsCods = strlen (Gbl.Usrs.Selected.List[Rol_UNK]);
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
@@ -5973,14 +6026,13 @@ bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *Encry
 /******* Check if there are valid users in list of encrypted user codes ******/
 /*****************************************************************************/
 
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (void)
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    struct UsrData UsrDat;
 
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK]
-          to check if there are valid users *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   /***** Loop over the list to check if there are valid users *****/
+   Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -5996,15 +6048,14 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (void)
 /******** Count number of valid users in list of encrypted user codes ********/
 /*****************************************************************************/
 
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void)
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    unsigned NumUsrs = 0;
    struct UsrData UsrDat;
 
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK]
-          to count the number of users *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   /***** Loop over the list to count the number of users *****/
+   Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -6021,13 +6072,15 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (void)
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-static void Usr_AllocateListSelectedEncryptedUsrCods (Rol_Role_t Role)
+static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs,
+						      Rol_Role_t Role)
   {
-   if (!Gbl.Usrs.Selected.List[Role])
+   if (!SelectedUsrs->List[Role])
      {
-      if ((Gbl.Usrs.Selected.List[Role] = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
+      if ((SelectedUsrs->List[Role] =
+	   (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
-      Gbl.Usrs.Selected.List[Role][0] = '\0';
+      SelectedUsrs->List[Role][0] = '\0';
      }
   }
 
@@ -6036,24 +6089,24 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (Rol_Role_t Role)
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-void Usr_FreeListsSelectedEncryptedUsrsCods (void)
+void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
   {
    Rol_Role_t Role;
 
-   if (Gbl.Usrs.Selected.Filled)	// Only if lists are filled
+   if (SelectedUsrs->Filled)	// Only if lists are filled
      {
       /***** Free lists *****/
       for (Role = (Rol_Role_t) 0;
 	   Role < Rol_NUM_ROLES;
 	   Role++)
-	 if (Gbl.Usrs.Selected.List[Role])
+	 if (SelectedUsrs->List[Role])
 	   {
-	    free (Gbl.Usrs.Selected.List[Role]);
-	    Gbl.Usrs.Selected.List[Role] = NULL;
+	    free (SelectedUsrs->List[Role]);
+	    SelectedUsrs->List[Role] = NULL;
 	   }
 
       /***** Mark lists as empty *****/
-      Gbl.Usrs.Selected.Filled = false;
+      SelectedUsrs->Filled = false;
       // Lists of encrypted codes of users selected from form
       // are now marked as not filled
      }
@@ -6063,7 +6116,9 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (void)
 /************* Get list of users selected to show their projects *************/
 /*****************************************************************************/
 
-void Usr_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCods)
+void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
+				 unsigned NumUsrsInList,
+				 long **LstSelectedUsrCods)
   {
    unsigned NumUsr;
    const char *Ptr;
@@ -6076,8 +6131,8 @@ void Usr_GetListSelectedUsrCods (unsigned NumUsrsInList,long **LstSelectedUsrCod
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
-   for (NumUsr = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   /***** Loop over the list getting users' codes *****/
+   for (NumUsr = 0, Ptr = SelectedUsrs->List[Rol_UNK];
 	NumUsr < NumUsrsInList && *Ptr;
 	NumUsr++)
      {
@@ -6250,7 +6305,8 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
 /******************** List users to select some of them **********************/
 /*****************************************************************************/
 
-void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams) (),
+void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
+				       Act_Action_t NextAction,void (*FuncParams) (),
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton)
@@ -6313,9 +6369,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 
          /* Put list of users to select some of them */
          HTM_TABLE_BeginCenter ();
-         Usr_ListUsersToSelect (Rol_TCH);
-         Usr_ListUsersToSelect (Rol_NET);
-         Usr_ListUsersToSelect (Rol_STD);
+         Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
+         Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
+         Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
          HTM_TABLE_End ();
 
          /* Send button */
@@ -6347,16 +6403,20 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    Box_BoxEnd ();
   }
 
-void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
+void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
+				    void (*FuncWhenUsrsSelected) (),
                                     void (*FuncWhenNoUsrsSelected) ())
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
 
    /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (SelectedUsrs);
+   Ale_ShowAlert (Ale_INFO,"DEBUG: SelectedUsrs->List[Rol_UNK] = %s;",
+		  SelectedUsrs->List[Rol_UNK]);
+   Lay_ShowErrorAndExit ("DEBUG: Usr_GetSelectedUsrsAndGoToAct ()");
 
    /***** Check number of users *****/
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())	// If some users are selected...
+   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
       FuncWhenUsrsSelected ();
    else	// If no users are selected...
      {
@@ -6367,14 +6427,14 @@ void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (SelectedUsrs);
   }
 
 /*****************************************************************************/
 /*********** List users with a given role to select some of them *************/
 /*****************************************************************************/
 
-void Usr_ListUsersToSelect (Rol_Role_t Role)
+void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs)
   {
    /***** If there are no users, don't list anything *****/
    if (!Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -6385,10 +6445,10 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
      {
       case Usr_LIST_AS_CLASS_PHOTO:
          Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,
-                             Role,true);
+                             Role,SelectedUsrs,true);
          break;
       case Usr_LIST_AS_LISTING:
-         Usr_ListUsrsForSelection (Role);
+         Usr_ListUsrsForSelection (Role,SelectedUsrs);
          break;
       default:
 	 break;
@@ -6399,10 +6459,12 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
 /******** Put a row, in a classphoto or a list, to select all users **********/
 /*****************************************************************************/
 
-void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
+static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
+			                     struct SelectedUsrs *SelectedUsrs)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *ParamName;
    Usr_Sex_t Sex;
 
    HTM_TR_Begin (NULL);
@@ -6411,9 +6473,13 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    HTM_LABEL_Begin (NULL);
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
+     {
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs);
       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],false,
 			  "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
-			  Usr_ParamUsrCod[Role]);
+			  ParamName);
+      free (ParamName);
+     }
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
@@ -6469,9 +6535,11 @@ unsigned Usr_GetColumnsForSelectUsrs (void)
 
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
-                                         bool UsrIsTheMsgSender)
+                                         bool UsrIsTheMsgSender,
+					 struct SelectedUsrs *SelectedUsrs)
   {
    bool CheckboxChecked;
+   char *ParamName;
 
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
      {
@@ -6483,11 +6551,13 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (EncryptedUsrCod);
 
       /***** Check box *****/
-      HTM_INPUT_CHECKBOX (Usr_ParamUsrCod[Role],false,
+      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs);
+      HTM_INPUT_CHECKBOX (ParamName,false,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,
 			  CheckboxChecked ? " checked=\"checked\"" : "",
 			  Usr_NameSelUnsel[Role]);
+      free (ParamName);
      }
    else
       Rol_WrongRoleExit ();
@@ -6578,7 +6648,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-         Usr_PutCheckboxToSelectAllUsers (Rol_GST);
+         Usr_PutCheckboxToSelectAllUsers (Rol_GST,&Gbl.Usrs.Selected);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -6598,7 +6668,8 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
          ID_GetListIDsFromUsrCod (&UsrDat);
 
          /* Show row for this guest */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST);
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST,
+				  &Gbl.Usrs.Selected);
         }
 
       /***** Free memory used for user's data *****/
@@ -6647,7 +6718,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Rol_STD);
+	 Usr_PutCheckboxToSelectAllUsers (Rol_STD,&Gbl.Usrs.Selected);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -6668,7 +6739,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
          /* Show row for this student */
          Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
-                                  PutCheckBoxToSelectUsr,Rol_STD);
+                                  PutCheckBoxToSelectUsr,Rol_STD,
+				  &Gbl.Usrs.Selected);
         }
 
       /***** Free memory used for user's data *****/
@@ -6692,7 +6764,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 // - Rol_NET
 // - Rol_TCH
 
-static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
+static void Usr_ListMainDataTchs (Rol_Role_t Role,
+				  bool PutCheckBoxToSelectUsr)
   {
    unsigned NumCol;
    unsigned NumUsr;
@@ -6702,7 +6775,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Role);
+	 Usr_PutCheckboxToSelectAllUsers (Role,&Gbl.Usrs.Selected);
 
       /***** Heading row with column names *****/
       /* Start row */
@@ -6738,7 +6811,8 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
 
          /* Show row for this teacher */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
-	                          PutCheckBoxToSelectUsr,Role);
+	                          PutCheckBoxToSelectUsr,Role,
+				  &Gbl.Usrs.Selected);
         }
 
       /***** Free memory used for user's data *****/
@@ -7071,7 +7145,8 @@ void Usr_ListAllDataStds (void)
 /*************** List users (of current course) for selection ****************/
 /*****************************************************************************/
 
-static void Usr_ListUsrsForSelection (Rol_Role_t Role)
+static void Usr_ListUsrsForSelection (Rol_Role_t Role,
+				      struct SelectedUsrs *SelectedUsrs)
   {
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -7082,7 +7157,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role)
       Usr_SetUsrDatMainFieldNames ();
 
       /***** Put a row to select all users *****/
-      Usr_PutCheckboxToSelectAllUsers (Role);
+      Usr_PutCheckboxToSelectAllUsers (Role,SelectedUsrs);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (true);	// Columns for the data
@@ -7098,7 +7173,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
 	   {
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
-	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role);
+	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	   }
@@ -7303,7 +7378,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
          ID_GetListIDsFromUsrCod (&UsrDat);
 
 	 /* Write data of this user */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role);
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role,
+				  &Gbl.Usrs.Selected);
 
 	 /* Write all the courses this user belongs to */
 	 if (Role != Rol_GST &&				// Guests do not belong to any course
@@ -7940,7 +8016,7 @@ void Usr_SeeGuests (void)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol_GST,
+        	                   Rol_GST,&Gbl.Usrs.Selected,
 				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
@@ -8101,7 +8177,7 @@ void Usr_SeeStudents (void)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol_STD,
+        	                   Rol_STD,&Gbl.Usrs.Selected,
 				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
@@ -8271,10 +8347,10 @@ void Usr_SeeTeachers (void)
             case Usr_LIST_AS_CLASS_PHOTO:
                /* List teachers and non-editing teachers */
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol_TCH,
+        	                   Rol_TCH,&Gbl.Usrs.Selected,
 				   PutForm);	// Put checkbox to select users?
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol_NET,
+        	                   Rol_NET,&Gbl.Usrs.Selected,
 				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
@@ -8470,10 +8546,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 
    /***** Get parameters from form *****/
    /* Get list of selected users */
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /* Check if there are selected users */
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods ())
+   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))
      {
       /* Get the action to do */
       Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_OPTION_UNKNOWN);
@@ -8605,7 +8681,7 @@ void Usr_DoActionOnSeveralUsrs2 (void)
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
@@ -8793,7 +8869,7 @@ void Usr_SeeGstClassPhotoPrn (void)
 				 -1L,-1L);
       HTM_TABLE_BeginWide ();
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-                          Rol_GST,false);
+                          Rol_GST,&Gbl.Usrs.Selected,false);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
@@ -8841,7 +8917,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                -1L);
       HTM_TABLE_BeginWide ();
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-                          Rol_STD,false);
+                          Rol_STD,&Gbl.Usrs.Selected,false);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -8910,9 +8986,9 @@ void Usr_SeeTchClassPhotoPrn (void)
 
       /* List teachers and non-editing teachers */
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			  Rol_TCH,false);
+			  Rol_TCH,&Gbl.Usrs.Selected,false);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			  Rol_NET,false);
+			  Rol_NET,&Gbl.Usrs.Selected,false);
 
       HTM_TABLE_End ();
      }
@@ -8933,7 +9009,9 @@ void Usr_SeeTchClassPhotoPrn (void)
 /*****************************************************************************/
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
-                                Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
+                                Rol_Role_t Role,
+				struct SelectedUsrs *SelectedUsrs,
+				bool PutCheckBoxToSelectUsr)
   {
    unsigned NumUsr;
    bool TRIsOpen = false;
@@ -8961,7 +9039,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Role);
+	 Usr_PutCheckboxToSelectAllUsers (Role,SelectedUsrs);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -8997,7 +9075,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /***** Checkbox to select this user *****/
 	 if (PutCheckBoxToSelectUsr)
-	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EncryptedUsrCod,UsrIsTheMsgSender);
+	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EncryptedUsrCod,UsrIsTheMsgSender,
+					 SelectedUsrs);
 
 	 /***** Show photo *****/
 	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);

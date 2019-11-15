@@ -503,7 +503,8 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 		      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
+	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected)
+;
 	    Frm_StartForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
@@ -525,7 +526,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
-	    Usr_FreeListsSelectedEncryptedUsrsCods ();
+	    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	    break;
 	 default:
 	    break;

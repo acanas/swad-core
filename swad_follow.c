@@ -98,6 +98,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
+static void Fol_PutHiddenParSelectedUsrsCods (void);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
@@ -1091,19 +1092,19 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Usr_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Usr_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 void Fol_RequestUnfollowStds (void)
@@ -1135,19 +1136,24 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Usr_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Usr_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+  }
+
+static void Fol_PutHiddenParSelectedUsrsCods (void)
+  {
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
@@ -1211,7 +1217,7 @@ void Fol_FollowUsrs ()
    unsigned NumFollowed = 0;
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1239,7 +1245,7 @@ void Fol_FollowUsrs ()
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Show alert *****/
    if (NumFollowed == 1)
@@ -1258,7 +1264,7 @@ void Fol_UnfollowUsrs (void)
    unsigned NumUnfollowed = 0;
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1286,7 +1292,7 @@ void Fol_UnfollowUsrs (void)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Show alert *****/
    if (NumUnfollowed == 1)

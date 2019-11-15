@@ -50,7 +50,7 @@ bool Ses_GetSessionData (void);
 void Ses_InsertHiddenParInDB (const char *ParamName,const char *ParamValue);
 void Ses_RemoveHiddenParFromThisSession (void);
 void Ses_RemoveHiddenParFromExpiredSessions (void);
-unsigned Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
-                                 size_t MaxBytes);
+void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
+                             size_t MaxBytes);
 
 #endif

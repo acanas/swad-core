@@ -192,6 +192,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.Tab = TabUnk;
 
    Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
+   Gbl.Usrs.Selected.ParamSuffix = NULL;// Don't add suffix to param names
    Gbl.Usrs.Selected.Option = Usr_OPTION_UNKNOWN;
    for (Role = (Rol_Role_t) 0;
 	Role < Rol_NUM_ROLES;
@@ -466,7 +467,7 @@ void Gbl_Cleanup (void)
       Usr_FreeUsrsList (Role);
 
    Usr_FreeListOtherRecipients ();
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
    Tst_FreeTagsList ();
    Exa_FreeMemExamAnnouncement ();

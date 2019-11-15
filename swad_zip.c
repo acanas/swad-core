@@ -100,7 +100,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 
 static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
   {
-   Usr_PutHiddenParSelectedUsrsCods ();
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Brw_PutHiddenParamFullTreeIfSelected ();
    Par_PutHiddenParamChar ("CreateZIP",'Y');
   }

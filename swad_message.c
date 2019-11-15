@@ -261,7 +261,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 
 	    if (ShowUsrsInCrs)
 	       /***** Get lists of selected users *****/
-	       Usr_GetListsSelectedUsrsCods ();
+	       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	   }
 
 	 /***** End section with user list *****/
@@ -306,9 +306,9 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       HTM_TABLE_BeginWide ();
       if (ShowUsrsInCrs)
 	{
-	 Usr_ListUsersToSelect (Rol_TCH);	// All teachers in course
-	 Usr_ListUsersToSelect (Rol_NET);	// All non-editing teachers in course
-	 Usr_ListUsersToSelect (Rol_STD);	// All students in selected groups
+	 Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
+	 Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
+	 Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
 	}
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
       HTM_TABLE_End ();
@@ -350,7 +350,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -398,7 +398,7 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
 
 static void Msg_PutParamsWriteMsg (void)
   {
-   Usr_PutHiddenParSelectedUsrsCods ();
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Msg_PutHiddenParamOtherRecipients ();
    Msg_PutHiddenParamsSubjectAndContent ();
    if (Gbl.Msg.Reply.IsReply)
@@ -722,13 +722,13 @@ void Msg_RecMsgFromUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /* Get lists of selected users */
-   Usr_GetListsSelectedUsrsCods ();
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /* Get list of users' IDs or nicknames written explicitely */
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
    /***** Check number of recipients *****/
-   if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods ()))
+   if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected)))
      {
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
           NumRecipients > Cfg_MAX_RECIPIENTS)
@@ -847,7 +847,7 @@ void Msg_RecMsgFromUsr (void)
    /***** Free memory *****/
    /* Free memory used for list of users */
    Usr_FreeListOtherRecipients ();
-   Usr_FreeListsSelectedEncryptedUsrsCods ();
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)

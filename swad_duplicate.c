@@ -183,7 +183,8 @@ void Dup_ListDuplicateUsrs (void)
                UsrDat.Accepted = false;
 
             /* Write data of this user */
-            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
+				     &Gbl.Usrs.Selected);
 
 	    HTM_TR_Begin (NULL);
 
@@ -320,7 +321,8 @@ static void Dup_ListSimilarUsrs (void)
                UsrDat.Accepted = false;
 
             /***** Write data of this user *****/
-            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
+				     &Gbl.Usrs.Selected);
 
             /***** Write user's profile and user's courses *****/
 	    HTM_TR_Begin (NULL);

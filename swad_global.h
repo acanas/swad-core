@@ -377,12 +377,7 @@ struct Globals
 	 unsigned NumIDToConfirm;	// Used as hidden parameter to confirm a user's ID
 	} Other;		// Another user, used for example to register in / remove from a course
       struct ListUsrs LstUsrs[Rol_NUM_ROLES];
-      struct
-        {
-         char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
-         bool Filled;			// If lists are already filled/readed
-         Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
-        } Selected;
+      struct SelectedUsrs Selected;
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
       struct
 	{

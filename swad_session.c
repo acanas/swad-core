@@ -403,17 +403,14 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName)
 /*****************************************************************************/
 /***************** Get hidden parameter from the database ********************/
 /*****************************************************************************/
-// Return true if the parameter is too big
 
-unsigned Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
-                                 size_t MaxBytes)
+void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
+                             size_t MaxBytes)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    bool ParameterIsTooBig = false;
-   unsigned NumTimes = 0;
-   const char *Ptr;
    char ErrorTxt[256];
 
    ParamValue[0] = '\0';
@@ -452,12 +449,4 @@ unsigned Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
                 ParamName,(unsigned long) MaxBytes);
       Lay_ShowErrorAndExit (ErrorTxt);
      }
-
-   /***** Count number of values of the parameter *****/
-   Ptr = ParamValue;
-   while (*Ptr)
-      if (Par_GetNextStrUntilSeparParamMult (&Ptr,NULL,MaxBytes)) // Characters found?
-         NumTimes++;
-
-   return NumTimes;
   }

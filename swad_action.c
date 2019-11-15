@@ -2079,7 +2079,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemPrj	*/{1680,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
    /* ActRemPrj		*/{1681,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
    /* ActHidPrj		*/{1682,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
-   /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProject		,NULL},
+   /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
    /* ActLckPrj		*/{1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
    /* ActUnlPrj		*/{1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnloProjectEdition		,NULL},
    /* ActReqAddStdPrj	*/{1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},

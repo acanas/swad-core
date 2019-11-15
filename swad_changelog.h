@@ -468,6 +468,7 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: Mostrar cifras sobre partidas (matches) en el apartado Figures > Games.
 // TODO: En resultados de test y de juegos, en preguntas modificadas se podría mostrar la puntuación obtenida en la pregunta (ahora no sale)
 // TODO: Al crear un nuevo juego, debería irse a la pantalla de añadir preguntas (la misma opción que sale cuando pulsas en editar un juego existente)
+// TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -487,14 +488,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.68.2 (2019-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.69 (2019-11-15)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.65.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-// TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
 
+	Version 19.69:    Nov 15, 2019	Code refactoring related with lists of users and hidden parameters. (246752 lines)
 	Version 19.68.2:  Nov 14, 2019	Code refactoring in users and attendance. (246625 lines)
 	Version 19.68.1:  Nov 14, 2019	Code refactoring in match results.
 				        Code refactoring in test results. (246623 lines)

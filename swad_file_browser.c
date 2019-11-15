@@ -2059,7 +2059,7 @@ void Brw_GetParAndInitFileBrowser (void)
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */
-      Usr_GetListsSelectedUsrsCods ();
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
       /* Get user whose folder will be used to make any operation */
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
       /* Get whether we must create the zip file or not */
@@ -2305,7 +2305,7 @@ static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolL
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Users selected *****/
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
       Usr_PutParamOtherUsrCodEncrypted ();
      }
 
@@ -3075,7 +3075,8 @@ void Brw_AskEditWorksCrs (void)
    extern const char *Txt_View_homework;
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActAdmAsgWrkCrs,NULL,
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActAdmAsgWrkCrs,NULL,
 				     Txt_Assignments_and_other_works,
 	                             Hlp_FILES_Homework_for_teachers,
 	                             Txt_View_homework);
@@ -3422,7 +3423,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Brw_ShowFileBrowserOrWorks,	// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Brw_ShowFileBrowserOrWorks,	// when user(s) selected
                                   Brw_AskEditWorksCrs);		// when no user selected
   }
 
@@ -4936,7 +4938,7 @@ static void Brw_PutParamsFullTree (void)
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/

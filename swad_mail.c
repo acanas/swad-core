@@ -870,7 +870,8 @@ void Mai_ReqUsrsToListEmails (void)
    extern const char *Txt_View_email_addresses;
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActMaiUsr,NULL,
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActMaiUsr,NULL,
 				     Txt_Email,
 	                             Hlp_MESSAGES_Email,
 	                             Txt_View_email_addresses);
@@ -882,7 +883,8 @@ void Mai_ReqUsrsToListEmails (void)
 
 void Mai_GetSelectedUsrsAndListEmails (void)
   {
-   Usr_GetSelectedUsrsAndGoToAct (Mai_ListEmails,		// when user(s) selected
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Mai_ListEmails,		// when user(s) selected
                                   Mai_ReqUsrsToListEmails);	// when no user selected
   }
 

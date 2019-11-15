@@ -207,7 +207,7 @@ long Prj_GetParamPrjCod (void);
 void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
 void Prj_HideProject (void);
-void Prj_ShowProject (void);
+void Prj_UnhideProject (void);
 
 void Prj_RecFormProject (void);
 
