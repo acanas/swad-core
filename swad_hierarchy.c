@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For fprintf, asprintf, etc.
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
 #include "swad_config.h"

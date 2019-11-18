@@ -1430,9 +1430,6 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
                HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
 
-	       /***** End user's cell *****/
-	       HTM_TD_End ();
-
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
 		  HTM_TR_End ();

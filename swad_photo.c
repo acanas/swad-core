@@ -1996,7 +1996,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -2025,11 +2025,11 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Pho_PutHiddenParamPhotoSize ();
       Pho_PutHiddenParamOrderDegrees ();
       Usr_PutParamsPrefsAboutUsrList ();
-      Frm_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_THE_DEGREE_X,
-	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-                                  NULL);
+      HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+	                         The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+                                 NULL);
       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
 
       /* Selector with all the degrees with students */
       HTM_SELECT_Begin (false,

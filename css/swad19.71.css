@@ -3881,6 +3881,7 @@ a.PAG:hover, .PAG_CUR
 	box-sizing:border-box;
 	width:100px;
 	height:90px;
+	text-align:left;
 	}
 .FOLLOW_USR_NAME
 	{

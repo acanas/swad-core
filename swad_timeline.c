@@ -1770,13 +1770,18 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
+   /***** Separator *****/
+   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+   HTM_NBSP ();
+   HTM_SPAN_End ();
+
    /***** Show user's nickname inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
 			     Txt_Another_user_s_profile,
 	             "BT_LINK DAT_LIGHT",NULL);
-   HTM_TxtF (" @%s",UsrDat->Nickname);
+   HTM_TxtF ("@%s",UsrDat->Nickname);
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
@@ -2345,7 +2350,7 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   HTM_TxtF (" @%s",Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_TxtF ("&nbsp;@%s",Gbl.Usrs.Me.UsrDat.Nickname);
    HTM_SPAN_End ();
 
    HTM_DIV_End ();
@@ -3086,13 +3091,18 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
+   /***** Separator *****/
+   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+   HTM_NBSP ();
+   HTM_SPAN_End ();
+
    /***** Show user's nickname inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
 			     Txt_Another_user_s_profile,
 		     "BT_LINK DAT_LIGHT",NULL);
-   HTM_TxtF (" @%s",UsrDat->Nickname);
+   HTM_TxtF ("@%s",UsrDat->Nickname);
    HTM_BUTTON_End ();
    Frm_EndForm ();
 

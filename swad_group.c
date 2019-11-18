@@ -360,7 +360,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
@@ -407,12 +407,12 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
 
    /***** Submit button *****/
    HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
-   Frm_LinkFormSubmitAnimated (Txt_Update_users,
-			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-                                                                NULL);
+   HTM_BUTTON_Animated_Begin (Txt_Update_users,
+			      The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+			      Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+                                                               NULL);
    Ico_PutCalculateIconWithText (Txt_Update_users);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
 
    /***** End form *****/

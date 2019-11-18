@@ -3024,7 +3024,7 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (void)
   {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3118,11 +3118,11 @@ static void Att_ListEventsToSelect (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-      Frm_LinkFormSubmitAnimated (Txt_Update_attendance,
-	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-				  NULL);
+      HTM_BUTTON_Animated_Begin (Txt_Update_attendance,
+	                         The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				 NULL);
       Ico_PutCalculateIconWithText (Txt_Update_attendance);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();

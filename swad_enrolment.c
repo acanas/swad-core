@@ -2841,7 +2841,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		      Crs.FullName);
             HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
-            Frm_LinkFormEnd ();
             HTM_BUTTON_End ();
             HTM_TD_End ();
 

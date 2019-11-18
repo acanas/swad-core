@@ -128,9 +128,9 @@ static void Con_PutIconToUpdateConnected (void)
 
    Frm_StartForm (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
+   HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
    Ico_PutCalculateIcon (Txt_Update);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -166,7 +166,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
+   HTM_BUTTON_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 
    /* Write total number of sessions */
    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -314,7 +314,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
+   HTM_BUTTON_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
@@ -889,7 +889,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    time_t TimeDiff;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   const char *Font;
+   const char *ClassTxt;
+   const char *ClassLink;
    struct UsrData UsrDat;
    bool PutLinkToRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
 	                   Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
@@ -1044,9 +1045,17 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    HTM_TD_End ();
 
 	    /***** Write full name and link *****/
-	    Font = (ThisCrs ? "BT_LINK CON_NAME_WIDE CON_CRS" :
-			      "BT_LINK CON_NAME_WIDE CON_NO_CRS");
-	    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+	    if (ThisCrs)
+	      {
+	       ClassTxt = "CON_NAME_WIDE CON_CRS";
+	       ClassLink = "BT_LINK CON_NAME_WIDE CON_CRS";
+	      }
+	    else
+	      {
+	       ClassTxt = "CON_NAME_WIDE CON_NO_CRS";
+	       ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
+	      }
+	    HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
 	       switch (Role)
@@ -1066,7 +1075,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
             HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 	    if (PutLinkToRecord)
-	       HTM_BUTTON_Begin (UsrDat.FullName,Font,NULL);
+	       HTM_BUTTON_Begin (UsrDat.FullName,ClassLink,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       HTM_BUTTON_End ();
@@ -1077,9 +1086,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    HTM_TD_End ();
 
 	    /***** Write time from last access *****/
-	    Font = (ThisCrs ? "CON_SINCE CON_CRS" :
-			      "CON_SINCE CON_NO_CRS");
-	    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+	    ClassTxt = ThisCrs ? "CON_SINCE CON_CRS" :
+			         "CON_SINCE CON_NO_CRS";
+	    HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
 	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
 	    HTM_TD_End ();
 

@@ -792,16 +792,16 @@ static void Prf_EndListItem (void)
 
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
    Frm_StartForm (ActCalFig);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   Frm_LinkFormSubmitAnimated (Txt_Calculate,
-			       The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
-			       NULL);
+   HTM_BUTTON_Animated_Begin (Txt_Calculate,
+			      The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
+			      NULL);
    Ico_PutCalculateIconWithText (Txt_Calculate);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 

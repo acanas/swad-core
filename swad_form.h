@@ -62,9 +62,6 @@ void Frm_StartFormId (Act_Action_t NextAction,const char *Id);
 void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion);
 void Frm_EndForm (void);
-void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
-                                 const char *OnSubmit);
-void Frm_LinkFormEnd (void);
 
 void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1]);
 

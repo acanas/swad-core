@@ -1688,7 +1688,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *Hlp_MESSAGES_Received_filter;
    extern const char *Hlp_MESSAGES_Sent;
    extern const char *Hlp_MESSAGES_Sent_filter;
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
@@ -1771,11 +1771,11 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Frm_LinkFormSubmitAnimated (Txt_Update_messages,
-	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-			       NULL);
+   HTM_BUTTON_Animated_Begin (Txt_Update_messages,
+	                      The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+			      NULL);
    Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Mnu_ContextMenuEnd ();
 
    Frm_EndForm ();

@@ -2104,7 +2104,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
       For_WriteNumberOfThrs (NumThrs);
 
    /***** End row *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Put link to register students *****/

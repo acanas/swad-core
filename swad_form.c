@@ -231,32 +231,6 @@ void Frm_EndForm (void)
      }
   }
 
-void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
-                                 const char *OnSubmit)
-  {
-   HTM_Txt ("<a href=\"\"");
-   if (Title)
-      if (Title[0])
-         HTM_TxtF (" title=\"%s\"",Title);
-   if (LinkClass)
-      if (LinkClass[0])
-	 HTM_TxtF (" class=\"%s\"",LinkClass);
-   HTM_Txt (" onclick=\"");
-   if (OnSubmit)	// JavaScript function to be called
-			// before submitting the form
-      if (OnSubmit[0])
-         HTM_TxtF ("%s",OnSubmit);
-   HTM_TxtF ("AnimateIcon(%d);"
-             "document.getElementById('%s').submit();return false;\">",
-	     Gbl.Form.Num,
-	     Gbl.Form.Id);
-  }
-
-void Frm_LinkFormEnd (void)
-  {
-   HTM_Txt ("</a>");
-  }
-
 /*****************************************************************************/
 /***************************** Get unique Id *********************************/
 /*****************************************************************************/

@@ -436,9 +436,9 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    extern const char *Txt_Update;
 
    Frm_StartForm (ActSeeSocPrf);
-   Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
+   HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
    Ico_PutCalculateIcon (Txt_Update);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -842,7 +842,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
-      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK DAT",NULL);
+      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       HTM_BUTTON_End ();
       HTM_DIV_End ();
@@ -892,14 +892,14 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    HTM_TD_End ();
 
    /***** User's name *****/
-   HTM_TD_Begin ("class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"CON_NAME_FOLLOW COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
-      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK CON_CRS",NULL);
+      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       HTM_BUTTON_End ();
       HTM_DIV_End ();
