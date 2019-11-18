@@ -3359,7 +3359,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,
                              Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
-                        	                  The_ClassFormInBox[Gbl.Prefs.Theme],
+                                                  The_ClassFormInBox[Gbl.Prefs.Theme],
                              true);
       HTM_TD_End ();
 

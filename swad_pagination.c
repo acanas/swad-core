@@ -25,7 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 
 #include "swad_action.h"
 #include "swad_database.h"
@@ -142,13 +144,17 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             long ThrCod,
                             struct Pagination *Pagination,
-                            bool FirstMsgEnabled,const char *Subject,const char *Font,
+                            bool FirstMsgEnabled,
+			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
   {
    extern const char *Txt_Page_X_of_Y;
    extern const char *Txt_FORUM_Post_banned;
    unsigned NumPage;
-   char LinkStyle[64];
+   char *ClassLink;
+
+   if (asprintf (&ClassLink,"BT_LINK PAG %s",ClassTxt) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Link to page 1, including a text *****/
    if (Subject)
@@ -240,17 +246,17 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
-         Frm_LinkFormSubmit (Gbl.Title,Font,NULL);
+         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
         }
       else
-         HTM_SPAN_Begin ("class=\"%s\"",Font);
+         HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
       if (FirstMsgEnabled)
          HTM_Txt (Subject);
       else
          HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
       if (LinkToPagCurrent)
 	{
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       else
@@ -261,10 +267,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
      {
-      snprintf (LinkStyle,sizeof (LinkStyle),
-	        "PAG %s",
-		Font);
-
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
         {
@@ -352,13 +354,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
-         Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (1);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
             HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -453,13 +455,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->LeftPage,
                    Pagination->NumPags);
-         Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->LeftPage);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
             HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -475,7 +477,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		   NumPage,Pagination->NumPags);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
-            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Gbl.Title,Font);
+            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Gbl.Title,ClassTxt);
             HTM_Unsigned (NumPage);
             HTM_SPAN_End ();
            }
@@ -562,9 +564,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Usr_PutParamOtherUsrCodEncrypted ();
                   break;
               }
-            Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+            HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
             HTM_Unsigned (NumPage);
-            Frm_LinkFormEnd ();
+            HTM_BUTTON_End ();
             Frm_EndForm ();
            }
         }
@@ -575,7 +577,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          if (Pagination->RightPage > Pagination->EndPage + 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
             HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -663,9 +665,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    Pagination->RightPage,Pagination->NumPags);
-         Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->RightPage);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
         }
 
@@ -674,7 +676,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          if (Pagination->NumPags > Pagination->RightPage + 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",Font);
+            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
             HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -762,12 +764,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    Pagination->NumPags,Pagination->NumPags);
-         Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->NumPags);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
         }
      }
+
+   free (ClassLink);
   }
 
 /*****************************************************************************/
