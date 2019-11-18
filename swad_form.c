@@ -135,7 +135,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       HTM_TxtF ("\" id=\"%s\"",Id);
       if (OnSubmit)
          if (OnSubmit[0])
-            HTM_TxtF (" onsubmit=\"%s;\"",OnSubmit);
+            HTM_TxtF (" onsubmit=\"%s\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
 	 case Act_BRW_NEW_TAB:

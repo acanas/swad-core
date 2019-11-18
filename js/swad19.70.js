@@ -812,13 +812,48 @@ function evalScriptsInElem (elem) {
 }
 
 /*****************************************************************************/
+/************* Show hidden comments social timeline using AJAX ***************/
+/*****************************************************************************/
+
+//This function is called when user submit a form inside two parent divs
+function updateDivHiddenComments (form,Params) {
+    var objXMLHttp = false;
+	var id = form.parentNode.parentNode.id;
+
+	objXMLHttp = AJAXCreateObject ();
+	if (objXMLHttp) {
+		/* Send request to server */
+		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
+			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+				if (objXMLHttp.status == 200)
+					if (id) {
+						var div = document.getElementById(id);			// Access to DIV
+						if (div) {
+							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
+						
+							// Scripts in div got via AJAX are not executed ==> execute them
+							evalScriptsInElem (div);
+	
+							// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+							MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+						}
+					}
+			}
+		};
+		objXMLHttp.open('POST',ActionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.send(Params);
+	}
+}
+
+/*****************************************************************************/
 /********** Update fav or share area in social timeline using AJAX ***********/
 /*****************************************************************************/
 
 // This function is called when user submit a form just inside a parent div
-function updateDivFaversSharers (form,Params) {
+function updateDivLockUnlockProject (form,Params) {
     var objXMLHttp = false;
-	var id = form.parentNode.parentNode.id;
+	var id = form.parentNode.id;
 
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
@@ -843,10 +878,10 @@ function updateDivFaversSharers (form,Params) {
 /************** Update lock/unlock area in project using AJAX ****************/
 /*****************************************************************************/
 
-// This function is called when user submit a form just inside a parent div
-function updateDivLockUnlockProject (form,Params) {
+// This function is called when user submit a form inside two parent divs
+function updateDivFaversSharers (form,Params) {
     var objXMLHttp = false;
-	var id = form.parentNode.id;
+	var id = form.parentNode.parentNode.id;
 
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
@@ -1140,8 +1175,13 @@ function toggleAnswer (option) {
 /*****************************************************************************/
 
 function toggleDisplay (elementID) {
-	var stl = document.getElementById (elementID).style;
-	stl.display = (stl.display === 'none') ? '' : 'none';
+	var element = document.getElementById (elementID);
+	var stl;
+
+	if (element) {
+		stl = element.style;
+		stl.display = (stl.display === 'none') ? '' : 'none';
+	}
 }
 
 /*****************************************************************************/

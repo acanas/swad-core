@@ -3184,7 +3184,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get of the database the data of the user
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted =
+	    Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	    /***** Show a row with the data of the owner of the works *****/
 	    HTM_TR_Begin (NULL);

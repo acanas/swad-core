@@ -230,6 +230,16 @@ const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
    "FORM_IN_PINK NOWRAP",
   };
 
+const char *The_ClassFormLink[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_IN_WHITE",
+   "BT_LINK FORM_IN_GREY",
+   "BT_LINK FORM_IN_PURPLE",
+   "BT_LINK FORM_IN_BLUE",
+   "BT_LINK FORM_IN_YELLOW",
+   "BT_LINK FORM_IN_PINK",
+  };
+
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
   {
    "FORM_OUT_WHITE",

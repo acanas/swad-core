@@ -204,8 +204,19 @@ static void TL_PutIconCommentDisabled (void);
 static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
                                                      const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long TL_GetNumCommentsInNote (long NotCod);
-static void TL_WriteCommentsInNote (const struct TL_Note *SocNot);
+static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
+				    unsigned NumComments);
+static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+			                 long NotCod,
+					 char IdComments[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialComments);
+static unsigned TL_WriteHiddenComments (long NotCod,
+					char IdComments[Frm_MAX_BYTES_ID + 1],
+					unsigned NumInitialCommentsToGet);
 static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res);
+static void TL_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1]);
+static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
+				           unsigned NumInitialComments);
 static void TL_PutIconToToggleComments (const char *UniqueId,
                                         const char *Icon,const char *Text);
 static void TL_WriteComment (struct TL_Comment *SocCom,
@@ -1670,7 +1681,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
       /* Show comments */
       if (NumComments)
-	 TL_WriteCommentsInNote (SocNot);
+	 TL_WriteCommentsInNote (SocNot,NumComments);
 
       /* End container for buttons and comments */
       HTM_DIV_End ();
@@ -2578,76 +2589,119 @@ static unsigned long TL_GetNumCommentsInNote (long NotCod)
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
+static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
+				    unsigned NumComments)
   {
-   extern const char *Txt_See_the_previous_X_COMMENTS;
-   extern const char *Txt_See_only_the_latest_COMMENTS;
    MYSQL_RES *mysql_res;
-   unsigned long NumComments;
-   unsigned long NumCommentsInitiallyHidden;
-   unsigned long NumCom;
+   unsigned NumInitialComments;
+   unsigned NumFinalCommentsToGet;
+   unsigned NumFinalCommentsGot;
+   unsigned NumCom;
    char IdComments[Frm_MAX_BYTES_ID + 1];
 
-   /***** Get comments of this note from database *****/
-   NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
-				 "SELECT social_pubs.PubCod,"		// row[0]
-				        "social_pubs.PublisherCod,"	// row[1]
-				        "social_pubs.NotCod,"		// row[2]
-				        "UNIX_TIMESTAMP("
-				        "social_pubs.TimePublish),"	// row[3]
-					"social_comments.Content,"	// row[4]
-				        "social_comments.MedCod"	// row[5]
-				 " FROM social_pubs,social_comments"
-				 " WHERE social_pubs.NotCod=%ld"
-				 " AND social_pubs.PubType=%u"
-				 " AND social_pubs.PubCod=social_comments.PubCod"
-				 " ORDER BY social_pubs.PubCod",
-				 SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
-
-   /***** List comments *****/
-   if (NumComments)	// Comments to this note found
+   /***** Compute how many initial comments will be hidden
+          and how many final comments will be visible *****/
+   // Never hide only one comment
+   // So, the number of comments initially hidden must be 0 or >= 2
+   if (NumComments <= TL_NUM_VISIBLE_COMMENTS + 1)
      {
-      // Never hide only one comment
-      // So, the number of comments initially hidden must be 0 or >= 2
-      NumCommentsInitiallyHidden = (NumComments <= TL_NUM_VISIBLE_COMMENTS + 1) ? 0 :	// Show all
-	                        					          NumComments - TL_NUM_VISIBLE_COMMENTS;
-      if (NumCommentsInitiallyHidden)
-        {
-	 /***** Create unique id for list of hidden comments *****/
-	 Frm_SetUniqueId (IdComments);
+      NumInitialComments    = 0;
+      NumFinalCommentsToGet = NumComments;
+     }
+   else
+     {
+      NumInitialComments    = NumComments - TL_NUM_VISIBLE_COMMENTS;
+      NumFinalCommentsToGet = TL_NUM_VISIBLE_COMMENTS;
+     }
 
-	 /***** Link to toggle on/off comments *****/
-	 HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-			" style=\"display:none;\"",	// Initially hidden
-		        IdComments);
-	 TL_PutIconToToggleComments (IdComments,"angle-down.svg",
-	                             Txt_See_only_the_latest_COMMENTS);
-	 HTM_DIV_End ();
+   /***** Get last comments of this note from database *****/
+   NumFinalCommentsGot = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get comments",
+			      "SELECT * FROM "
+			      "("
+			      "SELECT social_pubs.PubCod,"		// row[0]
+				     "social_pubs.PublisherCod,"	// row[1]
+				     "social_pubs.NotCod,"		// row[2]
+				     "UNIX_TIMESTAMP("
+				     "social_pubs.TimePublish),"	// row[3]
+				     "social_comments.Content,"		// row[4]
+				     "social_comments.MedCod"		// row[5]
+			      " FROM social_pubs,social_comments"
+			      " WHERE social_pubs.NotCod=%ld"
+			      " AND social_pubs.PubType=%u"
+			      " AND social_pubs.PubCod=social_comments.PubCod"
+			      " ORDER BY social_pubs.PubCod DESC LIMIT %u"
+			      ") AS comments"
+			      " ORDER BY PubCod",
+			      SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
+			      NumFinalCommentsToGet);
 
-	 /***** First list with comments initially hidden *****/
-	 HTM_UL_Begin ("id=\"com_%s\" class=\"LIST_LEFT\""
-	               " style=\"display:none;\"",	// Initially hidden
-		       IdComments);
-	 for (NumCom = 0;
-	      NumCom < NumCommentsInitiallyHidden;
-	      NumCom++)
-	    TL_WriteOneCommentInList (mysql_res);
-	 HTM_UL_End ();
+   /*
+      Before clicking "See prev..."    -->    After clicking "See prev..."
+    _________________________________       _________________________________
+   |           div con_<id>          |     |           div con_<id>          |
+   |            (hidden)             |     |            (visible)            |
+   |  _____________________________  |     |  _____________________________  |
+   | |    v See only the latest    | |     | |    v See only the latest    | |
+   | |_____________________________| |     | |_____________________________| |
+   |_________________________________|     |_________________________________|
+    _________________________________       _________________________________
+   |            div <id>             |     |        div <id> updated         |
+   |          which content          |     |  _____________________________  |
+   |    will be updated via AJAX     |     | |         ul com_<id>         | |
+   |   (parent of parent of form)    |     | |  _________________________  | |
+   |                                 |     | | |     li (comment 1)      | | |
+   |                                 |     | | |_________________________| | |
+   |                                 |     | | |           ...           | | |
+   |                                 |     | | |_________________________| | |
+   |                                 |     | | |     li (comment n)      | | |
+   |                                 | --> | | |_________________________| | |
+   |                                 |     | |_____________________________| |
+   |  _____________________________  |     |  _____________________________  |
+   | |        div exp_<id>         | |     | |         div exp_<id>        | |
+   | |  _________________________  | |     | |          (hidden)           | |
+   | | |          form           | | |     | |                             | |
+   | | |  _____________________  | | |     | |    _____________________    | |
+   | | | | ^ See prev.comments | | | |     | |   | ^ See prev.comments |   | |
+   | | | |_____________________| | | |     | |   |_____________________|   | |
+   | | |_________________________| | |     | |                             | |
+   | |_____________________________| |     | |_____________________________| |
+   |_________________________________|     |_________________________________|
+    _________________________________       _________________________________
+   |           ul com_<id>           |     |           ul com_<id>           |
+   |    _________________________    |     |    _________________________    |
+   |   |     li (comment 1)      |   |     |   |     li (comment 1)      |   |
+   |   |_________________________|   |     |   |_________________________|   |
+   |   |           ...           |   |     |   |           ...           |   |
+   |   |_________________________|   |     |   |_________________________|   |
+   |   |     li (comment n)      |   |     |   |     li (comment n)      |   |
+   |   |_________________________|   |     |   |_________________________|   |
+   |_________________________________|     |_________________________________|
+   */
+   /***** Link to show initial hidden comments *****/
+   if (NumInitialComments)
+     {
+      /***** Create unique id for list of hidden comments *****/
+      Frm_SetUniqueId (IdComments);
 
-	 /***** Link to toggle on/off comments *****/
-	 HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
-		        IdComments);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_See_the_previous_X_COMMENTS,
-		   NumCommentsInitiallyHidden);
-	 TL_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
-	 HTM_DIV_End ();
-        }
+      /***** Link (initially hidden) to show only the latest comments *****/
+      TL_LinkToShowOnlyLatestComments (IdComments);
 
-      /***** Second list with comments initially visible *****/
-      HTM_UL_Begin ("class=\"LIST_LEFT\"");
-      for (NumCom = NumCommentsInitiallyHidden;
-	   NumCom < NumComments;
+      /***** Div which content will be updated via AJAX *****/
+      HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComments);
+      TL_FormToShowHiddenComments (ActShoHidSocComGbl,ActShoHidSocComUsr,
+				   SocNot->NotCod,
+				   IdComments,
+				   NumInitialComments);
+      HTM_DIV_End ();
+     }
+
+   /***** List final visible comments *****/
+   if (NumFinalCommentsGot)
+     {
+      HTM_UL_Begin ("class=\"TL_LIST\"");
+      for (NumCom = 0;
+	   NumCom < NumFinalCommentsGot;
 	   NumCom++)
 	 TL_WriteOneCommentInList (mysql_res);
       HTM_UL_End ();
@@ -2656,6 +2710,160 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
+
+/*****************************************************************************/
+/********** Form to show hidden coments in global or user timeline ***********/
+/*****************************************************************************/
+
+static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+			                 long NotCod,
+					 char IdComments[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialComments)
+  {
+   extern const char *The_ClassFormLink[The_NUM_THEMES];
+   extern const char *Txt_See_the_previous_X_COMMENTS;
+   char *OnSubmit;
+
+   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
+		  IdComments);
+
+   /***** Form and icon-text to show hidden comments *****/
+   /* Start form */
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      if (asprintf (&OnSubmit,"toggleComments('%s');"
+	                      "updateDivHiddenComments(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    IdComments,
+		    Act_GetActCod (ActionUsr),
+		    Gbl.Session.Id,
+		    NotCod,
+		    IdComments,
+		    NumInitialComments,
+		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+     }
+   else
+     {
+      if (asprintf (&OnSubmit,"toggleComments('%s');"
+	                      "updateDivHiddenComments(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
+			      " return false;",	// return false is necessary to not submit form
+		    IdComments,
+		    Act_GetActCod (ActionGbl),
+		    Gbl.Session.Id,
+		    NotCod,
+		    IdComments,
+		    NumInitialComments) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+     }
+
+   /* Put icon and text with link to show the first hidden comments */
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_See_the_previous_X_COMMENTS,
+	     NumInitialComments);
+   HTM_BUTTON_Begin (The_ClassFormLink[Gbl.Prefs.Theme],false);
+   Ico_PutIconTextLink ("angle-up.svg",Gbl.Title);
+   HTM_BUTTON_End ();
+
+   /* End form */
+   Frm_EndForm ();
+
+   /* Free allocated memory for subquery */
+   free (OnSubmit);
+
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********************** Write hidden comments via AJAX ***********************/
+/*****************************************************************************/
+
+void TL_ShowHiddenCommentsUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show hidden comments *****/
+   TL_ShowHiddenCommentsGbl ();
+  }
+
+void TL_ShowHiddenCommentsGbl (void)
+  {
+   long NotCod;
+   char IdComments[Frm_MAX_BYTES_ID + 1];
+   unsigned NumInitialCommentsToGet;
+   unsigned NumInitialCommentsGot;
+
+   /***** Get parameters *****/
+   /* Get note code */
+   NotCod = TL_GetParamNotCod ();
+
+   /* Get identifier */
+   Par_GetParToText ("IdComments",IdComments,Frm_MAX_BYTES_ID);
+
+   /* Get number of comments to get */
+   NumInitialCommentsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
+
+   /***** Write HTML inside DIV with hidden comments *****/
+   NumInitialCommentsGot = TL_WriteHiddenComments (NotCod,IdComments,NumInitialCommentsToGet);
+
+   /***** Link to show the first comments *****/
+   TL_LinkToShowPreviousComments (IdComments,NumInitialCommentsGot);
+  }
+
+/*****************************************************************************/
+/**************************** Write hidden comments **************************/
+/*****************************************************************************/
+// Returns the number of comments got
+
+static unsigned TL_WriteHiddenComments (long NotCod,
+				        char IdComments[Frm_MAX_BYTES_ID + 1],
+					unsigned NumInitialCommentsToGet)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumInitialCommentsGot;
+   unsigned long NumCom;
+
+   /***** Get comments of this note from database *****/
+   NumInitialCommentsGot = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get comments",
+		   "SELECT social_pubs.PubCod,"		// row[0]
+			  "social_pubs.PublisherCod,"	// row[1]
+			  "social_pubs.NotCod,"		// row[2]
+			  "UNIX_TIMESTAMP("
+			  "social_pubs.TimePublish),"	// row[3]
+			  "social_comments.Content,"	// row[4]
+			  "social_comments.MedCod"	// row[5]
+		   " FROM social_pubs,social_comments"
+		   " WHERE social_pubs.NotCod=%ld"
+		   " AND social_pubs.PubType=%u"
+		   " AND social_pubs.PubCod=social_comments.PubCod"
+		   " ORDER BY social_pubs.PubCod"
+		   " LIMIT %lu",
+		   NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
+		   NumInitialCommentsToGet);
+
+   /***** List with comments *****/
+   HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComments);
+   for (NumCom = 0;
+	NumCom < NumInitialCommentsGot;
+	NumCom++)
+      TL_WriteOneCommentInList (mysql_res);
+   HTM_UL_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumInitialCommentsGot;
+  }
+
+/*****************************************************************************/
+/************************* Write a comment in list ***************************/
+/*****************************************************************************/
 
 static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
   {
@@ -2676,6 +2884,45 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
 
    /***** Free image *****/
    Med_MediaDestructor (&SocCom.Media);
+  }
+
+/*****************************************************************************/
+/****************** Link to show only the latest comments ********************/
+/*****************************************************************************/
+
+static void TL_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1])
+  {
+   extern const char *Txt_See_only_the_latest_COMMENTS;
+
+   /***** Icon and text to show only the latest comments ****/
+   HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
+		  " style=\"display:none;\"",	// Hidden
+		  IdComments);
+   TL_PutIconToToggleComments (IdComments,"angle-down.svg",
+			       Txt_See_only_the_latest_COMMENTS);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********************* Link to show the first comments ***********************/
+/*****************************************************************************/
+
+static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
+				           unsigned NumInitialComments)
+  {
+   extern const char *Txt_See_the_previous_X_COMMENTS;
+
+   /***** Build text to show *****/
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_See_the_previous_X_COMMENTS,
+	     NumInitialComments);
+
+   /***** Icon and text to show only the latest comments ****/
+   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
+	          " style=\"display:none;\"",	// Hidden
+		  IdComments);
+   TL_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

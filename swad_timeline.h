@@ -142,6 +142,9 @@ void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 void TL_ReceivePostUsr (void);
 void TL_ReceivePostGbl (void);
 
+void TL_ShowHiddenCommentsUsr (void);
+void TL_ShowHiddenCommentsGbl (void);
+
 void TL_PutHiddenParamPubCod (long PubCod);
 
 void TL_ReceiveCommentUsr (void);
