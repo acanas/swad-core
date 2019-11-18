@@ -2400,7 +2400,7 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
 
    /***** Submit button *****/
-   HTM_BUTTON_Begin ("BT_SUBMIT_INLINE BT_CREATE",false);
+   HTM_BUTTON_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
    HTM_Txt (Txt_Post);
    HTM_BUTTON_End ();
 
@@ -2765,7 +2765,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_See_the_previous_X_COMMENTS,
 	     NumInitialComments);
-   HTM_BUTTON_Begin (The_ClassFormLink[Gbl.Prefs.Theme],false);
+   HTM_BUTTON_Begin (NULL,The_ClassFormLink[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("angle-up.svg",Gbl.Title);
    HTM_BUTTON_End ();
 

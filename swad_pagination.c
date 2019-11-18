@@ -226,6 +226,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
+			              Gbl.Agenda.SelectedOrder,
                                       1,
                                       -1L);
                break;
@@ -337,6 +338,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
+			              Gbl.Agenda.SelectedOrder,
                                       1,
                                       -1L);
                break;
@@ -436,6 +438,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
+			              Gbl.Agenda.SelectedOrder,
                                       Pagination->LeftPage,
                                       -1L);
                break;
@@ -548,6 +551,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                          Gbl.Agenda.PrivatPublicEvents,
                                          Gbl.Agenda.HiddenVisiblEvents,
+			                 Gbl.Agenda.SelectedOrder,
                                          NumPage,
                                          -1L);
                   break;
@@ -645,6 +649,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 	                              Gbl.Agenda.PrivatPublicEvents,
 	                              Gbl.Agenda.HiddenVisiblEvents,
+			              Gbl.Agenda.SelectedOrder,
 	                              Pagination->RightPage,
 	                              -1L);
 	       break;
@@ -743,6 +748,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 	                              Gbl.Agenda.PrivatPublicEvents,
 	                              Gbl.Agenda.HiddenVisiblEvents,
+			              Gbl.Agenda.SelectedOrder,
 	                              Pagination->NumPags,
 	                              -1L);
 	       break;

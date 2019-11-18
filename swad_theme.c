@@ -102,12 +102,12 @@ const char *The_ClassTagline[The_NUM_THEMES] =
 
 const char *The_ClassNotif[The_NUM_THEMES] =
   {
-   "NOTIF_WHITE",
-   "NOTIF_GREY",
-   "NOTIF_PURPLE",
-   "NOTIF_BLUE",
-   "NOTIF_YELLOW",
-   "NOTIF_PINK",
+   "BT_LINK NOTIF_WHITE",
+   "BT_LINK NOTIF_GREY",
+   "BT_LINK NOTIF_PURPLE",
+   "BT_LINK NOTIF_BLUE",
+   "BT_LINK NOTIF_YELLOW",
+   "BT_LINK NOTIF_PINK",
   };
 
 const char *The_ClassUsr[The_NUM_THEMES] =

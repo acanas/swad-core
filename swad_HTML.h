@@ -134,7 +134,8 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 		         const char *fmt,...);
 
-void HTM_BUTTON_Begin (const char *Class,bool SubmitOnMouseDown);
+void HTM_BUTTON_OnMouseDown_Begin (const char *Class);
+void HTM_BUTTON_Begin (const char *Title,const char *Class,const char *OnSubmit);
 void HTM_BUTTON_End (void);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);

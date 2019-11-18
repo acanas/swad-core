@@ -488,14 +488,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.70 (2019-11-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.70.1 (2019-11-17)"
 #define CSS_FILE		"swad19.70.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-// TODO: Fix bug: cuando se envía una nueva publicación al timeline, si se baja al final y se pulsa en Mostrar más", se repiten los mensajes.
 
+	Version 19.70.1:  Nov 17, 2019	Converting links to send forms to buttons.
+					Fixed bug in agenda. (247061 lines)
 	Version 19.70:    Nov 17, 2019	Hidden comments in timeline are loaded on request using AJAX. (247028 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1806','es','N','Ver comentarios ocultos (global)');

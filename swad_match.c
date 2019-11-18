@@ -2596,7 +2596,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	       if (asprintf (&Class,"MCH_STD_BUTTON BT_%c",'A' + (char) NumOpt) < 0)
                   Lay_NotEnoughMemoryExit ();
 	      }
-	    HTM_BUTTON_Begin (Class,true);
+	    HTM_BUTTON_OnMouseDown_Begin (Class);
 	    HTM_TxtF ("%c",'a' + (char) NumOpt);
 	    HTM_BUTTON_End ();
 	    free (Class);

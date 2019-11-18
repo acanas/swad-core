@@ -1292,14 +1292,27 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 /********************************** Buttons **********************************/
 /*****************************************************************************/
 
-void HTM_BUTTON_Begin (const char *Class,bool SubmitOnMouseDown)
+void HTM_BUTTON_OnMouseDown_Begin (const char *Class)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"%s\"",Class);
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"%s\""
+	              " onmousedown=\"document.getElementById('%s').submit();return false;\" />",
+	    Class,Gbl.Form.Id);
+   HTM_BUTTON_NestingLevel++;
+  }
 
-   if (SubmitOnMouseDown)
-      fprintf (Gbl.F.Out," onmousedown=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
-
+void HTM_BUTTON_Begin (const char *Title,const char *Class,const char *OnSubmit)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\"");
+   if (Title)
+      if (Title[0])
+         HTM_TxtF (" title=\"%s\"",Title);
+   if (Class)
+      if (Class[0])
+         HTM_TxtF (" class=\"%s\"",Class);
+   if (OnSubmit)	// JavaScript function to be called
+			// before submitting the form
+      if (OnSubmit[0])
+         HTM_TxtF ("onsubmit=\"%s;\"",OnSubmit);
    fprintf (Gbl.F.Out," />");
 
    HTM_BUTTON_NestingLevel++;

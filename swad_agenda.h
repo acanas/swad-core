@@ -107,6 +107,7 @@ void Agd_RequestCreatOrEditEvent (void);
 void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
                             unsigned PrivatPublicEvents,
                             unsigned HiddenVisiblEvents,
+			    Agd_Order_t Order,
                             unsigned NumPage,
                             long AgdCodToEdit);
 void Agd_PutHiddenParamEventsOrder (void);

@@ -2049,19 +2049,18 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Begin form *****/
    Frm_StartFormId (ActSeeNewNtf,"form_ntf");
-   Frm_LinkFormSubmitId (Txt_See_notifications,
-			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf",NULL);
+   HTM_BUTTON_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
 
    /***** Number of unseen notifications *****/
    HTM_SPAN_Begin ("id=\"notif_all\"");
    HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,NumUnseenNtfs == 1 ? Txt_notification :
 				                             Txt_notifications);
-   HTM_BR ();
    HTM_SPAN_End ();
 
    /***** Icon and number of new notifications *****/
    if (NumNewNtfs)
      {
+      HTM_BR ();
       HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
 	       "class=\"ICO16x16\"");
       HTM_TxtF ("&nbsp;%u",NumNewNtfs);
@@ -2072,7 +2071,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
      }
 
    /***** End form *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
