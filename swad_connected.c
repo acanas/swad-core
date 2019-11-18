@@ -166,14 +166,14 @@ void Con_ShowGlobalConnectedUsrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+   HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
 
    /* Write total number of sessions */
    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
                           Gbl.Session.NumSessions == 1 ? Txt_session :
         	                                         Txt_sessions);
    /* End link to view more details about connected users */
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    if (NumUsrsTotal)
@@ -314,12 +314,12 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+   HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
@@ -406,9 +406,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
-	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+	 HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
 	 Ico_PutIcon ("ellipsis-h.svg",Txt_Connected_users,"ICO16x16");
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -783,7 +783,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    extern const char *Txt_View_record_for_this_course;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   const char *Font;
+   const char *ClassTxt;
+   const char *ClassLink;
    long UsrCod;
    bool ItsMe;
    struct UsrData *UsrDat;
@@ -818,9 +819,17 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    HTM_TD_End ();
 
    /***** Write full name and link *****/
-   Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
-	                                                               "CON_NAME_NARROW CON_NO_CRS");
-   HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+   if (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs)
+     {
+      ClassTxt = "CON_NAME_NARROW CON_CRS";
+      ClassLink = "BT_LINK CON_NAME_NARROW CON_CRS";
+     }
+   else
+     {
+      ClassTxt = "CON_NAME_NARROW CON_NO_CRS";
+      ClassLink = "BT_LINK CON_NAME_NARROW CON_NO_CRS";
+     }
+   HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
    // The form must be unique because
    // the list of connected users
    // is dynamically updated via AJAX
@@ -840,18 +849,18 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-   Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
+   HTM_BUTTON_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
    Usr_WriteFirstNameBRSurnames (UsrDat);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
 
    Frm_EndForm ();
    HTM_TD_End ();
 
    /***** Write time from last access *****/
-   Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
-	                                                               "CON_SINCE CON_NO_CRS");
-   HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+   ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
+	                                                                   "CON_SINCE CON_NO_CRS");
+   HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
    HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    HTM_DIV_End ();						// Used for automatic update, only when displayed on right column

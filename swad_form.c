@@ -231,45 +231,6 @@ void Frm_EndForm (void)
      }
   }
 
-/*****************************************************************************/
-/******************* Anchor directive used to send a form ********************/
-/*****************************************************************************/
-
-void Frm_LinkFormSubmit (const char *Title,const char *LinkClass,
-                         const char *OnSubmit)
-  {
-   Frm_LinkFormSubmitId (Title,LinkClass,Gbl.Form.Id,OnSubmit);
-  }
-
-void Frm_LinkFormSubmitUnique (const char *Title,const char *LinkClass)
-  {
-   Frm_LinkFormSubmitId (Title,LinkClass,Gbl.Form.UniqueId,NULL);
-  }
-
-// Title can be NULL
-// LinkClass can be NULL
-// Id can not be NULL
-// OnSubmit can be NULL
-
-void Frm_LinkFormSubmitId (const char *Title,const char *LinkClass,
-                           const char *Id,const char *OnSubmit)
-  {
-   HTM_Txt ("<a href=\"\"");
-   if (Title)
-      if (Title[0])
-         HTM_TxtF (" title=\"%s\"",Title);
-   if (LinkClass)
-      if (LinkClass[0])
-         HTM_TxtF (" class=\"%s\"",LinkClass);
-   HTM_Txt (" onclick=\"");
-   if (OnSubmit)	// JavaScript function to be called
-			// before submitting the form
-      if (OnSubmit[0])
-         HTM_TxtF ("%s;",OnSubmit);
-   HTM_TxtF ("document.getElementById('%s').submit();return false;\">",
-	     Id);
-  }
-
 void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
                                  const char *OnSubmit)
   {

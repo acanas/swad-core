@@ -904,13 +904,13 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 			   Order,
 			   Gbl.Prjs.CurrentPage,
 			   -1L);
-	    Frm_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
+	    HTM_BUTTON_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       HTM_U_Begin ();
             HTM_Txt (Txt_PROJECT_ORDER[Order]);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       HTM_U_End ();
-	    Frm_LinkFormEnd ();
+	    HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	    break;
 	 default:
@@ -1133,6 +1133,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    const char *ClassLabel;
    const char *ClassDate;
    const char *ClassTitle;
+   const char *ClassLink;
    const char *ClassData;
    struct Prj_Faults Faults;
    bool PrjIsFaulty;
@@ -1142,12 +1143,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassDate = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
-					     "DATE_BLUE";
+   ClassDate  = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
+					      "DATE_BLUE";
    ClassTitle = (Prj->Hidden == Prj_HIDDEN) ? "ASG_TITLE_LIGHT" :
 					      "ASG_TITLE";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK ASG_TITLE_LIGHT" :
+					      "BT_LINK ASG_TITLE";
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					      "DAT";
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
@@ -1254,9 +1257,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	{
 	 Frm_StartForm (ActAdmDocPrj);
 	 Prj_PutCurrentParams ();
-	 Frm_LinkFormSubmit (Txt_Project_files,ClassTitle,NULL);
+	 HTM_BUTTON_Begin (Txt_Project_files,ClassLink,NULL);
 	 HTM_Txt (Prj->Title);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       else

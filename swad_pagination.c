@@ -153,9 +153,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    unsigned NumPage;
    char *ClassLink;
 
-   if (asprintf (&ClassLink,"BT_LINK PAG %s",ClassTxt) < 0)
-      Lay_NotEnoughMemoryExit ();
-
    /***** Link to page 1, including a text *****/
    if (Subject)
      {
@@ -246,7 +243,10 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
+	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
+	    Lay_NotEnoughMemoryExit ();
          HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         free (ClassLink);
         }
       else
          HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
@@ -267,6 +267,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
      {
+      if (asprintf (&ClassLink,"BT_LINK PAG %s",ClassTxt) < 0)
+	 Lay_NotEnoughMemoryExit ();
+
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
         {
@@ -769,9 +772,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          HTM_BUTTON_End ();
          Frm_EndForm ();
         }
-     }
 
-   free (ClassLink);
+      free (ClassLink);
+     }
   }
 
 /*****************************************************************************/

@@ -1483,16 +1483,16 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Frm_LinkFormSubmit (Txt_Print,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("print.svg",
-			Txt_Print);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_Begin (Txt_Print,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+   Ico_PutIconTextLink ("print.svg",Txt_Print);
+   HTM_BUTTON_End ();
+
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_Txt ("(");
    HTM_SELECT_Begin (false,
@@ -2698,13 +2698,13 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	{
 	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Frm_LinkFormSubmit (Ins->FullName,NULL,NULL);
+	 HTM_BUTTON_Begin (Ins->FullName,"BT_LINK",NULL);
 	}
       Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
      }
@@ -2719,12 +2719,12 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	{
 	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Frm_LinkFormSubmit (Ins->FullName,"REC_HEAD",NULL);
+	 HTM_BUTTON_Begin (Ins->FullName,"BT_LINK REC_HEAD",NULL);
 	}
       HTM_Txt (Ins->FullName);
       if (PutFormLinks)
 	{
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
      }
@@ -2792,14 +2792,15 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
          ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 Frm_StartForm (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Frm_LinkFormSubmit (ItsMe ? Txt_My_public_profile :
-			             Txt_Another_user_s_profile,
-			     "REC_NICK",NULL);
+	 HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+			           Txt_Another_user_s_profile,
+			   "BT_LINK REC_NICK",
+			   NULL);
 	}
       HTM_TxtF ("@%s",UsrDat->Nickname);
       if (PutFormLinks)
 	{
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
      }

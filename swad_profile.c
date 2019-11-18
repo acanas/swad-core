@@ -946,7 +946,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *The_ClassFormOutBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -958,9 +958,9 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Hie_SYS);
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-   Frm_LinkFormSubmit (Gbl.Title,The_ClassFormOutBox[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_Begin (Gbl.Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
    HTM_TxtF ("#%lu",Rank);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -1772,9 +1772,9 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_DIV_Begin ("class=\"RANK_USR\"");	// Limited width
-      Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
+      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }

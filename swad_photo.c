@@ -1187,17 +1187,11 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
-	{
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-         Frm_LinkFormSubmitUnique (NULL,NULL);
-        }
       else
-	{
 	 Frm_StartForm (ActSeeOthPubPrf);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-         Frm_LinkFormSubmit (NULL,NULL,NULL);
-	}
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      HTM_BUTTON_Begin (NULL,"BT_LINK",NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -1308,7 +1302,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    /***** End form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
   }
@@ -2472,7 +2466,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
 		Deg->FullName);
-      Frm_LinkFormSubmit (Gbl.Title,NULL,NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK",NULL);
      }
 
    /***** Check if photo of degree can be shown *****/
@@ -2552,7 +2546,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    HTM_DIV_End ();
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
   }

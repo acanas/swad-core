@@ -2806,6 +2806,7 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *ClassLink;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
@@ -2815,11 +2816,17 @@ void Usr_WriteLoggedUsrHead (void)
    /***** User's role *****/
    if (NumAvailableRoles == 1)
      {
+      if (asprintf (&ClassLink,"BT_LINK %s",The_ClassUsr[Gbl.Prefs.Theme]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+
       Frm_StartForm (ActFrmRolSes);
-      Frm_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
+      HTM_BUTTON_Begin (Txt_Role,ClassLink,NULL);
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
+
+      free (ClassLink);
+
       HTM_Colon ();
      }
    else
@@ -6283,7 +6290,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
 static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
                                          Usr_ShowUsrsType_t ListType)
   {
-   extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
@@ -6296,13 +6303,13 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
       FuncParams ();
 
    /***** Link and image *****/
-   Frm_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
-                       The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
-                       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-                                                        NULL);
+   HTM_BUTTON_Begin (Txt_USR_LIST_TYPES[ListType],
+                     The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
+                     Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+                                                      NULL);
    Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
    HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -9898,7 +9905,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      }
    Frm_StartForm (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
+   HTM_BUTTON_Begin (UsrDat->FullName,"BT_LINK AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,NULL);
@@ -9916,6 +9923,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      }
 
    /***** End form *****/
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
   }

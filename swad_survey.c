@@ -260,13 +260,13 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -528,11 +528,12 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
-   Frm_LinkFormSubmit (Txt_View_survey,
-                       Svy.Status.Visible ? "ASG_TITLE" :
-	                                    "ASG_TITLE_LIGHT",NULL);
+   HTM_BUTTON_Begin (Txt_View_survey,
+                     Svy.Status.Visible ? "BT_LINK ASG_TITLE" :
+	                                  "BT_LINK ASG_TITLE_LIGHT",
+		     NULL);
    HTM_Txt (Svy.Title);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 

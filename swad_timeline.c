@@ -1730,11 +1730,11 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 /***** Show user's name inside form to go to user's public profile *****/
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	 Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
-					   Txt_Another_user_s_profile,
-				   "TL_TOP_PUBLISHER");
+	 HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+				   Txt_Another_user_s_profile,
+			   "BT_LINK TL_TOP_PUBLISHER",NULL);
 	 HTM_Txt (UsrDat.FullName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
 	 /***** Show action made *****/
@@ -1763,21 +1763,21 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
-				     Txt_Another_user_s_profile,
-			     "DAT_N_BOLD");
+   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+			     Txt_Another_user_s_profile,
+	             "BT_LINK DAT_N_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
-				     Txt_Another_user_s_profile,
-			     "DAT_LIGHT");
+   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+			     Txt_Another_user_s_profile,
+	             "BT_LINK DAT_LIGHT",NULL);
    HTM_TxtF (" @%s",UsrDat->Nickname);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    HTM_DIV_End ();
@@ -1876,7 +1876,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
-   char Class[64];
+   char *Class;
    char *Anchor = NULL;
    const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
      {
@@ -1967,7 +1967,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
      {
       HTM_DIV_Begin ("class=\"TL_FORM\"");
 
-      /***** Parameters depending on the type of note *****/
+      /***** Start form with parameters depending on the type of note *****/
       switch (SocNot->NoteType)
 	{
 	 case TL_NOTE_INS_DOC_PUB_FILE:
@@ -2034,14 +2034,17 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	    return;
 	}
 
-      /***** Link and end form *****/
-      snprintf (Class,sizeof (Class),
-	        "%s ICO_HIGHLIGHT",
-		The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-      Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
+      /***** Icon and link to go to action *****/
+      if (asprintf (&Class,"BT_LINK %s ICO_HIGHLIGHT",
+		    The_ClassFormInBoxBold[Gbl.Prefs.Theme]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_BUTTON_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],Class,NULL);
       Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
+      free (Class);
+
+      /***** End form *****/
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -3076,21 +3079,21 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
-				     Txt_Another_user_s_profile,
-			     "DAT_BOLD");
+   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+			     Txt_Another_user_s_profile,
+	             "BT_LINK DAT_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
-				     Txt_Another_user_s_profile,
-			     "DAT_LIGHT");
+   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+			     Txt_Another_user_s_profile,
+		     "BT_LINK DAT_LIGHT",NULL);
    HTM_TxtF (" @%s",UsrDat->Nickname);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** End container *****/
