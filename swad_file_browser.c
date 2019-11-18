@@ -3393,13 +3393,13 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Show user's name *****/
    HTM_BR ();
 
-   Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
+   HTM_BUTTON_Begin (Txt_View_record_for_this_course,"BT_LINK AUTHOR_TXT",NULL);
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
       HTM_TxtF (", %s",UsrDat->FirstName);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** Show user's email *****/
    if (UsrDat->Email[0])
@@ -6135,6 +6135,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata)
   {
    extern const char *Txt_View_data;
+   char *Class;
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
@@ -6144,13 +6145,16 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                              FileMetadata->FilCod);
 
    /***** Name and link of the file or folder *****/
-   Frm_LinkFormSubmit (Txt_View_data,Gbl.FileBrowser.TxtStyle,NULL);
+   if (asprintf (&Class,"BT_LINK %s",Gbl.FileBrowser.TxtStyle) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_BUTTON_Begin (Txt_View_data,Class,NULL);
+   free (Class);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
    /***** End link and form *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -6232,6 +6236,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
    extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    char FileNameToShow[NAME_MAX + 1];
+   char *Class;
 
    /***** Get the name of the file to show *****/
    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -6308,12 +6313,15 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link to the form and to the file */
-      Frm_LinkFormSubmit ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	                   Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
-	                                                               Txt_Download,
-			  Gbl.FileBrowser.TxtStyle,NULL);
+      if (asprintf (&Class,"BT_LINK %s",Gbl.FileBrowser.TxtStyle) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_BUTTON_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+	                 Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
+	                                                             Txt_Download,
+		        Class,NULL);
+      free (Class);
       HTM_Txt (FileNameToShow);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
 
       /* Put icon to make public/private file */
@@ -10020,13 +10028,13 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link begin */
-      Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"FILENAME_TXT",NULL);
+      HTM_BUTTON_Begin (Txt_Check_marks_in_the_file,"BT_LINK FILENAME_TXT",NULL);
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
       /* Name of the file of marks, link end and form end */
       HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
       Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    else
@@ -10069,13 +10077,13 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link begin */
-      Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"DAT",NULL);
+      HTM_BUTTON_Begin (Txt_Check_marks_in_the_file,"BT_LINK DAT",NULL);
 
       /* Name of the file of marks */
       HTM_Txt (FileNameToShow);
 
       /* Link end and form end */
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    else
@@ -11924,10 +11932,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   InsShortName);
-         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CT",true);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11941,10 +11949,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   CtrShortName);
-         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CT",true);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11958,10 +11966,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   DegShortName);
-         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CT",true);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11975,9 +11983,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Go_to_X,
 		   CrsShortName);
-	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+	 HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
 	 HTM_Txt (CrsShortName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -12077,7 +12085,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 				   FileMetadata.FilCod);
 
       /* File or folder icon */
-      Frm_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
+      HTM_BUTTON_Begin (FileNameToShow,"BT_LINK DAT_N",NULL);
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	 /* Icon with folder */
          Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
@@ -12085,7 +12093,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
       HTM_TxtF ("&nbsp;%s",FileNameToShow);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
 
       /* End form */
       Frm_EndForm ();

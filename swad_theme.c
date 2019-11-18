@@ -239,6 +239,15 @@ const char *The_ClassFormLink[The_NUM_THEMES] =
    "BT_LINK FORM_IN_YELLOW",
    "BT_LINK FORM_IN_PINK",
   };
+const char *The_ClassFormLinkBold[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_IN_WHITE BOLD",
+   "BT_LINK FORM_IN_GREY BOLD",
+   "BT_LINK FORM_IN_PURPLE BOLD",
+   "BT_LINK FORM_IN_BLUE BOLD",
+   "BT_LINK FORM_IN_YELLOW BOLD",
+   "BT_LINK FORM_IN_PINK BOLD",
+  };
 
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
   {

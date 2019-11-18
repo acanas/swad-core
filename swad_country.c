@@ -185,7 +185,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
                                             "COUNTRY_SMALL",
                                             "COUNTRY_MAP_SMALL",
-                                            "DAT");
+                                            "BT_LINK DAT");
          HTM_TD_End ();
 
          /* Number of pending institutions (row[1]) */
@@ -402,9 +402,9 @@ static void Cty_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Institutions_of_COUNTRY_X,
 		Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -664,7 +664,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCty);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    HTM_U_Begin ();
 	}
@@ -673,7 +673,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();
@@ -715,7 +715,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 				      "COUNTRY_SMALL",
 				      "COUNTRY_MAP_SMALL",
-				      "DAT_N");
+				      "BT_LINK DAT_N");
    HTM_TD_End ();
 
    /* Write stats of this country */
@@ -817,7 +817,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Cty->Name[Gbl.Prefs.Language]);
-   Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Draw country map *****/
    Cty_DrawCountryMap (Cty,ClassMap);
@@ -829,7 +829,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    HTM_TxtF ("(%s)",Cty->Alpha2);
 
    /***** End link *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    HTM_DIV_End ();
@@ -1289,10 +1289,10 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       /***** Write country name with link to country information *****/
       Frm_StartForm (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
-      Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
-		          ClassLink,NULL);
+      HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+		        ClassLink,NULL);
       HTM_Txt (CtyName);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    else

@@ -2817,7 +2817,7 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
    if (ShowData && UsrDat->CtyCod > 0)
       /* Link to see country information */
       Cty_WriteCountryName (UsrDat->CtyCod,
-                            "REC_DAT_BOLD");	// Put link to country
+                            "BT_LINK REC_DAT_BOLD");	// Put link to country
    HTM_TD_End ();
   }
 

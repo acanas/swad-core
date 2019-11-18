@@ -516,13 +516,13 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       /* Link with the head of this column */
-      Frm_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
+      HTM_BUTTON_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == SelectedOrder)
 	 HTM_U_Begin ();
       HTM_Txt (Txt_DEGREE_TYPES_ORDER[Order]);
       if (Order == SelectedOrder)
 	 HTM_U_End ();
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
 
       /* End form */
       Frm_EndForm ();

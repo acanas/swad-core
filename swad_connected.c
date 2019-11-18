@@ -1035,8 +1035,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    HTM_TD_End ();
 
 	    /***** Write full name and link *****/
-	    Font = (ThisCrs ? "CON_NAME_WIDE CON_CRS" :
-			      "CON_NAME_WIDE CON_NO_CRS");
+	    Font = (ThisCrs ? "BT_LINK CON_NAME_WIDE CON_CRS" :
+			      "BT_LINK CON_NAME_WIDE CON_NO_CRS");
 	    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
@@ -1057,10 +1057,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
             HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 	    if (PutLinkToRecord)
-	       Frm_LinkFormSubmit (UsrDat.FullName,Font,NULL);
+	       HTM_BUTTON_Begin (UsrDat.FullName,Font,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
-	       Frm_LinkFormEnd ();
+	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
 
 	    if (PutLinkToRecord)

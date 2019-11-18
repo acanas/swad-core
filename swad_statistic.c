@@ -3413,7 +3413,7 @@ static void Sta_WriteCountry (long CtyCod)
       Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
                                          "COUNTRY_TINY",
                                          "COUNTRY_MAP_TINY",
-                                         "LOG");
+                                         "BT_LINK LOG");
      }
    else			// Hit with no country selected
       /***** No country selected *****/

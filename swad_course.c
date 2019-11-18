@@ -460,11 +460,12 @@ static void Crs_Configuration (bool PrintView)
 	        "%u %s %u",
                 Indicators.NumIndicators,
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_TxtF ("%s&nbsp;",Gbl.Title);
       Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
         	                                                      "exclamation-triangle.svg",
 		   Gbl.Title,"ICO16x16");
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -518,8 +519,8 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLink[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
@@ -550,10 +551,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    const char *ClassNormal;
    char ClassHighlight[64];
 
-   ClassNormal = The_ClassFormInBox[Gbl.Prefs.Theme];
+   ClassNormal = The_ClassFormLink[Gbl.Prefs.Theme];
    snprintf (ClassHighlight,sizeof (ClassHighlight),
 	     "%s LIGHT_BLUE",
-	     The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+	     The_ClassFormLinkBold[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
@@ -566,13 +567,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			                    ClassNormal);
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
-   Frm_LinkFormSubmit (Txt_System,
-                       Highlight ? ClassHighlight :
-        	                   ClassNormal,
-		       NULL);
+   HTM_BUTTON_Begin (Txt_System,
+                     Highlight ? ClassHighlight :
+        	                 ClassNormal,
+		     NULL);
    Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
    HTM_TxtF ("&nbsp;%s",Txt_System);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_LI_End ();
 
@@ -599,12 +600,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
-      Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
-			  Highlight ? ClassHighlight :
-        	                      ClassNormal,NULL);
+      HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+			Highlight ? ClassHighlight :
+        	                    ClassNormal,
+		        NULL);
       Cty_DrawCountryMap (&Cty,"ICO16x16");
       HTM_TxtF ("&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_LI_End ();
 
@@ -632,12 +634,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
          Frm_StartForm (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
-	 Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
-	                     Highlight ? ClassHighlight :
-        	                         ClassNormal,NULL);
+	 HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
+	                   Highlight ? ClassHighlight :
+        	                       ClassNormal,
+			   NULL);
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
-	 HTM_TxtF ("&nbsp;%s",Ins.FullName);
-	 Frm_LinkFormEnd ();
+	 HTM_TxtF ("&nbsp;%s",Ins.ShrtName);
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	 HTM_LI_End ();
 
@@ -665,12 +668,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
             Frm_StartForm (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
-	    Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
-	                        Highlight ? ClassHighlight :
-        	                            ClassNormal,NULL);
+	    HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
+	                      Highlight ? ClassHighlight :
+        	                          ClassNormal,
+			      NULL);
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
-	    HTM_TxtF ("&nbsp;%s",Ctr.FullName);
-	    Frm_LinkFormEnd ();
+	    HTM_TxtF ("&nbsp;%s",Ctr.ShrtName);
+	    HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	    HTM_LI_End ();
 
@@ -698,12 +702,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
                Frm_StartForm (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
-	       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
-	                           Highlight ? ClassHighlight :
-        	                               ClassNormal,NULL);
+	       HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
+	                         Highlight ? ClassHighlight :
+        	                             ClassNormal,
+			         NULL);
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
-	       HTM_TxtF ("&nbsp;%s",Deg.FullName);
-	       Frm_LinkFormEnd ();
+	       HTM_TxtF ("&nbsp;%s",Deg.ShrtName);
+	       HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	       HTM_LI_End ();
 
@@ -734,12 +739,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  snprintf (Gbl.Title,sizeof (Gbl.Title),
 			    Txt_Go_to_X,
 			    Crs.ShrtName);
-		  Frm_LinkFormSubmit (Gbl.Title,
-		                      Highlight ? ClassHighlight :
-        	                                  ClassNormal,NULL);
+		  HTM_BUTTON_Begin (Gbl.Title,
+		                    Highlight ? ClassHighlight :
+        	                                ClassNormal,
+				    NULL);
 		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
-		  HTM_TxtF ("&nbsp;%s",Crs.FullName);
-		  Frm_LinkFormEnd ();
+		  HTM_TxtF ("&nbsp;%s",Crs.ShrtName);
+		  HTM_BUTTON_End ();
 		  Frm_EndForm ();
 
 		  /***** Put link to register students *****/
@@ -1216,12 +1222,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 if (Crs->Status & Crs_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal = "DAT_LIGHT";
-	    TxtClassStrong = "DAT_LIGHT";
+	    TxtClassStrong = "BT_LINK DAT_LIGHT";
 	   }
 	 else
 	   {
 	    TxtClassNormal = "DAT";
-	    TxtClassStrong = "DAT_N";
+	    TxtClassStrong = "BT_LINK DAT_N";
 	   }
 
 	 /* Check if this course is one of my courses */
@@ -1256,9 +1262,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Go_to_X,
 		   Crs->FullName);
-	 Frm_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
+	 HTM_BUTTON_Begin (Gbl.Title,TxtClassStrong,NULL);
 	 HTM_Txt (Crs->FullName);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -2871,10 +2877,14 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       Frm_StartForm (ActMyCrs);
 
       /***** Put icon with link *****/
-      Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
+      HTM_INPUT_IMAGE (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
+	               "BC_ICON ICO_HIGHLIGHT");
+      /*
+      HTM_BUTTON_Begin (Txt_My_courses,NULL,NULL);
       HTM_IMG (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
 	       "class=\"BC_ICON ICO_HIGHLIGHT\"");
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
+      */
 
       /***** End form *****/
       Frm_EndForm ();
@@ -3132,13 +3142,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
    if (NumTchs + NumStds)
      {
-      Style = "DAT_N";
-      StyleNoBR = "DAT_NOBR_N";
+      Style     = "BT_LINK DAT_N";
+      StyleNoBR = "BT_LINK DAT_NOBR_N";
      }
    else
      {
-      Style = "DAT";
-      StyleNoBR = "DAT_NOBR";
+      Style     = "BT_LINK DAT";
+      StyleNoBR = "BT_LINK DAT_NOBR";
      }
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                      Gbl.ColorRows[RowEvenOdd];
@@ -3172,10 +3182,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     row[2]);
-   Frm_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
+   HTM_BUTTON_Begin (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -3190,10 +3200,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Crs_PutParamCrsCod (CrsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
-	     row[6]);
-   Frm_LinkFormSubmit (Gbl.Title,Style,NULL);
+	     row[5]);
+   HTM_BUTTON_Begin (Gbl.Title,Style,NULL);
    HTM_Txt (row[5]);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 

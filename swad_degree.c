@@ -213,7 +213,7 @@ void Deg_SeeDegWithPendingCrss (void)
          /* Degree logo and full name */
          HTM_TD_Begin ("class=\"LM %s\"",BgColor);
          Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
-                                            "DAT_NOBR","CM");
+                                            "BT_LINK DAT_NOBR","CM");
          HTM_TD_End ();
 
          /* Number of pending courses (row[1]) */
@@ -253,14 +253,14 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Deg->FullName);
-   Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Degree logo and name *****/
    Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
    /***** End link *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -514,9 +514,9 @@ static void Deg_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Courses_of_DEGREE_X,
 		Gbl.Hierarchy.Deg.ShrtName);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1207,12 +1207,12 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    if (Deg->Status & Deg_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "DAT_LIGHT";
+      TxtClassStrong = "BT_LINK DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "DAT_N";
+      TxtClassStrong = "BT_LINK DAT_N";
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -2507,7 +2507,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
 		  /* Write degree logo and name */
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-						     "DAT_SMALL_NOBR","LT");
+						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
 	    default:	// There are no administrators in other scopes

@@ -1394,6 +1394,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLink[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
    unsigned NumOrder;
@@ -1475,7 +1476,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /* Icon and name of this institution */
 	       Frm_StartForm (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
-	       Frm_LinkFormSubmit (Ins.ShrtName,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
+	       HTM_BUTTON_Begin (Ins.ShrtName,The_ClassFormLink[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
 		  Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,
@@ -1483,7 +1484,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	          HTM_NBSP ();
 		 }
 	       HTM_Txt (Ins.FullName);
-	       Frm_LinkFormEnd ();
+	       HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	       HTM_TD_End ();
 

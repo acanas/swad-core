@@ -2839,10 +2839,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
-            Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+            HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             Frm_LinkFormEnd ();
-            Frm_EndForm ();
+            HTM_BUTTON_End ();
             HTM_TD_End ();
 
             /***** Number of teachers in the course *****/
