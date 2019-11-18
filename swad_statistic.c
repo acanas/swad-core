@@ -3502,7 +3502,7 @@ static void Sta_WriteInstitution (long InsCod)
 
       /***** Form to go to institution *****/
       Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-                                              "LOG","CT");
+                                              "BT_LINK LOG","CT");
      }
    else			// Hit with no institution selected
      {

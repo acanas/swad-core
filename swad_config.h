@@ -59,11 +59,9 @@
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
 
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO40x40"
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		140
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO140x40"
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"	// Main responsible for the platform
@@ -100,11 +98,9 @@
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"				// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO40x40"
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"openswad220x40.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		220
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO220x40"
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"		// Main responsible for the platform
@@ -162,11 +158,9 @@
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr160x80.png"				// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		80
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO80x40"
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr530x80.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		265
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO265x40"
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"UGR"					// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"swad@ugr.es"				// Main responsible for the platform
@@ -221,11 +215,9 @@
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
 
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO40x40"
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"SWADberry212x40.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		212
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
+#define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO212x40"
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"ATC - UGR"				// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"swad@ugr.es"				// Main responsible for the platform

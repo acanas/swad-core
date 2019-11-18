@@ -878,7 +878,6 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeading (void)
   {
    extern const char *The_ClassTagline[The_NUM_THEMES];
-   extern const char *Txt_System;
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
    const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -915,25 +914,19 @@ static void Lay_WritePageTopHeading (void)
    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
    HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
-   Frm_LinkFormSubmit (Txt_System,NULL,NULL);
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,Cfg_PLATFORM_SHORT_NAME,
-	    "class=\"CM\" style=\"width:%upx; height:%upx;\"",
-	    Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
-   Frm_LinkFormEnd ();
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+		    Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_SMALL_CLASS);
    HTM_DIV_End ();	// head_row_1_logo_small
 
    HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
-   Frm_LinkFormSubmit (Txt_System,NULL,NULL);
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,Cfg_PLATFORM_SHORT_NAME,
-	    "class=\"CM\" style=\"width:%upx; height:%upx;\"",
-	    Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
-   Frm_LinkFormEnd ();
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
+		    Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_BIG_CLASS);
    HTM_DIV_End ();	// head_row_1_logo_big
 
    HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
-   Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_Begin (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    HTM_Txt (Txt_TAGLINE_BR);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();	// head_row_1_tagline
 
    /* End form to go to home page */
@@ -1172,7 +1165,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,
 				    const char *Text)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
    HTM_Txt (" ");	// This space is necessary to enable
@@ -1184,9 +1177,9 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
       FuncParams ();
 
    /***** Put icon and text with link *****/
-   Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink (Icon,Text);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1206,7 +1199,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 					    const char *Text,
 					    const char *OnSubmit)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
    HTM_Txt (" ");	// This space is necessary to enable
@@ -1218,9 +1211,9 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
       FuncParams ();
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
+   HTM_BUTTON_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
    Ico_PutIconTextLink (Icon,Text);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();

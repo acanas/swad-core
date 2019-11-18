@@ -2013,21 +2013,21 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                    unsigned Level,
                                    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
    unsigned NumPosts;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
-   const char *Style;
+   const char *Class;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (Forum);
    NumThrsWithNewPosts = For_GetNumThrsWithNewPstsInForum (Forum,NumThrs);
-   Style = (NumThrsWithNewPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
-	                          The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Class = (NumThrsWithNewPosts ? The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme] :
+	                          The_ClassFormLinkInBox[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
    HTM_LI_Begin (Highlight ? "class=\"LIGHT_BLUE\"" :
@@ -2068,8 +2068,8 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                 Forum->Location,
                                 -1L,
                                 -1L);
-   Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
-                       Style,NULL);
+   HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
+                     Class,NULL);
    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
    switch (Forum->Type)
      {
@@ -2544,13 +2544,13 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 				      Gbl.Forum.ForumSelected.Location,
 				      -1L,
 				      -1L);
-	 Frm_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
          if (Order == Gbl.Forum.ThreadsOrder)
             HTM_U_Begin ();
 	 HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
          if (Order == Gbl.Forum.ThreadsOrder)
             HTM_U_End ();
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
 
          HTM_TH_End ();

@@ -2720,7 +2720,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
 					 char IdComments[Frm_MAX_BYTES_ID + 1],
 					 unsigned NumInitialComments)
   {
-   extern const char *The_ClassFormLink[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_See_the_previous_X_COMMENTS;
    char *OnSubmit;
 
@@ -2765,7 +2765,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_See_the_previous_X_COMMENTS,
 	     NumInitialComments);
-   HTM_BUTTON_Begin (NULL,The_ClassFormLink[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("angle-up.svg",Gbl.Title);
    HTM_BUTTON_End ();
 

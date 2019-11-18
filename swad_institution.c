@@ -200,7 +200,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          HTM_TR_Begin (NULL);
          HTM_TD_Begin ("class=\"LM %s\"",BgColor);
          Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
-                                                 "DAT_NOBR","CM");
+                                                 "BT_LINK DAT_NOBR","CM");
          HTM_TD_End ();
 
          /* Number of pending centres (row[1]) */
@@ -235,13 +235,13 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
      {
       Frm_StartForm (ActSeeInsInf);
       Ins_PutParamInsCod (Ins->InsCod);
-      Frm_LinkFormSubmit (Ins->FullName,NULL,NULL);
+      HTM_BUTTON_Begin (Ins->FullName,"BT_LINK",NULL);
      }
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
   }
@@ -263,14 +263,14 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Ins->FullName);
-   Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Institution logo and name *****/
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -541,9 +541,9 @@ static void Ins_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Centres_of_INSTITUTION_X,
 		Gbl.Hierarchy.Ins.ShrtName);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -766,12 +766,12 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    if (Ins->Status & Ins_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "DAT_LIGHT";
+      TxtClassStrong = "BT_LINK DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "DAT_N";
+      TxtClassStrong = "BT_LINK DAT_N";
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -859,7 +859,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    HTM_U_Begin ();
 	}
@@ -868,7 +868,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();

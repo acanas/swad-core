@@ -224,13 +224,13 @@ static void Gam_ListAllGames (void)
 	 Frm_StartForm (ActSeeAllGam);
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_GAMES_ORDER_HELP[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_GAMES_ORDER[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -449,11 +449,12 @@ void Gam_ShowOneGame (long GamCod,
    HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
-   Frm_LinkFormSubmit (Txt_View_game,
-                       Game.Hidden ? "ASG_TITLE_LIGHT":
-                	             "ASG_TITLE",NULL);
+   HTM_BUTTON_Begin (Txt_View_game,
+                     Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT":
+                	           "BT_LINK ASG_TITLE",
+		     NULL);
    HTM_Txt (Game.Title);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 
@@ -474,13 +475,14 @@ void Gam_ShowOneGame (long GamCod,
    Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
-   Frm_LinkFormSubmit (Txt_Matches,
-                       Game.Hidden ? "ASG_TITLE_LIGHT" :
-                	             "ASG_TITLE",NULL);
+   HTM_BUTTON_Begin (Txt_Matches,
+                     Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
+                	           "BT_LINK ASG_TITLE",
+		     NULL);
    if (ShowOnlyThisGame)
       HTM_TxtF ("%s:&nbsp;",Txt_Matches);
    HTM_Unsigned (Game.NumMchs);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    HTM_TD_End ();

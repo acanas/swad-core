@@ -125,13 +125,13 @@ void Hld_SeeHolidays (void)
 
 	    Frm_StartForm (ActSeeHld);
 	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	    Frm_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
+	    HTM_BUTTON_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       HTM_U_Begin ();
 	    HTM_Txt (Txt_HOLIDAYS_ORDER[Order]);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       HTM_U_End ();
-	    Frm_LinkFormEnd ();
+	    HTM_BUTTON_End ();
 	    Frm_EndForm ();
 
 	    HTM_TH_End ();

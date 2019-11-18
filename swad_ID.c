@@ -455,7 +455,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
    Act_Action_t NextAction;
 
@@ -493,10 +493,9 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
-   Frm_LinkFormSubmit (Txt_Confirm_ID,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("check.svg",
-			Txt_Confirm_ID);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+   Ico_PutIconTextLink ("check.svg",Txt_Confirm_ID);
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();

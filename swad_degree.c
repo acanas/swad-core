@@ -2483,7 +2483,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
 		  /* Write institution logo and name */
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-						          "DAT_SMALL_NOBR","LT");
+						          "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
 	    case Hie_CTR:	// Centre

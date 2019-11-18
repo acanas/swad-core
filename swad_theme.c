@@ -92,12 +92,12 @@ const char *The_TabOffBgColors[The_NUM_THEMES] =
 
 const char *The_ClassTagline[The_NUM_THEMES] =
   {
-   "TAGLINE_WHITE",
-   "TAGLINE_GREY",
-   "TAGLINE_PURPLE",
-   "TAGLINE_BLUE",
-   "TAGLINE_YELLOW",
-   "TAGLINE_PINK",
+   "BT_LINK TAGLINE_WHITE",
+   "BT_LINK TAGLINE_GREY",
+   "BT_LINK TAGLINE_PURPLE",
+   "BT_LINK TAGLINE_BLUE",
+   "BT_LINK TAGLINE_YELLOW",
+   "BT_LINK TAGLINE_PINK",
   };
 
 const char *The_ClassNotif[The_NUM_THEMES] =
@@ -200,6 +200,15 @@ const char *The_ClassTitle[The_NUM_THEMES] =
    "TITLE_PINK",
   };
 
+const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_IN_WHITE",
+   "BT_LINK FORM_IN_GREY",
+   "BT_LINK FORM_IN_PURPLE",
+   "BT_LINK FORM_IN_BLUE",
+   "BT_LINK FORM_IN_YELLOW",
+   "BT_LINK FORM_IN_PINK",
+  };
 const char *The_ClassFormInBox[The_NUM_THEMES] =
   {
    "FORM_IN_WHITE",
@@ -210,6 +219,15 @@ const char *The_ClassFormInBox[The_NUM_THEMES] =
    "FORM_IN_PINK",
   };
 
+const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_IN_WHITE BOLD",
+   "BT_LINK FORM_IN_GREY BOLD",
+   "BT_LINK FORM_IN_PURPLE BOLD",
+   "BT_LINK FORM_IN_BLUE BOLD",
+   "BT_LINK FORM_IN_YELLOW BOLD",
+   "BT_LINK FORM_IN_PINK BOLD",
+  };
 const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
   {
    "FORM_IN_WHITE BOLD",
@@ -230,23 +248,14 @@ const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
    "FORM_IN_PINK NOWRAP",
   };
 
-const char *The_ClassFormLink[The_NUM_THEMES] =
+const char *The_ClassFormLinkOutBox[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_IN_WHITE",
-   "BT_LINK FORM_IN_GREY",
-   "BT_LINK FORM_IN_PURPLE",
-   "BT_LINK FORM_IN_BLUE",
-   "BT_LINK FORM_IN_YELLOW",
-   "BT_LINK FORM_IN_PINK",
-  };
-const char *The_ClassFormLinkBold[The_NUM_THEMES] =
-  {
-   "BT_LINK FORM_IN_WHITE BOLD",
-   "BT_LINK FORM_IN_GREY BOLD",
-   "BT_LINK FORM_IN_PURPLE BOLD",
-   "BT_LINK FORM_IN_BLUE BOLD",
-   "BT_LINK FORM_IN_YELLOW BOLD",
-   "BT_LINK FORM_IN_PINK BOLD",
+   "BT_LINK FORM_OUT_WHITE",
+   "BT_LINK FORM_OUT_GREY",
+   "BT_LINK FORM_OUT_PURPLE",
+   "BT_LINK FORM_OUT_BLUE",
+   "BT_LINK FORM_OUT_YELLOW",
+   "BT_LINK FORM_OUT_PINK",
   };
 
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
@@ -257,6 +266,16 @@ const char *The_ClassFormOutBox[The_NUM_THEMES] =
    "FORM_OUT_BLUE",
    "FORM_OUT_YELLOW",
    "FORM_OUT_PINK",
+  };
+
+const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_OUT_WHITE BOLD",
+   "BT_LINK FORM_OUT_GREY BOLD",
+   "BT_LINK FORM_OUT_PURPLE BOLD",
+   "BT_LINK FORM_OUT_BLUE BOLD",
+   "BT_LINK FORM_OUT_YELLOW BOLD",
+   "BT_LINK FORM_OUT_PINK BOLD",
   };
 
 const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =

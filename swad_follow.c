@@ -213,9 +213,9 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 
       /***** Title with link to suggest more users to follow *****/
       Frm_StartForm (ActSeeSocPrf);
-      Frm_LinkFormSubmit (Txt_Who_to_follow,"CONNECTED_TXT",NULL);
+      HTM_BUTTON_Begin (Txt_Who_to_follow,"BT_LINK CONNECTED_TXT",NULL);
       HTM_Txt (Txt_Who_to_follow);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
 
       /***** Begin table *****/
@@ -552,28 +552,16 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    if (Gbl.Usrs.Me.Logged &&	// Logged
        !ItsMe)			// Not me!
      {
-      if (IFollowUsr)	// I follow this user
-	{
-	 Frm_StartForm (ActUnfUsr);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Frm_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
-	 HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
-	 Ico_PutIcon ("user-check.svg",Txt_Following_unfollow,"ICO40x40");
-	 HTM_DIV_End ();
-	 Frm_LinkFormEnd ();
-	 Frm_EndForm ();
-	}
-      else		// I do not follow this user
-	{
-	 Frm_StartForm (ActFolUsr);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Frm_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
-	 HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
-	 Ico_PutIcon ("user-plus.svg",Txt_Follow,"ICO40x40");
-	 HTM_DIV_End ();
-	 Frm_LinkFormEnd ();
-	 Frm_EndForm ();
-	}
+      Frm_StartForm (IFollowUsr ? ActUnfUsr :
+	                          ActFolUsr);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
+		       IFollowUsr ? "user-check.svg" :
+				    "user-plus.svg",
+		       IFollowUsr ? Txt_Following_unfollow :
+				    Txt_Follow,
+		       "ICO_HIGHLIGHT ICO40x40");
+      Frm_EndForm ();
      }
    HTM_DIV_End ();
 
@@ -596,6 +584,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
   {
    extern const char *The_ClassFormOutBox[The_NUM_THEMES];
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"FOLLOW_BOX\"");
@@ -606,9 +596,10 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       /* Form to list users */
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Frm_LinkFormSubmit (Title,
-                          (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-        	                                       "FOLLOW_NUM",NULL);
+      HTM_BUTTON_Begin (Title,
+                        (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
+        	                                     "BT_LINK FOLLOW_NUM",
+			NULL);
      }
    else
       HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
@@ -616,7 +607,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    HTM_Unsigned (NumUsrs);
    if (NumUsrs)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    else
@@ -631,15 +622,15 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       /* Form to list users */
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Frm_LinkFormSubmit (Title,
-                          (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
-        	                                       The_ClassFormOutBox    [Gbl.Prefs.Theme],
-			  NULL);
+      HTM_BUTTON_Begin (Title,
+                        (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
+        	                                     The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
+			NULL);
      }
    HTM_Txt (Title);
    if (NumUsrs)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    HTM_DIV_End ();
@@ -851,9 +842,9 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
-      Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
+      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }
@@ -908,9 +899,9 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
-      Frm_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
+      HTM_BUTTON_Begin (Txt_Another_user_s_profile,"BT_LINK CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }
@@ -951,7 +942,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
    }
 
 /*****************************************************************************/
-/*********************** Put icon to unfollow another user *********************/
+/*********************** Put icon to follow another user *********************/
 /*****************************************************************************/
 
 static void Fol_PutIconToFollow (struct UsrData *UsrDat)
@@ -961,11 +952,8 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    /***** Form to unfollow *****/
    Frm_StartForm (ActFolUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmit (Txt_Follow,NULL,NULL);
-   HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\"");
-   Ico_PutIcon ("user-plus.svg",Txt_Follow,"ICO16x16");
-   HTM_DIV_End ();
-   Frm_LinkFormEnd ();
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
+		    Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
   }
 
@@ -980,11 +968,8 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    /* Form to follow */
    Frm_StartForm (ActUnfUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmit (Txt_Unfollow,NULL,NULL);
-   HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\"");
-   Ico_PutIcon ("user-check.svg",Txt_Unfollow,"ICO16x16");
-   HTM_DIV_End ();
-   Frm_LinkFormEnd ();
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
+		    Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
   }
 

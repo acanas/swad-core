@@ -519,8 +519,8 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_ClassFormLink[The_NUM_THEMES];
-   extern const char *The_ClassFormLinkBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
@@ -551,10 +551,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    const char *ClassNormal;
    char ClassHighlight[64];
 
-   ClassNormal = The_ClassFormLink[Gbl.Prefs.Theme];
+   ClassNormal = The_ClassFormLinkInBox[Gbl.Prefs.Theme];
    snprintf (ClassHighlight,sizeof (ClassHighlight),
 	     "%s LIGHT_BLUE",
-	     The_ClassFormLinkBold[Gbl.Prefs.Theme]);
+	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,

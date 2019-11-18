@@ -304,14 +304,14 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
-   extern const char *The_ClassFormLink[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
 
    HTM_LI_Begin (NULL);
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
-   HTM_BUTTON_Begin (RoomFullName,The_ClassFormLink[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
