@@ -279,9 +279,9 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    /***** Start div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\"");
    Frm_StartForm (ActMFUAct);
-   Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
-   HTM_TxtF ("&nbsp;%s",Txt_Frequent_ACTIONS);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_Begin (Txt_My_frequent_actions,"BT_LINK MFU_TITLE",NULL);
+   HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Write list of frequently used actions *****/

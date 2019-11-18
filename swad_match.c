@@ -1218,10 +1218,9 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    /***** End table *****/
    HTM_TABLE_End ();
 
-   /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
-   Ico_PutIcon ("play.svg",Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
-   Frm_LinkFormEnd ();
+   /***** Put icon to submit the form *****/
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
+		    Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
 
    /***** End box *****/
    Box_BoxEnd ();

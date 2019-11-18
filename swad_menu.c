@@ -366,7 +366,7 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Begin form and link *****/
          Frm_StartForm (NumAct);
-         Frm_LinkFormSubmit (Title,The_ClassTxtMenu[Gbl.Prefs.Theme],NULL);
+         HTM_BUTTON_Begin (Title,"BT_LINK",NULL);
 
          /***** Icon and text *****/
 	 HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
@@ -378,7 +378,7 @@ void Mnu_WriteMenuThisTab (void)
 	 HTM_DIV_End ();
 
          /***** End link and form *****/
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
          /***** End container used to highlight this option *****/

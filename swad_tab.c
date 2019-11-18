@@ -129,13 +129,14 @@ void Tab_DrawTabs (void)
 	 if (NumTab == Gbl.Action.Tab)
 	    HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
 	 else
-	    HTM_DIV_Begin ("class=\"class=\"ICO_HIGHLIGHT\"");
+	    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\"");
 
 	 Frm_StartForm (ActMnu);
 	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
-	 Frm_LinkFormSubmit (Txt_TABS_TXT[NumTab],
-			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
+	 HTM_BUTTON_Begin (Txt_TABS_TXT[NumTab],
+			   NumTab == Gbl.Action.Tab ? "BT_LINK" :
+						      "BT_LINK",
+			   NULL);
 	 HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
 	          "class=\"TAB_ICO\"");
 	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
@@ -143,7 +144,7 @@ void Tab_DrawTabs (void)
 						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt_TABS_TXT[NumTab]);
 	 HTM_DIV_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
 	 HTM_DIV_End ();

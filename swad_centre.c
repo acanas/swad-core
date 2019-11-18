@@ -886,12 +886,12 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    if (Ctr->Status & Ctr_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "BT_LINK DAT_LIGHT";
+      TxtClassStrong = "BT_LINK LT DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "BT_LINK DAT_N";
+      TxtClassStrong = "BT_LINK LT DAT_N";
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];

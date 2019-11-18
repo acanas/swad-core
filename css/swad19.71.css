@@ -89,7 +89,7 @@ a:link, a:visited, a:active
 a:hover						/* Default ==> underlined */
 	{
 	text-decoration:underline;
-	}	
+	}
 .TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a, .CONTEXT_OPT a	/* Tabs and menus are the exceptions */
 	{
 	text-decoration:none;
@@ -935,23 +935,14 @@ a:hover						/* Default ==> underlined */
 	}
 #main_horizontal .MENU_OPT_OFF
 	{
-	opacity:0.7;
+	opacity:0.67;
 	}
 #main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{
 	opacity:1;
 	transform:scale(1.286,1.286);
 	}
-/*
-#main_horizontal .MENU_ICO
-	{
-	box-sizing:border-box;
-	padding:28px 0 0 0;
-	background-size:28px 28px;
-	background-repeat:no-repeat;
-	background-position:center top;
-	}
-*/
+
 #main_horizontal .MENU_ICO
 	{
 	box-sizing:border-box;
@@ -1004,23 +995,13 @@ a:hover						/* Default ==> underlined */
 		}
 	#main_vertical .MENU_OPT_OFF
 		{
-		opacity:0.7;
+		opacity:0.67;
 		}
 	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
 		{
 		opacity:1;
 		transform:scale(1.286,1.286);
 		}
-	/*
-	#main_vertical .MENU_ICO
-		{
-		box-sizing:border-box;
-		padding:28px 0 0 0;
-		background-size:28px 28px;
-		background-repeat:no-repeat;
-		background-position:center top;
-		}
-	*/
 	#main_vertical .MENU_ICO
 		{
 		box-sizing:border-box;
@@ -1071,7 +1052,7 @@ a:hover						/* Default ==> underlined */
 		}
 	#main_vertical .MENU_OPT_OFF
 		{
-		opacity:0.7;
+		opacity:0.67;
 		}
 	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
 		{
@@ -1520,12 +1501,10 @@ a:hover						/* Default ==> underlined */
 	border:none;
 	padding:0;
 	font:inherit;
-	text-align:left;
 	}
 .BT_LINK:hover
 	{
-	text-decoration: underline;
-	cursor: pointer;
+	cursor:pointer;
 	}
 
 /********************************** Notice ***********************************/
@@ -2141,12 +2120,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 /*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
 	{
-	opacity:0.3;
+	opacity:0.33;
 	}
 .ICO_HIGHLIGHT, .CHECKBOX_UNCHECKED
 	{
-	opacity:0.7;
+	opacity:0.67;
 	}
+
 .ICO_HIGHLIGHT:hover, .CHECKBOX_UNCHECKED:hover, .CHECKBOX_CHECKED
 	{
 	opacity:1;
@@ -2154,7 +2134,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .HLP_HIGHLIGHT
 	{
-	opacity:0.3;
+	opacity:0.33;
 	}
 .HLP_HIGHLIGHT:hover
 	{
@@ -2488,6 +2468,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-overflow:ellipsis;
 	margin:0 auto;
 	}
+
+/************************** Left column menu *********************************/
+.LINK_TITLE, .MFU_TITLE	{color:#4D88A1;}
 
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}

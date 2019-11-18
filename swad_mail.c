@@ -137,13 +137,13 @@ void Mai_SeeMailDomains (void)
 
       Frm_StartForm (ActSeeMai);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-      Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
+      HTM_BUTTON_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
          HTM_U_Begin ();
       HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrder)
          HTM_U_End ();
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
 
       HTM_TH_End ();

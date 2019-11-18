@@ -766,12 +766,12 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    if (Ins->Status & Ins_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "BT_LINK DAT_LIGHT";
+      TxtClassStrong = "BT_LINK LT DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "BT_LINK DAT_N";
+      TxtClassStrong = "BT_LINK LT DAT_N";
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];

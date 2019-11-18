@@ -1222,12 +1222,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 if (Crs->Status & Crs_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal = "DAT_LIGHT";
-	    TxtClassStrong = "BT_LINK DAT_LIGHT";
+	    TxtClassStrong = "BT_LINK LT DAT_LIGHT";
 	   }
 	 else
 	   {
 	    TxtClassNormal = "DAT";
-	    TxtClassStrong = "BT_LINK DAT_N";
+	    TxtClassStrong = "BT_LINK LT DAT_N";
 	   }
 
 	 /* Check if this course is one of my courses */

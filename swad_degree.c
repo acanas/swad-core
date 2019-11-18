@@ -1207,12 +1207,12 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    if (Deg->Status & Deg_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "BT_LINK DAT_LIGHT";
+      TxtClassStrong = "BT_LINK LT DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "BT_LINK DAT_N";
+      TxtClassStrong = "BT_LINK LT DAT_N";
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
