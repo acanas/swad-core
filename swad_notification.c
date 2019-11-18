@@ -338,7 +338,8 @@ void Ntf_ShowMyNotifications (void)
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
    const char *ClassBackground;
-   const char *ClassAnchor;
+   const char *ClassText;
+   const char *ClassLink;
    const char *ClassAuthorBg;
    bool PutLink;
 
@@ -449,21 +450,24 @@ void Ntf_ShowMyNotifications (void)
          if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
            {
             ClassBackground   = "MSG_TIT_BG_REM";
-            ClassAnchor       = "MSG_TIT_REM";
+            ClassText         = "MSG_TIT_REM";
+            ClassLink         = "BT_LINK MSG_TIT_REM";
             ClassAuthorBg     = "MSG_AUT_BG_REM";
             PutLink = false;
            }
          else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
            {
             ClassBackground   = "MSG_TIT_BG";
-            ClassAnchor       = "MSG_TIT";
+            ClassText         = "MSG_TIT";
+            ClassLink         = "BT_LINK MSG_TIT";
             ClassAuthorBg     = "MSG_AUT_BG";
             PutLink = true;
            }
          else					// I have not seen the source of the notification
            {
             ClassBackground   = "MSG_TIT_BG_NEW";
-            ClassAnchor       = "MSG_TIT_NEW";
+            ClassText         = "MSG_TIT_NEW";
+            ClassLink         = "BT_LINK MSG_TIT_NEW";
             ClassAuthorBg     = "MSG_AUT_BG_NEW";
             PutLink = true;
            }
@@ -490,18 +494,16 @@ void Ntf_ShowMyNotifications (void)
          /* Write event type */
          HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
-
-         if (PutLink)
            {
-            Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
+            HTM_BUTTON_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-            Frm_LinkFormEnd ();
+            HTM_BUTTON_End ();
             Frm_EndForm ();
            }
          else
            {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
+            HTM_SPAN_Begin ("class=\"%s\"",ClassText);
             HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             HTM_SPAN_End ();
            }
@@ -521,13 +523,13 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+               HTM_BUTTON_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             else
-               HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
+               HTM_SPAN_Begin ("class=\"%s\"",ClassText);
             HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
             if (PutLink)
               {
-               Frm_LinkFormEnd ();
+               HTM_BUTTON_End ();
                Frm_EndForm ();
               }
             else
@@ -539,9 +541,9 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+               HTM_BUTTON_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             else
-               HTM_SPAN_Begin ("class=\"%s\"",ClassAnchor);
+               HTM_SPAN_Begin ("class=\"%s\"",ClassText);
 
             if (Crs.CrsCod > 0)
                HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
@@ -556,7 +558,7 @@ void Ntf_ShowMyNotifications (void)
 
             if (PutLink)
               {
-               Frm_LinkFormEnd ();
+               HTM_BUTTON_End ();
                Frm_EndForm ();
               }
             else

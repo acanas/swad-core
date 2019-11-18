@@ -618,7 +618,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
       "NOTICE_CONTAINER_OBSOLETE",	// Not_OBSOLETE_NOTICE
      };
-   const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
+   static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
       "NOTICE_CONTAINER_NARROW",	// Not_LIST_BRIEF_NOTICES
       "NOTICE_CONTAINER_WIDE",		// Not_LIST_FULL_NOTICES
@@ -689,7 +689,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to view full notice */
       Frm_StartFormAnchor (ActSeeOneNot,Anchor);
       Not_PutHiddenParamNotCod (NotCod);
-      Frm_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
+      HTM_BUTTON_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
      }
    if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
       Lay_NotEnoughMemoryExit ();
@@ -697,7 +697,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    HTM_SPAN_End ();
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
      }
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,

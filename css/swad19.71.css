@@ -2230,8 +2230,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	white-space:nowrap;
 	overflow:hidden;
-	text-overflow:ellipsis;
-	}
+	/* text-overflow:ellipsis; */
 	}
 
 .LIST_I_MUST_READ

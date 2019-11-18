@@ -3157,10 +3157,11 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
                                                         	                ActExpSntMsg));
    Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
    Msg_PutHiddenParamsOneMsg ();
-   Frm_LinkFormSubmit (Expanded ? Txt_Hide_message :
-	                          Txt_See_message,
-                       Open ? "MSG_TIT" :
-                	      "MSG_TIT_NEW",NULL);
+   HTM_BUTTON_Begin (Expanded ? Txt_Hide_message :
+	                        Txt_See_message,
+                     Open ? "BT_LINK MSG_TIT" :
+                	    "BT_LINK MSG_TIT_NEW",
+		     NULL);
 
    /***** Write subject *****/
    if (Subject[0])
@@ -3169,7 +3170,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
       HTM_TxtF ("[%s]",Txt_no_subject);
 
    /***** End form to expand the message *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** End cell *****/
@@ -3283,9 +3284,9 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
-            Frm_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
+            HTM_BUTTON_Begin (Gbl.Title,"BT_LINK AUTHOR_TXT",NULL);
             HTM_Txt (Crs.ShrtName);
-            Frm_LinkFormEnd ();
+            HTM_BUTTON_End ();
             HTM_Txt (")");
             HTM_DIV_End ();
             Frm_EndForm ();
@@ -3567,10 +3568,10 @@ static void Msg_WriteMsgTo (long MsgCod)
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
          Msg_PutHiddenParamsOneMsg ();
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-         Frm_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
+         HTM_BUTTON_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
          HTM_TxtF (Txt_and_X_other_recipients,
                    NumRecipientsKnown - NumRecipientsToShow);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
          HTM_TD_End ();
 

@@ -338,7 +338,7 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
 static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinkToForum (struct Forum *Forum,
-                                  bool Highlight,bool ShowNumOfPosts,
+                                  bool Highlight,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static unsigned For_GetNumThrsWithNewPstsInForum (struct Forum *Forum,
@@ -348,14 +348,12 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (struct Forum *Forum,
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
-static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
-static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
+static void For_WriteNumberOfThrs (unsigned NumThrs);
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                                        Ale_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewThread (void);
 static void For_PutAllHiddenParamsNewThread (void);
 static unsigned For_GetNumThrsInForum (struct Forum *Forum);
-static unsigned For_GetNumPstsInForum (struct Forum *Forum);
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs);
@@ -1787,7 +1785,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
    Forum.Location = -1L;
    Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_GLOBAL_USRS);
    IsLastItemInLevel[1] = false;
-   For_WriteLinkToForum (&Forum,Highlight,false,0,IsLastItemInLevel);
+   For_WriteLinkToForum (&Forum,Highlight,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers global *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
@@ -1797,7 +1795,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
       Forum.Location = -1L;
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_GLOBAL_TCHS);
       IsLastItemInLevel[1] = false;
-      For_WriteLinkToForum (&Forum,Highlight,false,0,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,0,IsLastItemInLevel);
      }
   }
 
@@ -1823,7 +1821,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
    Forum.Location = -1L;
    Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM__SWAD__USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
-   For_WriteLinkToForum (&Forum,Highlight,false,0,IsLastItemInLevel);
+   For_WriteLinkToForum (&Forum,Highlight,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers about the platform *****/
    if (ICanSeeTeacherForum)
@@ -1832,7 +1830,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
       Forum.Location = -1L;
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM__SWAD__TCHS);
       IsLastItemInLevel[1] = IsLastForum;
-      For_WriteLinkToForum (&Forum,Highlight,false,0,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,0,IsLastItemInLevel);
      }
   }
 
@@ -1862,7 +1860,7 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_INSTIT_USRS &&
 	           Gbl.Forum.ForumSelected.Location == InsCod);
       IsLastItemInLevel[1] = (IsLastIns && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (&Forum,Highlight,false,1,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,1,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this institution *****/
       if (ICanSeeTeacherForum)
@@ -1872,7 +1870,7 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
 	 Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_INSTIT_TCHS &&
 		      Gbl.Forum.ForumSelected.Location == InsCod);
          IsLastItemInLevel[1] = IsLastIns;
-         For_WriteLinkToForum (&Forum,Highlight,false,1,IsLastItemInLevel);
+         For_WriteLinkToForum (&Forum,Highlight,1,IsLastItemInLevel);
         }
      }
    return InsCod;
@@ -1904,7 +1902,7 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_CENTRE_USRS &&
 	           Gbl.Forum.ForumSelected.Location == CtrCod);
       IsLastItemInLevel[2] = (IsLastCtr && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (&Forum,Highlight,false,2,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,2,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this centre *****/
       if (ICanSeeTeacherForum)
@@ -1914,7 +1912,7 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
 	 Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_CENTRE_TCHS &&
 		      Gbl.Forum.ForumSelected.Location == CtrCod);
          IsLastItemInLevel[2] = IsLastCtr;
-         For_WriteLinkToForum (&Forum,Highlight,false,2,IsLastItemInLevel);
+         For_WriteLinkToForum (&Forum,Highlight,2,IsLastItemInLevel);
         }
      }
    return CtrCod;
@@ -1946,7 +1944,7 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_DEGREE_USRS &&
 	           Gbl.Forum.ForumSelected.Location == DegCod);
       IsLastItemInLevel[3] = (IsLastDeg && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (&Forum,Highlight,false,3,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,3,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this degree *****/
       if (ICanSeeTeacherForum)
@@ -1956,7 +1954,7 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
 	 Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_DEGREE_TCHS &&
 		      Gbl.Forum.ForumSelected.Location == DegCod);
 	 IsLastItemInLevel[3] = IsLastDeg;
-         For_WriteLinkToForum (&Forum,Highlight,false,3,IsLastItemInLevel);
+         For_WriteLinkToForum (&Forum,Highlight,3,IsLastItemInLevel);
         }
      }
    return DegCod;
@@ -1988,7 +1986,7 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
       Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_COURSE_USRS &&
 	           Gbl.Forum.ForumSelected.Location == CrsCod);
       IsLastItemInLevel[4] = (IsLastCrs && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (&Forum,Highlight,false,4,IsLastItemInLevel);
+      For_WriteLinkToForum (&Forum,Highlight,4,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this course *****/
       if (ICanSeeTeacherForum)
@@ -1998,7 +1996,7 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
 	 Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_COURSE_TCHS &&
 		      Gbl.Forum.ForumSelected.Location == CrsCod);
          IsLastItemInLevel[4] = IsLastCrs;
-         For_WriteLinkToForum (&Forum,Highlight,false,4,IsLastItemInLevel);
+         For_WriteLinkToForum (&Forum,Highlight,4,IsLastItemInLevel);
         }
      }
    return CrsCod;
@@ -2009,16 +2007,15 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
 /*****************************************************************************/
 
 static void For_WriteLinkToForum (struct Forum *Forum,
-                                   bool Highlight,bool ShowNumOfPosts,
-                                   unsigned Level,
-                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
+                                  bool Highlight,
+                                  unsigned Level,
+                                  bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
-   unsigned NumPosts;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    const char *Class;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -2103,14 +2100,8 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    HTM_TxtF ("&nbsp;%s",ForumName);
 
    /***** Write total number of threads and posts in this forum *****/
-   if (ShowNumOfPosts)
-     {
-      if ((NumPosts = For_GetNumPstsInForum (Forum)))
-         For_WriteNumThrsAndPsts (NumThrs,NumThrsWithNewPosts,NumPosts);
-     }
-   else
-      if (NumThrs)
-         For_WriteNumberOfThrs (NumThrs,NumThrsWithNewPosts);
+   if (NumThrs)
+      For_WriteNumberOfThrs (NumThrs);
 
    /***** End row *****/
    Frm_LinkFormEnd ();
@@ -2348,54 +2339,17 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   }
 
 /*****************************************************************************/
-/*************** Get and write total number of threads and posts *************/
-/*****************************************************************************/
-
-static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts)
-  {
-   extern const char *Txt_thread;
-   extern const char *Txt_threads;
-   extern const char *Txt_FORUM_post;
-   extern const char *Txt_FORUM_posts;
-   extern const char *Txt_with_new_posts;
-
-   /***** Write number of threads and number of posts *****/
-   HTM_Txt (" [");
-   if (NumThrs == 1)
-     {
-      HTM_TxtF ("%u&nbsp;%s",1,Txt_thread);
-      if (NumThrsWithNewPosts)
-         HTM_TxtF (", 1 %s",Txt_with_new_posts);
-      HTM_TxtF ("; %u&nbsp;%s",NumPosts,NumPosts == 1 ? Txt_FORUM_post :
-                                                        Txt_FORUM_posts);
-     }
-   else
-     {
-      HTM_TxtF ("%u&nbsp;%s",NumThrs,Txt_threads);
-      if (NumThrsWithNewPosts)
-         HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-      HTM_TxtF ("; %u %s",NumPosts,Txt_FORUM_posts);
-     }
-   HTM_Txt ("]");
-  }
-
-/*****************************************************************************/
 /************** Get and write total number of threads and posts **************/
 /*****************************************************************************/
 
-static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts)
+static void For_WriteNumberOfThrs (unsigned NumThrs)
   {
    extern const char *Txt_thread;
    extern const char *Txt_threads;
-   extern const char *Txt_with_new_posts;
 
    /***** Write number of threads and number of posts *****/
-   HTM_Txt (" [");
-   HTM_TxtF ("%u&nbsp;%s",NumThrs,NumThrs == 1 ? Txt_thread :
-			                         Txt_threads);
-   if (NumThrsWithNewPosts)
-      HTM_TxtF (", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-   HTM_Txt ("]");
+   HTM_TxtF (" [%u&nbsp;%s]",NumThrs,NumThrs == 1 ? Txt_thread :
+			                            Txt_threads);
   }
 
 /*****************************************************************************/
@@ -3285,27 +3239,6 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
    DB_FreeMySQLResult (&mysql_res);
 
    return NumPosts;
-  }
-
-/*****************************************************************************/
-/********************* Get number of posts in a forum ************************/
-/*****************************************************************************/
-
-static unsigned For_GetNumPstsInForum (struct Forum *Forum)
-  {
-   char SubQuery[256];
-
-   /***** Get number of posts in a forum from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND forum_thread.Location=%ld",Forum->Location);
-   else
-      SubQuery[0] = '\0';
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of posts in a forum",
-			     "SELECT COUNT(*) FROM forum_thread,forum_post "
-			     " WHERE forum_thread.ForumType=%u%s"
-			     " AND forum_thread.ThrCod=forum_post.ThrCod",
-			     (unsigned) Forum->Type,SubQuery);
   }
 
 /*****************************************************************************/

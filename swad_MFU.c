@@ -208,7 +208,7 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
-   extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -245,11 +245,11 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          /* Icon and text */
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
-         Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
+         HTM_BUTTON_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
          HTM_TxtF ("&nbsp;%s",TabMenuStr);
-         Frm_LinkFormEnd ();
+         HTM_BUTTON_End ();
          Frm_EndForm ();
          HTM_LI_End ();
         }
@@ -306,11 +306,11 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          /* Icon and text */
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
-         Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
+         HTM_BUTTON_Begin (TabMenuStr,"BT_LINK",NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 	          NULL);
 	 HTM_TxtF ("&nbsp;%s",MenuStr);
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
          Frm_EndForm ();
          HTM_LI_End ();
         }

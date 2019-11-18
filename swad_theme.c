@@ -238,6 +238,15 @@ const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
    "FORM_IN_PINK BOLD",
   };
 
+const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES] =
+  {
+   "BT_LINK FORM_IN_WHITE NOWRAP",
+   "BT_LINK FORM_IN_GREY NOWRAP",
+   "BT_LINK FORM_IN_PURPLE NOWRAP",
+   "BT_LINK FORM_IN_BLUE NOWRAP",
+   "BT_LINK FORM_IN_YELLOW NOWRAP",
+   "BT_LINK FORM_IN_PINK NOWRAP",
+  };
 const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
   {
    "FORM_IN_WHITE NOWRAP",
