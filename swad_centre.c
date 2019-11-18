@@ -210,7 +210,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          HTM_TD_Begin ("class=\"LM %s\"",BgColor);
          Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeDeg,
-                                            "DAT_NOBR","CM");
+                                            "BT_LINK DAT_NOBR","CM");
          HTM_TD_End ();
 
          /* Number of pending degrees (row[1]) */
@@ -249,14 +249,14 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Ctr->FullName);
-   Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Centre logo and name *****/
    Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
    /***** End link *****/
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -645,9 +645,9 @@ static void Ctr_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Degrees_of_CENTRE_X,
 		Gbl.Hierarchy.Ctr.ShrtName);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      Frm_LinkFormEnd ();
+      HTM_BUTTON_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -886,12 +886,12 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    if (Ctr->Status & Ctr_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "DAT_LIGHT";
+      TxtClassStrong = "BT_LINK DAT_LIGHT";
      }
    else
      {
       TxtClassNormal = "DAT";
-      TxtClassStrong = "DAT_N";
+      TxtClassStrong = "BT_LINK DAT_N";
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -2586,7 +2586,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_CENTRES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    HTM_U_Begin ();
 	}
@@ -2595,7 +2595,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();

@@ -1026,12 +1026,6 @@ void Ban_WriteMenuWithBanners (void)
       Par_PutHiddenParamString (NULL,"URL",Gbl.Banners.Lst[NumBan].WWW);
       HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,
 		       Gbl.Banners.Lst[NumBan].FullName,"BANNER");
-      /*
-      HTM_BUTTON_Begin (Gbl.Banners.Lst[NumBan].FullName,"BT_LINK BANNER",NULL);
-      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
-	       "class=\"BANNER\"");
-      HTM_BUTTON_End ();
-      */
       Frm_EndForm ();
       HTM_DIV_End ();
      }

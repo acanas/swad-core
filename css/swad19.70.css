@@ -1520,6 +1520,7 @@ a:hover						/* Default ==> underlined */
 	border:none;
 	padding:0;
 	font:inherit;
+	text-align:left;
 	}
 .BT_LINK:hover
 	{

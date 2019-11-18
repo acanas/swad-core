@@ -2495,7 +2495,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
 		  /* Write centre logo and name */
 		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
-						     "DAT_SMALL_NOBR","LT");
+						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
 	    case Hie_DEG:	// Degree
