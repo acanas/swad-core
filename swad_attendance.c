@@ -119,7 +119,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct AttendanceEvent *Att);
 static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
 				 const char *Title,const char *Txt,
-				 const char *LinkStyle);
+				 const char *Class);
 static void Att_PutParamsCodGrps (long AttCod);
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
@@ -257,13 +257,13 @@ static void Att_ShowAllAttEvents (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 HTM_BUTTON_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    HTM_U_End ();
-	 Frm_LinkFormEnd ();
+	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -445,8 +445,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
    Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
-	                Att->Hidden ? "ASG_TITLE_LIGHT" :
-	                              "ASG_TITLE");
+	                Att->Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
+	                              "BT_LINK ASG_TITLE");
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -2171,14 +2171,14 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
 static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
 				 const char *Title,const char *Txt,
-				 const char *LinkStyle)
+				 const char *Class)
   {
    Frm_StartForm (ActSeeOneAtt);
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
-   Frm_LinkFormSubmit (Title,LinkStyle,NULL);
+   HTM_BUTTON_Begin (Title,Class,NULL);
    HTM_Txt (Txt);
-   Frm_LinkFormEnd ();
+   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -3276,7 +3276,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 Att_PutLinkAttEvent (&Gbl.AttEvents.Lst[NumAttEvent],
 			      Gbl.AttEvents.Lst[NumAttEvent].Title,
 			      StrNumAttEvent,
-			      NULL);
+			      "BT_LINK TIT_TBL");
 	 HTM_TH_End ();
 	}
 
