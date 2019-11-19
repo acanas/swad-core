@@ -459,7 +459,7 @@ void Ntf_ShowMyNotifications (void)
            {
             ClassBackground   = "MSG_TIT_BG";
             ClassText         = "MSG_TIT";
-            ClassLink         = "BT_LINK MSG_TIT";
+            ClassLink         = "BT_LINK LT MSG_TIT";
             ClassAuthorBg     = "MSG_AUT_BG";
             PutLink = true;
            }
@@ -467,7 +467,7 @@ void Ntf_ShowMyNotifications (void)
            {
             ClassBackground   = "MSG_TIT_BG_NEW";
             ClassText         = "MSG_TIT_NEW";
-            ClassLink         = "BT_LINK MSG_TIT_NEW";
+            ClassLink         = "BT_LINK LT MSG_TIT_NEW";
             ClassAuthorBg     = "MSG_AUT_BG_NEW";
             PutLink = true;
            }

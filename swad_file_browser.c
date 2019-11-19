@@ -11919,12 +11919,12 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TR_Begin (NULL);
 
       /***** Write number of document in this search *****/
-      HTM_TD_Begin ("class=\"DAT RT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"RT DAT %s\"",BgColor);
       HTM_UnsignedLong (++(*NumDocsNotHidden));
       HTM_TD_End ();
 
       /***** Write institution logo, institution short name *****/
-      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       if (InsCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeInsInf);
@@ -11932,7 +11932,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   InsShortName);
-         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
          Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 HTM_BUTTON_End ();
@@ -11941,7 +11941,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TD_End ();
 
       /***** Write centre logo, centre short name *****/
-      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       if (CtrCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeCtrInf);
@@ -11949,7 +11949,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   CtrShortName);
-         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
          Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 HTM_BUTTON_End ();
@@ -11958,7 +11958,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TD_End ();
 
       /***** Write degree logo, degree short name *****/
-      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       if (DegCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeDegInf);
@@ -11966,7 +11966,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   DegShortName);
-         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
          Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 HTM_BUTTON_End ();
@@ -11975,7 +11975,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TD_End ();
 
       /***** Write course short name *****/
-      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       if (CrsCod > 0)
 	{
 	 Frm_StartFormGoTo (ActSeeCrsInf);
@@ -12085,7 +12085,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 				   FileMetadata.FilCod);
 
       /* File or folder icon */
-      HTM_BUTTON_Begin (FileNameToShow,"BT_LINK DAT_N",NULL);
+      HTM_BUTTON_Begin (FileNameToShow,"BT_LINK LT DAT_N",NULL);
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	 /* Icon with folder */
          Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");

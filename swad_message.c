@@ -3159,8 +3159,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    Msg_PutHiddenParamsOneMsg ();
    HTM_BUTTON_Begin (Expanded ? Txt_Hide_message :
 	                        Txt_See_message,
-                     Open ? "BT_LINK MSG_TIT" :
-                	    "BT_LINK MSG_TIT_NEW",
+                     Open ? "BT_LINK LT MSG_TIT" :
+                	    "BT_LINK LT MSG_TIT_NEW",
 		     NULL);
 
    /***** Write subject *****/
