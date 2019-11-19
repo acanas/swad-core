@@ -1311,9 +1311,9 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden);
 
 static void Brw_PutIconNewFileOrFolder (void);
-static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
-                                                   struct FileMetadata *FileMetadata);
-static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
+static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata);
+static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
+			     const char *Class,bool Input);
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (void);
 
@@ -5593,7 +5593,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start column */
-   HTM_TD_Begin ("class=\"NO_BR LT COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"NO_BR LM COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
 
    HTM_TABLE_Begin (NULL);
    HTM_TR_Begin (NULL);
@@ -5616,12 +5616,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       /* Icon with folder */
       Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow);
    else	// File or link
-     {
       /* Icon with file type or link */
-      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-      Brw_PutIconFileWithLinkToViewMetadata (16,&FileMetadata);
-      HTM_TD_End ();
-     }
+      Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
 
    /* Check if is a new file or folder */
    // If our last access was before the last modify ==> indicate the file is new by putting a blinking star
@@ -5992,7 +5988,7 @@ static void Brw_PutIconFolder (unsigned Level,
    bool ICanCreate;
 
    /***** Start cell *****/
-   HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Level * 20);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
    /***** Put icon to create a new file or folder *****/
    if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
@@ -6131,11 +6127,10 @@ static void Brw_PutIconNewFileOrFolder (void)
 /*****************************************************************************/
 // FileType can be Brw_IS_FILE or Brw_IS_LINK
 
-static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
-                                                   struct FileMetadata *FileMetadata)
+static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata)
   {
-   extern const char *Txt_View_data;
-   char *Class;
+   /***** Start cell *****/
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
@@ -6144,25 +6139,23 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 			     Brw_IS_UNKNOWN,	// Not used
                              FileMetadata->FilCod);
 
-   /***** Name and link of the file or folder *****/
-   if (asprintf (&Class,"BT_LINK %s",Gbl.FileBrowser.TxtStyle) < 0)
-      Lay_NotEnoughMemoryExit ();
-   HTM_BUTTON_Begin (Txt_View_data,Class,NULL);
-   free (Class);
-
    /***** Icon depending on the file extension *****/
-   Brw_PutIconFile (Size,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
+   Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+		    "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",true);
 
-   /***** End link and form *****/
-   HTM_BUTTON_End ();
+   /***** End form *****/
    Frm_EndForm ();
+
+   /***** End cell *****/
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
+static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
+			     const char *Class,bool Input)
   {
    extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
    extern const char *Ext_FileExtensionsAllowed[];
@@ -6176,22 +6169,24 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 
    /***** Icon depending on the file extension *****/
    if (FileType == Brw_IS_LINK)
-      Ico_PutIcon ("link.svg",Txt_Link,(Size == 16) ? "CONTEXT_ICO_16x16" :
-		                                      "ICO40x40");
+     {
+      if (Input)
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,Class);
+      else
+	 Ico_PutIcon ("link.svg",Txt_Link,Class);
+     }
    else	// FileType == Brw_IS_FILE
      {
-      if (asprintf (&URL,"%s%ux%u",
-		    CfG_URL_ICON_FILEXT_PUBLIC,
-	            Size,Size) < 0)
+      if (asprintf (&URL,"%s32x32",
+		    CfG_URL_ICON_FILEXT_PUBLIC) < 0)
 	 Lay_NotEnoughMemoryExit ();
       for (DocType = 0, NotFound = true;
 	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	   DocType++)
 	 if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
 	   {
-	    if (asprintf (&Icon,"%s%ux%u.gif",
-			  Ext_FileExtensionsAllowed[DocType],
-		          Size,Size) < 0)
+	    if (asprintf (&Icon,"%s32x32.gif",
+			  Ext_FileExtensionsAllowed[DocType]) < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    if (asprintf (&Title,Txt_X_file,
 			  Ext_FileExtensionsAllowed[DocType]) < 0)
@@ -6200,15 +6195,17 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	   }
       if (NotFound)
 	{
-	 if (asprintf (&Icon,"xxx%ux%u.gif",Size,Size) < 0)
+	 if (asprintf (&Icon,"xxx32x32.gif") < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 if (asprintf (&Title,"%s","") < 0)
 	    Lay_NotEnoughMemoryExit ();
 	}
-      HTM_IMG (URL,Icon,Title,
-	       "class=\"CONTEXT_OPT ICO_HIGHLIGHT %s\"",
-	       (Size == 16) ? "CONTEXT_ICO_16x16" :
-			      "ICO40x40");
+
+      if (Input)
+	 HTM_INPUT_IMAGE (URL,Icon,Title,Class);
+      else
+	 HTM_IMG (URL,Icon,Title,
+		  "class=\"%s\"",Class);
       free (Title);
       free (Icon);
       free (URL);
@@ -6307,21 +6304,20 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 		       Gbl.FileBrowser.TxtStyle);
 
       HTM_NBSP ();
-      HTM_DIV_Begin ("class=\"FILENAME\"");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link to the form and to the file */
-      if (asprintf (&Class,"BT_LINK %s",Gbl.FileBrowser.TxtStyle) < 0)
+      if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_BUTTON_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
 	                 Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
 	                                                             Txt_Download,
 		        Class,NULL);
-      free (Class);
       HTM_Txt (FileNameToShow);
       HTM_BUTTON_End ();
+      free (Class);
       Frm_EndForm ();
 
       /* Put icon to make public/private file */
@@ -6329,7 +6325,6 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
          Ico_PutIconOff ("unlock.svg",
                          Txt_Public_open_educational_resource_OER_for_everyone);
 
-      HTM_DIV_End ();
       HTM_TD_End ();
      }
   }
@@ -9511,11 +9506,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Filename *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Filename);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	 HTM_TD_End ();
 
@@ -9524,11 +9519,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Publisher's data *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Uploaded_by);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
@@ -9538,6 +9533,7 @@ void Brw_ShowFileMetadata (void)
 	                      "PHOTO15x20",Pho_ZOOM,false);
 
 	    /* Write name */
+	    HTM_NBSP ();
 	    HTM_Txt (PublisherUsrDat.FullName);
 	   }
 	 else
@@ -9555,11 +9551,11 @@ void Brw_ShowFileMetadata (void)
 	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_File_size);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 HTM_Txt (FileSizeStr);
 	 HTM_TD_End ();
 
@@ -9568,11 +9564,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write the date *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Date_of_creation);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
+	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LB\"");
 	 Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -9583,14 +9579,14 @@ void Brw_ShowFileMetadata (void)
 	 /***** Private or public? *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM\"");
+	 HTM_TD_Begin ("class=\"RT\"");
 	 HTM_LABEL_Begin ("for=\"PublicFile\" class=\"%s\"",
 		          The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Availability);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    HTM_SELECT_Begin (false,
@@ -9624,7 +9620,7 @@ void Brw_ShowFileMetadata (void)
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    HTM_SELECT_Begin (false,
-			      "id=\"License\" name=\"License\">");
+			      "id=\"License\" name=\"License\" class=\"LICENSE\"");
 	    for (License = 0;
 		 License < Brw_NUM_LICENSES;
 		 License++)
@@ -9647,11 +9643,11 @@ void Brw_ShowFileMetadata (void)
 	   {
 	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s:",Txt_My_views);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"DAT LB\"");
 	    HTM_Unsigned (FileMetadata.NumMyViews);
 	    HTM_TD_End ();
 
@@ -9661,11 +9657,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write number of identificated views *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Identified_views);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 	 HTM_TxtF ("(%u %s)",
 		   FileMetadata.NumLoggedUsrs,
@@ -9678,11 +9674,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write number of public views *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s:",Txt_Public_views);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LB\"");
 	 HTM_Unsigned (FileMetadata.NumPublicViews);
 	 HTM_TD_End ();
 
@@ -10029,7 +10025,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
       /* Link begin */
       HTM_BUTTON_Begin (Txt_Check_marks_in_the_file,"BT_LINK FILENAME_TXT",NULL);
-      Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
+      Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+		       "ICO40x40",false);
 
       /* Name of the file of marks, link end and form end */
       HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
@@ -10045,7 +10042,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
-      Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
+      Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+		       "ICO40x40",false);
       HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
       Ico_PutIcon ("download.svg",Title,"ICO40x40");
       HTM_A_End ();
@@ -12091,7 +12089,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
       else
 	 /* Icon with file type or link */
-	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
+	 Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
+			  "CONTEXT_ICO_16x16",false);
       HTM_TxtF ("&nbsp;%s",FileNameToShow);
       HTM_BUTTON_End ();
 

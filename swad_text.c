@@ -52569,27 +52569,6 @@ const char *Txt_View_attendance =
 	"Ver presen&ccedil;a";
 #endif
 
-const char *Txt_View_data =
-#if   L==1	// ca
-	"Veure dades";
-#elif L==2	// de
-	"Siehe Daten";
-#elif L==3	// en
-	"View data";
-#elif L==4	// es
-	"Ver datos";
-#elif L==5	// fr
-	"Voir les donn&eacute;es";
-#elif L==6	// gn
-	"Ver datos";	// Okoteve traducción
-#elif L==7	// it
-	"Visualizza i dati";
-#elif L==8	// pl
-	"Zobacz dane";
-#elif L==9	// pt
-	"Ver os dados";
-#endif
-
 const char *Txt_View_email_addresses =
 #if   L==1	// ca
 	"Veure adreces de correu";

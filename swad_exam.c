@@ -1211,7 +1211,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_SELECT_End ();
 
       HTM_SELECT_Begin (false,
-			"name=\"ExamMinute\">");
+			"name=\"ExamMinute\"");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
@@ -1238,7 +1238,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_SELECT_Begin (false,
-			"name=\"DurationHour\">");
+			"name=\"DurationHour\"");
       for (Hour = 0;
 	   Hour <= 8;
 	   Hour++)
@@ -1248,7 +1248,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       HTM_SELECT_End ();
 
       HTM_SELECT_Begin (false,
-			"name=\"DurationMinute\">");
+			"name=\"DurationMinute\"");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)

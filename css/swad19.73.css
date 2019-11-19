@@ -1751,13 +1751,13 @@ a:hover						/* Default ==> underlined */
 	{
 	width:16px;
 	height:16px;
-	margin-top:-2px;
+	/* margin-top:-2px; */
 	vertical-align:middle;
 	}
 .CONTEXT_ICO_x16
 	{
 	height:16px;
-	margin-top:-2px;
+	/* margin-top:-2px; */
 	vertical-align:middle;
 	}
 
@@ -2032,15 +2032,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************* User's photo ********************************/
-.PHOTO12x16		{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
-.PHOTO15x20		{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
-.PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; display:block; margin:0 auto;}
-.PHOTO18x24		{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
-.PHOTO21x28		{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
-.PHOTO30x40		{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
-.PHOTO42x56		{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
-.PHOTO45x60		{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
-.PHOTO60x80		{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
+.PHOTO12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
+.PHOTO15x20	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
+.PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
+.PHOTO21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
+.PHOTO30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
+.PHOTO42x56	{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
+.PHOTO45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
+.PHOTO60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
 .PHOTO186x248	{width:186px; height:248px; border-radius:8px; vertical-align:middle;}
 .IMG_USR
 	{
@@ -2253,7 +2253,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-		}
+	}
 .FILENAME_TXT
 	{
 	color:#202020;
@@ -2268,15 +2268,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	width:100%;
 	}
-.LST				{color:#202020; font-size:11pt; white-space:nowrap;}
-.LST_HID			{color:#A0A0A0; font-size:11pt; white-space:nowrap;}
-.LST_REC			{color:#008000; font-size:11pt; white-space:nowrap;}
+.LST			{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_HID		{color:#A0A0A0; font-size:11pt; white-space:nowrap;}
+.LST_REC		{color:#008000; font-size:11pt; white-space:nowrap;}
 .LST_REC_HID		{color:#89BE87; font-size:11pt; white-space:nowrap;}
-.LST_EDIT			{width:250px; color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT		{width:250px; color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_HID		{width:250px; color:#A0A0A0; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC		{width:250px; color:#008000; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC_HID	{width:250px; color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_ROWS		{width:30px;  color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+
+.LICENSE	{max-width:260px;}
 
 /************** Paragraph (margin on top and bottom of a div) ****************/
 .PAR

@@ -2494,7 +2494,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Place *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
-		     "name=\"PlcCod\" class=\"PLC_SEL\">");
+		     "name=\"PlcCod\" class=\"PLC_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",
 	       Ctr_EditingCtr->PlcCod == 0,false,
 	       "%s",Txt_Another_place);

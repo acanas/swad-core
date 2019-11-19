@@ -455,7 +455,8 @@ void Sta_AskShowCrsHits (void)
          HTM_TxtF ("(%s: ",Txt_results_per_page);
          HTM_SELECT_Begin (false,
 		           "id=\"RowsPage\" name=\"RowsPage\"%s",
-                           Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" : " disabled=\"disabled\"");
+                           Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+                        	                                                      " disabled=\"disabled\"");
          for (i = 0;
               i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
