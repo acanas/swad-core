@@ -1404,7 +1404,7 @@ mysql> DESCRIBE mch_matches;
 			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(MchCod),"
-		   "INDEX(GamCod)");
+		   "INDEX(GamCod))");
 
    /***** Table mch_playing *****/
 /*

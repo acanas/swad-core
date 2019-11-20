@@ -406,9 +406,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
-	 Ico_PutIcon ("ellipsis-h.svg",Txt_Connected_users,"ICO16x16");
-	 HTM_BUTTON_End ();
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
+			  Txt_Connected_users,"ICO16x16");
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 

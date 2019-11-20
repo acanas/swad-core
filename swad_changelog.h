@@ -488,13 +488,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.74.2 (2019-11-20)"
-#define CSS_FILE		"swad19.74.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.74.3 (2019-11-20)"
+#define CSS_FILE		"swad19.74.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 
+	Version 19.74.3:  Nov 20, 2019	Minor bug fixes and changes in layout and users' ranking. (247020 lines)
 	Version 19.74.2:  Nov 20, 2019	Changes in layout of timeline. (247006 lines)
 	Version 19.74.1:  Nov 20, 2019	Fixed bug in CSS related to buttons. (247020 lines)
 	Version 19.74:    Nov 20, 2019	Changes in CSS.

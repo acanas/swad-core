@@ -2299,7 +2299,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border-width:1px;
 	}
 
-.DAT_SMALL			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:12pt;}
+.DAT_SMALL		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:12pt;}
 .DAT_SMALL_LIGHT	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
 .DAT_SMALL_NOBR		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
@@ -3754,13 +3754,6 @@ a.PAG:hover, .PAG_CUR
 	{
 	margin-bottom:10px;
 	}
-	
-/******************************* Users' ranking ******************************/
-.RANK_PHOTO
-	{
-	width:34px;
-	height:48px;
- 	}
 
 /***************************** Public user's profile *************************/
 .PRF_FIG_LEFT_CONTAINER
@@ -3891,13 +3884,19 @@ a.PAG:hover, .PAG_CUR
 .RANK_USR
 	{
 	box-sizing:border-box;
-	max-width:40px;
+	max-width:48px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
+	
+.RANK_PHOTO
+	{
+	width:34px;
+	height:48px;
+ 	}
 
 /************************* Indicators about courses **************************/
 .INDICATORS td,.INDICATORS th

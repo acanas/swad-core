@@ -113,7 +113,7 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
-static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank);
+static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
 
 /*****************************************************************************/
 /************* Suggest who to follow or request user's profile ***************/
@@ -1521,6 +1521,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
    unsigned NumUsr;
    unsigned Rank;
    struct UsrData UsrDat;
+   bool ItsMe;
    long FigureHigh = LONG_MAX;
    long Figure;
 
@@ -1541,6 +1542,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /* Get figure (row[1]) */
 	 if (sscanf (row[1],"%ld",&Figure) != 1)
@@ -1554,13 +1556,13 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 /***** Show row *****/
 	 HTM_TR_Begin (NULL);
-
-         Prf_ShowUsrInRanking (&UsrDat,Rank);
-
-	 HTM_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
+         Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
+	 HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+		       ItsMe ? "DAT_SMALL_N" :
+		               "DAT_SMALL",
+		       Gbl.RowEvenOdd);
 	 HTM_Long (Figure);
 	 HTM_TD_End ();
-
 	 HTM_TR_End ();
 	}
 
@@ -1586,6 +1588,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    unsigned NumUsr;
    unsigned Rank;
    struct UsrData UsrDat;
+   bool ItsMe;
    double NumClicksPerDayHigh = (double) LONG_MAX;
    double NumClicksPerDay;
 
@@ -1710,6 +1713,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /* Get number of clicks per day (row[1]) */
 	 NumClicksPerDay = Str_GetDoubleNumFromStr (row[1]);
@@ -1721,8 +1725,11 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	 /***** Show row *****/
 	 HTM_TR_Begin (NULL);
-	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 HTM_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
+	 Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
+	 HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+		       ItsMe ? "DAT_SMALL_N" :
+		               "DAT_SMALL",
+		       Gbl.RowEvenOdd);
 	 Str_WriteDoubleNumToFile (Gbl.F.Out,NumClicksPerDay);
 	 HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1742,14 +1749,17 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
+static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   HTM_TD_Begin ("class=\"RANK RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+		 ItsMe ? "DAT_SMALL_N" :
+		         "DAT_SMALL",
+                 Gbl.RowEvenOdd);
    HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
 
@@ -1771,11 +1781,12 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
      {
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      HTM_DIV_Begin ("class=\"RANK_USR\"");	// Limited width
-      HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK DAT_SMALL",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
+			       ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :
+		                       "BT_LINK RANK_USR DAT_SMALL",
+			       NULL);	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
       HTM_BUTTON_End ();
-      HTM_DIV_End ();
       Frm_EndForm ();
      }
    HTM_TD_End ();

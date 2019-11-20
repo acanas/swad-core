@@ -260,7 +260,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
+				  "BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
