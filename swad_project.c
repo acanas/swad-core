@@ -904,7 +904,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 			   Order,
 			   Gbl.Prjs.CurrentPage,
 			   -1L);
-	    HTM_BUTTON_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       HTM_U_Begin ();
             HTM_Txt (Txt_PROJECT_ORDER[Order]);
@@ -1257,7 +1257,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	{
 	 Frm_StartForm (ActAdmDocPrj);
 	 Prj_PutCurrentParams ();
-	 HTM_BUTTON_Begin (Txt_Project_files,ClassLink,NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
 	 HTM_Txt (Prj->Title);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();

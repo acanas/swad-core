@@ -3157,7 +3157,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
                                                         	                ActExpSntMsg));
    Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
    Msg_PutHiddenParamsOneMsg ();
-   HTM_BUTTON_Begin (Expanded ? Txt_Hide_message :
+   HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
 	                        Txt_See_message,
                      Open ? "BT_LINK LT MSG_TIT" :
                 	    "BT_LINK LT MSG_TIT_NEW",
@@ -3284,7 +3284,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
-            HTM_BUTTON_Begin (Gbl.Title,"BT_LINK AUTHOR_TXT",NULL);
+            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK AUTHOR_TXT",NULL);
             HTM_Txt (Crs.ShrtName);
             HTM_BUTTON_End ();
             HTM_Txt (")");
@@ -3568,7 +3568,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
          Msg_PutHiddenParamsOneMsg ();
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-         HTM_BUTTON_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
          HTM_TxtF (Txt_and_X_other_recipients,
                    NumRecipientsKnown - NumRecipientsToShow);
          HTM_BUTTON_End ();

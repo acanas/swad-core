@@ -224,7 +224,7 @@ static void Gam_ListAllGames (void)
 	 Frm_StartForm (ActSeeAllGam);
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_GAMES_ORDER[Order]);
@@ -449,7 +449,7 @@ void Gam_ShowOneGame (long GamCod,
    HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
-   HTM_BUTTON_Begin (Txt_View_game,
+   HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
                      Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT":
                 	           "BT_LINK ASG_TITLE",
 		     NULL);
@@ -475,7 +475,7 @@ void Gam_ShowOneGame (long GamCod,
    Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
-   HTM_BUTTON_Begin (Txt_Matches,
+   HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
                      Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
                 	           "BT_LINK ASG_TITLE",
 		     NULL);

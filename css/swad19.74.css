@@ -90,10 +90,6 @@ a:hover						/* Default ==> underlined */
 	{
 	text-decoration:underline;
 	}
-.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a, .CONTEXT_OPT a	/* Tabs and menus are the exceptions */
-	{
-	text-decoration:none;
-	}
 
 /****************** Layout (the whole page with a background) ****************/
 #whole_page
@@ -1497,6 +1493,7 @@ a:hover						/* Default ==> underlined */
 	
 .BT_LINK
 	{
+	display:inline;
 	background:none;
 	border:none;
 	padding:0;
@@ -1505,6 +1502,7 @@ a:hover						/* Default ==> underlined */
 .BT_LINK:hover
 	{
 	cursor:pointer;
+	text-decoration:underline;
 	}
 
 /********************************** Notice ***********************************/
@@ -1710,22 +1708,22 @@ a:hover						/* Default ==> underlined */
 	}
 
 /*********************************** Icons ***********************************/
-.ICOx16			{	     height:16px; vertical-align:middle;}
-.ICO16x16		{width:16px; height:16px; vertical-align:middle;}
-.ICO20x20		{width:20px; height:20px; vertical-align:middle;}
-.ICOx20			{	     height:20px; vertical-align:middle; margin:0 auto;}
-.ICO25x25		{width:25px; height:25px; vertical-align:middle;}
-.ICO40x40		{width:40px; height:40px; vertical-align:middle;}
-.ICO64x64		{width:64px; height:64px; vertical-align:middle;}
+.ICOx16		{	     height:16px; vertical-align:middle;}
+.ICO16x16	{width:16px; height:16px; vertical-align:middle;}
+.ICO20x20	{width:20px; height:20px; vertical-align:middle;}
+.ICOx20		{	     height:20px; vertical-align:middle; margin:0 auto;}
+.ICO25x25	{width:25px; height:25px; vertical-align:middle;}
+.ICO40x40	{width:40px; height:40px; vertical-align:middle;}
+.ICO64x64	{width:64px; height:64px; vertical-align:middle;}
 
-.ICO80x40		{width:80px; height:40px; vertical-align:middle;}
-.ICO140x40		{width:140px; height:40px; vertical-align:middle;}
-.ICO212x40		{width:212px; height:40px; vertical-align:middle;}
-.ICO220x40		{width:220px; height:40px; vertical-align:middle;}
-.ICO265x40		{width:265px; height:40px; vertical-align:middle;}
+.ICO80x40	{width:80px; height:40px; vertical-align:middle;}
+.ICO140x40	{width:140px; height:40px; vertical-align:middle;}
+.ICO212x40	{width:212px; height:40px; vertical-align:middle;}
+.ICO220x40	{width:220px; height:40px; vertical-align:middle;}
+.ICO265x40	{width:265px; height:40px; vertical-align:middle;}
 
-.ICO160x160		{width:160px; height:160px; vertical-align:middle;}
-.BANNER			{width:150px; height:50px;}
+.ICO160x160	{width:160px; height:160px; vertical-align:middle;}
+.BANNER		{width:150px; height:50px;}
 .BANNER_SMALL	{width:75px; height:25px;}
 
 /****** Contextual links with small icons and text to go to some action ******/

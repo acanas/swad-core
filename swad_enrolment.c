@@ -2839,7 +2839,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
-            HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             HTM_BUTTON_End ();
             HTM_TD_End ();

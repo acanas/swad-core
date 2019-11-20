@@ -246,7 +246,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    1,Pagination->NumPags);
 	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
 	    Lay_NotEnoughMemoryExit ();
-         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
          free (ClassLink);
         }
       else
@@ -358,7 +358,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
-         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (1);
          HTM_BUTTON_End ();
          Frm_EndForm ();
@@ -459,7 +459,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->LeftPage,
                    Pagination->NumPags);
-         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->LeftPage);
          HTM_BUTTON_End ();
          Frm_EndForm ();
@@ -568,7 +568,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Usr_PutParamOtherUsrCodEncrypted ();
                   break;
               }
-            HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
             HTM_Unsigned (NumPage);
             HTM_BUTTON_End ();
             Frm_EndForm ();
@@ -669,7 +669,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    Pagination->RightPage,Pagination->NumPags);
-         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->RightPage);
          HTM_BUTTON_End ();
          Frm_EndForm ();
@@ -768,7 +768,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Page_X_of_Y,
                    Pagination->NumPags,Pagination->NumPags);
-         HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->NumPags);
          HTM_BUTTON_End ();
          Frm_EndForm ();

@@ -249,7 +249,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Ctr->FullName);
-   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Centre logo and name *****/
    Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
@@ -645,7 +645,7 @@ static void Ctr_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Degrees_of_CENTRE_X,
 		Gbl.Hierarchy.Ctr.ShrtName);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -2586,7 +2586,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_CENTRES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_CENTRES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    HTM_U_Begin ();
 	}

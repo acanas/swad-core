@@ -166,7 +166,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   HTM_BUTTON_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+   HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 
    /* Write total number of sessions */
    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -314,7 +314,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   HTM_BUTTON_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+   HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
@@ -406,7 +406,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
-	 HTM_BUTTON_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"CONNECTED_TXT",NULL);
 	 Ico_PutIcon ("ellipsis-h.svg",Txt_Connected_users,"ICO16x16");
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -849,7 +849,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-   HTM_BUTTON_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -1075,7 +1075,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
             HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 	    if (PutLinkToRecord)
-	       HTM_BUTTON_Begin (UsrDat.FullName,ClassLink,NULL);
+	       HTM_BUTTON_SUBMIT_Begin (UsrDat.FullName,ClassLink,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       HTM_BUTTON_End ();

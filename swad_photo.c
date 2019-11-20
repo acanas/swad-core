@@ -1191,7 +1191,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       else
 	 Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      HTM_BUTTON_Begin (NULL,"BT_LINK CM",NULL);
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK CM",NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -2466,7 +2466,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
 		Deg->FullName);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK",NULL);
      }
 
    /***** Check if photo of degree can be shown *****/

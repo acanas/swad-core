@@ -219,7 +219,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    HTM_U_Begin ();
 	}

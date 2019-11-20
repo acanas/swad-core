@@ -1618,7 +1618,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Show_previous_X_clicks,
                 Gbl.Stat.RowsPerPage);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK TIT_TBL",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK TIT_TBL",NULL);
       HTM_STRONG_Begin ();
       HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
       HTM_STRONG_End ();
@@ -1656,7 +1656,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Show_next_X_clicks,
                 Gbl.Stat.RowsPerPage);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK TIT_TBL",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK TIT_TBL",NULL);
       HTM_STRONG_Begin ();
       HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
       HTM_STRONG_End ();
@@ -3780,7 +3780,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   Crs.FullName);
-         HTM_BUTTON_Begin (Gbl.Title,"BT_LINK LOG",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LOG",NULL);
          HTM_Txt (Crs.ShrtName);
          HTM_BUTTON_End ();
         }

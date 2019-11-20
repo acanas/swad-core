@@ -460,7 +460,7 @@ static void Crs_Configuration (bool PrintView)
 	        "%u %s %u",
                 Indicators.NumIndicators,
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_TxtF ("%s&nbsp;",Gbl.Title);
       Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
         	                                                      "exclamation-triangle.svg",
@@ -567,7 +567,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			                    ClassNormal);
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
-   HTM_BUTTON_Begin (Txt_System,
+   HTM_BUTTON_SUBMIT_Begin (Txt_System,
                      Highlight ? ClassHighlight :
         	                 ClassNormal,
 		     NULL);
@@ -600,7 +600,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
-      HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+      HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 			Highlight ? ClassHighlight :
         	                    ClassNormal,
 		        NULL);
@@ -634,7 +634,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
          Frm_StartForm (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
-	 HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
+	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
 	                   Highlight ? ClassHighlight :
         	                       ClassNormal,
 			   NULL);
@@ -668,7 +668,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
             Frm_StartForm (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
-	    HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
+	    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
 	                      Highlight ? ClassHighlight :
         	                          ClassNormal,
 			      NULL);
@@ -702,7 +702,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
                Frm_StartForm (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
-	       HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
+	       HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
 	                         Highlight ? ClassHighlight :
         	                             ClassNormal,
 			         NULL);
@@ -739,7 +739,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  snprintf (Gbl.Title,sizeof (Gbl.Title),
 			    Txt_Go_to_X,
 			    Crs.ShrtName);
-		  HTM_BUTTON_Begin (Gbl.Title,
+		  HTM_BUTTON_SUBMIT_Begin (Gbl.Title,
 		                    Highlight ? ClassHighlight :
         	                                ClassNormal,
 				    NULL);
@@ -1262,7 +1262,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Go_to_X,
 		   Crs->FullName);
-	 HTM_BUTTON_Begin (Gbl.Title,TxtClassStrong,NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,TxtClassStrong,NULL);
 	 HTM_Txt (Crs->FullName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -3182,7 +3182,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     row[2]);
-   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
    HTM_BUTTON_End ();
@@ -3201,7 +3201,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     row[5]);
-   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
    HTM_Txt (row[5]);
    HTM_BUTTON_End ();
    Frm_EndForm ();

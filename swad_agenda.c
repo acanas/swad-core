@@ -597,7 +597,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
 
-      HTM_BUTTON_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 HTM_U_Begin ();
       HTM_Txt (Txt_START_END_TIME[Order]);

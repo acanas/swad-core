@@ -1533,12 +1533,11 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       HTM_DIV_End ();
 
       /***** Right: author's name, time, summary and buttons *****/
+      /* Begin right container */
       HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
-      /* Write author's full name and nickname */
+      /* Write author's full name and date-time */
       TL_WriteAuthorNote (&UsrDat);
-
-      /* Write date and time */
       TL_WriteDateTime (SocNot->DateTimeUTC);
 
       /* Write content of the note */
@@ -1641,9 +1640,10 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	 HTM_DIV_End ();
 	}
 
-      /* End of right part */
+      /* End right container */
       HTM_DIV_End ();
 
+      /***** Buttons and comments *****/
       /* Create unique id for new comment */
       Frm_SetUniqueId (IdNewComment);
 
@@ -1685,7 +1685,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       /* End foot container */
       HTM_DIV_End ();
 
-      /* Show comments */
+      /* Comments */
       if (NumComments)
 	 TL_WriteCommentsInNote (SocNot,NumComments);
 
@@ -1736,7 +1736,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 /***** Show user's name inside form to go to user's public profile *****/
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	 HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 				   Txt_Another_user_s_profile,
 			   "BT_LINK TL_TOP_PUBLISHER",NULL);
 	 HTM_Txt (UsrDat.FullName);
@@ -1764,34 +1764,15 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
-
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 			     Txt_Another_user_s_profile,
-	             "BT_LINK DAT_N_BOLD",NULL);
+	                    "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
    Frm_EndForm ();
-
-   /***** Separator *****/
-   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   HTM_NBSP ();
-   HTM_SPAN_End ();
-
-   /***** Show user's nickname inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
-			     Txt_Another_user_s_profile,
-	             "BT_LINK DAT_LIGHT",NULL);
-   HTM_TxtF ("@%s",UsrDat->Nickname);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2049,7 +2030,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       if (asprintf (&Class,"BT_LINK %s ICO_HIGHLIGHT",
 		    The_ClassFormInBoxBold[Gbl.Prefs.Theme]) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      HTM_BUTTON_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],Class,NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],Class,NULL);
       Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       HTM_BUTTON_End ();
@@ -2345,37 +2326,19 @@ static void TL_PutFormToWriteNewPost (void)
 		     "PHOTO45x60",Pho_ZOOM,false);
    HTM_DIV_End ();
 
-   /***** Right: author's name, time, summary and buttons *****/
+   /***** Right: author's name, time, textarea *****/
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
-   /* Write author's full name and nickname */
-   HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
+   /* Author name */
+   TL_WriteAuthorNote (&Gbl.Usrs.Me.UsrDat);
 
-   HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-   HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
-   HTM_SPAN_End ();
-
-   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   HTM_TxtF ("&nbsp;@%s",Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_SPAN_End ();
-
+   /* Form to write the post */
+   HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
+   TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
+   TL_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
+   Frm_EndForm ();
    HTM_DIV_End ();
 
-   /***** Form to write the post *****/
-   /* Start container */
-   HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-
-   /* Begin form to write the post */
-   TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
-
-   /* Textarea and button */
-   TL_PutTextarea (Txt_New_TIMELINE_post,
-                   "TL_PST_TEXTAREA TL_RIGHT_WIDTH");
-
-   /* End form */
-   Frm_EndForm ();
-
-   /* End container */
    HTM_DIV_End ();
 
    /***** End list *****/
@@ -2414,7 +2377,7 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
 
    /***** Submit button *****/
-   HTM_BUTTON_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
+   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
    HTM_Txt (Txt_Post);
    HTM_BUTTON_End ();
 
@@ -2779,7 +2742,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_See_the_previous_X_COMMENTS,
 	     NumInitialComments);
-   HTM_BUTTON_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("angle-up.svg",Gbl.Title);
    HTM_BUTTON_End ();
 
@@ -2946,16 +2909,18 @@ static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_I
 static void TL_PutIconToToggleComments (const char *UniqueId,
                                         const char *Icon,const char *Text)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   char *OnClick;
+
+   if (asprintf (&OnClick,"toggleComments('%s')",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Link to toggle on/off some divs *****/
-   HTM_A_Begin ("href=\"\" title=\"%s\" class=\"%s\""
-                " onclick=\"toggleComments('%s');"
-                           "return false;\"",
-                Text,The_ClassFormInBox[Gbl.Prefs.Theme],
-                UniqueId);
+   HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
    Ico_PutIconTextLink (Icon,Text);
-   HTM_A_End ();
+   HTM_BUTTON_End ();
+
+   free (OnClick);
   }
 
 /*****************************************************************************/
@@ -3090,7 +3055,7 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 			     Txt_Another_user_s_profile,
 	             "BT_LINK DAT_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
@@ -3105,7 +3070,7 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    /***** Show user's nickname inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 			     Txt_Another_user_s_profile,
 		     "BT_LINK DAT_LIGHT",NULL);
    HTM_TxtF ("@%s",UsrDat->Nickname);

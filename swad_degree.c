@@ -253,7 +253,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Deg->FullName);
-   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Degree logo and name *****/
    Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
@@ -514,7 +514,7 @@ static void Deg_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Courses_of_DEGREE_X,
 		Gbl.Hierarchy.Deg.ShrtName);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
       HTM_BUTTON_End ();
       Frm_EndForm ();

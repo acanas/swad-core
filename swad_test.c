@@ -2833,7 +2833,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          Dat_WriteParamsIniEndDates ();
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-         HTM_BUTTON_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
          if (Order == Gbl.Test.SelectedOrder)
             HTM_U_Begin ();
         }

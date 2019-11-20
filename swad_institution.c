@@ -235,7 +235,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
      {
       Frm_StartForm (ActSeeInsInf);
       Ins_PutParamInsCod (Ins->InsCod);
-      HTM_BUTTON_Begin (Ins->FullName,"BT_LINK",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
@@ -263,7 +263,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Ins->FullName);
-   HTM_BUTTON_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Institution logo and name *****/
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
@@ -541,7 +541,7 @@ static void Ins_Configuration (bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		Txt_Centres_of_INSTITUTION_X,
 		Gbl.Hierarchy.Ins.ShrtName);
-      HTM_BUTTON_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
       HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -859,7 +859,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    HTM_U_Begin ();
 	}

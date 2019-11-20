@@ -2820,7 +2820,7 @@ void Usr_WriteLoggedUsrHead (void)
 	 Lay_NotEnoughMemoryExit ();
 
       Frm_StartForm (ActFrmRolSes);
-      HTM_BUTTON_Begin (Txt_Role,ClassLink,NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_Role,ClassLink,NULL);
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -6303,7 +6303,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
       FuncParams ();
 
    /***** Link and image *****/
-   HTM_BUTTON_Begin (Txt_USR_LIST_TYPES[ListType],
+   HTM_BUTTON_SUBMIT_Begin (Txt_USR_LIST_TYPES[ListType],
                      The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
                      Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
                                                       NULL);
@@ -9905,7 +9905,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      }
    Frm_StartForm (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_Begin (UsrDat->FullName,"BT_LINK AUTHOR_TXT",NULL);
+   HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,NULL);

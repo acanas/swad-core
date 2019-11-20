@@ -165,7 +165,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
       HTM_DIV_Begin ("id=\"institutional_links\"");
 
       Frm_StartForm (ActSeeLnk);
-      HTM_BUTTON_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
       HTM_TxtF ("%s",Txt_Links);
       HTM_BUTTON_End ();
       Frm_EndForm ();

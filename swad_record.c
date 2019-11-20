@@ -1489,7 +1489,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   HTM_BUTTON_Begin (Txt_Print,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_SUBMIT_Begin (Txt_Print,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("print.svg",Txt_Print);
    HTM_BUTTON_End ();
 
@@ -2698,7 +2698,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	{
 	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_Begin (Ins->FullName,"BT_LINK",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
 	}
       Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
@@ -2719,7 +2719,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	{
 	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_Begin (Ins->FullName,"BT_LINK REC_HEAD",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD",NULL);
 	}
       HTM_Txt (Ins->FullName);
       if (PutFormLinks)
@@ -2792,7 +2792,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
          ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 Frm_StartForm (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 HTM_BUTTON_Begin (ItsMe ? Txt_My_public_profile :
+	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 			           Txt_Another_user_s_profile,
 			   "BT_LINK REC_NICK",
 			   NULL);

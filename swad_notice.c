@@ -689,7 +689,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to view full notice */
       Frm_StartFormAnchor (ActSeeOneNot,Anchor);
       Not_PutHiddenParamNotCod (NotCod);
-      HTM_BUTTON_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
      }
    if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
       Lay_NotEnoughMemoryExit ();

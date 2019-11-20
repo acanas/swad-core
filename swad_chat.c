@@ -311,7 +311,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
    Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
-   HTM_BUTTON_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_SUBMIT_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

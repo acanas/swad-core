@@ -2065,7 +2065,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                 Forum->Location,
                                 -1L,
                                 -1L);
-   HTM_BUTTON_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
+   HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
                      Class,NULL);
    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
    switch (Forum->Type)
@@ -2498,7 +2498,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 				      Gbl.Forum.ForumSelected.Location,
 				      -1L,
 				      -1L);
-	 HTM_BUTTON_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
          if (Order == Gbl.Forum.ThreadsOrder)
             HTM_U_Begin ();
 	 HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);

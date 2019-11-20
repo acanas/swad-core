@@ -359,14 +359,11 @@ void Mnu_WriteMenuThisTab (void)
          /***** Start element *****/
 	 HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
 
-         /***** Start container used to highlight this option *****/
-         HTM_DIV_Begin ("class=\"%s\"",
-			IsTheSelectedAction ? "MENU_OPT_ON" :
-					      "MENU_OPT_OFF");
-
          /***** Begin form and link *****/
          Frm_StartForm (NumAct);
-         HTM_BUTTON_Begin (Title,"BT_LINK",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Title,
+			   IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
+					         "BT_LINK MENU_OPT_OFF",NULL);
 
          /***** Icon and text *****/
 	 HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
@@ -380,9 +377,6 @@ void Mnu_WriteMenuThisTab (void)
          /***** End link and form *****/
          HTM_BUTTON_End ();
 	 Frm_EndForm ();
-
-         /***** End container used to highlight this option *****/
-         HTM_DIV_End ();
 
          /***** End element *****/
          HTM_LI_End ();

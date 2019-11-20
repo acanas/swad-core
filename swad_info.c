@@ -611,7 +611,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
         {
          HTM_LI_Begin (NULL);
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
-         HTM_BUTTON_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
+         HTM_BUTTON_SUBMIT_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                            The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
          HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
          HTM_BUTTON_End ();

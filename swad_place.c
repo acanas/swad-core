@@ -123,7 +123,7 @@ void Plc_SeePlaces (void)
 
 	 Frm_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_PLACES_ORDER[Order]);

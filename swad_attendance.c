@@ -257,7 +257,7 @@ static void Att_ShowAllAttEvents (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
@@ -2176,7 +2176,7 @@ static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
    Frm_StartForm (ActSeeOneAtt);
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
-   HTM_BUTTON_Begin (Title,Class,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
    HTM_Txt (Txt);
    HTM_BUTTON_End ();
    Frm_EndForm ();

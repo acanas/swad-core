@@ -493,7 +493,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
-   HTM_BUTTON_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_SUBMIT_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("check.svg",Txt_Confirm_ID);
    HTM_BUTTON_End ();
 
