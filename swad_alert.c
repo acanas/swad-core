@@ -53,13 +53,13 @@ extern struct Globals Gbl;
 
 static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
   {
-   NULL,		// Ale_NONE
-   "clipboard.svg",	// Ale_CLIPBOARD
-   "info-circle.svg",	// Ale_INFO
-   "check-circle.svg",	// Ale_SUCCESS
-   "question64x64.gif",	// Ale_QUESTION		animated gif
-   "warning64x64.gif",	// Ale_WARNING		animated gif
-   "error64x64.gif",	// Ale_ERROR		animated gif
+   [Ale_NONE     ] = NULL,
+   [Ale_CLIPBOARD] = "clipboard.svg",
+   [Ale_INFO     ] = "info-circle.svg",
+   [Ale_SUCCESS  ] = "check-circle.svg",
+   [Ale_QUESTION ] = "question64x64.gif",	// animated gif
+   [Ale_WARNING  ] = "warning64x64.gif",	// animated gif
+   [Ale_ERROR    ] = "error64x64.gif",		// animated gif
   };
 
 /*****************************************************************************/
@@ -382,13 +382,13 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    char IdAlert[Frm_MAX_BYTES_ID + 1];
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
-      false,	// Ale_NONE
-      true,	// Ale_CLIPBOARD
-      true,	// Ale_INFO
-      true,	// Ale_SUCCESS
-      true,	// Ale_QUESTION
-      true,	// Ale_WARNING
-      true,	// Ale_ERROR
+      [Ale_NONE     ] = false,
+      [Ale_CLIPBOARD] = true,
+      [Ale_INFO     ] = true,
+      [Ale_SUCCESS  ] = true,
+      [Ale_QUESTION ] = true,
+      [Ale_WARNING  ] = true,
+      [Ale_ERROR    ] = true,
     };
 
    /****** If start of page is not written yet, do it now ******/

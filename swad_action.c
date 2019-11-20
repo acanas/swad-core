@@ -5253,13 +5253,13 @@ void Act_AdjustActionWhenNoUsrLogged (void)
   {
    static const Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
-      ActUnk, 		// Hie_UNK, Unknown
-      ActFrmLogIn,	// Hie_SYS, System
-      ActSeeCtyInf,	// Hie_CTY, Country
-      ActSeeInsInf,	// Hie_INS, Institution
-      ActSeeCtrInf,	// Hie_CTR, Centre
-      ActSeeDegInf,	// Hie_DEG, Degree
-      ActSeeCrsInf,	// Hie_CRS, Course
+      [Hie_UNK] = ActUnk, 	// Unknown
+      [Hie_SYS] = ActFrmLogIn,	// System
+      [Hie_CTY] = ActSeeCtyInf,	// Country
+      [Hie_INS] = ActSeeInsInf,	// Institution
+      [Hie_CTR] = ActSeeCtrInf,	// Centre
+      [Hie_DEG] = ActSeeDegInf,	// Degree
+      [Hie_CRS] = ActSeeCrsInf,	// Course
      };
 
    if (Gbl.Hierarchy.Level >= Hie_NUM_LEVELS)

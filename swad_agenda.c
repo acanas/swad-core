@@ -184,8 +184,8 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
    Agd_Past__FutureEvents_t PstFut;
    static const char *Icon[2] =
      {
-      "calendar-minus.svg",	// Agd_PAST___EVENTS
-      "calendar-plus.svg",	// Agd_FUTURE_EVENTS
+      [Agd_PAST___EVENTS] = "calendar-minus.svg",
+      [Agd_FUTURE_EVENTS] = "calendar-plus.svg",
      };
 
    Set_StartOneSettingSelector ();
@@ -221,8 +221,8 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
    Agd_PrivatPublicEvents_t PrvPub;
    static const char *Icon[2] =
      {
-      "lock.svg",	// Agd_PRIVAT_EVENTS
-      "unlock.svg",	// Agd_PUBLIC_EVENTS
+      [Agd_PRIVAT_EVENTS] = "lock.svg",
+      [Agd_PUBLIC_EVENTS] = "unlock.svg",
      };
 
    Set_StartOneSettingSelector ();
@@ -258,8 +258,8 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
    Agd_HiddenVisiblEvents_t HidVis;
    static const char *Icon[2] =
      {
-      "eye-slash.svg",	// Agd_HIDDEN_EVENTS
-      "eye.svg",	// Agd_VISIBL_EVENTS
+      [Agd_HIDDEN_EVENTS] = "eye-slash.svg",
+      [Agd_VISIBL_EVENTS] = "eye.svg",
      };
 
    Set_StartOneSettingSelector ();
@@ -442,10 +442,10 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    unsigned NumEvent;
    Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
-      Pag_MY_AGENDA,	// Agd_MY_AGENDA_TODAY, not used
-      Pag_MY_AGENDA,	// Agd_MY_AGENDA
-      Pag_ANOTHER_AGENDA,	// Agd_ANOTHER_AGENDA_TODAY, not used
-      Pag_ANOTHER_AGENDA,	// Agd_ANOTHER_AGENDA
+      [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
+      [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,
+      [Agd_ANOTHER_AGENDA_TODAY] = Pag_ANOTHER_AGENDA,	// not used
+      [Agd_ANOTHER_AGENDA      ] = Pag_ANOTHER_AGENDA,
      };
 
    /***** Get parameters *****/
@@ -919,10 +919,10 @@ static void Agd_GetParams (Agd_AgendaType_t AgendaType)
   {
    Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
-      Pag_MY_AGENDA,		// Agd_MY_AGENDA_TODAY, not used
-      Pag_MY_AGENDA,		// Agd_MY_AGENDA
-      Pag_ANOTHER_AGENDA,	// Agd_ANOTHER_AGENDA_TODAY, not used
-      Pag_ANOTHER_AGENDA,	// Agd_ANOTHER_AGENDA
+      [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
+      [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,
+      [Agd_ANOTHER_AGENDA_TODAY] = Pag_ANOTHER_AGENDA,	// not used
+      [Agd_ANOTHER_AGENDA      ] = Pag_ANOTHER_AGENDA,
      };
 
    if (AgendaType == Agd_MY_AGENDA)
@@ -978,8 +978,8 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    static const char *OrderBySubQuery[Agd_NUM_ORDERS] =
      {
-      "StartTime,EndTime,Event,Location",	// Agd_ORDER_BY_START_DATE
-      "EndTime,StartTime,Event,Location",	// Agd_ORDER_BY_END_DATE
+      [Agd_ORDER_BY_START_DATE] = "StartTime,EndTime,Event,Location",
+      [Agd_ORDER_BY_END_DATE  ] = "EndTime,StartTime,Event,Location",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

@@ -55,34 +55,34 @@ extern struct Globals Gbl;
 
 const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
   {
-   2,	// Sta_CLICKS_CRS_DETAILED_LIST
+   [Sta_CLICKS_CRS_DETAILED_LIST   ] = 2,
 
-   1,	// Sta_CLICKS_CRS_PER_USR
-   1,	// Sta_CLICKS_CRS_PER_DAY
-   0,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
-   1,	// Sta_CLICKS_CRS_PER_WEEK
-   1,	// Sta_CLICKS_CRS_PER_MONTH
-   1,	// Sta_CLICKS_CRS_PER_YEAR
-   1,	// Sta_CLICKS_CRS_PER_HOUR
-   0,	// Sta_CLICKS_CRS_PER_MINUTE
-   1,	// Sta_CLICKS_CRS_PER_ACTION
+   [Sta_CLICKS_CRS_PER_USR         ] = 1,
+   [Sta_CLICKS_CRS_PER_DAY         ] = 1,
+   [Sta_CLICKS_CRS_PER_DAY_AND_HOUR] = 0,
+   [Sta_CLICKS_CRS_PER_WEEK        ] = 1,
+   [Sta_CLICKS_CRS_PER_MONTH       ] = 1,
+   [Sta_CLICKS_CRS_PER_YEAR        ] = 1,
+   [Sta_CLICKS_CRS_PER_HOUR        ] = 1,
+   [Sta_CLICKS_CRS_PER_MINUTE      ] = 0,
+   [Sta_CLICKS_CRS_PER_ACTION      ] = 1,
 
-   1,	// Sta_CLICKS_GBL_PER_DAY
-   0,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
-   1,	// Sta_CLICKS_GBL_PER_WEEK
-   1,	// Sta_CLICKS_GBL_PER_MONTH
-   1,	// Sta_CLICKS_GBL_PER_YEAR
-   1,	// Sta_CLICKS_GBL_PER_HOUR
-   0,	// Sta_CLICKS_GBL_PER_MINUTE
-   1,	// Sta_CLICKS_GBL_PER_ACTION
-   1,	// Sta_CLICKS_GBL_PER_PLUGIN
-   1,	// Sta_CLICKS_GBL_PER_API_FUNCTION
-   1,	// Sta_CLICKS_GBL_PER_BANNER
-   1,	// Sta_CLICKS_GBL_PER_COUNTRY
-   1,	// Sta_CLICKS_GBL_PER_INSTITUTION
-   1,	// Sta_CLICKS_GBL_PER_CENTRE
-   1,	// Sta_CLICKS_GBL_PER_DEGREE
-   1,	// Sta_CLICKS_GBL_PER_COURSE
+   [Sta_CLICKS_GBL_PER_DAY         ] = 1,
+   [Sta_CLICKS_GBL_PER_DAY_AND_HOUR] = 0,
+   [Sta_CLICKS_GBL_PER_WEEK        ] = 1,
+   [Sta_CLICKS_GBL_PER_MONTH       ] = 1,
+   [Sta_CLICKS_GBL_PER_YEAR        ] = 1,
+   [Sta_CLICKS_GBL_PER_HOUR        ] = 1,
+   [Sta_CLICKS_GBL_PER_MINUTE      ] = 0,
+   [Sta_CLICKS_GBL_PER_ACTION      ] = 1,
+   [Sta_CLICKS_GBL_PER_PLUGIN      ] = 1,
+   [Sta_CLICKS_GBL_PER_API_FUNCTION] = 1,
+   [Sta_CLICKS_GBL_PER_BANNER      ] = 1,
+   [Sta_CLICKS_GBL_PER_COUNTRY     ] = 1,
+   [Sta_CLICKS_GBL_PER_INSTITUTION ] = 1,
+   [Sta_CLICKS_GBL_PER_CENTRE      ] = 1,
+   [Sta_CLICKS_GBL_PER_DEGREE      ] = 1,
+   [Sta_CLICKS_GBL_PER_COURSE      ] = 1,
   };
 
 #define Sta_STAT_RESULTS_SECTION_ID	"stat_results"
