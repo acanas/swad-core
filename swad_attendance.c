@@ -608,27 +608,24 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
   {
    static const char *HiddenSubQuery[Rol_NUM_ROLES] =
      {
-      " AND Hidden='N'",	// Rol_UNK
-      " AND Hidden='N'",	// Rol_GST
-      " AND Hidden='N'",	// Rol_USR
-      " AND Hidden='N'",	// Rol_STD
-      " AND Hidden='N'",	// Rol_NET
-      "",			// Rol_TCH
-      " AND Hidden='N'",	// Rol_DEG_ADM
-      " AND Hidden='N'",	// Rol_CTR_ADM
-      " AND Hidden='N'",	// Rol_INS_ADM
-      "",			// Rol_SYS_ADM
+      [Rol_UNK    ] = " AND Hidden='N'",
+      [Rol_GST    ] = " AND Hidden='N'",
+      [Rol_USR    ] = " AND Hidden='N'",
+      [Rol_STD    ] = " AND Hidden='N'",
+      [Rol_NET    ] = " AND Hidden='N'",
+      [Rol_TCH    ] = "",
+      [Rol_DEG_ADM] = " AND Hidden='N'",
+      [Rol_CTR_ADM] = " AND Hidden='N'",
+      [Rol_INS_ADM] = " AND Hidden='N'",
+      [Rol_SYS_ADM] = "",
      };
    static const char *OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS_NEWEST_OLDEST] =
      {
-        {	// Dat_START_TIME
-	 "StartTime DESC,EndTime DESC,Title DESC",	// Att_NEWEST_FIRST
-	 "StartTime,EndTime,Title",			// Att_OLDEST_FIRST
-	},
-	{	// Dat_END_TIME
-	 "EndTime DESC,StartTime DESC,Title DESC",	// Att_NEWEST_FIRST
-	 "EndTime,StartTime,Title",			// Att_OLDEST_FIRST
-	}
+      [Dat_START_TIME][Att_NEWEST_FIRST] = "StartTime DESC,EndTime DESC,Title DESC",
+      [Dat_START_TIME][Att_OLDEST_FIRST] = "StartTime,EndTime,Title",
+
+      [Dat_END_TIME  ][Att_NEWEST_FIRST] = "EndTime DESC,StartTime DESC,Title DESC",
+      [Dat_END_TIME  ][Att_OLDEST_FIRST] = "EndTime,StartTime,Title",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

@@ -52,38 +52,38 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS] =
+  {
+   [Dat_PAST   ] = "DATE_RED",
+   [Dat_PRESENT] = "DATE_GREEN",
+   [Dat_FUTURE ] = "DATE_BLUE",
+  };
+const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
+  {
+   [Dat_PAST   ] = "DATE_RED_LIGHT",
+   [Dat_PRESENT] = "DATE_GREEN_LIGHT",
+   [Dat_FUTURE ] = "DATE_BLUE_LIGHT",
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-const unsigned Dat_NumDaysMonth[1 + 12] =
+static const unsigned Dat_NumDaysMonth[1 + 12] =
   {
-    0,
-   31,	//  1: January
-   28,	//  2: February
-   31,	//  3: Mars
-   30,	//  4: April
-   31,	//  5: May
-   30,	//  6: June
-   31,	//  7: July
-   31,	//  8: Agoust
-   30,	//  9: September
-   31,	// 10: October
-   30,	// 11: November
-   31,	// 12: December
-  };
-
-const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS] =
-  {
-   "DATE_RED",		// Dat_PAST
-   "DATE_GREEN",	// Dat_PRESENT
-   "DATE_BLUE",		// Dat_FUTURE
-  };
-const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
-  {
-   "DATE_RED_LIGHT",	// Dat_PAST
-   "DATE_GREEN_LIGHT",	// Dat_PRESENT
-   "DATE_BLUE_LIGHT",	// Dat_FUTURE
+   [ 0] =  0,
+   [ 1] = 31,	// January
+   [ 2] = 28,	// February
+   [ 3] = 31,	// March
+   [ 4] = 30,	// April
+   [ 5] = 31,	// May
+   [ 6] = 30,	// June
+   [ 7] = 31,	// July
+   [ 8] = 31,	// Agoust
+   [ 9] = 30,	// September
+   [10] = 31,	// October
+   [11] = 30,	// November
+   [12] = 31,	// December
   };
 
 /*****************************************************************************/
@@ -551,10 +551,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    unsigned Hour;
    unsigned Minute;
    unsigned Second;
-   unsigned MinutesIInterval[Dat_NUM_FORM_SECONDS] =
+   static unsigned MinutesIInterval[Dat_NUM_FORM_SECONDS] =
      {
-      5,   // Dat_FORM_SECONDS_OFF
-      1,   // Dat_FORM_SECONDS_ON
+      [Dat_FORM_SECONDS_OFF] = 5,
+      [Dat_FORM_SECONDS_ON ] = 1,
      };
    char *IdTimeUTC;
    char *ParamNameTimeUTC;
@@ -1043,30 +1043,30 @@ void Dat_GetIniEndDatesFromForm (void)
 
 void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm_ptr)
   {
-   const char *StrDayOfWeek[7] =
+   static const char *StrDayOfWeek[7] =
      {
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
+      [0] = "Sun",
+      [1] = "Mon",
+      [2] = "Tue",
+      [3] = "Wed",
+      [4] = "Thu",
+      [5] = "Fri",
+      [6] = "Sat",
      };
-   const char *StrMonth[12] =
+   static const char *StrMonth[12] =
      {
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      [ 0] = "Jan",
+      [ 1] = "Feb",
+      [ 2] = "Mar",
+      [ 3] = "Apr",
+      [ 4] = "May",
+      [ 5] = "Jun",
+      [ 6] = "Jul",
+      [ 7] = "Aug",
+      [ 8] = "Sep",
+      [ 9] = "Oct",
+      [10] = "Nov",
+      [11] = "Dec",
       };
 
    fprintf (File,"%s, %d %s %d %02d:%02d:%02d UT",
@@ -1647,9 +1647,9 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
    extern const char *Txt_Today;
    static const char *SeparatorStr[] =
      {
-      "",		// Dat_SEPARATOR_NONE
-      ",&nbsp;",	// Dat_SEPARATOR_COMMA
-      "<br />",		// Dat_SEPARATOR_BREAK
+      [Dat_SEPARATOR_NONE ] = "",
+      [Dat_SEPARATOR_COMMA] = ",&nbsp;",
+      [Dat_SEPARATOR_BREAK] = "<br />",
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);

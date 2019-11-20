@@ -965,23 +965,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    const char *Width;
    void (*FunctionToDrawContextualIcons) (void);
    const char *HelpLink;
-   const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
+   static const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
-	{	// Exa_NORMAL_VIEW
-	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
-	 "EXA_ANN_HIDDEN",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
-	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
-	},
-	{	// Exa_PRINT_VIEW
-	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
-	 "EXA_ANN_VISIBLE",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
-	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
-	},
-	{	// Exa_FORM_VIEW
-	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
-	 "EXA_ANN_VISIBLE",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
-	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
-	},
+      [Exa_NORMAL_VIEW][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
+      [Exa_NORMAL_VIEW][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_HIDDEN",
+      [Exa_NORMAL_VIEW][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
+
+      [Exa_PRINT_VIEW ][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
+      [Exa_PRINT_VIEW ][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_VISIBLE",
+      [Exa_PRINT_VIEW ][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
+
+      [Exa_FORM_VIEW  ][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
+      [Exa_FORM_VIEW  ][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_VISIBLE",
+      [Exa_FORM_VIEW  ][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
      };
 
    /***** Get data of institution of this degree *****/

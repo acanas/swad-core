@@ -1051,8 +1051,8 @@ void Ctr_GetListCentres (long InsCod)
   {
    static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
      {
-      "FullName",		// Ctr_ORDER_BY_CENTRE
-      "NumUsrs DESC,FullName",	// Ctr_ORDER_BY_NUM_TCHS
+      [Ctr_ORDER_BY_CENTRE  ] = "FullName",
+      [Ctr_ORDER_BY_NUM_TCHS] = "NumUsrs DESC,FullName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

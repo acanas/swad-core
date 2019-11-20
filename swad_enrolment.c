@@ -57,18 +57,18 @@
 static const bool Enr_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
   {
    /* Users who can not admin */
-   false,	// Rol_UNK
-   false,	// Rol_GST
-   false,	// Rol_USR
-   false,	// Rol_STD
-   false,	// Rol_NET
+   [Rol_UNK    ] = false,
+   [Rol_GST    ] = false,
+   [Rol_USR    ] = false,
+   [Rol_STD    ] = false,
+   [Rol_NET    ] = false,
 
    /* Users who can admin */
-   true,	// Rol_TCH
-   true,	// Rol_DEG_ADM
-   true,	// Rol_CTR_ADM
-   true,	// Rol_INS_ADM
-   true,	// Rol_SYS_ADM
+   [Rol_TCH    ] = true,
+   [Rol_DEG_ADM] = true,
+   [Rol_CTR_ADM] = true,
+   [Rol_INS_ADM] = true,
+   [Rol_SYS_ADM] = true,
   };
 
 /*****************************************************************************/
@@ -3588,13 +3588,13 @@ static void Enr_ReqAddAdm (Hie_Level_t Scope,long Cod,const char *InsCtrDegName)
    extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
    static const Act_Action_t Enr_ActNewAdm[Hie_NUM_LEVELS] =
      {
-      ActUnk,		// Hie_UNK
-      ActUnk,		// Hie_SYS,
-      ActUnk,		// Hie_CTY,
-      ActNewAdmIns,	// Hie_INS,
-      ActNewAdmCtr,	// Hie_CTR,
-      ActNewAdmDeg,	// Hie_DEG,
-      ActUnk,		// Hie_CRS,
+      [Hie_UNK] = ActUnk,
+      [Hie_SYS] = ActUnk,
+      [Hie_CTY] = ActUnk,
+      [Hie_INS] = ActNewAdmIns,
+      [Hie_CTR] = ActNewAdmCtr,
+      [Hie_DEG] = ActNewAdmDeg,
+      [Hie_CRS] = ActUnk,
      };
    bool ICanRegister;
 
@@ -4170,13 +4170,13 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Level_t Scope,
    extern const char *Txt_Remove_USER_as_an_administrator;
    static const Act_Action_t Enr_ActRemAdm[Hie_NUM_LEVELS] =
      {
-      ActUnk,		// Hie_UNK
-      ActUnk,		// Hie_SYS,
-      ActUnk,		// Hie_CTY,
-      ActRemAdmIns,	// Hie_INS,
-      ActRemAdmCtr,	// Hie_CTR,
-      ActRemAdmDeg,	// Hie_DEG,
-      ActUnk,		// Hie_CRS,
+      [Hie_UNK] = ActUnk,
+      [Hie_SYS] = ActUnk,
+      [Hie_CTY] = ActUnk,
+      [Hie_INS] = ActRemAdmIns,
+      [Hie_CTR] = ActRemAdmCtr,
+      [Hie_DEG] = ActRemAdmDeg,
+      [Hie_CRS] = ActUnk,
      };
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))

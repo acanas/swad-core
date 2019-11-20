@@ -87,1051 +87,1050 @@ struct Brw_NumObjects
 /**************************** Internal constants *****************************/
 /*****************************************************************************/
 
-const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
+static const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
   {
-   "BrwFFL",	// Brw_IS_UNKNOWN
-   "BrwFil",	// Brw_IS_FILE	- Do not use Fil_NAME_OF_PARAM_FILENAME_ORG
-   "BrwFol",	// Brw_IS_FOLDER
-   "BrwLnk",	// Brw_IS_LINK
+   [Brw_IS_UNKNOWN] = "BrwFFL",
+   [Brw_IS_FILE   ] = "BrwFil",	// Do not use Fil_NAME_OF_PARAM_FILENAME_ORG
+   [Brw_IS_FOLDER ] = "BrwFol",
+   [Brw_IS_LINK   ] = "BrwLnk",
   };
 
 // Browsers types for database "files" and "file_browser_size" tables
 const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
-   Brw_ADMI_DOC_CRS,	// Brw_SHOW_DOC_CRS =  1
-   Brw_ADMI_MRK_CRS,	// Brw_SHOW_MRK_CRS =  2
-   Brw_ADMI_DOC_CRS,	// Brw_ADMI_DOC_CRS =  3
-   Brw_ADMI_SHR_CRS,	// Brw_ADMI_SHR_CRS =  4
-   Brw_ADMI_SHR_GRP,	// Brw_ADMI_SHR_GRP =  5
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_USR =  6
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_CRS =  7
-   Brw_ADMI_MRK_CRS,	// Brw_ADMI_MRK_CRS =  8
-   Brw_ADMI_BRF_USR,	// Brw_ADMI_BRF_USR =  9
-   Brw_ADMI_DOC_GRP,	// Brw_SHOW_DOC_GRP = 10
-   Brw_ADMI_DOC_GRP,	// Brw_ADMI_DOC_GRP = 11
-   Brw_ADMI_MRK_GRP,	// Brw_SHOW_MRK_GRP = 12
-   Brw_ADMI_MRK_GRP,	// Brw_ADMI_MRK_GRP = 13
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_USR = 14
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_CRS = 15
-   Brw_ADMI_DOC_DEG,	// Brw_SHOW_DOC_DEG = 16
-   Brw_ADMI_DOC_DEG,	// Brw_ADMI_DOC_DEG = 17
-   Brw_ADMI_DOC_CTR,	// Brw_SHOW_DOC_CTR = 18
-   Brw_ADMI_DOC_CTR,	// Brw_ADMI_DOC_CTR = 19
-   Brw_ADMI_DOC_INS,	// Brw_SHOW_DOC_INS = 20
-   Brw_ADMI_DOC_INS,	// Brw_ADMI_DOC_INS = 21
-   Brw_ADMI_SHR_DEG,	// Brw_ADMI_SHR_DEG = 22
-   Brw_ADMI_SHR_CTR,	// Brw_ADMI_SHR_CTR = 23
-   Brw_ADMI_SHR_INS,	// Brw_ADMI_SHR_INS = 24
-   Brw_ADMI_TCH_CRS,	// Brw_ADMI_TCH_CRS = 25
-   Brw_ADMI_TCH_GRP,	// Brw_ADMI_TCH_GRP = 26
-   Brw_ADMI_DOC_PRJ,	// Brw_ADMI_DOC_PRJ = 27
-   Brw_ADMI_ASS_PRJ,	// Brw_ADMI_ASS_PRJ = 28
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
+   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 // Browsers viewable shown in search for documents
-const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
-   Brw_SHOW_DOC_CRS,	// Brw_SHOW_DOC_CRS =  1
-   Brw_SHOW_MRK_CRS,	// Brw_SHOW_MRK_CRS =  2
-   Brw_SHOW_DOC_CRS,	// Brw_ADMI_DOC_CRS =  3
-   Brw_ADMI_SHR_CRS,	// Brw_ADMI_SHR_CRS =  4
-   Brw_ADMI_SHR_GRP,	// Brw_ADMI_SHR_GRP =  5
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_USR =  6
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_CRS =  7
-   Brw_ADMI_MRK_CRS,	// Brw_ADMI_MRK_CRS =  8
-   Brw_ADMI_BRF_USR,	// Brw_ADMI_BRF_USR =  9
-   Brw_SHOW_DOC_GRP,	// Brw_SHOW_DOC_GRP = 10
-   Brw_SHOW_DOC_GRP,	// Brw_ADMI_DOC_GRP = 11
-   Brw_SHOW_MRK_GRP,	// Brw_SHOW_MRK_GRP = 12
-   Brw_SHOW_MRK_GRP,	// Brw_ADMI_MRK_GRP = 13
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_USR = 14
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_CRS = 15
-   Brw_SHOW_DOC_DEG,	// Brw_SHOW_DOC_DEG = 16
-   Brw_SHOW_DOC_DEG,	// Brw_ADMI_DOC_DEG = 17
-   Brw_SHOW_DOC_CTR,	// Brw_SHOW_DOC_CTR = 18
-   Brw_SHOW_DOC_CTR,	// Brw_ADMI_DOC_CTR = 19
-   Brw_SHOW_DOC_INS,	// Brw_SHOW_DOC_INS = 20
-   Brw_SHOW_DOC_INS,	// Brw_ADMI_DOC_INS = 21
-   Brw_ADMI_SHR_DEG,	// Brw_ADMI_SHR_DEG = 22
-   Brw_ADMI_SHR_CTR,	// Brw_ADMI_SHR_CTR = 23
-   Brw_ADMI_SHR_INS,	// Brw_ADMI_SHR_INS = 24
-   Brw_ADMI_TCH_CRS,	// Brw_ADMI_TCH_CRS = 25
-   Brw_ADMI_TCH_GRP,	// Brw_ADMI_TCH_GRP = 26
-   Brw_ADMI_DOC_PRJ,	// Brw_ADMI_DOC_PRJ = 27
-   Brw_ADMI_ASS_PRJ,	// Brw_ADMI_ASS_PRJ = 28
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_SHOW_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_SHOW_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_SHOW_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_SHOW_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_SHOW_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_SHOW_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_SHOW_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
+   [Brw_SHOW_DOC_DEG] = Brw_SHOW_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_SHOW_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_SHOW_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_SHOW_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_SHOW_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_SHOW_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 // Browsers types for database "clipboard" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
-   Brw_ADMI_DOC_CRS,	// Brw_SHOW_DOC_CRS =  1
-   Brw_ADMI_MRK_CRS,	// Brw_SHOW_MRK_CRS =  2
-   Brw_ADMI_DOC_CRS,	// Brw_ADMI_DOC_CRS =  3
-   Brw_ADMI_SHR_CRS,	// Brw_ADMI_SHR_CRS =  4
-   Brw_ADMI_SHR_GRP,	// Brw_ADMI_SHR_GRP =  5
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_USR =  6
-   Brw_ADMI_WRK_CRS,	// Brw_ADMI_WRK_CRS =  7
-   Brw_ADMI_MRK_CRS,	// Brw_ADMI_MRK_CRS =  8
-   Brw_ADMI_BRF_USR,	// Brw_ADMI_BRF_USR =  9
-   Brw_ADMI_DOC_GRP,	// Brw_SHOW_DOC_GRP = 10
-   Brw_ADMI_DOC_GRP,	// Brw_ADMI_DOC_GRP = 11
-   Brw_ADMI_MRK_GRP,	// Brw_SHOW_MRK_GRP = 12
-   Brw_ADMI_MRK_GRP,	// Brw_ADMI_MRK_GRP = 13
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_USR = 14
-   Brw_ADMI_ASG_CRS,	// Brw_ADMI_ASG_CRS = 15
-   Brw_ADMI_DOC_DEG,	// Brw_SHOW_DOC_DEG = 16
-   Brw_ADMI_DOC_DEG,	// Brw_ADMI_DOC_DEG = 17
-   Brw_ADMI_DOC_CTR,	// Brw_SHOW_DOC_CTR = 18
-   Brw_ADMI_DOC_CTR,	// Brw_ADMI_DOC_CTR = 19
-   Brw_ADMI_DOC_INS,	// Brw_SHOW_DOC_INS = 20
-   Brw_ADMI_DOC_INS,	// Brw_ADMI_DOC_INS = 21
-   Brw_ADMI_SHR_DEG,	// Brw_ADMI_SHR_DEG = 22
-   Brw_ADMI_SHR_CTR,	// Brw_ADMI_SHR_CTR = 23
-   Brw_ADMI_SHR_INS,	// Brw_ADMI_SHR_INS = 24
-   Brw_ADMI_TCH_CRS,	// Brw_ADMI_TCH_CRS = 25
-   Brw_ADMI_TCH_GRP,	// Brw_ADMI_TCH_GRP = 26
-   Brw_ADMI_DOC_PRJ,	// Brw_ADMI_DOC_PRJ = 27
-   Brw_ADMI_ASS_PRJ,	// Brw_ADMI_ASS_PRJ = 28
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 // Browsers types for database "expanded_folders" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
-   Brw_ADMI_DOC_CRS,	// Brw_SHOW_DOC_CRS =  1
-   Brw_ADMI_MRK_CRS,	// Brw_SHOW_MRK_CRS =  2
-   Brw_ADMI_DOC_CRS,	// Brw_ADMI_DOC_CRS =  3
-   Brw_ADMI_SHR_CRS,	// Brw_ADMI_SHR_CRS =  4
-   Brw_ADMI_SHR_GRP,	// Brw_ADMI_SHR_GRP =  5
-   Brw_ADMI_WRK_USR,	// Brw_ADMI_WRK_USR =  6
-   Brw_ADMI_WRK_CRS,	// Brw_ADMI_WRK_CRS =  7
-   Brw_ADMI_MRK_CRS,	// Brw_ADMI_MRK_CRS =  8
-   Brw_ADMI_BRF_USR,	// Brw_ADMI_BRF_USR =  9
-   Brw_ADMI_DOC_GRP,	// Brw_SHOW_DOC_GRP = 10
-   Brw_ADMI_DOC_GRP,	// Brw_ADMI_DOC_GRP = 11
-   Brw_ADMI_MRK_GRP,	// Brw_SHOW_MRK_GRP = 12
-   Brw_ADMI_MRK_GRP,	// Brw_ADMI_MRK_GRP = 13
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_USR = 14
-   Brw_ADMI_ASG_CRS,	// Brw_ADMI_ASG_CRS = 15
-   Brw_ADMI_DOC_DEG,	// Brw_SHOW_DOC_DEG = 16
-   Brw_ADMI_DOC_DEG,	// Brw_ADMI_DOC_DEG = 17
-   Brw_ADMI_DOC_CTR,	// Brw_SHOW_DOC_CTR = 18
-   Brw_ADMI_DOC_CTR,	// Brw_ADMI_DOC_CTR = 19
-   Brw_ADMI_DOC_INS,	// Brw_SHOW_DOC_INS = 20
-   Brw_ADMI_DOC_INS,	// Brw_ADMI_DOC_INS = 21
-   Brw_ADMI_SHR_DEG,	// Brw_ADMI_SHR_DEG = 22
-   Brw_ADMI_SHR_CTR,	// Brw_ADMI_SHR_CTR = 23
-   Brw_ADMI_SHR_INS,	// Brw_ADMI_SHR_INS = 24
-   Brw_ADMI_TCH_CRS,	// Brw_ADMI_TCH_CRS = 25
-   Brw_ADMI_TCH_GRP,	// Brw_ADMI_TCH_GRP = 26
-   Brw_ADMI_DOC_PRJ,	// Brw_ADMI_DOC_PRJ = 27
-   Brw_ADMI_ASS_PRJ,	// Brw_ADMI_ASS_PRJ = 28
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 // Browsers types for database "file_browser_last" table
 // Assignments and works are stored as one in file_browser_last...
 // ...because a user views them at the same time
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
-   Brw_ADMI_DOC_CRS,	// Brw_SHOW_DOC_CRS =  1
-   Brw_ADMI_MRK_CRS,	// Brw_SHOW_MRK_CRS =  2
-   Brw_ADMI_DOC_CRS,	// Brw_ADMI_DOC_CRS =  3
-   Brw_ADMI_SHR_CRS,	// Brw_ADMI_SHR_CRS =  4
-   Brw_ADMI_SHR_GRP,	// Brw_ADMI_SHR_GRP =  5
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_WRK_USR =  6
-   Brw_ADMI_ASG_CRS,	// Brw_ADMI_WRK_CRS =  7
-   Brw_ADMI_MRK_CRS,	// Brw_ADMI_MRK_CRS =  8
-   Brw_ADMI_BRF_USR,	// Brw_ADMI_BRF_USR =  9
-   Brw_ADMI_DOC_GRP,	// Brw_SHOW_DOC_GRP = 10
-   Brw_ADMI_DOC_GRP,	// Brw_ADMI_DOC_GRP = 11
-   Brw_ADMI_MRK_GRP,	// Brw_SHOW_MRK_GRP = 12
-   Brw_ADMI_MRK_GRP,	// Brw_ADMI_MRK_GRP = 13
-   Brw_ADMI_ASG_USR,	// Brw_ADMI_ASG_USR = 14
-   Brw_ADMI_ASG_CRS,	// Brw_ADMI_ASG_CRS = 15
-   Brw_ADMI_DOC_DEG,	// Brw_SHOW_DOC_DEG = 16
-   Brw_ADMI_DOC_DEG,	// Brw_ADMI_DOC_DEG = 17
-   Brw_ADMI_DOC_CTR,	// Brw_SHOW_DOC_CTR = 18
-   Brw_ADMI_DOC_CTR,	// Brw_ADMI_DOC_CTR = 19
-   Brw_ADMI_DOC_INS,	// Brw_SHOW_DOC_INS = 20
-   Brw_ADMI_DOC_INS,	// Brw_ADMI_DOC_INS = 21
-   Brw_ADMI_SHR_DEG,	// Brw_ADMI_SHR_DEG = 22
-   Brw_ADMI_SHR_CTR,	// Brw_ADMI_SHR_CTR = 23
-   Brw_ADMI_SHR_INS,	// Brw_ADMI_SHR_INS = 24
-   Brw_ADMI_TCH_CRS,	// Brw_ADMI_TCH_CRS = 25
-   Brw_ADMI_TCH_GRP,	// Brw_ADMI_TCH_GRP = 26
-   Brw_ADMI_DOC_PRJ,	// Brw_ADMI_DOC_PRJ = 27
-   Brw_ADMI_ASS_PRJ,	// Brw_ADMI_ASS_PRJ = 28
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_ASG_CRS,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
 // Internal names of root folders
 const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   "",							// Brw_UNKNOWN
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,		// Brw_SHOW_DOC_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,			// Brw_SHOW_MRK_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,		// Brw_ADMI_DOC_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,		// Brw_ADMI_SHR_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,		// Brw_ADMI_SHR_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,			// Brw_ADMI_WRK_USR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,			// Brw_ADMI_WRK_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,			// Brw_ADMI_MRK_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,			// Brw_ADMI_BRF_USR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,		// Brw_SHOW_DOC_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,		// Brw_ADMI_DOC_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,			// Brw_SHOW_MRK_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,			// Brw_ADMI_MRK_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,		// Brw_ADMI_ASG_USR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,		// Brw_ADMI_ASG_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_SHOW_DOC_DEG
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_ADMI_DOC_DEG
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_SHOW_DOC_CTR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_ADMI_DOC_CTR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_SHOW_DOC_INS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,		// Brw_ADMI_DOC_INS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,		// Brw_ADMI_SHR_DEG
-   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,		// Brw_ADMI_SHR_CTR
-   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,		// Brw_ADMI_SHR_INS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,		// Brw_ADMI_TCH_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,		// Brw_ADMI_TCH_GRP
-   Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS,	// Brw_ADMI_DOC_PRJ
-   Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = "",
+   [Brw_SHOW_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_SHOW_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_ADMI_SHR_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
+   [Brw_ADMI_SHR_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
+   [Brw_ADMI_WRK_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
+   [Brw_ADMI_WRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
+   [Brw_ADMI_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_BRF_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,
+   [Brw_SHOW_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_ADMI_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_SHOW_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_ASG_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   [Brw_ADMI_ASG_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   [Brw_SHOW_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_SHOW_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_SHOW_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_SHR_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_SHR_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_SHR_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_TCH_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
+   [Brw_ADMI_TCH_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
+   [Brw_ADMI_DOC_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS,
+   [Brw_ADMI_ASS_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT,
   };
 
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   false,	// Brw_UNKNOWN
-   false,	// Brw_SHOW_DOC_CRS
-   false,	// Brw_SHOW_MRK_CRS
-   true,	// Brw_ADMI_DOC_CRS
-   true,	// Brw_ADMI_SHR_CRS
-   true,	// Brw_ADMI_SHR_GRP
-   true,	// Brw_ADMI_WRK_USR
-   true,	// Brw_ADMI_WRK_CRS
-   true,	// Brw_ADMI_MRK_CRS
-   true,	// Brw_ADMI_BRF_USR
-   false,	// Brw_SHOW_DOC_GRP
-   true,	// Brw_ADMI_DOC_GRP
-   false,	// Brw_SHOW_MRK_GRP
-   true,	// Brw_ADMI_MRK_GRP
-   true,	// Brw_ADMI_ASG_USR
-   true,	// Brw_ADMI_ASG_CRS
-   false,	// Brw_SHOW_DOC_DEG
-   true,	// Brw_ADMI_DOC_DEG
-   false,	// Brw_SHOW_DOC_CTR
-   true,	// Brw_ADMI_DOC_CTR
-   false,	// Brw_SHOW_DOC_INS
-   true,	// Brw_ADMI_DOC_INS
-   true,	// Brw_ADMI_SHR_DEG
-   true,	// Brw_ADMI_SHR_CTR
-   true,	// Brw_ADMI_SHR_INS
-   true,	// Brw_ADMI_TCH_CRS
-   true,	// Brw_ADMI_TCH_GRP
-   true,	// Brw_ADMI_DOC_PRJ
-   true,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = false,
+   [Brw_SHOW_DOC_CRS] = false,
+   [Brw_SHOW_MRK_CRS] = false,
+   [Brw_ADMI_DOC_CRS] = true,
+   [Brw_ADMI_SHR_CRS] = true,
+   [Brw_ADMI_SHR_GRP] = true,
+   [Brw_ADMI_WRK_USR] = true,
+   [Brw_ADMI_WRK_CRS] = true,
+   [Brw_ADMI_MRK_CRS] = true,
+   [Brw_ADMI_BRF_USR] = true,
+   [Brw_SHOW_DOC_GRP] = false,
+   [Brw_ADMI_DOC_GRP] = true,
+   [Brw_SHOW_MRK_GRP] = false,
+   [Brw_ADMI_MRK_GRP] = true,
+   [Brw_ADMI_ASG_USR] = true,
+   [Brw_ADMI_ASG_CRS] = true,
+   [Brw_SHOW_DOC_DEG] = false,
+   [Brw_ADMI_DOC_DEG] = true,
+   [Brw_SHOW_DOC_CTR] = false,
+   [Brw_ADMI_DOC_CTR] = true,
+   [Brw_SHOW_DOC_INS] = false,
+   [Brw_ADMI_DOC_INS] = true,
+   [Brw_ADMI_SHR_DEG] = true,
+   [Brw_ADMI_SHR_CTR] = true,
+   [Brw_ADMI_SHR_INS] = true,
+   [Brw_ADMI_TCH_CRS] = true,
+   [Brw_ADMI_TCH_GRP] = true,
+   [Brw_ADMI_DOC_PRJ] = true,
+   [Brw_ADMI_ASS_PRJ] = true,
   };
 static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActSeeMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActAdmShaCrs,	// Brw_ADMI_SHR_CRS
-   ActAdmShaGrp,	// Brw_ADMI_SHR_GRP
-   ActAdmAsgWrkUsr,	// Brw_ADMI_WRK_USR
-   ActAdmAsgWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActAdmBrf,		// Brw_ADMI_BRF_USR
-   ActSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActSeeMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActAdmAsgWrkUsr,	// Brw_ADMI_ASG_USR
-   ActAdmAsgWrkCrs,	// Brw_ADMI_ASG_CRS
-   ActSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActAdmShaDeg,	// Brw_ADMI_SHR_DEG
-   ActAdmShaCtr,	// Brw_ADMI_SHR_CTR
-   ActAdmShaIns,	// Brw_ADMI_SHR_INS
-   ActAdmTchCrs,	// Brw_ADMI_TCH_CRS
-   ActAdmTchGrp,	// Brw_ADMI_TCH_GRP
-   ActAdmDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActAdmAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActAdmShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActAdmShaGrp,
+   [Brw_ADMI_WRK_USR] = ActAdmAsgWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActAdmAsgWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActAdmBrf,
+   [Brw_SHOW_DOC_GRP] = ActSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActAdmAsgWrkUsr,
+   [Brw_ADMI_ASG_CRS] = ActAdmAsgWrkCrs,
+   [Brw_SHOW_DOC_DEG] = ActSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActAdmShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActAdmShaCtr,
+   [Brw_ADMI_SHR_INS] = ActAdmShaIns,
+   [Brw_ADMI_TCH_CRS] = ActAdmTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActAdmTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActAdmDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
   };
 
 static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActAdmDocCrs,	// Brw_SHOW_DOC_CRS
-   ActAdmMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActUnk,		// Brw_ADMI_DOC_CRS
-   ActUnk,		// Brw_ADMI_SHR_CRS
-   ActUnk,		// Brw_ADMI_SHR_GRP
-   ActUnk,		// Brw_ADMI_WRK_USR
-   ActUnk,		// Brw_ADMI_WRK_CRS
-   ActUnk,		// Brw_ADMI_MRK_CRS
-   ActUnk,		// Brw_ADMI_BRF_USR
-   ActAdmDocGrp,	// Brw_SHOW_DOC_GRP
-   ActUnk,		// Brw_ADMI_DOC_GRP
-   ActAdmMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActUnk,		// Brw_ADMI_MRK_GRP
-   ActUnk,		// Brw_ADMI_ASG_USR
-   ActUnk,		// Brw_ADMI_ASG_CRS
-   ActAdmDocDeg,	// Brw_SHOW_DOC_DEG
-   ActUnk,		// Brw_ADMI_DOC_DEG
-   ActAdmDocCtr,	// Brw_SHOW_DOC_CTR
-   ActUnk,		// Brw_ADMI_DOC_CTR
-   ActAdmDocIns,	// Brw_SHOW_DOC_INS
-   ActUnk,		// Brw_ADMI_DOC_INS
-   ActUnk,		// Brw_ADMI_SHR_DEG
-   ActUnk,		// Brw_ADMI_SHR_CTR
-   ActUnk,		// Brw_ADMI_SHR_INS
-   ActUnk,		// Brw_ADMI_TCH_CRS
-   ActUnk,		// Brw_ADMI_TCH_GRP
-   ActUnk,		// Brw_ADMI_DOC_PRJ
-   ActUnk,		// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActAdmDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActAdmMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActUnk,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActUnk,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActAdmDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActUnk,
+   [Brw_SHOW_MRK_GRP] = ActAdmMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActUnk,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActAdmDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActUnk,
+   [Brw_SHOW_DOC_CTR] = ActAdmDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActUnk,
+   [Brw_SHOW_DOC_INS] = ActAdmDocIns,
+   [Brw_ADMI_DOC_INS] = ActUnk,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActSeeDocCrs,	// Brw_ADMI_DOC_CRS
-   ActUnk,		// Brw_ADMI_SHR_CRS
-   ActUnk,		// Brw_ADMI_SHR_GRP
-   ActUnk,		// Brw_ADMI_WRK_USR
-   ActUnk,		// Brw_ADMI_WRK_CRS
-   ActSeeMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActUnk,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActSeeDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActSeeMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActUnk,		// Brw_ADMI_ASG_USR
-   ActUnk,		// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActSeeDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActSeeDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActSeeDocIns,	// Brw_ADMI_DOC_INS
-   ActUnk,		// Brw_ADMI_SHR_DEG
-   ActUnk,		// Brw_ADMI_SHR_CTR
-   ActUnk,		// Brw_ADMI_SHR_INS
-   ActUnk,		// Brw_ADMI_TCH_CRS
-   ActUnk,		// Brw_ADMI_TCH_GRP
-   ActUnk,		// Brw_ADMI_DOC_PRJ
-   ActUnk,		// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActSeeDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActSeeMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActSeeDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActSeeMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActSeeDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActSeeDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActSeeDocIns,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
 static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActChgToSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActChgToSeeMrk,	// Brw_SHOW_MRK_CRS
-   ActChgToAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActChgToAdmSha,	// Brw_ADMI_SHR_CRS
-   ActChgToAdmSha,	// Brw_ADMI_SHR_GRP
-   ActUnk,		// Brw_ADMI_WRK_USR
-   ActUnk,		// Brw_ADMI_WRK_CRS
-   ActChgToAdmMrk,	// Brw_ADMI_MRK_CRS
-   ActUnk,		// Brw_ADMI_BRF_USR
-   ActChgToSeeDocCrs,	// Brw_SHOW_DOC_GRP
-   ActChgToAdmDocCrs,	// Brw_ADMI_DOC_GRP
-   ActChgToSeeMrk,	// Brw_SHOW_MRK_GRP
-   ActChgToAdmMrk,	// Brw_ADMI_MRK_GRP
-   ActUnk,		// Brw_ADMI_ASG_USR
-   ActUnk,		// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActUnk,		// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActUnk,		// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActUnk,		// Brw_ADMI_DOC_INS
-   ActUnk,		// Brw_ADMI_SHR_DEG
-   ActUnk,		// Brw_ADMI_SHR_CTR
-   ActUnk,		// Brw_ADMI_SHR_INS
-   ActChgToAdmTch,	// Brw_ADMI_TCH_CRS
-   ActChgToAdmTch,	// Brw_ADMI_TCH_GRP
-   ActUnk,		// Brw_ADMI_DOC_PRJ
-   ActUnk,		// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActChgToSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActChgToSeeMrk,
+   [Brw_ADMI_DOC_CRS] = ActChgToAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActChgToAdmSha,
+   [Brw_ADMI_SHR_GRP] = ActChgToAdmSha,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActChgToAdmMrk,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActChgToSeeDocCrs,
+   [Brw_ADMI_DOC_GRP] = ActChgToAdmDocCrs,
+   [Brw_SHOW_MRK_GRP] = ActChgToSeeMrk,
+   [Brw_ADMI_MRK_GRP] = ActChgToAdmMrk,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActUnk,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActUnk,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActUnk,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActChgToAdmTch,
+   [Brw_ADMI_TCH_GRP] = ActChgToAdmTch,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActShoDocCrs,	// Brw_ADMI_DOC_CRS
-   ActUnk,		// Brw_ADMI_SHR_CRS
-   ActUnk,		// Brw_ADMI_SHR_GRP
-   ActUnk,		// Brw_ADMI_WRK_USR
-   ActUnk,		// Brw_ADMI_WRK_CRS
-   ActShoMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActUnk,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActShoDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActShoMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActUnk,		// Brw_ADMI_ASG_USR
-   ActUnk,		// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActShoDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActShoDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActShoDocIns,	// Brw_ADMI_DOC_INS
-   ActUnk,		// Brw_ADMI_SHR_DEG
-   ActUnk,		// Brw_ADMI_SHR_CTR
-   ActUnk,		// Brw_ADMI_SHR_INS
-   ActUnk,		// Brw_ADMI_TCH_CRS
-   ActUnk,		// Brw_ADMI_TCH_GRP
-   ActUnk,		// Brw_ADMI_DOC_PRJ
-   ActUnk,		// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActShoDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActShoMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActShoDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActShoMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActShoDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActShoDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActShoDocIns,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActHidDocCrs,	// Brw_ADMI_DOC_CRS
-   ActUnk,		// Brw_ADMI_SHR_CRS
-   ActUnk,		// Brw_ADMI_SHR_GRP
-   ActUnk,		// Brw_ADMI_WRK_USR
-   ActUnk,		// Brw_ADMI_WRK_CRS
-   ActHidMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActUnk,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActHidDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActHidMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActUnk,		// Brw_ADMI_ASG_USR
-   ActUnk,		// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActHidDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActHidDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActHidDocIns,	// Brw_ADMI_DOC_INS
-   ActUnk,		// Brw_ADMI_SHR_DEG
-   ActUnk,		// Brw_ADMI_SHR_CTR
-   ActUnk,		// Brw_ADMI_SHR_INS
-   ActUnk,		// Brw_ADMI_TCH_CRS
-   ActUnk,		// Brw_ADMI_TCH_GRP
-   ActUnk,		// Brw_ADMI_DOC_PRJ
-   ActUnk,		// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActHidDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActHidMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActHidDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActHidMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActHidDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActHidDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActHidDocIns,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActReqDatSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActReqDatSeeMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActReqDatAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActReqDatShaCrs,	// Brw_ADMI_SHR_CRS
-   ActReqDatShaGrp,	// Brw_ADMI_SHR_GRP
-   ActReqDatWrkUsr,	// Brw_ADMI_WRK_USR
-   ActReqDatWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActReqDatAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActReqDatBrf,	// Brw_ADMI_BRF_USR
-   ActReqDatSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActReqDatAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActReqDatSeeMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActReqDatAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActReqDatAsgUsr,	// Brw_ADMI_ASG_USR
-   ActReqDatAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActReqDatSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActReqDatAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActReqDatSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActReqDatAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActReqDatSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActReqDatAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActReqDatShaDeg,	// Brw_ADMI_SHR_DEG
-   ActReqDatShaCtr,	// Brw_ADMI_SHR_CTR
-   ActReqDatShaIns,	// Brw_ADMI_SHR_INS
-   ActReqDatTchCrs,	// Brw_ADMI_TCH_CRS
-   ActReqDatTchGrp,	// Brw_ADMI_TCH_GRP
-   ActReqDatDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActReqDatAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActReqDatSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActReqDatSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActReqDatAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActReqDatShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActReqDatShaGrp,
+   [Brw_ADMI_WRK_USR] = ActReqDatWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActReqDatWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActReqDatAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActReqDatBrf,
+   [Brw_SHOW_DOC_GRP] = ActReqDatSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActReqDatAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActReqDatSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActReqDatAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActReqDatAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActReqDatAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActReqDatSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActReqDatAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActReqDatSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActReqDatAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActReqDatSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActReqDatAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActReqDatShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActReqDatShaCtr,
+   [Brw_ADMI_SHR_INS] = ActReqDatShaIns,
+   [Brw_ADMI_TCH_CRS] = ActReqDatTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActReqDatTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActReqDatDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActReqDatAssPrj,
   };
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActDowSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActSeeMyMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActDowAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActDowShaCrs,	// Brw_ADMI_SHR_CRS
-   ActDowShaGrp,	// Brw_ADMI_SHR_GRP
-   ActDowWrkUsr,	// Brw_ADMI_WRK_USR
-   ActDowWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActDowAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActDowBrf,		// Brw_ADMI_BRF_USR
-   ActDowSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActDowAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActSeeMyMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActDowAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActDowAsgUsr,	// Brw_ADMI_ASG_USR
-   ActDowAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActDowSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActDowAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActDowSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActDowAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActDowSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActDowAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActDowShaDeg,	// Brw_ADMI_SHR_DEG
-   ActDowShaCtr,	// Brw_ADMI_SHR_CTR
-   ActDowShaIns,	// Brw_ADMI_SHR_INS
-   ActDowTchCrs,	// Brw_ADMI_TCH_CRS
-   ActDowTchGrp,	// Brw_ADMI_TCH_GRP
-   ActDowDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActDowAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActDowSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActSeeMyMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActDowAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActDowShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActDowShaGrp,
+   [Brw_ADMI_WRK_USR] = ActDowWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActDowWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActDowAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActDowBrf,
+   [Brw_SHOW_DOC_GRP] = ActDowSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActDowAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActSeeMyMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActDowAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActDowAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActDowAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActDowSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActDowAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActDowSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActDowAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActDowSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActDowAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActDowShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActDowShaCtr,
+   [Brw_ADMI_SHR_INS] = ActDowShaIns,
+   [Brw_ADMI_TCH_CRS] = ActDowTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActDowTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActDowDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActDowAssPrj,
   };
 static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActReqRemFilDocCrs,	// Brw_ADMI_DOC_CRS
-   ActReqRemFilShaCrs,	// Brw_ADMI_SHR_CRS
-   ActReqRemFilShaGrp,	// Brw_ADMI_SHR_GRP
-   ActReqRemFilWrkUsr,	// Brw_ADMI_WRK_USR
-   ActReqRemFilWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActReqRemFilMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActReqRemFilBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActReqRemFilDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActReqRemFilMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActReqRemFilAsgUsr,	// Brw_ADMI_ASG_USR
-   ActReqRemFilAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActReqRemFilDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActReqRemFilDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActReqRemFilDocIns,	// Brw_ADMI_DOC_INS
-   ActReqRemFilShaDeg,	// Brw_ADMI_SHR_DEG
-   ActReqRemFilShaCtr,	// Brw_ADMI_SHR_CTR
-   ActReqRemFilShaIns,	// Brw_ADMI_SHR_INS
-   ActReqRemFilTchCrs,	// Brw_ADMI_TCH_CRS
-   ActReqRemFilTchGrp,	// Brw_ADMI_TCH_GRP
-   ActReqRemFilDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActReqRemFilAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActReqRemFilDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActReqRemFilShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActReqRemFilShaGrp,
+   [Brw_ADMI_WRK_USR] = ActReqRemFilWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActReqRemFilWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActReqRemFilMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActReqRemFilBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActReqRemFilDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActReqRemFilMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActReqRemFilAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActReqRemFilAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActReqRemFilDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActReqRemFilDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActReqRemFilDocIns,
+   [Brw_ADMI_SHR_DEG] = ActReqRemFilShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActReqRemFilShaCtr,
+   [Brw_ADMI_SHR_INS] = ActReqRemFilShaIns,
+   [Brw_ADMI_TCH_CRS] = ActReqRemFilTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActReqRemFilTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActReqRemFilDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActReqRemFilAssPrj,
   };
 static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRemFilDocCrs,	// Brw_ADMI_DOC_CRS
-   ActRemFilShaCrs,	// Brw_ADMI_SHR_CRS
-   ActRemFilShaGrp,	// Brw_ADMI_SHR_GRP
-   ActRemFilWrkUsr,	// Brw_ADMI_WRK_USR
-   ActRemFilWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActRemFilMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActRemFilBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRemFilDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRemFilMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActRemFilAsgUsr,	// Brw_ADMI_ASG_USR
-   ActRemFilAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRemFilDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRemFilDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRemFilDocIns,	// Brw_ADMI_DOC_INS
-   ActRemFilShaDeg,	// Brw_ADMI_SHR_DEG
-   ActRemFilShaCtr,	// Brw_ADMI_SHR_CTR
-   ActRemFilShaIns,	// Brw_ADMI_SHR_INS
-   ActRemFilTchCrs,	// Brw_ADMI_TCH_CRS
-   ActRemFilTchGrp,	// Brw_ADMI_TCH_GRP
-   ActRemFilDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActRemFilAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRemFilDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActRemFilShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActRemFilShaGrp,
+   [Brw_ADMI_WRK_USR] = ActRemFilWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRemFilWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActRemFilMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActRemFilBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRemFilDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRemFilMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActRemFilAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRemFilAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRemFilDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRemFilDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRemFilDocIns,
+   [Brw_ADMI_SHR_DEG] = ActRemFilShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActRemFilShaCtr,
+   [Brw_ADMI_SHR_INS] = ActRemFilShaIns,
+   [Brw_ADMI_TCH_CRS] = ActRemFilTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActRemFilTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActRemFilDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemFilAssPrj,
   };
 static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRemFolDocCrs,	// Brw_ADMI_DOC_CRS
-   ActRemFolShaCrs,	// Brw_ADMI_SHR_CRS
-   ActRemFolShaGrp,	// Brw_ADMI_SHR_GRP
-   ActRemFolWrkUsr,	// Brw_ADMI_WRK_USR
-   ActRemFolWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActRemFolMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActRemFolBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRemFolDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRemFolMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActRemFolAsgUsr,	// Brw_ADMI_ASG_USR
-   ActRemFolAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRemFolDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRemFolDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRemFolDocIns,	// Brw_ADMI_DOC_INS
-   ActRemFolShaDeg,	// Brw_ADMI_SHR_DEG
-   ActRemFolShaCtr,	// Brw_ADMI_SHR_CTR
-   ActRemFolShaIns,	// Brw_ADMI_SHR_INS
-   ActRemFolTchCrs,	// Brw_ADMI_TCH_CRS
-   ActRemFolTchGrp,	// Brw_ADMI_TCH_GRP
-   ActRemFolDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActRemFolAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRemFolDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActRemFolShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActRemFolShaGrp,
+   [Brw_ADMI_WRK_USR] = ActRemFolWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRemFolWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActRemFolMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActRemFolBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRemFolDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRemFolMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActRemFolAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRemFolAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRemFolDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRemFolDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRemFolDocIns,
+   [Brw_ADMI_SHR_DEG] = ActRemFolShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActRemFolShaCtr,
+   [Brw_ADMI_SHR_INS] = ActRemFolShaIns,
+   [Brw_ADMI_TCH_CRS] = ActRemFolTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActRemFolTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActRemFolDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemFolAssPrj,
   };
 static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRemTreDocCrs,	// Brw_ADMI_DOC_CRS
-   ActRemTreShaCrs,	// Brw_ADMI_SHR_CRS
-   ActRemTreShaGrp,	// Brw_ADMI_SHR_GRP
-   ActRemTreWrkUsr,	// Brw_ADMI_WRK_USR
-   ActRemTreWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActRemTreMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActRemTreBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRemTreDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRemTreMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActRemTreAsgUsr,	// Brw_ADMI_ASG_USR
-   ActRemTreAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRemTreDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRemTreDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRemTreDocIns,	// Brw_ADMI_DOC_INS
-   ActRemTreShaDeg,	// Brw_ADMI_SHR_DEG
-   ActRemTreShaCtr,	// Brw_ADMI_SHR_CTR
-   ActRemTreShaIns,	// Brw_ADMI_SHR_INS
-   ActRemTreTchCrs,	// Brw_ADMI_TCH_CRS
-   ActRemTreTchGrp,	// Brw_ADMI_TCH_GRP
-   ActRemTreDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActRemTreAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRemTreDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActRemTreShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActRemTreShaGrp,
+   [Brw_ADMI_WRK_USR] = ActRemTreWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRemTreWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActRemTreMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActRemTreBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRemTreDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRemTreMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActRemTreAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRemTreAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRemTreDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRemTreDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRemTreDocIns,
+   [Brw_ADMI_SHR_DEG] = ActRemTreShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActRemTreShaCtr,
+   [Brw_ADMI_SHR_INS] = ActRemTreShaIns,
+   [Brw_ADMI_TCH_CRS] = ActRemTreTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActRemTreTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActRemTreDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemTreAssPrj,
   };
 static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActCopDocCrs,	// Brw_ADMI_DOC_CRS
-   ActCopShaCrs,	// Brw_ADMI_SHR_CRS
-   ActCopShaGrp,	// Brw_ADMI_SHR_GRP
-   ActCopWrkUsr,	// Brw_ADMI_WRK_USR
-   ActCopWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActCopMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActCopBrf,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActCopDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActCopMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActCopAsgUsr,	// Brw_ADMI_ASG_USR
-   ActCopAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActCopDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActCopDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActCopDocIns,	// Brw_ADMI_DOC_INS
-   ActCopShaDeg,	// Brw_ADMI_SHR_DEG
-   ActCopShaCtr,	// Brw_ADMI_SHR_CTR
-   ActCopShaIns,	// Brw_ADMI_SHR_INS
-   ActCopTchCrs,	// Brw_ADMI_TCH_CRS
-   ActCopTchGrp,	// Brw_ADMI_TCH_GRP
-   ActCopDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActCopAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActCopDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActCopShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActCopShaGrp,
+   [Brw_ADMI_WRK_USR] = ActCopWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActCopWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActCopMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActCopBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActCopDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActCopMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActCopAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActCopAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActCopDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActCopDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActCopDocIns,
+   [Brw_ADMI_SHR_DEG] = ActCopShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActCopShaCtr,
+   [Brw_ADMI_SHR_INS] = ActCopShaIns,
+   [Brw_ADMI_TCH_CRS] = ActCopTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActCopTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActCopDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActCopAssPrj,
   };
 static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActPasDocCrs,	// Brw_ADMI_DOC_CRS
-   ActPasShaCrs,	// Brw_ADMI_SHR_CRS
-   ActPasShaGrp,	// Brw_ADMI_SHR_GRP
-   ActPasWrkUsr,	// Brw_ADMI_WRK_USR
-   ActPasWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActPasMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActPasBrf,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActPasDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActPasMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActPasAsgUsr,	// Brw_ADMI_ASG_USR
-   ActPasAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActPasDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActPasDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActPasDocIns,	// Brw_ADMI_DOC_INS
-   ActPasShaDeg,	// Brw_ADMI_SHR_DEG
-   ActPasShaCtr,	// Brw_ADMI_SHR_CTR
-   ActPasShaIns,	// Brw_ADMI_SHR_INS
-   ActPasTchCrs,	// Brw_ADMI_TCH_CRS
-   ActPasTchGrp,	// Brw_ADMI_TCH_GRP
-   ActPasDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActPasAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActPasDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActPasShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActPasShaGrp,
+   [Brw_ADMI_WRK_USR] = ActPasWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActPasWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActPasMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActPasBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActPasDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActPasMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActPasAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActPasAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActPasDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActPasDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActPasDocIns,
+   [Brw_ADMI_SHR_DEG] = ActPasShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActPasShaCtr,
+   [Brw_ADMI_SHR_INS] = ActPasShaIns,
+   [Brw_ADMI_TCH_CRS] = ActPasTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActPasTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActPasDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActPasAssPrj,
   };
 static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActFrmCreDocCrs,	// Brw_ADMI_DOC_CRS
-   ActFrmCreShaCrs,	// Brw_ADMI_SHR_CRS
-   ActFrmCreShaGrp,	// Brw_ADMI_SHR_GRP
-   ActFrmCreWrkUsr,	// Brw_ADMI_WRK_USR
-   ActFrmCreWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActFrmCreMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActFrmCreBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActFrmCreDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActFrmCreMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActFrmCreAsgUsr,	// Brw_ADMI_ASG_USR
-   ActFrmCreAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActFrmCreDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActFrmCreDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActFrmCreDocIns,	// Brw_ADMI_DOC_INS
-   ActFrmCreShaDeg,	// Brw_ADMI_SHR_DEG
-   ActFrmCreShaCtr,	// Brw_ADMI_SHR_CTR
-   ActFrmCreShaIns,	// Brw_ADMI_SHR_INS
-   ActFrmCreTchCrs,	// Brw_ADMI_TCH_CRS
-   ActFrmCreTchGrp,	// Brw_ADMI_TCH_GRP
-   ActFrmCreDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActFrmCreAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActFrmCreDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActFrmCreShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActFrmCreShaGrp,
+   [Brw_ADMI_WRK_USR] = ActFrmCreWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActFrmCreWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActFrmCreMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActFrmCreBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActFrmCreDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActFrmCreMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActFrmCreAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActFrmCreAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActFrmCreDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActFrmCreDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActFrmCreDocIns,
+   [Brw_ADMI_SHR_DEG] = ActFrmCreShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActFrmCreShaCtr,
+   [Brw_ADMI_SHR_INS] = ActFrmCreShaIns,
+   [Brw_ADMI_TCH_CRS] = ActFrmCreTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActFrmCreTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActFrmCreDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActFrmCreAssPrj,
   };
 static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActCreFolDocCrs,	// Brw_ADMI_DOC_CRS
-   ActCreFolShaCrs,	// Brw_ADMI_SHR_CRS
-   ActCreFolShaGrp,	// Brw_ADMI_SHR_GRP
-   ActCreFolWrkUsr,	// Brw_ADMI_WRK_USR
-   ActCreFolWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActCreFolMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActCreFolBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActCreFolDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActCreFolMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActCreFolAsgUsr,	// Brw_ADMI_ASG_USR
-   ActCreFolAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActCreFolDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActCreFolDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActCreFolDocIns,	// Brw_ADMI_DOC_INS
-   ActCreFolShaDeg,	// Brw_ADMI_SHR_DEG
-   ActCreFolShaCtr,	// Brw_ADMI_SHR_CTR
-   ActCreFolShaIns,	// Brw_ADMI_SHR_INS
-   ActCreFolTchCrs,	// Brw_ADMI_TCH_CRS
-   ActCreFolTchGrp,	// Brw_ADMI_TCH_GRP
-   ActCreFolDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActCreFolAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActCreFolDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActCreFolShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActCreFolShaGrp,
+   [Brw_ADMI_WRK_USR] = ActCreFolWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActCreFolWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActCreFolMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActCreFolBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActCreFolDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActCreFolMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActCreFolAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActCreFolAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActCreFolDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActCreFolDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActCreFolDocIns,
+   [Brw_ADMI_SHR_DEG] = ActCreFolShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActCreFolShaCtr,
+   [Brw_ADMI_SHR_INS] = ActCreFolShaIns,
+   [Brw_ADMI_TCH_CRS] = ActCreFolTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActCreFolTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActCreFolDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActCreFolAssPrj,
   };
 static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActCreLnkDocCrs,	// Brw_ADMI_DOC_CRS
-   ActCreLnkShaCrs,	// Brw_ADMI_SHR_CRS
-   ActCreLnkShaGrp,	// Brw_ADMI_SHR_GRP
-   ActCreLnkWrkUsr,	// Brw_ADMI_WRK_USR
-   ActCreLnkWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActUnk,		// Brw_ADMI_MRK_CRS
-   ActCreLnkBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActCreLnkDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActUnk,		// Brw_ADMI_MRK_GRP
-   ActCreLnkAsgUsr,	// Brw_ADMI_ASG_USR
-   ActCreLnkAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActCreLnkDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActCreLnkDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActCreLnkDocIns,	// Brw_ADMI_DOC_INS
-   ActCreLnkShaDeg,	// Brw_ADMI_SHR_DEG
-   ActCreLnkShaCtr,	// Brw_ADMI_SHR_CTR
-   ActCreLnkShaIns,	// Brw_ADMI_SHR_INS
-   ActCreLnkTchCrs,	// Brw_ADMI_TCH_CRS
-   ActCreLnkTchGrp,	// Brw_ADMI_TCH_GRP
-   ActCreLnkDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActCreLnkAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActCreLnkDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActCreLnkShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActCreLnkShaGrp,
+   [Brw_ADMI_WRK_USR] = ActCreLnkWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActCreLnkWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActUnk,
+   [Brw_ADMI_BRF_USR] = ActCreLnkBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActCreLnkDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActUnk,
+   [Brw_ADMI_ASG_USR] = ActCreLnkAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActCreLnkAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActCreLnkDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActCreLnkDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActCreLnkDocIns,
+   [Brw_ADMI_SHR_DEG] = ActCreLnkShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActCreLnkShaCtr,
+   [Brw_ADMI_SHR_INS] = ActCreLnkShaIns,
+   [Brw_ADMI_TCH_CRS] = ActCreLnkTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActCreLnkTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActCreLnkDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActCreLnkAssPrj,
   };
 static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRenFolDocCrs,	// Brw_ADMI_DOC_CRS
-   ActRenFolShaCrs,	// Brw_ADMI_SHR_CRS
-   ActRenFolShaGrp,	// Brw_ADMI_SHR_GRP
-   ActRenFolWrkUsr,	// Brw_ADMI_WRK_USR
-   ActRenFolWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActRenFolMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActRenFolBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRenFolDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRenFolMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActRenFolAsgUsr,	// Brw_ADMI_ASG_USR
-   ActRenFolAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRenFolDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRenFolDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRenFolDocIns,	// Brw_ADMI_DOC_INS
-   ActRenFolShaDeg,	// Brw_ADMI_SHR_DEG
-   ActRenFolShaCtr,	// Brw_ADMI_SHR_CTR
-   ActRenFolShaIns,	// Brw_ADMI_SHR_INS
-   ActRenFolTchCrs,	// Brw_ADMI_TCH_CRS
-   ActRenFolTchGrp,	// Brw_ADMI_TCH_GRP
-   ActRenFolDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActRenFolAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRenFolDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActRenFolShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActRenFolShaGrp,
+   [Brw_ADMI_WRK_USR] = ActRenFolWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRenFolWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActRenFolMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActRenFolBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRenFolDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRenFolMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActRenFolAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRenFolAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRenFolDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRenFolDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRenFolDocIns,
+   [Brw_ADMI_SHR_DEG] = ActRenFolShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActRenFolShaCtr,
+   [Brw_ADMI_SHR_INS] = ActRenFolShaIns,
+   [Brw_ADMI_TCH_CRS] = ActRenFolTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActRenFolTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActRenFolDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRenFolAssPrj,
   };
 static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRcvFilDocCrsDZ,	// Brw_ADMI_DOC_CRS
-   ActRcvFilShaCrsDZ,	// Brw_ADMI_SHR_CRS
-   ActRcvFilShaGrpDZ,	// Brw_ADMI_SHR_GRP
-   ActRcvFilWrkUsrDZ,	// Brw_ADMI_WRK_USR
-   ActRcvFilWrkCrsDZ,	// Brw_ADMI_WRK_CRS
-   ActRcvFilMrkCrsDZ,	// Brw_ADMI_MRK_CRS
-   ActRcvFilBrfDZ,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRcvFilDocGrpDZ,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRcvFilMrkGrpDZ,	// Brw_ADMI_MRK_GRP
-   ActRcvFilAsgUsrDZ,	// Brw_ADMI_ASG_USR
-   ActRcvFilAsgCrsDZ,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRcvFilDocDegDZ,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRcvFilDocCtrDZ,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRcvFilDocInsDZ,	// Brw_ADMI_DOC_INS
-   ActRcvFilShaDegDZ,	// Brw_ADMI_SHR_DEG
-   ActRcvFilShaCtrDZ,	// Brw_ADMI_SHR_CTR
-   ActRcvFilShaInsDZ,	// Brw_ADMI_SHR_INS
-   ActRcvFilTchCrsDZ,	// Brw_ADMI_TCH_CRS
-   ActRcvFilTchGrpDZ,	// Brw_ADMI_TCH_GRP
-   ActRcvFilDocPrjDZ,	// Brw_ADMI_DOC_PRJ
-   ActRcvFilAssPrjDZ,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRcvFilDocCrsDZ,
+   [Brw_ADMI_SHR_CRS] = ActRcvFilShaCrsDZ,
+   [Brw_ADMI_SHR_GRP] = ActRcvFilShaGrpDZ,
+   [Brw_ADMI_WRK_USR] = ActRcvFilWrkUsrDZ,
+   [Brw_ADMI_WRK_CRS] = ActRcvFilWrkCrsDZ,
+   [Brw_ADMI_MRK_CRS] = ActRcvFilMrkCrsDZ,
+   [Brw_ADMI_BRF_USR] = ActRcvFilBrfDZ,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRcvFilDocGrpDZ,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRcvFilMrkGrpDZ,
+   [Brw_ADMI_ASG_USR] = ActRcvFilAsgUsrDZ,
+   [Brw_ADMI_ASG_CRS] = ActRcvFilAsgCrsDZ,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRcvFilDocDegDZ,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRcvFilDocCtrDZ,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRcvFilDocInsDZ,
+   [Brw_ADMI_SHR_DEG] = ActRcvFilShaDegDZ,
+   [Brw_ADMI_SHR_CTR] = ActRcvFilShaCtrDZ,
+   [Brw_ADMI_SHR_INS] = ActRcvFilShaInsDZ,
+   [Brw_ADMI_TCH_CRS] = ActRcvFilTchCrsDZ,
+   [Brw_ADMI_TCH_GRP] = ActRcvFilTchGrpDZ,
+   [Brw_ADMI_DOC_PRJ] = ActRcvFilDocPrjDZ,
+   [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjDZ,
   };
 static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActRcvFilDocCrsCla,	// Brw_ADMI_DOC_CRS
-   ActRcvFilShaCrsCla,	// Brw_ADMI_SHR_CRS
-   ActRcvFilShaGrpCla,	// Brw_ADMI_SHR_GRP
-   ActRcvFilWrkUsrCla,	// Brw_ADMI_WRK_USR
-   ActRcvFilWrkCrsCla,	// Brw_ADMI_WRK_CRS
-   ActRcvFilMrkCrsCla,	// Brw_ADMI_MRK_CRS
-   ActRcvFilBrfCla,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActRcvFilDocGrpCla,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActRcvFilMrkGrpCla,	// Brw_ADMI_MRK_GRP
-   ActRcvFilAsgUsrCla,	// Brw_ADMI_ASG_USR
-   ActRcvFilAsgCrsCla,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActRcvFilDocDegCla,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActRcvFilDocCtrCla,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActRcvFilDocInsCla,	// Brw_ADMI_DOC_INS
-   ActRcvFilShaDegCla,	// Brw_ADMI_SHR_DEG
-   ActRcvFilShaCtrCla,	// Brw_ADMI_SHR_CTR
-   ActRcvFilShaInsCla,	// Brw_ADMI_SHR_INS
-   ActRcvFilTchCrsCla,	// Brw_ADMI_TCH_CRS
-   ActRcvFilTchGrpCla,	// Brw_ADMI_TCH_GRP
-   ActRcvFilDocPrjCla,	// Brw_ADMI_DOC_PRJ
-   ActRcvFilAssPrjCla,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActRcvFilDocCrsCla,
+   [Brw_ADMI_SHR_CRS] = ActRcvFilShaCrsCla,
+   [Brw_ADMI_SHR_GRP] = ActRcvFilShaGrpCla,
+   [Brw_ADMI_WRK_USR] = ActRcvFilWrkUsrCla,
+   [Brw_ADMI_WRK_CRS] = ActRcvFilWrkCrsCla,
+   [Brw_ADMI_MRK_CRS] = ActRcvFilMrkCrsCla,
+   [Brw_ADMI_BRF_USR] = ActRcvFilBrfCla,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActRcvFilDocGrpCla,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActRcvFilMrkGrpCla,
+   [Brw_ADMI_ASG_USR] = ActRcvFilAsgUsrCla,
+   [Brw_ADMI_ASG_CRS] = ActRcvFilAsgCrsCla,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActRcvFilDocDegCla,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActRcvFilDocCtrCla,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActRcvFilDocInsCla,
+   [Brw_ADMI_SHR_DEG] = ActRcvFilShaDegCla,
+   [Brw_ADMI_SHR_CTR] = ActRcvFilShaCtrCla,
+   [Brw_ADMI_SHR_INS] = ActRcvFilShaInsCla,
+   [Brw_ADMI_TCH_CRS] = ActRcvFilTchCrsCla,
+   [Brw_ADMI_TCH_GRP] = ActRcvFilTchGrpCla,
+   [Brw_ADMI_DOC_PRJ] = ActRcvFilDocPrjCla,
+   [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjCla,
   };
 static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActAdmShaCrs,	// Brw_ADMI_SHR_CRS
-   ActAdmShaGrp,	// Brw_ADMI_SHR_GRP
-   ActAdmAsgWrkUsr,	// Brw_ADMI_WRK_USR
-   ActAdmAsgWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActAdmBrf,		// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActAdmAsgWrkUsr,	// Brw_ADMI_ASG_USR
-   ActAdmAsgWrkCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActAdmShaDeg,	// Brw_ADMI_SHR_DEG
-   ActAdmShaCtr,	// Brw_ADMI_SHR_CTR
-   ActAdmShaIns,	// Brw_ADMI_SHR_INS
-   ActAdmTchCrs,	// Brw_ADMI_TCH_CRS
-   ActAdmTchGrp,	// Brw_ADMI_TCH_GRP
-   ActAdmDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActAdmAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActAdmShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActAdmShaGrp,
+   [Brw_ADMI_WRK_USR] = ActAdmAsgWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActAdmAsgWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActAdmBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActAdmAsgWrkUsr,
+   [Brw_ADMI_ASG_CRS] = ActAdmAsgWrkCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActAdmShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActAdmShaCtr,
+   [Brw_ADMI_SHR_INS] = ActAdmShaIns,
+   [Brw_ADMI_TCH_CRS] = ActAdmTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActAdmTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActAdmDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
   };
 static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActExpSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActExpSeeMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActExpAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActExpShaCrs,	// Brw_ADMI_SHR_CRS
-   ActExpShaGrp,	// Brw_ADMI_SHR_GRP
-   ActExpWrkUsr,	// Brw_ADMI_WRK_USR
-   ActExpWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActExpAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActExpBrf,		// Brw_ADMI_BRF_USR
-   ActExpSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActExpAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActExpSeeMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActExpAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActExpAsgUsr,	// Brw_ADMI_ASG_USR
-   ActExpAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActExpSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActExpAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActExpSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActExpAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActExpSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActExpAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActExpShaDeg,	// Brw_ADMI_SHR_DEG
-   ActExpShaCtr,	// Brw_ADMI_SHR_CTR
-   ActExpShaIns,	// Brw_ADMI_SHR_INS
-   ActExpTchCrs,	// Brw_ADMI_TCH_CRS
-   ActExpTchGrp,	// Brw_ADMI_TCH_GRP
-   ActExpDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActExpAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActExpSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActExpSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActExpAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActExpShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActExpShaGrp,
+   [Brw_ADMI_WRK_USR] = ActExpWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActExpWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActExpAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActExpBrf,
+   [Brw_SHOW_DOC_GRP] = ActExpSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActExpAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActExpSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActExpAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActExpAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActExpAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActExpSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActExpAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActExpSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActExpAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActExpSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActExpAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActExpShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActExpShaCtr,
+   [Brw_ADMI_SHR_INS] = ActExpShaIns,
+   [Brw_ADMI_TCH_CRS] = ActExpTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActExpTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActExpDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActExpAssPrj,
   };
 static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActConSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActConSeeMrkCrs,	// Brw_SHOW_MRK_CRS
-   ActConAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActConShaCrs,	// Brw_ADMI_SHR_CRS
-   ActConShaGrp,	// Brw_ADMI_SHR_GRP
-   ActConWrkUsr,	// Brw_ADMI_WRK_USR
-   ActConWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActConAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActConBrf,		// Brw_ADMI_BRF_USR
-   ActConSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActConAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActConSeeMrkGrp,	// Brw_SHOW_MRK_GRP
-   ActConAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActConAsgUsr,	// Brw_ADMI_ASG_USR
-   ActConAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActConSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActConAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActConSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActConAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActConSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActConAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActConShaDeg,	// Brw_ADMI_SHR_DEG
-   ActConShaCtr,	// Brw_ADMI_SHR_CTR
-   ActConShaIns,	// Brw_ADMI_SHR_INS
-   ActConTchCrs,	// Brw_ADMI_TCH_CRS
-   ActConTchGrp,	// Brw_ADMI_TCH_GRP
-   ActConDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActConAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActConSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActConSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActConAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActConShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActConShaGrp,
+   [Brw_ADMI_WRK_USR] = ActConWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActConWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActConAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActConBrf,
+   [Brw_SHOW_DOC_GRP] = ActConSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActConAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActConSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActConAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActConAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActConAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActConSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActConAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActConSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActConAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActConSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActConAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActConShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActConShaCtr,
+   [Brw_ADMI_SHR_INS] = ActConShaIns,
+   [Brw_ADMI_TCH_CRS] = ActConTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActConTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActConDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActConAssPrj,
   };
 static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActUnk,		// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActChgDatAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActChgDatShaCrs,	// Brw_ADMI_SHR_CRS
-   ActChgDatShaGrp,	// Brw_ADMI_SHR_GRP
-   ActChgDatWrkUsr,	// Brw_ADMI_WRK_USR
-   ActChgDatWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActChgDatAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActChgDatBrf,	// Brw_ADMI_BRF_USR
-   ActUnk,		// Brw_SHOW_DOC_GRP
-   ActChgDatAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActChgDatAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActChgDatAsgUsr,	// Brw_ADMI_ASG_USR
-   ActChgDatAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActUnk,		// Brw_SHOW_DOC_DEG
-   ActChgDatAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActUnk,		// Brw_SHOW_DOC_CTR
-   ActChgDatAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActUnk,		// Brw_SHOW_DOC_INS
-   ActChgDatAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActChgDatShaDeg,	// Brw_ADMI_SHR_DEG
-   ActChgDatShaCtr,	// Brw_ADMI_SHR_CTR
-   ActChgDatShaIns,	// Brw_ADMI_SHR_INS
-   ActChgDatTchCrs,	// Brw_ADMI_TCH_CRS
-   ActChgDatTchGrp,	// Brw_ADMI_TCH_GRP
-   ActChgDatDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActChgDatAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActChgDatAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActChgDatShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActChgDatShaGrp,
+   [Brw_ADMI_WRK_USR] = ActChgDatWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActChgDatWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActChgDatAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActChgDatBrf,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActChgDatAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActChgDatAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActChgDatAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActChgDatAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActChgDatAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActChgDatAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActChgDatAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActChgDatShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActChgDatShaCtr,
+   [Brw_ADMI_SHR_INS] = ActChgDatShaIns,
+   [Brw_ADMI_TCH_CRS] = ActChgDatTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActChgDatTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActChgDatDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActChgDatAssPrj,
   };
 static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_UNKNOWN
-   ActZIPSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActZIPAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActZIPShaCrs,	// Brw_ADMI_SHR_CRS
-   ActZIPShaGrp,	// Brw_ADMI_SHR_GRP
-   ActZIPWrkUsr,	// Brw_ADMI_WRK_USR
-   ActZIPWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActZIPAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActZIPBrf,		// Brw_ADMI_BRF_USR
-   ActZIPSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActZIPAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActZIPAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActZIPAsgUsr,	// Brw_ADMI_ASG_USR
-   ActZIPAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActZIPSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActZIPAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActZIPSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActZIPAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActZIPSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActZIPAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActZIPShaDeg,	// Brw_ADMI_SHR_DEG
-   ActZIPShaCtr,	// Brw_ADMI_SHR_CTR
-   ActZIPShaIns,	// Brw_ADMI_SHR_INS
-   ActZIPTchCrs,	// Brw_ADMI_TCH_CRS
-   ActZIPTchGrp,	// Brw_ADMI_TCH_GRP
-   ActZIPDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActZIPAssPrj,	// Brw_ADMI_ASS_PRJ
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActZIPSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActZIPAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActZIPShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActZIPShaGrp,
+   [Brw_ADMI_WRK_USR] = ActZIPWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActZIPWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActZIPAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActZIPBrf,
+   [Brw_SHOW_DOC_GRP] = ActZIPSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActZIPAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActZIPAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActZIPAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActZIPAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActZIPSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActZIPAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActZIPSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActZIPAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActZIPSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActZIPAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActZIPShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActZIPShaCtr,
+   [Brw_ADMI_SHR_INS] = ActZIPShaIns,
+   [Brw_ADMI_TCH_CRS] = ActZIPTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActZIPTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActZIPDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActZIPAssPrj,
   };
-
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
 #define Brw_GiB (1024ULL * 1024ULL * 1024ULL)
@@ -3518,66 +3517,66 @@ static void Brw_ShowFileBrowser (void)
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
 
    /***** Set title of file browser *****/
-   Brw_TitleOfFileBrowser[Brw_UNKNOWN     ] = NULL;					// Brw_UNKNOWN
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CRS] = Txt_Documents_area;			// Brw_SHOW_DOC_CRS
-   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_CRS] = Txt_Marks_area;				// Brw_SHOW_MRK_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CRS] = Txt_Documents_management_area;		// Brw_ADMI_DOC_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CRS] = Txt_Shared_files_area;			// Brw_ADMI_SHR_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_GRP] = Txt_Shared_files_area;			// Brw_ADMI_SHR_GRP
-   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_USR] = Txt_Works_area;				// Brw_ADMI_WRK_USR
-   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_CRS] = Txt_Works_area;				// Brw_ADMI_WRK_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_CRS] = Txt_Marks_management_area;		// Brw_ADMI_MRK_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_BRF_USR] = Txt_Temporary_private_storage_area;	// Brw_ADMI_BRF_USR
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_GRP] = Txt_Documents_area;			// Brw_SHOW_DOC_GRP
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_GRP] = Txt_Documents_management_area;		// Brw_ADMI_DOC_GRP
-   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_GRP] = Txt_Marks_area;				// Brw_SHOW_MRK_GRP
-   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_GRP] = Txt_Marks_management_area;		// Brw_ADMI_MRK_GRP
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_USR] = Txt_Assignments_area;			// Brw_ADMI_ASG_USR
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_CRS] = Txt_Assignments_area;			// Brw_ADMI_ASG_CRS
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_DEG] = Txt_Documents_area;			// Brw_SHOW_DOC_DEG
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_DEG] = Txt_Documents_management_area;		// Brw_ADMI_DOC_DEG
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CTR] = Txt_Documents_area;			// Brw_SHOW_DOC_CTR
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CTR] = Txt_Documents_management_area;		// Brw_ADMI_DOC_CTR
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_INS] = Txt_Documents_area;			// Brw_SHOW_DOC_INS
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_INS] = Txt_Documents_management_area;		// Brw_ADMI_DOC_INS
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_DEG] = Txt_Shared_files_area;			// Brw_ADMI_SHR_DEG
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CTR] = Txt_Shared_files_area;			// Brw_ADMI_SHR_CTR
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_INS] = Txt_Shared_files_area;			// Brw_ADMI_SHR_INS
-   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_CRS] = Txt_Teachers_files_area;			// Brw_ADMI_TCH_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_GRP] = Txt_Teachers_files_area;			// Brw_ADMI_TCH_GRP
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_PRJ] = Txt_Project_documents;			// Brw_ADMI_DOC_PRJ
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASS_PRJ] = Txt_Project_assessment;			// Brw_ADMI_ASS_PRJ
+   Brw_TitleOfFileBrowser[Brw_UNKNOWN     ] = NULL;
+   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CRS] = Txt_Documents_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_CRS] = Txt_Marks_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CRS] = Txt_Documents_management_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CRS] = Txt_Shared_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_GRP] = Txt_Shared_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_USR] = Txt_Works_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_CRS] = Txt_Works_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_CRS] = Txt_Marks_management_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_BRF_USR] = Txt_Temporary_private_storage_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_GRP] = Txt_Documents_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_GRP] = Txt_Documents_management_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_GRP] = Txt_Marks_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_GRP] = Txt_Marks_management_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_USR] = Txt_Assignments_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_CRS] = Txt_Assignments_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_DEG] = Txt_Documents_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_DEG] = Txt_Documents_management_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CTR] = Txt_Documents_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CTR] = Txt_Documents_management_area;
+   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_INS] = Txt_Documents_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_INS] = Txt_Documents_management_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_DEG] = Txt_Shared_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CTR] = Txt_Shared_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_INS] = Txt_Shared_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_CRS] = Txt_Teachers_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_GRP] = Txt_Teachers_files_area;
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_PRJ] = Txt_Project_documents;
+   Brw_TitleOfFileBrowser[Brw_ADMI_ASS_PRJ] = Txt_Project_assessment;
 
    /***** Set help link of file browser *****/
-   Brw_HelpOfFileBrowser[Brw_UNKNOWN     ] = NULL;				// Brw_UNKNOWN
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CRS] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_CRS
-   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_CRS] = Hlp_FILES_Marks;			// Brw_SHOW_MRK_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CRS] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CRS] = Hlp_FILES_Shared;			// Brw_ADMI_SHR_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_GRP] = Hlp_FILES_Shared;			// Brw_ADMI_SHR_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_USR] = Hlp_FILES_Homework_for_students;	// Brw_ADMI_WRK_USR
-   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_CRS] = Hlp_FILES_Homework_for_teachers;	// Brw_ADMI_WRK_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_CRS] = Hlp_FILES_Marks;			// Brw_ADMI_MRK_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_BRF_USR] = Hlp_FILES_Briefcase;		// Brw_ADMI_BRF_USR
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_GRP] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_GRP] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_GRP
-   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_GRP] = Hlp_FILES_Marks;			// Brw_SHOW_MRK_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_GRP] = Hlp_FILES_Marks;			// Brw_ADMI_MRK_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_USR] = Hlp_FILES_Homework_for_students;	// Brw_ADMI_ASG_USR
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_CRS] = Hlp_FILES_Homework_for_teachers;	// Brw_ADMI_ASG_CRS
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_DEG] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_DEG
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_DEG] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_DEG
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CTR] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_CTR
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CTR] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_CTR
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_INS] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_INS
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_INS] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_INS
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_DEG] = Hlp_FILES_Shared;			// Brw_ADMI_SHR_DEG
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CTR] = Hlp_FILES_Shared;			// Brw_ADMI_SHR_CTR
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_INS] = Hlp_FILES_Shared;			// Brw_ADMI_SHR_INS
-   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_CRS] = Hlp_FILES_Private;			// Brw_ADMI_TCH_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_GRP] = Hlp_FILES_Private;			// Brw_ADMI_TCH_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_PRJ] = Hlp_ASSESSMENT_Projects;		// Brw_ADMI_DOC_PRJ
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASS_PRJ] = Hlp_ASSESSMENT_Projects;		// Brw_ADMI_ASS_PRJ
+   Brw_HelpOfFileBrowser[Brw_UNKNOWN     ] = NULL;
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CRS] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_CRS] = Hlp_FILES_Marks;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CRS] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CRS] = Hlp_FILES_Shared;
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_GRP] = Hlp_FILES_Shared;
+   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_USR] = Hlp_FILES_Homework_for_students;
+   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_CRS] = Hlp_FILES_Homework_for_teachers;
+   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_CRS] = Hlp_FILES_Marks;
+   Brw_HelpOfFileBrowser[Brw_ADMI_BRF_USR] = Hlp_FILES_Briefcase;
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_GRP] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_GRP] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_GRP] = Hlp_FILES_Marks;
+   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_GRP] = Hlp_FILES_Marks;
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_USR] = Hlp_FILES_Homework_for_students;
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_CRS] = Hlp_FILES_Homework_for_teachers;
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_DEG] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_DEG] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CTR] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CTR] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_INS] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_INS] = Hlp_FILES_Documents;
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_DEG] = Hlp_FILES_Shared;
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CTR] = Hlp_FILES_Shared;
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_INS] = Hlp_FILES_Shared;
+   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_CRS] = Hlp_FILES_Private;
+   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_GRP] = Hlp_FILES_Private;
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_PRJ] = Hlp_ASSESSMENT_Projects;
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASS_PRJ] = Hlp_ASSESSMENT_Projects;
 
    /***** Set contextual icon in box *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;

@@ -571,8 +571,8 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
   {
    static const char *OrderBySubQuery[DT_NUM_ORDERS] =
      {
-      "DegTypName",			// DT_ORDER_BY_DEGREE_TYPE
-      "NumDegs DESC,DegTypName",	// DT_ORDER_BY_NUM_DEGREES
+      [DT_ORDER_BY_DEGREE_TYPE] = "DegTypName",
+      [DT_ORDER_BY_NUM_DEGREES] = "NumDegs DESC,DegTypName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

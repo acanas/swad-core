@@ -300,10 +300,10 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
   {
    static const char *OrderBySubQuery[Cla_NUM_ORDERS] =
      {
-      "ShortName",			// Cla_ORDER_BY_SHRT_NAME
-      "FullName",			// Cla_ORDER_BY_FULL_NAME
-      "Capacity DESC,ShortName",	// Cla_ORDER_BY_CAPACITY
-      "Location,ShortName",		// Cla_ORDER_BY_LOCATION
+      [Cla_ORDER_BY_SHRT_NAME] = "ShortName",
+      [Cla_ORDER_BY_FULL_NAME] = "FullName",
+      [Cla_ORDER_BY_CAPACITY ] = "Capacity DESC,ShortName",
+      [Cla_ORDER_BY_LOCATION ] = "Location,ShortName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

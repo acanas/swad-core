@@ -300,8 +300,8 @@ void Dpt_GetListDepartments (long InsCod)
   {
    static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
      {
-      "FullName",		// Dpt_ORDER_BY_DEPARTMENT
-      "NumTchs DESC,FullName",	// Dpt_ORDER_BY_NUM_TCHS
+      [Dpt_ORDER_BY_DEPARTMENT] = "FullName",
+      [Dpt_ORDER_BY_NUM_TCHS  ] = "NumTchs DESC,FullName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

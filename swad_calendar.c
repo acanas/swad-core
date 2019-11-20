@@ -44,18 +44,18 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
 const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
   {
-   true,	// 0: monday
-   false,	// 1: tuesday
-   false,	// 2: wednesday
-   false,	// 3: thursday
-   false,	// 4: friday
-   false,	// 5: saturday
-   true,	// 6: sunday
+   [0] = true,	// monday
+   [1] = false,	// tuesday
+   [2] = false,	// wednesday
+   [3] = false,	// thursday
+   [4] = false,	// friday
+   [5] = false,	// saturday
+   [6] = true,	// sunday
   };
 
 /*****************************************************************************/
