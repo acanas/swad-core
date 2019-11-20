@@ -6312,9 +6312,9 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_BUTTON_SUBMIT_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	                 Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
-	                                                             Txt_Download,
-		        Class,NULL);
+			        Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
+									    Txt_Download,
+			       Class,NULL);
       HTM_Txt (FileNameToShow);
       HTM_BUTTON_End ();
       free (Class);

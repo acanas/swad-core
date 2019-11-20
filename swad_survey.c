@@ -529,9 +529,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
    HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
-                     Svy.Status.Visible ? "BT_LINK ASG_TITLE" :
-	                                  "BT_LINK ASG_TITLE_LIGHT",
-		     NULL);
+			    Svy.Status.Visible ? "BT_LINK ASG_TITLE" :
+						 "BT_LINK ASG_TITLE_LIGHT",
+			    NULL);
    HTM_Txt (Svy.Title);
    HTM_BUTTON_End ();
    Frm_EndForm ();

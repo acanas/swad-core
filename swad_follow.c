@@ -597,9 +597,9 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
-                        (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
-        	                                     "BT_LINK FOLLOW_NUM",
-			NULL);
+			       (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
+							    "BT_LINK FOLLOW_NUM",
+			       NULL);
      }
    else
       HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
@@ -623,9 +623,9 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
-                        (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
-        	                                     The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
-			NULL);
+			       (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
+							    The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
+			       NULL);
      }
    HTM_Txt (Title);
    if (NumUsrs)

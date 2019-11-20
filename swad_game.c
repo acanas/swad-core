@@ -450,9 +450,9 @@ void Gam_ShowOneGame (long GamCod,
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
-                     Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT":
-                	           "BT_LINK ASG_TITLE",
-		     NULL);
+			    Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT":
+					  "BT_LINK ASG_TITLE",
+			    NULL);
    HTM_Txt (Game.Title);
    HTM_BUTTON_End ();
    Frm_EndForm ();
@@ -476,9 +476,9 @@ void Gam_ShowOneGame (long GamCod,
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
-                     Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
-                	           "BT_LINK ASG_TITLE",
-		     NULL);
+			    Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
+					  "BT_LINK ASG_TITLE",
+			    NULL);
    if (ShowOnlyThisGame)
       HTM_TxtF ("%s:&nbsp;",Txt_Matches);
    HTM_Unsigned (Game.NumMchs);

@@ -2793,9 +2793,9 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 Frm_StartForm (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			           Txt_Another_user_s_profile,
-			   "BT_LINK REC_NICK",
-			   NULL);
+					  Txt_Another_user_s_profile,
+				  "BT_LINK REC_NICK",
+				  NULL);
 	}
       HTM_TxtF ("@%s",UsrDat->Nickname);
       if (PutFormLinks)

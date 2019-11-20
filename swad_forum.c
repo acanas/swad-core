@@ -2066,7 +2066,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                 -1L,
                                 -1L);
    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
-                     Class,NULL);
+                            Class,NULL);
    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
    switch (Forum->Type)
      {

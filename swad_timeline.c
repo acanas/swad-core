@@ -1737,8 +1737,8 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-				   Txt_Another_user_s_profile,
-			   "BT_LINK TL_TOP_PUBLISHER",NULL);
+					  Txt_Another_user_s_profile,
+				  "BT_LINK TL_TOP_PUBLISHER",NULL);
 	 HTM_Txt (UsrDat.FullName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -1768,8 +1768,9 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			     Txt_Another_user_s_profile,
-	                    "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",NULL);
+				    Txt_Another_user_s_profile,
+		            "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
+			    NULL);
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
    Frm_EndForm ();
@@ -3049,36 +3050,15 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   /***** Start container *****/
-   HTM_DIV_Begin ("class=\"TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH\"");
-
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			     Txt_Another_user_s_profile,
-	             "BT_LINK DAT_BOLD",NULL);
+			            Txt_Another_user_s_profile,
+	                    "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
    Frm_EndForm ();
-
-   /***** Separator *****/
-   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   HTM_NBSP ();
-   HTM_SPAN_End ();
-
-   /***** Show user's nickname inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			     Txt_Another_user_s_profile,
-		     "BT_LINK DAT_LIGHT",NULL);
-   HTM_TxtF ("@%s",UsrDat->Nickname);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

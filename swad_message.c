@@ -3158,10 +3158,10 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
    Msg_PutHiddenParamsOneMsg ();
    HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
-	                        Txt_See_message,
-                     Open ? "BT_LINK LT MSG_TIT" :
-                	    "BT_LINK LT MSG_TIT_NEW",
-		     NULL);
+				       Txt_See_message,
+			    Open ? "BT_LINK LT MSG_TIT" :
+				   "BT_LINK LT MSG_TIT_NEW",
+			    NULL);
 
    /***** Write subject *****/
    if (Subject[0])

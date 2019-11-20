@@ -568,9 +568,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
    HTM_BUTTON_SUBMIT_Begin (Txt_System,
-                     Highlight ? ClassHighlight :
-        	                 ClassNormal,
-		     NULL);
+			    Highlight ? ClassHighlight :
+				        ClassNormal,
+			    NULL);
    Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
    HTM_TxtF ("&nbsp;%s",Txt_System);
    HTM_BUTTON_End ();
@@ -601,9 +601,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Frm_StartForm (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
       HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
-			Highlight ? ClassHighlight :
-        	                    ClassNormal,
-		        NULL);
+			       Highlight ? ClassHighlight :
+					   ClassNormal,
+			       NULL);
       Cty_DrawCountryMap (&Cty,"ICO16x16");
       HTM_TxtF ("&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       HTM_BUTTON_End ();
@@ -635,9 +635,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
          Frm_StartForm (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
-	                   Highlight ? ClassHighlight :
-        	                       ClassNormal,
-			   NULL);
+				  Highlight ? ClassHighlight :
+					      ClassNormal,
+				  NULL);
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 HTM_TxtF ("&nbsp;%s",Ins.ShrtName);
 	 HTM_BUTTON_End ();
@@ -669,9 +669,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
             Frm_StartForm (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
-	                      Highlight ? ClassHighlight :
-        	                          ClassNormal,
-			      NULL);
+				     Highlight ? ClassHighlight :
+						 ClassNormal,
+				     NULL);
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    HTM_TxtF ("&nbsp;%s",Ctr.ShrtName);
 	    HTM_BUTTON_End ();
@@ -703,9 +703,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                Frm_StartForm (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
-	                         Highlight ? ClassHighlight :
-        	                             ClassNormal,
-			         NULL);
+				        Highlight ? ClassHighlight :
+						    ClassNormal,
+				        NULL);
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       HTM_TxtF ("&nbsp;%s",Deg.ShrtName);
 	       HTM_BUTTON_End ();
@@ -740,9 +740,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			    Txt_Go_to_X,
 			    Crs.ShrtName);
 		  HTM_BUTTON_SUBMIT_Begin (Gbl.Title,
-		                    Highlight ? ClassHighlight :
-        	                                ClassNormal,
-				    NULL);
+					   Highlight ? ClassHighlight :
+						       ClassNormal,
+					   NULL);
 		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Crs.ShrtName);
 		  HTM_BUTTON_End ();
