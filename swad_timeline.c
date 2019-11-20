@@ -343,42 +343,48 @@ void TL_ShowTimelineGbl2 (void)
    Ntf_NotifyEvent_t NotifyEvent;
    const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_UNKNOWN
+      [Ntf_EVENT_UNKNOWN          ] = TL_TOP_MESSAGE_NONE,
 
+      /* Start tab */
+      [Ntf_EVENT_TIMELINE_COMMENT ] = TL_TOP_MESSAGE_COMMENTED,
+      [Ntf_EVENT_TIMELINE_FAV     ] = TL_TOP_MESSAGE_FAVED,
+      [Ntf_EVENT_TIMELINE_SHARE   ] = TL_TOP_MESSAGE_SHARED,
+      [Ntf_EVENT_TIMELINE_MENTION ] = TL_TOP_MESSAGE_MENTIONED,
+      [Ntf_EVENT_FOLLOWER         ] = TL_TOP_MESSAGE_NONE,
+
+      /* System tab */
+      /* Country tab */
+      /* Institution tab */
+      /* Centre tab */
+      /* Degree tab */
       /* Course tab */
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_DOCUMENT_FILE
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_TEACHERS_FILE
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_SHARED_FILE
 
       /* Assessment tab */
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ASSIGNMENT
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_MARKS_FILE
+      [Ntf_EVENT_ASSIGNMENT       ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_SURVEY           ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_EXAM_ANNOUNCEMENT] = TL_TOP_MESSAGE_NONE,
+
+      /* Files tab */
+      [Ntf_EVENT_DOCUMENT_FILE    ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_TEACHERS_FILE    ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_SHARED_FILE      ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_MARKS_FILE       ] = TL_TOP_MESSAGE_NONE,
 
       /* Users tab */
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_STD
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_TCH
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_REQUEST
-
-      /* Start tab */	// TODO: Move to top
-      TL_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
-      TL_TOP_MESSAGE_FAVED,	// Ntf_EVENT_TIMELINE_FAV
-      TL_TOP_MESSAGE_SHARED,	// Ntf_EVENT_TIMELINE_SHARE
-      TL_TOP_MESSAGE_MENTIONED,	// Ntf_EVENT_TIMELINE_MENTION
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FOLLOWER
+      [Ntf_EVENT_ENROLMENT_STD    ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_ENROLMENT_NET    ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_ENROLMENT_TCH    ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_ENROLMENT_REQUEST] = TL_TOP_MESSAGE_NONE,
 
       /* Messages tab */
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FORUM_POST_COURSE
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FORUM_REPLY
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_NOTICE
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_MESSAGE
+      [Ntf_EVENT_NOTICE           ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_FORUM_POST_COURSE] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_FORUM_REPLY      ] = TL_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_MESSAGE          ] = TL_TOP_MESSAGE_NONE,
 
-      /* Statistics tab */
+      /* Analytics tab */
 
       /* Profile tab */
-
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
 
    /***** Initialize note code to -1 ==> no highlighted note *****/
@@ -1910,9 +1916,9 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 
       /* Start tab */
       ActUnk,			// TL_NOTE_SOCIAL_POST (action not used)	// TODO: Move to start tab
-      ActSeeFor,		// TL_NOTE_FORUM_POST				// TODO: Move to messages tab
 
       /* Messages tab */
+      ActSeeFor,		// TL_NOTE_FORUM_POST				// TODO: Move down
       ActSeeOneNot,		// TL_NOTE_NOTICE
 
       /* Statistics tab */

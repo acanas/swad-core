@@ -62,82 +62,94 @@ extern struct Globals Gbl;
 
 const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "unknown",				// Ntf_EVENT_UNKNOWN
+   [Ntf_EVENT_UNKNOWN          ] = "unknown",
 
+   /* Start tab */
+   [Ntf_EVENT_TIMELINE_COMMENT ] = "timelineComment",
+   [Ntf_EVENT_TIMELINE_FAV     ] = "timelineFav",
+   [Ntf_EVENT_TIMELINE_SHARE   ] = "timelineShare",
+   [Ntf_EVENT_TIMELINE_MENTION ] = "timelineMention",
+   [Ntf_EVENT_FOLLOWER         ] = "follower",
+
+   /* System tab */
+   /* Country tab */
+   /* Institution tab */
+   /* Centre tab */
+   /* Degree tab */
    /* Course tab */
-   "documentFile",			// Ntf_EVENT_DOCUMENT_FILE
-   "teachersFile",			// Ntf_EVENT_TEACHERS_FILE
-   "sharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "assignment",			// Ntf_EVENT_ASSIGNMENT
-   "examAnnouncement",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "marksFile",				// Ntf_EVENT_MARKS_FILE
+   [Ntf_EVENT_ASSIGNMENT       ] = "assignment",
+   [Ntf_EVENT_SURVEY           ] = "survey",
+   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "examAnnouncement",
+
+   /* Files tab */
+   [Ntf_EVENT_DOCUMENT_FILE    ] = "documentFile",
+   [Ntf_EVENT_TEACHERS_FILE    ] = "teachersFile",
+   [Ntf_EVENT_SHARED_FILE      ] = "sharedFile",
+   [Ntf_EVENT_MARKS_FILE       ] = "marksFile",
 
    /* Users tab */
-   "enrollmentStudent",			// Ntf_EVENT_ENROLMENT_STD	// TODO: Change to "enrolmentStudent" carefully in future versions
-   "enrollmentTeacher",			// Ntf_EVENT_ENROLMENT_TCH	// TODO: Change to "enrolmentTeacher" carefully in future versions
-   "enrollmentRequest",			// Ntf_EVENT_ENROLMENT_REQUEST	// TODO: Change to "enrolmentRequest" carefully in future versions
-
-   /* Social tab */
-   "timelineComment",			// Ntf_EVENT_TIMELINE_COMMENT
-   "timelineFav",			// Ntf_EVENT_TIMELINE_FAV
-   "timelineShare",			// Ntf_EVENT_TIMELINE_SHARE
-   "timelineMention",			// Ntf_EVENT_TIMELINE_MENTION
-   "follower",				// Ntf_EVENT_FOLLOWER
-   "forumPostCourse",			// Ntf_EVENT_FORUM_POST_COURSE
-   "forumReply",			// Ntf_EVENT_FORUM_REPLY
+   [Ntf_EVENT_ENROLMENT_STD    ] = "enrollmentStudent",
+   [Ntf_EVENT_ENROLMENT_NET    ] = "enrolmentNonEditingTeacher",
+   [Ntf_EVENT_ENROLMENT_TCH    ] = "enrollmentTeacher",
+   [Ntf_EVENT_ENROLMENT_REQUEST] = "enrollmentRequest",
 
    /* Messages tab */
-   "notice",				// Ntf_EVENT_NOTICE
-   "message",				// Ntf_EVENT_MESSAGE
+   [Ntf_EVENT_NOTICE           ] = "notice",
+   [Ntf_EVENT_FORUM_POST_COURSE] = "forumPostCourse",
+   [Ntf_EVENT_FORUM_REPLY      ] = "forumReply",
+   [Ntf_EVENT_MESSAGE          ] = "message",
 
-   /* Statistics tab */
+   /* Analytics tab */
 
    /* Profile tab */
-
-   "survey",				// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "enrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   ActUnk,		// Ntf_EVENT_UNKNOWN
+   [Ntf_EVENT_UNKNOWN          ] = ActUnk,
 
+   /* Start tab */
+   [Ntf_EVENT_TIMELINE_COMMENT ] = ActSeeSocTmlGbl,
+   [Ntf_EVENT_TIMELINE_FAV     ] = ActSeeSocTmlGbl,
+   [Ntf_EVENT_TIMELINE_SHARE   ] = ActSeeSocTmlGbl,
+   [Ntf_EVENT_TIMELINE_MENTION ] = ActSeeSocTmlGbl,
+   [Ntf_EVENT_FOLLOWER         ] = ActSeeFlr,
+
+   /* System tab */
+   /* Country tab */
+   /* Institution tab */
+   /* Centre tab */
+   /* Degree tab */
    /* Course tab */
-   ActSeeAdmDocCrsGrp,	// Ntf_EVENT_DOCUMENT_FILE
-   ActAdmTchCrsGrp,	// Ntf_EVENT_TEACHERS_FILE
-   ActAdmShaCrsGrp,	// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   ActSeeAsg,		// Ntf_EVENT_ASSIGNMENT
-   ActSeeAllExaAnn,	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   ActSeeAdmMrk,	// Ntf_EVENT_MARKS_FILE
+   [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAsg,
+   [Ntf_EVENT_SURVEY           ] = ActSeeAllSvy,
+   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = ActSeeAllExaAnn,
+
+   /* Files tab */
+   [Ntf_EVENT_DOCUMENT_FILE    ] = ActSeeAdmDocCrsGrp,
+   [Ntf_EVENT_TEACHERS_FILE    ] = ActAdmTchCrsGrp,
+   [Ntf_EVENT_SHARED_FILE      ] = ActAdmShaCrsGrp,
+   [Ntf_EVENT_MARKS_FILE       ] = ActSeeAdmMrk,
 
    /* Users tab */
-   ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STD
-   ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TCH
-   ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
-
-   /* Social tab */
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_COMMENT	// TODO: Change position
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_FAV	// TODO: Change position
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_SHARE	// TODO: Change position
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_MENTION	// TODO: Change position
-   ActSeeFlr,		// Ntf_EVENT_FOLLOWER		// TODO: Change position
-   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE	// TODO: Change position
-   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY	// TODO: Change position
+   [Ntf_EVENT_ENROLMENT_STD    ] = ActReqAccEnrStd,
+   [Ntf_EVENT_ENROLMENT_NET    ] = ActReqAccEnrNET,
+   [Ntf_EVENT_ENROLMENT_TCH    ] = ActReqAccEnrTch,
+   [Ntf_EVENT_ENROLMENT_REQUEST] = ActSeeSignUpReq,
 
    /* Messages tab */
-   ActSeeOneNot,	// Ntf_EVENT_NOTICE
-   ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
+   [Ntf_EVENT_NOTICE           ] = ActSeeOneNot,
+   [Ntf_EVENT_FORUM_POST_COURSE] = ActSeeFor,
+   [Ntf_EVENT_FORUM_REPLY      ] = ActSeeFor,
+   [Ntf_EVENT_MESSAGE          ] = ActExpRcvMsg,
 
-   /* Statistics tab */
+   /* Analytics tab */
 
    /* Profile tab */
-
-   ActSeeAllSvy,	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -147,124 +159,142 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 // Notify me notification events
 static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "NotifyNtfEventUnknown",			// Ntf_EVENT_UNKNOWN
+   [Ntf_EVENT_UNKNOWN          ] = "NotifyNtfEventUnknown",
 
+   /* Start tab */
+   [Ntf_EVENT_TIMELINE_COMMENT ] = "NotifyNtfEventTimelineComment",
+   [Ntf_EVENT_TIMELINE_FAV     ] = "NotifyNtfEventTimelineFav",
+   [Ntf_EVENT_TIMELINE_SHARE   ] = "NotifyNtfEventTimelineShare",
+   [Ntf_EVENT_TIMELINE_MENTION ] = "NotifyNtfEventTimelineMention",
+   [Ntf_EVENT_FOLLOWER         ] = "NotifyNtfEventFollower",
+
+   /* System tab */
+   /* Country tab */
+   /* Institution tab */
+   /* Centre tab */
+   /* Degree tab */
    /* Course tab */
-   "NotifyNtfEventDocumentFile",		// Ntf_EVENT_DOCUMENT_FILE
-   "NotifyNtfEventTeachersFile",		// Ntf_EVENT_TEACHERS_FILE
-   "NotifyNtfEventSharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "NotifyNtfEventAssignment",			// Ntf_EVENT_ASSIGNMENT
-   "NotifyNtfEventExamAnnouncement",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "NotifyNtfEventMarksFile",			// Ntf_EVENT_MARKS_FILE
+   [Ntf_EVENT_ASSIGNMENT       ] = "NotifyNtfEventAssignment",
+   [Ntf_EVENT_SURVEY           ] = "NotifyNtfEventSurvey",
+   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "NotifyNtfEventExamAnnouncement",
 
-   /* Users tab */
-   "NotifyNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
-   "NotifyNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
-   "NotifyNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
-
-   /* Social tab */
-   "NotifyNtfEventTimelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
-   "NotifyNtfEventTimelineFav",			// Ntf_EVENT_TIMELINE_FAV
-   "NotifyNtfEventTimelineShare",		// Ntf_EVENT_TIMELINE_SHARE
-   "NotifyNtfEventTimelineMention",		// Ntf_EVENT_TIMELINE_MENTION
-   "NotifyNtfEventFollower",			// Ntf_EVENT_FOLLOWER
-   "NotifyNtfEventForumPostCourse",		// Ntf_EVENT_FORUM_POST_COURSE
-   "NotifyNtfEventForumReply",			// Ntf_EVENT_FORUM_REPLY
+   /* Files tab */
+   [Ntf_EVENT_DOCUMENT_FILE    ] = "NotifyNtfEventDocumentFile",
+   [Ntf_EVENT_TEACHERS_FILE    ] = "NotifyNtfEventTeachersFile",
+   [Ntf_EVENT_SHARED_FILE      ] = "NotifyNtfEventSharedFile",
+   [Ntf_EVENT_MARKS_FILE       ] = "NotifyNtfEventMarksFile",
 
    /* Messages tab */
-   "NotifyNtfEventNotice",			// Ntf_EVENT_NOTICE
-   "NotifyNtfEventMessage",			// Ntf_EVENT_MESSAGE
+   [Ntf_EVENT_NOTICE           ] = "NotifyNtfEventNotice",
+   [Ntf_EVENT_FORUM_POST_COURSE] = "NotifyNtfEventForumPostCourse",
+   [Ntf_EVENT_FORUM_REPLY      ] = "NotifyNtfEventForumReply",
+   [Ntf_EVENT_MESSAGE          ] = "NotifyNtfEventMessage",
 
-   /* Statistics tab */
+   /* Users tab */
+   [Ntf_EVENT_ENROLMENT_STD    ] = "NotifyNtfEventEnrolmentStudent",
+   [Ntf_EVENT_ENROLMENT_NET    ] = "NotifyNtfEventEnrolmentNonEditingTeacher",
+   [Ntf_EVENT_ENROLMENT_TCH    ] = "NotifyNtfEventEnrolmentTeacher",
+   [Ntf_EVENT_ENROLMENT_REQUEST] = "NotifyNtfEventEnrolmentRequest",
+
+   /* Analytics tab */
 
    /* Profile tab */
-
-   "NotifyNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Email me about notification events
 static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "EmailNtfEventUnknown",			// Ntf_EVENT_UNKNOWN
+   [Ntf_EVENT_UNKNOWN          ] = "EmailNtfEventUnknown",
 
+   /* Start tab */
+   [Ntf_EVENT_TIMELINE_COMMENT ] = "EmailNtfEventTimelineComment",
+   [Ntf_EVENT_TIMELINE_FAV     ] = "EmailNtfEventTimelineFav",
+   [Ntf_EVENT_TIMELINE_SHARE   ] = "EmailNtfEventTimelineShare",
+   [Ntf_EVENT_TIMELINE_MENTION ] = "EmailNtfEventTimelineMention",
+   [Ntf_EVENT_FOLLOWER         ] = "EmailNtfEventSocialFollower",
+
+   /* System tab */
+   /* Country tab */
+   /* Institution tab */
+   /* Centre tab */
+   /* Degree tab */
    /* Course tab */
-   "EmailNtfEventDocumentFile",			// Ntf_EVENT_DOCUMENT_FILE
-   "EmailNtfEventTeachersFile",			// Ntf_EVENT_TEACHERS_FILE
-   "EmailNtfEventSharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "EmailNtfEventAssignment",			// Ntf_EVENT_ASSIGNMENT
-   "EmailNtfEventExamAnnouncement",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "EmailNtfEventMarksFile",			// Ntf_EVENT_MARKS_FILE
+   [Ntf_EVENT_ASSIGNMENT       ] = "EmailNtfEventAssignment",
+   [Ntf_EVENT_SURVEY           ] = "EmailNtfEventSurvey",
+   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "EmailNtfEventExamAnnouncement",
 
-   /* Users tab */
-   "EmailNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
-   "EmailNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
-   "EmailNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
-
-   /* Social tab */
-   "EmailNtfEventTimelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
-   "EmailNtfEventTimelineFav",			// Ntf_EVENT_TIMELINE_FAV
-   "EmailNtfEventTimelineShare",		// Ntf_EVENT_TIMELINE_SHARE
-   "EmailNtfEventTimelineMention",		// Ntf_EVENT_TIMELINE_MENTION
-   "EmailNtfEventSocialFollower",		// Ntf_EVENT_FOLLOWER
-   "EmailNtfEventForumPostCourse",		// Ntf_EVENT_FORUM_POST_COURSE
-   "EmailNtfEventForumReply",			// Ntf_EVENT_FORUM_REPLY
+   /* Files tab */
+   [Ntf_EVENT_DOCUMENT_FILE    ] = "EmailNtfEventDocumentFile",
+   [Ntf_EVENT_TEACHERS_FILE    ] = "EmailNtfEventTeachersFile",
+   [Ntf_EVENT_SHARED_FILE      ] = "EmailNtfEventSharedFile",
+   [Ntf_EVENT_MARKS_FILE       ] = "EmailNtfEventMarksFile",
 
    /* Messages tab */
-   "EmailNtfEventNotice",			// Ntf_EVENT_NOTICE
-   "EmailNtfEventMessage",			// Ntf_EVENT_MESSAGE
+   [Ntf_EVENT_NOTICE           ] = "EmailNtfEventNotice",
+   [Ntf_EVENT_FORUM_POST_COURSE] = "EmailNtfEventForumPostCourse",
+   [Ntf_EVENT_FORUM_REPLY      ] = "EmailNtfEventForumReply",
+   [Ntf_EVENT_MESSAGE          ] = "EmailNtfEventMessage",
+
+   /* Users tab */
+   [Ntf_EVENT_ENROLMENT_STD    ] = "EmailNtfEventEnrolmentStudent",
+   [Ntf_EVENT_ENROLMENT_NET    ] = "EmailNtfEventEnrolmentNonEditingTeacher",
+   [Ntf_EVENT_ENROLMENT_TCH    ] = "EmailNtfEventEnrolmentTeacher",
+   [Ntf_EVENT_ENROLMENT_REQUEST] = "EmailNtfEventEnrolmentRequest",
 
    /* Statistics tab */
 
    /* Profile tab */
-
-   "EmailNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Icons for notification events
 static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "question.svg",	// Ntf_EVENT_UNKNOWN
+   [Ntf_EVENT_UNKNOWN          ] = "question.svg",
 
+   /* Start tab */
+   [Ntf_EVENT_TIMELINE_COMMENT ] = "comment-dots.svg",
+   [Ntf_EVENT_TIMELINE_FAV     ] = "star.svg",
+   [Ntf_EVENT_TIMELINE_SHARE   ] = "share-alt.svg",
+   [Ntf_EVENT_TIMELINE_MENTION ] = "at.svg",
+   [Ntf_EVENT_FOLLOWER         ] = "user-plus.svg",
+
+   /* System tab */
+   /* Country tab */
+   /* Institution tab */
+   /* Centre tab */
+   /* Degree tab */
    /* Course tab */
-   "file.svg",		// Ntf_EVENT_DOCUMENT_FILE
-   "file.svg",		// Ntf_EVENT_TEACHERS_FILE
-   "file.svg",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "edit.svg",		// Ntf_EVENT_ASSIGNMENT
-   "bullhorn.svg",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "clipboard-list.svg",// Ntf_EVENT_MARKS_FILE
+   [Ntf_EVENT_ASSIGNMENT       ] = "edit.svg",
+   [Ntf_EVENT_SURVEY           ] = "poll.svg",
+   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
 
-   /* Users tab */
-   "user.svg",		// Ntf_EVENT_ENROLMENT_STD
-   "user-tie.svg",	// Ntf_EVENT_ENROLMENT_TCH
-   "hand-point-up.svg",	// Ntf_EVENT_ENROLMENT_REQUEST
-
-   /* Social tab */
-   "comment-dots.svg",	// Ntf_EVENT_TIMELINE_COMMENT
-   "star.svg",		// Ntf_EVENT_TIMELINE_FAV
-   "share-alt.svg",	// Ntf_EVENT_TIMELINE_SHARE
-   "at.svg",		// Ntf_EVENT_TIMELINE_MENTION
-   "user-plus.svg",	// Ntf_EVENT_FOLLOWER
-   "comments.svg",	// Ntf_EVENT_FORUM_POST_COURSE
-   "comments.svg",	// Ntf_EVENT_FORUM_REPLY
+   /* Files tab */
+   [Ntf_EVENT_DOCUMENT_FILE    ] = "file.svg",
+   [Ntf_EVENT_TEACHERS_FILE    ] = "file.svg",
+   [Ntf_EVENT_SHARED_FILE      ] = "file.svg",
+   [Ntf_EVENT_MARKS_FILE       ] = "clipboard-list.svg",
 
    /* Messages tab */
-   "sticky-note.svg",	// Ntf_EVENT_NOTICE
-   "envelope.svg",	// Ntf_EVENT_MESSAGE
+   [Ntf_EVENT_NOTICE           ] = "sticky-note.svg",
+   [Ntf_EVENT_FORUM_POST_COURSE] = "comments.svg",
+   [Ntf_EVENT_FORUM_REPLY      ] = "comments.svg",
+   [Ntf_EVENT_MESSAGE          ] = "envelope.svg",
+
+   /* Users tab */
+   [Ntf_EVENT_ENROLMENT_STD    ] = "user.svg",
+   [Ntf_EVENT_ENROLMENT_NET    ] = "user-tie.svg",
+   [Ntf_EVENT_ENROLMENT_TCH    ] = "user-tie.svg",
+   [Ntf_EVENT_ENROLMENT_REQUEST] = "hand-point-up.svg",
 
    /* Statistics tab */
 
    /* Profile tab */
-
-   "poll.svg",		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "user-tie.svg",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
