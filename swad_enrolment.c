@@ -2842,6 +2842,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             HTM_BUTTON_End ();
+            Frm_EndForm ();
             HTM_TD_End ();
 
             /***** Number of teachers in the course *****/
