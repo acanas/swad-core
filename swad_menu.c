@@ -62,232 +62,115 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 
 // Actions not initialized are 0 by default
 static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
-	{
-		// TabUnk *******************
-		{
-		0,			//  0
-		0,			//  1
-		0,			//  2
-		0,			//  3
-		0,			//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
+  {
+   [TabUnk] =  {
+	       },
+   [TabStr] =  {
+		[ 0] = ActFrmLogIn,
+		[ 1] = ActReqSch,
+		[ 2] = ActSeeSocTmlGbl,
+		[ 3] = ActSeeSocPrf,
+		[ 4] = ActSeeCal,
+		[ 5] = ActSeeNtf,
+	       },
+   [TabSys] =  {
+		[ 0] = ActSeeCty,
+		[ 1] = ActSeePen,
+		[ 2] = ActSeeLnk,
+		[ 3] = ActLstPlg,
+		[ 4] = ActSetUp,
+	       },
+   [TabCty] =  {
+		[ 0] = ActSeeCtyInf,
+		[ 1] = ActSeeIns,
+	       },
+   [TabIns] =  {
+		[ 0] = ActSeeInsInf,
+		[ 1] = ActSeeCtr,
+		[ 2] = ActSeePlc,
+		[ 3] = ActSeeDpt,
+		[ 4] = ActSeeHld,
+	       },
+   [TabCtr] =  {
+		[ 0] = ActSeeCtrInf,
+		[ 1] = ActSeeDeg,
+		[ 2] = ActSeeCla,
+	       },
+   [TabDeg] =  {
+		[ 0] = ActSeeDegInf,
+		[ 1] = ActSeeCrs,
+	       },
+   [TabCrs] =  {
+		[ 0] = ActSeeCrsInf,
+		[ 1] = ActSeeTchGui,
+		[ 2] = ActSeeSyl,
+		[ 3] = ActSeeBib,
+		[ 4] = ActSeeFAQ,
+		[ 5] = ActSeeCrsLnk,
+		[ 6] = ActSeeCrsTT,
+	       },
+   [TabAss] =  {
+		[ 0] = ActSeeAss,
+		[ 1] = ActSeeAsg,
+		[ 2] = ActSeePrj,
+		[ 3] = ActReqTst,
+		[ 4] = ActSeeAllGam,
+		[ 5] = ActSeeAllSvy,
+		[ 6] = ActSeeAllExaAnn,
+	       },
+   [TabFil] =  {
+		[ 0] = ActSeeAdmDocIns,
+		[ 1] = ActAdmShaIns,
+		[ 2] = ActSeeAdmDocCtr,
+		[ 3] = ActAdmShaCtr,
+		[ 4] = ActSeeAdmDocDeg,
+		[ 5] = ActAdmShaDeg,
+		[ 6] = ActSeeAdmDocCrsGrp,
+		[ 7] = ActAdmTchCrsGrp,
+		[ 8] = ActAdmShaCrsGrp,
+		[ 9] = ActAdmAsgWrkUsr,
+		[10] = ActReqAsgWrkCrs,
+		[11] = ActSeeAdmMrk,
+		[12] = ActAdmBrf,
+	       },
+   [TabUsr] =  {
+		[ 0] = ActReqSelGrp,
+		[ 1] = ActLstStd,
+		[ 2] = ActLstTch,
+		[ 3] = ActLstOth,
+		[ 4] = ActSeeAtt,
+		[ 5] = ActReqSignUp,
+		[ 6] = ActSeeSignUpReq,
+		[ 7] = ActLstCon,
 		},
-		// TabStr *******************
-		{
-		ActFrmLogIn,		//  0
-		ActReqSch,		//  1
-		ActSeeSocTmlGbl,	//  2
-		ActSeeSocPrf,		//  3
-		ActSeeCal,		//  4
-		ActSeeNtf,		//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabSys *******************
-		{
-		ActSeeCty,		//  0
-		ActSeePen,		//  1
-		ActSeeLnk,		//  2
-		ActLstPlg,		//  3
-		ActSetUp,		//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabCty *******************
-		{
-		ActSeeCtyInf,		//  0
-		ActSeeIns,		//  1
-		0,			//  2
-		0,			//  3
-		0,			//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabIns *******************
-		{
-		ActSeeInsInf,		//  0
-		ActSeeCtr,		//  1
-		ActSeePlc,		//  2
-		ActSeeDpt,		//  3
-		ActSeeHld,		//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabCtr *******************
-		{
-		ActSeeCtrInf,		//  0
-		ActSeeDeg,		//  1
-		ActSeeCla,		//  2
-		0,			//  3
-		0,			//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabDeg *******************
-		{
-		ActSeeDegInf,		//  0
-		ActSeeCrs,		//  1
-		0,			//  2
-		0,			//  3
-		0,			//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabCrs *******************
-		{
-		ActSeeCrsInf,		//  0
-		ActSeeTchGui,		//  1
-		ActSeeSyl,		//  2
-		ActSeeBib,		//  3
-		ActSeeFAQ,		//  4
-		ActSeeCrsLnk,		//  5
-		ActSeeCrsTT,		//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabAss *******************
-		{
-		ActSeeAss,		//  0
-		ActSeeAsg,		//  1
-		ActSeePrj,		//  2
-		ActReqTst,		//  3
-		ActSeeAllGam,		//  4
-		ActSeeAllSvy,		//  5
-		ActSeeAllExaAnn,	//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabFil *******************
-		{
-		ActSeeAdmDocIns,	//  0
-		ActAdmShaIns,		//  1
-		ActSeeAdmDocCtr,	//  2
-		ActAdmShaCtr,		//  3
-		ActSeeAdmDocDeg,	//  4
-		ActAdmShaDeg,		//  5
-		ActSeeAdmDocCrsGrp,	//  6
-		ActAdmTchCrsGrp,	//  7
-		ActAdmShaCrsGrp,	//  8
-		ActAdmAsgWrkUsr,	//  9
-		ActReqAsgWrkCrs,	// 10
-		ActSeeAdmMrk,		// 11
-		ActAdmBrf,		// 12
-		},
-		// TabUsr *******************
-		{
-		ActReqSelGrp,		//  0
-		ActLstStd,		//  1
-		ActLstTch,		//  2
-		ActLstOth,		//  3
-		ActSeeAtt,		//  4
-		ActReqSignUp,		//  5
-		ActSeeSignUpReq,	//  6
-		ActLstCon,		//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabMsg *******************
-		{
-		ActSeeAnn,		//  0
-		ActSeeAllNot,		//  1
-		ActSeeFor,		//  2
-		ActSeeChtRms,		//  3
-		ActReqMsgUsr,		//  4
-		ActSeeRcvMsg,		//  5
-		ActSeeSntMsg,		//  6
-		ActReqMaiUsr,		//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabAna *******************
-		{
-		ActReqUseGbl,		//  0
-		ActSeePhoDeg,		//  1
-		ActReqStaCrs,		//  2
-		ActReqAccGbl,		//  3
-		ActReqMyUsgRep,		//  4
-		ActMFUAct,		//  5
-		0,			//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabPrf *******************
-		{
-		ActFrmRolSes,		//  0
-		ActMyCrs,		//  1
-		ActSeeMyTT,		//  2
-		ActSeeMyAgd,		//  3
-		ActFrmMyAcc,		//  4
-		ActReqEdiRecSha,	//  5
-		ActReqEdiSet,		//  6
-		0,			//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-	};
+   [TabMsg] =  {
+		[ 0] = ActSeeAnn,
+		[ 1] = ActSeeAllNot,
+		[ 2] = ActSeeFor,
+		[ 3] = ActSeeChtRms,
+		[ 4] = ActReqMsgUsr,
+		[ 5] = ActSeeRcvMsg,
+		[ 6] = ActSeeSntMsg,
+		[ 7] = ActReqMaiUsr,
+	       },
+   [TabAna] =  {
+		[ 0] = ActReqUseGbl,
+		[ 1] = ActSeePhoDeg,
+		[ 2] = ActReqStaCrs,
+		[ 3] = ActReqAccGbl,
+		[ 4] = ActReqMyUsgRep,
+		[ 5] = ActMFUAct,
+	       },
+   [TabPrf] =  {
+		[ 0] = ActFrmRolSes,
+		[ 1] = ActMyCrs,
+		[ 2] = ActSeeMyTT,
+		[ 3] = ActSeeMyAgd,
+		[ 4] = ActFrmMyAcc,
+		[ 5] = ActReqEdiRecSha,
+		[ 6] = ActReqEdiSet,
+	       },
+  };
 
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
