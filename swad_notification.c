@@ -63,92 +63,76 @@ extern struct Globals Gbl;
 const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "unknown",
-
    /* Start tab */
    [Ntf_EVENT_TIMELINE_COMMENT ] = "timelineComment",
    [Ntf_EVENT_TIMELINE_FAV     ] = "timelineFav",
    [Ntf_EVENT_TIMELINE_SHARE   ] = "timelineShare",
    [Ntf_EVENT_TIMELINE_MENTION ] = "timelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "follower",
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "assignment",
    [Ntf_EVENT_SURVEY           ] = "survey",
    [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "examAnnouncement",
-
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "documentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "teachersFile",
    [Ntf_EVENT_SHARED_FILE      ] = "sharedFile",
    [Ntf_EVENT_MARKS_FILE       ] = "marksFile",
-
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = "enrollmentStudent",
    [Ntf_EVENT_ENROLMENT_NET    ] = "enrolmentNonEditingTeacher",
    [Ntf_EVENT_ENROLMENT_TCH    ] = "enrollmentTeacher",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "enrollmentRequest",
-
    /* Messages tab */
    [Ntf_EVENT_NOTICE           ] = "notice",
    [Ntf_EVENT_FORUM_POST_COURSE] = "forumPostCourse",
    [Ntf_EVENT_FORUM_REPLY      ] = "forumReply",
    [Ntf_EVENT_MESSAGE          ] = "message",
-
    /* Analytics tab */
-
    /* Profile tab */
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = ActUnk,
-
    /* Start tab */
    [Ntf_EVENT_TIMELINE_COMMENT ] = ActSeeSocTmlGbl,
    [Ntf_EVENT_TIMELINE_FAV     ] = ActSeeSocTmlGbl,
    [Ntf_EVENT_TIMELINE_SHARE   ] = ActSeeSocTmlGbl,
    [Ntf_EVENT_TIMELINE_MENTION ] = ActSeeSocTmlGbl,
    [Ntf_EVENT_FOLLOWER         ] = ActSeeFlr,
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAsg,
    [Ntf_EVENT_SURVEY           ] = ActSeeAllSvy,
    [Ntf_EVENT_EXAM_ANNOUNCEMENT] = ActSeeAllExaAnn,
-
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = ActSeeAdmDocCrsGrp,
    [Ntf_EVENT_TEACHERS_FILE    ] = ActAdmTchCrsGrp,
    [Ntf_EVENT_SHARED_FILE      ] = ActAdmShaCrsGrp,
    [Ntf_EVENT_MARKS_FILE       ] = ActSeeAdmMrk,
-
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = ActReqAccEnrStd,
    [Ntf_EVENT_ENROLMENT_NET    ] = ActReqAccEnrNET,
    [Ntf_EVENT_ENROLMENT_TCH    ] = ActReqAccEnrTch,
    [Ntf_EVENT_ENROLMENT_REQUEST] = ActSeeSignUpReq,
-
    /* Messages tab */
    [Ntf_EVENT_NOTICE           ] = ActSeeOneNot,
    [Ntf_EVENT_FORUM_POST_COURSE] = ActSeeFor,
    [Ntf_EVENT_FORUM_REPLY      ] = ActSeeFor,
    [Ntf_EVENT_MESSAGE          ] = ActExpRcvMsg,
-
    /* Analytics tab */
-
    /* Profile tab */
   };
 
@@ -160,46 +144,38 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "NotifyNtfEventUnknown",
-
    /* Start tab */
    [Ntf_EVENT_TIMELINE_COMMENT ] = "NotifyNtfEventTimelineComment",
    [Ntf_EVENT_TIMELINE_FAV     ] = "NotifyNtfEventTimelineFav",
    [Ntf_EVENT_TIMELINE_SHARE   ] = "NotifyNtfEventTimelineShare",
    [Ntf_EVENT_TIMELINE_MENTION ] = "NotifyNtfEventTimelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "NotifyNtfEventFollower",
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "NotifyNtfEventAssignment",
    [Ntf_EVENT_SURVEY           ] = "NotifyNtfEventSurvey",
    [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "NotifyNtfEventExamAnnouncement",
-
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "NotifyNtfEventDocumentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "NotifyNtfEventTeachersFile",
    [Ntf_EVENT_SHARED_FILE      ] = "NotifyNtfEventSharedFile",
    [Ntf_EVENT_MARKS_FILE       ] = "NotifyNtfEventMarksFile",
-
    /* Messages tab */
    [Ntf_EVENT_NOTICE           ] = "NotifyNtfEventNotice",
    [Ntf_EVENT_FORUM_POST_COURSE] = "NotifyNtfEventForumPostCourse",
    [Ntf_EVENT_FORUM_REPLY      ] = "NotifyNtfEventForumReply",
    [Ntf_EVENT_MESSAGE          ] = "NotifyNtfEventMessage",
-
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = "NotifyNtfEventEnrolmentStudent",
    [Ntf_EVENT_ENROLMENT_NET    ] = "NotifyNtfEventEnrolmentNonEditingTeacher",
    [Ntf_EVENT_ENROLMENT_TCH    ] = "NotifyNtfEventEnrolmentTeacher",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "NotifyNtfEventEnrolmentRequest",
-
    /* Analytics tab */
-
    /* Profile tab */
   };
 
@@ -207,46 +183,38 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "EmailNtfEventUnknown",
-
    /* Start tab */
    [Ntf_EVENT_TIMELINE_COMMENT ] = "EmailNtfEventTimelineComment",
    [Ntf_EVENT_TIMELINE_FAV     ] = "EmailNtfEventTimelineFav",
    [Ntf_EVENT_TIMELINE_SHARE   ] = "EmailNtfEventTimelineShare",
    [Ntf_EVENT_TIMELINE_MENTION ] = "EmailNtfEventTimelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "EmailNtfEventSocialFollower",
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "EmailNtfEventAssignment",
    [Ntf_EVENT_SURVEY           ] = "EmailNtfEventSurvey",
    [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "EmailNtfEventExamAnnouncement",
-
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "EmailNtfEventDocumentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "EmailNtfEventTeachersFile",
    [Ntf_EVENT_SHARED_FILE      ] = "EmailNtfEventSharedFile",
    [Ntf_EVENT_MARKS_FILE       ] = "EmailNtfEventMarksFile",
-
    /* Messages tab */
    [Ntf_EVENT_NOTICE           ] = "EmailNtfEventNotice",
    [Ntf_EVENT_FORUM_POST_COURSE] = "EmailNtfEventForumPostCourse",
    [Ntf_EVENT_FORUM_REPLY      ] = "EmailNtfEventForumReply",
    [Ntf_EVENT_MESSAGE          ] = "EmailNtfEventMessage",
-
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = "EmailNtfEventEnrolmentStudent",
    [Ntf_EVENT_ENROLMENT_NET    ] = "EmailNtfEventEnrolmentNonEditingTeacher",
    [Ntf_EVENT_ENROLMENT_TCH    ] = "EmailNtfEventEnrolmentTeacher",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "EmailNtfEventEnrolmentRequest",
-
-   /* Statistics tab */
-
+   /* Analytics tab */
    /* Profile tab */
   };
 
@@ -254,46 +222,38 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "question.svg",
-
    /* Start tab */
    [Ntf_EVENT_TIMELINE_COMMENT ] = "comment-dots.svg",
    [Ntf_EVENT_TIMELINE_FAV     ] = "star.svg",
    [Ntf_EVENT_TIMELINE_SHARE   ] = "share-alt.svg",
    [Ntf_EVENT_TIMELINE_MENTION ] = "at.svg",
    [Ntf_EVENT_FOLLOWER         ] = "user-plus.svg",
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "edit.svg",
    [Ntf_EVENT_SURVEY           ] = "poll.svg",
    [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
-
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "file.svg",
    [Ntf_EVENT_TEACHERS_FILE    ] = "file.svg",
    [Ntf_EVENT_SHARED_FILE      ] = "file.svg",
    [Ntf_EVENT_MARKS_FILE       ] = "clipboard-list.svg",
-
    /* Messages tab */
    [Ntf_EVENT_NOTICE           ] = "sticky-note.svg",
    [Ntf_EVENT_FORUM_POST_COURSE] = "comments.svg",
    [Ntf_EVENT_FORUM_REPLY      ] = "comments.svg",
    [Ntf_EVENT_MESSAGE          ] = "envelope.svg",
-
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = "user.svg",
    [Ntf_EVENT_ENROLMENT_NET    ] = "user-tie.svg",
    [Ntf_EVENT_ENROLMENT_TCH    ] = "user-tie.svg",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "hand-point-up.svg",
-
-   /* Statistics tab */
-
+   /* Analytics tab */
    /* Profile tab */
   };
 

@@ -171,7 +171,7 @@ typedef enum
   } API_Role_t;
 
 /* Translation from service-web-role to swad-core-role */
-Rol_Role_t API_SvcRole_to_RolRole[API_NUM_ROLES] =
+static const Rol_Role_t API_SvcRole_to_RolRole[API_NUM_ROLES] =
   {
    [API_ROLE_UNKNOWN] = Rol_UNK,
    [API_ROLE__GUEST_] = Rol_GST,
@@ -180,7 +180,7 @@ Rol_Role_t API_SvcRole_to_RolRole[API_NUM_ROLES] =
   };
 
 /* Translation from swad-core-role to service-web-role */
-API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
+static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
   {
    [Rol_UNK    ] = API_ROLE_UNKNOWN,
    [Rol_GST    ] = API_ROLE__GUEST_,

@@ -56,203 +56,217 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************ Public constants and types *************************/
+/*****************************************************************************/
+
+const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActSeeForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActSeeForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActSeeForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActSeeForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActSeeForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActSeeForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActSeeForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActSeeForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActSeeForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActSeeForGenTch,
+   [For_FORUM__SWAD__USRS] = ActSeeForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActSeeForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActSeePstForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActSeePstForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActSeePstForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActSeePstForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActSeePstForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActSeePstForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActSeePstForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActSeePstForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActSeePstForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActSeePstForGenTch,
+   [For_FORUM__SWAD__USRS] = ActSeePstForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActSeePstForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActRcvThrForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActRcvThrForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActRcvThrForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActRcvThrForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActRcvThrForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActRcvThrForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActRcvThrForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActRcvThrForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActRcvThrForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActRcvThrForGenTch,
+   [For_FORUM__SWAD__USRS] = ActRcvThrForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActRcvThrForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActRcvRepForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActRcvRepForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActRcvRepForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActRcvRepForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActRcvRepForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActRcvRepForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActRcvRepForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActRcvRepForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActRcvRepForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActRcvRepForGenTch,
+   [For_FORUM__SWAD__USRS] = ActRcvRepForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActRcvRepForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActReqDelThrCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActReqDelThrCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActReqDelThrDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActReqDelThrDegTch,
+   [For_FORUM_CENTRE_USRS] = ActReqDelThrCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActReqDelThrCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActReqDelThrInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActReqDelThrInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActReqDelThrGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActReqDelThrGenTch,
+   [For_FORUM__SWAD__USRS] = ActReqDelThrSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActReqDelThrSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActDelThrForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActDelThrForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActDelThrForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActDelThrForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActDelThrForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActDelThrForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActDelThrForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActDelThrForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActDelThrForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActDelThrForGenTch,
+   [For_FORUM__SWAD__USRS] = ActDelThrForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActDelThrForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActCutThrForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActCutThrForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActCutThrForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActCutThrForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActCutThrForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActCutThrForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActCutThrForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActCutThrForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActCutThrForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActCutThrForGenTch,
+   [For_FORUM__SWAD__USRS] = ActCutThrForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActCutThrForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActPasThrForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActPasThrForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActPasThrForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActPasThrForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActPasThrForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActPasThrForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActPasThrForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActPasThrForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActPasThrForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActPasThrForGenTch,
+   [For_FORUM__SWAD__USRS] = ActPasThrForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActPasThrForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActDelPstForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActDelPstForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActDelPstForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActDelPstForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActDelPstForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActDelPstForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActDelPstForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActDelPstForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActDelPstForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActDelPstForGenTch,
+   [For_FORUM__SWAD__USRS] = ActDelPstForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActDelPstForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActEnbPstForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActEnbPstForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActEnbPstForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActEnbPstForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActEnbPstForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActEnbPstForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActEnbPstForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActEnbPstForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActEnbPstForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActEnbPstForGenTch,
+   [For_FORUM__SWAD__USRS] = ActEnbPstForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActEnbPstForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
+  {
+   [For_FORUM_COURSE_USRS] = ActDisPstForCrsUsr,
+   [For_FORUM_COURSE_TCHS] = ActDisPstForCrsTch,
+   [For_FORUM_DEGREE_USRS] = ActDisPstForDegUsr,
+   [For_FORUM_DEGREE_TCHS] = ActDisPstForDegTch,
+   [For_FORUM_CENTRE_USRS] = ActDisPstForCtrUsr,
+   [For_FORUM_CENTRE_TCHS] = ActDisPstForCtrTch,
+   [For_FORUM_INSTIT_USRS] = ActDisPstForInsUsr,
+   [For_FORUM_INSTIT_TCHS] = ActDisPstForInsTch,
+   [For_FORUM_GLOBAL_USRS] = ActDisPstForGenUsr,
+   [For_FORUM_GLOBAL_TCHS] = ActDisPstForGenTch,
+   [For_FORUM__SWAD__USRS] = ActDisPstForSWAUsr,
+   [For_FORUM__SWAD__TCHS] = ActDisPstForSWATch,
+   [For_FORUM_UNKNOWN    ] = ActSeeFor,
+  };
+
+/*****************************************************************************/
 /*********************** Private constants and types *************************/
 /*****************************************************************************/
 
 #define For_FORUM_MAX_LEVELS 4
 
-const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
+static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
   {
-   0x3F0,	// For_FORUM_COURSE_USRS
-   0x3F0,	// For_FORUM_COURSE_TCHS
-   0x3E0,	// For_FORUM_DEGREE_USRS
-   0x3E0,	// For_FORUM_DEGREE_TCHS
-   0x3C0,	// For_FORUM_CENTRE_USRS
-   0x3C0,	// For_FORUM_CENTRE_TCHS
-   0x380,	// For_FORUM_INSTIT_USRS
-   0x380,	// For_FORUM_INSTIT_TCHS
-   0x300,	// For_FORUM_GLOBAL_USRS
-   0x300,	// For_FORUM_GLOBAL_TCHS
-   0x300,	// For_FORUM__SWAD__USRS
-   0x300,	// For_FORUM__SWAD__TCHS
-   0x000,	// For_FORUM_UNKNOWN
-  };
-
-const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
-  {
-   ActSeeForCrsUsr,
-   ActSeeForCrsTch,
-   ActSeeForDegUsr,
-   ActSeeForDegTch,
-   ActSeeForCtrUsr,
-   ActSeeForCtrTch,
-   ActSeeForInsUsr,
-   ActSeeForInsTch,
-   ActSeeForGenUsr,
-   ActSeeForGenTch,
-   ActSeeForSWAUsr,
-   ActSeeForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
-  {
-   ActSeePstForCrsUsr,
-   ActSeePstForCrsTch,
-   ActSeePstForDegUsr,
-   ActSeePstForDegTch,
-   ActSeePstForCtrUsr,
-   ActSeePstForCtrTch,
-   ActSeePstForInsUsr,
-   ActSeePstForInsTch,
-   ActSeePstForGenUsr,
-   ActSeePstForGenTch,
-   ActSeePstForSWAUsr,
-   ActSeePstForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
-  {
-   ActRcvThrForCrsUsr,
-   ActRcvThrForCrsTch,
-   ActRcvThrForDegUsr,
-   ActRcvThrForDegTch,
-   ActRcvThrForCtrUsr,
-   ActRcvThrForCtrTch,
-   ActRcvThrForInsUsr,
-   ActRcvThrForInsTch,
-   ActRcvThrForGenUsr,
-   ActRcvThrForGenTch,
-   ActRcvThrForSWAUsr,
-   ActRcvThrForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
-  {
-   ActRcvRepForCrsUsr,
-   ActRcvRepForCrsTch,
-   ActRcvRepForDegUsr,
-   ActRcvRepForDegTch,
-   ActRcvRepForCtrUsr,
-   ActRcvRepForCtrTch,
-   ActRcvRepForInsUsr,
-   ActRcvRepForInsTch,
-   ActRcvRepForGenUsr,
-   ActRcvRepForGenTch,
-   ActRcvRepForSWAUsr,
-   ActRcvRepForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
-  {
-   ActReqDelThrCrsUsr,
-   ActReqDelThrCrsTch,
-   ActReqDelThrDegUsr,
-   ActReqDelThrDegTch,
-   ActReqDelThrCtrUsr,
-   ActReqDelThrCtrTch,
-   ActReqDelThrInsUsr,
-   ActReqDelThrInsTch,
-   ActReqDelThrGenUsr,
-   ActReqDelThrGenTch,
-   ActReqDelThrSWAUsr,
-   ActReqDelThrSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
-  {
-   ActDelThrForCrsUsr,
-   ActDelThrForCrsTch,
-   ActDelThrForDegUsr,
-   ActDelThrForDegTch,
-   ActDelThrForCtrUsr,
-   ActDelThrForCtrTch,
-   ActDelThrForInsUsr,
-   ActDelThrForInsTch,
-   ActDelThrForGenUsr,
-   ActDelThrForGenTch,
-   ActDelThrForSWAUsr,
-   ActDelThrForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
-  {
-   ActCutThrForCrsUsr,
-   ActCutThrForCrsTch,
-   ActCutThrForDegUsr,
-   ActCutThrForDegTch,
-   ActCutThrForCtrUsr,
-   ActCutThrForCtrTch,
-   ActCutThrForInsUsr,
-   ActCutThrForInsTch,
-   ActCutThrForGenUsr,
-   ActCutThrForGenTch,
-   ActCutThrForSWAUsr,
-   ActCutThrForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
-  {
-   ActPasThrForCrsUsr,
-   ActPasThrForCrsTch,
-   ActPasThrForDegUsr,
-   ActPasThrForDegTch,
-   ActPasThrForCtrUsr,
-   ActPasThrForCtrTch,
-   ActPasThrForInsUsr,
-   ActPasThrForInsTch,
-   ActPasThrForGenUsr,
-   ActPasThrForGenTch,
-   ActPasThrForSWAUsr,
-   ActPasThrForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
-  {
-   ActDelPstForCrsUsr,
-   ActDelPstForCrsTch,
-   ActDelPstForDegUsr,
-   ActDelPstForDegTch,
-   ActDelPstForCtrUsr,
-   ActDelPstForCtrTch,
-   ActDelPstForInsUsr,
-   ActDelPstForInsTch,
-   ActDelPstForGenUsr,
-   ActDelPstForGenTch,
-   ActDelPstForSWAUsr,
-   ActDelPstForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
-  {
-   ActEnbPstForCrsUsr,
-   ActEnbPstForCrsTch,
-   ActEnbPstForDegUsr,
-   ActEnbPstForDegTch,
-   ActEnbPstForCtrUsr,
-   ActEnbPstForCtrTch,
-   ActEnbPstForInsUsr,
-   ActEnbPstForInsTch,
-   ActEnbPstForGenUsr,
-   ActEnbPstForGenTch,
-   ActEnbPstForSWAUsr,
-   ActEnbPstForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
-  };
-const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
-  {
-   ActDisPstForCrsUsr,
-   ActDisPstForCrsTch,
-   ActDisPstForDegUsr,
-   ActDisPstForDegTch,
-   ActDisPstForCtrUsr,
-   ActDisPstForCtrTch,
-   ActDisPstForInsUsr,
-   ActDisPstForInsTch,
-   ActDisPstForGenUsr,
-   ActDisPstForGenTch,
-   ActDisPstForSWAUsr,
-   ActDisPstForSWATch,
-   ActSeeFor,		// For_FORUM_UNKNOWN
+   [For_FORUM_COURSE_USRS] = 0x3F0,
+   [For_FORUM_COURSE_TCHS] = 0x3F0,
+   [For_FORUM_DEGREE_USRS] = 0x3E0,
+   [For_FORUM_DEGREE_TCHS] = 0x3E0,
+   [For_FORUM_CENTRE_USRS] = 0x3C0,
+   [For_FORUM_CENTRE_TCHS] = 0x3C0,
+   [For_FORUM_INSTIT_USRS] = 0x380,
+   [For_FORUM_INSTIT_TCHS] = 0x380,
+   [For_FORUM_GLOBAL_USRS] = 0x300,
+   [For_FORUM_GLOBAL_TCHS] = 0x300,
+   [For_FORUM__SWAD__USRS] = 0x300,
+   [For_FORUM__SWAD__TCHS] = 0x300,
+   [For_FORUM_UNKNOWN    ] = 0x000,
   };
 
 // Links to go to <section>

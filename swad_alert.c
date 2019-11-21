@@ -51,17 +51,6 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
-  {
-   [Ale_NONE     ] = NULL,
-   [Ale_CLIPBOARD] = "clipboard.svg",
-   [Ale_INFO     ] = "info-circle.svg",
-   [Ale_SUCCESS  ] = "check-circle.svg",
-   [Ale_QUESTION ] = "question64x64.gif",	// animated gif
-   [Ale_WARNING  ] = "warning64x64.gif",	// animated gif
-   [Ale_ERROR    ] = "error64x64.gif",		// animated gif
-  };
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -390,6 +379,16 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       [Ale_WARNING  ] = true,
       [Ale_ERROR    ] = true,
     };
+   static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
+     {
+      [Ale_NONE     ] = NULL,
+      [Ale_CLIPBOARD] = "clipboard.svg",
+      [Ale_INFO     ] = "info-circle.svg",
+      [Ale_SUCCESS  ] = "check-circle.svg",
+      [Ale_QUESTION ] = "question64x64.gif",	// animated gif
+      [Ale_WARNING  ] = "warning64x64.gif",	// animated gif
+      [Ale_ERROR    ] = "error64x64.gif",	// animated gif
+     };
 
    /****** If start of page is not written yet, do it now ******/
    if (!Gbl.Layout.HTMLStartWritten)

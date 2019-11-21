@@ -440,7 +440,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    extern const char *Txt_No_events;
    struct Pagination Pagination;
    unsigned NumEvent;
-   Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+   static const Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
       [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
       [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,
@@ -917,7 +917,7 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
 
 static void Agd_GetParams (Agd_AgendaType_t AgendaType)
   {
-   Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+   static const Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
       [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
       [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,

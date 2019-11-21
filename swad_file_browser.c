@@ -84,16 +84,8 @@ struct Brw_NumObjects
   };
 
 /*****************************************************************************/
-/**************************** Internal constants *****************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
-
-static const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
-  {
-   [Brw_IS_UNKNOWN] = "BrwFFL",
-   [Brw_IS_FILE   ] = "BrwFil",	// Do not use Fil_NAME_OF_PARAM_FILENAME_ORG
-   [Brw_IS_FOLDER ] = "BrwFol",
-   [Brw_IS_LINK   ] = "BrwLnk",
-  };
 
 // Browsers types for database "files" and "file_browser_size" tables
 const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -128,6 +120,53 @@ const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
+
+// Names of root folders
+const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_UNKNOWN     ] = "",
+   [Brw_SHOW_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_SHOW_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_ADMI_SHR_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
+   [Brw_ADMI_SHR_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
+   [Brw_ADMI_WRK_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
+   [Brw_ADMI_WRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
+   [Brw_ADMI_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_BRF_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,
+   [Brw_SHOW_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_ADMI_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
+   [Brw_SHOW_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
+   [Brw_ADMI_ASG_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   [Brw_ADMI_ASG_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   [Brw_SHOW_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_SHOW_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_SHOW_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
+   [Brw_ADMI_SHR_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_SHR_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_SHR_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
+   [Brw_ADMI_TCH_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
+   [Brw_ADMI_TCH_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
+   [Brw_ADMI_DOC_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS,
+   [Brw_ADMI_ASS_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT,
+  };
+
+/*****************************************************************************/
+/***************************** Private constants *****************************/
+/*****************************************************************************/
+
+static const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
+  {
+   [Brw_IS_UNKNOWN] = "BrwFFL",
+   [Brw_IS_FILE   ] = "BrwFil",	// Do not use Fil_NAME_OF_PARAM_FILENAME_ORG
+   [Brw_IS_FOLDER ] = "BrwFol",
+   [Brw_IS_LINK   ] = "BrwLnk",
+  };
+
 // Browsers viewable shown in search for documents
 static const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -161,6 +200,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BR
    [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
+
 // Browsers types for database "clipboard" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -194,6 +234,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
    [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
+
 // Browsers types for database "expanded_folders" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -227,6 +268,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
    [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
+
 // Browsers types for database "file_browser_last" table
 // Assignments and works are stored as one in file_browser_last...
 // ...because a user views them at the same time
@@ -263,40 +305,6 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TY
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
-// Internal names of root folders
-const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = "",
-   [Brw_SHOW_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
-   [Brw_SHOW_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
-   [Brw_ADMI_DOC_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
-   [Brw_ADMI_SHR_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
-   [Brw_ADMI_SHR_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED,
-   [Brw_ADMI_WRK_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
-   [Brw_ADMI_WRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,
-   [Brw_ADMI_MRK_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
-   [Brw_ADMI_BRF_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,
-   [Brw_SHOW_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
-   [Brw_ADMI_DOC_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,
-   [Brw_SHOW_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
-   [Brw_ADMI_MRK_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,
-   [Brw_ADMI_ASG_USR] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-   [Brw_ADMI_ASG_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-   [Brw_SHOW_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_ADMI_DOC_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_SHOW_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_ADMI_DOC_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_SHOW_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_ADMI_DOC_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,
-   [Brw_ADMI_SHR_DEG] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
-   [Brw_ADMI_SHR_CTR] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
-   [Brw_ADMI_SHR_INS] = Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,
-   [Brw_ADMI_TCH_CRS] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
-   [Brw_ADMI_TCH_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
-   [Brw_ADMI_DOC_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS,
-   [Brw_ADMI_ASS_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT,
-  };
-
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = false,
@@ -329,6 +337,7 @@ static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = true,
    [Brw_ADMI_ASS_PRJ] = true,
   };
+
 static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -394,6 +403,7 @@ static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActUnk,
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
+
 static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -459,6 +469,7 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActUnk,
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
+
 static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -491,6 +502,7 @@ static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActUnk,
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
+
 static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -523,6 +535,7 @@ static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActUnk,
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
+
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -555,6 +568,7 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActReqDatDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActReqDatAssPrj,
   };
+
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -587,6 +601,7 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActDowDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActDowAssPrj,
   };
+
 static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -619,6 +634,7 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActReqRemFilDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActReqRemFilAssPrj,
   };
+
 static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -651,6 +667,7 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActRemFilDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActRemFilAssPrj,
   };
+
 static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -683,6 +700,7 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActRemFolDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActRemFolAssPrj,
   };
+
 static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -715,6 +733,7 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    [Brw_ADMI_DOC_PRJ] = ActRemTreDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActRemTreAssPrj,
   };
+
 static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -747,6 +766,7 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActCopDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActCopAssPrj,
   };
+
 static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -779,6 +799,7 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActPasDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActPasAssPrj,
   };
+
 static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -811,6 +832,7 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActFrmCreDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActFrmCreAssPrj,
   };
+
 static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -843,6 +865,7 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActCreFolDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActCreFolAssPrj,
   };
+
 static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -875,6 +898,7 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActCreLnkDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActCreLnkAssPrj,
   };
+
 static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -907,6 +931,7 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActRenFolDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActRenFolAssPrj,
   };
+
 static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -939,6 +964,7 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    [Brw_ADMI_DOC_PRJ] = ActRcvFilDocPrjDZ,
    [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjDZ,
   };
+
 static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -971,6 +997,7 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActRcvFilDocPrjCla,
    [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjCla,
   };
+
 static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1003,6 +1030,7 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    [Brw_ADMI_DOC_PRJ] = ActAdmDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
   };
+
 static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1035,6 +1063,7 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActExpDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActExpAssPrj,
   };
+
 static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1067,6 +1096,7 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActConDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActConAssPrj,
   };
+
 static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1099,6 +1129,7 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_DOC_PRJ] = ActChgDatDocPrj,
    [Brw_ADMI_ASS_PRJ] = ActChgDatAssPrj,
   };
+
 static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1208,18 +1239,18 @@ static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
 #define Brw_MAX_FILES_MARKS_GRP		200
 #define Brw_MAX_FOLDS_MARKS_GRP		20
 
-const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
+static const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   {
-	            0,	// Rol_UNK
-	            0,	// Rol_GST
-	            0,	// Rol_USR
-	32ULL*Brw_GiB,	// Rol_STD
-	32ULL*Brw_GiB,	// Rol_NET
-	64ULL*Brw_GiB,	// Rol_TCH
-	            0,	// Rol_DEG_ADM
-	            0,	// Rol_CTR_ADM
-	            0,	// Rol_INS_ADM
-	            0,	// Rol_SYS_ADM
+   [Rol_UNK    ] =	            0,
+   [Rol_GST    ] =	            0,
+   [Rol_USR    ] =	            0,
+   [Rol_STD    ] =	32ULL*Brw_GiB,
+   [Rol_NET    ] =	32ULL*Brw_GiB,
+   [Rol_TCH    ] =	64ULL*Brw_GiB,
+   [Rol_DEG_ADM] =	            0,
+   [Rol_CTR_ADM] =	            0,
+   [Rol_INS_ADM] =	            0,
+   [Rol_SYS_ADM] =	            0,
   };
 #define Brw_MAX_FILES_BRIEF	5000
 #define Brw_MAX_FOLDS_BRIEF	1000
@@ -6630,10 +6661,7 @@ void Brw_RemFolderFromTree (void)
                                             Gbl.FileBrowser.FilFolLnk.Full))
            {
 	    if (errno == ENOTEMPTY)	// The directory is not empty
-	      {
 	       Brw_AskConfirmRemoveFolderNotEmpty ();
-	       // Gbl.Alert.Txt[0] = '\0';	// TODO: Remove this line
-	      }
 	    else	// The directory is empty
                Lay_ShowErrorAndExit ("Can not remove folder.");
            }
@@ -6812,10 +6840,10 @@ static void Brw_WriteCurrentClipboard (void)
    char FileNameToShow[NAME_MAX + 1];
    const char *TxtFileType[Brw_NUM_FILE_TYPES] =
      {
-      Txt_file_folder,	// Brw_IS_UNKNOWN
-      Txt_file,		// Brw_IS_FILE
-      Txt_folder,	// Brw_IS_FOLDER
-      Txt_link,		// Brw_IS_LINK
+      [Brw_IS_UNKNOWN] = Txt_file_folder,
+      [Brw_IS_FILE   ] = Txt_file,
+      [Brw_IS_FOLDER ] = Txt_folder,
+      [Brw_IS_LINK   ] = Txt_link,
      };
 
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
@@ -7048,13 +7076,13 @@ static bool Brw_GetMyClipboard (void)
    unsigned UnsignedNum;
 
    /***** Clear clipboard data *****/
-   Gbl.FileBrowser.Clipboard.FileBrowser = Brw_UNKNOWN;
-   Gbl.FileBrowser.Clipboard.Cod         = -1L;
-   Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
+   Gbl.FileBrowser.Clipboard.FileBrowser       = Brw_UNKNOWN;
+   Gbl.FileBrowser.Clipboard.Cod               = -1L;
+   Gbl.FileBrowser.Clipboard.WorksUsrCod       = -1L;
    Gbl.FileBrowser.Clipboard.FilFolLnk.Type    = Brw_IS_UNKNOWN;
-   Gbl.FileBrowser.Clipboard.FilFolLnk.Full[0]     = '\0';
+   Gbl.FileBrowser.Clipboard.FilFolLnk.Full[0] = '\0';
    Gbl.FileBrowser.Clipboard.FilFolLnk.Name[0] = '\0';
-   Gbl.FileBrowser.Clipboard.Level       = 0;
+   Gbl.FileBrowser.Clipboard.Level             = 0;
 
    /***** Get my current clipboard from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get source of copy"
@@ -10560,18 +10588,18 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
      }
    else
      {
-      FileMetadata->FilCod                      = -1L;
-      FileMetadata->FileBrowser                 = Brw_UNKNOWN;
-      FileMetadata->Cod                         = -1L;
-      FileMetadata->ZoneUsrCod                  = -1L;
-      FileMetadata->PublisherUsrCod             = -1L;
-      FileMetadata->FilFolLnk.Type                    = Brw_IS_UNKNOWN;
-      FileMetadata->FilFolLnk.Full[0]           = '\0';
+      FileMetadata->FilCod            = -1L;
+      FileMetadata->FileBrowser       = Brw_UNKNOWN;
+      FileMetadata->Cod               = -1L;
+      FileMetadata->ZoneUsrCod        = -1L;
+      FileMetadata->PublisherUsrCod   = -1L;
+      FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
+      FileMetadata->FilFolLnk.Full[0] = '\0';
       FileMetadata->FilFolLnk.Path[0] = '\0';
-      FileMetadata->FilFolLnk.Name[0]            = '\0';
-      FileMetadata->IsHidden                    = false;
-      FileMetadata->IsPublic                    = false;
-      FileMetadata->License                     = Brw_LICENSE_DEFAULT;
+      FileMetadata->FilFolLnk.Name[0] = '\0';
+      FileMetadata->IsHidden          = false;
+      FileMetadata->IsPublic          = false;
+      FileMetadata->License           = Brw_LICENSE_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

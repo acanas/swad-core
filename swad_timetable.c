@@ -98,15 +98,15 @@ struct TT_Cell
   };
 
 /*****************************************************************************/
-/************************* Internal global variables *************************/
+/************************** Private global variables *************************/
 /*****************************************************************************/
 
-char *TT_ClassTypeDB[TT_NUM_CLASS_TYPES] =
+static const char *TT_ClassTypeDB[TT_NUM_CLASS_TYPES] =
   {
-   "free",
-   "lecture",
-   "practical",
-   "tutoring",
+   [TT_FREE     ] = "free",
+   [TT_LECTURE  ] = "lecture",
+   [TT_PRACTICAL] = "practical",
+   [TT_TUTORING ] = "tutoring",
   };
 
 struct TT_Cell *TT_TimeTable[TT_DAYS_PER_WEEK];

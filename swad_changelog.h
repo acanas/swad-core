@@ -469,6 +469,8 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: En resultados de test y de juegos, en preguntas modificadas se podría mostrar la puntuación obtenida en la pregunta (ahora no sale)
 // TODO: Al crear un nuevo juego, debería irse a la pantalla de añadir preguntas (la misma opción que sale cuando pulsas en editar un juego existente)
 // TODO: Code refactoring in HTML h1, title, meta, video, p, iframe, input hidden, area
+// TODO: ¿Añadir dos columnas a resultados de juegos entre "Preguntas contestadas" y "Puntuación total": Preguntas "Correctas" y Preguntas "Erróneas"?
+//       Problema: sólo es aplicable a tipo test
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -488,13 +490,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.75.2 (2019-11-21)"
+#define Log_PLATFORM_VERSION	"SWAD 19.76.1 (2019-11-21)"
 #define CSS_FILE		"swad19.74.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
+// TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.76.1:  Nov 21, 2019	Code refactoring related to vectors. (247023 lines)
+	Version 19.76:    Nov 21, 2019	Code refactoring related to vectors. (247019 lines)
 	Version 19.75.2:  Nov 21, 2019	Fixed bug in enrolment. (247015 lines)
 	Version 19.75.1:  Nov 21, 2019	Code refactoring related to vectors. (247013 lines)
 	Version 19.75:    Nov 21, 2019	Code refactoring related to vectors. (247012 lines)

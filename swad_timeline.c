@@ -341,49 +341,41 @@ void TL_ShowTimelineGbl2 (void)
    struct TL_Note SocNot;
    struct UsrData UsrDat;
    Ntf_NotifyEvent_t NotifyEvent;
-   const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
+   static const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
       [Ntf_EVENT_UNKNOWN          ] = TL_TOP_MESSAGE_NONE,
-
       /* Start tab */
       [Ntf_EVENT_TIMELINE_COMMENT ] = TL_TOP_MESSAGE_COMMENTED,
       [Ntf_EVENT_TIMELINE_FAV     ] = TL_TOP_MESSAGE_FAVED,
       [Ntf_EVENT_TIMELINE_SHARE   ] = TL_TOP_MESSAGE_SHARED,
       [Ntf_EVENT_TIMELINE_MENTION ] = TL_TOP_MESSAGE_MENTIONED,
       [Ntf_EVENT_FOLLOWER         ] = TL_TOP_MESSAGE_NONE,
-
       /* System tab */
       /* Country tab */
       /* Institution tab */
       /* Centre tab */
       /* Degree tab */
       /* Course tab */
-
       /* Assessment tab */
       [Ntf_EVENT_ASSIGNMENT       ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_SURVEY           ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_EXAM_ANNOUNCEMENT] = TL_TOP_MESSAGE_NONE,
-
       /* Files tab */
       [Ntf_EVENT_DOCUMENT_FILE    ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_TEACHERS_FILE    ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_SHARED_FILE      ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_MARKS_FILE       ] = TL_TOP_MESSAGE_NONE,
-
       /* Users tab */
       [Ntf_EVENT_ENROLMENT_STD    ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_ENROLMENT_NET    ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_ENROLMENT_TCH    ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_ENROLMENT_REQUEST] = TL_TOP_MESSAGE_NONE,
-
       /* Messages tab */
       [Ntf_EVENT_NOTICE           ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_FORUM_POST_COURSE] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_FORUM_REPLY      ] = TL_TOP_MESSAGE_NONE,
       [Ntf_EVENT_MESSAGE          ] = TL_TOP_MESSAGE_NONE,
-
       /* Analytics tab */
-
       /* Profile tab */
      };
 
@@ -1871,79 +1863,57 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
    extern const char *Txt_not_available;
    char *Class;
    char *Anchor = NULL;
-   const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
+   static const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
      {
-      ActUnk,			// TL_NOTE_UNKNOWN
-
-      /* Institution tab */
-      ActReqDatSeeDocIns,	// TL_NOTE_INS_DOC_PUB_FILE
-      ActReqDatShaIns,		// TL_NOTE_INS_SHA_PUB_FILE
-
-      /* Centre tab */
-      ActReqDatSeeDocCtr,	// TL_NOTE_CTR_DOC_PUB_FILE
-      ActReqDatShaCtr,		// TL_NOTE_CTR_SHA_PUB_FILE
-
-      /* Degree tab */
-      ActReqDatSeeDocDeg,	// TL_NOTE_DEG_DOC_PUB_FILE
-      ActReqDatShaDeg,		// TL_NOTE_DEG_SHA_PUB_FILE
-
-      /* Course tab */
-      ActReqDatSeeDocCrs,	// TL_NOTE_CRS_DOC_PUB_FILE
-      ActReqDatShaCrs,		// TL_NOTE_CRS_SHA_PUB_FILE
-
-      /* Assessment tab */
-      ActSeeOneExaAnn,		// TL_NOTE_EXAM_ANNOUNCEMENT
-
-      /* Users tab */
-
+      [TL_NOTE_UNKNOWN          ] = ActUnk,
       /* Start tab */
-      ActUnk,			// TL_NOTE_SOCIAL_POST (action not used)	// TODO: Move to start tab
-
+      [TL_NOTE_POST             ] = ActUnk,	// action not used
+      /* Institution tab */
+      [TL_NOTE_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
+      [TL_NOTE_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
+      /* Centre tab */
+      [TL_NOTE_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
+      [TL_NOTE_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
+      /* Degree tab */
+      [TL_NOTE_DEG_DOC_PUB_FILE ] = ActReqDatSeeDocDeg,
+      [TL_NOTE_DEG_SHA_PUB_FILE ] = ActReqDatShaDeg,
+      /* Course tab */
+      [TL_NOTE_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
+      [TL_NOTE_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
+      /* Assessment tab */
+      [TL_NOTE_EXAM_ANNOUNCEMENT] = ActSeeOneExaAnn,
+      /* Users tab */
       /* Messages tab */
-      ActSeeFor,		// TL_NOTE_FORUM_POST				// TODO: Move down
-      ActSeeOneNot,		// TL_NOTE_NOTICE
-
-      /* Statistics tab */
-
+      [TL_NOTE_NOTICE           ] = ActSeeOneNot,
+      [TL_NOTE_FORUM_POST       ] = ActSeeFor,
+      /* Analytics tab */
       /* Profile tab */
-
      };
-   const char *TL_Icons[TL_NUM_NOTE_TYPES] =
+   static const char *TL_Icons[TL_NUM_NOTE_TYPES] =
      {
-      NULL,			// TL_NOTE_UNKNOWN
-
-      /* Institution tab */
-      "file.svg",		// TL_NOTE_INS_DOC_PUB_FILE
-      "file.svg",		// TL_NOTE_INS_SHA_PUB_FILE
-
-      /* Centre tab */
-      "file.svg",		// TL_NOTE_CTR_DOC_PUB_FILE
-      "file.svg",		// TL_NOTE_CTR_SHA_PUB_FILE
-
-      /* Degree tab */
-      "file.svg",		// TL_NOTE_DEG_DOC_PUB_FILE
-      "file.svg",		// TL_NOTE_DEG_SHA_PUB_FILE
-
-      /* Course tab */
-      "file.svg",		// TL_NOTE_CRS_DOC_PUB_FILE
-      "file.svg",		// TL_NOTE_CRS_SHA_PUB_FILE
-
-      /* Assessment tab */
-      "bullhorn.svg",		// TL_NOTE_EXAM_ANNOUNCEMENT
-
-      /* Users tab */
-
+      [TL_NOTE_UNKNOWN          ] = NULL,
       /* Start tab */
-      NULL,			// TL_NOTE_SOCIAL_POST (icon not used)
-
+      [TL_NOTE_POST             ] = NULL,	// icon not used
+      /* Institution tab */
+      [TL_NOTE_INS_DOC_PUB_FILE ] = "file.svg",
+      [TL_NOTE_INS_SHA_PUB_FILE ] = "file.svg",
+      /* Centre tab */
+      [TL_NOTE_CTR_DOC_PUB_FILE ] = "file.svg",
+      [TL_NOTE_CTR_SHA_PUB_FILE ] = "file.svg",
+      /* Degree tab */
+      [TL_NOTE_DEG_DOC_PUB_FILE ] = "file.svg",
+      [TL_NOTE_DEG_SHA_PUB_FILE ] = "file.svg",
+      /* Course tab */
+      [TL_NOTE_CRS_DOC_PUB_FILE ] = "file.svg",
+      [TL_NOTE_CRS_SHA_PUB_FILE ] = "file.svg",
+      /* Assessment tab */
+      [TL_NOTE_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
+      /* Users tab */
       /* Messages tab */
-      "comments.svg",		// TL_NOTE_FORUM_POST	// TODO: Move down
-      "sticky-note.svg",	// TL_NOTE_NOTICE
-
-      /* Statistics tab */
-
+      [TL_NOTE_NOTICE           ] = "sticky-note.svg",
+      [TL_NOTE_FORUM_POST       ] = "comments.svg",
+      /* Analytics tab */
       /* Profile tab */
-
      };
 
    if (SocNot->Unavailable ||	// File/notice... pointed by this note is unavailable

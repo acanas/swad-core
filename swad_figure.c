@@ -3564,7 +3564,7 @@ static void Fig_GetAndShowFollowStats (void)
    extern const char *Txt_Followed;
    extern const char *Txt_Followers;
    extern const char *Txt_FollowPerFollow[2];
-   const char *FieldDB[2] =
+   static const char *FieldDB[2] =
      {
       "FollowedCod",
       "FollowerCod"
@@ -4759,17 +4759,17 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned i;
-   char AcceptedInDB[2] =
+   static const char AcceptedInDB[2] =
      {
       'N',		// false
       'Y'		// true
      };
-   char *AcceptedClass[2] =
+   static const char *AcceptedClass[2] =
      {
       "DAT_RED",	// false
       "DAT_GREEN"	// true
      };
-   char *AcceptedSymbol[2] =
+   static const char *AcceptedSymbol[2] =
      {
       "&cross;",	// false
       "&check;"		// true

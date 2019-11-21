@@ -54,48 +54,39 @@
 typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
   {
    Ntf_EVENT_UNKNOWN		=  0,
-
    /* Start tab */
    Ntf_EVENT_TIMELINE_COMMENT	= 10,	// New comment to one of my social publishings (notes or comments)
    Ntf_EVENT_TIMELINE_FAV	= 11,	// New fav of one of my social publishings (notes or comments)
    Ntf_EVENT_TIMELINE_SHARE	= 12,	// New sharing of one of my social notes
    Ntf_EVENT_TIMELINE_MENTION	= 13,	// New mention
    Ntf_EVENT_FOLLOWER		= 14,
-
    /* System tab */
    /* Country tab */
    /* Institution tab */
    /* Centre tab */
    /* Degree tab */
    /* Course tab */
-
    /* Assessment tab */
    Ntf_EVENT_ASSIGNMENT		=  4,
    Ntf_EVENT_SURVEY		= 19,
    Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,
-
    /* Files tab */
    Ntf_EVENT_DOCUMENT_FILE	=  1,
    Ntf_EVENT_TEACHERS_FILE	=  2,
    Ntf_EVENT_SHARED_FILE	=  3,
    Ntf_EVENT_MARKS_FILE		=  6,
-
    /* Users tab */
    Ntf_EVENT_ENROLMENT_STD	=  7,
    Ntf_EVENT_ENROLMENT_NET	= 20,
    Ntf_EVENT_ENROLMENT_TCH	=  8,
    Ntf_EVENT_ENROLMENT_REQUEST	=  9,
-
    /* Messages tab */
    Ntf_EVENT_NOTICE		= 17,
    Ntf_EVENT_FORUM_POST_COURSE	= 15,	// New post in forums of my courses
    Ntf_EVENT_FORUM_REPLY	= 16,	// New reply to one of my posts in any forum
    Ntf_EVENT_MESSAGE		= 18,
-
    /* Analytics tab */
-
    /* Profile tab */
-
   } Ntf_NotifyEvent_t;
 
 typedef enum

@@ -50,7 +50,7 @@
 typedef enum
   {
    TL_PUB_UNKNOWN		= 0,
-   TL_PUB_ORIGINAL_NOTE	= 1,
+   TL_PUB_ORIGINAL_NOTE		= 1,
    TL_PUB_SHARED_NOTE		= 2,
    TL_PUB_COMMENT_TO_NOTE	= 3,
   } TL_PubType_t;
@@ -61,39 +61,28 @@ typedef enum
 typedef enum
   {
    TL_NOTE_UNKNOWN		=  0,
-
+   /* Start tab */
+   TL_NOTE_POST			= 10,	// Post written directly in timeline
    /* Institution tab */
-   TL_NOTE_INS_DOC_PUB_FILE	=  1,
-   TL_NOTE_INS_SHA_PUB_FILE	=  2,
-
+   TL_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
+   TL_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
    /* Centre tab */
-   TL_NOTE_CTR_DOC_PUB_FILE	=  3,
-   TL_NOTE_CTR_SHA_PUB_FILE	=  4,
-
+   TL_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of centre
+   TL_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of centre
    /* Degree tab */
-   TL_NOTE_DEG_DOC_PUB_FILE	=  5,
-   TL_NOTE_DEG_SHA_PUB_FILE	=  6,
-
+   TL_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
+   TL_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
    /* Course tab */
-   TL_NOTE_CRS_DOC_PUB_FILE	=  7,
-   TL_NOTE_CRS_SHA_PUB_FILE	=  8,
-
+   TL_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
+   TL_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
    /* Assessment tab */
-   TL_NOTE_EXAM_ANNOUNCEMENT	=  9,
-
+   TL_NOTE_EXAM_ANNOUNCEMENT	=  9,	// Exam announcement in a course
    /* Users tab */
-
-   /* Start tab */			// TODO: Move to the top
-   TL_NOTE_POST			= 10,
-   TL_NOTE_FORUM_POST		= 11,
-
    /* Messages tab */
-   TL_NOTE_NOTICE		= 12,
-
-   /* Statistics tab */
-
+   TL_NOTE_NOTICE		= 12,	// A public notice in a course
+   TL_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
+   /* Analytics tab */
    /* Profile tab */
-
   } TL_NoteType_t;
 
 #define TL_NUM_TOP_MESSAGES (1 + 6)
@@ -101,7 +90,7 @@ typedef enum
   {
    TL_TOP_MESSAGE_NONE		= 0,
    TL_TOP_MESSAGE_COMMENTED	= 1,
-   TL_TOP_MESSAGE_FAVED	= 2,
+   TL_TOP_MESSAGE_FAVED		= 2,
    TL_TOP_MESSAGE_UNFAVED	= 3,
    TL_TOP_MESSAGE_SHARED	= 4,
    TL_TOP_MESSAGE_UNSHARED	= 5,

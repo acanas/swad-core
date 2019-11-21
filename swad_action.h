@@ -1535,7 +1535,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActMaiUsr		(ActUnfSevTch + 169)
 
 /*****************************************************************************/
-/****************************** Statistics tab *******************************/
+/****************************** Analytics tab ********************************/
 /*****************************************************************************/
 // Actions in menu
 #define ActReqUseGbl		(ActMaiUsr +  1)
