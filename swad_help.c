@@ -105,16 +105,16 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Create_account;
    static const Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
      {
-      ActUnk,		// Rol_UNK
-      ActUnk,		// Rol_GST
-      ActUnk,		// Rol_USR
-      ActRemMe_Std,	// Rol_STD
-      ActRemMe_NET,	// Rol_NET
-      ActRemMe_Tch,	// Rol_TCH
-      ActUnk,		// Rol_DEG_ADM
-      ActUnk,		// Rol_CTR_ADM
-      ActUnk,		// Rol_INS_ADM
-      ActUnk,		// Rol_SYS_ADM
+      [Rol_UNK    ] = ActUnk,
+      [Rol_GST    ] = ActUnk,
+      [Rol_USR    ] = ActUnk,
+      [Rol_STD    ] = ActRemMe_Std,
+      [Rol_NET    ] = ActRemMe_NET,
+      [Rol_TCH    ] = ActRemMe_Tch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
      };
 
    /***** Alert message *****/

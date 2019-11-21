@@ -312,15 +312,15 @@ void TT_ShowClassTimeTable (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    const char *Help[TT_NUM_TIMETABLE_TYPES] =
      {
-      Hlp_COURSE_Timetable,	// TT_COURSE_TIMETABLE
-      Hlp_PROFILE_Timetable,	// TT_MY_TIMETABLE
-      NULL,			// TT_TUTORING_TIMETABLE
+      [TT_COURSE_TIMETABLE  ] = Hlp_COURSE_Timetable,
+      [TT_MY_TIMETABLE      ] = Hlp_PROFILE_Timetable,
+      [TT_TUTORING_TIMETABLE] = NULL,
      };
-   Act_Action_t ActChgTT1stDay[TT_NUM_TIMETABLE_TYPES] =
+   static Act_Action_t ActChgTT1stDay[TT_NUM_TIMETABLE_TYPES] =
      {
-      ActChgCrsTT1stDay,// TT_COURSE_TIMETABLE
-      ActChgMyTT1stDay,	// TT_MY_TIMETABLE
-      ActUnk,		// TT_TUTORING_TIMETABLE
+      [TT_COURSE_TIMETABLE  ] = ActChgCrsTT1stDay,
+      [TT_MY_TIMETABLE      ] = ActChgMyTT1stDay,
+      [TT_TUTORING_TIMETABLE] = ActUnk,
      };
    bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
 	             Gbl.Action.Act == ActPrnMyTT);;
@@ -1435,10 +1435,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    extern const char *Txt_Info;
    static const char *TimeTableClasses[TT_NUM_CLASS_TYPES] =
      {
-      "TT_FREE",	// TT_FREE	(free hour)
-      "TT_LECT",	// TT_LECTURE	(lecture class)
-      "TT_PRAC",	// TT_PRACTICAL	(practical class)
-      "TT_TUTO",	// TT_TUTORING	(tutoring/office hour)
+      [TT_FREE     ] = "TT_FREE",	// free hour
+      [TT_LECTURE  ] = "TT_LECT",	// lecture class
+      [TT_PRACTICAL] = "TT_PRAC",	// practical class
+      [TT_TUTORING ] = "TT_TUTO",	// tutoring/office hour
      };
    char *CellStr;	// Unique string for this cell used in labels
    struct GroupData GrpDat;

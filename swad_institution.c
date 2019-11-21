@@ -985,8 +985,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
   {
    static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
      {
-      "FullName",		// Ins_ORDER_BY_INSTITUTION
-      "NumUsrs DESC,FullName",	// Ins_ORDER_BY_NUM_USRS
+      [Ins_ORDER_BY_INSTITUTION] = "FullName",
+      [Ins_ORDER_BY_NUM_USRS   ] = "NumUsrs DESC,FullName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

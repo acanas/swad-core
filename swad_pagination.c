@@ -53,17 +53,17 @@ extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 
 static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
-   "NumPagAsg",		// Pag_ASSIGNMENTS
-   "NumPagPrj",		// Pag_PROJECTS
-   "NumPagGam",		// Pag_GAMES
-   "NumPagSvy",		// Pag_SURVEYS
-   "NumPagAtt",		// Pag_ATT_EVENTS
-   "NumPagThr",		// Pag_THREADS_FORUM
-   "NumPagPst",		// Pag_POSTS_FORUM
-   "NumPagRcv",		// Pag_MESSAGES_RECEIVED
-   "NumPagSnt",		// Pag_MESSAGES_SENT
-   "NumPagMyAgd",	// Pag_MY_AGENDA
-   "NumPagOthAgd",	// Pag_ANOTHER_AGENDA
+   [Pag_ASSIGNMENTS      ] = "NumPagAsg",
+   [Pag_PROJECTS         ] = "NumPagPrj",
+   [Pag_GAMES            ] = "NumPagGam",
+   [Pag_SURVEYS          ] = "NumPagSvy",
+   [Pag_ATT_EVENTS       ] = "NumPagAtt",
+   [Pag_THREADS_FORUM    ] = "NumPagThr",
+   [Pag_POSTS_FORUM      ] = "NumPagPst",
+   [Pag_MESSAGES_RECEIVED] = "NumPagRcv",
+   [Pag_MESSAGES_SENT    ] = "NumPagSnt",
+   [Pag_MY_AGENDA        ] = "NumPagMyAgd",
+   [Pag_ANOTHER_AGENDA   ] = "NumPagOthAgd",
   };
 
 /*****************************************************************************/

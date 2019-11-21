@@ -289,8 +289,8 @@ void Hld_GetListHolidays (void)
   {
    static const char *OrderBySubQuery[Hld_NUM_ORDERS] =
      {
-      "Place,StartDate",	// Hld_ORDER_BY_PLACE
-      "StartDate,Place",	// Hld_ORDER_BY_START_DATE
+      [Hld_ORDER_BY_PLACE     ] = "Place,StartDate",
+      [Hld_ORDER_BY_START_DATE] = "StartDate,Place",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

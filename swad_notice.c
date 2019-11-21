@@ -615,28 +615,28 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_See_full_notice;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
-      "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
-      "NOTICE_CONTAINER_OBSOLETE",	// Not_OBSOLETE_NOTICE
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_CONTAINER_ACTIVE",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_CONTAINER_OBSOLETE",
      };
    static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
-      "NOTICE_CONTAINER_NARROW",	// Not_LIST_BRIEF_NOTICES
-      "NOTICE_CONTAINER_WIDE",		// Not_LIST_FULL_NOTICES
+      [Not_LIST_BRIEF_NOTICES] = "NOTICE_CONTAINER_NARROW",
+      [Not_LIST_FULL_NOTICES ] = "NOTICE_CONTAINER_WIDE",
      };
    static const char *DateClass[Not_NUM_STATUS] =
      {
-      "NOTICE_DATE_ACTIVE",		// Not_ACTIVE_NOTICE
-      "NOTICE_DATE_OBSOLETE",		// Not_OBSOLETE_NOTICE
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_DATE_ACTIVE",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_DATE_OBSOLETE",
      };
    static const char *TextClass[Not_NUM_STATUS] =
      {
-      "NOTICE_TEXT_ACTIVE",		// Not_ACTIVE_NOTICE
-      "NOTICE_TEXT_OBSOLETE",		// Not_OBSOLETE_NOTICE
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_TEXT_ACTIVE",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_TEXT_OBSOLETE",
      };
    static const char *AuthorClass[Not_NUM_STATUS] =
      {
-      "NOTICE_AUTHOR_ACTIVE",		// Not_ACTIVE_NOTICE
-      "NOTICE_AUTHOR_OBSOLETE",		// Not_OBSOLETE_NOTICE
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_AUTHOR_ACTIVE",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_AUTHOR_OBSOLETE",
      };
    static unsigned UniqueId = 0;
    char *Id;

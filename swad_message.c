@@ -73,8 +73,8 @@ extern struct Globals Gbl;
 
 static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
   {
-   Pag_MESSAGES_RECEIVED,	// Msg_MESSAGES_RECEIVED
-   Pag_MESSAGES_SENT		// Msg_MESSAGES_SENT
+   [Msg_MESSAGES_RECEIVED] = Pag_MESSAGES_RECEIVED,
+   [Msg_MESSAGES_SENT    ] = Pag_MESSAGES_SENT,
   };
 
 /*****************************************************************************/
@@ -1702,23 +1702,23 @@ static void Msg_ShowSentOrReceivedMessages (void)
    long MsgCod;
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
-      ActSeeRcvMsg,
-      ActSeeSntMsg,
+      [Msg_MESSAGES_RECEIVED] = ActSeeRcvMsg,
+      [Msg_MESSAGES_SENT    ] = ActSeeSntMsg,
      };
    static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
      {
-      Pag_MESSAGES_RECEIVED,
-      Pag_MESSAGES_SENT,
+      [Msg_MESSAGES_RECEIVED] = Pag_MESSAGES_RECEIVED,
+      [Msg_MESSAGES_SENT    ] = Pag_MESSAGES_SENT,
      };
    const char *Help[Msg_NUM_TYPES_OF_MSGS] =
      {
-      Hlp_MESSAGES_Received,
-      Hlp_MESSAGES_Sent,
+      [Msg_MESSAGES_RECEIVED] = Hlp_MESSAGES_Received,
+      [Msg_MESSAGES_SENT    ] = Hlp_MESSAGES_Sent,
      };
    const char *HelpFilter[Msg_NUM_TYPES_OF_MSGS] =
      {
-      Hlp_MESSAGES_Received_filter,
-      Hlp_MESSAGES_Sent_filter,
+      [Msg_MESSAGES_RECEIVED] = Hlp_MESSAGES_Received_filter,
+      [Msg_MESSAGES_SENT    ] = Hlp_MESSAGES_Sent_filter,
      };
 
    /***** Get the page number *****/
@@ -2491,8 +2491,8 @@ static void Msg_PutIconsListMsgs (void)
   {
    static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
-      ActReqDelAllRcvMsg,
-      ActReqDelAllSntMsg,
+      [Msg_MESSAGES_RECEIVED] = ActReqDelAllRcvMsg,
+      [Msg_MESSAGES_SENT    ] = ActReqDelAllSntMsg,
      };
 
    /***** Put icon to remove messages *****/
@@ -2908,8 +2908,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    extern const char *Txt_MSG_Content;
    static const Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
-      ActDelRcvMsg,
-      ActDelSntMsg,
+      [Msg_MESSAGES_RECEIVED] = ActDelRcvMsg,
+      [Msg_MESSAGES_SENT    ] = ActDelSntMsg,
      };
    struct UsrData UsrDat;
    const char *Title = NULL;	// Initialized to avoid warning
@@ -3430,8 +3430,8 @@ static void Msg_WriteMsgTo (long MsgCod)
    char PhotoURL[PATH_MAX + 1];
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
-      ActSeeRcvMsg,
-      ActSeeSntMsg,
+      [Msg_MESSAGES_RECEIVED] = ActSeeRcvMsg,
+      [Msg_MESSAGES_SENT    ] = ActSeeSntMsg,
      };
 
    /***** Get number of recipients of a message from database *****/

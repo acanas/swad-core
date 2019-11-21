@@ -350,14 +350,14 @@ void Inf_ShowInfo (void)
    bool ShowWarningNoInfo = false;
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus,				// Inf_LECTURES
-      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ,				// Inf_FAQ
-      Hlp_COURSE_Links,				// Inf_LINKS
-      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
+      [Inf_LINKS         ] = Hlp_COURSE_Links,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
      };
 
    /***** Set info type *****/
@@ -1031,14 +1031,14 @@ static void Inf_ShowPage (const char *URL)
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus,				// Inf_LECTURES
-      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ,				// Inf_FAQ
-      Hlp_COURSE_Links,				// Inf_LINKS
-      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
+      [Inf_LINKS         ] = Hlp_COURSE_Links,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
      };
 
    /***** Begin box *****/
@@ -1769,14 +1769,14 @@ static bool Inf_CheckAndShowPlainTxt (void)
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide,					// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus,				// Inf_LECTURES
-      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography,				// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ,					// Inf_FAQ
-      Hlp_COURSE_Links,					// Inf_LINKS
-      Hlp_ASSESSMENT_System,				// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
+      [Inf_LINKS         ] = Hlp_COURSE_Links,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
      };
 
    /***** Get info text from database *****/
@@ -1853,14 +1853,14 @@ static bool Inf_CheckAndShowRichTxt (void)
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus,				// Inf_LECTURES
-      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ,				// Inf_FAQ
-      Hlp_COURSE_Links,				// Inf_LINKS
-      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
+      [Inf_LINKS         ] = Hlp_COURSE_Links,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
      };
 
    /***** Get info text from database *****/

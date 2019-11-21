@@ -242,9 +242,9 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
    static const char *OrderBySubQuery[Mai_NUM_ORDERS] =
      {
-      "Domain,Info,N DESC",	// Mai_ORDER_BY_DOMAIN
-      "Info,Domain,N DESC",	// Mai_ORDER_BY_INFO
-      "N DESC,Info,Domain",	// Mai_ORDER_BY_USERS
+      [Mai_ORDER_BY_DOMAIN] = "Domain,Info,N DESC",
+      [Mai_ORDER_BY_INFO  ] = "Info,Domain,N DESC",
+      [Mai_ORDER_BY_USERS ] = "N DESC,Info,Domain",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

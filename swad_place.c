@@ -333,8 +333,8 @@ void Plc_GetListPlaces (void)
   {
    static const char *OrderBySubQuery[Plc_NUM_ORDERS] =
      {
-      "FullName",		// Plc_ORDER_BY_PLACE
-      "NumCtrs DESC,FullName",	// Plc_ORDER_BY_NUM_CTRS
+      [Plc_ORDER_BY_PLACE   ] = "FullName",
+      [Plc_ORDER_BY_NUM_CTRS] = "NumCtrs DESC,FullName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

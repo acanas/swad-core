@@ -84,28 +84,28 @@ static const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
 /***** Enum field in database for types of proposal *****/
 static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
   {
-   "new",		// Prj_PROPOSAL_NEW
-   "modified",		// Prj_PROPOSAL_MODIFIED
-   "unmodified",	// Prj_PROPOSAL_UNMODIFIED
+   [Prj_PROPOSAL_NEW       ] = "new",
+   [Prj_PROPOSAL_MODIFIED  ] = "modified",
+   [Prj_PROPOSAL_UNMODIFIED] = "unmodified",
   };
 
 /***** Assigned/non-assigned project *****/
 static const char *AssignedNonassigImage[Prj_NUM_ASSIGNED_NONASSIG] =
   {
-   "user.svg",		// Prj_ASSIGNED
-   "user-slash.svg",	// Prj_NONASSIG
+   [Prj_ASSIGNED] = "user.svg",
+   [Prj_NONASSIG] = "user-slash.svg",
   };
 
 /***** Locked/unlocked project edition *****/
 static const char *Prj_LockIcons[Prj_NUM_LOCKED_UNLOCKED] =
   {
-   "lock.svg",	// Prj_LOCKED
-   "unlock.svg",	// Prj_UNLOCKED
+   [Prj_LOCKED  ] = "lock.svg",
+   [Prj_UNLOCKED] = "unlock.svg",
   };
 static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
   {
-   ActUnlPrj,	// Prj_LOCKED
-   ActLckPrj,	// Prj_UNLOCKED
+   [Prj_LOCKED  ] = ActUnlPrj,
+   [Prj_UNLOCKED] = ActLckPrj,
   };
 
 /***** List of users to select one or more members
@@ -575,8 +575,8 @@ static void Prj_ShowFormToFilterByHidden (void)
    Prj_HiddenVisibl_t HidVis;
    static const char *HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
      {
-      "eye-slash.svg",	// Prj_HIDDEN
-      "eye.svg",	// Prj_VISIBL
+      [Prj_HIDDEN] = "eye-slash.svg",
+      [Prj_VISIBL] = "eye.svg",
      };
 
    Set_StartOneSettingSelector ();
@@ -616,8 +616,8 @@ static void Prj_ShowFormToFilterByWarning (void)
    Prj_Faultiness_t Faultiness;
    static const char *FaultinessIcon[Prj_NUM_FAULTINESS] =
      {
-      "exclamation-triangle.svg",	// Prj_FAULTY
-      "check-circle.svg",		// Prj_FAULTLESS
+      [Prj_FAULTY   ] = "exclamation-triangle.svg",
+      [Prj_FAULTLESS] = "check-circle.svg",
      };
 
    Set_StartOneSettingSelector ();
@@ -965,16 +965,16 @@ static bool Prj_CheckIfICanCreateProjects (void)
   {
    static const bool ICanCreateProjects[Rol_NUM_ROLES] =
      {
-      false,	// Rol_UNK
-      false,	// Rol_GST
-      false,	// Rol_USR
-      false,	// Rol_STD
-      true,	// Rol_NET
-      true,	// Rol_TCH
-      true,	// Rol_DEG_ADM
-      true,	// Rol_CTR_ADM
-      true,	// Rol_INS_ADM
-      true,	// Rol_SYS_ADM
+      [Rol_UNK    ] = false,
+      [Rol_GST    ] = false,
+      [Rol_USR    ] = false,
+      [Rol_STD    ] = false,
+      [Rol_NET    ] = true,
+      [Rol_TCH    ] = true,
+      [Rol_DEG_ADM] = true,
+      [Rol_CTR_ADM] = true,
+      [Rol_INS_ADM] = true,
+      [Rol_SYS_ADM] = true,
      };
 
    return ICanCreateProjects[Gbl.Usrs.Me.Role.Logged];
@@ -1934,17 +1934,17 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
    const char *ClassData;
    static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
-      ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActReqRemStdPrj,	// Prj_ROLE_STD, Student
-      ActReqRemTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActReqRemEvlPrj,	// Prj_ROLE_EVL, Evaluator
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActReqRemStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActReqRemTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActReqRemEvlPrj,	// Evaluator
      };
    static const Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
-      ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActReqAddStdPrj,	// Prj_ROLE_STD, Student
-      ActReqAddTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActReqAddEvlPrj,	// Prj_ROLE_EVL, Evaluator
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActReqAddStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActReqAddTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActReqAddEvlPrj,	// Evaluator
      };
 
    /***** Set CSS classes *****/
@@ -2681,22 +2681,19 @@ static void Prj_GetListProjects (void)
    char *DptCodSubQuery;
    static const char *OrderBySubQuery[Prj_NUM_ORDERS] =
      {
-      "projects.CreatTime DESC,"	// Prj_ORDER_START_TIME
-      "projects.ModifTime DESC,"
-      "projects.Title",
-
-      "projects.ModifTime DESC,"	// Prj_ORDER_END_TIME
-      "projects.CreatTime DESC,"
-      "projects.Title",
-
-      "projects.Title,"			// Prj_ORDER_TITLE
-      "projects.CreatTime DESC,"
-      "projects.ModifTime DESC",
-
-      "departments.FullName,"		// Prj_ORDER_DEPARTMENT
-      "projects.CreatTime DESC,"
-      "projects.ModifTime DESC,"
-      "projects.Title",
+      [Prj_ORDER_START_TIME] = "projects.CreatTime DESC,"
+			       "projects.ModifTime DESC,"
+			       "projects.Title",
+      [Prj_ORDER_END_TIME  ] = "projects.ModifTime DESC,"
+			       "projects.CreatTime DESC,"
+			       "projects.Title",
+      [Prj_ORDER_TITLE     ] = "projects.Title,"
+			       "projects.CreatTime DESC,"
+			       "projects.ModifTime DESC",
+      [Prj_ORDER_DEPARTMENT] = "departments.FullName,"
+			       "projects.CreatTime DESC,"
+			       "projects.ModifTime DESC,"
+			       "projects.Title",
      };
    MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
    MYSQL_ROW row;

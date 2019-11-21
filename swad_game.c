@@ -643,9 +643,9 @@ void Gam_GetListGames (void)
   {
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
-      "StartTime DESC,EndTime DESC,gam_games.Title DESC",	// Gam_ORDER_BY_START_DATE
-      "EndTime DESC,StartTime DESC,gam_games.Title DESC",	// Gam_ORDER_BY_END_DATE
-      "gam_games.Title DESC",					// Gam_ORDER_BY_TITLE
+      [Gam_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,gam_games.Title DESC",
+      [Gam_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,gam_games.Title DESC",
+      [Gam_ORDER_BY_TITLE     ] = "gam_games.Title DESC",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

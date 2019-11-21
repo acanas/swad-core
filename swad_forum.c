@@ -4466,13 +4466,13 @@ void For_RemoveForums (Hie_Level_t Scope,long ForumLocation)
       For_ForumType_t Tchs;
      } ForumType[Hie_NUM_LEVELS] =
      {
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_UNK	// No forums for this scope
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_SYS	// Not removable
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_CTY	// No forums for this scope
-	{For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},	// Hie_INS
-	{For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},	// Hie_CTR
-	{For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},	// Hie_DEG
-	{For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},	// Hie_CRS
+      [Hie_UNK] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [Hie_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
+      [Hie_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [Hie_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
+      [Hie_CTR] = {For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},
+      [Hie_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
+      [Hie_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
      };
 
    /***** Remove disabled posts *****/

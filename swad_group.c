@@ -56,16 +56,16 @@
 
 static const bool Grp_ICanChangeGrps[Rol_NUM_ROLES] =
   {
-   false,	// Rol_UNK
-   false,	// Rol_GST
-   false,	// Rol_USR
-   true,	// Rol_STD
-   false,	// Rol_NET
-   true,	// Rol_TCH
-   false,	// Rol_DEG_ADM
-   false,	// Rol_CTR_ADM
-   false,	// Rol_INS_ADM
-   true,	// Rol_SYS_ADM
+   [Rol_UNK    ] = false,
+   [Rol_GST    ] = false,
+   [Rol_USR    ] = false,
+   [Rol_STD    ] = true,
+   [Rol_NET    ] = false,
+   [Rol_TCH    ] = true,
+   [Rol_DEG_ADM] = false,
+   [Rol_CTR_ADM] = false,
+   [Rol_INS_ADM] = false,
+   [Rol_SYS_ADM] = true,
   };
 
 /*****************************************************************************/

@@ -350,13 +350,13 @@ const char *Sco_GetDBStrFromScope (Hie_Level_t Scope)
   {
    static const char *Sco_ScopeDB[Hie_NUM_LEVELS] =
      {
-      "Unk",	// Hie_UNK
-      "Sys",	// Hie_SYS
-      "Cty",	// Hie_CTY
-      "Ins",	// Hie_INS
-      "Ctr",	// Hie_CTR
-      "Deg",	// Hie_DEG
-      "Crs",	// Hie_CRS
+      [Hie_UNK] = "Unk",
+      [Hie_SYS] = "Sys",
+      [Hie_CTY] = "Cty",
+      [Hie_INS] = "Ins",
+      [Hie_CTR] = "Ctr",
+      [Hie_DEG] = "Deg",
+      [Hie_CRS] = "Crs",
      };
 
    if (Scope >= Hie_NUM_LEVELS)

@@ -101,37 +101,36 @@ const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
 
 static const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
-   "",			// Usr_LIST_UNKNOWN
-   "th.svg",		// Usr_LIST_AS_CLASS_PHOTO
-   "list-ol.svg",	// Usr_LIST_AS_LISTING
+   [Usr_LIST_UNKNOWN       ] = "",
+   [Usr_LIST_AS_CLASS_PHOTO] = "th.svg",
+   [Usr_LIST_AS_LISTING    ] = "list-ol.svg",
   };
-
 
 static const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
   {
-   NULL,		// Rol_UNK
-   "SEL_UNSEL_GSTS",	// Rol_GST
-   NULL,		// Rol_USR
-   "SEL_UNSEL_STDS",	// Rol_STD
-   "SEL_UNSEL_NETS",	// Rol_NET
-   "SEL_UNSEL_TCHS",	// Rol_TCH
-   NULL,		// Rol_DEG_ADM
-   NULL,		// Rol_CTR_ADM
-   NULL,		// Rol_INS_ADM
-   NULL,		// Rol_SYS_ADM
+   [Rol_UNK    ] = NULL,
+   [Rol_GST    ] = "SEL_UNSEL_GSTS",
+   [Rol_USR    ] = NULL,
+   [Rol_STD    ] = "SEL_UNSEL_STDS",
+   [Rol_NET    ] = "SEL_UNSEL_NETS",
+   [Rol_TCH    ] = "SEL_UNSEL_TCHS",
+   [Rol_DEG_ADM] = NULL,
+   [Rol_CTR_ADM] = NULL,
+   [Rol_INS_ADM] = NULL,
+   [Rol_SYS_ADM] = NULL,
   };
 static const char *Usr_ParamUsrCod[Rol_NUM_ROLES] =
   {
-   "UsrCodAll",	// Rol_UNK (here means all users)
-   "UsrCodGst",	// Rol_GST
-   NULL,	// Rol_USR
-   "UsrCodStd",	// Rol_STD
-   "UsrCodNET",	// Rol_NET
-   "UsrCodTch",	// Rol_TCH
-   NULL,	// Rol_DEG_ADM
-   NULL,	// Rol_CTR_ADM
-   NULL,	// Rol_INS_ADM
-   NULL,	// Rol_SYS_ADM
+   [Rol_UNK    ] = "UsrCodAll",	//  here means all users
+   [Rol_GST    ] = "UsrCodGst",
+   [Rol_USR    ] = NULL,
+   [Rol_STD    ] = "UsrCodStd",
+   [Rol_NET    ] = "UsrCodNET",
+   [Rol_TCH    ] = "UsrCodTch",
+   [Rol_DEG_ADM] = NULL,
+   [Rol_CTR_ADM] = NULL,
+   [Rol_INS_ADM] = NULL,
+   [Rol_SYS_ADM] = NULL,
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7

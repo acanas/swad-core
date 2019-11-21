@@ -890,8 +890,8 @@ static void Svy_GetListSurveys (void)
    char *SubQuery[Hie_NUM_LEVELS];
    static const char *OrderBySubQuery[Svy_NUM_ORDERS] =
      {
-      "StartTime DESC,EndTime DESC,Title DESC",	// Svy_ORDER_BY_START_DATE
-      "EndTime DESC,StartTime DESC,Title DESC",	// Svy_ORDER_BY_END_DATE
+      [Svy_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,Title DESC",
+      [Svy_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,Title DESC",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

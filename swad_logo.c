@@ -73,13 +73,13 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
   {
    static const char *HieIcon[Hie_NUM_LEVELS] =
      {
-      "sitemap.svg",		// Hie_UNK, not applicable here
-      "sitemap.svg",		// Hie_SYS, not applicable here
-      "sitemap.svg",		// Hie_CTY, not applicable here
-      "university.svg",		// Hie_INS
-      "building.svg",		// Hie_CTR
-      "graduation-cap.svg",	// Hie_DEG
-      "sitemap.svg",		// Hie_CRS, not applicable here
+      [Hie_UNK] = "sitemap.svg",	// not applicable here
+      [Hie_SYS] = "sitemap.svg",	// not applicable here
+      [Hie_CTY] = "sitemap.svg",	// not applicable here
+      [Hie_INS] = "university.svg",
+      [Hie_CTR] = "building.svg",
+      [Hie_DEG] = "graduation-cap.svg",
+      [Hie_CRS] = "sitemap.svg",	// not applicable here
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
