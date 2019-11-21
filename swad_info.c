@@ -50,19 +50,19 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/*************************** Public constants ********************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
+const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES] =
   {
-   Cfg_CRS_INFO_INTRODUCTION,
-   Cfg_CRS_INFO_TEACHING_GUIDE,
-   Cfg_CRS_INFO_LECTURES,
-   Cfg_CRS_INFO_PRACTICALS,
-   Cfg_CRS_INFO_BIBLIOGRAPHY,
-   Cfg_CRS_INFO_FAQ,
-   Cfg_CRS_INFO_LINKS,
-   Cfg_CRS_INFO_ASSESSMENT,
+   [Inf_INTRODUCTION  ] = ActSeeCrsInf,
+   [Inf_TEACHING_GUIDE] = ActSeeTchGui,
+   [Inf_LECTURES      ] = ActSeeSylLec,
+   [Inf_PRACTICALS    ] = ActSeeSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActSeeBib,
+   [Inf_FAQ           ] = ActSeeFAQ,
+   [Inf_LINKS         ] = ActSeeCrsLnk,
+   [Inf_ASSESSMENT    ] = ActSeeAss,
   };
 
 /*****************************************************************************/
@@ -73,210 +73,178 @@ const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+static const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
+  {
+   [Inf_INTRODUCTION  ] = Cfg_CRS_INFO_INTRODUCTION,
+   [Inf_TEACHING_GUIDE] = Cfg_CRS_INFO_TEACHING_GUIDE,
+   [Inf_LECTURES      ] = Cfg_CRS_INFO_LECTURES,
+   [Inf_PRACTICALS    ] = Cfg_CRS_INFO_PRACTICALS,
+   [Inf_BIBLIOGRAPHY  ] = Cfg_CRS_INFO_BIBLIOGRAPHY,
+   [Inf_FAQ           ] = Cfg_CRS_INFO_FAQ,
+   [Inf_LINKS         ] = Cfg_CRS_INFO_LINKS,
+   [Inf_ASSESSMENT    ] = Cfg_CRS_INFO_ASSESSMENT,
+  };
+
 /* Functions to write forms in course edition (FAQ, links, etc.) */
-void (*Inf_FormsForEditionTypes[Inf_NUM_INFO_SOURCES])(Inf_InfoSrc_t InfoSrc) =
+static void (*Inf_FormsForEditionTypes[Inf_NUM_INFO_SOURCES])(Inf_InfoSrc_t InfoSrc) =
   {
-   NULL,
-   Inf_FormToEnterIntegratedEditor,
-   Inf_FormToEnterPlainTextEditor,
-   Inf_FormToEnterRichTextEditor,
-   Inf_FormToSendPage,
-   Inf_FormToSendURL,
+   [Inf_INFO_SRC_NONE      ] = NULL,
+   [Inf_INFO_SRC_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
+   [Inf_INFO_SRC_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
+   [Inf_INFO_SRC_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
+   [Inf_INFO_SRC_PAGE      ] = Inf_FormToSendPage,
+   [Inf_INFO_SRC_URL       ] = Inf_FormToSendURL,
   };
 
-const char *Inf_NamesInDBForInfoSrc[Inf_NUM_INFO_SOURCES] =
+static const char *Inf_NamesInDBForInfoSrc[Inf_NUM_INFO_SOURCES] =
   {
-   "none",
-   "editor",
-   "plain_text",
-   "rich_text",
-   "page",
-   "URL",
-  };
-const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES] =
-  {
-   ActSeeCrsInf,
-   ActSeeTchGui,
-   ActSeeSylLec,
-   ActSeeSylPra,
-   ActSeeBib,
-   ActSeeFAQ,
-   ActSeeCrsLnk,
-   ActSeeAss,
-  };
-const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_INFO_TYPES] =
-  {
-   ActEdiCrsInf,
-   ActEdiTchGui,
-   ActEdiSylLec,
-   ActEdiSylPra,
-   ActEdiBib,
-   ActEdiFAQ,
-   ActEdiCrsLnk,
-   ActEdiAss,
-  };
-const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_INFO_TYPES] =
-  {
-   ActChgFrcReaCrsInf,
-   ActChgFrcReaTchGui,
-   ActChgFrcReaSylLec,
-   ActChgFrcReaSylPra,
-   ActChgFrcReaBib,
-   ActChgFrcReaFAQ,
-   ActChgFrcReaCrsLnk,
-   ActChgFrcReaAss,
-  };
-const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_INFO_TYPES] =
-  {
-   ActChgHavReaCrsInf,
-   ActChgHavReaTchGui,
-   ActChgHavReaSylLec,
-   ActChgHavReaSylPra,
-   ActChgHavReaBib,
-   ActChgHavReaFAQ,
-   ActChgHavReaCrsLnk,
-   ActChgHavReaAss,
-  };
-const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_INFO_TYPES] =
-  {
-   ActSelInfSrcCrsInf,
-   ActSelInfSrcTchGui,
-   ActSelInfSrcSylLec,
-   ActSelInfSrcSylPra,
-   ActSelInfSrcBib,
-   ActSelInfSrcFAQ,
-   ActSelInfSrcCrsLnk,
-   ActSelInfSrcAss,
-  };
-const Act_Action_t Inf_ActionsInfo[Inf_NUM_INFO_SOURCES][Inf_NUM_INFO_TYPES] =
-  {
-   {
-    ActUnk,
-    ActUnk,
-    ActUnk,
-    ActUnk,
-    ActUnk,
-    ActUnk,
-    ActUnk,
-    ActUnk,
-   },
-   {
-    ActEditorCrsInf,
-    ActEditorTchGui,
-    ActEditorSylLec,
-    ActEditorSylPra,
-    ActEditorBib,
-    ActEditorFAQ,
-    ActEditorCrsLnk,
-    ActEditorAss,
-   },
-   {
-    ActPlaTxtEdiCrsInf,
-    ActPlaTxtEdiTchGui,
-    ActPlaTxtEdiSylLec,
-    ActPlaTxtEdiSylPra,
-    ActPlaTxtEdiBib,
-    ActPlaTxtEdiFAQ,
-    ActPlaTxtEdiCrsLnk,
-    ActPlaTxtEdiAss,
-   },
-   {
-    ActRchTxtEdiCrsInf,
-    ActRchTxtEdiTchGui,
-    ActRchTxtEdiSylLec,
-    ActRchTxtEdiSylPra,
-    ActRchTxtEdiBib,
-    ActRchTxtEdiFAQ,
-    ActRchTxtEdiCrsLnk,
-    ActRchTxtEdiAss,
-   },
-   {
-    ActRcvPagCrsInf,
-    ActRcvPagTchGui,
-    ActRcvPagSylLec,
-    ActRcvPagSylPra,
-    ActRcvPagBib,
-    ActRcvPagFAQ,
-    ActRcvPagCrsLnk,
-    ActRcvPagAss,
-   },
-   {
-    ActRcvURLCrsInf,
-    ActRcvURLTchGui,
-    ActRcvURLSylLec,
-    ActRcvURLSylPra,
-    ActRcvURLBib,
-    ActRcvURLFAQ,
-    ActRcvURLCrsLnk,
-    ActRcvURLAss,
-   }
+   [Inf_INFO_SRC_NONE      ] = "none",
+   [Inf_INFO_SRC_EDITOR    ] = "editor",
+   [Inf_INFO_SRC_PLAIN_TEXT] = "plain_text",
+   [Inf_INFO_SRC_RICH_TEXT ] = "rich_text",
+   [Inf_INFO_SRC_PAGE      ] = "page",
+   [Inf_INFO_SRC_URL       ] = "URL",
   };
 
-const Act_Action_t Inf_ActionsEditorInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_INFO_TYPES] =
   {
-   ActEditorCrsInf,
-   ActEditorTchGui,
-   ActEditorSylLec,
-   ActEditorSylPra,
-   ActEditorBib,
-   ActEditorFAQ,
-   ActEditorCrsLnk,
-   ActEditorAss,
+   [Inf_INTRODUCTION  ] = ActEdiCrsInf,
+   [Inf_TEACHING_GUIDE] = ActEdiTchGui,
+   [Inf_LECTURES      ] = ActEdiSylLec,
+   [Inf_PRACTICALS    ] = ActEdiSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActEdiBib,
+   [Inf_FAQ           ] = ActEdiFAQ,
+   [Inf_LINKS         ] = ActEdiCrsLnk,
+   [Inf_ASSESSMENT    ] = ActEdiAss,
   };
-const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_INFO_TYPES] =
+
+static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_INFO_TYPES] =
   {
-   ActRcvPlaTxtCrsInf,
-   ActRcvPlaTxtTchGui,
-   ActRcvPlaTxtSylLec,
-   ActRcvPlaTxtSylPra,
-   ActRcvPlaTxtBib,
-   ActRcvPlaTxtFAQ,
-   ActRcvPlaTxtCrsLnk,
-   ActRcvPlaTxtAss,
+   [Inf_INTRODUCTION  ] = ActChgFrcReaCrsInf,
+   [Inf_TEACHING_GUIDE] = ActChgFrcReaTchGui,
+   [Inf_LECTURES      ] = ActChgFrcReaSylLec,
+   [Inf_PRACTICALS    ] = ActChgFrcReaSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActChgFrcReaBib,
+   [Inf_FAQ           ] = ActChgFrcReaFAQ,
+   [Inf_LINKS         ] = ActChgFrcReaCrsLnk,
+   [Inf_ASSESSMENT    ] = ActChgFrcReaAss,
   };
-const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_INFO_TYPES] =
+
+static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_INFO_TYPES] =
   {
-   ActRcvRchTxtCrsInf,
-   ActRcvRchTxtTchGui,
-   ActRcvRchTxtSylLec,
-   ActRcvRchTxtSylPra,
-   ActRcvRchTxtBib,
-   ActRcvRchTxtFAQ,
-   ActRcvRchTxtCrsLnk,
-   ActRcvRchTxtAss,
+   [Inf_INTRODUCTION  ] = ActChgHavReaCrsInf,
+   [Inf_TEACHING_GUIDE] = ActChgHavReaTchGui,
+   [Inf_LECTURES      ] = ActChgHavReaSylLec,
+   [Inf_PRACTICALS    ] = ActChgHavReaSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActChgHavReaBib,
+   [Inf_FAQ           ] = ActChgHavReaFAQ,
+   [Inf_LINKS         ] = ActChgHavReaCrsLnk,
+   [Inf_ASSESSMENT    ] = ActChgHavReaAss,
   };
-const Act_Action_t Inf_ActionsRcvPagBibEvEtc[Inf_NUM_INFO_TYPES] =
+
+static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_INFO_TYPES] =
   {
-   ActRcvPagCrsInf,
-   ActRcvPagTchGui,
-   ActRcvPagSylLec,
-   ActRcvPagSylPra,
-   ActRcvPagBib,
-   ActRcvPagFAQ,
-   ActRcvPagCrsLnk,
-   ActRcvPagAss,
+   [Inf_INTRODUCTION  ] = ActSelInfSrcCrsInf,
+   [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
+   [Inf_LECTURES      ] = ActSelInfSrcSylLec,
+   [Inf_PRACTICALS    ] = ActSelInfSrcSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActSelInfSrcBib,
+   [Inf_FAQ           ] = ActSelInfSrcFAQ,
+   [Inf_LINKS         ] = ActSelInfSrcCrsLnk,
+   [Inf_ASSESSMENT    ] = ActSelInfSrcAss,
   };
-const Act_Action_t In_ActionsRcvURLBibEvEtc[Inf_NUM_INFO_TYPES] =
+
+static const Act_Action_t Inf_ActionsInfo[Inf_NUM_INFO_SOURCES][Inf_NUM_INFO_TYPES] =
   {
-   ActRcvURLCrsInf,
-   ActRcvURLTchGui,
-   ActRcvURLSylLec,
-   ActRcvURLSylPra,
-   ActRcvURLBib,
-   ActRcvURLFAQ,
-   ActRcvURLCrsLnk,
-   ActRcvURLAss,
+   [Inf_INFO_SRC_NONE      ][Inf_INTRODUCTION  ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_TEACHING_GUIDE] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_LECTURES      ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_PRACTICALS    ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_BIBLIOGRAPHY  ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_FAQ           ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_LINKS         ] = ActUnk,
+   [Inf_INFO_SRC_NONE      ][Inf_ASSESSMENT    ] = ActUnk,
+
+   [Inf_INFO_SRC_EDITOR    ][Inf_INTRODUCTION  ] = ActEditorCrsInf,
+   [Inf_INFO_SRC_EDITOR    ][Inf_TEACHING_GUIDE] = ActEditorTchGui,
+   [Inf_INFO_SRC_EDITOR    ][Inf_LECTURES      ] = ActEditorSylLec,
+   [Inf_INFO_SRC_EDITOR    ][Inf_PRACTICALS    ] = ActEditorSylPra,
+   [Inf_INFO_SRC_EDITOR    ][Inf_BIBLIOGRAPHY  ] = ActEditorBib,
+   [Inf_INFO_SRC_EDITOR    ][Inf_FAQ           ] = ActEditorFAQ,
+   [Inf_INFO_SRC_EDITOR    ][Inf_LINKS         ] = ActEditorCrsLnk,
+   [Inf_INFO_SRC_EDITOR    ][Inf_ASSESSMENT    ] = ActEditorAss,
+
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_INTRODUCTION  ] = ActPlaTxtEdiCrsInf,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_TEACHING_GUIDE] = ActPlaTxtEdiTchGui,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_LECTURES      ] = ActPlaTxtEdiSylLec,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_PRACTICALS    ] = ActPlaTxtEdiSylPra,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_BIBLIOGRAPHY  ] = ActPlaTxtEdiBib,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_FAQ           ] = ActPlaTxtEdiFAQ,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_LINKS         ] = ActPlaTxtEdiCrsLnk,
+   [Inf_INFO_SRC_PLAIN_TEXT][Inf_ASSESSMENT    ] = ActPlaTxtEdiAss,
+
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_INTRODUCTION  ] = ActRchTxtEdiCrsInf,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_TEACHING_GUIDE] = ActRchTxtEdiTchGui,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_LECTURES      ] = ActRchTxtEdiSylLec,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_PRACTICALS    ] = ActRchTxtEdiSylPra,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_BIBLIOGRAPHY  ] = ActRchTxtEdiBib,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_FAQ           ] = ActRchTxtEdiFAQ,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_LINKS         ] = ActRchTxtEdiCrsLnk,
+   [Inf_INFO_SRC_RICH_TEXT ][Inf_ASSESSMENT    ] = ActRchTxtEdiAss,
+
+   [Inf_INFO_SRC_PAGE      ][Inf_INTRODUCTION  ] = ActRcvPagCrsInf,
+   [Inf_INFO_SRC_PAGE      ][Inf_TEACHING_GUIDE] = ActRcvPagTchGui,
+   [Inf_INFO_SRC_PAGE      ][Inf_LECTURES      ] = ActRcvPagSylLec,
+   [Inf_INFO_SRC_PAGE      ][Inf_PRACTICALS    ] = ActRcvPagSylPra,
+   [Inf_INFO_SRC_PAGE      ][Inf_BIBLIOGRAPHY  ] = ActRcvPagBib,
+   [Inf_INFO_SRC_PAGE      ][Inf_FAQ           ] = ActRcvPagFAQ,
+   [Inf_INFO_SRC_PAGE      ][Inf_LINKS         ] = ActRcvPagCrsLnk,
+   [Inf_INFO_SRC_PAGE      ][Inf_ASSESSMENT    ] = ActRcvPagAss,
+
+   [Inf_INFO_SRC_URL       ][Inf_INTRODUCTION  ] = ActRcvURLCrsInf,
+   [Inf_INFO_SRC_URL       ][Inf_TEACHING_GUIDE] = ActRcvURLTchGui,
+   [Inf_INFO_SRC_URL       ][Inf_LECTURES      ] = ActRcvURLSylLec,
+   [Inf_INFO_SRC_URL       ][Inf_PRACTICALS    ] = ActRcvURLSylPra,
+   [Inf_INFO_SRC_URL       ][Inf_BIBLIOGRAPHY  ] = ActRcvURLBib,
+   [Inf_INFO_SRC_URL       ][Inf_FAQ           ] = ActRcvURLFAQ,
+   [Inf_INFO_SRC_URL       ][Inf_LINKS         ] = ActRcvURLCrsLnk,
+   [Inf_INFO_SRC_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
   };
-const char *Inf_NamesInDBForInfoType[Inf_NUM_INFO_TYPES] =
+
+static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_INFO_TYPES] =
   {
-   "intro",		// TODO: Change this to "introduction"!
-   "description",	// TODO: Change this to "guide"!
-   "theory",		// TODO: Change this to "lectures"!
-   "practices",		// TODO: Change this to "practicals"!
-   "bibliography",
-   "FAQ",
-   "links",
-   "assessment",
+   [Inf_INTRODUCTION  ] = ActRcvPlaTxtCrsInf,
+   [Inf_TEACHING_GUIDE] = ActRcvPlaTxtTchGui,
+   [Inf_LECTURES      ] = ActRcvPlaTxtSylLec,
+   [Inf_PRACTICALS    ] = ActRcvPlaTxtSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActRcvPlaTxtBib,
+   [Inf_FAQ           ] = ActRcvPlaTxtFAQ,
+   [Inf_LINKS         ] = ActRcvPlaTxtCrsLnk,
+   [Inf_ASSESSMENT    ] = ActRcvPlaTxtAss,
+  };
+
+static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_INFO_TYPES] =
+  {
+   [Inf_INTRODUCTION  ] = ActRcvRchTxtCrsInf,
+   [Inf_TEACHING_GUIDE] = ActRcvRchTxtTchGui,
+   [Inf_LECTURES      ] = ActRcvRchTxtSylLec,
+   [Inf_PRACTICALS    ] = ActRcvRchTxtSylPra,
+   [Inf_BIBLIOGRAPHY  ] = ActRcvRchTxtBib,
+   [Inf_FAQ           ] = ActRcvRchTxtFAQ,
+   [Inf_LINKS         ] = ActRcvRchTxtCrsLnk,
+   [Inf_ASSESSMENT    ] = ActRcvRchTxtAss,
+  };
+
+static const char *Inf_NamesInDBForInfoType[Inf_NUM_INFO_TYPES] =
+  {
+   [Inf_INTRODUCTION  ] = "intro",		// TODO: Change this to "introduction"!
+   [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "guide"!
+   [Inf_LECTURES      ] = "theory",		// TODO: Change this to "lectures"!
+   [Inf_PRACTICALS    ] = "practices",		// TODO: Change this to "practicals"!
+   [Inf_BIBLIOGRAPHY  ] = "bibliography",
+   [Inf_FAQ           ] = "FAQ",
+   [Inf_LINKS         ] = "links",
+   [Inf_ASSESSMENT    ] = "assessment",
   };
 
 /***** Help *****/

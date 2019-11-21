@@ -51,7 +51,7 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/****************************** Internal types *******************************/
+/******************************* Private types *******************************/
 /*****************************************************************************/
 
 typedef enum
@@ -61,19 +61,19 @@ typedef enum
   } Brw_HeadOrFoot_t;
 
 /*****************************************************************************/
-/**************************** Internal constants *****************************/
+/***************************** Private constants *****************************/
 /*****************************************************************************/
 
-const char *Mrk_HeadOrFootStr[2] =	// Names of columns in database, so don't change!
- {
-  "Header",
-  "Footer",
- };
+static const char *Mrk_HeadOrFootStr[2] =	// Names of columns in database, so don't change!
+  {
+   "Header",
+   "Footer",
+  };
 
 #define Mrk_MAX_BYTES_IN_CELL_CONTENT	1024	// Cell of a table containing one or several user's IDs
 
 /*****************************************************************************/
-/*************************** Internal prototypes *****************************/
+/**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks);

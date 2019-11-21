@@ -56,14 +56,6 @@ extern struct Globals Gbl;
 #define Gam_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
 #define Gam_MAX_BYTES_ANSWER	((Gam_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-// #define Gam_MAX_BYTES_LIST_ANSWER_TYPES	(Gam_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-
-const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
-  {
-   "unique_choice",
-   "multiple_choice",
-  };
-
 #define Gam_MAX_ANSWERS_PER_QUESTION	10
 
 #define Gam_MAX_SELECTED_QUESTIONS		1000

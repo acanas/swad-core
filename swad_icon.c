@@ -45,21 +45,21 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/******************************** Private constants **************************/
+/******************************** Public constants ***************************/
 /*****************************************************************************/
 
 #define Ico_MAX_BYTES_ICON_SET_ID 16
 
 const char *Ico_IconSetId[Ico_NUM_ICON_SETS] =
   {
-   "awesome",
-   "nuvola",
+   [Ico_ICON_SET_AWESOME] = "awesome",
+   [Ico_ICON_SET_NUVOLA ] = "nuvola",
   };
 
 const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
   {
-   "Awesome",
-   "Nuvola",
+   [Ico_ICON_SET_AWESOME] = "Awesome",
+   [Ico_ICON_SET_NUVOLA ] = "Nuvola",
   };
 
 /*****************************************************************************/

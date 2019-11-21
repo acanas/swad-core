@@ -52,38 +52,38 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Internal constants ****************************/
+/***************************** Private constants *****************************/
 /*****************************************************************************/
 
-const char *Med_StringsTypeDB[Med_NUM_TYPES] =
+static const char *Med_StringsTypeDB[Med_NUM_TYPES] =
   {
-   "none",	// Med_NONE
-   "jpg",	// Med_JPG
-   "gif",	// Med_GIF
-   "mp4",	// Med_MP4
-   "webm",	// Med_WEBM
-   "ogg",	// Med_OGG
-   "youtube",	// Med_YOUTUBE
-   "embed",	// Med_EMBED
-   };
+   [Med_TYPE_NONE] = "none",
+   [Med_JPG      ] = "jpg",
+   [Med_GIF      ] = "gif",
+   [Med_MP4      ] = "mp4",
+   [Med_WEBM     ] = "webm",
+   [Med_OGG      ] = "ogg",
+   [Med_YOUTUBE  ] = "youtube",
+   [Med_EMBED    ] = "embed",
+  };
 
-const char *Med_Extensions[Med_NUM_TYPES] =
+static const char *Med_Extensions[Med_NUM_TYPES] =
   {
-   "",		// Med_NONE
-   "jpg",	// Med_JPG
-   "gif",	// Med_GIF
-   "mp4",	// Med_MP4
-   "webm",	// Med_WEBM
-   "ogg",	// Med_OGG
-   "",		// Med_YOUTUBE
-   "",		// Med_EMBED
+   [Med_TYPE_NONE] = "",
+   [Med_JPG      ] = "jpg",
+   [Med_GIF      ] = "gif",
+   [Med_MP4      ] = "mp4",
+   [Med_WEBM     ] = "webm",
+   [Med_OGG      ] = "ogg",
+   [Med_YOUTUBE  ] = "",
+   [Med_EMBED    ] = "",
    };
 
 #define Med_MAX_SIZE_GIF (5UL * 1024UL * 1024UL)	// 5 MiB
 #define Med_MAX_SIZE_MP4 (5UL * 1024UL * 1024UL)	// 5 MiB
 
 /*****************************************************************************/
-/****************************** Internal types *******************************/
+/******************************* Private types *******************************/
 /*****************************************************************************/
 
 #define Med_NUM_FORM_TYPES 4
@@ -113,11 +113,11 @@ struct MediaUploader
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/************************* Internal global variables *************************/
+/************************** Private global variables *************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Internal prototypes ***************************/
+/***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Med_ResetMediaExceptURLAndTitle (struct Media *Media);

@@ -45,31 +45,23 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/******************************* Public constants ****************************/
+/*****************************************************************************/
+
+const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
+  {
+   [Mnu_MENU_HORIZONTAL] = "ellipsis-h.svg",
+   [Mnu_MENU_VERTICAL  ] = "ellipsis-v.svg",
+  };
+
+/*****************************************************************************/
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
 #define MAX_MENU_ID 16
 
-const char *Mnu_MenuId[Mnu_NUM_MENUS] =
-  {
-   "horizontal",
-   "vertical",
-  };
-
-const char *Mnu_MenuNames[Mnu_NUM_MENUS] =
-  {
-   "Horizontal",
-   "Vertical",
-  };
-
-const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
-  {
-   "ellipsis-h.svg",
-   "ellipsis-v.svg",
-  };
-
 // Actions not initialized are 0 by default
-const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 		// TabUnk *******************
 		{

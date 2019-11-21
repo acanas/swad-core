@@ -113,10 +113,10 @@ void Lay_WriteStartOfPage (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   const char *LayoutMainZone[Mnu_NUM_MENUS] =
+   static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
-      "main_horizontal",	// Mnu_MENU_HORIZONTAL
-      "main_vertical",		// Mnu_MENU_VERTICAL
+      [Mnu_MENU_HORIZONTAL] = "main_horizontal",
+      [Mnu_MENU_VERTICAL  ] = "main_vertical",
      };
    Act_BrowserTab_t BrowserTab;
 
@@ -880,23 +880,23 @@ static void Lay_WritePageTopHeading (void)
    extern const char *The_ClassTagline[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
-   const char *ClassHeadRow1[The_NUM_THEMES] =
+   static const char *ClassHeadRow1[The_NUM_THEMES] =
      {
-      "HEAD_ROW_1_WHITE",	// The_THEME_WHITE
-      "HEAD_ROW_1_GREY",	// The_THEME_GREY
-      "HEAD_ROW_1_PURPLE",	// The_THEME_PURPLE
-      "HEAD_ROW_1_BLUE",	// The_THEME_BLUE
-      "HEAD_ROW_1_YELLOW",	// The_THEME_YELLOW
-      "HEAD_ROW_1_PINK",	// The_THEME_PINK
-      };
-   const char *ClassHeadRow2[The_NUM_THEMES] =
+      [The_THEME_WHITE ] = "HEAD_ROW_1_WHITE",
+      [The_THEME_GREY  ] = "HEAD_ROW_1_GREY",
+      [The_THEME_PURPLE] = "HEAD_ROW_1_PURPLE",
+      [The_THEME_BLUE  ] = "HEAD_ROW_1_BLUE",
+      [The_THEME_YELLOW] = "HEAD_ROW_1_YELLOW",
+      [The_THEME_PINK  ] = "HEAD_ROW_1_PINK",
+     };
+   static const char *ClassHeadRow2[The_NUM_THEMES] =
      {
-      "HEAD_ROW_2_WHITE",	// The_THEME_WHITE
-      "HEAD_ROW_2_GREY",	// The_THEME_GREY
-      "HEAD_ROW_2_PURPLE",	// The_THEME_PURPLE
-      "HEAD_ROW_2_BLUE",	// The_THEME_BLUE
-      "HEAD_ROW_2_YELLOW",	// The_THEME_YELLOW
-      "HEAD_ROW_2_PINK",	// The_THEME_PINK
+      [The_THEME_WHITE ] = "HEAD_ROW_2_WHITE",
+      [The_THEME_GREY  ] = "HEAD_ROW_2_GREY",
+      [The_THEME_PURPLE] = "HEAD_ROW_2_PURPLE",
+      [The_THEME_BLUE  ] = "HEAD_ROW_2_BLUE",
+      [The_THEME_YELLOW] = "HEAD_ROW_2_YELLOW",
+      [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
       };
 
    /***** Start header *****/

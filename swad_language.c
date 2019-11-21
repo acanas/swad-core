@@ -44,18 +44,18 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
-	{
-	"",	// Lan_LANGUAGE_UNKNOWN
-	"ca",	// Lan_LANGUAGE_CA
-	"de",	// Lan_LANGUAGE_DE
-	"en",	// Lan_LANGUAGE_EN
-	"es",	// Lan_LANGUAGE_ES
-	"fr",	// Lan_LANGUAGE_FR
-	"gn",	// Lan_LANGUAGE_GN
-	"it",	// Lan_LANGUAGE_IT
-	"pl",	// Lan_LANGUAGE_PL
-	"pt",	// Lan_LANGUAGE_PT
-	};
+  {
+   [Lan_LANGUAGE_UNKNOWN] = "",
+   [Lan_LANGUAGE_CA     ] = "ca",
+   [Lan_LANGUAGE_DE     ] = "de",
+   [Lan_LANGUAGE_EN     ] = "en",
+   [Lan_LANGUAGE_ES     ] = "es",
+   [Lan_LANGUAGE_FR     ] = "fr",
+   [Lan_LANGUAGE_GN     ] = "gn",
+   [Lan_LANGUAGE_IT     ] = "it",
+   [Lan_LANGUAGE_PL     ] = "pl",
+   [Lan_LANGUAGE_PT     ] = "pt",
+  };
 
 /*****************************************************************************/
 /****************************** Private constants ****************************/
