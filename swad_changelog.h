@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.76.4 (2019-11-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.76.5 (2019-11-22)"
 #define CSS_FILE		"swad19.74.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.76.5:  Nov 22, 2019	Code refactoring related to vectors. (246852 lines)
 	Version 19.76.4:  Nov 22, 2019	Code refactoring related to vectors. (246851 lines)
 	Version 19.76.3:  Nov 21, 2019	Code refactoring related to vectors. (246850 lines)
 	Version 19.76.2:  Nov 21, 2019	Code refactoring related to vectors. (246966 lines)

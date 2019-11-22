@@ -123,114 +123,114 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 
 const char *Txt_Course_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
-	"",
-	"Assignatura",
-	"Kurs",
-	"Course",
-	"Asignatura",
-	"Matière",
-	"Mbo'esyry",
-	"Corso",
-	"Kurs",
-	"Disciplina",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Assignatura",
+	[Lan_LANGUAGE_DE     ] = "Kurs",
+	[Lan_LANGUAGE_EN     ] = "Course",
+	[Lan_LANGUAGE_ES     ] = "Asignatura",
+	[Lan_LANGUAGE_FR     ] = "Matière",
+	[Lan_LANGUAGE_GN     ] = "Mbo'esyry",
+	[Lan_LANGUAGE_IT     ] = "Corso",
+	[Lan_LANGUAGE_PL     ] = "Kurs",
+	[Lan_LANGUAGE_PT     ] = "Disciplina",
 	};
 
 const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 {
+[Usr_SEX_UNKNOWN] =
 	{
-	// Usr_SEX_UNKNOWN
-	"",
-	"Estimat/da",
-	"Sehr geehrte/r",
-	"Dear",
-	"Estimado/a",
-	"Cher/Chère",
-	"Estimado/a",	// Okoteve traducción
-	"Egregio/a",
-	"Drogi",
-	"Prezado/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Estimat/da",
+	[Lan_LANGUAGE_DE     ] = "Sehr geehrte/r",
+	[Lan_LANGUAGE_EN     ] = "Dear",
+	[Lan_LANGUAGE_ES     ] = "Estimado/a",
+	[Lan_LANGUAGE_FR     ] = "Cher/Chère",
+	[Lan_LANGUAGE_GN     ] = "Estimado/a",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Egregio/a",
+	[Lan_LANGUAGE_PL     ] = "Drogi",
+	[Lan_LANGUAGE_PT     ] = "Prezado/a",
 	},
+[Usr_SEX_FEMALE] =
 	{
-	// Usr_SEX_FEMALE
-	"",
-	"Estimada",
-	"Sehr geehrte",
-	"Dear",
-	"Estimada",
-	"Chère",
-	"Estimada",	// Okoteve traducción
-	"Egregia",
-	"Drogi",
-	"Prezada",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Estimada",
+	[Lan_LANGUAGE_DE     ] = "Sehr geehrte",
+	[Lan_LANGUAGE_EN     ] = "Dear",
+	[Lan_LANGUAGE_ES     ] = "Estimada",
+	[Lan_LANGUAGE_FR     ] = "Chère",
+	[Lan_LANGUAGE_GN     ] = "Estimada",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Egregia",
+	[Lan_LANGUAGE_PL     ] = "Drogi",
+	[Lan_LANGUAGE_PT     ] = "Prezada",
 	},
+[Usr_SEX_MALE] =
 	{
-	// Usr_SEX_MALE
-	"",
-	"Estimat",
-	"Sehr geehrter",
-	"Dear",
-	"Estimado",
-	"Cher",
-	"Estimado",	// Okoteve traducción
-	"Egregio",
-	"Drogi",
-	"Prezado",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Estimat",
+	[Lan_LANGUAGE_DE     ] = "Sehr geehrter",
+	[Lan_LANGUAGE_EN     ] = "Dear",
+	[Lan_LANGUAGE_ES     ] = "Estimado",
+	[Lan_LANGUAGE_FR     ] = "Cher",
+	[Lan_LANGUAGE_GN     ] = "Estimado",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Egregio",
+	[Lan_LANGUAGE_PL     ] = "Drogi",
+	[Lan_LANGUAGE_PT     ] = "Prezado",
 	},
+[Usr_SEX_ALL] =
 	{
-	// Usr_SEX_ALL
-	"",
-	"Estimat/da",
-	"Sehr geehrte/r",
-	"Dear",
-	"Estimado/a",
-	"Cher/Chère",
-	"Estimado/a",	// Okoteve traducción
-	"Egregio/a",
-	"Drogi",
-	"Prezado/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Estimat/da",
+	[Lan_LANGUAGE_DE     ] = "Sehr geehrte/r",
+	[Lan_LANGUAGE_EN     ] = "Dear",
+	[Lan_LANGUAGE_ES     ] = "Estimado/a",
+	[Lan_LANGUAGE_FR     ] = "Cher/Chère",
+	[Lan_LANGUAGE_GN     ] = "Estimado/a",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Egregio/a",
+	[Lan_LANGUAGE_PL     ] = "Drogi",
+	[Lan_LANGUAGE_PT     ] = "Prezado/a",
 	}
 };
 
 const char *Txt_Forum_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
-	"",
-	"Fòrum",
-	"Forum",
-	"Forum",
-	"Foro",
-	"Forum",
-	"Foro",		// Okoteve traducción
-	"Forum",
-	"Forum",
-	"Fórum",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Fòrum",
+	[Lan_LANGUAGE_DE     ] = "Forum",
+	[Lan_LANGUAGE_EN     ] = "Forum",
+	[Lan_LANGUAGE_ES     ] = "Foro",
+	[Lan_LANGUAGE_FR     ] = "Forum",
+	[Lan_LANGUAGE_GN     ] = "Foro",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Forum",
+	[Lan_LANGUAGE_PL     ] = "Forum",
+	[Lan_LANGUAGE_PT     ] = "Fórum",
 	};
 
 const char *Txt_General_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &eacute; here
 	{
-	"",
-	"General",
-	"Allgemein",
-	"General",
-	"General",
-	"Général",
-	"General",	// Okoteve traducción
-	"Generale",
-	"Ogólne",
-	"Geral",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "General",
+	[Lan_LANGUAGE_DE     ] = "Allgemein",
+	[Lan_LANGUAGE_EN     ] = "General",
+	[Lan_LANGUAGE_ES     ] = "General",
+	[Lan_LANGUAGE_FR     ] = "Général",
+	[Lan_LANGUAGE_GN     ] = "General",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Generale",
+	[Lan_LANGUAGE_PL     ] = "Ogólne",
+	[Lan_LANGUAGE_PT     ] = "Geral",
 	};
 
 const char *Txt_Go_to_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &agrave; here
 	{
-	"",
-	"Anar a",
-	"Gehe zum",
-	"Go to",
-	"Ir a",
-	"Aller à",
-	"Ir a",		// Okoteve traducción
-	"Vai a",
-	"Idz do",
-	"Ir para",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Anar a",
+	[Lan_LANGUAGE_DE     ] = "Gehe zum",
+	[Lan_LANGUAGE_EN     ] = "Go to",
+	[Lan_LANGUAGE_ES     ] = "Ir a",
+	[Lan_LANGUAGE_FR     ] = "Aller à",
+	[Lan_LANGUAGE_GN     ] = "Ir a",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Vai a",
+	[Lan_LANGUAGE_PL     ] = "Idz do",
+	[Lan_LANGUAGE_PT     ] = "Ir para",
 	};
 
 const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML =	// Don't use HTML entities like &egrave; here
@@ -362,391 +362,391 @@ const char *Txt_Institutions_NO_HTML =
 
 const char *Txt_MSG_From_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
-	"",
-	"De",
-	"Von",
-	"From",
-	"De",
-	"De",
-	"De",	// Okoteve traducción
-	"Da",
-	"Od",
-	"De",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "De",
+	[Lan_LANGUAGE_DE     ] = "Von",
+	[Lan_LANGUAGE_EN     ] = "From",
+	[Lan_LANGUAGE_ES     ] = "De",
+	[Lan_LANGUAGE_FR     ] = "De",
+	[Lan_LANGUAGE_GN     ] = "De",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Da",
+	[Lan_LANGUAGE_PL     ] = "Od",
+	[Lan_LANGUAGE_PT     ] = "De",
 	};
 
 const char *Txt_Notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
-	"",
-	"Notificacions",
-	"Anmeldungen",
-	"Notifications",
-	"Notificaciones",
-	"Notifications",
-	"Momarandu",
-	"Notifiche",
-	"Powiadomienia",
-	"Notificações",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Notificacions",
+	[Lan_LANGUAGE_DE     ] = "Anmeldungen",
+	[Lan_LANGUAGE_EN     ] = "Notifications",
+	[Lan_LANGUAGE_ES     ] = "Notificaciones",
+	[Lan_LANGUAGE_FR     ] = "Notifications",
+	[Lan_LANGUAGE_GN     ] = "Momarandu",
+	[Lan_LANGUAGE_IT     ] = "Notifiche",
+	[Lan_LANGUAGE_PL     ] = "Powiadomienia",
+	[Lan_LANGUAGE_PT     ] = "Notificações",
 	};
 
 const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &ntilde; here.
 	{
-	"",
-	"Nova contrasenya",
-	"Neues Passwort",
-	"New password",
-	"Nueva contraseña",
-	"Nouveau mot de passe",
-	"Nueva contraseña",	// Okoteve traducción
-	"Nuova password",
-	"Nowe has&lstrok;o",
-	"Nova senha",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova contrasenya",
+	[Lan_LANGUAGE_DE     ] = "Neues Passwort",
+	[Lan_LANGUAGE_EN     ] = "New password",
+	[Lan_LANGUAGE_ES     ] = "Nueva contraseña",
+	[Lan_LANGUAGE_FR     ] = "Nouveau mot de passe",
+	[Lan_LANGUAGE_GN     ] = "Nueva contraseña",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova password",
+	[Lan_LANGUAGE_PL     ] = "Nowe has&lstrok;o",
+	[Lan_LANGUAGE_PT     ] = "Nova senha",
 	};
 
 const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &uuml; here.
 {
+[Ntf_EVENT_UNKNOWN] =
 	{
-	// Ntf_EVENT_UNKNOWN
-	"",
-	"Esdeveniment desconegut",
-	"Unbekannt Ereignis",
-	"Unknown event",
-	"Evento desconocido",
-	"Événement inconnu",
-	"Evento desconocido",			// Okoteve traducción
-	"Evento sconosciuto",
-	"Nieznane zdarzenia",
-	"Evento desconhecido",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Esdeveniment desconegut",
+	[Lan_LANGUAGE_DE     ] = "Unbekannt Ereignis",
+	[Lan_LANGUAGE_EN     ] = "Unknown event",
+	[Lan_LANGUAGE_ES     ] = "Evento desconocido",
+	[Lan_LANGUAGE_FR     ] = "Événement inconnu",
+	[Lan_LANGUAGE_GN     ] = "Evento desconocido",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Evento sconosciuto",
+	[Lan_LANGUAGE_PL     ] = "Nieznane zdarzenia",
+	[Lan_LANGUAGE_PT     ] = "Evento desconhecido",
 	},
+[Ntf_EVENT_DOCUMENT_FILE] =
 	{
-	// Ntf_EVENT_DOCUMENT_FILE
-	"",
-	"Nou document",
-	"Neue Dokumentdatei",
-	"New document file",
-	"Nuevo documento",
-	"Nouveau fichier de document",
-	"Nuevo documento",			// Okoteve traducción
-	"Nuovo documento",
-	"Nowy plik dokumentu",
-	"Novo arquivo de documento",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou document",
+	[Lan_LANGUAGE_DE     ] = "Neue Dokumentdatei",
+	[Lan_LANGUAGE_EN     ] = "New document file",
+	[Lan_LANGUAGE_ES     ] = "Nuevo documento",
+	[Lan_LANGUAGE_FR     ] = "Nouveau fichier de document",
+	[Lan_LANGUAGE_GN     ] = "Nuevo documento",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo documento",
+	[Lan_LANGUAGE_PL     ] = "Nowy plik dokumentu",
+	[Lan_LANGUAGE_PT     ] = "Novo arquivo de documento",
 	},
+[Ntf_EVENT_TEACHERS_FILE] =
 	{
-	// Ntf_EVENT_TEACHERS_FILE
-	"",
-	"Nou arxiu de professors",
-	"Neue Lehrer Datei",
-	"New teachers' file",
-	"Nuevo archivo de profesores",
-	"Nouveau fichier d'enseignants",
-	"Nuevo archivo de profesores",		// Okoteve traducción
-	"Nuovo file di professori",
-	"Nowy Nauczyciela plik",
-	"Novo arquivo dos professores",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou arxiu de professors",
+	[Lan_LANGUAGE_DE     ] = "Neue Lehrer Datei",
+	[Lan_LANGUAGE_EN     ] = "New teachers' file",
+	[Lan_LANGUAGE_ES     ] = "Nuevo archivo de profesores",
+	[Lan_LANGUAGE_FR     ] = "Nouveau fichier d'enseignants",
+	[Lan_LANGUAGE_GN     ] = "Nuevo archivo de profesores",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo file di professori",
+	[Lan_LANGUAGE_PL     ] = "Nowy Nauczyciela plik",
+	[Lan_LANGUAGE_PT     ] = "Novo arquivo dos professores",
 	},
+[Ntf_EVENT_SHARED_FILE] =
 	{
-	// Ntf_EVENT_SHARED_FILE
-	"",
-	"Nou arxiu compartit",
-	"Neue freigegebene Datei",
-	"New shared file",
-	"Nuevo archivo compartido",
-	"Nouveau fichier partagé",
-	"Nuevo archivo compartido",		// Okoteve traducción
-	"Nuovo file condiviso",
-	"Nowy Udostepniony plik",
-	"Novo arquivo compartilhado",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou arxiu compartit",
+	[Lan_LANGUAGE_DE     ] = "Neue freigegebene Datei",
+	[Lan_LANGUAGE_EN     ] = "New shared file",
+	[Lan_LANGUAGE_ES     ] = "Nuevo archivo compartido",
+	[Lan_LANGUAGE_FR     ] = "Nouveau fichier partagé",
+	[Lan_LANGUAGE_GN     ] = "Nuevo archivo compartido",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo file condiviso",
+	[Lan_LANGUAGE_PL     ] = "Nowy Udostepniony plik",
+	[Lan_LANGUAGE_PT     ] = "Novo arquivo compartilhado",
 	},
+[Ntf_EVENT_ASSIGNMENT] =
 	{
-	// Ntf_EVENT_ASSIGNMENT
-	"",
-	"Nova activitat",
-	"Neue Aufgabe",
-	"New assignment",
-	"Nueva actividad",
-	"Nouvelle activité",
-	"Nueva actividad",			// Okoteve traducción
-	"Nuova attività",
-	"Nowe zadania",
-	"Nova atividade",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova activitat",
+	[Lan_LANGUAGE_DE     ] = "Neue Aufgabe",
+	[Lan_LANGUAGE_EN     ] = "New assignment",
+	[Lan_LANGUAGE_ES     ] = "Nueva actividad",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle activité",
+	[Lan_LANGUAGE_GN     ] = "Nueva actividad",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova attività",
+	[Lan_LANGUAGE_PL     ] = "Nowe zadania",
+	[Lan_LANGUAGE_PT     ] = "Nova atividade",
 	},
+[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
 	{
-	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-	"",
-	"Nova convocatòria d'examen",
-	"Neue Aufrufe für Prüfung",
-	"New announcement of exam",
-	"Nueva convocatoria de examen",
-	"Nouvelle convocation à un examen",
-	"Nueva convocatoria de examen",		// Okoteve traducción
-	"Nuovo appello d'esame",
-	"Nowe ogloszenie egzaminu",
-	"Nova chamada para exame",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova convocatòria d'examen",
+	[Lan_LANGUAGE_DE     ] = "Neue Aufrufe für Prüfung",
+	[Lan_LANGUAGE_EN     ] = "New announcement of exam",
+	[Lan_LANGUAGE_ES     ] = "Nueva convocatoria de examen",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle convocation à un examen",
+	[Lan_LANGUAGE_GN     ] = "Nueva convocatoria de examen",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo appello d'esame",
+	[Lan_LANGUAGE_PL     ] = "Nowe ogloszenie egzaminu",
+	[Lan_LANGUAGE_PT     ] = "Nova chamada para exame",
 	},
+[Ntf_EVENT_MARKS_FILE] =
 	{
-	// Ntf_EVENT_MARKS_FILE
-	"",
-	"Nou fitxer de calificacions",
-	"Neue Datei mit Bewertung",
-	"New file with marks",
-	"Nuevo archivo de calificaciones",
-	"Nouveau fichier avec des notes",
-	"Nuevo archivo de calificaciones",	// Okoteve traducción
-	"Nuovo file con i risultati",
-	"Nowy plik ze znakami",
-	"Novo arquivo de notas",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou fitxer de calificacions",
+	[Lan_LANGUAGE_DE     ] = "Neue Datei mit Bewertung",
+	[Lan_LANGUAGE_EN     ] = "New file with marks",
+	[Lan_LANGUAGE_ES     ] = "Nuevo archivo de calificaciones",
+	[Lan_LANGUAGE_FR     ] = "Nouveau fichier avec des notes",
+	[Lan_LANGUAGE_GN     ] = "Nuevo archivo de calificaciones",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo file con i risultati",
+	[Lan_LANGUAGE_PL     ] = "Nowy plik ze znakami",
+	[Lan_LANGUAGE_PT     ] = "Novo arquivo de notas",
 	},
+[Ntf_EVENT_ENROLMENT_STD] =
 	{
-	// Ntf_EVENT_ENROLMENT_STD
-	"",
-	"Nova inscripció com a estudiant",
-	"New Einschreibung als Student",
-	"New enrolment as a student",
-	"Nueva inscripción como estudiante",
-	"Nouvelle inscriptionen tant qu'étudiant",
-	"Nueva inscripción como estudiante",			// Okoteve traducción
-	"Nuova iscrizione come studente",
-	"Nowe zapisy jako student",
-	"Nova inscrição como estudante",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova inscripció com a estudiant",
+	[Lan_LANGUAGE_DE     ] = "New Einschreibung als Student",
+	[Lan_LANGUAGE_EN     ] = "New enrolment as a student",
+	[Lan_LANGUAGE_ES     ] = "Nueva inscripción como estudiante",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle inscriptionen tant qu'étudiant",
+	[Lan_LANGUAGE_GN     ] = "Nueva inscripción como estudiante",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova iscrizione come studente",
+	[Lan_LANGUAGE_PL     ] = "Nowe zapisy jako student",
+	[Lan_LANGUAGE_PT     ] = "Nova inscrição como estudante",
 	},
+[Ntf_EVENT_ENROLMENT_TCH] =
 	{
-	// Ntf_EVENT_ENROLMENT_TCH
-	"",
-	"Nova inscripció com a professor/a",
-	"New Einschreibung als Lehrkraft",
-	"New enrolment as a teacher",
-	"Nueva inscripción como profesor/a",
-	"Nouvelle inscription en tant qu'enseignant",
-	"Nueva inscripción como profesor/a",			// Okoteve traducción
-	"Nuova iscrizione come professore/ssa",
-	"Nowe zapisy jako nauczyciel",
-	"Nova inscrição como professor/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova inscripció com a professor/a",
+	[Lan_LANGUAGE_DE     ] = "New Einschreibung als Lehrkraft",
+	[Lan_LANGUAGE_EN     ] = "New enrolment as a teacher",
+	[Lan_LANGUAGE_ES     ] = "Nueva inscripción como profesor/a",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle inscription en tant qu'enseignant",
+	[Lan_LANGUAGE_GN     ] = "Nueva inscripción como profesor/a",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova iscrizione come professore/ssa",
+	[Lan_LANGUAGE_PL     ] = "Nowe zapisy jako nauczyciel",
+	[Lan_LANGUAGE_PT     ] = "Nova inscrição como professor/a",
 	},
+[Ntf_EVENT_ENROLMENT_REQUEST] =
 	{
-	// Ntf_EVENT_ENROLMENT_REQUEST
-	"",
-	"Nova petició d'inscripció",
-	"New Registrierungsanforderung",
-	"New enrolment request",
-	"Nueva petición de inscripción",
-	"Nouvelle demande d'inscription",
-	"Nueva petición de inscripción",	// Okoteve traducción
-	"Nuova richiesta di iscrizione",
-	"Nowe prosby o rejestracji",
-	"Novo pedido de inscrição",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova petició d'inscripció",
+	[Lan_LANGUAGE_DE     ] = "New Registrierungsanforderung",
+	[Lan_LANGUAGE_EN     ] = "New enrolment request",
+	[Lan_LANGUAGE_ES     ] = "Nueva petición de inscripción",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle demande d'inscription",
+	[Lan_LANGUAGE_GN     ] = "Nueva petición de inscripción",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova richiesta di iscrizione",
+	[Lan_LANGUAGE_PL     ] = "Nowe prosby o rejestracji",
+	[Lan_LANGUAGE_PT     ] = "Novo pedido de inscrição",
 	},
+[Ntf_EVENT_TIMELINE_COMMENT] =
 	{
-	// Ntf_EVENT_TIMELINE_COMMENT
-	"",
-	"Nou comentari a un missatge social",
-	"Neue Kommentar zu soziale Beitrag",
-	"New comment to social post",
-	"Nuevo comentario a un mensaje social",
-	"Nouveau commentaire à message social",
-	"Nuevo comentario a un mensaje social",			// Okoteve traducción
-	"Nuovo commento a un post sociale",
-	"Nowy komentarz do post spoleczna",
-	"Novo comentário a um post sociais",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou comentari a un missatge social",
+	[Lan_LANGUAGE_DE     ] = "Neue Kommentar zu soziale Beitrag",
+	[Lan_LANGUAGE_EN     ] = "New comment to social post",
+	[Lan_LANGUAGE_ES     ] = "Nuevo comentario a un mensaje social",
+	[Lan_LANGUAGE_FR     ] = "Nouveau commentaire à message social",
+	[Lan_LANGUAGE_GN     ] = "Nuevo comentario a un mensaje social",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo commento a un post sociale",
+	[Lan_LANGUAGE_PL     ] = "Nowy komentarz do post spoleczna",
+	[Lan_LANGUAGE_PT     ] = "Novo comentário a um post sociais",
 	},
+[Ntf_EVENT_TIMELINE_FAV] =
 	{
-	// Ntf_EVENT_TIMELINE_FAV
-	"",
-	"Nou favorit a un missatge social",
-	"Neue Favorit zu soziale Beitrag",
-	"New favourite to social post",
-	"Nuevo favorito a un mensaje social",
-	"Nouveau favori à message social",
-	"Nuevo favorito a un mensaje social",			// Okoteve traducción
-	"Nuovo preferito a un post sociale",
-	"Nowy ulubiony do post spoleczna",
-	"Novo favorito a um post sociais",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou favorit a un missatge social",
+	[Lan_LANGUAGE_DE     ] = "Neue Favorit zu soziale Beitrag",
+	[Lan_LANGUAGE_EN     ] = "New favourite to social post",
+	[Lan_LANGUAGE_ES     ] = "Nuevo favorito a un mensaje social",
+	[Lan_LANGUAGE_FR     ] = "Nouveau favori à message social",
+	[Lan_LANGUAGE_GN     ] = "Nuevo favorito a un mensaje social",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo preferito a un post sociale",
+	[Lan_LANGUAGE_PL     ] = "Nowy ulubiony do post spoleczna",
+	[Lan_LANGUAGE_PT     ] = "Novo favorito a um post sociais",
 	},
+[Ntf_EVENT_TIMELINE_SHARE] =
 	{
-	// Ntf_EVENT_TIMELINE_SHARE
-	"",
-	"Nova compartició de missatge social",
-	"Neue gemeinsame Nutzung von soziale Beitrag",
-	"New sharing of social post",
-	"Nueva compartición de mensaje social",
-	"Nouveau partage de message social",
-	"Nueva compartición de mensaje social",			// Okoteve traducción
-	"Nuova condivisione di post sociale",
-	"Nowy podzial post spoleczna",
-	"Nova partilha de post sociais",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova compartició de missatge social",
+	[Lan_LANGUAGE_DE     ] = "Neue gemeinsame Nutzung von soziale Beitrag",
+	[Lan_LANGUAGE_EN     ] = "New sharing of social post",
+	[Lan_LANGUAGE_ES     ] = "Nueva compartición de mensaje social",
+	[Lan_LANGUAGE_FR     ] = "Nouveau partage de message social",
+	[Lan_LANGUAGE_GN     ] = "Nueva compartición de mensaje social",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova condivisione di post sociale",
+	[Lan_LANGUAGE_PL     ] = "Nowy podzial post spoleczna",
+	[Lan_LANGUAGE_PT     ] = "Nova partilha de post sociais",
 	},
+[Ntf_EVENT_TIMELINE_MENTION] =
 	{
-	// Ntf_EVENT_TIMELINE_MENTION
-	"",
-	"Nova menció",
-	"Neue Erwähnung",
-	"New mention",
-	"Nueva mención",
-	"Nouveau mention",
-	"Nueva mención",			// Okoteve traducción
-	"Nuovo menzione",
-	"Nowa wzmianka",
-	"Nova menção",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova menció",
+	[Lan_LANGUAGE_DE     ] = "Neue Erwähnung",
+	[Lan_LANGUAGE_EN     ] = "New mention",
+	[Lan_LANGUAGE_ES     ] = "Nueva mención",
+	[Lan_LANGUAGE_FR     ] = "Nouveau mention",
+	[Lan_LANGUAGE_GN     ] = "Nueva mención",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo menzione",
+	[Lan_LANGUAGE_PL     ] = "Nowa wzmianka",
+	[Lan_LANGUAGE_PT     ] = "Nova menção",
 	},
+[Ntf_EVENT_FOLLOWER] =
 	{
-	// Ntf_EVENT_FOLLOWER
-	"",
-	"Nou seguidor",
-	"Neue Anh&auml;nger",
-	"New follower",
-	"Nuevo seguidor",
-	"Nouveau suiveur",
-	"Nuevo seguidor",	// Okoteve traducción
-	"Nuovo follower",
-	"Nowy obserwuj&aogon;",
-	"Novo seguidor",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou seguidor",
+	[Lan_LANGUAGE_DE     ] = "Neue Anh&auml;nger",
+	[Lan_LANGUAGE_EN     ] = "New follower",
+	[Lan_LANGUAGE_ES     ] = "Nuevo seguidor",
+	[Lan_LANGUAGE_FR     ] = "Nouveau suiveur",
+	[Lan_LANGUAGE_GN     ] = "Nuevo seguidor",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo follower",
+	[Lan_LANGUAGE_PL     ] = "Nowy obserwuj&aogon;",
+	[Lan_LANGUAGE_PT     ] = "Novo seguidor",
 	},
+[Ntf_EVENT_FORUM_POST_COURSE] =
 	{
-	// Ntf_EVENT_FORUM_POST_COURSE
-	"",
-	"Novo comentari en un fòrum",
-	"Neue Nachricht in einem Forum",
-	"New post in a forum",
-	"Nuevo comentario en un foro",
-	"Nouveau post dans un forum",
-	"Nuevo comentario en un foro",		// Okoteve traducción
-	"Nuovo post in un forum",
-	"Nowy post na forum",
-	"Novo post em um fórum",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Novo comentari en un fòrum",
+	[Lan_LANGUAGE_DE     ] = "Neue Nachricht in einem Forum",
+	[Lan_LANGUAGE_EN     ] = "New post in a forum",
+	[Lan_LANGUAGE_ES     ] = "Nuevo comentario en un foro",
+	[Lan_LANGUAGE_FR     ] = "Nouveau post dans un forum",
+	[Lan_LANGUAGE_GN     ] = "Nuevo comentario en un foro",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo post in un forum",
+	[Lan_LANGUAGE_PL     ] = "Nowy post na forum",
+	[Lan_LANGUAGE_PT     ] = "Novo post em um fórum",
 	},
+[Ntf_EVENT_FORUM_REPLY] =
 	{
-	// Ntf_EVENT_FORUM_REPLY
-	"",
-	"Nova resposta en un fòrum",
-	"Neue Antwort in einem Forum",
-	"New reply in a forum",
-	"Nueva respuesta en un foro",
-	"Nouvelle réponse dans un forum",
-	"Nueva respuesta en un foro",		// Okoteve traducción
-	"Nuova risposta in un forum",
-	"Odpowiedz nowe na forum",
-	"Nova resposta em um fórum",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova resposta en un fòrum",
+	[Lan_LANGUAGE_DE     ] = "Neue Antwort in einem Forum",
+	[Lan_LANGUAGE_EN     ] = "New reply in a forum",
+	[Lan_LANGUAGE_ES     ] = "Nueva respuesta en un foro",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle réponse dans un forum",
+	[Lan_LANGUAGE_GN     ] = "Nueva respuesta en un foro",		// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova risposta in un forum",
+	[Lan_LANGUAGE_PL     ] = "Odpowiedz nowe na forum",
+	[Lan_LANGUAGE_PT     ] = "Nova resposta em um fórum",
 	},
+[Ntf_EVENT_NOTICE] =
 	{
-	// Ntf_EVENT_NOTICE
-	"",
-	"Nou avís",
-	"Neuen Ankündigungen",
-	"New notice",
-	"Nuevo aviso",
-	"Nouvel avis",
-	"Nuevo aviso",				// Okoteve traducción
-	"Nuovo avviso",
-	"Nowe obwieszczenie",
-	"Novo anúncio",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou avís",
+	[Lan_LANGUAGE_DE     ] = "Neuen Ankündigungen",
+	[Lan_LANGUAGE_EN     ] = "New notice",
+	[Lan_LANGUAGE_ES     ] = "Nuevo aviso",
+	[Lan_LANGUAGE_FR     ] = "Nouvel avis",
+	[Lan_LANGUAGE_GN     ] = "Nuevo aviso",				// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo avviso",
+	[Lan_LANGUAGE_PL     ] = "Nowe obwieszczenie",
+	[Lan_LANGUAGE_PT     ] = "Novo anúncio",
 	},
+[Ntf_EVENT_MESSAGE] =
 	{
-	// Ntf_EVENT_MESSAGE
-	"",
-	"Nou missatge",
-	"Neue Nachricht",
-	"New message",
-	"Nuevo mensaje",
-	"Nouveau message",
-	"Nuevo mensaje",			// Okoteve traducción
-	"Nuovo messaggio",
-	"Nowa wiadomosc",
-	"Nova mensagem",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nou missatge",
+	[Lan_LANGUAGE_DE     ] = "Neue Nachricht",
+	[Lan_LANGUAGE_EN     ] = "New message",
+	[Lan_LANGUAGE_ES     ] = "Nuevo mensaje",
+	[Lan_LANGUAGE_FR     ] = "Nouveau message",
+	[Lan_LANGUAGE_GN     ] = "Nuevo mensaje",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo messaggio",
+	[Lan_LANGUAGE_PL     ] = "Nowa wiadomosc",
+	[Lan_LANGUAGE_PT     ] = "Nova mensagem",
 	},
+[Ntf_EVENT_SURVEY] =		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 	{
-	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-	"",
-	"Nova enquesta",
-	"Neuer Umfrage",
-	"New survey",
-	"Nueva encuesta",
-	"Nouveau sondage",
-	"Nueva encuesta",			// Okoteve traducción
-	"Nuovo sondaggio",
-	"Nowe badania",
-	"Novo inqu&eacute;rito",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova enquesta",
+	[Lan_LANGUAGE_DE     ] = "Neuer Umfrage",
+	[Lan_LANGUAGE_EN     ] = "New survey",
+	[Lan_LANGUAGE_ES     ] = "Nueva encuesta",
+	[Lan_LANGUAGE_FR     ] = "Nouveau sondage",
+	[Lan_LANGUAGE_GN     ] = "Nueva encuesta",			// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuovo sondaggio",
+	[Lan_LANGUAGE_PL     ] = "Nowe badania",
+	[Lan_LANGUAGE_PT     ] = "Novo inqu&eacute;rito",
 	},
+[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
 	{
-	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
-	"",
-	"Nova inscripció com a professor/a no editor/a",
-	"New Einschreibung als nicht bearbeiteter Lehrkraft",
-	"New enrolment as a non-editing teacher",
-	"Nueva inscripción como profesor/a no editor/a",
-	"Nouvelle inscription en tant qu'enseignant/e non-éditeur/trice",
-	"Nueva inscripción como profesor/a no editor/a",	// Okoteve traducción
-	"Nuova iscrizione come professore/ssa non-editing",
-	"Nowe zapisy jako nauczyciel nie edytujacy",
-	"Nova inscrição como professor/a não editor/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Nova inscripció com a professor/a no editor/a",
+	[Lan_LANGUAGE_DE     ] = "New Einschreibung als nicht bearbeiteter Lehrkraft",
+	[Lan_LANGUAGE_EN     ] = "New enrolment as a non-editing teacher",
+	[Lan_LANGUAGE_ES     ] = "Nueva inscripción como profesor/a no editor/a",
+	[Lan_LANGUAGE_FR     ] = "Nouvelle inscription en tant qu'enseignant/e non-éditeur/trice",
+	[Lan_LANGUAGE_GN     ] = "Nueva inscripción como profesor/a no editor/a",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Nuova iscrizione come professore/ssa non-editing",
+	[Lan_LANGUAGE_PL     ] = "Nowe zapisy jako nauczyciel nie edytujacy",
+	[Lan_LANGUAGE_PT     ] = "Nova inscrição como professor/a não editor/a",
 	},
 };
 
 const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
-	"",
-	"Hi ha un nou esdeveniment en %s",
-	"Es ist eine neue Ereignis in %s",
-	"There is a new event in %s",
-	"Hay un nuevo evento en %s",
-	"Il y un nouvel événement dans %s",
-	"Hay un nuevo evento en %s",	// Okoteve traducción
-	"C'è un nuovo evento in %s",
-	"Jest nowe wydarzenie w %s",
-	"Existe um novo evento em %s",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Hi ha un nou esdeveniment en %s",
+	[Lan_LANGUAGE_DE     ] = "Es ist eine neue Ereignis in %s",
+	[Lan_LANGUAGE_EN     ] = "There is a new event in %s",
+	[Lan_LANGUAGE_ES     ] = "Hay un nuevo evento en %s",
+	[Lan_LANGUAGE_FR     ] = "Il y un nouvel événement dans %s",
+	[Lan_LANGUAGE_GN     ] = "Hay un nuevo evento en %s",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "C'è un nuovo evento in %s",
+	[Lan_LANGUAGE_PL     ] = "Jest nowe wydarzenie w %s",
+	[Lan_LANGUAGE_PT     ] = "Existe um novo evento em %s",
 	};
 
 const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Warning: it is very important to include %u and %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
-	"",
-	"Hi ha %u nous esdeveniments en %s",
-	"Es gibt %u neue Ereignisse in %s",
-	"There are %u new events in %s",
-	"Hay %u nuevos eventos en %s",
-	"Il y a %u nouveaux événements dans %s",
-	"Hay %u nuevos eventos en %s",	// Okoteve traducción
-	"Ci sono %u nuovi eventi in %s",
-	"Istnieje %u nowych wydarzen w %s",
-	"Há %u novos eventos em %s",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Hi ha %u nous esdeveniments en %s",
+	[Lan_LANGUAGE_DE     ] = "Es gibt %u neue Ereignisse in %s",
+	[Lan_LANGUAGE_EN     ] = "There are %u new events in %s",
+	[Lan_LANGUAGE_ES     ] = "Hay %u nuevos eventos en %s",
+	[Lan_LANGUAGE_FR     ] = "Il y a %u nouveaux événements dans %s",
+	[Lan_LANGUAGE_GN     ] = "Hay %u nuevos eventos en %s",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Ci sono %u nuovi eventi in %s",
+	[Lan_LANGUAGE_PL     ] = "Istnieje %u nowych wydarzen w %s",
+	[Lan_LANGUAGE_PT     ] = "Há %u novos eventos em %s",
 	};
 
 const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
-	"",
-	", professors",
-	", Lehrkräfte",
-	", teachers",
-	", profesores",
-	", enseignants",
-	", profesores",	// Okoteve traducción
-	", professori",
-	", nauczyciel",
-	", professores",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = ", professors",
+	[Lan_LANGUAGE_DE     ] = ", Lehrkräfte",
+	[Lan_LANGUAGE_EN     ] = ", teachers",
+	[Lan_LANGUAGE_ES     ] = ", profesores",
+	[Lan_LANGUAGE_FR     ] = ", enseignants",
+	[Lan_LANGUAGE_GN     ] = ", profesores",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = ", professori",
+	[Lan_LANGUAGE_PL     ] = ", nauczyciel",
+	[Lan_LANGUAGE_PT     ] = ", professores",
 	};
 
 const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
-	"",
-	"Si us plau, no respongui a aquest correu generat automàticament.",
-	"Bitte, antworten Sie nicht auf diese automatisch generierte E-Mail.",
-	"Please do not reply to this automatically generated email.",
-	"Por favor, no responda a este correo generado automáticamente.",
-	"S'il vous plaît, ne pas répondre à ce courrier électronique généré automatiquement.",
-	"Por favor, no responda a este correo generado automáticamente.",	// Okoteve traducción
-	"Per favore, non rispondere a questa email generata automaticamente.",
-	"Prosimy nie odpowiadac na to automatycznie wygenerowany email.",
-	"Por favor, não responda a este email gerado automaticamente.",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Si us plau, no respongui a aquest correu generat automàticament.",
+	[Lan_LANGUAGE_DE     ] = "Bitte, antworten Sie nicht auf diese automatisch generierte E-Mail.",
+	[Lan_LANGUAGE_EN     ] = "Please do not reply to this automatically generated email.",
+	[Lan_LANGUAGE_ES     ] = "Por favor, no responda a este correo generado automáticamente.",
+	[Lan_LANGUAGE_FR     ] = "S'il vous plaît, ne pas répondre à ce courrier électronique généré automatiquement.",
+	[Lan_LANGUAGE_GN     ] = "Por favor, no responda a este correo generado automáticamente.",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "Per favore, non rispondere a questa email generata automaticamente.",
+	[Lan_LANGUAGE_PL     ] = "Prosimy nie odpowiadac na to automatycznie wygenerowany email.",
+	[Lan_LANGUAGE_PT     ] = "Por favor, não responda a este email gerado automaticamente.",
 	 };
 
 const char *Txt_TAB_Messages_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
-	"",
-	"Missatges",
-	"Nachrichten",
-	"Messages",
-	"Mensajes",
-	"Messages",
-	"Marandu",
-	"Messaggi",
-	"Wiadomosci",
-	"Mensagens",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Missatges",
+	[Lan_LANGUAGE_DE     ] = "Nachrichten",
+	[Lan_LANGUAGE_EN     ] = "Messages",
+	[Lan_LANGUAGE_ES     ] = "Mensajes",
+	[Lan_LANGUAGE_FR     ] = "Messages",
+	[Lan_LANGUAGE_GN     ] = "Marandu",
+	[Lan_LANGUAGE_IT     ] = "Messaggi",
+	[Lan_LANGUAGE_PL     ] = "Wiadomosci",
+	[Lan_LANGUAGE_PT     ] = "Mensagens",
 	};
 
 const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML =	// Warning: it is very important to include %s and %u in the following sentences. Don't use HTML entities like &egrave; here
@@ -1147,57 +1147,57 @@ const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// 
 
 const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 {
+[Usr_SEX_UNKNOWN] =
 	{
-	// Usr_SEX_UNKNOWN
-	"",
-	"usuari/a",
-	"Benutzer",
-	"user",
-	"usuario/a",
-	"utilisateur/se",
-	"puruhára",
-	"utente",
-	"uzytkownika",
-	"utilizador/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "usuari/a",
+	[Lan_LANGUAGE_DE     ] = "Benutzer",
+	[Lan_LANGUAGE_EN     ] = "user",
+	[Lan_LANGUAGE_ES     ] = "usuario/a",
+	[Lan_LANGUAGE_FR     ] = "utilisateur/se",
+	[Lan_LANGUAGE_GN     ] = "puruhára",
+	[Lan_LANGUAGE_IT     ] = "utente",
+	[Lan_LANGUAGE_PL     ] = "uzytkownika",
+	[Lan_LANGUAGE_PT     ] = "utilizador/a",
 	},
+[Usr_SEX_FEMALE] =
 	{
-	// Usr_SEX_FEMALE
-	"",
-	"usuaria",
-	"Benutzer",
-	"user",
-	"usuaria",
-	"utilisateuse",
-	"usuaria",	// Okoteve traducción
-	"utente",
-	"uzytkownika",
-	"utilizadora",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "usuaria",
+	[Lan_LANGUAGE_DE     ] = "Benutzer",
+	[Lan_LANGUAGE_EN     ] = "user",
+	[Lan_LANGUAGE_ES     ] = "usuaria",
+	[Lan_LANGUAGE_FR     ] = "utilisateuse",
+	[Lan_LANGUAGE_GN     ] = "usuaria",	// Okoteve traducción
+	[Lan_LANGUAGE_IT     ] = "utente",
+	[Lan_LANGUAGE_PL     ] = "uzytkownika",
+	[Lan_LANGUAGE_PT     ] = "utilizadora",
 	},
+[Usr_SEX_MALE] =
 	{
-	// Usr_SEX_MALE
-	"",
-	"usuari",
-	"Benutzer",
-	"user",
-	"usuario",
-	"utilisateur",
-	"puruhára",
-	"utente",
-	"uzytkownika",
-	"utilizador",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "usuari",
+	[Lan_LANGUAGE_DE     ] = "Benutzer",
+	[Lan_LANGUAGE_EN     ] = "user",
+	[Lan_LANGUAGE_ES     ] = "usuario",
+	[Lan_LANGUAGE_FR     ] = "utilisateur",
+	[Lan_LANGUAGE_GN     ] = "puruhára",
+	[Lan_LANGUAGE_IT     ] = "utente",
+	[Lan_LANGUAGE_PL     ] = "uzytkownika",
+	[Lan_LANGUAGE_PT     ] = "utilizador",
 	},
+[Usr_SEX_ALL] =
 	{
-	// Usr_SEX_ALL
-	"",
-	"usuari/a",
-	"Benutzer",
-	"user",
-	"usuario/a",
-	"utilisateur/se",
-	"puruhára",
-	"utente",
-	"uzytkownika",
-	"utilizador/a",
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "usuari/a",
+	[Lan_LANGUAGE_DE     ] = "Benutzer",
+	[Lan_LANGUAGE_EN     ] = "user",
+	[Lan_LANGUAGE_ES     ] = "usuario/a",
+	[Lan_LANGUAGE_FR     ] = "utilisateur/se",
+	[Lan_LANGUAGE_GN     ] = "puruhára",
+	[Lan_LANGUAGE_IT     ] = "utente",
+	[Lan_LANGUAGE_PL     ] = "uzytkownika",
+	[Lan_LANGUAGE_PT     ] = "utilizador/a",
 	}
 };
 
