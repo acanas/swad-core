@@ -2650,7 +2650,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
    unsigned StartIndex;
    unsigned i;
    char *Ptr; // Pointer used to go through StrDst writing characters
-   unsigned long long LengthDst;
+   unsigned long long DstLength;
 
    /***** Checkings on boundary string *****/
    if (!LengthBoundaryStr)
@@ -2665,7 +2665,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 
    StartIndex = 0;
    NumBytesReadButNotDiscarded = 0;
-   LengthDst = 0;
+   DstLength = 0;
 
    for (;;)
      {
@@ -2709,7 +2709,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 	   }
 	}
 
-      if (LengthDst == MaxLength)
+      if (DstLength == MaxLength)
 	{
 	 if (StrDst != NULL)
 	    *Ptr = '\0';
@@ -2721,7 +2721,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 
       StartIndex = (StartIndex + 1) % LengthBoundaryStr;
       NumBytesReadButNotDiscarded--;
-      LengthDst++;
+      DstLength++;
      }
 
    return 0;	// Not reached
@@ -2912,14 +2912,14 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {
    char ErrorTxt[128];
-   size_t LengthSrc = strlen (Src);
+   size_t SrcLength = strlen (Src);
 
    /***** Check if buffer has enough space for source *****/
-   if (LengthSrc > DstSize)
+   if (SrcLength > DstSize)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
-	        "Trying to copy %lu chars into a %lu-chars buffer.",
-                LengthSrc,DstSize);
+	        "Trying to copy %zu chars into a %zu-chars buffer.",
+                SrcLength,DstSize);
       Lay_ShowErrorAndExit (ErrorTxt);
      }
 
@@ -2934,31 +2934,31 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
 
 void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   {
-   size_t LengthDst;
-   size_t LengthSrc;
+   size_t DstLength;
+   size_t SrcLength;
    size_t FreeSpace;
    char ErrorTxt[256];
 
    /***** Check if buffer has already overflowed *****/
-   LengthDst = strlen (Dst);
-   if (LengthDst > DstSize)
+   DstLength = strlen (Dst);
+   if (DstLength > DstSize)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "%lu-chars buffer has %lu chars!",
-                DstSize,LengthDst);
+                DstSize,DstLength);
       Lay_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Check if buffer has enough space for source *****/
-   // DstSize >= LengthDst ==> FreeSpace >= 0
-   FreeSpace = DstSize - LengthDst;
-   LengthSrc = strlen (Src);
-   if (FreeSpace < LengthSrc)
+   // DstSize >= DstLength ==> FreeSpace >= 0
+   FreeSpace = DstSize - DstLength;
+   SrcLength = strlen (Src);
+   if (FreeSpace < SrcLength)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
-	        "Trying to concatenate %lu chars to a %lu-chars buffer"
-	        " with free space for only %lu chars!",
-                LengthSrc,DstSize,FreeSpace);
+	        "Trying to concatenate %zu chars to a %zu-chars buffer"
+	        " with free space for only %zu chars!",
+                SrcLength,DstSize,FreeSpace);
       Lay_ShowErrorAndExit (ErrorTxt);
      }
 

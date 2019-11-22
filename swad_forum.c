@@ -1399,16 +1399,8 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            // TODO: Do only direct copy when Subject will be VARCHAR(255)
-            if (strlen (row[0]) > Ntf_MAX_BYTES_SUMMARY)
-              {
-               strncpy (SummaryStr,row[0],
-			Ntf_MAX_BYTES_SUMMARY);
-               SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
-              }
-            else
-	       Str_Copy (SummaryStr,row[0],
-			 Ntf_MAX_BYTES_SUMMARY);
+	    Str_Copy (SummaryStr,row[0],
+		      Ntf_MAX_BYTES_SUMMARY);
 
             /***** Copy content *****/
             if (GetContent)
