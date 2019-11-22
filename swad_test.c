@@ -61,22 +61,22 @@
 // strings are limited to Tst_MAX_BYTES_FEEDBACK_TYPE bytes
 const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
   {
-   "nothing",
-   "totalResult",
-   "eachResult",
-   "eachGoodBad",
-   "fullFeedback",
+   [Tst_FEEDBACK_NOTHING      ] = "nothing",
+   [Tst_FEEDBACK_TOTAL_RESULT ] = "totalResult",
+   [Tst_FEEDBACK_EACH_RESULT  ] = "eachResult",
+   [Tst_FEEDBACK_EACH_GOOD_BAD] = "eachGoodBad",
+   [Tst_FEEDBACK_FULL_FEEDBACK] = "fullFeedback",
   };
 
 // strings are limited to Tst_MAX_BYTES_ANSWER_TYPE characters
 const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
   {
-   "int",
-   "float",
-   "TF",
-   "uniqueChoice",
-   "multipleChoice",
-   "text",
+   [Tst_ANS_INT            ] = "int",
+   [Tst_ANS_FLOAT          ] = "float",
+   [Tst_ANS_TRUE_FALSE     ] = "TF",
+   [Tst_ANS_UNIQUE_CHOICE  ] = "uniqueChoice",
+   [Tst_ANS_MULTIPLE_CHOICE] = "multipleChoice",
+   [Tst_ANS_TEXT           ] = "text",
   };
 
 /*****************************************************************************/

@@ -53,248 +53,252 @@ extern struct Globals Gbl;
 
 const char *The_ThemeId[The_NUM_THEMES] =
   {
-   "white",
-   "grey",
-   "purple",
-   "blue",
-   "yellow",
-   "pink",
+   [The_THEME_WHITE ] = "white",
+   [The_THEME_GREY  ] = "grey",
+   [The_THEME_PURPLE] = "purple",
+   [The_THEME_BLUE  ] = "blue",
+   [The_THEME_YELLOW] = "yellow",
+   [The_THEME_PINK  ] = "pink",
   };
 
 const char *The_ThemeNames[The_NUM_THEMES] =
   {
-   "White",
-   "Grey",
-   "Purple",
-   "Blue",
-   "Yellow",
-   "Pink",
+   [The_THEME_WHITE ] = "White",
+   [The_THEME_GREY  ] = "Grey",
+   [The_THEME_PURPLE] = "Purple",
+   [The_THEME_BLUE  ] = "Blue",
+   [The_THEME_YELLOW] = "Yellow",
+   [The_THEME_PINK  ] = "Pink",
   };
 
 const char *The_TabOnBgColors[The_NUM_THEMES] =
   {
-   "TAB_ON_WHITE",
-   "TAB_ON_GREY",
-   "TAB_ON_PURPLE",
-   "TAB_ON_BLUE",
-   "TAB_ON_YELLOW",
-   "TAB_ON_PINK",
+   [The_THEME_WHITE ] = "TAB_ON_WHITE",
+   [The_THEME_GREY  ] = "TAB_ON_GREY",
+   [The_THEME_PURPLE] = "TAB_ON_PURPLE",
+   [The_THEME_BLUE  ] = "TAB_ON_BLUE",
+   [The_THEME_YELLOW] = "TAB_ON_YELLOW",
+   [The_THEME_PINK  ] = "TAB_ON_PINK",
   };
+
 const char *The_TabOffBgColors[The_NUM_THEMES] =
   {
-   "TAB_OFF_WHITE",
-   "TAB_OFF_GREY",
-   "TAB_OFF_PURPLE",
-   "TAB_OFF_BLUE",
-   "TAB_OFF_YELLOW",
-   "TAB_OFF_PINK",
+   [The_THEME_WHITE ] = "TAB_OFF_WHITE",
+   [The_THEME_GREY  ] = "TAB_OFF_GREY",
+   [The_THEME_PURPLE] = "TAB_OFF_PURPLE",
+   [The_THEME_BLUE  ] = "TAB_OFF_BLUE",
+   [The_THEME_YELLOW] = "TAB_OFF_YELLOW",
+   [The_THEME_PINK  ] = "TAB_OFF_PINK",
   };
 
 const char *The_ClassTagline[The_NUM_THEMES] =
   {
-   "BT_LINK TAGLINE_WHITE",
-   "BT_LINK TAGLINE_GREY",
-   "BT_LINK TAGLINE_PURPLE",
-   "BT_LINK TAGLINE_BLUE",
-   "BT_LINK TAGLINE_YELLOW",
-   "BT_LINK TAGLINE_PINK",
+   [The_THEME_WHITE ] = "BT_LINK TAGLINE_WHITE",
+   [The_THEME_GREY  ] = "BT_LINK TAGLINE_GREY",
+   [The_THEME_PURPLE] = "BT_LINK TAGLINE_PURPLE",
+   [The_THEME_BLUE  ] = "BT_LINK TAGLINE_BLUE",
+   [The_THEME_YELLOW] = "BT_LINK TAGLINE_YELLOW",
+   [The_THEME_PINK  ] = "BT_LINK TAGLINE_PINK",
   };
 
 const char *The_ClassNotif[The_NUM_THEMES] =
   {
-   "BT_LINK NOTIF_WHITE",
-   "BT_LINK NOTIF_GREY",
-   "BT_LINK NOTIF_PURPLE",
-   "BT_LINK NOTIF_BLUE",
-   "BT_LINK NOTIF_YELLOW",
-   "BT_LINK NOTIF_PINK",
+   [The_THEME_WHITE ] = "BT_LINK NOTIF_WHITE",
+   [The_THEME_GREY  ] = "BT_LINK NOTIF_GREY",
+   [The_THEME_PURPLE] = "BT_LINK NOTIF_PURPLE",
+   [The_THEME_BLUE  ] = "BT_LINK NOTIF_BLUE",
+   [The_THEME_YELLOW] = "BT_LINK NOTIF_YELLOW",
+   [The_THEME_PINK  ] = "BT_LINK NOTIF_PINK",
   };
 
 const char *The_ClassUsr[The_NUM_THEMES] =
   {
-   "USR_WHITE",
-   "USR_GREY",
-   "USR_PURPLE",
-   "USR_BLUE",
-   "USR_YELLOW",
-   "USR_PINK",
+   [The_THEME_WHITE ] = "USR_WHITE",
+   [The_THEME_GREY  ] = "USR_GREY",
+   [The_THEME_PURPLE] = "USR_PURPLE",
+   [The_THEME_BLUE  ] = "USR_BLUE",
+   [The_THEME_YELLOW] = "USR_YELLOW",
+   [The_THEME_PINK  ] = "USR_PINK",
   };
 
 const char *The_ClassBreadcrumb[The_NUM_THEMES] =
   {
-   "BC_WHITE",
-   "BC_GREY",
-   "BC_PURPLE",
-   "BC_BLUE",
-   "BC_YELLOW",
-   "BC_PINK",
+   [The_THEME_WHITE ] = "BC_WHITE",
+   [The_THEME_GREY  ] = "BC_GREY",
+   [The_THEME_PURPLE] = "BC_PURPLE",
+   [The_THEME_BLUE  ] = "BC_BLUE",
+   [The_THEME_YELLOW] = "BC_YELLOW",
+   [The_THEME_PINK  ] = "BC_PINK",
   };
 
 const char *The_ClassCourse[The_NUM_THEMES] =
   {
-   "MAIN_TITLE_WHITE",
-   "MAIN_TITLE_GREY",
-   "MAIN_TITLE_PURPLE",
-   "MAIN_TITLE_BLUE",
-   "MAIN_TITLE_YELLOW",
-   "MAIN_TITLE_PINK",
+   [The_THEME_WHITE ] = "MAIN_TITLE_WHITE",
+   [The_THEME_GREY  ] = "MAIN_TITLE_GREY",
+   [The_THEME_PURPLE] = "MAIN_TITLE_PURPLE",
+   [The_THEME_BLUE  ] = "MAIN_TITLE_BLUE",
+   [The_THEME_YELLOW] = "MAIN_TITLE_YELLOW",
+   [The_THEME_PINK  ] = "MAIN_TITLE_PINK",
   };
 
 const char *The_ClassTxtMenu[The_NUM_THEMES] =
   {
-   "MENU_TXT_WHITE",
-   "MENU_TXT_GREY",
-   "MENU_TXT_PURPLE",
-   "MENU_TXT_BLUE",
-   "MENU_TXT_YELLOW",
-   "MENU_TXT_PINK",
+   [The_THEME_WHITE ] = "MENU_TXT_WHITE",
+   [The_THEME_GREY  ] = "MENU_TXT_GREY",
+   [The_THEME_PURPLE] = "MENU_TXT_PURPLE",
+   [The_THEME_BLUE  ] = "MENU_TXT_BLUE",
+   [The_THEME_YELLOW] = "MENU_TXT_YELLOW",
+   [The_THEME_PINK  ] = "MENU_TXT_PINK",
   };
 
 const char *The_ClassTxtTabOff[The_NUM_THEMES] =
   {
-   "TAB_OFF_TXT_WHITE",
-   "TAB_OFF_TXT_GREY",
-   "TAB_OFF_TXT_PURPLE",
-   "TAB_OFF_TXT_BLUE",
-   "TAB_OFF_TXT_YELLOW",
-   "TAB_OFF_TXT_PINK",
+   [The_THEME_WHITE ] = "TAB_OFF_TXT_WHITE",
+   [The_THEME_GREY  ] = "TAB_OFF_TXT_GREY",
+   [The_THEME_PURPLE] = "TAB_OFF_TXT_PURPLE",
+   [The_THEME_BLUE  ] = "TAB_OFF_TXT_BLUE",
+   [The_THEME_YELLOW] = "TAB_OFF_TXT_YELLOW",
+   [The_THEME_PINK  ] = "TAB_OFF_TXT_PINK",
   };
 
 const char *The_ClassTxtTabOn[The_NUM_THEMES] =
   {
-   "TAB_ON_TXT_WHITE",
-   "TAB_ON_TXT_GREY",
-   "TAB_ON_TXT_PURPLE",
-   "TAB_ON_TXT_BLUE",
-   "TAB_ON_TXT_YELLOW",
-   "TAB_ON_TXT_PINK",
+   [The_THEME_WHITE ] = "TAB_ON_TXT_WHITE",
+   [The_THEME_GREY  ] = "TAB_ON_TXT_GREY",
+   [The_THEME_PURPLE] = "TAB_ON_TXT_PURPLE",
+   [The_THEME_BLUE  ] = "TAB_ON_TXT_BLUE",
+   [The_THEME_YELLOW] = "TAB_ON_TXT_YELLOW",
+   [The_THEME_PINK  ] = "TAB_ON_TXT_PINK",
   };
 
 const char *The_ClassTitleAction[The_NUM_THEMES] =
   {
-   "TITLE_ACTION_WHITE",
-   "TITLE_ACTION_GREY",
-   "TITLE_ACTION_PURPLE",
-   "TITLE_ACTION_BLUE",
-   "TITLE_ACTION_YELLOW",
-   "TITLE_ACTION_PINK",
+   [The_THEME_WHITE ] = "TITLE_ACTION_WHITE",
+   [The_THEME_GREY  ] = "TITLE_ACTION_GREY",
+   [The_THEME_PURPLE] = "TITLE_ACTION_PURPLE",
+   [The_THEME_BLUE  ] = "TITLE_ACTION_BLUE",
+   [The_THEME_YELLOW] = "TITLE_ACTION_YELLOW",
+   [The_THEME_PINK  ] = "TITLE_ACTION_PINK",
   };
 
 const char *The_ClassSubtitleAction[The_NUM_THEMES] =
   {
-   "SUBTITLE_ACTION_WHITE",
-   "SUBTITLE_ACTION_GREY",
-   "SUBTITLE_ACTION_PURPLE",
-   "SUBTITLE_ACTION_BLUE",
-   "SUBTITLE_ACTION_YELLOW",
-   "SUBTITLE_ACTION_PINK",
+   [The_THEME_WHITE ] = "SUBTITLE_ACTION_WHITE",
+   [The_THEME_GREY  ] = "SUBTITLE_ACTION_GREY",
+   [The_THEME_PURPLE] = "SUBTITLE_ACTION_PURPLE",
+   [The_THEME_BLUE  ] = "SUBTITLE_ACTION_BLUE",
+   [The_THEME_YELLOW] = "SUBTITLE_ACTION_YELLOW",
+   [The_THEME_PINK  ] = "SUBTITLE_ACTION_PINK",
   };
 
 const char *The_ClassTitle[The_NUM_THEMES] =
   {
-   "TITLE_WHITE",
-   "TITLE_GREY",
-   "TITLE_PURPLE",
-   "TITLE_BLUE",
-   "TITLE_YELLOW",
-   "TITLE_PINK",
+   [The_THEME_WHITE ] = "TITLE_WHITE",
+   [The_THEME_GREY  ] = "TITLE_GREY",
+   [The_THEME_PURPLE] = "TITLE_PURPLE",
+   [The_THEME_BLUE  ] = "TITLE_BLUE",
+   [The_THEME_YELLOW] = "TITLE_YELLOW",
+   [The_THEME_PINK  ] = "TITLE_PINK",
   };
 
 const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_IN_WHITE",
-   "BT_LINK FORM_IN_GREY",
-   "BT_LINK FORM_IN_PURPLE",
-   "BT_LINK FORM_IN_BLUE",
-   "BT_LINK FORM_IN_YELLOW",
-   "BT_LINK FORM_IN_PINK",
+   [The_THEME_WHITE ] = "BT_LINK FORM_IN_WHITE",
+   [The_THEME_GREY  ] = "BT_LINK FORM_IN_GREY",
+   [The_THEME_PURPLE] = "BT_LINK FORM_IN_PURPLE",
+   [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE",
+   [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW",
+   [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK",
   };
+
 const char *The_ClassFormInBox[The_NUM_THEMES] =
   {
-   "FORM_IN_WHITE",
-   "FORM_IN_GREY",
-   "FORM_IN_PURPLE",
-   "FORM_IN_BLUE",
-   "FORM_IN_YELLOW",
-   "FORM_IN_PINK",
+   [The_THEME_WHITE ] = "FORM_IN_WHITE",
+   [The_THEME_GREY  ] = "FORM_IN_GREY",
+   [The_THEME_PURPLE] = "FORM_IN_PURPLE",
+   [The_THEME_BLUE  ] = "FORM_IN_BLUE",
+   [The_THEME_YELLOW] = "FORM_IN_YELLOW",
+   [The_THEME_PINK  ] = "FORM_IN_PINK",
   };
 
 const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_IN_WHITE BOLD",
-   "BT_LINK FORM_IN_GREY BOLD",
-   "BT_LINK FORM_IN_PURPLE BOLD",
-   "BT_LINK FORM_IN_BLUE BOLD",
-   "BT_LINK FORM_IN_YELLOW BOLD",
-   "BT_LINK FORM_IN_PINK BOLD",
+   [The_THEME_WHITE ] = "BT_LINK FORM_IN_WHITE BOLD",
+   [The_THEME_GREY  ] = "BT_LINK FORM_IN_GREY BOLD",
+   [The_THEME_PURPLE] = "BT_LINK FORM_IN_PURPLE BOLD",
+   [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE BOLD",
+   [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW BOLD",
+   [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK BOLD",
   };
+
 const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
   {
-   "FORM_IN_WHITE BOLD",
-   "FORM_IN_GREY BOLD",
-   "FORM_IN_PURPLE BOLD",
-   "FORM_IN_BLUE BOLD",
-   "FORM_IN_YELLOW BOLD",
-   "FORM_IN_PINK BOLD",
+   [The_THEME_WHITE ] = "FORM_IN_WHITE BOLD",
+   [The_THEME_GREY  ] = "FORM_IN_GREY BOLD",
+   [The_THEME_PURPLE] = "FORM_IN_PURPLE BOLD",
+   [The_THEME_BLUE  ] = "FORM_IN_BLUE BOLD",
+   [The_THEME_YELLOW] = "FORM_IN_YELLOW BOLD",
+   [The_THEME_PINK  ] = "FORM_IN_PINK BOLD",
   };
 
 const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_IN_WHITE NOWRAP",
-   "BT_LINK FORM_IN_GREY NOWRAP",
-   "BT_LINK FORM_IN_PURPLE NOWRAP",
-   "BT_LINK FORM_IN_BLUE NOWRAP",
-   "BT_LINK FORM_IN_YELLOW NOWRAP",
-   "BT_LINK FORM_IN_PINK NOWRAP",
+   [The_THEME_WHITE ] = "BT_LINK FORM_IN_WHITE NOWRAP",
+   [The_THEME_GREY  ] = "BT_LINK FORM_IN_GREY NOWRAP",
+   [The_THEME_PURPLE] = "BT_LINK FORM_IN_PURPLE NOWRAP",
+   [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE NOWRAP",
+   [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW NOWRAP",
+   [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK NOWRAP",
   };
+
 const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
   {
-   "FORM_IN_WHITE NOWRAP",
-   "FORM_IN_GREY NOWRAP",
-   "FORM_IN_PURPLE NOWRAP",
-   "FORM_IN_BLUE NOWRAP",
-   "FORM_IN_YELLOW NOWRAP",
-   "FORM_IN_PINK NOWRAP",
+   [The_THEME_WHITE ] = "FORM_IN_WHITE NOWRAP",
+   [The_THEME_GREY  ] = "FORM_IN_GREY NOWRAP",
+   [The_THEME_PURPLE] = "FORM_IN_PURPLE NOWRAP",
+   [The_THEME_BLUE  ] = "FORM_IN_BLUE NOWRAP",
+   [The_THEME_YELLOW] = "FORM_IN_YELLOW NOWRAP",
+   [The_THEME_PINK  ] = "FORM_IN_PINK NOWRAP",
   };
 
 const char *The_ClassFormLinkOutBox[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_OUT_WHITE",
-   "BT_LINK FORM_OUT_GREY",
-   "BT_LINK FORM_OUT_PURPLE",
-   "BT_LINK FORM_OUT_BLUE",
-   "BT_LINK FORM_OUT_YELLOW",
-   "BT_LINK FORM_OUT_PINK",
+   [The_THEME_WHITE ] = "BT_LINK FORM_OUT_WHITE",
+   [The_THEME_GREY  ] = "BT_LINK FORM_OUT_GREY",
+   [The_THEME_PURPLE] = "BT_LINK FORM_OUT_PURPLE",
+   [The_THEME_BLUE  ] = "BT_LINK FORM_OUT_BLUE",
+   [The_THEME_YELLOW] = "BT_LINK FORM_OUT_YELLOW",
+   [The_THEME_PINK  ] = "BT_LINK FORM_OUT_PINK",
   };
 
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
   {
-   "FORM_OUT_WHITE",
-   "FORM_OUT_GREY",
-   "FORM_OUT_PURPLE",
-   "FORM_OUT_BLUE",
-   "FORM_OUT_YELLOW",
-   "FORM_OUT_PINK",
+   [The_THEME_WHITE ] = "FORM_OUT_WHITE",
+   [The_THEME_GREY  ] = "FORM_OUT_GREY",
+   [The_THEME_PURPLE] = "FORM_OUT_PURPLE",
+   [The_THEME_BLUE  ] = "FORM_OUT_BLUE",
+   [The_THEME_YELLOW] = "FORM_OUT_YELLOW",
+   [The_THEME_PINK  ] = "FORM_OUT_PINK",
   };
 
 const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES] =
   {
-   "BT_LINK FORM_OUT_WHITE BOLD",
-   "BT_LINK FORM_OUT_GREY BOLD",
-   "BT_LINK FORM_OUT_PURPLE BOLD",
-   "BT_LINK FORM_OUT_BLUE BOLD",
-   "BT_LINK FORM_OUT_YELLOW BOLD",
-   "BT_LINK FORM_OUT_PINK BOLD",
+   [The_THEME_WHITE ] = "BT_LINK FORM_OUT_WHITE BOLD",
+   [The_THEME_GREY  ] = "BT_LINK FORM_OUT_GREY BOLD",
+   [The_THEME_PURPLE] = "BT_LINK FORM_OUT_PURPLE BOLD",
+   [The_THEME_BLUE  ] = "BT_LINK FORM_OUT_BLUE BOLD",
+   [The_THEME_YELLOW] = "BT_LINK FORM_OUT_YELLOW BOLD",
+   [The_THEME_PINK  ] = "BT_LINK FORM_OUT_PINK BOLD",
   };
 
 const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
   {
-   "FORM_OUT_WHITE BOLD",
-   "FORM_OUT_GREY BOLD",
-   "FORM_OUT_PURPLE BOLD",
-   "FORM_OUT_BLUE BOLD",
-   "FORM_OUT_YELLOW BOLD",
-   "FORM_OUT_PINK BOLD",
+   [The_THEME_WHITE ] = "FORM_OUT_WHITE BOLD",
+   [The_THEME_GREY  ] = "FORM_OUT_GREY BOLD",
+   [The_THEME_PURPLE] = "FORM_OUT_PURPLE BOLD",
+   [The_THEME_BLUE  ] = "FORM_OUT_BLUE BOLD",
+   [The_THEME_YELLOW] = "FORM_OUT_YELLOW BOLD",
+   [The_THEME_PINK  ] = "FORM_OUT_PINK BOLD",
   };
 
 /*****************************************************************************/

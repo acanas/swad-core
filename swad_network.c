@@ -83,103 +83,103 @@ typedef enum
 
 #define Net_MAX_BYTES_NETWORK_NAME 32
 
-const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
+static const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
-   "www",		// Net_WWW
-   "500px",		// Net_500PX
-   "delicious",		// Net_DELICIOUS
-   "deviantart",	// Net_DEVIANTART
-   "diaspora",		// Net_DIASPORA
-   "edmodo",		// Net_EDMODO
-   "facebook",		// Net_FACEBOOK
-   "flickr",		// Net_FLICKR
-   "foursquare",	// Net_FOURSQUAREhub
-   "github",		// Net_GITHUB
-   "gnusocial",		// Net_GNU_SOCIAL
-   "googleplus",	// Net_GOOGLE_PLUS
-   "googlescholar",	// Net_GOOGLE_SCHOLAR
-   "identica",		// Net_IDENTICA
-   "instagram",		// Net_INSTAGRAM
-   "linkedin",		// Net_LINKEDIN
-   "orcid",		// Net_ORCID
-   "paperli",		// Net_PAPERLI
-   "pinterest",		// Net_PINTEREST
-   "researchgate",	// Net_RESEARCH_GATE
-   "researcherid",	// Net_RESEARCHERID
-   "scoopit",		// Net_SCOOPIT
-   "slideshare",	// Net_SLIDESHARE
-   "stackoverflow",	// Net_STACK_OVERFLOW
-   "storify",		// Net_STORIFY
-   "tumblr",		// Net_TUMBLR
-   "twitter",		// Net_TWITTER
-   "wikipedia",		// Net_WIKIPEDIA
-   "youtube",		// Net_YOUTUBE
+   [Net_WWW           ] = "www",
+   [Net_500PX         ] = "500px",
+   [Net_DELICIOUS     ] = "delicious",
+   [Net_DEVIANTART    ] = "deviantart",
+   [Net_DIASPORA      ] = "diaspora",
+   [Net_EDMODO        ] = "edmodo",
+   [Net_FACEBOOK      ] = "facebook",
+   [Net_FLICKR        ] = "flickr",
+   [Net_FOURSQUARE    ] = "foursquare",
+   [Net_GITHUB        ] = "github",
+   [Net_GNU_SOCIAL    ] = "gnusocial",
+   [Net_GOOGLE_PLUS   ] = "googleplus",
+   [Net_GOOGLE_SCHOLAR] = "googlescholar",
+   [Net_IDENTICA      ] = "identica",
+   [Net_INSTAGRAM     ] = "instagram",
+   [Net_LINKEDIN      ] = "linkedin",
+   [Net_ORCID         ] = "orcid",
+   [Net_PAPERLI       ] = "paperli",
+   [Net_PINTEREST     ] = "pinterest",
+   [Net_RESEARCH_GATE ] = "researchgate",
+   [Net_RESEARCHERID  ] = "researcherid",
+   [Net_SCOOPIT       ] = "scoopit",
+   [Net_SLIDESHARE    ] = "slideshare",
+   [Net_STACK_OVERFLOW] = "stackoverflow",
+   [Net_STORIFY       ] = "storify",
+   [Net_TUMBLR        ] = "tumblr",
+   [Net_TWITTER       ] = "twitter",
+   [Net_WIKIPEDIA     ] = "wikipedia",
+   [Net_YOUTUBE       ] = "youtube",
   };
 
-const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
+static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
-   "globe.svg",			// Net_WWW
-   "500px-brands.svg",		// Net_500PX
-   "delicious-brands.svg",	// Net_DELICIOUS
-   "deviantart-brands.svg",	// Net_DEVIANTART
-   "diaspora-brands.svg",	// Net_DIASPORA
-   "edmodo64x64.png",		// Net_EDMODO
-   "facebook-brands.svg",	// Net_FACEBOOK
-   "flickr-brands.svg",		// Net_FLICKR
-   "foursquare-brands.svg",	// Net_FOURSQUAREhub
-   "github-brands.svg",		// Net_GITHUB
-   "gnusocial64x64.png",	// Net_GNU_SOCIAL
-   "google-plus-brands.svg",	// Net_GOOGLE_PLUS
-   "googlescholar.svg",		// Net_GOOGLE_SCHOLAR
-   "identica64x64.png",		// Net_IDENTICA
-   "instagram-brands.svg",	// Net_INSTAGRAM
-   "linkedin-brands.svg",	// Net_LINKEDIN
-   "orcid64x64.png",		// Net_ORCID
-   "paperli64x64.png",		// Net_PAPERLI
-   "pinterest-brands.svg",	// Net_PINTEREST
-   "researchgate-brands.svg",	// Net_RESEARCH_GATE
-   "researcherid64x64.png",	// Net_RESEARCHERID
-   "scoopit64x64.png",		// Net_SCOOPIT
-   "slideshare-brands.svg",	// Net_SLIDESHARE
-   "stack-overflow-brands.svg",	// Net_STACK_OVERFLOW
-   "storify64x64.png",		// Net_STORIFY
-   "tumblr-brands.svg",		// Net_TUMBLR
-   "twitter-brands.svg",	// Net_TWITTER
-   "wikipedia-w-brands.svg",	// Net_WIKIPEDIA
-   "youtube-brands.svg",	// Net_YOUTUBE
+   [Net_WWW           ] = "globe.svg",
+   [Net_500PX         ] = "500px-brands.svg",
+   [Net_DELICIOUS     ] = "delicious-brands.svg",
+   [Net_DEVIANTART    ] = "deviantart-brands.svg",
+   [Net_DIASPORA      ] = "diaspora-brands.svg",
+   [Net_EDMODO        ] = "edmodo64x64.png",
+   [Net_FACEBOOK      ] = "facebook-brands.svg",
+   [Net_FLICKR        ] = "flickr-brands.svg",
+   [Net_FOURSQUARE    ] = "foursquare-brands.svg",
+   [Net_GITHUB        ] = "github-brands.svg",
+   [Net_GNU_SOCIAL    ] = "gnusocial64x64.png",
+   [Net_GOOGLE_PLUS   ] = "google-plus-brands.svg",
+   [Net_GOOGLE_SCHOLAR] = "googlescholar.svg",
+   [Net_IDENTICA      ] = "identica64x64.png",
+   [Net_INSTAGRAM     ] = "instagram-brands.svg",
+   [Net_LINKEDIN      ] = "linkedin-brands.svg",
+   [Net_ORCID         ] = "orcid64x64.png",
+   [Net_PAPERLI       ] = "paperli64x64.png",
+   [Net_PINTEREST     ] = "pinterest-brands.svg",
+   [Net_RESEARCH_GATE ] = "researchgate-brands.svg",
+   [Net_RESEARCHERID  ] = "researcherid64x64.png",
+   [Net_SCOOPIT       ] = "scoopit64x64.png",
+   [Net_SLIDESHARE    ] = "slideshare-brands.svg",
+   [Net_STACK_OVERFLOW] = "stack-overflow-brands.svg",
+   [Net_STORIFY       ] = "storify64x64.png",
+   [Net_TUMBLR        ] = "tumblr-brands.svg",
+   [Net_TWITTER       ] = "twitter-brands.svg",
+   [Net_WIKIPEDIA     ] = "wikipedia-w-brands.svg",
+   [Net_YOUTUBE       ] = "youtube-brands.svg",
   };
 
-const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
+static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
-   "WWW",		// Net_WWW
-   "500px",		// Net_500PX
-   "Delicious",		// Net_DELICIOUS
-   "DeviantArt",	// Net_DEVIANTART
-   "Diaspora",		// Net_DIASPORA
-   "Edmodo",		// Net_EDMODO
-   "Facebook",		// Net_FACEBOOK
-   "Flickr",		// Net_FLICKR
-   "Foursquare",	// Net_FOURSQUARE
-   "GitHub",		// Net_GITHUB
-   "GNU Social",	// Net_GNU_SOCIAL
-   "Google+",		// Net_GOOGLE_PLUS
-   "Google Scholar",	// Net_GOOGLE_SCHOLAR
-   "identi.ca",		// Net_IDENTICA
-   "Instagram",		// Net_INSTAGRAM
-   "LinkedIn",		// Net_LINKEDIN
-   "ORCID",		// Net_ORCID
-   "Paper.li",		// Net_PAPERLI
-   "Pinterest",		// Net_PINTEREST
-   "Research Gate",	// Net_RESEARCH_GATE
-   "ResearcherID",	// Net_RESEARCHERID
-   "Scoop.it",		// Net_SCOOPIT
-   "Slideshare",	// Net_SLIDESHARE
-   "Stack Overflow",	// Net_STACK_OVERFLOW
-   "Storify",		// Net_STORIFY
-   "Tumblr",		// Net_TUMBLR
-   "Twitter",		// Net_TWITTER
-   "Wikipedia",		// Net_WIKIPEDIA
-   "YouTube",		// Net_YOUTUBE
+   [Net_WWW           ] = "WWW",
+   [Net_500PX         ] = "500px",
+   [Net_DELICIOUS     ] = "Delicious",
+   [Net_DEVIANTART    ] = "DeviantArt",
+   [Net_DIASPORA      ] = "Diaspora",
+   [Net_EDMODO        ] = "Edmodo",
+   [Net_FACEBOOK      ] = "Facebook",
+   [Net_FLICKR        ] = "Flickr",
+   [Net_FOURSQUARE    ] = "Foursquare",
+   [Net_GITHUB        ] = "GitHub",
+   [Net_GNU_SOCIAL    ] = "GNU Social",
+   [Net_GOOGLE_PLUS   ] = "Google+",
+   [Net_GOOGLE_SCHOLAR] = "Google Scholar",
+   [Net_IDENTICA      ] = "identi.ca",
+   [Net_INSTAGRAM     ] = "Instagram",
+   [Net_LINKEDIN      ] = "LinkedIn",
+   [Net_ORCID         ] = "ORCID",
+   [Net_PAPERLI       ] = "Paper.li",
+   [Net_PINTEREST     ] = "Pinterest",
+   [Net_RESEARCH_GATE ] = "Research Gate",
+   [Net_RESEARCHERID  ] = "ResearcherID",
+   [Net_SCOOPIT       ] = "Scoop.it",
+   [Net_SLIDESHARE    ] = "Slideshare",
+   [Net_STACK_OVERFLOW] = "Stack Overflow",
+   [Net_STORIFY       ] = "Storify",
+   [Net_TUMBLR        ] = "Tumblr",
+   [Net_TWITTER       ] = "Twitter",
+   [Net_WIKIPEDIA     ] = "Wikipedia",
+   [Net_YOUTUBE       ] = "YouTube",
   };
 
 #define Net_MY_WEBS_ID	"my_webs_section"

@@ -53,7 +53,7 @@ extern struct Globals Gbl;
 
 #define Sta_SECONDS_IN_RECENT_LOG ((time_t) (Cfg_DAYS_IN_RECENT_LOG * 24UL * 60UL * 60UL))	// Remove entries in recent log oldest than this time
 
-const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
+static const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
   {
    [Sta_CLICKS_CRS_DETAILED_LIST   ] = 2,
 

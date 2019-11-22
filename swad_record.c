@@ -1659,13 +1659,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
      {
-      Hlp_USERS_Students_course_record_card,	// Rec_CRS_MY_RECORD_AS_STUDENT_FORM
-      Hlp_USERS_Students_course_record_card,	// Rec_CRS_MY_RECORD_AS_STUDENT_CHECK
-      Hlp_USERS_Students_course_record_card,	// Rec_CRS_LIST_ONE_RECORD
-      Hlp_USERS_Students_course_record_card,	// Rec_CRS_LIST_SEVERAL_RECORDS
-      NULL,					// Rec_CRS_PRINT_ONE_RECORD
-      NULL,					// Rec_CRS_PRINT_SEVERAL_RECORDS
-		// Rec_CRS_RECORD_PRINT
+      [Rec_CRS_MY_RECORD_AS_STUDENT_FORM ] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_MY_RECORD_AS_STUDENT_CHECK] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_LIST_ONE_RECORD           ] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_LIST_SEVERAL_RECORDS      ] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_PRINT_ONE_RECORD          ] = NULL,
+      [Rec_CRS_PRINT_SEVERAL_RECORDS     ] = NULL,
      };
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool ItsMe;
@@ -2148,30 +2147,30 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
-      Hlp_USERS_SignUp,				// Rec_SHA_SIGN_UP_IN_CRS_FORM
+      [Rec_SHA_SIGN_UP_IN_CRS_FORM    ] = Hlp_USERS_SignUp,
 
-      Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_FORM
+      [Rec_SHA_MY_RECORD_FORM         ] = Hlp_PROFILE_Record,
 
-      NULL,					// Rec_SHA_OTHER_EXISTING_USR_FORM
-      NULL,					// Rec_SHA_OTHER_NEW_USR_FORM
-      NULL,					// Rec_SHA_OTHER_USR_CHECK
+      [Rec_SHA_OTHER_EXISTING_USR_FORM] = NULL,
+      [Rec_SHA_OTHER_NEW_USR_FORM     ] = NULL,
+      [Rec_SHA_OTHER_USR_CHECK        ] = NULL,
 
-      NULL,					// Rec_SHA_RECORD_LIST
-      NULL,					// Rec_SHA_RECORD_PRINT
-      Hlp_START_Profiles_view_public_profile,	// Rec_SHA_RECORD_PUBLIC
+      [Rec_SHA_RECORD_LIST            ] = NULL,
+      [Rec_SHA_RECORD_PRINT           ] = NULL,
+      [Rec_SHA_RECORD_PUBLIC          ] = Hlp_START_Profiles_view_public_profile,
      };
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {
-      NULL,					// Rol_UNK
-      Hlp_USERS_Guests,				// Rol_GST
-      NULL,					// Rol_USR
-      Hlp_USERS_Students_shared_record_card,	// Rol_STD
-      Hlp_USERS_Teachers_shared_record_card,	// Rol_NET
-      Hlp_USERS_Teachers_shared_record_card,	// Rol_TCH
-      NULL,					// Rol_DEG_ADM
-      NULL,					// Rol_CTR_ADM
-      NULL,					// Rol_INS_ADM
-      NULL,					// Rol_SYS_ADM
+      [Rol_UNK    ] = NULL,
+      [Rol_GST    ] = Hlp_USERS_Guests,
+      [Rol_USR    ] = NULL,
+      [Rol_STD    ] = Hlp_USERS_Students_shared_record_card,
+      [Rol_NET    ] = Hlp_USERS_Teachers_shared_record_card,
+      [Rol_TCH    ] = Hlp_USERS_Teachers_shared_record_card,
+      [Rol_DEG_ADM] = NULL,
+      [Rol_CTR_ADM] = NULL,
+      [Rol_INS_ADM] = NULL,
+      [Rol_SYS_ADM] = NULL,
      };
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *ClassForm = "REC_DAT";

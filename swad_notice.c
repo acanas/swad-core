@@ -55,16 +55,16 @@ extern struct Globals Gbl;
 
 #define Not_MAX_CHARS_ON_NOTICE	40	// Maximum number of characters in notices (when not expanded)
 
-const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
+static const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
   {
-   148 + 50,	// Not_LIST_BRIEF_NOTICES
-   500 + 50,	// Not_LIST_FULL_NOTICES
+   [Not_LIST_BRIEF_NOTICES] = 148 + 50,
+   [Not_LIST_FULL_NOTICES ] = 500 + 50,
   };
 
-const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
+static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
   {
-    15,	// Not_LIST_BRIEF_NOTICES
-    50,	// Not_LIST_FULL_NOTICES
+   [Not_LIST_BRIEF_NOTICES] = 15,
+   [Not_LIST_FULL_NOTICES ] = 50,
   };
 
 /*****************************************************************************/

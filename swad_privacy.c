@@ -49,11 +49,11 @@ extern struct Globals Gbl;
 /***** Visibility (who can see user's photo or public profile) *****/
 const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
   {
-   "unknown",	// Pri_VISIBILITY_UNKNOWN
-   "user",	// Pri_VISIBILITY_USER
-   "course",	// Pri_VISIBILITY_COURSE
-   "system",	// Pri_VISIBILITY_SYSTEM
-   "world",	// Pri_VISIBILITY_WORLD
+   [Pri_VISIBILITY_UNKNOWN] = "unknown",
+   [Pri_VISIBILITY_USER   ] = "user",
+   [Pri_VISIBILITY_COURSE ] = "course",
+   [Pri_VISIBILITY_SYSTEM ] = "system",
+   [Pri_VISIBILITY_WORLD  ] = "world",
   };
 
 /*****************************************************************************/

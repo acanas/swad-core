@@ -77,6 +77,7 @@ typedef enum
    TL_TIMELINE_GBL,	// Show the timeline of the users follwed by me
   } TL_TimelineUsrOrGbl_t;
 
+#define TL_NUM_WHAT_TO_GET_FROM_TIMELINE 3
 typedef enum
   {
    TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
@@ -560,11 +561,11 @@ static void TL_BuildQueryToGetTimeline (char **Query,
    unsigned NumPub;
    long PubCod;
    long NotCod;
-   const unsigned MaxPubsToGet[3] =
+   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET_FROM_TIMELINE] =
      {
-      TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,	// TL_GET_ONLY_NEW_PUBS
-      TL_MAX_REC_PUBS_TO_GET_AND_SHOW,	// TL_GET_RECENT_TIMELINE
-      TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,	// TL_GET_ONLY_OLD_PUBS
+      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
+      [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [TL_GET_ONLY_OLD_PUBS  ] = TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
      };
 
    /***** Clear timeline for this session in database *****/
@@ -4929,12 +4930,12 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 
 static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub)
   {
-   const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
+   static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
      {
-      TL_TOP_MESSAGE_NONE,		// TL_PUB_UNKNOWN
-      TL_TOP_MESSAGE_NONE,		// TL_PUB_ORIGINAL_NOTE
-      TL_TOP_MESSAGE_SHARED,		// TL_PUB_SHARED_NOTE
-      TL_TOP_MESSAGE_COMMENTED,	// TL_PUB_COMMENT_TO_NOTE
+      [TL_PUB_UNKNOWN        ] = TL_TOP_MESSAGE_NONE,
+      [TL_PUB_ORIGINAL_NOTE  ] = TL_TOP_MESSAGE_NONE,
+      [TL_PUB_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
+      [TL_PUB_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
      };
 
    /***** Get code of publication (row[0]) *****/

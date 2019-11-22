@@ -113,7 +113,7 @@ struct TT_Cell *TT_TimeTable[TT_DAYS_PER_WEEK];
 
 /* Possible resolutions of the timetable in minutes */
 #define TT_NUM_RESOLUTIONS 3
-unsigned TT_MinutesPerInterval[TT_NUM_RESOLUTIONS] =
+static const unsigned TT_MinutesPerInterval[TT_NUM_RESOLUTIONS] =
   {
     5,	//  5 minutes
    15,	// 15 minutes	// Use 10 or 15 minutes (15 looks better), never both together
@@ -316,7 +316,7 @@ void TT_ShowClassTimeTable (void)
       [TT_MY_TIMETABLE      ] = Hlp_PROFILE_Timetable,
       [TT_TUTORING_TIMETABLE] = NULL,
      };
-   static Act_Action_t ActChgTT1stDay[TT_NUM_TIMETABLE_TYPES] =
+   static const Act_Action_t ActChgTT1stDay[TT_NUM_TIMETABLE_TYPES] =
      {
       [TT_COURSE_TIMETABLE  ] = ActChgCrsTT1stDay,
       [TT_MY_TIMETABLE      ] = ActChgMyTT1stDay,
@@ -418,7 +418,7 @@ static void TT_PutContextualIcons (void)
 
 static void TT_PutFormToSelectWhichGroupsToShow (void)
   {
-   Act_Action_t ActSeeTT[TT_NUM_TIMETABLE_TYPES] =
+   static const Act_Action_t ActSeeTT[TT_NUM_TIMETABLE_TYPES] =
      {
       ActSeeCrsTT,	// TT_COURSE_TIMETABLE
       ActSeeMyTT,	// TT_MY_TIMETABLE

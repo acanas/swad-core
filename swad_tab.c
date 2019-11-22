@@ -41,24 +41,6 @@ extern struct Globals Gbl;
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-const char *Tab_TabIcons[Tab_NUM_TABS] =
-  {
-   /* TabUnk */	NULL,
-   /* TabStr */ "home",
-   /* TabSys */	"sitemap",
-   /* TabCty */	"globe",
-   /* TabIns */	"university",
-   /* TabCtr */	"building",
-   /* TabDeg */	"graduation-cap",
-   /* TabCrs */	"list-ol",
-   /* TabAss */	"check",
-   /* TabFil */	"folder-open",
-   /* TabUsr */	"users",
-   /* TabMsg */	"envelope",
-   /* TabAna */	"chart-bar",
-   /* TabPrf */	"user",
-  };
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -88,14 +70,14 @@ void Tab_DrawTabs (void)
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
    bool ICanViewTab;
-   const char *ClassHeadRow3[The_NUM_THEMES] =
+   static const char *ClassHeadRow3[The_NUM_THEMES] =
      {
-      "HEAD_ROW_3_WHITE",	// The_THEME_WHITE
-      "HEAD_ROW_3_GREY",	// The_THEME_GREY
-      "HEAD_ROW_3_PURPLE",	// The_THEME_PURPLE
-      "HEAD_ROW_3_BLUE",	// The_THEME_BLUE
-      "HEAD_ROW_3_YELLOW",	// The_THEME_YELLOW
-      "HEAD_ROW_3_PINK",	// The_THEME_PINK
+      [The_THEME_WHITE ] = "HEAD_ROW_3_WHITE",
+      [The_THEME_GREY  ] = "HEAD_ROW_3_GREY",
+      [The_THEME_PURPLE] = "HEAD_ROW_3_PURPLE",
+      [The_THEME_BLUE  ] = "HEAD_ROW_3_BLUE",
+      [The_THEME_YELLOW] = "HEAD_ROW_3_YELLOW",
+      [The_THEME_PINK  ] = "HEAD_ROW_3_PINK",
       };
 
    /***** Start tabs container *****/
@@ -201,6 +183,24 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 
 static const char *Tab_GetIcon (Tab_Tab_t NumTab)
   {
+   static const char *Tab_TabIcons[Tab_NUM_TABS] =
+     {
+      [TabUnk] = NULL,
+      [TabStr] = "home",
+      [TabSys] = "sitemap",
+      [TabCty] = "globe",
+      [TabIns] = "university",
+      [TabCtr] = "building",
+      [TabDeg] = "graduation-cap",
+      [TabCrs] = "list-ol",
+      [TabAss] = "check",
+      [TabFil] = "folder-open",
+      [TabUsr] = "users",
+      [TabMsg] = "envelope",
+      [TabAna] = "chart-bar",
+      [TabPrf] = "user",
+     };
+
    if (NumTab < (Tab_Tab_t) 1 || NumTab >= Tab_NUM_TABS)
       return NULL;
 

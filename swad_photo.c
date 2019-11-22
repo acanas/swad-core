@@ -68,12 +68,12 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-const char *Pho_StrAvgPhotoDirs[Pho_NUM_AVERAGE_PHOTO_TYPES] =
+static const char *Pho_StrAvgPhotoDirs[Pho_NUM_AVERAGE_PHOTO_TYPES] =
   {
    Cfg_FOLDER_DEGREE_PHOTO_MEDIAN,
    Cfg_FOLDER_DEGREE_PHOTO_AVERAGE,
   };
-const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
+static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
   {
    Cfg_COMMAND_DEGREE_PHOTO_MEDIAN,
    Cfg_COMMAND_DEGREE_PHOTO_AVERAGE,

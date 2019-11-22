@@ -74,25 +74,25 @@
 
 const char *Usr_StringsSexIcons[Usr_NUM_SEXS] =
   {
-   "?",		// Usr_SEX_UNKNOWN
-   "&female;",	// Usr_SEX_FEMALE
-   "&male;",	// Usr_SEX_MALE
-   "*",		// Usr_SEX_ALL
+   [Usr_SEX_UNKNOWN] = "?",
+   [Usr_SEX_FEMALE ] = "&female;",
+   [Usr_SEX_MALE   ] = "&male;",
+   [Usr_SEX_ALL    ] = "*",
    };
 
 const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
   {
-   "unknown",	// Usr_SEX_UNKNOWN
-   "female",	// Usr_SEX_FEMALE
-   "male",	// Usr_SEX_MALE
-   "all",	// Usr_SEX_ALL
+   [Usr_SEX_UNKNOWN] = "unknown",
+   [Usr_SEX_FEMALE ] = "female",
+   [Usr_SEX_MALE   ] = "male",
+   [Usr_SEX_ALL    ] = "all",
    };
 
 const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
   {
-   "",			// Usr_LIST_UNKNOWN
-   "classphoto",	// Usr_LIST_AS_CLASS_PHOTO
-   "list",		// Usr_LIST_AS_LISTING
+   [Usr_LIST_UNKNOWN       ] = "",
+   [Usr_LIST_AS_CLASS_PHOTO] = "classphoto",
+   [Usr_LIST_AS_LISTING    ] = "list",
   };
 
 /*****************************************************************************/
@@ -8496,14 +8496,14 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
    extern const char *Txt_Continue;
    const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
-      NULL,			// Usr_OPTION_UNKNOWN
-      Txt_View_records,		// Usr_OPTION_RECORDS
-      Txt_View_homework,	// Usr_OPTION_HOMEWORK
-      Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
-      Txt_Send_message,		// Usr_OPTION_MESSAGE
-      Txt_Create_email_message,	// Usr_OPTION_EMAIL
-      Txt_Follow,		// Usr_OPTION_FOLLOW
-      Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
+      [Usr_OPTION_UNKNOWN   ] = NULL,
+      [Usr_OPTION_RECORDS   ] = Txt_View_records,
+      [Usr_OPTION_HOMEWORK  ] = Txt_View_homework,
+      [Usr_OPTION_ATTENDANCE] = Txt_View_attendance,
+      [Usr_OPTION_MESSAGE   ] = Txt_Send_message,
+      [Usr_OPTION_EMAIL     ] = Txt_Create_email_message,
+      [Usr_OPTION_FOLLOW    ] = Txt_Follow,
+      [Usr_OPTION_UNFOLLOW  ] = Txt_Unfollow,
      };
    Usr_ListUsrsOption_t Opt;
 

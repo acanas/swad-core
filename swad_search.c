@@ -116,20 +116,20 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
-	"",						// Sch_SEARCH_UNKNOWN
-	Txt_all,					// Sch_SEARCH_ALL
-	Txt_countries,					// Sch_SEARCH_COUNTRIES
-	Txt_institutions,				// Sch_SEARCH_INSTITS
-	Txt_centres,					// Sch_SEARCH_CENTRES
-	Txt_degrees,					// Sch_SEARCH_DEGREES
-	Txt_courses,					// Sch_SEARCH_COURSES
-	Txt_users[Usr_SEX_UNKNOWN],			// Sch_SEARCH_USERS
-	Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
-	Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_abc[Rol_GST][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
-	Txt_open_documents,				// Sch_SEARCH_OPEN_DOCUMENTS
-	Txt_documents_in_my_courses,			// Sch_SEARCH_DOCUM_IN_MY_COURSES
-	Txt_my_documents,				// Sch_SEARCH_MY_DOCUMENTS
+      [Sch_SEARCH_UNKNOWN            ] = "",
+      [Sch_SEARCH_ALL                ] = Txt_all,
+      [Sch_SEARCH_COUNTRIES          ] = Txt_countries,
+      [Sch_SEARCH_INSTITS            ] = Txt_institutions,
+      [Sch_SEARCH_CENTRES            ] = Txt_centres,
+      [Sch_SEARCH_DEGREES            ] = Txt_degrees,
+      [Sch_SEARCH_COURSES            ] = Txt_courses,
+      [Sch_SEARCH_USERS              ] = Txt_users[Usr_SEX_UNKNOWN],
+      [Sch_SEARCH_TEACHERS           ] = Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_UNKNOWN],
+      [Sch_SEARCH_STUDENTS           ] = Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],
+      [Sch_SEARCH_GUESTS             ] = Txt_ROLES_PLURAL_abc[Rol_GST][Usr_SEX_UNKNOWN],
+      [Sch_SEARCH_OPEN_DOCUMENTS     ] = Txt_open_documents,
+      [Sch_SEARCH_DOCUM_IN_MY_COURSES] = Txt_documents_in_my_courses,
+      [Sch_SEARCH_MY_DOCUMENTS       ] = Txt_my_documents,
      };
    Sch_WhatToSearch_t WhatToSearch;
    unsigned WTS;
@@ -200,22 +200,22 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
   {
-   unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
+   static unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
      {
-      0x000,	// Sch_SEARCH_UNKNOWN
-      0x3FF,	// Sch_SEARCH_ALL
-      0x3FF,	// Sch_SEARCH_COUNTRIES
-      0x3FF,	// Sch_SEARCH_INSTITS
-      0x3FF,	// Sch_SEARCH_CENTRES
-      0x3FF,	// Sch_SEARCH_DEGREES
-      0x3FF,	// Sch_SEARCH_COURSES
-      0x3FF,	// Sch_SEARCH_USERS
-      0x3FF,	// Sch_SEARCH_TEACHERS
-      0x3FF,	// Sch_SEARCH_STUDENTS
-      0x3FF,	// Sch_SEARCH_GUESTS
-      0x3FF,	// Sch_SEARCH_OPEN_DOCUMENTS
-      0x3FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
-      0x3FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
+      [Sch_SEARCH_UNKNOWN            ] = 0x000,
+      [Sch_SEARCH_ALL                ] = 0x3FF,
+      [Sch_SEARCH_COUNTRIES          ] = 0x3FF,
+      [Sch_SEARCH_INSTITS            ] = 0x3FF,
+      [Sch_SEARCH_CENTRES            ] = 0x3FF,
+      [Sch_SEARCH_DEGREES            ] = 0x3FF,
+      [Sch_SEARCH_COURSES            ] = 0x3FF,
+      [Sch_SEARCH_USERS              ] = 0x3FF,
+      [Sch_SEARCH_TEACHERS           ] = 0x3FF,
+      [Sch_SEARCH_STUDENTS           ] = 0x3FF,
+      [Sch_SEARCH_GUESTS             ] = 0x3FF,
+      [Sch_SEARCH_OPEN_DOCUMENTS     ] = 0x3FF,
+      [Sch_SEARCH_DOCUM_IN_MY_COURSES] = 0x3FE,	// Only if I am logged
+      [Sch_SEARCH_MY_DOCUMENTS       ] = 0x3FE,	// Only if I am logged
      };
 
    return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Role.Logged));
