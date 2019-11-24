@@ -44,17 +44,6 @@
 
 #define TL_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
-#define TL_NUM_PUB_TYPES	4
-// If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table social_notes
-typedef enum
-  {
-   TL_PUB_UNKNOWN		= 0,
-   TL_PUB_ORIGINAL_NOTE		= 1,
-   TL_PUB_SHARED_NOTE		= 2,
-   TL_PUB_COMMENT_TO_NOTE	= 3,
-  } TL_PubType_t;
-
 #define TL_NUM_NOTE_TYPES	13
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table social_notes
@@ -85,6 +74,17 @@ typedef enum
    /* Profile tab */
   } TL_NoteType_t;
 
+#define TL_NUM_PUB_TYPES	4
+// If the numbers assigned to each event type change,
+// it is necessary to change old numbers to new ones in database table social_notes
+typedef enum
+  {
+   TL_PUB_UNKNOWN		= 0,
+   TL_PUB_ORIGINAL_NOTE		= 1,
+   TL_PUB_SHARED_NOTE		= 2,
+   TL_PUB_COMMENT_TO_NOTE	= 3,
+  } TL_PubType_t;
+
 #define TL_NUM_TOP_MESSAGES (1 + 6)
 typedef enum
   {
@@ -101,7 +101,7 @@ struct TL_Publication
   {
    long PubCod;
    long NotCod;
-   long PublisherCod;	// Sharer or writer of a comment
+   long PublisherCod;		// Sharer or writer of the publication
    TL_PubType_t PubType;
    time_t DateTimeUTC;
    TL_TopMessage_t TopMessage;	// Used to show feedback on the action made

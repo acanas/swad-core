@@ -2321,10 +2321,10 @@ mysql> DESCRIBE social_comments;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 			"PubCod BIGINT NOT NULL,"
-			"Content LONGTEXT NOT NULL,"
+			"Content LONGTEXT NOT NULL,"	// TODO: Rename as Txt
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Content),"
+		   "FULLTEXT(Content),"			// TODO: Rename as Txt
 		   "INDEX(MedCod)) ENGINE = MYISAM;");
 
    /***** Table social_comments_fav *****/
@@ -2414,10 +2414,10 @@ mysql> DESCRIBE social_posts;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
 			"PubCod INT NOT NULL AUTO_INCREMENT,"
-			"Content LONGTEXT NOT NULL,"
+			"Content LONGTEXT NOT NULL,"	// TODO: Rename as Txt
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Content),"
+		   "FULLTEXT(Content),"			// TODO: Rename as Txt
 		   "INDEX(MedCod)) ENGINE = MYISAM;");
 
    /***** Table social_pubs *****/

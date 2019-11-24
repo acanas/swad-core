@@ -55,7 +55,7 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
+/************************* Private constants and types ***********************/
 /*****************************************************************************/
 
 #define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
@@ -88,41 +88,78 @@ typedef enum
 				// when user clicks on link at bottom of timeline
   } TL_WhatToGetFromTimeline_t;
 
-// Timeline images will be saved with:
-// - maximum width of TL_IMAGE_SAVED_MAX_HEIGHT
-// - maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
-// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+struct PostContent
+  {
+   char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
+   struct Media Media;
+  };
+
+/*
+   Timeline images will be saved with:
+   � maximum width of TL_IMAGE_SAVED_MAX_HEIGHT
+   � maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
+   � maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+*/
 #define TL_IMAGE_SAVED_MAX_WIDTH	768
 #define TL_IMAGE_SAVED_MAX_HEIGHT	512
 #define TL_IMAGE_SAVED_QUALITY		 75	// 1 to 100
 // in timeline posts, the quality should not be high in order to speed up the loading of images
 
-/*****************************************************************************/
-/****************************** Private types ********************************/
-/*****************************************************************************/
+/*
+   The timeline is a set of publications.
+   A publication can be:
+   � an original note
+   � a shared note
+   � a comment to a note
+   A note can be:
+   � a timeline post
+   � a public file
+   � an exam announcement
+   � a notice
+   � a forum post
+   written by an author in a date-time.
+*/
 
 struct TL_Note
   {
    long NotCod;
-   TL_NoteType_t NoteType;
-   long UsrCod;
-   long HieCod;		// Hierarchy code (institution/centre/degree/course)
-   long Cod;		// Code of file, forum post, notice, timeline post...
-   bool Unavailable;	// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;
-   unsigned NumShared;	// Number of times (users) this note has been shared
-   unsigned NumFavs;	// Number of times (users) this note has been favourited
+   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
+   long UsrCod;			// Publisher
+   long HieCod;			// Hierarchy code (institution/centre/degree/course)
+   long Cod;			// Code of file, forum post, notice, timeline post...
+   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
+   time_t DateTimeUTC;		// Date-time of publishing in UTC time
+   unsigned NumShared;		// Number of times (users) this note has been shared
+   unsigned NumFavs;		// Number of times (users) this note has been favourited
   };
 
+/* A note can have comments attached to it.
+ __________________
+|@author           |
+|       Note       |
+|__________________|
+    |@author       |
+    |  Comment  1  |
+    |______________|
+    |@author       |
+    |  Comment  2  |
+    |______________|
+    |              |
+    |      ...     |
+    |______________|
+    |@author       |
+    |  Comment  n  |
+    |______________|
+
+*/
 struct TL_Comment
   {
    long PubCod;
-   long UsrCod;
-   long NotCod;		// Note code to which this comment belongs
-   time_t DateTimeUTC;
-   unsigned NumFavs;	// Number of times (users) this comment has been favourited
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   long UsrCod;			// Publisher
+   long NotCod;			// Note code to which this comment belongs
+   time_t DateTimeUTC;		// Date-time of publishing in UTC time
+   unsigned NumFavs;		// Number of times (users) this comment has been favourited
+   struct PostContent Content;
   };
 
 typedef enum
@@ -722,7 +759,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
       "SELECT MAX(PubCod) AS NewestPubCod FROM social_pubs ...
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
-    */
+   */
 
    for (NumPub = 0;
 	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
@@ -1802,16 +1839,15 @@ static void TL_GetAndWritePost (long PstCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct PostContent Content;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&Media);
+   Med_MediaConstructor (&Content.Media);
 
    /***** Get post from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
 					" of a post",
-			     "SELECT Content,"		// row[0]
+			     "SELECT Content,"		// row[0]	// TODO: Rename as Txt
 			            "MedCod"		// row[1]
 			     " FROM social_posts"
 			     " WHERE PstCod=%ld",
@@ -1823,33 +1859,33 @@ static void TL_GetAndWritePost (long PstCod)
       row = mysql_fetch_row (mysql_res);
 
       /****** Get content (row[0]) *****/
-      Str_Copy (Content,row[0],
+      Str_Copy (Content.Txt,row[0],
                 Cns_MAX_BYTES_LONG_TEXT);
 
       /***** Get media (row[1]) *****/
-      Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
-      Med_GetMediaDataByCod (&Media);
+      Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
+      Med_GetMediaDataByCod (&Content.Media);
      }
    else
-      Content[0] = '\0';
+      Content.Txt[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Write content *****/
-   if (Content[0])
+   if (Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"TL_TXT\"");
-      Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+      Msg_WriteMsgContent (Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
    /***** Show image *****/
-   Med_ShowMedia (&Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
-	                 "TL_PST_MED TL_RIGHT_WIDTH");
+   Med_ShowMedia (&Content.Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
+	                         "TL_PST_MED TL_RIGHT_WIDTH");
 
    /***** Free image *****/
-   Med_MediaDestructor (&Media);
+   Med_MediaDestructor (&Content.Media);
   }
 
 /*****************************************************************************/
@@ -2331,7 +2367,7 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Frm_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
-   HTM_TEXTAREA_Begin ("name=\"Content\" rows=\"1\" maxlength=\"%u\""
+   HTM_TEXTAREA_Begin ("name=\"Txt\" rows=\"1\" maxlength=\"%u\""
                        " placeholder=\"%s&hellip;\" class=\"%s\""
 	               " onfocus=\"expandTextarea(this,'%s','6');\"",
 		       TL_MAX_CHARS_IN_POST,
@@ -2394,53 +2430,52 @@ void TL_ReceivePostGbl (void)
 // Returns the code of the note just created
 static long TL_ReceivePost (void)
   {
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct PostContent Content;
    long PstCod;
    struct TL_Publication SocPub;
 
    /***** Get the content of the new post *****/
-   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+   Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&Media);
+   Med_MediaConstructor (&Content.Media);
 
    /***** Get attached image (action, file and title) *****/
-   Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
-   Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
-   Media.Quality = TL_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+   Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
+   Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
+   Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1,&Content.Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
-   if (Content[0] ||			// Text not empty
-       Media.Status == Med_PROCESSED)	// A media is attached
+   if (Content.Txt[0] ||		// Text not empty
+      Content.Media.Status == Med_PROCESSED)	// A media is attached
      {
       /***** Store media in filesystem and database *****/
-      Med_RemoveKeepOrStoreMedia (-1L,&Media);
+      Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);
 
       /***** Publish *****/
       /* Insert post content in the database */
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
 				   "INSERT INTO social_posts"
-				   " (Content,MedCod)"
+				   " (Content,MedCod)"		// TODO: Rename Content as Txt
 				   " VALUES"
 				   " ('%s',%ld)",
-				   Content,
-				   Media.MedCod);
+				   Content.Txt,
+				   Content.Media.MedCod);
 
       /* Insert post in notes */
       TL_StoreAndPublishNote (TL_NOTE_POST,PstCod,&SocPub);
 
       /***** Analyze content and store notifications about mentions *****/
-      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
+      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content.Txt);
      }
    else	// Text and image are empty
       SocPub.NotCod = -1L;
 
    /***** Free image *****/
-   Med_MediaDestructor (&Media);
+   Med_MediaDestructor (&Content.Media);
 
    return SocPub.NotCod;
   }
@@ -2573,7 +2608,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
 				     "social_pubs.NotCod,"		// row[2]
 				     "UNIX_TIMESTAMP("
 				     "social_pubs.TimePublish),"	// row[3]
-				     "social_comments.Content,"		// row[4]
+				     "social_comments.Content,"		// row[4]	// TODO: Rename as Txt
 				     "social_comments.MedCod"		// row[5]
 			      " FROM social_pubs,social_comments"
 			      " WHERE social_pubs.NotCod=%ld"
@@ -2785,7 +2820,7 @@ static unsigned TL_WriteHiddenComments (long NotCod,
 			  "social_pubs.NotCod,"		// row[2]
 			  "UNIX_TIMESTAMP("
 			  "social_pubs.TimePublish),"	// row[3]
-			  "social_comments.Content,"	// row[4]
+			  "social_comments.Content,"	// row[4]	// TODO: Rename as Txt
 			  "social_comments.MedCod"	// row[5]
 		   " FROM social_pubs,social_comments"
 		   " WHERE social_pubs.NotCod=%ld"
@@ -2820,7 +2855,7 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
    struct TL_Comment SocCom;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Media);
+   Med_MediaConstructor (&SocCom.Content.Media);
 
    /***** Get data of comment *****/
    row = mysql_fetch_row (mysql_res);
@@ -2832,7 +2867,7 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
 		    false);	// Not alone
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Media);
+   Med_MediaDestructor (&SocCom.Content.Media);
   }
 
 /*****************************************************************************/
@@ -2967,16 +3002,16 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       TL_WriteDateTime (SocCom->DateTimeUTC);
 
       /* Write content of the comment */
-      if (SocCom->Content[0])
+      if (SocCom->Content.Txt[0])
 	{
 	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (SocCom->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
 	 HTM_DIV_End ();
 	}
 
       /* Show image */
-      Med_ShowMedia (&SocCom->Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
-	                            "TL_COM_MED TL_COMM_WIDTH");
+      Med_ShowMedia (&SocCom->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
+	                                    "TL_COM_MED TL_COMM_WIDTH");
 
       /* Start foot container */
       HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
@@ -3319,8 +3354,7 @@ void TL_ReceiveCommentGbl (void)
 static long TL_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct PostContent Content;
    struct TL_Note SocNot;
    struct TL_Publication SocPub;
 
@@ -3331,24 +3365,24 @@ static long TL_ReceiveComment (void)
    if (SocNot.NotCod > 0)
      {
       /***** Get the content of the comment *****/
-      Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+      Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
 				 Str_TO_RIGOROUS_HTML,true);
 
       /***** Initialize image *****/
-      Med_MediaConstructor (&Media);
+      Med_MediaConstructor (&Content.Media);
 
       /***** Get attached image (action, file and title) *****/
-      Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
-      Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
-      Media.Quality = TL_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+      Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
+      Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
+      Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
+      Med_GetMediaFromForm (-1,&Content.Media,NULL,NULL);
       Ale_ShowAlerts (NULL);
 
-      if (Content[0] ||				// Text not empty
-	  Media.Status == Med_PROCESSED)	// A media is attached
+      if (Content.Txt[0] ||			// Text not empty
+	 Content.Media.Status == Med_PROCESSED)	// A media is attached
 	{
 	 /***** Store media in filesystem and database *****/
-	 Med_RemoveKeepOrStoreMedia (-1L,&Media);
+	 Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);
 
 	 /***** Publish *****/
 	 /* Insert into publications */
@@ -3360,22 +3394,22 @@ static long TL_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
 			 "INSERT INTO social_comments"
-	                 " (PubCod,Content,MedCod)"
+	                 " (PubCod,Content,MedCod)"	// TODO: Rename Content as Txt
 			 " VALUES"
 			 " (%ld,'%s',%ld)",
 			 SocPub.PubCod,
-			 Content,
-			 Media.MedCod);
+			 Content.Txt,
+			 Content.Media.MedCod);
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
 
 	 /***** Analyze content and store notifications about mentions *****/
-	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
+	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content.Txt);
 	}
 
       /***** Free image *****/
-      Med_MediaDestructor (&Media);
+      Med_MediaDestructor (&Content.Media);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
@@ -3677,10 +3711,10 @@ void TL_ShowAllFaversComGbl (void)
    struct TL_Comment SocCom;
 
    /***** Get data of comment *****/
-   Med_MediaConstructor (&SocCom.Media);
+   Med_MediaConstructor (&SocCom.Content.Media);
    SocCom.PubCod = TL_GetParamPubCod ();
    TL_GetDataOfCommByCod (&SocCom);
-   Med_MediaDestructor (&SocCom.Media);
+   Med_MediaDestructor (&SocCom.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_ALL_USRS);
@@ -3761,7 +3795,7 @@ static void TL_FavComment (struct TL_Comment *SocCom)
    bool IAmTheAuthor;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Media);
+   Med_MediaConstructor (&SocCom->Content.Media);
 
    /***** Get data of comment *****/
    SocCom->PubCod = TL_GetParamPubCod ();
@@ -3793,7 +3827,7 @@ static void TL_FavComment (struct TL_Comment *SocCom)
      }
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Media);
+   Med_MediaDestructor (&SocCom->Content.Media);
   }
 
 static void TL_UnfComment (struct TL_Comment *SocCom)
@@ -3801,7 +3835,7 @@ static void TL_UnfComment (struct TL_Comment *SocCom)
    bool IAmTheAuthor;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Media);
+   Med_MediaConstructor (&SocCom->Content.Media);
 
    /***** Get data of comment *****/
    SocCom->PubCod = TL_GetParamPubCod ();
@@ -3831,7 +3865,7 @@ static void TL_UnfComment (struct TL_Comment *SocCom)
      }
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Media);
+   Med_MediaDestructor (&SocCom->Content.Media);
   }
 
 /*****************************************************************************/
@@ -4282,7 +4316,7 @@ static void TL_RequestRemovalComment (void)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Media);
+   Med_MediaConstructor (&SocCom.Content.Media);
 
    /***** Get data of comment *****/
    SocCom.PubCod = TL_GetParamPubCod ();
@@ -4318,7 +4352,7 @@ static void TL_RequestRemovalComment (void)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Media);
+   Med_MediaDestructor (&SocCom.Content.Media);
   }
 
 /*****************************************************************************/
@@ -4376,7 +4410,7 @@ static void TL_RemoveComment (void)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Media);
+   Med_MediaConstructor (&SocCom.Content.Media);
 
    /***** Get data of comment *****/
    SocCom.PubCod = TL_GetParamPubCod ();
@@ -4402,7 +4436,7 @@ static void TL_RemoveComment (void)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Media);
+   Med_MediaDestructor (&SocCom.Content.Media);
   }
 
 /*****************************************************************************/
@@ -4900,7 +4934,7 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 				 "social_pubs.PublisherCod,"			// row[1]
 				 "social_pubs.NotCod,"				// row[2]
 				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
-				 "social_comments.Content,"			// row[4]
+				 "social_comments.Content,"			// row[4]	// TODO: Rename as Txt
 				 "social_comments.MedCod"			// row[5]
 			  " FROM social_pubs,social_comments"
 			  " WHERE social_pubs.PubCod=%ld"
@@ -5030,7 +5064,7 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    row[1]: PublisherCod
    row[2]: NotCod
    row[3]: TimePublish
-   row[4]: Content
+   row[4]: Content 	// TODO: Rename as Txt
    row[5]: MedCod
     */
    /***** Get code of comment (row[0]) *****/
@@ -5045,16 +5079,16 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    /***** Get time of the note (row[3]) *****/
    SocCom->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
-   /***** Get content (row[4]) *****/
-   Str_Copy (SocCom->Content,row[4],
+   /***** Get text content (row[4]) *****/
+   Str_Copy (SocCom->Content.Txt,row[4],
              Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
    TL_GetNumTimesACommHasBeenFav (SocCom);
 
-   /***** Get media (row[5]) *****/
-   SocCom->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-   Med_GetMediaDataByCod (&SocCom->Media);
+   /***** Get media content (row[5]) *****/
+   SocCom->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&SocCom->Content.Media);
   }
 
 /*****************************************************************************/
@@ -5083,7 +5117,7 @@ static void TL_ResetComment (struct TL_Comment *SocCom)
    SocCom->UsrCod      = -1L;
    SocCom->NotCod      = -1L;
    SocCom->DateTimeUTC = (time_t) 0;
-   SocCom->Content[0]  = '\0';
+   SocCom->Content.Txt[0]  = '\0';
   }
 
 /*****************************************************************************/
@@ -5136,14 +5170,14 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_ROW row;
    struct TL_Publication SocPub;
    struct TL_Note SocNot;
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
+   struct PostContent Content;
    size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
    SocPub.PubType = TL_PUB_UNKNOWN;
    SummaryStr[0] = '\0';	// Return nothing on error
-   Content[0] = '\0';
+   Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
@@ -5179,7 +5213,8 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    /***** Get content of post from database *****/
 	    // TODO: What happens if content is empty and an image is attached?
 	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
-			        "SELECT Content FROM social_posts"
+			        "SELECT Content"	// TODO: Rename as Txt
+			        " FROM social_posts"
 				" WHERE PstCod=%ld",
 				SocNot.Cod) == 1)   // Result should have a unique row
 	      {
@@ -5187,7 +5222,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	       row = mysql_fetch_row (mysql_res);
 
 	       /****** Get content (row[0]) *****/
-	       Str_Copy (Content,row[0],
+	       Str_Copy (Content.Txt,row[0],
 	                 Cns_MAX_BYTES_LONG_TEXT);
 	      }
 
@@ -5197,18 +5232,18 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    /***** Copy content string *****/
 	    if (GetContent)
 	      {
-	       Length = strlen (Content);
+	       Length = strlen (Content.Txt);
 	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 		 {
-		  Str_Copy (*ContentStr,Content,
+		  Str_Copy (*ContentStr,Content.Txt,
 		            Length);
 		  ContentCopied = true;
 		 }
 	      }
 
 	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content,Ntf_MAX_CHARS_SUMMARY);
-	    Str_Copy (SummaryStr,Content,
+	    Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
+	    Str_Copy (SummaryStr,Content.Txt,
 	              Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
@@ -5219,7 +5254,8 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 // TODO: What happens if content is empty and an image is attached?
 	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
 				        " of a comment to a note",
-			     "SELECT Content FROM social_comments"
+			     "SELECT Content"	// TODO: Rename as Txt
+			     " FROM social_comments"
 			     " WHERE PubCod=%ld",
 			     SocPub.PubCod) == 1)   // Result should have a unique row
 	   {
@@ -5227,7 +5263,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    row = mysql_fetch_row (mysql_res);
 
 	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content,row[0],
+	    Str_Copy (Content.Txt,row[0],
 	              Cns_MAX_BYTES_LONG_TEXT);
 	   }
 
@@ -5237,18 +5273,18 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 /***** Copy content string *****/
 	 if (GetContent)
 	   {
-	    Length = strlen (Content);
+	    Length = strlen (Content.Txt);
 	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 	      {
-	       Str_Copy (*ContentStr,Content,
+	       Str_Copy (*ContentStr,Content.Txt,
 	                 Length);
 	       ContentCopied = true;
 	      }
 	   }
 
 	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content,Ntf_MAX_CHARS_SUMMARY);
-	 Str_Copy (SummaryStr,Content,
+	 Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
+	 Str_Copy (SummaryStr,Content.Txt,
 	           Ntf_MAX_BYTES_SUMMARY);
 	 break;
      }
