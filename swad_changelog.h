@@ -491,14 +491,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 #define Log_PLATFORM_VERSION	"SWAD 19.78 (2019-11-25)"
-#define CSS_FILE		"swad19.74.3.css"
+#define CSS_FILE		"swad19.78.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
-	Version 19.78:    Nov 25, 2019	Filtering of match results by games. (247104 lines)
+	Version 19.78:    Nov 25, 2019	Filtering of match results by games. (247106 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod=1795;
 
@@ -516,10 +516,10 @@ sudo cp -a icon/poll.svg /var/www/html/swad/icon/
 
 	Version 19.76.8:  Nov 25, 2019	Changes in database related to timeline. (246885 lines)
 					4 changes necessary in database:
-ALTER TABLE social_comments CHANGE COLUMN Content Txt LONGTEXT NOT NULL,DROP FULLTEXT Content,ADD FULLTEXT (Txt);
 ALTER TABLE social_comments DROP INDEX Content;
-ALTER TABLE social_posts CHANGE COLUMN Content Txt LONGTEXT NOT NULL,DROP FULLTEXT Content,ADD FULLTEXT (Txt);
+ALTER TABLE social_comments CHANGE COLUMN Content Txt LONGTEXT NOT NULL,ADD FULLTEXT (Txt);
 ALTER TABLE social_posts DROP INDEX Content;
+ALTER TABLE social_posts CHANGE COLUMN Content Txt LONGTEXT NOT NULL,ADD FULLTEXT (Txt);
 
 	Version 19.76.7:  Nov 24, 2019	Code refactoring in timeline. (246879 lines)
 	Version 19.76.6:  Nov 22, 2019	Code refactoring in forums and strings. (246845 lines)

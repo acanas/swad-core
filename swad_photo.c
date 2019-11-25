@@ -1191,7 +1191,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       else
 	 Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK CM",NULL);
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
