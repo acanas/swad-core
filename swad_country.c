@@ -151,7 +151,7 @@ void Cty_SeeCtyWithPendingInss (void)
    if (NumCtys)
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
+      Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -198,7 +198,7 @@ void Cty_SeeCtyWithPendingInss (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
@@ -531,7 +531,7 @@ void Cty_ListCountries2 (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListingCountries,
+   Box_BoxTableBegin (NULL,Txt_Countries,Cty_PutIconsListingCountries,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -623,7 +623,7 @@ void Cty_ListCountries2 (void)
    HTM_TR_End ();
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
@@ -2030,7 +2030,7 @@ static void Cty_PutFormToCreateCountry (void)
    Frm_StartForm (ActNewCty);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_country,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_country,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2108,7 +2108,7 @@ static void Cty_PutFormToCreateCountry (void)
      }
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_country);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_country);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2432,7 +2432,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	        "%u %s",
                 NumCtys,NumCtys == 1 ? Txt_country :
 				       Txt_countries);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -2457,7 +2457,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	}
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/

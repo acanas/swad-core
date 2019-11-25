@@ -727,7 +727,7 @@ static void Lnk_PutFormToCreateLink (void)
    Frm_StartForm (ActNewLnk);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_link,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_link,NULL,
                       Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -762,7 +762,7 @@ static void Lnk_PutFormToCreateLink (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Frm_EndForm ();

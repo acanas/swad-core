@@ -159,7 +159,7 @@ static void Gam_ListAllGames (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         McR_PutFormToViewMchResults (ActReqSeeMyMchRes);
+         McR_PutFormToViewMchResults (ActSeeMyMchRes);
          break;
       case Rol_NET:
       case Rol_TCH:
@@ -180,7 +180,7 @@ static void Gam_ListAllGames (void)
       Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of games *****/
-   Gam_GetListGames ();
+   Gam_GetListGames (Gbl.Games.SelectedOrder);
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Games.Num;
@@ -236,7 +236,7 @@ static void Gam_ListAllGames (void)
       for (NumGame = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
-	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],
+	 Gam_ShowOneGame (Gbl.Games.Lst[NumGame - 1].GamCod,
 	                  false,
 	                  false,	// Do not list game questions
 	                  false);	// Do not put form to start new match
@@ -631,13 +631,13 @@ static void Gam_GetParamOrder (void)
 /*********************** Get list of all the games *************************/
 /*****************************************************************************/
 
-void Gam_GetListGames (void)
+void Gam_GetListGames (Gam_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
       [Gam_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,gam_games.Title DESC",
       [Gam_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,gam_games.Title DESC",
-      [Gam_ORDER_BY_TITLE     ] = "gam_games.Title DESC",
+      [Gam_ORDER_BY_TITLE     ] = "gam_games.Title",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -684,7 +684,7 @@ void Gam_GetListGames (void)
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     HiddenSubQuery,
-			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
+			     OrderBySubQuery[SelectedOrder]);
 
    /***** Free allocated memory for subquery *****/
    free (HiddenSubQuery);
@@ -694,7 +694,7 @@ void Gam_GetListGames (void)
       Gbl.Games.Num = (unsigned) NumRows;
 
       /***** Create list of games *****/
-      if ((Gbl.Games.LstGamCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Gbl.Games.Lst = (struct GameSelected *) malloc (NumRows * sizeof (struct GameSelected))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the games codes *****/
@@ -704,7 +704,7 @@ void Gam_GetListGames (void)
         {
          /* Get next game code (row[0]) */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Games.LstGamCods[NumGame] = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         if ((Gbl.Games.Lst[NumGame].GamCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Lay_ShowErrorAndExit ("Error: wrong game code.");
         }
      }
@@ -715,6 +715,72 @@ void Gam_GetListGames (void)
    DB_FreeMySQLResult (&mysql_res);
 
    Gbl.Games.LstIsRead = true;
+  }
+
+/*****************************************************************************/
+/********************* Get list of game events selected **********************/
+/*****************************************************************************/
+// Return number of games selected
+
+unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected)
+  {
+   unsigned MaxSizeListGamCodsSelected;
+   unsigned NumGame;
+   const char *Ptr;
+   long GamCod;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   unsigned NumGamesSelected;
+
+   /***** Allocate memory for list of games selected *****/
+   MaxSizeListGamCodsSelected = Gbl.Games.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   if ((*StrGamCodsSelected = (char *) malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Get parameter multiple with list of games selected *****/
+   Par_GetParMultiToText ("GamCods",*StrGamCodsSelected,MaxSizeListGamCodsSelected);
+
+   /***** Set which games will be shown as selected (checkboxes on) *****/
+   if ((*StrGamCodsSelected)[0])	// There are games selected
+     {
+      /* Reset selection */
+      for (NumGame = 0;
+	   NumGame < Gbl.Games.Num;
+	   NumGame++)
+	 Gbl.Games.Lst[NumGame].Selected = false;
+      NumGamesSelected = 0;
+
+      /* Set some games as selected */
+      for (Ptr = *StrGamCodsSelected;
+	   *Ptr;
+	   )
+	{
+	 /* Get next game selected */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 GamCod = Str_ConvertStrCodToLongCod (LongStr);
+
+	 /* Set each game in *StrGamCodsSelected as selected */
+	 for (NumGame = 0;
+	      NumGame < Gbl.Games.Num;
+	      NumGame++)
+	    if (Gbl.Games.Lst[NumGame].GamCod == GamCod)
+	      {
+	       Gbl.Games.Lst[NumGame].Selected = true;
+	       NumGamesSelected++;
+	       break;
+	      }
+	}
+     }
+   else				// No games selected
+     {
+      /***** Set all games as selected *****/
+      for (NumGame = 0;
+	   NumGame < Gbl.Games.Num;
+	   NumGame++)
+	 Gbl.Games.Lst[NumGame].Selected = true;
+      NumGamesSelected = Gbl.Games.Num;
+     }
+
+   return NumGamesSelected;
   }
 
 /*****************************************************************************/
@@ -828,11 +894,11 @@ static void Gam_ResetGame (struct Game *Game)
 
 void Gam_FreeListGames (void)
   {
-   if (Gbl.Games.LstIsRead && Gbl.Games.LstGamCods)
+   if (Gbl.Games.LstIsRead && Gbl.Games.Lst)
      {
       /***** Free memory used by the list of games *****/
-      free (Gbl.Games.LstGamCods);
-      Gbl.Games.LstGamCods = NULL;
+      free (Gbl.Games.Lst);
+      Gbl.Games.Lst = NULL;
       Gbl.Games.Num = 0;
       Gbl.Games.LstIsRead = false;
      }
@@ -1120,10 +1186,10 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    /***** Begin box and table *****/
    if (ItsANewGame)
-      Box_StartBoxTable (NULL,Txt_New_game,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_game,NULL,
 			 Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,
+      Box_BoxTableBegin (NULL,
 			 Game->Title[0] ? Game->Title :
 					  Txt_Edit_game,
 			 NULL,
@@ -1165,9 +1231,9 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    /***** End table, send button and end box *****/
    if (ItsANewGame)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_game);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();

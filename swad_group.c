@@ -2067,7 +2067,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Groups,NULL,
+   Box_BoxTableBegin (NULL,Txt_Groups,NULL,
                       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
    /***** List to select the groups the user belongs to *****/
@@ -2078,7 +2078,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -2464,7 +2464,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Begin box *****/
-   Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_type_of_group,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2545,7 +2545,7 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2574,7 +2574,7 @@ static void Grp_PutFormToCreateGroup (void)
    Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_group,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_group,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2667,7 +2667,7 @@ static void Grp_PutFormToCreateGroup (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_group);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_group);
 
    /***** End form *****/
    Frm_EndForm ();

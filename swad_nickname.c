@@ -412,7 +412,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    HTM_TR_End ();
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();

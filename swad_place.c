@@ -798,7 +798,7 @@ static void Plc_PutFormToCreatePlace (void)
    Frm_StartForm (ActNewPlc);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_place,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_place,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -834,7 +834,7 @@ static void Plc_PutFormToCreatePlace (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_place);
 
    /***** End form *****/
    Frm_EndForm ();

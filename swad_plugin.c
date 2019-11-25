@@ -110,7 +110,7 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Plugins,
+   Box_BoxTableBegin (NULL,Txt_Plugins,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
                                                                NULL,
                       NULL,Box_NOT_CLOSABLE,2);
@@ -161,7 +161,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -875,7 +875,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Frm_StartForm (ActNewPlg);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_plugin,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -930,7 +930,7 @@ static void Plg_PutFormToCreatePlugin (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
    Frm_EndForm ();

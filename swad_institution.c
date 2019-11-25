@@ -169,7 +169,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    if (NumInss)
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
+      Box_BoxTableBegin (NULL,Txt_Institutions_with_pending_centres,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -214,7 +214,7 @@ void Ins_SeeInsWithPendingCtrs (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
@@ -2180,7 +2180,7 @@ static void Ins_PutFormToCreateInstitution (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_institution,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_institution,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2246,7 +2246,7 @@ static void Ins_PutFormToCreateInstitution (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_institution);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2505,7 +2505,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	        "%u %s",
                 NumInss,NumInss == 1 ? Txt_institution :
 				       Txt_institutions);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -2530,7 +2530,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	}
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/

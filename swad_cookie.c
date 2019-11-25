@@ -68,7 +68,7 @@ void Coo_EditMyPrefsOnCookies (void)
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Cookies,Coo_PutIconsCookies,
+   Box_BoxTableBegin (NULL,Txt_Cookies,Coo_PutIconsCookies,
                       Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Edit my preference about cookies *****/
@@ -91,7 +91,7 @@ void Coo_EditMyPrefsOnCookies (void)
    HTM_DIV_End ();
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** End section with preferences about cookies *****/
    HTM_SECTION_End ();

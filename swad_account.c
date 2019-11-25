@@ -211,7 +211,7 @@ void Acc_CheckIfEmptyAccountExists (void)
       if (NumUsrs)
 	{
          /***** Begin box and table *****/
-	 Box_StartBoxTable (NULL,
+	 Box_BoxTableBegin (NULL,
 	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					     Txt_Do_you_think_you_are_one_of_these_users,
 			    NULL,
@@ -242,7 +242,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Usr_UsrDataDestructor (&UsrDat);
 
 	 /***** End table and box *****/
-	 Box_EndBoxTable ();
+	 Box_BoxTableEnd ();
 	}
       else
 	 Ale_ShowAlert (Ale_INFO,Txt_There_is_no_empty_account_associated_with_your_ID_X,
@@ -359,7 +359,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Frm_StartForm (ActCreUsrAcc);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Create_account,NULL,
+   Box_BoxTableBegin (NULL,Txt_Create_account,NULL,
                       Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
@@ -407,7 +407,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Pwd_PutFormToGetNewPasswordOnce ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_account);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_account);
 
    /***** End form *****/
    Frm_EndForm ();

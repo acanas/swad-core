@@ -404,7 +404,7 @@ void Ann_ShowFormAnnouncement (void)
    Frm_StartForm (ActRcvAnn);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_announcement,NULL,
                       Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE,2);
 
    /***** Announcement subject and body *****/
@@ -435,7 +435,7 @@ void Ann_ShowFormAnnouncement (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Frm_EndForm ();

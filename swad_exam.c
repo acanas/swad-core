@@ -1020,7 +1020,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Ale_ShowAlerts (Anchor);
 
       /* Start highlighted box */
-      Box_StartBoxShadow (Width,NULL,FunctionToDrawContextualIcons,HelpLink);
+      Box_BoxShadowBegin (Width,NULL,FunctionToDrawContextualIcons,HelpLink);
      }
    else	// Don't highlight
       /* Start normal box */
@@ -1469,11 +1469,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    /***** End table, send button and end box *****/
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Box_EndBoxTableWithButton ((ExaCod > 0) ? Btn_CONFIRM_BUTTON :
+      Box_BoxTableWithButtonEnd ((ExaCod > 0) ? Btn_CONFIRM_BUTTON :
 	                                        Btn_CREATE_BUTTON,
 	                         Txt_Publish_announcement_OF_EXAM);
    else
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
 
    /***** Show QR code *****/
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)

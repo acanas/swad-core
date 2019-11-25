@@ -37,6 +37,12 @@
 #define Gam_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+struct GameSelected
+  {
+   long GamCod;		// Game code
+   bool Selected;	// Is this game selected when viewing match results?
+  };
+
 struct Game
   {
    long GamCod;		// Game code
@@ -82,7 +88,8 @@ void Gam_RequestCreatOrEditGame (void);
 void Gam_PutParams (void);
 long Gam_GetParams (void);
 
-void Gam_GetListGames (void);
+void Gam_GetListGames (Gam_Order_t SelectedOrder);
+unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
 void Gam_FreeListGames (void);

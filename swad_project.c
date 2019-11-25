@@ -2364,7 +2364,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /* Get user's data */
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get of the database the data of the user
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
         {
 	 /* Add user to project */
 	 DB_QueryREPLACE ("can not add user to project",
@@ -3448,14 +3448,14 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /***** 1. Project members *****/
    if (!ItsANewProject)	// Existing project
      {
-      Box_StartBoxTable (NULL,Txt_Members,NULL,
+      Box_BoxTableBegin (NULL,Txt_Members,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       for (NumRoleToShow = 0;
 	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	   NumRoleToShow++)
 	 Prj_ShowOneProjectMembersWithARole (Prj,Prj_EDIT_ONE_PROJECT,
 	                                     Prj_RolesToShow[NumRoleToShow]);
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** 2. Project data *****/
@@ -3465,7 +3465,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    Prj_PutCurrentParams ();
 
    /* Begin box and table */
-   Box_StartBoxTable (NULL,Txt_Data,NULL,
+   Box_BoxTableBegin (NULL,Txt_Data,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /* Project title */
@@ -3596,9 +3596,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /* End table, send button and end box */
    if (ItsANewProject)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_project);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /* End data form */
    Frm_EndForm ();

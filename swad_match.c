@@ -1193,7 +1193,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    Gam_PutParamQstInd (0);	// Start by first question in game
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_match,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_match,NULL,
 		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
    /***** Match title *****/
@@ -1256,7 +1256,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_StartBoxTable ("95%",NULL,NULL,
+      Box_BoxTableBegin ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
@@ -1282,7 +1282,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 					    Grp_MATCH);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
       HTM_TD_End ();
       HTM_TR_End ();
      }

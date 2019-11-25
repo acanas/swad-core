@@ -111,6 +111,29 @@ struct PostContent
    · an original note
    · a shared note
    · a comment to a note
+
+     _____tl_pubs_____                                       _tl_comments_
+    |                 |                                     |             |
+    |  Publication n  |------------------------------------>|  Comment p  |
+    |    (comment)    |                                +----| (to note m) |
+    |_________________|          ____tl_notes_____     |    |_____________|
+    |                 |         |                 |    |    |             |
+    | Publication n-1 |-------->|      Note m     |<---+    |             |
+    | (original note) |         |    (tl. post)   |         |     ...     |
+    |_________________|         |_________________|         |_____________|
+    |                 |         |                 |         |             |
+    |                 |         |     Note m-1    |         |  Comment 1  |
+    |        ...      |         |  (public file)  |    +----| (to note 2) |
+    |_________________|         |_________________|    |    |_____________|
+    |                 |         |                 |    |
+    |  Publication 2  |         |      Note 2     |<---+
+    |  (shared note)  |----+    | (exam announc.) |
+    |_________________|    |    |_________________|
+    |                 |    |    |                 |
+    |  Publication 1  |    +--->|      Note 1     |
+    | (original note) |-------->|    (tl. post)   |
+    |_________________|         |_________________|
+
    A note can be:
    · a timeline post
    · a public file

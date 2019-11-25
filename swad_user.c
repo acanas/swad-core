@@ -2615,7 +2615,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
       FuncParams ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Log_in,NULL,
+   Box_BoxTableBegin (NULL,Txt_Log_in,NULL,
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
@@ -2639,7 +2639,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
+   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -7364,7 +7364,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 		                                      Txt_users[Sex]) :
 		                    ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                                      Txt_ROLES_PLURAL_abc[Role][Sex]));
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Heading row with column names *****/
@@ -7423,7 +7423,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free memory for teachers list *****/
@@ -9904,7 +9904,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      }
    Frm_StartForm (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK AUTHOR_TXT",NULL);
+   HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,NULL);

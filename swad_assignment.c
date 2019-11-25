@@ -1155,10 +1155,10 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Begin box and table *****/
    if (ItsANewAssignment)
-      Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_assignment,NULL,
 			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,
+      Box_BoxTableBegin (NULL,
                          Asg.Title[0] ? Asg.Title :
                 	                Txt_Edit_assignment,
                          NULL,
@@ -1224,9 +1224,9 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** End table, send button and end box *****/
    if (ItsANewAssignment)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_assignment);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1260,7 +1260,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_StartBoxTable ("100%",NULL,NULL,
+      Box_BoxTableBegin ("100%",NULL,NULL,
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
@@ -1287,7 +1287,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                                             AsgCod,Grp_ASSIGNMENT);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
       HTM_TD_End ();
 
       HTM_TR_End ();

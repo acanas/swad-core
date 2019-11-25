@@ -553,7 +553,7 @@ static void Hld_ListHolidaysForEdition (void)
    unsigned HolidayTypeUnsigned;
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
+   Box_BoxTableBegin (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -654,7 +654,7 @@ static void Hld_ListHolidaysForEdition (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -964,7 +964,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Frm_StartForm (ActNewHld);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_holiday,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_holiday,NULL,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -1040,7 +1040,7 @@ static void Hld_PutFormToCreateHoliday (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_holiday);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_holiday);
 
    /***** End form *****/
    Frm_EndForm ();

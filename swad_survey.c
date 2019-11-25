@@ -1883,10 +1883,10 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Begin box and table *****/
    if (ItsANewSurvey)
-      Box_StartBoxTable (NULL,Txt_New_survey,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_survey,NULL,
                          Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,
+      Box_BoxTableBegin (NULL,
                          Svy.Title[0] ? Svy.Title :
                 	                Txt_Edit_survey,
                          NULL,
@@ -1968,9 +1968,9 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** End table, send button and end box *****/
    if (ItsANewSurvey)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_survey);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_survey);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2086,7 +2086,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_StartBoxTable ("95%",NULL,NULL,
+      Box_BoxTableBegin ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
@@ -2112,7 +2112,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
                                                SvyCod,Grp_SURVEY);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
       HTM_TD_End ();
       HTM_TR_End ();
      }

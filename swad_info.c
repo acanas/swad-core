@@ -1095,7 +1095,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Form to choice between alternatives *****/
    /* Begin box and table */
-   Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
+   Box_BoxTableBegin (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
@@ -1148,7 +1148,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -2051,7 +2051,7 @@ void Inf_EditPlainTxtInfo (void)
    HTM_DIV_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -2101,7 +2101,7 @@ void Inf_EditRichTxtInfo (void)
    HTM_DIV_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 

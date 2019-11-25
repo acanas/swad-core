@@ -257,7 +257,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Rooms_with_users,NULL,
+      Box_BoxTableBegin (NULL,Txt_Rooms_with_users,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -290,7 +290,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/

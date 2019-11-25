@@ -704,12 +704,13 @@ struct Globals
    struct
      {
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of surveys
-      long *LstGamCods;	// List of game codes
+      unsigned Num;	// Number of games
+      struct GameSelected *Lst;	// List of games
       Gam_Order_t SelectedOrder;
       unsigned CurrentPage;
       char *ListQuestions;
       long MchCodBeingPlayed;	// Used to refresh game via AJAX
+      char *StrGamCodsSelected;
      } Games;
    struct
      {

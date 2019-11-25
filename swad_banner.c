@@ -845,7 +845,7 @@ static void Ban_PutFormToCreateBanner (void)
    Frm_StartForm (ActNewBan);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_banner,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_banner,NULL,
                       Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -889,7 +889,7 @@ static void Ban_PutFormToCreateBanner (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End form *****/
    Frm_EndForm ();

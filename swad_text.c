@@ -51483,6 +51483,27 @@ const char *Txt_Update_messages =
 	"Atualizar mensagens";
 #endif
 
+const char *Txt_Update_results =
+#if   L==1	// ca
+	"Actualitzar resultats";
+#elif L==2	// de
+	"Update Ergebnisse";
+#elif L==3	// en
+	"Update results";
+#elif L==4	// es
+	"Actualizar resultados";
+#elif L==5	// fr
+	"Mise &agrave; jour des r&eacute;sultats";
+#elif L==6	// gn
+	"Actualizar resultados";	// Okoteve traducción
+#elif L==7	// it
+	"Aggiornamento risultati";
+#elif L==8	// pl
+	"Zaktualizuj wyniki mecze";
+#elif L==9	// pt
+	"Atualizar os resultados";
+#endif
+
 const char *Txt_Update_users =
 #if   L==1	// ca
 	"Actualitzar usuaris";

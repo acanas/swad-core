@@ -216,7 +216,7 @@ void Prf_RequestUserProfile (void)
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
    Frm_EndForm ();

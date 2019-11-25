@@ -3833,7 +3833,7 @@ void Msg_ListBannedUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Banned_users,NULL,
+      Box_BoxTableBegin (NULL,Txt_Banned_users,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** List users *****/
@@ -3877,7 +3877,7 @@ void Msg_ListBannedUsrs (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

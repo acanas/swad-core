@@ -167,7 +167,7 @@ void Rep_ReqMyUsageReport (void)
    Rep_TitleReport (NULL);	// NULL means do not write date
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Generate_report);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Generate_report);
 
    /***** End form *****/
    Frm_EndForm ();

@@ -761,7 +761,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Confirm);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -819,7 +819,7 @@ void Enr_AskRemoveOldUsrs (void)
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
+   Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Frm_EndForm ();

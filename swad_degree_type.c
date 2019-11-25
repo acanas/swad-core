@@ -454,7 +454,7 @@ static void DT_PutFormToCreateDegreeType (void)
    Frm_StartForm (ActNewDegTyp);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_type_of_degree,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -484,7 +484,7 @@ static void DT_PutFormToCreateDegreeType (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/
    Frm_EndForm ();

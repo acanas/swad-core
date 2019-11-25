@@ -181,7 +181,7 @@ void Deg_SeeDegWithPendingCrss (void)
    if (NumDegs)
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
+      Box_BoxTableBegin (NULL,Txt_Degrees_with_pending_courses,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -227,7 +227,7 @@ void Deg_SeeDegWithPendingCrss (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
@@ -925,7 +925,7 @@ static void Deg_PutFormToCreateDegree (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_degree,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_degree,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -997,7 +997,7 @@ static void Deg_PutFormToCreateDegree (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_degree);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2544,7 +2544,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	        "%u %s",
                 NumDegs,(NumDegs == 1) ? Txt_degree :
         	                         Txt_degrees);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -2569,7 +2569,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	}
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/

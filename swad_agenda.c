@@ -526,12 +526,12 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Box_StartBoxTableShadow (NULL,Txt_Today,NULL,
+	    Box_BoxTableShadowBegin (NULL,Txt_Today,NULL,
 				     Hlp_PROFILE_Agenda,
 				     2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Box_StartBoxTableShadow (NULL,Txt_Today,NULL,
+	    Box_BoxTableShadowBegin (NULL,Txt_Today,NULL,
 			             Hlp_PROFILE_Agenda_public_agenda,
 				     2);
             break;
@@ -549,7 +549,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent]);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free list of events *****/
@@ -1501,10 +1501,10 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Begin box and table *****/
    if (ItsANewEvent)
-      Box_StartBoxTable (NULL,Txt_New_event,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_event,NULL,
 			 Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_event,NULL,
+      Box_BoxTableBegin (NULL,Txt_Edit_event,NULL,
 			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
    /***** Event *****/
@@ -1563,9 +1563,9 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** End table, send button and end box *****/
    if (ItsANewEvent)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();

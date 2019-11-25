@@ -36,7 +36,6 @@
 /*****************************************************************************/
 
 void McR_PutFormToViewMchResults (Act_Action_t Action);
-void McR_SelDatesToSeeMyMchResults (void);
 void McR_ShowMyMchResults (void);
 void McR_SelUsrsToViewUsrsMchResults (void);
 void McR_GetUsrsAndShowMchResults (void);

@@ -97,7 +97,7 @@ void Pri_EditMyPrivacy (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
+   Box_BoxTableBegin (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
                       Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Edit photo visibility *****/
@@ -125,7 +125,7 @@ void Pri_EditMyPrivacy (void)
                           Pri_TIMELINE_ALLOWED_VIS);
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** End section with settings on privacy *****/
    HTM_SECTION_End ();

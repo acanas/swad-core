@@ -1636,7 +1636,7 @@ static void Crs_PutFormToCreateCourse (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_course,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_course,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -1706,7 +1706,7 @@ static void Crs_PutFormToCreateCourse (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_course);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2987,7 +2987,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if (NumCrss)
      {
       /* Begin box and table */
-      Box_StartBoxTable ("100%",NULL,NULL,
+      Box_BoxTableBegin ("100%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /* Heading row */
@@ -3029,7 +3029,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
         }
 
       /* End table and box */
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3060,7 +3060,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 	        "%u %s",
                 NumCrss,(NumCrss == 1) ? Txt_course :
 	                                 Txt_courses);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/
@@ -3088,7 +3088,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 	}
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3291,7 +3291,7 @@ void Crs_AskRemoveOldCrss (void)
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
+   Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Frm_EndForm ();

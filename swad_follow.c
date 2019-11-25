@@ -147,7 +147,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                                        &mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
+      Box_BoxTableBegin ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
                          Hlp_START_Profiles_who_to_follow,Box_NOT_CLOSABLE,2);
 
       /***** Initialize structure with user's data *****/
@@ -178,7 +178,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
@@ -684,7 +684,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
          /***** Begin box and table *****/
-	 Box_StartBoxTable ("560px",Txt_Following,NULL,
+	 Box_BoxTableBegin ("560px",Txt_Following,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
 	 for (NumUsr = 0;
@@ -708,7 +708,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	   }
 
          /***** End table and box *****/
-	 Box_EndBoxTable ();
+	 Box_BoxTableEnd ();
 
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&FollowingUsrDat);
@@ -767,7 +767,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
          /***** Begin box and table *****/
-	 Box_StartBoxTable ("560px",Txt_Followers,NULL,
+	 Box_BoxTableBegin ("560px",Txt_Followers,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
 	 for (NumUsr = 0;
@@ -791,7 +791,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	   }
 
          /***** End table and box *****/
-	 Box_EndBoxTable ();
+	 Box_BoxTableEnd ();
 
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&FollowerUsrDat);

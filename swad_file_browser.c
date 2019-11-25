@@ -3200,7 +3200,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    Brw_WriteTopBeforeShowingFileBrowser ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
+   Box_BoxTableBegin ("100%",Txt_Assignments_and_other_works,
 		      Brw_PutIconShowFigure,
 		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
 
@@ -3211,7 +3211,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get of the database the data of the user
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    Gbl.Usrs.Other.UsrDat.Accepted =
@@ -3239,7 +3239,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -8380,7 +8380,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_folder);
+   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -8503,7 +8503,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 	          FileNameToShow);
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Paste);
+   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -8569,7 +8569,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TABLE_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
+   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -9519,7 +9519,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 
          /***** Begin box and table *****/
-	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
+	 Box_BoxTableShadowBegin (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
 	 HTM_TR_Begin (NULL);
@@ -9715,14 +9715,14 @@ void Brw_ShowFileMetadata (void)
 	 if (ICanEdit)	// I can edit file properties
 	   {
             /* End table, send button and end box */
-	    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
+	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 
 	    /* End form */
 	    Frm_EndForm ();
 	   }
 	 else
             /* End table and box */
-	    Box_EndBoxTable ();
+	    Box_BoxTableEnd ();
 
 	 /***** Mark possible notifications as seen *****/
 	 switch (Gbl.FileBrowser.Type)
@@ -11817,7 +11817,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 	        "%lu %s",
                 NumDocs,(NumDocs == 1) ? TitleSingular :
         	                         TitlePlural);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -11860,7 +11860,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       HTM_TR_End ();
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -12187,7 +12187,7 @@ void Brw_AskRemoveOldFiles (void)
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Remove);
+   Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/
    Frm_EndForm ();

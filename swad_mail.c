@@ -122,7 +122,7 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
+   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                NULL,
                       Hlp_START_Domains,Box_NOT_CLOSABLE,2);
@@ -174,7 +174,7 @@ void Mai_SeeMailDomains (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -474,7 +474,7 @@ static void Mai_ListMailDomainsForEdition (void)
    struct Mail *Mai;
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
+   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -529,7 +529,7 @@ static void Mai_ListMailDomainsForEdition (void)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -744,7 +744,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Frm_StartForm (ActNewMai);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_email_domain,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -774,7 +774,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End form *****/
    Frm_EndForm ();

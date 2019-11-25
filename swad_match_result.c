@@ -53,6 +53,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define McR_RESULTS_TABLE_ID		"mcr_table"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -70,8 +72,10 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void McR_ShowUsrsMchResults (void);
+static void McR_ListGamesToSelect (void);
 static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
-static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther);
+static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
+				unsigned NumGamesSelected);
 static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
@@ -103,55 +107,61 @@ void McR_PutFormToViewMchResults (Act_Action_t Action)
   }
 
 /*****************************************************************************/
-/****************** Select dates to show my matches results ******************/
-/*****************************************************************************/
-
-void McR_SelDatesToSeeMyMchResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Games_results;
-   extern const char *Txt_Results;
-   extern const char *Txt_View_matches_results;
-
-   /***** Begin form *****/
-   Frm_StartForm (ActSeeMyMchRes);
-
-   /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
-                      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
-
-   /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_matches_results);
-
-   /***** End form *****/
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
 /*************************** Show my matches results *************************/
 /*****************************************************************************/
 
 void McR_ShowMyMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
+   unsigned NumGamesSelected;
 
-   /***** Get starting and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
+   /***** Get list of games *****/
+   Gam_GetListGames (Gam_ORDER_BY_TITLE);
 
-   /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
-                      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+   /***** Get list of game codes selected *****/
+   NumGamesSelected = Gam_GetListSelectedGamCods (&Gbl.Games.StrGamCodsSelected);
 
-   /***** Header of the table with the list of users *****/
-   McR_ShowHeaderMchResults (Usr_ME);
+   if (NumGamesSelected)
+     {
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Results,NULL,
+		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
-   /***** List my matches results *****/
-   Tst_GetConfigTstFromDB ();	// To get feedback type
-   McR_ShowMchResults (Usr_ME);
+      /***** List games to select *****/
+      McR_ListGamesToSelect ();
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+      /***** Start section with match results table *****/
+      HTM_SECTION_Begin (McR_RESULTS_TABLE_ID);
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
+
+      /***** Header of the table with the list of users *****/
+      McR_ShowHeaderMchResults (Usr_ME);
+
+      /***** List my matches results *****/
+      Tst_GetConfigTstFromDB ();	// To get feedback type
+      McR_ShowMchResults (Usr_ME,NumGamesSelected);
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** End section with match results table *****/
+      HTM_SECTION_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,"No games selected.");	// TODO: Need translation!!!!
+
+   /***** Free memory for list of game events selected *****/
+   free (Gbl.Games.StrGamCodsSelected);
+
+   /***** Free list of games *****/
+   Gam_FreeListGames ();
   }
 
 /*****************************************************************************/
@@ -223,9 +233,6 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 
          HTM_TR_End ();
 
-         /***** Starting and ending dates in the search *****/
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
-
          HTM_TABLE_End ();
 
          /***** Send button *****/
@@ -276,33 +283,152 @@ static void McR_ShowUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
+   unsigned NumGamesSelected;
    const char *Ptr;
 
-   /***** Get starting and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
+   /***** Get list of games *****/
+   Gam_GetListGames (Gam_ORDER_BY_TITLE);
 
-   /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
-		      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+   /***** Get list of game codes selected *****/
+   NumGamesSelected = Gam_GetListSelectedGamCods (&Gbl.Games.StrGamCodsSelected);
 
-   /***** Header of the table with the list of users *****/
-   McR_ShowHeaderMchResults (Usr_OTHER);
-
-   /***** List the matches results of the selected users *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   if (NumGamesSelected)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
-	 if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
-	    /***** Show matches results *****/
-	    McR_ShowMchResults (Usr_OTHER);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Results,NULL,
+		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+
+      /***** List games to select *****/
+      McR_ListGamesToSelect ();
+
+      /***** Start section with match results table *****/
+      HTM_SECTION_Begin (McR_RESULTS_TABLE_ID);
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
+
+      /***** Header of the table with the list of users *****/
+      McR_ShowHeaderMchResults (Usr_OTHER);
+
+      /***** List the matches results of the selected users *****/
+      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+      while (*Ptr)
+	{
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	       /***** Show matches results *****/
+	       McR_ShowMchResults (Usr_OTHER,NumGamesSelected);
+	}
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** End section with match results table *****/
+      HTM_SECTION_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,"No games selected.");	// TODO: Need translation!!!!
+
+   /***** Free memory for list of game events selected *****/
+   free (Gbl.Games.StrGamCodsSelected);
+
+   /***** Free list of games *****/
+   Gam_FreeListGames ();
+  }
+
+/*****************************************************************************/
+/********** Write list of those attendance events that have students *********/
+/*****************************************************************************/
+
+static void McR_ListGamesToSelect (void)
+  {
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *Txt_Games;
+   extern const char *Txt_Game;
+   extern const char *Txt_Update_results;
+   unsigned UniqueId;
+   unsigned NumGame;
+   struct Game Game;
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Games,NULL,NULL,Box_NOT_CLOSABLE);
+
+   /***** Begin form to update the results
+	  depending on the games selected *****/
+   Frm_StartFormAnchor (Gbl.Action.Act,McR_RESULTS_TABLE_ID);
+   Grp_PutParamsCodGrps ();
+   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWidePadding (2);
+
+   /***** Heading row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,2,NULL,NULL);
+   HTM_TH (1,1,"LM",Txt_Game);
+
+   HTM_TR_End ();
+
+   /***** List the events *****/
+   for (NumGame = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
+	NumGame < Gbl.Games.Num;
+	NumGame++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+     {
+      /* Get data of this game */
+      Game.GamCod = Gbl.Games.Lst[NumGame].GamCod;
+      Gam_GetDataOfGameByCod (&Game);
+
+      /* Write a row for this event */
+      HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_INPUT_CHECKBOX ("GamCods",false,
+			  "id=\"Gam%u\" value=\"%ld\"%s",
+			  NumGame,Gbl.Games.Lst[NumGame].GamCod,
+			  Gbl.Games.Lst[NumGame].Selected ? " checked=\"checked\"" : "");
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
+      HTM_TxtF ("%u:",NumGame + 1);
+      HTM_LABEL_End ();
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_Txt (Game.Title);
+      HTM_TD_End ();
+
+      HTM_TR_End ();
      }
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** Put button to refresh *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
+   HTM_BUTTON_Animated_Begin (Txt_Update_results,
+			      The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+			      NULL);
+   Ico_PutCalculateIconWithText (Txt_Update_results);
+   HTM_BUTTON_End ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -348,12 +474,17 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 /********* Show the matches results of a user in the current course **********/
 /*****************************************************************************/
 
-static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
+static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
+				unsigned NumGamesSelected)
   {
    extern const char *Txt_Match_result;
    extern const char *Txt_Hidden_result;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t MaxSizeGamesSubQuery;
+   char *GamesSubQuery;
+   unsigned NumGame;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    struct UsrData *UsrDat;
    bool ShowResultThisMatch;
    bool ShowSummaryResults = true;
@@ -371,31 +502,52 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    double TotalScoreOfAllResults = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
+   /***** Trivial check: there should be games selected *****/
+   if (!NumGamesSelected)
+      return;
+
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
-	                            &Gbl.Usrs.Other.UsrDat;
+				    &Gbl.Usrs.Other.UsrDat;
+
+   /***** Allocate memory for subquery of games selected *****/
+   MaxSizeGamesSubQuery = (size_t) NumGamesSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   if ((GamesSubQuery = (char *) malloc (MaxSizeGamesSubQuery + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Build subquery with list of selected games *****/
+   GamesSubQuery[0] = '\0';
+   for (NumGame = 0;
+	NumGame < Gbl.Games.Num;
+	NumGame++)
+      if (Gbl.Games.Lst[NumGame].Selected)
+	{
+	 sprintf (LongStr,"%ld",Gbl.Games.Lst[NumGame].GamCod);
+	 if (GamesSubQuery[0])
+	    Str_Concat (GamesSubQuery,",",MaxSizeGamesSubQuery);
+	 Str_Concat (GamesSubQuery,LongStr,MaxSizeGamesSubQuery);
+	}
 
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
 			      "SELECT mch_results.MchCod,"			// row[0]
-			             "UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
-			             "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
-			             "mch_results.NumQsts,"			// row[3]
-			             "mch_results.NumQstsNotBlank,"		// row[4]
-			             "mch_results.Score"			// row[5]
+				     "UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
+				     "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
+				     "mch_results.NumQsts,"			// row[3]
+				     "mch_results.NumQstsNotBlank,"		// row[4]
+				     "mch_results.Score"			// row[5]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      " AND mch_results.MchCod=mch_matches.MchCod"
 			      " AND mch_matches.GamCod=gam_games.GamCod"
 			      " AND gam_games.CrsCod=%ld"			// Extra check
-			      " AND mch_matches.EndTime>=FROM_UNIXTIME(%ld)"
-			      " AND mch_matches.StartTime<=FROM_UNIXTIME(%ld)"
-			      " ORDER BY MchCod",
+			      " AND gam_games.GamCod IN (%s)"
+			      " ORDER BY gam_games.Title",
 			      UsrDat->UsrCod,
 			      Gbl.Hierarchy.Crs.CrsCod,
-			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
-			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+			      GamesSubQuery);
+   free (GamesSubQuery);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
@@ -405,28 +557,28 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    if (NumResults)
      {
       for (NumResult = 0;
-           NumResult < NumResults;
-           NumResult++)
-        {
-         row = mysql_fetch_row (mysql_res);
+	   NumResult < NumResults;
+	   NumResult++)
+	{
+	 row = mysql_fetch_row (mysql_res);
 
-         /* Get match code (row[0]) */
+	 /* Get match code (row[0]) */
 	 if ((Match.MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
-         Mch_GetDataOfMatchByCod (&Match);
+	 Mch_GetDataOfMatchByCod (&Match);
 
 	 /* Show match result? */
 	 ShowResultThisMatch = McR_CheckIfICanSeeMatchResult (Match.MchCod,UsrDat->UsrCod);
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
-         if (NumResult)
-            HTM_TR_Begin (NULL);
+	 if (NumResult)
+	    HTM_TR_Begin (NULL);
 
-         /* Write start/end times (row[1], row[2] hold UTC start/end times) */
-         for (StartEndTime = (Dat_StartEndTime_t) 0;
+	 /* Write start/end times (row[1], row[2] hold UTC start/end times) */
+	 for (StartEndTime = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
-           {
+	   {
 	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
 	    if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
@@ -437,22 +589,22 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x7);
 	    HTM_TD_End ();
-            free (Id);
-           }
+	    free (Id);
+	   }
 
-         /* Write match title */
+	 /* Write match title */
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
-         /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
-            NumQstsInThisResult = 0;
+	 /* Get number of questions (row[3]) */
+	 if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
+	    NumQstsInThisResult = 0;
 	 NumTotalQsts += NumQstsInThisResult;
 
-         /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
-            NumQstsNotBlankInThisResult = 0;
+	 /* Get number of questions not blank (row[4]) */
+	 if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
+	    NumQstsNotBlankInThisResult = 0;
 	 NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
 
 	 if (ShowResultThisMatch)
@@ -465,12 +617,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    TotalScoreOfAllResults += ScoreInThisResult;
 	   }
 
-         /* Write number of questions */
+	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_Unsigned (NumQstsInThisResult);
 	 HTM_TD_End ();
 
-         /* Write number of questions not blank */
+	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_Unsigned (NumQstsNotBlankInThisResult);
 	 HTM_TD_End ();
@@ -481,20 +633,20 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    HTM_Double (ScoreInThisResult);
 	 HTM_TD_End ();
 
-         /* Write average score per question */
+	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult /
-		                              (double) NumQstsInThisResult :
-			                      0.0);
+					      (double) NumQstsInThisResult :
+					      0.0);
 	 HTM_TD_End ();
 
-         /* Write score over Tst_SCORE_MAX */
+	 /* Write score over Tst_SCORE_MAX */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX /
-			                      (double) NumQstsInThisResult :
-			                      0.0);
+					      (double) NumQstsInThisResult :
+					      0.0);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -522,18 +674,18 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
-         HTM_TR_End ();
-        }
+	 HTM_TR_End ();
+	}
 
       /***** Write totals for this user *****/
       McR_ShowMchResultsSummaryRow (ShowSummaryResults,
 				    NumResults,
-                                    NumTotalQsts,NumTotalQstsNotBlank,
-                                    TotalScoreOfAllResults);
+				    NumTotalQsts,NumTotalQstsNotBlank,
+				    TotalScoreOfAllResults);
      }
    else
      {
-      HTM_TD_ColouredEmpty (8);
+      HTM_TD_ColouredEmpty (9);
       HTM_TR_End ();
      }
 

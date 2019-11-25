@@ -289,7 +289,7 @@ void Pwd_ShowFormSendNewPwd (void)
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -710,7 +710,7 @@ void Pwd_ShowFormChgMyPwd (void)
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,
+   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,
 			      IHaveAPasswordInDB ? Txt_Change_password :
 						   Txt_Set_password);
 

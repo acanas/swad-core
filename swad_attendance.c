@@ -1092,10 +1092,10 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Begin box and table *****/
    if (ItsANewAttEvent)
-      Box_StartBoxTable (NULL,Txt_New_event,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_event,NULL,
 			 Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,
+      Box_BoxTableBegin (NULL,
                          Att.Title[0] ? Att.Title :
                 	                Txt_Edit_event,
                 	 NULL,
@@ -1163,9 +1163,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** End table, send button and end box *****/
    if (ItsANewAttEvent)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1199,7 +1199,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_StartBoxTable ("100%",NULL,NULL,
+      Box_BoxTableBegin ("100%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
@@ -1226,7 +1226,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
                                             AttCod,Grp_ATT_EVENT);
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
       HTM_TD_End ();
       HTM_TR_End ();
      }
@@ -1828,14 +1828,14 @@ void Att_SeeOneAttEvent (void)
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Event,NULL,
+   Box_BoxTableBegin (NULL,Txt_Event,NULL,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
 
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -2889,7 +2889,10 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	      NumAttEvent < Gbl.AttEvents.Num;
 	      NumAttEvent++)
 	    if (Gbl.AttEvents.Lst[NumAttEvent].AttCod == AttCod)
+	      {
 	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	       break;
+	      }
 	}
      }
    else				// No events selected
@@ -3404,7 +3407,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Details,NULL,
+   Box_BoxTableBegin (NULL,Txt_Details,NULL,
 	              NULL,Box_NOT_CLOSABLE,2);
 
    /***** List students with attendance details *****/
@@ -3422,7 +3425,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** End section with attendance details *****/
    HTM_SECTION_End ();

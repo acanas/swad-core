@@ -564,7 +564,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Begin box and table *****/
-   Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
+   Box_BoxTableShadowBegin (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
    HTM_TR_Begin (NULL);
@@ -615,5 +615,5 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TR_End ();
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }

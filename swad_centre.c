@@ -178,7 +178,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if (NumCtrs)
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
+      Box_BoxTableBegin (NULL,Txt_Centres_with_pending_degrees,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Wrtie heading *****/
@@ -223,7 +223,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed);
@@ -2470,7 +2470,7 @@ static void Ctr_PutFormToCreateCentre (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_centre,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_centre,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2552,7 +2552,7 @@ static void Ctr_PutFormToCreateCentre (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_centre);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2887,7 +2887,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	        "%u %s",
                 NumCtrs,(NumCtrs == 1) ? Txt_centre :
 	                                 Txt_centres);
-      Box_StartBoxTable (NULL,Gbl.Title,NULL,
+      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -2912,7 +2912,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	}
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
 
    /***** Free structure that stores the query result *****/

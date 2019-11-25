@@ -114,7 +114,7 @@ void Dpt_SeeDepts (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Departments_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
-   Box_StartBoxTable (NULL,Gbl.Title,
+   Box_BoxTableBegin (NULL,Gbl.Title,
 		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
 							       NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
@@ -207,7 +207,7 @@ void Dpt_SeeDepts (void)
    HTM_TR_End ();
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** Free list of departments *****/
    Dpt_FreeListDepartments ();
@@ -895,7 +895,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Frm_StartForm (ActNewDpt);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_department,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_department,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -946,7 +946,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_department);
 
    /***** End form *****/
    Frm_EndForm ();

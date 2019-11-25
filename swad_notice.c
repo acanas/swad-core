@@ -118,7 +118,7 @@ void Not_ShowFormNotice (void)
    HTM_TEXTAREA_End ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_notice);
+   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Frm_EndForm ();

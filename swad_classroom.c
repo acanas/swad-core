@@ -887,7 +887,7 @@ static void Cla_PutFormToCreateClassroom (void)
    Frm_StartForm (ActNewCla);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_classroom,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_classroom,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -931,7 +931,7 @@ static void Cla_PutFormToCreateClassroom (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_classroom);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_classroom);
 
    /***** End form *****/
    Frm_EndForm ();

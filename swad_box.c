@@ -62,17 +62,17 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Box_StartBoxInternal (const char *Width,const char *Title,
+static void Box_BoxInternalBegin (const char *Width,const char *Title,
 				  void (*FunctionToDrawContextualIcons) (void),
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame);
 
 /*****************************************************************************/
-/******************* Start and end a table with rounded box ******************/
+/******************* Begin and end a table with rounded box ******************/
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8
 
-void Box_StartBoxTable (const char *Width,const char *Title,
+void Box_BoxTableBegin (const char *Width,const char *Title,
                         void (*FunctionToDrawContextualIcons) (void),
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
@@ -82,12 +82,12 @@ void Box_StartBoxTable (const char *Width,const char *Title,
    HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
-void Box_StartBoxTableShadow (const char *Width,const char *Title,
+void Box_BoxTableShadowBegin (const char *Width,const char *Title,
                               void (*FunctionToDrawContextualIcons) (void),
                               const char *HelpLink,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_StartBoxShadow (Width,Title,
+   Box_BoxShadowBegin (Width,Title,
                        FunctionToDrawContextualIcons,
                        HelpLink);
    HTM_TABLE_BeginWidePadding (CellPadding);
@@ -97,24 +97,24 @@ void Box_BoxBegin (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void),
                    const char *HelpLink,Box_Closable_t Closable)
   {
-   Box_StartBoxInternal (Width,Title,
+   Box_BoxInternalBegin (Width,Title,
 			 FunctionToDrawContextualIcons,
 			 HelpLink,Closable,
 			 "FRAME");
   }
 
-void Box_StartBoxShadow (const char *Width,const char *Title,
+void Box_BoxShadowBegin (const char *Width,const char *Title,
                          void (*FunctionToDrawContextualIcons) (void),
                          const char *HelpLink)
   {
-   Box_StartBoxInternal (Width,Title,
+   Box_BoxInternalBegin (Width,Title,
                          FunctionToDrawContextualIcons,
 			 HelpLink,Box_NOT_CLOSABLE,
 			 "FRAME_SHADOW");
   }
 
 // Return pointer to box id string
-static void Box_StartBoxInternal (const char *Width,const char *Title,
+static void Box_BoxInternalBegin (const char *Width,const char *Title,
 				  void (*FunctionToDrawContextualIcons) (void),
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
@@ -202,19 +202,19 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
      }
   }
 
-void Box_EndBoxTable (void)
+void Box_BoxTableEnd (void)
   {
    HTM_TABLE_End ();
    Box_BoxEnd ();
   }
 
-void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton)
+void Box_BoxTableWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
   {
    HTM_TABLE_End ();
-   Box_EndBoxWithButton (Button,TxtButton);
+   Box_BoxWithButtonEnd (Button,TxtButton);
   }
 
-void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton)
+void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
   {
    Btn_PutButton (Button,TxtButton);
    Box_BoxEnd ();

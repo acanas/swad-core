@@ -1642,7 +1642,7 @@ void Lay_AdvertisementMobile (void)
       HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,NULL,NULL,
+      Box_BoxTableBegin (NULL,NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/
@@ -1660,7 +1660,7 @@ void Lay_AdvertisementMobile (void)
       HTM_TR_End ();
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
 
       HTM_DIV_End ();
      }

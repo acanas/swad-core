@@ -195,13 +195,13 @@ void Rec_ReqEditRecordFields (void)
    if (Gbl.Crs.Records.LstFields.Num)	// Fields found...
      {
       /* Begin box and table */
-      Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
+      Box_BoxTableBegin (NULL,Txt_Record_fields,NULL,
                          Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
       Rec_ListFieldsRecordsForEdition ();
 
       /* End table and box */
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else	// No fields of records found for current course in the database
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
@@ -369,7 +369,7 @@ void Rec_ShowFormCreateRecordField (void)
    Frm_StartForm (ActNewFie);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_record_field,NULL,
                       Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -415,7 +415,7 @@ void Rec_ShowFormCreateRecordField (void)
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_record_field);
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1739,7 +1739,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBoxTable (StrRecordWidth,NULL,NULL,
+   Box_BoxTableBegin (StrRecordWidth,NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -1860,14 +1860,14 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    if (ICanEdit)
      {
       /* End table, send button and end box */
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
       /* End form */
       Frm_EndForm ();
      }
    else
       /* End table and box */
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -2258,7 +2258,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Box_StartBoxTable (StrRecordWidth,NULL,
+   Box_BoxTableBegin (StrRecordWidth,NULL,
                       TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
                         	                                 Rec_PutIconsCommands,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
@@ -2452,7 +2452,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -4003,7 +4003,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Box_StartBoxTable (StrRecordWidth,
+   Box_BoxTableBegin (StrRecordWidth,
                       IAmATeacher ? Txt_Institution_centre_and_department :
 	                            Txt_Institution,
 	              NULL,
@@ -4187,7 +4187,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();

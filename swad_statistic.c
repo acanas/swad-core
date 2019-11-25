@@ -530,7 +530,7 @@ void Sta_AskShowGblHits (void)
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
+   Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,NULL,
                       Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
@@ -632,7 +632,7 @@ void Sta_AskShowGblHits (void)
    Dat_PutHiddenParBrowserTZDiff ();
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_hits);
+   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_hits);
 
    /***** End form *****/
    Frm_EndForm ();

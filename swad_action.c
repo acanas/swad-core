@@ -629,7 +629,6 @@ Assessment:
         478. ActAnsMchQstStd		Answer a match question (as student)
         479. ActRefMchStd		Refresh current question when playing a game (as student)
 
-	480. ActReqSeeMyMchRes		Select range of dates to see my matches results
 	481. ActSeeMyMchRes		Show my matches results
 	482. ActReqSeeUsrMchRes		Select users and range of dates to see matches results
 
@@ -2141,7 +2140,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeMyTstRes	] = {1084,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowMyTstResults		,NULL},
    [ActSeeOneTstResMe	] = {1085,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTstResult		,NULL},
    [ActReqSeeUsrTstRes	] = {1080,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelUsrsToViewUsrsTstResults,NULL},
-   [ActSeeUsrTstRes	] = {1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_GetUsrsAndShowTstResults		,NULL},
+   [ActSeeUsrTstRes	] = {1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_GetUsrsAndShowTstResults	,NULL},
    [ActSeeOneTstResOth	] = {1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTstResult		,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
@@ -2162,12 +2161,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAnsMchQstStd	] = {1651,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQuestionAnswer	,NULL},
    [ActRefMchStd	] = {1782,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
 
-   [ActReqSeeMyMchRes	] = {1795,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,McR_SelDatesToSeeMyMchResults	,NULL},
    [ActSeeMyMchRes	] = {1796,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResults		,NULL},
    [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
 
    [ActReqSeeUsrMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,McR_SelUsrsToViewUsrsMchResults,NULL},
-   [ActSeeUsrMchRes	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_GetUsrsAndShowMchResults		,NULL},
+   [ActSeeUsrMchRes	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_GetUsrsAndShowMchResults	,NULL},
    [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 
@@ -5014,7 +5012,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1792 (obsolete action)
 	-1,			// #1793 (obsolete action)
 	ActChgVisResMchQst,	// #1794
-	ActReqSeeMyMchRes,	// #1795
+	-1,			// #1795
 	ActSeeMyMchRes,		// #1796
 	ActSeeOneMchResMe,	// #1797
 	ActReqSeeUsrMchRes,	// #1798

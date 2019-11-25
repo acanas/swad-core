@@ -1781,7 +1781,7 @@ static void Tst_ShowFormEditTags (void)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_StartBoxTable (NULL,Txt_Tags,NULL,
+      Box_BoxTableBegin (NULL,Txt_Tags,NULL,
                          Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE,2);
 
       /***** Show tags *****/
@@ -1819,7 +1819,7 @@ static void Tst_ShowFormEditTags (void)
         }
 
       /***** End table and box *****/
-      Box_EndBoxTable ();
+      Box_BoxTableEnd ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
@@ -7553,12 +7553,12 @@ void Tst_SelDatesToSeeMyTstResults (void)
    Frm_StartForm (ActSeeMyTstRes);
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** End table, send button and end box *****/
-   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_test_results);
+   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -7577,7 +7577,7 @@ void Tst_ShowMyTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
@@ -7588,7 +7588,7 @@ void Tst_ShowMyTstResults (void)
    Tst_ShowTstResults (&Gbl.Usrs.Me.UsrDat);
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -7654,7 +7654,7 @@ static void Tst_ShowUsrsTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,NULL,
 		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
@@ -7667,14 +7667,14 @@ static void Tst_ShowUsrsTstResults (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	    /***** Show test results *****/
 	    Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
      }
 
    /***** End table and box *****/
-   Box_EndBoxTable ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
