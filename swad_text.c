@@ -25511,27 +25511,6 @@ const char *Txt_No_of_questions =
 	"N&ordm; de quest&otilde;es";
 #endif
 
-const char *Txt_No_of_social_posts =
-#if   L==1	// ca
-	"Nombre de missatges socials";
-#elif L==2	// de
-	"Anzahl der sozialen Beitr&auml;ge";
-#elif L==3	// en
-	"No. of social posts";
-#elif L==4	// es
-	"N&ordm; de mensajes sociales";
-#elif L==5	// fr
-	"Nombre de messages sociaux";
-#elif L==6	// gn
-	"N&ordm; de mensajes sociales";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di post sociali";
-#elif L==8	// pl
-	"Liczba post spo&lstrok;ecznej";
-#elif L==9	// pt
-	"N&ordm; de post sociais";
-#endif
-
 const char *Txt_No_of_threads =
 #if   L==1	// ca
 	"N&ordm; de discusiones";	// Necessita traduccio

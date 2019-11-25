@@ -46,7 +46,7 @@
 
 #define TL_NUM_NOTE_TYPES	13
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table social_notes
+// it is necessary to change old numbers to new ones in database table tl_notes
 typedef enum
   {
    TL_NOTE_UNKNOWN		=  0,
@@ -76,7 +76,7 @@ typedef enum
 
 #define TL_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table social_notes
+// it is necessary to change old numbers to new ones in database table tl_notes
 typedef enum
   {
    TL_PUB_UNKNOWN		= 0,

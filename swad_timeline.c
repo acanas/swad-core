@@ -128,7 +128,7 @@ struct TL_Note
    long HieCod;			// Hierarchy code (institution/centre/degree/course)
    long Cod;			// Code of file, forum post, notice, timeline post...
    bool Unavailable;		// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;		// Date-time of publishing in UTC time
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
    unsigned NumShared;		// Number of times (users) this note has been shared
    unsigned NumFavs;		// Number of times (users) this note has been favourited
   };
@@ -157,7 +157,7 @@ struct TL_Comment
    long PubCod;
    long UsrCod;			// Publisher
    long NotCod;			// Note code to which this comment belongs
-   time_t DateTimeUTC;		// Date-time of publishing in UTC time
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
    unsigned NumFavs;		// Number of times (users) this comment has been favourited
    struct PostContent Content;
   };
@@ -430,7 +430,7 @@ void TL_ShowTimelineGbl2 (void)
 
    if (SocNot.NotCod > 0)
      {
-      /* Get who did the action (publishing, commenting, faving, sharing, mentioning) */
+      /* Get who did the action (publication, commenting, faving, sharing, mentioning) */
       Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
 
       /* Get what he/she did */
@@ -614,19 +614,19 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 
    /***** Create temporary table with publication codes *****/
    DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE pub_codes "
+	     "CREATE TEMPORARY TABLE tl_pub_codes "
 	     "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
 
    /***** Create temporary table with notes got in this execution *****/
    DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE not_codes "
+	     "CREATE TEMPORARY TABLE tl_not_codes "
 	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY");
 
    /***** Create temporary table with notes already present in timeline for this session *****/
    DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE current_timeline "
+	     "CREATE TEMPORARY TABLE tl_current_timeline "
 	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY"
-	     " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
+	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
 	     Gbl.Session.Id);
 
    /***** Create temporary table and subquery with potential publishers *****/
@@ -645,7 +645,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
                break;
 	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
 	       DB_Query ("can not create temporary table",
-		         "CREATE TEMPORARY TABLE publishers "
+		         "CREATE TEMPORARY TABLE tl_publishers "
 			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
 			 " SELECT %ld AS UsrCod"
 			 " UNION"
@@ -654,7 +654,8 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
+	       sprintf (SubQueryPublishers,
+			"tl_pubs.PublisherCod=tl_publishers.UsrCod AND ");
 	       break;
 	    case Usr_WHO_ALL:	// Show the timeline of all users
 	       SubQueryPublishers[0] = '\0';
@@ -676,13 +677,13 @@ static void TL_BuildQueryToGetTimeline (char **Query,
             case TL_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
-			 " (SELECT NotCod FROM not_codes)",
+			 " (SELECT NotCod FROM tl_not_codes)",
 			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case TL_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
-			 " (SELECT NotCod FROM current_timeline)",
+			 " (SELECT NotCod FROM tl_current_timeline)",
 			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
@@ -693,14 +694,14 @@ static void TL_BuildQueryToGetTimeline (char **Query,
             case TL_GET_ONLY_NEW_PUBS:
             case TL_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " social_pubs.NotCod NOT IN"
-			 " (SELECT NotCod FROM not_codes)",
+	                 " tl_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_not_codes)",
 			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case TL_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " social_pubs.NotCod NOT IN"
-			 " (SELECT NotCod FROM current_timeline)",
+	                 " tl_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_current_timeline)",
 			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
@@ -710,7 +711,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
 
-            social_pubs
+              tl_pubs
                _____
               |_____|11
               |_____|10
@@ -756,7 +757,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
       As an alternative, we tried to get the maximum PubCod,
       i.e more recent publication (original, shared or commment),
       of every set of publications corresponding to the same note:
-      "SELECT MAX(PubCod) AS NewestPubCod FROM social_pubs ...
+      "SELECT MAX(PubCod) AS NewestPubCod FROM tl_pubs ...
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
    */
@@ -765,7 +766,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
 	NumPub++)
      {
-      /* Create subqueries with range of publications to get from social_pubs */
+      /* Create subqueries with range of publications to get from tl_pubs */
       if (RangePubsToGet.Bottom > 0)
 	 switch (TimelineUsrOrGbl)
 	   {
@@ -782,7 +783,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 			      RangePubsToGet.Bottom);
 		     break;
 		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",
+		     sprintf (SubQueryRangeBottom,"tl_pubs.PubCod>%ld AND ",
 			      RangePubsToGet.Bottom);
 		     break;
 		  default:
@@ -810,7 +811,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 			      RangePubsToGet.Top);
 		     break;
 		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",
+		     sprintf (SubQueryRangeTop,"tl_pubs.PubCod<%ld AND ",
 			      RangePubsToGet.Top);
 		     break;
 		  default:
@@ -822,7 +823,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
       else
 	 SubQueryRangeTop[0] = '\0';
 
-      /* Select the most recent publication from social_pubs */
+      /* Select the most recent publication from tl_pubs */
       NumPubs = 0;	// Initialized to avoid warning
       switch (TimelineUsrOrGbl)
 	{
@@ -830,7 +831,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	    NumPubs =
 	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				       "SELECT PubCod,NotCod"
-				       " FROM social_pubs"
+				       " FROM tl_pubs"
 				       " WHERE %s%s%s%s"
 				       " ORDER BY PubCod DESC LIMIT 1",
 				       SubQueryRangeBottom,SubQueryRangeTop,
@@ -844,7 +845,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 					     "SELECT PubCod,NotCod"
-					     " FROM social_pubs"
+					     " FROM tl_pubs"
 					     " WHERE %s%s%s%s"
 					     " ORDER BY PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
@@ -855,9 +856,9 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod"
-				             " FROM social_pubs,publishers"
+				             " FROM tl_pubs,tl_publishers"
 					     " WHERE %s%s%s%s"
-					     " ORDER BY social_pubs.PubCod DESC LIMIT 1",
+					     " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
 					     SubQueryPublishers,
 					     SubQueryAlreadyExists);
@@ -866,7 +867,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod"
-				             " FROM social_pubs"
+				             " FROM tl_pubs"
 					     " WHERE %s%s%s"
 					     " ORDER BY PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
@@ -897,7 +898,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
       if (PubCod > 0)
 	{
 	 DB_QueryINSERT ("can not store publication code",
-			 "INSERT INTO pub_codes SET PubCod=%ld",
+			 "INSERT INTO tl_pub_codes SET PubCod=%ld",
 			 PubCod);
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
@@ -906,10 +907,10 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	   {
 	    NotCod = Str_ConvertStrCodToLongCod (row[1]);
 	    DB_QueryINSERT ("can not store note code",
-			    "INSERT INTO not_codes SET NotCod=%ld",
+			    "INSERT INTO tl_not_codes SET NotCod=%ld",
 			    NotCod);
 	    DB_QueryINSERT ("can not store note code",
-			    "INSERT INTO current_timeline SET NotCod=%ld",
+			    "INSERT INTO tl_current_timeline SET NotCod=%ld",
 			    NotCod);
 	   }
 	}
@@ -932,10 +933,10 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	                 "PublisherCod,"		// row[2]
 	                 "PubType,"			// row[3]
 	                 "UNIX_TIMESTAMP(TimePublish)"	// row[4]
-		  " FROM social_pubs"
+		  " FROM tl_pubs"
 		  " WHERE PubCod IN "
 		  "(SELECT PubCod"
-		  " FROM pub_codes)"
+		  " FROM tl_pub_codes)"
 		  " ORDER BY PubCod DESC");
   }
 
@@ -981,7 +982,7 @@ static void TL_UpdateLastPubCodIntoSession (void)
    DB_QueryUPDATE ("can not update last publication code into session",
 		   "UPDATE sessions"
 	           " SET LastPubCod="
-	           "(SELECT IFNULL(MAX(PubCod),0) FROM social_pubs)"
+	           "(SELECT IFNULL(MAX(PubCod),0) FROM tl_pubs)"
 	           " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
@@ -1005,8 +1006,11 @@ static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
 static void TL_DropTemporaryTablesUsedToQueryTimeline (void)
   {
    DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS"
-	     " pub_codes,not_codes,publishers,current_timeline");
+	     "DROP TEMPORARY TABLE IF EXISTS "
+	     "tl_pub_codes,"
+	     "tl_not_codes,"
+	     "tl_publishers,"
+	     "tl_current_timeline");
   }
 
 /*****************************************************************************/
@@ -1849,7 +1853,7 @@ static void TL_GetAndWritePost (long PstCod)
 					" of a post",
 			     "SELECT Txt,"		// row[0]
 			            "MedCod"		// row[1]
-			     " FROM social_posts"
+			     " FROM tl_posts"
 			     " WHERE PstCod=%ld",
 			     PstCod);
 
@@ -2126,7 +2130,7 @@ void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publicati
    /***** Store note *****/
    SocPub->NotCod =
    DB_QueryINSERTandReturnCode ("can not create new note",
-				"INSERT INTO social_notes"
+				"INSERT INTO tl_notes"
 				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
 				" VALUES"
 				" (%u,%ld,%ld,%ld,'N',NOW())",
@@ -2147,7 +2151,7 @@ void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod)
   {
    /***** Mark the note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE social_notes SET Unavailable='Y'"
+		   "UPDATE tl_notes SET Unavailable='Y'"
 		   " WHERE NotCod=%ld",
 		   NotCod);
   }
@@ -2156,7 +2160,7 @@ void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Co
   {
    /***** Mark the note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE social_notes SET Unavailable='Y'"
+		   "UPDATE tl_notes SET Unavailable='Y'"
 		   " WHERE NoteType=%u AND Cod=%ld",
 		   (unsigned) NoteType,Cod);
   }
@@ -2276,7 +2280,7 @@ void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 	       return;
 	   }
          DB_QueryUPDATE ("can not mark notes as unavailable",
-			 "UPDATE social_notes SET Unavailable='Y'"
+			 "UPDATE tl_notes SET Unavailable='Y'"
 		         " WHERE NoteType=%u AND Cod IN"
 	                 " (SELECT FilCod FROM files"
 			 " WHERE FileBrowser=%u AND Cod=%ld"
@@ -2300,7 +2304,7 @@ static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub)
    /***** Publish note in timeline *****/
    SocPub->PubCod =
    DB_QueryINSERTandReturnCode ("can not publish note",
-				"INSERT INTO social_pubs"
+				"INSERT INTO tl_pubs"
 				" (NotCod,PublisherCod,PubType,TimePublish)"
 				" VALUES"
 				" (%ld,%ld,%u,NOW())",
@@ -2458,7 +2462,7 @@ static long TL_ReceivePost (void)
       /* Insert post content in the database */
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
-				   "INSERT INTO social_posts"
+				   "INSERT INTO tl_posts"
 				   " (Txt,MedCod)"
 				   " VALUES"
 				   " ('%s',%ld)",
@@ -2564,7 +2568,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
 static unsigned long TL_GetNumCommentsInNote (long NotCod)
   {
    return DB_QueryCOUNT ("can not get number of comments in a note",
-			 "SELECT COUNT(*) FROM social_pubs"
+			 "SELECT COUNT(*) FROM tl_pubs"
 			 " WHERE NotCod=%ld AND PubType=%u",
 			 NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
   }
@@ -2603,18 +2607,18 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
    DB_QuerySELECT (&mysql_res,"can not get comments",
 			      "SELECT * FROM "
 			      "("
-			      "SELECT social_pubs.PubCod,"		// row[0]
-				     "social_pubs.PublisherCod,"	// row[1]
-				     "social_pubs.NotCod,"		// row[2]
+			      "SELECT tl_pubs.PubCod,"		// row[0]
+				     "tl_pubs.PublisherCod,"	// row[1]
+				     "tl_pubs.NotCod,"		// row[2]
 				     "UNIX_TIMESTAMP("
-				     "social_pubs.TimePublish),"	// row[3]
-				     "social_comments.Txt,"		// row[4]
-				     "social_comments.MedCod"		// row[5]
-			      " FROM social_pubs,social_comments"
-			      " WHERE social_pubs.NotCod=%ld"
-			      " AND social_pubs.PubType=%u"
-			      " AND social_pubs.PubCod=social_comments.PubCod"
-			      " ORDER BY social_pubs.PubCod DESC LIMIT %u"
+				     "tl_pubs.TimePublish),"	// row[3]
+				     "tl_comments.Txt,"		// row[4]
+				     "tl_comments.MedCod"	// row[5]
+			      " FROM tl_pubs,tl_comments"
+			      " WHERE tl_pubs.NotCod=%ld"
+			      " AND tl_pubs.PubType=%u"
+			      " AND tl_pubs.PubCod=tl_comments.PubCod"
+			      " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
 			      ") AS comments"
 			      " ORDER BY PubCod",
 			      SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
@@ -2815,18 +2819,18 @@ static unsigned TL_WriteHiddenComments (long NotCod,
    /***** Get comments of this note from database *****/
    NumInitialCommentsGot = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get comments",
-		   "SELECT social_pubs.PubCod,"		// row[0]
-			  "social_pubs.PublisherCod,"	// row[1]
-			  "social_pubs.NotCod,"		// row[2]
+		   "SELECT tl_pubs.PubCod,"		// row[0]
+			  "tl_pubs.PublisherCod,"	// row[1]
+			  "tl_pubs.NotCod,"		// row[2]
 			  "UNIX_TIMESTAMP("
-			  "social_pubs.TimePublish),"	// row[3]
-			  "social_comments.Txt,"	// row[4]
-			  "social_comments.MedCod"	// row[5]
-		   " FROM social_pubs,social_comments"
-		   " WHERE social_pubs.NotCod=%ld"
-		   " AND social_pubs.PubType=%u"
-		   " AND social_pubs.PubCod=social_comments.PubCod"
-		   " ORDER BY social_pubs.PubCod"
+			  "tl_pubs.TimePublish),"	// row[3]
+			  "tl_comments.Txt,"		// row[4]
+			  "tl_comments.MedCod"		// row[5]
+		   " FROM tl_pubs,tl_comments"
+		   " WHERE tl_pubs.NotCod=%ld"
+		   " AND tl_pubs.PubType=%u"
+		   " AND tl_pubs.PubCod=tl_comments.PubCod"
+		   " ORDER BY tl_pubs.PubCod"
 		   " LIMIT %lu",
 		   NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
 		   NumInitialCommentsToGet);
@@ -3393,7 +3397,7 @@ static long TL_ReceiveComment (void)
 
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
-			 "INSERT INTO social_comments"
+			 "INSERT INTO tl_comments"
 	                 " (PubCod,Txt,MedCod)"
 			 " VALUES"
 			 " (%ld,'%s',%ld)",
@@ -3639,7 +3643,7 @@ static void TL_FavNote (struct TL_Note *SocNot)
 	   {
 	    /***** Mark as favourite in database *****/
 	    DB_QueryINSERT ("can not favourite note",
-			    "INSERT IGNORE INTO social_notes_fav"
+			    "INSERT IGNORE INTO tl_notes_fav"
 			    " (NotCod,UsrCod,TimeFav)"
 			    " VALUES"
 			    " (%ld,%ld,NOW())",
@@ -3677,7 +3681,7 @@ static void TL_UnfNote (struct TL_Note *SocNot)
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    DB_QueryDELETE ("can not unfavourite note",
-			    "DELETE FROM social_notes_fav"
+			    "DELETE FROM tl_notes_fav"
 			    " WHERE NotCod=%ld AND UsrCod=%ld",
 			    SocNot->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3810,7 +3814,7 @@ static void TL_FavComment (struct TL_Comment *SocCom)
 	   {
 	    /***** Mark as favourite in database *****/
 	    DB_QueryINSERT ("can not favourite comment",
-			    "INSERT IGNORE INTO social_comments_fav"
+			    "INSERT IGNORE INTO tl_comments_fav"
 			    " (PubCod,UsrCod,TimeFav)"
 			    " VALUES"
 			    " (%ld,%ld,NOW())",
@@ -3851,7 +3855,7 @@ static void TL_UnfComment (struct TL_Comment *SocCom)
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    DB_QueryDELETE ("can not unfavourite comment",
-			    "DELETE FROM social_comments_fav"
+			    "DELETE FROM tl_comments_fav"
 			    " WHERE PubCod=%ld AND UsrCod=%ld",
 			    SocCom->PubCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3947,7 +3951,7 @@ static void TL_UnsNote (struct TL_Note *SocNot)
 	   {
 	    /***** Delete publication from database *****/
 	    DB_QueryDELETE ("can not remove a publication",
-			    "DELETE FROM social_pubs"
+			    "DELETE FROM tl_pubs"
 	                    " WHERE NotCod=%ld"
 	                    " AND PublisherCod=%ld"
 	                    " AND PubType=%u",
@@ -4136,7 +4140,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    /* Get comments of this note */
    NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
 				 "SELECT PubCod"
-				 " FROM social_pubs"
+				 " FROM tl_pubs"
 				 " WHERE NotCod=%ld AND PubType=%u",
 				 SocNot->NotCod,
 				 (unsigned) TL_PUB_COMMENT_TO_NOTE);
@@ -4164,7 +4168,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
       /* Remove media associated to a post from database */
       if (DB_QuerySELECT (&mysql_res,"can not get media",
 				 "SELECT MedCod"	// row[0]
-				 " FROM social_posts"
+				 " FROM tl_posts"
 				 " WHERE PstCod=%ld",
 				 SocNot->Cod) == 1)   // Result should have a unique row
         {
@@ -4193,19 +4197,19 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
 
    /***** Remove favs for this note *****/
    DB_QueryDELETE ("can not remove favs for note",
-		   "DELETE FROM social_notes_fav"
+		   "DELETE FROM tl_notes_fav"
 		   " WHERE NotCod=%ld",
 		   SocNot->NotCod);
 
    /***** Remove all the publications of this note *****/
    DB_QueryDELETE ("can not remove a publication",
-		   "DELETE FROM social_pubs"
+		   "DELETE FROM tl_pubs"
 		   " WHERE NotCod=%ld",
 		   SocNot->NotCod);
 
    /***** Remove note *****/
    DB_QueryDELETE ("can not remove a note",
-		   "DELETE FROM social_notes"
+		   "DELETE FROM tl_notes"
 	           " WHERE NotCod=%ld"
 	           " AND UsrCod=%ld",		// Extra check: I am the author
 		   SocNot->NotCod,
@@ -4214,7 +4218,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    if (SocNot->NoteType == TL_NOTE_POST)
       /***** Remove post *****/
       DB_QueryDELETE ("can not remove a post",
-		      "DELETE FROM social_posts"
+		      "DELETE FROM tl_posts"
 		      " WHERE PstCod=%ld",
 		      SocNot->Cod);
   }
@@ -4231,7 +4235,7 @@ static long TL_GetNotCodOfPublication (long PubCod)
 
    /***** Get code of note from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get code of note",
-		       "SELECT NotCod FROM social_pubs"
+		       "SELECT NotCod FROM tl_pubs"
 		       " WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
@@ -4258,7 +4262,7 @@ static long TL_GetPubCodOfOriginalNote (long NotCod)
 
    /***** Get code of publication of the original note *****/
    if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod FROM social_pubs"
+		       "SELECT PubCod FROM tl_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
 		       NotCod,(unsigned) TL_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
      {
@@ -4452,7 +4456,7 @@ static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
    /***** Remove media associated to comment *****/
    if (DB_QuerySELECT (&mysql_res,"can not get media",
 		       "SELECT MedCod"	// row[0]
-		       " FROM social_comments"
+		       " FROM tl_comments"
 		       " WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
@@ -4474,19 +4478,19 @@ static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
 
    /***** Remove favs for this comment *****/
    DB_QueryDELETE ("can not remove favs for comment",
-		   "DELETE FROM social_comments_fav"
+		   "DELETE FROM tl_comments_fav"
 		   " WHERE PubCod=%ld",
 		   PubCod);
 
    /***** Remove content of this comment *****/
    DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM social_comments"
+		   "DELETE FROM tl_comments"
 		   " WHERE PubCod=%ld",
 		   PubCod);
 
    /***** Remove this comment *****/
    DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM social_pubs"
+		   "DELETE FROM tl_pubs"
 	           " WHERE PubCod=%ld"
 	           " AND PublisherCod=%ld"	// Extra check: I am the author
 	           " AND PubType=%u",		// Extra check: it's a comment
@@ -4504,98 +4508,98 @@ void TL_RemoveUsrContent (long UsrCod)
    /***** Remove favs for comments *****/
    /* Remove all favs made by this user in any comment */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_comments_fav"
+		   "DELETE FROM tl_comments_fav"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /* Remove all favs for all comments of this user */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_comments_fav"
-	           " USING social_pubs,social_comments_fav"
-	           " WHERE social_pubs.PublisherCod=%ld"	// Author of the comment
-                   " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
+		   "DELETE FROM tl_comments_fav"
+	           " USING tl_pubs,tl_comments_fav"
+	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
 		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* Remove all favs for all comments in all the notes of the user */
    DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM social_comments_fav"
-	           " USING social_notes,social_pubs,social_comments_fav"
-	           " WHERE social_notes.UsrCod=%ld"	// Author of the note
-	           " AND social_notes.NotCod=social_pubs.NotCod"
-                   " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
+		   "DELETE FROM tl_comments_fav"
+	           " USING tl_notes,tl_pubs,tl_comments_fav"
+	           " WHERE tl_notes.UsrCod=%ld"	// Author of the note
+	           " AND tl_notes.NotCod=tl_pubs.NotCod"
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
 		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user in any note */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_notes_fav"
+		   "DELETE FROM tl_notes_fav"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /* Remove all favs for all notes of this user */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_notes_fav"
-	           " USING social_notes,social_notes_fav"
-	           " WHERE social_notes.UsrCod=%ld"	// Author of the note
-	           " AND social_notes.NotCod=social_notes_fav.NotCod",
+		   "DELETE FROM tl_notes_fav"
+	           " USING tl_notes,tl_notes_fav"
+	           " WHERE tl_notes.UsrCod=%ld"	// Author of the note
+	           " AND tl_notes.NotCod=tl_notes_fav.NotCod",
 		   UsrCod);
 
    /***** Remove comments *****/
    /* Remove content of all the comments in all the notes of the user */
    DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM social_comments"
-	           " USING social_notes,social_pubs,social_comments"
-	           " WHERE social_notes.UsrCod=%ld"
-		   " AND social_notes.NotCod=social_pubs.NotCod"
-                   " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments.PubCod",
+		   "DELETE FROM tl_comments"
+	           " USING tl_notes,tl_pubs,tl_comments"
+	           " WHERE tl_notes.UsrCod=%ld"
+		   " AND tl_notes.NotCod=tl_pubs.NotCod"
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments.PubCod",
 		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* Remove all the comments from any user in any note of the user */
    DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM social_pubs"
-	           " USING social_notes,social_pubs"
-	           " WHERE social_notes.UsrCod=%ld"
-		   " AND social_notes.NotCod=social_pubs.NotCod"
-                   " AND social_pubs.PubType=%u",
+		   "DELETE FROM tl_pubs"
+	           " USING tl_notes,tl_pubs"
+	           " WHERE tl_notes.UsrCod=%ld"
+		   " AND tl_notes.NotCod=tl_pubs.NotCod"
+                   " AND tl_pubs.PubType=%u",
 		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* Remove content of all the comments of the user in any note */
    DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM social_comments"
-	           " USING social_pubs,social_comments"
-	           " WHERE social_pubs.PublisherCod=%ld"
-	           " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments.PubCod",
+		   "DELETE FROM tl_comments"
+	           " USING tl_pubs,tl_comments"
+	           " WHERE tl_pubs.PublisherCod=%ld"
+	           " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments.PubCod",
 		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /***** Remove all the posts of the user *****/
    DB_QueryDELETE ("can not remove posts",
-		   "DELETE FROM social_posts"
+		   "DELETE FROM tl_posts"
 		   " WHERE PstCod IN"
-		   " (SELECT Cod FROM social_notes"
+		   " (SELECT Cod FROM tl_notes"
 	           " WHERE UsrCod=%ld AND NoteType=%u)",
 		   UsrCod,(unsigned) TL_NOTE_POST);
 
    /***** Remove all the publications of any user authored by the user *****/
    DB_QueryDELETE ("can not remove publications",
-		   "DELETE FROM social_pubs"
-                   " USING social_notes,social_pubs"
-	           " WHERE social_notes.UsrCod=%ld"
-                   " AND social_notes.NotCod=social_pubs.NotCod",
+		   "DELETE FROM tl_pubs"
+                   " USING tl_notes,tl_pubs"
+	           " WHERE tl_notes.UsrCod=%ld"
+                   " AND tl_notes.NotCod=tl_pubs.NotCod",
 		   UsrCod);
 
    /***** Remove all the publications of the user *****/
    DB_QueryDELETE ("can not remove publications",
-		   "DELETE FROM social_pubs"
+		   "DELETE FROM tl_pubs"
 		   " WHERE PublisherCod=%ld",
 		   UsrCod);
 
    /***** Remove all the notes of the user *****/
    DB_QueryDELETE ("can not remove notes",
-		   "DELETE FROM social_notes"
+		   "DELETE FROM tl_notes"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
@@ -4607,7 +4611,7 @@ void TL_RemoveUsrContent (long UsrCod)
 static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user has shared a note",
-			  "SELECT COUNT(*) FROM social_pubs"
+			  "SELECT COUNT(*) FROM tl_pubs"
 			  " WHERE NotCod=%ld"
 			  " AND PublisherCod=%ld"
 			  " AND PubType=%u",
@@ -4624,7 +4628,7 @@ static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user"
 			  " has favourited a note",
-			  "SELECT COUNT(*) FROM social_notes_fav"
+			  "SELECT COUNT(*) FROM tl_notes_fav"
 			  " WHERE NotCod=%ld AND UsrCod=%ld",
 			  NotCod,UsrCod) != 0);
   }
@@ -4637,7 +4641,7 @@ static bool TL_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user"
 			  " has favourited a comment",
-			  "SELECT COUNT(*) FROM social_comments_fav"
+			  "SELECT COUNT(*) FROM tl_comments_fav"
 			  " WHERE PubCod=%ld AND UsrCod=%ld",
 			  PubCod,UsrCod) != 0);
   }
@@ -4652,7 +4656,7 @@ static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
    SocNot->NumShared =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a note has been shared",
-			     "SELECT COUNT(*) FROM social_pubs"
+			     "SELECT COUNT(*) FROM tl_pubs"
 			     " WHERE NotCod=%ld"
 			     " AND PublisherCod<>%ld"
 			     " AND PubType=%u",
@@ -4671,7 +4675,7 @@ static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot)
    SocNot->NumFavs =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a note has been favourited",
-			     "SELECT COUNT(*) FROM social_notes_fav"
+			     "SELECT COUNT(*) FROM tl_notes_fav"
 			     " WHERE NotCod=%ld"
 			     " AND UsrCod<>%ld",	// Extra check
 			     SocNot->NotCod,
@@ -4688,7 +4692,7 @@ static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom)
    SocCom->NumFavs =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a comment has been favourited",
-			     "SELECT COUNT(*) FROM social_comments_fav"
+			     "SELECT COUNT(*) FROM tl_comments_fav"
 			     " WHERE PubCod=%ld"
 			     " AND UsrCod<>%ld",	// Extra check
 			     SocCom->PubCod,
@@ -4709,7 +4713,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
    if (SocNot->NumShared)
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT PublisherCod FROM social_pubs"
+				 "SELECT PublisherCod FROM tl_pubs"
 				 " WHERE NotCod=%ld"
 				 " AND PublisherCod<>%ld"
 				 " AND PubType=%u"
@@ -4752,7 +4756,7 @@ static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
       /***** Get list of users from database *****/
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM social_notes_fav"
+				 "SELECT UsrCod FROM tl_notes_fav"
 				 " WHERE NotCod=%ld"
 				 " AND UsrCod<>%ld"	// Extra check
 				 " ORDER BY FavCod LIMIT %u",
@@ -4793,7 +4797,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
       /***** Get list of users from database *****/
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM social_comments_fav"
+				 "SELECT UsrCod FROM tl_comments_fav"
 				 " WHERE PubCod=%ld"
 				 " AND UsrCod<>%ld"	// Extra check
 				 " ORDER BY FavCod LIMIT %u",
@@ -4897,7 +4901,7 @@ static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
 				 "HieCod,"			// row[4]
 				 "Unavailable,"			// row[5]
 				 "UNIX_TIMESTAMP(TimeNote)"	// row[6]
-			  " FROM social_notes"
+			  " FROM tl_notes"
 			  " WHERE NotCod=%ld",
 			  SocNot->NotCod))
 	{
@@ -4930,16 +4934,16 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
      {
       /***** Get data of comment from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get data of comment",
-			  "SELECT social_pubs.PubCod,"				// row[0]
-				 "social_pubs.PublisherCod,"			// row[1]
-				 "social_pubs.NotCod,"				// row[2]
-				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
-				 "social_comments.Txt,"				// row[4]
-				 "social_comments.MedCod"			// row[5]
-			  " FROM social_pubs,social_comments"
-			  " WHERE social_pubs.PubCod=%ld"
-			  " AND social_pubs.PubType=%u"
-			  " AND social_pubs.PubCod=social_comments.PubCod",
+			  "SELECT tl_pubs.PubCod,"			// row[0]
+				 "tl_pubs.PublisherCod,"		// row[1]
+				 "tl_pubs.NotCod,"			// row[2]
+				 "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
+				 "tl_comments.Txt,"			// row[4]
+				 "tl_comments.MedCod"			// row[5]
+			  " FROM tl_pubs,tl_comments"
+			  " WHERE tl_pubs.PubCod=%ld"
+			  " AND tl_pubs.PubType=%u"
+			  " AND tl_pubs.PubCod=tl_comments.PubCod",
 			  SocCom->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
 	{
 	 /***** Get data of comment *****/
@@ -4959,7 +4963,7 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
   }
 
 /*****************************************************************************/
-/****************** Get data of publication using its code *******************/
+/***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
 static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub)
@@ -5024,7 +5028,7 @@ static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
   }
 
 /*****************************************************************************/
-/******** Get publication type from string number coming from database *******/
+/******* Get publication type from string number coming from database ********/
 /*****************************************************************************/
 
 static TL_PubType_t TL_GetPubTypeFromStr (const char *Str)
@@ -5128,7 +5132,7 @@ void TL_ClearOldTimelinesDB (void)
   {
    /***** Remove timelines for expired sessions *****/
    DB_QueryDELETE ("can not remove old timelines",
-		   "DELETE LOW_PRIORITY FROM social_timelines"
+		   "DELETE LOW_PRIORITY FROM tl_timelines"
                    " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
   }
 
@@ -5140,7 +5144,7 @@ static void TL_ClearTimelineThisSession (void)
   {
    /***** Remove timeline for this session *****/
    DB_QueryDELETE ("can not remove timeline",
-		   "DELETE FROM social_timelines"
+		   "DELETE FROM tl_timelines"
 		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
@@ -5152,14 +5156,14 @@ static void TL_ClearTimelineThisSession (void)
 static void TL_AddNotesJustRetrievedToTimelineThisSession (void)
   {
    DB_QueryINSERT ("can not insert notes in timeline",
-		   "INSERT IGNORE INTO social_timelines"
+		   "INSERT IGNORE INTO tl_timelines"
 	           " (SessionId,NotCod)"
-	           " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
+	           " SELECT DISTINCTROW '%s',NotCod FROM tl_not_codes",
 		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
-/****************** Get notification of a new publication ********************/
+/***************** Get notification of a new publication *********************/
 /*****************************************************************************/
 
 void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
@@ -5186,7 +5190,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			      "PublisherCod,"			// row[2]
 			      "PubType,"			// row[3]
 			      "UNIX_TIMESTAMP(TimePublish)"	// row[4]
-		       " FROM social_pubs WHERE PubCod=%ld",
+		       " FROM tl_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
       /* Get data of publication */
@@ -5213,7 +5217,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    /***** Get content of post from database *****/
 	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
 			        "SELECT Txt"	// row[0]
-			        " FROM social_posts"
+			        " FROM tl_posts"
 				" WHERE PstCod=%ld",
 				SocNot.Cod) == 1)   // Result should have a unique row
 	      {
@@ -5253,7 +5257,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
 				        " of a comment to a note",
 			     "SELECT Txt"	// row[0]
-			     " FROM social_comments"
+			     " FROM tl_comments"
 			     " WHERE PubCod=%ld",
 			     SocPub.PubCod) == 1)   // Result should have a unique row
 	   {
@@ -5392,7 +5396,7 @@ unsigned long TL_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
    return DB_QueryCOUNT ("can not get number of publications from a user",
-			 "SELECT COUNT(*) FROM social_pubs"
+			 "SELECT COUNT(*) FROM tl_pubs"
 			 " WHERE PublisherCod=%ld",
 			 UsrCod);
   }

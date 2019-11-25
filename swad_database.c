@@ -2307,161 +2307,6 @@ mysql> DESCRIBE sessions;
 		   "UNIQUE INDEX(SessionId),"
 		   "INDEX(UsrCod))");
 
-   /***** Table social_comments *****/
-/*
-mysql> DESCRIBE social_comments;
-+--------+------------+------+-----+---------+-------+
-| Field  | Type       | Null | Key | Default | Extra |
-+--------+------------+------+-----+---------+-------+
-| PubCod | bigint(20) | NO   | PRI | NULL    |       |
-| Txt    | longtext   | NO   | MUL | NULL    |       |
-| MedCod | int(11)    | NO   | MUL | -1      |       |
-+--------+------------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
-			"PubCod BIGINT NOT NULL,"
-			"Content Txt NOT NULL,"
-			"MedCod INT NOT NULL DEFAULT -1,"
-		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
-
-   /***** Table social_comments_fav *****/
-/*
-mysql> DESCRIBE social_comments_fav;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| PubCod  | bigint(20) | NO   | MUL | NULL    |                |
-| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
-| TimeFav | datetime   | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_fav ("
-			"FavCod BIGINT AUTO_INCREMENT,"
-			"PubCod BIGINT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
-		   "UNIQUE INDEX(FavCod),"
-		   "UNIQUE INDEX(PubCod,UsrCod),"
-		   "INDEX(UsrCod))");
-
-   /***** Table social_notes *****/
-/*
-mysql> DESCRIBE social_notes;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
-| NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
-| Cod         | int(11)       | NO   |     | -1      |                |
-| UsrCod      | int(11)       | NO   | MUL | NULL    |                |
-| HieCod      | int(11)       | NO   |     | -1      |                |
-| Unavailable | enum('N','Y') | NO   |     | N       |                |
-| TimeNote    | datetime      | NO   | MUL | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
-			"NotCod BIGINT NOT NULL AUTO_INCREMENT,"
-			"NoteType TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"UsrCod INT NOT NULL,"
-			"HieCod INT NOT NULL DEFAULT -1,"
-			"Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"TimeNote DATETIME NOT NULL,"
-		   "UNIQUE INDEX(NotCod),"
-		   "INDEX(NoteType,Cod),"
-		   "INDEX(UsrCod),"
-		   "INDEX(TimeNote))");
-
-   /***** Table social_notes_fav *****/
-/*
-mysql> DESCRIBE social_notes_fav;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| NotCod  | bigint(20) | NO   | MUL | NULL    |                |
-| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
-| TimeFav | datetime   | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes_fav ("
-			"FavCod BIGINT AUTO_INCREMENT,"
-			"NotCod BIGINT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
-		   "UNIQUE INDEX(FavCod),"
-		   "UNIQUE INDEX(NotCod,UsrCod),"
-		   "INDEX(UsrCod))");
-
-   /***** Table social_posts *****/
-/*
-mysql> DESCRIBE social_posts;
-+--------+----------+------+-----+---------+----------------+
-| Field  | Type     | Null | Key | Default | Extra          |
-+--------+----------+------+-----+---------+----------------+
-| PstCod | int(11)  | NO   | PRI | NULL    | auto_increment |
-| Txt    | longtext | NO   | MUL | NULL    |                |
-| MedCod | int(11)  | NO   | MUL | -1      |                |
-+--------+----------+------+-----+---------+----------------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
-			"PubCod INT NOT NULL AUTO_INCREMENT,"
-			"Txt LONGTEXT NOT NULL,"
-			"MedCod INT NOT NULL DEFAULT -1,"
-		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
-
-   /***** Table social_pubs *****/
-/*
-mysql> DESCRIBE social_pubs;
-+--------------+------------+------+-----+---------+----------------+
-| Field        | Type       | Null | Key | Default | Extra          |
-+--------------+------------+------+-----+---------+----------------+
-| PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| NotCod       | bigint(20) | NO   | MUL | NULL    |                |
-| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
-| PubType      | tinyint(4) | NO   | MUL | NULL    |                |
-| TimePublish  | datetime   | NO   | MUL | NULL    |                |
-+--------------+------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_pubs ("
-			"PubCod BIGINT NOT NULL AUTO_INCREMENT,"
-			"NotCod BIGINT NOT NULL,"
-			"PublisherCod INT NOT NULL,"
-			"PubType TINYINT NOT NULL,"
-			"TimePublish DATETIME NOT NULL,"
-		   "UNIQUE INDEX(PubCod),"
-		   "INDEX(NotCod,PublisherCod,PubType),"
-		   "INDEX(PublisherCod),"
-		   "INDEX(PubType),"
-		   "INDEX(TimePublish))");
-
-   /***** Table social_timelines *****/
-/*
-mysql> DESCRIBE social_timelines;
-+-----------+------------+------+-----+---------+-------+
-| Field     | Type       | Null | Key | Default | Extra |
-+-----------+------------+------+-----+---------+-------+
-| SessionId | char(43)   | NO   | PRI | NULL    |       |
-| NotCod    | bigint(20) | NO   | PRI | NULL    |       |
-+-----------+------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timelines ("
-			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
-			"NotCod BIGINT NOT NULL,"
-		   "UNIQUE INDEX(SessionId,NotCod))");
-
    /***** Table sta_degrees *****/
 /*
 mysql> DESCRIBE sta_degrees;
@@ -2667,6 +2512,161 @@ mysql> DESCRIBE timetable_tut;
 			"Duration TIME NOT NULL,"
 			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
 		   "INDEX(UsrCod))");
+
+   /***** Table tl_comments *****/
+/*
+mysql> DESCRIBE tl_comments;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| PubCod | bigint(20) | NO   | PRI | NULL    |       |
+| Txt    | longtext   | NO   | MUL | NULL    |       |
+| MedCod | int(11)    | NO   | MUL | -1      |       |
++--------+------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_comments ("
+			"PubCod BIGINT NOT NULL,"
+			"Content Txt NOT NULL,"
+			"MedCod INT NOT NULL DEFAULT -1,"
+		   "UNIQUE INDEX(PubCod),"
+		   "FULLTEXT(Txt),"
+		   "INDEX(MedCod)) ENGINE = MYISAM;");
+
+   /***** Table tl_comments_fav *****/
+/*
+mysql> DESCRIBE tl_comments_fav;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| PubCod  | bigint(20) | NO   | MUL | NULL    |                |
+| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
+| TimeFav | datetime   | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_comments_fav ("
+			"FavCod BIGINT AUTO_INCREMENT,"
+			"PubCod BIGINT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
+		   "UNIQUE INDEX(FavCod),"
+		   "UNIQUE INDEX(PubCod,UsrCod),"
+		   "INDEX(UsrCod))");
+
+   /***** Table tl_notes *****/
+/*
+mysql> DESCRIBE tl_notes;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
+| NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod         | int(11)       | NO   |     | -1      |                |
+| UsrCod      | int(11)       | NO   | MUL | NULL    |                |
+| HieCod      | int(11)       | NO   |     | -1      |                |
+| Unavailable | enum('N','Y') | NO   |     | N       |                |
+| TimeNote    | datetime      | NO   | MUL | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_notes ("
+			"NotCod BIGINT NOT NULL AUTO_INCREMENT,"
+			"NoteType TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"HieCod INT NOT NULL DEFAULT -1,"
+			"Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"TimeNote DATETIME NOT NULL,"
+		   "UNIQUE INDEX(NotCod),"
+		   "INDEX(NoteType,Cod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(TimeNote))");
+
+   /***** Table tl_notes_fav *****/
+/*
+mysql> DESCRIBE tl_notes_fav;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| NotCod  | bigint(20) | NO   | MUL | NULL    |                |
+| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
+| TimeFav | datetime   | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_notes_fav ("
+			"FavCod BIGINT AUTO_INCREMENT,"
+			"NotCod BIGINT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
+		   "UNIQUE INDEX(FavCod),"
+		   "UNIQUE INDEX(NotCod,UsrCod),"
+		   "INDEX(UsrCod))");
+
+   /***** Table tl_posts *****/
+/*
+mysql> DESCRIBE tl_posts;
++--------+----------+------+-----+---------+----------------+
+| Field  | Type     | Null | Key | Default | Extra          |
++--------+----------+------+-----+---------+----------------+
+| PstCod | int(11)  | NO   | PRI | NULL    | auto_increment |
+| Txt    | longtext | NO   | MUL | NULL    |                |
+| MedCod | int(11)  | NO   | MUL | -1      |                |
++--------+----------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_posts ("
+			"PubCod INT NOT NULL AUTO_INCREMENT,"
+			"Txt LONGTEXT NOT NULL,"
+			"MedCod INT NOT NULL DEFAULT -1,"
+		   "UNIQUE INDEX(PubCod),"
+		   "FULLTEXT(Txt),"
+		   "INDEX(MedCod)) ENGINE = MYISAM;");
+
+   /***** Table tl_pubs *****/
+/*
+mysql> DESCRIBE tl_pubs;
++--------------+------------+------+-----+---------+----------------+
+| Field        | Type       | Null | Key | Default | Extra          |
++--------------+------------+------+-----+---------+----------------+
+| PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| NotCod       | bigint(20) | NO   | MUL | NULL    |                |
+| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
+| PubType      | tinyint(4) | NO   | MUL | NULL    |                |
+| TimePublish  | datetime   | NO   | MUL | NULL    |                |
++--------------+------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_pubs ("
+			"PubCod BIGINT NOT NULL AUTO_INCREMENT,"
+			"NotCod BIGINT NOT NULL,"
+			"PublisherCod INT NOT NULL,"
+			"PubType TINYINT NOT NULL,"
+			"TimePublish DATETIME NOT NULL,"
+		   "UNIQUE INDEX(PubCod),"
+		   "INDEX(NotCod,PublisherCod,PubType),"
+		   "INDEX(PublisherCod),"
+		   "INDEX(PubType),"
+		   "INDEX(TimePublish))");
+
+   /***** Table tl_timelines *****/
+/*
+mysql> DESCRIBE tl_timelines;
++-----------+------------+------+-----+---------+-------+
+| Field     | Type       | Null | Key | Default | Extra |
++-----------+------------+------+-----+---------+-------+
+| SessionId | char(43)   | NO   | PRI | NULL    |       |
+| NotCod    | bigint(20) | NO   | PRI | NULL    |       |
++-----------+------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_timelines ("
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
+			"NotCod BIGINT NOT NULL,"
+		   "UNIQUE INDEX(SessionId,NotCod))");
 
    /***** Table tst_answers *****/
 /*

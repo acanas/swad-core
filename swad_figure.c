@@ -150,7 +150,7 @@ static void Fig_GetAndShowProjectsStats (void);
 static void Fig_GetAndShowTestsStats (void);
 static void Fig_GetAndShowGamesStats (void);
 
-static void Fig_GetAndShowSocialActivityStats (void);
+static void Fig_GetAndShowTimelineActivityStats (void);
 static void Fig_GetAndShowFollowStats (void);
 
 static void Fig_GetAndShowForumStats (void);
@@ -320,7 +320,7 @@ void Fig_ShowFigures (void)
       Fig_GetAndShowTestsStats,			// Fig_TESTS
       Fig_GetAndShowGamesStats,			// Fig_GAMES
       Fig_GetAndShowSurveysStats,		// Fig_SURVEYS
-      Fig_GetAndShowSocialActivityStats,	// Fig_SOCIAL_ACTIVITY
+      Fig_GetAndShowTimelineActivityStats,	// Fig_SOCIAL_ACTIVITY
       Fig_GetAndShowFollowStats,		// Fig_FOLLOW
       Fig_GetAndShowForumStats,			// Fig_FORUMS
       Fig_GetAndShowNumUsrsPerNotifyEvent,	// Fig_NOTIFY_EVENTS
@@ -3248,15 +3248,15 @@ static void Fig_GetAndShowGamesStats (void)
   }
 
 /*****************************************************************************/
-/******************** Get and show number of social notes ********************/
+/******************* Get and show number of timeline notes *******************/
 /*****************************************************************************/
 
-static void Fig_GetAndShowSocialActivityStats (void)
+static void Fig_GetAndShowTimelineActivityStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
-   extern const char *Txt_No_of_social_posts;
+   extern const char *Txt_No_of_posts;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_No_of_posts_BR_per_user;
@@ -3265,7 +3265,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    TL_NoteType_t NoteType;
-   unsigned long NumSocialNotes;
+   unsigned long NumNotes;
    unsigned long NumRows;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
@@ -3278,7 +3278,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Type);
-   HTM_TH (1,1,"RM",Txt_No_of_social_posts);
+   HTM_TH (1,1,"RM",Txt_No_of_posts);
    HTM_TH (1,1,"RM",Txt_No_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
    HTM_TH (1,1,"RM",Txt_No_of_posts_BR_per_user);
@@ -3287,10 +3287,10 @@ static void Fig_GetAndShowSocialActivityStats (void)
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                                                             1 << Rol_STD |
-                                                                                             1 << Rol_NET |
-                                                                                             1 << Rol_TCH);
+                                                   Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                                                       1 << Rol_STD |
+                                                                                       1 << Rol_NET |
+                                                                                       1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (NoteType = (TL_NoteType_t) 0;
@@ -3303,71 +3303,71 @@ static void Fig_GetAndShowSocialActivityStats (void)
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				      "SELECT COUNT(*),"
 					     "COUNT(DISTINCT UsrCod)"
-				      " FROM social_notes WHERE NoteType=%u",
+				      " FROM tl_notes WHERE NoteType=%u",
 				      NoteType);
 	    break;
 	 case Hie_CTY:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					     "COUNT(DISTINCT social_notes.UsrCod)"
-				      " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					     "COUNT(DISTINCT tl_notes.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,tl_notes"
 				      " WHERE institutions.CtyCod=%ld"
 				      " AND institutions.InsCod=centres.InsCod"
 				      " AND centres.CtrCod=degrees.CtrCod"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=social_notes.UsrCod"
-				      " AND social_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
+				      " AND tl_notes.NoteType=%u",
 				      Gbl.Hierarchy.Cty.CtyCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_INS:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					     "COUNT(DISTINCT social_notes.UsrCod)"
-				      " FROM centres,degrees,courses,crs_usr,social_notes"
+				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					     "COUNT(DISTINCT tl_notes.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,tl_notes"
 				      " WHERE centres.InsCod=%ld"
 				      " AND centres.CtrCod=degrees.CtrCod"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=social_notes.UsrCod"
-				      " AND social_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
+				      " AND tl_notes.NoteType=%u",
 				      Gbl.Hierarchy.Ins.InsCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_CTR:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					     "COUNT(DISTINCT social_notes.UsrCod)"
-				      " FROM degrees,courses,crs_usr,social_notes"
+				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					     "COUNT(DISTINCT tl_notes.UsrCod)"
+				      " FROM degrees,courses,crs_usr,tl_notes"
 				      " WHERE degrees.CtrCod=%ld"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=social_notes.UsrCod"
-				      " AND social_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
+				      " AND tl_notes.NoteType=%u",
 				      Gbl.Hierarchy.Ctr.CtrCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_DEG:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					     "COUNT(DISTINCT social_notes.UsrCod)"
-				      " FROM courses,crs_usr,social_notes"
+				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					     "COUNT(DISTINCT tl_notes.UsrCod)"
+				      " FROM courses,crs_usr,tl_notes"
 				      " WHERE courses.DegCod=%ld"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=social_notes.UsrCod"
-				      " AND social_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
+				      " AND tl_notes.NoteType=%u",
 				      Gbl.Hierarchy.Deg.DegCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_CRS:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					     "COUNT(DISTINCT social_notes.UsrCod)"
-				      " FROM crs_usr,social_notes"
+				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					     "COUNT(DISTINCT tl_notes.UsrCod)"
+				      " FROM crs_usr,tl_notes"
 				      " WHERE crs_usr.CrsCod=%ld"
-				      " AND crs_usr.UsrCod=social_notes.UsrCod"
-				      " AND social_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
+				      " AND tl_notes.NoteType=%u",
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      (unsigned) NoteType);
 	    break;
@@ -3376,7 +3376,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 	    NumRows = 0;	// Initialized to avoid warning
 	    break;
 	}
-      NumSocialNotes = 0;
+      NumNotes = 0;
       NumUsrs = 0;
 
       if (NumRows)
@@ -3386,8 +3386,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
 
 	 /* Get number of social notes */
 	 if (row[0])
-	    if (sscanf (row[0],"%lu",&NumSocialNotes) != 1)
-	       NumSocialNotes = 0;
+	    if (sscanf (row[0],"%lu",&NumNotes) != 1)
+	       NumNotes = 0;
 
 	 /* Get number of users */
 	 if (row[1])
@@ -3406,7 +3406,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_UnsignedLong (NumSocialNotes);
+      HTM_UnsignedLong (NumNotes);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3420,7 +3420,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (NumUsrs ? (double) NumSocialNotes / (double) NumUsrs :
+      HTM_Double (NumUsrs ? (double) NumNotes / (double) NumUsrs :
         	            0.0);
       HTM_TD_End ();
 
@@ -3434,61 +3434,61 @@ static void Fig_GetAndShowSocialActivityStats (void)
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				   "SELECT COUNT(*),"
 					  "COUNT(DISTINCT UsrCod)"
-				   " FROM social_notes");
+				   " FROM tl_notes");
 	 break;
       case Hie_CTY:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					  "COUNT(DISTINCT social_notes.UsrCod)"
-				   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					  "COUNT(DISTINCT tl_notes.UsrCod)"
+				   " FROM institutions,centres,degrees,courses,crs_usr,tl_notes"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=centres.InsCod"
 				   " AND centres.CtrCod=degrees.CtrCod"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
 				   Gbl.Hierarchy.Cty.CtyCod);
 	 break;
       case Hie_INS:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					  "COUNT(DISTINCT social_notes.UsrCod)"
-				   " FROM centres,degrees,courses,crs_usr,social_notes"
+				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					  "COUNT(DISTINCT tl_notes.UsrCod)"
+				   " FROM centres,degrees,courses,crs_usr,tl_notes"
 				   " WHERE centres.InsCod=%ld"
 				   " AND centres.CtrCod=degrees.CtrCod"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
 				   Gbl.Hierarchy.Ins.InsCod);
 	 break;
       case Hie_CTR:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					  "COUNT(DISTINCT social_notes.UsrCod)"
-				   " FROM degrees,courses,crs_usr,social_notes"
+				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					  "COUNT(DISTINCT tl_notes.UsrCod)"
+				   " FROM degrees,courses,crs_usr,tl_notes"
 				   " WHERE degrees.CtrCod=%ld"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
 				   Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_DEG:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					  "COUNT(DISTINCT social_notes.UsrCod)"
-				   " FROM courses,crs_usr,social_notes"
+				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					  "COUNT(DISTINCT tl_notes.UsrCod)"
+				   " FROM courses,crs_usr,tl_notes"
 				   " WHERE courses.DegCod=%ld"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
 				   Gbl.Hierarchy.Deg.DegCod);
 	 break;
       case Hie_CRS:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
-					  "COUNT(DISTINCT social_notes.UsrCod)"
-				   " FROM crs_usr,social_notes"
+				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
+					  "COUNT(DISTINCT tl_notes.UsrCod)"
+				   " FROM crs_usr,tl_notes"
 				   " WHERE crs_usr.CrsCod=%ld"
-				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
 				   Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
@@ -3496,7 +3496,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 	 NumRows = 0;	// Initialized to avoid warning
 	 break;
      }
-   NumSocialNotes = 0;
+   NumNotes = 0;
    NumUsrs = 0;
 
    if (NumRows)
@@ -3506,8 +3506,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
 
       /* Get number of social notes */
       if (row[0])
-	 if (sscanf (row[0],"%lu",&NumSocialNotes) != 1)
-	    NumSocialNotes = 0;
+	 if (sscanf (row[0],"%lu",&NumNotes) != 1)
+	    NumNotes = 0;
 
       /* Get number of users */
       if (row[1])
@@ -3526,7 +3526,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_UnsignedLong (NumSocialNotes);
+   HTM_UnsignedLong (NumNotes);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3540,7 +3540,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (NumUsrs ? (double) NumSocialNotes / (double) NumUsrs :
+   HTM_Double (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 		         0.0);
    HTM_TD_End ();
 

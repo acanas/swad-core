@@ -1081,86 +1081,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 	SearchString VARCHAR(255) NOT NULL DEFAULT '',
 	SideCols TINYINT NOT NULL DEFAULT 3,
 	UNIQUE INDEX(SessionId),
-	INDEX(UsrCod));
---
--- Table social_comments: stores the content of comments to social notes
---
-CREATE TABLE IF NOT EXISTS social_comments (
-	PubCod BIGINT NOT NULL,
-	Txt LONGTEXT NOT NULL,
-	MedCod INT NOT NULL DEFAULT -1,
-	UNIQUE INDEX(PubCod),
-	FULLTEXT(Txt),
-	INDEX(MedCod)) ENGINE = MYISAM;
---
--- Table social_comments_fav: stores users who marked social comments as favourite
---
-CREATE TABLE IF NOT EXISTS social_comments_fav (
-	FavCod BIGINT AUTO_INCREMENT,
-	PubCod BIGINT NOT NULL,
-	UsrCod INT NOT NULL,
-	TimeFav DATETIME NOT NULL,
-	UNIQUE INDEX(FavCod),
-	UNIQUE INDEX(PubCod,UsrCod),
-	INDEX(UsrCod));
---
--- Table social_notes: stores social notes
---
-CREATE TABLE IF NOT EXISTS social_notes (
-	NotCod BIGINT NOT NULL AUTO_INCREMENT,
-	NoteType TINYINT NOT NULL,
-	Cod INT NOT NULL DEFAULT -1,
-	UsrCod INT NOT NULL,
-	HieCod INT NOT NULL DEFAULT -1,
-	Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',
-	TimeNote DATETIME NOT NULL,
-	UNIQUE INDEX(NotCod),
-	INDEX(NoteType,Cod),
-	INDEX(UsrCod),
-	INDEX(TimeNote));
---
--- Table social_notes_fav: stores users who marked social notes as favourite
---
-CREATE TABLE IF NOT EXISTS social_notes_fav (
-	FavCod BIGINT AUTO_INCREMENT,
-	NotCod BIGINT NOT NULL,
-	UsrCod INT NOT NULL,
-	TimeFav DATETIME NOT NULL,
-	UNIQUE INDEX(FavCod),
-	UNIQUE INDEX(NotCod,UsrCod),
-	INDEX(UsrCod));
---
--- Table social_posts: stores social posts (public comments written by users)
---
-CREATE TABLE IF NOT EXISTS social_posts (
-	PstCod INT NOT NULL AUTO_INCREMENT,
-	Content LONGTEXT NOT NULL,
-	MedCod INT NOT NULL DEFAULT -1,
-	UNIQUE INDEX(PstCod),
-	FULLTEXT(Content),
-	INDEX(MedCod)) ENGINE = MYISAM;
---
--- Table social_pubs: stores social publishings (original notes, sharede notes or comments)
---
-CREATE TABLE IF NOT EXISTS social_pubs (
-	PubCod BIGINT NOT NULL AUTO_INCREMENT,
-	NotCod BIGINT NOT NULL,
-	PublisherCod INT NOT NULL,
-	PubType TINYINT NOT NULL,
-	TimePublish DATETIME NOT NULL,
-	UNIQUE INDEX(PubCod),
-	INDEX(NotCod,PublisherCod,PubType),
-	INDEX(PublisherCod),
-	INDEX(PubType),
-	INDEX(TimePublish));
---
--- Table social_timelines: stores notes published in social timeline for every active session
---
-CREATE TABLE IF NOT EXISTS social_timelines (
-	SessionId CHAR(43) NOT NULL,
-	NotCod BIGINT NOT NULL,
-	UNIQUE INDEX(SessionId,NotCod));
---
+	INDEX(UsrCod));--
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (
@@ -1254,6 +1175,85 @@ CREATE TABLE IF NOT EXISTS timetable_tut (
 	Duration TIME NOT NULL,
 	Info VARCHAR(2047) NOT NULL DEFAULT '',
 	INDEX(UsrCod));
+
+--
+-- Table tl_comments: stores the content of comments to timeline notes
+--
+CREATE TABLE IF NOT EXISTS tl_comments (
+	PubCod BIGINT NOT NULL,
+	Txt LONGTEXT NOT NULL,
+	MedCod INT NOT NULL DEFAULT -1,
+	UNIQUE INDEX(PubCod),
+	FULLTEXT(Txt),
+	INDEX(MedCod)) ENGINE = MYISAM;
+--
+-- Table tl_comments_fav: stores users who marked timeline comments as favourite
+--
+CREATE TABLE IF NOT EXISTS tl_comments_fav (
+	FavCod BIGINT AUTO_INCREMENT,
+	PubCod BIGINT NOT NULL,
+	UsrCod INT NOT NULL,
+	TimeFav DATETIME NOT NULL,
+	UNIQUE INDEX(FavCod),
+	UNIQUE INDEX(PubCod,UsrCod),
+	INDEX(UsrCod));
+--
+-- Table tl_notes: stores timeline notes
+--
+CREATE TABLE IF NOT EXISTS tl_notes (
+	NotCod BIGINT NOT NULL AUTO_INCREMENT,
+	NoteType TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	UsrCod INT NOT NULL,
+	HieCod INT NOT NULL DEFAULT -1,
+	Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',
+	TimeNote DATETIME NOT NULL,
+	UNIQUE INDEX(NotCod),
+	INDEX(NoteType,Cod),
+	INDEX(UsrCod),
+	INDEX(TimeNote));
+--
+-- Table tl_notes_fav: stores users who marked timeline notes as favourite
+--
+CREATE TABLE IF NOT EXISTS tl_notes_fav (
+	FavCod BIGINT AUTO_INCREMENT,
+	NotCod BIGINT NOT NULL,
+	UsrCod INT NOT NULL,
+	TimeFav DATETIME NOT NULL,
+	UNIQUE INDEX(FavCod),
+	UNIQUE INDEX(NotCod,UsrCod),
+	INDEX(UsrCod));
+--
+-- Table tl_posts: stores timeline posts (public comments written by users)
+--
+CREATE TABLE IF NOT EXISTS tl_posts (
+	PstCod INT NOT NULL AUTO_INCREMENT,
+	Content LONGTEXT NOT NULL,
+	MedCod INT NOT NULL DEFAULT -1,
+	UNIQUE INDEX(PstCod),
+	FULLTEXT(Content),
+	INDEX(MedCod)) ENGINE = MYISAM;
+--
+-- Table tl_pubs: stores timeline publications (original notes, sharede notes or comments)
+--
+CREATE TABLE IF NOT EXISTS tl_pubs (
+	PubCod BIGINT NOT NULL AUTO_INCREMENT,
+	NotCod BIGINT NOT NULL,
+	PublisherCod INT NOT NULL,
+	PubType TINYINT NOT NULL,
+	TimePublish DATETIME NOT NULL,
+	UNIQUE INDEX(PubCod),
+	INDEX(NotCod,PublisherCod,PubType),
+	INDEX(PublisherCod),
+	INDEX(PubType),
+	INDEX(TimePublish));
+--
+-- Table tl_timelines: stores notes published in timeline for every active session
+--
+CREATE TABLE IF NOT EXISTS tl_timelines (
+	SessionId CHAR(43) NOT NULL,
+	NotCod BIGINT NOT NULL,
+	UNIQUE INDEX(SessionId,NotCod));
 --
 -- Table tst_answers: stores the answers to the questions in tests
 --

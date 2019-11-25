@@ -490,13 +490,25 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.76.8 (2019-11-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.77 (2019-11-25)"
 #define CSS_FILE		"swad19.74.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
+
+	Version 19.77:    Nov 25, 2019	Changes in database related to timeline. (246877 lines)
+					7 changes necessary in database:
+RENAME TABLE social_comments TO tl_comments;
+RENAME TABLE social_comments_fav TO tl_comments_fav;
+RENAME TABLE social_notes TO tl_notes;
+RENAME TABLE social_notes_fav TO tl_notes_fav;
+RENAME TABLE social_posts TO tl_posts;
+RENAME TABLE social_pubs TO tl_pubs;
+RENAME TABLE social_timelines TO tl_timelines;
+					Copy the following icon to icon public directory:
+sudo cp -a icon/poll.svg /var/www/html/swad/icon/
 
 	Version 19.76.8:  Nov 25, 2019	Changes in database related to timeline. (246885 lines)
 					4 changes necessary in database:
@@ -696,7 +708,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1803','es','N','Conf
 	Version 19.42.6:  Oct 24, 2019	Code refactoring in CSS.
 					Changes icon to upload file in timeline.
 					Code refactoring in media. (246034 lines)
-					Copy the following 4 icons to icon public directory:
+					Copy the following icon to icon public directory:
 sudo cp -a icon/photo-video.svg /var/www/html/swad/icon/
 
 	Version 19.42.5:  Oct 24, 2019	Code refactoring in contextual menus. (246011 lines)
