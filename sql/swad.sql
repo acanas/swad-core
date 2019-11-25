@@ -1087,10 +1087,10 @@ CREATE TABLE IF NOT EXISTS sessions (
 --
 CREATE TABLE IF NOT EXISTS social_comments (
 	PubCod BIGINT NOT NULL,
-	Content LONGTEXT NOT NULL,
+	Txt LONGTEXT NOT NULL,
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PubCod),
-	FULLTEXT(Content),
+	FULLTEXT(Txt),
 	INDEX(MedCod)) ENGINE = MYISAM;
 --
 -- Table social_comments_fav: stores users who marked social comments as favourite

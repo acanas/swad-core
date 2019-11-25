@@ -1847,7 +1847,7 @@ static void TL_GetAndWritePost (long PstCod)
    /***** Get post from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
 					" of a post",
-			     "SELECT Content,"		// row[0]	// TODO: Rename as Txt
+			     "SELECT Txt,"		// row[0]
 			            "MedCod"		// row[1]
 			     " FROM social_posts"
 			     " WHERE PstCod=%ld",
@@ -2459,7 +2459,7 @@ static long TL_ReceivePost (void)
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
 				   "INSERT INTO social_posts"
-				   " (Content,MedCod)"		// TODO: Rename Content as Txt
+				   " (Txt,MedCod)"
 				   " VALUES"
 				   " ('%s',%ld)",
 				   Content.Txt,
@@ -2608,7 +2608,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
 				     "social_pubs.NotCod,"		// row[2]
 				     "UNIX_TIMESTAMP("
 				     "social_pubs.TimePublish),"	// row[3]
-				     "social_comments.Content,"		// row[4]	// TODO: Rename as Txt
+				     "social_comments.Txt,"		// row[4]
 				     "social_comments.MedCod"		// row[5]
 			      " FROM social_pubs,social_comments"
 			      " WHERE social_pubs.NotCod=%ld"
@@ -2820,7 +2820,7 @@ static unsigned TL_WriteHiddenComments (long NotCod,
 			  "social_pubs.NotCod,"		// row[2]
 			  "UNIX_TIMESTAMP("
 			  "social_pubs.TimePublish),"	// row[3]
-			  "social_comments.Content,"	// row[4]	// TODO: Rename as Txt
+			  "social_comments.Txt,"	// row[4]
 			  "social_comments.MedCod"	// row[5]
 		   " FROM social_pubs,social_comments"
 		   " WHERE social_pubs.NotCod=%ld"
@@ -3394,7 +3394,7 @@ static long TL_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
 			 "INSERT INTO social_comments"
-	                 " (PubCod,Content,MedCod)"	// TODO: Rename Content as Txt
+	                 " (PubCod,Txt,MedCod)"
 			 " VALUES"
 			 " (%ld,'%s',%ld)",
 			 SocPub.PubCod,
@@ -4934,7 +4934,7 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 				 "social_pubs.PublisherCod,"			// row[1]
 				 "social_pubs.NotCod,"				// row[2]
 				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
-				 "social_comments.Content,"			// row[4]	// TODO: Rename as Txt
+				 "social_comments.Txt,"				// row[4]
 				 "social_comments.MedCod"			// row[5]
 			  " FROM social_pubs,social_comments"
 			  " WHERE social_pubs.PubCod=%ld"
@@ -5064,7 +5064,7 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    row[1]: PublisherCod
    row[2]: NotCod
    row[3]: TimePublish
-   row[4]: Content 	// TODO: Rename as Txt
+   row[4]: Txt
    row[5]: MedCod
     */
    /***** Get code of comment (row[0]) *****/
@@ -5211,9 +5211,8 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (SocNot.NoteType == TL_NOTE_POST)
 	   {
 	    /***** Get content of post from database *****/
-	    // TODO: What happens if content is empty and an image is attached?
 	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
-			        "SELECT Content"	// TODO: Rename as Txt
+			        "SELECT Txt"	// row[0]
 			        " FROM social_posts"
 				" WHERE PstCod=%ld",
 				SocNot.Cod) == 1)   // Result should have a unique row
@@ -5251,10 +5250,9 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 break;
       case TL_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of post from database *****/
-	 // TODO: What happens if content is empty and an image is attached?
 	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
 				        " of a comment to a note",
-			     "SELECT Content"	// TODO: Rename as Txt
+			     "SELECT Txt"	// row[0]
 			     " FROM social_comments"
 			     " WHERE PubCod=%ld",
 			     SocPub.PubCod) == 1)   // Result should have a unique row

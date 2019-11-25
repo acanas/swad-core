@@ -2310,21 +2310,21 @@ mysql> DESCRIBE sessions;
    /***** Table social_comments *****/
 /*
 mysql> DESCRIBE social_comments;
-+---------+------------+------+-----+---------+-------+
-| Field   | Type       | Null | Key | Default | Extra |
-+---------+------------+------+-----+---------+-------+
-| PubCod  | bigint(20) | NO   | PRI | NULL    |       |
-| Content | longtext   | NO   | MUL | NULL    |       |
-| MedCod  | int(11)    | NO   | MUL | -1      |       |
-+---------+------------+------+-----+---------+-------+
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| PubCod | bigint(20) | NO   | PRI | NULL    |       |
+| Txt    | longtext   | NO   | MUL | NULL    |       |
+| MedCod | int(11)    | NO   | MUL | -1      |       |
++--------+------------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 			"PubCod BIGINT NOT NULL,"
-			"Content LONGTEXT NOT NULL,"	// TODO: Rename as Txt
+			"Content Txt NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Content),"			// TODO: Rename as Txt
+		   "FULLTEXT(Txt),"
 		   "INDEX(MedCod)) ENGINE = MYISAM;");
 
    /***** Table social_comments_fav *****/
@@ -2403,21 +2403,21 @@ mysql> DESCRIBE social_notes_fav;
    /***** Table social_posts *****/
 /*
 mysql> DESCRIBE social_posts;
-+---------+----------+------+-----+---------+----------------+
-| Field   | Type     | Null | Key | Default | Extra          |
-+---------+----------+------+-----+---------+----------------+
-| PstCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
-| Content | longtext | NO   | MUL | NULL    |                |
-| MedCod  | int(11)  | NO   | MUL | -1      |                |
-+---------+----------+------+-----+---------+----------------+
-3 rows in set (0.01 sec)
++--------+----------+------+-----+---------+----------------+
+| Field  | Type     | Null | Key | Default | Extra          |
++--------+----------+------+-----+---------+----------------+
+| PstCod | int(11)  | NO   | PRI | NULL    | auto_increment |
+| Txt    | longtext | NO   | MUL | NULL    |                |
+| MedCod | int(11)  | NO   | MUL | -1      |                |
++--------+----------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
 			"PubCod INT NOT NULL AUTO_INCREMENT,"
-			"Content LONGTEXT NOT NULL,"	// TODO: Rename as Txt
+			"Txt LONGTEXT NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
-		   "FULLTEXT(Content),"			// TODO: Rename as Txt
+		   "FULLTEXT(Txt),"
 		   "INDEX(MedCod)) ENGINE = MYISAM;");
 
    /***** Table social_pubs *****/
