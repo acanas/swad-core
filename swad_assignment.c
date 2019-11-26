@@ -1176,7 +1176,8 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1211,7 +1212,8 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
    if (!ItsANewAssignment)
       HTM_Txt (Txt);
    HTM_TEXTAREA_End ();

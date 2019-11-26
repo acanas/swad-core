@@ -671,7 +671,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    /***** Write selector with departments *****/
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Prjs.Filter.DptCod,		// Selected department
-                                "PRJ_INPUT",			// Selector class
+                                "TITLE_DESCRIPTION_WIDTH",	// Selector class
                                 -1L,				// First option
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
@@ -3479,7 +3479,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,false,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3498,7 +3499,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_Begin ("class=\"LM\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
-                                "PRJ_INPUT",			// Selector class
+                                "TITLE_DESCRIPTION_WIDTH",	// Selector class
                                 0,				// First option
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change
@@ -3548,7 +3549,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
-		     "name=\"Proposal\"");
+		     "name=\"Proposal\" class=\"TITLE_DESCRIPTION_WIDTH\"");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	Proposal++)
@@ -3589,7 +3590,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_INPUT_URL ("URL",Prj->URL,false,
-		  "size=\"45\"");
+		  "class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3626,7 +3627,8 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"%s",
+   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"",
                        Id,Id,NumRows,Required ? " required=\"required\"" :
                 	                        "");
    HTM_Txt (TxtField);

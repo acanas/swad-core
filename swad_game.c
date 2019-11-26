@@ -1206,7 +1206,8 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1221,7 +1222,8 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
    if (!ItsANewGame)
       HTM_Txt (Txt);
    HTM_TEXTAREA_End ();

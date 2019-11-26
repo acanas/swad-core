@@ -2499,10 +2499,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	padding-left:1em;
 	}
-.PRJ_INPUT
-	{
-	max-width:500px;
-	}
 .PRJ_MEMBER_ICO
 	{
 	width:30px;
@@ -3225,6 +3221,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-weight:bold;
 	color:darkred;
 	opacity:0.1;
+	}
+	
+/********************* Edition of attendance events, games *******************/
+.TITLE_DESCRIPTION_WIDTH
+	{
+	box-sizing:border-box;
+	width:500px;
 	}
 
 /**************************** Enrolment requests *****************************/

@@ -51653,23 +51653,23 @@ const char *Txt_Upload_files =
 
 const char *Txt_Upload_files_QUESTION =
 #if   L==1	// ca
-	"Enviar<br />fitxers?";
+	"Enviar fitxers?";
 #elif L==2	// de
-	"Upload<br />Dateien?";
+	"Upload Dateien?";
 #elif L==3	// en
-	"Upload<br />files?";
+	"Upload files?";
 #elif L==4	// es
-	"&iquest;Enviar<br />archivos?";
+	"&iquest;Enviar archivos?";
 #elif L==5	// fr
-	"T&eacute;l&eacute;charger<br />fichiers?";
+	"T&eacute;l&eacute;charger fichiers?";
 #elif L==6	// gn
-	"&iquest;Enviar<br />archivos?";	// Okoteve traducción
+	"&iquest;Envia archivos?";	// Okoteve traducción
 #elif L==7	// it
-	"Caricare<br />file?";
+	"Caricare file?";
 #elif L==8	// pl
-	"Upload<br />files?";			// Potrzebujesz tlumaczenie
+	"Przesy&lstrok;a&cacute; pliki?";
 #elif L==9	// pt
-	"Fazer upload<br />de arquivos?";
+	"Fazer upload de arquivos?";
 #endif
 
 const char *Txt_Upload_logo =

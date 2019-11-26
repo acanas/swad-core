@@ -490,14 +490,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.78 (2019-11-25)"
-#define CSS_FILE		"swad19.78.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.78.1 (2019-11-27)"
+#define CSS_FILE		"swad19.78.1.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.78.1:  Nov 27, 2019	Changes in edition of games, attendance, events, assignments. (247123 lines)
 	Version 19.78:    Nov 25, 2019	Filtering of match results by games. (247106 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod=1795;

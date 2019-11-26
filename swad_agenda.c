@@ -1518,7 +1518,8 @@ void Agd_RequestCreatOrEditEvent (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,false,
-		   "id=\"Event\" size=\"45\" required=\"required\"");
+		   "id=\"Event\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1534,7 +1535,8 @@ void Agd_RequestCreatOrEditEvent (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,false,
-		   "id=\"Location\" size=\"45\" required=\"required\"");
+		   "id=\"Location\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1553,7 +1555,8 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
    if (!ItsANewEvent)
       HTM_Txt (Txt);
    HTM_TEXTAREA_End ();

@@ -1920,7 +1920,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,false,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1938,7 +1939,8 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
    if (!ItsANewSurvey)
       HTM_Txt (Txt);
    HTM_TEXTAREA_End ();

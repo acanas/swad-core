@@ -1112,7 +1112,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,false,
-		   "id=\"Title\" size=\"45\"");
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1150,7 +1151,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"5\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
    if (!ItsANewAttEvent)
       HTM_Txt (Description);
    HTM_TEXTAREA_End ();
