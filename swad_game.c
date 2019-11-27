@@ -62,6 +62,38 @@ extern struct Globals Gbl;
 #define Gam_MAX_SELECTED_QUESTIONS		1000
 #define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
+/* Score range [0...max.score]
+   will be converted to
+   grade range [0...max.grade]
+   Example: Game with 5 questions, unique-choice, 4 options per question
+            max.score = 5 *   1     =  5
+            min.score = 5 * (-0.33) = -1,67
+            max.grade given by teacher = 0.2 ==> min.grade = -0,067
+
+              grade
+                ^
+                |          /
+   max.grade--> +---------+
+                |        /|
+                |       / |
+                |      /  |
+                |     /   |
+                |    /    |
+                |   /     |
+                |  /      |
+                | /       |
+                |/        |
+    ------+---0-+---------+---------> score
+          ^    /0         ^
+     min.score/ |      max.score
+          |  /  |   (num.questions)
+          | /   |
+          |/    |
+          +-----+ <--min.grade
+         /      |
+*/
+#define Gam_MAX_GRADE_DEFAULT 1.0
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -800,7 +832,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 			            "gam_games.CrsCod,"		// row[1]
 			            "gam_games.Hidden,"		// row[2]
 			            "gam_games.UsrCod,"		// row[3]
-			            "gam_games.Title"		// row[4]
+			            "gam_games.MaxGrade,"	// row[4]
+			            "gam_games.Title"		// row[5]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
@@ -823,8 +856,11 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Get author of the game (row[3]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get the title of the game (row[4]) */
-      Str_Copy (Game->Title,row[4],
+      /* Get maximum grade (row[4]) */
+      Game->MaxGrade = Str_GetDoubleFromStr (row[4]);
+
+      /* Get the title of the game (row[5]) */
+      Str_Copy (Game->Title,row[5],
                 Gam_MAX_BYTES_TITLE);
 
       /* Get number of questions */
@@ -878,9 +914,10 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 static void Gam_ResetGame (struct Game *Game)
   {
    /***** Initialize to empty game *****/
-   Game->GamCod = -1L;
-   Game->CrsCod = -1L;
-   Game->UsrCod = -1L;
+   Game->GamCod                  = -1L;
+   Game->CrsCod                  = -1L;
+   Game->UsrCod                  = -1L;
+   Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
    Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Game->Title[0]                = '\0';
@@ -1222,7 +1259,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_FLOAT ("MaxGrade",(double) 0.0,(double) DBL_MAX,(double) 0.01,(double) 10.0,false,
+   HTM_INPUT_FLOAT ("MaxGrade",(double) 0.0,(double) DBL_MAX,(double) 0.01,Game->MaxGrade,false,
 		    "required=\"required\"");
    HTM_TD_End ();
 
@@ -1269,50 +1306,39 @@ void Gam_RecFormGame (void)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_game;
-   struct Game OldGame;
-   struct Game NewGame;
+   struct Game Game;
    bool ItsANewGame;
    bool NewGameIsCorrect = true;
    char MaxGradeStr[64];
-   double MaxGrade;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the game *****/
-   NewGame.GamCod = Gam_GetParamGameCod ();
+   Game.GamCod = Gam_GetParamGameCod ();
 
    /***** Check if game has matches *****/
    if (Gam_CheckIfICanEditGames ())
      {
-      ItsANewGame = (NewGame.GamCod < 0);
-      if (!ItsANewGame)
-	{
-	 /* Get data of the old (current) game from database */
-	 OldGame.GamCod = NewGame.GamCod;
-	 Gam_GetDataOfGameByCod (&OldGame);
-	 if (!Gam_CheckIfICanEditGames ())
-            Lay_NoPermissionExit ();
-	}
+      ItsANewGame = (Game.GamCod < 0);
 
       /***** Get game title *****/
-      Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
+      Par_GetParToText ("Title",Game.Title,Gam_MAX_BYTES_TITLE);
 
       /***** Get maximum grade *****/
       Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
-      MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
-      Ale_ShowAlert (Ale_INFO,"DEBUG: MaxGrade = %lg",MaxGrade);	// TODO: Remove this line
+      Game.MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
 
       /***** Get game text and insert links *****/
       Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
       /***** Check if title is correct *****/
-      if (NewGame.Title[0])	// If there's a game title
+      if (Game.Title[0])	// If there's a game title
 	{
 	 /* If title of game was in database... */
-	 if (Gam_CheckIfSimilarGameExists (&NewGame))
+	 if (Gam_CheckIfSimilarGameExists (&Game))
 	   {
 	    NewGameIsCorrect = false;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
-			   NewGame.Title);
+			   Game.Title);
 	   }
 	}
       else	// If there is not a game title
@@ -1325,15 +1351,15 @@ void Gam_RecFormGame (void)
       if (NewGameIsCorrect)
 	{
 	 if (ItsANewGame)
-	    Gam_CreateGame (&NewGame,Txt);	// Add new game to database
+	    Gam_CreateGame (&Game,Txt);	// Add new game to database
 	 else
-	    Gam_UpdateGame (&NewGame,Txt);
+	    Gam_UpdateGame (&Game,Txt);
 	}
       else
 	 Gam_RequestCreatOrEditGame ();
 
       /***** Put forms to create/edit a game *****/
-      Gam_PutFormsEditionGame (&NewGame,false);
+      Gam_PutFormsEditionGame (&Game,false);
      }
    else
       Lay_NoPermissionExit ();
@@ -1351,16 +1377,19 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    extern const char *Txt_Created_new_game_X;
 
    /***** Create a new game *****/
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO gam_games"
-				" (CrsCod,Hidden,UsrCod,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,'%s','%s')",
+				" (%ld,'N',%ld,%lg,'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Game->MaxGrade,
 				Game->Title,
 				Txt);
+   Str_SetDecimalPointToLocal ();	// Return to local system
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,
@@ -1376,16 +1405,20 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    extern const char *Txt_The_game_has_been_modified;
 
    /***** Update the data of the game *****/
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update game",
 		   "UPDATE gam_games"
 		   " SET CrsCod=%ld,"
+		        "MaxGrade=%lg,"
 		        "Title='%s',"
 		        "Txt='%s'"
 		   " WHERE GamCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
+		   Game->MaxGrade,
 	           Game->Title,
 	           Txt,
 	           Game->GamCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);

@@ -48,6 +48,9 @@ struct Game
    long GamCod;		// Game code
    long CrsCod;		// Course code
    long UsrCod;		// Author code
+   double MaxGrade;	// Score range [0...max.score]
+			// will be converted to
+			// grade range [0...max.grade]
    char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Hidden;		// Game is hidden

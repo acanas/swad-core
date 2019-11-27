@@ -1313,8 +1313,8 @@ mysql> DESCRIBE gam_games;
 | GamCod   | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod   | int(11)       | NO   | MUL | -1      |                |
 | Hidden   | enum('N','Y') | NO   |     | N       |                |
-| NumNotif | int(11)       | NO   |     | 0       |                |
 | UsrCod   | int(11)       | NO   |     | NULL    |                |
+| MaxGrade | double        | NO   |     | 1       |                |
 | Title    | varchar(2047) | NO   |     | NULL    |                |
 | Txt      | text          | NO   |     | NULL    |                |
 +----------+---------------+------+-----+---------+----------------+
@@ -1324,8 +1324,8 @@ mysql> DESCRIBE gam_games;
 			"GamCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"NumNotif INT NOT NULL DEFAULT 0,"
 			"UsrCod INT NOT NULL,"
+			"MaxGrade DOUBLE PRECISION NOT NULL DEFAULT 1,"	// Scale from score [0...num.answers] to grade [0...MaxGrade]
 			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
