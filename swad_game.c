@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <float.h>		// For DBL_MAX
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <stdio.h>		// For asprintf
@@ -1162,6 +1163,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
+   extern const char *Txt_Maximum_grade;
    extern const char *Txt_Description;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
@@ -1208,6 +1210,20 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Maximum grade *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Maximum_grade);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_INPUT_FLOAT ("MaxGrade",(double) 0.0,(double) DBL_MAX,(double) 0.01,(double) 10.0,false,
+		     NULL);
    HTM_TD_End ();
 
    HTM_TR_End ();

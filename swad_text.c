@@ -18224,6 +18224,27 @@ const char *Txt_maximum =
 	"m&aacute;ximo";
 #endif
 
+const char *Txt_Maximum_grade =
+#if   L==1	// ca
+	"Nota m&agrave;xima";
+#elif L==2	// de
+	"H&ouml;chstnote";
+#elif L==3	// en
+	"Maximum grade";
+#elif L==4	// es
+	"Nota m&aacute;xima";
+#elif L==5	// fr
+	"Note maximale";
+#elif L==6	// gn
+	"Nota m&aacute;xima";	// Okoteve traducción
+#elif L==7	// it
+	"Voto massimo";
+#elif L==8	// pl
+	"Maksymalna ocena";
+#elif L==9	// pt
+	"Nota m&aacute;xima";
+#endif
+
 const char *Txt_Members =	// Project members
 #if   L==1	// ca
 	"Membres";

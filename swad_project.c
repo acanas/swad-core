@@ -3534,7 +3534,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_NUMBER ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,false,
+   HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,false,
 		     NULL);
    HTM_TD_End ();
 

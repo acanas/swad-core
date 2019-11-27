@@ -361,7 +361,7 @@ void Tst_ShowFormAskTst (void)
          HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"LM\"");
-         HTM_INPUT_NUMBER ("NumQst",
+         HTM_INPUT_LONG ("NumQst",
 			   (long) Gbl.Test.Config.Min,
 			   (long) Gbl.Test.Config.Max,
 			   (long) Gbl.Test.Config.Def,

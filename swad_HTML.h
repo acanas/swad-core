@@ -127,8 +127,10 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const c
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,bool Required,
 	                 const char *fmt,...);
-void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled,
-	               const char *fmt,...);
+void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled,
+	             const char *fmt,...);
+void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
+	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,

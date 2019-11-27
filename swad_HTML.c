@@ -1189,8 +1189,8 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    fprintf (Gbl.F.Out," />");
   }
 
-void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled,
-	               const char *fmt,...)
+void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled,
+	             const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1200,6 +1200,42 @@ void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabl
 	              " min=\"%ld\" max=\"%ld\" value=\"%ld\"",
 	    Name,
 	    Min,Max,Value);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free (Attr);
+	}
+     }
+
+   fprintf (Gbl.F.Out," />");
+  }
+
+void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
+	              const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"%s\""
+	              " min=\"%lg\" max=\"%lg\" step=\"%lg\" value=\"%lg\"",
+	    Name,
+	    Min,Max,Step,Value);
+   Str_SetDecimalPointToLocal ();	// Return to local system
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
 

@@ -681,27 +681,6 @@ static unsigned Str_FindHTMLEntity (const char *Ptr)
   }
 
 /*****************************************************************************/
-/**************** Check if a URL adreess looks as** valid ********************/
-/*****************************************************************************/
-/*
-bool Str_URLLooksValid (const char *URL)
-  {
-   ***** If it's a NULL pointer *****
-   if (!URL)
-      return false;
-
-   ***** If it's the empty string *****
-   if (!URL[0])
-      return false;
-
-   ***** Check if start by http:// or https:// *****
-   if (!strncasecmp (URL,"http://",7) || !strncasecmp (URL,"https://",8))
-      return (bool) (strchr (URL,(int) '.') != NULL);	// There is any . in the URL
-   else	// There's no http:// nor https://
-      return false;
-  }
-*/
-/*****************************************************************************/
 /***** Convert a string to title: first uppercase and the rest lowercase *****/
 /*****************************************************************************/
 
