@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.79.1 (2019-11-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.79.2 (2019-11-27)"
 #define CSS_FILE		"swad19.78.1.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.79.2:  Nov 27, 2019	Column for grade in matches results. (247232 lines)
 	Version 19.79.1:  Nov 27, 2019	Maximum grade shown in listing of games. (247201 lines)
 	Version 19.79:    Nov 27, 2019	Storing maximum grade in a game into database. (247197 lines)
 					1 change necessary in database:

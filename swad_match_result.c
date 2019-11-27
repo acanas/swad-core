@@ -80,7 +80,8 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
-                                          double TotalScoreOfAllResults);
+                                          double TotalScoreOfAllResults,
+					  double TotalGrade);
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
@@ -444,8 +445,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Total_BR_score;
    extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
-   extern const char *Txt_Score;
-   extern const char *Txt_out_of_PART_OF_A_SCORE;
+   extern const char *Txt_Grade;
 
    HTM_TR_Begin (NULL);
 
@@ -458,13 +458,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Total_BR_score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   HTM_TH_Begin (1,1,"RT");
-   HTM_Txt (Txt_Score);
-   HTM_BR ();
-   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
-   HTM_BR ();
-   HTM_Unsigned (Tst_SCORE_MAX);
-   HTM_TH_End ();
+   HTM_TH (1,1,"RT",Txt_Grade);
    HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -500,6 +494,10 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    unsigned NumTotalQstsNotBlank = 0;
    double ScoreInThisResult;
    double TotalScoreOfAllResults = 0.0;
+   double MaxScore;
+   double MaxGrade;
+   double Grade;
+   double TotalGrade = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
    /***** Trivial check: there should be games selected *****/
@@ -536,7 +534,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				     "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
 				     "mch_results.NumQsts,"			// row[3]
 				     "mch_results.NumQstsNotBlank,"		// row[4]
-				     "mch_results.Score"			// row[5]
+				     "mch_results.Score,"			// row[5]
+				     "gam_games.MaxGrade"			// row[6]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      " AND mch_results.MchCod=mch_matches.MchCod"
@@ -609,12 +608,18 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 if (ShowResultThisMatch)
 	   {
-	    /* Get score (row[5]) */
 	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-	    if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
+
+	    /* Get score (row[5]) */
+	    if (sscanf (row[5],"%lg",&ScoreInThisResult) != 1)
 	       ScoreInThisResult = 0.0;
-	    Str_SetDecimalPointToLocal ();	// Return to local system
 	    TotalScoreOfAllResults += ScoreInThisResult;
+
+	    /* Get maximum grade (row[6]) */
+	    if (sscanf (row[6],"%lg",&MaxGrade) != 1)
+	       MaxGrade = 0.0;
+
+	    Str_SetDecimalPointToLocal ();	// Return to local system
 	   }
 
 	 /* Write number of questions */
@@ -641,12 +646,20 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 					      0.0);
 	 HTM_TD_End ();
 
-	 /* Write score over Tst_SCORE_MAX */
+	 /* Write grade over maximum grade */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX /
-					      (double) NumQstsInThisResult :
-					      0.0);
+	   {
+	    if (NumQstsInThisResult)
+	      {
+	       MaxScore = (double) NumQstsInThisResult;
+	       Grade = ScoreInThisResult * MaxGrade / MaxScore;
+	      }
+	    else
+	       Grade = 0.0;
+	    HTM_Double (Grade);
+	    TotalGrade += Grade;
+	   }
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -681,7 +694,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
       McR_ShowMchResultsSummaryRow (ShowSummaryResults,
 				    NumResults,
 				    NumTotalQsts,NumTotalQstsNotBlank,
-				    TotalScoreOfAllResults);
+				    TotalScoreOfAllResults,
+				    TotalGrade);
      }
    else
      {
@@ -703,7 +717,8 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
-                                          double TotalScoreOfAllResults)
+                                          double TotalScoreOfAllResults,
+					  double TotalGrade)
   {
    extern const char *Txt_Matches;
 
@@ -741,12 +756,10 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 			         0.0);
    HTM_TD_End ();
 
-   /***** Write score over Tst_SCORE_MAX *****/
+   /***** Write total grade *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
-      HTM_Double (NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
-			         (double) NumTotalQsts :
-			         0.0);
+      HTM_Double (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
@@ -1125,7 +1138,7 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",Score) != 1)
+      if (sscanf (row[4],"%lg",Score) != 1)
 	 *Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }

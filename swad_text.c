@@ -14014,6 +14014,27 @@ const char *Txt_Go_to_one_of_my_courses =
 	"V&aacute; para uma das minha disciplinas";
 #endif
 
+const char *Txt_Grade =
+#if   L==1	// ca
+	"Nota";
+#elif L==2	// de
+	"Note";
+#elif L==3	// en
+	"Grade";
+#elif L==4	// es
+	"Nota";
+#elif L==5	// fr
+	"Note";
+#elif L==6	// gn
+	"Nota";	// Okoteve traducción
+#elif L==7	// it
+	"Voto";
+#elif L==8	// pl
+	"Ocena";
+#elif L==9	// pt
+	"Nota";
+#endif
+
 const char *Txt_Group =
 #if   L==1	// ca
 	"Grup";
