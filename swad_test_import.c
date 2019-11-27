@@ -328,7 +328,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
               i++)
            {
             row = mysql_fetch_row (mysql_res);
-            FloatNum[i] = Tst_GetFloatAnsFromStr (row[1]);
+            FloatNum[i] = Str_GetDoubleFromStr (row[1]);
            }
          fprintf (Gbl.Test.XML.FileXML,"%s"
                                        "<lower>%lg</lower>%s"
@@ -753,7 +753,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
                     i++)
                  {
                   row = mysql_fetch_row (mysql_res_ans);
-                  IdenticalAnswers = (Tst_GetFloatAnsFromStr (row[0]) == Gbl.Test.Answer.FloatingPoint[i]);
+                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Gbl.Test.Answer.FloatingPoint[i]);
                  }
                IdenticalQuestionFound = IdenticalAnswers;
                break;

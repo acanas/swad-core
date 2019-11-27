@@ -1223,7 +1223,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_FLOAT ("MaxGrade",(double) 0.0,(double) DBL_MAX,(double) 0.01,(double) 10.0,false,
-		     NULL);
+		    "required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1273,6 +1273,8 @@ void Gam_RecFormGame (void)
    struct Game NewGame;
    bool ItsANewGame;
    bool NewGameIsCorrect = true;
+   char MaxGradeStr[64];
+   double MaxGrade;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the game *****/
@@ -1293,6 +1295,11 @@ void Gam_RecFormGame (void)
 
       /***** Get game title *****/
       Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
+
+      /***** Get maximum grade *****/
+      Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
+      MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
+      Ale_ShowAlert (Ale_INFO,"DEBUG: MaxGrade = %lg",MaxGrade);	// TODO: Remove this line
 
       /***** Get game text and insert links *****/
       Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -2570,9 +2577,9 @@ double Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
 	 break;
      }
 
-   /***** Get number of courses *****/
+   /***** Get average number of questions per game *****/
    row = mysql_fetch_row (mysql_res);
-   NumQstsPerGame = Str_GetDoubleNumFromStr (row[0]);
+   NumQstsPerGame = Str_GetDoubleFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

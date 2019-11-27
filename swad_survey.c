@@ -4103,9 +4103,9 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope)
 	 break;
      }
 
-   /***** Get number of courses *****/
+   /***** Get average number of questions per survey *****/
    row = mysql_fetch_row (mysql_res);
-   NumQstsPerSurvey = Str_GetDoubleNumFromStr (row[0]);
+   NumQstsPerSurvey = Str_GetDoubleFromStr (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

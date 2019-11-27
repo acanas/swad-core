@@ -195,7 +195,6 @@ Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void);
 long Tst_GetIntAnsFromStr (char *Str);
-double Tst_GetFloatAnsFromStr (char *Str);
 void Tst_RequestRemoveQst (void);
 void Tst_RemoveQst (void);
 void Tst_ChangeShuffleQst (void);

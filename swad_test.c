@@ -3318,7 +3318,7 @@ void Tst_WriteAnswersEdit (long QstCod)
               i++)
            {
             row = mysql_fetch_row (mysql_res);
-            FloatNum[i] = Tst_GetFloatAnsFromStr (row[1]);
+            FloatNum[i] = Str_GetDoubleFromStr (row[1]);
            }
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
          HTM_TxtF ("([%lg; %lg])",FloatNum[0],FloatNum[1]);
@@ -4611,7 +4611,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 	i++)
      {
       row = mysql_fetch_row (mysql_res);
-      FloatAnsCorr[i] = Tst_GetFloatAnsFromStr (row[1]);
+      FloatAnsCorr[i] = Str_GetDoubleFromStr (row[1]);
      }
    if (FloatAnsCorr[0] > FloatAnsCorr[1]) 	// The maximum and the minimum are swapped
     {
@@ -4632,7 +4632,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    /***** Write the user answer *****/
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
-      FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
+      FloatAnsUsr = Str_GetDoubleFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
          HTM_TD_Begin ("class=\"%s CM\"",
@@ -5722,7 +5722,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	 case Tst_ANS_FLOAT:
 	    if (Gbl.Test.Answer.NumOptions != 2)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Gbl.Test.Answer.FloatingPoint[NumOpt] = Tst_GetFloatAnsFromStr (row[1]);
+	    Gbl.Test.Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	    break;
 	 case Tst_ANS_TRUE_FALSE:
 	    if (Gbl.Test.Answer.NumOptions != 1)
@@ -6176,7 +6176,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
          for (i = 0;
               i < 2;
               i++)
-            Gbl.Test.Answer.FloatingPoint[i] = Tst_GetFloatAnsFromStr (Gbl.Test.Answer.Options[i].Text);
+            Gbl.Test.Answer.FloatingPoint[i] = Str_GetDoubleFromStr (Gbl.Test.Answer.Options[i].Text);
          if (Gbl.Test.Answer.FloatingPoint[0] >
              Gbl.Test.Answer.FloatingPoint[1])
            {
@@ -6326,32 +6326,6 @@ long Tst_GetIntAnsFromStr (char *Str)
      }
 
    return LongNum;
-  }
-
-/*****************************************************************************/
-/************ Get a float number from a string in floating point *************/
-/*****************************************************************************/
-
-double Tst_GetFloatAnsFromStr (char *Str)
-  {
-   double DoubleNum;
-
-   if (Str == NULL)
-      return 0.0;
-
-   /***** Change commnas to points *****/
-   Str_ConvertStrFloatCommaToStrFloatPoint (Str);
-
-   /***** The string is "scanned" in floating point (it must have a point, not a colon as decimal separator) *****/
-   Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-   if (sscanf (Str,"%lg",&DoubleNum) != 1)	// If the string does not hold a valid floating point number...
-     {
-      DoubleNum = 0.0;	// ...the number is reset to 0
-      Str[0] = '\0';	// ...and the string is reset to ""
-     }
-   Str_SetDecimalPointToLocal ();	// Return to local system
-
-   return DoubleNum;
   }
 
 /*****************************************************************************/
@@ -6732,7 +6706,7 @@ static void Tst_InsertAnswersIntoDB (void)
 			 Gbl.Test.Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
-	 Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+	 Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    	 for (i = 0;
    	      i < 2;
    	      i++)

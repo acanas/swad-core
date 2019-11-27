@@ -1866,7 +1866,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       HTM_TD_End ();
 
       /* Write the number of clicks */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       if (NumRow == 1)
 	 Hits.Max = Hits.Num;
       if (Hits.Max > 0.0)
@@ -1948,7 +1948,7 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&ReadDate,&LastDate);
@@ -2158,7 +2158,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	 Lay_ShowErrorAndExit ("Wrong hour.");
 
       /* Get number of pages generated (in row[2]) */
-      Hits.Num = Str_GetDoubleNumFromStr (row[2]);
+      Hits.Num = Str_GetDoubleFromStr (row[2]);
 
       /* If this is the first read date, initialize PreviousReadDate */
       if (NumRow == 1)
@@ -2523,7 +2523,7 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumWeeksBetweenLastDateAndCurDate = Dat_GetNumWeeksBetweenDates (&ReadDate,&LastDate);
@@ -2623,7 +2623,7 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumMonthsBetweenLastDateAndCurDate = Dat_GetNumMonthsBetweenDates (&ReadDate,
@@ -2723,7 +2723,7 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumYearsBetweenLastDateAndCurDate = Dat_GetNumYearsBetweenDates (&ReadDate,
@@ -2827,7 +2827,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
 		 H++, Hour++)
 	       Sta_WriteAccessHour (H,&Hits,ColumnWidth);
 
-	    Hits.Num = Str_GetDoubleNumFromStr (row[1]) / (float) NumDays;
+	    Hits.Num = Str_GetDoubleFromStr (row[1]) / (float) NumDays;
 	    Sta_WriteAccessHour (ReadHour,&Hits,ColumnWidth);
 
 	    Hour++;
@@ -2917,7 +2917,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	    if (sscanf (row[0],"%02u%02u",&ReadHour,&MinuteRead) != 2)   // In row[0] is the date in formato HHMM
 	       Lay_ShowErrorAndExit ("Wrong hour-minute.");
 	    /* Get number of pages generated */
-	    Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+	    Hits.Num = Str_GetDoubleFromStr (row[1]);
 	    MinuteDayRead = ReadHour * 60 + MinuteRead;
 	    for (i = MinuteDay;
 		 i < MinuteDayRead;
@@ -3150,7 +3150,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
                           Hits.Num,Hits.Max,Hits.Total,500);
 
@@ -3205,7 +3205,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
                           Hits.Num,Hits.Max,Hits.Total,500);
 
@@ -3257,7 +3257,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
                           Hits.Num,Hits.Max,Hits.Total,500);
 
@@ -3297,7 +3297,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       row = mysql_fetch_row (mysql_res);
 
       /* Get number of pages generated */
-      NumClicks = Str_GetDoubleNumFromStr (row[1]);
+      NumClicks = Str_GetDoubleFromStr (row[1]);
       if (NumRow == 1)
 	 MaxClicks = NumClicks;
       TotalClicks += NumClicks;
@@ -3326,7 +3326,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       HTM_A_End ();
 
       /* Draw bar proportional to number of clicks */
-      NumClicks = Str_GetDoubleNumFromStr (row[1]);
+      NumClicks = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  NumClicks,MaxClicks,TotalClicks,500);
 
@@ -3385,7 +3385,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       Sta_WriteCountry (CtyCod);
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
                           Hits.Num,Hits.Max,Hits.Total,375);
 
@@ -3475,7 +3475,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       Sta_WriteInstitution (InsCod);
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
@@ -3567,7 +3567,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       Sta_WriteCentre (CtrCod);
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
@@ -3659,7 +3659,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       Sta_WriteDegree (DegCod);
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
@@ -3792,7 +3792,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       HTM_TD_End ();
 
       /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleNumFromStr (row[1]);
+      Hits.Num = Str_GetDoubleFromStr (row[1]);
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
@@ -3821,7 +3821,7 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
       row = mysql_fetch_row (mysql_res);
 
       /* Get number of hits */
-      Hits->Num = Str_GetDoubleNumFromStr (row[Field]);
+      Hits->Num = Str_GetDoubleFromStr (row[Field]);
       if (Divisor > 1)
          Hits->Num /= (double) Divisor;
 

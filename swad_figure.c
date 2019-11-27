@@ -3811,7 +3811,7 @@ static void Fig_GetAndShowFollowStats (void)
 
       /***** Get average *****/
       row = mysql_fetch_row (mysql_res);
-      Average = Str_GetDoubleNumFromStr (row[0]);
+      Average = Str_GetDoubleFromStr (row[0]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

@@ -1715,8 +1715,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	 /* Get number of clicks per day (row[1]) */
-	 NumClicksPerDay = Str_GetDoubleNumFromStr (row[1]);
+	 /* Get average number of clicks per day (row[1]) */
+	 NumClicksPerDay = Str_GetDoubleFromStr (row[1]);
 	 if (NumClicksPerDay < NumClicksPerDayHigh)
 	   {
 	    Rank = NumUsr;
