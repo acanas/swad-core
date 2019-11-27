@@ -396,6 +396,7 @@ void Gam_ShowOneGame (long GamCod,
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
    extern const char *Txt_View_game;
+   extern const char *Txt_Maximum_grade;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Matches;
    char *Anchor = NULL;
@@ -483,10 +484,12 @@ void Gam_ShowOneGame (long GamCod,
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 
-   /* Number of questions */
+   /* Number of questions and maximum grade */
    HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
    HTM_TxtF ("%s:&nbsp;%u",Txt_No_of_questions,Game.NumQsts);
+   HTM_BR ();
+   HTM_TxtF ("%s:&nbsp;%lg",Txt_Maximum_grade,Game.MaxGrade);
    HTM_DIV_End ();
 
    HTM_TD_End ();
