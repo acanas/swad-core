@@ -671,13 +671,9 @@ double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
 
 void Tst_ShowGrade (double Grade,double MaxGrade)
   {
-   extern const char *Txt_out_of_PART_OF_A_SCORE;
-
    /***** Write grade over maximum grade *****/
    HTM_Double (Grade);
-   HTM_NBSP ();
-   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
-   HTM_NBSP ();
+   HTM_Txt ("/");
    HTM_Double (MaxGrade);
   }
 
@@ -7694,8 +7690,7 @@ static void Tst_ShowHeaderTestResults (void)
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Score;
    extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
-   extern const char *Txt_Score;
-   extern const char *Txt_out_of_PART_OF_A_SCORE;
+   extern const char *Txt_Grade;
 
    HTM_TR_Begin (NULL);
 
@@ -7705,13 +7700,7 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   HTM_TH_Begin (1,1,"RT");
-   HTM_Txt (Txt_Score);
-   HTM_BR ();
-   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
-   HTM_BR ();
-   HTM_Unsigned (Tst_SCORE_MAX);
-   HTM_TH_End ();
+   HTM_TH (1,1,"RT",Txt_Grade);
    HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -7873,12 +7862,10 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 			                    0.0);
 	 HTM_TD_End ();
 
-         /* Write score over Tst_SCORE_MAX */
+         /* Write grade */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double (NumQstsInThisTest ? ScoreInThisTest * Tst_SCORE_MAX /
-		                            (double) NumQstsInThisTest :
-			                    0.0);
+            Tst_ComputeAndShowGrade (NumQstsInThisTest,ScoreInThisTest,Tst_SCORE_MAX);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -8006,9 +7993,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
    /***** Write score over Tst_SCORE_MAX *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      HTM_Double (NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
-			         (double) NumTotalQsts :
-			         0.0);
+      Tst_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,Tst_SCORE_MAX);
    HTM_TD_End ();
 
    /***** Last cell *****/

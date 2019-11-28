@@ -458,7 +458,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   HTM_TH (1,1,"CT",Txt_Grade);
+   HTM_TH (1,1,"RT",Txt_Grade);
    HTM_TH_Empty (1);
 
    HTM_TR_End ();

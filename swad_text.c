@@ -28545,27 +28545,6 @@ const char *Txt_Other_recipients =
 	"Outros destinat&aacute;rios";
 #endif
 
-const char *Txt_out_of_PART_OF_A_SCORE =	// Example: score is 2 out of 10
-#if   L==1	// ca
-	"sobre";	// Necessita traduccio
-#elif L==2	// de
-	"von";
-#elif L==3	// en
-	"out of";
-#elif L==4	// es
-	"sobre";
-#elif L==5	// fr
-	"sur";
-#elif L==6	// gn
-	"sobre";	// Okoteve traducción
-#elif L==7	// it
-	"su";
-#elif L==8	// pl
-	"obecnie";
-#elif L==9	// pt
-	"out of";
-#endif
-
 const char *Txt_page =
 #if   L==1	// ca
 	"p&agrave;g.";
