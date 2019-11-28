@@ -634,7 +634,6 @@ long Gam_GetParams (void)
   {
    /***** Get other parameters *****/
    Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
@@ -1317,8 +1316,8 @@ void Gam_RecFormGame (void)
    char MaxGradeStr[64];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get the code of the game *****/
-   Game.GamCod = Gam_GetParamGameCod ();
+   /***** Get parameters *****/
+   Game.GamCod = Gam_GetParams ();
 
    /***** Check if game has matches *****/
    if (Gam_CheckIfICanEditGames ())

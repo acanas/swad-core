@@ -1148,6 +1148,7 @@ void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match)
    /* Get parameters of game */
    if ((Game->GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Grp_GetParamWhichGrps ();
    Gam_GetDataOfGameByCod (Game);
 
    /* Get match code */
