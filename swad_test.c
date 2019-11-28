@@ -565,7 +565,7 @@ void Tst_AssessTest (void)
 
 	 /***** Write total mark of test *****/
 	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
-	    Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
+	    Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 
 	 /***** End box *****/
 	 Box_BoxEnd ();
@@ -629,23 +629,35 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
 /************************** Show total mark of a test ************************/
 /*****************************************************************************/
 
-void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
+void Tst_ShowTstTotalMark (unsigned NumQsts,double Score,double MaxGrade)
   {
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
-   double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) NumQsts;
+   double MaxScore;
+   double Grade;
 
-   /***** Write total mark ****/
+   if (NumQsts)
+     {
+      MaxScore = (double) NumQsts;
+      Grade = Score * MaxGrade / MaxScore;
+     }
+   else
+      Grade = 0.0;
+
+   /***** Write total score ****/
    HTM_DIV_Begin ("class=\"DAT CM\"");
    HTM_TxtF ("%s:&nbsp;",Txt_Score);
    HTM_SPAN_Begin ("class=\"%s\"",
-	           (TotalScoreOverSCORE_MAX >=
-	            (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
-					                      "ANS_BAD");
-   HTM_Double (TotalScore);
+	           (Grade >= MaxGrade / 2.0) ? "ANS_OK" :
+					       "ANS_BAD");
+   HTM_Double (Score);
    HTM_Txt (" (");
-   HTM_Double (TotalScoreOverSCORE_MAX);
-   HTM_TxtF (" %s %u)",Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   HTM_Double (Grade);
+   HTM_NBSP ();
+   HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
+   HTM_NBSP ();
+   HTM_Double (MaxGrade);
+   HTM_Txt (")");
    HTM_SPAN_End ();
    HTM_DIV_End ();
   }
@@ -8188,7 +8200,7 @@ void Tst_ShowOneTstResult (void)
 
       /***** Write total mark of test *****/
       if (ICanViewScore)
-	 Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
+	 Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 
       /***** End box *****/
       Box_BoxEnd ();

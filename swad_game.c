@@ -861,6 +861,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
       /* Get maximum grade (row[4]) */
       Game->MaxGrade = Str_GetDoubleFromStr (row[4]);
+      if (Game->MaxGrade < 0.0)	// Only positive values allowed
+	 Game->MaxGrade = 0.0;
 
       /* Get the title of the game (row[5]) */
       Str_Copy (Game->Title,row[5],
@@ -1262,7 +1264,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_FLOAT ("MaxGrade",(double) 0.0,(double) DBL_MAX,(double) 0.01,Game->MaxGrade,false,
+   HTM_INPUT_FLOAT ("MaxGrade",0.0,0.0,0.01,Game->MaxGrade,false,
 		    "required=\"required\"");
    HTM_TD_End ();
 
@@ -1329,6 +1331,8 @@ void Gam_RecFormGame (void)
       /***** Get maximum grade *****/
       Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
       Game.MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
+      if (Game.MaxGrade < 0.0)	// Only positive values allowed
+	 Game.MaxGrade = 0.0;
 
       /***** Get game text and insert links *****/
       Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)

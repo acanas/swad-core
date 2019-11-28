@@ -140,7 +140,7 @@ struct Tst_Stats
 void Tst_ShowFormAskTst (void);
 void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
-void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore);
+void Tst_ShowTstTotalMark (unsigned NumQsts,double Score,double MaxGrade);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
