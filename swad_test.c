@@ -513,6 +513,7 @@ void Tst_AssessTest (void)
    extern const char *Txt_Test_result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_Score;
+   extern const char *Txt_Grade;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
@@ -564,12 +565,15 @@ void Tst_AssessTest (void)
 	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 HTM_TABLE_End ();
 
-	 /***** Write total mark of test *****/
+	 /***** Write total score and grade *****/
 	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
 	   {
-	    HTM_DIV_Begin ("class=\"DAT CM\"");
+	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	    HTM_TxtF ("%s:&nbsp;",Txt_Score);
-	    Tst_ShowScoreAndGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
+	    HTM_Double (TotalScore);
+	    HTM_BR ();
+	    HTM_TxtF ("%s:&nbsp;",Txt_Grade);
+	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
 
@@ -632,22 +636,17 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
   }
 
 /*****************************************************************************/
-/********* Show total score (and total grade out of maximum grade) ***********/
+/************ Compute and show total grade out of maximum grade **************/
 /*****************************************************************************/
 
-void Tst_ShowScoreAndGrade (unsigned NumQsts,double Score,double MaxGrade)
+void Tst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade)
   {
-   /***** Write total score ****/
-   HTM_Double (Score);
-
-   /***** Separator *****/
-   HTM_NBSP ();
-
-   /***** Compute and write grade over maximum grade *****/
-   HTM_Txt ("(");
    Tst_ShowGrade (Tst_ComputeGrade (NumQsts,Score,MaxGrade),MaxGrade);
-   HTM_Txt (")");
   }
+
+/*****************************************************************************/
+/**************** Compute total grade out of maximum grade *******************/
+/*****************************************************************************/
 
 double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
   {
@@ -665,6 +664,10 @@ double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
 
    return Grade;
   }
+
+/*****************************************************************************/
+/****************** Show total grade out of maximum grade ********************/
+/*****************************************************************************/
 
 void Tst_ShowGrade (double Grade,double MaxGrade)
   {
@@ -8030,6 +8033,7 @@ void Tst_ShowOneTstResult (void)
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
+   extern const char *Txt_Grade;
    extern const char *Txt_Tags;
    long TstCod;
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
@@ -8179,7 +8183,21 @@ void Tst_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         Tst_ShowScoreAndGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
+	 HTM_Double (TotalScore);
+      else
+	 HTM_Txt ("?");	// No feedback
+      HTM_TD_End ();
+
+      /* Grade */
+      HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TxtF ("%s:",Txt_Grade);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"DAT LT\"");
+      if (ICanViewScore)
+         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
       else
 	 HTM_Txt ("?");	// No feedback
       HTM_TD_End ();
@@ -8209,9 +8227,12 @@ void Tst_ShowOneTstResult (void)
       /***** Write total mark of test *****/
       if (ICanViewScore)
 	{
-	 HTM_DIV_Begin ("class=\"DAT CM\"");
+	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
-	 Tst_ShowScoreAndGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
+	 HTM_Double (TotalScore);
+	 HTM_BR ();
+	 HTM_TxtF ("%s:&nbsp;",Txt_Grade);
+         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 

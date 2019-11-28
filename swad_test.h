@@ -141,7 +141,7 @@ void Tst_ShowFormAskTst (void);
 void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
 
-void Tst_ShowScoreAndGrade (unsigned NumQsts,double Score,double MaxGrade);
+void Tst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 void Tst_ShowGrade (double Grade,double MaxGrade);
 
