@@ -7692,7 +7692,7 @@ static void Tst_ShowHeaderTestResults (void)
    extern const char *Txt_Date;
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
-   extern const char *Txt_Total_BR_score;
+   extern const char *Txt_Score;
    extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
@@ -7703,7 +7703,7 @@ static void Tst_ShowHeaderTestResults (void)
    HTM_TH (1,1,"RT",Txt_Date);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
-   HTM_TH (1,1,"RT",Txt_Total_BR_score);
+   HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH_Begin (1,1,"RT");
    HTM_Txt (Txt_Score);

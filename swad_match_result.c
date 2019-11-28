@@ -76,12 +76,12 @@ static void McR_ListGamesToSelect (void);
 static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				unsigned NumGamesSelected);
-static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
-                                          unsigned NumResults,
+static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
-					  double TotalGrade);
+					  double TotalGrade,
+					  double TotalMaxGrade);
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
@@ -443,7 +443,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
-   extern const char *Txt_Total_BR_score;
+   extern const char *Txt_Score;
    extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
    extern const char *Txt_Grade;
 
@@ -456,7 +456,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"LT",Txt_Match);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
-   HTM_TH (1,1,"RT",Txt_Total_BR_score);
+   HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    HTM_TH (1,1,"CT",Txt_Grade);
    HTM_TH_Empty (1);
@@ -497,6 +497,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
+   double TotalMaxGrade = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
    /***** Trivial check: there should be games selected *****/
@@ -595,18 +596,18 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
-	 /* Get number of questions (row[3]) */
-	 if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
-	    NumQstsInThisResult = 0;
-	 NumTotalQsts += NumQstsInThisResult;
-
-	 /* Get number of questions not blank (row[4]) */
-	 if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
-	    NumQstsNotBlankInThisResult = 0;
-	 NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
-
 	 if (ShowResultThisMatch)
 	   {
+	    /* Get number of questions (row[3]) */
+	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
+	       NumQstsInThisResult = 0;
+	    NumTotalQsts += NumQstsInThisResult;
+
+	    /* Get number of questions not blank (row[4]) */
+	    if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
+	       NumQstsNotBlankInThisResult = 0;
+	    NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
+
 	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
 
 	    /* Get score (row[5]) */
@@ -617,24 +618,33 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    /* Get maximum grade (row[6]) */
 	    if (sscanf (row[6],"%lg",&MaxGrade) != 1)
 	       MaxGrade = 0.0;
+	    TotalMaxGrade += MaxGrade;
 
 	    Str_SetDecimalPointToLocal ();	// Return to local system
 	   }
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumQstsInThisResult);
+	 if (ShowResultThisMatch)
+	    HTM_Unsigned (NumQstsInThisResult);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumQstsNotBlankInThisResult);
+	 if (ShowResultThisMatch)
+	    HTM_Unsigned (NumQstsNotBlankInThisResult);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    HTM_Double (ScoreInThisResult);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
 	 /* Write average score per question */
@@ -643,6 +653,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult /
 					      (double) NumQstsInThisResult :
 					      0.0);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
@@ -653,6 +665,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    Tst_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
 	   }
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -684,11 +698,10 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	}
 
       /***** Write totals for this user *****/
-      McR_ShowMchResultsSummaryRow (ShowSummaryResults,
-				    NumResults,
+      McR_ShowMchResultsSummaryRow (NumResults,
 				    NumTotalQsts,NumTotalQstsNotBlank,
 				    TotalScoreOfAllResults,
-				    TotalGrade);
+				    TotalGrade,TotalMaxGrade);
      }
    else
      {
@@ -706,12 +719,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 /************** Show row with summary of user's matches results **************/
 /*****************************************************************************/
 
-static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
-                                          unsigned NumResults,
+static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
-					  double TotalGrade)
+					  double TotalGrade,
+					  double TotalMaxGrade)
   {
    extern const char *Txt_Matches;
 
@@ -738,21 +751,18 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ShowSummaryResults)
-      HTM_Double (TotalScoreOfAllResults);
+   HTM_Double (TotalScoreOfAllResults);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ShowSummaryResults)
-      HTM_Double (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
-			         0.0);
+   HTM_Double (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
+			      0.0);
    HTM_TD_End ();
 
    /***** Write total grade *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP CM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ShowSummaryResults)
-      HTM_Double (TotalGrade);
+   Tst_ShowGrade (TotalGrade,TotalMaxGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/

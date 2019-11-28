@@ -50294,27 +50294,6 @@ const char *Txt_Total =
 	"Total";
 #endif
 
-const char *Txt_Total_BR_score =
-#if   L==1	// ca
-	"Puntuaci&oacute;<br />total";
-#elif L==2	// de
-	"Gesamt";
-#elif L==3	// en
-	"Total<br />score";
-#elif L==4	// es
-	"Puntuaci&oacute;n<br />total";
-#elif L==5	// fr
-	"Note<br />total";
-#elif L==6	// gn
-	"Puntuaci&oacute;n<br />total ";	// Okoteve traducción
-#elif L==7	// it
-	"Punteggio<br />totale";
-#elif L==8	// pl
-	"Ca&lstrok;kowity<br />wynik";
-#elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />total";
-#endif
-
 const char *Txt_TST_Answer_given_by_the_teachers =
 #if   L==1	// ca
 	"Resposta donada pels professors";
