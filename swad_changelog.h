@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.80.3:  Nov 28, 2019	Fixed bug in games. (247286 lines)
 	Version 19.80.2:  Nov 28, 2019	Changes in test results and match results. (247285 lines)
 	Version 19.80.1:  Nov 28, 2019	Changes in test results and match results. (247252 lines)
 	Version 19.80:    Nov 28, 2019	Changes in test results and match results. (247265 lines)
