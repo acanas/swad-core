@@ -471,7 +471,6 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				unsigned NumGamesSelected)
   {
-   extern const char *Txt_out_of_PART_OF_A_SCORE;
    extern const char *Txt_Match_result;
    extern const char *Txt_Hidden_result;
    MYSQL_RES *mysql_res;
@@ -651,20 +650,9 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	   {
-	    if (NumQstsInThisResult)
-	      {
-	       MaxScore = (double) NumQstsInThisResult;
-	       Grade = ScoreInThisResult * MaxGrade / MaxScore;
-	      }
-	    else
-	       Grade = 0.0;
+            Grade = Tst_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
+	    Tst_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
-
-	    HTM_Double (Grade);
-	    HTM_NBSP ();
-	    HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
-	    HTM_NBSP ();
-	    HTM_Double (MaxGrade);
 	   }
 	 HTM_TD_End ();
 
@@ -790,7 +778,6 @@ void McR_ShowOneMchResult (void)
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
-   extern const char *Txt_out_of_PART_OF_A_SCORE;
    extern const char *Txt_Tags;
    struct Game Game;
    struct Match Match;
@@ -803,7 +790,6 @@ void McR_ShowOneMchResult (void)
    unsigned NumQstsNotBlank;
    double MaxScore;
    double TotalScore;
-   double Grade;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ItsMe;
@@ -986,25 +972,9 @@ void McR_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-	{
-	 if (NumQsts)
-	   {
-	    MaxScore = (double) NumQsts;
-	    Grade = TotalScore * Game.MaxGrade / MaxScore;
-	   }
-	 else
-	    Grade = 0.0;
-	 HTM_Double (TotalScore);
-	 HTM_Txt (" (");
-	 HTM_Double (Grade);
-	}
+         Tst_ShowScoreAndGrade (NumQsts,TotalScore,Game.MaxGrade);
       else
-	 HTM_Txt ("? (?");	// No feedback
-      HTM_NBSP ();
-      HTM_Txt (Txt_out_of_PART_OF_A_SCORE);
-      HTM_NBSP ();
-      HTM_Double (Game.MaxGrade);
-      HTM_Txt (")");
+	 HTM_Txt ("?");	// No feedback
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1030,7 +1000,12 @@ void McR_ShowOneMchResult (void)
 
       /***** Write total mark of match result *****/
       if (ICanViewScore)
-         Tst_ShowTstTotalMark (NumQsts,TotalScore,Game.MaxGrade);
+	{
+	 HTM_DIV_Begin ("class=\"DAT CM\"");
+	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
+         Tst_ShowScoreAndGrade (NumQsts,TotalScore,Game.MaxGrade);
+         HTM_DIV_End ();
+	}
 
       /***** End box *****/
       Box_BoxEnd ();
