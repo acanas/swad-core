@@ -564,7 +564,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Required_reading,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+                 NULL,Box_CLOSABLE);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);

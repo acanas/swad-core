@@ -80,8 +80,7 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
-					  double TotalGrade,
-					  double TotalMaxGrade);
+					  double TotalGrade);
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
@@ -497,7 +496,6 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
-   double TotalMaxGrade = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
    /***** Trivial check: there should be games selected *****/
@@ -618,7 +616,6 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    /* Get maximum grade (row[6]) */
 	    if (sscanf (row[6],"%lg",&MaxGrade) != 1)
 	       MaxGrade = 0.0;
-	    TotalMaxGrade += MaxGrade;
 
 	    Str_SetDecimalPointToLocal ();	// Return to local system
 	   }
@@ -701,7 +698,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
       McR_ShowMchResultsSummaryRow (NumResults,
 				    NumTotalQsts,NumTotalQstsNotBlank,
 				    TotalScoreOfAllResults,
-				    TotalGrade,TotalMaxGrade);
+				    TotalGrade);
      }
    else
      {
@@ -723,8 +720,7 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
-					  double TotalGrade,
-					  double TotalMaxGrade)
+					  double TotalGrade)
   {
    extern const char *Txt_Matches;
 
@@ -761,8 +757,8 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP CM COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_ShowGrade (TotalGrade,TotalMaxGrade);
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_Double (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
