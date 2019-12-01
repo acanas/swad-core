@@ -192,7 +192,7 @@ struct swad__tagsArray
    struct swad__tag *__ptr;		// pointer to array
    int __size; 				// number of elements pointed to 
   };
-struct swad__question
+struct swad__testQuestion
   {
    int questionCode;
    char *answerType;
@@ -200,12 +200,12 @@ struct swad__question
    char *stem;
    char *feedback;
   };
-struct swad__questionsArray
+struct swad__testQuestionsArray
   {
-   struct swad__question *__ptr;	// pointer to array
+   struct swad__testQuestion *__ptr;	// pointer to array
    int __size; 				// number of elements pointed to 
   };
-struct swad__answer
+struct swad__testAnswer
   {
    int questionCode;
    int answerIndex;
@@ -213,9 +213,9 @@ struct swad__answer
    char *answerText;
    char *answerFeedback;
   };
-struct swad__answersArray
+struct swad__testAnswersArray
   {
-   struct swad__answer *__ptr;		// pointer to array
+   struct swad__testAnswer *__ptr;		// pointer to array
    int __size; 				// number of elements pointed to 
   };
 struct swad__questionTag
@@ -232,16 +232,15 @@ struct swad__questionTagsArray
 struct swad__getTestsOutput
   {
    struct swad__tagsArray tagsArray;
-   struct swad__questionsArray questionsArray;
-   struct swad__answersArray answersArray;
+   struct swad__testQuestionsArray questionsArray;
+   struct swad__testAnswersArray answersArray;
    struct swad__questionTagsArray questionTagsArray;
   };
 struct swad__getTrivialQuestionOutput
   {
-   struct swad__question question;
-   struct swad__answersArray answersArray;
+   struct swad__testQuestion question;
+   struct swad__testAnswersArray answersArray;
   };
-
 
 /* getGames */
 struct swad__game
@@ -255,7 +254,8 @@ struct swad__game
    int endTime;
    char *title;
    char *text;
-   char *groups;
+   int numQuestions;
+   float maxGrade;
   };
 struct swad__gamesArray
   {
@@ -266,6 +266,61 @@ struct swad__getGamesOutput
   {
    int numGames;
    struct swad__gamesArray gamesArray;
+  };
+
+/* getMatches */
+struct swad__match
+  {
+   int matchCode;
+   char *userSurname1;
+   char *userSurname2;
+   char *userFirstname;
+   char *userPhoto;
+   int startTime;
+   int endTime;
+   char *title;
+   int questionIndex;
+   char *groups;
+  };
+struct swad__matchesArray
+  {
+   struct swad__match *__ptr;	// pointer to array
+   int __size; 			// number of elements pointed to
+  };
+struct swad__getMatchesOutput
+  {
+   int numMatches;
+   struct swad__matchesArray matchesArray;
+  };
+
+/* playMatch */
+struct swad__playMatchOutput
+  {
+   int matchCode;
+  };
+
+/* getMatchStatus */
+struct swad__matchAnswer
+  {
+   int answerIndex;
+   int selected;
+  };
+struct swad__matchAnswersArray
+  {
+   struct swad__matchAnswer *__ptr;	// pointer to array
+   int __size; 				// number of elements pointed to
+  };
+struct swad__getMatchStatusOutput
+  {
+   int matchCode;
+   int questionIndex;
+   struct swad__matchAnswersArray answersArray;
+  };
+
+/* answerMatchQuestion */
+struct swad__answerMatchQuestionOutput
+  {
+   int matchCode;
   };
 
 /* structs used in getUsers and sendMessage */
@@ -445,6 +500,14 @@ int swad__getTrivialQuestion (char *wsKey,char *degrees,float lowerScore,float u
 /* Games */
 int swad__getGames (char *wsKey,int courseCode,
                     struct swad__getGamesOutput *getGamesOut);
+int swad__getMatches (char *wsKey,int gameCode,
+                      struct swad__getMatchesOutput *getMatchesOut);
+int swad__playMatch (char *wsKey,int matchCode,
+                     struct swad__playMatchOutput *playMatchOut);
+int swad__getMatchStatus (char *wsKey,int matchCode,
+                          struct swad__getMatchStatusOutput *getMatchStatusOut);
+int swad__answerMatchQuestion (char *wsKey,int matchCode,int questionIndex,int numOption,
+                               struct swad__answerMatchQuestionOutput *answerMatchQuestionOut);
 
 /* List of users */
 int swad__getUsers (char *wsKey,int courseCode,char *groups,int userRole,

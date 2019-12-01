@@ -238,7 +238,7 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut);
 
-static void API_GetListGrpsInGameFromDB (long GamCod,char **ListGroups);
+static void API_GetListGrpsInGameFromDB (long MchCod,char **ListGroups);
 
 static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree);
 static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,const char *FileName);
@@ -4324,7 +4324,7 @@ int swad__getGames (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
+   unsigned long NumRows;
    int NumGame;
    long GamCod;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -4373,32 +4373,28 @@ int swad__getGames (struct soap *soap,
      }
 
    /***** Query list of games *****/
-   NumRows =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get games",
-			      "SELECT GamCod,"				// row[0]
-			             "UsrCod,"				// row[1]
-			             "UNIX_TIMESTAMP(StartTime) AS ST,"	// row[2]
-			             "UNIX_TIMESTAMP(EndTime) AS ET,"	// row[3]
-			             "Title,"				// row[4]
-			             "Txt"				// row[5]
-			      " FROM gam_games"
-			      " WHERE CrsCod=%ld"
-			      " AND Hidden='N'"
-			      " AND NOW() BETWEEN StartTime AND EndTime"
-			      " AND (GamCod NOT IN (SELECT GamCod FROM mch_groups) OR"
-			      " GamCod IN (SELECT mch_groups.GamCod FROM mch_groups,crs_grp_usr"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))"
-			      " ORDER BY ST DESC,ET DESC,Title DESC",
-			      courseCode,
-			      Gbl.Usrs.Me.UsrDat.UsrCod);
-
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
+			     "SELECT gam_games.GamCod,"				// row[0]
+			            "gam_games.UsrCod,"				// row[1]
+			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[2]
+			            "MAX(mch_matches.EndTime) AS EndTime"	// row[3]
+				    "gam_games.MaxGrade,"			// row[4]
+			            "gam_games.Title,"				// row[5]
+			            "gam_games.Txt"				// row[6]
+			     " FROM gam_games"
+			     " LEFT JOIN mch_matches"
+			     " ON gam_games.GamCod=mch_matches.GamCod"
+			     " WHERE gam_games.CrsCod=%ld"
+			     " AND Hidden='N'"
+			     " GROUP BY gam_games.GamCod"
+			     " ORDER BY StartTime DESC,EndTime DESC,gam_games.Title DESC",
+			     Gbl.Hierarchy.Crs.CrsCod);
    getGamesOut->gamesArray.__size =
    getGamesOut->numGames          = (int) NumRows;
 
    if (getGamesOut->numGames == 0)
       getGamesOut->gamesArray.__ptr = NULL;
-   else	// Events found
+   else	// Games found
      {
       getGamesOut->gamesArray.__ptr = soap_malloc (Gbl.soap,(getGamesOut->gamesArray.__size) * sizeof (*(getGamesOut->gamesArray.__ptr)));
 
@@ -4406,7 +4402,7 @@ int swad__getGames (struct soap *soap,
 	   NumGame < getGamesOut->numGames;
 	   NumGame++)
 	{
-	 /* Get next group */
+	 /* Get next game */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get game code (row[0]) */
@@ -4462,20 +4458,22 @@ int swad__getGames (struct soap *soap,
             sscanf (row[3],"%ld",&EndTime);
          getGamesOut->gamesArray.__ptr[NumGame].endTime = EndTime;
 
-	 /* Get title of the game (row[4]) */
-         Length = strlen (row[4]);
-         getGamesOut->gamesArray.__ptr[NumGame].title = (char *) soap_malloc (Gbl.soap,Length + 1);
-         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[4],
-                   Length);
+	 /* Get maximum grade (row[4]) */
+	 getGamesOut->gamesArray.__ptr[NumGame].maxGrade = Str_GetDoubleFromStr (row[4]);
+	 if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
+	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
-	 /* Get Txt (row[5]) */
+	 /* Get title of the game (row[5]) */
          Length = strlen (row[5]);
-         getGamesOut->gamesArray.__ptr[NumGame].text = (char *) soap_malloc (Gbl.soap,Length + 1);
-         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[5],
+         getGamesOut->gamesArray.__ptr[NumGame].title = (char *) soap_malloc (Gbl.soap,Length + 1);
+         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[5],
                    Length);
 
-	 /* Get list of groups for this game */
-         API_GetListGrpsInGameFromDB (GamCod,&(getGamesOut->gamesArray.__ptr[NumGame].groups));
+	 /* Get Txt (row[6]) */
+         Length = strlen (row[6]);
+         getGamesOut->gamesArray.__ptr[NumGame].text = (char *) soap_malloc (Gbl.soap,Length + 1);
+         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[6],
+                   Length);
 	}
      }
 
@@ -4486,10 +4484,285 @@ int swad__getGames (struct soap *soap,
   }
 
 /*****************************************************************************/
-/**************** Get lists of groups of an attendance event *****************/
+/********************** Return list of matches in a game *********************/
 /*****************************************************************************/
 
-static void API_GetListGrpsInGameFromDB (long GamCod,char **ListGroups)
+int swad__getMatches (struct soap *soap,
+                      char *wsKey,int gameCode,				// input
+                      struct swad__getMatchesOutput *getMatchesOut)	// output
+  {
+   int ReturnCode;
+   struct Game Game;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   int NumMatch;
+   long MchCod;
+   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   long StartTime;
+   long EndTime;
+   size_t Length;
+
+   /***** Initializations *****/
+   Gbl.soap = soap;
+   Gbl.WebService.Function = API_getMatches;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /***** Get game data from database *****/
+   Game.GamCod = (long) gameCode;
+   if (Game.GamCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad game code",
+	                        "Game code must be a integer greater than 0");
+   Gam_GetDataOfGameByCod (&Game);
+
+   /***** Check if course code is correct *****/
+   Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
+
+   /***** Get some of my data *****/
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+
+   /***** Check if I am a student in the course *****/
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+     {
+      case Rol_STD:
+	 // OK. I am a student to the course
+	 break;
+      default:
+	 return soap_receiver_fault (Gbl.soap,
+				     "Request forbidden",
+				     "Requester must be a student in the course");
+     }
+
+   /***** Query list of matches *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get matches",
+			     "SELECT MchCod,"				// row[ 0]
+				    "UsrCod,"				// row[ 1]
+				    "UNIX_TIMESTAMP(StartTime),"	// row[ 2]
+				    "UNIX_TIMESTAMP(EndTime),"		// row[ 3]
+				    "Title,"				// row[ 4]
+				    "QstInd"				// row[ 5]
+				    " FROM mch_matches"
+				    " WHERE GamCod=%ld"
+				    " AND"
+				    "(MchCod NOT IN"
+				    " (SELECT MchCod FROM mch_groups)"
+				    " OR"
+				    " MchCod IN"
+				    " (SELECT mch_groups.MchCod"
+				    " FROM mch_groups,crs_grp_usr"
+				    " WHERE crs_grp_usr.UsrCod=%ld"
+				    " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+				    " ORDER BY MchCod",
+			     Game.GamCod,
+			     Gbl.Usrs.Me.UsrDat.UsrCod);
+   getMatchesOut->matchesArray.__size =
+   getMatchesOut->numMatches          = (int) NumRows;
+
+   if (getMatchesOut->numMatches == 0)
+      getMatchesOut->matchesArray.__ptr = NULL;
+   else	// Matches found
+     {
+      getMatchesOut->matchesArray.__ptr = soap_malloc (Gbl.soap,(getMatchesOut->matchesArray.__size) * sizeof (*(getMatchesOut->matchesArray.__ptr)));
+
+      for (NumMatch = 0;
+	   NumMatch < getMatchesOut->numMatches;
+	   NumMatch++)
+	{
+	 /* Get next game */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get match code (row[0]) */
+	 MchCod = Str_ConvertStrCodToLongCod (row[0]);
+         getMatchesOut->matchesArray.__ptr[NumMatch].matchCode = (int) MchCod;
+
+	 /* Get user's code of the user who created the game (row[1]) */
+         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
+           {
+            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1,
+                      Gbl.Usrs.Other.UsrDat.Surname1,
+                      Length);
+
+            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2,
+                      Gbl.Usrs.Other.UsrDat.Surname2,
+                      Length);
+
+            Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
+                      Gbl.Usrs.Other.UsrDat.FirstName,
+                      Length);
+
+            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            Length = strlen (PhotoURL);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto,
+                      PhotoURL,
+                      Length);
+           }
+         else
+           {
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1  = NULL;
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2  = NULL;
+            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname = NULL;
+            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto     = NULL;
+           }
+
+	 /* Get match start time (row[2]) */
+         StartTime = 0L;
+         if (row[2])
+            sscanf (row[2],"%ld",&StartTime);
+         getMatchesOut->matchesArray.__ptr[NumMatch].startTime = StartTime;
+
+	 /* Get match end time (row[3]) */
+         EndTime = 0L;
+         if (row[3])
+            sscanf (row[3],"%ld",&EndTime);
+         getMatchesOut->matchesArray.__ptr[NumMatch].endTime = EndTime;
+
+	 /* Get title of the match (row[4]) */
+         Length = strlen (row[4]);
+         getMatchesOut->matchesArray.__ptr[NumMatch].title = (char *) soap_malloc (Gbl.soap,Length + 1);
+         Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].title,row[4],
+                   Length);
+
+	 /* Get current question index (row[5]) */
+         getMatchesOut->matchesArray.__ptr[NumMatch].questionIndex = (int) Gam_GetQstIndFromStr (row[5]);
+
+	 /* Get list of groups for this match */
+	 API_GetListGrpsInGameFromDB (MchCod,&(getMatchesOut->matchesArray.__ptr[NumMatch].groups));
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/********************** Try to join to a match as student ********************/
+/*****************************************************************************/
+
+int swad__playMatch (struct soap *soap,
+                     char *wsKey,int matchCode,				// input
+                     struct swad__playMatchOutput *playMatchOut)	// output
+  {
+   int ReturnCode;
+
+   /***** Initializations *****/
+   Gbl.soap = soap;
+   Gbl.WebService.Function = API_playMatch;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   // TODO: Write the code
+   playMatchOut->matchCode = matchCode;
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/*********** Get match status to be refreshed in student's screen ************/
+/*****************************************************************************/
+
+int swad__getMatchStatus (struct soap *soap,
+                          char *wsKey,int matchCode,				// input
+                          struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
+  {
+   int ReturnCode;
+
+   /***** Initializations *****/
+   Gbl.soap = soap;
+   Gbl.WebService.Function = API_getMatchStatus;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   // TODO: Write the code
+   getMatchStatusOut->matchCode = matchCode;
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/************* Send an answer to the current question in a match *************/
+/*****************************************************************************/
+
+int swad__answerMatchQuestion (struct soap *soap,
+                               char *wsKey,int matchCode,int questionIndex,int numOption,	// input
+                               struct swad__answerMatchQuestionOutput *answerMatchQuestionOut)	// output
+  {
+   int ReturnCode;
+   // unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
+   // unsigned NumOpt;
+
+   /***** Initializations *****/
+   Gbl.soap = soap;
+   Gbl.WebService.Function = API_answerMatchQuestion;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   // TODO: Write the code
+   if (questionIndex > 0 && numOption > 0)
+     {
+      // QstInd = (unsigned) questionIndex;
+      // NumOpt = (unsigned) numOption;
+      answerMatchQuestionOut->matchCode = matchCode;
+     }
+   else
+     {
+      // QstInd = 0;
+      // NumOpt = 0;
+      answerMatchQuestionOut->matchCode = -1;
+     }
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/*********************** Get lists of groups of a match **********************/
+/*****************************************************************************/
+
+static void API_GetListGrpsInGameFromDB (long MchCod,char **ListGroups)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4502,11 +4775,11 @@ static void API_GetListGrpsInGameFromDB (long GamCod,char **ListGroups)
    /***** Get list of groups *****/
    NumGrps =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			      "SELECT GrpCod FROM mch_groups WHERE GamCod=%ld",
-			      GamCod);
+			      "SELECT GrpCod FROM mch_groups WHERE MchCod=%ld",
+			      MchCod);
    if (NumGrps == 0)
       *ListGroups = NULL;
-   else	// Events found
+   else	// Groups found
      {
       Length = NumGrps * (10 + 1) - 1;
       *ListGroups = soap_malloc (Gbl.soap,Length + 1);

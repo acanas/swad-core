@@ -688,7 +688,7 @@ void Gam_GetListGames (Gam_Order_t SelectedOrder)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+         if (asprintf (&HiddenSubQuery," AND gam_games.Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       case Rol_NET:
