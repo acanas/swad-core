@@ -111,6 +111,7 @@ void Mch_ForwardMatch (void);
 unsigned Mch_GetNumMchsInGame (long GamCod);
 
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
+bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);

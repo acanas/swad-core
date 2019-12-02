@@ -108,6 +108,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_ID.h"
+#include "swad_match.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
@@ -4670,6 +4671,9 @@ int swad__playMatch (struct soap *soap,
                      struct swad__playMatchOutput *playMatchOut)	// output
   {
    int ReturnCode;
+   struct Match Match;
+   struct Game Game;
+   bool ICanPlayThisMatchBasedOnGrps;
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -4683,8 +4687,68 @@ int swad__playMatch (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   // TODO: Write the code
-   playMatchOut->matchCode = matchCode;
+   /***** Get match data from database *****/
+   Match.MchCod = (long) matchCode;
+   if (Match.MchCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad match code",
+	                        "Match code must be a integer greater than 0");
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Get game data from database *****/
+   Game.GamCod = Match.GamCod;
+   if (Game.GamCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad game code",
+	                        "Game code must be a integer greater than 0");
+   Gam_GetDataOfGameByCod (&Game);
+
+   /***** Check if course code is correct *****/
+   Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
+
+   /***** Get some of my data *****/
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+
+   /***** Check if I am a student in the course *****/
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+     {
+      case Rol_STD:
+	 // OK. I am a student to the course
+	 break;
+      default:
+	 return soap_receiver_fault (Gbl.soap,
+				     "Request forbidden",
+				     "Requester must be a student in the course");
+     }
+
+   /***** Can I play this match? *****/
+   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
+   if (!ICanPlayThisMatchBasedOnGrps)
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Requester can not join this match");
+
+   /***** Join match *****/
+   if (Match.Status.Playing)
+     {
+      if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+	 /* Update players */
+	 playMatchOut->matchCode = Mch_RegisterMeAsPlayerInMatch (&Match) ? matchCode :	//  > 0 ==> OK
+                                                                            -1;		//  < 0 ==> can not join this match
+      else
+         playMatchOut->matchCode = 0;	// == 0 ==> wait
+     }
+   else	// Not being played
+      playMatchOut->matchCode = 0;	// == 0 ==> wait
 
    return SOAP_OK;
   }

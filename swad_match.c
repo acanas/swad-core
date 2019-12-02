@@ -189,7 +189,6 @@ static void Mch_RemoveOldPlayers (void);
 static void Mch_UpdateMatchAsBeingPlayed (long MchCod);
 static void Mch_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Mch_GetIfMatchIsBeingPlayed (long MchCod);
-static void Mch_RegisterMeAsPlayerInMatch (long MchCod);
 static void Mch_GetNumPlayers (struct Match *Match);
 
 static double Mch_ComputeScore (unsigned NumQsts);
@@ -2238,18 +2237,21 @@ static void Mch_ShowRightColumnStd (struct Match *Match)
    /***** Bottom row *****/
    if (Match->Status.Playing)
      {
-      if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+      if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Match not over
 	{
 	 HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");
 
 	 /***** Update players ******/
-	 Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
-
-	 /* Show current question and possible answers */
-	 Mch_ShowQuestionAndAnswersStd (Match);
+	 if (Mch_RegisterMeAsPlayerInMatch (Match))
+	    /* Show current question and possible answers */
+	    Mch_ShowQuestionAndAnswersStd (Match);
+	 else
+	    Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
 
 	 HTM_DIV_End ();
 	}
+      else							// Match over
+	 Mch_ShowWaitImage (Txt_Please_wait_);
      }
    else	// Not being played
       Mch_ShowWaitImage (Txt_Please_wait_);
@@ -2976,14 +2978,6 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
 			  MchCod) != 0);
   }
 
-static void Mch_RegisterMeAsPlayerInMatch (long MchCod)
-  {
-   /***** Insert me as match player *****/
-   DB_QueryREPLACE ("can not insert match player",
-		    "REPLACE mch_players (MchCod,UsrCod) VALUES (%ld,%ld)",
-		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
 static void Mch_GetNumPlayers (struct Match *Match)
   {
    /***** Get number of players who are playing a match *****/
@@ -2992,6 +2986,36 @@ static void Mch_GetNumPlayers (struct Match *Match)
 			     "SELECT COUNT(*) FROM mch_players"
 			     " WHERE MchCod=%ld",
 			     Match->MchCod);
+  }
+
+/*****************************************************************************/
+/******************* Register me as a player in a match **********************/
+/*****************************************************************************/
+// Return true on success
+
+bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match)
+  {
+   /***** Trivial check: match code must be > 0 *****/
+   if (Match->MchCod <= 0)
+      return false;
+
+   /***** Trivial check: match must be being played *****/
+   if (!Match->Status.Playing)				// Not playing
+      return false;
+
+   /***** Trivial check: match must not be over *****/
+   if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
+      return false;
+
+   /***** Trivial check: only a student can join a match *****/
+   if (Gbl.Usrs.Me.Role.Logged != Rol_STD)		// I am not logged as student
+      return false;
+
+   /***** Insert me as match player *****/
+   DB_QueryREPLACE ("can not insert match player",
+		    "REPLACE mch_players (MchCod,UsrCod) VALUES (%ld,%ld)",
+		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return true;
   }
 
 /*****************************************************************************/
