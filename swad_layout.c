@@ -678,6 +678,8 @@ static void Lay_WriteScriptInit (void)
 	 RefreshNewTimeline = true;
 	 break;
       case ActJoiMch:
+      case ActSeeMchAnsQstStd:
+      case ActRemMchAnsQstStd:
       case ActAnsMchQstStd:
 	 RefreshMatchStd = true;
 	 break;
@@ -811,6 +813,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 break;
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:
+      case ActSeeMchAnsQstStd:
+      case ActRemMchAnsQstStd:
       case ActAnsMchQstStd:
 	 // Refresh parameters
 	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"

@@ -626,6 +626,8 @@ Assessment:
         476. ActRefMchTch		Refresh current question when playing a match (as teacher)
 
         477. ActJoiMch			Show current question when playing a game (as student)
+        NEW. ActSeeMchAnsQstStd		View my answer to a match question (as student)
+        NEW. ActRemMchAnsQstStd		Remove my answer to a match question (as student)
         478. ActAnsMchQstStd		Answer a match question (as student)
         479. ActRefMchStd		Refresh current question when playing a game (as student)
 
@@ -2158,6 +2160,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRefMchTch	] = {1788,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
 
    [ActJoiMch		] = {1780,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_JoinMatchAsStd		,NULL},
+   [ActSeeMchAnsQstStd	] = {1808,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_JoinMatchAsStd		,NULL},
+   [ActRemMchAnsQstStd	] = {1809,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_RemoveQuestionAnswer	,NULL},
    [ActAnsMchQstStd	] = {1651,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQuestionAnswer	,NULL},
    [ActRefMchStd	] = {1782,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
 
@@ -5025,6 +5029,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqUsrPrj,		// #1805
 	ActShoHidSocComGbl,	// #1806
 	ActShoHidSocComUsr,	// #1807
+        ActSeeMchAnsQstStd,	// #1808
+        ActRemMchAnsQstStd,	// #1809
 	};
 
 /*****************************************************************************/

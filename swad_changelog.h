@@ -490,15 +490,20 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.81.1 (2019-12-01)"
-#define CSS_FILE		"swad19.78.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.82 (2019-12-03)"
+#define CSS_FILE		"swad19.82.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
-	Version 19.81.1:  Dec 01, 2019	API function playMatch finished. (247620 lines)
+	Version 19.82:    Dec 03, 2019	Changes in feedback in matches. (247758 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1808','es','N','Ver mi respuesta a pregunta en partida');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1809','es','N','Eliminar mi respuesta a pregunta en partida');
+
+	Version 19.81.1:  Dec 02, 2019	API function playMatch finished. (247620 lines)
 	Version 19.81:    Dec 01, 2019	New (some unfinished) API functions related to games and matches. (247540 lines)
 	Version 19.80.7:  Nov 29, 2019	Changes in match results. (247242 lines)
 	Version 19.80.6:  Nov 28, 2019	Changes in match results and test results. (247245 lines)

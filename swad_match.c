@@ -65,6 +65,12 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Mch_CHANGE_STATUS_BY_STUDENT,
+   Mch_REFRESH_STATUS_BY_SERVER,
+  } Mch_Update_t;
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -149,13 +155,16 @@ static void Mch_SetMatchStatusToNextQst (struct Match *Match);
 static void Mch_SetMatchStatusToEnd (struct Match *Match);
 
 static void Mch_ShowMatchStatusForTch (struct Match *Match);
-static void Mch_ShowMatchStatusForStd (struct Match *Match);
+static void Mch_ShowMatchStatusForStd (struct Match *Match,Mch_Update_t Update);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_ShowRightColumnTch (struct Match *Match);
-static void Mch_ShowLeftColumnStd (struct Match *Match);
-static void Mch_ShowRightColumnStd (struct Match *Match);
+static void Mch_ShowLeftColumnStd (struct Match *Match,
+				   const struct Mch_UsrAnswer *UsrAnswer);
+static void Mch_ShowRightColumnStd (struct Match *Match,
+				    const struct Mch_UsrAnswer *UsrAnswer,
+				    Mch_Update_t Update);
 
 static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
@@ -164,10 +173,14 @@ static void Mch_PutParamNumCols (unsigned NumCols);
 
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_PutCheckboxResult (struct Match *Match);
+static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
+static void Mch_PutIconToRemoveMyAnswer (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_WriteAnswersMatchResult (struct Match *Match,
                                          const char *Class,bool ShowResult);
-static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
+static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+					   const struct Mch_UsrAnswer *UsrAnswer,
+					   Mch_Update_t Update);
 
 static void Mch_ShowMatchScore (struct Match *Match);
 static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore);
@@ -190,6 +203,8 @@ static void Mch_UpdateMatchAsBeingPlayed (long MchCod);
 static void Mch_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Mch_GetIfMatchIsBeingPlayed (long MchCod);
 static void Mch_GetNumPlayers (struct Match *Match);
+
+static void Mch_RemoveAnswerToMatchQuestion (const struct Match *Match);
 
 static double Mch_ComputeScore (unsigned NumQsts);
 
@@ -2029,20 +2044,28 @@ static void Mch_ShowMatchStatusForTch (struct Match *Match)
 /************ Show current question being played for a student ***************/
 /*****************************************************************************/
 
-static void Mch_ShowMatchStatusForStd (struct Match *Match)
+static void Mch_ShowMatchStatusForStd (struct Match *Match,Mch_Update_t Update)
   {
    bool ICanPlayThisMatchBasedOnGrps;
+   struct Mch_UsrAnswer UsrAnswer;
 
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
    if (!ICanPlayThisMatchBasedOnGrps)
       Lay_NoPermissionExit ();
 
+   /***** Get student's answer to this question
+	  (<0 ==> no answer) *****/
+   Mch_GetQstAnsFromDB (Match->MchCod,
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			Match->Status.QstInd,
+			&UsrAnswer);
+
    /***** Left column *****/
-   Mch_ShowLeftColumnStd (Match);
+   Mch_ShowLeftColumnStd (Match,&UsrAnswer);
 
    /***** Right column *****/
-   Mch_ShowRightColumnStd (Match);
+   Mch_ShowRightColumnStd (Match,&UsrAnswer,Update);
   }
 
 /*****************************************************************************/
@@ -2204,8 +2227,11 @@ static void Mch_ShowRightColumnTch (struct Match *Match)
 /*********** Show left column when playing a match (as a student) ************/
 /*****************************************************************************/
 
-static void Mch_ShowLeftColumnStd (struct Match *Match)
+static void Mch_ShowLeftColumnStd (struct Match *Match,
+				   const struct Mch_UsrAnswer *UsrAnswer)
   {
+   bool Answered = UsrAnswer->NumOpt >= 0;
+
    /***** Start left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT\"");
 
@@ -2216,6 +2242,14 @@ static void Mch_ShowLeftColumnStd (struct Match *Match)
    /***** Write number of question *****/
    Mch_ShowNumQstInMatch (Match);
 
+   /***** Write if question is answered *****/
+   Mch_PutIfAnswered (Match,Answered);
+
+   if (Match->Status.Showing == Mch_ANSWERS &&
+       Answered)
+      /***** Put icon to view *****/
+      Mch_PutIconToRemoveMyAnswer (Match);
+
    /***** End left container *****/
    HTM_DIV_End ();
   }
@@ -2224,7 +2258,9 @@ static void Mch_ShowLeftColumnStd (struct Match *Match)
 /********** Show right column when playing a match (as a student) ************/
 /*****************************************************************************/
 
-static void Mch_ShowRightColumnStd (struct Match *Match)
+static void Mch_ShowRightColumnStd (struct Match *Match,
+				    const struct Mch_UsrAnswer *UsrAnswer,
+				    Mch_Update_t Update)
   {
    extern const char *Txt_Please_wait_;
 
@@ -2244,7 +2280,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match)
 	 /***** Update players ******/
 	 if (Mch_RegisterMeAsPlayerInMatch (Match))
 	    /* Show current question and possible answers */
-	    Mch_ShowQuestionAndAnswersStd (Match);
+	    Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
 	 else
 	    Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
 
@@ -2435,6 +2471,88 @@ static void Mch_PutCheckboxResult (struct Match *Match)
   }
 
 /*****************************************************************************/
+/***************** Put checkbox to select if show results ********************/
+/*****************************************************************************/
+
+static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
+  {
+   extern const char *Txt_View_results;
+
+   /***** Start container *****/
+   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
+
+   /***** Put icon with link *****/
+   if (Match->Status.Showing == Mch_ANSWERS &&
+       Answered)
+     {
+      /* Start form */
+      Frm_StartForm (ActSeeMchAnsQstStd);
+      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+
+      HTM_A_Begin ("href=\"\" class=\"DAT_SMALL\" title=\"%s\" "
+		   " onclick=\"document.getElementById('%s').submit();return false;\"",
+		   "Ver mi respuesta",	// TODO: Need translation!!!!
+		   Gbl.Form.Id);
+      HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
+		"fas fa-check-circle",
+		"Respondida");			// TODO: Need translation!!!!
+      HTM_TxtF ("&nbsp;%s","Respondida");	// TODO: Need translation!!!!
+      HTM_A_End ();
+
+      /* End form */
+      Frm_EndForm ();
+     }
+   else
+     {
+      HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+      HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
+		Answered ? "fas fa-check-circle" :
+		           "fas fa-exclamation-circle",
+		Answered ? "Respondida" :
+		           "No respondida");		// TODO: Need translation!!!!
+      HTM_TxtF ("&nbsp;%s",Answered ? "Respondida" :
+		                      "No respondida");	// TODO: Need translation!!!!
+      HTM_DIV_End ();
+     }
+
+   /***** End container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/***************** Put checkbox to select if show results ********************/
+/*****************************************************************************/
+
+static void Mch_PutIconToRemoveMyAnswer (struct Match *Match)
+  {
+   extern const char *Txt_View_results;
+
+   /***** Start container *****/
+   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
+
+   /***** Start form *****/
+   Frm_StartForm (ActRemMchAnsQstStd);
+   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+   Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+
+   /***** Put icon with link *****/
+   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
+   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
+		" onclick=\"document.getElementById('%s').submit();return false;\"",
+	        "Eliminar mi respuesta",	// TODO: Need translation!!!!
+	        Gbl.Form.Id);
+   HTM_Txt ("<i class=\"fas fa-trash\" style=\"color:#660000;\"></i>");
+   HTM_A_End ();
+   HTM_DIV_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /***************************** Show match title ******************************/
 /*****************************************************************************/
 
@@ -2541,9 +2659,10 @@ static void Mch_WriteAnswersMatchResult (struct Match *Match,
 /***** Show question and its answers when playing a match (as a student) *****/
 /*****************************************************************************/
 
-static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
+static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+					   const struct Mch_UsrAnswer *UsrAnswer,
+					   Mch_Update_t Update)
   {
-   struct Mch_UsrAnswer UsrAnswer;
    unsigned NumOptions;
    unsigned NumOpt;
    char *Class;
@@ -2554,13 +2673,6 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
      {
       if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
 	{
-	 /***** Get student's answer to this question
-		(<0 ==> no answer) *****/
-	 Mch_GetQstAnsFromDB (Match->MchCod,
-			      Gbl.Usrs.Me.UsrDat.UsrCod,
-			      Match->Status.QstInd,
-			      &UsrAnswer);
-
 	 /***** Get number of options in this question *****/
 	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
@@ -2583,21 +2695,16 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	       is necessary in order to be fast
 	       and not lose clicks due to refresh */
 	    Frm_StartForm (ActAnsMchQstStd);
-	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+	    Mch_PutParamMchCod (Match->MchCod);		// Current match being played
 	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 	    Mch_PutParamNumOpt (NumOpt);		// Number of button
 
-	    if (UsrAnswer.NumOpt == (int) NumOpt)	// Student's answer
-	      {
-	       if (asprintf (&Class,"MCH_STD_ANSWER_SELECTED "
-	                            "MCH_STD_BUTTON BT_%c",'A' + (char) NumOpt) < 0)
-                  Lay_NotEnoughMemoryExit ();
-	      }
-	    else
-	      {
-	       if (asprintf (&Class,"MCH_STD_BUTTON BT_%c",'A' + (char) NumOpt) < 0)
-                  Lay_NotEnoughMemoryExit ();
-	      }
+	    if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
+			  UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
+			  Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
+								   "",
+			  'A' + (char) NumOpt) < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    HTM_BUTTON_OnMouseDown_Begin (Class);
 	    HTM_TxtF ("%c",'a' + (char) NumOpt);
 	    HTM_BUTTON_End ();
@@ -3030,7 +3137,7 @@ void Mch_GetMatchBeingPlayed (void)
   }
 
 /*****************************************************************************/
-/********* Show game being played to me as student in a new window ***********/
+/********************* Show match being played as student ********************/
 /*****************************************************************************/
 
 void Mch_JoinMatchAsStd (void)
@@ -3043,7 +3150,36 @@ void Mch_JoinMatchAsStd (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match);
+   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/****** Remove student's answer to a question and show match as student ******/
+/*****************************************************************************/
+
+void Mch_RemoveQuestionAnswer (void)
+  {
+   struct Match Match;
+   unsigned QstInd;
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Get question index from form *****/
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Check that teacher's screen is showing answers
+          and question index is the current one being played *****/
+   if (Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+       QstInd == Match.Status.QstInd)		// Removing answer to the current question being played
+      /***** Remove answer to this question *****/
+      Mch_RemoveAnswerToMatchQuestion (&Match);
+
+   /***** Show current match status *****/
+   HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
+   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
 
@@ -3093,7 +3229,7 @@ void Mch_RefreshMatchStd (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
-   Mch_ShowMatchStatusForStd (&Match);
+   Mch_ShowMatchStatusForStd (&Match,Mch_REFRESH_STATUS_BY_SERVER);
   }
 
 /*****************************************************************************/
@@ -3159,14 +3295,14 @@ void Mch_ReceiveQuestionAnswer (void)
    /***** Get question index from form *****/
    QstInd = Gam_GetParamQstInd ();
 
-   /***** Get indexes for this question from database *****/
-   Mch_GetIndexes (Match.MchCod,QstInd,Indexes);
-
    /***** Check that teacher's screen is showing answers
           and question index is the current one being played *****/
    if (Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
        QstInd == Match.Status.QstInd)		// Receiving an answer to the current question being played
      {
+      /***** Get indexes for this question from database *****/
+      Mch_GetIndexes (Match.MchCod,Match.Status.QstInd,Indexes);
+
       /***** Get answer index *****/
       /*
       Indexes[4] = {0,3,1,2}
@@ -3188,23 +3324,19 @@ void Mch_ReceiveQuestionAnswer (void)
 
       /***** Get previous student's answer to this question
 	     (<0 ==> no answer) *****/
-      Mch_GetQstAnsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,
+      Mch_GetQstAnsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match.Status.QstInd,
 			   &PreviousUsrAnswer);
 
       /***** Store student's answer *****/
-      if (PreviousUsrAnswer.AnsInd == UsrAnswer.AnsInd)
-	 DB_QueryDELETE ("can not remove your answer to the match question",
-			  "DELETE FROM mch_answers"
-			  " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd);
-      else if (UsrAnswer.NumOpt >= 0 &&
-	       UsrAnswer.AnsInd >= 0)
+      if (UsrAnswer.NumOpt >= 0 &&
+	  UsrAnswer.AnsInd >= 0 &&
+	  UsrAnswer.AnsInd != PreviousUsrAnswer.AnsInd)
 	 DB_QueryREPLACE ("can not register your answer to the match question",
 			  "REPLACE mch_answers"
 			  " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
 			  " VALUES"
 			  " (%ld,%ld,%u,%d,%d)",
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match.Status.QstInd,
 			  UsrAnswer.NumOpt,
 			  UsrAnswer.AnsInd);
 
@@ -3248,8 +3380,20 @@ void Mch_ReceiveQuestionAnswer (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match);
+   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********************* Remove answer to match question ***********************/
+/*****************************************************************************/
+
+static void Mch_RemoveAnswerToMatchQuestion (const struct Match *Match)
+  {
+   DB_QueryDELETE ("can not remove your answer to the match question",
+		    "DELETE FROM mch_answers"
+		    " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
+		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match->Status.QstInd);
   }
 
 /*****************************************************************************/

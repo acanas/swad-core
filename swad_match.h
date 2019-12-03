@@ -115,6 +115,7 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);
+void Mch_RemoveQuestionAnswer (void);
 void Mch_RefreshMatchTch (void);
 void Mch_RefreshMatchStd (void);
 
