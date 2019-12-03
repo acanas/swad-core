@@ -2471,7 +2471,7 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 
 static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
   {
-   extern const char *Txt_View_results;
+   extern const char *Txt_View_my_answer;
 
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
@@ -2484,15 +2484,11 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
       Frm_StartForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      HTM_A_Begin ("href=\"\" class=\"DAT_SMALL\" title=\"%s\" "
-		   " onclick=\"document.getElementById('%s').submit();return false;\"",
-		   "Ver mi respuesta",	// TODO: Need translation!!!!
-		   Gbl.Form.Id);
-      HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
-		"fas fa-check-circle",
-		"Respondida");			// TODO: Need translation!!!!
+      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL");
+      HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
       HTM_TxtF ("&nbsp;%s","Respondida");	// TODO: Need translation!!!!
-      HTM_A_End ();
+
+      HTM_BUTTON_End ();
 
       /* End form */
       Frm_EndForm ();
@@ -2700,7 +2696,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
 								   "",
 			  'A' + (char) NumOpt) < 0)
 	       Lay_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnMouseDown_Begin (Class);
+	    HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
 	    HTM_TxtF ("%c",'a' + (char) NumOpt);
 	    HTM_BUTTON_End ();
 	    free (Class);

@@ -52674,6 +52674,27 @@ const char *Txt_View_matches_results =
 	"Ver resultados de partidas";
 #endif
 
+const char *Txt_View_my_answer =
+#if   L==1	// ca
+	"Veure la meva resposta";
+#elif L==2	// de
+	"Meine Antwort anzeigen";
+#elif L==3	// en
+	"View my answer";
+#elif L==4	// es
+	"Ver mi respuesta";
+#elif L==5	// fr
+	"Voir ma r&eacute;ponse";
+#elif L==6	// gn
+	"Ver mi respuesta";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi la mia risposta";
+#elif L==8	// pl
+	"Zobacz moj&aogon; odpowied&zacute;";
+#elif L==9	// pt
+	"Ver minha resposta";
+#endif
+
 const char *Txt_View_projects =
 #if   L==1	// ca
 	"Veure projectes";

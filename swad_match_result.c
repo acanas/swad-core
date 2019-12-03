@@ -115,6 +115,7 @@ void McR_ShowMyMchResults (void)
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
+   extern const char *Txt_No_games;
    unsigned NumGamesSelected;
 
    /***** Get list of games *****/
@@ -155,7 +156,7 @@ void McR_ShowMyMchResults (void)
       Box_BoxEnd ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,"No games selected.");	// TODO: Need translation!!!!
+      Ale_ShowAlert (Ale_WARNING,Txt_No_games);
 
    /***** Free memory for list of game events selected *****/
    free (Gbl.Games.StrGamCodsSelected);
@@ -283,6 +284,7 @@ static void McR_ShowUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
+   extern const char *Txt_No_games;
    unsigned NumGamesSelected;
    const char *Ptr;
 
@@ -333,7 +335,7 @@ static void McR_ShowUsrsMchResults (void)
       Box_BoxEnd ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,"No games selected.");	// TODO: Need translation!!!!
+      Ale_ShowAlert (Ale_WARNING,Txt_No_games);
 
    /***** Free memory for list of game events selected *****/
    free (Gbl.Games.StrGamCodsSelected);
