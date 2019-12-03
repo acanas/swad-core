@@ -2778,7 +2778,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
       /* Label with the number of the answer */
       HTM_TD_Begin ("class=\"RT\"");
-      HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\">",
+      HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
                        NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_TxtF ("%u)",NumAns + 1);
       HTM_LABEL_End ();

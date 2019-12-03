@@ -1628,10 +1628,10 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
    char MchSubQuery[Mch_MAX_BYTES_SUBQUERY];
 
    /***** Update end time only if match is currently being played *****/
-   if (Match->Status.Playing)
+   if (Match->Status.Playing)	// Match is being played
       Str_Copy (MchSubQuery,"mch_matches.EndTime=NOW(),",
 		Mch_MAX_BYTES_SUBQUERY);
-   else
+   else				// Match is paused, not being played
       MchSubQuery[0] = '\0';
 
    /***** Update match status in database *****/
@@ -1653,10 +1653,10 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 		   Match->Status.ShowQstResults ? 'Y' : 'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Match->Status.Playing)
+   if (Match->Status.Playing)	// Match is being played
       /* Update match as being played */
       Mch_UpdateMatchAsBeingPlayed (Match->MchCod);
-   else
+   else				// Match is paused, not being played
       /* Update match as not being played */
       Mch_SetMatchAsNotBeingPlayed (Match->MchCod);
   }
@@ -1668,7 +1668,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
   {
    /***** Update elapsed time in current question in database *****/
-   if (Match->Status.Playing &&
+   if (Match->Status.Playing &&		// Match is being played
        Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
       DB_QueryINSERT ("can not update elapsed time in question",
@@ -1774,18 +1774,12 @@ void Mch_PlayPauseMatch (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   if (Match.Status.Playing)	// match is being played ==> pause it
+   if (Match.Status.Playing)	// Match is being played             ==> pause it
       Match.Status.Playing = false;	// Pause match
-   else				// match is paused       ==> play it
-     {
+   else				// Match is paused, not being played ==> play it
       /* If unfinished, update status */
       if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
-	{
-	 // if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
-	 //    Mch_SetMatchStatusToNext (&Match);
-	 Match.Status.Playing = true;			// Start/resume match
-	}
-     }
+	 Match.Status.Playing = true;	// Start/resume match
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -2189,7 +2183,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       HTM_Unsigned (NumAnswerersQst);
    else
       HTM_Hyphen ();
-   if (Match->Status.Playing)
+   if (Match->Status.Playing)	// Match is being played
      {
       /* Get current number of players */
       Mch_GetNumPlayers (Match);
@@ -2245,8 +2239,9 @@ static void Mch_ShowLeftColumnStd (struct Match *Match,
    /***** Write if question is answered *****/
    Mch_PutIfAnswered (Match,Answered);
 
-   if (Match->Status.Showing == Mch_ANSWERS &&
-       Answered)
+   if (Match->Status.Playing &&			// Match is being played
+       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+       Answered)				// I have answered this question
       /***** Put icon to view *****/
       Mch_PutIconToRemoveMyAnswer (Match);
 
@@ -2271,7 +2266,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
    Mch_ShowMatchTitle (Match);
 
    /***** Bottom row *****/
-   if (Match->Status.Playing)
+   if (Match->Status.Playing)					// Match is being played
      {
       if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Match not over
 	{
@@ -2289,7 +2284,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
       else							// Match over
 	 Mch_ShowWaitImage (Txt_Please_wait_);
      }
-   else	// Not being played
+   else								// Match is not being played
       Mch_ShowWaitImage (Txt_Please_wait_);
 
    /***** End right container *****/
@@ -2344,11 +2339,11 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
 
    /***** Center button *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONTAINER\"");
-   if (Match->Status.Playing)					// Being played
+   if (Match->Status.Playing)					// Match is being played
       /* Put button to pause match */
       Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
 			Mch_ICON_PAUSE,Txt_Pause);
-   else								// Paused
+   else								// Match is paused, not being played
      {
       if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Not finished
 	 /* Put button to play match */
@@ -2621,12 +2616,12 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 	 /* Don't write anything */
 	 break;
       case Mch_ANSWERS:
-	 if (Match->Status.Playing)			// Being played
+	 if (Match->Status.Playing)			// Match is being played
 	    /* Write answers */
 	    Mch_WriteAnswersMatchResult (Match,
 					 "MCH_TCH_ANS",
 					 false);	// Don't show result
-	 else						// Not being played
+	 else						// Match is paused, not being played
 	    Mch_ShowWaitImage (Txt_MATCH_Paused);
 	 break;
       case Mch_RESULTS:
@@ -3107,7 +3102,7 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match)
       return false;
 
    /***** Trivial check: match must be being played *****/
-   if (!Match->Status.Playing)				// Not playing
+   if (!Match->Status.Playing)				// Match is paused, not being played
       return false;
 
    /***** Trivial check: match must not be over *****/
@@ -3172,7 +3167,8 @@ void Mch_RemoveQuestionAnswer (void)
 
    /***** Check that teacher's screen is showing answers
           and question index is the current one being played *****/
-   if (Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+   if (Match.Status.Playing &&			// Match is being played
+       Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
        QstInd == Match.Status.QstInd)		// Removing answer to the current question being played
       /***** Remove answer to this question *****/
       Mch_RemoveAnswerToMatchQuestion (&Match);

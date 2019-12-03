@@ -3687,7 +3687,7 @@ static void Sta_WriteDegree (long DegCod)
 
       /***** Form to go to degree *****/
       Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-                                         "LOG","CT");
+                                         "BT_LINK LOG","CT");
      }
    else			// Hit with no degree selected
      {

@@ -2263,7 +2263,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
 	 if (SeeOrPrint == Pho_DEGREES_SEE)
 	    Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-					       "DAT","CT");
+					       "BT_LINK DAT","CT");
 	 else	// Pho_DEGREES_PRINT
 	   {
 	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
@@ -2277,7 +2277,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	   {
 	    /***** Show average photo of students belonging to this degree *****/
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CM COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"CLASSPHOTO RM COLOR%u\"",Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
 	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
 	    else
