@@ -2236,14 +2236,18 @@ static void Mch_ShowLeftColumnStd (struct Match *Match,
    /***** Write number of question *****/
    Mch_ShowNumQstInMatch (Match);
 
-   /***** Write if question is answered *****/
-   Mch_PutIfAnswered (Match,Answered);
+   if (Match->Status.QstInd > 0 &&
+       Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
+     {
+      /***** Write whether question is answered or not *****/
+      Mch_PutIfAnswered (Match,Answered);
 
-   if (Match->Status.Playing &&			// Match is being played
-       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-       Answered)				// I have answered this question
-      /***** Put icon to view *****/
-      Mch_PutIconToRemoveMyAnswer (Match);
+      if (Match->Status.Playing &&			// Match is being played
+	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+	  Answered)				// I have answered this question
+	 /***** Put icon to remove my answet *****/
+	 Mch_PutIconToRemoveMyAnswer (Match);
+     }
 
    /***** End left container *****/
    HTM_DIV_End ();
@@ -2274,8 +2278,11 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
 
 	 /***** Update players ******/
 	 if (Mch_RegisterMeAsPlayerInMatch (Match))
-	    /* Show current question and possible answers */
-	    Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
+	   {
+	    if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
+	       /* Show current question and possible answers */
+	       Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
+	   }
 	 else
 	    Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
 
@@ -2446,17 +2453,12 @@ static void Mch_PutCheckboxResult (struct Match *Match)
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
-   HTM_A_Begin ("href=\"\" class=\"ICO_HIGHLIGHT\" title=\"%s\" "
-		" onclick=\"document.getElementById('%s').submit();return false;\"",
-	        Txt_View_results,
-	        Gbl.Form.Id);
+   HTM_BUTTON_SUBMIT_Begin (Txt_View_results,"BT_LINK DAT ICO_HIGHLIGHT",NULL);
    HTM_TxtF ("<i class=\"%s\"></i>",
 	     Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 		                            "fas fa-toggle-off");
    HTM_TxtF ("&nbsp;%s",Txt_View_results);
-   HTM_A_End ();
-   HTM_DIV_End ();
+   HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2472,22 +2474,24 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
   {
    extern const char *Txt_View_my_answer;
+   extern const char *Txt_MATCH_QUESTION_Answered;
+   extern const char *Txt_MATCH_QUESTION_Unanswered;
 
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
 
    /***** Put icon with link *****/
-   if (Match->Status.Showing == Mch_ANSWERS &&
-       Answered)
+   if (Match->Status.Playing &&			// Match is being played
+       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+       Answered)				// I have answered this question
      {
       /* Start form */
       Frm_StartForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL");
+      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
-      HTM_TxtF ("&nbsp;%s","Respondida");	// TODO: Need translation!!!!
-
+      HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
       HTM_BUTTON_End ();
 
       /* End form */
@@ -2495,14 +2499,15 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+      HTM_DIV_Begin ("class=\"%s\"",Answered ? "DAT_SMALL_GREEN" :
+	                                       "DAT_SMALL_RED");
       HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
 		Answered ? "fas fa-check-circle" :
 		           "fas fa-exclamation-circle",
-		Answered ? "Respondida" :
-		           "No respondida");		// TODO: Need translation!!!!
-      HTM_TxtF ("&nbsp;%s",Answered ? "Respondida" :
-		                      "No respondida");	// TODO: Need translation!!!!
+		Answered ? Txt_MATCH_QUESTION_Answered :
+		           Txt_MATCH_QUESTION_Unanswered);
+      HTM_TxtF ("&nbsp;%s",Answered ? Txt_MATCH_QUESTION_Answered :
+		                      Txt_MATCH_QUESTION_Unanswered);
       HTM_DIV_End ();
      }
 
@@ -2516,7 +2521,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
 
 static void Mch_PutIconToRemoveMyAnswer (struct Match *Match)
   {
-   extern const char *Txt_View_results;
+   extern const char *Txt_Delete_my_answer;
 
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
@@ -2528,12 +2533,9 @@ static void Mch_PutIconToRemoveMyAnswer (struct Match *Match)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
-		" onclick=\"document.getElementById('%s').submit();return false;\"",
-	        "Eliminar mi respuesta",	// TODO: Need translation!!!!
-	        Gbl.Form.Id);
-   HTM_Txt ("<i class=\"fas fa-trash\" style=\"color:#660000;\"></i>");
-   HTM_A_End ();
+   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_RED");
+   HTM_Txt ("<i class=\"fas fa-trash\"></i>");
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
 
    /***** End form *****/
@@ -2659,63 +2661,59 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
    char *Class;
 
    /***** Show question *****/
-   /* Write buttons for answers? */
-   if (Match->Status.Showing == Mch_ANSWERS)
+   if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
      {
-      if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
+      /***** Get number of options in this question *****/
+      NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (8);
+
+      for (NumOpt = 0;
+	   NumOpt < NumOptions;
+	   NumOpt++)
 	{
-	 /***** Get number of options in this question *****/
-	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+	 /***** Start row *****/
+	 HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (8);
+	 /***** Write letter for this option *****/
+	 /* Begin table cell */
+	 HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
 
-	 for (NumOpt = 0;
-	      NumOpt < NumOptions;
-	      NumOpt++)
-	   {
-	    /***** Start row *****/
-	    HTM_TR_Begin (NULL);
+	 /* Form with button.
+	    Sumitting onmousedown instead of default onclick
+	    is necessary in order to be fast
+	    and not lose clicks due to refresh */
+	 Frm_StartForm (ActAnsMchQstStd);
+	 Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+	 Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+	 Mch_PutParamNumOpt (NumOpt);		// Number of button
 
-	    /***** Write letter for this option *****/
-	    /* Begin table cell */
-	    HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
+	 if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
+		       UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
+		       Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
+								"",
+		       'A' + (char) NumOpt) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
+	 HTM_TxtF ("%c",'a' + (char) NumOpt);
+	 HTM_BUTTON_End ();
+	 free (Class);
 
-	    /* Form with button.
-	       Sumitting onmousedown instead of default onclick
-	       is necessary in order to be fast
-	       and not lose clicks due to refresh */
-	    Frm_StartForm (ActAnsMchQstStd);
-	    Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-	    Mch_PutParamNumOpt (NumOpt);		// Number of button
+	 Frm_EndForm ();
 
-	    if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
-			  UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
-			  Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
-								   "",
-			  'A' + (char) NumOpt) < 0)
-	       Lay_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
-	    HTM_TxtF ("%c",'a' + (char) NumOpt);
-	    HTM_BUTTON_End ();
-	    free (Class);
+	 /* End table cell */
+	 HTM_TD_End ();
 
-	    Frm_EndForm ();
-
-	    /* End table cell */
-	    HTM_TD_End ();
-
-	    /***** End row *****/
-	    HTM_TR_End ();
-	   }
-
-	 /***** End table *****/
-	 HTM_TABLE_End ();
+	 /***** End row *****/
+	 HTM_TR_End ();
 	}
-      else
-	 Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+
+      /***** End table *****/
+      HTM_TABLE_End ();
      }
+   else
+      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
   }
 
 /*****************************************************************************/
@@ -2979,11 +2977,9 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
-	        " onclick=\"document.getElementById('%s').submit();return false;\"",
-		Txt,Id);
+   HTM_BUTTON_SUBMIT_Begin (Txt,"BT_LINK MCH_BUTTON_ON ICO_BLACK",NULL);
    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
-   HTM_A_End ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
 
    /***** End form *****/
@@ -2994,9 +2990,9 @@ static void Mch_PutBigButtonOff (const char *Icon)
   {
    /***** Put inactive icon *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_OFF\"");
+   HTM_BUTTON_BUTTON_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_OFF ICO_BLACK",NULL);
    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
-   HTM_DIV_End ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
@@ -3006,10 +3002,9 @@ static void Mch_PutBigButtonClose (void)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
-	        " onclick=\"window.close();return false;\"\"",Txt_Close);
+   HTM_BUTTON_BUTTON_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_BLACK","window.close();");
    HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
-   HTM_A_End ();
+   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 

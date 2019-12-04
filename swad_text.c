@@ -7687,6 +7687,27 @@ const char *Txt_Delete_messages_sent =
 	"Eliminar mensagens enviadas";
 #endif
 
+const char *Txt_Delete_my_answer =
+#if   L==1	// ca
+	"Eliminar la meva resposta";
+#elif L==2	// de
+	"L&ouml;sche meine Antwort";
+#elif L==3	// en
+	"Delete my answer";
+#elif L==4	// es
+	"Eliminar mi respuesta";
+#elif L==5	// fr
+	"Supprimer ma r&eacute;ponse";
+#elif L==6	// gn
+	"Eliminar mi respuesta";	// Okoteve traducción
+#elif L==7	// it
+	"Elimina la mia risposta";
+#elif L==8	// pl
+	"Usu&nacute; moj&aogon; odpowied&zacute;";
+#elif L==9	// pt
+	"Excluir minha resposta";
+#endif
+
 const char *Txt_Department =
 #if   L==1	// ca
 	"Departament";
@@ -18054,6 +18075,48 @@ const char *Txt_MATCH_Paused =
 	 "Wstrzymany";
 #elif L==9	// pt
 	 "Pausado";
+#endif
+
+const char *Txt_MATCH_QUESTION_Answered =
+#if   L==1	// ca
+	"Resposta";
+#elif L==2	// de
+	"Beantwortet";
+#elif L==3	// en
+	"Answered";
+#elif L==4	// es
+	"Respondida";
+#elif L==5	// fr
+	"R&eacute;pondue";
+#elif L==6	// gn
+	"Respondida";	// Okoteve traducción
+#elif L==7	// it
+	"Risposta";
+#elif L==8	// pl
+	"Odpowiedziano";
+#elif L==9	// pt
+	"Respondida";
+#endif
+
+const char *Txt_MATCH_QUESTION_Unanswered =
+#if   L==1	// ca
+	"No resposta";
+#elif L==2	// de
+	"Unbeantwortete";
+#elif L==3	// en
+	"Unanswered";
+#elif L==4	// es
+	"No respondida";
+#elif L==5	// fr
+	"Pas r&eacute;pondue";
+#elif L==6	// gn
+	"No respondida";	// Okoteve traducción
+#elif L==7	// it
+	"Non risposta";
+#elif L==8	// pl
+	"Nie odpowiedziano";
+#elif L==9	// pt
+	"N&atilde;o respondida";
 #endif
 
 const char *Txt_MATCH_Start =
