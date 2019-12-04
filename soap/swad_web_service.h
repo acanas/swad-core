@@ -293,28 +293,13 @@ struct swad__getMatchesOutput
    struct swad__matchesArray matchesArray;
   };
 
-/* playMatch */
-struct swad__playMatchOutput
-  {
-   int matchCode;
-  };
-
 /* getMatchStatus */
-struct swad__matchAnswer
-  {
-   int answerIndex;
-   int selected;
-  };
-struct swad__matchAnswersArray
-  {
-   struct swad__matchAnswer *__ptr;	// pointer to array
-   int __size; 				// number of elements pointed to
-  };
 struct swad__getMatchStatusOutput
   {
    int matchCode;
    int questionIndex;
-   struct swad__matchAnswersArray answersArray;
+   int numAnswers;
+   int selected;
   };
 
 /* answerMatchQuestion */
@@ -502,11 +487,9 @@ int swad__getGames (char *wsKey,int courseCode,
                     struct swad__getGamesOutput *getGamesOut);
 int swad__getMatches (char *wsKey,int gameCode,
                       struct swad__getMatchesOutput *getMatchesOut);
-int swad__playMatch (char *wsKey,int matchCode,
-                     struct swad__playMatchOutput *playMatchOut);
 int swad__getMatchStatus (char *wsKey,int matchCode,
                           struct swad__getMatchStatusOutput *getMatchStatusOut);
-int swad__answerMatchQuestion (char *wsKey,int matchCode,int questionIndex,int numOption,
+int swad__answerMatchQuestion (char *wsKey,int matchCode,int questionIndex,int answerIndex,
                                struct swad__answerMatchQuestionOutput *answerMatchQuestionOut);
 
 /* List of users */

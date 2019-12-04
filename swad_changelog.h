@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.82.3 (2019-12-04)"
+#define Log_PLATFORM_VERSION	"SWAD 19.83 (2019-12-04)"
 #define CSS_FILE		"swad19.82.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.83:    Dec 04, 2019	Removed API function playMatch.
+				        API function getMatchStatus finished. (247823 lines)
 	Version 19.82.3:  Dec 04, 2019	Code refactoring in matches.
 					Some messages translated. (247840 lines)
 	Version 19.82.2:  Dec 03, 2019	Some messages translated. (247781 lines)

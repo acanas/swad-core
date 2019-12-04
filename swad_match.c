@@ -178,7 +178,7 @@ static void Mch_PutIconToRemoveMyAnswer (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_WriteAnswersMatchResult (struct Match *Match,
                                          const char *Class,bool ShowResult);
-static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+static bool Mch_ShowQuestionAndAnswersStd (struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
 
@@ -2281,7 +2281,8 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
 	   {
 	    if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
 	       /* Show current question and possible answers */
-	       Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
+	       if (!Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update))
+                  Ale_ShowAlert (Ale_ERROR,"Wrong question.");
 	   }
 	 else
 	    Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
@@ -2651,8 +2652,9 @@ static void Mch_WriteAnswersMatchResult (struct Match *Match,
 /*****************************************************************************/
 /***** Show question and its answers when playing a match (as a student) *****/
 /*****************************************************************************/
+// Return true on valid question, false on invalid question
 
-static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+static bool Mch_ShowQuestionAndAnswersStd (struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update)
   {
@@ -2660,60 +2662,60 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match,
    unsigned NumOpt;
    char *Class;
 
-   /***** Show question *****/
-   if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
+   /***** Trivial check: this question must be valid for games *****/
+   if (!Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
+      return false;
+
+   /***** Get number of options in this question *****/
+   NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWidePadding (8);
+
+   for (NumOpt = 0;
+	NumOpt < NumOptions;
+	NumOpt++)
      {
-      /***** Get number of options in this question *****/
-      NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+      /***** Start row *****/
+      HTM_TR_Begin (NULL);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (8);
+      /***** Write letter for this option *****/
+      /* Begin table cell */
+      HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
 
-      for (NumOpt = 0;
-	   NumOpt < NumOptions;
-	   NumOpt++)
-	{
-	 /***** Start row *****/
-	 HTM_TR_Begin (NULL);
+      /* Form with button.
+	 Sumitting onmousedown instead of default onclick
+	 is necessary in order to be fast
+	 and not lose clicks due to refresh */
+      Frm_StartForm (ActAnsMchQstStd);
+      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+      Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+      Mch_PutParamNumOpt (NumOpt);		// Number of button
 
-	 /***** Write letter for this option *****/
-	 /* Begin table cell */
-	 HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
+      if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
+		    UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
+		    Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
+							     "",
+		    'A' + (char) NumOpt) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
+      HTM_TxtF ("%c",'a' + (char) NumOpt);
+      HTM_BUTTON_End ();
+      free (Class);
 
-	 /* Form with button.
-	    Sumitting onmousedown instead of default onclick
-	    is necessary in order to be fast
-	    and not lose clicks due to refresh */
-	 Frm_StartForm (ActAnsMchQstStd);
-	 Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-	 Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-	 Mch_PutParamNumOpt (NumOpt);		// Number of button
+      Frm_EndForm ();
 
-	 if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
-		       UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
-		       Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
-								"",
-		       'A' + (char) NumOpt) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
-	 HTM_TxtF ("%c",'a' + (char) NumOpt);
-	 HTM_BUTTON_End ();
-	 free (Class);
+      /* End table cell */
+      HTM_TD_End ();
 
-	 Frm_EndForm ();
-
-	 /* End table cell */
-	 HTM_TD_End ();
-
-	 /***** End row *****/
-	 HTM_TR_End ();
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
+      /***** End row *****/
+      HTM_TR_End ();
      }
-   else
-      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   return true;
   }
 
 /*****************************************************************************/

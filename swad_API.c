@@ -4663,21 +4663,23 @@ int swad__getMatches (struct soap *soap,
   }
 
 /*****************************************************************************/
-/********************** Try to join to a match as student ********************/
+/*********** Get match status to be refreshed in student's screen ************/
 /*****************************************************************************/
 
-int swad__playMatch (struct soap *soap,
-                     char *wsKey,int matchCode,				// input
-                     struct swad__playMatchOutput *playMatchOut)	// output
+int swad__getMatchStatus (struct soap *soap,
+                          char *wsKey,int matchCode,				// input
+                          struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
   {
    int ReturnCode;
    struct Match Match;
    struct Game Game;
    bool ICanPlayThisMatchBasedOnGrps;
+   unsigned NumOptions;
+   struct Mch_UsrAnswer UsrAnswer;
 
    /***** Initializations *****/
    Gbl.soap = soap;
-   Gbl.WebService.Function = API_playMatch;
+   Gbl.WebService.Function = API_getMatchStatus;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -4737,46 +4739,40 @@ int swad__playMatch (struct soap *soap,
 				  "Request forbidden",
 				  "Requester can not join this match");
 
-   /***** Join match *****/
-   if (Match.Status.Playing)
-     {
-      if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
-	 /* Update players */
-	 playMatchOut->matchCode = Mch_RegisterMeAsPlayerInMatch (&Match) ? matchCode :	//  > 0 ==> OK
-                                                                            -1;		//  < 0 ==> can not join this match
-      else
-         playMatchOut->matchCode = 0;	// == 0 ==> wait
-     }
-   else	// Not being played
-      playMatchOut->matchCode = 0;	// == 0 ==> wait
-
-   return SOAP_OK;
-  }
-
-/*****************************************************************************/
-/*********** Get match status to be refreshed in student's screen ************/
-/*****************************************************************************/
-
-int swad__getMatchStatus (struct soap *soap,
-                          char *wsKey,int matchCode,				// input
-                          struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
-  {
-   int ReturnCode;
-
-   /***** Initializations *****/
-   Gbl.soap = soap;
-   Gbl.WebService.Function = API_getMatchStatus;
-
-   /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
-      return ReturnCode;
-   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+   /***** Check question *****/
+   if (!Tst_CheckIfQuestionIsValidForGame (Match.Status.QstCod))
       return soap_receiver_fault (Gbl.soap,
-	                          "Bad web service key",
-	                          "Web service key does not exist in database");
+				  "Wrong question",
+				  "Type of answer not valid in a game.");
 
-   // TODO: Write the code
-   getMatchStatusOut->matchCode = matchCode;
+   /***** Join match *****/
+   getMatchStatusOut->matchCode = 0;		// == 0 ==> wait
+   if (Match.Status.Playing &&				// Match is being played
+       Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+      /* Update players */
+      getMatchStatusOut->matchCode = Mch_RegisterMeAsPlayerInMatch (&Match) ? matchCode :	//  > 0 ==> OK
+									      -1;		//  < 0 ==> can not join this match
+
+   /***** Set index of question inside the game *****/
+   getMatchStatusOut->questionIndex = (int) Match.Status.QstInd;
+
+   /***** Set number of answers (options) in question *****/
+   NumOptions = Tst_GetNumAnswersQst (Match.Status.QstCod);
+   getMatchStatusOut->numAnswers = (int) NumOptions;
+
+   /***** Set number of selected answer *****/
+   if (NumOptions == 0)
+      getMatchStatusOut->selected = -1;
+   else	// Answers found
+     {
+      /***** Get student's answer to this question
+	     (<0 ==> no answer) *****/
+      Mch_GetQstAnsFromDB (Match.MchCod,
+			   Gbl.Usrs.Me.UsrDat.UsrCod,
+			   Match.Status.QstInd,
+			   &UsrAnswer);
+      getMatchStatusOut->selected = UsrAnswer.NumOpt;
+     }
 
    return SOAP_OK;
   }

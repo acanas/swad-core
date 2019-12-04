@@ -70,9 +70,8 @@ typedef enum
    API_removeAttendanceEvent	= 27,
    API_getGames			= 28,
    API_getMatches		= 29,
-   API_playMatch		= 30,
-   API_getMatchStatus		= 31,
-   API_answerMatchQuestion	= 32,
+   API_getMatchStatus		= 30,
+   API_answerMatchQuestion	= 31,
   } API_Function_t;
 
 /*****************************************************************************/
