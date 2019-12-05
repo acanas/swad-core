@@ -2426,6 +2426,8 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 
 void TL_ReceivePostUsr (void)
   {
+   long NotCod;
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -2437,7 +2439,8 @@ void TL_ReceivePostUsr (void)
 
    /***** Receive and store post, and
           write updated timeline after publication (user) *****/
-   TL_ReceivePostGbl ();
+   NotCod = TL_ReceivePost ();
+   TL_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -3350,6 +3353,8 @@ static long TL_GetParamPubCod (void)
 
 void TL_ReceiveCommentUsr (void)
   {
+   long NotCod;
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -3361,7 +3366,8 @@ void TL_ReceiveCommentUsr (void)
 
    /***** Receive comment in a note
           and write updated timeline after commenting (user) *****/
-   TL_ReceiveCommentGbl ();
+   NotCod = TL_ReceiveComment ();
+   TL_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
