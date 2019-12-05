@@ -838,7 +838,7 @@ void McR_ShowOneMchResult (void)
 	 switch (MeOrOther)
 	   {
 	    case Usr_ME:
-	       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
+	       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);
 	       ICanViewResult = ItsMe && ICanPlayThisMatchBasedOnGrps &&
 		                Match.Status.ShowUsrResults;
 

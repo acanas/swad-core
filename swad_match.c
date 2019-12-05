@@ -98,7 +98,7 @@ long Mch_CurrentMchCod = -1L;	// Used as parameter in contextual links
 
 static void Mch_PutIconToCreateNewMatch (void);
 
-static void Mch_ListOneOrMoreMatches (struct Game *Game,
+static void Mch_ListOneOrMoreMatches (const struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
@@ -110,10 +110,10 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match);
-static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts,
-					    bool ICanPlayThisMatchBasedOnGrps);
-static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
-					    bool ICanPlayThisMatchBasedOnGrps);
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match);
 
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
@@ -128,7 +128,7 @@ static void Mch_RemoveUsrMchResultsInCrs (long UsrCod,long CrsCod,const char *Ta
 static void Mch_PutParamsPlay (void);
 static void Mch_PutParamMchCod (long MchCod);
 
-static void Mch_PutFormNewMatch (struct Game *Game);
+static void Mch_PutFormNewMatch (const struct Game *Game);
 static void Mch_ShowLstGrpsToCreateMatch (void);
 
 static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
@@ -136,12 +136,12 @@ static void Mch_CreateIndexes (long GamCod,long MchCod);
 static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 			       long QstCod,bool Shuffle);
 static void Mch_CreateGrps (long MchCod);
-static void Mch_UpdateMatchStatusInDB (struct Match *Match);
+static void Mch_UpdateMatchStatusInDB (const struct Match *Match);
 
-static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match);
-static void Mch_GetElapsedTimeInQuestion (struct Match *Match,
+static void Mch_UpdateElapsedTimeInQuestion (const struct Match *Match);
+static void Mch_GetElapsedTimeInQuestion (const struct Match *Match,
 				          struct Time *Time);
-static void Mch_GetElapsedTimeInMatch (struct Match *Match,
+static void Mch_GetElapsedTimeInMatch (const struct Match *Match,
 				       struct Time *Time);
 static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 				struct Time *Time);
@@ -159,30 +159,30 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match,Mch_Update_t Update);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowRefreshablePartTch (struct Match *Match);
-static void Mch_ShowRightColumnTch (struct Match *Match);
-static void Mch_ShowLeftColumnStd (struct Match *Match,
+static void Mch_ShowRightColumnTch (const struct Match *Match);
+static void Mch_ShowLeftColumnStd (const struct Match *Match,
 				   const struct Mch_UsrAnswer *UsrAnswer);
 static void Mch_ShowRightColumnStd (struct Match *Match,
 				    const struct Mch_UsrAnswer *UsrAnswer,
 				    Mch_Update_t Update);
 
-static void Mch_ShowNumQstInMatch (struct Match *Match);
-static void Mch_PutMatchControlButtons (struct Match *Match);
-static void Mch_ShowFormColumns (struct Match *Match);
+static void Mch_ShowNumQstInMatch (const struct Match *Match);
+static void Mch_PutMatchControlButtons (const struct Match *Match);
+static void Mch_ShowFormColumns (const struct Match *Match);
 static void Mch_PutParamNumCols (unsigned NumCols);
 
-static void Mch_ShowMatchTitle (struct Match *Match);
-static void Mch_PutCheckboxResult (struct Match *Match);
+static void Mch_ShowMatchTitle (const struct Match *Match);
+static void Mch_PutCheckboxResult (const struct Match *Match);
 static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
-static void Mch_PutIconToRemoveMyAnswer (struct Match *Match);
-static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
-static void Mch_WriteAnswersMatchResult (struct Match *Match,
+static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match);
+static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match);
+static void Mch_WriteAnswersMatchResult (const struct Match *Match,
                                          const char *Class,bool ShowResult);
-static bool Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
 
-static void Mch_ShowMatchScore (struct Match *Match);
+static void Mch_ShowMatchScore (const struct Match *Match);
 static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore);
 static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 			      unsigned NumRow,unsigned NumUsrs,unsigned MaxUsrs);
@@ -387,14 +387,13 @@ static void Mch_PutIconToCreateNewMatch (void)
 /*********************** List game matches for edition ***********************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatches (struct Game *Game,
+static void Mch_ListOneOrMoreMatches (const struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res)
   {
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
-   bool ICanPlayThisMatchBasedOnGrps;
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Write the heading *****/
@@ -410,36 +409,34 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 
       /***** Get match data from row *****/
       Mch_GetMatchDataFromRow (mysql_res,&Match);
-      ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
 
-      /***** Write row for this match ****/
-      HTM_TR_Begin (NULL);
+      if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match))
+	{
+	 /***** Write row for this match ****/
+	 HTM_TR_Begin (NULL);
 
-      /* Icons */
-      if (ICanEditMatches)
-         Mch_ListOneOrMoreMatchesIcons (&Match);
+	 /* Icons */
+	 if (ICanEditMatches)
+	    Mch_ListOneOrMoreMatchesIcons (&Match);
 
-      /* Match player */
-      Mch_ListOneOrMoreMatchesAuthor (&Match);
+	 /* Match player */
+	 Mch_ListOneOrMoreMatchesAuthor (&Match);
 
-      /* Start/end date/time */
-      Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
+	 /* Start/end date/time */
+	 Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
 
-      /* Title and groups */
-      Mch_ListOneOrMoreMatchesTitleGrps (&Match);
+	 /* Title and groups */
+	 Mch_ListOneOrMoreMatchesTitleGrps (&Match);
 
-      /* Number of players who have answered any question in the match */
-      Mch_ListOneOrMoreMatchesNumPlayers (&Match);
+	 /* Number of players who have answered any question in the match */
+	 Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
-      /* Match status */
-      Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts,
-				      ICanPlayThisMatchBasedOnGrps);
+	 /* Match status */
+	 Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
 
-      /* Match result visible? */
-      Mch_ListOneOrMoreMatchesResult (&Match,
-				      ICanPlayThisMatchBasedOnGrps);
-
-      HTM_TR_End ();
+	 /* Match result visible? */
+	 Mch_ListOneOrMoreMatchesResult (&Match);
+	}
      }
 
    /***** End table *****/
@@ -584,12 +581,22 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
   {
+   extern const char *Txt_Play;
+   extern const char *Txt_Resume;
+
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /***** Title *****/
-   HTM_SPAN_Begin ("class=\"ASG_TITLE\"");
+   /***** Match title *****/
+   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+   Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+						       ActResMch);
+   Mch_PutParamsPlay ();
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+								 Txt_Resume,
+			    "BT_LINK ASG_TITLE",NULL);
    HTM_Txt (Match->Title);
-   HTM_SPAN_End ();
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
 
    /***** Groups whose students can answer this match *****/
    if (Gbl.Crs.Grps.NumGrps)
@@ -677,8 +684,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
 /********************** Put a column for match status ************************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts,
-					    bool ICanPlayThisMatchBasedOnGrps)
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -693,37 +699,16 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
       HTM_DIV_End ();
      }
 
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 if (ICanPlayThisMatchBasedOnGrps)
-	   {
-	    /* Icon to play as student */
-            Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	    Lay_PutContextualLinkOnlyIcon (ActJoiMch,NULL,
-					   Mch_PutParamsPlay,
-					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											    "flag-checkered.svg",
-					   Txt_Play);
-	   }
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 /* Icon to resume */
-	 if (Mch_CheckIfICanEditThisMatch (Match))
-	   {
-	    Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	    Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
-					   Mch_PutParamsPlay,
-					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											    "flag-checkered.svg",
-					   Txt_Resume);
-	   }
-	 break;
-      default:
-	 break;
-     }
+   /* Icon to join match or resume match */
+   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+   Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+								       ActResMch,
+				  NULL,
+				  Mch_PutParamsPlay,
+				  Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+										   "flag-checkered.svg",
+				  Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+								       Txt_Resume);
 
    HTM_TD_End ();
   }
@@ -732,64 +717,73 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 /**************** Put a column for visibility of match result ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
-					    bool ICanPlayThisMatchBasedOnGrps)
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
   {
-   extern const char *Txt_Match_result;
-   extern const char *Txt_Hidden_result;
-   extern const char *Txt_Visible_result;
-
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 if (ICanPlayThisMatchBasedOnGrps)
-	   {
-	    /* Match result visible or hidden? */
-	    if (Match->Status.ShowUsrResults)
-	      {
- 	       /* Result is visible by me */
-               Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-               Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	       Frm_StartForm (ActSeeOneMchResMe);
-	       Mch_PutParamsEdit ();
-	       Ico_PutIconLink ("tasks.svg",Txt_Match_result);
-	       Frm_EndForm ();
-	      }
-	    else
-	       /* Result is forbidden to me */
-	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	   }
+	 Mch_ListOneOrMoreMatchesResultStd (Match);
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /* Match result visible or hidden? */
-	 if (Mch_CheckIfICanEditThisMatch (Match))
-	   {
-	    /* I can edit visibility */
-	    Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-	    Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	    Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					   Mch_PutParamsEdit,
-					   Match->Status.ShowUsrResults ? "eye.svg" :
-									  "eye-slash.svg",
-					   Match->Status.ShowUsrResults ? Txt_Visible_result :
-									  Txt_Hidden_result);
-	   }
-	 else
-	    /* I can not edit visibility */
-	    Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
-							   "eye-slash.svg",
-			    Match->Status.ShowUsrResults ? Txt_Visible_result :
-							   Txt_Hidden_result);
+	 Mch_ListOneOrMoreMatchesResultTch (Match);
 	 break;
       default:
+	 Rol_WrongRoleExit ();
 	 break;
      }
 
    HTM_TD_End ();
+  }
+
+static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
+  {
+   extern const char *Txt_Match_result;
+   extern const char *Txt_Hidden_result;
+
+   /***** Is match result visible or hidden? *****/
+   if (Match->Status.ShowUsrResults)
+     {
+      /* Result is visible by me */
+      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+      Frm_StartForm (ActSeeOneMchResMe);
+      Mch_PutParamsEdit ();
+      Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+      Frm_EndForm ();
+     }
+   else
+      /* Result is forbidden to me */
+      Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+  }
+
+static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
+  {
+   extern const char *Txt_Hidden_result;
+   extern const char *Txt_Visible_result;
+
+   /***** Can I edit match vivibility? *****/
+   if (Mch_CheckIfICanEditThisMatch (Match))
+     {
+      /* I can edit visibility */
+      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+      Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+				     Mch_PutParamsEdit,
+				     Match->Status.ShowUsrResults ? "eye.svg" :
+								    "eye-slash.svg",
+				     Match->Status.ShowUsrResults ? Txt_Visible_result :
+								    Txt_Hidden_result);
+     }
+   else
+      /* I can not edit visibility */
+      Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
+						     "eye-slash.svg",
+		      Match->Status.ShowUsrResults ? Txt_Visible_result :
+						     Txt_Hidden_result);
   }
 
 /*****************************************************************************/
@@ -1191,7 +1185,7 @@ long Mch_GetParamMchCod (void)
 /****** Put a big button to play match (start a new match) as a teacher ******/
 /*****************************************************************************/
 
-static void Mch_PutFormNewMatch (struct Game *Game)
+static void Mch_PutFormNewMatch (const struct Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -1623,7 +1617,7 @@ void Mch_RemoveGroupsOfType (long GrpTypCod)
 
 #define Mch_MAX_BYTES_SUBQUERY 128
 
-static void Mch_UpdateMatchStatusInDB (struct Match *Match)
+static void Mch_UpdateMatchStatusInDB (const struct Match *Match)
   {
    char MchSubQuery[Mch_MAX_BYTES_SUBQUERY];
 
@@ -1665,7 +1659,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 /********** Update elapsed time in current question (by a teacher) ***********/
 /*****************************************************************************/
 
-static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
+static void Mch_UpdateElapsedTimeInQuestion (const struct Match *Match)
   {
    /***** Update elapsed time in current question in database *****/
    if (Match->Status.Playing &&		// Match is being played
@@ -1685,7 +1679,7 @@ static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
 /******************* Get elapsed time in a match question ********************/
 /*****************************************************************************/
 
-static void Mch_GetElapsedTimeInQuestion (struct Match *Match,
+static void Mch_GetElapsedTimeInQuestion (const struct Match *Match,
 					  struct Time *Time)
   {
    MYSQL_RES *mysql_res;
@@ -1709,7 +1703,7 @@ static void Mch_GetElapsedTimeInQuestion (struct Match *Match,
 /*********************** Get elapsed time in a match *************************/
 /*****************************************************************************/
 
-static void Mch_GetElapsedTimeInMatch (struct Match *Match,
+static void Mch_GetElapsedTimeInMatch (const struct Match *Match,
 				       struct Time *Time)
   {
    MYSQL_RES *mysql_res;
@@ -2044,7 +2038,7 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match,Mch_Update_t Update)
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Can I play this match? *****/
-   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
+   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match);
    if (!ICanPlayThisMatchBasedOnGrps)
       Lay_NoPermissionExit ();
 
@@ -2084,27 +2078,31 @@ unsigned Mch_GetNumMchsInGame (long GamCod)
 /************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 
-bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
+bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Match *Match)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-	    /***** Get if I can play a match from database *****/
-	    return (DB_QueryCOUNT ("can not check if I can play a match",
-				   "SELECT COUNT(*) FROM mch_matches"
-				   " WHERE MchCod=%ld"
-				   " AND (MchCod NOT IN (SELECT MchCod FROM mch_groups) OR"
-				   " MchCod IN (SELECT mch_groups.MchCod FROM mch_groups,crs_grp_usr"
-				   " WHERE crs_grp_usr.UsrCod=%ld"
-				   " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
-				   MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-	 else
-	    return false;
+	 /***** Check if I belong to any of the groups
+	        associated to the match *****/
+	 return (DB_QueryCOUNT ("can not check if I can play a match",
+				"SELECT COUNT(*) FROM mch_matches"
+				" WHERE MchCod=%ld"
+				" AND"
+				"(MchCod NOT IN"
+				" (SELECT MchCod FROM mch_groups)"
+				" OR"
+				" MchCod IN"
+				" (SELECT mch_groups.MchCod"
+				" FROM mch_groups,crs_grp_usr"
+				" WHERE crs_grp_usr.UsrCod=%ld"
+				" AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+				Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:
+	 /***** Only if I am the creator *****/
+	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       case Rol_TCH:
-	 return Gbl.Usrs.Me.IBelongToCurrentCrs;
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -2199,7 +2197,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
 /********** Show right column when playing a match (as a teacher) ************/
 /*****************************************************************************/
 
-static void Mch_ShowRightColumnTch (struct Match *Match)
+static void Mch_ShowRightColumnTch (const struct Match *Match)
   {
    /***** Start right container *****/
    HTM_DIV_Begin ("class=\"MCH_RIGHT\"");
@@ -2221,7 +2219,7 @@ static void Mch_ShowRightColumnTch (struct Match *Match)
 /*********** Show left column when playing a match (as a student) ************/
 /*****************************************************************************/
 
-static void Mch_ShowLeftColumnStd (struct Match *Match,
+static void Mch_ShowLeftColumnStd (const struct Match *Match,
 				   const struct Mch_UsrAnswer *UsrAnswer)
   {
    bool Answered = UsrAnswer->NumOpt >= 0;
@@ -2303,7 +2301,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
 /********************* Show number of question in game ***********************/
 /*****************************************************************************/
 
-static void Mch_ShowNumQstInMatch (struct Match *Match)
+static void Mch_ShowNumQstInMatch (const struct Match *Match)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
@@ -2323,7 +2321,7 @@ static void Mch_ShowNumQstInMatch (struct Match *Match)
 /********************** Put buttons to control a match ***********************/
 /*****************************************************************************/
 
-static void Mch_PutMatchControlButtons (struct Match *Match)
+static void Mch_PutMatchControlButtons (const struct Match *Match)
   {
    extern const char *Txt_Go_back;
    extern const char *Txt_Go_forward;
@@ -2383,7 +2381,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
 /** Show form to choice whether to show answers in one column or two columns */
 /*****************************************************************************/
 
-static void Mch_ShowFormColumns (struct Match *Match)
+static void Mch_ShowFormColumns (const struct Match *Match)
   {
    extern const char *Txt_column;
    extern const char *Txt_columns;
@@ -2442,7 +2440,7 @@ static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void Mch_PutCheckboxResult (struct Match *Match)
+static void Mch_PutCheckboxResult (const struct Match *Match)
   {
    extern const char *Txt_View_results;
 
@@ -2520,7 +2518,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void Mch_PutIconToRemoveMyAnswer (struct Match *Match)
+static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
   {
    extern const char *Txt_Delete_my_answer;
 
@@ -2550,7 +2548,7 @@ static void Mch_PutIconToRemoveMyAnswer (struct Match *Match)
 /***************************** Show match title ******************************/
 /*****************************************************************************/
 
-static void Mch_ShowMatchTitle (struct Match *Match)
+static void Mch_ShowMatchTitle (const struct Match *Match)
   {
    /***** Match title *****/
    HTM_DIV_Begin ("class=\"MCH_TOP\"");
@@ -2562,7 +2560,7 @@ static void Mch_ShowMatchTitle (struct Match *Match)
 /***** Show question and its answers when playing a match (as a teacher) *****/
 /*****************************************************************************/
 
-static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
+static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
   {
    extern const char *Txt_MATCH_Paused;
    MYSQL_RES *mysql_res;
@@ -2638,7 +2636,7 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 /************* Write answers of a question when viewing a match **************/
 /*****************************************************************************/
 
-static void Mch_WriteAnswersMatchResult (struct Match *Match,
+static void Mch_WriteAnswersMatchResult (const struct Match *Match,
                                          const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
@@ -2654,7 +2652,7 @@ static void Mch_WriteAnswersMatchResult (struct Match *Match,
 /*****************************************************************************/
 // Return true on valid question, false on invalid question
 
-static bool Mch_ShowQuestionAndAnswersStd (struct Match *Match,
+static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update)
   {
@@ -2724,7 +2722,7 @@ static bool Mch_ShowQuestionAndAnswersStd (struct Match *Match,
 
 #define Mch_NUM_ROWS_SCORE 50
 
-static void Mch_ShowMatchScore (struct Match *Match)
+static void Mch_ShowMatchScore (const struct Match *Match)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

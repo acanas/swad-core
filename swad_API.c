@@ -4733,7 +4733,7 @@ int swad__getMatchStatus (struct soap *soap,
      }
 
    /***** Can I play this match? *****/
-   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
+   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);
    if (!ICanPlayThisMatchBasedOnGrps)
       return soap_receiver_fault (Gbl.soap,
 				  "Request forbidden",
