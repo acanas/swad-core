@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.84 (2019-12-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.84.1 (2019-12-06)"
 #define CSS_FILE		"swad19.82.3.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,9 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.84.1:  Dec 06, 2019	Fixed bug in forms to edit dates.
+					Fixed bug in edition of holidays.
+					Fixed bug in API function getGames, reported by Sergio Díaz Rueda. (247890 lines)
 	Version 19.84:    Dec 05, 2019	Code refactoring in matches.
 					Match title is now a link to play the match. (247822 lines)
 	Version 19.83.1:  Dec 05, 2019	Fixed bug in user's timeline. (247827 lines)

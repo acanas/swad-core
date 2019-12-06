@@ -1250,7 +1250,9 @@ int swad__getCourses (struct soap *soap,
       getCoursesOut->coursesArray.__ptr = NULL;
    else	// Courses found
      {
-      getCoursesOut->coursesArray.__ptr = soap_malloc (Gbl.soap,(getCoursesOut->coursesArray.__size) * sizeof (*(getCoursesOut->coursesArray.__ptr)));
+      getCoursesOut->coursesArray.__ptr = soap_malloc (Gbl.soap,
+						       (getCoursesOut->coursesArray.__size) *
+						       sizeof (*(getCoursesOut->coursesArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -1263,12 +1265,14 @@ int swad__getCourses (struct soap *soap,
 	 getCoursesOut->coursesArray.__ptr[NumRow].courseCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get course short name (row[1]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_SHRT_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName =
+            (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_SHRT_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,row[1],
 	           Hie_MAX_BYTES_SHRT_NAME);
 
          /* Get course full name (row[2]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName =
+            (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,row[2],
 	           Hie_MAX_BYTES_FULL_NAME);
 
@@ -1616,7 +1620,9 @@ static void API_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getU
      {
       getUsersOut->numUsers = (int) NumUsrs;
       getUsersOut->usersArray.__size = (int) NumUsrs;
-      getUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,(getUsersOut->usersArray.__size) * sizeof (*(getUsersOut->usersArray.__ptr)));
+      getUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+						   (getUsersOut->usersArray.__size) *
+						   sizeof (*(getUsersOut->usersArray.__ptr)));
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1719,7 +1725,9 @@ int swad__getGroupTypes (struct soap *soap,
       getGroupTypesOut->groupTypesArray.__ptr = NULL;
    else	// Groups found
      {
-      getGroupTypesOut->groupTypesArray.__ptr = soap_malloc (Gbl.soap,(getGroupTypesOut->groupTypesArray.__size) * sizeof (*(getGroupTypesOut->groupTypesArray.__ptr)));
+      getGroupTypesOut->groupTypesArray.__ptr = soap_malloc (Gbl.soap,
+							     (getGroupTypesOut->groupTypesArray.__size) *
+							     sizeof (*(getGroupTypesOut->groupTypesArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -1732,7 +1740,8 @@ int swad__getGroupTypes (struct soap *soap,
 	 getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+         getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName =
+            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -1836,7 +1845,9 @@ int swad__getGroups (struct soap *soap,
       getGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
-      getGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,(getGroupsOut->groupsArray.__size) * sizeof (*(getGroupsOut->groupsArray.__ptr)));
+      getGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,
+						     (getGroupsOut->groupsArray.__size) *
+						     sizeof (*(getGroupsOut->groupsArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -1849,7 +1860,8 @@ int swad__getGroups (struct soap *soap,
 	 getGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+         getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
+            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -1858,7 +1870,8 @@ int swad__getGroups (struct soap *soap,
 	 getGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
+         getGroupsOut->groupsArray.__ptr[NumRow].groupName =
+            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
@@ -2003,7 +2016,9 @@ int swad__sendMyGroups (struct soap *soap,
       SendMyGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
-      SendMyGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,(SendMyGroupsOut->groupsArray.__size) * sizeof (*(SendMyGroupsOut->groupsArray.__ptr)));
+      SendMyGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,
+							(SendMyGroupsOut->groupsArray.__size) *
+							sizeof (*(SendMyGroupsOut->groupsArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -2016,7 +2031,8 @@ int swad__sendMyGroups (struct soap *soap,
 	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
+            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -2025,7 +2041,8 @@ int swad__sendMyGroups (struct soap *soap,
 	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName =
+            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
@@ -2183,7 +2200,9 @@ int swad__getAttendanceEvents (struct soap *soap,
       getAttendanceEventsOut->eventsArray.__ptr = NULL;
    else	// Events found
      {
-      getAttendanceEventsOut->eventsArray.__ptr = soap_malloc (Gbl.soap,(getAttendanceEventsOut->eventsArray.__size) * sizeof (*(getAttendanceEventsOut->eventsArray.__ptr)));
+      getAttendanceEventsOut->eventsArray.__ptr = soap_malloc (Gbl.soap,
+							       (getAttendanceEventsOut->eventsArray.__size) *
+							       sizeof (*(getAttendanceEventsOut->eventsArray.__ptr)));
 
       for (NumAttEvent = 0;
 	   NumAttEvent < getAttendanceEventsOut->numEvents;
@@ -2205,26 +2224,30 @@ int swad__getAttendanceEvents (struct soap *soap,
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
                       PhotoURL,
                       Length);
@@ -2255,13 +2278,15 @@ int swad__getAttendanceEvents (struct soap *soap,
 
 	 /* Get title of the event (row[6]) */
          Length = strlen (row[6]);
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,row[6],
                    Length);
 
 	 /* Get Txt (row[7]) */
          Length = strlen (row[7]);
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,row[7],
                    Length);
 
@@ -2643,7 +2668,9 @@ int swad__getAttendanceUsers (struct soap *soap,
       getAttendanceUsersOut->usersArray.__ptr = NULL;
    else	// Events found
      {
-      getAttendanceUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,(getAttendanceUsersOut->usersArray.__size) * sizeof (*(getAttendanceUsersOut->usersArray.__ptr)));
+      getAttendanceUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+							     (getAttendanceUsersOut->usersArray.__size) *
+							     sizeof (*(getAttendanceUsersOut->usersArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -2660,7 +2687,8 @@ int swad__getAttendanceUsers (struct soap *soap,
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,
                       Gbl.Usrs.Other.UsrDat.Nickname,
                       Length);
@@ -2668,38 +2696,44 @@ int swad__getAttendanceUsers (struct soap *soap,
             if (Gbl.Usrs.Other.UsrDat.IDs.Num)
               {
 	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
-	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,Length + 1);
+	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
+	          (char *) soap_malloc (Gbl.soap,Length + 1);
 	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,
 	                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
 	                 Length);
               }
             else
               {
-	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,1);
+	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
+	          (char *) soap_malloc (Gbl.soap,1);
 	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID[0] = '\0';
               }
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,
                       PhotoURL,
                       Length);
@@ -2945,7 +2979,9 @@ int swad__getNotifications (struct soap *soap,
      {
       getNotificationsOut->numNotifications = (int) NumNotifications;
       getNotificationsOut->notificationsArray.__size = (int) NumNotifications;
-      getNotificationsOut->notificationsArray.__ptr = soap_malloc (Gbl.soap,(getNotificationsOut->notificationsArray.__size) * sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
+      getNotificationsOut->notificationsArray.__ptr = soap_malloc (Gbl.soap,
+								   (getNotificationsOut->notificationsArray.__size) *
+								   sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
 
       for (NumNotif = 0;
 	   NumNotif < NumNotifications;
@@ -2960,7 +2996,8 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get notification event type (row[1]) */
          NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[1]);
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType = (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType =
+            (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,
                    Ntf_WSNotifyEvents[NotifyEvent],
                    Ntf_MAX_BYTES_NOTIFY_EVENT);
@@ -2980,28 +3017,33 @@ int swad__getNotifications (struct soap *soap,
 
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Crs.CrsCod))	// Get some user's data from database
            {
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
+               (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,
                       Gbl.Usrs.Other.UsrDat.Nickname,
                       Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 =
+               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 =
+               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname =
+               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
+               (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
                       PhotoURL,
                       Cns_MAX_BYTES_WWW);
@@ -3032,7 +3074,8 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventCode = (int) Cod;
 
          /* Set location */
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].location = (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_LOCATION + 1);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].location =
+            (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_LOCATION + 1);
 
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
@@ -3071,20 +3114,23 @@ int swad__getNotifications (struct soap *soap,
                                         true);
 
          Length = strlen (SummaryStr);
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].summary = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].summary =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].summary,
                    SummaryStr,
                    Length);
 
          if (ContentStr == NULL)
            {
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content =
+               (char *) soap_malloc (Gbl.soap,1);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].content[0] = '\0';
            }
          else
            {
             Length = strlen (ContentStr);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].content,
                       ContentStr,
                       Length);
@@ -3388,7 +3434,9 @@ int swad__sendMessage (struct soap *soap,
 
       if (NumRows)	// Users found
         {
-         sendMessageOut->usersArray.__ptr = soap_malloc (Gbl.soap,(sendMessageOut->usersArray.__size) * sizeof (*(sendMessageOut->usersArray.__ptr)));
+         sendMessageOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+							 (sendMessageOut->usersArray.__size) *
+							 sizeof (*(sendMessageOut->usersArray.__ptr)));
 
          for (NumRow = 0;
               NumRow < NumRows;
@@ -3814,7 +3862,9 @@ static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
       getTestsOut->tagsArray.__ptr = NULL;
    else	// Tags found
      {
-      getTestsOut->tagsArray.__ptr = soap_malloc (Gbl.soap,(getTestsOut->tagsArray.__size) * sizeof (*(getTestsOut->tagsArray.__ptr)));
+      getTestsOut->tagsArray.__ptr = soap_malloc (Gbl.soap,
+						  (getTestsOut->tagsArray.__size) *
+						  sizeof (*(getTestsOut->tagsArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -3827,7 +3877,8 @@ static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
 	 getTestsOut->tagsArray.__ptr[NumRow].tagCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get tag text (row[1]) */
-         getTestsOut->tagsArray.__ptr[NumRow].tagText = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_TAG + 1);
+         getTestsOut->tagsArray.__ptr[NumRow].tagText =
+            (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_TAG + 1);
 	 Str_Copy (getTestsOut->tagsArray.__ptr[NumRow].tagText,row[1],
 	           Tst_MAX_BYTES_TAG);
 	}
@@ -3885,7 +3936,9 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
       getTestsOut->questionsArray.__ptr = NULL;
    else	// Questions found
      {
-      getTestsOut->questionsArray.__ptr = soap_malloc (Gbl.soap,(getTestsOut->questionsArray.__size) * sizeof (*(getTestsOut->questionsArray.__ptr)));
+      getTestsOut->questionsArray.__ptr = soap_malloc (Gbl.soap,
+						       (getTestsOut->questionsArray.__size) *
+						       sizeof (*(getTestsOut->questionsArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -3899,7 +3952,8 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 
          /* Get answer type (row[1]) */
          AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-         getTestsOut->questionsArray.__ptr[NumRow].answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+         getTestsOut->questionsArray.__ptr[NumRow].answerType =
+            (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
 	           Tst_StrAnswerTypesXML[AnswerType],
 	           Tst_MAX_BYTES_ANSWER_TYPE);
@@ -3909,12 +3963,14 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
                                                                                   0;
 
          /* Get question stem (row[3]) */
-         getTestsOut->questionsArray.__ptr[NumRow].stem = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         getTestsOut->questionsArray.__ptr[NumRow].stem =
+            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].stem,row[3],
                    Cns_MAX_BYTES_TEXT);
 
          /* Get question feedback (row[4]) */
-         getTestsOut->questionsArray.__ptr[NumRow].feedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         getTestsOut->questionsArray.__ptr[NumRow].feedback =
+            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].feedback,row[4],
                    Cns_MAX_BYTES_TEXT);
 	}
@@ -3971,7 +4027,9 @@ static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
       getTestsOut->answersArray.__ptr = NULL;
    else	// Answers found
      {
-      getTestsOut->answersArray.__ptr = soap_malloc (Gbl.soap,(getTestsOut->answersArray.__size) * sizeof (*(getTestsOut->answersArray.__ptr)));
+      getTestsOut->answersArray.__ptr = soap_malloc (Gbl.soap,
+						     (getTestsOut->answersArray.__size) *
+						     sizeof (*(getTestsOut->answersArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -3994,12 +4052,14 @@ static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
                                                                                 0;
 
          /* Get answer (row[3]) */
-         getTestsOut->answersArray.__ptr[NumRow].answerText = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         getTestsOut->answersArray.__ptr[NumRow].answerText =
+            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerText,row[3],
                    Cns_MAX_BYTES_TEXT);
 
          /* Get feedback (row[4]) */
-         getTestsOut->answersArray.__ptr[NumRow].answerFeedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         getTestsOut->answersArray.__ptr[NumRow].answerFeedback =
+            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerFeedback,row[4],
                    Cns_MAX_BYTES_TEXT);
 	}
@@ -4056,7 +4116,9 @@ static int API_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
       getTestsOut->questionTagsArray.__ptr = NULL;
    else	// Answers found
      {
-      getTestsOut->questionTagsArray.__ptr = soap_malloc (Gbl.soap,(getTestsOut->questionTagsArray.__size) * sizeof (*(getTestsOut->questionTagsArray.__ptr)));
+      getTestsOut->questionTagsArray.__ptr = soap_malloc (Gbl.soap,
+							  (getTestsOut->questionTagsArray.__size) *
+							  sizeof (*(getTestsOut->questionTagsArray.__ptr)));
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -4213,7 +4275,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+      getTrivialQuestionOut->question.answerType =
+         (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
                 Tst_StrAnswerTypesXML[AnswerType],
                 Tst_MAX_BYTES_ANSWER_TYPE);
@@ -4223,12 +4286,14 @@ int swad__getTrivialQuestion (struct soap *soap,
 							             0;
 
       /* Get question stem (row[3]) */
-      getTrivialQuestionOut->question.stem = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+      getTrivialQuestionOut->question.stem =
+         (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
       Str_Copy (getTrivialQuestionOut->question.stem,row[3],
                 Cns_MAX_BYTES_TEXT);
 
       /* Get question feedback (row[4]) */
-      getTrivialQuestionOut->question.feedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+      getTrivialQuestionOut->question.feedback =
+         (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
       Str_Copy (getTrivialQuestionOut->question.feedback,row[4],
                 Cns_MAX_BYTES_TEXT);
      }
@@ -4273,7 +4338,9 @@ int swad__getTrivialQuestion (struct soap *soap,
 	 getTrivialQuestionOut->answersArray.__ptr = NULL;
       else	// Answers found
 	{
-	 getTrivialQuestionOut->answersArray.__ptr = soap_malloc (Gbl.soap,(getTrivialQuestionOut->answersArray.__size) * sizeof (*(getTrivialQuestionOut->answersArray.__ptr)));
+	 getTrivialQuestionOut->answersArray.__ptr = soap_malloc (Gbl.soap,
+								  (getTrivialQuestionOut->answersArray.__size) *
+								  sizeof (*(getTrivialQuestionOut->answersArray.__ptr)));
 
 	 for (NumRow = 0;
 	      NumRow < NumRows;
@@ -4296,12 +4363,14 @@ int swad__getTrivialQuestion (struct soap *soap,
 										             0;
 
 	    /* Get answer (row[3]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText =
+	       (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
 	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText,row[3],
 	              Cns_MAX_BYTES_TEXT);
 
 	    /* Get feedback (row[4]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback =
+	       (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
 	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback,row[4],
 	              Cns_MAX_BYTES_TEXT);
 	   }
@@ -4360,25 +4429,18 @@ int swad__getGames (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
-   /***** Check if I belong to the course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
-     {
-      case Rol_STD:
-      case Rol_TCH:
-	 // OK. I belong to the course
-	 break;
-      default:
-	 return soap_receiver_fault (Gbl.soap,
-				     "Request forbidden",
-				     "Requester must belong to the course");
-     }
+   /***** Check if I am logged as student in the course *****/
+   if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Requester must be a student in the course");
 
    /***** Query list of games *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
 			     "SELECT gam_games.GamCod,"				// row[0]
 			            "gam_games.UsrCod,"				// row[1]
 			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[2]
-			            "MAX(mch_matches.EndTime) AS EndTime"	// row[3]
+			            "MAX(mch_matches.EndTime) AS EndTime,"	// row[3]
 				    "gam_games.MaxGrade,"			// row[4]
 			            "gam_games.Title,"				// row[5]
 			            "gam_games.Txt"				// row[6]
@@ -4397,7 +4459,9 @@ int swad__getGames (struct soap *soap,
       getGamesOut->gamesArray.__ptr = NULL;
    else	// Games found
      {
-      getGamesOut->gamesArray.__ptr = soap_malloc (Gbl.soap,(getGamesOut->gamesArray.__size) * sizeof (*(getGamesOut->gamesArray.__ptr)));
+      getGamesOut->gamesArray.__ptr = soap_malloc (Gbl.soap,
+						   (getGamesOut->gamesArray.__size) *
+						   sizeof (*(getGamesOut->gamesArray.__ptr)));
 
       for (NumGame = 0;
 	   NumGame < getGamesOut->numGames;
@@ -4415,26 +4479,30 @@ int swad__getGames (struct soap *soap,
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getGamesOut->gamesArray.__ptr[NumGame].userSurname1 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getGamesOut->gamesArray.__ptr[NumGame].userSurname2 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
-            getGamesOut->gamesArray.__ptr[NumGame].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getGamesOut->gamesArray.__ptr[NumGame].userFirstname =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
-            getGamesOut->gamesArray.__ptr[NumGame].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getGamesOut->gamesArray.__ptr[NumGame].userPhoto =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userPhoto,
                       PhotoURL,
                       Length);
@@ -4466,13 +4534,15 @@ int swad__getGames (struct soap *soap,
 
 	 /* Get title of the game (row[5]) */
          Length = strlen (row[5]);
-         getGamesOut->gamesArray.__ptr[NumGame].title = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getGamesOut->gamesArray.__ptr[NumGame].title =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[5],
                    Length);
 
 	 /* Get Txt (row[6]) */
          Length = strlen (row[6]);
-         getGamesOut->gamesArray.__ptr[NumGame].text = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getGamesOut->gamesArray.__ptr[NumGame].text =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[6],
                    Length);
 	}
@@ -4539,17 +4609,11 @@ int swad__getMatches (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
-   /***** Check if I am a student in the course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
-     {
-      case Rol_STD:
-	 // OK. I am a student to the course
-	 break;
-      default:
-	 return soap_receiver_fault (Gbl.soap,
-				     "Request forbidden",
-				     "Requester must be a student in the course");
-     }
+   /***** Check if I am logged as student in the course *****/
+   if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Requester must be a student in the course");
 
    /***** Query list of matches *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get matches",
@@ -4580,7 +4644,9 @@ int swad__getMatches (struct soap *soap,
       getMatchesOut->matchesArray.__ptr = NULL;
    else	// Matches found
      {
-      getMatchesOut->matchesArray.__ptr = soap_malloc (Gbl.soap,(getMatchesOut->matchesArray.__size) * sizeof (*(getMatchesOut->matchesArray.__ptr)));
+      getMatchesOut->matchesArray.__ptr = soap_malloc (Gbl.soap,
+						       (getMatchesOut->matchesArray.__size) *
+						       sizeof (*(getMatchesOut->matchesArray.__ptr)));
 
       for (NumMatch = 0;
 	   NumMatch < getMatchesOut->numMatches;
@@ -4598,26 +4664,30 @@ int swad__getMatches (struct soap *soap,
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto =
+               (char *) soap_malloc (Gbl.soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto,
                       PhotoURL,
                       Length);
@@ -4644,7 +4714,8 @@ int swad__getMatches (struct soap *soap,
 
 	 /* Get title of the match (row[4]) */
          Length = strlen (row[4]);
-         getMatchesOut->matchesArray.__ptr[NumMatch].title = (char *) soap_malloc (Gbl.soap,Length + 1);
+         getMatchesOut->matchesArray.__ptr[NumMatch].title =
+            (char *) soap_malloc (Gbl.soap,Length + 1);
          Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].title,row[4],
                    Length);
 
@@ -4720,17 +4791,11 @@ int swad__getMatchStatus (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
-   /***** Check if I am a student in the course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
-     {
-      case Rol_STD:
-	 // OK. I am a student to the course
-	 break;
-      default:
-	 return soap_receiver_fault (Gbl.soap,
-				     "Request forbidden",
-				     "Requester must be a student in the course");
-     }
+   /***** Check if I am logged as student in the course *****/
+   if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Requester must be a student in the course");
 
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);

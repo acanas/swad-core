@@ -867,7 +867,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    if (SubmitFormOnChange)
       HTM_SELECT_Begin (false,
 			"id=\"%sYear\" name=\"%sYear\"%s"
-                        " onchange=\"adjustDateForm('%s');",
+                        " onchange=\"adjustDateForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
 	                Id,Id,
 			Disabled ? " disabled=\"disabled\"" : "",

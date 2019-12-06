@@ -586,7 +586,7 @@ static void Hld_ListHolidaysForEdition (void)
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
       HTM_SELECT_Begin (true,
-			"name=\"PlcCod\" class=\"PLC_COD\"");
+			"name=\"PlcCod\" class=\"PLC_SEL\"");
       HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
 		  "%s",Txt_All_places);
       for (NumPlc = 0;
@@ -983,7 +983,7 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Holiday place *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
-		     "name=\"PlcCod\" class=\"PLC_COD\"");
+		     "name=\"PlcCod\" class=\"PLC_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
 	       "%s",Txt_All_places);
    for (NumPlc = 0;
