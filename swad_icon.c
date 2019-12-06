@@ -335,6 +335,15 @@ void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,void (*FuncPara
 				  Txt_Results);
   }
 
+void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,void (*FuncParams) (void))
+  {
+   extern const char *Txt_Attendance_list;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "list-ol.svg",
+				  Txt_Attendance_list);
+  }
+
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Create_ZIP_file;

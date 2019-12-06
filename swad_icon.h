@@ -70,6 +70,7 @@ void Ico_PutContextualIconToCopy (Act_Action_t NextAction,void (*FuncParams) (vo
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,void (*FuncParams) (void));
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncParams) (void),bool Open);
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,void (*FuncParams) (void));
+void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,void (*FuncParams) (void));
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (void));
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title);

@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.85 (2019-12-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.85.1 (2019-12-06)"
 #define CSS_FILE		"swad19.85.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.85.1:  Dec 06, 2019	Contextual icon to show users' attendance. (247840 lines)
 	Version 19.85:    Dec 06, 2019	Changes in layout of pagination.
 					Code refactoring in surveys. (247855 lines)
 	Version 19.84.3:  Dec 06, 2019	Contextual icon to show matches results.

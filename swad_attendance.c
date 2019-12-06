@@ -88,13 +88,11 @@ static void Att_PutIconsInListOfAttEvents (void);
 static void Att_PutIconToCreateNewAttEvent (void);
 static void Att_PutButtonToCreateNewAttEvent (void);
 static void Att_PutParamsToCreateNewAttEvent (void);
+static void Att_PutParamsToListUsrsAttendance (void);
+
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete);
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
 static void Att_GetParamAttOrder (void);
-
-static void Att_PutFormToListMyAttendance (void);
-static void Att_PutFormToListStdsAttendance (void);
-static void Att_PutFormToListStdsParams (void);
 
 static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
                                               const char *Anchor);
@@ -171,27 +169,6 @@ void Att_SeeAttEvents (void)
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
-
-   /***** Contextual menu *****/
-   if (Gbl.AttEvents.Num &&
-       Gbl.Usrs.Me.UsrDat.Nickname[0])
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Mnu_ContextMenuBegin ();
-	    Att_PutFormToListMyAttendance ();	// List my attendance
-	    Mnu_ContextMenuEnd ();
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Mnu_ContextMenuBegin ();
-	    Att_PutFormToListStdsAttendance ();	// List students' attendance
-	    Mnu_ContextMenuEnd ();
-	    break;
-	 default:
-	    break;
-	}
 
    /***** Show all the attendance events *****/
    Att_ShowAllAttEvents ();
@@ -325,6 +302,23 @@ static void Att_PutIconsInListOfAttEvents (void)
    if (ICanEdit)
       Att_PutIconToCreateNewAttEvent ();
 
+   /***** Put icon to show attendance list *****/
+   if (Gbl.AttEvents.Num)
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    Ico_PutContextualIconToShowAttendanceList (ActSeeLstMyAtt,NULL);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Ico_PutContextualIconToShowAttendanceList (ActReqLstUsrAtt,
+						       Att_PutParamsToListUsrsAttendance);
+	    break;
+	 default:
+	    break;
+	}
+
    /***** Put icon to print my QR code *****/
    QR_PutLinkToPrintQRCode (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted);
   }
@@ -362,6 +356,17 @@ static void Att_PutButtonToCreateNewAttEvent (void)
 /*****************************************************************************/
 
 static void Att_PutParamsToCreateNewAttEvent (void)
+  {
+   Att_PutHiddenParamAttOrder ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+  }
+
+/*****************************************************************************/
+/***************** Put parameters to list users attendance *******************/
+/*****************************************************************************/
+
+static void Att_PutParamsToListUsrsAttendance (void)
   {
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
@@ -530,40 +535,6 @@ static void Att_GetParamAttOrder (void)
 void Att_PutHiddenParamAttOrder (void)
   {
    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.AttEvents.SelectedOrder);
-  }
-
-/*****************************************************************************/
-/**** Put a link (form) to list assistance of students to several events *****/
-/*****************************************************************************/
-
-static void Att_PutFormToListMyAttendance (void)
-  {
-   extern const char *Txt_Attendance_list;
-
-   Lay_PutContextualLinkIconText (ActSeeLstMyAtt,NULL,NULL,
-				  "list-ol.svg",
-				  Txt_Attendance_list);
-  }
-
-/*****************************************************************************/
-/** Put a link (form) to list my assistance (as student) to several events ***/
-/*****************************************************************************/
-
-static void Att_PutFormToListStdsAttendance (void)
-  {
-   extern const char *Txt_Attendance_list;
-
-   Lay_PutContextualLinkIconText (ActReqLstUsrAtt,NULL,
-				  Att_PutFormToListStdsParams,
-				  "list-ol.svg",
-				  Txt_Attendance_list);
-  }
-
-static void Att_PutFormToListStdsParams (void)
-  {
-   Att_PutHiddenParamAttOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
   }
 
 /*****************************************************************************/
