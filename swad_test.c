@@ -1402,7 +1402,7 @@ static void Tst_PutIconsTests (void)
          Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
      }
 
-   /***** Put icon to show results *****/
+   /***** Put icon to view tests results *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:

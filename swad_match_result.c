@@ -91,22 +91,6 @@ static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod);
 static bool McR_GetVisibilityMchResultFromDB (long MchCod);
 
 /*****************************************************************************/
-/****************** Write a form to go to result of matches ******************/
-/*****************************************************************************/
-
-void McR_PutFormToViewMchResults (Act_Action_t Action)
-  {
-   extern const char *Txt_Results;
-
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-   Lay_PutContextualLinkIconText (Action,NULL,NULL,
-				  "tasks.svg",
-				  Txt_Results);	// View match results
-   Mnu_ContextMenuEnd ();
-  }
-
-/*****************************************************************************/
 /*************************** Show my matches results *************************/
 /*****************************************************************************/
 
@@ -321,8 +305,11 @@ static void McR_ShowUsrsMchResults (void)
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	      {
 	       /***** Show matches results *****/
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       McR_ShowMchResults (Usr_OTHER,NumGamesSelected);
+	      }
 	}
 
       /***** End table *****/

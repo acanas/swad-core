@@ -188,26 +188,6 @@ static void Gam_ListAllGames (void)
    struct Pagination Pagination;
    unsigned NumGame;
 
-   /***** Put link to view matches results *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         McR_PutFormToViewMchResults (ActSeeMyMchRes);
-         break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         McR_PutFormToViewMchResults (ActReqSeeUsrMchRes);
-	 break;
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-	 break;
-      default:
-	 Rol_WrongRoleExit ();
-	 break;
-     }
-
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
       Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
@@ -323,6 +303,21 @@ static void Gam_PutIconsListGames (void)
    /***** Put icon to create a new game *****/
    if (Gam_CheckIfICanEditGames ())
       Gam_PutIconToCreateNewGame ();
+
+   /***** Put icon to view matches results *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         Ico_PutContextualIconToShowResults (ActSeeMyMchRes,NULL);
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         Ico_PutContextualIconToShowResults (ActReqSeeUsrMchRes,NULL);
+	 break;
+      default:
+	 break;
+     }
 
    /***** Put icon to show a figure *****/
    Gbl.Figures.FigureType = Fig_GAMES;
