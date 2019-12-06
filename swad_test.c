@@ -147,8 +147,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tst_PutFormToViewTstResults (Act_Action_t Action);
-
 static void Tst_GetQuestionsAndAnswersFromForm (void);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
@@ -316,21 +314,6 @@ void Tst_ShowFormAskTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
-   /***** Put link to view tests results *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         Tst_PutFormToViewTstResults (ActReqSeeMyTstRes);
-         break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         Tst_PutFormToViewTstResults (ActReqSeeUsrTstRes);
-	 break;
-      default:
-	 break;
-     }
-
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
@@ -393,22 +376,6 @@ void Tst_ShowFormAskTst (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/*************** Write a form to go to result of users' tests ****************/
-/*****************************************************************************/
-
-static void Tst_PutFormToViewTstResults (Act_Action_t Action)
-  {
-   extern const char *Txt_Results;
-
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-   Lay_PutContextualLinkIconText (Action,NULL,NULL,
-				  "tasks.svg",
-				  Txt_Results);	// Tests results
-   Mnu_ContextMenuEnd ();
   }
 
 /*****************************************************************************/
@@ -496,7 +463,7 @@ void Tst_ShowNewTest (void)
          DB_FreeMySQLResult (&mysql_res);
         }
       else
-         Tst_ShowFormAskTst ();							// Show the form again
+         Tst_ShowFormAskTst ();						// Show the form again
 
       /***** Free memory used for by the list of tags *****/
       Tst_FreeTagsList ();
@@ -1433,6 +1400,21 @@ static void Tst_PutIconsTests (void)
       /***** Put form to go to test configuration *****/
       if (Gbl.Action.Act != ActCfgTst)
          Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
+     }
+
+   /***** Put icon to show results *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL);
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL);
+	 break;
+      default:
+	 break;
      }
 
    /***** Put icon to show a figure *****/
@@ -7670,8 +7652,11 @@ static void Tst_ShowUsrsTstResults (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
+	   {
 	    /***** Show test results *****/
+	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
+	   }
      }
 
    /***** End table and box *****/

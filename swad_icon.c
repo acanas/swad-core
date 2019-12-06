@@ -326,6 +326,15 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncP
 				  Txt_Upload_file_or_create_folder);
   }
 
+void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,void (*FuncParams) (void))
+  {
+   extern const char *Txt_Results;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "tasks.svg",
+				  Txt_Results);
+  }
+
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Create_ZIP_file;
