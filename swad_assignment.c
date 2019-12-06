@@ -138,12 +138,6 @@ static void Asg_ShowAllAssignments (void)
    Pag_CalculatePagination (&Pagination);
    Gbl.Asgs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
-   /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-                                     0,
-                                     &Pagination);
-
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
@@ -155,6 +149,12 @@ static void Asg_ShowAllAssignments (void)
       Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
       Set_EndSettingsHead ();
      }
+
+   /***** Write links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
+                                     0,
+                                     &Pagination);
 
    if (Gbl.Asgs.Num)
      {
@@ -175,18 +175,18 @@ static void Asg_ShowAllAssignments (void)
    else	// No assignments created
       Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
+                                     0,
+                                     &Pagination);
+
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
       Asg_PutButtonToCreateNewAsg ();
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-                                     0,
-                                     &Pagination);
 
    /***** Free list of assignments *****/
    Asg_FreeListAssignments ();

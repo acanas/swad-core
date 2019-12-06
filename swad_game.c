@@ -201,15 +201,15 @@ static void Gam_ListAllGames (void)
    Pag_CalculatePagination (&Pagination);
    Gbl.Games.CurrentPage = (unsigned) Pagination.CurrentPage;
 
+   /***** Begin box *****/
+   Box_BoxBegin ("100%",Txt_Games,Gam_PutIconsListGames,
+                 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
+
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
       Pag_WriteLinksToPagesCentered (Pag_GAMES,
                                      0,
                                      &Pagination);
-
-   /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Games,Gam_PutIconsListGames,
-                 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    if (Gbl.Games.Num)
      {
@@ -260,18 +260,18 @@ static void Gam_ListAllGames (void)
    else	// No games created
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,
+                                     0,
+                                     &Pagination);
+
    /***** Button to create a new game *****/
    if (Gam_CheckIfICanEditGames ())
       Gam_PutButtonToCreateNewGame ();
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_GAMES,
-                                     0,
-                                     &Pagination);
 
    /***** Free list of games *****/
    Gam_FreeListGames ();

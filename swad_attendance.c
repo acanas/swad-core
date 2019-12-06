@@ -222,12 +222,6 @@ static void Att_ShowAllAttEvents (void)
    Pag_CalculatePagination (&Pagination);
    Gbl.AttEvents.CurrentPage = (unsigned) Pagination.CurrentPage;
 
-   /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-                                     0,
-                                     &Pagination);
-
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Events,Att_PutIconsInListOfAttEvents,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
@@ -239,6 +233,12 @@ static void Att_ShowAllAttEvents (void)
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
       Set_EndSettingsHead ();
      }
+
+   /***** Write links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+                                     0,
+                                     &Pagination);
 
    if (Gbl.AttEvents.Num)
      {
@@ -285,18 +285,18 @@ static void Att_ShowAllAttEvents (void)
    else	// No events created
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+                                     0,
+                                     &Pagination);
+
    /***** Button to create a new attendance event *****/
    if (ICanEdit)
       Att_PutButtonToCreateNewAttEvent ();
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-                                     0,
-                                     &Pagination);
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

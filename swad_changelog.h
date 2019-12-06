@@ -490,14 +490,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.84.3 (2019-12-06)"
-#define CSS_FILE		"swad19.82.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.85 (2019-12-06)"
+#define CSS_FILE		"swad19.85.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.85:    Dec 06, 2019	Changes in layout of pagination.
+					Code refactoring in surveys. (247855 lines)
 	Version 19.84.3:  Dec 06, 2019	Contextual icon to show matches results.
 					Fixed bug in matches results. (247875 lines)
 	Version 19.84.2:  Dec 06, 2019	Contextual icon to show tests results.

@@ -1823,7 +1823,7 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	width:100%;
-	margin-bottom:20px;
+	margin-bottom:10px;
 	}
 .FRAME_TBL_CENTER
 	{
@@ -1832,7 +1832,7 @@ a:hover						/* Default ==> underlined */
 .FRAME_TBL_CENTER_MARGIN
 	{
 	margin:0 auto;
-	margin-bottom:20px;
+	margin-bottom:10px;
 	}
 .FRAME_TITLE
 	{
