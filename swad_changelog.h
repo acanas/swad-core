@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.86 (2019-12-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.86.1 (2019-12-07)"
 #define CSS_FILE		"swad19.85.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.86.1:  Dec 07, 2019	Show matches results in a game for a student. (247901 lines)
 	Version 19.86:    Dec 07, 2019	New actions to show the matches results in a game. (247905 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1810','es','N','Ver mis resultados en un juego');

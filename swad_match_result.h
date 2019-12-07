@@ -35,8 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void McR_ShowAllMyMchRes (void);
-void McR_ShowAllMyMchResInGame (void);
+void McR_ShowMyMchRes (void);
 void McR_SelUsrsToViewUsrsMchRes (void);
 void McR_GetUsrsAndShowMchRes (void);
 void McR_GetUsrsAndShowMchResInGame (void);

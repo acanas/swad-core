@@ -822,7 +822,7 @@ unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
-   Par_GetParMultiToText ("GamCods",*StrGamCodsSelected,MaxSizeListGamCodsSelected);
+   Par_GetParMultiToText ("GamCod",*StrGamCodsSelected,MaxSizeListGamCodsSelected);
 
    /***** Set which games will be shown as selected (checkboxes on) *****/
    if ((*StrGamCodsSelected)[0])	// There are games selected

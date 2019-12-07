@@ -94,7 +94,7 @@ static bool McR_GetVisibilityMchResultFromDB (long MchCod);
 /*************************** Show my matches results *************************/
 /*****************************************************************************/
 
-void McR_ShowAllMyMchRes (void)
+void McR_ShowMyMchRes (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Hlp_ASSESSMENT_Games_results;
@@ -147,11 +147,6 @@ void McR_ShowAllMyMchRes (void)
 
    /***** Free list of games *****/
    Gam_FreeListGames ();
-  }
-
-void McR_ShowAllMyMchResInGame (void)
-  {
-   // TODO: Implement!!!!
   }
 
 /*****************************************************************************/
@@ -388,7 +383,7 @@ static void McR_ListGamesToSelect (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("GamCods",false,
+      HTM_INPUT_CHECKBOX ("GamCod",false,
 			  "id=\"Gam%u\" value=\"%ld\"%s",
 			  NumGame,Gbl.Games.Lst[NumGame].GamCod,
 			  Gbl.Games.Lst[NumGame].Selected ? " checked=\"checked\"" : "");
