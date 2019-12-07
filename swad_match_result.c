@@ -94,7 +94,7 @@ static bool McR_GetVisibilityMchResultFromDB (long MchCod);
 /*************************** Show my matches results *************************/
 /*****************************************************************************/
 
-void McR_ShowMyMchResults (void)
+void McR_ShowAllMyMchRes (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Hlp_ASSESSMENT_Games_results;
@@ -149,11 +149,16 @@ void McR_ShowMyMchResults (void)
    Gam_FreeListGames ();
   }
 
+void McR_ShowAllMyMchResInGame (void)
+  {
+   // TODO: Implement!!!!
+  }
+
 /*****************************************************************************/
 /*********** Select users and dates to show their matches results ************/
 /*****************************************************************************/
 
-void McR_SelUsrsToViewUsrsMchResults (void)
+void McR_SelUsrsToViewUsrsMchRes (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -197,7 +202,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 	 Usr_ShowFormsToSelectUsrListType (NULL);
 
          /***** Begin form *****/
-         Frm_StartForm (ActSeeUsrMchRes);
+         Frm_StartForm (ActSeeAllMchRes);
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
@@ -253,11 +258,16 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 /****************** Get users and show their matches results *****************/
 /*****************************************************************************/
 
-void McR_GetUsrsAndShowMchResults (void)
+void McR_GetUsrsAndShowMchRes (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  McR_ShowUsrsMchResults,
-                                  McR_SelUsrsToViewUsrsMchResults);
+                                  McR_SelUsrsToViewUsrsMchRes);
+  }
+
+void McR_GetUsrsAndShowMchResInGame (void)
+  {
+   // TODO: Implement!!!
   }
 
 /*****************************************************************************/

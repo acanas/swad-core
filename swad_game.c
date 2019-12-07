@@ -115,11 +115,13 @@ static void Gam_PutIconsListGames (void);
 static void Gam_PutIconToCreateNewGame (void);
 static void Gam_PutButtonToCreateNewGame (void);
 static void Gam_PutParamsToCreateNewGame (void);
+static void Gam_PutIconToShowResultsOfGame (void);
 static void Gam_WriteAuthor (struct Game *Game);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
 
+static void Gam_PutParamCurrentGamCod (void);
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
 
@@ -308,12 +310,12 @@ static void Gam_PutIconsListGames (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActSeeMyMchRes,NULL);
+         Ico_PutContextualIconToShowResults (ActSeeAllMyMchRes,NULL);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Ico_PutContextualIconToShowResults (ActReqSeeUsrMchRes,NULL);
+         Ico_PutContextualIconToShowResults (ActReqSeeAllMchRes,NULL);
 	 break;
       default:
 	 break;
@@ -403,8 +405,11 @@ void Gam_ShowOneGame (long GamCod,
 
    /***** Begin box *****/
    if (ShowOnlyThisGame)
-      Box_BoxBegin (NULL,Txt_Game,NULL,
+     {
+      Gam_SetParamCurrentGamCod (GamCod);
+      Box_BoxBegin (NULL,Txt_Game,Gam_PutIconToShowResultsOfGame,
                     Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
+     }
 
    /***** Get data of this game *****/
    Game.GamCod = GamCod;
@@ -566,6 +571,28 @@ void Gam_ShowOneGame (long GamCod,
   }
 
 /*****************************************************************************/
+/************* Put icon to show results of matches in a game *****************/
+/*****************************************************************************/
+
+static void Gam_PutIconToShowResultsOfGame (void)
+  {
+   /***** Put icon to view matches results *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         Ico_PutContextualIconToShowResults (ActSeeGamMyMchRes,Gam_PutParamCurrentGamCod);
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         Ico_PutContextualIconToShowResults (ActSeeGamMchRes,Gam_PutParamCurrentGamCod);
+	 break;
+      default:
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /*********************** Write the author of a game ************************/
 /*****************************************************************************/
 
@@ -611,14 +638,41 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 
 void Gam_PutParams (void)
   {
+   Gam_PutParamCurrentGamCod ();
+   Gam_PutHiddenParamOrder ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with code of game **********************/
+/*****************************************************************************/
+
+static void Gam_PutParamCurrentGamCod (void)
+  {
    long CurrentGamCod = Gam_GetParamCurrentGamCod ();
 
    if (CurrentGamCod > 0)
       Gam_PutParamGameCod (CurrentGamCod);
+  }
 
-   Gam_PutHiddenParamOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
+/*****************************************************************************/
+/******************** Write parameter with code of game **********************/
+/*****************************************************************************/
+
+void Gam_PutParamGameCod (long GamCod)
+  {
+   Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
+  }
+
+/*****************************************************************************/
+/********************* Get parameter with code of game ***********************/
+/*****************************************************************************/
+
+long Gam_GetParamGameCod (void)
+  {
+   /***** Get code of game *****/
+   return Par_GetParToLong ("GamCod");
   }
 
 /*****************************************************************************/
@@ -641,7 +695,8 @@ long Gam_GetParams (void)
 
 static void Gam_PutHiddenParamOrder (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Games.SelectedOrder);
+   if (Gbl.Games.SelectedOrder != Gam_ORDER_DEFAULT)
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Games.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -972,25 +1027,6 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
    if (NumRows > 1)
       Lay_ShowErrorAndExit ("Error when getting game text.");
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of game **********************/
-/*****************************************************************************/
-
-void Gam_PutParamGameCod (long GamCod)
-  {
-   Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of game ***********************/
-/*****************************************************************************/
-
-long Gam_GetParamGameCod (void)
-  {
-   /***** Get code of game *****/
-   return Par_GetParToLong ("GamCod");
   }
 
 /*****************************************************************************/

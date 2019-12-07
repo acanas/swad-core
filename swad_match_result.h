@@ -35,9 +35,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void McR_ShowMyMchResults (void);
-void McR_SelUsrsToViewUsrsMchResults (void);
-void McR_GetUsrsAndShowMchResults (void);
+void McR_ShowAllMyMchRes (void);
+void McR_ShowAllMyMchResInGame (void);
+void McR_SelUsrsToViewUsrsMchRes (void);
+void McR_GetUsrsAndShowMchRes (void);
+void McR_GetUsrsAndShowMchResInGame (void);
 void McR_ShowOneMchResult (void);
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 					unsigned *NumQsts,unsigned *NumQstsNotBlank);

@@ -89,6 +89,8 @@ void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 
 void Gam_PutParams (void);
+void Gam_PutParamGameCod (long GamCod);
+long Gam_GetParamGameCod (void);
 long Gam_GetParams (void);
 
 void Gam_GetListGames (Gam_Order_t SelectedOrder);
@@ -96,9 +98,6 @@ unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
 void Gam_FreeListGames (void);
-
-void Gam_PutParamGameCod (long GamCod);
-long Gam_GetParamGameCod (void);
 
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);

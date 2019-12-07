@@ -4939,7 +4939,8 @@ void Grp_PutParamWhichGrps (void)
   {
    Grp_GetParamWhichGrps ();
 
-   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
+   if (Gbl.Crs.Grps.WhichGrps != Grp_WHICH_GROUPS_DEFAULT)
+      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)

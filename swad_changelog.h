@@ -490,13 +490,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.85.1 (2019-12-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.86 (2019-12-07)"
 #define CSS_FILE		"swad19.85.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada juego, poder listar los resultados en una tabla como la de resultados globales
+
+	Version 19.86:    Dec 07, 2019	New actions to show the matches results in a game. (247905 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1810','es','N','Ver mis resultados en un juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1811','es','N','Ver resultados en un juego');
 
 	Version 19.85.1:  Dec 06, 2019	Contextual icon to show users' attendance. (247840 lines)
 	Version 19.85:    Dec 06, 2019	Changes in layout of pagination.
