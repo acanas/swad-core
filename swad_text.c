@@ -14519,25 +14519,25 @@ const char *Txt_hidden_documents =
 	"documentos ocultos";
 #endif
 
-const char *Txt_Hidden_result =
+const char *Txt_Hidden_results =
 #if   L==1	// ca
-	"Resultat ocult";
+	"Resultats ocults";
 #elif L==2	// de
-	"Ausgeblendet Ergebnis";
+	"Ausgeblendet Ergebnisse";
 #elif L==3	// en
-	"Hidden result";
+	"Hidden results";
 #elif L==4	// es
-	"Resultado oculto";
+	"Resultados ocultos";
 #elif L==5	// fr
-	"R&eacute;sultat cach&eacute;";
+	"R&eacute;sultats cach&eacute;s";
 #elif L==6	// gn
-	"Resultado oculto";	// Okoteve traducción
+	"Resultados ocultos";	// Okoteve traducción
 #elif L==7	// it
-	"Risultato nascosto";
+	"Risultati nascosti";
 #elif L==8	// pl
-	"Ukryte wynik";
+	"Ukryte wynik&oacute;w";
 #elif L==9	// pt
-	"Resultado oculto";
+	"Resultados ocultos";
 #endif
 
 const char *Txt_Hidden_survey =
@@ -33358,6 +33358,48 @@ const char *Txt_Results =
 	"Wyniki";
 #elif L==9	// pt
 	"Resultados";
+#endif
+
+const char *Txt_Results_of_game_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Resultats del joc %s";
+#elif L==2	// de
+	"Ergebnisse von Spiel %s";
+#elif L==3	// en
+	"Results of game %s";
+#elif L==4	// es
+	"Resultados del juego %s";
+#elif L==5	// fr
+	"R&eacute;sultats du jeu %s";
+#elif L==6	// gn
+	"Resultados del juego %s";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati del gioco %s";
+#elif L==8	// pl
+	"Wyniki gry %s";
+#elif L==9	// pt
+	"Resultados do jogo %s";
+#endif
+
+const char *Txt_Results_of_match_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Resultats de la partida %s";
+#elif L==2	// de
+	"Ergebnisse von Spiel %s";
+#elif L==3	// en
+	"Results of match %s";
+#elif L==4	// es
+	"Resultados de la partida %s";
+#elif L==5	// fr
+	"R&eacute;sultats du match %s";
+#elif L==6	// gn
+	"Resultados de la partida %s";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati della partita %s";
+#elif L==8	// pl
+	"Wyniki mecz %s";
+#elif L==9	// pt
+	"Resultados do jogo %s";
 #endif
 
 const char *Txt_results_per_page =
@@ -52989,25 +53031,25 @@ const char *Txt_Visible_by_BR_the_student =
 	"Vis&iacute;vel pelo<br />estudante?";
 #endif
 
-const char *Txt_Visible_result =
+const char *Txt_Visible_results =
 #if   L==1	// ca
-	"Resultat visible";
+	"Resultats visibles";
 #elif L==2	// de
-	"Sichtbare Ergebnis";
+	"Sichtbar Ergebnisse";
 #elif L==3	// en
-	"Visible result";
+	"Visible results";
 #elif L==4	// es
-	"Resultado visible";
+	"Resultados visibles";
 #elif L==5	// fr
-	"R&eacute;sultat visible";
+	"R&eacute;sultats visible";
 #elif L==6	// gn
-	"Resultado visible";	// Okoteve traducción
+	"Resultados visibles";	// Okoteve traducción
 #elif L==7	// it
-	"Risultato visibile";
+	"Risultati visibili";
 #elif L==8	// pl
-	"Widoczny wynik";
+	"Widoczne wynik&oacute;w";
 #elif L==9	// pt
-	"Resultado vis&iacute;vel";
+	"Resultados vis&iacute;veis";
 #endif
 
 const char *Txt_Visible_MALE_PLURAL =

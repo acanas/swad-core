@@ -81,10 +81,10 @@ typedef enum
 
 void Gam_SeeAllGames (void);
 void Gam_SeeOneGame (void);
-void Gam_ShowOnlyOneGame (long GamCod,
+void Gam_ShowOnlyOneGame (struct Game *Game,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch);
-void Gam_ShowOnlyOneGameBegin (long GamCod,
+void Gam_ShowOnlyOneGameBegin (struct Game *Game,
 			       bool ListGameQuestions,
 			       bool PutFormNewMatch);
 void Gam_ShowOnlyOneGameEnd (void);
@@ -140,7 +140,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
 
-void Gam_SetParamCurrentGamCod (long GamCod);
+void Gam_SetCurrentGamCod (long GamCod);
 
 void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore);
 

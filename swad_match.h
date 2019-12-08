@@ -127,6 +127,6 @@ void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsig
 					       unsigned NumAnswerersQst,bool Correct);
 unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
 
-void Mch_SetParamCurrentMchCod (long MchCod);
+void Mch_SetCurrentMchCod (long MchCod);
 
 #endif

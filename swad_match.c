@@ -213,7 +213,7 @@ static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsi
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
-static long Mch_GetParamCurrentMchCod (void);
+static long Mch_GetCurrentMchCod (void);
 
 /*****************************************************************************/
 /************************* List the matches of a game ************************/
@@ -271,7 +271,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    free (SubQuery);
 
    /***** Begin box *****/
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_BoxBegin ("100%",Txt_Matches,Mch_PutIconsInListOfMatches,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
@@ -534,8 +534,8 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    /***** Put icon to remove the match *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
      {
-      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+      Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Frm_StartForm (ActReqRemMch);
       Mch_PutParamsEdit ();
       Ico_PutIconRemove ();
@@ -599,7 +599,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Match title *****/
-   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+   Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
    Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 						       ActResMch);
    Mch_PutParamsPlay ();
@@ -712,7 +712,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
      }
 
    /* Icon to join match or resume match */
-   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+   Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
    Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 								       ActResMch,
 				  NULL,
@@ -753,49 +753,57 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
 
 static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
   {
-   extern const char *Txt_Match_result;
-   extern const char *Txt_Hidden_result;
+   extern const char *Txt_Hidden_results;
+   extern const char *Txt_Results;
 
    /***** Is match result visible or hidden? *****/
    if (Match->Status.ShowUsrResults)
      {
       /* Result is visible by me */
-      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-      Frm_StartForm (ActSeeOneMchResMe);
-      Mch_PutParamsEdit ();
-      Ico_PutIconLink ("tasks.svg",Txt_Match_result);
-      Frm_EndForm ();
+      Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
+      Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_TABLE_ID,
+				     Mch_PutParamsEdit,
+				     "trophy.svg",
+				     Txt_Results);
      }
    else
       /* Result is forbidden to me */
-      Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+      Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
   }
 
 static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
   {
-   extern const char *Txt_Hidden_result;
-   extern const char *Txt_Visible_result;
+   extern const char *Txt_Visible_results;
+   extern const char *Txt_Hidden_results;
+   extern const char *Txt_Results;
 
    /***** Can I edit match vivibility? *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
      {
+      Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
+
+      /* Show match results */
+      Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_TABLE_ID,
+				     Mch_PutParamsEdit,
+				     "trophy.svg",
+				     Txt_Results);
+
       /* I can edit visibility */
-      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 				     Mch_PutParamsEdit,
 				     Match->Status.ShowUsrResults ? "eye.svg" :
 								    "eye-slash.svg",
-				     Match->Status.ShowUsrResults ? Txt_Visible_result :
-								    Txt_Hidden_result);
+				     Match->Status.ShowUsrResults ? Txt_Visible_results :
+								    Txt_Hidden_results);
      }
    else
       /* I can not edit visibility */
       Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
 						     "eye-slash.svg",
-		      Match->Status.ShowUsrResults ? Txt_Visible_result :
-						     Txt_Hidden_result);
+		      Match->Status.ShowUsrResults ? Txt_Visible_results :
+						     Txt_Hidden_results);
   }
 
 /*****************************************************************************/
@@ -825,7 +833,7 @@ void Mch_ToggleVisibilResultsMchUsr (void)
 		   Match.MchCod);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Match.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -945,15 +953,15 @@ void Mch_RequestRemoveMatch (void)
    Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Show question and button to remove question *****/
-   Gam_SetParamCurrentGamCod (Match.GamCod);	// Used to pass parameter
-   Mch_SetParamCurrentMchCod (Match.MchCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Match.GamCod);	// Used to pass parameter
+   Mch_SetCurrentMchCod (Match.MchCod);	// Used to pass parameter
    Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Mch_PutParamsEdit,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Match.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -983,7 +991,7 @@ void Mch_RemoveMatch (void)
 		  Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Match.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -1140,7 +1148,7 @@ void Mch_PutParamsEdit (void)
 
 static void Mch_PutParamsPlay (void)
   {
-   long CurrentMchCod = Mch_GetParamCurrentMchCod ();
+   long CurrentMchCod = Mch_GetCurrentMchCod ();
 
    if (CurrentMchCod > 0)
       Mch_PutParamMchCod (CurrentMchCod);
@@ -3549,12 +3557,12 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 /**************** Access to variable used to pass parameter ******************/
 /*****************************************************************************/
 
-void Mch_SetParamCurrentMchCod (long MchCod)
+void Mch_SetCurrentMchCod (long MchCod)
   {
    Mch_CurrentMchCod = MchCod;
   }
 
-static long Mch_GetParamCurrentMchCod (void)
+static long Mch_GetCurrentMchCod (void)
   {
    return Mch_CurrentMchCod;
   }

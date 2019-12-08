@@ -631,14 +631,17 @@ Assessment:
         478. ActAnsMchQstStd		Answer a match question (as student)
         479. ActRefMchStd		Refresh current question when playing a game (as student)
 
-	481. ActSeeAllMyMchRes		Show all my matches results
-	NEW. ActSeeGamMyMchRes		Show my matches results in a given game
+	NEW. ActSeeMyMchResCrs		Show all my matches results in the current course
+	NEW. ActSeeMyMchResGam		Show all my matches results in a given game
+	NEW. ActSeeMyMchResMch		Show all my matches results in a given match
+	484. ActSeeOneMchResMe		Show one match result of me as student
 
 	482. ActReqSeeAllMchRes		Select users and range of dates to see matches results
-	483. ActSeeAllMchRes		Show matches results of several users in a given game
-	NEW. ActSeeGamMchRes		Show matches results of several users
-	484. ActSeeOneMchResMe		Show one match result of me as student
+	NEW. ActSeeAllMchResCrs		Show all matches results of selected users in the current course
+	NEW. ActSeeAllMchResGam		Show all matches results in a given game
+	NEW. ActSeeAllMchResMch		Show all matches results in a given game
 	485. ActSeeOneMchResOth		Show one match result of other user
+
         476. ActChgVisResMchUsr		Change visibility of match results for students
 
         487. ActFrmNewGam		Form to create a new game
@@ -2167,14 +2170,17 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAnsMchQstStd	] = {1651,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQuestionAnswer	,NULL},
    [ActRefMchStd	] = {1782,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
 
-   [ActSeeAllMyMchRes	] = {1796,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchRes		,NULL},
-   [ActSeeGamMyMchRes	] = {1810,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResInGame		,NULL},
+   [ActSeeMyMchResCrs	] = {1796,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResultsInCrs	,NULL},
+   [ActSeeMyMchResGam	] = {1810,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResultsInGam	,NULL},
+   [ActSeeMyMchResMch	] = {1812,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResultsInMch	,NULL},
    [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
 
-   [ActReqSeeAllMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,McR_SelUsrsToViewUsrsMchRes	,NULL},
-   [ActSeeAllMchRes	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_GetUsrsAndShowMchRes	,NULL},
-   [ActSeeGamMchRes	] = {1811,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowUsrsMchResultsInGame	,NULL},
+   [ActReqSeeAllMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,McR_SelUsrsToViewMchResults	,NULL},
+   [ActSeeAllMchResCrs	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowAllMchResultsInCrs	,NULL},
+   [ActSeeAllMchResGam	] = {1811,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowAllMchResultsInGam	,NULL},
+   [ActSeeAllMchResMch	] = {1813,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowAllMchResultsInMch	,NULL},
    [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
+
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 
    [ActFrmNewGam	] = {1652,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -5021,10 +5027,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1793 (obsolete action)
 	ActChgVisResMchQst,	// #1794
 	-1,			// #1795
-	ActSeeAllMyMchRes,	// #1796
+	ActSeeMyMchResCrs,	// #1796
 	ActSeeOneMchResMe,	// #1797
 	ActReqSeeAllMchRes,	// #1798
-	ActSeeAllMchRes,	// #1799
+	ActSeeAllMchResCrs,	// #1799
 	ActSeeOneMchResOth,	// #1800
 	ActChgVisResMchUsr,	// #1801
 	ActChgNumColMch,	// #1802
@@ -5035,8 +5041,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActShoHidSocComUsr,	// #1807
         ActSeeMchAnsQstStd,	// #1808
         ActRemMchAnsQstStd,	// #1809
-        ActSeeGamMyMchRes,	// #1810
-        ActSeeGamMchRes,	// #1811
+        ActSeeMyMchResGam,	// #1810
+        ActSeeAllMchResGam,	// #1811
+        ActSeeMyMchResMch,	// #1812
+        ActSeeAllMchResMch,	// #1813
 	};
 
 /*****************************************************************************/

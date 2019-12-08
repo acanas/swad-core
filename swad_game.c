@@ -162,7 +162,7 @@ static void Gam_ExchangeQuestions (long GamCod,
 
 static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
 
-static long Gam_GetParamCurrentGamCod (void);
+static long Gam_GetCurrentGamCod (void);
 
 /*****************************************************************************/
 /***************************** List all games ********************************/
@@ -319,7 +319,7 @@ static void Gam_PutIconsListGames (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActSeeAllMyMchRes,NULL,NULL);
+         Ico_PutContextualIconToShowResults (ActSeeMyMchResCrs,NULL,NULL);
          break;
       case Rol_NET:
       case Rol_TCH:
@@ -377,14 +377,15 @@ static void Gam_PutParamsToCreateNewGame (void)
 
 void Gam_SeeOneGame (void)
   {
-   long GamCod;
+   struct Game Game;
 
    /***** Get parameters *****/
-   if ((GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/
-   Gam_ShowOnlyOneGame (GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -393,41 +394,36 @@ void Gam_SeeOneGame (void)
 /******************************* Show one game *******************************/
 /*****************************************************************************/
 
-void Gam_ShowOnlyOneGame (long GamCod,
+void Gam_ShowOnlyOneGame (struct Game *Game,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch)
   {
-   Gam_ShowOnlyOneGameBegin (GamCod,ListGameQuestions,PutFormNewMatch);
+   Gam_ShowOnlyOneGameBegin (Game,ListGameQuestions,PutFormNewMatch);
    Gam_ShowOnlyOneGameEnd ();
   }
 
-void Gam_ShowOnlyOneGameBegin (long GamCod,
+void Gam_ShowOnlyOneGameBegin (struct Game *Game,
 			       bool ListGameQuestions,
 			       bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
-   struct Game Game;
-
-   /***** Get data of this game *****/
-   Game.GamCod = GamCod;
-   Gam_GetDataOfGameByCod (&Game);
 
    /***** Begin box *****/
-   Gam_SetParamCurrentGamCod (GamCod);
+   Gam_SetCurrentGamCod (Game->GamCod);
    Box_BoxBegin (NULL,Txt_Game,Gam_PutIconToShowResultsOfGame,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Show game *****/
-   Gam_ShowOneGame (&Game,
+   Gam_ShowOneGame (Game,
 		    true);	// Show only this game
 
    if (ListGameQuestions)
        /***** Write questions of this game *****/
-      Gam_ListGameQuestions (&Game);
+      Gam_ListGameQuestions (Game);
    else
       /***** List matches *****/
-      Mch_ListMatches (&Game,PutFormNewMatch);
+      Mch_ListMatches (Game,PutFormNewMatch);
   }
 
 void Gam_ShowOnlyOneGameEnd (void)
@@ -504,7 +500,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Game title */
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
@@ -533,7 +529,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    else
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
@@ -600,12 +596,12 @@ static void Gam_PutIconToShowResultsOfGame (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActSeeGamMyMchRes,McR_RESULTS_TABLE_ID,Gam_PutParams);
+         Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,McR_RESULTS_TABLE_ID,Gam_PutParams);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Ico_PutContextualIconToShowResults (ActSeeGamMchRes,McR_RESULTS_TABLE_ID,Gam_PutParams);
+         Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,McR_RESULTS_TABLE_ID,Gam_PutParams);
 	 break;
       default:
 	 break;
@@ -637,7 +633,7 @@ void Gam_PutHiddenParamGameOrder (void)
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor)
   {
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
 
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
@@ -670,7 +666,7 @@ void Gam_PutParams (void)
 
 static void Gam_PutParamCurrentGamCod (void)
   {
-   long CurrentGamCod = Gam_GetParamCurrentGamCod ();
+   long CurrentGamCod = Gam_GetCurrentGamCod ();
 
    if (CurrentGamCod > 0)
       Gam_PutParamGameCod (CurrentGamCod);
@@ -1065,7 +1061,7 @@ void Gam_AskRemGame (void)
       Lay_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
-   Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,Gam_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
@@ -1269,7 +1265,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
      }
 
    /***** Begin form *****/
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
    Gam_PutParams ();
@@ -1515,19 +1511,20 @@ void Gam_RequestNewQuestion (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Show form to create a new question in this game *****/
-      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+      Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ShowFormAskSelectTstsForGame ();
      }
    else
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -1548,7 +1545,7 @@ void Gam_ListTstQuestionsToSelect (void)
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** List several test questions for selection *****/
-      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+      Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ListQuestionsToSelect ();
      }
    else
@@ -1757,7 +1754,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 					Game->GamCod);
 
    /***** Begin box *****/
-   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_BoxBegin (NULL,Txt_Questions,ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
                                                         NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
@@ -1848,7 +1845,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /***** Icons *****/
-      Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
+      Gam_SetCurrentGamCod (GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
       HTM_TR_Begin (NULL);
 
@@ -1996,6 +1993,7 @@ void Gam_AddTstQuestionsToGame (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -2042,7 +2040,7 @@ void Gam_AddTstQuestionsToGame (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2121,6 +2119,7 @@ void Gam_RequestRemoveQst (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -2129,7 +2128,7 @@ void Gam_RequestRemoveQst (void)
       QstInd = Gam_GetParamQstInd ();
 
       /***** Show question and button to remove question *****/
-      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+      Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
       Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
@@ -2140,7 +2139,7 @@ void Gam_RequestRemoveQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2158,6 +2157,7 @@ void Gam_RemoveQst (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -2197,7 +2197,7 @@ void Gam_RemoveQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2217,6 +2217,7 @@ void Gam_MoveUpQst (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -2245,7 +2246,7 @@ void Gam_MoveUpQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2267,6 +2268,7 @@ void Gam_MoveDownQst (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -2303,7 +2305,7 @@ void Gam_MoveDownQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2385,7 +2387,7 @@ void Gam_PutButtonNewMatch (long GamCod)
   {
    extern const char *Txt_New_match;
 
-   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
+   Gam_SetCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
    Gam_PutParams ();
    Btn_PutConfirmButton (Txt_New_match);
@@ -2398,14 +2400,15 @@ void Gam_PutButtonNewMatch (long GamCod)
 
 void Gam_RequestNewMatch (void)
   {
-   long GamCod;
+   struct Game Game;
 
    /***** Get parameters *****/
-   if ((GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/
-   Gam_ShowOnlyOneGame (GamCod,
+   Gam_ShowOnlyOneGame (&Game,
                         false,	// Do not list game questions
                         true);	// Put form to start new match
   }
@@ -2699,12 +2702,12 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 /**************** Access to variable used to pass parameter ******************/
 /*****************************************************************************/
 
-void Gam_SetParamCurrentGamCod (long GamCod)
+void Gam_SetCurrentGamCod (long GamCod)
   {
    Gam_CurrentGamCod = GamCod;
   }
 
-static long Gam_GetParamCurrentGamCod (void)
+static long Gam_GetCurrentGamCod (void)
   {
    return Gam_CurrentGamCod;
   }
