@@ -409,7 +409,7 @@ static void Mch_ListOneOrMoreMatches (const struct Game *Game,
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
    /***** Write rows *****/
@@ -825,10 +825,9 @@ void Mch_ToggleVisibilResultsMchUsr (void)
 		   Match.MchCod);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Match.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Match.GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -954,10 +953,9 @@ void Mch_RequestRemoveMatch (void)
 	                   Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Match.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Match.GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -985,10 +983,9 @@ void Mch_RemoveMatch (void)
 		  Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Match.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Match.GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/

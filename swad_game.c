@@ -115,6 +115,9 @@ static void Gam_PutIconsListGames (void);
 static void Gam_PutIconToCreateNewGame (void);
 static void Gam_PutButtonToCreateNewGame (void);
 static void Gam_PutParamsToCreateNewGame (void);
+
+static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame);
+
 static void Gam_PutIconToShowResultsOfGame (void);
 static void Gam_WriteAuthor (struct Game *Game);
 
@@ -189,6 +192,7 @@ static void Gam_ListAllGames (void)
    Gam_Order_t Order;
    struct Pagination Pagination;
    unsigned NumGame;
+   struct Game Game;
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
@@ -251,10 +255,15 @@ static void Gam_ListAllGames (void)
       for (NumGame = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
-	 Gam_ShowOneGame (Gbl.Games.Lst[NumGame - 1].GamCod,
-	                  false,
-	                  false,	// Do not list game questions
-	                  false);	// Do not put form to start new match
+	{
+	 /* Get data of this game */
+	 Game.GamCod = Gbl.Games.Lst[NumGame - 1].GamCod;
+	 Gam_GetDataOfGameByCod (&Game);
+
+	 /* Show game */
+	 Gam_ShowOneGame (&Game,
+	                  false);	// Do not show only this game
+	}
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -368,30 +377,56 @@ static void Gam_PutParamsToCreateNewGame (void)
 
 void Gam_SeeOneGame (void)
   {
-   struct Game Game;
+   long GamCod;
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams ()) == -1L)
+   if ((GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-	            false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
 /******************************* Show one game *******************************/
 /*****************************************************************************/
 
-void Gam_ShowOneGame (long GamCod,
-                      bool ShowOnlyThisGame,
-                      bool ListGameQuestions,
-                      bool PutFormNewMatch)
+void Gam_ShowOnlyOneGame (long GamCod,
+			  bool ListGameQuestions,
+			  bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
+   struct Game Game;
+
+   /***** Get data of this game *****/
+   Game.GamCod = GamCod;
+   Gam_GetDataOfGameByCod (&Game);
+
+   /***** Begin box *****/
+   Gam_SetParamCurrentGamCod (GamCod);
+   Box_BoxBegin (NULL,Txt_Game,Gam_PutIconToShowResultsOfGame,
+		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
+
+   /***** Show game *****/
+   Gam_ShowOneGame (&Game,
+		    true);	// Show only this game
+
+   if (ListGameQuestions)
+       /***** Write questions of this game *****/
+      Gam_ListGameQuestions (&Game);
+   else
+      /***** List matches *****/
+      Mch_ListMatches (&Game,PutFormNewMatch);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
+  {
    extern const char *Txt_View_game;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_No_of_questions;
@@ -399,26 +434,13 @@ void Gam_ShowOneGame (long GamCod,
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
-   struct Game Game;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Begin box *****/
-   if (ShowOnlyThisGame)
-     {
-      Gam_SetParamCurrentGamCod (GamCod);
-      Box_BoxBegin (NULL,Txt_Game,Gam_PutIconToShowResultsOfGame,
-                    Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
-     }
-
-   /***** Get data of this game *****/
-   Game.GamCod = GamCod;
-   Gam_GetDataOfGameByCod (&Game);
-
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Game.GamCod,&Anchor);
+   Frm_SetAnchorStr (Game->GamCod,&Anchor);
 
-   /***** Begin table *****/
+   /***** Begin box and table *****/
    if (ShowOnlyThisGame)
       HTM_TABLE_BeginWidePadding (2);
 
@@ -434,7 +456,7 @@ void Gam_ShowOneGame (long GamCod,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Icons to remove/edit this game */
-      Gam_PutFormsToRemEditOneGame (&Game,Anchor);
+      Gam_PutFormsToRemEditOneGame (Game,Anchor);
 
       HTM_TD_End ();
      }
@@ -449,15 +471,15 @@ void Gam_ShowOneGame (long GamCod,
 	 Lay_NotEnoughMemoryExit ();
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,Game.Hidden ? "DATE_GREEN_LIGHT":
-				        "DATE_GREEN");
+		       Id,Game->Hidden ? "DATE_GREEN_LIGHT":
+				         "DATE_GREEN");
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,Game.Hidden ? "DATE_GREEN_LIGHT":
-				        "DATE_GREEN",
+		       Id,Game->Hidden ? "DATE_GREEN_LIGHT":
+				         "DATE_GREEN",
 		       Gbl.RowEvenOdd);
-      if (Game.TimeUTC[Dat_START_TIME])
-	 Dat_WriteLocalDateHMSFromUTC (Id,Game.TimeUTC[StartEndTime],
+      if (Game->TimeUTC[Dat_START_TIME])
+	 Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
       HTM_TD_End ();
@@ -471,25 +493,25 @@ void Gam_ShowOneGame (long GamCod,
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Game title */
-   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
-			    Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT":
-					  "BT_LINK ASG_TITLE",
+			    Game->Hidden ? "BT_LINK ASG_TITLE_LIGHT":
+					   "BT_LINK ASG_TITLE",
 			    NULL);
-   HTM_Txt (Game.Title);
+   HTM_Txt (Game->Title);
    HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 
    /* Number of questions and maximum grade */
-   HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
-        	                               "ASG_GRP");
-   HTM_TxtF ("%s:&nbsp;%u",Txt_No_of_questions,Game.NumQsts);
+   HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
+        	                                "ASG_GRP");
+   HTM_TxtF ("%s:&nbsp;%u",Txt_No_of_questions,Game->NumQsts);
    HTM_BR ();
-   HTM_TxtF ("%s:&nbsp;%lg",Txt_Maximum_grade,Game.MaxGrade);
+   HTM_TxtF ("%s:&nbsp;%lg",Txt_Maximum_grade,Game->MaxGrade);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -500,16 +522,16 @@ void Gam_ShowOneGame (long GamCod,
    else
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
-   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
-			    Game.Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
-					  "BT_LINK ASG_TITLE",
+			    Game->Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
+				           "BT_LINK ASG_TITLE",
 			    NULL);
    if (ShowOnlyThisGame)
       HTM_TxtF ("%s:&nbsp;",Txt_Matches);
-   HTM_Unsigned (Game.NumMchs);
+   HTM_Unsigned (Game->NumMchs);
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
@@ -526,7 +548,7 @@ void Gam_ShowOneGame (long GamCod,
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Gam_WriteAuthor (&Game);
+   Gam_WriteAuthor (Game);
    HTM_TD_End ();
 
    /***** Text of the game *****/
@@ -534,12 +556,12 @@ void Gam_ShowOneGame (long GamCod,
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+   Gam_GetGameTxtFromDB (Game->GamCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR %s\"",Game.Hidden ? "DAT_LIGHT" :
-        	                                   "DAT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
+        	                                    "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -555,19 +577,6 @@ void Gam_ShowOneGame (long GamCod,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
-
-   if (ShowOnlyThisGame)
-     {
-      if (ListGameQuestions)
-          /***** Write questions of this game *****/
-	 Gam_ListGameQuestions (&Game);
-      else
-	 /***** List matches *****/
-	 Mch_ListMatches (&Game,PutFormNewMatch);
-
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
   }
 
 /*****************************************************************************/
@@ -1507,10 +1516,9 @@ void Gam_RequestNewQuestion (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2023,10 +2031,9 @@ void Gam_AddTstQuestionsToGame (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2122,10 +2129,9 @@ void Gam_RequestRemoveQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2180,10 +2186,9 @@ void Gam_RemoveQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2229,10 +2234,9 @@ void Gam_MoveUpQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2288,10 +2292,9 @@ void Gam_MoveDownQst (void)
       Lay_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2391,10 +2394,9 @@ void Gam_RequestNewMatch (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Gam_ShowOneGame (GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-                    true);	// Put form to start new match
+   Gam_ShowOnlyOneGame (GamCod,
+                        false,	// Do not list game questions
+                        true);	// Put form to start new match
   }
 
 /*****************************************************************************/

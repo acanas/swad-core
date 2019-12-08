@@ -254,10 +254,9 @@ void McR_ShowMyMchResInGame (void)
       Lay_NotEnoughMemoryExit ();
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-	            false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
@@ -373,10 +372,9 @@ void McR_ShowUsrsMchResultsInGame (void)
       Lay_NotEnoughMemoryExit ();
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list game questions
-	            false);	// Do not put form to start new match
+   Gam_ShowOnlyOneGame (Game.GamCod,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,

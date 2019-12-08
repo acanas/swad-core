@@ -81,10 +81,9 @@ typedef enum
 
 void Gam_SeeAllGames (void);
 void Gam_SeeOneGame (void);
-void Gam_ShowOneGame (long GamCod,
-                      bool ShowOnlyThisGame,
-                      bool ListGameQuestions,
-                      bool PutFormNewMatch);
+void Gam_ShowOnlyOneGame (long GamCod,
+			  bool ListGameQuestions,
+			  bool PutFormNewMatch);
 void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 
