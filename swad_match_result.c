@@ -53,8 +53,6 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define McR_RESULTS_TABLE_ID		"mcr_table"
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -75,7 +73,7 @@ static void McR_ShowUsrsMchResults (void);
 static void McR_ListGamesToSelect (void);
 static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
 
-static void McR_BuildGamesSelectedCommas (char *GamesSelectedCommas);
+static void McR_BuildGamesSelectedCommas (char **GamesSelectedCommas);
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				const char *GamesSelectedSeparatedByCommas);
 static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
@@ -207,13 +205,10 @@ void McR_ShowMyMchRes (void)
    /***** Get list of games *****/
    Gam_GetListGames (Gam_ORDER_BY_TITLE);
    Gam_GetListSelectedGamCods ();
-   McR_BuildGamesSelectedCommas (GamesSelectedCommas);
+   McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
 
    if (Gbl.Games.NumSelected)
      {
-      /***** Get feedback type *****/
-      Tst_GetConfigTstFromDB ();
-
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Results,NULL,
 		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
@@ -224,6 +219,7 @@ void McR_ShowMyMchRes (void)
       McR_ShowHeaderMchResults (Usr_ME);
 
       /***** List my matches results *****/
+      Tst_GetConfigTstFromDB ();	// Get feedback type
       McR_ShowMchResults (Usr_ME,GamesSelectedCommas);
 
       /***** End section with match results table *****/
@@ -252,17 +248,20 @@ void McR_ShowMyMchResInGame (void)
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
    extern const char *Txt_No_games;
-   long GamCod;
+   struct Game Game;
    char *GamesSelectedCommas;
 
-   /***** Get game code *****/
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-   if (asprintf (&GamesSelectedCommas,"%ld",GamCod) < 0)
+   if (asprintf (&GamesSelectedCommas,"%ld",Game.GamCod) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   /***** Get feedback type *****/
-   Tst_GetConfigTstFromDB ();
+   /***** Show game *****/
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    false,	// Do not list game questions
+	            false);	// Do not put form to start new match
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
@@ -274,6 +273,7 @@ void McR_ShowMyMchResInGame (void)
    McR_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results *****/
+   Tst_GetConfigTstFromDB ();	// Get feedback type
    McR_ShowMchResults (Usr_ME,GamesSelectedCommas);
 
    /***** End section with match results table *****/
@@ -313,7 +313,7 @@ static void McR_ShowUsrsMchResults (void)
    /***** Get list of games *****/
    Gam_GetListGames (Gam_ORDER_BY_TITLE);
    Gam_GetListSelectedGamCods ();
-   McR_BuildGamesSelectedCommas (GamesSelectedCommas);
+   McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
@@ -364,18 +364,24 @@ void McR_ShowUsrsMchResultsInGame (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   long GamCod;
+   struct Game Game;
    char *GamesSelectedCommas;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
 
-   /***** Get game code *****/
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-   if (asprintf (&GamesSelectedCommas,"%ld",GamCod) < 0)
+   if (asprintf (&GamesSelectedCommas,"%ld",Game.GamCod) < 0)
       Lay_NotEnoughMemoryExit ();
+
+   /***** Show game *****/
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    false,	// Do not list game questions
+	            false);	// Do not put form to start new match
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
@@ -388,7 +394,7 @@ void McR_ShowUsrsMchResultsInGame (void)
 			     " WHERE mch_matches.GamCod=%ld"
 			     " AND mch_matches.MchCod=mch_answers.MchCod"
 			     " ORDER BY mch_answers.UsrCod",	// TODO: Order by name
-			     GamCod);
+			     Game.GamCod);
    if (NumUsrs)
      {
       /***** Start section with match results table *****/
@@ -554,7 +560,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 /******* from list of selected games                                  ********/
 /*****************************************************************************/
 
-static void McR_BuildGamesSelectedCommas (char *GamesSelectedCommas)
+static void McR_BuildGamesSelectedCommas (char **GamesSelectedCommas)
   {
    size_t MaxLength;
    unsigned NumGame;
@@ -562,20 +568,20 @@ static void McR_BuildGamesSelectedCommas (char *GamesSelectedCommas)
 
    /***** Allocate memory for subquery of games selected *****/
    MaxLength = (size_t) Gbl.Games.NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((GamesSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
+   if ((*GamesSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected games *****/
-   GamesSelectedCommas[0] = '\0';
+   (*GamesSelectedCommas)[0] = '\0';
    for (NumGame = 0;
 	NumGame < Gbl.Games.Num;
 	NumGame++)
       if (Gbl.Games.Lst[NumGame].Selected)
 	{
 	 sprintf (LongStr,"%ld",Gbl.Games.Lst[NumGame].GamCod);
-	 if (GamesSelectedCommas[0])
-	    Str_Concat (GamesSelectedCommas,",",MaxLength);
-	 Str_Concat (GamesSelectedCommas,LongStr,MaxLength);
+	 if ((*GamesSelectedCommas)[0])
+	    Str_Concat (*GamesSelectedCommas,",",MaxLength);
+	 Str_Concat (*GamesSelectedCommas,LongStr,MaxLength);
 	}
   }
 

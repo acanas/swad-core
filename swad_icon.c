@@ -326,11 +326,11 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncP
 				  Txt_Upload_file_or_create_folder);
   }
 
-void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
   {
    extern const char *Txt_Results;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
 				  "tasks.svg",
 				  Txt_Results);
   }

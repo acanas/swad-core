@@ -1406,12 +1406,12 @@ static void Tst_PutIconsTests (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL);
+         Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,NULL);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL);
+         Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,NULL);
 	 break;
       default:
 	 break;
