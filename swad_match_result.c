@@ -199,7 +199,6 @@ void McR_ShowMyMchRes (void)
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_No_games;
    char *GamesSelectedCommas = NULL;	// Initialized to avoid warning
 
    /***** Get list of games *****/
@@ -207,30 +206,28 @@ void McR_ShowMyMchRes (void)
    Gam_GetListSelectedGamCods ();
    McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
 
-   if (Gbl.Games.NumSelected)
-     {
-      /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Results,NULL,
-		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Results,NULL,
+		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
-      /***** Start section with match results table *****/
-      HTM_SECTION_Begin (McR_RESULTS_TABLE_ID);
-      HTM_TABLE_BeginWidePadding (2);
-      McR_ShowHeaderMchResults (Usr_ME);
+   /***** List games to select *****/
+   McR_ListGamesToSelect ();
 
-      /***** List my matches results *****/
-      Tst_GetConfigTstFromDB ();	// Get feedback type
-      McR_ShowMchResults (Usr_ME,GamesSelectedCommas);
+   /***** Start section with match results table *****/
+   HTM_SECTION_Begin (McR_RESULTS_TABLE_ID);
+   HTM_TABLE_BeginWidePadding (2);
+   McR_ShowHeaderMchResults (Usr_ME);
 
-      /***** End section with match results table *****/
-      HTM_TABLE_End ();
-      HTM_SECTION_End ();
+   /***** List my matches results *****/
+   Tst_GetConfigTstFromDB ();	// Get feedback type
+   McR_ShowMchResults (Usr_ME,GamesSelectedCommas);
 
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_No_games);
+   /***** End section with match results table *****/
+   HTM_TABLE_End ();
+   HTM_SECTION_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
 
    /***** Free list of games *****/
    free (GamesSelectedCommas);
@@ -247,7 +244,6 @@ void McR_ShowMyMchResInGame (void)
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_No_games;
    struct Game Game;
    char *GamesSelectedCommas;
 
@@ -306,7 +302,6 @@ static void McR_ShowUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_No_games;
    char *GamesSelectedCommas = NULL;	// Initialized to avoid warning
    const char *Ptr;
 
@@ -993,7 +988,7 @@ void McR_ShowOneMchResult (void)
 					 &NumQsts,&NumQstsNotBlank);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Match_result,NULL,
+      Box_BoxBegin (NULL,Match.Title,NULL,
                     Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,

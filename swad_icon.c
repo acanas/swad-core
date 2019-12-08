@@ -331,7 +331,7 @@ void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anc
    extern const char *Txt_Results;
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
-				  "tasks.svg",
+				  "trophy.svg",
 				  Txt_Results);
   }
 
