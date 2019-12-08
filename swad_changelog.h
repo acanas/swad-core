@@ -490,7 +490,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.87.4 (2019-12-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.87.5 (2019-12-07)"
 #define CSS_FILE		"swad19.85.css"
 #define JS_FILE			"swad19.70.js"
 /*
@@ -498,6 +498,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: En cada partida, poder listar los resultados en una tabla como la de resultados globales
 
+	Version 19.87.5:  Dec 08, 2019	Results of a game are integrated in the box of that game. (248008 lines)
 	Version 19.87.4:  Dec 08, 2019	Code refactoring in games. (247989 lines)
 	Version 19.87.3:  Dec 08, 2019	Changes in layout of matches results. (247997 lines)
 					Copy the following icon to icon public directory:

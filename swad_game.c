@@ -397,6 +397,14 @@ void Gam_ShowOnlyOneGame (long GamCod,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch)
   {
+   Gam_ShowOnlyOneGameBegin (GamCod,ListGameQuestions,PutFormNewMatch);
+   Gam_ShowOnlyOneGameEnd ();
+  }
+
+void Gam_ShowOnlyOneGameBegin (long GamCod,
+			       bool ListGameQuestions,
+			       bool PutFormNewMatch)
+  {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
    struct Game Game;
@@ -420,7 +428,10 @@ void Gam_ShowOnlyOneGame (long GamCod,
    else
       /***** List matches *****/
       Mch_ListMatches (&Game,PutFormNewMatch);
+  }
 
+void Gam_ShowOnlyOneGameEnd (void)
+  {
    /***** End box *****/
    Box_BoxEnd ();
   }

@@ -272,7 +272,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /***** Begin box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_BoxBegin (NULL,Txt_Matches,Mch_PutIconsInListOfMatches,
+   Box_BoxBegin ("100%",Txt_Matches,Mch_PutIconsInListOfMatches,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/

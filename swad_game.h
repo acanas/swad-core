@@ -84,6 +84,10 @@ void Gam_SeeOneGame (void);
 void Gam_ShowOnlyOneGame (long GamCod,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch);
+void Gam_ShowOnlyOneGameBegin (long GamCod,
+			       bool ListGameQuestions,
+			       bool PutFormNewMatch);
+void Gam_ShowOnlyOneGameEnd (void);
 void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 

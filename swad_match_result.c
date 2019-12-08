@@ -207,7 +207,7 @@ void McR_ShowMyMchRes (void)
    McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Results,NULL,
+   Box_BoxBegin ("100%",Txt_Results,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** List games to select *****/
@@ -253,13 +253,13 @@ void McR_ShowMyMchResInGame (void)
    if (asprintf (&GamesSelectedCommas,"%ld",Game.GamCod) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   /***** Show game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
-                        false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+   /***** Game begin *****/
+   Gam_ShowOnlyOneGameBegin (Game.GamCod,
+                             false,	// Do not list game questions
+	                     false);	// Do not put form to start new match
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Results,NULL,
+   Box_BoxBegin ("100%",Txt_Results,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** Start section with match results table *****/
@@ -277,6 +277,9 @@ void McR_ShowMyMchResInGame (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+
+   /***** Game end *****/
+   Gam_ShowOnlyOneGameEnd ();
 
    /***** Free string with list of selected games separated by commas *****/
    free (GamesSelectedCommas);
@@ -310,7 +313,7 @@ static void McR_ShowUsrsMchResults (void)
    McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Results,NULL,
+   Box_BoxBegin ("100%",Txt_Results,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** List games to select *****/
@@ -371,13 +374,13 @@ void McR_ShowUsrsMchResultsInGame (void)
    if (asprintf (&GamesSelectedCommas,"%ld",Game.GamCod) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   /***** Show game *****/
-   Gam_ShowOnlyOneGame (Game.GamCod,
-                        false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+   /***** Game begin *****/
+   Gam_ShowOnlyOneGameBegin (Game.GamCod,
+                             false,	// Do not list game questions
+	                     false);	// Do not put form to start new match
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Results,NULL,
+   Box_BoxBegin ("100%",Txt_Results,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** Make database query *****/
@@ -422,6 +425,9 @@ void McR_ShowUsrsMchResultsInGame (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+
+   /***** Game end *****/
+   Gam_ShowOnlyOneGameEnd ();
 
    /***** Free string with list of selected games separated by commas *****/
    free (GamesSelectedCommas);
