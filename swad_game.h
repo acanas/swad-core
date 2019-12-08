@@ -94,7 +94,7 @@ long Gam_GetParamGameCod (void);
 long Gam_GetParams (void);
 
 void Gam_GetListGames (Gam_Order_t SelectedOrder);
-unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected);
+void Gam_GetListSelectedGamCods (void);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
 void Gam_FreeListGames (void);

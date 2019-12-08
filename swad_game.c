@@ -805,37 +805,35 @@ void Gam_GetListGames (Gam_Order_t SelectedOrder)
 /*****************************************************************************/
 /********************* Get list of game events selected **********************/
 /*****************************************************************************/
-// Return number of games selected
 
-unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected)
+void Gam_GetListSelectedGamCods (void)
   {
    unsigned MaxSizeListGamCodsSelected;
    unsigned NumGame;
    const char *Ptr;
    long GamCod;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   unsigned NumGamesSelected;
 
    /***** Allocate memory for list of games selected *****/
    MaxSizeListGamCodsSelected = Gbl.Games.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((*StrGamCodsSelected = (char *) malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
+   if ((Gbl.Games.GamCodsSelected = (char *) malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
-   Par_GetParMultiToText ("GamCod",*StrGamCodsSelected,MaxSizeListGamCodsSelected);
+   Par_GetParMultiToText ("GamCod",Gbl.Games.GamCodsSelected,MaxSizeListGamCodsSelected);
 
    /***** Set which games will be shown as selected (checkboxes on) *****/
-   if ((*StrGamCodsSelected)[0])	// There are games selected
+   if (Gbl.Games.GamCodsSelected[0])	// Some games selected
      {
       /* Reset selection */
       for (NumGame = 0;
 	   NumGame < Gbl.Games.Num;
 	   NumGame++)
 	 Gbl.Games.Lst[NumGame].Selected = false;
-      NumGamesSelected = 0;
+      Gbl.Games.NumSelected = 0;
 
       /* Set some games as selected */
-      for (Ptr = *StrGamCodsSelected;
+      for (Ptr = Gbl.Games.GamCodsSelected;
 	   *Ptr;
 	   )
 	{
@@ -850,22 +848,20 @@ unsigned Gam_GetListSelectedGamCods (char **StrGamCodsSelected)
 	    if (Gbl.Games.Lst[NumGame].GamCod == GamCod)
 	      {
 	       Gbl.Games.Lst[NumGame].Selected = true;
-	       NumGamesSelected++;
+	       Gbl.Games.NumSelected++;
 	       break;
 	      }
 	}
      }
-   else				// No games selected
+   else					// No games selected
      {
       /***** Set all games as selected *****/
       for (NumGame = 0;
 	   NumGame < Gbl.Games.Num;
 	   NumGame++)
 	 Gbl.Games.Lst[NumGame].Selected = true;
-      NumGamesSelected = Gbl.Games.Num;
+      Gbl.Games.NumSelected = Gbl.Games.Num;
      }
-
-   return NumGamesSelected;
   }
 
 /*****************************************************************************/

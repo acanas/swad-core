@@ -703,14 +703,16 @@ struct Globals
      } DateRange;
    struct
      {
-      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of games
-      struct GameSelected *Lst;	// List of games
+      bool LstIsRead;			// Is the list already read from database...
+					// ...or it needs to be read?
+      unsigned Num;			// Total number of games
+      unsigned NumSelected;		// Number of games selected
+      struct GameSelected *Lst;		// List of games
       Gam_Order_t SelectedOrder;
       unsigned CurrentPage;
       char *ListQuestions;
       long MchCodBeingPlayed;	// Used to refresh game via AJAX
-      char *StrGamCodsSelected;
+      char *GamCodsSelected;	// String with selected game codes separated by separator multiple
      } Games;
    struct
      {

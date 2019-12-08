@@ -2168,12 +2168,12 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRefMchStd	] = {1782,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
 
    [ActSeeAllMyMchRes	] = {1796,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchRes		,NULL},
-   [ActSeeGamMyMchRes	] = {1810,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchRes		,NULL},
+   [ActSeeGamMyMchRes	] = {1810,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowMyMchResInGame		,NULL},
    [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
 
    [ActReqSeeAllMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,McR_SelUsrsToViewUsrsMchRes	,NULL},
    [ActSeeAllMchRes	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_GetUsrsAndShowMchRes	,NULL},
-   [ActSeeGamMchRes	] = {1811,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_GetUsrsAndShowMchResInGame	,NULL},
+   [ActSeeGamMchRes	] = {1811,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowUsrsMchResultsInGame	,NULL},
    [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,McR_ShowOneMchResult		,NULL},
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 
