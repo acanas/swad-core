@@ -7425,101 +7425,15 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 void Tst_SelUsrsToViewUsrsTstResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Results;
-   extern const char *Txt_Users;
    extern const char *Txt_View_test_results;
-   unsigned NumTotalUsrs;
 
-   /***** Get and update type of list,
-          number of columns in class photo
-          and preference about viewing photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
-
-   /***** Get groups to show ******/
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-   /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Hie_CRS,Rol_STD);
-   Usr_GetListUsrs (Hie_CRS,Rol_NET);
-   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Results,NULL,
-                 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
-
-   /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NULL,
-	                              Grp_MY_GROUPS);
-
-   /***** Start section with user list *****/
-   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-
-   if (NumTotalUsrs)
-     {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL,NULL))
-        {
-	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (NULL);
-
-         /***** Begin form *****/
-         Frm_StartForm (ActSeeUsrTstRes);
-         Grp_PutParamsCodGrps ();
-
-         /***** Put list of users to select some of them *****/
-         HTM_TABLE_BeginCenterPadding (2);
-
-         HTM_TR_Begin (NULL);
-
-         HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_Users);
-         HTM_TD_End ();
-
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TABLE_BeginPadding (2);
-         Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
-         Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
-         Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
-         HTM_TABLE_End ();
-         HTM_TD_End ();
-
-         HTM_TR_End ();
-
-         /***** Starting and ending dates in the search *****/
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
-
-         HTM_TABLE_End ();
-
-         /***** Send button *****/
-	 Btn_PutConfirmButton (Txt_View_test_results);
-
-         /***** End form *****/
-         Frm_EndForm ();
-        }
-     }
-   else	// NumTotalUsrs == 0
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_UNK);
-
-   /***** End section with user list *****/
-   HTM_SECTION_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-
-   /***** Free memory for users' list *****/
-   Usr_FreeUsrsList (Rol_TCH);
-   Usr_FreeUsrsList (Rol_NET);
-   Usr_FreeUsrsList (Rol_STD);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-   /***** Free memory for list of selected groups *****/
-   Grp_FreeListCodSelectedGrps ();
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeUsrTstRes,Grp_PutParamsCodGrps,
+				     Txt_Results,
+                                     Hlp_ASSESSMENT_Tests_results,
+                                     Txt_View_test_results,
+				     true);	// Put form with date range
   }
 
 /*****************************************************************************/

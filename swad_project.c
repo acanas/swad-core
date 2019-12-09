@@ -277,7 +277,8 @@ static void Prj_ReqUsrsToSelect (void)
 				     ActSeePrj,Prj_PutCurrentParams,
 				     Txt_Projects,
 	                             Hlp_ASSESSMENT_Projects,
-	                             Txt_View_projects);
+	                             Txt_View_projects,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -2292,7 +2293,8 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
 				     ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
-                                     TxtButton);
+                                     TxtButton,
+				     false);	// Do not put form with date range
 
    /***** Put a form to create/edit project *****/
    Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCod);

@@ -2631,7 +2631,8 @@ void Att_ReqListUsrsAttendanceCrs (void)
 				     ActSeeLstUsrAtt,NULL,
 				     Txt_Attendance_list,
 	                             Hlp_USERS_Attendance_attendance_list,
-	                             Txt_View_attendance);
+	                             Txt_View_attendance,
+				     false);	// Do not put form with date range
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

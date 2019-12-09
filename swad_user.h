@@ -470,7 +470,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,void (*FuncParams) (),
 				       const char *Title,
                                        const char *HelpLink,
-                                       const char *TxtButton);
+                                       const char *TxtButton,
+				       bool PutFormDateRange);
 void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (),
                                     void (*FuncWhenNoUsrsSelected) ());

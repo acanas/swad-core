@@ -874,7 +874,8 @@ void Mai_ReqUsrsToListEmails (void)
 				     ActMaiUsr,NULL,
 				     Txt_Email,
 	                             Hlp_MESSAGES_Email,
-	                             Txt_View_email_addresses);
+	                             Txt_View_email_addresses,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/

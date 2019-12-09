@@ -3109,7 +3109,8 @@ void Brw_AskEditWorksCrs (void)
 				     ActAdmAsgWrkCrs,NULL,
 				     Txt_Assignments_and_other_works,
 	                             Hlp_FILES_Homework_for_teachers,
-	                             Txt_View_homework);
+	                             Txt_View_homework,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/

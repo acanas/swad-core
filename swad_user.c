@@ -6322,9 +6322,12 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,void (*FuncParams) (),
 				       const char *Title,
                                        const char *HelpLink,
-                                       const char *TxtButton)
+                                       const char *TxtButton,
+				       bool PutFormDateRange)
   {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Select_users;
+   extern const char *Txt_Users;
    unsigned NumTotalUsrs;
 
    /***** Begin box *****/
@@ -6366,7 +6369,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 	 /***** Link to register students *****/
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-	 /***** Form to select users ****/
+	 /***** Form to select users and select date range ****/
          /* Begin form */
          Frm_StartForm (NextAction);
 
@@ -6380,17 +6383,35 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          if (FuncParams)
             FuncParams ();
 
+         HTM_TABLE_BeginCenterPadding (2);
+
          /* Put list of users to select some of them */
+         HTM_TR_Begin (NULL);
+
+         HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         HTM_TxtF ("%s:",Txt_Users);
+         HTM_TD_End ();
+
+	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TABLE_BeginCenter ();
          Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
          Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
          Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
          HTM_TABLE_End ();
+         HTM_TD_End ();
 
-         /* Send button */
+         HTM_TR_End ();
+
+         /* Starting and ending dates in the search */
+         if (PutFormDateRange)
+            Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+
+         HTM_TABLE_End ();
+
+         /***** Send button *****/
 	 Btn_PutConfirmButton (TxtButton);
 
-         /* End form */
+         /***** End form *****/
          Frm_EndForm ();
         }
      }
