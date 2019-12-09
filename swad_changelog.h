@@ -490,13 +490,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.88.7 (2019-12-09)"
+#define Log_PLATFORM_VERSION	"SWAD 19.88.8 (2019-12-09)"
 #define CSS_FILE		"swad19.88.5.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-
+// TODO: Ordenar usuarios en resultados en un juego o en una partida por orden alfabético
+ *
+	Version 19.88.8:  Dec 09, 2019	Fixed bug in matches results. (248126 lines)
 	Version 19.88.7:  Dec 09, 2019	Fixed bug in matches results. (248123 lines)
 	Version 19.88.6:  Dec 09, 2019	Fixed bugs in action permissions related to matches results. (248122 lines)
 					2 changes necessary in database:

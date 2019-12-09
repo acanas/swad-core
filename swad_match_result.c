@@ -345,7 +345,7 @@ static void McR_ListAllMchResultsInGam (long GamCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
-			     "SELECT mch_results.UsrCod"	// row[0]
+			     "SELECT DISTINCT mch_results.UsrCod"	// row[0]
 			     " FROM mch_results,mch_matches,gam_games"
 			     " WHERE mch_matches.GamCod=%ld"
 			     " AND mch_matches.MchCod=mch_results.MchCod"
