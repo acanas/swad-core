@@ -770,7 +770,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	   {
 	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
-	    if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    if (asprintf (&Id,"mch_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
