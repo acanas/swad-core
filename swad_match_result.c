@@ -551,6 +551,7 @@ static void McR_ShowResultsBegin (const char *Title,bool ListGamesToSelect)
    extern const char *Hlp_ASSESSMENT_Games_results;
 
    /***** Begin box *****/
+   HTM_SECTION_Begin (McR_RESULTS_BOX_ID);
    Box_BoxBegin ("100%",Title,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
@@ -558,19 +559,20 @@ static void McR_ShowResultsBegin (const char *Title,bool ListGamesToSelect)
    if (ListGamesToSelect)
       McR_ListGamesToSelect ();
 
-   /***** Start section with match results table *****/
+   /***** Begin match results table *****/
    HTM_SECTION_Begin (McR_RESULTS_TABLE_ID);
    HTM_TABLE_BeginWidePadding (2);
   }
 
 static void McR_ShowResultsEnd (void)
   {
-   /***** End section with match results table *****/
+   /***** End match results table *****/
    HTM_TABLE_End ();
    HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -579,6 +581,7 @@ static void McR_ShowResultsEnd (void)
 
 static void McR_ListGamesToSelect (void)
   {
+   extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
@@ -588,7 +591,7 @@ static void McR_ListGamesToSelect (void)
    struct Game Game;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Games,NULL,NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Games,NULL,Hlp_ASSESSMENT_Games_results,Box_CLOSABLE);
 
    /***** Begin form to update the results
 	  depending on the games selected *****/

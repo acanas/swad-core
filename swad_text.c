@@ -33362,44 +33362,44 @@ const char *Txt_Results =
 
 const char *Txt_Results_of_game_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Resultats del joc %s";
+	"Resultats del joc &quot;%s&quot;";
 #elif L==2	// de
-	"Ergebnisse von Spiel %s";
+	"Ergebnisse von Spiel &quot;%s&quot;";
 #elif L==3	// en
-	"Results of game %s";
+	"Results of game &quot;%s&quot;";
 #elif L==4	// es
-	"Resultados del juego %s";
+	"Resultados del juego &quot;%s&quot;";
 #elif L==5	// fr
-	"R&eacute;sultats du jeu %s";
+	"R&eacute;sultats du jeu &quot;%s&quot;";
 #elif L==6	// gn
-	"Resultados del juego %s";	// Okoteve traducción
+	"Resultados del juego &quot;%s&quot;";	// Okoteve traducción
 #elif L==7	// it
-	"Risultati del gioco %s";
+	"Risultati del gioco &quot;%s&quot;";
 #elif L==8	// pl
-	"Wyniki gry %s";
+	"Wyniki gry &quot;%s&quot;";
 #elif L==9	// pt
-	"Resultados do jogo %s";
+	"Resultados do jogo &quot;%s&quot;";
 #endif
 
 const char *Txt_Results_of_match_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Resultats de la partida %s";
+	"Resultats de la partida &quot;%s&quot;";
 #elif L==2	// de
-	"Ergebnisse von Spiel %s";
+	"Ergebnisse von Spiel &quot;%s&quot;";
 #elif L==3	// en
-	"Results of match %s";
+	"Results of match &quot;%s&quot;";
 #elif L==4	// es
-	"Resultados de la partida %s";
+	"Resultados de la partida &quot;%s&quot;";
 #elif L==5	// fr
-	"R&eacute;sultats du match %s";
+	"R&eacute;sultats du match &quot;%s&quot;";
 #elif L==6	// gn
-	"Resultados de la partida %s";	// Okoteve traducción
+	"Resultados de la partida &quot;%s&quot;";	// Okoteve traducción
 #elif L==7	// it
-	"Risultati della partita %s";
+	"Risultati della partita &quot;%s&quot;";
 #elif L==8	// pl
-	"Wyniki mecz %s";
+	"Wyniki mecz &quot;%s&quot;";
 #elif L==9	// pt
-	"Resultados do jogo %s";
+	"Resultados do jogo &quot;%s&quot;";
 #endif
 
 const char *Txt_results_per_page =

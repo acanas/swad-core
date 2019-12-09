@@ -596,12 +596,12 @@ static void Gam_PutIconToShowResultsOfGame (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,McR_RESULTS_TABLE_ID,Gam_PutParams);
+         Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,McR_RESULTS_BOX_ID,Gam_PutParams);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,McR_RESULTS_TABLE_ID,Gam_PutParams);
+         Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,McR_RESULTS_BOX_ID,Gam_PutParams);
 	 break;
       default:
 	 break;

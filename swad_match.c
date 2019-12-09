@@ -762,7 +762,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
       /* Result is visible by me */
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
-      Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_TABLE_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,
 				     "trophy.svg",
 				     Txt_Results);
@@ -785,7 +785,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
 
       /* Show match results */
-      Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_TABLE_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,
 				     "trophy.svg",
 				     Txt_Results);
