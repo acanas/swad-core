@@ -6392,8 +6392,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          HTM_TxtF ("%s:",Txt_Users);
          HTM_TD_End ();
 
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TABLE_BeginCenter ();
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         HTM_TABLE_BeginCenterPadding (2);
          Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
          Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
          Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);

@@ -380,7 +380,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TxtF ("%s:",Txt_Users);
          HTM_TD_End ();
 
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TABLE_Begin (NULL);
          Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
          Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
@@ -403,7 +403,7 @@ void Sta_AskShowCrsHits (void)
          HTM_TxtF ("%s:",Txt_Show);
          HTM_TD_End ();
 
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
               Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
@@ -545,7 +545,7 @@ void Sta_AskShowGblHits (void)
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
    for (RoleStat = (Sta_Role_t) 0;
@@ -574,7 +574,7 @@ void Sta_AskShowGblHits (void)
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 		       1 << Hie_INS |
@@ -597,7 +597,7 @@ void Sta_AskShowGblHits (void)
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
@@ -722,7 +722,7 @@ static void Sta_WriteSelectorAction (void)
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",Gbl.Stat.NumAction == 0,false,

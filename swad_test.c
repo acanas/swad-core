@@ -172,7 +172,7 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
 static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
-                                 bool ShowOnlyEnabledTags,unsigned NumCols);
+                                 bool ShowOnlyEnabledTags);
 static void Tst_ShowFormEditTags (void);
 static void Tst_PutIconEnable (long TagCod,const char *TagTxt);
 static void Tst_PutIconDisable (long TagCod,const char *TagTxt);
@@ -182,7 +182,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
-static void Tst_ShowFormAnswerTypes (unsigned NumCols);
+static void Tst_ShowFormAnswerTypes (void);
 static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
@@ -329,10 +329,10 @@ void Tst_ShowFormAskTst (void)
          HTM_TABLE_BeginPadding (2);
 
          /***** Selection of tags *****/
-         Tst_ShowFormSelTags (NumRows,mysql_res,true,1);
+         Tst_ShowFormSelTags (NumRows,mysql_res,true);
 
          /***** Selection of types of answers *****/
-         Tst_ShowFormAnswerTypes (1);
+         Tst_ShowFormAnswerTypes ();
 
          /***** Number of questions to generate ****/
          HTM_TR_Begin (NULL);
@@ -1285,10 +1285,10 @@ void Tst_ShowFormAskEditTsts (void)
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
+      Tst_ShowFormSelTags (NumRows,mysql_res,false);
 
       /***** Selection of types of answers *****/
-      Tst_ShowFormAnswerTypes (2);
+      Tst_ShowFormAnswerTypes ();
 
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
@@ -1341,7 +1341,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
+      Tst_ShowFormSelTags (NumRows,mysql_res,false);
 
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
@@ -1670,7 +1670,7 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
-                                 bool ShowOnlyEnabledTags,unsigned NumCols)
+                                 bool ShowOnlyEnabledTags)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Tags;
@@ -1696,10 +1696,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    HTM_TD_End ();
 
    /***** Select all tags *****/
-   if (NumCols > 1)
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",NumCols);
-   else
-      HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
 
    HTM_TABLE_BeginPadding (2);
    HTM_TR_Begin (NULL);
@@ -2310,7 +2307,7 @@ static void Tst_CheckAndCorrectNumbersQst (void)
 /***************** Show form for select the types of answers *****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormAnswerTypes (unsigned NumCols)
+static void Tst_ShowFormAnswerTypes (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
@@ -2329,10 +2326,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    HTM_TD_End ();
 
    /***** Select all types of answers *****/
-   if (NumCols > 1)
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",NumCols);
-   else
-      HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_TABLE_BeginPadding (2);
 
    HTM_TR_Begin (NULL);

@@ -2204,6 +2204,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:8pt;
 	}
 
+/****************************** Date range form ******************************/
+.DATE_RANGE
+	{
+	float:left;	/* To display something after the table in the same line */
+	}
+
 /*********************************** Lists ***********************************/
 .LIST_LEFT, .LIST_TREE
 	{

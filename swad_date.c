@@ -431,9 +431,9 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
 
+   /***** Start date-time *****/
    HTM_TR_Begin (NULL);
 
-   /***** Start date-time *****/
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_START_END_TIME[Dat_START_TIME]);
@@ -451,10 +451,9 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 				                SetHMS000000To235959 ? Dat_HMS_TO_000000 :	// Set hour, minute and second to 00:00:00
 				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second to 00:00:00
 				                false);						// Don't submit on change
-   HTM_TD_End ();
 
-   /***** "Yesterday" and "Today" buttons *****/
-   HTM_TD_Begin ("rowspan=\"2\" class=\"LM\"");
+   /* "Yesterday" and "Today" buttons */
+   HTM_NBSP ();
    HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
 		     "onclick=\"setDateToYesterday('Start','End');\"");
    HTM_INPUT_BUTTON ("Today",Txt_Today,
@@ -462,9 +461,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    HTM_TD_End ();
 
    HTM_TR_End ();
-   HTM_TR_Begin (NULL);
 
    /***** End date-time *****/
+   HTM_TR_Begin (NULL);
+
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_START_END_TIME[Dat_END_TIME]);
@@ -560,7 +560,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    char *ParamNameTimeUTC;
 
    /***** Begin table *****/
-   HTM_TABLE_Begin (NULL);
+   HTM_TABLE_Begin ("DATE_RANGE");
    HTM_TR_Begin (NULL);
 
    /***** Year *****/
