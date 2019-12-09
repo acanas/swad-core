@@ -345,13 +345,18 @@ static void McR_ListAllMchResultsInGam (long GamCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
-			     "SELECT DISTINCT mch_results.UsrCod"	// row[0]
+			     "SELECT users.UsrCod FROM"
+			     " (SELECT DISTINCT mch_results.UsrCod AS UsrCod"	// row[0]
 			     " FROM mch_results,mch_matches,gam_games"
 			     " WHERE mch_matches.GamCod=%ld"
 			     " AND mch_matches.MchCod=mch_results.MchCod"
 			     " AND mch_matches.GamCod=gam_games.GamCod"
-			     " AND gam_games.CrsCod=%ld"	// Extra check
-			     " ORDER BY mch_results.UsrCod",	// TODO: Order by name
+			     " AND gam_games.CrsCod=%ld)"			// Extra check
+			     " AS users,usr_data"
+			     " WHERE users.UsrCod=usr_data.UsrCod"
+			     " ORDER BY usr_data.Surname1,"
+			               "usr_data.Surname2,"
+			               "usr_data.FirstName",
 			     GamCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumUsrs)
@@ -426,13 +431,18 @@ static void McR_ListAllMchResultsInMch (long MchCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
-			     "SELECT mch_results.UsrCod"	// row[0]
+			     "SELECT users.UsrCod FROM"
+			     " (SELECT mch_results.UsrCod AS UsrCod"	// row[0]
 			     " FROM mch_results,mch_matches,gam_games"
 			     " WHERE mch_results.MchCod=%ld"
 			     " AND mch_results.MchCod=mch_matches.MchCod"
 			     " AND mch_matches.GamCod=gam_games.GamCod"
-			     " AND gam_games.CrsCod=%ld"	// Extra check
-			     " ORDER BY mch_results.UsrCod",	// TODO: Order by name
+			     " AND gam_games.CrsCod=%ld)"		// Extra check
+			     " AS users,usr_data"
+			     " WHERE users.UsrCod=usr_data.UsrCod"
+			     " ORDER BY usr_data.Surname1,"
+			               "usr_data.Surname2,"
+			               "usr_data.FirstName",
 			     MchCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumUsrs)
