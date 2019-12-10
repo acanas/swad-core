@@ -212,10 +212,9 @@ static void Gam_ListAllGames (void)
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_GAMES,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_GAMES,
+				  &Pagination,
+				  0);
 
    if (Gbl.Games.Num)
      {
@@ -272,10 +271,9 @@ static void Gam_ListAllGames (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
    /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_GAMES,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_GAMES,
+				  &Pagination,
+				  0);
 
    /***** Button to create a new game *****/
    if (Gam_CheckIfICanEditGames ())

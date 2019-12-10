@@ -128,14 +128,16 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 /*****************************************************************************/
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
-                                    long ThrCod,
-                                    struct Pagination *Pagination)
+                                    struct Pagination *Pagination,
+                                    long ThrCod)
   {
-   HTM_DIV_Begin ("class=\"CM\"");
-   Pag_WriteLinksToPages (WhatPaginate,
-                          ThrCod,
-                          Pagination,true,NULL,"PAG_TXT",false);
-   HTM_DIV_End ();
+   if (Pagination->MoreThanOnePage)
+     {
+      HTM_DIV_Begin ("class=\"CM\"");
+      Pag_WriteLinksToPages (WhatPaginate,Pagination,ThrCod,
+			     true,NULL,"PAG_TXT",false);
+      HTM_DIV_End ();
+     }
   }
 
 /*****************************************************************************/
@@ -143,8 +145,8 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 /*****************************************************************************/
 
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
-                            long ThrCod,
                             struct Pagination *Pagination,
+                            long ThrCod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)

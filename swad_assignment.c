@@ -151,10 +151,9 @@ static void Asg_ShowAllAssignments (void)
      }
 
    /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
+				  &Pagination,
+				  0);
 
    if (Gbl.Asgs.Num)
      {
@@ -176,10 +175,9 @@ static void Asg_ShowAllAssignments (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
    /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
+				  &Pagination,
+				  0);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())

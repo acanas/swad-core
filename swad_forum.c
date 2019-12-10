@@ -1037,10 +1037,9 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       Gbl.Forum.CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
       /***** Write links to pages *****/
-      if (PaginationPsts.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
-                                        Gbl.Forum.ForumSelected.ThrCod,
-                                        &PaginationPsts);
+      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
+				     &PaginationPsts,
+				     Gbl.Forum.ForumSelected.ThrCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -1098,10 +1097,9 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       HTM_TABLE_End ();
 
       /***** Write again links to pages *****/
-      if (PaginationPsts.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
-                                        Gbl.Forum.ForumSelected.ThrCod,
-                                        &PaginationPsts);
+      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
+				     &PaginationPsts,
+				     Gbl.Forum.ForumSelected.ThrCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -2476,10 +2474,9 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    if (NumThrs)
      {
       /***** Write links to all the pages in the listing of threads *****/
-      if (PaginationThrs.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
-                                        0,
-                                        &PaginationThrs);
+      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
+				     &PaginationThrs,
+				     0);
 
       /***** Heading row *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -2530,10 +2527,9 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       HTM_TABLE_End ();
 
       /***** Write links to all the pages in the listing of threads *****/
-      if (PaginationThrs.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
-                                        0,
-                                        &PaginationThrs);
+      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
+				     &PaginationThrs,
+				     0);
      }
 
    /***** Put a form to write the first post of a new thread *****/
@@ -3360,8 +3356,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       Pag_CalculatePagination (&PaginationPsts);
       PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,
-                             Thr.ThrCod,
                              &PaginationPsts,
+                             Thr.ThrCod,
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,
                              Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :

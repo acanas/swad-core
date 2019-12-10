@@ -425,10 +425,9 @@ static void Prj_ShowPrjsInCurrentPage (void)
    if (Gbl.Prjs.Num)
      {
       /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
-					0,
-					&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
+				     &Pagination,
+				     0);
 
       /***** Allocate memory for the project *****/
       Prj_AllocMemProject (&Prj);
@@ -471,10 +470,9 @@ static void Prj_ShowPrjsInCurrentPage (void)
       Prj_FreeMemProject (&Prj);
 
       /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
-					0,
-					&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
+				     &Pagination,
+				     0);
      }
    else	// No projects created
       Ale_ShowAlert (Ale_INFO,Txt_No_projects);

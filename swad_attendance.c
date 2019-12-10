@@ -212,10 +212,9 @@ static void Att_ShowAllAttEvents (void)
      }
 
    /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+				  &Pagination,
+				  0);
 
    if (Gbl.AttEvents.Num)
      {
@@ -263,10 +262,9 @@ static void Att_ShowAllAttEvents (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+				  &Pagination,
+				  0);
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)

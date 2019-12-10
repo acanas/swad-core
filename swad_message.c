@@ -1816,10 +1816,9 @@ static void Msg_ShowSentOrReceivedMessages (void)
 	                              Gbl.Msg.CurrentPage);
 
       /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
-                                        0,
-                                        &Pagination);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
+				     &Pagination,
+				     0);
 
       /***** Show received / sent messages in this page *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -1840,10 +1839,9 @@ static void Msg_ShowSentOrReceivedMessages (void)
       HTM_TABLE_End ();
 
       /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
-                                        0,
-                                        &Pagination);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
+				     &Pagination,
+				     0);
      }
 
    /***** End box *****/

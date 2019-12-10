@@ -229,10 +229,9 @@ static void Svy_ListAllSurveys (void)
      }
 
    /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+				  &Pagination,
+				  0);
 
    if (Gbl.Svys.Num)
      {
@@ -284,10 +283,9 @@ static void Svy_ListAllSurveys (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
 
    /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
-                                     0,
-                                     &Pagination);
+   Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+				  &Pagination,
+				  0);
 
    /***** Button to create a new survey *****/
    if (Svy_CheckIfICanCreateSvy ())
