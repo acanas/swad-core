@@ -639,7 +639,7 @@ CREATE TABLE IF NOT EXISTS mch_matches (
 	Title VARCHAR(2047) NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
-	Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing',
+	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
 	NumCols INT NOT NULL DEFAULT 1,
 	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',

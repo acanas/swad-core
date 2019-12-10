@@ -45,17 +45,18 @@ struct GameSelected
 
 struct Game
   {
-   long GamCod;		// Game code
-   long CrsCod;		// Course code
-   long UsrCod;		// Author code
-   double MaxGrade;	// Score range [0...max.score]
-			// will be converted to
-			// grade range [0...max.grade]
+   long GamCod;			// Game code
+   long CrsCod;			// Course code
+   long UsrCod;			// Author code
+   double MaxGrade;		// Score range [0...max.score]
+				// will be converted to
+				// grade range [0...max.grade]
    char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Hidden;		// Game is hidden
-   unsigned NumQsts;	// Number of questions in the game
-   unsigned NumMchs;	// Number of matches in the game
+   bool Hidden;			// Game is hidden
+   unsigned NumQsts;		// Number of questions in the game
+   unsigned NumMchs;		// Number of matches in the game
+   unsigned NumUnfinishedMchs;	// Number of unfinished matches in the game
   };
 
 #define Gam_NUM_ORDERS 3

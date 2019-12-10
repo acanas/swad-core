@@ -490,13 +490,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.88.11 (2019-12-10)"
+#define Log_PLATFORM_VERSION	"SWAD 19.89 (2019-12-10)"
 #define CSS_FILE		"swad19.88.5.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-// TODO: ¿Poner en color rojo las fechas de los juegos que tengan todas las partidas terminadas?
+
+	Version 19.89:    Dec 10, 2019	Game dates are in red colour if all their matches are finished or ot don't have matches. (248186 lines)
+					4 changes necessary in database:
+ALTER TABLE mch_matches CHANGE COLUMN Showing Showing ENUM('nothing','stem','answers','results','start','end') NOT NULL DEFAULT 'nothing';
+UPDATE mch_matches SET Showing='start' WHERE QstInd='0' AND Showing='nothing';
+UPDATE mch_matches SET Showing='end' WHERE QstInd='2147483647' AND Showing='nothing';
+ALTER TABLE mch_matches CHANGE COLUMN Showing Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start';
 
 	Version 19.88.11: Dec 10, 2019	Fixed bug in selection of groups. (248141 lines)
 	Version 19.88.10: Dec 10, 2019	Fixed bug in matches results. (248145 lines)

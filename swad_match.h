@@ -37,15 +37,16 @@
 
 #define Mch_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
 
-#define Mch_NUM_SHOWING 4
+#define Mch_NUM_SHOWING 5
 typedef enum
   {
-   Mch_NOTHING,	// Don't show anything
+   Mch_START,	// Start: don't show anything
    Mch_STEM,	// Showing only the question stem
    Mch_ANSWERS,	// Showing the question stem and the answers
    Mch_RESULTS,	// Showing the results
+   Mch_END,	// End: don't show anything
   } Mch_Showing_t;
-#define Mch_SHOWING_DEFAULT Mch_NOTHING
+#define Mch_SHOWING_DEFAULT Mch_START
 
 struct Match
   {
@@ -109,13 +110,14 @@ void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 
 unsigned Mch_GetNumMchsInGame (long GamCod);
+unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod);
 
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Match *Match);
 bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);
-void Mch_RemoveQuestionAnswer (void);
+void Mch_RemoveMyQuestionAnswer (void);
 void Mch_RefreshMatchTch (void);
 void Mch_RefreshMatchStd (void);
 

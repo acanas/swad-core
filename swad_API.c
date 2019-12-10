@@ -4811,9 +4811,9 @@ int swad__getMatchStatus (struct soap *soap,
 				  "Type of answer not valid in a game.");
 
    /***** Join match *****/
-   getMatchStatusOut->matchCode = 0;		// == 0 ==> wait
-   if (Match.Status.Playing &&				// Match is being played
-       Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+   getMatchStatusOut->matchCode = 0;	// == 0 ==> wait
+   if (Match.Status.Playing &&		// Match is being played
+       Match.Status.Showing != Mch_END)	// Unfinished
       /* Update players */
       getMatchStatusOut->matchCode = Mch_RegisterMeAsPlayerInMatch (&Match) ? matchCode :	//  > 0 ==> OK
 									      -1;		//  < 0 ==> can not join this match

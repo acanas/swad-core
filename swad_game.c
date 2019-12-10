@@ -160,7 +160,7 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
+static bool Gam_CheckIfEditable (const struct Game *Game);
 
 static long Gam_GetCurrentGamCod (void);
 
@@ -251,8 +251,8 @@ static void Gam_ListAllGames (void)
 
       HTM_TR_End ();
 
-      /***** Write all the games *****/
-      for (NumGame = Pagination.FirstItemVisible;
+      /***** Write all games *****/
+      for (NumGame  = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
 	{
@@ -442,6 +442,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    static unsigned UniqueId = 0;
    char *Id;
    Dat_StartEndTime_t StartEndTime;
+   const char *Color;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set anchor string *****/
@@ -470,21 +471,22 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
 
    /***** Start/end date/time *****/
    UniqueId++;
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
       if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
+      Color = Game->NumUnfinishedMchs ? (Game->Hidden ? "DATE_GREEN_LIGHT":
+							"DATE_GREEN") :
+					(Game->Hidden ? "DATE_RED_LIGHT":
+							"DATE_RED");
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,Game->Hidden ? "DATE_GREEN_LIGHT":
-				         "DATE_GREEN");
+		       Id,Color);
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,Game->Hidden ? "DATE_GREEN_LIGHT":
-				         "DATE_GREEN",
-		       Gbl.RowEvenOdd);
+		       Id,Color,Gbl.RowEvenOdd);
       if (Game->TimeUTC[Dat_START_TIME])
 	 Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -934,6 +936,9 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
       /* Get number of matches */
       Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
+
+      /* Get number of unfinished matches */
+      Game->NumUnfinishedMchs = Mch_GetNumUnfinishedMchsInGame (Game->GamCod);
      }
    else
       /* Initialize to empty game */
@@ -989,6 +994,7 @@ static void Gam_ResetGame (struct Game *Game)
    Game->Title[0]                = '\0';
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
+   Game->NumUnfinishedMchs       = 0;
    Game->Hidden                  = false;
   }
 
@@ -1514,7 +1520,7 @@ void Gam_RequestNewQuestion (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Show form to create a new question in this game *****/
       Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
@@ -1540,9 +1546,10 @@ void Gam_ListTstQuestionsToSelect (void)
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** List several test questions for selection *****/
       Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
@@ -1683,9 +1690,10 @@ unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 
    /***** Get previous question index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (row[0])
-      if (sscanf (row[0],"%u",&PrevQstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting previous question index.");
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&PrevQstInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting previous question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1716,9 +1724,10 @@ unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
 
    /***** Get next question index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (row[0])
-      if (sscanf (row[0],"%u",&NextQstInd) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting next question index.");
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&NextQstInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting next question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1737,7 +1746,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    extern const char *Txt_This_game_has_no_questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   bool ICanEditQuestions = Gam_GetNumMchsGameAndCheckIfEditable (Game);
+   bool ICanEditQuestions = Gam_CheckIfEditable (Game);
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1996,7 +2005,7 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Get selected questions *****/
       /* Allocate space for selected question codes */
@@ -2122,7 +2131,7 @@ void Gam_RequestRemoveQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstInd = Gam_GetParamQstInd ();
@@ -2160,7 +2169,7 @@ void Gam_RemoveQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstInd = Gam_GetParamQstInd ();
@@ -2220,7 +2229,7 @@ void Gam_MoveUpQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstIndBottom = Gam_GetParamQstInd ();
@@ -2271,7 +2280,7 @@ void Gam_MoveDownQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   if (Gam_CheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstIndTop = Gam_GetParamQstInd ();
@@ -2365,16 +2374,13 @@ static void Gam_ExchangeQuestions (long GamCod,
 /*****************************************************************************/
 /*********** Get number of matches and check is edition is possible **********/
 /*****************************************************************************/
-// Games with matches should not be edited
+// Before calling this function, number of matches must be calculated
 
-static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game)
+static bool Gam_CheckIfEditable (const struct Game *Game)
   {
-   /***** Get number of matches *****/
-   Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
-
    if (Gam_CheckIfICanEditGames ())
       /***** Questions are editable only if game has no matches *****/
-      return (bool) (Game->NumMchs == 0);
+      return (bool) (Game->NumMchs == 0);	// Games with matches should not be edited
    else
       return false;	// Questions are not editable
   }
