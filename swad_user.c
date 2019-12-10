@@ -6353,8 +6353,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    Box_BoxBegin (NULL,Txt_Select_users,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (FuncParams,
-	                              Grp_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (FuncParams,Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -8162,8 +8161,7 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,
-	                                 Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -8331,8 +8329,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,
-	                                 Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

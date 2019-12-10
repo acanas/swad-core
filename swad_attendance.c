@@ -1914,8 +1914,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,
-	                              Grp_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

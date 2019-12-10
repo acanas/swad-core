@@ -113,7 +113,7 @@ void McR_SelUsrsToViewMchResults (void)
    extern const char *Txt_View_matches_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeAllMchResCrs,Grp_PutParamsCodGrps,
+				     ActSeeAllMchResCrs,NULL,
 				     Txt_Results,
                                      Hlp_ASSESSMENT_Games_results,
                                      Txt_View_matches_results,
@@ -344,7 +344,7 @@ static void McR_ListAllMchResultsInGam (long GamCod)
    McR_ShowHeaderMchResults (Usr_OTHER);
 
    /***** Get all users who have answered any match question in this game *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
+   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in game",
 			     "SELECT users.UsrCod FROM"
 			     " (SELECT DISTINCT mch_results.UsrCod AS UsrCod"	// row[0]
 			     " FROM mch_results,mch_matches,gam_games"
@@ -430,7 +430,7 @@ static void McR_ListAllMchResultsInMch (long MchCod)
    McR_ShowHeaderMchResults (Usr_OTHER);
 
    /***** Get all users who have answered any match question in this game *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
+   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in match",
 			     "SELECT users.UsrCod FROM"
 			     " (SELECT mch_results.UsrCod AS UsrCod"	// row[0]
 			     " FROM mch_results,mch_matches,gam_games"
@@ -714,8 +714,17 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
      }
    else if (GamesSelectedCommas)
      {
-      if (asprintf (&GamSubQuery," AND mch_matches.GamCod IN (%s)",GamesSelectedCommas) < 0)
-	 Lay_NotEnoughMemoryExit ();
+      if (GamesSelectedCommas[0])
+	{
+	 if (asprintf (&GamSubQuery," AND mch_matches.GamCod IN (%s)",
+		       GamesSelectedCommas) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	}
+      else
+	{
+	 if (asprintf (&GamSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	}
      }
    else
      {
@@ -725,7 +734,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
    /***** Make database query *****/
    NumResults =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results",
 			      "SELECT mch_results.MchCod,"			// row[0]
 				     "UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
 				     "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]

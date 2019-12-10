@@ -7423,7 +7423,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
    extern const char *Txt_View_test_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeUsrTstRes,Grp_PutParamsCodGrps,
+				     ActSeeUsrTstRes,NULL,
 				     Txt_Results,
                                      Hlp_ASSESSMENT_Tests_results,
                                      Txt_View_test_results,

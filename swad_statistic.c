@@ -348,8 +348,7 @@ void Sta_AskShowCrsHits (void)
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NULL,
-	                              Grp_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (NULL,Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

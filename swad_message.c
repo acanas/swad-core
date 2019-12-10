@@ -241,8 +241,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,
-	                                    Grp_MY_GROUPS);
+	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,Grp_MY_GROUPS);
 
 	 /***** Start section with user list *****/
          HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
