@@ -1301,7 +1301,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
-      Med_ShowMedia (&Media,"FOR_IMG_CONTAINER","FOR_IMG");
+      Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");
      }
    else
       HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);

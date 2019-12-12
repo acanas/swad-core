@@ -1051,16 +1051,6 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    bool ThereIsSpaceChar = true;	// Indicates if the character before was a space. Set to true to respect the initial spaces.
    char StrSpecialChar[Str_MAX_BYTES_SPECIAL_CHAR + 1];
 
-/*
-  if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-    {
-     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	       "Str_ChangeFormat (&quot;%s&quot;)",
-	       Str);
-     Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
-    }
-*/
-
    if (ChangeTo != Str_DONT_CHANGE)
      {
       /***** Allocate memory for a destination string where to do the changes *****/

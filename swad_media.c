@@ -410,8 +410,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Icons *****/
    /* Start icons */
-   HTM_DIV_Begin ("class=\"PREF_CONTAINERS\"");			// icons containers
-   HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");			// icons container
+   HTM_DIV_Begin ("class=\"PREF_CONTS\"");			// icons containers
+   HTM_DIV_Begin ("class=\"PREF_CONT\"");			// icons container
 
    /* Draw icons */
    for (NumUploader = 0;

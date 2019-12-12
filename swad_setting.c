@@ -394,7 +394,7 @@ unsigned Set_GetParamSideCols (void)
 */
 void Set_StartSettingsHead (void)
   {
-   HTM_DIV_Begin ("class=\"PREF_CONTAINERS\"");
+   HTM_DIV_Begin ("class=\"PREF_CONTS\"");
   }
 
 void Set_EndSettingsHead (void)
@@ -404,7 +404,7 @@ void Set_EndSettingsHead (void)
 
 void Set_StartOneSettingSelector (void)
   {
-   HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"PREF_CONT\"");
   }
 
 void Set_EndOneSettingSelector (void)

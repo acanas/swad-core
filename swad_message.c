@@ -3056,7 +3056,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-      Med_ShowMedia (&Media,"MSG_IMG_CONTAINER","MSG_IMG");
+      Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
       HTM_TD_End ();
 
       HTM_TR_End ();

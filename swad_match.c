@@ -164,6 +164,8 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_WriteElapsedTimeInMch (struct Match *Match);
 static void Mch_WriteElapsedTimeInQst (struct Match *Match);
 static void Mch_WriteHourglass (struct Match *Match);
+static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
+				  const char *Class,const char *Txt);
 static void Mch_WriteNumRespondersQst (struct Match *Match);
 
 static void Mch_ShowRightColumnTch (const struct Match *Match);
@@ -200,7 +202,7 @@ static unsigned Mch_GetParamNumOpt (void);
 
 static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 			      long MchCod,const char *Icon,const char *Txt);
-static void Mch_PutBigButtonOff (const char *Icon);
+static void Mch_PutBigButtonHidden (const char *Icon);
 static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
@@ -1908,8 +1910,7 @@ void Mch_StartCountdown (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Start countdown *****/
-   if (NewCountdown >= 0)
-      Match.Status.Countdown = NewCountdown;
+   Match.Status.Countdown = NewCountdown;
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -2282,83 +2283,102 @@ static void Mch_WriteElapsedTimeInQst (struct Match *Match)
 
 static void Mch_WriteHourglass (struct Match *Match)
   {
+   const char *Class;
+   const char *Icon;
+
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
 
-   /***** Start form *****/
-   Frm_StartForm (ActMchCntDwn);
-   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+   /***** Put forms to start countdown *****/
+   Mch_PutFormCountdown (Match,-1L,"MCH_GREEN"    ,"&nbsp;&infin;&nbsp;");
+   Mch_PutFormCountdown (Match,60L,"MCH_LIMEGREEN","&nbsp;60&Prime;"    );
+   Mch_PutFormCountdown (Match,30L,"MCH_YELLOW"   ,"&nbsp;30&Prime;"    );
+   Mch_PutFormCountdown (Match,10L,"MCH_RED"      ,"&nbsp;10&Prime;"    );
+
+   /***** Set hourglass icon depending on countdown *****/
+   if (Match->Status.Showing == Mch_END)	// Match over
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_HIDDEN MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown < 0)	// No countdown
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > 30)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_LIMEGREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > 10)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_YELLOW";
+      Icon  = "fa-hourglass-half";
+     }
+   else						// Countdown about to end
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_RED";
+      Icon  = "fa-hourglass-end";
+     }
 
    /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
-   HTM_TxtF ("<i class=\"fas %s\"></i>",
-	      Match->Status.Countdown < 0                                 ? "fa-hourglass-start" :	// No countdown
-	     (Match->Status.Countdown > Cfg_SECONDS_TO_REFRESH_MATCH_TCH) ? "fa-hourglass-half" :	// Countdown in progress
-		                                                            "fa-hourglass-end");	// Countdown about to end
+   HTM_BR ();
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_BUTTON_Begin ("Cuenta atr&aacute;s",Class,NULL);	// TODO: Need translation!!!!
+   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
    HTM_BR ();
    if (Match->Status.Countdown > 0)
-      HTM_TxtF ("%ld&quot;",Match->Status.Countdown);
+      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
    else
       HTM_NBSP ();
    HTM_BUTTON_End ();
    HTM_DIV_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
-
-   HTM_BR ();
-
-   /***** Start form *****/
-   Frm_StartForm (ActMchCntDwn);
-   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-   Par_PutHiddenParamLong (NULL,"Countdown",60L);
-
-   /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
-   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
-   HTM_Txt ("60&quot;");
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
-
-   HTM_NBSP ();
-
-   /***** Start form *****/
-   Frm_StartForm (ActMchCntDwn);
-   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-   Par_PutHiddenParamLong (NULL,"Countdown",30L);
-
-   /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
-   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
-   HTM_Txt ("30&quot;");
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
-   /***** End form *****/
-   Frm_EndForm ();
-
-   HTM_NBSP ();
-
-   /***** Start form *****/
-   Frm_StartForm (ActMchCntDwn);
-   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-   Par_PutHiddenParamLong (NULL,"Countdown",10L);
-
-   /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
-   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
-   HTM_Txt ("10&quot;");
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
-
    /***** End container *****/
    HTM_DIV_End ();
+  }
+
+static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
+				  const char *Color,const char *Txt)
+  {
+   char *Class;
+   bool PutForm = Match->Status.Showing != Mch_END;
+
+   if (PutForm)
+     {
+      /***** Start form *****/
+      Frm_StartForm (ActMchCntDwn);
+      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+      Par_PutHiddenParamLong (NULL,"Countdown",Countdown);
+
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+
+   /***** Put icon *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
+   if (PutForm)
+      HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s",Class);	// TODO: Need translation!!!!
+   else
+      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
+   HTM_Txt (Txt);
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+
+   /***** Free class *****/
+   free (Class);
+
+   /***** End form *****/
+   if (PutForm)
+      Frm_EndForm ();
   }
 
 static void Mch_WriteNumRespondersQst (struct Match *Match)
@@ -2546,10 +2566,10 @@ static void Mch_PutMatchControlButtons (const struct Match *Match)
    extern const char *Txt_Resume;
 
    /***** Start buttons container *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTONS_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_BUTTONS_CONT\"");
 
    /***** Left button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_LEFT_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_BUTTON_LEFT_CONT\"");
    switch (Match->Status.Showing)
      {
       case Mch_START:
@@ -2565,7 +2585,7 @@ static void Mch_PutMatchControlButtons (const struct Match *Match)
    HTM_DIV_End ();
 
    /***** Center button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONT\"");
    if (Match->Status.Playing)					// Match is being played
       /* Put button to pause match */
       Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
@@ -2581,7 +2601,7 @@ static void Mch_PutMatchControlButtons (const struct Match *Match)
 	    break;
 	 case Mch_END:			// Match over
 	    /* Put disabled button to play match */
-	    Mch_PutBigButtonOff (Mch_ICON_PLAY);
+	    Mch_PutBigButtonHidden (Mch_ICON_PLAY);
 	    break;
 	 default:
 	    /* Put button to resume match */
@@ -2592,7 +2612,7 @@ static void Mch_PutMatchControlButtons (const struct Match *Match)
    HTM_DIV_End ();
 
    /***** Right button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_RIGHT_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_BUTTON_RIGHT_CONT\"");
    if (Match->Status.Showing == Mch_END)	// Match over
       /* Put button to close browser tab */
       Mch_PutBigButtonClose ();
@@ -2760,8 +2780,8 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 
    /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_RED");
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED");
    HTM_Txt ("<i class=\"fas fa-trash\"></i>");
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -3209,7 +3229,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
    HTM_BUTTON_SUBMIT_Begin (Txt,"BT_LINK MCH_BUTTON_ON ICO_BLACK",NULL);
    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
    HTM_BUTTON_End ();
@@ -3219,11 +3239,11 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    Frm_EndForm ();
   }
 
-static void Mch_PutBigButtonOff (const char *Icon)
+static void Mch_PutBigButtonHidden (const char *Icon)
   {
    /***** Put inactive icon *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_BUTTON_BUTTON_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_OFF ICO_BLACK",NULL);
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_BUTTON_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK",NULL);
    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -3234,8 +3254,8 @@ static void Mch_PutBigButtonClose (void)
    extern const char *Txt_Close;
 
    /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   HTM_BUTTON_BUTTON_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_BLACK","window.close();");
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_BUTTON_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_DARKRED","window.close();");
    HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -3247,7 +3267,7 @@ static void Mch_PutBigButtonClose (void)
 
 static void Mch_ShowWaitImage (const char *Txt)
   {
-   HTM_DIV_Begin ("class=\"MCH_WAIT_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
    Ico_PutIcon ("wait.gif",Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }

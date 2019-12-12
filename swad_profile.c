@@ -399,7 +399,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Left list *****/
    /* Start left list */
-   HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONT\"");
    HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
 
    /* Time since first click */
@@ -419,7 +419,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    HTM_DIV_End ();
 
    /***** Right list *****/
-   HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONTAINER\"");
+   HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONT\"");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)

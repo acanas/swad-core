@@ -7546,7 +7546,7 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
-      HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");
+      HTM_DIV_Begin ("class=\"PREF_CONT\"");
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_StartForm (ActLstOth);
       Sco_PutParamCurrentScope ();

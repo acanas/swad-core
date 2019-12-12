@@ -279,8 +279,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    extern const char *Txt_Do_not_show_again;
    static const char *ContainerClass[Ann_NUM_STATUS] =
      {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_CONTAINER_ACTIVE NOTICE_CONTAINER_WIDE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_CONTAINER_OBSOLETE NOTICE_CONTAINER_WIDE",
+      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_CONT_ACTIVE NOTICE_CONT_WIDE",
+      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_CONT_OBSOLETE NOTICE_CONT_WIDE",
      };
    static const char *SubjectClass[Ann_NUM_STATUS] =
      {

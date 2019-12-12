@@ -901,7 +901,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:100%;
 	}
-#main_horizontal .MENU_LIST_CONTAINER
+#main_horizontal .MENU_LIST_CONT
 	{
 	width:100%;
 	}
@@ -961,7 +961,7 @@ a:hover						/* Default ==> underlined */
 		box-sizing:border-box;
 		width:100%;
 		}
-	#main_vertical .MENU_LIST_CONTAINER
+	#main_vertical .MENU_LIST_CONT
 		{
 		width:100%;
 		}
@@ -1023,7 +1023,7 @@ a:hover						/* Default ==> underlined */
 		box-sizing:border-box;
 		width:100%;
 		}
-	#main_vertical .MENU_LIST_CONTAINER
+	#main_vertical .MENU_LIST_CONT
 		{
 		display:table-cell;
 		box-sizing:border-box;
@@ -1321,7 +1321,7 @@ a:hover						/* Default ==> underlined */
 	margin:0 auto;
 	border-spacing:12px 0;
 	}
-.MONTH_CONTAINER
+.MONTH_CONT
 	{
 	box-sizing:border-box;
 	width:148px;
@@ -1509,7 +1509,7 @@ a:hover						/* Default ==> underlined */
 	{
 	to {background-color:white;}
 	}
-.NOTICE_CONTAINER_ACTIVE
+.NOTICE_CONT_ACTIVE
 	{
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
@@ -1520,7 +1520,7 @@ a:hover						/* Default ==> underlined */
 	text-align:left;
 	overflow:hidden;
 	}
-.NOTICE_CONTAINER_OBSOLETE
+.NOTICE_CONT_OBSOLETE
 	{
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
@@ -1531,8 +1531,8 @@ a:hover						/* Default ==> underlined */
 	text-align:left;
 	overflow:hidden;
 	}
-.NOTICE_CONTAINER_NARROW	{width:148px;}
-.NOTICE_CONTAINER_WIDE		{width:500px;}
+.NOTICE_CONT_NARROW	{width:148px;}
+.NOTICE_CONT_WIDE	{width:500px;}
 .NOTICE_DATE_ACTIVE
 	{
 	float:right;
@@ -1719,7 +1719,7 @@ a:hover						/* Default ==> underlined */
 .BANNER_SMALL	{width:75px; height:25px;}
 
 .ICO_BLACK	{color:#404040;}
-.ICO_RED	{color:#660000;}
+.ICO_DARKRED	{color:#660000;}
 
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
@@ -1761,7 +1761,7 @@ a:hover						/* Default ==> underlined */
 	margin:0 8px;
 	vertical-align:top;
 	}
-.FRAME_CONTAINER
+.FRAME_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -2166,10 +2166,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .RB	{text-align:right;  vertical-align:bottom;}	/* Right Bottom  */
 
 /***************** Colors used in headers,backgrounds,etc. *****************/
-.COLOR0				{background-color:#F4F2EA;}
-.COLOR1				{background-color:#FBFAF7;}
+.COLOR0			{background-color:#F4F2EA;}
+.COLOR1			{background-color:#FBFAF7;}
 .LIGHT_GREEN		{background-color:#C0FF40;}
-.LIGHT_BLUE			{background-color:#DDECF1;}
+.LIGHT_BLUE		{background-color:#DDECF1;}
 .VERY_LIGHT_BLUE	{background-color:#EAF3F6;}
 
 /********************************* Course info *******************************/
@@ -2574,7 +2574,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0 0 0 1em;
 	}
 
-.TEST_MED_SHOW_CONTAINER
+.TEST_MED_SHOW_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -2586,7 +2586,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	border-radius:4px;
 	}
-.TEST_MED_EDIT_LIST_CONTAINER
+.TEST_MED_EDIT_LIST_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -2613,7 +2613,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:400px;
 	}
 
-.TEST_MED_EDIT_ONE_CONTAINER
+.TEST_MED_EDIT_ONE_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -2731,14 +2731,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:16pt;
 	}
 
-.MCH_BUTTONS_CONTAINER
+.MCH_BUTTONS_CONT
 	{
 	display:table;
 	box-sizing:border-box;
 	width:100%;
 	padding:20px 0;
 	}
-.MCH_BUTTON_LEFT_CONTAINER
+.MCH_BUTTON_LEFT_CONT
 	{
 	display:table;
 	box-sizing:border-box;
@@ -2746,7 +2746,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:35%;
 	text-align:center;
 	}
-.MCH_BUTTON_CENTER_CONTAINER
+.MCH_BUTTON_CENTER_CONT
 	{
 	display:table;
 	box-sizing:border-box;
@@ -2754,7 +2754,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:30%;
 	text-align:center;
 	}
-.MCH_BUTTON_RIGHT_CONTAINER
+.MCH_BUTTON_RIGHT_CONT
 	{
 	display:table;
 	box-sizing:border-box;
@@ -2763,29 +2763,27 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	}
 
-.MCH_BUTTON_CONTAINER
+.MCH_BIGBUTTON_CONT
 	{
 	box-sizing:border-box;
-	display:table-cell;
-	width:100%;
-	height:64px;
+	display:inline-block;
 	font-size:28pt;
 	font-weight:bold;
 	padding:2px;
 	text-align:center;
 	vertical-align:middle;
 	}
-.MCH_SMALLBUTTON_CONTAINER
+.MCH_SMALLBUTTON_CONT
 	{
 	box-sizing:border-box;
-	display:table-cell;
-	width:100%;
-	font-size:18pt;
+	display:inline-block;
+	font-size:16pt;
+	font-weight:bold;
 	padding:2px;
 	text-align:center;
 	vertical-align:middle;
 	}
-.MCH_BUTTON_ON
+.MCH_BUTTON_ON, .MCH_BUTTON_OFF
 	{
 	display:table-cell;
 	width:100%;
@@ -2797,7 +2795,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:1;
 	}
-.MCH_BUTTON_OFF
+
+.MCH_BUTTON_HIDDEN
 	{
 	display:table-cell;
 	width:100%;
@@ -2805,6 +2804,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	opacity:0.1;
 	}
+
+.MCH_RED	{color:#913b00;}
+.MCH_YELLOW	{color:#a27600;}
+.MCH_LIMEGREEN	{color:#636e00;}
+.MCH_GREEN	{color:#246600;}
 
 .MCH_TCH_STEM
 	{
@@ -2818,7 +2822,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:24pt;
 	}
 
-.MCH_WAIT_CONTAINER
+.MCH_WAIT_CONT
 	{
 	box-sizing:border-box;
 	text-align:center;
@@ -3046,12 +3050,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 	
 /********************************* Preference ********************************/
-.PREF_CONTAINERS
+.PREF_CONTS
 	{
 	margin:0 auto;
 	text-align:center;
 	}
-.PREF_CONTAINER
+.PREF_CONT
 	{
 	display:inline-block;
 	margin:0 10px;
@@ -3573,7 +3577,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /************************************ Forum **********************************/
-.FOR_IMG_CONTAINER
+.FOR_IMG_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -3600,7 +3604,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-.MSG_IMG_CONTAINER
+.MSG_IMG_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -3786,7 +3790,7 @@ a.PAG:hover, .PAG_CUR
 	}
 
 /***************************** Public user's profile *************************/
-.PRF_FIG_LEFT_CONTAINER
+.PRF_FIG_LEFT_CONT
 	{
 	display:inline-block;
 	box-sizing:border-box;
@@ -3795,7 +3799,7 @@ a.PAG:hover, .PAG_CUR
 	text-align:right;
 	vertical-align:top;
 	}
-.PRF_FIG_RIGHT_CONTAINER
+.PRF_FIG_RIGHT_CONT
 	{
 	display:inline-block;
 	box-sizing:border-box;
@@ -4015,7 +4019,7 @@ a.PAG:hover, .PAG_CUR
 		text-align:center;
 		}
 	}
-.FOOT_LIST_CONTAINER
+.FOOT_LIST_CONT
 	{
 	position:relative;
 	float:left;

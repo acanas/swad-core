@@ -1052,7 +1052,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
    Med_GetMediaDataByCod (&Gbl.Test.Media);
    Med_ShowMedia (&Gbl.Test.Media,
-                  "TEST_MED_SHOW_CONTAINER",
+                  "TEST_MED_SHOW_CONT",
                   "TEST_MED_SHOW");
 
    /***** Write answers depending on shuffle (row[3]) and feedback (row[5])  *****/
@@ -1147,7 +1147,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       HTM_Txt (Txt_Current_image_video);
       HTM_LABEL_End ();
       Med_ShowMedia (Media,
-	             "TEST_MED_EDIT_ONE_CONTAINER",
+	             "TEST_MED_EDIT_ONE_CONT",
 		     "TEST_MED_EDIT_ONE");
 
       /***** Choice 3: Change media *****/
@@ -2965,7 +2965,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
       Med_GetMediaDataByCod (&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_MED_EDIT_LIST_CONTAINER",
+                     "TEST_MED_EDIT_LIST_CONT",
                      "TEST_MED_EDIT_LIST");
 
       /* Write feedback (row[5]) and answers */
@@ -3166,7 +3166,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
       Med_GetMediaDataByCod (&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_MED_EDIT_LIST_CONTAINER",
+                     "TEST_MED_EDIT_LIST_CONT",
                      "TEST_MED_EDIT_LIST");
 
       /* Write feedback (row[5]) */
@@ -3394,7 +3394,7 @@ void Tst_WriteAnswersEdit (long QstCod)
             HTM_DIV_Begin ("class=\"TEST_EDI\"");
             HTM_Txt (Answer);
 	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
-	                   "TEST_MED_EDIT_LIST_CONTAINER",
+	                   "TEST_MED_EDIT_LIST_CONT",
 	                   "TEST_MED_EDIT_LIST");
             HTM_DIV_End ();
 
@@ -3752,7 +3752,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
-                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
       HTM_TD_End ();
 
@@ -3875,7 +3875,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       HTM_DIV_Begin ("class=\"ANS_TXT\"");
       HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
       HTM_DIV_End ();
 
@@ -4197,7 +4197,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
       HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
 
       /* Show result (number of users who answered? */

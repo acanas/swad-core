@@ -144,10 +144,10 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       /* Create unique id for alert */
       Frm_SetUniqueId (Gbl.Box.Ids[Gbl.Box.Nested]);
 
-      HTM_DIV_Begin ("class=\"FRAME_CONTAINER\" id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
+      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
      }
    else
-      HTM_DIV_Begin ("class=\"FRAME_CONTAINER\"");
+      HTM_DIV_Begin ("class=\"FRAME_CONT\"");
 
    /***** Begin box *****/
    if (Width)

@@ -467,12 +467,12 @@ function writeClockConnected () {
 				if (H != 0) {
 					StrM = ((M < 10) ? '0' : '') + M;
 					StrS = ((S < 10) ? '0' : '') + S;
-					PrintableClock = H + ':' + StrM + '&#39;' + StrS + '&quot;';
+					PrintableClock = H + ':' + StrM + '&prime;' + StrS + '&Prime;';
 				} else if (M != 0) {
 					StrS = ((S < 10) ? '0' : '') + S;
-					PrintableClock = M + '&#39;' + StrS + '&quot;';
+					PrintableClock = M + '&prime;' + StrS + '&Prime;';
 				} else
-					PrintableClock = S + '&quot;';
+					PrintableClock = S + '&Prime;';
 				BoxClock.innerHTML = PrintableClock;
 			}
 		}
@@ -1191,7 +1191,7 @@ function toggleDisplay (elementID) {
 /*****************************************************************************/
 
 // idCaption must be the id of a hidden div with the caption in innerHTML
-// (this allows showing &#39; and &quot;)
+// (this allows showing &prime; and &Prime;)
 function zoom (img,urlPhoto,idCaption) {
 	var zoomImgWidth  = 186;	// big photo
 	var zoomImgHeight = 248;	// big photo
@@ -1580,7 +1580,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	}
 
 	/***** Start of month *****/
-	Gbl_HTMLContent += '<div class="MONTH_CONTAINER">';
+	Gbl_HTMLContent += '<div class="MONTH_CONT">';
 
 	/***** Month name *****/
 	if (DrawingCalendar)

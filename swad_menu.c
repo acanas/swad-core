@@ -214,7 +214,7 @@ void Mnu_WriteMenuThisTab (void)
    bool IsTheSelectedAction;
 
    /***** Menu start *****/
-   HTM_Txt ("<nav class=\"MENU_LIST_CONTAINER\">");
+   HTM_Txt ("<nav class=\"MENU_LIST_CONT\">");
    HTM_UL_Begin ("class=\"MENU_LIST\"");
 
    /***** Loop to write all options in menu. Each row holds an option *****/

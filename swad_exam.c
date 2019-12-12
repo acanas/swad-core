@@ -1213,7 +1213,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	   Minute++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 		     Gbl.ExamAnns.ExaDat.StartTime.Minute == Minute,false,
-		     "%02u &#39;",Minute);
+		     "%02u &prime;",Minute);
       HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.StartTime.Hour)
@@ -1250,7 +1250,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	   Minute++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 		     Gbl.ExamAnns.ExaDat.Duration.Minute == Minute,false,
-		     "%02u &#39;",Minute);
+		     "%02u &prime;",Minute);
       HTM_SELECT_End ();
      }
    else if (Gbl.ExamAnns.ExaDat.Duration.Hour ||
@@ -1259,7 +1259,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       if (Gbl.ExamAnns.ExaDat.Duration.Hour)
         {
          if (Gbl.ExamAnns.ExaDat.Duration.Minute)
-            HTM_TxtF ("%u %s %u &#39;",Gbl.ExamAnns.ExaDat.Duration.Hour,
+            HTM_TxtF ("%u %s %u &prime;",Gbl.ExamAnns.ExaDat.Duration.Hour,
                                        Txt_hours_ABBREVIATION,
                                        Gbl.ExamAnns.ExaDat.Duration.Minute);
          else

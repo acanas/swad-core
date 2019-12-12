@@ -677,7 +677,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	Minute < 60;
 	Minute += MinutesIInterval[FormSeconds])
       HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
-		  "%02u &#39;",Minute);
+		  "%02u &prime;",Minute);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -701,7 +701,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	   Second <= 59;
 	   Second++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
-		     "%02u &quot;",Second);
+		     "%02u &Prime;",Second);
       HTM_SELECT_End ();
       HTM_TD_End ();
      }
@@ -1614,11 +1614,11 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 
    Seconds %= 60;
    if (Hours)
-      HTM_TxtF ("%ld:%02ld'%02ld&quot;",(long) Hours,(long) Minutes,(long) Seconds);
+      HTM_TxtF ("%ld:%02ld&prime;%02ld&Prime;",(long) Hours,(long) Minutes,(long) Seconds);
    else if (Minutes)
-      HTM_TxtF ("%ld'%02ld&quot;",(long) Minutes,(long) Seconds);
+      HTM_TxtF ("%ld&prime;%02ld&Prime;",(long) Minutes,(long) Seconds);
    else
-      HTM_TxtF ("%ld&quot;",(long) Seconds);
+      HTM_TxtF ("%ld&Prime;",(long) Seconds);
   }
 
 /*****************************************************************************/
@@ -1628,11 +1628,11 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 void Dat_WriteHoursMinutesSeconds (struct Time *Time)
   {
    if (Time->Hour)
-      HTM_TxtF ("%u:%02u'%02u&quot;",Time->Hour,Time->Minute,Time->Second);
+      HTM_TxtF ("%u:%02u&prime;%02u&Prime;",Time->Hour,Time->Minute,Time->Second);
    else if (Time->Minute)
-      HTM_TxtF ("%u'%02u&quot;",Time->Minute,Time->Second);
+      HTM_TxtF ("%u&prime;%02u&Prime;",Time->Minute,Time->Second);
    else
-      HTM_TxtF ("%u&quot;",Time->Second);
+      HTM_TxtF ("%u&Prime;",Time->Second);
   }
 
 /*****************************************************************************/

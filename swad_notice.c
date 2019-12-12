@@ -615,13 +615,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_See_full_notice;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_CONTAINER_ACTIVE",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_CONTAINER_OBSOLETE",
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_CONT_ACTIVE",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_CONT_OBSOLETE",
      };
    static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
-      [Not_LIST_BRIEF_NOTICES] = "NOTICE_CONTAINER_NARROW",
-      [Not_LIST_FULL_NOTICES ] = "NOTICE_CONTAINER_WIDE",
+      [Not_LIST_BRIEF_NOTICES] = "NOTICE_CONT_NARROW",
+      [Not_LIST_FULL_NOTICES ] = "NOTICE_CONT_WIDE",
      };
    static const char *DateClass[Not_NUM_STATUS] =
      {
