@@ -161,6 +161,10 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match,Mch_Update_t Update);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowRefreshablePartTch (struct Match *Match);
+static void Mch_WriteElapsedTimeInMch (struct Match *Match);
+static void Mch_WriteElapsedTimeInQst (struct Match *Match);
+static void Mch_WriteNumRespondersQst (struct Match *Match);
+
 static void Mch_ShowRightColumnTch (const struct Match *Match);
 static void Mch_ShowLeftColumnStd (const struct Match *Match,
 				   const struct Mch_UsrAnswer *UsrAnswer);
@@ -168,7 +172,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
 				    const struct Mch_UsrAnswer *UsrAnswer,
 				    Mch_Update_t Update);
 
-static void Mch_ShowNumQstInMatch (const struct Match *Match);
+static void Mch_ShowNumQstInMch (const struct Match *Match);
 static void Mch_PutMatchControlButtons (const struct Match *Match);
 static void Mch_ShowFormColumns (const struct Match *Match);
 static void Mch_PutParamNumCols (unsigned NumCols);
@@ -212,7 +216,7 @@ static double Mch_ComputeScore (unsigned NumQsts);
 
 static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
-static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
+static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
 
 static long Mch_GetCurrentMchCod (void);
 
@@ -2173,46 +2177,79 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
 
 static void Mch_ShowRefreshablePartTch (struct Match *Match)
   {
-   extern const char *Txt_MATCH_respond;
-   struct Time Time;
-   unsigned NumAnswerersQst;
+   /***** Write elapsed time in match *****/
+   Mch_WriteElapsedTimeInMch (Match);
 
-   /***** Top *****/
+   /***** Write number of question *****/
+   Mch_ShowNumQstInMch (Match);
+
+   /***** Write elapsed time in question *****/
+   Mch_WriteElapsedTimeInQst (Match);
+
+   /***** Number of users who have responded this question *****/
+   Mch_WriteNumRespondersQst (Match);
+  }
+
+static void Mch_WriteElapsedTimeInMch (struct Match *Match)
+  {
+   struct Time Time;
+
    HTM_DIV_Begin ("class=\"MCH_TOP\"");
 
-   /* Write elapsed time in match */
+   /***** Get elapsed time in match *****/
    Mch_GetElapsedTimeInMatch (Match,&Time);
+
+   /***** Write elapsed time in hh:mm'ss" format *****/
    Dat_WriteHoursMinutesSeconds (&Time);
 
    HTM_DIV_End ();
+  }
 
-   /***** Write number of question *****/
-   Mch_ShowNumQstInMatch (Match);
+static void Mch_WriteElapsedTimeInQst (struct Match *Match)
+  {
+   struct Time Time;
 
-   /***** Write elapsed time in question *****/
    HTM_DIV_Begin ("class=\"MCH_TIME_QST\"");
-   if (Match->Status.Showing != Mch_START &&
-       Match->Status.Showing != Mch_END)
-     {
-      Mch_GetElapsedTimeInQuestion (Match,&Time);
-      Dat_WriteHoursMinutesSeconds (&Time);
-     }
-   else
-      HTM_Hyphen ();
-   HTM_DIV_End ();
 
-   /***** Number of users who have answered this question *****/
-   NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
-						     Match->Status.QstInd);
+   switch (Match->Status.Showing)
+     {
+      case Mch_START:
+      case Mch_END:
+         HTM_Hyphen ();	// Do not write elapsed time
+         break;
+      default:
+	 Mch_GetElapsedTimeInQuestion (Match,&Time);
+	 Dat_WriteHoursMinutesSeconds (&Time);
+	 break;
+     }
+
+   HTM_DIV_End ();
+  }
+
+static void Mch_WriteNumRespondersQst (struct Match *Match)
+  {
+   extern const char *Txt_MATCH_respond;
+
+   /***** Begin block *****/
    HTM_DIV_Begin ("class=\"MCH_NUM_ANSWERERS\"");
    HTM_Txt (Txt_MATCH_respond);
    HTM_BR ();
    HTM_STRONG_Begin ();
-   if (Match->Status.Showing != Mch_START &&
-       Match->Status.Showing != Mch_END)
-      HTM_Unsigned (NumAnswerersQst);
-   else
-      HTM_Hyphen ();
+
+   /***** Write number of responders *****/
+   switch (Match->Status.Showing)
+     {
+      case Mch_START:
+      case Mch_END:
+         HTM_Hyphen ();	// Do not write number of responders
+         break;
+      default:
+	 HTM_Unsigned (Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,
+					             Match->Status.QstInd));
+	 break;
+     }
+
+   /***** Write number of players *****/
    if (Match->Status.Playing)	// Match is being played
      {
       /* Get current number of players */
@@ -2221,6 +2258,8 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       /* Show current number of players */
       HTM_TxtF ("/%u",Match->Status.NumPlayers);
      }
+
+   /***** End block *****/
    HTM_STRONG_End ();
    HTM_DIV_End ();
   }
@@ -2264,19 +2303,23 @@ static void Mch_ShowLeftColumnStd (const struct Match *Match,
    HTM_DIV_End ();
 
    /***** Write number of question *****/
-   Mch_ShowNumQstInMatch (Match);
+   Mch_ShowNumQstInMch (Match);
 
-   if (Match->Status.Showing != Mch_START &&
-       Match->Status.Showing != Mch_END)
+   switch (Match->Status.Showing)
      {
-      /***** Write whether question is answered or not *****/
-      Mch_PutIfAnswered (Match,Answered);
+      case Mch_START:
+      case Mch_END:
+	 break;
+      default:
+	 /***** Write whether question is answered or not *****/
+	 Mch_PutIfAnswered (Match,Answered);
 
-      if (Match->Status.Playing &&			// Match is being played
-	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-	  Answered)				// I have answered this question
-	 /***** Put icon to remove my answet *****/
-	 Mch_PutIconToRemoveMyAnswer (Match);
+	 if (Match->Status.Playing &&			// Match is being played
+	     Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+	     Answered)				// I have answered this question
+	    /***** Put icon to remove my answet *****/
+	    Mch_PutIconToRemoveMyAnswer (Match);
+	 break;
      }
 
    /***** End left container *****/
@@ -2333,7 +2376,7 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
 /********************* Show number of question in game ***********************/
 /*****************************************************************************/
 
-static void Mch_ShowNumQstInMatch (const struct Match *Match)
+static void Mch_ShowNumQstInMch (const struct Match *Match)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
@@ -2372,13 +2415,18 @@ static void Mch_PutMatchControlButtons (const struct Match *Match)
 
    /***** Left button *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_LEFT_CONTAINER\"");
-   if (Match->Status.Showing == Mch_START)
-      /* Put button to close browser tab */
-      Mch_PutBigButtonClose ();
-   else
-      /* Put button to go back */
-      Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
-			Mch_ICON_PREVIOUS,Txt_Go_back);
+   switch (Match->Status.Showing)
+     {
+      case Mch_START:
+	 /* Put button to close browser tab */
+	 Mch_PutBigButtonClose ();
+	 break;
+      default:
+	 /* Put button to go back */
+	 Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
+			   Mch_ICON_PREVIOUS,Txt_Go_back);
+	 break;
+     }
    HTM_DIV_End ();
 
    /***** Center button *****/
@@ -2612,10 +2660,15 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Trivial check: question index should be correct *****/
-   if (Match->Status.Showing == Mch_START ||
-       Match->Status.Showing == Mch_END)
-      return;
+   /***** Trivial check: do not show anything on match start and end *****/
+   switch (Match->Status.Showing)
+     {
+      case Mch_START:
+      case Mch_END:
+	 return;
+      default:
+	 break;
+     }
 
    /***** Get data of question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -2654,12 +2707,6 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    /***** Write answers? *****/
    switch (Match->Status.Showing)
      {
-      case Mch_START:
-	 /* Don't write anything */
-	 break;
-      case Mch_STEM:
-	 /* Don't write anything */
-	 break;
       case Mch_ANSWERS:
 	 if (Match->Status.Playing)			// Match is being played
 	    /* Write answers */
@@ -2675,12 +2722,12 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 				      "MCH_TCH_ANS",
 				      true);		// Show result
 	 break;
-      case Mch_END:
+      default:
 	 /* Don't write anything */
 	 break;
      }
 
-   HTM_DIV_End ();			// Bottom
+   HTM_DIV_End ();				// Bottom
   }
 
 /*****************************************************************************/
@@ -3475,27 +3522,27 @@ static double Mch_ComputeScore (unsigned NumQsts)
 /*****************************************************************************/
 
 void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
-					       unsigned NumAnswerersQst,bool Correct)
+					       unsigned NumRespondersQst,bool Correct)
   {
-   unsigned NumAnswerersAns;
+   unsigned NumRespondersAns;
 
    /***** Get number of users who selected this answer *****/
-   NumAnswerersAns = Mch_GetNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd);
+   NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd);
 
    /***** Show stats of this answer *****/
-   Mch_DrawBarNumUsrs (NumAnswerersAns,NumAnswerersQst,Correct);
+   Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,Correct);
   }
 
 /*****************************************************************************/
-/******* Get number of users who have answered a question in a match *********/
+/********** Get number of users who answered a question in a match ***********/
 /*****************************************************************************/
 
-unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd)
+unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
   {
-   /***** Get number of users who have answered
-          a question in match from database *****/
+   /***** Get number of users who answered
+          a question in a match from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who have answered a question",
+   (unsigned) DB_QueryCOUNT ("can not get number of users who answered a question",
 			     "SELECT COUNT(*) FROM mch_answers"
 			     " WHERE MchCod=%ld AND QstInd=%u",
 			     MchCod,QstInd);
@@ -3538,31 +3585,31 @@ static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod)
 // #define Mch_MAX_BAR_WIDTH 400
 #define Mch_MAX_BAR_WIDTH 100
 
-static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct)
+static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned i;
    unsigned BarWidth = 0;
 
    /***** String with the number of users *****/
-   if (NumAnswerersQst)
+   if (NumRespondersQst)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-                NumAnswerersAns,
-                (unsigned) ((((double) NumAnswerersAns * 100.0) / (double) NumAnswerersQst) + 0.5),
-                Txt_of_PART_OF_A_TOTAL,NumAnswerersQst);
+                NumRespondersAns,
+                (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
+                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
    else
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-                Txt_of_PART_OF_A_TOTAL,NumAnswerersQst);
+                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
 
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_RESULT\"");
 
    /***** Draw bar with a with proportional to the number of clicks *****/
-   if (NumAnswerersAns && NumAnswerersQst)
-      BarWidth = (unsigned) ((((double) NumAnswerersAns * (double) Mch_MAX_BAR_WIDTH) /
-	                       (double) NumAnswerersQst) + 0.5);
+   if (NumRespondersAns && NumRespondersQst)
+      BarWidth = (unsigned) ((((double) NumRespondersAns * (double) Mch_MAX_BAR_WIDTH) /
+	                       (double) NumRespondersQst) + 0.5);
 
    /***** Bar proportional to number of users *****/
    HTM_TABLE_BeginWide ();

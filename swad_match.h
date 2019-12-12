@@ -126,8 +126,8 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 void Mch_ReceiveQuestionAnswer (void);
 
 void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
-					       unsigned NumAnswerersQst,bool Correct);
-unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
+					       unsigned NumRespondersQst,bool Correct);
+unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
 
 void Mch_SetCurrentMchCod (long MchCod);
 

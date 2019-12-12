@@ -4124,7 +4124,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
-   NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (MchCod,QstInd);
+   NumAnswerersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);

@@ -490,13 +490,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.89.1 (2019-12-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.89.2 (2019-12-11)"
 #define CSS_FILE		"swad19.88.5.css"
 #define JS_FILE			"swad19.70.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 
+	Version 19.89.2:  Dec 11, 2019	Code refactoring in matches. (248207 lines)
 	Version 19.89.1:  Dec 11, 2019	Code refactoring in pagination. (248171 lines)
 	Version 19.89:    Dec 10, 2019	Game dates are in red colour if all their matches are finished or ot don't have matches. (248186 lines)
 					4 changes necessary in database:
