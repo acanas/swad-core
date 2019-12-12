@@ -163,6 +163,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_WriteElapsedTimeInMch (struct Match *Match);
 static void Mch_WriteElapsedTimeInQst (struct Match *Match);
+static void Mch_WriteHourglass (struct Match *Match);
 static void Mch_WriteNumRespondersQst (struct Match *Match);
 
 static void Mch_ShowRightColumnTch (const struct Match *Match);
@@ -263,9 +264,10 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 						  "QstInd,"				// row[ 6]
 						  "QstCod,"				// row[ 7]
 						  "Showing,"				// row[ 8]
-						  "NumCols,"				// row[ 9]
-					          "ShowQstResults,"			// row[10]
-					          "ShowUsrResults"			// row[11]
+						  "Countdown,"				// row[ 9]
+						  "NumCols,"				// row[10]
+					          "ShowQstResults,"			// row[11]
+					          "ShowUsrResults"			// row[12]
 					   " FROM mch_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
@@ -335,9 +337,10 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
 					       "QstInd,"			// row[ 6]
 					       "QstCod,"			// row[ 7]
 					       "Showing,"			// row[ 8]
-					       "NumCols,"			// row[ 9]
-					       "ShowQstResults,"		// row[10]
-					       "ShowUsrResults"			// row[11]
+					       "Countdown,"			// row[ 9]
+					       "NumCols,"			// row[10]
+					       "ShowQstResults,"		// row[11]
+					       "ShowUsrResults"			// row[12]
 					" FROM mch_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -363,6 +366,7 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
       Match->Status.Showing          = Mch_START;
+      Match->Status.Countdown        = -1L;
       Match->Status.Playing          = false;
       Match->Status.NumPlayers       = 0;
       Match->Status.NumCols          = Mch_NUM_COLS_DEFAULT;
@@ -894,9 +898,10 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    row[ 6]	QstInd
    row[ 7]	QstCod
    row[ 8]	Showing
-   row[ 9]	NumCols
-   row[10]	ShowQstResults
-   row[11]	ShowUsrResults
+   row[ 9]	Countdown
+   row[10]	NumCols
+   row[11]	ShowQstResults
+   row[12]	ShowUsrResults
    */
    /* Current question index (row[6]) */
    Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
@@ -907,17 +912,20 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Get what to show (stem, answers, results) (row(8)) */
    Match->Status.Showing = Mch_GetShowingFromStr (row[8]);
 
-   /* Get number of columns (row[9]) */
-   LongNum = Str_ConvertStrCodToLongCod (row[9]);
+   /* Get countdown (row[9]) */
+   Match->Status.Countdown = Str_ConvertStrCodToLongCod (row[9]);
+
+   /* Get number of columns (row[10]) */
+   LongNum = Str_ConvertStrCodToLongCod (row[10]);
    Match->Status.NumCols =  (LongNum <= 1           ) ? 1 :
                            ((LongNum >= Mch_MAX_COLS) ? Mch_MAX_COLS :
                         	                        (unsigned) LongNum);
 
-   /* Get whether to show question results or not (row(10)) */
-   Match->Status.ShowQstResults = (row[10][0] == 'Y');
+   /* Get whether to show question results or not (row(11)) */
+   Match->Status.ShowQstResults = (row[11][0] == 'Y');
 
-   /* Get whether to show user results or not (row(11)) */
-   Match->Status.ShowUsrResults = (row[11][0] == 'Y');
+   /* Get whether to show user results or not (row(12)) */
+   Match->Status.ShowUsrResults = (row[12][0] == 'Y');
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.Showing == Mch_END)	// Match over
@@ -934,7 +942,7 @@ static Mch_Showing_t Mch_GetShowingFromStr (const char *Str)
   {
    Mch_Showing_t Showing;
 
-   for (Showing = (Mch_Showing_t) 0;
+   for (Showing  = (Mch_Showing_t) 0;
 	Showing <= (Mch_Showing_t) (Mch_NUM_SHOWING - 1);
 	Showing++)
       if (!strcmp (Str,Mch_ShowingStringsDB[Showing]))
@@ -1391,8 +1399,8 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
 				         "INSERT mch_matches "
 				         "(GamCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,Showing,NumCols,"
-				         "ShowQstResults,ShowUsrResults)"
+				         "QstInd,QstCod,Showing,Countdown,"
+				         "NumCols,ShowQstResults,ShowUsrResults)"
 				         " VALUES "
 				         "(%ld,"	// GamCod
 				         "%ld,"		// UsrCod
@@ -1402,6 +1410,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
 				         "'%s',"	// Showing: What is being shown
+					 "-1,"		// Countdown: No countdown
 					 "%u,"		// NumCols: Number of columns in answers
 				         "'N',"		// ShowQstResults: Don't show question results initially
 				         "'N')",	// ShowUsrResults: Don't show user results initially
@@ -1637,18 +1646,21 @@ void Mch_RemoveGroupsOfType (long GrpTypCod)
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
-#define Mch_MAX_BYTES_SUBQUERY 128
-
 static void Mch_UpdateMatchStatusInDB (const struct Match *Match)
   {
-   char MchSubQuery[Mch_MAX_BYTES_SUBQUERY];
+   char *MchSubQuery;
 
    /***** Update end time only if match is currently being played *****/
    if (Match->Status.Playing)	// Match is being played
-      Str_Copy (MchSubQuery,"mch_matches.EndTime=NOW(),",
-		Mch_MAX_BYTES_SUBQUERY);
+     {
+      if (asprintf (&MchSubQuery,"mch_matches.EndTime=NOW(),") < 0)	// Background
+         Lay_NotEnoughMemoryExit ();
+     }
    else				// Match is paused, not being played
-      MchSubQuery[0] = '\0';
+     {
+      if (asprintf (&MchSubQuery,"%s","") < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
 
    /***** Update match status in database *****/
    DB_QueryUPDATE ("can not update match being played",
@@ -1657,6 +1669,7 @@ static void Mch_UpdateMatchStatusInDB (const struct Match *Match)
 			"mch_matches.QstInd=%u,"
 			"mch_matches.QstCod=%ld,"
 			"mch_matches.Showing='%s',"
+		        "mch_matches.Countdown=%ld,"
 		        "mch_matches.NumCols=%u,"
 			"mch_matches.ShowQstResults='%c'"
 		   " WHERE mch_matches.MchCod=%ld"
@@ -1665,9 +1678,11 @@ static void Mch_UpdateMatchStatusInDB (const struct Match *Match)
 		   MchSubQuery,
 		   Match->Status.QstInd,Match->Status.QstCod,
 		   Mch_ShowingStringsDB[Match->Status.Showing],
+		   Match->Status.Countdown,
 		   Match->Status.NumCols,
 		   Match->Status.ShowQstResults ? 'Y' : 'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
+   free (MchSubQuery);
 
    if (Match->Status.Playing)	// Match is being played
       /* Update match as being played */
@@ -1872,6 +1887,40 @@ void Mch_ToggleVisibilResultsMchQst (void)
   }
 
 /*****************************************************************************/
+/******************** Start match countdown (by a teacher) *******************/
+/*****************************************************************************/
+
+void Mch_StartCountdown (void)
+  {
+   struct Match Match;
+   long NewCountdown;
+
+   /***** Get countdown parameter ****/
+   NewCountdown = Par_GetParToLong ("Countdown");
+
+   /***** Remove old players.
+          This function must be called by a teacher
+          before getting match status. *****/
+   Mch_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Start countdown *****/
+   if (NewCountdown >= 0)
+      Match.Status.Countdown = NewCountdown;
+
+   /***** Update match status in database *****/
+   Mch_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
+   Mch_ShowMatchStatusForTch (&Match);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /************* Show previous question in a match (by a teacher) **************/
 /*****************************************************************************/
 
@@ -1952,6 +2001,7 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
 	 Match->Status.Showing = Mch_ANSWERS;
 	 break;
      }
+   Match->Status.Countdown = -1L;	// No countdown
   }
 
 static void Mch_SetMatchStatusToPrevQst (struct Match *Match)
@@ -2006,6 +2056,7 @@ static void Mch_SetMatchStatusToNext (struct Match *Match)
 	 Mch_SetMatchStatusToEnd (Match);
 	 break;
      }
+   Match->Status.Countdown = -1L;	// No countdown
   }
 
 static void Mch_SetMatchStatusToNextQst (struct Match *Match)
@@ -2186,6 +2237,9 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    /***** Write elapsed time in question *****/
    Mch_WriteElapsedTimeInQst (Match);
 
+   /***** Write hourglass *****/
+   Mch_WriteHourglass (Match);
+
    /***** Number of users who have responded this question *****/
    Mch_WriteNumRespondersQst (Match);
   }
@@ -2223,6 +2277,87 @@ static void Mch_WriteElapsedTimeInQst (struct Match *Match)
 	 break;
      }
 
+   HTM_DIV_End ();
+  }
+
+static void Mch_WriteHourglass (struct Match *Match)
+  {
+   /***** Start container *****/
+   HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
+
+   /***** Start form *****/
+   Frm_StartForm (ActMchCntDwn);
+   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+
+   /***** Put icon with link *****/
+   HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
+   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
+   HTM_TxtF ("<i class=\"fas %s\"></i>",
+	      Match->Status.Countdown < 0                                 ? "fa-hourglass-start" :	// No countdown
+	     (Match->Status.Countdown > Cfg_SECONDS_TO_REFRESH_MATCH_TCH) ? "fa-hourglass-half" :	// Countdown in progress
+		                                                            "fa-hourglass-end");	// Countdown about to end
+   HTM_BR ();
+   if (Match->Status.Countdown > 0)
+      HTM_TxtF ("%ld&quot;",Match->Status.Countdown);
+   else
+      HTM_NBSP ();
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   HTM_BR ();
+
+   /***** Start form *****/
+   Frm_StartForm (ActMchCntDwn);
+   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+   Par_PutHiddenParamLong (NULL,"Countdown",60L);
+
+   /***** Put icon with link *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
+   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
+   HTM_Txt ("60&quot;");
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   HTM_NBSP ();
+
+   /***** Start form *****/
+   Frm_StartForm (ActMchCntDwn);
+   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+   Par_PutHiddenParamLong (NULL,"Countdown",30L);
+
+   /***** Put icon with link *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
+   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
+   HTM_Txt ("30&quot;");
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+   /***** End form *****/
+   Frm_EndForm ();
+
+   HTM_NBSP ();
+
+   /***** Start form *****/
+   Frm_StartForm (ActMchCntDwn);
+   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+   Par_PutHiddenParamLong (NULL,"Countdown",10L);
+
+   /***** Put icon with link *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONTAINER\"");
+   HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s","BT_LINK MCH_BUTTON_ON ICO_BLACK");	// TODO: Need translation!!!!
+   HTM_Txt ("10&quot;");
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 
@@ -2538,10 +2673,10 @@ static void Mch_PutCheckboxResult (const struct Match *Match)
   {
    extern const char *Txt_View_results;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActChgVisResMchQst);
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
@@ -2571,7 +2706,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
    extern const char *Txt_MATCH_QUESTION_Unanswered;
 
    /***** Start container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
+   HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
 
    /***** Put icon with link *****/
    if (Match->Status.Playing &&			// Match is being played
@@ -2617,7 +2752,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
    extern const char *Txt_Delete_my_answer;
 
    /***** Start container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
+   HTM_DIV_Begin ("class=\"MCH_REM_MY_ANS\"");
 
    /***** Start form *****/
    Frm_StartForm (ActRemMchAnsQstStd);
@@ -3275,6 +3410,7 @@ void Mch_RemoveMyQuestionAnswer (void)
 void Mch_RefreshMatchTch (void)
   {
    struct Match Match;
+   enum {REFRESH_LEFT,REFRESH_ALL} WhatToRefresh;
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
@@ -3288,6 +3424,23 @@ void Mch_RefreshMatchTch (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Mch_GetDataOfMatchByCod (&Match);
 
+   /***** Update countdown *****/
+   // If current countdown is < 0 ==> no countdown in progress
+   WhatToRefresh = REFRESH_LEFT;
+   if (Match.Status.Playing &&		// Match is being played
+       Match.Status.Countdown >= 0)	// Countdown in progress
+     {
+      /* Decrease countdown */
+      Match.Status.Countdown -= Cfg_SECONDS_TO_REFRESH_MATCH_TCH;
+
+      /* On countdown reached, set match status to next (forward) status */
+      if (Match.Status.Countdown <= 0)	// End of countdown reached
+	{
+	 Mch_SetMatchStatusToNext (&Match);
+	 WhatToRefresh = REFRESH_ALL;	// Refresh the whole page
+	}
+     }
+
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
 
@@ -3295,7 +3448,17 @@ void Mch_RefreshMatchTch (void)
    Mch_UpdateElapsedTimeInQuestion (&Match);
 
    /***** Show current match status *****/
-   Mch_ShowRefreshablePartTch (&Match);
+   switch (WhatToRefresh)
+     {
+      case REFRESH_LEFT:	// Refresh only left part
+         HTM_TxtF ("match_left|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+         Mch_ShowRefreshablePartTch (&Match);
+         break;
+      case REFRESH_ALL:		// Refresh the whole page
+         HTM_TxtF ("match|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+         Mch_ShowMatchStatusForTch (&Match);
+         break;
+     }
   }
 
 /*****************************************************************************/

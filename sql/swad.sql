@@ -640,6 +640,7 @@ CREATE TABLE IF NOT EXISTS mch_matches (
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
 	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
+	Countdown INT NOT NULL DEFAULT -1,
 	NumCols INT NOT NULL DEFAULT 1,
 	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',

@@ -572,9 +572,9 @@ function readMatchStdData () {
 		if (objXMLHttpReqMchStd.status == 200) {
 			var htmlMatch = objXMLHttpReqMchStd.responseText;	// Get HTML code
 
-			var divMatch = document.getElementById('match');	// Access to game DIV
+			var divMatch = document.getElementById('match');	// Access to refreshable DIV
 			if (divMatch)
-				divMatch.innerHTML = htmlMatch;					// Update game DIV
+				divMatch.innerHTML = htmlMatch;					// Update refreshable DIV
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchStd()',delayMatch);
 		}
@@ -604,11 +604,13 @@ function refreshMatchTch () {
 function readMatchTchData () {
 	if (objXMLHttpReqMchTch.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqMchTch.status == 200) {
-			var htmlMatch = objXMLHttpReqMchTch.responseText;	// Get HTML code
+			var endOfId = objXMLHttpReqMchTch.responseText.indexOf('|',0);	// Get separator position
+			var Id = objXMLHttpReqMchTch.responseText.substring(0,endOfId);	// Get Id
+			var htmlMatch = objXMLHttpReqMchTch.responseText.substring(endOfId + 1);	// Get HTML code
 
-			var divMatch = document.getElementById('match_left');	// Access to game DIV
+			var divMatch = document.getElementById(Id);			// Access to refreshable DIV
 			if (divMatch)
-				divMatch.innerHTML = htmlMatch;					// Update game DIV
+				divMatch.innerHTML = htmlMatch;					// Update refreshable DIV
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchTch()',delayMatch);
 		}

@@ -89,7 +89,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 /*
-1397 actions in one CGI:
+1380 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActMnu			Show menu of a tab
@@ -618,6 +618,7 @@ Assessment:
         468. ActReqNewMch		Put form to create a new match
         469. ActNewMch			Create a new match showing first question in a new browser tab
         470. ActResMch			Resume an unfinished match showing current question in a new browser tab
+        NEW. ActMchCntDwn		Start match countdown
         471. ActBckMch			Go back when playing a match
         472. ActPlyPauMch		Play/pause current match
         473. ActFwdMch			Go forward when playing a match
@@ -2157,6 +2158,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqNewMch	] = {1670,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatch		,NULL},
    [ActNewMch		] = {1671,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_ResumeMatch		,NULL},
    [ActResMch		] = {1785,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatch		,NULL},
+   [ActMchCntDwn	] = {1814,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_StartCountdown		,NULL},
    [ActBckMch		] = {1790,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
    [ActPlyPauMch	] = {1789,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayPauseMatch		,NULL},
    [ActFwdMch		] = {1672,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatch		,NULL},
@@ -5045,6 +5047,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActSeeAllMchResGam,	// #1811
         ActSeeMyMchResMch,	// #1812
         ActSeeAllMchResMch,	// #1813
+	ActMchCntDwn,		// #1814
 	};
 
 /*****************************************************************************/

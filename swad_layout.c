@@ -685,6 +685,7 @@ static void Lay_WriteScriptInit (void)
 	 break;
       case ActNewMch:
       case ActResMch:
+      case ActMchCntDwn:
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:
@@ -822,6 +823,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMch:
       case ActResMch:
+      case ActMchCntDwn:
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:

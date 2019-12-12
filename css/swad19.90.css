@@ -2718,7 +2718,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	vertical-align:top;
 	}
-.MCH_SHOW_RESULTS
+.MCH_SHOW_HOURGLASS, .MCH_SHOW_ANSWERED, .MCH_REM_MY_ANS, .MCH_SHOW_RESULTS
 	{
 	text-align:center;
 	padding:16pt 0;
@@ -2770,6 +2770,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	height:64px;
 	font-size:28pt;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+	vertical-align:middle;
+	}
+.MCH_SMALLBUTTON_CONTAINER
+	{
+	box-sizing:border-box;
+	display:table-cell;
+	width:100%;
+	font-size:18pt;
 	padding:2px;
 	text-align:center;
 	vertical-align:middle;

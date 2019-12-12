@@ -61,6 +61,9 @@ struct Match
       long QstCod;
       time_t QstStartTimeUTC;
       Mch_Showing_t Showing;	// What is shown on teacher's screen
+      long Countdown;		// > 0 ==> countdown in progress
+				// = 0 ==> countdown over ==> go to next step
+				// < 0 ==> no countdown at this time
       unsigned NumCols;		// Number of columns for answers on teacher's screen
       bool ShowQstResults;	// Show global results of current question while playing
       bool ShowUsrResults;	// Show exam with results of all questions for the student
@@ -106,6 +109,7 @@ void Mch_RemoveGroupsOfType (long GrpTypCod);
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);
 void Mch_ToggleVisibilResultsMchQst (void);
+void Mch_StartCountdown (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 

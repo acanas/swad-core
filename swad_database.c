@@ -1384,11 +1384,12 @@ mysql> DESCRIBE mch_matches;
 | QstInd         | int(11)                                        | NO   |     | 0       |                |
 | QstCod         | int(11)                                        | NO   |     | -1      |                |
 | Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
+| Countdown      | int(11)                                        | NO   |     | -1      |                |
 | NumCols        | int(11)                                        | NO   |     | 1       |                |
 | ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
 | ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
 +----------------+------------------------------------------------+------+-----+---------+----------------+
-12 rows in set (0.00 sec)
+13 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_matches ("
 			"MchCod INT NOT NULL AUTO_INCREMENT,"
@@ -1400,6 +1401,7 @@ mysql> DESCRIBE mch_matches;
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
 			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"
+			"Countdown INT NOT NULL DEFAULT -1,"
 		        "NumCols INT NOT NULL DEFAULT 1,"
 			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
