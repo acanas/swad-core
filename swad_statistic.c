@@ -3413,7 +3413,7 @@ static void Sta_WriteCountry (long CtyCod)
       Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
                                          "COUNTRY_TINY",
                                          "COUNTRY_MAP_TINY",
-                                         "BT_LINK LOG");
+                                         "BT_LINK LT LOG");
      }
    else			// Hit with no country selected
       /***** No country selected *****/
@@ -3502,7 +3502,7 @@ static void Sta_WriteInstitution (long InsCod)
 
       /***** Form to go to institution *****/
       Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-                                              "BT_LINK LOG","CT");
+                                              "BT_LINK LT LOG","CT");
      }
    else			// Hit with no institution selected
      {
@@ -3594,7 +3594,7 @@ static void Sta_WriteCentre (long CtrCod)
 
       /***** Form to go to centre *****/
       Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
-                                         "BT_LINK LOG","CT");
+                                         "BT_LINK LT LOG","CT");
      }
    else			// Hit with no centre selected
      {
@@ -3686,7 +3686,7 @@ static void Sta_WriteDegree (long DegCod)
 
       /***** Form to go to degree *****/
       Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-                                         "BT_LINK LOG","CT");
+                                         "BT_LINK LT LOG","CT");
      }
    else			// Hit with no degree selected
      {
@@ -3779,7 +3779,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   Crs.FullName);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LOG",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT LOG",NULL);
          HTM_Txt (Crs.ShrtName);
          HTM_BUTTON_End ();
         }
