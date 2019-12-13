@@ -505,8 +505,8 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
-			    Game->Hidden ? "BT_LINK ASG_TITLE_LIGHT":
-					   "BT_LINK ASG_TITLE",
+			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+					   "BT_LINK LT ASG_TITLE",
 			    NULL);
    HTM_Txt (Game->Title);
    HTM_BUTTON_End ();
@@ -533,8 +533,8 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
-			    Game->Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
-				           "BT_LINK ASG_TITLE",
+			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+				           "BT_LINK LT ASG_TITLE",
 			    NULL);
    if (ShowOnlyThisGame)
       HTM_TxtF ("%s:&nbsp;",Txt_Matches);

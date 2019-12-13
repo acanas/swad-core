@@ -448,8 +448,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
    Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
-	                Att->Hidden ? "BT_LINK ASG_TITLE_LIGHT" :
-	                              "BT_LINK ASG_TITLE");
+	                Att->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+	                              "BT_LINK LT ASG_TITLE");
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 

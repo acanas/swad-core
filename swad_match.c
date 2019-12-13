@@ -620,7 +620,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    Mch_PutParamsPlay ();
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								 Txt_Resume,
-			    "BT_LINK ASG_TITLE",NULL);
+			    "BT_LINK LT ASG_TITLE",NULL);
    HTM_Txt (Match->Title);
    HTM_BUTTON_End ();
    Frm_EndForm ();

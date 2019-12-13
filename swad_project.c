@@ -1146,8 +1146,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 					      "DATE_BLUE";
    ClassTitle = (Prj->Hidden == Prj_HIDDEN) ? "ASG_TITLE_LIGHT" :
 					      "ASG_TITLE";
-   ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK ASG_TITLE_LIGHT" :
-					      "BT_LINK ASG_TITLE";
+   ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK LT ASG_TITLE_LIGHT" :
+					      "BT_LINK LT ASG_TITLE";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 					      "DAT";
 
