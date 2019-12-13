@@ -169,7 +169,7 @@ static void Mch_WriteElapsedTimeInMch (struct Match *Match);
 static void Mch_WriteElapsedTimeInQst (struct Match *Match);
 static void Mch_WriteHourglass (struct Match *Match);
 static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color);
-static void Mch_PutHourglassIconAndCountdown (struct Match *Match);
+static void Mch_PutCountdownAndHourglassIcon (struct Match *Match);
 static void Mch_WriteNumRespondersQst (struct Match *Match);
 
 static void Mch_ShowRightColumnTch (const struct Match *Match);
@@ -2290,14 +2290,15 @@ static void Mch_WriteHourglass (struct Match *Match)
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
 
+   /***** Put icon hourglass and write countdown *****/
+   Mch_PutCountdownAndHourglassIcon (Match);
+   HTM_BR ();
+
    /***** Put forms to start countdown *****/
    Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
    Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
    Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
    Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
-
-   /***** Put icon hourglass and write countdown *****/
-   Mch_PutHourglassIconAndCountdown (Match);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -2352,7 +2353,7 @@ static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char 
       Frm_EndForm ();
   }
 
-static void Mch_PutHourglassIconAndCountdown (struct Match *Match)
+static void Mch_PutCountdownAndHourglassIcon (struct Match *Match)
   {
    extern const char *Txt_Countdown;
    const char *Class;
@@ -2385,16 +2386,20 @@ static void Mch_PutHourglassIconAndCountdown (struct Match *Match)
       Icon  = "fa-hourglass-end";
      }
 
-   /***** Put hourglass icon with countdown *****/
-   HTM_BR ();
+   /***** Write countdown and put hourglass icon *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
    HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
-   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
-   HTM_BR ();
+
+   /* Countdown */
    if (Match->Status.Countdown > 0)
       HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
    else
       HTM_NBSP ();
+   HTM_BR ();
+
+   /* Icon */
+   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
+
    HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
