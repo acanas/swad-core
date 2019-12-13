@@ -685,12 +685,12 @@ static void Lay_WriteScriptInit (void)
 	 break;
       case ActNewMch:
       case ActResMch:
-      case ActMchCntDwn:
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:
       case ActChgNumColMch:
       case ActChgVisResMchQst:
+      case ActMchCntDwn:
 	 RefreshMatchTch = true;
 	 break;
       case ActLstClk:
@@ -823,12 +823,12 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMch:
       case ActResMch:
-      case ActMchCntDwn:
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:
       case ActChgNumColMch:
       case ActChgVisResMchQst:
+      case ActMchCntDwn:
 	 // Handle keys in keyboard/presenter
 	 HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
 	 // Refresh parameters

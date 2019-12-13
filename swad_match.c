@@ -1893,39 +1893,6 @@ void Mch_ToggleVisibilResultsMchQst (void)
   }
 
 /*****************************************************************************/
-/******************** Start match countdown (by a teacher) *******************/
-/*****************************************************************************/
-
-void Mch_StartCountdown (void)
-  {
-   struct Match Match;
-   long NewCountdown;
-
-   /***** Get countdown parameter ****/
-   NewCountdown = Par_GetParToLong ("Countdown");
-
-   /***** Remove old players.
-          This function must be called by a teacher
-          before getting match status. *****/
-   Mch_RemoveOldPlayers ();
-
-   /***** Get data of the match from database *****/
-   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
-   Mch_GetDataOfMatchByCod (&Match);
-
-   /***** Start countdown *****/
-   Match.Status.Countdown = NewCountdown;
-
-   /***** Update match status in database *****/
-   Mch_UpdateMatchStatusInDB (&Match);
-
-   /***** Show current match status *****/
-   HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /************* Show previous question in a match (by a teacher) **************/
 /*****************************************************************************/
 
@@ -2307,6 +2274,65 @@ static void Mch_WriteHourglass (struct Match *Match)
 static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color)
   {
    extern const char *Txt_Countdown;
+   char *OnSubmit;
+   char *Class;
+   bool PutForm = Match->Status.Showing != Mch_END;
+
+   if (PutForm)
+     {
+      /***** Start form *****/
+      if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
+			      "'act=%ld&ses=%s&MchCod=%ld&Countdown=%ld');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActMchCntDwn),Gbl.Session.Id,
+		    Match->MchCod,Countdown) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      // Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+
+   /***** Put icon *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
+
+   if (PutForm)
+     {
+      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class,OnSubmit);
+     }
+   else
+      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
+
+   if (Countdown >= 0)
+      HTM_TxtF ("&nbsp;%ld&Prime;",Countdown);
+   else
+      HTM_Txt ("&nbsp;&infin;&nbsp;");
+
+   HTM_BUTTON_End ();
+
+   HTM_DIV_End ();
+
+   /***** Free class *****/
+   free (Class);
+
+   /***** End form *****/
+   if (PutForm)
+     {
+      Frm_EndForm ();
+      free (OnSubmit);
+     }
+  }
+
+static void Mch_PutFormCountdown_old (struct Match *Match,long Countdown,const char *Color)
+  {
+   extern const char *Txt_Countdown;
    char *Class;
    bool PutForm = Match->Status.Showing != Mch_END;
 
@@ -2332,7 +2358,7 @@ static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char 
    HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
 
    if (PutForm)
-      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class);
+      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class,NULL);
    else
       HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
 
@@ -2764,7 +2790,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
       Frm_StartForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
+      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN",NULL);
       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
       HTM_BUTTON_End ();
@@ -2808,7 +2834,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED");
+   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED",NULL);
    HTM_Txt ("<i class=\"fas fa-trash\"></i>");
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -2976,7 +3002,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 							     "",
 		    'A' + (char) NumOpt) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
+      HTM_BUTTON_OnMouseDown_Begin (NULL,Class,NULL);
       HTM_TxtF ("%c",'a' + (char) NumOpt);
       HTM_BUTTON_End ();
       free (Class);
@@ -3451,6 +3477,37 @@ void Mch_RemoveMyQuestionAnswer (void)
   }
 
 /*****************************************************************************/
+/******************** Start match countdown (by a teacher) *******************/
+/*****************************************************************************/
+
+void Mch_StartCountdown (void)
+  {
+   struct Match Match;
+   long NewCountdown;
+
+   /***** Get countdown parameter ****/
+   NewCountdown = Par_GetParToLong ("Countdown");
+
+   /***** Remove old players.
+          This function must be called by a teacher
+          before getting match status. *****/
+   Mch_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Start countdown *****/
+   Match.Status.Countdown = NewCountdown;
+
+   /***** Update match status in database *****/
+   Mch_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   Mch_ShowRefreshablePartTch (&Match);
+  }
+
+/*****************************************************************************/
 /****************** Refresh match for a teacher via AJAX *********************/
 /*****************************************************************************/
 
@@ -3498,11 +3555,11 @@ void Mch_RefreshMatchTch (void)
    switch (WhatToRefresh)
      {
       case REFRESH_LEFT:	// Refresh only left part
-         HTM_TxtF ("match_left|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+         HTM_Txt ("match_left|");
          Mch_ShowRefreshablePartTch (&Match);
          break;
       case REFRESH_ALL:		// Refresh the whole page
-         HTM_TxtF ("match|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+         HTM_Txt ("match|");
          Mch_ShowMatchStatusForTch (&Match);
          break;
      }

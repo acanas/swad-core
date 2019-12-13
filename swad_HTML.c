@@ -106,6 +106,8 @@ static void HTM_TEXTAREA_BeginWithoutAttr (void);
 
 static void HTM_SELECT_BeginWithoutAttr (void);
 
+static void HTM_SPTxt (const char *Txt);
+
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
 /*****************************************************************************/
@@ -127,7 +129,7 @@ void HTM_TABLE_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<table class=\"%s\">",Class);
+	 HTM_TxtF ("<table class=\"%s\">",Class);
 
 	 HTM_TABLE_NestingLevel++;
 
@@ -144,8 +146,8 @@ void HTM_TABLE_BeginPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
-	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+      HTM_TxtF ("<table class=\"CELLS_PAD_%u\">",
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
       HTM_TABLE_NestingLevel++;
      }
@@ -155,7 +157,7 @@ void HTM_TABLE_BeginPadding (unsigned CellPadding)
 
 static void HTM_TABLE_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<table>");
+   HTM_Txt ("<table>");
 
    HTM_TABLE_NestingLevel++;
   }
@@ -164,8 +166,8 @@ void HTM_TABLE_BeginCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
-	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+      HTM_TxtF ("<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
       HTM_TABLE_NestingLevel++;
      }
@@ -175,7 +177,7 @@ void HTM_TABLE_BeginCenterPadding (unsigned CellPadding)
 
 void HTM_TABLE_BeginCenter (void)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+   HTM_Txt ("<table class=\"FRAME_TBL_CENTER\">");
 
    HTM_TABLE_NestingLevel++;
   }
@@ -184,8 +186,8 @@ void HTM_TABLE_BeginWidePadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
-	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+      HTM_TxtF ("<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
       HTM_TABLE_NestingLevel++;
      }
@@ -195,7 +197,7 @@ void HTM_TABLE_BeginWidePadding (unsigned CellPadding)
 
 void HTM_TABLE_BeginWide (void)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
+   HTM_Txt ("<table class=\"FRAME_TBL_WIDE\">");
 
    HTM_TABLE_NestingLevel++;
   }
@@ -204,8 +206,8 @@ void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
-	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+      HTM_TxtF ("<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
       HTM_TABLE_NestingLevel++;
      }
@@ -215,7 +217,7 @@ void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding)
 
 void HTM_TABLE_BeginWideMargin (void)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
+   HTM_Txt ("<table class=\"FRAME_TBL_WIDE_MARGIN\">");
 
    HTM_TABLE_NestingLevel++;
   }
@@ -225,7 +227,7 @@ void HTM_TABLE_End (void)
    if (HTM_TABLE_NestingLevel == 0)	// No TABLE open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TABLE.");
 
-   fprintf (Gbl.F.Out,"</table>");
+   HTM_Txt ("</table>");
 
    HTM_TABLE_NestingLevel--;
   }
@@ -251,7 +253,7 @@ void HTM_TR_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<tr %s>",Attr);
+	 HTM_TxtF ("<tr %s>",Attr);
 
 	 free (Attr);
 	}
@@ -266,7 +268,7 @@ void HTM_TR_Begin (const char *fmt,...)
 
 static void HTM_TR_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<tr>");
+   HTM_Txt ("<tr>");
   }
 
 void HTM_TR_End (void)
@@ -274,7 +276,7 @@ void HTM_TR_End (void)
    if (HTM_TR_NestingLevel == 0)	// No TR open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
-   fprintf (Gbl.F.Out,"</tr>");
+   HTM_Txt ("</tr>");
 
    HTM_TR_NestingLevel--;
   }
@@ -348,7 +350,7 @@ static void HTM_TH_BeginAttr (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<th %s>",Attr);
+	 HTM_TxtF ("<th %s>",Attr);
 
 	 free (Attr);
 	}
@@ -363,7 +365,7 @@ static void HTM_TH_BeginAttr (const char *fmt,...)
 
 static void HTM_TH_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<th>");
+   HTM_Txt ("<th>");
   }
 
 void HTM_TH_End (void)
@@ -371,7 +373,7 @@ void HTM_TH_End (void)
    if (HTM_TH_NestingLevel == 0)	// No TH open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
-   fprintf (Gbl.F.Out,"</th>");
+   HTM_Txt ("</th>");
 
    HTM_TH_NestingLevel--;
   }
@@ -410,7 +412,7 @@ void HTM_TD_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<td %s>",Attr);
+	 HTM_TxtF ("<td %s>",Attr);
 
 	 free (Attr);
 	}
@@ -425,7 +427,7 @@ void HTM_TD_Begin (const char *fmt,...)
 
 static void HTM_TD_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<td>");
+   HTM_Txt ("<td>");
   }
 
 void HTM_TD_End (void)
@@ -433,7 +435,7 @@ void HTM_TD_End (void)
    if (HTM_TD_NestingLevel == 0)	// No TD open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TD.");
 
-   fprintf (Gbl.F.Out,"</td>");
+   HTM_Txt ("</td>");
 
    HTM_TD_NestingLevel--;
   }
@@ -485,7 +487,7 @@ void HTM_DIV_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<div %s>",Attr);
+	 HTM_TxtF ("<div %s>",Attr);
 
 	 free (Attr);
 	}
@@ -500,7 +502,7 @@ void HTM_DIV_Begin (const char *fmt,...)
 
 static void HTM_DIV_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_Txt ("<div>");
   }
 
 void HTM_DIV_End (void)
@@ -508,7 +510,7 @@ void HTM_DIV_End (void)
    if (HTM_DIV_NestingLevel == 0)	// No DIV open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DIV.");
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_Txt ("</div>");
 
    HTM_DIV_NestingLevel--;
   }
@@ -519,12 +521,12 @@ void HTM_DIV_End (void)
 
 void HTM_MAIN_Begin (const char *Class)
   {
-   fprintf (Gbl.F.Out,"<main class=\"%s\">",Class);
+   HTM_TxtF ("<main class=\"%s\">",Class);
   }
 
 void HTM_MAIN_End (void)
   {
-   fprintf (Gbl.F.Out,"</main>");
+   HTM_Txt ("</main>");
   }
 
 /*****************************************************************************/
@@ -533,12 +535,12 @@ void HTM_MAIN_End (void)
 
 void HTM_ARTICLE_Begin (const char *ArticleId)
   {
-   fprintf (Gbl.F.Out,"<article id=\"%s\">",ArticleId);
+   HTM_TxtF ("<article id=\"%s\">",ArticleId);
   }
 
 void HTM_ARTICLE_End (void)
   {
-   fprintf (Gbl.F.Out,"</article>");
+   HTM_Txt ("</article>");
   }
 
 /*****************************************************************************/
@@ -547,12 +549,12 @@ void HTM_ARTICLE_End (void)
 
 void HTM_SECTION_Begin (const char *SectionId)
   {
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",SectionId);
+   HTM_TxtF ("<section id=\"%s\">",SectionId);
   }
 
 void HTM_SECTION_End (void)
   {
-   fprintf (Gbl.F.Out,"</section>");
+   HTM_Txt ("</section>");
   }
 
 /*****************************************************************************/
@@ -576,7 +578,7 @@ void HTM_SPAN_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<span %s>",Attr);
+	 HTM_TxtF ("<span %s>",Attr);
 
 	 free (Attr);
 	}
@@ -591,7 +593,7 @@ void HTM_SPAN_Begin (const char *fmt,...)
 
 static void HTM_SPAN_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<span>");
+   HTM_Txt ("<span>");
   }
 
 void HTM_SPAN_End (void)
@@ -599,7 +601,7 @@ void HTM_SPAN_End (void)
    if (HTM_SPAN_NestingLevel == 0)	// No SPAN open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SPAN.");
 
-   fprintf (Gbl.F.Out,"</span>");
+   HTM_Txt ("</span>");
 
    HTM_SPAN_NestingLevel--;
   }
@@ -610,7 +612,7 @@ void HTM_SPAN_End (void)
 
 void HTM_OL_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<ol>");
+   HTM_Txt ("<ol>");
 
    HTM_OL_NestingLevel++;
   }
@@ -620,7 +622,7 @@ void HTM_OL_End (void)
    if (HTM_OL_NestingLevel == 0)	// No OL open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened OL.");
 
-   fprintf (Gbl.F.Out,"</ol>");
+   HTM_Txt ("</ol>");
 
    HTM_OL_NestingLevel--;
   }
@@ -642,7 +644,7 @@ void HTM_UL_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<ul %s>",Attr);
+	 HTM_TxtF ("<ul %s>",Attr);
 
 	 free (Attr);
 	}
@@ -657,7 +659,7 @@ void HTM_UL_Begin (const char *fmt,...)
 
 static void HTM_UL_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<ul>");
+   HTM_Txt ("<ul>");
   }
 
 void HTM_UL_End (void)
@@ -665,7 +667,7 @@ void HTM_UL_End (void)
    if (HTM_UL_NestingLevel == 0)	// No UL open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened UL.");
 
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_Txt ("</ul>");
 
    HTM_UL_NestingLevel--;
   }
@@ -691,7 +693,7 @@ void HTM_LI_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<li %s>",Attr);
+	 HTM_TxtF ("<li %s>",Attr);
 
 	 free (Attr);
 	}
@@ -706,7 +708,7 @@ void HTM_LI_Begin (const char *fmt,...)
 
 static void HTM_LI_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<li>");
+   HTM_Txt ("<li>");
   }
 
 void HTM_LI_End (void)
@@ -714,7 +716,7 @@ void HTM_LI_End (void)
    if (HTM_LI_NestingLevel == 0)	// No LI open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened LI.");
 
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_Txt ("</li>");
 
    HTM_LI_NestingLevel--;
   }
@@ -725,7 +727,7 @@ void HTM_LI_End (void)
 
 void HTM_DL_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<dl>");
+   HTM_Txt ("<dl>");
 
    HTM_DL_NestingLevel++;
   }
@@ -735,14 +737,14 @@ void HTM_DL_End (void)
    if (HTM_DL_NestingLevel == 0)	// No DL open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DL.");
 
-   fprintf (Gbl.F.Out,"</dl>");
+   HTM_Txt ("</dl>");
 
    HTM_DL_NestingLevel--;
   }
 
 void HTM_DT_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<dt>");
+   HTM_Txt ("<dt>");
 
    HTM_DT_NestingLevel++;
   }
@@ -752,14 +754,14 @@ void HTM_DT_End (void)
    if (HTM_DL_NestingLevel == 0)	// No DT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DT.");
 
-   fprintf (Gbl.F.Out,"</dt>");
+   HTM_Txt ("</dt>");
 
    HTM_DT_NestingLevel--;
   }
 
 void HTM_DD_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<dd>");
+   HTM_Txt ("<dd>");
 
    HTM_DD_NestingLevel++;
   }
@@ -769,7 +771,7 @@ void HTM_DD_End (void)
    if (HTM_DD_NestingLevel == 0)	// No DD open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened DD.");
 
-   fprintf (Gbl.F.Out,"</dd>");
+   HTM_Txt ("</dd>");
 
    HTM_DD_NestingLevel--;
   }
@@ -795,7 +797,7 @@ void HTM_A_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<a %s>",Attr);
+	 HTM_TxtF ("<a %s>",Attr);
 
 	 free (Attr);
 	}
@@ -810,7 +812,7 @@ void HTM_A_Begin (const char *fmt,...)
 
 static void HTM_A_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<a>");
+   HTM_Txt ("<a>");
   }
 
 void HTM_A_End (void)
@@ -818,7 +820,7 @@ void HTM_A_End (void)
    if (HTM_A_NestingLevel == 0)	// No A open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened A.");
 
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_Txt ("</a>");
 
    HTM_A_NestingLevel--;
   }
@@ -829,14 +831,14 @@ void HTM_A_End (void)
 
 void HTM_SCRIPT_Begin (const char *URL,const char *CharSet)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\"");
+   HTM_Txt ("<script type=\"text/javascript\"");
    if (URL)
       if (URL[0])
-         fprintf (Gbl.F.Out," src=\"%s\"",URL);
+         HTM_TxtF (" src=\"%s\"",URL);
    if (CharSet)
       if (CharSet[0])
-         fprintf (Gbl.F.Out," charset=\"%s\"",CharSet);
-   fprintf (Gbl.F.Out,">\n");
+         HTM_TxtF (" charset=\"%s\"",CharSet);
+   HTM_Txt (">\n");
 
    HTM_SCRIPT_NestingLevel++;
   }
@@ -846,7 +848,7 @@ void HTM_SCRIPT_End (void)
    if (HTM_SCRIPT_NestingLevel == 0)	// No SCRIPT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SCRIPT.");
 
-   fprintf (Gbl.F.Out,"</script>\n");
+   HTM_Txt ("</script>\n");
 
    HTM_SCRIPT_NestingLevel--;
   }
@@ -872,7 +874,7 @@ void HTM_PARAM (const char *Name,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"\n<param name=\"%s\" value=\"%s\">",Name,Value);
+	 HTM_TxtF ("\n<param name=\"%s\" value=\"%s\">",Name,Value);
 
 	 free (Value);
 	}
@@ -899,7 +901,7 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<label %s>",Attr);
+	 HTM_TxtF ("<label %s>",Attr);
 
 	 free (Attr);
 	}
@@ -914,7 +916,7 @@ void HTM_LABEL_Begin (const char *fmt,...)
 
 static void HTM_LABEL_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<label>");
+   HTM_Txt ("<label>");
   }
 
 void HTM_LABEL_End (void)
@@ -922,7 +924,7 @@ void HTM_LABEL_End (void)
    if (HTM_LABEL_NestingLevel == 0)	// No LABEL open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened LABEL.");
 
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_Txt ("</label>");
 
    HTM_LABEL_NestingLevel--;
   }
@@ -938,9 +940,8 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
-		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,MaxLength,Value);
+   HTM_TxtF ("<input type=\"text\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
+	     Name,MaxLength,Value);
 
    if (fmt)
      {
@@ -953,17 +954,17 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
@@ -973,9 +974,8 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"%s\""
-		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,MaxLength,Value);
+   HTM_TxtF ("<input type=\"search\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
+	     Name,MaxLength,Value);
 
    if (fmt)
      {
@@ -988,13 +988,13 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
@@ -1004,9 +1004,8 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"%s\""
-		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Usr_MAX_CHARS_PHONE,Value);
+   HTM_TxtF ("<input type=\"tel\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
+	     Name,Usr_MAX_CHARS_PHONE,Value);
 
    if (fmt)
      {
@@ -1019,17 +1018,17 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
@@ -1039,9 +1038,8 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"email\" name=\"%s\""
-		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,MaxLength,Value);
+   HTM_TxtF ("<input type=\"email\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
+	     Name,MaxLength,Value);
 
    if (fmt)
      {
@@ -1054,13 +1052,13 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
@@ -1070,9 +1068,8 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"%s\""
-		      " maxlength=\"%u\" value=\"%s\"",
-	    Name,Cns_MAX_CHARS_WWW,Value);
+   HTM_TxtF ("<input type=\"url\" name=\"%s\ maxlength=\"%u\" value=\"%s\"",
+	     Name,Cns_MAX_CHARS_WWW,Value);
 
    if (fmt)
      {
@@ -1085,17 +1082,17 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
@@ -1105,8 +1102,8 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" accept=\"%s\"",
-	    Name,Accept);
+   HTM_TxtF ("<input type=\"file\" name=\"%s\" accept=\"%s\"",
+	     Name,Accept);
 
    if (fmt)
      {
@@ -1119,34 +1116,34 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
-   fprintf (Gbl.F.Out," />");
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
-   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"%s\" value=\"%s\"%s />",
-	    Name,Value,Attr);
+   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\"%s />",
+	     Name,Value,Attr);
   }
 
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class)
   {
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s",URL);
+   HTM_TxtF ("<input type=\"image\" src=\"%s",URL);
    if (Icon)
       if (Icon[0])
-         fprintf (Gbl.F.Out,"/%s",Icon);
-   fprintf (Gbl.F.Out,"\"");
+         HTM_TxtF ("/%s",Icon);
+   HTM_Txt ("\"");
 
-   fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" class=\"%s\" />",
-	    Title,Title,Class);
+   HTM_TxtF (" alt=\"%s\" title=\"%s\" class=\"%s\" />",
+	     Title,Title,Class);
   }
 
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
@@ -1157,17 +1154,16 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"password\" name=\"%s\""
-                      " size=\"18\" maxlength=\"%u\"",
-	    Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
+   HTM_TxtF ("<input type=\"password\" name=\"%s\" size=\"18\" maxlength=\"%u\"",
+	     Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
    if (PlaceHolder)
       if (PlaceHolder[0])
-	 fprintf (Gbl.F.Out," placeholder=\"%s\"",PlaceHolder);
+	 HTM_TxtF (" placeholder=\"%s\"",PlaceHolder);
    if (AutoComplete)
       if (AutoComplete[0])
-         fprintf (Gbl.F.Out," autocomplete=\"%s\"",AutoComplete);
+         HTM_TxtF (" autocomplete=\"%s\"",AutoComplete);
    if (Required)
-      fprintf (Gbl.F.Out," required=\"required\"");
+      HTM_Txt (" required=\"required\"");
 
    if (fmt)
      {
@@ -1180,13 +1176,13 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled,
@@ -1196,12 +1192,10 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"%s\""
-	              " min=\"%ld\" max=\"%ld\" value=\"%ld\"",
-	    Name,
-	    Min,Max,Value);
+   HTM_TxtF ("<input type=\"number\" name=\"%s\" min=\"%ld\" max=\"%ld\" value=\"%ld\"",
+	     Name,Min,Max,Value);
    if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
      {
@@ -1214,13 +1208,13 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
@@ -1231,13 +1225,13 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double 
    char *Attr;
 
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"%s\""
-	              " min=\"%lg\" max=\"%lg\" step=\"%lg\" value=\"%lg\"",
-	    Name,
-	    Min,Max,Step,Value);
+   HTM_TxtF ("<input type=\"number\" name=\"%s\""
+	     " min=\"%lg\" max=\"%lg\" step=\"%lg\" value=\"%lg\"",
+	     Name,
+	     Min,Max,Step,Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
    if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
      {
@@ -1250,13 +1244,13 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double 
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
@@ -1266,7 +1260,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\"",Name);
+   HTM_TxtF ("<input type=\"radio\" name=\"%s\"",Name);
 
    if (fmt)
      {
@@ -1279,16 +1273,16 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnClick)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
-   fprintf (Gbl.F.Out," />");
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
@@ -1298,7 +1292,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\"",Name);
+   HTM_TxtF ("<input type=\"checkbox\" name=\"%s\"",Name);
 
    if (fmt)
      {
@@ -1311,40 +1305,44 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
 /********************************** Buttons **********************************/
 /*****************************************************************************/
 
-void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class)
+void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class,const char *OnMouseDown)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\"");
+   HTM_Txt ("<button type=\"submit\"");
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
    if (Class)
       if (Class[0])
          HTM_TxtF (" class=\"%s\"",Class);
-   fprintf (Gbl.F.Out," onmousedown=\"document.getElementById('%s').submit();return false;\">",
-	    Gbl.Form.Id);
+   HTM_TxtF (" onmousedown=\"");
+   if (OnMouseDown)	// JavaScript function to be called before submitting the form
+      if (OnMouseDown[0])
+         HTM_TxtF ("%s;",OnMouseDown);
+   HTM_TxtF ("document.getElementById('%s').submit();return false;\">",
+	     Gbl.Form.Id);
    HTM_BUTTON_NestingLevel++;
   }
 
 void HTM_BUTTON_SUBMIT_Begin (const char *Title,const char *Class,const char *OnSubmit)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\"");
+   HTM_Txt ("<button type=\"submit\"");
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
@@ -1354,14 +1352,14 @@ void HTM_BUTTON_SUBMIT_Begin (const char *Title,const char *Class,const char *On
    if (OnSubmit)	// JavaScript function to be called before submitting the form
       if (OnSubmit[0])
          HTM_TxtF (" onsubmit=\"%s;\"",OnSubmit);
-   fprintf (Gbl.F.Out,">");
+   HTM_Txt (">");
 
    HTM_BUTTON_NestingLevel++;
   }
 
 void HTM_BUTTON_BUTTON_Begin (const char *Title,const char *Class,const char *OnClick)
   {
-   fprintf (Gbl.F.Out,"<button type=\"button\"");
+   HTM_Txt ("<button type=\"button\"");
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
@@ -1371,14 +1369,14 @@ void HTM_BUTTON_BUTTON_Begin (const char *Title,const char *Class,const char *On
    if (OnClick)	// JavaScript function to be called when clicking the button
       if (OnClick[0])
          HTM_TxtF (" onclick=\"%s;\"",OnClick);
-   fprintf (Gbl.F.Out,">");
+   HTM_Txt (">");
 
    HTM_BUTTON_NestingLevel++;
   }
 
 void HTM_BUTTON_Animated_Begin (const char *Title,const char *Class,const char *OnClick)
   {
-   fprintf (Gbl.F.Out,"<button type=\"submit\"");
+   HTM_Txt ("<button type=\"submit\"");
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
@@ -1399,7 +1397,7 @@ void HTM_BUTTON_End (void)
    if (HTM_BUTTON_NestingLevel == 0)	// No BUTTON open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened BUTTON.");
 
-   fprintf (Gbl.F.Out,"</button>");
+   HTM_Txt ("</button>");
 
    HTM_BUTTON_NestingLevel--;
   }
@@ -1425,7 +1423,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<textarea %s>",Attr);
+	 HTM_TxtF ("<textarea %s>",Attr);
 
 	 free (Attr);
 	}
@@ -1440,7 +1438,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 
 static void HTM_TEXTAREA_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<textarea>");
+   HTM_Txt ("<textarea>");
   }
 
 void HTM_TEXTAREA_End (void)
@@ -1448,7 +1446,7 @@ void HTM_TEXTAREA_End (void)
    if (HTM_TEXTAREA_NestingLevel == 0)	// No TEXTAREA open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TEXTAREA.");
 
-   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_Txt ("</textarea>");
 
    HTM_TEXTAREA_NestingLevel--;
   }
@@ -1475,7 +1473,7 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,"<select %s",Attr);
+	 HTM_TxtF ("<select %s",Attr);
 
 	 free (Attr);
 	}
@@ -1487,16 +1485,16 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
 
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
-	       Gbl.Form.Id);
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
    HTM_SELECT_NestingLevel++;
   }
 
 static void HTM_SELECT_BeginWithoutAttr (void)
   {
-   fprintf (Gbl.F.Out,"<select");
+   HTM_Txt ("<select");
   }
 
 void HTM_SELECT_End (void)
@@ -1504,14 +1502,14 @@ void HTM_SELECT_End (void)
    if (HTM_SELECT_NestingLevel == 0)	// No SELECT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SELECT.");
 
-   fprintf (Gbl.F.Out,"</select>");
+   HTM_Txt ("</select>");
 
    HTM_SELECT_NestingLevel--;
   }
 
 void HTM_OPTGROUP_Begin (const char *Label)
   {
-   fprintf (Gbl.F.Out,"<optgroup label=\"%s\">",Label);
+   HTM_TxtF ("<optgroup label=\"%s\">",Label);
 
    HTM_OPTGROUP_NestingLevel++;
   }
@@ -1521,7 +1519,7 @@ void HTM_OPTGROUP_End (void)
    if (HTM_OPTGROUP_NestingLevel == 0)	// No OPTGROUP open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened OPTGROUP.");
 
-   fprintf (Gbl.F.Out,"</optgroup>");
+   HTM_Txt ("</optgroup>");
 
    HTM_OPTGROUP_NestingLevel--;
   }
@@ -1533,7 +1531,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
    int NumBytesPrinted;
    char *Content;
 
-   fprintf (Gbl.F.Out,"<option value=\"");
+   HTM_Txt ("<option value=\"");
    switch (Type)
      {
       case HTM_Type_UNSIGNED:
@@ -1546,12 +1544,12 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	 HTM_Txt ((char *) ValuePtr);
 	 break;
      }
-   fprintf (Gbl.F.Out,"\"");
+   HTM_Txt ("\"");
    if (Selected)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
+      HTM_Txt (" selected=\"selected\"");
    if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_Txt (" disabled=\"disabled\"");
+   HTM_Txt (">");
 
    if (fmt)
      {
@@ -1570,7 +1568,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	}
      }
 
-   fprintf (Gbl.F.Out,"</option>");
+   HTM_Txt ("</option>");
   }
 
 /*****************************************************************************/
@@ -1584,21 +1582,21 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<img src=\"%s",URL);
+   HTM_TxtF ("<img src=\"%s",URL);
    if (Icon)
       if (Icon[0])
-         fprintf (Gbl.F.Out,"/%s",Icon);
-   fprintf (Gbl.F.Out,"\"");
+         HTM_TxtF ("/%s",Icon);
+   HTM_Txt ("\"");
 
    if (Title)
      {
       if (Title[0])
-         fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\"",Title,Title);
+         HTM_TxtF (" alt=\"%s\" title=\"%s\"",Title,Title);
       else
-         fprintf (Gbl.F.Out," alt=\"\"");
+         HTM_Txt (" alt=\"\"");
      }
    else
-      fprintf (Gbl.F.Out," alt=\"\"");
+      HTM_Txt (" alt=\"\"");
 
    if (fmt)
      {
@@ -1611,13 +1609,13 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 fprintf (Gbl.F.Out," %s",Attr);
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
      }
 
-   fprintf (Gbl.F.Out," />");
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -1626,7 +1624,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 
 void HTM_STRONG_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<strong>");
+   HTM_Txt ("<strong>");
 
    HTM_STRONG_NestingLevel++;
   }
@@ -1636,7 +1634,7 @@ void HTM_STRONG_End (void)
    if (HTM_STRONG_NestingLevel == 0)	// No STRONG open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened STRONG.");
 
-   fprintf (Gbl.F.Out,"</strong>");
+   HTM_Txt ("</strong>");
 
    HTM_STRONG_NestingLevel--;
   }
@@ -1647,7 +1645,7 @@ void HTM_STRONG_End (void)
 
 void HTM_EM_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<em>");
+   HTM_Txt ("<em>");
 
    HTM_EM_NestingLevel++;
   }
@@ -1657,7 +1655,7 @@ void HTM_EM_End (void)
    if (HTM_EM_NestingLevel == 0)	// No EM open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened EM.");
 
-   fprintf (Gbl.F.Out,"</em>");
+   HTM_Txt ("</em>");
 
    HTM_EM_NestingLevel--;
   }
@@ -1668,7 +1666,7 @@ void HTM_EM_End (void)
 
 void HTM_U_Begin (void)
   {
-   fprintf (Gbl.F.Out,"<u>");
+   HTM_Txt ("<u>");
 
    HTM_U_NestingLevel++;
   }
@@ -1678,7 +1676,7 @@ void HTM_U_End (void)
    if (HTM_U_NestingLevel == 0)	// No U open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened U.");
 
-   fprintf (Gbl.F.Out,"</u>");
+   HTM_Txt ("</u>");
 
    HTM_U_NestingLevel--;
   }
@@ -1689,7 +1687,7 @@ void HTM_U_End (void)
 
 void HTM_BR (void)
   {
-   fprintf (Gbl.F.Out,"<br />");
+   HTM_Txt ("<br />");
   }
 
 /*****************************************************************************/
@@ -1716,6 +1714,13 @@ void HTM_TxtF (const char *fmt,...)
 
 	 free (Attr);
 	}
+  }
+
+
+static void HTM_SPTxt (const char *Txt)
+  {
+   HTM_Txt (" ");
+   HTM_Txt (Txt);
   }
 
 void HTM_Txt (const char *Txt)
@@ -1750,30 +1755,30 @@ void HTM_Asterisk (void)
 
 void HTM_Unsigned (unsigned Num)
   {
-   fprintf (Gbl.F.Out,"%u",Num);
+   HTM_TxtF ("%u",Num);
   }
 
 void HTM_Int (int Num)
   {
-   fprintf (Gbl.F.Out,"%d",Num);
+   HTM_TxtF ("%d",Num);
   }
 
 void HTM_UnsignedLong (unsigned long Num)
   {
-   fprintf (Gbl.F.Out,"%lu",Num);
+   HTM_TxtF ("%lu",Num);
   }
 
 void HTM_Long (long Num)
   {
-   fprintf (Gbl.F.Out,"%ld",Num);
+   HTM_TxtF ("%ld",Num);
   }
 
 void HTM_Double (double Num)
   {
-   fprintf (Gbl.F.Out,"%.2lf",Num);
+   HTM_TxtF ("%.2lf",Num);
   }
 
 void HTM_Percentage (double Percentage)
   {
-   fprintf (Gbl.F.Out,"%5.2lf%%",Percentage);
+   HTM_TxtF ("%5.2lf%%",Percentage);
   }

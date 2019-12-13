@@ -572,9 +572,9 @@ function readMatchStdData () {
 		if (objXMLHttpReqMchStd.status == 200) {
 			var htmlMatch = objXMLHttpReqMchStd.responseText;	// Get HTML code
 
-			var divMatch = document.getElementById('match');	// Access to refreshable DIV
-			if (divMatch)
-				divMatch.innerHTML = htmlMatch;					// Update refreshable DIV
+			var div = document.getElementById('match');	// Access to refreshable DIV
+			if (div)
+				div.innerHTML = htmlMatch;				// Update DIV content
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchStd()',delayMatch);
 		}
@@ -608,12 +608,47 @@ function readMatchTchData () {
 			var Id = objXMLHttpReqMchTch.responseText.substring(0,endOfId);	// Get Id
 			var htmlMatch = objXMLHttpReqMchTch.responseText.substring(endOfId + 1);	// Get HTML code
 
-			var divMatch = document.getElementById(Id);			// Access to refreshable DIV
-			if (divMatch)
-				divMatch.innerHTML = htmlMatch;					// Update refreshable DIV
+			var div = document.getElementById(Id);	// Access to refreshable DIV
+			if (div) {
+				div.innerHTML = htmlMatch;			// Update DIV content
+			
+				// Scripts in div got via AJAX are not executed ==> execute them
+				evalScriptsInElem (div);
+
+				// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+			}
+			
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchTch()',delayMatch);
 		}
+	}
+}
+
+/*****************************************************************************/
+/****************** Update match control area using AJAX *********************/
+/*****************************************************************************/
+
+// This function is called when user submit a form inside two parent divs
+function updateMatchTch (id,Params) {
+    var objXMLHttp = false;
+
+	objXMLHttp = AJAXCreateObject ();
+	if (objXMLHttp) {
+		/* Send request to server */
+		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
+			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+				if (objXMLHttp.status == 200)
+					if (id) {
+						var div = document.getElementById(id);			// Access to DIV
+						if (div)
+							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
+					}
+			}
+		};
+		objXMLHttp.open('POST',ActionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.send(Params);
 	}
 }
 

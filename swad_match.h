@@ -109,7 +109,6 @@ void Mch_RemoveGroupsOfType (long GrpTypCod);
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);
 void Mch_ToggleVisibilResultsMchQst (void);
-void Mch_StartCountdown (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 
@@ -122,6 +121,8 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);
 void Mch_RemoveMyQuestionAnswer (void);
+
+void Mch_StartCountdown (void);
 void Mch_RefreshMatchTch (void);
 void Mch_RefreshMatchStd (void);
 

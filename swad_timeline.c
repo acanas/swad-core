@@ -1237,7 +1237,7 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
    Ico_PutIconLink (Icon,Title);
    Frm_EndForm ();
 
-   /* Free allocated memory for subquery */
+   /* Free allocated memory */
    free (OnSubmit);
   }
 
@@ -2786,7 +2786,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
    /* End form */
    Frm_EndForm ();
 
-   /* Free allocated memory for subquery */
+   /* Free allocated memory */
    free (OnSubmit);
 
    HTM_DIV_End ();
