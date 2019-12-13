@@ -4816,6 +4816,28 @@ const char *Txt_Could_not_detect_any_face_in_front_position_ =
 	"N&atilde;o foi poss&iacute;vel detectar nenhum rosto na posi&ccedil;&atilde;o frontal.";
 #endif
 
+
+const char *Txt_Countdown =
+#if   L==1	// ca
+	"Compte enrere";
+#elif L==2	// de
+	"Countdown";
+#elif L==3	// en
+	"Countdown";
+#elif L==4	// es
+	"Cuenta atr&aacute;s";
+#elif L==5	// fr
+	"Compte &agrave; rebours";
+#elif L==6	// gn
+	"Cuenta atr&aacute;s";	// Okoteve traducción
+#elif L==7	// it
+	"Conto alla rovescia";
+#elif L==8	// pl
+	"Odliczanie";
+#elif L==9	// pt
+	"Contagem regressiva";
+#endif
+
 const char *Txt_Countries =
 #if   L==1	// ca
 	"Pa&iuml;sos";

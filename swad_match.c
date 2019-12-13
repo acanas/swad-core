@@ -61,6 +61,10 @@ extern struct Globals Gbl;
 #define Mch_ICON_NEXT		"fas fa-step-forward"
 #define Mch_ICON_RESULTS	"fas fa-chart-bar"
 
+#define Mch_COUNTDOWN_SECONDS_LARGE  60
+#define Mch_COUNTDOWN_SECONDS_MEDIUM 30
+#define Mch_COUNTDOWN_SECONDS_SMALL  10
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -164,8 +168,8 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_WriteElapsedTimeInMch (struct Match *Match);
 static void Mch_WriteElapsedTimeInQst (struct Match *Match);
 static void Mch_WriteHourglass (struct Match *Match);
-static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
-				  const char *Class,const char *Txt);
+static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color);
+static void Mch_PutHourglassIconAndCountdown (struct Match *Match);
 static void Mch_WriteNumRespondersQst (struct Match *Match);
 
 static void Mch_ShowRightColumnTch (const struct Match *Match);
@@ -2283,65 +2287,25 @@ static void Mch_WriteElapsedTimeInQst (struct Match *Match)
 
 static void Mch_WriteHourglass (struct Match *Match)
   {
-   const char *Class;
-   const char *Icon;
-
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
 
    /***** Put forms to start countdown *****/
-   Mch_PutFormCountdown (Match,-1L,"MCH_GREEN"    ,"&nbsp;&infin;&nbsp;");
-   Mch_PutFormCountdown (Match,60L,"MCH_LIMEGREEN","&nbsp;60&Prime;"    );
-   Mch_PutFormCountdown (Match,30L,"MCH_YELLOW"   ,"&nbsp;30&Prime;"    );
-   Mch_PutFormCountdown (Match,10L,"MCH_RED"      ,"&nbsp;10&Prime;"    );
+   Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
 
-   /***** Set hourglass icon depending on countdown *****/
-   if (Match->Status.Showing == Mch_END)	// Match over
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_HIDDEN MCH_GREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown < 0)	// No countdown
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_GREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown > 30)	// Countdown in progress
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_LIMEGREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown > 10)	// Countdown in progress
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_YELLOW";
-      Icon  = "fa-hourglass-half";
-     }
-   else						// Countdown about to end
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_RED";
-      Icon  = "fa-hourglass-end";
-     }
-
-   /***** Put icon with link *****/
-   HTM_BR ();
-   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_BUTTON_Begin ("Cuenta atr&aacute;s",Class,NULL);	// TODO: Need translation!!!!
-   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
-   HTM_BR ();
-   if (Match->Status.Countdown > 0)
-      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
-   else
-      HTM_NBSP ();
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
+   /***** Put icon hourglass and write countdown *****/
+   Mch_PutHourglassIconAndCountdown (Match);
 
    /***** End container *****/
    HTM_DIV_End ();
   }
 
-static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
-				  const char *Color,const char *Txt)
+static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color)
   {
+   extern const char *Txt_Countdown;
    char *Class;
    bool PutForm = Match->Status.Showing != Mch_END;
 
@@ -2365,12 +2329,19 @@ static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
 
    /***** Put icon *****/
    HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
+
    if (PutForm)
-      HTM_BUTTON_OnMouseDown_Begin ("Cuenta atr&aacute;s",Class);	// TODO: Need translation!!!!
+      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class);
    else
       HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
-   HTM_Txt (Txt);
+
+   if (Countdown >= 0)
+      HTM_TxtF ("&nbsp;%ld&Prime;",Countdown);
+   else
+      HTM_Txt ("&nbsp;&infin;&nbsp;");
+
    HTM_BUTTON_End ();
+
    HTM_DIV_End ();
 
    /***** Free class *****/
@@ -2380,6 +2351,57 @@ static void Mch_PutFormCountdown (struct Match *Match,long Countdown,
    if (PutForm)
       Frm_EndForm ();
   }
+
+static void Mch_PutHourglassIconAndCountdown (struct Match *Match)
+  {
+   extern const char *Txt_Countdown;
+   const char *Class;
+   const char *Icon;
+
+   /***** Set hourglass icon depending on countdown *****/
+   if (Match->Status.Showing == Mch_END)				// Match over
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_HIDDEN MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown < 0)				// No countdown
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_MEDIUM)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_LIMEGREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_SMALL)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_YELLOW";
+      Icon  = "fa-hourglass-half";
+     }
+   else									// Countdown about to end
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_RED";
+      Icon  = "fa-hourglass-end";
+     }
+
+   /***** Put hourglass icon with countdown *****/
+   HTM_BR ();
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
+   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
+   HTM_BR ();
+   if (Match->Status.Countdown > 0)
+      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
+   else
+      HTM_NBSP ();
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*************** Write number of responders to a match question **************/
+/*****************************************************************************/
 
 static void Mch_WriteNumRespondersQst (struct Match *Match)
   {
