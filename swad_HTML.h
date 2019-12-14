@@ -179,6 +179,7 @@ void HTM_Int (int Num);
 void HTM_UnsignedLong (unsigned long Num);
 void HTM_Long (long Num);
 void HTM_Double (double Num);
+void HTM_Double2Decimals (double Num);
 void HTM_Percentage (double Percentage);
 
 #endif

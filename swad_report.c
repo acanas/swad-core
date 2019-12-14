@@ -140,6 +140,8 @@ static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
 static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
                                 unsigned MaxBarWidth);
 
+static void Rep_WriteDouble (double Num);
+
 static void Rep_RemoveUsrReportsFiles (long UsrCod);
 static void Rep_RemoveUsrReportsFromDB (long UsrCod);
 
@@ -651,9 +653,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
-	                           (double) Report->UsrFigures.NumClicks /
-			           (double) Report->UsrFigures.NumDays);
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumClicks /
+			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -686,9 +687,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
-	                           (double) Report->UsrFigures.NumFileViews /
-			           (double) Report->UsrFigures.NumDays);
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumFileViews /
+			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -707,9 +707,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
-	                           (double) Report->UsrFigures.NumForPst /
-			           (double) Report->UsrFigures.NumDays);
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumForPst /
+			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -728,9 +727,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteDoubleNumToFile (Gbl.F.Rep,
-	                           (double) Report->UsrFigures.NumMsgSnt /
-			           (double) Report->UsrFigures.NumDays);
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumMsgSnt /
+			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -1378,8 +1376,27 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
 
       /***** Write the number of hits *****/
       fprintf (Gbl.F.Rep,"&nbsp;");
-      Str_WriteDoubleNumToFile (Gbl.F.Rep,HitsNum);
+      Rep_WriteDouble (HitsNum);
      }
+  }
+
+/*****************************************************************************/
+/********** Remove all user's usage report of a user from database ***********/
+/*****************************************************************************/
+
+static void Rep_WriteDouble (double Num)
+  {
+   char *Str;
+
+   /***** Write from floating point number to string
+          with the correct accuracy *****/
+   Str_DoubleNumToStr (&Str,Num);
+
+   /***** Write number from string to file *****/
+   fputs (Str,Gbl.F.Rep);
+
+   /***** Free memory allocated for string *****/
+   free (Str);
   }
 
 /*****************************************************************************/

@@ -1771,6 +1771,21 @@ void HTM_Long (long Num)
 
 void HTM_Double (double Num)
   {
+   char *Str;
+
+   /***** Write from floating point number to string
+          with the correct accuracy *****/
+   Str_DoubleNumToStr (&Str,Num);
+
+   /***** Write number from string to file *****/
+   HTM_Txt (Str);
+
+   /***** Free memory allocated for string *****/
+   free (Str);
+  }
+
+void HTM_Double2Decimals (double Num)
+  {
    HTM_TxtF ("%.2lf",Num);
   }
 

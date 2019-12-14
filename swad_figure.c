@@ -436,11 +436,11 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double (NumCrssPerUsr);
+   HTM_Double2Decimals (NumCrssPerUsr);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double (NumUsrsPerCrs);
+   HTM_Double2Decimals (NumUsrsPerCrs);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -467,11 +467,11 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double (0.0);
+   HTM_Double2Decimals (0.0);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double (0.0);
+   HTM_Double2Decimals (0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2979,7 +2979,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double (NumAssignmentsPerCourse);
+   HTM_Double2Decimals (NumAssignmentsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3038,7 +3038,7 @@ static void Fig_GetAndShowProjectsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double (NumProjectsPerCourse);
+   HTM_Double2Decimals (NumProjectsPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3119,7 +3119,7 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (Stats.AvgQstsPerCourse);
+      HTM_Double2Decimals (Stats.AvgQstsPerCourse);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3127,15 +3127,15 @@ static void Fig_GetAndShowTestsStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (Stats.AvgHitsPerCourse);
+      HTM_Double2Decimals (Stats.AvgHitsPerCourse);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (Stats.AvgHitsPerQuestion);
+      HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (Stats.AvgScorePerQuestion);
+      HTM_Double2Decimals (Stats.AvgScorePerQuestion);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3168,7 +3168,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (Stats.AvgQstsPerCourse);
+   HTM_Double2Decimals (Stats.AvgQstsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3176,15 +3176,15 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (Stats.AvgHitsPerCourse);
+   HTM_Double2Decimals (Stats.AvgHitsPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (Stats.AvgHitsPerQuestion);
+   HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (Stats.AvgScorePerQuestion);
+   HTM_Double2Decimals (Stats.AvgScorePerQuestion);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3238,7 +3238,7 @@ static void Fig_GetAndShowGamesStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double (NumGamesPerCourse);
+   HTM_Double2Decimals (NumGamesPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3420,7 +3420,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (NumUsrs ? (double) NumNotes / (double) NumUsrs :
+      HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
         	            0.0);
       HTM_TD_End ();
 
@@ -3540,7 +3540,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (NumUsrs ? (double) NumNotes / (double) NumUsrs :
+   HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 		         0.0);
    HTM_TD_End ();
 
@@ -3824,7 +3824,7 @@ static void Fig_GetAndShowFollowStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double (Average);
+      HTM_Double2Decimals (Average);
       HTM_TD_End ();
 
       HTM_TD_Empty (1);
@@ -4100,15 +4100,15 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double (NumThrsPerForum);
+   HTM_Double2Decimals (NumThrsPerForum);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double (NumPostsPerThread);
+   HTM_Double2Decimals (NumPostsPerThread);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double (NumPostsPerForum);
+   HTM_Double2Decimals (NumPostsPerForum);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4163,15 +4163,15 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (NumThrsPerForum);
+   HTM_Double2Decimals (NumThrsPerForum);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (NumPostsPerThread);
+   HTM_Double2Decimals (NumPostsPerThread);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-   HTM_Double (NumPostsPerForum);
+   HTM_Double2Decimals (NumPostsPerForum);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4628,11 +4628,11 @@ static void Fig_GetAndShowSurveysStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double (NumSurveysPerCourse);
+   HTM_Double2Decimals (NumSurveysPerCourse);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double (NumQstsPerSurvey);
+   HTM_Double2Decimals (NumQstsPerSurvey);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");

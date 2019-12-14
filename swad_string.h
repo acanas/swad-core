@@ -91,7 +91,6 @@ char *Str_ConvertToLowerText (char *Str);
 char Str_ConvertToUpperLetter (char Ch);
 char Str_ConvertToLowerLetter (char Ch);
 
-void Str_WriteDoubleNumToFile (FILE *FileDst,double Number);
 void Str_DoubleNumToStr (char **Str,double Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
 double Str_GetDoubleFromStr (char *Str);

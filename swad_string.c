@@ -858,24 +858,6 @@ char Str_ConvertToLowerLetter (char Ch)
   }
 
 /*****************************************************************************/
-/*** Write a number in floating point with the correct accuracy to a file ****/
-/*****************************************************************************/
-
-void Str_WriteDoubleNumToFile (FILE *FileDst,double Number)
-  {
-   char *Str;
-
-   /***** Write from floating point number to string *****/
-   Str_DoubleNumToStr (&Str,Number);
-
-   /***** Write number from string to file *****/
-   fprintf (FileDst,"%s",Str);
-
-   /***** Free memory allocated for string *****/
-   free (Str);
-  }
-
-/*****************************************************************************/
 /** Write a number in floating point with the correct accuracy to a string ***/
 /*****************************************************************************/
 // Str should be freed after calling this function

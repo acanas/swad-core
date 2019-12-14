@@ -537,7 +537,7 @@ void Tst_AssessTest (void)
 	   {
 	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	    HTM_TxtF ("%s:&nbsp;",Txt_Score);
-	    HTM_Double (TotalScore);
+	    HTM_Double2Decimals (TotalScore);
 	    HTM_BR ();
 	    HTM_TxtF ("%s:&nbsp;",Txt_Grade);
 	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
@@ -639,9 +639,9 @@ double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
 void Tst_ShowGrade (double Grade,double MaxGrade)
   {
    /***** Write grade over maximum grade *****/
-   HTM_Double (Grade);
+   HTM_Double2Decimals (Grade);
    HTM_Txt ("/");
-   HTM_Double (MaxGrade);
+   HTM_Double2Decimals (MaxGrade);
   }
 
 /*****************************************************************************/
@@ -2999,7 +2999,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       /* Write average score */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsThisQst)
-	 HTM_Double (TotalScoreThisQst / (double) NumHitsThisQst);
+	 HTM_Double2Decimals (TotalScoreThisQst / (double) NumHitsThisQst);
       else
          HTM_Txt ("N.A.");
       HTM_TD_End ();
@@ -3012,7 +3012,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       /* Write average score (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsNotBlankThisQst)
-         HTM_Double (TotalScoreThisQst / (double) NumHitsNotBlankThisQst);
+         HTM_Double2Decimals (TotalScoreThisQst / (double) NumHitsNotBlankThisQst);
       else
          HTM_Txt ("N.A.");
       HTM_TD_End ();
@@ -3633,17 +3633,17 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
       if (AnsTF == '\0')		// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       else if (AnsTF == row[1][0])	// If correct
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double (1.0);
+         HTM_Double2Decimals (1.0);
 	}
       else				// If wrong
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double (-1.0);
+         HTM_Double2Decimals (-1.0);
 	}
       HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
@@ -3905,7 +3905,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
       else
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-      HTM_Double (*ScoreThisQst);
+      HTM_Double2Decimals (*ScoreThisQst);
       HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
      }
@@ -4421,17 +4421,17 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       else if (Correct)					// If correct
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double (1.0);
+         HTM_Double2Decimals (1.0);
 	}
       else						// If wrong
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
@@ -4550,17 +4550,17 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       else if (IntAnswerUsr == IntAnswerCorr)		// If correct
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double (1.0);
+         HTM_Double2Decimals (1.0);
 	}
       else						// If wrong
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
@@ -4693,18 +4693,18 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       else if (FloatAnsUsr >= FloatAnsCorr[0] &&
                FloatAnsUsr <= FloatAnsCorr[1])		// If correct (inside the interval)
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double (1.0);
+         HTM_Double2Decimals (1.0);
 	}
       else						// If wrong (outside the interval)
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double (0.0);
+         HTM_Double2Decimals (0.0);
 	}
       HTM_SPAN_End ();
       Tst_WriteScoreEnd ();
@@ -7744,13 +7744,13 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double (ScoreInThisTest);
+	    HTM_Double2Decimals (ScoreInThisTest);
 	 HTM_TD_End ();
 
          /* Write average score per question */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double (NumQstsInThisTest ? ScoreInThisTest /
+	    HTM_Double2Decimals (NumQstsInThisTest ? ScoreInThisTest /
 		                            (double) NumQstsInThisTest :
 			                    0.0);
 	 HTM_TD_End ();
@@ -7873,13 +7873,13 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      HTM_Double (TotalScoreOfAllTests);
+      HTM_Double2Decimals (TotalScoreOfAllTests);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      HTM_Double (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
+      HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
 			         0.0);
    HTM_TD_End ();
 
@@ -8061,7 +8061,7 @@ void Tst_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-	 HTM_Double (TotalScore);
+	 HTM_Double2Decimals (TotalScore);
       else
 	 HTM_Txt ("?");	// No feedback
       HTM_TD_End ();
@@ -8107,7 +8107,7 @@ void Tst_ShowOneTstResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
-	 HTM_Double (TotalScore);
+	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
 	 HTM_TxtF ("%s:&nbsp;",Txt_Grade);
          Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);

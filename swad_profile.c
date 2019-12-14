@@ -601,9 +601,8 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			           (double) UsrFigures->NumClicks /
-			           (double) UsrFigures->NumDays);
+	 HTM_Double ((double) UsrFigures->NumClicks /
+		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
@@ -642,9 +641,8 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			           (double) UsrFigures->NumFileViews /
-			           (double) UsrFigures->NumDays);
+	 HTM_Double ((double) UsrFigures->NumFileViews /
+	             (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -680,9 +678,8 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			           (double) UsrFigures->NumSocPub /
-			           (double) UsrFigures->NumDays);
+	 HTM_Double ((double) UsrFigures->NumSocPub /
+		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -718,9 +715,8 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			           (double) UsrFigures->NumForPst /
-			           (double) UsrFigures->NumDays);
+	 HTM_Double ((double) UsrFigures->NumForPst /
+		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -756,9 +752,8 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,
-			           (double) UsrFigures->NumMsgSnt /
-			           (double) UsrFigures->NumDays);
+	 HTM_Double ((double) UsrFigures->NumMsgSnt /
+		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -1730,7 +1725,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 		       ItsMe ? "DAT_SMALL_N" :
 		               "DAT_SMALL",
 		       Gbl.RowEvenOdd);
-	 Str_WriteDoubleNumToFile (Gbl.F.Out,NumClicksPerDay);
+	 HTM_Double (NumClicksPerDay);
 	 HTM_TD_End ();
 	 HTM_TR_End ();
 	}

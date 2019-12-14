@@ -1888,7 +1888,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  BarWidth);
 	 HTM_NBSP ();
 	}
-      Str_WriteDoubleNumToFile (Gbl.F.Out,Hits.Num);
+      HTM_Double (Hits.Num);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2338,14 +2338,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LOG CB\" style=\"width:%upx;\"",
 		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
 		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      Str_WriteDoubleNumToFile (Gbl.F.Out,(double) Interval * HitsMax / 5.0);
+      HTM_Double ((double) Interval * HitsMax / 5.0);
       HTM_TD_End ();
      }
 
    HTM_TD_Begin ("colspan=\"%u\" class=\"LOG RB\" style=\"width:%upx;\"",
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   Str_WriteDoubleNumToFile (Gbl.F.Out,HitsMax);
+   HTM_Double (HitsMax);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2857,7 +2857,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       HTM_TxtF ("%u%%",(unsigned) (((Hits->Num * 100.0) /
 		                     Hits->Total) + 0.5));
       HTM_BR ();
-      Str_WriteDoubleNumToFile (Gbl.F.Out,Hits->Num);
+      HTM_Double (Hits->Num);
       HTM_BR ();
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
@@ -3860,7 +3860,7 @@ static void Sta_DrawBarNumHits (char Color,
 
       /***** Write the number of hits *****/
       HTM_NBSP ();
-      Str_WriteDoubleNumToFile (Gbl.F.Out,HitsNum);
+      HTM_Double (HitsNum);
       HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
         	                          HitsTotal) + 0.5));
      }

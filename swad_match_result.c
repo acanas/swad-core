@@ -850,7 +850,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    HTM_Double (ScoreInThisResult);
+	    HTM_Double2Decimals (ScoreInThisResult);
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
 	 HTM_TD_End ();
@@ -858,7 +858,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
-	    HTM_Double (NumQstsInThisResult ? ScoreInThisResult /
+	    HTM_Double2Decimals (NumQstsInThisResult ? ScoreInThisResult /
 					      (double) NumQstsInThisResult :
 					      0.0);
 	 else
@@ -958,18 +958,18 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
 
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double (TotalScoreOfAllResults);
+   HTM_Double2Decimals (TotalScoreOfAllResults);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
+   HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
 			      0.0);
    HTM_TD_End ();
 
    /***** Write total grade *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double (TotalGrade);
+   HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
@@ -1187,7 +1187,7 @@ void McR_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         HTM_Double (TotalScore);
+         HTM_Double2Decimals (TotalScore);
       else
 	 HTM_Txt ("?");	// No feedback
       HTM_TD_End ();
@@ -1234,7 +1234,7 @@ void McR_ShowOneMchResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
-	 HTM_Double (TotalScore);
+	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
 	 HTM_TxtF ("%s:&nbsp;",Txt_Grade);
          Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
