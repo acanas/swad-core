@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
+#include "swad_log.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
@@ -87,7 +88,7 @@ void Con_ShowConnectedUsrs (void)
    if (Gbl.Usrs.Me.Logged)
      {
       Mnu_ContextMenuBegin ();
-      Sta_PutLinkToLastClicks ();	// Show last clicks in real time
+      Log_PutLinkToLastClicks ();	// Show last clicks in real time
       Mnu_ContextMenuEnd ();
      }
 

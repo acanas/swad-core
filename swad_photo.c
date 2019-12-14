@@ -2266,7 +2266,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 					       "BT_LINK DAT","CT");
 	 else	// Pho_DEGREES_PRINT
 	   {
-	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+	    Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	    HTM_TxtF ("&nbsp;%s",Deg.FullName);
 	   }
 	 HTM_TD_End ();

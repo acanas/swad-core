@@ -11959,7 +11959,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   InsShortName);
          HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
-         Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
+         Lgo_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -11976,7 +11976,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   CtrShortName);
          HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
-         Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
+         Lgo_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -11993,7 +11993,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   DegShortName);
          HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
-         Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
+         Lgo_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();

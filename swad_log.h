@@ -1,7 +1,7 @@
-// swad_logo.h: logo of institution, centre or degree
+// swad_log.h: access log stored in database
 
-#ifndef _SWAD_LGO
-#define _SWAD_LGO
+#ifndef _SWAD_LOG
+#define _SWAD_LOG
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -39,11 +39,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Class,bool PutIconIfNotExists);
-void Lgo_PutIconToChangeLogo (Hie_Level_t Scope);
-void Lgo_RequestLogo (Hie_Level_t Scope);
-void Lgo_ReceiveLogo (Hie_Level_t Scope);
-void Lgo_RemoveLogo (Hie_Level_t Scope);
+void Log_LogAccess (const char *Comments);
+void Log_RemoveOldEntriesRecentLog (void);
+
+void Log_PutLinkToLastClicks (void);
+void Log_ShowLastClicks (void);
+void Log_GetAndShowLastClicks (void);
 
 #endif

@@ -237,7 +237,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
       Ins_PutParamInsCod (Ins->InsCod);
       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
-   Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
+   Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
@@ -266,7 +266,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Institution logo and name *****/
-   Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
@@ -340,7 +340,7 @@ static void Ins_Configuration (bool PrintView)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Ins.WWW,
 	           Gbl.Hierarchy.Ins.FullName);
-   Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+   Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
 		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Gbl.Hierarchy.Ins.FullName);
@@ -613,7 +613,7 @@ static void Ins_PutIconsToPrintAndUpload (void)
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       /***** Icon to upload logo of institution *****/
-      Log_PutIconToChangeLogo (Hie_INS);
+      Lgo_PutIconToChangeLogo (Hie_INS);
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
@@ -1475,7 +1475,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Institution logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-      Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Institution short name */
@@ -2141,7 +2141,7 @@ static void Ins_PutParamGoToIns (void)
 
 void Ins_RequestLogo (void)
   {
-   Log_RequestLogo (Hie_INS);
+   Lgo_RequestLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2150,7 +2150,7 @@ void Ins_RequestLogo (void)
 
 void Ins_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Hie_INS);
+   Lgo_ReceiveLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2159,7 +2159,7 @@ void Ins_ReceiveLogo (void)
 
 void Ins_RemoveLogo (void)
   {
-   Log_RemoveLogo (Hie_INS);
+   Lgo_RemoveLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2198,7 +2198,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-   Log_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Institution short name *****/

@@ -53,6 +53,7 @@
 #include "swad_ID.h"
 #include "swad_indicator.h"
 #include "swad_language.h"
+#include "swad_log.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_match.h"
@@ -3138,7 +3139,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeAccCrs	] = { 119,-1,TabUnk,ActReqAccGbl	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_SeeCrsAccesses		,NULL},
    [ActSeeAllStaCrs	] = { 768,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ind_ShowIndicatorsCourses	,NULL},
 
-   [ActLstClk		] = { 989,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_ShowLastClicks		,NULL},
+   [ActLstClk		] = { 989,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Log_ShowLastClicks		,NULL},
    [ActRefLstClk	] = { 994,-1,TabUnk,ActRefLstClk	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,Lay_RefreshLastClicks		,NULL},
 
    [ActSeeMyUsgRep	] = {1582,-1,TabUnk,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rep_ShowMyUsageReport		,NULL},

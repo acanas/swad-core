@@ -223,7 +223,7 @@ static void Crs_Configuration (bool PrintView)
 	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Deg.WWW,
 	           Gbl.Hierarchy.Deg.FullName);
-   Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
                  Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       HTM_A_End ();
@@ -638,7 +638,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				  Highlight ? ClassHighlight :
 					      ClassNormal,
 				  NULL);
-	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
+	 Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 HTM_TxtF ("&nbsp;%s",Ins.ShrtName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -672,7 +672,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				     Highlight ? ClassHighlight :
 						 ClassNormal,
 				     NULL);
-	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
+	    Lgo_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    HTM_TxtF ("&nbsp;%s",Ctr.ShrtName);
 	    HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -706,7 +706,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				        Highlight ? ClassHighlight :
 						    ClassNormal,
 				        NULL);
-	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+	       Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       HTM_TxtF ("&nbsp;%s",Deg.ShrtName);
 	       HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -3183,7 +3183,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     Txt_Go_to_X,
 	     row[2]);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
-   Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+   Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
    HTM_BUTTON_End ();
    Frm_EndForm ();

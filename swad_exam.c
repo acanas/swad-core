@@ -1047,7 +1047,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    else
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
                    Ins.WWW,StyleTitle);
-   Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+   Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Ins.FullName);
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)

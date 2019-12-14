@@ -252,7 +252,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Centre logo and name *****/
-   Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
    /***** End link *****/
@@ -343,7 +343,7 @@ static void Ctr_Configuration (bool PrintView)
 	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Ctr.WWW,
 	           Gbl.Hierarchy.Ctr.FullName);
-   Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
+   Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
@@ -697,7 +697,7 @@ static void Ctr_PutIconsCtrConfig (void)
       // have permission to upload logo and photo of the centre
      {
       /***** Put icon to upload logo of centre *****/
-      Log_PutIconToChangeLogo (Hie_CTR);
+      Lgo_PutIconToChangeLogo (Hie_CTR);
 
       /***** Put icon to upload photo of centre *****/
       Ctr_PutIconToChangePhoto ();
@@ -1500,7 +1500,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Centre logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-      Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Place */
@@ -2244,7 +2244,7 @@ static void Ctr_PutParamGoToCtr (void)
 
 void Ctr_RequestLogo (void)
   {
-   Log_RequestLogo (Hie_CTR);
+   Lgo_RequestLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2253,7 +2253,7 @@ void Ctr_RequestLogo (void)
 
 void Ctr_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Hie_CTR);
+   Lgo_ReceiveLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2262,7 +2262,7 @@ void Ctr_ReceiveLogo (void)
 
 void Ctr_RemoveLogo (void)
   {
-   Log_RemoveLogo (Hie_CTR);
+   Lgo_RemoveLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2488,7 +2488,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-   Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Place *****/

@@ -131,10 +131,10 @@ struct Sta_Hits
 /*****************************************************************************/
 
 void Sta_GetRemoteAddr (void);
-void Sta_LogAccess (const char *Comments);
-void Sta_RemoveOldEntriesRecentLog (void);
 void Sta_AskShowCrsHits (void);
 void Sta_AskShowGblHits (void);
+void Sta_PutLinkToCourseHits (void);
+void Sta_PutLinkToGlobalHits (void);
 void Sta_SetIniEndDates (void);
 void Sta_SeeGblAccesses (void);
 void Sta_SeeCrsAccesses (void);
@@ -148,9 +148,5 @@ void Sta_ComputeTimeToGeneratePage (void);
 void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);
 void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);
-
-void Sta_PutLinkToLastClicks (void);
-void Sta_ShowLastClicks (void);
-void Sta_GetAndShowLastClicks (void);
 
 #endif

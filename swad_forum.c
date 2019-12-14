@@ -2084,15 +2084,15 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         Log_DrawLogo (Hie_INS,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (Hie_INS,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Log_DrawLogo (Hie_CTR,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (Hie_CTR,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Log_DrawLogo (Hie_DEG,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (Hie_DEG,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:

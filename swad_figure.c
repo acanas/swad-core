@@ -1476,7 +1476,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
-		  Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,
+		  Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,
 				40,NULL,true);
 	          HTM_NBSP ();
 		 }

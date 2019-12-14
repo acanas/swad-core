@@ -46,6 +46,7 @@
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
+#include "swad_log.h"
 #include "swad_logo.h"
 #include "swad_MFU.h"
 #include "swad_notice.h"
@@ -1337,7 +1338,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
      {
       /***** Log access *****/
       Gbl.TimeSendInMicroseconds = 0L;
-      Sta_LogAccess (Txt);
+      Log_LogAccess (Txt);
      }
    else
      {
@@ -1354,7 +1355,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	 Sta_ComputeTimeToSendPage ();
 
 	 /***** Log access *****/
-	 Sta_LogAccess (Txt);
+	 Log_LogAccess (Txt);
 
 	 /***** Update last data for next time *****/
 	 if (Gbl.Usrs.Me.Logged)
@@ -1463,7 +1464,7 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 103))
       Set_RemoveOldSettingsFromIP ();		// Remove old settings from IP
    else if (!(Gbl.PID % 107))
-      Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
+      Log_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
    else if (!(Gbl.PID % 109))
       Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE		,Cfg_TIME_TO_DELETE_HTML_OUTPUT		,false);
    else if (!(Gbl.PID % 113))
@@ -1514,7 +1515,7 @@ void Lay_RefreshLastClicks (void)
       HTM_TxtF ("%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
 
       /***** Get and show last clicks *****/
-      Sta_GetAndShowLastClicks ();
+      Log_GetAndShowLastClicks ();
      }
   }
 
@@ -1572,7 +1573,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      {
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Ins.WWW);
-      Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
+      Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
      }
@@ -1619,7 +1620,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
                       Deg.WWW);
-      Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
+      Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
      }

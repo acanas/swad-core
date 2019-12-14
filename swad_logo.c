@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
 
-void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
+void Lgo_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists)
   {
    static const char *HieIcon[Hie_NUM_LEVELS] =
@@ -195,7 +195,7 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
 /************* the logo of institution, centre or degree       ***************/
 /*****************************************************************************/
 
-void Log_PutIconToChangeLogo (Hie_Level_t Scope)
+void Lgo_PutIconToChangeLogo (Hie_Level_t Scope)
   {
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
@@ -247,7 +247,7 @@ void Log_PutIconToChangeLogo (Hie_Level_t Scope)
 /**** Show a form for sending a logo of the institution, centre or degree ****/
 /*****************************************************************************/
 
-void Log_RequestLogo (Hie_Level_t Scope)
+void Lgo_RequestLogo (Hie_Level_t Scope)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
@@ -330,7 +330,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
 /******* Receive the logo of the current institution, centre or degree *******/
 /*****************************************************************************/
 
-void Log_ReceiveLogo (Hie_Level_t Scope)
+void Lgo_ReceiveLogo (Hie_Level_t Scope)
   {
    extern const char *Txt_The_file_is_not_X;
    long Cod;
@@ -416,7 +416,7 @@ void Log_ReceiveLogo (Hie_Level_t Scope)
 /******* Remove the logo of the current institution, centre or degree ********/
 /*****************************************************************************/
 
-void Log_RemoveLogo (Hie_Level_t Scope)
+void Lgo_RemoveLogo (Hie_Level_t Scope)
   {
    long Cod;
    const char *Folder;

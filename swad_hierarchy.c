@@ -439,16 +439,16 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
          Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TITLE");
          break;
       case Hie_INS:	// Institution
-	 Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+	 Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
 		       Gbl.Hierarchy.Ins.ShrtName,40,"TOP_LOGO",false);
          break;
       case Hie_CTR:	// Centre
-	 Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
+	 Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		       Gbl.Hierarchy.Ctr.ShrtName,40,"TOP_LOGO",false);
          break;
       case Hie_DEG:	// Degree
       case Hie_CRS:	// Course
-	 Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+	 Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
 		       Gbl.Hierarchy.Deg.ShrtName,40,"TOP_LOGO",false);
          break;
       default:

@@ -256,7 +256,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
 
    /***** Degree logo and name *****/
-   Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
    /***** End link *****/
@@ -327,7 +327,7 @@ static void Deg_Configuration (bool PrintView)
 		   " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Deg.WWW,
 	           Gbl.Hierarchy.Deg.FullName);
-   Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
 		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Gbl.Hierarchy.Deg.FullName);
@@ -549,7 +549,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
       // Only degree admins, centre admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
-      Log_PutIconToChangeLogo (Hie_DEG);
+      Lgo_PutIconToChangeLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -725,7 +725,7 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
-      Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Degree short name */
@@ -943,7 +943,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-   Log_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Degree short name *****/
@@ -2286,7 +2286,7 @@ static void Deg_PutParamGoToDeg (void)
 
 void Deg_RequestLogo (void)
   {
-   Log_RequestLogo (Hie_DEG);
+   Lgo_RequestLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -2295,7 +2295,7 @@ void Deg_RequestLogo (void)
 
 void Deg_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Hie_DEG);
+   Lgo_ReceiveLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -2304,7 +2304,7 @@ void Deg_ReceiveLogo (void)
 
 void Deg_RemoveLogo (void)
   {
-   Log_RemoveLogo (Hie_DEG);
+   Lgo_RemoveLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
