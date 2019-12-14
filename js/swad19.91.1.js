@@ -604,19 +604,24 @@ function refreshMatchTch () {
 function readMatchTchData () {
 	if (objXMLHttpReqMchTch.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqMchTch.status == 200) {
-			var endOfId = objXMLHttpReqMchTch.responseText.indexOf('|',0);	// Get separator position
-			var Id = objXMLHttpReqMchTch.responseText.substring(0,endOfId);	// Get Id
-			var htmlMatch = objXMLHttpReqMchTch.responseText.substring(endOfId + 1);	// Get HTML code
+			var endOfId = objXMLHttpReqMchTch.responseText.indexOf('|',0           );	// Get separator position
+			var endOfEv = objXMLHttpReqMchTch.responseText.indexOf('|',endOfId  + 1);	// Get separator position
 
-			var div = document.getElementById(Id);	// Access to refreshable DIV
+			var id   = objXMLHttpReqMchTch.responseText.substring(0          ,endOfId);	// Get id
+			var ev   = objXMLHttpReqMchTch.responseText.substring(endOfId + 1,endOfEv);	// Get ev ('0' / '1')
+			var html = objXMLHttpReqMchTch.responseText.substring(endOfEv + 1);			// Get HTML code
+
+			var div = document.getElementById(id);	// Access to refreshable DIV
 			if (div) {
-				div.innerHTML = htmlMatch;			// Update DIV content
+				div.innerHTML = html;				// Update DIV content
 			
-				// Scripts in div got via AJAX are not executed ==> execute them
-				evalScriptsInElem (div);
+				if (parseInt(ev)) {	// 0 / 1
+					// Scripts in div got via AJAX are not executed ==> execute them
+					evalScriptsInElem (div);
 
-				// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-				MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+				}
 			}
 			
 			// Global delay variable is set initially in swad-core

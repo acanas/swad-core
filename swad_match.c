@@ -167,10 +167,10 @@ static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_WriteElapsedTimeInMch (struct Match *Match);
 static void Mch_WriteElapsedTimeInQst (struct Match *Match);
-static void Mch_WriteHourglass (struct Match *Match);
-static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color);
-static void Mch_PutCountdownAndHourglassIcon (struct Match *Match);
 static void Mch_WriteNumRespondersQst (struct Match *Match);
+static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *Color);
+static void Mch_PutCountdownAndHourglassIcon (struct Match *Match);
+static void Mch_PutFormsCountdown (struct Match *Match);
 
 static void Mch_ShowRightColumnTch (const struct Match *Match);
 static void Mch_ShowLeftColumnStd (const struct Match *Match,
@@ -196,7 +196,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   Mch_Update_t Update);
 
 static void Mch_ShowMatchScore (const struct Match *Match);
-static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore);
+static void Mch_DrawEmptyScoreRow (unsigned NumRow,double MinScore,double MaxScore);
 static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 			      unsigned NumRow,unsigned NumUsrs,unsigned MaxUsrs);
 static const char *Mch_GetClassBorder (unsigned NumRow);
@@ -1976,6 +1976,10 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
    Match->Status.Countdown = -1L;	// No countdown
   }
 
+/*****************************************************************************/
+/****************** Set match status to previous question ********************/
+/*****************************************************************************/
+
 static void Mch_SetMatchStatusToPrevQst (struct Match *Match)
   {
    /***** Get index of the previous question *****/
@@ -1991,6 +1995,10 @@ static void Mch_SetMatchStatusToPrevQst (struct Match *Match)
    else					// Start of questions reached
       Mch_SetMatchStatusToStart (Match);
   }
+
+/*****************************************************************************/
+/************************ Set match status to start **************************/
+/*****************************************************************************/
 
 static void Mch_SetMatchStatusToStart (struct Match *Match)
   {
@@ -2031,6 +2039,10 @@ static void Mch_SetMatchStatusToNext (struct Match *Match)
    Match->Status.Countdown = -1L;	// No countdown
   }
 
+/*****************************************************************************/
+/****************** Set match status to next question ************************/
+/*****************************************************************************/
+
 static void Mch_SetMatchStatusToNextQst (struct Match *Match)
   {
    /***** Get index of the next question *****/
@@ -2047,6 +2059,10 @@ static void Mch_SetMatchStatusToNextQst (struct Match *Match)
    else							// End of questions reached
       Mch_SetMatchStatusToEnd (Match);
   }
+
+/*****************************************************************************/
+/************************* Set match status to end ***************************/
+/*****************************************************************************/
 
 static void Mch_SetMatchStatusToEnd (struct Match *Match)
   {
@@ -2183,6 +2199,9 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    Mch_ShowRefreshablePartTch (Match);
    HTM_DIV_End ();
 
+   /***** Put forms to start countdown *****/
+   Mch_PutFormsCountdown (Match);
+
    /***** Buttons *****/
    Mch_PutMatchControlButtons (Match);
 
@@ -2198,6 +2217,10 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    HTM_DIV_End ();
   }
 
+/*****************************************************************************/
+/***************** Show left refreshable part for teachers *******************/
+/*****************************************************************************/
+
 static void Mch_ShowRefreshablePartTch (struct Match *Match)
   {
    /***** Write elapsed time in match *****/
@@ -2209,12 +2232,16 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    /***** Write elapsed time in question *****/
    Mch_WriteElapsedTimeInQst (Match);
 
-   /***** Write hourglass *****/
-   Mch_WriteHourglass (Match);
-
    /***** Number of users who have responded this question *****/
    Mch_WriteNumRespondersQst (Match);
+
+   /***** Write hourglass *****/
+   Mch_PutCountdownAndHourglassIcon (Match);
   }
+
+/*****************************************************************************/
+/******************** Write elapsed time in current match ********************/
+/*****************************************************************************/
 
 static void Mch_WriteElapsedTimeInMch (struct Match *Match)
   {
@@ -2230,6 +2257,10 @@ static void Mch_WriteElapsedTimeInMch (struct Match *Match)
 
    HTM_DIV_End ();
   }
+
+/*****************************************************************************/
+/****************** Write elapsed time in current question *******************/
+/*****************************************************************************/
 
 static void Mch_WriteElapsedTimeInQst (struct Match *Match)
   {
@@ -2249,184 +2280,6 @@ static void Mch_WriteElapsedTimeInQst (struct Match *Match)
 	 break;
      }
 
-   HTM_DIV_End ();
-  }
-
-static void Mch_WriteHourglass (struct Match *Match)
-  {
-   /***** Start container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
-
-   /***** Put icon hourglass and write countdown *****/
-   Mch_PutCountdownAndHourglassIcon (Match);
-   HTM_BR ();
-
-   /***** Put forms to start countdown *****/
-   Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
-
-   /***** End container *****/
-   HTM_DIV_End ();
-  }
-
-static void Mch_PutFormCountdown (struct Match *Match,long Countdown,const char *Color)
-  {
-   extern const char *Txt_Countdown;
-   char *OnSubmit;
-   char *Class;
-   bool PutForm = Match->Status.Showing != Mch_END;
-
-   if (PutForm)
-     {
-      /***** Start form *****/
-      if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
-			      "'act=%ld&ses=%s&MchCod=%ld&Countdown=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActMchCntDwn),Gbl.Session.Id,
-		    Match->MchCod,Countdown) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      // Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-   else
-     {
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-
-   /***** Put icon *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
-
-   if (PutForm)
-     {
-      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class,OnSubmit);
-     }
-   else
-      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
-
-   if (Countdown >= 0)
-      HTM_TxtF ("&nbsp;%ld&Prime;",Countdown);
-   else
-      HTM_Txt ("&nbsp;&infin;&nbsp;");
-
-   HTM_BUTTON_End ();
-
-   HTM_DIV_End ();
-
-   /***** Free class *****/
-   free (Class);
-
-   /***** End form *****/
-   if (PutForm)
-     {
-      Frm_EndForm ();
-      free (OnSubmit);
-     }
-  }
-
-static void Mch_PutFormCountdown_old (struct Match *Match,long Countdown,const char *Color)
-  {
-   extern const char *Txt_Countdown;
-   char *Class;
-   bool PutForm = Match->Status.Showing != Mch_END;
-
-   if (PutForm)
-     {
-      /***** Start form *****/
-      Frm_StartForm (ActMchCntDwn);
-      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-      Par_PutHiddenParamLong (NULL,"Countdown",Countdown);
-
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-   else
-     {
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-
-   /***** Put icon *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
-
-   if (PutForm)
-      HTM_BUTTON_OnMouseDown_Begin (Txt_Countdown,Class,NULL);
-   else
-      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
-
-   if (Countdown >= 0)
-      HTM_TxtF ("&nbsp;%ld&Prime;",Countdown);
-   else
-      HTM_Txt ("&nbsp;&infin;&nbsp;");
-
-   HTM_BUTTON_End ();
-
-   HTM_DIV_End ();
-
-   /***** Free class *****/
-   free (Class);
-
-   /***** End form *****/
-   if (PutForm)
-      Frm_EndForm ();
-  }
-
-static void Mch_PutCountdownAndHourglassIcon (struct Match *Match)
-  {
-   extern const char *Txt_Countdown;
-   const char *Class;
-   const char *Icon;
-
-   /***** Set hourglass icon depending on countdown *****/
-   if (Match->Status.Showing == Mch_END)				// Match over
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_HIDDEN MCH_GREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown < 0)				// No countdown
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_GREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_MEDIUM)	// Countdown in progress
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_LIMEGREEN";
-      Icon  = "fa-hourglass-start";
-     }
-   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_SMALL)	// Countdown in progress
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_YELLOW";
-      Icon  = "fa-hourglass-half";
-     }
-   else									// Countdown about to end
-     {
-      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_RED";
-      Icon  = "fa-hourglass-end";
-     }
-
-   /***** Write countdown and put hourglass icon *****/
-   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
-
-   /* Countdown */
-   if (Match->Status.Countdown > 0)
-      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
-   else
-      HTM_NBSP ();
-   HTM_BR ();
-
-   /* Icon */
-   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
-
-   HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
@@ -2470,6 +2323,147 @@ static void Mch_WriteNumRespondersQst (struct Match *Match)
    /***** End block *****/
    HTM_STRONG_End ();
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*************** Write current countdown and hourglass icon ******************/
+/*****************************************************************************/
+
+static void Mch_PutCountdownAndHourglassIcon (struct Match *Match)
+  {
+   extern const char *Txt_Countdown;
+   const char *Class;
+   const char *Icon;
+
+   /***** Set hourglass icon depending on countdown *****/
+   if (Match->Status.Showing == Mch_END)				// Match over
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_HIDDEN MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown < 0)				// No countdown
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_GREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_MEDIUM)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_LIMEGREEN";
+      Icon  = "fa-hourglass-start";
+     }
+   else if (Match->Status.Countdown > Mch_COUNTDOWN_SECONDS_SMALL)	// Countdown in progress
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_YELLOW";
+      Icon  = "fa-hourglass-half";
+     }
+   else									// Countdown about to end
+     {
+      Class = "BT_LINK_OFF MCH_BUTTON_OFF MCH_RED";
+      Icon  = "fa-hourglass-end";
+     }
+
+   /***** Write countdown and put hourglass icon *****/
+   HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
+   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+   HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
+
+   /* Countdown */
+   if (Match->Status.Countdown > 0)
+      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
+   else
+      HTM_NBSP ();
+   HTM_BR ();
+
+   /* Icon */
+   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
+
+   HTM_BUTTON_End ();
+   HTM_DIV_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************** Put all forms to start countdowns **********************/
+/*****************************************************************************/
+
+static void Mch_PutFormsCountdown (struct Match *Match)
+  {
+   /***** Start container *****/
+   HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
+
+   /***** Put forms to start countdown *****/
+   Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
+   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
+
+   /***** End container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/****** Put a form to start a countdown with a given number of seconds *******/
+/*****************************************************************************/
+
+static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *Color)
+  {
+   extern const char *Txt_Countdown;
+   char *OnSubmit;
+   char *Class;
+   bool PutForm = Match->Status.Showing != Mch_END;
+
+   if (PutForm)
+     {
+      /***** Start form *****/
+      if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
+			      "'act=%ld&ses=%s&MchCod=%ld&Countdown=%ld');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActMchCntDwn),Gbl.Session.Id,
+		    Match->MchCod,Seconds) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormOnSubmit (ActUnk,OnSubmit);
+
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      /***** Set class *****/
+      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+
+   /***** Put icon *****/
+   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
+
+   if (PutForm)
+      HTM_BUTTON_SUBMIT_Begin (Txt_Countdown,Class,NULL);
+   else
+      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
+
+   HTM_NBSP ();
+   if (Seconds >= 0)
+      HTM_TxtF ("%ld&Prime;",Seconds);
+   else
+     {
+      HTM_Txt ("&infin;");
+      HTM_NBSP ();
+     }
+
+   HTM_BUTTON_End ();
+
+   HTM_DIV_End ();
+
+   /***** Free class *****/
+   free (Class);
+
+   /***** End form *****/
+   if (PutForm)
+     {
+      Frm_EndForm ();
+      free (OnSubmit);
+     }
   }
 
 /*****************************************************************************/
@@ -2790,7 +2784,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered)
       Frm_StartForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN",NULL);
+      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
       HTM_BUTTON_End ();
@@ -2834,7 +2828,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED",NULL);
+   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED");
    HTM_Txt ("<i class=\"fas fa-trash\"></i>");
    HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -3002,7 +2996,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 							     "",
 		    'A' + (char) NumOpt) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      HTM_BUTTON_OnMouseDown_Begin (NULL,Class,NULL);
+      HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
       HTM_TxtF ("%c",'a' + (char) NumOpt);
       HTM_BUTTON_End ();
       free (Class);
@@ -3113,7 +3107,7 @@ static void Mch_ShowMatchScore (const struct Match *Match)
       for (;
 	   NumRow < NumRowForThisScore;
 	   NumRow++)
-         Mch_DrawEmptyRowScore (NumRow,MinScore,MaxScore);
+         Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
 
       /***** Draw row for this score *****/
       Mch_DrawScoreRow (Score,MinScore,MaxScore,NumRow,NumUsrs,MaxUsrs);
@@ -3124,7 +3118,7 @@ static void Mch_ShowMatchScore (const struct Match *Match)
    for (;
 	NumRow < Mch_NUM_ROWS_SCORE;
 	NumRow++)
-      Mch_DrawEmptyRowScore (NumRow,MinScore,MaxScore);
+      Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -3133,7 +3127,11 @@ static void Mch_ShowMatchScore (const struct Match *Match)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore)
+/*****************************************************************************/
+/*************************** Draw empty score row ****************************/
+/*****************************************************************************/
+
+static void Mch_DrawEmptyScoreRow (unsigned NumRow,double MinScore,double MaxScore)
   {
    /***** Draw row *****/
    HTM_TR_Begin (NULL);
@@ -3158,6 +3156,10 @@ static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxSco
 
    HTM_TR_End ();
   }
+
+/*****************************************************************************/
+/******************************* Draw score row ******************************/
+/*****************************************************************************/
 
 static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 			      unsigned NumRow,unsigned NumUsrs,unsigned MaxUsrs)
@@ -3292,6 +3294,10 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    Frm_EndForm ();
   }
 
+/*****************************************************************************/
+/************************** Put a big button hidden **************************/
+/*****************************************************************************/
+
 static void Mch_PutBigButtonHidden (const char *Icon)
   {
    /***** Put inactive icon *****/
@@ -3301,6 +3307,9 @@ static void Mch_PutBigButtonHidden (const char *Icon)
    HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
+/*****************************************************************************/
+/********************** Put a big button to close window *********************/
+/*****************************************************************************/
 
 static void Mch_PutBigButtonClose (void)
   {
@@ -3344,6 +3353,10 @@ static void Mch_RemoveOldPlayers (void)
 		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
   }
 
+/*****************************************************************************/
+/********************** Update match as being played *************************/
+/*****************************************************************************/
+
 static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
   {
    /***** Insert match as being played *****/
@@ -3351,6 +3364,10 @@ static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
 		    "REPLACE mch_playing (MchCod) VALUE (%ld)",
 		    MchCod);
   }
+
+/*****************************************************************************/
+/**************** Update match as paused, not being played *******************/
+/*****************************************************************************/
 
 static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
   {
@@ -3367,6 +3384,10 @@ static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
 		    MchCod);
   }
 
+/*****************************************************************************/
+/*********************** Get if match is being played ************************/
+/*****************************************************************************/
+
 static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
   {
    /***** Get if a match is being played or not *****/
@@ -3376,6 +3397,10 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
 			  " WHERE MchCod=%ld",
 			  MchCod) != 0);
   }
+
+/*****************************************************************************/
+/*************************** Get number of players ***************************/
+/*****************************************************************************/
 
 static void Mch_GetNumPlayers (struct Match *Match)
   {
@@ -3555,11 +3580,11 @@ void Mch_RefreshMatchTch (void)
    switch (WhatToRefresh)
      {
       case REFRESH_LEFT:	// Refresh only left part
-         HTM_Txt ("match_left|");
+         HTM_Txt ("match_left|0|");	// 0 ==> do not evaluate MatJax scripts after updating HTML
          Mch_ShowRefreshablePartTch (&Match);
          break;
       case REFRESH_ALL:		// Refresh the whole page
-         HTM_Txt ("match|");
+         HTM_Txt ("match|1|");		// 1 ==> evaluate MatJax scripts after updating HTML
          Mch_ShowMatchStatusForTch (&Match);
          break;
      }

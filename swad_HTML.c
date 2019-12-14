@@ -1068,7 +1068,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
-   HTM_TxtF ("<input type=\"url\" name=\"%s\ maxlength=\"%u\" value=\"%s\"",
+   HTM_TxtF ("<input type=\"url\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
 	     Name,Cns_MAX_CHARS_WWW,Value);
 
    if (fmt)
@@ -1322,7 +1322,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 /********************************** Buttons **********************************/
 /*****************************************************************************/
 
-void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class,const char *OnMouseDown)
+void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class)
   {
    HTM_Txt ("<button type=\"submit\"");
    if (Title)
@@ -1331,11 +1331,7 @@ void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class,const cha
    if (Class)
       if (Class[0])
          HTM_TxtF (" class=\"%s\"",Class);
-   HTM_TxtF (" onmousedown=\"");
-   if (OnMouseDown)	// JavaScript function to be called before submitting the form
-      if (OnMouseDown[0])
-         HTM_TxtF ("%s;",OnMouseDown);
-   HTM_TxtF ("document.getElementById('%s').submit();return false;\">",
+   HTM_TxtF (" onmousedown=\"document.getElementById('%s').submit();return false;\">",
 	     Gbl.Form.Id);
    HTM_BUTTON_NestingLevel++;
   }
