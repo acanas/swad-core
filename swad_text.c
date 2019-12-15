@@ -35656,9 +35656,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	};
 
 const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-{
 	{
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_UNKNOWN
+	[Rol_UNK][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Desconeguts"
 #elif L==2	// de
 	"Unbekannte"
@@ -35678,7 +35678,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_FEMALE
+	[Rol_UNK][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Desconegudes"
 #elif L==2	// de
 	"Unbekannte"
@@ -35698,7 +35699,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidas"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_MALE
+	[Rol_UNK][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Desconeguts"
 #elif L==2	// de
 	"Unbekannte"
@@ -35718,7 +35720,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_ALL
+	[Rol_UNK][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Desconeguts"
 #elif L==2	// de
 	"Unbekannte"
@@ -35737,9 +35740,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_GST - Usr_SEX_UNKNOWN
+	,
+	[Rol_GST][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -35759,7 +35762,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidados"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_FEMALE
+	[Rol_GST][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Convidadas"
 #elif L==2	// de
 	"Eingeladen"
@@ -35779,7 +35783,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidadas"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_MALE
+	[Rol_GST][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -35799,7 +35804,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidados"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_ALL
+	[Rol_GST][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -35818,9 +35824,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidados"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
+	,
+	[Rol_USR][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -35840,7 +35846,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
+	[Rol_USR][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Usu&agrave;ries"
 #elif L==2	// de
 	"Benutzer"
@@ -35860,7 +35867,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizadoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
+	[Rol_USR][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -35880,7 +35888,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
+	[Rol_USR][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -35899,9 +35908,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_STD - Usr_SEX_UNKNOWN
+	,
+	[Rol_STD][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -35921,7 +35930,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_FEMALE
+	[Rol_STD][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -35941,7 +35951,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_MALE
+	[Rol_STD][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -35961,7 +35972,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_ALL
+	[Rol_STD][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -35980,9 +35992,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudantes"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_NET - Usr_SEX_UNKNOWN
+	,
+	[Rol_NET][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -36002,7 +36014,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_FEMALE
+	[Rol_NET][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Professores no editores"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -36022,7 +36035,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professoras n&atilde;o editoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_MALE
+	[Rol_NET][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -36042,7 +36056,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_ALL
+	[Rol_NET][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -36061,9 +36076,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores n&atilde;o editores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_UNKNOWN
+	,
+	[Rol_TCH][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Professors"
 #elif L==2	// de
 	"Lehrkraft"
@@ -36083,7 +36098,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_FEMALE
+	[Rol_TCH][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Professores"
 #elif L==2	// de
 	"Lehrkraft"
@@ -36103,7 +36119,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_MALE
+	[Rol_TCH][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Professors"
 #elif L==2	// de
 	"Lehrkraft"
@@ -36123,7 +36140,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_ALL
+	[Rol_TCH][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Professors"
 #elif L==2	// de
 	"Lehrkraft"
@@ -36142,9 +36160,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36164,7 +36182,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_FEMALE
+	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -36184,7 +36203,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_MALE
+	[Rol_DEG_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36204,28 +36224,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_ALL
-	"Administradors"
-#elif L==2	// de
-	"Administratoren"
-#elif L==3	// en
-	"Administrators"
-#elif L==4	// es
-	"Administradores"
-#elif L==5	// fr
-	"Administrateurs"
-#elif L==6	// gn
-	"&Ntilde;angarekoh&aacute;ra"
-#elif L==7	// it
-	"Amministratori"
-#elif L==8	// pl
-	"Administratorzy"
-#elif L==9	// pt
-	"Administradores"
-#endif
-	},
-	{
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
+	[Rol_DEG_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36245,7 +36245,29 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_FEMALE
+	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
+	"Administradors"
+#elif L==2	// de
+	"Administratoren"
+#elif L==3	// en
+	"Administrators"
+#elif L==4	// es
+	"Administradores"
+#elif L==5	// fr
+	"Administrateurs"
+#elif L==6	// gn
+	"&Ntilde;angarekoh&aacute;ra"
+#elif L==7	// it
+	"Amministratori"
+#elif L==8	// pl
+	"Administratorzy"
+#elif L==9	// pt
+	"Administradores"
+#endif
+	,
+	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -36265,7 +36287,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_MALE
+	[Rol_CTR_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36285,28 +36308,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_ALL
-	"Administradors"
-#elif L==2	// de
-	"Administratoren"
-#elif L==3	// en
-	"Administrators"
-#elif L==4	// es
-	"Administradores"
-#elif L==5	// fr
-	"Administrateurs"
-#elif L==6	// gn
-	"&Ntilde;angarekoh&aacute;ra"
-#elif L==7	// it
-	"Amministratori"
-#elif L==8	// pl
-	"Administratorzy"
-#elif L==9	// pt
-	"Administradores"
-#endif
-	},
-	{
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
+	[Rol_CTR_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36326,7 +36329,29 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_FEMALE
+	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
+	"Administradors"
+#elif L==2	// de
+	"Administratoren"
+#elif L==3	// en
+	"Administrators"
+#elif L==4	// es
+	"Administradores"
+#elif L==5	// fr
+	"Administrateurs"
+#elif L==6	// gn
+	"&Ntilde;angarekoh&aacute;ra"
+#elif L==7	// it
+	"Amministratori"
+#elif L==8	// pl
+	"Administratorzy"
+#elif L==9	// pt
+	"Administradores"
+#endif
+	,
+	[Rol_INS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -36346,7 +36371,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_MALE
+	[Rol_INS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36366,7 +36392,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_ALL
+	[Rol_INS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -36385,9 +36412,9 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -36407,7 +36434,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_FEMALE
+	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Superusuarias"	// Necessita traduccio
 #elif L==2	// de
 	"Superuser"
@@ -36427,7 +36455,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizadoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_MALE
+	[Rol_SYS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -36447,7 +36476,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_ALL
+	[Rol_SYS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -36466,12 +36496,12 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadores"
 #endif
-	}
-   };
+	};
 
 const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	{
-#if   L==1	// ca	// Rol_UNK
+	[Rol_UNK] =
+#if   L==1	// ca
 	"Desc."
 #elif L==2	// de
 	"Unbe."
@@ -36491,7 +36521,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Desc."
 #endif
 	,
-#if   L==1	// ca	// Rol_GST
+	[Rol_GST] =
+#if   L==1	// ca
 	"Conv."
 #elif L==2	// de
 	"Eing."
@@ -36511,7 +36542,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Conv."
 #endif
 	,
-#if   L==1	// ca	// Rol_USR
+	[Rol_USR] =
+#if   L==1	// ca
 	"Usua."
 #elif L==2	// de
 	"Benu."
@@ -36531,7 +36563,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Util."
 #endif
 	,
-#if   L==1	// ca	// Rol_STD
+	[Rol_STD] =
+#if   L==1	// ca
 	"Estu."
 #elif L==2	// de
 	"Stud."
@@ -36551,7 +36584,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Estu."
 #endif
 	,
-#if   L==1	// ca	// Rol_NET
+	[Rol_NET] =
+#if   L==1	// ca
 	"Prof.n.e."
 #elif L==2	// de
 	"N.b.Lehr."
@@ -36571,7 +36605,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Prof.n.e."
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH
+	[Rol_TCH] =
+#if   L==1	// ca
 	"Prof."
 #elif L==2	// de
 	"Lehr."
@@ -36591,7 +36626,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Prof."
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM
+	[Rol_DEG_ADM] =
+#if   L==1	// ca
 	"Admi."
 #elif L==2	// de
 	"Admi."
@@ -36611,7 +36647,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Admi."
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM
+	[Rol_CTR_ADM] =
+#if   L==1	// ca
 	"Admi."
 #elif L==2	// de
 	"Admi."
@@ -36631,7 +36668,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Admi."
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM
+	[Rol_INS_ADM] =
+#if   L==1	// ca
 	"Admi."
 #elif L==2	// de
 	"Admi."
@@ -36651,7 +36689,8 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	"Admi."
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM
+	[Rol_SYS_ADM] =
+#if   L==1	// ca
 	"Supe."
 #elif L==2	// de
 	"Supe."
@@ -36673,9 +36712,9 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 	};
 
 const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-{
 	{
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_UNKNOWN
+	[Rol_UNK][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"desconocidos"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannte"
@@ -36695,7 +36734,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_FEMALE
+	[Rol_UNK][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"desconocidas"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannte"
@@ -36715,7 +36755,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidas"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_MALE
+	[Rol_UNK][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"desconocidos"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannte"
@@ -36735,7 +36776,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_ALL
+	[Rol_UNK][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"desconocidos"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannte"
@@ -36754,9 +36796,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidos"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_GST - Usr_SEX_UNKNOWN
+	,
+	[Rol_GST][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -36776,7 +36818,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidados"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_FEMALE
+	[Rol_GST][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"invitadas"	// Necessita traduccio
 #elif L==2	// de
 	"Eingeladen"
@@ -36796,7 +36839,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidadas"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_MALE
+	[Rol_GST][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -36816,7 +36860,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidados"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_ALL
+	[Rol_GST][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"convidats"
 #elif L==2	// de
 	"Eingeladen"
@@ -36835,9 +36880,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidados"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
+	,
+	[Rol_USR][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -36857,7 +36902,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
+	[Rol_USR][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"usu&agrave;ries"
 #elif L==2	// de
 	"Benutzer"
@@ -36877,7 +36923,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizadoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
+	[Rol_USR][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -36897,7 +36944,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
+	[Rol_USR][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -36916,9 +36964,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_STD - Usr_SEX_UNKNOWN
+	,
+	[Rol_STD][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -36938,7 +36986,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_FEMALE
+	[Rol_STD][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -36958,7 +37007,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_MALE
+	[Rol_STD][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -36978,7 +37028,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_ALL
+	[Rol_STD][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -36997,9 +37048,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudantes"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_NET - Usr_SEX_UNKNOWN
+	,
+	[Rol_NET][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -37019,7 +37070,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_FEMALE
+	[Rol_NET][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"professores no editores"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -37039,7 +37091,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professoras n&atilde;o editoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_MALE
+	[Rol_NET][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -37059,7 +37112,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_ALL
+	[Rol_NET][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -37078,9 +37132,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_UNKNOWN
+	,
+	[Rol_TCH][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"professors"
 #elif L==2	// de
 	"Lehrkr&auml;fte"
@@ -37100,7 +37154,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_FEMALE
+	[Rol_TCH][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"professores"
 #elif L==2	// de
 	"Lehrkr&auml;fte"
@@ -37120,7 +37175,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_MALE
+	[Rol_TCH][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"professors"
 #elif L==2	// de
 	"Lehrkr&auml;fte"
@@ -37140,7 +37196,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_ALL
+	[Rol_TCH][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"professors"
 #elif L==2	// de
 	"Lehrkr&auml;fte"
@@ -37159,9 +37216,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37181,7 +37238,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_FEMALE
+	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -37201,7 +37259,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_MALE
+	[Rol_DEG_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37221,28 +37280,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_ALL
-	"administradors"
-#elif L==2	// de
-	"Administratoren"
-#elif L==3	// en
-	"administrators"
-#elif L==4	// es
-	"administradores"
-#elif L==5	// fr
-	"administrateurs"
-#elif L==6	// gn
-	"&ntilde;angarekoh&aacute;ra"
-#elif L==7	// it
-	"amministratori"
-#elif L==8	// pl
-	"administratorzy"
-#elif L==9	// pt
-	"administradores"
-#endif
-	},
-	{
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
+	[Rol_DEG_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37262,7 +37301,29 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_FEMALE
+	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
+	"administradors"
+#elif L==2	// de
+	"Administratoren"
+#elif L==3	// en
+	"administrators"
+#elif L==4	// es
+	"administradores"
+#elif L==5	// fr
+	"administrateurs"
+#elif L==6	// gn
+	"&ntilde;angarekoh&aacute;ra"
+#elif L==7	// it
+	"amministratori"
+#elif L==8	// pl
+	"administratorzy"
+#elif L==9	// pt
+	"administradores"
+#endif
+	,
+	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -37282,7 +37343,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_MALE
+	[Rol_CTR_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37302,28 +37364,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_ALL
-	"administradors"
-#elif L==2	// de
-	"Administratoren"
-#elif L==3	// en
-	"administrators"
-#elif L==4	// es
-	"administradores"
-#elif L==5	// fr
-	"administrateurs"
-#elif L==6	// gn
-	"&ntilde;angarekoh&aacute;ra"
-#elif L==7	// it
-	"amministratori"
-#elif L==8	// pl
-	"administratorzy"
-#elif L==9	// pt
-	"administradores"
-#endif
-	},
-	{
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
+	[Rol_CTR_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37343,7 +37385,29 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_FEMALE
+	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
+	"administradors"
+#elif L==2	// de
+	"Administratoren"
+#elif L==3	// en
+	"administrators"
+#elif L==4	// es
+	"administradores"
+#elif L==5	// fr
+	"administrateurs"
+#elif L==6	// gn
+	"&ntilde;angarekoh&aacute;ra"
+#elif L==7	// it
+	"amministratori"
+#elif L==8	// pl
+	"administratorzy"
+#elif L==9	// pt
+	"administradores"
+#endif
+	,
+	[Rol_INS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"administradoras"	// Necessita traduccio
 #elif L==2	// de
 	"Administratoren"
@@ -37363,7 +37427,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_MALE
+	[Rol_INS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37383,7 +37448,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_ALL
+	[Rol_INS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"administradors"
 #elif L==2	// de
 	"Administratoren"
@@ -37402,9 +37468,9 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -37419,12 +37485,13 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"			// Potrzebujesz tlumaczenie
+	"superusers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_FEMALE
+	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"superusuarias"		// Necessita traduccio
 #elif L==2	// de
 	"Superuser"
@@ -37439,12 +37506,13 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"			// Potrzebujesz tlumaczenie
+	"superusers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadoras"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_MALE
+	[Rol_SYS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -37459,12 +37527,13 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"			// Potrzebujesz tlumaczenie
+	"superusers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_ALL
+	[Rol_SYS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"superusuaris"
 #elif L==2	// de
 	"Superuser"
@@ -37479,12 +37548,11 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"			// Potrzebujesz tlumaczenie
+	"superusers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #endif
-	}
-   };
+	};
 
 const char *Txt_Rooms_with_users =
 #if   L==1	// ca
@@ -37509,9 +37577,9 @@ const char *Txt_Rooms_with_users =
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	{
-	// Brw_UNKNOWN
+	[Brw_UNKNOWN] =
 	"",
-	// Brw_SHOW_DOC_CRS
+	[Brw_SHOW_DOC_CRS] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37532,7 +37600,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_SHOW_MRK_CRS
+	[Brw_SHOW_MRK_CRS] =
 #if   L==1	// ca
 	"qualificacions"
 #elif L==2	// de
@@ -37553,7 +37621,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"notas"
 #endif
 	,
-	// Brw_ADMI_DOC_CRS
+	[Brw_ADMI_DOC_CRS] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37574,7 +37642,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_SHR_CRS
+	[Brw_ADMI_SHR_CRS] =
 #if   L==1	// ca
 	"compartits"
 #elif L==2	// de
@@ -37595,7 +37663,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"comum"
 #endif
 	,
-	// Brw_ADMI_SHR_GRP
+	[Brw_ADMI_SHR_GRP] =
 #if   L==1	// ca
 	"compartits"
 #elif L==2	// de
@@ -37616,7 +37684,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"comum"
 #endif
 	,
-	// Brw_ADMI_WRK_USR
+	[Brw_ADMI_WRK_USR] =
 #if   L==1	// ca
 	"treballs"
 #elif L==2	// de
@@ -37637,7 +37705,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"trabalhos"
 #endif
 	,
-	// Brw_ADMI_WRK_CRS
+	[Brw_ADMI_WRK_CRS] =
 #if   L==1	// ca
 	"treballs"
 #elif L==2	// de
@@ -37658,7 +37726,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"trabalhos"
 #endif
 	,
-	// Brw_ADMI_MRK_CRS
+	[Brw_ADMI_MRK_CRS] =
 #if   L==1	// ca
 	"qualificacions"
 #elif L==2	// de
@@ -37674,12 +37742,12 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"risultati"
 #elif L==8	// pl
-	"marks"		// Potrzebujesz tlumaczenie
+	"marks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"notas"
 #endif
 	,
-	// Brw_ADMI_BRF_USR
+	[Brw_ADMI_BRF_USR] =
 #if   L==1	// ca
 	"maleti"
 #elif L==2	// de
@@ -37700,7 +37768,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"pasta"
 #endif
 	,
-	// Brw_SHOW_DOC_GRP
+	[Brw_SHOW_DOC_GRP] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37721,7 +37789,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_DOC_GRP
+	[Brw_ADMI_DOC_GRP] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37742,7 +37810,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_SHOW_MRK_GRP
+	[Brw_SHOW_MRK_GRP] =
 #if   L==1	// ca
 	"qualificacions"	// Necessita traduccio
 #elif L==2	// de
@@ -37758,12 +37826,12 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"risultati"
 #elif L==8	// pl
-	"marks"		// Potrzebujesz tlumaczenie
+	"marks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"notas"
 #endif
 	,
-	// Brw_ADMI_MRK_GRP
+	[Brw_ADMI_MRK_GRP] =
 #if   L==1	// ca
 	"qualificacions"
 #elif L==2	// de
@@ -37784,7 +37852,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"notas"
 #endif
 	,
-	// Brw_ADMI_ASG_USR
+	[Brw_ADMI_ASG_USR] =
 #if   L==1	// ca
 	"activitats"
 #elif L==2	// de
@@ -37805,7 +37873,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"atividades"
 #endif
 	,
-	// Brw_ADMI_ASG_CRS
+	[Brw_ADMI_ASG_CRS] =
 #if   L==1	// ca
 	"activitats"
 #elif L==2	// de
@@ -37826,7 +37894,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"atividades"
 #endif
 	,
-	// Brw_SHOW_DOC_DEG
+	[Brw_SHOW_DOC_DEG] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37847,7 +37915,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_DOC_DEG
+	[Brw_ADMI_DOC_DEG] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37868,7 +37936,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_SHOW_DOC_CTR
+	[Brw_SHOW_DOC_CTR] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37889,7 +37957,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_DOC_CTR
+	[Brw_ADMI_DOC_CTR] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37910,7 +37978,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_SHOW_DOC_INS
+	[Brw_SHOW_DOC_INS] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37931,7 +37999,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_DOC_INS
+	[Brw_ADMI_DOC_INS] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -37952,7 +38020,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_SHR_DEG
+	[Brw_ADMI_SHR_DEG] =
 #if   L==1	// ca
 	"compartits"
 #elif L==2	// de
@@ -37973,7 +38041,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"comum"
 #endif
 	,
-	// Brw_ADMI_SHR_CTR
+	[Brw_ADMI_SHR_CTR] =
 #if   L==1	// ca
 	"compartits"
 #elif L==2	// de
@@ -37994,7 +38062,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"comum"
 #endif
 	,
-	// Brw_ADMI_SHR_INS
+	[Brw_ADMI_SHR_INS] =
 #if   L==1	// ca
 	"compartits"
 #elif L==2	// de
@@ -38015,7 +38083,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"comum"
 #endif
 	,
-	// Brw_ADMI_TCH_CRS
+	[Brw_ADMI_TCH_CRS] =
 #if   L==1	// ca
 	"privats"
 #elif L==2	// de
@@ -38036,7 +38104,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"privados"
 #endif
 	,
-	// Brw_ADMI_TCH_GRP
+	[Brw_ADMI_TCH_GRP] =
 #if   L==1	// ca
 	"privats"
 #elif L==2	// de
@@ -38057,7 +38125,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"privados"
 #endif
 	,
-	// Brw_ADMI_DOC_PRJ
+	[Brw_ADMI_DOC_PRJ] =
 #if   L==1	// ca
 	"documents"
 #elif L==2	// de
@@ -38078,7 +38146,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"documentos"
 #endif
 	,
-	// Brw_ADMI_ASS_PRJ
+	[Brw_ADMI_ASS_PRJ] =
 #if   L==1	// ca
 	"avaluacio"
 #elif L==2	// de
@@ -39068,7 +39136,8 @@ const char *Txt_Sex =
 
 const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
+	[Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Desconocidos"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannt"
@@ -39088,7 +39157,8 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
+	[Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Dones"	// Necessita traduccio
 #elif L==2	// de
 	"Frauen"
@@ -39108,7 +39178,8 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	"Mulheres"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_MALE
+	[Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Homes"
 #elif L==2	// de
 	"M&auml;nner"
@@ -39128,7 +39199,8 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	"Homens"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_ALL
+	[Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Todos"	// Necessita traduccio
 #elif L==2	// de
 	"Alle"
@@ -39151,7 +39223,8 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 
 const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
+	[Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"desconocidos"	// Necessita traduccio
 #elif L==2	// de
 	"unbekannt"
@@ -39171,7 +39244,8 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
+	[Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"dones"
 #elif L==2	// de
 	"Frauen"
@@ -39191,7 +39265,8 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	"mulheres"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_MALE
+	[Usr_SEX_MALE] =
+#if   L==1	// ca
 	"homes"
 #elif L==2	// de
 	"M&auml;nner"
@@ -39211,7 +39286,8 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	"homens"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_ALL
+	[Usr_SEX_ALL] =
+#if   L==1	// ca
 	"todos"	// Necessita traduccio
 #elif L==2	// de
 	"alle"
@@ -39234,7 +39310,8 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 
 const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
+	[Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Desconocido"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannt"
@@ -39254,7 +39331,8 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 	"Desconhecido"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
+	[Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Dona"
 #elif L==2	// de
 	"Frau"
@@ -39274,7 +39352,8 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 	"Mulher"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_MALE
+	[Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Home"
 #elif L==2	// de
 	"Mann"
@@ -39294,7 +39373,8 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 	"Homem"
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_ALL
+	[Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Todos"		// Necessita traduccio
 #elif L==2	// de
 	"Alle"
@@ -40010,7 +40090,7 @@ const char *Txt_Source_of_information =
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 	{
-		  // Sta_CLICKS_CRS_DETAILED_LIST
+	[Sta_CLICKS_CRS_DETAILED_LIST] =
 #if   L==1	// ca
 	"clics detallats"
 #elif L==2	// de
@@ -40030,7 +40110,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"detalhadamente cliques"
 #endif
-	,	// Sta_CLICKS_CRS_PER_USR
+	,
+	[Sta_CLICKS_CRS_PER_USR] =
 #if   L==1	// ca
 	"usuari"
 #elif L==2	// de
@@ -40050,7 +40131,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"utilizador"
 #endif
-	,	// Sta_CLICKS_CRS_PER_DAY
+	,
+	[Sta_CLICKS_CRS_PER_DAY] =
 #if   L==1	// ca
 	"dia"
 #elif L==2	// de
@@ -40070,7 +40152,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia"
 #endif
-	,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
+	,
+	[Sta_CLICKS_CRS_PER_DAY_AND_HOUR] =
 #if   L==1	// ca
 	"dia i hora"
 #elif L==2	// de
@@ -40090,7 +40173,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia e hora"
 #endif
-	,	// Sta_CLICKS_CRS_PER_WEEK
+	,
+	[Sta_CLICKS_CRS_PER_WEEK] =
 #if   L==1	// ca
 	"setmana"
 #elif L==2	// de
@@ -40110,7 +40194,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"semana"
 #endif
-	,	// Sta_CLICKS_CRS_PER_MONTH
+	,
+	[Sta_CLICKS_CRS_PER_MONTH] =
 #if   L==1	// ca
 	"mes"
 #elif L==2	// de
@@ -40130,7 +40215,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"m&ecirc;s"
 #endif
-	,	// Sta_CLICKS_CRS_PER_YEAR
+	,
+	[Sta_CLICKS_CRS_PER_YEAR] =
 #if   L==1	// ca
 	"any"
 #elif L==2	// de
@@ -40150,7 +40236,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"ano"
 #endif
-	,	// Sta_CLICKS_CRS_PER_HOUR
+	,
+	[Sta_CLICKS_CRS_PER_HOUR] =
 #if   L==1	// ca
 	"hora"
 #elif L==2	// de
@@ -40170,7 +40257,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"hora"
 #endif
-	,	// Sta_CLICKS_CRS_PER_MINUTE
+	,
+	[Sta_CLICKS_CRS_PER_MINUTE] =
 #if   L==1	// ca
 	"minut"
 #elif L==2	// de
@@ -40190,7 +40278,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"minuto"
 #endif
-	,	// Sta_CLICKS_CRS_PER_ACTION
+	,
+	[Sta_CLICKS_CRS_PER_ACTION] =
 #if   L==1	// ca
 	"acci&oacute;"
 #elif L==2	// de
@@ -40210,7 +40299,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"a&ccedil;&atilde;o"
 #endif
-	,	// Sta_CLICKS_GBL_PER_DAY
+	,
+	[Sta_CLICKS_GBL_PER_DAY] =
 #if   L==1	// ca
 	"dia"
 #elif L==2	// de
@@ -40230,7 +40320,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia"
 #endif
-	,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
+	,
+	[Sta_CLICKS_GBL_PER_DAY_AND_HOUR] =
 #if   L==1	// ca
 	"dia i hora"
 #elif L==2	// de
@@ -40250,7 +40341,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia e hora"
 #endif
-	,	// Sta_CLICKS_GBL_PER_WEEK
+	,
+	[Sta_CLICKS_GBL_PER_WEEK] =
 #if   L==1	// ca
 	"setmana"
 #elif L==2	// de
@@ -40270,7 +40362,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"semana"
 #endif
-	,	// Sta_CLICKS_GBL_PER_MONTH
+	,
+	[Sta_CLICKS_GBL_PER_MONTH] =
 #if   L==1	// ca
 	"mes"
 #elif L==2	// de
@@ -40290,7 +40383,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"m&ecirc;s"
 #endif
-	,	// Sta_CLICKS_GBL_PER_YEAR
+	,
+	[Sta_CLICKS_GBL_PER_YEAR] =
 #if   L==1	// ca
 	"any"
 #elif L==2	// de
@@ -40310,7 +40404,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"ano"
 #endif
-	,	// Sta_CLICKS_GBL_PER_HOUR
+	,
+	[Sta_CLICKS_GBL_PER_HOUR] =
 #if   L==1	// ca
 	"hora"
 #elif L==2	// de
@@ -40330,7 +40425,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"hora"
 #endif
-	,	// Sta_CLICKS_GBL_PER_MINUTE
+	,
+	[Sta_CLICKS_GBL_PER_MINUTE] =
 #if   L==1	// ca
 	"minut"
 #elif L==2	// de
@@ -40350,7 +40446,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"minuto"
 #endif
-	,	// Sta_CLICKS_GBL_PER_ACTION
+	,
+	[Sta_CLICKS_GBL_PER_ACTION] =
 #if   L==1	// ca
 	"acci&oacute;"
 #elif L==2	// de
@@ -40370,7 +40467,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"a&ccedil;&atilde;o"
 #endif
-	,	// Sta_CLICKS_GBL_PER_PLUGIN
+	,
+	[Sta_CLICKS_GBL_PER_PLUGIN] =
 #if   L==1	// ca
 	"complement"
 #elif L==2	// de
@@ -40390,7 +40488,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"plugin"
 #endif
-	,	// Sta_CLICKS_GBL_PER_API_FUNCTION
+	,
+	[Sta_CLICKS_GBL_PER_API_FUNCTION] =
 #if   L==1	// ca
 	"funci&oacute;"
 #elif L==2	// de
@@ -40410,7 +40509,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"fun&ccedil;&atilde;o"
 #endif
-	,	// Sta_CLICKS_GBL_PER_BANNER
+	,
+	[Sta_CLICKS_GBL_PER_BANNER] =
 #if   L==1	// ca
 	"banner"
 #elif L==2	// de
@@ -40430,7 +40530,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"banner"
 #endif
-	,	// Sta_CLICKS_GBL_PER_COUNTRY
+	,
+	[Sta_CLICKS_GBL_PER_COUNTRY] =
 #if   L==1	// ca
 	"pa&iacute;s"
 #elif L==2	// de
@@ -40450,7 +40551,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"pa&iacute;s"
 #endif
-	,	// Sta_CLICKS_GBL_PER_INSTITUTION
+	,
+	[Sta_CLICKS_GBL_PER_INSTITUTION] =
 #if   L==1	// ca
 	"instituci&oacute;"
 #elif L==2	// de
@@ -40470,7 +40572,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"institu&ccedil;&atilde;o"
 #endif
-	,	// Sta_CLICKS_GBL_PER_CENTRE
+	,
+	[Sta_CLICKS_GBL_PER_CENTRE] =
 #if   L==1	// ca
 	"centre"
 #elif L==2	// de
@@ -40490,7 +40593,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"centro"
 #endif
-	,	// Sta_CLICKS_GBL_PER_DEGREE
+	,
+	[Sta_CLICKS_GBL_PER_DEGREE] =
 #if   L==1	// ca
 	"titulaci&oacute;"
 #elif L==2	// de
@@ -40510,7 +40614,8 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"grau"
 #endif
-	,	// Sta_CLICKS_GBL_PER_COURSE
+	,
+	[Sta_CLICKS_GBL_PER_COURSE] =
 #if   L==1	// ca
 	"assignatura"
 #elif L==2	// de
@@ -40534,6 +40639,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 
 const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 	{
+	[Sta_COLOR] =
 #if   L==1	// ca
 	"color"
 #elif L==2	// de
@@ -40554,6 +40660,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 	"cor"
 #endif
 	,
+	[Sta_BLACK_TO_WHITE] =
 #if   L==1	// ca
 	"de negre a blanc"
 #elif L==2	// de
@@ -40574,6 +40681,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 	"do preto ao branco"
 #endif
 	,
+	[Sta_WHITE_TO_BLACK] =
 #if   L==1	// ca
 	"de blanc a negre"
 #elif L==2	// de
@@ -40597,7 +40705,8 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 
 const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
 	{
-#if   L==1	// ca	// Brw_ADMI_DOC_CRS
+	[0] =
+#if   L==1	// ca
 	"Documents&nbsp;(ass.)"
 #elif L==2	// de
 	"Dokumente&nbsp;(Ver.)"
@@ -40617,7 +40726,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Documentos&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_DOC_GRP
+	[1] =
+#if   L==1	// ca
 	"Documents&nbsp;(grp.)"
 #elif L==2	// de
 	"Dokumente&nbsp;(Grp.)"
@@ -40637,7 +40747,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Documentos&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_TCH_CRS
+	[2] =
+#if   L==1	// ca
 	"Privats&nbsp;(ass.)"
 #elif L==2	// de
 	"Private&nbsp;(Ver.)"
@@ -40657,7 +40768,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Privadoss&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_TCH_GRP
+	[3] =
+#if   L==1	// ca
 	"Privats&nbsp;(grp.)"
 #elif L==2	// de
 	"Private&nbsp;(Grp.)"
@@ -40677,7 +40789,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Privadoss&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_SHR_CRS
+	[4] =
+#if   L==1	// ca
 	"Compartits&nbsp;(asg.)"
 #elif L==2	// de
 	"Freigegebene&nbsp;(Ver.)"
@@ -40697,7 +40810,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Compartilhados&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_SHR_GRP
+	[5] =
+#if   L==1	// ca
 	"Compartits&nbsp;(grp.)"
 #elif L==2	// de
 	"Freigegebene&nbsp;(Grp.)"
@@ -40717,7 +40831,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Compartilhados&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_MRK_CRS
+	[6] =
+#if   L==1	// ca
 	"Qualificacions&nbsp;(ass.)"
 #elif L==2	// de
 	"Bewertungen&nbsp;(Ver.)"
@@ -40737,7 +40852,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Notas&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_MRK_GRP
+	[7] =
+#if   L==1	// ca
 	"Qualificacions&nbsp;(grp.)"
 #elif L==2	// de
 	"Bewertungen&nbsp;(Grp.)"
@@ -40757,7 +40873,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Notas&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_ASG_USR
+	[8] =
+#if   L==1	// ca
 	"Activitats"
 #elif L==2	// de
 	"Aufgaben"
@@ -40777,7 +40894,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Atividades"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_WRK_USR
+	[9] =
+#if   L==1	// ca
 	"Treballs"
 #elif L==2	// de
 	"Hausarbeiten"
@@ -40797,7 +40915,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Trabalhos"
 #endif
 	,
-#if   L==1	// ca	// Brw_UNKNOWN
+	[10] =
+#if   L==1	// ca
 	"Total"
 #elif L==2	// de
 	"Gesamtzahl"
@@ -40817,7 +40936,8 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Total"
 #endif
 	,
-#if   L==1	// ca	// Brw_ADMI_BRF_USR
+	[11] =
+#if   L==1	// ca
 	"Maletins"
 #elif L==2	// de
 	"Aktentasche"
@@ -40840,6 +40960,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 
 const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 	{
+	[Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS] =
 #if   L==1	// ca
 	"proporcional al n&ordm; de estudiantes"	// Necessita traduccio
 #elif L==2	// de
@@ -40860,6 +40981,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 	"proporcional ao n&uacute;mero de estudantes"
 #endif
 	,
+	[Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS] =
 #if   L==1	// ca
 	"proporcional al n&ordm; de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
@@ -40880,6 +41002,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 	"proporcional ao n&uacute;mero de estudantes com foto"
 #endif
 	,
+	[Pho_PROPORTIONAL_TO_PERCENT] =
 #if   L==1	// ca
 	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
@@ -40900,6 +41023,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 	"proporcional ao porcentagem de estudantes com foto"
 #endif
 	,
+	[Pho_UNIQUE_SIZE] =
 #if   L==1	// ca
 	"igual para todas las titulaciones"	// Necessita traduccio
 #elif L==2	// de
@@ -40923,6 +41047,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 
 const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	{
+	[Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS] =
 #if   L==1	// ca
 	"nombre d'estudiants"
 #elif L==2	// de
@@ -40943,6 +41068,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	"n&uacute;mero de estudantes"
 #endif
 	,
+	[Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS] =
 #if   L==1	// ca
 	"nombre d'estudiants amb fotografia"
 #elif L==2	// de
@@ -40963,6 +41089,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	"n&uacute;mero de estudantes com foto"
 #endif
 	,
+	[Pho_PROPORTIONAL_TO_PERCENT] =
 #if   L==1	// ca
 	"porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
@@ -40983,6 +41110,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	"porcentagem de estudantes com foto"
 #endif
 	,
+	[Pho_UNIQUE_SIZE] =
 #if   L==1	// ca
 	"nombre de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -41006,6 +41134,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 
 const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	{
+	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
 	"N&ordm; total de clics"	// Necessita traduccio
 #elif L==2	// de
@@ -41026,6 +41155,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	"N&uacute;mero total de cliques"
 #endif
 	,
+	[Sta_DISTINCT_USRS] =
 #if   L==1	// ca
 	"N&ordm; de usuarios distintos"		// Necessita traduccio
 #elif L==2	// de
@@ -41046,6 +41176,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	"N&uacute;mero de utilizadores diferentes"
 #endif
 	,
+	[Sta_CLICKS_PER_USR] =
 #if   L==1	// ca
 	"N&ordm; de clics por usuario"		// Necessita traduccio
 #elif L==2	// de
@@ -41063,9 +41194,10 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==8	// pl
 	"Number of clicks per user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"n&uacute;mero de cliques por utilizador"
+	"N&uacute;mero de cliques por utilizador"
 #endif
 	,
+	[Sta_GENERATION_TIME] =
 #if   L==1	// ca
 	"Tiempo de generaci&oacute;n de p&aacute;gina"	// Necessita traduccio
 #elif L==2	// de
@@ -41086,6 +41218,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	"Tempo para gerar p&aacute;gina"
 #endif
 	,
+	[Sta_SEND_TIME] =
 #if   L==1	// ca
 	"Tiempo de env&iacute;o de p&aacute;gina"	// Necessita traduccio
 #elif L==2	// de
@@ -41109,6 +41242,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 
 const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	{
+	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
 	"n&ordm; total de clics"	// Necessita traduccio
 #elif L==2	// de
@@ -41129,6 +41263,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	"n&uacute;mero total de cliques"
 #endif
 	,
+	[Sta_DISTINCT_USRS] =
 #if   L==1	// ca
 	"n&ordm; de usuarios distintos"		// Necessita traduccio
 #elif L==2	// de
@@ -41149,6 +41284,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	"n&uacute;mero de utilizadores diferentes"
 #endif
 	,
+ 	[Sta_CLICKS_PER_USR] =
 #if   L==1	// ca
 	"n&ordm; de clics por usuario"		// Necessita traduccio
 #elif L==2	// de
@@ -41169,6 +41305,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	"n&uacute;mero de cliques por utilizador"
 #endif
 	,
+	[Sta_GENERATION_TIME] =
 #if   L==1	// ca
 	"tiempo de generaci&oacute;n"		// Necessita traduccio
 #elif L==2	// de
@@ -41189,6 +41326,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	"tempo para gerar"
 #endif
 	,
+	[Sta_SEND_TIME] =
 #if   L==1	// ca
 	"tiempo de env&iacute;o"	// Necessita traduccio
 #elif L==2	// de
@@ -41212,7 +41350,8 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 
 const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	{
-#if   L==1	// ca				// Fig_USERS
+	[Fig_USERS] =
+#if   L==1	// ca
 	"Usuaris"
 #elif L==2	// de
 	"Benutzer"
@@ -41232,7 +41371,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Utilizadores"
 #endif
 	,
-#if   L==1	// ca				// Fig_USERS_RANKING
+	[Fig_USERS_RANKING] =
+#if   L==1	// ca
 	"R&agrave;nquing"
 #elif L==2	// de
 	"Rang"
@@ -41252,7 +41392,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Posi&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca				// Fig_HIERARCHY
+	[Fig_HIERARCHY] =
+#if   L==1	// ca
 	"Jerarquia"
 #elif L==2	// de
 	"Hierarchie"
@@ -41272,7 +41413,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Hierarquia"
 #endif
 	,
-#if   L==1	// ca				// Fig_INSTITS
+	[Fig_INSTITS] =
+#if   L==1	// ca
 	"Institucions"
 #elif L==2	// de
 	"Hochschulen"
@@ -41292,7 +41434,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	,
-#if   L==1	// ca				// Fig_DEGREE_TYPES
+	[Fig_DEGREE_TYPES] =
+#if   L==1	// ca
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
 	"Abschlussart"
@@ -41312,7 +41455,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Tipos de grau"
 #endif
 	,
-#if   L==1	// ca				// Fig_FOLDERS_AND_FILES
+	[Fig_FOLDERS_AND_FILES] =
+#if   L==1	// ca
 	"Carpetes i fitxers"
 #elif L==2	// de
 	"Verzeichnisse und Dateien"
@@ -41332,7 +41476,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Diret&oacute;rios e arquivos"
 #endif
 	,
-#if   L==1	// ca				// Fig_OER
+	[Fig_OER] =
+#if   L==1	// ca
 	"Recursos Educatius Oberts (OER)"
 #elif L==2	// de
 	"Open Educational Resources (OER)"
@@ -41352,7 +41497,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Recursos Educacionais Abertos (OER)"
 #endif
 	,
-#if   L==1	// ca				// Fig_ASSIGNMENTS
+	[Fig_ASSIGNMENTS] =
+#if   L==1	// ca
 	"Activitats"
 #elif L==2	// de
 	"Aufgaben"
@@ -41372,7 +41518,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Atividades"
 #endif
 	,
-#if   L==1	// ca				// Fig_PROJECTS
+	[Fig_PROJECTS] =
+#if   L==1	// ca
 	"Projectes"
 #elif L==2	// de
 	"Projekte"
@@ -41392,7 +41539,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Projetos"
 #endif
 	,
-#if   L==1	// ca				// Fig_TESTS
+	[Fig_TESTS] =
+#if   L==1	// ca
 	"Tests"
 #elif L==2	// de
 	"Tests"
@@ -41412,7 +41560,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Testes"
 #endif
 	,
-#if   L==1	// ca				// Fig_GAMES
+	[Fig_GAMES] =
+#if   L==1	// ca
 	"Jocs"
 #elif L==2	// de
 	"Spiele"
@@ -41432,7 +41581,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Jogos"
 #endif
 	,
-#if   L==1	// ca				// Fig_SURVEYS
+	[Fig_SURVEYS] =
+#if   L==1	// ca
 	"Enquestes"
 #elif L==2	// de
 	"Umfragen"
@@ -41452,7 +41602,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-#if   L==1	// ca				// Fig_SOCIAL_ACTIVITY
+	[Fig_TIMELINE] =
+#if   L==1	// ca
 	"Timeline"
 #elif L==2	// de
 	"Timeline"
@@ -41472,7 +41623,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Timeline"
 #endif
 	,
-#if   L==1	// ca				// Fig_FOLLOW
+	[Fig_FOLLOW] =
+#if   L==1	// ca
 	"Seguits / Seguidors"
 #elif L==2	// de
 	"Gefolgt / Anh&auml;nger"
@@ -41492,7 +41644,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Seguidos / Seguidores"
 #endif
 	,
-#if   L==1	// ca				// Fig_FORUMS
+	[Fig_FORUMS] =
+#if   L==1	// ca
 	"F&ograve;rums"
 #elif L==2	// de
 	"Foren"
@@ -41507,12 +41660,13 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==7	// it
 	"Forum"
 #elif L==8	// pl
-	"Forums"		// Potrzebujesz tlumaczenie
+	"Forums"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"F&oacute;runs"
 #endif
 	,
-#if   L==1	// ca				// Fig_NOTIFY_EVENTS
+	[Fig_NOTIFY_EVENTS] =
+#if   L==1	// ca
 	"Notificacions enviades per correu"
 #elif L==2	// de
 	"Anmeldungen per E-Mail gesendet"
@@ -41532,7 +41686,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Notifica&ccedil;&otilde;es enviadas por email"
 #endif
 	,
-#if   L==1	// ca				// Fig_NOTICES
+	[Fig_NOTICES] =
+#if   L==1	// ca
 	"Avisos"
 #elif L==2	// de
 	"Ank&uuml;ndigungen"
@@ -41552,7 +41707,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Avisos"
 #endif
 	,
-#if   L==1	// ca				// Fig_MESSAGES
+	[Fig_MESSAGES] =
+#if   L==1	// ca
 	"Missatges"
 #elif L==2	// de
 	"Nachrichten"
@@ -41572,7 +41728,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Mensagens"
 #endif
 	,
-#if   L==1	// ca				// Fig_SOCIAL_NETWORKS
+	[Fig_SOCIAL_NETWORKS] =
+#if   L==1	// ca
 	"Webs / xarxes socials"
 #elif L==2	// de
 	"Webs / Social Networks"
@@ -41592,7 +41749,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Webs / redes sociais"
 #endif
 	,
-#if   L==1	// ca				// Fig_LANGUAGES
+	[Fig_LANGUAGES] =
+#if   L==1	// ca
 	"Idioma"
 #elif L==2	// de
 	"Sprache"
@@ -41612,7 +41770,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Lingua"
 #endif
 	,
-#if   L==1	// ca				// Fig_FIRST_DAY_OF_WEEK
+	[Fig_FIRST_DAY_OF_WEEK] =
+#if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
 	"Kalender"
@@ -41632,7 +41791,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Calend&aacute;rio"
 #endif
 	,
-#if   L==1	// ca				// Fig_DATE_FORMAT
+	[Fig_DATE_FORMAT] =
+#if   L==1	// ca
 	"Dates"
 #elif L==2	// de
 	"Datum"
@@ -41652,7 +41812,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Datas"
 #endif
 	,
-#if   L==1	// ca				// Fig_ICON_SETS
+	[Fig_ICON_SETS] =
+#if   L==1	// ca
 	"Icones"
 #elif L==2	// de
 	"Symbole"
@@ -41672,7 +41833,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"&Iacute;cones"
 #endif
 	,
-#if   L==1	// ca				// Fig_MENUS
+	[Fig_MENUS] =
+#if   L==1	// ca
 	"Men&uacute;"
 #elif L==2	// de
 	"Men&uuml;"
@@ -41692,7 +41854,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Menu"
 #endif
 	,
-#if   L==1	// ca				// Fig_THEMES
+	[Fig_THEMES] =
+#if   L==1	// ca
 	"Tema (colors)"
 #elif L==2	// de
 	"Skin"
@@ -41712,7 +41875,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Skin"
 #endif
 	,
-#if   L==1	// ca				// Fig_SIDE_COLUMNS
+	[Fig_SIDE_COLUMNS] =
+#if   L==1	// ca
 	"Columnes"
 #elif L==2	// de
 	"Spalten"
@@ -41732,7 +41896,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Colunas"
 #endif
 	,
-#if   L==1	// ca				// Fig_PRIVACY
+	[Fig_PRIVACY] =
+#if   L==1	// ca
 	"Privacitat"
 #elif L==2	// de
 	"Geheimhaltung"
@@ -41752,7 +41917,8 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Privacidade"
 #endif
 	,
-#if   L==1	// ca				// Fig_COOKIES
+	[Fig_COOKIES] =
+#if   L==1	// ca
 	"Cookies"
 #elif L==2	// de
 	"Cookies"
@@ -42321,6 +42487,7 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 
 const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
 	{
+	[Svy_ANS_UNIQUE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; &uacute;nica"
 #elif L==2	// de
@@ -42341,6 +42508,7 @@ const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
 	"&Uacute;nica escolha"
 #endif
 	,
+	[Svy_ANS_MULTIPLE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; m&uacute;ltiple"
 #elif L==2	// de
@@ -42427,7 +42595,7 @@ const char *Txt_Syllabus_of_the_course =
 
 const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 	{
-	// Lectures
+	[Syl_LECTURES] =
 #if   L==1	// ca
 	"Teoria"
 #elif L==2	// de
@@ -42448,7 +42616,7 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 	"Teoria"
 #endif
 	,
-	// Practicals
+	[Syl_PRACTICALS] =
 #if   L==1	// ca
 	"Pr&agrave;ctiques"
 #elif L==2	// de
@@ -42460,7 +42628,7 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #elif L==5	// fr
 	"Pratique"
 #elif L==6	// gn
-	"Pr&aacute;cticas"		// Okoteve traducción
+	"Pr&aacute;cticas"	// Okoteve traducción
 #elif L==7	// it
 	"Pratica"
 #elif L==8	// pl
@@ -42468,7 +42636,6 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #elif L==9	// pt
 	"Pr&aacute;tica"
 #endif
-	,
 	};
 
 const char *Txt_System =
@@ -42557,10 +42724,10 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	{
-	// TabUnk
+	[TabUnk] =
 	""
 	,
-	// TabStr
+	[TabStr] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
@@ -42581,7 +42748,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Inicio"
 #endif
 	,
-	// TabSys
+	[TabSys] =
 #if   L==1	// ca
 	"Plataforma"
 #elif L==2	// de
@@ -42602,7 +42769,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Sistema"
 #endif
 	,
-	// TabCty
+	[TabCty] =
 #if   L==1	// ca
 	"Pa&iacute;s"
 #elif L==2	// de
@@ -42623,7 +42790,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Pa&iacute;s"
 #endif
 	,
-	// TabIns
+	[TabIns] =
 #if   L==1	// ca
 	"Instituci&oacute;"
 #elif L==2	// de
@@ -42644,7 +42811,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Institu&ccedil;&atilde;o"
 #endif
 	,
-	// TabCtr
+	[TabCtr] =
 #if   L==1	// ca
 	"Centre"
 #elif L==2	// de
@@ -42665,7 +42832,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Centro"
 #endif
 	,
-	// TabDeg
+	[TabDeg] =
 #if   L==1	// ca
 	"Titulaci&oacute;"
 #elif L==2	// de
@@ -42686,7 +42853,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Grau"
 #endif
 	,
-	// TabCrs
+	[TabCrs] =
 #if   L==1	// ca
 	"Assignatura"
 #elif L==2	// de
@@ -42707,7 +42874,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Disciplina"
 #endif
 	,
-	// TabAss
+	[TabAss] =
 #if   L==1	// ca
 	"Avaluaci&oacute;"
 #elif L==2	// de
@@ -42728,7 +42895,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Avalia&ccedil;&atilde;o"
 #endif
 	,
-	// TabFil
+	[TabFil] =
 #if   L==1	// ca
 	"Fitxers"
 #elif L==2	// de
@@ -42749,7 +42916,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Arquivos"
 #endif
 	,
-	// TabUsr
+	[TabUsr] =
 #if   L==1	// ca
 	"Usuaris"
 #elif L==2	// de
@@ -42770,7 +42937,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Utilizadores"
 #endif
 	,
-	// TabMsg
+	[TabMsg] =
 #if   L==1	// ca
 	"Missatges"
 #elif L==2	// de
@@ -42791,6 +42958,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Mensagens"
 #endif
 	,
+	[TabAna] =
 #if   L==1	// ca
 	"An&agrave;lisi"
 #elif L==2	// de
@@ -42811,7 +42979,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"An&aacute;lises"
 #endif
 	,
-	// TabPrf
+	[TabPrf] =
 #if   L==1	// ca
 	"Perfil"
 #elif L==2	// de
@@ -49560,7 +49728,8 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 
 const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	{
-#if   L==1	// ca	// TL_NOTE_UNKNOWN
+	[TL_NOTE_UNKNOWN] =
+#if   L==1	// ca
 	"Esdeveniment desconegut"
 #elif L==2	// de
 	"Unbekannt Ereignis"
@@ -49580,7 +49749,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Evento desconhecido"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_INS_DOC_PUB_FILE
+	[TL_NOTE_INS_DOC_PUB_FILE] =
+#if   L==1	// ca
 	"Document p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
 	"&Ouml;ffentliche Dokumentdatei (Hochschule)"
@@ -49600,7 +49770,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_INS_SHA_PUB_FILE
+	[TL_NOTE_INS_SHA_PUB_FILE] =
+#if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
 	"&Ouml;ffentliche Freigegebene Datei (Hochschule)"
@@ -49620,7 +49791,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_CTR_DOC_PUB_FILE
+	[TL_NOTE_CTR_DOC_PUB_FILE] =
+#if   L==1	// ca
 	"Document p&uacute;blic (centre)"
 #elif L==2	// de
 	"&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
@@ -49640,7 +49812,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (centro)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_CTR_SHA_PUB_FILE
+	[TL_NOTE_CTR_SHA_PUB_FILE] =
+#if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (centre)"
 #elif L==2	// de
 	"&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
@@ -49660,7 +49833,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (centro)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_DEG_DOC_PUB_FILE
+	[TL_NOTE_DEG_DOC_PUB_FILE] =
+#if   L==1	// ca
 	"Document p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
 	"&Ouml;ffentliche Dokumentdatei (Studiengang)"
@@ -49680,7 +49854,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (grau)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_DEG_SHA_PUB_FILE
+	[TL_NOTE_DEG_SHA_PUB_FILE] =
+#if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
 	"&Ouml;ffentliche Freigegebene Datei (Studiengang)"
@@ -49700,7 +49875,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (grau)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_CRS_DOC_PUB_FILE
+	[TL_NOTE_CRS_DOC_PUB_FILE] =
+#if   L==1	// ca
 	"Document p&uacute;blic (assignatura)"
 #elif L==2	// de
 	"&Ouml;ffentliche Dokumentdatei (Kurs)"
@@ -49720,7 +49896,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (disciplina)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_CRS_SHA_PUB_FILE
+	[TL_NOTE_CRS_SHA_PUB_FILE] =
+#if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (assignatura)"
 #elif L==2	// de
 	"&Ouml;ffentliche Freigegebene Datei (Kurs)"
@@ -49740,7 +49917,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_EXAM_ANNOUNCEMENT
+	[TL_NOTE_EXAM_ANNOUNCEMENT] =
+#if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
 	"Aufrufe für Pr&uuml;fung"
@@ -49760,7 +49938,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Chamada para exame"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_SOCIAL_POST
+	[TL_NOTE_POST] =
+#if   L==1	// ca
 	"Missatge social"
 #elif L==2	// de
 	"Social Beitrag"
@@ -49780,7 +49959,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Post sociais"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_FORUM_POST
+	[TL_NOTE_FORUM_POST] =
+#if   L==1	// ca
 	"Comentari en un f&ograve;rum"
 #elif L==2	// de
 	"Beitr&auml;ge in einem Forum"
@@ -49800,7 +49980,8 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	"Post em um f&oacute;rum"
 #endif
 	,
-#if   L==1	// ca	// TL_NOTE_NOTICE
+	[TL_NOTE_NOTICE] =
+#if   L==1	// ca
 	"Av&iacute;s"
 #elif L==2	// de
 	"Ank&uuml;ndigungen"
@@ -49949,10 +50130,10 @@ const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone =	// No longer shared
 
 const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	{
-	// TL_TOP_MESSAGE_NONE
+	[TL_TOP_MESSAGE_NONE] =
 	""
 	,
-	// TL_TOP_MESSAGE_COMMENTED:
+	[TL_TOP_MESSAGE_COMMENTED] =
 #if   L==1	// ca
 	"ha comentat"
 #elif L==2	// de
@@ -49973,7 +50154,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"comentou"
 #endif
 	,
-	// TL_TOP_MESSAGE_FAVED:
+	[TL_TOP_MESSAGE_FAVED] =
 #if   L==1	// ca
 	"ha marcat com favorit"
 #elif L==2	// de
@@ -49994,7 +50175,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"marcou como favorito"
 #endif
 	,
-	// TL_TOP_MESSAGE_UNFAVED:
+	[TL_TOP_MESSAGE_UNFAVED] =
 #if   L==1	// ca
 	"ha desmarcat com favorit"
 #elif L==2	// de
@@ -50015,7 +50196,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"desmarcou como favorito"
 #endif
 	,
-	// TL_TOP_MESSAGE_SHARED:
+	[TL_TOP_MESSAGE_SHARED] =
 #if   L==1	// ca
 	"ha compartit"
 #elif L==2	// de
@@ -50036,7 +50217,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"compartilhou"
 #endif
 	,
-	// TL_TOP_MESSAGE_UNSHARED:
+	[TL_TOP_MESSAGE_UNSHARED] =
 #if   L==1	// ca
 	"ha deixat de compartir"
 #elif L==2	// de
@@ -50057,7 +50238,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"parou compartilhar"
 #endif
 	,
-	// TL_TOP_MESSAGE_MENTIONED:
+	[TL_TOP_MESSAGE_MENTIONED] =
 #if   L==1	// ca
 	"li ha esmentat"
 #elif L==2	// de
@@ -50144,7 +50325,7 @@ const char *Txt_TIMELINE_posts =
 
 const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	{
-	// TT_COURSE_TIMETABLE
+	[TT_COURSE_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de classes de l'assignatura"
 #elif L==2	// de
@@ -50165,7 +50346,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// TT_MY_TIMETABLE
+	[TT_MY_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de les meves assignatures"
 #elif L==2	// de
@@ -50186,7 +50367,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	// TT_TUTORING_TIMETABLE
+	[TT_TUTORING_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de tutories"
 #elif L==2	// de
@@ -50210,7 +50391,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 
 const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	{
-   // TT_FREE
+	[TT_FREE] =
 #if   L==1	// ca
 	"Lliure"
 #elif L==2	// de
@@ -50231,7 +50412,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Livre"
 #endif
 	,
-	// TT_LECTURE
+	[TT_LECTURE] =
 #if   L==1	// ca
 	"Teoria"
 #elif L==2	// de
@@ -50252,7 +50433,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Teoria"
 #endif
 	,
-	// TT_PRACTICAL
+	[TT_PRACTICAL] =
 #if   L==1	// ca
 	"Pr&agrave;ct."
 #elif L==2	// de
@@ -50273,7 +50454,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Pr&aacute;ct."
 #endif
 	,
-	// TT_TUTORING
+	[TT_TUTORING] =
 #if   L==1	// ca
 	"Tutories"
 #elif L==2	// de
@@ -50720,9 +50901,9 @@ const char *Txt_TST_Answer_given_by_the_user =
 
 const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	{
-	// Tst_PLUGGABLE_UNKNOWN
+	[Tst_PLUGGABLE_UNKNOWN] =
 	"",
-	// Tst_PLUGGABLE_NO
+	[Tst_PLUGGABLE_NO] =
 #if   L==1	// ca
 	"Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
 #elif L==2	// de
@@ -50743,7 +50924,7 @@ const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	"Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
 #endif
 	,
-	// Tst_PLUGGABLE_YES
+	[Tst_PLUGGABLE_YES] =
 #if   L==1	// ca
 	"Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
 #elif L==2	// de
@@ -50767,6 +50948,7 @@ const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 
 const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	{
+	[Tst_ANS_INT] =
 #if   L==1	// ca
 	"Nombre enter"
 #elif L==2	// de
@@ -50787,6 +50969,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"N&ordm; inteiro"
 #endif
 	,
+	[Tst_ANS_FLOAT] =
 #if   L==1	// ca
 	"Nombre real"
 #elif L==2	// de
@@ -50807,6 +50990,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"N&ordm; real"
 #endif
 	,
+	[Tst_ANS_TRUE_FALSE] =
 #if   L==1	// ca
 	"V/F"
 #elif L==2	// de
@@ -50827,6 +51011,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"V/F"
 #endif
 	,
+	[Tst_ANS_UNIQUE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; &uacute;nica"
 #elif L==2	// de
@@ -50847,6 +51032,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"&Uacute;nica escolha"
 #endif
 	,
+	[Tst_ANS_MULTIPLE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; m&uacute;ltiple"
 #elif L==2	// de
@@ -50867,6 +51053,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"M&uacute;ltipla escolha"
 #endif
 	,
+	[Tst_ANS_TEXT] =
 #if   L==1	// ca
 	"Text"
 #elif L==2	// de
@@ -50886,11 +51073,11 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"Texto"
 #endif
-	,
 	};
 
 const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	{
+	[Tst_FEEDBACK_NOTHING] =
 #if   L==1	// ca
 	"Ninguna realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -50911,6 +51098,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Nenhum feedback"
 #endif
 	,
+	[Tst_FEEDBACK_TOTAL_RESULT] =
 #if   L==1	// ca
 	"Poca: solo puntuaci&oacute;n total"	// Necessita traduccio
 #elif L==2	// de
@@ -50931,6 +51119,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Pouco: apenas a pontua&ccedil;&atilde;o total"
 #endif
 	,
+	[Tst_FEEDBACK_EACH_RESULT] =
 #if   L==1	// ca
 	"Media: puntuaci&oacute;n de cada pregunta"	// Necessita traduccio
 #elif L==2	// de
@@ -50951,6 +51140,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"M&eacute;dio: pontua&ccedil;&atilde;o de cada quest&atilde;o"
 #endif
 	,
+	[Tst_FEEDBACK_EACH_GOOD_BAD] =
 #if   L==1	// ca
 	"Alta: respuesta correcta en cada pregunta"			// Necessita traduccio
 #elif L==2	// de
@@ -50971,6 +51161,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Alto: resposta correta para cada quest&atilde;o"
 #endif
 	,
+	[Tst_FEEDBACK_FULL_FEEDBACK] =
 #if   L==1	// ca
 	"M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -50994,7 +51185,8 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 
 const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	{
-#if   L==1	// ca	// Tst_ORDER_STEM
+	[Tst_ORDER_STEM] =
+#if   L==1	// ca
 	"Ordenar por enunciado de la pregunta"	// Necessita traduccio
 #elif L==2	// de
 	"Sortieren nach Stammzellen in Frage"
@@ -51014,7 +51206,8 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Classificar por formula&ccedil;&atilde;o da quest&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Tst_ORDER_NUM_HITS
+	[Tst_ORDER_NUM_HITS] =
+#if   L==1	// ca
 	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Necessita traduccio
 #elif L==2	// de
 	"Sortieren nach Anzahl der mal die Frage beantwortet wurde"
@@ -51034,7 +51227,8 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Classificar por n&ordm; de vezes que a quest&atilde;o foi respondida"
 #endif
 	,
-#if   L==1	// ca	// TST_ORDER_AVERAGE_SCORE
+	[Tst_ORDER_AVERAGE_SCORE] =
+#if   L==1	// ca
 	"Ordenar por puntuaci&oacute;n media"	// Necessita traduccio
 #elif L==2	// de
 	"Sortieren nach Durchschnittsnote"
@@ -51053,7 +51247,9 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia"
 #endif
-#if   L==1	// ca	// Tst_ORDER_NUM_HITS_NOT_BLANK
+	,
+	[Tst_ORDER_NUM_HITS_NOT_BLANK] =
+#if   L==1	// ca
 	"Ordenar por n&ordm; de veces que se ha respondido"
 	" la pregunta (excluyendo respuestas en blanco)"	// Necessita traduccio
 #elif L==2	// de
@@ -51082,7 +51278,8 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	" que a quest&atilde;o foi respondida (n&atilde;o em branco)"
 #endif
 	,
-#if   L==1	// ca	// TST_ORDER_AVERAGE_SCORE_NOT_BLANK
+	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
+#if   L==1	// ca
 	"Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Necessita traduccio
 #elif L==2	// de
 	"Sortieren nach Durchschnittsnote (nicht leer)"
@@ -51105,7 +51302,8 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 
 const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	{
-#if   L==1	// ca	// Tst_ORDER_STEM
+	[Tst_ORDER_STEM] =
+#if   L==1	// ca
 	"Pregunta"
 #elif L==2	// de
 	"Frage"
@@ -51125,7 +51323,8 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"Quest&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Tst_ORDER_NUM_HITS
+	[Tst_ORDER_NUM_HITS] =
+#if   L==1	// ca
 	"N&ordm;<br />resp."			// Necessita traduccio
 #elif L==2	// de
 	"Anzahl<br />Antw."
@@ -51145,7 +51344,8 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"N&ordm;<br />resp."
 #endif
 	,
-#if   L==1	// ca	// TST_ORDER_AVERAGE_SCORE
+	[Tst_ORDER_AVERAGE_SCORE] =
+#if   L==1	// ca
 	"Puntuaci&oacute;n<br />media"	// Necessita traduccio
 #elif L==2	// de
 	"Durchschnitt"
@@ -51165,7 +51365,8 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"Pontua&ccedil;&atilde;o<br />m&eacute;dia"
 #endif
 	,
-#if   L==1	// ca	// Tst_ORDER_NUM_HITS
+	[Tst_ORDER_NUM_HITS_NOT_BLANK] =
+#if   L==1	// ca
 	"N&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
 #elif L==2	// de
 	"Anzahl<br />Antw.<br />nicht<br />leer"
@@ -51185,7 +51386,8 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"N&ordm;<br />resp.<br />n&atilde;o em<br />branco"
 #endif
 	,
-#if   L==1	// ca	// TST_ORDER_AVERAGE_SCORE
+	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
+#if   L==1	// ca
 	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Necessita traduccio
 #elif L==2	// de
 	"Durchschnitt<br />nicht<br />leer"
@@ -52223,7 +52425,8 @@ const char *Txt_Use_this_nickname =
 #endif
 
 const char *Txt_User[Usr_NUM_SEXS] =
-	{	// Usr_SEX_UNKNOWN
+	{
+	[Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
 	"Usuari/a"
 #elif L==2	// de
@@ -52243,7 +52446,8 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #endif
-	,	// Usr_SEX_FEMALE
+	,
+	[Usr_SEX_FEMALE] =
 #if   L==1	// ca
 	"Usuaria"
 #elif L==2	// de
@@ -52263,7 +52467,8 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadora"
 #endif
-	,	// Usr_SEX_MALE
+	,
+	[Usr_SEX_MALE] =
 #if   L==1	// ca
 	"Usuari"
 #elif L==2	// de
@@ -52283,7 +52488,8 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador"
 #endif
-	,	// Usr_SEX_ALL
+	,
+	[Usr_SEX_ALL] =
 #if   L==1	// ca
 	"Usuari/a"
 #elif L==2	// de
@@ -52306,7 +52512,8 @@ const char *Txt_User[Usr_NUM_SEXS] =
 	};
 
 const char *Txt_user[Usr_NUM_SEXS] =
-	{	// Usr_SEX_UNKNOWN
+	{
+	[Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
 	"usuari/a"
 #elif L==2	// de
@@ -52326,7 +52533,8 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #endif
-	,	// Usr_SEX_FEMALE
+	,
+	[Usr_SEX_FEMALE] =
 #if   L==1	// ca
 	"usuaria"
 #elif L==2	// de
@@ -52346,7 +52554,8 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadora"
 #endif
-	,	// Usr_SEX_MALE
+	,
+	[Usr_SEX_MALE] =
 #if   L==1	// ca
 	"usuari"
 #elif L==2	// de
@@ -52366,7 +52575,8 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador"
 #endif
-	,	// Usr_SEX_ALL
+	,
+	[Usr_SEX_ALL] =
 #if   L==1	// ca
 	"usuari/a"
 #elif L==2	// de
@@ -52512,7 +52722,8 @@ const char *Txt_Users =
 #endif
 
 const char *Txt_users[Usr_NUM_SEXS] =
-	{	// Usr_SEX_UNKNOWN
+	{
+	[Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
@@ -52532,7 +52743,8 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #endif
-	,	// Usr_SEX_FEMALE
+	,
+	[Usr_SEX_FEMALE] =
 #if   L==1	// ca
 	"usuarias"
 #elif L==2	// de
@@ -52552,7 +52764,8 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadoras"
 #endif
-	,	// Usr_SEX_MALE
+	,
+	[Usr_SEX_MALE] =
 #if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
@@ -52572,7 +52785,8 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #endif
-	,	// Usr_SEX_ALL
+	,
+	[Usr_SEX_ALL] =
 #if   L==1	// ca
 	"usuaris"
 #elif L==2	// de
