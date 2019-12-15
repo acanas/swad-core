@@ -413,7 +413,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    /* Start/end date/time */
    UniqueId++;
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {

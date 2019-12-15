@@ -3381,8 +3381,8 @@ static void Crs_EditingCourseConstructor (void)
    Crs_EditingCrs->Status      = 0;
    Crs_EditingCrs->ShrtName[0] = '\0';
    Crs_EditingCrs->FullName[0] = '\0';
-   for (Role = (Rol_Role_t) 0;
-	Role < Rol_NUM_ROLES;
+   for (Role  = (Rol_Role_t) 0;
+	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
 	Role++)
       Crs_EditingCrs->NumUsrs[Role] = 0;
   }

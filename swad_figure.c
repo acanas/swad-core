@@ -225,8 +225,8 @@ void Fig_ReqShowFigures (void)
    HTM_TxtF ("%s:&nbsp;",Txt_Statistic);
    HTM_SELECT_Begin (false,
 		     "name=\"FigureType\"");
-   for (FigureType = (Fig_FigureType_t) 0;
-	FigureType < Fig_NUM_FIGURES;
+   for (FigureType  = (Fig_FigureType_t) 0;
+	FigureType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
 	FigureType++)
      {
       FigureTypeUnsigned = (unsigned) FigureType;
@@ -308,34 +308,34 @@ void Fig_ShowFigures (void)
   {
    static void (*Fig_Function[Fig_NUM_FIGURES])(void) =	// Array of pointers to functions
      {
-      Fig_GetAndShowUsersStats,			// Fig_USERS
-      Fig_GetAndShowUsersRanking,		// Fig_USERS_RANKING
-      Fig_GetAndShowHierarchyStats,		// Fig_HIERARCHY
-      Fig_GetAndShowInstitutionsStats,		// Fig_INSTITS
-      Fig_GetAndShowDegreeTypesStats,		// Fig_DEGREE_TYPES
-      Fig_GetAndShowFileBrowsersStats,		// Fig_FOLDERS_AND_FILES
-      Fig_GetAndShowOERsStats,			// Fig_OER
-      Fig_GetAndShowAssignmentsStats,		// Fig_ASSIGNMENTS
-      Fig_GetAndShowProjectsStats,		// Fig_PROJECTS
-      Fig_GetAndShowTestsStats,			// Fig_TESTS
-      Fig_GetAndShowGamesStats,			// Fig_GAMES
-      Fig_GetAndShowSurveysStats,		// Fig_SURVEYS
-      Fig_GetAndShowTimelineActivityStats,	// Fig_SOCIAL_ACTIVITY
-      Fig_GetAndShowFollowStats,		// Fig_FOLLOW
-      Fig_GetAndShowForumStats,			// Fig_FORUMS
-      Fig_GetAndShowNumUsrsPerNotifyEvent,	// Fig_NOTIFY_EVENTS
-      Fig_GetAndShowNoticesStats,		// Fig_NOTICES
-      Fig_GetAndShowMsgsStats,			// Fig_MESSAGES
-      Net_ShowWebAndSocialNetworksStats,	// Fig_SOCIAL_NETWORKS
-      Fig_GetAndShowNumUsrsPerLanguage,		// Fig_LANGUAGES
-      Fig_GetAndShowNumUsrsPerFirstDayOfWeek,	// Fig_FIRST_DAY_OF_WEEK
-      Fig_GetAndShowNumUsrsPerDateFormat,	// Fig_DATE_FORMAT
-      Fig_GetAndShowNumUsrsPerIconSet,		// Fig_ICON_SETS
-      Fig_GetAndShowNumUsrsPerMenu,		// Fig_MENUS
-      Fig_GetAndShowNumUsrsPerTheme,		// Fig_THEMES
-      Fig_GetAndShowNumUsrsPerSideColumns,	// Fig_SIDE_COLUMNS
-      Fig_GetAndShowNumUsrsPerPrivacy,		// Fig_PRIVACY
-      Fig_GetAndShowNumUsrsPerCookies,		// Fig_COOKIES
+      [Fig_USERS            ] = Fig_GetAndShowUsersStats,
+      [Fig_USERS_RANKING    ] = Fig_GetAndShowUsersRanking,
+      [Fig_HIERARCHY        ] = Fig_GetAndShowHierarchyStats,
+      [Fig_INSTITS          ] = Fig_GetAndShowInstitutionsStats,
+      [Fig_DEGREE_TYPES     ] = Fig_GetAndShowDegreeTypesStats,
+      [Fig_FOLDERS_AND_FILES] = Fig_GetAndShowFileBrowsersStats,
+      [Fig_OER              ] = Fig_GetAndShowOERsStats,
+      [Fig_ASSIGNMENTS      ] = Fig_GetAndShowAssignmentsStats,
+      [Fig_PROJECTS         ] = Fig_GetAndShowProjectsStats,
+      [Fig_TESTS            ] = Fig_GetAndShowTestsStats,
+      [Fig_GAMES            ] = Fig_GetAndShowGamesStats,
+      [Fig_SURVEYS          ] = Fig_GetAndShowSurveysStats,
+      [Fig_TIMELINE         ] = Fig_GetAndShowTimelineActivityStats,
+      [Fig_FOLLOW           ] = Fig_GetAndShowFollowStats,
+      [Fig_FORUMS           ] = Fig_GetAndShowForumStats,
+      [Fig_NOTIFY_EVENTS    ] = Fig_GetAndShowNumUsrsPerNotifyEvent,
+      [Fig_NOTICES          ] = Fig_GetAndShowNoticesStats,
+      [Fig_MESSAGES         ] = Fig_GetAndShowMsgsStats,
+      [Fig_SOCIAL_NETWORKS  ] = Net_ShowWebAndSocialNetworksStats,
+      [Fig_LANGUAGES        ] = Fig_GetAndShowNumUsrsPerLanguage,
+      [Fig_FIRST_DAY_OF_WEEK] = Fig_GetAndShowNumUsrsPerFirstDayOfWeek,
+      [Fig_DATE_FORMAT      ] = Fig_GetAndShowNumUsrsPerDateFormat,
+      [Fig_ICON_SETS        ] = Fig_GetAndShowNumUsrsPerIconSet,
+      [Fig_MENUS            ] = Fig_GetAndShowNumUsrsPerMenu,
+      [Fig_THEMES           ] = Fig_GetAndShowNumUsrsPerTheme,
+      [Fig_SIDE_COLUMNS     ] = Fig_GetAndShowNumUsrsPerSideColumns,
+      [Fig_PRIVACY          ] = Fig_GetAndShowNumUsrsPerPrivacy,
+      [Fig_COOKIES          ] = Fig_GetAndShowNumUsrsPerCookies,
      };
 
    /***** Get the type of figure ******/

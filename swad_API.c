@@ -130,35 +130,38 @@ extern const char Str_BIN_TO_BASE64URL[64 + 1];
 // Add new functions at the end
 static const char *API_Functions[1 + API_NUM_FUNCTIONS] =
   {
-   "?",				// 0 ==> unknown function
-   "loginBySession",		// 1
-   "loginByUserPassword",	// 2 (deprecated)
-   "loginByUserPasswordKey",	// 3
-   "getCourses",		// 4
-   "getUsers",			// 5
-   "getNotifications",		// 6
-   "getTestConfig",		// 7
-   "getTests",			// 8
-   "sendMessage",		// 9
-   "sendNotice",		// 10
-   "getDirectoryTree",		// 11
-   "getGroups",			// 12
-   "getGroupTypes",		// 13
-   "sendMyGroups",		// 14
-   "getFile",			// 15
-   "markNotificationsAsRead",	// 16
-   "getNewPassword",		// 17
-   "getCourseInfo",		// 18
-   "getAttendanceEvents",	// 19
-   "sendAttendanceEvent",	// 20
-   "getAttendanceUsers",	// 21
-   "sendAttendanceUsers",	// 22
-   "createAccount",		// 23
-   "getMarks",			// 24
-   "getTrivialQuestion",	// 25
-   "findUsers",			// 26
-   "removeAttendanceEvent",	// 27
-   "getGames",			// 28
+   [API_unknown                ] = "?",				//  0 ==> unknown function
+   [API_loginBySessionKey      ] = "loginBySession",		//  1
+   [API_loginByUserPassword    ] = "loginByUserPassword",	//  2 (deprecated)
+   [API_loginByUserPasswordKey ] = "loginByUserPasswordKey",	//  3
+   [API_getCourses             ] = "getCourses",		//  4
+   [API_getUsers               ] = "getUsers",			//  5
+   [API_getNotifications       ] = "getNotifications",		//  6
+   [API_getTestConfig          ] = "getTestConfig",		//  7
+   [API_getTests               ] = "getTests",			//  8
+   [API_sendMessage            ] = "sendMessage",		//  9
+   [API_sendNotice             ] = "sendNotice",		// 10
+   [API_getDirectoryTree       ] = "getDirectoryTree",		// 11
+   [API_getGroups              ] = "getGroups",			// 12
+   [API_getGroupTypes          ] = "getGroupTypes",		// 13
+   [API_sendMyGroups           ] = "sendMyGroups",		// 14
+   [API_getFile                ] = "getFile",			// 15
+   [API_markNotificationsAsRead] = "markNotificationsAsRead",	// 16
+   [API_getNewPassword         ] = "getNewPassword",		// 17
+   [API_getCourseInfo          ] = "getCourseInfo",		// 18
+   [API_getAttendanceEvents    ] = "getAttendanceEvents",	// 19
+   [API_sendAttendanceEvent    ] = "sendAttendanceEvent",	// 20
+   [API_getAttendanceUsers     ] = "getAttendanceUsers",	// 21
+   [API_sendAttendanceUsers    ] = "sendAttendanceUsers",	// 22
+   [API_createAccount          ] = "createAccount",		// 23
+   [API_getMarks               ] = "getMarks",			// 24
+   [API_getTrivialQuestion     ] = "getTrivialQuestion",	// 25
+   [API_findUsers              ] = "findUsers",			// 26
+   [API_removeAttendanceEvent  ] = "removeAttendanceEvent",	// 27
+   [API_getGames               ] = "getGames",			// 28
+   [API_getMatches             ] = "getMatches",		// 29
+   [API_getMatchStatus         ] = "getMatchStatus",		// 30
+   [API_answerMatchQuestion    ] = "answerMatchQuestion",	// 31
   };
 
 /* Web service roles (they do not match internal swad-core roles) */
@@ -1306,23 +1309,23 @@ int swad__getCourseInfo (struct soap *soap,
    int Result = SOAP_OK;
    const char *NamesInWSForInfoType[Inf_NUM_INFO_TYPES] =
      {
-      "introduction",	// Inf_INTRODUCTION
-      "guide",		// Inf_TEACHING_GUIDE
-      "lectures",	// Inf_LECTURES
-      "practicals",	// Inf_PRACTICALS
-      "bibliography",	// Inf_BIBLIOGRAPHY
-      "FAQ",		// Inf_FAQ
-      "links",		// Inf_LINKS
-      "assessment",	// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = "introduction",
+      [Inf_TEACHING_GUIDE] = "guide",
+      [Inf_LECTURES      ] = "lectures",
+      [Inf_PRACTICALS    ] = "practicals",
+      [Inf_BIBLIOGRAPHY  ] = "bibliography",
+      [Inf_FAQ           ] = "FAQ",
+      [Inf_LINKS         ] = "links",
+      [Inf_ASSESSMENT    ] = "assessment",
      };
    const char *NamesInWSForInfoSrc[Inf_NUM_INFO_SOURCES] =
      {
-      "none",		// Inf_INFO_SRC_NONE
-      "editor",		// Inf_INFO_SRC_EDITOR
-      "plainText",	// Inf_INFO_SRC_PLAIN_TEXT
-      "richText",	// Inf_INFO_SRC_RICH_TEXT
-      "page",		// Inf_INFO_SRC_PAGE
-      "URL",		// Inf_INFO_SRC_URL
+      [Inf_INFO_SRC_NONE      ] = "none",
+      [Inf_INFO_SRC_EDITOR    ] = "editor",
+      [Inf_INFO_SRC_PLAIN_TEXT] = "plainText",
+      [Inf_INFO_SRC_RICH_TEXT ] = "richText",
+      [Inf_INFO_SRC_PAGE      ] = "page",
+      [Inf_INFO_SRC_URL       ] = "URL",
      };
 
    /***** Initializations *****/
@@ -1359,8 +1362,8 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get info source *****/
-   for (InfoType = (Inf_InfoType_t) 0;
-	InfoType < Inf_NUM_INFO_TYPES;
+   for (InfoType  = (Inf_InfoType_t) 0;
+	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
 	InfoType++)
       if (!strcmp (infoType,NamesInWSForInfoType[InfoType]))
 	 break;
@@ -3178,9 +3181,9 @@ static int API_GetMyLanguage (void)
    row = mysql_fetch_row (mysql_res);
 
    /* Get language (row[0]) */
-   Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) (Lan_NUM_LANGUAGES - 1);
 	Lan++)
       if (!strcasecmp (row[0],Lan_STR_LANG_ID[Lan]))
         {

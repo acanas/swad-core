@@ -502,7 +502,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
 
    HTM_TR_Begin (NULL);
    HTM_TH_Empty (1);
-   for (Order = DT_ORDER_BY_DEGREE_TYPE;
+   for (Order  = DT_ORDER_BY_DEGREE_TYPE;
 	Order <= DT_ORDER_BY_NUM_DEGREES;
 	Order++)
      {

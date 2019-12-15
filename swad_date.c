@@ -115,7 +115,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Frm_StartForm (ActChgDatFmt);
 
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
-   for (Format = (Dat_Format_t) 0;
+   for (Format  = (Dat_Format_t) 0;
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
@@ -499,11 +499,11 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
    Dat_StartEndTime_t StartEndTime;
    const char *Id[Dat_NUM_START_END_TIME] =
      {
-      "Start",	// Dat_START_TIME
-      "End"	// Dat_END_TIME
+      [Dat_START_TIME] = "Start",
+      [Dat_END_TIME  ] = "End",
      };
 
-   for (StartEndTime = Dat_START_TIME;
+   for (StartEndTime  = Dat_START_TIME;
 	StartEndTime <= Dat_END_TIME;
 	StartEndTime++)
      {

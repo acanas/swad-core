@@ -1065,8 +1065,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
          SubQueryNam2[0] = '\0';
          SubQueryWWW1[0] = '\0';
          SubQueryWWW2[0] = '\0';
-         for (Lan = (Lan_Language_t) 1;
-              Lan <= Lan_NUM_LANGUAGES;
+         for (Lan  = (Lan_Language_t) 1;
+              Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
               Lan++)
            {
             snprintf (StrField,sizeof (StrField),
@@ -1156,8 +1156,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
          switch (GetExtraData)
            {
             case Cty_GET_BASIC_DATA:
-               for (Lan = (Lan_Language_t) 1;
-        	    Lan <= Lan_NUM_LANGUAGES;
+               for (Lan  = (Lan_Language_t) 1;
+        	    Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
         	    Lan++)
         	 {
                   Cty->Name[Lan][0] = '\0';
@@ -1173,8 +1173,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                break;
             case Cty_GET_EXTRA_DATA:
                /* Get the name of the country in several languages */
-               for (Lan = (Lan_Language_t) 1;
-        	    Lan <= Lan_NUM_LANGUAGES;
+               for (Lan  = (Lan_Language_t) 1;
+        	    Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
         	    Lan++)
         	 {
                   Str_Copy (Cty->Name[Lan],row[1 + Lan],
@@ -1323,8 +1323,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       return false;
 
    /***** Clear data *****/
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       Cty->Name[Lan][0] = '\0';
@@ -1337,8 +1337,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    /***** Check if country code is correct *****/
    if (Cty->CtyCod == 0)
      {
-      for (Lan = (Lan_Language_t) 1;
-	   Lan <= Lan_NUM_LANGUAGES;
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	   Lan++)
          if (Lan == Gbl.Prefs.Language)
             Str_Copy (Cty->Name[Lan],Txt_Another_country,
@@ -1367,8 +1367,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	 SubQueryNam2[0] = '\0';
 	 SubQueryWWW1[0] = '\0';
 	 SubQueryWWW2[0] = '\0';
-	 for (Lan = (Lan_Language_t) 1;
-	      Lan <= Lan_NUM_LANGUAGES;
+	 for (Lan  = (Lan_Language_t) 1;
+	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	      Lan++)
 	   {
 	    snprintf (StrField,sizeof (StrField),
@@ -1432,8 +1432,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    break;
 	 case Cty_GET_EXTRA_DATA:
 	    /* Get name and WWW of the country in several languages */
-	    for (Lan = (Lan_Language_t) 1;
-		 Lan <= Lan_NUM_LANGUAGES;
+	    for (Lan  = (Lan_Language_t) 1;
+		 Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 		 Lan++)
 	      {
 	       Str_Copy (Cty->Name[Lan],row[Lan],
@@ -1649,8 +1649,8 @@ static void Cty_ListCountriesForEdition (void)
       HTM_TR_End ();
 
       /* Country name in several languages */
-      for (Lan = (Lan_Language_t) 1;
-	   Lan <= Lan_NUM_LANGUAGES;
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	   Lan++)
         {
          HTM_TR_Begin (NULL);
@@ -2075,8 +2075,8 @@ static void Cty_PutFormToCreateCountry (void)
    HTM_TR_End ();
 
    /***** Country name in several languages *****/
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       HTM_TR_Begin (NULL);
@@ -2206,8 +2206,8 @@ void Cty_RecFormNewCountry (void)
          else	// Alphabetic code correct
            {
             /* Get country name and WWW in different languages */
-            for (Lan = (Lan_Language_t) 1;
-        	 Lan <= Lan_NUM_LANGUAGES;
+            for (Lan  = (Lan_Language_t) 1;
+        	 Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
         	 Lan++)
               {
                snprintf (ParamName,sizeof (ParamName),
@@ -2274,8 +2274,8 @@ static void Cty_CreateCountry (void)
    SubQueryNam2[0] = '\0';
    SubQueryWWW1[0] = '\0';
    SubQueryWWW2[0] = '\0';
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       snprintf (StrField,sizeof (StrField),
@@ -2483,8 +2483,8 @@ static void Cty_EditingCountryConstructor (void)
    /***** Reset country *****/
    Cty_EditingCty->CtyCod = -1L;
    Cty_EditingCty->Alpha2[0] = '\0';
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       Cty_EditingCty->Name[Lan][0] = '\0';

@@ -750,7 +750,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
    /* Start/end date/time */
    UniqueId++;
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {

@@ -367,7 +367,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    /* Start/end date/time */
    UniqueId++;
 
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {

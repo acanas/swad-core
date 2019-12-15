@@ -121,7 +121,7 @@ void Dpt_SeeDepts (void)
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-   for (Order = Dpt_ORDER_BY_DEPARTMENT;
+   for (Order  = Dpt_ORDER_BY_DEPARTMENT;
 	Order <= Dpt_ORDER_BY_NUM_TCHS;
 	Order++)
      {

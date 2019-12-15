@@ -697,8 +697,8 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
    /***** Get users' sex (row[2]) *****/
    Usrs->Sex = Usr_SEX_UNKNOWN;
    if (NumSexs == 1)
-      for (Sex = (Usr_Sex_t) 0;
-	   Sex < Usr_NUM_SEXS;
+      for (Sex  = (Usr_Sex_t) 0;
+	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	   Sex++)
          if (!strcasecmp (row[2],Usr_StringsSexDB[Sex]))
            {

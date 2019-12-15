@@ -2576,7 +2576,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 
    HTM_TH_Empty (1);
 
-   for (Order = Ctr_ORDER_BY_CENTRE;
+   for (Order  = Ctr_ORDER_BY_CENTRE;
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
      {
