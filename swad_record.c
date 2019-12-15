@@ -335,8 +335,8 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_SELECT_Begin (true,
 			"name=\"Visibility\"");
-      for (Vis = (Rec_VisibilityRecordFields_t) 0;
-	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
+      for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+	   Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 	   Vis++)
         {
 	 VisUnsigned = (unsigned) Vis;
@@ -400,8 +400,8 @@ void Rec_ShowFormCreateRecordField (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"Visibility\"");
-   for (Vis = (Rec_VisibilityRecordFields_t) 0;
-	Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
+   for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+	Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 	Vis++)
      {
       VisUnsigned = (unsigned) Vis;

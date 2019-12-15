@@ -322,8 +322,8 @@ void The_PutIconsToSelectTheme (void)
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
-   for (Theme = (The_Theme_t) 0;
-	Theme < The_NUM_THEMES;
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
      {
       HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
@@ -395,8 +395,8 @@ The_Theme_t The_GetParamTheme (void)
    The_Theme_t Theme;
 
    Par_GetParToText ("Theme",ThemeId,The_MAX_BYTES_THEME_ID);
-   for (Theme = (The_Theme_t) 0;
-	Theme < The_NUM_THEMES;
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
       if (!strcmp (ThemeId,The_ThemeId[Theme]))
          return Theme;
@@ -412,8 +412,8 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
   {
    The_Theme_t Theme;
 
-   for (Theme = (The_Theme_t) 0;
-	Theme < The_NUM_THEMES;
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
       if (!strcasecmp (Str,The_ThemeId[Theme]))
 	 return Theme;

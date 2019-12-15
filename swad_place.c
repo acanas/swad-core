@@ -115,8 +115,8 @@ void Plc_SeePlaces (void)
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
       HTM_TR_Begin (NULL);
-      for (Order = Plc_ORDER_BY_PLACE;
-	   Order <= Plc_ORDER_BY_NUM_CTRS;
+      for (Order  = (Plc_Order_t) 0;
+	   Order <= (Plc_Order_t) (Plc_NUM_ORDERS - 1);
 	   Order++)
 	{
 	 HTM_TH_Begin (1,1,"LM");

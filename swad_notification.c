@@ -1926,8 +1926,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** Checkbox to activate internal notifications and email notifications
           about events *****/
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
       HTM_TR_Begin (NULL);
@@ -1979,8 +1979,8 @@ static void Ntf_GetParamsNotifyEvents (void)
 
    Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif = 0;
    Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail = 0;
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++)	// 0 is reserved for Ntf_EVENT_UNKNOWN
      {
       if ((CreateNotifForThisEvent = Par_GetParToBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))

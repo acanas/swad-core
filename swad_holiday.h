@@ -47,8 +47,8 @@ typedef enum
 
 typedef enum
   {
-   HLD_START_DATE,
-   HLD_END_DATE
+   Hld_START_DATE,
+   Hld_END_DATE
   } Hld_StartOrEndDate_t;
 
 struct Holiday

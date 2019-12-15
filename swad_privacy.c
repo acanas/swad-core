@@ -202,8 +202,8 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
   {
    Pri_Visibility_t Visibility;
 
-   for (Visibility = (Pri_Visibility_t) 0;
-	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+   for (Visibility  = (Pri_Visibility_t) 0;
+	Visibility <= (Pri_Visibility_t) (Pri_NUM_OPTIONS_PRIVACY - 1);
 	Visibility++)
       if (!strcasecmp (Str,Pri_VisibilityDB[Visibility]))
 	 return Visibility;

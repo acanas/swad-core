@@ -2605,8 +2605,8 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    unsigned NumOriginCrs;
    const char *TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
      {
-      Txt_Messages_received_from_A_COURSE,
-      Txt_Messages_sent_from_A_COURSE
+      [Msg_MESSAGES_RECEIVED] = Txt_Messages_received_from_A_COURSE,
+      [Msg_MESSAGES_SENT    ] = Txt_Messages_sent_from_A_COURSE
      };
 
    /***** Course selection *****/
@@ -2641,8 +2641,8 @@ void Msg_ShowFormToFilterMsgs (void)
    extern const char *Txt_MSG_Content;
    const char *TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
      {
-      Txt_MSG_From,
-      Txt_MSG_To
+      [Msg_MESSAGES_RECEIVED] = Txt_MSG_From,
+      [Msg_MESSAGES_SENT    ] = Txt_MSG_To
      };
 
    /***** Begin table *****/

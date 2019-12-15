@@ -1052,7 +1052,7 @@ void Ctr_GetListCentres (long InsCod)
    static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
      {
       [Ctr_ORDER_BY_CENTRE  ] = "FullName",
-      [Ctr_ORDER_BY_NUM_TCHS] = "NumUsrs DESC,FullName",
+      [Ctr_ORDER_BY_NUM_USRS] = "NumUsrs DESC,FullName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2576,8 +2576,8 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 
    HTM_TH_Empty (1);
 
-   for (Order  = Ctr_ORDER_BY_CENTRE;
-	Order <= Ctr_ORDER_BY_NUM_TCHS;
+   for (Order  = (Ctr_Order_t) 0;
+	Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
 	Order++)
      {
       HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTRE ? "LM" :

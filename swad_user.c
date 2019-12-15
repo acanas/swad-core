@@ -690,8 +690,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
      {
       /* Get language (row[26]) */
       UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
-      for (Lan = (Lan_Language_t) 1;
-	   Lan <= Lan_NUM_LANGUAGES;
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	   Lan++)
 	 if (!strcasecmp (row[26],Lan_STR_LANG_ID[Lan]))
 	   {
@@ -707,8 +707,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 
       /* Get theme (row[29]) */
       UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-      for (Theme = (The_Theme_t) 0;
-	   Theme < The_NUM_THEMES;
+      for (Theme  = (The_Theme_t) 0;
+	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	   Theme++)
 	 if (!strcasecmp (row[29],The_ThemeId[Theme]))
 	   {
@@ -718,8 +718,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 
       /* Get icon set (row[30]) */
       UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
-      for (IconSet = (Ico_IconSet_t) 0;
-	   IconSet < Ico_NUM_ICON_SETS;
+      for (IconSet  = (Ico_IconSet_t) 0;
+	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	   IconSet++)
 	 if (!strcasecmp (row[30],Ico_IconSetId[IconSet]))
 	   {
@@ -865,8 +865,8 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
   {
    Usr_Sex_t Sex;
 
-   for (Sex = (Usr_Sex_t) 0;
-        Sex < Usr_NUM_SEXS;
+   for (Sex  = (Usr_Sex_t) 0;
+        Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
         Sex++)
       if (!strcasecmp (Str,Usr_StringsSexDB[Sex]))
          return Sex;
@@ -6109,8 +6109,8 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
    if (SelectedUsrs->Filled)	// Only if lists are filled
      {
       /***** Free lists *****/
-      for (Role = (Rol_Role_t) 0;
-	   Role < Rol_NUM_ROLES;
+      for (Role  = (Rol_Role_t) 0;
+	   Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
 	   Role++)
 	 if (SelectedUsrs->List[Role])
 	   {
@@ -7695,8 +7695,8 @@ static void Usr_GetMyUsrListTypeFromDB (void)
       Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
       row = mysql_fetch_row (mysql_res);
       if (row[0])
-         for (ListType = (Usr_ShowUsrsType_t) 0;
-              ListType < Usr_NUM_USR_LIST_TYPES;
+         for (ListType  = (Usr_ShowUsrsType_t) 0;
+              ListType <= (Usr_ShowUsrsType_t) (Usr_NUM_USR_LIST_TYPES - 1);
               ListType++)
             if (!strcasecmp (row[0],Usr_StringsUsrListTypeInDB[ListType]))
               {

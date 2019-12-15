@@ -214,8 +214,8 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
                             "swad64x64.png",Cfg_PLATFORM_SHORT_NAME);
 
    /***** Show the rest of webs / social networks *****/
-   for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
-	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
+   for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
+	NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	NumURL++)
      {
       /***** Check if exists the web / social network for this user *****/
@@ -293,8 +293,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
 
    /***** List webs and social networks *****/
-   for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
-	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
+   for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
+	NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
@@ -391,8 +391,8 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get URLs *****/
-   for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
-	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
+   for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
+	NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	NumURL++)
      {
       /***** Get URL from the form *****/
@@ -563,8 +563,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
       /* Get web / social network (row[0]) */
       Str_Copy (NetName,row[0],
                 Net_MAX_BYTES_NETWORK_NAME);
-      for (Web = (Net_WebsAndSocialNetworks_t) 0;
-	   Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
+      for (Web  = (Net_WebsAndSocialNetworks_t) 0;
+	   Web <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	   Web++)
 	 if (!strcmp (Net_WebsAndSocialNetworksDB[Web],NetName))
 	    break;

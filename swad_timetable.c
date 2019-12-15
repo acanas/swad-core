@@ -279,12 +279,12 @@ static void TT_GetParamsTimeTable (void)
 
    /***** Get class type *****/
    Par_GetParToText ("TTTyp",StrClassType,TT_MAX_BYTES_STR_CLASS_TYPE);
-   for (Gbl.TimeTable.ClassType = (TT_ClassType_t) 0;
-	Gbl.TimeTable.ClassType < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
+   for (Gbl.TimeTable.ClassType  = (TT_ClassType_t) 0;
+	Gbl.TimeTable.ClassType <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
 	Gbl.TimeTable.ClassType++)
       if (!strcmp (StrClassType,TT_ClassTypeDB[Gbl.TimeTable.ClassType]))
          break;
-   if (Gbl.TimeTable.ClassType == (TT_ClassType_t) TT_NUM_CLASS_TYPES)
+   if (Gbl.TimeTable.ClassType > (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1))
       Lay_ShowErrorAndExit ("Type of timetable cell is missing.");
 
    /***** Get class duration *****/
@@ -420,9 +420,9 @@ static void TT_PutFormToSelectWhichGroupsToShow (void)
   {
    static const Act_Action_t ActSeeTT[TT_NUM_TIMETABLE_TYPES] =
      {
-      ActSeeCrsTT,	// TT_COURSE_TIMETABLE
-      ActSeeMyTT,	// TT_MY_TIMETABLE
-      ActUnk,		// TT_TUTORING_TIMETABLE
+      [TT_COURSE_TIMETABLE  ] = ActSeeCrsTT,
+      [TT_MY_TIMETABLE      ] = ActSeeMyTT,
+      [TT_TUTORING_TIMETABLE] = ActUnk,
      };
 
    Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.TimeTable.Type],NULL);
@@ -1606,8 +1606,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 /***** Class type *****/
 	 HTM_SELECT_Begin (true,
 			   "name=\"TTTyp\" class=\"TT_TYP\"");
-	 for (CT = (TT_ClassType_t) 0;
-	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
+	 for (CT  = (TT_ClassType_t) 0;
+	      CT <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
 	      CT++)
 	    if ((CT == TT_FREE) ||
 		((Gbl.TimeTable.View == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||

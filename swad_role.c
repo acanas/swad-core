@@ -211,7 +211,7 @@ void Rol_SetMyRoles (void)
    if (!(Gbl.Usrs.Me.Role.Available &
 	 (1 << Gbl.Usrs.Me.Role.Logged)))        // Current type I am logged is not available for me
       /* Set the lowest role available for me */
-      for (Gbl.Usrs.Me.Role.Logged = Rol_UNK;
+      for (Gbl.Usrs.Me.Role.Logged  = (Rol_Role_t) 0;
            Gbl.Usrs.Me.Role.Logged <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
            Gbl.Usrs.Me.Role.Logged++)
          if (Gbl.Usrs.Me.Role.Available & (1 << Gbl.Usrs.Me.Role.Logged))
@@ -227,8 +227,8 @@ unsigned Rol_GetNumAvailableRoles (void)
    Rol_Role_t Role;
    unsigned NumAvailableRoles = 0;
 
-   for (Role = Rol_GST;
-        Role < Rol_NUM_ROLES;
+   for (Role  = (Rol_Role_t) 1;
+        Role <= (Rol_Role_t) Rol_NUM_ROLES - 1;
         Role++)
       if (Gbl.Usrs.Me.Role.Available & (1 << Role))
          NumAvailableRoles++;
@@ -485,8 +485,8 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    else
       HTM_SELECT_Begin (true,
 			"name=\"MyRole\"");
-   for (Role = Rol_GST;
-        Role < Rol_NUM_ROLES;
+   for (Role  = (Rol_Role_t) 1;
+        Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
         Role++)
      if (Gbl.Usrs.Me.Role.Available & (1 << Role))
         {
@@ -578,7 +578,7 @@ void Rol_PutHiddenParamRoles (unsigned Roles)
 
 unsigned Rol_GetSelectedRoles (void)
   {
-   char StrRoles[Rol_NUM_ROLES * (10 + 1)];
+   char StrRoles[Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1)];
    const char *Ptr;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Rol_Role_t Role;
@@ -592,7 +592,7 @@ unsigned Rol_GetSelectedRoles (void)
                                      0);			// 000...000
 
    /***** Try to get multiple param "Role" *****/
-   Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (10 + 1));
+   Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
    for (Ptr = StrRoles;
         *Ptr;)
      {

@@ -1372,13 +1372,13 @@ void Pho_CalcPhotoDegree (void)
    /***** Get list of students in this degree *****/
    Usr_GetUnorderedStdsCodesInDeg (DegCod);
 
-   for (Sex = (Usr_Sex_t) 0;
-	Sex < Usr_NUM_SEXS;
+   for (Sex  = (Usr_Sex_t) 0;
+	Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	Sex++)
      {
       TotalTimeToComputeAvgPhotoInMicroseconds = 0;
-      for (TypeOfAverage = (Pho_AvgPhotoTypeOfAverage_t) 0;
-	   TypeOfAverage < Pho_NUM_AVERAGE_PHOTO_TYPES;
+      for (TypeOfAverage  = (Pho_AvgPhotoTypeOfAverage_t) 0;
+	   TypeOfAverage <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
 	   TypeOfAverage++)
         {
          /***** Compute average photos of students belonging this degree *****/
@@ -1545,8 +1545,8 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
    if (NumRows == Usr_NUM_SEXS)
      {
       TotalTimeToComputeAvgPhoto = 0;
-      for (Sex = (Usr_Sex_t) 0;
-	   Sex < Usr_NUM_SEXS;
+      for (Sex  = (Usr_Sex_t) 0;
+	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	   Sex++)
         {
          /***** Get row *****/
@@ -1805,8 +1805,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"AvgType\" name=\"AvgType\"");
-   for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
-	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
+   for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
+	TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
 	TypeOfAvg++)
      {
       TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
@@ -1870,8 +1870,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"PhotoSize\" name=\"PhotoSize\"");
-   for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
-	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
+   for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
+	PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
 	PhoSi++)
      {
       PhoSiUnsigned = (unsigned) PhoSi;
@@ -1935,8 +1935,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"Order\" name=\"Order\"");
-   for (Order = (Pho_HowOrderDegrees_t) 0;
-	Order < Pho_NUM_HOW_ORDER_DEGREES;
+   for (Order  = (Pho_HowOrderDegrees_t) 0;
+	Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
 	Order++)
      {
       OrderUnsigned = (unsigned) Order;
@@ -2230,8 +2230,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       HTM_TH (1,1,"RT",Txt_No_INDEX);
       HTM_TH (1,1,"CT",Txt_Degree);
-      for (Sex = (Usr_Sex_t) 0;
-	   Sex < Usr_NUM_SEXS;
+      for (Sex  = (Usr_Sex_t) 0;
+	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	   Sex++)
 	 HTM_TH (1,1,"CT",Txt_SEX_PLURAL_Abc[Sex]);
 
@@ -2271,8 +2271,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	   }
 	 HTM_TD_End ();
 
-	 for (Sex = (Usr_Sex_t) 0;
-	      Sex < Usr_NUM_SEXS;
+	 for (Sex  = (Usr_Sex_t) 0;
+	      Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	      Sex++)
 	   {
 	    /***** Show average photo of students belonging to this degree *****/

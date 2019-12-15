@@ -86,31 +86,31 @@ const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
 #define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
 #define Tst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
 
-const char *Tst_PluggableDB[Tst_NUM_OPTIONS_PLUGGABLE] =
+static const char *Tst_PluggableDB[Tst_NUM_OPTIONS_PLUGGABLE] =
   {
-   "unknown",
-   "N",
-   "Y",
+   [Tst_PLUGGABLE_UNKNOWN] = "unknown",
+   [Tst_PLUGGABLE_NO     ] = "N",
+   [Tst_PLUGGABLE_YES    ] = "Y",
   };
 
 // Feedback to students in tests
-const char *Tst_FeedbackDB[Tst_NUM_TYPES_FEEDBACK] =
+static const char *Tst_FeedbackDB[Tst_NUM_TYPES_FEEDBACK] =
   {
-   "nothing",		// No feedback
-   "total_result",	// Little
-   "each_result",	// Medium
-   "each_good_bad",	// High
-   "full_feedback",	// Maximum
+   [Tst_FEEDBACK_NOTHING      ] = "nothing",		// No feedback
+   [Tst_FEEDBACK_TOTAL_RESULT ] = "total_result",	// Little
+   [Tst_FEEDBACK_EACH_RESULT  ] = "each_result",	// Medium
+   [Tst_FEEDBACK_EACH_GOOD_BAD] = "each_good_bad",	// High
+   [Tst_FEEDBACK_FULL_FEEDBACK] = "full_feedback",	// Maximum
   };
 
-const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
+static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
   {
-   "int",
-   "float",
-   "true_false",
-   "unique_choice",
-   "multiple_choice",
-   "text",
+   [Tst_ANS_INT            ] = "int",
+   [Tst_ANS_FLOAT          ] = "float",
+   [Tst_ANS_TRUE_FALSE     ] = "true_false",
+   [Tst_ANS_UNIQUE_CHOICE  ] = "unique_choice",
+   [Tst_ANS_MULTIPLE_CHOICE] = "multiple_choice",
+   [Tst_ANS_TEXT           ] = "text",
   };
 
 // Test images will be saved with:
@@ -1979,8 +1979,8 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
-   for (Feedback = (Tst_Feedback_t) 0;
-	Feedback < Tst_NUM_TYPES_FEEDBACK;
+   for (Feedback  = (Tst_Feedback_t) 0;
+	Feedback <= (Tst_Feedback_t) (Tst_NUM_TYPES_FEEDBACK - 1);
 	Feedback++)
      {
       HTM_LABEL_Begin ("class=\"DAT\"");
@@ -2126,8 +2126,8 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 	                                                     (unsigned long) LongNum;
 
    /***** Get feedback type (row[5]) *****/
-   for (Feedback = (Tst_Feedback_t) 0;
-	Feedback < Tst_NUM_TYPES_FEEDBACK;
+   for (Feedback  = (Tst_Feedback_t) 0;
+	Feedback <= (Tst_Feedback_t) (Tst_NUM_TYPES_FEEDBACK - 1);
 	Feedback++)
       if (!strcmp (row[5],Tst_FeedbackDB[Feedback]))
         {
@@ -2343,8 +2343,8 @@ static void Tst_ShowFormAnswerTypes (void)
    HTM_TR_End ();
 
    /***** Type of answer *****/
-   for (AnsType = (Tst_AnswerType_t) 0;
-	AnsType < Tst_NUM_ANS_TYPES;
+   for (AnsType  = (Tst_AnswerType_t) 0;
+	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
 	AnsType++)
      {
       HTM_TR_Begin (NULL);
@@ -2824,8 +2824,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    /* Stem and answers of question */
    /* Number of times that the question has been answered */
    /* Average score */
-   for (Order = (Tst_QuestionsOrder_t) 0;
-	Order < (Tst_QuestionsOrder_t) Tst_NUM_TYPES_ORDER_QST;
+   for (Order  = (Tst_QuestionsOrder_t) 0;
+	Order <= (Tst_QuestionsOrder_t) (Tst_NUM_TYPES_ORDER_QST - 1);
 	Order++)
      {
       HTM_TH_Begin (1,1,"LT");
@@ -5242,8 +5242,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   for (AnsType = (Tst_AnswerType_t) 0;
-	AnsType < Tst_NUM_ANS_TYPES;
+   for (AnsType  = (Tst_AnswerType_t) 0;
+	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
 	AnsType++)
      {
       HTM_LABEL_Begin (NULL);
@@ -5837,8 +5837,8 @@ Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
    Tst_AnswerType_t AnsType;
 
    if (StrAnsTypeBD != NULL)
-      for (AnsType = (Tst_AnswerType_t) 0;
-	   AnsType < Tst_NUM_ANS_TYPES;
+      for (AnsType  = (Tst_AnswerType_t) 0;
+	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
 	   AnsType++)
          if (!strcmp (StrAnsTypeBD,Tst_StrAnswerTypesDB[AnsType]))
             return AnsType;
@@ -6284,6 +6284,111 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
 
     return true;	// Question format without errors
    }
+
+/*****************************************************************************/
+/*********** Check if a test question already exists in database *************/
+/*****************************************************************************/
+
+bool Tst_CheckIfQuestionExistsInDB (void)
+  {
+   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
+   MYSQL_RES *mysql_res_qst;
+   MYSQL_RES *mysql_res_ans;
+   MYSQL_ROW row;
+   bool IdenticalQuestionFound = false;
+   bool IdenticalAnswers;
+   unsigned NumQst;
+   unsigned NumQstsWithThisStem;
+   unsigned NumOpt;
+   unsigned NumOptsExistingQstInDB;
+   long QstCod;
+   unsigned i;
+
+   /***** Check if stem exists *****/
+   NumQstsWithThisStem =
+   (unsigned) DB_QuerySELECT (&mysql_res_qst,"can not check"
+					     " if a question exists",
+			      "SELECT QstCod FROM tst_questions"
+			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+			      Gbl.Test.Stem.Text);
+
+   if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
+     {
+      /***** Check if the answer exists in any of the questions with the same stem *****/
+      /* For each question with the same stem */
+      for (NumQst = 0;
+           !IdenticalQuestionFound && NumQst < NumQstsWithThisStem;
+           NumQst++)
+        {
+         row = mysql_fetch_row (mysql_res_qst);
+         if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+            Lay_ShowErrorAndExit ("Wrong code of question.");
+
+         /* Get answers from this question */
+         NumOptsExistingQstInDB =
+         (unsigned) DB_QuerySELECT (&mysql_res_ans,"can not get the answer"
+						   " of a question",
+				    "SELECT Answer FROM tst_answers"
+				    " WHERE QstCod=%ld ORDER BY AnsInd",
+				    QstCod);
+
+         switch (Gbl.Test.AnswerType)
+           {
+            case Tst_ANS_INT:
+               row = mysql_fetch_row (mysql_res_ans);
+               IdenticalQuestionFound = (Tst_GetIntAnsFromStr (row[0]) == Gbl.Test.Answer.Integer);
+               break;
+            case Tst_ANS_FLOAT:
+               for (IdenticalAnswers = true, i = 0;
+                    IdenticalAnswers && i < 2;
+                    i++)
+                 {
+                  row = mysql_fetch_row (mysql_res_ans);
+                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Gbl.Test.Answer.FloatingPoint[i]);
+                 }
+               IdenticalQuestionFound = IdenticalAnswers;
+               break;
+            case Tst_ANS_TRUE_FALSE:
+               row = mysql_fetch_row (mysql_res_ans);
+               IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Gbl.Test.Answer.TF);
+               break;
+            case Tst_ANS_UNIQUE_CHOICE:
+            case Tst_ANS_MULTIPLE_CHOICE:
+            case Tst_ANS_TEXT:
+               if (NumOptsExistingQstInDB == Gbl.Test.Answer.NumOptions)
+                 {
+                  for (IdenticalAnswers = true, NumOpt = 0;
+                       IdenticalAnswers && NumOpt < NumOptsExistingQstInDB;
+                       NumOpt++)
+                    {
+                     row = mysql_fetch_row (mysql_res_ans);
+
+                     if (strcasecmp (row[0],Gbl.Test.Answer.Options[NumOpt].Text))
+                        IdenticalAnswers = false;
+                    }
+                 }
+               else	// Different number of answers (options)
+                  IdenticalAnswers = false;
+               IdenticalQuestionFound = IdenticalAnswers;
+               break;
+            default:
+               break;
+           }
+
+         /* Free structure that stores the query result for answers */
+         DB_FreeMySQLResult (&mysql_res_ans);
+        }
+     }
+   else	// Stem does not exist
+      IdenticalQuestionFound = false;
+
+   /* Free structure that stores the query result for questions */
+   DB_FreeMySQLResult (&mysql_res_qst);
+
+   return IdenticalQuestionFound;
+  }
 
 /*****************************************************************************/
 /* Move images associates to a test question to their definitive directories */

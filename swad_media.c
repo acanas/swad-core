@@ -350,33 +350,32 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    struct ParamUploadMedia ParamUploadMedia;
    char Id[Frm_MAX_BYTES_ID + 1];
    size_t NumUploader;
-
 #define Med_NUM_MEDIA_UPLOADERS 3
    struct MediaUploader MediaUploader[Med_NUM_MEDIA_UPLOADERS] =
      {
 	{/* Upload */
-	 Med_FORM_FILE,
-	 "ico_upl",			// <id>_ico_upl
-	 "par_upl",			// <id>_par_upl
-	 "mediaClickOnActivateUpload",
-	 "photo-video.svg",
-	 Txt_Image_video
+	 .FormType     = Med_FORM_FILE,
+	 .IconSuffix   = "ico_upl",			// <id>_ico_upl
+	 .ParamSuffix  = "par_upl",			// <id>_par_upl
+	 .FunctionName = "mediaClickOnActivateUpload",
+	 .Icon         = "photo-video.svg",
+	 .Title        = Txt_Image_video
 	},
 	{/* YouTube */
-	 Med_FORM_YOUTUBE,
-	 "ico_you",			// <id>_ico_you
-	 "par_you",			// <id>_par_you
-	 "mediaClickOnActivateYoutube",
-	 "youtube-brands.svg",
-	 "YouTube"
+	 .FormType     = Med_FORM_YOUTUBE,
+	 .IconSuffix   = "ico_you",			// <id>_ico_you
+	 .ParamSuffix  = "par_you",			// <id>_par_you
+	 .FunctionName = "mediaClickOnActivateYoutube",
+	 .Icon         = "youtube-brands.svg",
+	 .Title        = "YouTube"
 	},
 	{/* Embed */
-	 Med_FORM_EMBED,
-	 "ico_emb",			// <id>_ico_emb
-	 "par_emb",			// <id>_par_emb
-	 "mediaClickOnActivateEmbed",
-	 "code.svg",
-	 "Embed"
+	 .FormType     = Med_FORM_EMBED,
+	 .IconSuffix   = "ico_emb",			// <id>_ico_emb
+	 .ParamSuffix  = "par_emb",			// <id>_par_emb
+	 .FunctionName = "mediaClickOnActivateEmbed",
+	 .Icon         = "code.svg",
+	 .Title        = "Embed"
 	}
      };
 
@@ -1918,8 +1917,8 @@ static Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
   {
    Med_Type_t Type;
 
-   for (Type = (Med_Type_t) 0;
-        Type < Med_NUM_TYPES;
+   for (Type  = (Med_Type_t) 0;
+        Type <= (Med_Type_t) (Med_NUM_TYPES - 1);
         Type++)
       if (!strcasecmp (Str,Med_StringsTypeDB[Type]))
          return Type;

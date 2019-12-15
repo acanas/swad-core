@@ -605,8 +605,8 @@ static void Hld_ListHolidaysForEdition (void)
       Hld_PutParamHldCod (Hld->HldCod);
       HTM_SELECT_Begin (true,
 			"name=\"HldTyp\" style=\"width:62px;\"");
-      for (HolidayType = (Hld_HolidayType_t) 0;
-	   HolidayType < Hld_NUM_TYPES_HOLIDAY;
+      for (HolidayType  = (Hld_HolidayType_t) 0;
+	   HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
 	   HolidayType++)
 	{
 	 HolidayTypeUnsigned = (unsigned) HolidayType;
@@ -785,7 +785,7 @@ void Hld_ChangeHolidayType (void)
 
 void Hld_ChangeStartDate (void)
   {
-   Hld_ChangeDate (HLD_START_DATE);
+   Hld_ChangeDate (Hld_START_DATE);
   }
 
 /*****************************************************************************/
@@ -794,7 +794,7 @@ void Hld_ChangeStartDate (void)
 
 void Hld_ChangeEndDate (void)
   {
-   Hld_ChangeDate (HLD_END_DATE);
+   Hld_ChangeDate (Hld_END_DATE);
   }
 
 /*****************************************************************************/
@@ -822,7 +822,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    /***** Get the new date for the holiday *****/
    switch (StartOrEndDate)
      {
-      case HLD_START_DATE:
+      case Hld_START_DATE:
          StrStartOrEndDate = "StartDate";
          PtrDate = &Hld_EditingHld->StartDate;
          Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
@@ -832,7 +832,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
              NewDate.Year  == 0)
             Dat_AssignDate (&NewDate,&Gbl.Now.Date);
          break;
-      case HLD_END_DATE:
+      case Hld_END_DATE:
          StrStartOrEndDate = "EndDate";
          PtrDate = &Hld_EditingHld->EndDate;
          switch (Hld_EditingHld->HldTyp)
@@ -999,8 +999,8 @@ static void Hld_PutFormToCreateHoliday (void)
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
 		     "name=\"HldTyp\" style=\"width:62px;\"");
-   for (HolidayType = (Hld_HolidayType_t) 0;
-	HolidayType < Hld_NUM_TYPES_HOLIDAY;
+   for (HolidayType  = (Hld_HolidayType_t) 0;
+	HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
 	HolidayType++)
      {
       HolidayTypeUnsigned = (unsigned) HolidayType;

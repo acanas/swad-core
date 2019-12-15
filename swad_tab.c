@@ -86,8 +86,8 @@ void Tab_DrawTabs (void)
    HTM_UL_Begin ("class=\"TAB_LIST\"");
 
    /***** Draw the tabs *****/
-   for (NumTab = (Tab_Tab_t) 1;
-        NumTab <= (Tab_Tab_t) Tab_NUM_TABS - 1;
+   for (NumTab  = (Tab_Tab_t) 1;
+        NumTab <= (Tab_Tab_t) (Tab_NUM_TABS - 1);
         NumTab++)
      {
       ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
@@ -201,7 +201,8 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       [TabPrf] = "user",
      };
 
-   if (NumTab < (Tab_Tab_t) 1 || NumTab >= Tab_NUM_TABS)
+   if (NumTab < (Tab_Tab_t) 1 ||
+       NumTab > (Tab_Tab_t) (Tab_NUM_TABS - 1))
       return NULL;
 
    return Ico_GetIcon (Tab_TabIcons[NumTab]);

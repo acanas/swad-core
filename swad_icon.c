@@ -120,8 +120,8 @@ void Ico_PutIconsToSelectIconSet (void)
                  Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
-   for (IconSet = (Ico_IconSet_t) 0;
-	IconSet < Ico_NUM_ICON_SETS;
+   for (IconSet  = (Ico_IconSet_t) 0;
+	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)
      {
       HTM_DIV_Begin ("class=\"%s\"",
@@ -187,8 +187,8 @@ Ico_IconSet_t Ico_GetParamIconSet (void)
    Ico_IconSet_t IconSet;
 
    Par_GetParToText ("IconSet",IconSetId,Ico_MAX_BYTES_ICON_SET_ID);
-   for (IconSet = (Ico_IconSet_t) 0;
-	IconSet < Ico_NUM_ICON_SETS;
+   for (IconSet  = (Ico_IconSet_t) 0;
+	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)
       if (!strcmp (IconSetId,Ico_IconSetId[IconSet]))
          return IconSet;
@@ -204,8 +204,8 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
   {
    Ico_IconSet_t IconSet;
 
-   for (IconSet = (Ico_IconSet_t) 0;
-	IconSet < Ico_NUM_ICON_SETS;
+   for (IconSet  = (Ico_IconSet_t) 0;
+	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)
       if (!strcasecmp (Str,Ico_IconSetId[IconSet]))
 	 return IconSet;

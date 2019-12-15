@@ -2771,8 +2771,8 @@ static void Fig_GetAndShowOERsStats (void)
 
    HTM_TR_End ();
 
-   for (License = 0;
-	License < Brw_NUM_LICENSES;
+   for (License  = (Brw_License_t) 0;
+	License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
 	License++)
      {
       Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
@@ -3088,8 +3088,8 @@ static void Fig_GetAndShowTestsStats (void)
 
    HTM_TR_End ();
 
-   for (AnsType = (Tst_AnswerType_t) 0;
-	AnsType < Tst_NUM_ANS_TYPES;
+   for (AnsType  = (Tst_AnswerType_t) 0;
+	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
 	AnsType++)
      {
       /***** Get the stats about test questions from this location *****/
@@ -3293,8 +3293,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
                                                                                        1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
-   for (NoteType = (TL_NoteType_t) 0;
-	NoteType < TL_NUM_NOTE_TYPES;
+   for (NoteType  = (TL_NoteType_t) 0;
+	NoteType <= (TL_NoteType_t) (TL_NUM_NOTE_TYPES - 1);
 	NoteType++)
      {
       switch (Gbl.Scope.Current)
@@ -4232,8 +4232,8 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    Fig_GetNumUsrsWhoChoseAnOption ("usr_data.EmailNtfEvents<>0");
 
    /***** For each notify event... *****/
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
      {
       /* Get the number of users who want to be notified by email on this event, from database */
@@ -4339,8 +4339,8 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
      }
 
    /***** Write number of users who want to be notified by email on each event *****/
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
      {
       HTM_TR_Begin (NULL);
@@ -4422,8 +4422,8 @@ static void Fig_GetAndShowNoticesStats (void)
    unsigned NumTotalNotifications = 0;
 
    /***** Get the number of notices active and obsolete *****/
-   for (NoticeStatus = (Not_Status_t) 0;
-	NoticeStatus < Not_NUM_STATUS;
+   for (NoticeStatus  = (Not_Status_t) 0;
+	NoticeStatus <= (Not_Status_t) (Not_NUM_STATUS - 1);
 	NoticeStatus++)
      {
       NumNotices[NoticeStatus] = Not_GetNumNotices (Gbl.Scope.Current,NoticeStatus,&NumNotif);
@@ -4705,8 +4705,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    HTM_TR_End ();
 
    /***** For each privacy option... *****/
-   for (Visibility = (Pri_Visibility_t) 0;
-	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+   for (Visibility  = (Pri_Visibility_t) 0;
+	Visibility <= (Pri_Visibility_t) (Pri_NUM_OPTIONS_PRIVACY - 1);
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
 	{
@@ -4722,8 +4722,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	}
 
    /***** Write number of users who have chosen each privacy option *****/
-   for (Visibility = (Pri_Visibility_t) 0;
-	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+   for (Visibility  = (Pri_Visibility_t) 0;
+	Visibility <= (Pri_Visibility_t) (Pri_NUM_OPTIONS_PRIVACY - 1);
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
 	{
@@ -4761,18 +4761,18 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    unsigned i;
    static const char AcceptedInDB[2] =
      {
-      'N',		// false
-      'Y'		// true
+      [false] = 'N',
+      [true ] = 'Y'
      };
    static const char *AcceptedClass[2] =
      {
-      "DAT_RED",	// false
-      "DAT_GREEN"	// true
+      [false] = "DAT_RED",
+      [true ] = "DAT_GREEN"
      };
    static const char *AcceptedSymbol[2] =
      {
-      "&cross;",	// false
-      "&check;"		// true
+      [false] = "&cross;",
+      [true ] = "&check;"
      };
 
    char *SubQuery;
@@ -4868,8 +4868,8 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    HTM_TR_End ();
 
    /***** For each language... *****/
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       /* Get the number of users who have chosen this language from database */
@@ -4884,8 +4884,8 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
      }
 
    /***** Write number of users who have chosen each language *****/
-   for (Lan = (Lan_Language_t) 1;
-	Lan <= Lan_NUM_LANGUAGES;
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
       HTM_TR_Begin (NULL);
@@ -5029,7 +5029,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
    HTM_TR_End ();
 
    /***** For each format... *****/
-   for (Format = (Dat_Format_t) 0;
+   for (Format  = (Dat_Format_t) 0;
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
@@ -5045,7 +5045,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
      }
 
    /***** Write number of users who have chosen each date format *****/
-   for (Format = (Dat_Format_t) 0;
+   for (Format  = (Dat_Format_t) 0;
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
@@ -5106,8 +5106,8 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    HTM_TR_End ();
 
    /***** For each icon set... *****/
-   for (IconSet = (Ico_IconSet_t) 0;
-	IconSet < Ico_NUM_ICON_SETS;
+   for (IconSet  = (Ico_IconSet_t) 0;
+	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)
      {
       /* Get the number of users who have chosen this icon set from database */
@@ -5122,8 +5122,8 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
      }
 
    /***** Write number of users who have chosen each icon set *****/
-   for (IconSet = (Ico_IconSet_t) 0;
-	IconSet < Ico_NUM_ICON_SETS;
+   for (IconSet  = (Ico_IconSet_t) 0;
+	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)
      {
       HTM_TR_Begin (NULL);
@@ -5186,8 +5186,8 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    HTM_TR_End ();
 
    /***** For each menu... *****/
-   for (Menu = (Mnu_Menu_t) 0;
-	Menu < Mnu_NUM_MENUS;
+   for (Menu  = (Mnu_Menu_t) 0;
+	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 	Menu++)
      {
       /* Get number of users who have chosen this menu from database */
@@ -5202,8 +5202,8 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
      }
 
    /***** Write number of users who have chosen each menu *****/
-   for (Menu = (Mnu_Menu_t) 0;
-	Menu < Mnu_NUM_MENUS;
+   for (Menu  = (Mnu_Menu_t) 0;
+	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 	Menu++)
      {
       HTM_TR_Begin (NULL);
@@ -5262,8 +5262,8 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    HTM_TR_End ();
 
    /***** For each theme... *****/
-   for (Theme = (The_Theme_t) 0;
-	Theme < The_NUM_THEMES;
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
      {
       /* Get number of users who have chosen this theme from database */
@@ -5278,8 +5278,8 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
      }
 
    /***** Write number of users who have chosen each theme *****/
-   for (Theme = (The_Theme_t) 0;
-	Theme < The_NUM_THEMES;
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
      {
       HTM_TR_Begin (NULL);

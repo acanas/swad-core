@@ -2373,8 +2373,8 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
 
    /***** Get the name of the file, folder or link *****/
    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
-   for (FileType = (Brw_FileType_t) 0;
-	FileType < Brw_NUM_FILE_TYPES;
+   for (FileType  = (Brw_FileType_t) 0;
+	FileType <= (Brw_FileType_t) (Brw_NUM_FILE_TYPES - 1);
 	FileType++)
       // File names with heading and trailing spaces are allowed
       if (Par_GetParAndChangeFormat (Brw_FileTypeParamName[FileType],
@@ -3540,7 +3540,6 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Project_documents;
    extern const char *Txt_Project_assessment;
-
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    struct Brw_NumObjects Removed;
@@ -9649,8 +9648,8 @@ void Brw_ShowFileMetadata (void)
 	   {
 	    HTM_SELECT_Begin (false,
 			      "id=\"License\" name=\"License\" class=\"LICENSE\"");
-	    for (License = 0;
-		 License < Brw_NUM_LICENSES;
+	    for (License  = (Brw_License_t) 0;
+		 License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
 		 License++)
 	      {
 	       LicenseUnsigned = (unsigned) License;
@@ -10460,18 +10459,18 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
      }
    else
      {
-      FileMetadata->FilCod                      = -1L;
-      FileMetadata->FileBrowser                 = Brw_UNKNOWN;
-      FileMetadata->Cod                         = -1L;
-      FileMetadata->ZoneUsrCod                  = -1L;
-      FileMetadata->PublisherUsrCod             = -1L;
-      FileMetadata->FilFolLnk.Type                    = Brw_IS_UNKNOWN;
-      FileMetadata->FilFolLnk.Full[0]           = '\0';
+      FileMetadata->FilCod            = -1L;
+      FileMetadata->FileBrowser       = Brw_UNKNOWN;
+      FileMetadata->Cod               = -1L;
+      FileMetadata->ZoneUsrCod        = -1L;
+      FileMetadata->PublisherUsrCod   = -1L;
+      FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
+      FileMetadata->FilFolLnk.Full[0] = '\0';
       FileMetadata->FilFolLnk.Path[0] = '\0';
-      FileMetadata->FilFolLnk.Name[0]            = '\0';
-      FileMetadata->IsHidden                    = false;
-      FileMetadata->IsPublic                    = false;
-      FileMetadata->License                     = Brw_LICENSE_DEFAULT;
+      FileMetadata->FilFolLnk.Name[0] = '\0';
+      FileMetadata->IsHidden          = false;
+      FileMetadata->IsPublic          = false;
+      FileMetadata->License           = Brw_LICENSE_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

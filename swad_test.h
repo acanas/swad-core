@@ -197,6 +197,9 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void);
+
+bool Tst_CheckIfQuestionExistsInDB (void);
+
 long Tst_GetIntAnsFromStr (char *Str);
 void Tst_RequestRemoveQst (void);
 void Tst_RemoveQst (void);

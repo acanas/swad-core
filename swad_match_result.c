@@ -783,7 +783,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    HTM_TR_Begin (NULL);
 
 	 /* Write start/end times (row[1], row[2] hold UTC start/end times) */
-	 for (StartEndTime = (Dat_StartEndTime_t) 0;
+	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
 	   {
@@ -1143,7 +1143,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /* Start/end time (for user in this match) */
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
 	{

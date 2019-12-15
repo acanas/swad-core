@@ -72,7 +72,6 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
 static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
-static bool TsI_CheckIfQuestionExistsInDB (void);
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
@@ -641,7 +640,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
 	      {
 	       /* Check if question already exists in database */
-	       QuestionExists = TsI_CheckIfQuestionExistsInDB ();
+	       QuestionExists = Tst_CheckIfQuestionExistsInDB ();
 
 	       /* Write row with this imported question */
 	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,QuestionExists);
@@ -681,8 +680,8 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
    Tst_AnswerType_t AnsType;
 
    if (StrAnsTypeXML != NULL)
-      for (AnsType = (Tst_AnswerType_t) 0;
-	   AnsType < Tst_NUM_ANS_TYPES;
+      for (AnsType  = (Tst_AnswerType_t) 0;
+	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
 	   AnsType++)
 	 // comparison must be case insensitive, because users can edit XML
          if (!strcasecmp (StrAnsTypeXML,Tst_StrAnswerTypesXML[AnsType]))
@@ -690,111 +689,6 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 
    Lay_ShowErrorAndExit ("Wrong type of answer.");
    return (Tst_AnswerType_t) 0;	// Not reached
-  }
-
-/*****************************************************************************/
-/**************** Get answer inside an XML question elements *****************/
-/*****************************************************************************/
-
-static bool TsI_CheckIfQuestionExistsInDB (void)
-  {
-   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
-   MYSQL_RES *mysql_res_qst;
-   MYSQL_RES *mysql_res_ans;
-   MYSQL_ROW row;
-   bool IdenticalQuestionFound = false;
-   bool IdenticalAnswers;
-   unsigned NumQst;
-   unsigned NumQstsWithThisStem;
-   unsigned NumOpt;
-   unsigned NumOptsExistingQstInDB;
-   long QstCod;
-   unsigned i;
-
-   /***** Check if stem exists *****/
-   NumQstsWithThisStem =
-   (unsigned) DB_QuerySELECT (&mysql_res_qst,"can not check"
-					     " if a question exists",
-			      "SELECT QstCod FROM tst_questions"
-			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-			      Gbl.Test.Stem.Text);
-
-   if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
-     {
-      /***** Check if the answer exists in any of the questions with the same stem *****/
-      /* For each question with the same stem */
-      for (NumQst = 0;
-           !IdenticalQuestionFound && NumQst < NumQstsWithThisStem;
-           NumQst++)
-        {
-         row = mysql_fetch_row (mysql_res_qst);
-         if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of question.");
-
-         /* Get answers from this question */
-         NumOptsExistingQstInDB =
-         (unsigned) DB_QuerySELECT (&mysql_res_ans,"can not get the answer"
-						   " of a question",
-				    "SELECT Answer FROM tst_answers"
-				    " WHERE QstCod=%ld ORDER BY AnsInd",
-				    QstCod);
-
-         switch (Gbl.Test.AnswerType)
-           {
-            case Tst_ANS_INT:
-               row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Tst_GetIntAnsFromStr (row[0]) == Gbl.Test.Answer.Integer);
-               break;
-            case Tst_ANS_FLOAT:
-               for (IdenticalAnswers = true, i = 0;
-                    IdenticalAnswers && i < 2;
-                    i++)
-                 {
-                  row = mysql_fetch_row (mysql_res_ans);
-                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Gbl.Test.Answer.FloatingPoint[i]);
-                 }
-               IdenticalQuestionFound = IdenticalAnswers;
-               break;
-            case Tst_ANS_TRUE_FALSE:
-               row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Gbl.Test.Answer.TF);
-               break;
-            case Tst_ANS_UNIQUE_CHOICE:
-            case Tst_ANS_MULTIPLE_CHOICE:
-            case Tst_ANS_TEXT:
-               if (NumOptsExistingQstInDB == Gbl.Test.Answer.NumOptions)
-                 {
-                  for (IdenticalAnswers = true, NumOpt = 0;
-                       IdenticalAnswers && NumOpt < NumOptsExistingQstInDB;
-                       NumOpt++)
-                    {
-                     row = mysql_fetch_row (mysql_res_ans);
-
-                     if (strcasecmp (row[0],Gbl.Test.Answer.Options[NumOpt].Text))
-                        IdenticalAnswers = false;
-                    }
-                 }
-               else	// Different number of answers (options)
-                  IdenticalAnswers = false;
-               IdenticalQuestionFound = IdenticalAnswers;
-               break;
-            default:
-               break;
-           }
-
-         /* Free structure that stores the query result for answers */
-         DB_FreeMySQLResult (&mysql_res_ans);
-        }
-     }
-   else	// Stem does not exist
-      IdenticalQuestionFound = false;
-
-   /* Free structure that stores the query result for questions */
-   DB_FreeMySQLResult (&mysql_res_qst);
-
-   return IdenticalQuestionFound;
   }
 
 /*****************************************************************************/

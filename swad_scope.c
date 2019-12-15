@@ -78,8 +78,8 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
    HTM_SELECT_Begin (SendOnChange,
 		     "id=\"%s\" name=\"%s\"",ParamName,ParamName);
 
-   for (Scope = (Hie_Level_t) 0;
-	Scope < Hie_NUM_LEVELS;
+   for (Scope  = (Hie_Level_t) 0;
+	Scope <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
 	Scope++)
       if ((Gbl.Scope.Allowed & (1 << Scope)))
 	{
@@ -333,8 +333,8 @@ Hie_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
   {
    Hie_Level_t Scope;
 
-   for (Scope = Hie_UNK;
-	Scope < Hie_NUM_LEVELS;
+   for (Scope  = (Hie_Level_t) 0;
+	Scope <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
 	Scope++)
       if (!strcmp (Sco_GetDBStrFromScope (Scope),ScopeDBStr))
 	 return Scope;

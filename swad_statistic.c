@@ -436,8 +436,8 @@ void Sta_AskShowGblHits (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,
 		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
-   for (RoleStat = (Sta_Role_t) 0;
-	RoleStat < Sta_NUM_ROLES_STAT;
+   for (RoleStat  = (Sta_Role_t) 0;
+	RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
 	RoleStat++)
      {
       RoleStatUnsigned = (unsigned) RoleStat;
@@ -575,8 +575,8 @@ static void Sta_WriteSelectorCountType (void)
    /**** Count type *****/
    HTM_SELECT_Begin (false,
 		     "id=\"CountType\" name=\"CountType\"");
-   for (StatCountType = (Sta_CountType_t) 0;
-	StatCountType < Sta_NUM_COUNT_TYPES;
+   for (StatCountType  = (Sta_CountType_t) 0;
+	StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
 	StatCountType++)
      {
       StatCountTypeUnsigned = (unsigned) StatCountType;
@@ -615,8 +615,8 @@ static void Sta_WriteSelectorAction (void)
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",Gbl.Stat.NumAction == 0,false,
 	       "%s",Txt_Any_action);
-   for (Action = (Act_Action_t) 1;
-	Action < Act_NUM_ACTIONS;
+   for (Action  = (Act_Action_t) 1;
+	Action <= (Act_Action_t) (Act_NUM_ACTIONS - 1);
 	Action++)
      {
       Tab = Act_GetTab (Act_GetSuperAction (Action));
@@ -1974,8 +1974,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    HTM_TxtF ("%s:&nbsp;",Txt_Color_of_the_graphic);
    HTM_SELECT_Begin (true,
 		     "name=\"ColorType\"");
-   for (ColorType = (Sta_ColorType_t) 0;
-	ColorType < Sta_NUM_COLOR_TYPES;
+   for (ColorType  = (Sta_ColorType_t) 0;
+	ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);
 	ColorType++)
      {
       ColorTypeUnsigned = (unsigned) ColorType;

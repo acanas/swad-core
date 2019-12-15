@@ -79,7 +79,7 @@ struct Centre
 typedef enum
   {
    Ctr_ORDER_BY_CENTRE   = 0,
-   Ctr_ORDER_BY_NUM_TCHS = 1,
+   Ctr_ORDER_BY_NUM_USRS = 1,
   } Ctr_Order_t;
 #define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
 

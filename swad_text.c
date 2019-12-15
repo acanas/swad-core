@@ -115,68 +115,68 @@ const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n t
 /***** Languages *****/
 const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES] =
 	{
-	"",
-	"Catal&agrave;",						// ca
-	"Deutsch",							// de
-	"English",							// en
-	"Espa&ntilde;ol",						// es
-	"Fran&ccedil;ais",						// fr
-	"Ava&ntilde;e'&#7869;",						// gn
-	"Italiano",							// it
-	"Polski",							// pl
-	"Portugu&ecirc;s",						// pt
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Catal&agrave;",
+	[Lan_LANGUAGE_DE     ] = "Deutsch",
+	[Lan_LANGUAGE_EN     ] = "English",
+	[Lan_LANGUAGE_ES     ] = "Espa&ntilde;ol",
+	[Lan_LANGUAGE_FR     ] = "Fran&ccedil;ais",
+	[Lan_LANGUAGE_GN     ] = "Ava&ntilde;e'&#7869;",
+	[Lan_LANGUAGE_IT     ] = "Italiano",
+	[Lan_LANGUAGE_PL     ] = "Polski",
+	[Lan_LANGUAGE_PT     ] = "Portugu&ecirc;s",
 	};
 const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
-	"",
-	"Voleu canviar l'idioma a catal&agrave;?",			// ca
-	"Wollen Sie die Sprache auf Deutsch umstellen?",		// de
-	"Do you want to change the language to English?",		// en
-	"&iquest;Desea cambiar el idioma a espa&ntilde;ol?",		// es
-	"Voulez-vous changer la langue au fran&ccedil;ais?",		// fr
-	"&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",	// gn
-	"Vuoi cambiare la lingua in italiano?",				// it
-	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",		// pl
-	"Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",		// pt
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Voleu canviar l'idioma a catal&agrave;?",
+	[Lan_LANGUAGE_DE     ] = "Wollen Sie die Sprache auf Deutsch umstellen?",
+	[Lan_LANGUAGE_EN     ] = "Do you want to change the language to English?",
+	[Lan_LANGUAGE_ES     ] = "&iquest;Desea cambiar el idioma a espa&ntilde;ol?",
+	[Lan_LANGUAGE_FR     ] = "Voulez-vous changer la langue au fran&ccedil;ais?",
+	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
+	[Lan_LANGUAGE_IT     ] = "Vuoi cambiare la lingua in italiano?",
+	[Lan_LANGUAGE_PL     ] = "Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
+	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",
 	};
 const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
-	"",
-	"Voleu canviar el seu idioma a catal&agrave;?",			// ca
-	"Wollen Sie Ihre Sprache auf Deutsch umstellen?",		// de
-	"Do you want to change your language to English?",		// en
-	"&iquest;Desea cambiar su idioma a espa&ntilde;ol?",		// es
-	"Voulez-vous changer votre langue au fran&ccedil;ais?",		// fr
-	"&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",	// gn
-	"Vuoi cambiare la tua lingua in italiano?",			// it
-	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",		// pl
-	"Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",	// pt
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Voleu canviar el seu idioma a catal&agrave;?",
+	[Lan_LANGUAGE_DE     ] = "Wollen Sie Ihre Sprache auf Deutsch umstellen?",
+	[Lan_LANGUAGE_EN     ] = "Do you want to change your language to English?",
+	[Lan_LANGUAGE_ES     ] = "&iquest;Desea cambiar su idioma a espa&ntilde;ol?",
+	[Lan_LANGUAGE_FR     ] = "Voulez-vous changer votre langue au fran&ccedil;ais?",
+	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
+	[Lan_LANGUAGE_IT     ] = "Vuoi cambiare la tua lingua in italiano?",
+	[Lan_LANGUAGE_PL     ] = "Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
+	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
 	};
 const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
-	"",
-	"Canviar a catal&agrave;",					// ca
-	"Umschalten auf Deutsch",					// de
-	"Switch to English",						// en
-	"Cambiar a espa&ntilde;ol",					// es
-	"Passer au fran&ccedil;ais",					// fr
-	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;",		// gn
-	"Passare a italiano",						// it
-	"Prze&lstrok;&aogon;cz na polski",				// pl
-	"Mudar para portugu&ecirc;s",					// pt
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Canviar a catal&agrave;",
+	[Lan_LANGUAGE_DE     ] = "Umschalten auf Deutsch",
+	[Lan_LANGUAGE_EN     ] = "Switch to English",
+	[Lan_LANGUAGE_ES     ] = "Cambiar a espa&ntilde;ol",
+	[Lan_LANGUAGE_FR     ] = "Passer au fran&ccedil;ais",
+	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;",
+	[Lan_LANGUAGE_IT     ] = "Passare a italiano",
+	[Lan_LANGUAGE_PL     ] = "Prze&lstrok;&aogon;cz na polski",
+	[Lan_LANGUAGE_PT     ] = "Mudar para portugu&ecirc;s",
 	};
 const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
-	"",
-	"Canviant a catal&agrave;&hellip;",				// ca
-	"Umschaltung auf Deutsch&hellip;",				// de
-	"Switching to English&hellip;",					// en
-	"Cambiando a espa&ntilde;ol&hellip;",				// es
-	"Passant au fran&ccedil;ais&hellip;",				// fr
-	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;&hellip;",	// gn
-	"Passando a italiano&hellip;",					// it
-	"Prze&lstrok;&aogon;cz na polski&hellip;",			// pl
-	"Mudando para portugu&ecirc;s&hellip;",				// pt
+	[Lan_LANGUAGE_UNKNOWN] = "",
+	[Lan_LANGUAGE_CA     ] = "Canviant a catal&agrave;&hellip;",
+	[Lan_LANGUAGE_DE     ] = "Umschaltung auf Deutsch&hellip;",
+	[Lan_LANGUAGE_EN     ] = "Switching to English&hellip;",
+	[Lan_LANGUAGE_ES     ] = "Cambiando a espa&ntilde;ol&hellip;",
+	[Lan_LANGUAGE_FR     ] = "Passant au fran&ccedil;ais&hellip;",
+	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;&hellip;",
+	[Lan_LANGUAGE_IT     ] = "Passando a italiano&hellip;",
+	[Lan_LANGUAGE_PL     ] = "Prze&lstrok;&aogon;cz na polski&hellip;",
+	[Lan_LANGUAGE_PT     ] = "Mudando para portugu&ecirc;s&hellip;",
 	};
 
 /***** Messages translated (use HTML entities) *****/
@@ -201,7 +201,7 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 #elif L==5	// fr
 	"Un visage (marqu&eacute; en vert) a &eacute;t&eacute; d&eacute;tect&eacute; en position avant"
 	" et l'arri&egrave;re-plan est assez clair.<br />"
-	 "Cliquez sur pour confirmer la mise &agrave; jour de l'image.";
+	"Cliquez sur pour confirmer la mise &agrave; jour de l'image.";
 #elif L==6	// gn
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
 	" y con el fondo suficientemente claro.<br />"
@@ -1591,23 +1591,23 @@ const char *Txt_Announcement_of_exam_removed =
 
 const char *Txt_Announcements_of_exams =
 #if   L==1	// ca
-	 "Convocat&ograve;ries d'ex&agrave;mens";
+	"Convocat&ograve;ries d'ex&agrave;mens";
 #elif L==2	// de
-	 "Aufrufe f&uuml;r Pr&uuml;fung";
+	"Aufrufe f&uuml;r Pr&uuml;fung";
 #elif L==3	// en
-	 "Announcements of exams";
+	"Announcements of exams";
 #elif L==4	// es
-	 "Convocatorias de ex&aacute;menes";
+	"Convocatorias de ex&aacute;menes";
 #elif L==5	// fr
-	 "Convocations &agrave; examens";
+	"Convocations &agrave; examens";
 #elif L==6	// gn
-	 "Convocatorias de ex&aacute;menes";	// Okoteve traducción
+	"Convocatorias de ex&aacute;menes";	// Okoteve traducción
 #elif L==7	// it
-	 "Appelli d'esame";
+	"Appelli d'esame";
 #elif L==8	// pl
-	 "Ogloszenia egzamin&oacute;w";
+	"Ogloszenia egzamin&oacute;w";
 #elif L==9	// pt
-	 "Chamadas para exames";
+	"Chamadas para exames";
 #endif
 
 const char *Txt_Another_centre =
@@ -2178,88 +2178,92 @@ const char *Txt_Assignments_and_other_works =
 #endif
 
 const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
-   {
+	{
+ 	[Dat_START_TIME] =
 #if   L==1	// ca
-	 "Ordenar per data de comen&ccedil;ament"
+	"Ordenar per data de comen&ccedil;ament"
 #elif L==2	// de
-	 "Sortieren nach Startdatum"
+	"Sortieren nach Startdatum"
 #elif L==3	// en
-	 "Sort by start date"
+	"Sort by start date"
 #elif L==4	// es
-	 "Ordenar por fecha de comienzo"
+	"Ordenar por fecha de comienzo"
 #elif L==5	// fr
-	 "Trier par date de d&eacute;but"
+	"Trier par date de d&eacute;but"
 #elif L==6	// gn
-	 "Ordenar por fecha de comienzo"	// Okoteve traducción
+	"Ordenar por fecha de comienzo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data di inizio"
+	"Ordina per data di inizio"
 #elif L==8	// pl
-	 "Sortuj wedlug daty rozpoczecia"
+	"Sortuj wedlug daty rozpoczecia"
 #elif L==9	// pt
-	 "Classificar por data de in&iacute;cio"
+	"Classificar por data de in&iacute;cio"
 #endif
-	 ,
+	,
+	[Dat_END_TIME] =
 #if   L==1	// ca
-	 "Ordenar per data de finalitzaci&oacute;"
+	"Ordenar per data de finalitzaci&oacute;"
 #elif L==2	// de
-	 "Sortieren nach Enddatum"
+	"Sortieren nach Enddatum"
 #elif L==3	// en
-	 "Sort by end date"
+	"Sort by end date"
 #elif L==4	// es
-	 "Ordenar por fecha de finalizaci&oacute;n"
+	"Ordenar por fecha de finalizaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par date de fin"
+	"Trier par date de fin"
 #elif L==6	// gn
-	 "Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+	"Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data di fine"
+	"Ordina per data di fine"
 #elif L==8	// pl
-	 "Sortuj wedlug daty zakonczenia"
+	"Sortuj wedlug daty zakonczenia"
 #elif L==9	// pt
-	 "Classificar por data de t&eacute;rmino"
+	"Classificar por data de t&eacute;rmino"
 #endif
 	};
 
 const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
-   {
+	{
+ 	[Dat_START_TIME] =
 #if   L==1	// ca
-	 "Inici"
+	"Inici"
 #elif L==2	// de
-	 "Start"
+	"Start"
 #elif L==3	// en
-	 "Start"
+	"Start"
 #elif L==4	// es
-	 "Inicio"
+	"Inicio"
 #elif L==5	// fr
-	 "D&eacute;but"
+	"D&eacute;but"
 #elif L==6	// gn
-	 "&Ntilde;epyr&utilde;"
+	"&Ntilde;epyr&utilde;"
 #elif L==7	// it
-	 "Inizio"
+	"Inizio"
 #elif L==8	// pl
-	 "Pocz&aogon;tek"
+	"Pocz&aogon;tek"
 #elif L==9	// pt
-	 "In&iacute;cio"
+	"In&iacute;cio"
 #endif
-	 ,
+	,
+	[Dat_END_TIME] =
 #if   L==1	// ca
-	 "Final"
+	"Final"
 #elif L==2	// de
-	 "Ende"
+	"Ende"
 #elif L==3	// en
-	 "End"
+	"End"
 #elif L==4	// es
-	 "Final"
+	"Final"
 #elif L==5	// fr
-	 "Fin"
+	"Fin"
 #elif L==6	// gn
-	 "Paha"
+	"Paha"
 #elif L==7	// it
-	 "Fine"
+	"Fine"
 #elif L==8	// pl
-	 "Koniec"
+	"Koniec"
 #elif L==9	// pt
-	 "Fim"
+	"Fim"
 #endif
 	};
 
@@ -2579,45 +2583,47 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #endif
 
 const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
-   {
+	{
+ 	[Pho_PHOTO_MEDIAN_ALL] =
 #if   L==1	// ca
-	 "mitjana de totes les fotos"
+	"mitjana de totes les fotos"
 #elif L==2	// de
-	 "Median aller Fotos"
+	"Median aller Fotos"
 #elif L==3	// en
-	 "median of all the photos"
+	"median of all the photos"
 #elif L==4	// es
-	 "mediana de todas las fotos"
+	"mediana de todas las fotos"
 #elif L==5	// fr
-	 "m&eacute;dian de toutes les photos"
+	"m&eacute;dian de toutes les photos"
 #elif L==6	// gn
-	 "mediana de todas las fotos"			// Okoteve traducción
+	"mediana de todas las fotos"			// Okoteve traducción
 #elif L==7	// it
-	 "mediana di tutte le foto"
+	"mediana di tutte le foto"
 #elif L==8	// pl
-	 "mediana wszystkich zdjec"
+	"mediana wszystkich zdjec"
 #elif L==9	// pt
-	 "mediana de todas as fotos"
+	"mediana de todas as fotos"
 #endif
-	 ,
+	,
+ 	[Pho_PHOTO_AVERAGE_ALL] =
 #if   L==1	// ca
-	 "mitjana aritm&egrave;tica de totes les fotos"
+	"mitjana aritm&egrave;tica de totes les fotos"
 #elif L==2	// de
-	 "arithmetischer Mittelwert aller Fotos"
+	"arithmetischer Mittelwert aller Fotos"
 #elif L==3	// en
-	 "arithmetic mean of all the photos"
+	"arithmetic mean of all the photos"
 #elif L==4	// es
-	 "media aritm&eacute;tica de todas las fotos"
+	"media aritm&eacute;tica de todas las fotos"
 #elif L==5	// fr
-	 "moyenne arithm&eacute;tique de toutes les photos"
+	"moyenne arithm&eacute;tique de toutes les photos"
 #elif L==6	// gn
-	 "media aritm&eacute;tica de todas las fotos"	// Okoteve traducción
+	"media aritm&eacute;tica de todas las fotos"	// Okoteve traducción
 #elif L==7	// it
-	 "media aritmetica di tutte le foto"
+	"media aritmetica di tutte le foto"
 #elif L==8	// pl
-	 "&sacute;rednia arytmetyczna wszystkich zdjec"
+	"&sacute;rednia arytmetyczna wszystkich zdjec"
 #elif L==9	// pt
-	 "m&eacute;dia aritm&eacute;tica de todas as fotos"
+	"m&eacute;dia aritm&eacute;tica de todas as fotos"
 #endif
 	};
 
@@ -3240,85 +3246,89 @@ const char *Txt_Centre_X_removed =	// Warning: it is very important to include %
 #endif
 
 const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
-   {
-#if   L==1	// ca	// Ctr_STATUS_UNKNOWN
-	 "Desconegudo"
+	{
+ 	[Ctr_STATUS_UNKNOWN] =
+#if   L==1	// ca
+	"Desconegudo"
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocido"
+	"Desconocido"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocido"			// Okoteve traducción
+	"Desconocido"			// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuto"
+	"Sconosciuto"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecido"
+	"Desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Ctr_STATUS_ACTIVE
-	 "Activo"
+	,
+ 	[Ctr_STATUS_ACTIVE] =
+#if   L==1	// ca
+	"Activo"
 #elif L==2	// de
-	 "Aktive"
+	"Aktive"
 #elif L==3	// en
-	 "Active"
+	"Active"
 #elif L==4	// es
-	 "Activo"
+	"Activo"
 #elif L==5	// fr
-	 "Actif"
+	"Actif"
 #elif L==6	// gn
-	 "Activo"	// Okoteve traducción
+	"Activo"	// Okoteve traducción
 #elif L==7	// it
-	 "Attivo"
+	"Attivo"
 #elif L==8	// pl
-	 "Aktywne"
+	"Aktywne"
 #elif L==9	// pt
-	 "Ativo"
+	"Ativo"
 #endif
-	 ,
-#if   L==1	// ca	// Ctr_STATUS_PENDING
-	 "Novo"
+	,
+ 	[Ctr_STATUS_PENDING] =
+#if   L==1	// ca
+	"Novo"
 #elif L==2	// de
-	 "Neu"
+	"Neu"
 #elif L==3	// en
-	 "New"
+	"New"
 #elif L==4	// es
-	 "Nuevo"
+	"Nuevo"
 #elif L==5	// fr
-	 "Nouveau"
+	"Nouveau"
 #elif L==6	// gn
-	 "Pyahu"
+	"Pyahu"
 #elif L==7	// it
-	 "Nuovo"
+	"Nuovo"
 #elif L==8	// pl
-	 "Nowy"
+	"Nowy"
 #elif L==9	// pt
-	 "Novo"
+	"Novo"
 #endif
-	 ,
-#if   L==1	// ca	// Ctr_STATUS_REMOVED
-	 "Eliminado"
+	,
+ 	[Ctr_STATUS_REMOVED] =
+#if   L==1	// ca
+	"Eliminado"
 #elif L==2	// de
-	 "Entfernt"
+	"Entfernt"
 #elif L==3	// en
-	 "Removed"
+	"Removed"
 #elif L==4	// es
-	 "Eliminado"
+	"Eliminado"
 #elif L==5	// fr
-	 "Supprim&eacute;"
+	"Supprim&eacute;"
 #elif L==6	// gn
-	 "Eliminado"	// Okoteve traducción
+	"Eliminado"	// Okoteve traducción
 #elif L==7	// it
-	 "Rimosso"
+	"Rimosso"
 #elif L==8	// pl
-	 "Usuniete"
+	"Usuniete"
 #elif L==9	// pt
-	 "Suprimido"
+	"Suprimido"
 #endif
 	};
 
@@ -3386,45 +3396,47 @@ const char *Txt_centres =
 #endif
 
 const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
-   {
+	{
+ 	[Ctr_ORDER_BY_CENTRE] =
 #if   L==1	// ca
-	 "Ordenar per centre"
+	"Ordenar per centre"
 #elif L==2	// de
-	 "Nach Lehrinstitut Sortieren"
+	"Nach Lehrinstitut Sortieren"
 #elif L==3	// en
-	 "Sort by centre"
+	"Sort by centre"
 #elif L==4	// es
-	 "Ordenar por centro"
+	"Ordenar por centro"
 #elif L==5	// fr
-	 "Trier par centre"
+	"Trier par centre"
 #elif L==6	// gn
-	 "Ordenar por centro"	// Okoteve traducción
+	"Ordenar por centro"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per centro"
+	"Ordina per centro"
 #elif L==8	// pl
-	 "Sortuj centrum"
+	"Sortuj centrum"
 #elif L==9	// pt
-	 "Classificar por centro"
+	"Classificar por centro"
 #endif
-	 ,
+	,
+ 	[Ctr_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Ordenar per n&ordm; d'usuaris"
+	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
-	 "Nach Anzahl der Benutzer sortieren"
+	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
-	 "Sort by no. of users"
+	"Sort by no. of users"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de usuarios"
+	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	 "Trier par nombre d'utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de usuarios"	// Okoteve traducción
+	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di utenti"
+	"Ordina per numero di utenti"
 #elif L==8	// pl
-	 "Sortuj wedlug liczby uzytkownikow"
+	"Sortuj wedlug liczby uzytkownikow"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de utilizadores"
+	"Classificar por n&ordm; de utilizadores"
 #endif
 	};
 
@@ -3450,45 +3462,47 @@ const char *Txt_Centres_of_INSTITUTION_X =	// Warning: it is very important to i
 #endif
 
 const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
-   {
+	{
+ 	[Ctr_ORDER_BY_CENTRE] =
 #if   L==1	// ca
-	 "Centre"
+	"Centre"
 #elif L==2	// de
-	 "Lehrinstitut"
+	"Lehrinstitut"
 #elif L==3	// en
-	 "Centre"
+	"Centre"
 #elif L==4	// es
-	 "Centro"
+	"Centro"
 #elif L==5	// fr
-	 "Centre"
+	"Centre"
 #elif L==6	// gn
-	 "Mbo'ehao"
+	"Mbo'ehao"
 #elif L==7	// it
-	 "Centro"
+	"Centro"
 #elif L==8	// pl
-	 "Centrum"
+	"Centrum"
 #elif L==9	// pt
-	 "Centro"
+	"Centro"
 #endif
-	 ,
+	,
+ 	[Ctr_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Usuaris del centre"
+	"Usuaris del centre"
 #elif L==2	// de
-	 "Benutzer der Lehrinstitut"
+	"Benutzer der Lehrinstitut"
 #elif L==3	// en
-	 "Users of the centre"
+	"Users of the centre"
 #elif L==4	// es
-	 "Usuarios del centro"
+	"Usuarios del centro"
 #elif L==5	// fr
-	 "Utilisateurs du centre"
+	"Utilisateurs du centre"
 #elif L==6	// gn
-	 "Usuarios del centro"	// Okoteve traducción
+	"Usuarios del centro"	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti del centro"
+	"Utenti del centro"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy centrum"
+	"U&zdot;ytkownicy centrum"
 #elif L==9	// pt
-	 "Utilizadores do centro"
+	"Utilizadores do centro"
 #endif
 	};
 
@@ -3871,130 +3885,137 @@ const char *Txt_Classroom_X_removed =	// Warning: it is very important to includ
 #endif
 
 const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
-   {		// Cla_ORDER_BY_SHRT_NAME
+	{
+	[Cla_ORDER_BY_SHRT_NAME] =
 #if   L==1	// ca
-	 "Ordenar per nom breu"
+	"Ordenar per nom breu"
 #elif L==2	// de
-	 "Nach Kurzname sortieren"
+	"Nach Kurzname sortieren"
 #elif L==3	// en
-	 "Sort by short name"
+	"Sort by short name"
 #elif L==4	// es
-	 "Ordenar por nombre breve"
+	"Ordenar por nombre breve"
 #elif L==5	// fr
-	 "Trier par nom abr&eacute;g&eacute;"
+	"Trier par nom abr&eacute;g&eacute;"
 #elif L==6	// gn
-	 "Ordenar por nombre breve"	// Okoteve traducción
+	"Ordenar por nombre breve"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per nome breve"
+	"Ordina per nome breve"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug kr&oacute;tkiej nazwy"
+	"Sortuj wed&lstrok;ug kr&oacute;tkiej nazwy"
 #elif L==9	// pt
-	 "Classificar por nome abreviado"
+	"Classificar por nome abreviado"
 #endif
-	 ,	// Cla_ORDER_BY_FULL_NAME
+	,
+	[Cla_ORDER_BY_FULL_NAME] =
 #if   L==1	// ca
-	 "Ordenar per nom complet"
+	"Ordenar per nom complet"
 #elif L==2	// de
-	 "Nach vollst&auml;ndiger Name sortieren"
+	"Nach vollst&auml;ndiger Name sortieren"
 #elif L==3	// en
-	 "Sort by full name"
+	"Sort by full name"
 #elif L==4	// es
-	 "Ordenar por nombre completo"
+	"Ordenar por nombre completo"
 #elif L==5	// fr
-	 "Trier par nom complet"
+	"Trier par nom complet"
 #elif L==6	// gn
-	 "Ordenar por nombre completo"	// Okoteve traducción
+	"Ordenar por nombre completo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per nome completo"
+	"Ordina per nome completo"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug pe&lstrok;na nazwa"
+	"Sortuj wed&lstrok;ug pe&lstrok;na nazwa"
 #elif L==9	// pt
-	 "Classificar por nome completo"
+	"Classificar por nome completo"
 #endif
-	 ,	// Cla_ORDER_BY_CAPACITY
+	,
+	[Cla_ORDER_BY_CAPACITY] =
 #if   L==1	// ca
-	 "Ordenar per aforo"
+	"Ordenar per aforo"
 #elif L==2	// de
-	 "Sortieren nach Sitzplatzkapazit&auml;t"
+	"Sortieren nach Sitzplatzkapazit&auml;t"
 #elif L==3	// en
-	 "Sort by seating capacity"
+	"Sort by seating capacity"
 #elif L==4	// es
-	 "Ordenar por aforo"
+	"Ordenar por aforo"
 #elif L==5	// fr
-	 "Trier par nombre de places"
+	"Trier par nombre de places"
 #elif L==6	// gn
-	 "Ordenar por aforo"	// Okoteve traducción
+	"Ordenar por aforo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per capacit&agrave; di posti"
+	"Ordina per capacit&agrave; di posti"
 #elif L==8	// pl
-	 "Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
+	"Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
 #elif L==9	// pt
-	 "Ordenar por capacidade"
+	"Ordenar por capacidade"
 #endif
-	 ,	// Cla_ORDER_BY_LOCATION
+	,
+	[Cla_ORDER_BY_LOCATION] =
 #if   L==1	// ca
-	 "Ordenar per ubicaci&oacute;"
+	"Ordenar per ubicaci&oacute;"
 #elif L==2	// de
-	 "Nach Standort sortieren"
+	"Nach Standort sortieren"
 #elif L==3	// en
-	 "Sort by location"
+	"Sort by location"
 #elif L==4	// es
-	 "Ordenar por ubicaci&oacute;n"
+	"Ordenar por ubicaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par emplacement"
+	"Trier par emplacement"
 #elif L==6	// gn
-	 "Ordenar por ubicaci&oacute;n"	// Okoteve traducción
+	"Ordenar por ubicaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per posizione"
+	"Ordina per posizione"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug lokacja"
+	"Sortuj wed&lstrok;ug lokacja"
 #elif L==9	// pt
-	 "Classificar por localiza&ccedil;&atilde;o"
+	"Classificar por localiza&ccedil;&atilde;o"
 #endif
-	};
+  };
 
 const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
-   {		// Cla_ORDER_BY_SHRT_NAME
+	{
+	[Cla_ORDER_BY_SHRT_NAME] =
 #if   L==1	// ca
-	 "Nom breu"
+	"Nom breu"
 #elif L==2	// de
-	 "Kurzname"
+	"Kurzname"
 #elif L==3	// en
-	 "Short name"
+	"Short name"
 #elif L==4	// es
-	 "Nombre breve"
+	"Nombre breve"
 #elif L==5	// fr
-	 "Nom abr&eacute;g&eacute;"
+	"Nom abr&eacute;g&eacute;"
 #elif L==6	// gn
-	 "Nombre breve"	// Okoteve traducción
+	"Nombre breve"	// Okoteve traducción
 #elif L==7	// it
-	 "Nome breve"
+	"Nome breve"
 #elif L==8	// pl
-	 "Kr&oacute;tkiej nazwy"
+	"Kr&oacute;tkiej nazwy"
 #elif L==9	// pt
-	 "Nome abreviado"
+	"Nome abreviado"
 #endif
-	 ,	// Cla_ORDER_BY_FULL_NAME
+	,
+	[Cla_ORDER_BY_FULL_NAME] =
 #if   L==1	// ca
-	 "Nom complet"
+	"Nom complet"
 #elif L==2	// de
-	 "Vollst&auml;ndiger Name"
+	"Vollst&auml;ndiger Name"
 #elif L==3	// en
-	 "Full name"
+	"Full name"
 #elif L==4	// es
-	 "Nombre completo"
+	"Nombre completo"
 #elif L==5	// fr
-	 "Nom complet"
+	"Nom complet"
 #elif L==6	// gn
-	 "Nombre completo"	// Okoteve traducción
+	"Nombre completo"	// Okoteve traducción
 #elif L==7	// it
-	 "Nome completo"
+	"Nome completo"
 #elif L==8	// pl
-	 "Pe&lstrok;na nazwa"
+	"Pe&lstrok;na nazwa"
 #elif L==9	// pt
-	 "Nome completo"
+	"Nome completo"
 #endif
-	 ,	// Cla_ORDER_BY_CAPACITY
+	,
+	[Cla_ORDER_BY_CAPACITY] =
 #if   L==1	// ca
 	"Aforo"
 #elif L==2	// de
@@ -4014,7 +4035,8 @@ const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
 #elif L==9	// pt
 	"Capacidade"
 #endif
-	 ,	// // Cla_ORDER_BY_LOCATION
+	,
+	[Cla_ORDER_BY_LOCATION] =
 #if   L==1	// ca
 	"Ubicaci&oacute;"
 #elif L==2	// de
@@ -4881,45 +4903,47 @@ const char *Txt_countries =
 #endif
 
 const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
-   {
+	{
+	[Cty_ORDER_BY_COUNTRY] =
 #if   L==1	// ca
-	 "Ordenar por pa&iacute;s"	// Necessita traduccio
+	"Ordenar por pa&iacute;s"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Land sortieren"
+	"Nach Land sortieren"
 #elif L==3	// en
-	 "Sort by country"
+	"Sort by country"
 #elif L==4	// es
-	 "Ordenar por pa&iacute;s"
+	"Ordenar por pa&iacute;s"
 #elif L==5	// fr
-	 "Trier par pays"
+	"Trier par pays"
 #elif L==6	// gn
-	 "Ordenar por pa&iacute;s"	// Okoteve traducción
+	"Ordenar por pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per paese"
+	"Ordina per paese"
 #elif L==8	// pl
-	 "Sortuj wedlug kraju"
+	"Sortuj wedlug kraju"
 #elif L==9	// pt
-	 "Classificar por pa&iacute;s"
+	"Classificar por pa&iacute;s"
 #endif
-	 ,
+	,
+	[Cty_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Ordenar per n&ordm; d'usuaris"
+	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
-	 "Nach Anzahl der Benutzer sortieren"
+	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
-	 "Sort by no. of users"
+	"Sort by no. of users"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de usuarios"
+	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	 "Trier par nombre d'utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de usuarios"	// Okoteve traducción
+	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di utenti"
+	"Ordina per numero di utenti"
 #elif L==8	// pl
-	 "Sortuj wedlug liczby uzytkownikow"
+	"Sortuj wedlug liczby uzytkownikow"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de utilizadores"
+	"Classificar por n&ordm; de utilizadores"
 #endif
 	};
 
@@ -4945,45 +4969,47 @@ const char *Txt_Countries_with_pending_institutions =
 #endif
 
 const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
-   {
+	{
+	[Cty_ORDER_BY_COUNTRY] =
 #if   L==1	// ca
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #elif L==2	// de
-	 "Land"
+	"Land"
 #elif L==3	// en
-	 "Country"
+	"Country"
 #elif L==4	// es
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #elif L==5	// fr
-	 "Pays"
+	"Pays"
 #elif L==6	// gn
-	 "Tet&atilde;"
+	"Tet&atilde;"
 #elif L==7	// it
-	 "Paese"
+	"Paese"
 #elif L==8	// pl
-	 "Kraj"
+	"Kraj"
 #elif L==9	// pt
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #endif
-	 ,
+	,
+	[Cty_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Usuaris del pa&iacute;s"
+	"Usuaris del pa&iacute;s"
 #elif L==2	// de
-	 "Benutzer des Landes"
+	"Benutzer des Landes"
 #elif L==3	// en
-	 "Users of the country"
+	"Users of the country"
 #elif L==4	// es
-	 "Usuarios del pa&iacute;s"
+	"Usuarios del pa&iacute;s"
 #elif L==5	// fr
-	 "Utilisateurs du pays"
+	"Utilisateurs du pays"
 #elif L==6	// gn
-	 "Usuarios del pa&iacute;s"	// Okoteve traducción
+	"Usuarios del pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti del paese"
+	"Utenti del paese"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy kraju"
+	"U&zdot;ytkownicy kraju"
 #elif L==9	// pt
-	 "Utilizadores do pa&iacute;s"
+	"Utilizadores do pa&iacute;s"
 #endif
 	};
 
@@ -5114,85 +5140,89 @@ const char *Txt_course =
 #endif
 
 const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
-   {
-#if   L==1	// ca	// Crs_STATUS_UNKNOWN
-	 "Desconegudo"
+	{
+	[Crs_STATUS_UNKNOWN] =
+#if   L==1	// ca
+	"Desconegudo"
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocido"
+	"Desconocido"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocido"			// Okoteve traducción
+	"Desconocido"	// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuto"
+	"Sconosciuto"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecido"
+	"Desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Crs_STATUS_ACTIVE
-	 "Activa"
+	,
+	[Crs_STATUS_ACTIVE] =
+#if   L==1	// ca
+	"Activa"
 #elif L==2	// de
-	 "Aktive"
+	"Aktive"
 #elif L==3	// en
-	 "Active"
+	"Active"
 #elif L==4	// es
-	 "Activa"
+	"Activa"
 #elif L==5	// fr
-	 "Actif"
+	"Actif"
 #elif L==6	// gn
-	 "Activa"	// Okoteve traducción
+	"Activa"	// Okoteve traducción
 #elif L==7	// it
-	 "Attivo"
+	"Attivo"
 #elif L==8	// pl
-	 "Aktywne"
+	"Aktywne"
 #elif L==9	// pt
-	 "Ativa"
+	"Ativa"
 #endif
-	 ,
-#if   L==1	// ca	// Crs_STATUS_PENDING
-	 "Nova"
+	,
+	[Crs_STATUS_PENDING] =
+#if   L==1	// ca
+	"Nova"
 #elif L==2	// de
-	 "Neu"
+	"Neu"
 #elif L==3	// en
-	 "New"
+	"New"
 #elif L==4	// es
-	 "Nueva"
+	"Nueva"
 #elif L==5	// fr
-	 "Nouvelle"
+	"Nouvelle"
 #elif L==6	// gn
-	 "Pyahu"
+	"Pyahu"
 #elif L==7	// it
-	 "Nuovo"
+	"Nuovo"
 #elif L==8	// pl
-	 "Nowy"
+	"Nowy"
 #elif L==9	// pt
-	 "Nova"
+	"Nova"
 #endif
-	 ,
-#if   L==1	// ca	// Crs_STATUS_REMOVED
-	 "Eliminada"
+	,
+	[Crs_STATUS_REMOVED] =
+#if   L==1	// ca
+	"Eliminada"
 #elif L==2	// de
-	 "Entfernt"
+	"Entfernt"
 #elif L==3	// en
-	 "Removed"
+	"Removed"
 #elif L==4	// es
-	 "Eliminada"
+	"Eliminada"
 #elif L==5	// fr
-	 "Supprim&eacute;"
+	"Supprim&eacute;"
 #elif L==6	// gn
-	 "Eliminada"	// Okoteve traducción
+	"Eliminada"	// Okoteve traducción
 #elif L==7	// it
-	 "Rimosso"
+	"Rimosso"
 #elif L==8	// pl
-	 "Usuniete"
+	"Usuniete"
 #elif L==9	// pt
-	 "Suprimida"
+	"Suprimida"
 #endif
 	};
 
@@ -6961,288 +6991,288 @@ const char *Txt_days =
 #endif
 
 const char *Txt_DAYS_CAPS[7] =
-   {
+	{
 #if   L==1	// ca
-	 "DILLUNS"
+	"DILLUNS"
 #elif L==2	// de
-	 "MONTAG"
+	"MONTAG"
 #elif L==3	// en
-	 "MONDAY"
+	"MONDAY"
 #elif L==4	// es
-	 "LUNES"
+	"LUNES"
 #elif L==5	// fr
-	 "LUNDI"
+	"LUNDI"
 #elif L==6	// gn
-	 "ARAKOI"
+	"ARAKOI"
 #elif L==7	// it
-	 "LUNED&Igrave;"
+	"LUNED&Igrave;"
 #elif L==8	// pl
-	 "Poniedzialek"
+	"Poniedzialek"
 #elif L==9	// pt
-	 "SEGUNDA-FEIRA"
+	"SEGUNDA-FEIRA"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DIMARTS"
+	"DIMARTS"
 #elif L==2	// de
-	 "DIENSTAG"
+	"DIENSTAG"
 #elif L==3	// en
-	 "TUESDAY"
+	"TUESDAY"
 #elif L==4	// es
-	 "MARTES"
+	"MARTES"
 #elif L==5	// fr
-	 "MARDI"
+	"MARDI"
 #elif L==6	// gn
-	 "ARAAPY"
+	"ARAAPY"
 #elif L==7	// it
-	 "MARTED&Igrave;"
+	"MARTED&Igrave;"
 #elif L==8	// pl
-	 "Wtorek"
+	"Wtorek"
 #elif L==9	// pt
-	 "TER&Ccedil;A-FEIRA"
+	"TER&Ccedil;A-FEIRA"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DIMECRES"
+	"DIMECRES"
 #elif L==2	// de
-	 "MITTWOCH"
+	"MITTWOCH"
 #elif L==3	// en
-	 "WEDNESDAY"
+	"WEDNESDAY"
 #elif L==4	// es
-	 "MI&Eacute;RCOLES"
+	"MI&Eacute;RCOLES"
 #elif L==5	// fr
-	 "MERCREDI"
+	"MERCREDI"
 #elif L==6	// gn
-	 "ARARUNDY"
+	"ARARUNDY"
 #elif L==7	// it
-	 "MERCOLED&Igrave;"
+	"MERCOLED&Igrave;"
 #elif L==8	// pl
-	 "Sroda"
+	"Sroda"
 #elif L==9	// pt
-	 "QUARTA-FEIRA"
+	"QUARTA-FEIRA"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DIJOUS"
+	"DIJOUS"
 #elif L==2	// de
-	 "DONNERSTAG"
+	"DONNERSTAG"
 #elif L==3	// en
-	 "THURSDAY"
+	"THURSDAY"
 #elif L==4	// es
-	 "JUEVES"
+	"JUEVES"
 #elif L==5	// fr
-	 "JEUDI"
+	"JEUDI"
 #elif L==6	// gn
-	 "ARAPO"
+	"ARAPO"
 #elif L==7	// it
-	 "GIOVED&Igrave;"
+	"GIOVED&Igrave;"
 #elif L==8	// pl
-	 "Czwartek"
+	"Czwartek"
 #elif L==9	// pt
-	 "QUINTA-FEIRA"
+	"QUINTA-FEIRA"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DIVENDRES"
+	"DIVENDRES"
 #elif L==2	// de
-	 "FREITAG"
+	"FREITAG"
 #elif L==3	// en
-	 "FRIDAY"
+	"FRIDAY"
 #elif L==4	// es
-	 "VIERNES"
+	"VIERNES"
 #elif L==5	// fr
-	 "VENDREDI"
+	"VENDREDI"
 #elif L==6	// gn
-	 "ARAPOTE&#296;"
+	"ARAPOTE&#296;"
 #elif L==7	// it
-	 "VENERD&Igrave;"
+	"VENERD&Igrave;"
 #elif L==8	// pl
-	 "Piatek"
+	"Piatek"
 #elif L==9	// pt
-	 "SEXTA-FEIRA"
+	"SEXTA-FEIRA"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DISSABTE"
+	"DISSABTE"
 #elif L==2	// de
-	 "SAMSTAG"
+	"SAMSTAG"
 #elif L==3	// en
-	 "SATURDAY"
+	"SATURDAY"
 #elif L==4	// es
-	 "S&Aacute;BADO"
+	"S&Aacute;BADO"
 #elif L==5	// fr
-	 "SAMEDI"
+	"SAMEDI"
 #elif L==6	// gn
-	 "ARAPOK&Otilde;I"
+	"ARAPOK&Otilde;I"
 #elif L==7	// it
-	 "SABATO"
+	"SABATO"
 #elif L==8	// pl
-	 "Sobota"
+	"Sobota"
 #elif L==9	// pt
-	 "SABADO"
+	"SABADO"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "DIUMENGE"
+	"DIUMENGE"
 #elif L==2	// de
-	 "SONNTAG"
+	"SONNTAG"
 #elif L==3	// en
-	 "SUNDAY"
+	"SUNDAY"
 #elif L==4	// es
-	 "DOMINGO"
+	"DOMINGO"
 #elif L==5	// fr
-	 "DIMANCHE"
+	"DIMANCHE"
 #elif L==6	// gn
-	 "ARATE&#296;"
+	"ARATE&#296;"
 #elif L==7	// it
-	 "DOMENICA"
+	"DOMENICA"
 #elif L==8	// pl
-	 "Niedziela"
+	"Niedziela"
 #elif L==9	// pt
-	 "DOMINGO"
+	"DOMINGO"
 #endif
 	};
 
 const char *Txt_DAYS_SMALL[7] =
-   {
+	{
 #if   L==1	// ca
-	 "dilluns"
+	"dilluns"
 #elif L==2	// de
-	 "Montag"
+	"Montag"
 #elif L==3	// en
-	 "Monday"
+	"Monday"
 #elif L==4	// es
-	 "lunes"
+	"lunes"
 #elif L==5	// fr
-	 "Lundi"
+	"Lundi"
 #elif L==6	// gn
-	 "arak&otilde;i"
+	"arak&otilde;i"
 #elif L==7	// it
-	 "Luned&igrave;"
+	"Luned&igrave;"
 #elif L==8	// pl
-	 "Poniedzialek"
+	"Poniedzialek"
 #elif L==9	// pt
-	 "Segunda-feira"
+	"Segunda-feira"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "dimarts"
+	"dimarts"
 #elif L==2	// de
-	 "Dienstag"
+	"Dienstag"
 #elif L==3	// en
-	 "Tuesday"
+	"Tuesday"
 #elif L==4	// es
-	 "martes"
+	"martes"
 #elif L==5	// fr
-	 "Mardi"
+	"Mardi"
 #elif L==6	// gn
-	 "araapy"
+	"araapy"
 #elif L==7	// it
-	 "Marted&igrave;"
+	"Marted&igrave;"
 #elif L==8	// pl
-	 "Wtorek"
+	"Wtorek"
 #elif L==9	// pt
-	 "Ter&ccedil;a-feira"
+	"Ter&ccedil;a-feira"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "dimecres"
+	"dimecres"
 #elif L==2	// de
-	 "Mittwoch"
+	"Mittwoch"
 #elif L==3	// en
-	 "Wednesday"
+	"Wednesday"
 #elif L==4	// es
-	 "mi&eacute;rcoles"
+	"mi&eacute;rcoles"
 #elif L==5	// fr
-	 "Mercredi"
+	"Mercredi"
 #elif L==6	// gn
-	 "ararundy"
+	"ararundy"
 #elif L==7	// it
-	 "Mercoled&igrave;"
+	"Mercoled&igrave;"
 #elif L==8	// pl
-	 "Sroda"
+	"Sroda"
 #elif L==9	// pt
-	 "Quarta-feira"
+	"Quarta-feira"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "dijous"
+	"dijous"
 #elif L==2	// de
-	 "Donnerstag"
+	"Donnerstag"
 #elif L==3	// en
-	 "Thursday"
+	"Thursday"
 #elif L==4	// es
-	 "jueves"
+	"jueves"
 #elif L==5	// fr
-	 "Jeudi"
+	"Jeudi"
 #elif L==6	// gn
-	 "arapo"
+	"arapo"
 #elif L==7	// it
-	 "Gioved&igrave;"
+	"Gioved&igrave;"
 #elif L==8	// pl
-	 "Czwartek"
+	"Czwartek"
 #elif L==9	// pt
-	 "Quinta-feira"
+	"Quinta-feira"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "divendres"
+	"divendres"
 #elif L==2	// de
-	 "Freitag"
+	"Freitag"
 #elif L==3	// en
-	 "Friday"
+	"Friday"
 #elif L==4	// es
-	 "viernes"
+	"viernes"
 #elif L==5	// fr
-	 "Vendredi"
+	"Vendredi"
 #elif L==6	// gn
-	 "arapote&#297;"
+	"arapote&#297;"
 #elif L==7	// it
-	 "Venerd&igrave;"
+	"Venerd&igrave;"
 #elif L==8	// pl
-	 "Piatek"
+	"Piatek"
 #elif L==9	// pt
-	 "Sexta-feira"
+	"Sexta-feira"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "dissabte"
+	"dissabte"
 #elif L==2	// de
-	 "Samstag"
+	"Samstag"
 #elif L==3	// en
-	 "Saturday"
+	"Saturday"
 #elif L==4	// es
-	 "s&aacute;bado"
+	"s&aacute;bado"
 #elif L==5	// fr
-	 "Samedi"
+	"Samedi"
 #elif L==6	// gn
-	 "arapok&otilde;i"
+	"arapok&otilde;i"
 #elif L==7	// it
-	 "Sabato"
+	"Sabato"
 #elif L==8	// pl
-	 "Sobota"
+	"Sobota"
 #elif L==9	// pt
-	 "Sabado"
+	"Sabado"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "diumenge"
+	"diumenge"
 #elif L==2	// de
-	 "Sonntag"
+	"Sonntag"
 #elif L==3	// en
-	 "Sunday"
+	"Sunday"
 #elif L==4	// es
-	 "domingo"
+	"domingo"
 #elif L==5	// fr
-	 "Dimanche"
+	"Dimanche"
 #elif L==6	// gn
-	 "arate&#297;"
+	"arate&#297;"
 #elif L==7	// it
-	 "Domenica"
+	"Domenica"
 #elif L==8	// pl
-	 "Niedziela"
+	"Niedziela"
 #elif L==9	// pt
-	 "Domingo"
+	"Domingo"
 #endif
 	};
 
@@ -7331,133 +7361,140 @@ const char *Txt_degree =
 #endif
 
 const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
-   {
-#if   L==1	// ca	// Deg_STATUS_UNKNOWN
-	 "Desconegudo"
+	{
+	[Deg_STATUS_UNKNOWN] =
+#if   L==1	// ca
+	"Desconegudo"
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocido"
+	"Desconocido"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocido"			// Okoteve traducción
+	"Desconocido"			// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuto"
+	"Sconosciuto"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecido"
+	"Desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Deg_STATUS_ACTIVE
-	 "Activa"
+	,
+	[Deg_STATUS_ACTIVE] =
+#if   L==1	// ca
+	"Activa"
 #elif L==2	// de
-	 "Aktive"
+	"Aktive"
 #elif L==3	// en
-	 "Active"
+	"Active"
 #elif L==4	// es
-	 "Activa"
+	"Activa"
 #elif L==5	// fr
-	 "Actif"
+	"Actif"
 #elif L==6	// gn
-	 "Activa"	// Okoteve traducción
+	"Activa"	// Okoteve traducción
 #elif L==7	// it
-	 "Attiva"
+	"Attiva"
 #elif L==8	// pl
-	 "Aktywne"
+	"Aktywne"
 #elif L==9	// pt
-	 "Ativa"
+	"Ativa"
 #endif
-	 ,
-#if   L==1	// ca	// Deg_STATUS_PENDING
-	 "Nova"
+	,
+	[Deg_STATUS_PENDING] =
+#if   L==1	// ca
+	"Nova"
 #elif L==2	// de
-	 "Neu"
+	"Neu"
 #elif L==3	// en
-	 "New"
+	"New"
 #elif L==4	// es
-	 "Nueva"
+	"Nueva"
 #elif L==5	// fr
-	 "Nouveau"
+	"Nouveau"
 #elif L==6	// gn
-	 "Pyahu"
+	"Pyahu"
 #elif L==7	// it
-	 "Nuovo"
+	"Nuovo"
 #elif L==8	// pl
-	 "Nowy"
+	"Nowy"
 #elif L==9	// pt
-	 "Nova"
+	"Nova"
 #endif
-	 ,
-#if   L==1	// ca	// Deg_STATUS_REMOVED
-	 "Eliminada"
+	,
+	[Deg_STATUS_REMOVED] =
+#if   L==1	// ca
+	"Eliminada"
 #elif L==2	// de
-	 "Entfernt"
+	"Entfernt"
 #elif L==3	// en
-	 "Removed"
+	"Removed"
 #elif L==4	// es
-	 "Eliminada"
+	"Eliminada"
 #elif L==5	// fr
-	 "Supprim&eacute;"
+	"Supprim&eacute;"
 #elif L==6	// gn
-	 "Eliminada"	// Okoteve traducción
+	"Eliminada"	// Okoteve traducción
 #elif L==7	// it
-	 "Rimossa"
+	"Rimossa"
 #elif L==8	// pl
-	 "Usuniete"
+	"Usuniete"
 #elif L==9	// pt
-	 "Suprimida"
+	"Suprimida"
 #endif
 	};
 
 const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
 	{
+	[DT_ORDER_BY_DEGREE_TYPE] =
 #if   L==1	// ca
-	 "Ordenar por tipus de titulaci&oacute;"
+	"Ordenar por tipus de titulaci&oacute;"
 #elif L==2	// de
-	 "Nach Art des Grades sortieren"
+	"Nach Art des Grades sortieren"
 #elif L==3	// en
-	 "Sort by type of degree"
+	"Sort by type of degree"
 #elif L==4	// es
-	 "Ordenar por tipo de titulaci&oacute;n"
+	"Ordenar por tipo de titulaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par type d'&eacute;tude"
+	"Trier par type d'&eacute;tude"
 #elif L==6	// gn
-	 "Ordenar por tipo de titulaci&oacute;n"	// Okoteve traducción
+	"Ordenar por tipo de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per tipo di laurea"
+	"Ordina per tipo di laurea"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug rodzaju stopnia"
+	"Sortuj wed&lstrok;ug rodzaju stopnia"
 #elif L==9	// pt
-	 "Classificar por tipo de grau"
+	"Classificar por tipo de grau"
 #endif
-	 ,
+	,
+	[DT_ORDER_BY_NUM_DEGREES] =
 #if   L==1	// ca
-	 "Ordenar per nombre de titulacions"
+	"Ordenar per nombre de titulacions"
 #elif L==2	// de
-	 "Nach Anzahl der Studieng&auml;nge sortieren"
+	"Nach Anzahl der Studieng&auml;nge sortieren"
 #elif L==3	// en
-	 "Sort by no. of degrees"
+	"Sort by no. of degrees"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de titulaciones"
+	"Ordenar por n&ordm; de titulaciones"
 #elif L==5	// fr
-	 "Trier par nombre d'&eacute;tudes"
+	"Trier par nombre d'&eacute;tudes"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
+	"Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di lauree"
+	"Ordina per numero di lauree"
 #elif L==8	// pl
-	 "Sortuj wedlug stopni"
+	"Sortuj wedlug stopni"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de graus"
+	"Classificar por n&ordm; de graus"
 #endif
 	};
 
 const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
 	{
+	[DT_ORDER_BY_DEGREE_TYPE] =
 #if   L==1	// ca
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -7477,7 +7514,8 @@ const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
 #elif L==9	// pt
 	"Tipos de grau"
 #endif
-	 ,
+	,
+	[DT_ORDER_BY_NUM_DEGREES] =
 #if   L==1	// ca
 	"Titulacions"
 #elif L==2	// de
@@ -7857,88 +7895,92 @@ const char *Txt_Departments_ABBREVIATION =
 #endif
 
 const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
-   {
+	{
+	[Dpt_ORDER_BY_DEPARTMENT] =
 #if   L==1	// ca
-	 "Ordenar por departamento"	// Necessita traduccio
+	"Ordenar por departamento"	// Necessita traduccio
 #elif L==2	// de
-	 "Sortieren nach Abteilung"
+	"Sortieren nach Abteilung"
 #elif L==3	// en
-	 "Sort by department"
+	"Sort by department"
 #elif L==4	// es
-	 "Ordenar por departamento"
+	"Ordenar por departamento"
 #elif L==5	// fr
-	 "Trier par d&eacute;partement"
+	"Trier par d&eacute;partement"
 #elif L==6	// gn
-	 "Ordenar por departamento"	// Okoteve traducción
+	"Ordenar por departamento"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per dipartimento"
+	"Ordina per dipartimento"
 #elif L==8	// pl
-	 "Sortuj wedlug dzial&oacute;w"
+	"Sortuj wedlug dzial&oacute;w"
 #elif L==9	// pt
-	 "Classificar por departamento"
+	"Classificar por departamento"
 #endif
-	 ,
+	,
+	[Dpt_ORDER_BY_NUM_TCHS] =
 #if   L==1	// ca
-	 "Ordenar por n&ordm; de profesores"	// Necessita traduccio
+	"Ordenar por n&ordm; de profesores"	// Necessita traduccio
 #elif L==2	// de
-	 "Sortieren nach Anzahl der Lehrkr&auml;fte"
+	"Sortieren nach Anzahl der Lehrkr&auml;fte"
 #elif L==3	// en
-	 "Sort by no. of teachers"
+	"Sort by no. of teachers"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de profesores"
+	"Ordenar por n&ordm; de profesores"
 #elif L==5	// fr
-	 "Trier par nombre d'enseignants"
+	"Trier par nombre d'enseignants"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de profesores"	// Okoteve traducción
+	"Ordenar por n&ordm; de profesores"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di professori"
+	"Ordina per numero di professori"
 #elif L==8	// pl
-	 "Sortuj wedlug liczby nauczycieli"
+	"Sortuj wedlug liczby nauczycieli"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de professores"
+	"Classificar por n&ordm; de professores"
 #endif
 	};
 
 const char *Txt_DEPARTMENTS_ORDER[Dpt_NUM_ORDERS] =
-   {
+	{
+	[Dpt_ORDER_BY_DEPARTMENT] =
 #if   L==1	// ca
-	 "Departament"
+	"Departament"
 #elif L==2	// de
-	 "Abteilung"
+	"Abteilung"
 #elif L==3	// en
-	 "Department"
+	"Department"
 #elif L==4	// es
-	 "Departamento"
+	"Departamento"
 #elif L==5	// fr
-	 "D&eacute;partement"
+	"D&eacute;partement"
 #elif L==6	// gn
-	 "Peh&#7869;"
+	"Peh&#7869;"
 #elif L==7	// it
-	 "Dipartimento"
+	"Dipartimento"
 #elif L==8	// pl
-	 "Wydzia&lstrok;"
+	"Wydzia&lstrok;"
 #elif L==9	// pt
-	 "Departamento"
+	"Departamento"
 #endif
-	 ,
+	,
+	[Dpt_ORDER_BY_NUM_TCHS] =
 #if   L==1	// ca
-	 "Professors"
+	"Professors"
 #elif L==2	// de
-	 "Lehrkr&auml;fte"
+	"Lehrkr&auml;fte"
 #elif L==3	// en
-	 "Teachers"
+	"Teachers"
 #elif L==4	// es
-	 "Profesores"
+	"Profesores"
 #elif L==5	// fr
-	 "Enseignants"
+	"Enseignants"
 #elif L==6	// gn
-	 "Profesores"	// Okoteve traducción
+	"Profesores"	// Okoteve traducción
 #elif L==7	// it
-	 "Professori"
+	"Professori"
 #elif L==8	// pl
-	 "Nauczycieli"
+	"Nauczycieli"
 #elif L==9	// pt
-	 "Professores"
+	"Professores"
 #endif
 	};
 
@@ -10381,128 +10423,134 @@ const char *Txt_Email_domains_allowed_for_notifications =
 #endif
 
 const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
-   {
+	{
+	[Mai_ORDER_BY_DOMAIN] =
 #if   L==1	// ca
-	 "Ordenar por dominio de correo"	// Necessita traduccio
+	"Ordenar por dominio de correo"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach E-Mail-Dom&auml;ne sortieren"
+	"Nach E-Mail-Dom&auml;ne sortieren"
 #elif L==3	// en
-	 "Sort by email domain"
+	"Sort by email domain"
 #elif L==4	// es
-	 "Ordenar por dominio de correo"
+	"Ordenar por dominio de correo"
 #elif L==5	// fr
-	 "Trier par domaine de messagerie"
+	"Trier par domaine de messagerie"
 #elif L==6	// gn
-	 "Ordenar por dominio de correo"	// Okoteve traducción
+	"Ordenar por dominio de correo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per campo mail"
+	"Ordina per campo mail"
 #elif L==8	// pl
-	 "Sortuj wedlug domeny poczty"
+	"Sortuj wedlug domeny poczty"
 #elif L==9	// pt
-	 "Classificar por dom&iacute;nio de email"
+	"Classificar por dom&iacute;nio de email"
 #endif
-	 ,
+	,
+	[Mai_ORDER_BY_INFO] =
 #if   L==1	// ca
-	 "Ordenar por informaci&oacute;n"	// Necessita traduccio
+	"Ordenar por informaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Information sortieren"
+	"Nach Information sortieren"
 #elif L==3	// en
-	 "Sort by information"
+	"Sort by information"
 #elif L==4	// es
-	 "Ordenar por informaci&oacute;n"
+	"Ordenar por informaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par information"
+	"Trier par information"
 #elif L==6	// gn
-	 "Ordenar por informaci&oacute;n"	// Okoteve traducción
+	"Ordenar por informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per informazione"
+	"Ordina per informazione"
 #elif L==8	// pl
-	 "Sortuj wedlug informacji"
+	"Sortuj wedlug informacji"
 #elif L==9	// pt
-	 "Classificar por informa&ccedil;&atilde;o"
+	"Classificar por informa&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Mai_ORDER_BY_USERS] =
 #if   L==1	// ca
-	 "Ordenar por n&ordm; de usuarios"	// Necessita traduccio
+	"Ordenar por n&ordm; de usuarios"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Anzahl der Benutzer sortieren"
+	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
-	 "Sort by no. of users"
+	"Sort by no. of users"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de usuarios"
+	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	 "Trier par nombre d'utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de usuarios"	// Okoteve traducción
+	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di utenti"
+	"Ordina per numero di utenti"
 #elif L==8	// pl
-	 "Sortuj wedlug numerow uzytkownikow"
+	"Sortuj wedlug numerow uzytkownikow"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de utilizadores"
+	"Classificar por n&ordm; de utilizadores"
 #endif
 	};
 
 const char *Txt_EMAIL_DOMAIN_ORDER[Mai_NUM_ORDERS] =
-   {
+	{
+	[Mai_ORDER_BY_DOMAIN] =
 #if   L==1	// ca
-	 "Domini de correu"
+	"Domini de correu"
 #elif L==2	// de
-	 "E-Mail-Dom&auml;ne"
+	"E-Mail-Dom&auml;ne"
 #elif L==3	// en
-	 "Email domain"
+	"Email domain"
 #elif L==4	// es
-	 "Dominio de correo"
+	"Dominio de correo"
 #elif L==5	// fr
-	 "Domaine de messagerie"
+	"Domaine de messagerie"
 #elif L==6	// gn
-	 "Dominio de correo"	// Okoteve traducción
+	"Dominio de correo"	// Okoteve traducción
 #elif L==7	// it
-	 "Campo mail"
+	"Campo mail"
 #elif L==8	// pl
-	 "Domeny poczty"
+	"Domeny poczty"
 #elif L==9	// pt
-	 "Dom&iacute;nio de email"
+	"Dom&iacute;nio de email"
 #endif
-	 ,
+	,
+	[Mai_ORDER_BY_INFO] =
 #if   L==1	// ca
-	 "Informaci&oacute;"
+	"Informaci&oacute;"
 #elif L==2	// de
-	 "Information"
+	"Information"
 #elif L==3	// en
-	 "Information"
+	"Information"
 #elif L==4	// es
-	 "Informaci&oacute;n"
+	"Informaci&oacute;n"
 #elif L==5	// fr
-	 "Information"
+	"Information"
 #elif L==6	// gn
-	 "Informaci&oacute;n"	// Okoteve traducción
+	"Informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Informazione"
+	"Informazione"
 #elif L==8	// pl
-	 "Informacja"
+	"Informacja"
 #elif L==9	// pt
-	 "Informa&ccedil;&atilde;o"
+	"Informa&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Mai_ORDER_BY_USERS] =
 #if   L==1	// ca
-	 "Usuaris"
+	"Usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarios"
+	"Usuarios"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Usuarios"	// Okoteve traducción
+	"Usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "Uzytkownikow"
+	"Uzytkownikow"
 #elif L==9	// pt
-	 "Utilizadores"
+	"Utilizadores"
 #endif
 	};
 
@@ -10967,23 +11015,23 @@ const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_priv
 
 const char *Txt_Events =
 #if   L==1	// ca
-	 "Esdeveniments";
+	"Esdeveniments";
 #elif L==2	// de
-	 "Ereignisse";
+	"Ereignisse";
 #elif L==3	// en
-	 "Events";
+	"Events";
 #elif L==4	// es
-	 "Eventos";
+	"Eventos";
 #elif L==5	// fr
-	 "&Eacute;v&eacute;nements";
+	"&Eacute;v&eacute;nements";
 #elif L==6	// gn
-	 "Eventos";	// Okoteve traducción
+	"Eventos";	// Okoteve traducción
 #elif L==7	// it
-	 "Eventi";
+	"Eventi";
 #elif L==8	// pl
-	 "Wydarzen";
+	"Wydarzen";
 #elif L==9	// pt
-	 "Eventos";
+	"Eventos";
 #endif
 
 const char *Txt_Exam =
@@ -12627,7 +12675,7 @@ const char *Txt_Follow =
 #endif
 
 const char *Txt_FollowPerFollow[2] =
-      {
+   	{
 #if   L==1	// ca
 	"Mitjana de seguits per cada seguidor"
 #elif L==2	// de
@@ -12645,7 +12693,7 @@ const char *Txt_FollowPerFollow[2] =
 #elif L==8	// pl
         "&Sacute;rednia liczba obserwowani za obserwuj&aogon;"
 #elif L==9	// pt
-	 "M&eacute;dia por seguidos por seguidor"
+	"M&eacute;dia por seguidos por seguidor"
 #endif
       ,
 #if   L==1	// ca
@@ -13153,133 +13201,137 @@ const char *Txt_Forum_threads =
 #endif
 
 const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
-   {
+	{
+	[For_FIRST_MSG] =
 #if   L==1	// ca
-	 "Ordenar por fecha del primer mensaje"	// Necessita traduccio
+	"Ordenar por fecha del primer mensaje"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Datum der Nachrichten sortieren (aufsteigend)"
+	"Nach Datum der Nachrichten sortieren (aufsteigend)"
 #elif L==3	// en
-	 "Sort by date of first message"
+	"Sort by date of first message"
 #elif L==4	// es
-	 "Ordenar por fecha del primer mensaje"
+	"Ordenar por fecha del primer mensaje"
 #elif L==5	// fr
-	 "Trier par date du premier message"
+	"Trier par date du premier message"
 #elif L==6	// gn
-	 "Ordenar por fecha del primer mensaje"	// Okoteve traducción
+	"Ordenar por fecha del primer mensaje"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data del primo messaggio"
+	"Ordina per data del primo messaggio"
 #elif L==8	// pl
-	 "Sortuj wedlug daty pierwszej wiadomosci"
+	"Sortuj wedlug daty pierwszej wiadomosci"
 #elif L==9	// pt
-	 "Classificar por data da primeira mensagem"
+	"Classificar por data da primeira mensagem"
 #endif
-	 ,
+	,
+	[For_LAST_MSG] =
 #if   L==1	// ca
-	 "Ordenar por fecha del &uacute;ltimo mensaje"	// Necessita traduccio
+	"Ordenar por fecha del &uacute;ltimo mensaje"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Datum der Nachrichten sortieren (absteigend)"
+	"Nach Datum der Nachrichten sortieren (absteigend)"
 #elif L==3	// en
-	 "Sort by date of the last message"
+	"Sort by date of the last message"
 #elif L==4	// es
-	 "Ordenar por fecha del &uacute;ltimo mensaje"
+	"Ordenar por fecha del &uacute;ltimo mensaje"
 #elif L==5	// fr
-	 "Trier par date du dernier message"
+	"Trier par date du dernier message"
 #elif L==6	// gn
-	 "Ordenar por fecha del &uacute;ltimo mensaje"	// Okoteve traducción
+	"Ordenar por fecha del &uacute;ltimo mensaje"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data dell'ultimo messaggio"
+	"Ordina per data dell'ultimo messaggio"
 #elif L==8	// pl
-	 "Sortuj wedlug daty ostatniego komunikatu"
+	"Sortuj wedlug daty ostatniego komunikatu"
 #elif L==9	// pt
-	 "Classificar pela data da &uacute;ltima mensagem"
+	"Classificar pela data da &uacute;ltima mensagem"
 #endif
 	};
 
 const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
-   {
+	{
+	[For_FIRST_MSG] =
 #if   L==1	// ca
-	 "Primer comentari"
+	"Primer comentari"
 #elif L==2	// de
-	 "Erste Post"
+	"Erste Post"
 #elif L==3	// en
-	 "First post"
+	"First post"
 #elif L==4	// es
-	 "Primer comentario"
+	"Primer comentario"
 #elif L==5	// fr
-	 "Premier post"
+	"Premier post"
 #elif L==6	// gn
-	 "Primer comentario"	// Okoteve traducción
+	"Primer comentario"	// Okoteve traducción
 #elif L==7	// it
-	 "Primo post"
+	"Primo post"
 #elif L==8	// pl
-	 "Pierwsza post"
+	"Pierwsza post"
 #elif L==9	// pt
-	 "Primeira post"
+	"Primeira post"
 #endif
-	 ,
+	,
+	[For_LAST_MSG] =
 #if   L==1	// ca
-	 "&Uacute;ltim comentari"
+	"&Uacute;ltim comentari"
 #elif L==2	// de
-	 "Letzte Post"
+	"Letzte Post"
 #elif L==3	// en
-	 "Last post"
+	"Last post"
 #elif L==4	// es
-	 "&Uacute;ltimo comentario"
+	"&Uacute;ltimo comentario"
 #elif L==5	// fr
-	 "Dernier post"
+	"Dernier post"
 #elif L==6	// gn
-	 "&Uacute;ltimo comentario"	// Okoteve traducción
+	"&Uacute;ltimo comentario"	// Okoteve traducción
 #elif L==7	// it
-	 "Ultimo post"
+	"Ultimo post"
 #elif L==8	// pl
-	 "Ostatnia post"
+	"Ostatnia post"
 #elif L==9	// pt
-	 "&Uacute;ltima post"
+	"&Uacute;ltima post"
 #endif
 	};
 
 const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
-   {
-	 // For_ONLY_CURRENT_FORUMS
+	{
+	[For_ONLY_CURRENT_FORUMS] =
 #if   L==1	// ca
-	 "F&ograve;rums d'aquest lloc"
+	"F&ograve;rums d'aquest lloc"
 #elif L==2	// de
-	 "Foren zu diesem Standort"
+	"Foren zu diesem Standort"
 #elif L==3	// en
-	 "Forums of this location"
+	"Forums of this location"
 #elif L==4	// es
-	 "Foros de este sitio"
+	"Foros de este sitio"
 #elif L==5	// fr
-	 "Forums de cet emplacement"
+	"Forums de cet emplacement"
 #elif L==6	// gn
-	 "Foros de este sitio"	// Okoteve traducción
+	"Foros de este sitio"	// Okoteve traducción
 #elif L==7	// it
-	 "Forum di questo sito"
+	"Forum di questo sito"
 #elif L==8	// pl
-	 "Forum tej lokalizacji"
+	"Forum tej lokalizacji"
 #elif L==9	// pt
-	 "F&oacute;runs deste site"
+	"F&oacute;runs deste site"
 #endif
-	 ,
-	 // For_ALL_MY_FORUMS
+	,
+	[For_ALL_MY_FORUMS] =
 #if   L==1	// ca
-	 "Tots els meus f&ograve;rums"
+	"Tots els meus f&ograve;rums"
 #elif L==2	// de
-	 "Alle meine Foren"
+	"Alle meine Foren"
 #elif L==3	// en
-	 "All my forums"
+	"All my forums"
 #elif L==4	// es
-	 "Todos mis foros"
+	"Todos mis foros"
 #elif L==5	// fr
-	 "Tous mes forums"
+	"Tous mes forums"
 #elif L==6	// gn
-	 "Todos mis foros"	// Okoteve traducción
+	"Todos mis foros"	// Okoteve traducción
 #elif L==7	// it
-	 "Tutti i miei forum"
+	"Tutti i miei forum"
 #elif L==8	// pl
-	 "Wszystkie moje forum"
+	"Wszystkie moje forum"
 #elif L==9	// pt
-	 "Todos os meus f&oacute;runs"
+	"Todos os meus f&oacute;runs"
 #endif
 	};
 
@@ -13680,47 +13732,50 @@ const char *Txt_Games =
 #endif
 
 const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
-   {		// Gam_ORDER_BY_START_DATE
+	{
+	[Gam_ORDER_BY_START_DATE] =
 #if   L==1	// ca
-	 "Inici"
+	"Inici"
 #elif L==2	// de
-	 "Start"
+	"Start"
 #elif L==3	// en
-	 "Start"
+	"Start"
 #elif L==4	// es
-	 "Inicio"
+	"Inicio"
 #elif L==5	// fr
-	 "D&eacute;but"
+	"D&eacute;but"
 #elif L==6	// gn
-	 "&Ntilde;epyr&utilde;"
+	"&Ntilde;epyr&utilde;"
 #elif L==7	// it
-	 "Inizio"
+	"Inizio"
 #elif L==8	// pl
-	 "Pocz&aogon;tek"
+	"Pocz&aogon;tek"
 #elif L==9	// pt
-	 "In&iacute;cio"
+	"In&iacute;cio"
 #endif
-	 ,	// Gam_ORDER_BY_END_DATE
+	,
+	[Gam_ORDER_BY_END_DATE] =
 #if   L==1	// ca
-	 "Final"
+	"Final"
 #elif L==2	// de
-	 "Ende"
+	"Ende"
 #elif L==3	// en
-	 "End"
+	"End"
 #elif L==4	// es
-	 "Final"
+	"Final"
 #elif L==5	// fr
-	 "Fin"
+	"Fin"
 #elif L==6	// gn
-	 "Paha"
+	"Paha"
 #elif L==7	// it
-	 "Fine"
+	"Fine"
 #elif L==8	// pl
-	 "Koniec"
+	"Koniec"
 #elif L==9	// pt
-	 "Fim"
+	"Fim"
 #endif
-	 ,	// Gam_ORDER_BY_TITLE
+	,
+	[Gam_ORDER_BY_TITLE] =
 #if   L==1	// ca
 	"Joc"
 #elif L==2	// de
@@ -13743,65 +13798,68 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 	};
 
 const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
-   {		// Gam_ORDER_BY_START_DATE
+	{
+	[Gam_ORDER_BY_START_DATE] =
 #if   L==1	// ca
-	 "Ordenar per data de comen&ccedil;ament"
+	"Ordenar per data de comen&ccedil;ament"
 #elif L==2	// de
-	 "Sortieren nach Startdatum"
+	"Sortieren nach Startdatum"
 #elif L==3	// en
-	 "Sort by start date"
+	"Sort by start date"
 #elif L==4	// es
-	 "Ordenar por fecha de comienzo"
+	"Ordenar por fecha de comienzo"
 #elif L==5	// fr
-	 "Trier par date de d&eacute;but"
+	"Trier par date de d&eacute;but"
 #elif L==6	// gn
-	 "Ordenar por fecha de comienzo"	// Okoteve traducción
+	"Ordenar por fecha de comienzo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data di inizio"
+	"Ordina per data di inizio"
 #elif L==8	// pl
-	 "Sortuj wedlug daty rozpoczecia"
+	"Sortuj wedlug daty rozpoczecia"
 #elif L==9	// pt
-	 "Classificar por data de in&iacute;cio"
+	"Classificar por data de in&iacute;cio"
 #endif
-	 ,
+	,
+	[Gam_ORDER_BY_END_DATE] =
 #if   L==1	// ca
-	 "Ordenar per data de finalitzaci&oacute;"
+	"Ordenar per data de finalitzaci&oacute;"
 #elif L==2	// de
-	 "Sortieren nach Enddatum"
+	"Sortieren nach Enddatum"
 #elif L==3	// en
-	 "Sort by end date"
+	"Sort by end date"
 #elif L==4	// es
-	 "Ordenar por fecha de finalizaci&oacute;n"
+	"Ordenar por fecha de finalizaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par date de fin"
+	"Trier par date de fin"
 #elif L==6	// gn
-	 "Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+	"Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data di fine"
+	"Ordina per data di fine"
 #elif L==8	// pl
-	 "Sortuj wedlug daty zakonczenia"
+	"Sortuj wedlug daty zakonczenia"
 #elif L==9	// pt
-	 "Classificar por data de t&eacute;rmino"
+	"Classificar por data de t&eacute;rmino"
 #endif
-	 ,	// Gam_ORDER_BY_TITLE
+	,
+	[Gam_ORDER_BY_TITLE] =
 #if   L==1	// ca
-	 "Ordenar per t&iacute;tol del joc"
+	"Ordenar per t&iacute;tol del joc"
 #elif L==2	// de
-	 "Sortieren nach Spieltitel"
+	"Sortieren nach Spieltitel"
 #elif L==3	// en
-	 "Sort by game title"
+	"Sort by game title"
 #elif L==4	// es
-	 "Ordenar por t&iacute;tulo del juego"
+	"Ordenar por t&iacute;tulo del juego"
 #elif L==5	// fr
-	 "Trier par titre de jeu"
+	"Trier par titre de jeu"
 #elif L==6	// gn
-	 "Ordenar por t&iacute;tulo del juego"	// Okoteve traducción
+	"Ordenar por t&iacute;tulo del juego"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per titolo del gioco"
+	"Ordina per titolo del gioco"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug tytu&lstrok;u gry"
+	"Sortuj wed&lstrok;ug tytu&lstrok;u gry"
 #elif L==9	// pt
-	 "Classificar por t&iacute;tulo do jogo"
+	"Classificar por t&iacute;tulo do jogo"
 #endif
 	};
 
@@ -14268,7 +14326,7 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 #endif
 
 const char *Txt_GROUP_WHICH_GROUPS[2] =
-   {
+	{
 #if   L==1	// ca
 	"Nom&eacute;s els meus grups"
 #elif L==2	// de
@@ -14836,45 +14894,47 @@ const char *Txt_Holiday_X_removed =	// Warning: it is very important to include 
 #endif
 
 const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
-   {
+	{
+	[Hld_HOLIDAY] =
 #if   L==1	// ca
-	 "D&iacute;a festivo"	// Necessita traduccio
+	"D&iacute;a festivo"	// Necessita traduccio
 #elif L==2	// de
-	 "Urlaub"
+	"Urlaub"
 #elif L==3	// en
-	 "Holiday"
+	"Holiday"
 #elif L==4	// es
-	 "D&iacute;a festivo"
+	"D&iacute;a festivo"
 #elif L==5	// fr
-	 "Jour f&eacute;ri&eacute;"
+	"Jour f&eacute;ri&eacute;"
 #elif L==6	// gn
-	 "Arete"
+	"Arete"
 #elif L==7	// it
-	 "Festivit&agrave;"
+	"Festivit&agrave;"
 #elif L==8	// pl
-	 "wakacje"
+	"wakacje"
 #elif L==9	// pt
-	 "Feriado"
+	"Feriado"
 #endif
-	 ,
+	,
+	[Hld_NON_SCHOOL_PERIOD] =
 #if   L==1	// ca
-	 "Per&iacute;odo no lectivo"	// Necessita traduccio
+	"Per&iacute;odo no lectivo"	// Necessita traduccio
 #elif L==2	// de
-	 "Non-Schule Zeitraum"
+	"Non-Schule Zeitraum"
 #elif L==3	// en
-	 "Non school period"
+	"Non school period"
 #elif L==4	// es
-	 "Per&iacute;odo no lectivo"
+	"Per&iacute;odo no lectivo"
 #elif L==5	// fr
-	 "P&eacute;riode sans &eacute;cole"
+	"P&eacute;riode sans &eacute;cole"
 #elif L==6	// gn
-	 "Per&iacute;odo no lectivo"	// Okoteve traducción
+	"Per&iacute;odo no lectivo"	// Okoteve traducción
 #elif L==7	// it
-	 "Periodo senza lezione"
+	"Periodo senza lezione"
 #elif L==8	// pl
-	 "Okres nauki szkolnej dla"
+	"Okres nauki szkolnej dla"
 #elif L==9	// pt
-	 "Per&iacute;odo sem escola"
+	"Per&iacute;odo sem escola"
 #endif
 	};
 
@@ -14900,88 +14960,92 @@ const char *Txt_Holidays =
 #endif
 
 const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
-   {
+	{
+	[Hld_ORDER_BY_PLACE] =
 #if   L==1	// ca
-	 "Ordenar por lugar"	// Necessita traduccio
+	"Ordenar por lugar"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Standort sortieren"
+	"Nach Standort sortieren"
 #elif L==3	// en
-	 "Sort by place"
+	"Sort by place"
 #elif L==4	// es
-	 "Ordenar por lugar"
+	"Ordenar por lugar"
 #elif L==5	// fr
-	 "Trier par emplacement"
+	"Trier par emplacement"
 #elif L==6	// gn
-	 "Ordenar por lugar"	// Okoteve traducción
+	"Ordenar por lugar"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per localit&grave;"
+	"Ordina per localit&grave;"
 #elif L==8	// pl
-	 "Sortuj wedlug miejsca"
+	"Sortuj wedlug miejsca"
 #elif L==9	// pt
-	 "Classificar por localiza&ccedil;&atilde;o"
+	"Classificar por localiza&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Hld_ORDER_BY_START_DATE] =
 #if   L==1	// ca
-	 "Ordenar por fecha"	// Necessita traduccio
+	"Ordenar por fecha"	// Necessita traduccio
 #elif L==2	// de
-	 "Sortieren nach Datum"
+	"Sortieren nach Datum"
 #elif L==3	// en
-	 "Sort by date"
+	"Sort by date"
 #elif L==4	// es
-	 "Ordenar por fecha"
+	"Ordenar por fecha"
 #elif L==5	// fr
-	 "Trier par date"
+	"Trier par date"
 #elif L==6	// gn
-	 "Ordenar por fecha"	// Okoteve traducción
+	"Ordenar por fecha"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data"
+	"Ordina per data"
 #elif L==8	// pl
-	 "Sortuj wedlug daty"
+	"Sortuj wedlug daty"
 #elif L==9	// pt
-	 "Classificar por data"
+	"Classificar por data"
 #endif
 	};
 
 const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
-   {
+	{
+	[Hld_ORDER_BY_PLACE] =
 #if   L==1	// ca
-	 "Lloc"
+	"Lloc"
 #elif L==2	// de
-	 "Standort"
+	"Standort"
 #elif L==3	// en
-	 "Place"
+	"Place"
 #elif L==4	// es
-	 "Lugar"
+	"Lugar"
 #elif L==5	// fr
-	 "Emplacement"
+	"Emplacement"
 #elif L==6	// gn
-	 "Tenda"
+	"Tenda"
 #elif L==7	// it
-	 "Luogo"
+	"Luogo"
 #elif L==8	// pl
-	 "Miejsce"
+	"Miejsce"
 #elif L==9	// pt
-	 "Localiza&ccedil;&atilde;o"
+	"Localiza&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Hld_ORDER_BY_START_DATE] =
 #if   L==1	// ca
-	 "Data inicial"
+	"Data inicial"
 #elif L==2	// de
-	 "Startdatum"
+	"Startdatum"
 #elif L==3	// en
-	 "Start date"
+	"Start date"
 #elif L==4	// es
-	 "Fecha inicial"
+	"Fecha inicial"
 #elif L==5	// fr
-	 "Date initiale"
+	"Date initiale"
 #elif L==6	// gn
-	 "Fecha inicial"	// Okoteve traducción
+	"Fecha inicial"	// Okoteve traducción
 #elif L==7	// it
-	 "Data iniziale"
+	"Data iniziale"
 #elif L==8	// pl
-	 "Data rozpoczecia"
+	"Data rozpoczecia"
 #elif L==9	// pt
-	 "Data de in&iacute;cio"
+	"Data de in&iacute;cio"
 #endif
 	};
 
@@ -15715,322 +15779,330 @@ const char *Txt_Indicators_of_courses =
 
 const char *Txt_Info =
 #if   L==1	// ca
-	 "Info";
+	"Info";
 #elif L==2	// de
-	 "Info";
+	"Info";
 #elif L==3	// en
-	 "Info";
+	"Info";
 #elif L==4	// es
-	 "Info";
+	"Info";
 #elif L==5	// fr
-	 "Info";
+	"Info";
 #elif L==6	// gn
-	 "Info";	// Okoteve traducción
+	"Info";	// Okoteve traducción
 #elif L==7	// it
-	 "Informazione";
+	"Informazione";
 #elif L==8	// pl
-	 "Info";
+	"Info";
 #elif L==9	// pt
-	 "Info";
+	"Info";
 #endif
 
 const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
-   {
-   // Inf_INTRODUCTION
+	{
+	[Inf_INTRODUCTION] =
 #if   L==1	// ca
-	 "Informaci&oacute;"
+	"Informaci&oacute;"
 #elif L==2	// de
-	 "Information"
+	"Information"
 #elif L==3	// en
-	 "Information"
+	"Information"
 #elif L==4	// es
-	 "Informaci&oacute;n"
+	"Informaci&oacute;n"
 #elif L==5	// fr
-	 "Information"
+	"Information"
 #elif L==6	// gn
-	 "Informaci&oacute;n"	// Okoteve traducción
+	"Informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Informazione"
+	"Informazione"
 #elif L==8	// pl
-	 "Informacja"
+	"Informacja"
 #elif L==9	// pt
-	 "Informa&ccedil;&atilde;o"
+	"Informa&ccedil;&atilde;o"
 #endif
-	 ,
-	 // Inf_TEACHING_GUIDE
+	,
+	[Inf_TEACHING_GUIDE] =
 #if   L==1	// ca
-	 "Guia docent"
+	"Guia docent"
 #elif L==2	// de
-	 "Hinweise zur Kurs"
+	"Hinweise zur Kurs"
 #elif L==3	// en
-	 "Teaching guide"
+	"Teaching guide"
 #elif L==4	// es
-	 "Gu&iacute;a docente"
+	"Gu&iacute;a docente"
 #elif L==5	// fr
-	 "Guide p&eacute;dagogique"
+	"Guide p&eacute;dagogique"
 #elif L==6	// gn
-	 "Gu&iacute;a docente"	// Okoteve traducción
+	"Gu&iacute;a docente"	// Okoteve traducción
 #elif L==7	// it
-	 "Guida didattica"
+	"Guida didattica"
 #elif L==8	// pl
-	 "Nauczanie przypomnienie"
+	"Nauczanie przypomnienie"
 #elif L==9	// pt
-	 "Guia de ensino"
+	"Guia de ensino"
 #endif
-	 ,
-	 // Inf_LECTURES
+	,
+	[Inf_LECTURES] =
 #if   L==1	// ca
-	 "Programa teoria"
+	"Programa teoria"
 #elif L==2	// de
-	 "Studienplan (Vorlesungen)"
+	"Studienplan (Vorlesungen)"
 #elif L==3	// en
-	 "Syllabus (lectures)"
+	"Syllabus (lectures)"
 #elif L==4	// es
-	 "Programa teor&iacute;a"
+	"Programa teor&iacute;a"
 #elif L==5	// fr
-	 "Plan th&eacute;orie"
+	"Plan th&eacute;orie"
 #elif L==6	// gn
-	 "Programa teor&iacute;a"	// Okoteve traducción
+	"Programa teor&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	 "Programma teoria"
+	"Programma teoria"
 #elif L==8	// pl
-	 "Syllabus (wyklady)"
+	"Syllabus (wyklady)"
 #elif L==9	// pt
-	 "Programa teoria"
+	"Programa teoria"
 #endif
-	 ,
-	 // Inf_PRACTICALS
+	,
+	[Inf_PRACTICALS] =
 #if   L==1	// ca
-	 "Programa pr&agrave;ctiques"
+	"Programa pr&agrave;ctiques"
 #elif L==2	// de
-	 "Studienplan (&Uuml;bungen)"
+	"Studienplan (&Uuml;bungen)"
 #elif L==3	// en
-	 "Syllabus (practicals)"
+	"Syllabus (practicals)"
 #elif L==4	// es
-	 "Programa pr&aacute;cticas"
+	"Programa pr&aacute;cticas"
 #elif L==5	// fr
-	 "Plan pratique"
+	"Plan pratique"
 #elif L==6	// gn
-	 "Programa pr&aacute;cticas"	// Okoteve traducción
+	"Programa pr&aacute;cticas"	// Okoteve traducción
 #elif L==7	// it
-	 "Programma pratica"
+	"Programma pratica"
 #elif L==8	// pl
-	 "Syllabus (practicals)"
+	"Syllabus (practicals)"
 #elif L==9	// pt
-	 "Programa pr&aacute;tica"
+	"Programa pr&aacute;tica"
 #endif
-	 ,
-	 // Inf_BIBLIOGRAPHY
+	,
+	[Inf_BIBLIOGRAPHY] =
 #if   L==1	// ca
-	 "Bibliografia"
+	"Bibliografia"
 #elif L==2	// de
-	 "Literatur"
+	"Literatur"
 #elif L==3	// en
-	 "Bibliography"
+	"Bibliography"
 #elif L==4	// es
-	 "Bibliograf&iacute;a"
+	"Bibliograf&iacute;a"
 #elif L==5	// fr
-	 "Bibliographie"
+	"Bibliographie"
 #elif L==6	// gn
-	 "Arandukapurupyre"
+	"Arandukapurupyre"
 #elif L==7	// it
-	 "Bibliografia"
+	"Bibliografia"
 #elif L==8	// pl
-	 "Bibliografia"
+	"Bibliografia"
 #elif L==9	// pt
-	 "Bibliografia"
+	"Bibliografia"
 #endif
-	 ,
-	 // Inf_FAQ
+	,
+	[Inf_FAQ] =
 #if   L==1	// ca
-	 "FAQ"
+	"FAQ"
 #elif L==2	// de
-	 "FAQ"
+	"FAQ"
 #elif L==3	// en
-	 "FAQ"
+	"FAQ"
 #elif L==4	// es
-	 "FAQ"
+	"FAQ"
 #elif L==5	// fr
-	 "FAQ"
+	"FAQ"
 #elif L==6	// gn
-	 "FAQ"	// Okoteve traducción
+	"FAQ"	// Okoteve traducción
 #elif L==7	// it
-	 "FAQ"
+	"FAQ"
 #elif L==8	// pl
-	 "FAQ"
+	"FAQ"
 #elif L==9	// pt
-	 "FAQ"
+	"FAQ"
 #endif
-	 ,
-	 // Inf_LINKS
+	,
+	[Inf_LINKS] =
 #if   L==1	// ca
-	 "Enlla&ccedil;os"
+	"Enlla&ccedil;os"
 #elif L==2	// de
-	 "Links"
+	"Links"
 #elif L==3	// en
-	 "Links"
+	"Links"
 #elif L==4	// es
-	 "Enlaces"
+	"Enlaces"
 #elif L==5	// fr
-	 "Liens"
+	"Liens"
 #elif L==6	// gn
-	 "Ambu&eacute;re joaju"
+	"Ambu&eacute;re joaju"
 #elif L==7	// it
-	 "Link"
+	"Link"
 #elif L==8	// pl
-	 "Linki"
+	"Linki"
 #elif L==9	// pt
-	 "Liga&ccedil;&otilde;es"
+	"Liga&ccedil;&otilde;es"
 #endif
-	 ,
-	 // Inf_ASSESSMENT
+	,
+	[Inf_ASSESSMENT] =
 #if   L==1	// ca
-	 "Sistema d'avaluaci&oacute;"
+	"Sistema d'avaluaci&oacute;"
 #elif L==2	// de
-	 "Bewertungssystem"
+	"Bewertungssystem"
 #elif L==3	// en
-	 "Assessment system"
+	"Assessment system"
 #elif L==4	// es
-	 "Sistema de evaluaci&oacute;n"
+	"Sistema de evaluaci&oacute;n"
 #elif L==5	// fr
-	 "Syst&egrave;me d'&eacute;valuation"
+	"Syst&egrave;me d'&eacute;valuation"
 #elif L==6	// gn
-	 "Sistema de evaluaci&oacute;n"	// Okoteve traducción
+	"Sistema de evaluaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Sistema di valutazione"
+	"Sistema di valutazione"
 #elif L==8	// pl
-	 "System oceniania"
+	"System oceniania"
 #elif L==9	// pt
-	 "Sistema de avalia&ccedil;&atilde;o"
+	"Sistema de avalia&ccedil;&atilde;o"
 #endif
 	};
 
 const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
-   {
+	{
+	[Inf_INFO_SRC_NONE] =
 #if   L==1	// ca
-	 "No ofrecer ninguna informaci&oacute;n"	// Necessita traduccio
+	"No ofrecer ninguna informaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Geben keine Auskunft"
+	"Geben keine Auskunft"
 #elif L==3	// en
-	 "Do not give any information"
+	"Do not give any information"
 #elif L==4	// es
-	 "No ofrecer ninguna informaci&oacute;n"
+	"No ofrecer ninguna informaci&oacute;n"
 #elif L==5	// fr
-	 "Ne pas donner d'information"
+	"Ne pas donner d'information"
 #elif L==6	// gn
-	 "No ofrecer ninguna informaci&oacute;n"	// Okoteve traducción
+	"No ofrecer ninguna informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Non dare alcuna informazione"
+	"Non dare alcuna informazione"
 #elif L==8	// pl
-	 "Nie podawaj zadnych informacji"
+	"Nie podawaj zadnych informacji"
 #elif L==9	// pt
-	 "N&atilde;o d&ecirc; nenhuma informa&ccedil;&atilde;o"
+	"N&atilde;o d&ecirc; nenhuma informa&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_EDITOR] =
 #if   L==1	// ca
-	 "Editor interno"	// Necessita traduccio
+	"Editor interno"	// Necessita traduccio
 #elif L==2	// de
-	 "Interner Editor"
+	"Interner Editor"
 #elif L==3	// en
-	 "Internal editor"
+	"Internal editor"
 #elif L==4	// es
-	 "Editor interno"
+	"Editor interno"
 #elif L==5	// fr
-	 "&Eacute;diteur interne"
+	"&Eacute;diteur interne"
 #elif L==6	// gn
-	 "Editor interno"	// Okoteve traducción
+	"Editor interno"	// Okoteve traducción
 #elif L==7	// it
-	 "Editor interno"
+	"Editor interno"
 #elif L==8	// pl
-	 "Wewnetrzny edytor"
+	"Wewnetrzny edytor"
 #elif L==9	// pt
-	 "Interno editor"
+	"Interno editor"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_PLAIN_TEXT] =
 #if   L==1	// ca
-	 "Text sense format"
+	"Text sense format"
 #elif L==2	// de
-	 "Plain Text"
+	"Plain Text"
 #elif L==3	// en
-	 "Plain text"
+	"Plain text"
 #elif L==4	// es
-	 "Texto sin formato"
+	"Texto sin formato"
 #elif L==5	// fr
-	 "Texte brut"
+	"Texte brut"
 #elif L==6	// gn
-	 "Texto sin formato"	// Okoteve traducción
+	"Texto sin formato"	// Okoteve traducción
 #elif L==7	// it
-	 "Testo normale"
+	"Testo normale"
 #elif L==8	// pl
-	 "Zwykly tekst"
+	"Zwykly tekst"
 #elif L==9	// pt
-	 "Texto plano"
+	"Texto plano"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_RICH_TEXT] =
 #if   L==1	// ca
-	 "Text enriquit"
+	"Text enriquit"
 #elif L==2	// de
-	 "Rich Text"
+	"Rich Text"
 #elif L==3	// en
-	 "Rich text"
+	"Rich text"
 #elif L==4	// es
-	 "Texto enriquecido"
+	"Texto enriquecido"
 #elif L==5	// fr
-	 "Texte enrichi"
+	"Texte enrichi"
 #elif L==6	// gn
-	 "Texto enriquecido"	// Okoteve traducción
+	"Texto enriquecido"	// Okoteve traducción
 #elif L==7	// it
-	 "Testo formattato"
+	"Testo formattato"
 #elif L==8	// pl
-	 "Rich text"		// Potrzebujesz tlumaczenie
+	"Rich text"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Texto enriquecido"
+	"Texto enriquecido"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_PAGE] =
 #if   L==1	// ca
-	 "P&aacute;gina web alojada aqu&iacute;"	// Necessita traduccio
+	"P&aacute;gina web alojada aqu&iacute;"	// Necessita traduccio
 #elif L==2	// de
-	 "Webseite gehostet hier"
+	"Webseite gehostet hier"
 #elif L==3	// en
-	 "Web page hosted here"
+	"Web page hosted here"
 #elif L==4	// es
-	 "P&aacute;gina web alojada aqu&iacute;"
+	"P&aacute;gina web alojada aqu&iacute;"
 #elif L==5	// fr
-	 "Page web h&eacute;berg&eacute;e ici"
+	"Page web h&eacute;berg&eacute;e ici"
 #elif L==6	// gn
-	 "P&aacute;gina web alojada aqu&iacute;"	// Okoteve traducción
+	"P&aacute;gina web alojada aqu&iacute;"	// Okoteve traducción
 #elif L==7	// it
-	 "Pagina web ospitata qui"
+	"Pagina web ospitata qui"
 #elif L==8	// pl
-	 "Strona internetowa hostowana tutaj"
+	"Strona internetowa hostowana tutaj"
 #elif L==9	// pt
-	 "P&aacute;gina Web hospedada aqui"
+	"P&aacute;gina Web hospedada aqui"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_URL] =
 #if   L==1	// ca
-	 "P&aacute;gina web alojada en otro servidor"	// Necessita traduccio
+	"P&aacute;gina web alojada en otro servidor"	// Necessita traduccio
 #elif L==2	// de
-	 "Webseite auf einem anderen Server gehostet"
+	"Webseite auf einem anderen Server gehostet"
 #elif L==3	// en
-	 "Web page hosted on another server"
+	"Web page hosted on another server"
 #elif L==4	// es
-	 "P&aacute;gina web alojada en otro servidor"
+	"P&aacute;gina web alojada en otro servidor"
 #elif L==5	// fr
-	 "Page Web h&eacute;berg&eacute;e sur un autre serveur"
+	"Page Web h&eacute;berg&eacute;e sur un autre serveur"
 #elif L==6	// gn
-	 "P&aacute;gina web alojada en otro servidor"	// Okoteve traducción
+	"P&aacute;gina web alojada en otro servidor"	// Okoteve traducción
 #elif L==7	// it
-	 "Pagina Web ospitata su un altro server"
+	"Pagina Web ospitata su un altro server"
 #elif L==8	// pl
-	 "Strona internetowa umieszczona na innym serwerze"
+	"Strona internetowa umieszczona na innym serwerze"
 #elif L==9	// pt
-	 "P&aacute;gina Web hospedada em outro servidor"
+	"P&aacute;gina Web hospedada em outro servidor"
 #endif
 	};
 
 const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	{
+	[Inf_INFO_SRC_NONE] =
 	NULL,
+	[Inf_INFO_SRC_EDITOR] =
 #if   L==1	// ca
 	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
 #elif L==2	// de
@@ -16051,6 +16123,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"interno editor, apenas para programas de teoria y pr&aacute;tica"
 #endif
 	,
+	[Inf_INFO_SRC_PLAIN_TEXT] =
 #if   L==1	// ca
 	"editor de text sense format"
 #elif L==2	// de
@@ -16071,6 +16144,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"editor de texto simples"
 #endif
 	,
+	[Inf_INFO_SRC_RICH_TEXT] =
 #if   L==1	// ca
 	"editor de text enriquit"
 #elif L==2	// de
@@ -16091,6 +16165,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"editor de texto rico"
 #endif
 	,
+	[Inf_INFO_SRC_PAGE] =
 #if   L==1	// ca
 	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Necessita traduccio
 #elif L==2	// de
@@ -16111,6 +16186,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
 #endif
 	,
+	[Inf_INFO_SRC_URL] =
 #if   L==1	// ca
 	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Necessita traduccio
 #elif L==2	// de
@@ -16133,125 +16209,131 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	};
 
 const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
-   {
+	{
+	[Inf_INFO_SRC_NONE] =
 #if   L==1	// ca
-	 "Ninguna informaci&oacute;n"	// Necessita traduccio
+	"Ninguna informaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Keine Angaben"
+	"Keine Angaben"
 #elif L==3	// en
-	 "No information"
+	"No information"
 #elif L==4	// es
-	 "Ninguna informaci&oacute;n"
+	"Ninguna informaci&oacute;n"
 #elif L==5	// fr
-	 "Aucune information"
+	"Aucune information"
 #elif L==6	// gn
-	 "Ninguna informaci&oacute;n"	// Okoteve traducción
+	"Ninguna informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Nessuna informazione"
+	"Nessuna informazione"
 #elif L==8	// pl
-	 "Brak informacji"
+	"Brak informacji"
 #elif L==9	// pt
-	 "Sem informa&ccedil;&atilde;o"
+	"Sem informa&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_EDITOR] =
 #if   L==1	// ca
-	 "Editor interno"	// Necessita traduccio
+	"Editor interno"	// Necessita traduccio
 #elif L==2	// de
-	 "Interner Editor"
+	"Interner Editor"
 #elif L==3	// en
-	 "Internal editor"
+	"Internal editor"
 #elif L==4	// es
-	 "Editor interno"
+	"Editor interno"
 #elif L==5	// fr
-	 "&Eacute;diteur interne"
+	"&Eacute;diteur interne"
 #elif L==6	// gn
-	 "Editor interno"	// Okoteve traducción
+	"Editor interno"	// Okoteve traducción
 #elif L==7	// it
-	 "Editor interno"
+	"Editor interno"
 #elif L==8	// pl
-	 "Wewnetrzny edytor"
+	"Wewnetrzny edytor"
 #elif L==9	// pt
-	 "Interno editor"
+	"Interno editor"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_PLAIN_TEXT] =
 #if   L==1	// ca
-	 "Text sense format"
+	"Text sense format"
 #elif L==2	// de
-	 "Plain Text"
+	"Plain Text"
 #elif L==3	// en
-	 "Plain text"
+	"Plain text"
 #elif L==4	// es
-	 "Texto sin formato"
+	"Texto sin formato"
 #elif L==5	// fr
-	 "Plain text"
+	"Plain text"
 #elif L==6	// gn
-	 "Texto sin formato"	// Okoteve traducción
+	"Texto sin formato"	// Okoteve traducción
 #elif L==7	// it
-	 "Testo normale"
+	"Testo normale"
 #elif L==8	// pl
-	 "Zwykly tekst"
+	"Zwykly tekst"
 #elif L==9	// pt
-	 "Texto plano"
+	"Texto plano"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_RICH_TEXT] =
 #if   L==1	// ca
-	 "Text enriquit"
+	"Text enriquit"
 #elif L==2	// de
-	 "Rich Text"
+	"Rich Text"
 #elif L==3	// en
-	 "Rich text"
+	"Rich text"
 #elif L==4	// es
-	 "Texto enriquecido"
+	"Texto enriquecido"
 #elif L==5	// fr
-	 "Texte enrichi"
+	"Texte enrichi"
 #elif L==6	// gn
-	 "Texto enriquecido"	// Okoteve traducción
+	"Texto enriquecido"	// Okoteve traducción
 #elif L==7	// it
-	 "Testo formattato"
+	"Testo formattato"
 #elif L==8	// pl
-	 "Rich text"		// Potrzebujesz tlumaczenie
+	"Rich text"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Texto enriquecido"
+	"Texto enriquecido"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_PAGE] =
 #if   L==1	// ca
-	 "P&aacute;gina interna"	// Necessita traduccio
+	"P&aacute;gina interna"	// Necessita traduccio
 #elif L==2	// de
-	 "Interne Webseite"
+	"Interne Webseite"
 #elif L==3	// en
-	 "Internal page"
+	"Internal page"
 #elif L==4	// es
-	 "P&aacute;gina interna"
+	"P&aacute;gina interna"
 #elif L==5	// fr
-	 "Page interne"
+	"Page interne"
 #elif L==6	// gn
-	 "P&aacute;gina interna"	// Okoteve traducción
+	"P&aacute;gina interna"	// Okoteve traducción
 #elif L==7	// it
-	 "Pagina interna"
+	"Pagina interna"
 #elif L==8	// pl
-	 "Strona wewnetrzna"
+	"Strona wewnetrzna"
 #elif L==9	// pt
-	 "Interna p&aacute;gina"
+	"Interna p&aacute;gina"
 #endif
-	 ,
+	,
+	[Inf_INFO_SRC_URL] =
 #if   L==1	// ca
-	 "P&aacute;gina externa"	// Necessita traduccio
+	"P&aacute;gina externa"	// Necessita traduccio
 #elif L==2	// de
-	 "Externe Webseite"
+	"Externe Webseite"
 #elif L==3	// en
-	 "External page"
+	"External page"
 #elif L==4	// es
-	 "P&aacute;gina externa"
+	"P&aacute;gina externa"
 #elif L==5	// fr
-	 "Page externe"
+	"Page externe"
 #elif L==6	// gn
-	 "P&aacute;gina externa"	// Okoteve traducción
+	"P&aacute;gina externa"	// Okoteve traducción
 #elif L==7	// it
-	 "Pagina esterna"
+	"Pagina esterna"
 #elif L==8	// pl
-	 "Strona zewnetrzna"
+	"Strona zewnetrzna"
 #elif L==9	// pt
-	 "Externa p&aacute;gina"
+	"Externa p&aacute;gina"
 #endif
 	};
 
@@ -16383,85 +16465,89 @@ const char *Txt_Institution_X_removed =	// Warning: it is very important to incl
 
 
 const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
-   {
-#if   L==1	// ca	// Ins_STATUS_UNKNOWN
-	 "Desconegudo"
+	{
+	[Ins_STATUS_UNKNOWN] =
+#if   L==1	// ca
+	"Desconegudo"
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocido"
+	"Desconocido"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocido"			// Okoteve traducción
+	"Desconocido"			// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuto"
+	"Sconosciuto"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecido"
+	"Desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Ins_STATUS_ACTIVE
-	 "Activa"
+	,
+	[Ins_STATUS_ACTIVE] =
+#if   L==1	// ca
+	"Activa"
 #elif L==2	// de
-	 "Aktive"
+	"Aktive"
 #elif L==3	// en
-	 "Active"
+	"Active"
 #elif L==4	// es
-	 "Activa"
+	"Activa"
 #elif L==5	// fr
-	 "Actif"
+	"Actif"
 #elif L==6	// gn
-	 "Activa"	// Okoteve traducción
+	"Activa"	// Okoteve traducción
 #elif L==7	// it
-	 "Attiva"
+	"Attiva"
 #elif L==8	// pl
-	 "Aktywne"
+	"Aktywne"
 #elif L==9	// pt
-	 "Ativa"
+	"Ativa"
 #endif
-	 ,
-#if   L==1	// ca	// Ins_STATUS_PENDING
-	 "Nova"
+	,
+	[Ins_STATUS_PENDING] =
+#if   L==1	// ca
+	"Nova"
 #elif L==2	// de
-	 "Neu"
+	"Neu"
 #elif L==3	// en
-	 "New"
+	"New"
 #elif L==4	// es
-	 "Nueva"
+	"Nueva"
 #elif L==5	// fr
-	 "Nouvelle"
+	"Nouvelle"
 #elif L==6	// gn
-	 "Pyahu"
+	"Pyahu"
 #elif L==7	// it
-	 "Nuovo"
+	"Nuovo"
 #elif L==8	// pl
-	 "Nowy"
+	"Nowy"
 #elif L==9	// pt
-	 "Nova"
+	"Nova"
 #endif
-	 ,
-#if   L==1	// ca	// Ins_STATUS_REMOVED
-	 "Eliminada"
+	,
+	[Ins_STATUS_REMOVED] =
+#if   L==1	// ca
+	"Eliminada"
 #elif L==2	// de
-	 "Entfernt"
+	"Entfernt"
 #elif L==3	// en
-	 "Removed"
+	"Removed"
 #elif L==4	// es
-	 "Eliminada"
+	"Eliminada"
 #elif L==5	// fr
-	 "Supprim&eacute;"
+	"Supprim&eacute;"
 #elif L==6	// gn
-	 "Eliminada"	// Okoteve traducción
+	"Eliminada"	// Okoteve traducción
 #elif L==7	// it
-	 "Rimossa"
+	"Rimossa"
 #elif L==8	// pl
-	 "Usuniete"
+	"Usuniete"
 #elif L==9	// pt
-	 "Suprimida"
+	"Suprimida"
 #endif
 	};
 
@@ -16571,45 +16657,47 @@ const char *Txt_institutions =
 #endif
 
 const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
-   {
+	{
+	[Ins_ORDER_BY_INSTITUTION] =
 #if   L==1	// ca
-	 "Ordenar por instituci&oacute;n"	// Necessita traduccio
+	"Ordenar por instituci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Hochschule sortieren"
+	"Nach Hochschule sortieren"
 #elif L==3	// en
-	 "Sort by institution"
+	"Sort by institution"
 #elif L==4	// es
-	 "Ordenar por instituci&oacute;n"
+	"Ordenar por instituci&oacute;n"
 #elif L==5	// fr
-	 "Trier par &eacute;tablissement"
+	"Trier par &eacute;tablissement"
 #elif L==6	// gn
-	 "Ordenar por instituci&oacute;n"	// Okoteve traducción
+	"Ordenar por instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per istituzione"
+	"Ordina per istituzione"
 #elif L==8	// pl
-	 "Sortuj wedlug instytucji"
+	"Sortuj wedlug instytucji"
 #elif L==9	// pt
-	 "Classificar por institui&ccedil;&atilde;o"
+	"Classificar por institui&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Ins_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Ordenar por n&ordm; de usuarios"	// Necessita traduccio
+	"Ordenar por n&ordm; de usuarios"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Anzahl der Benutzer sortieren"
+	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
-	 "Sort by no. of users"
+	"Sort by no. of users"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de usuarios"
+	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	 "Trier par nombre d'utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de usuarios"	// Okoteve traducción
+	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di utenti"
+	"Ordina per numero di utenti"
 #elif L==8	// pl
-	 "Sortowanie wedlug liczby uzytkownikow"
+	"Sortowanie wedlug liczby uzytkownikow"
 #elif L==9	// pt
-	 "Classificar por n&ordm; de utilizadores"
+	"Classificar por n&ordm; de utilizadores"
 #endif
 	};
 
@@ -16740,45 +16828,47 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 #endif
 
 const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
-   {
+	{
+	[Ins_ORDER_BY_INSTITUTION] =
 #if   L==1	// ca
-	 "Instituci&oacute;"
+	"Instituci&oacute;"
 #elif L==2	// de
-	 "Hochschule"
+	"Hochschule"
 #elif L==3	// en
-	 "Institution"
+	"Institution"
 #elif L==4	// es
-	 "Instituci&oacute;n"
+	"Instituci&oacute;n"
 #elif L==5	// fr
-	 "&Eacute;tablissement"
+	"&Eacute;tablissement"
 #elif L==6	// gn
-	 "Mbo'ehao"
+	"Mbo'ehao"
 #elif L==7	// it
-	 "Istituzione"
+	"Istituzione"
 #elif L==8	// pl
-	 "Instytucji"
+	"Instytucji"
 #elif L==9	// pt
-	 "Institui&ccedil;&atilde;o"
+	"Institui&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Ins_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	 "Usuaris de la instituci&oacute;"
+	"Usuaris de la instituci&oacute;"
 #elif L==2	// de
-	 "Benutzer der Hochschule"
+	"Benutzer der Hochschule"
 #elif L==3	// en
-	 "Users of the institution"
+	"Users of the institution"
 #elif L==4	// es
-	 "Usuarios de la instituci&oacute;n"
+	"Usuarios de la instituci&oacute;n"
 #elif L==5	// fr
-	 "Utilisateurs du &eacute;tablissement"
+	"Utilisateurs du &eacute;tablissement"
 #elif L==6	// gn
-	 "Usuarios de la instituci&oacute;n"	// Okoteve traducción
+	"Usuarios de la instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti della istituzione"
+	"Utenti della istituzione"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy instytucji"
+	"U&zdot;ytkownicy instytucji"
 #elif L==9	// pt
-	 "Utilizadores da institu&ccedil;&atilde;o"
+	"Utilizadores da institu&ccedil;&atilde;o"
 #endif
 	};
 
@@ -17014,85 +17104,85 @@ const char *Txt_Last_clicks_in_real_time =
 #endif
 
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
-   {
+	{
 #if   L==1	// ca
-	 "Solo zona central"	// Necessita traduccio
+	"Solo zona central"	// Necessita traduccio
 #elif L==2	// de
-	 "Nur mittleren Bereich anzeigen"
+	"Nur mittleren Bereich anzeigen"
 #elif L==3	// en
-	 "Display central area only"
+	"Display central area only"
 #elif L==4	// es
-	 "Solo zona central"
+	"Solo zona central"
 #elif L==5	// fr
-	 "Display central area only"	// Besoin de traduction
+	"Display central area only"	// Besoin de traduction
 #elif L==6	// gn
-	 "Solo zona central"	// Okoteve traducción
+	"Solo zona central"	// Okoteve traducción
 #elif L==7	// it
-	 "Mostra solo la parte centrale"
+	"Mostra solo la parte centrale"
 #elif L==8	// pl
-	 "Wyswietl centralnej czesci tylko"
+	"Wyswietl centralnej czesci tylko"
 #elif L==9	// pt
-	 "Somente &aacute;rea central"
+	"Somente &aacute;rea central"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Columna derecha visible"	// Necessita traduccio
+	"Columna derecha visible"	// Necessita traduccio
 #elif L==2	// de
-	 "Rechte Spalte anzeigen"
+	"Rechte Spalte anzeigen"
 #elif L==3	// en
-	 "Display right column"
+	"Display right column"
 #elif L==4	// es
-	 "Columna derecha visible"
+	"Columna derecha visible"
 #elif L==5	// fr
-	 "Display right column"		// Besoin de traduction
+	"Display right column"		// Besoin de traduction
 #elif L==6	// gn
-	 "Columna derecha visible"	// Okoteve traducción
+	"Columna derecha visible"	// Okoteve traducción
 #elif L==7	// it
-	 "Mostra la colonna destra"
+	"Mostra la colonna destra"
 #elif L==8	// pl
-	 "Wyswietl prawa kolumne"
+	"Wyswietl prawa kolumne"
 #elif L==9	// pt
-	 "Coluna direita vis&iacute;vel"
+	"Coluna direita vis&iacute;vel"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Columna izquierda visible"	// Necessita traduccio
+	"Columna izquierda visible"	// Necessita traduccio
 #elif L==2	// de
-	 "Linke Spalte anzeigen"
+	"Linke Spalte anzeigen"
 #elif L==3	// en
-	 "Display left column"
+	"Display left column"
 #elif L==4	// es
-	 "Columna izquierda visible"
+	"Columna izquierda visible"
 #elif L==5	// fr
-	 "Display left column"		// Besoin de traduction
+	"Display left column"		// Besoin de traduction
 #elif L==6	// gn
-	 "Columna izquierda visible"	// Okoteve traducción
+	"Columna izquierda visible"	// Okoteve traducción
 #elif L==7	// it
-	 "Mostra la colonna sinistra"
+	"Mostra la colonna sinistra"
 #elif L==8	// pl
-	 "Wyswietl lewa kolumne"
+	"Wyswietl lewa kolumne"
 #elif L==9	// pt
-	 "Coluna esquerda vis&iacute;vel"
+	"Coluna esquerda vis&iacute;vel"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Columnas izquierda y derecha visibles"	// Necessita traduccio
+	"Columnas izquierda y derecha visibles"	// Necessita traduccio
 #elif L==2	// de
-	 "Linke und rechte Spalte anzeigen"
+	"Linke und rechte Spalte anzeigen"
 #elif L==3	// en
-	 "Display left and right columns"
+	"Display left and right columns"
 #elif L==4	// es
-	 "Columnas izquierda y derecha visibles"
+	"Columnas izquierda y derecha visibles"
 #elif L==5	// fr
-	 "Display left and right columns"		// Besoin de traduction
+	"Display left and right columns"		// Besoin de traduction
 #elif L==6	// gn
-	 "Columnas izquierda y derecha visibles"	// Okoteve traducción
+	"Columnas izquierda y derecha visibles"	// Okoteve traducción
 #elif L==7	// it
-	 "Mostra la colonna sinistra e destra"
+	"Mostra la colonna sinistra e destra"
 #elif L==8	// pl
-	 "Wyswietl lewa i prawa kolumne"
+	"Wyswietl lewa i prawa kolumne"
 #elif L==9	// pt
-	 "Colunas esquerda e direita vis&iacute;veis"
+	"Colunas esquerda e direita vis&iacute;veis"
 #endif
 	};
 
@@ -17182,6 +17272,7 @@ const char *Txt_License =
 
 const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	{
+	[Brw_LICENSE_UNKNOWN] =
 #if   L==1	// ca
 	"desconeguda / altra"
 #elif L==2	// de
@@ -17202,6 +17293,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"desconhecida / outra"
 #endif
 	,
+	[Brw_LICENSE_ALL_RIGHTS_RESERVED] =
 #if   L==1	// ca
 	"Tots els drets reservats"		// All Rights Reserved
 #elif L==2	// de
@@ -17222,6 +17314,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"Todos os direitos reservados"		// All Rights Reserved
 #endif
 	,
+	[Brw_LICENSE_CC_BY] =
 #if   L==1	// ca
 	"CC Reconeixement"			// CC Attribution License
 #elif L==2	// de
@@ -17242,6 +17335,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"CC Atribui&ccedil;&atilde;o"		// CC Attribution License
 #endif
 	,
+	[Brw_LICENSE_CC_BY_SA] =
 #if   L==1	// ca
 	"CC Reconeixement - Compartir igual"				// CC Attribution-ShareAlike License
 #elif L==2	// de
@@ -17262,6 +17356,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"CC Atribui&ccedil;&atilde;o - Compartilha Igual"		// CC Attribution-ShareAlike License
 #endif
 	,
+	[Brw_LICENSE_CC_BY_ND] =
 #if   L==1	// ca
 	"CC Reconeixement - Sense obra derivada"				// CC Attribution-NoDerivs License
 #elif L==2	// de
@@ -17282,6 +17377,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"CC Atribui&ccedil;&atilde;o - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NoDerivs License
 #endif
 	,
+	[Brw_LICENSE_CC_BY_NC] =
 #if   L==1	// ca
 	"CC Reconeixement - No comercial"			// CC Attribution-NonCommercial License
 #elif L==2	// de
@@ -17302,6 +17398,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial"	// CC Attribution-NonCommercial License
 #endif
 	,
+	[Brw_LICENSE_CC_BY_NC_SA] =
 #if   L==1	// ca
 	"CC Reconeixement - No comercial - Compartir igual"					// CC Attribution-NonCommercial-ShareAlike License
 #elif L==2	// de
@@ -17322,6 +17419,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Compartilha Igual"			// CC Attribution-NonCommercial-ShareAlike License
 #endif
 	,
+	[Brw_LICENSE_CC_BY_NC_ND] =
 #if   L==1	// ca
 	"CC Reconeixement - No comercial - Sense obra derivada"						// CC Attribution-NonCommercial-NoDerivs License
 #elif L==2	// de
@@ -17617,7 +17715,8 @@ const char *Txt_Locations =
 #endif
 
 const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
-  {
+	{
+	[Prj_LOCKED] =
 #if   L==1	// ca
 	"Edici&oacute; bloquejada"
 #elif L==2	// de
@@ -17638,6 +17737,7 @@ const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
 	"Edi&ccedil;&atilde;o bloqueada"
 #endif
 	,
+	[Prj_UNLOCKED] =
 #if   L==1	// ca
 	"Edici&oacute; permesa"
 #elif L==2	// de
@@ -17808,84 +17908,88 @@ const char *Txt_Log_out =
 
 const char *Txt_logged[Usr_NUM_SEXS] =
 	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
-	 "identificado/a"	// Necessita traduccio
+	[Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
+	"identificado/a"	// Necessita traduccio
 #elif L==2	// de
-	 "angemeldet"
+	"angemeldet"
 #elif L==3	// en
-	 "logged"
+	"logged"
 #elif L==4	// es
-	 "identificado/a"
+	"identificado/a"
 #elif L==5	// fr
-	 "connect&eacute;/e"
+	"connect&eacute;/e"
 #elif L==6	// gn
-	 "identificado/a"	// Okoteve traducción
+	"identificado/a"	// Okoteve traducción
 #elif L==7	// it
-	 "loggato/a"
+	"loggato/a"
 #elif L==8	// pl
-	 "zalogowany"
+	"zalogowany"
 #elif L==9	// pt
-	 "logado/a"
+	"logado/a"
 #endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_FEMALE
-	 "identificada"	// Necessita traduccio
+	,
+	[Usr_SEX_FEMALE] =
+#if   L==1	// ca
+	"identificada"	// Necessita traduccio
 #elif L==2	// de
-	 "angemeldet"
+	"angemeldet"
 #elif L==3	// en
-	 "logged"
+	"logged"
 #elif L==4	// es
-	 "identificada"
+	"identificada"
 #elif L==5	// fr
-	 "connect&eacute;e"
+	"connect&eacute;e"
 #elif L==6	// gn
-	 "identificada"	// Okoteve traducción
+	"identificada"	// Okoteve traducción
 #elif L==7	// it
-	 "loggata"
+	"loggata"
 #elif L==8	// pl
-	 "zalogowana"
+	"zalogowana"
 #elif L==9	// pt
-	 "logada"
+	"logada"
 #endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_MALE
-	 "identificado"	// Necessita traduccio
+	,
+	[Usr_SEX_MALE] =
+#if   L==1	// ca
+	"identificado"	// Necessita traduccio
 #elif L==2	// de
-	 "angemeldet"
+	"angemeldet"
 #elif L==3	// en
-	 "logged"
+	"logged"
 #elif L==4	// es
-	 "identificado"
+	"identificado"
 #elif L==5	// fr
-	 "connect&eacute;"
+	"connect&eacute;"
 #elif L==6	// gn
-	 "identificado"	// Okoteve traducción
+	"identificado"	// Okoteve traducción
 #elif L==7	// it
-	 "loggato"
+	"loggato"
 #elif L==8	// pl
-	 "zalogowany"
+	"zalogowany"
 #elif L==9	// pt
-	 "logado"
+	"logado"
 #endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_ALL
-	 "identificado/a"	// Necessita traduccio
+	,
+	[Usr_SEX_ALL] =
+#if   L==1	// ca
+	"identificado/a"	// Necessita traduccio
 #elif L==2	// de
-	 "angemeldet"
+	"angemeldet"
 #elif L==3	// en
-	 "logged"
+	"logged"
 #elif L==4	// es
-	 "identificado/a"
+	"identificado/a"
 #elif L==5	// fr
-	 "connect&eacute;/e"
+	"connect&eacute;/e"
 #elif L==6	// gn
-	 "identificado/a"	// Okoteve traducción
+	"identificado/a"	// Okoteve traducción
 #elif L==7	// it
-	 "loggato/a"
+	"loggato/a"
 #elif L==8	// pl
-	 "zalogowani"
+	"zalogowani"
 #elif L==9	// pt
-	 "logado/a"
+	"logado/a"
 #endif
 	};
 
@@ -18059,44 +18163,44 @@ const char *Txt_Match =		// of a game
 
 const char *Txt_MATCH_End =
 #if   L==1	// ca
-	 "Final";
+	"Final";
 #elif L==2	// de
-	 "Ende";
+	"Ende";
 #elif L==3	// en
-	 "End";
+	"End";
 #elif L==4	// es
-	 "Final";
+	"Final";
 #elif L==5	// fr
-	 "Fin";
+	"Fin";
 #elif L==6	// gn
-	 "Paha";
+	"Paha";
 #elif L==7	// it
-	 "Fine";
+	"Fine";
 #elif L==8	// pl
-	 "Koniec";
+	"Koniec";
 #elif L==9	// pt
-	 "Fim";
+	"Fim";
 #endif
 
 const char *Txt_MATCH_Paused =
 #if   L==1	// ca
-	 "En pausa";
+	"En pausa";
 #elif L==2	// de
-	 "Angehalten";
+	"Angehalten";
 #elif L==3	// en
-	 "Paused";
+	"Paused";
 #elif L==4	// es
-	 "En pausa";
+	"En pausa";
 #elif L==5	// fr
-	 "En pause";
+	"En pause";
 #elif L==6	// gn
-	 "En pausa";	// Okoteve traducción
+	"En pausa";	// Okoteve traducción
 #elif L==7	// it
-	 "In pausa";
+	"In pausa";
 #elif L==8	// pl
-	 "Wstrzymany";
+	"Wstrzymany";
 #elif L==9	// pt
-	 "Pausado";
+	"Pausado";
 #endif
 
 const char *Txt_MATCH_QUESTION_Answered =
@@ -18143,23 +18247,23 @@ const char *Txt_MATCH_QUESTION_Unanswered =
 
 const char *Txt_MATCH_Start =
 #if   L==1	// ca
-	 "Inici";
+	"Inici";
 #elif L==2	// de
-	 "Start";
+	"Start";
 #elif L==3	// en
-	 "Start";
+	"Start";
 #elif L==4	// es
-	 "Inicio";
+	"Inicio";
 #elif L==5	// fr
-	 "D&eacute;but";
+	"D&eacute;but";
 #elif L==6	// gn
-	 "&Ntilde;epyr&utilde;";
+	"&Ntilde;epyr&utilde;";
 #elif L==7	// it
-	 "Inizio";
+	"Inizio";
 #elif L==8	// pl
-	 "Pocz&aogon;tek";
+	"Pocz&aogon;tek";
 #elif L==9	// pt
-	 "In&iacute;cio";
+	"In&iacute;cio";
 #endif
 
 const char *Txt_Match_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -18185,23 +18289,23 @@ const char *Txt_Match_X_removed =	// Warning: it is very important to include %s
 
 const char *Txt_MATCH_respond =
 #if   L==1	// ca
-	 "responen";
+	"responen";
 #elif L==2	// de
-	 "antworten";
+	"antworten";
 #elif L==3	// en
-	 "respond";
+	"respond";
 #elif L==4	// es
-	 "responden";
+	"responden";
 #elif L==5	// fr
-	 "r&eacute;pondent";
+	"r&eacute;pondent";
 #elif L==6	// gn
-	 "responden";	// Okoteve traducción
+	"responden";	// Okoteve traducción
 #elif L==7	// it
-	 "rispondono";
+	"rispondono";
 #elif L==8	// pl
-	 "odpowiadaj&aogon;";
+	"odpowiadaj&aogon;";
 #elif L==9	// pt
-	 "respondem";
+	"respondem";
 #endif
 
 const char *Txt_Match_result =
@@ -18394,52 +18498,54 @@ const char *Txt_Menu =
 #endif
 
 const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
-   {
+	{
+	[Mnu_MENU_HORIZONTAL] =
 #if   L==1	// ca
-	 "Horitzontal"
+	"Horitzontal"
 #elif L==2	// de
-	 "Horizontal"
+	"Horizontal"
 #elif L==3	// en
-	 "Horizontal"
+	"Horizontal"
 #elif L==4	// es
-	 "Horizontal"
+	"Horizontal"
 #elif L==5	// fr
-	 "Horizontal"
+	"Horizontal"
 #elif L==6	// gn
-	 "Horizontal"	// Okoteve traducción
+	"Horizontal"	// Okoteve traducción
 #elif L==7	// it
-	 "Orizzontale"
+	"Orizzontale"
 #elif L==8	// pl
-	 "Poziomy"
+	"Poziomy"
 #elif L==9	// pt
-	 "Horizontal"
+	"Horizontal"
 #endif
-	 ,
+	,
+	[Mnu_MENU_VERTICAL] =
 #if   L==1	// ca
-	 "Vertical"
+	"Vertical"
 #elif L==2	// de
-	 "Vertikal"
+	"Vertikal"
 #elif L==3	// en
-	 "Vertical"
+	"Vertical"
 #elif L==4	// es
-	 "Vertical"
+	"Vertical"
 #elif L==5	// fr
-	 "Vertical"
+	"Vertical"
 #elif L==6	// gn
-	 "Vertical"		// Okoteve traducción
+	"Vertical"		// Okoteve traducción
 #elif L==7	// it
-	 "Verticale"
+	"Verticale"
 #elif L==8	// pl
-	 "Pionowy"
+	"Pionowy"
 #elif L==9	// pt
-	 "Vertical"
+	"Vertical"
 #endif
 	};
 
 const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
+[TabUnk] =
 	{
-	// TabUnk ****************************************************
 	NULL,	//  0
 	NULL,	//  1
 	NULL,	//  2
@@ -18454,8 +18560,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabStr] =
 	{
-	// TabStr *****************************************************
 	//  0: ActFrmLogIn
 #if   L==1	// ca
 	"Entrar"
@@ -18500,44 +18606,44 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeeSocTmlGbl
 #if   L==1	// ca
-	 "Timeline"
+	"Timeline"
 #elif L==2	// de
-	 "Timeline"
+	"Timeline"
 #elif L==3	// en
-	 "Timeline"
+	"Timeline"
 #elif L==4	// es
-	 "Timeline"
+	"Timeline"
 #elif L==5	// fr
-	 "Chronologie"
+	"Chronologie"
 #elif L==6	// gn
-	 "Timeline"	// Okoteve traducción
+	"Timeline"	// Okoteve traducción
 #elif L==7	// it
-	 "Timeline"
+	"Timeline"
 #elif L==8	// pl
-	 "Timeline"
+	"Timeline"
 #elif L==9	// pt
-	 "Timeline"
+	"Timeline"
 #endif
 	,
 	//  3: ActSeeSocPrf
 #if   L==1	// ca
-	 "Perfils"
+	"Perfils"
 #elif L==2	// de
-	 "Profiles"
+	"Profiles"
 #elif L==3	// en
-	 "Profiles"
+	"Profiles"
 #elif L==4	// es
-	 "Perfiles"
+	"Perfiles"
 #elif L==5	// fr
-	 "Profils"
+	"Profils"
 #elif L==6	// gn
-	 "Che"
+	"Che"
 #elif L==7	// it
-	 "Profili"
+	"Profili"
 #elif L==8	// pl
-	 "Profile"
+	"Profile"
 #elif L==9	// pt
-	 "Perfiles"
+	"Perfiles"
 #endif
 	,
 	//  4: ActSeeCal
@@ -18590,8 +18696,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabSys] =
 	{
-	// TabSys *****************************************************
 	//  0: ActSeeCty
 #if   L==1	// ca
 	"Pa&iuml;sos"
@@ -18615,23 +18721,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeePen
 #if   L==1	// ca
-	 "Jerarquia"
+	"Jerarquia"
 #elif L==2	// de
-	 "Hierarchie"
+	"Hierarchie"
 #elif L==3	// en
-	 "Hierarchy"
+	"Hierarchy"
 #elif L==4	// es
-	 "Jerarqu&iacute;a"
+	"Jerarqu&iacute;a"
 #elif L==5	// fr
-	 "Hi&eacute;rarchie"
+	"Hi&eacute;rarchie"
 #elif L==6	// gn
-	 "S&atilde;mbyhyha reko"
+	"S&atilde;mbyhyha reko"
 #elif L==7	// it
-	 "Gerarchia"
+	"Gerarchia"
 #elif L==8	// pl
-	 "Hierarchia"
+	"Hierarchia"
 #elif L==9	// pt
-	 "Hierarquia"
+	"Hierarquia"
 #endif
 	,
 	//  2: ActSeeLnk
@@ -18706,8 +18812,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCty] =
 	{
-	// TabCty *****************************************************
 	//  0: ActSeeCtyInf
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -18762,8 +18868,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabIns] =
 	{
-	// TabIns *****************************************************
 	//  0: ActSeeInsInf
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -18878,8 +18984,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCtr] =
 	{
-	// TabCtr *****************************************************
 	//  0: ActSeeCtrInf
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -18954,8 +19060,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabDeg] =
 	{
-	// TabDeg *****************************************************
 	//  0: ActSeeDegInf
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -19010,8 +19116,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCrs] =
 	{
-	// TabCrs *****************************************************
 	//  0: ActSeeCrsInf
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -19166,27 +19272,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabAss] =
 	{
-	// TabAss *****************************************************
 	//  0: ActSeeAss
 #if   L==1	// ca
-	 "Sistema"
+	"Sistema"
 #elif L==2	// de
-	 "System"
+	"System"
 #elif L==3	// en
-	 "System"
+	"System"
 #elif L==4	// es
-	 "Sistema"
+	"Sistema"
 #elif L==5	// fr
-	 "Syst&egrave;me"
+	"Syst&egrave;me"
 #elif L==6	// gn
-	 "Sistema"	// Okoteve traducción
+	"Sistema"	// Okoteve traducción
 #elif L==7	// it
-	 "Sistema"
+	"Sistema"
 #elif L==8	// pl
-	 "System"
+	"System"
 #elif L==9	// pt
-	 "Sistema"
+	"Sistema"
 #endif
 	,
 	//  1: ActSeeAsg
@@ -19322,8 +19428,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabFil] =
 	{
-	// TabFil *****************************************************
 	//  0: ActSeeAdmDocIns
 #if   L==1	// ca
 	"Documents"
@@ -19597,8 +19703,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pasta"
 #endif
 	},
+[TabUsr] =
 	{
-	// TabUsr *****************************************************
 	//  0: ActReqSelGrp
 #if   L==1	// ca
 	"Grups"
@@ -19773,8 +19879,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabMsg] =
 	{
-	// TabMsg *****************************************************
 	//  0: ActSeeAnn
 #if   L==1	// ca
 	"Anuncis"
@@ -19949,8 +20055,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabAna] =
 	{
-	// TabAna **********************************************************************
 	//  0: ActReqUseGbl
 #if   L==1	// ca
 	"Xifres"
@@ -20085,8 +20191,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabPrf] =
 	{
-	// TabPrf *****************************************************
 	//  0: ActFrmRolSes
 #if   L==1	// ca
 	"Sessi&oacute;"
@@ -20245,8 +20351,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 
 const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
+[TabUnk] =
 	{
-	// TabUnk ****************************************************
 	NULL,	//  0
 	NULL,	//  1
 	NULL,	//  2
@@ -20261,8 +20367,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabStr] =
 	{
-	// TabStr *****************************************************
 	//  0: ActFrmLogIn
 #if   L==1	// ca
 	"Rol en aquesta sessi&oacute;"
@@ -20307,44 +20413,44 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeeSocTmlGbl
 #if   L==1	// ca
-	 "Timeline dels usuaris que segueixo o de tots els usuaris"
+	"Timeline dels usuaris que segueixo o de tots els usuaris"
 #elif L==2	// de
-	 "Timeline der Benutzer Ich folge oder alle Benutzern"
+	"Timeline der Benutzer Ich folge oder alle Benutzern"
 #elif L==3	// en
-	 "Timeline of users I follow or all users"
+	"Timeline of users I follow or all users"
 #elif L==4	// es
-	 "Timeline de los usuarios que sigo o de todos los usuarios"
+	"Timeline de los usuarios que sigo o de todos los usuarios"
 #elif L==5	// fr
-	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
+	"Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
 #elif L==6	// gn
-	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
+	"Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Timeline degli utenti che seguo o tutti gli utenti"
+	"Timeline degli utenti che seguo o tutti gli utenti"
 #elif L==8	// pl
-	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
+	"Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
-	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
+	"Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
 #endif
 	,
-	 //  3: ActSeeSocPrf
+	//  3: ActSeeSocPrf
 #if   L==1	// ca
-	 "Perfils p&uacute;blics"
+	"Perfils p&uacute;blics"
 #elif L==2	// de
-	 "&Ouml;ffentliche Profile"
+	"&Ouml;ffentliche Profile"
 #elif L==3	// en
-	 "Public profiles"
+	"Public profiles"
 #elif L==4	// es
-	 "Perfiles p&uacute;blicos de usuarios"
+	"Perfiles p&uacute;blicos de usuarios"
 #elif L==5	// fr
-	 "Profils publics"
+	"Profils publics"
 #elif L==6	// gn
-	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
+	"Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Profili pubblici"
+	"Profili pubblici"
 #elif L==8	// pl
-	 "Profile publiczne"
+	"Profile publiczne"
 #elif L==9	// pt
-	 "Perfis p&uacute;blicos"
+	"Perfis p&uacute;blicos"
 #endif
 	,
 	//  4: ActSeeCal
@@ -20397,8 +20503,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabSys] =
 	{
-	// TabSys *****************************************************
 	//  0: ActSeeCty
 #if   L==1	// ca
 	"Llista de pa&iuml;sos i del nombre d'usuaris de cada pa&iacute;s"
@@ -20513,8 +20619,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCty] =
 	{
-	// TabCty *****************************************************
 	//  0: ActSeeCtyInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquest pa&iacute;s"
@@ -20569,8 +20675,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabIns] =
 	{
-	// TabIns *****************************************************
 	//  0: ActSeeInsInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquesta instituci&oacute;"
@@ -20694,8 +20800,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCtr] =
 	{
-	// TabCtr *****************************************************
 	//  0: ActSeeCtrInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquest centre"
@@ -20770,8 +20876,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabDeg] =
 	{
-	// TabDeg *****************************************************
 	//  0: ActSeeDegInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquesta titulaci&oacute;"
@@ -20826,8 +20932,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabCrs] =
 	{
-	// TabCrs *****************************************************
 	//  0: ActSeeCrsInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquesta assignatura"
@@ -20982,8 +21088,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabAss] =
 	{
-	// TabAss *****************************************************
 	//  0: ActSeeAss
 #if   L==1	// ca
 	"Sistema o criteris d'avaluaci&oacute;"
@@ -21141,8 +21247,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabFil] =
 	{
-	// TabFil *****************************************************
 	//  0: ActSeeAdmDocIns
 #if   L==1	// ca
 	"Documents"
@@ -21441,8 +21547,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pasta"
 #endif
 	},
+[TabUsr] =
 	{
-	// TabUsr *****************************************************
 	//  0: ActReqSelGrp
 #if   L==1	// ca
 	"Grups en aquesta assignatura"
@@ -21621,8 +21727,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabMsg] =
 	{
-	// TabMsg *****************************************************
 	//  0: ActSeeAnn
 #if   L==1	// ca
 	"Anuncis globals mostrat en iniciar sessi&oacute;"
@@ -21809,8 +21915,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabAna] =
 	{
-	// TabAna *****************************************************
 	//  0: ActReqUseGbl
 #if   L==1	// ca
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
@@ -21952,8 +22058,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	NULL,	// 12
 	},
+[TabPrf] =
 	{
-	// TabPrf *****************************************************
 	//  0: ActFrmRolSes
 #if   L==1	// ca
 	"Rol en aquesta sessi&oacute;"
@@ -22657,488 +22763,488 @@ const char *Txt_months =
 #endif
 
 const char *Txt_MONTHS_SMALL[12] =
-   {
+	{
 #if   L==1	// ca
-	 "gener"
+	"gener"
 #elif L==2	// de
-	 "Januar"
+	"Januar"
 #elif L==3	// en
-	 "January"
+	"January"
 #elif L==4	// es
-	 "enero"
+	"enero"
 #elif L==5	// fr
-	 "janvier"
+	"janvier"
 #elif L==6	// gn
-	 "jasyte&#297;"
+	"jasyte&#297;"
 #elif L==7	// it
-	 "gennaio"
+	"gennaio"
 #elif L==8	// pl
-	 "Stycznia"
+	"Stycznia"
 #elif L==9	// pt
-	 "janeiro"
+	"janeiro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "febrer"
+	"febrer"
 #elif L==2	// de
-	 "Februar"
+	"Februar"
 #elif L==3	// en
-	 "February"
+	"February"
 #elif L==4	// es
-	 "febrero"
+	"febrero"
 #elif L==5	// fr
-	 "f&eacute;vrier"
+	"f&eacute;vrier"
 #elif L==6	// gn
-	 "jasyk&otilde;i"
+	"jasyk&otilde;i"
 #elif L==7	// it
-	 "febbraio"
+	"febbraio"
 #elif L==8	// pl
-	 "Lutego"
+	"Lutego"
 #elif L==9	// pt
-	 "fevereiro"
+	"fevereiro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "mar&ccedil;"
+	"mar&ccedil;"
 #elif L==2	// de
-	 "M;&auml;rz"
+	"M;&auml;rz"
 #elif L==3	// en
-	 "March"
+	"March"
 #elif L==4	// es
-	 "marzo"
+	"marzo"
 #elif L==5	// fr
-	 "mars"
+	"mars"
 #elif L==6	// gn
-	 "jasyapy"
+	"jasyapy"
 #elif L==7	// it
-	 "marzo"
+	"marzo"
 #elif L==8	// pl
-	 "Marca"
+	"Marca"
 #elif L==9	// pt
-	 "mar&ccedil;o"
+	"mar&ccedil;o"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "abril"
+	"abril"
 #elif L==2	// de
-	 "April"
+	"April"
 #elif L==3	// en
-	 "April"
+	"April"
 #elif L==4	// es
-	 "abril"
+	"abril"
 #elif L==5	// fr
-	 "avril"
+	"avril"
 #elif L==6	// gn
-	 "jasyrundy"
+	"jasyrundy"
 #elif L==7	// it
-	 "aprile"
+	"aprile"
 #elif L==8	// pl
-	 "Kwietnia"
+	"Kwietnia"
 #elif L==9	// pt
-	 "abril"
+	"abril"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "maig"
+	"maig"
 #elif L==2	// de
-	 "Mai"
+	"Mai"
 #elif L==3	// en
-	 "May"
+	"May"
 #elif L==4	// es
-	 "mayo"
+	"mayo"
 #elif L==5	// fr
-	 "mai"
+	"mai"
 #elif L==6	// gn
-	 "jasypo"
+	"jasypo"
 #elif L==7	// it
-	 "maggio"
+	"maggio"
 #elif L==8	// pl
-	 "Maja"
+	"Maja"
 #elif L==9	// pt
-	 "maio"
+	"maio"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "juny"
+	"juny"
 #elif L==2	// de
-	 "Juni"
+	"Juni"
 #elif L==3	// en
-	 "June"
+	"June"
 #elif L==4	// es
-	 "junio"
+	"junio"
 #elif L==5	// fr
-	 "juin"
+	"juin"
 #elif L==6	// gn
-	 "jasypote&#297;"
+	"jasypote&#297;"
 #elif L==7	// it
-	 "giugno"
+	"giugno"
 #elif L==8	// pl
-	 "Czerwca"
+	"Czerwca"
 #elif L==9	// pt
-	 "junho"
+	"junho"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "juliol"
+	"juliol"
 #elif L==2	// de
-	 "Juli"
+	"Juli"
 #elif L==3	// en
-	 "July"
+	"July"
 #elif L==4	// es
-	 "julio"
+	"julio"
 #elif L==5	// fr
-	 "juillet"
+	"juillet"
 #elif L==6	// gn
-	 "jasypok&otilde;i"
+	"jasypok&otilde;i"
 #elif L==7	// it
-	 "luglio"
+	"luglio"
 #elif L==8	// pl
-	 "Lipca"
+	"Lipca"
 #elif L==9	// pt
-	 "julho"
+	"julho"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "agost"
+	"agost"
 #elif L==2	// de
-	 "August"
+	"August"
 #elif L==3	// en
-	 "August"
+	"August"
 #elif L==4	// es
-	 "agosto"
+	"agosto"
 #elif L==5	// fr
-	 "ao&ucirc;t"
+	"ao&ucirc;t"
 #elif L==6	// gn
-	 "jasypoapy"
+	"jasypoapy"
 #elif L==7	// it
-	 "agosto"
+	"agosto"
 #elif L==8	// pl
-	 "Sierpnia"
+	"Sierpnia"
 #elif L==9	// pt
-	 "agosto"
+	"agosto"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "setembre"
+	"setembre"
 #elif L==2	// de
-	 "September"
+	"September"
 #elif L==3	// en
-	 "September"
+	"September"
 #elif L==4	// es
-	 "septiembre"
+	"septiembre"
 #elif L==5	// fr
-	 "septembre"
+	"septembre"
 #elif L==6	// gn
-	 "jasyporundy"
+	"jasyporundy"
 #elif L==7	// it
-	 "settembre"
+	"settembre"
 #elif L==8	// pl
-	 "Wrze&sacute;nia"
+	"Wrze&sacute;nia"
 #elif L==9	// pt
-	 "setembro"
+	"setembro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "octubre"
+	"octubre"
 #elif L==2	// de
-	 "Oktober"
+	"Oktober"
 #elif L==3	// en
-	 "October"
+	"October"
 #elif L==4	// es
-	 "octubre"
+	"octubre"
 #elif L==5	// fr
-	 "octobre"
+	"octobre"
 #elif L==6	// gn
-	 "jasypa"
+	"jasypa"
 #elif L==7	// it
-	 "ottobre"
+	"ottobre"
 #elif L==8	// pl
-	 "Pa&zacute;dziernika"
+	"Pa&zacute;dziernika"
 #elif L==9	// pt
-	 "outubro"
+	"outubro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "novembre"
+	"novembre"
 #elif L==2	// de
-	 "November"
+	"November"
 #elif L==3	// en
-	 "November"
+	"November"
 #elif L==4	// es
-	 "noviembre"
+	"noviembre"
 #elif L==5	// fr
-	 "novembre"
+	"novembre"
 #elif L==6	// gn
-	 "jasypate&#297;"
+	"jasypate&#297;"
 #elif L==7	// it
-	 "novembre"
+	"novembre"
 #elif L==8	// pl
-	 "Listopada"
+	"Listopada"
 #elif L==9	// pt
-	 "novembro"
+	"novembro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "desembre"
+	"desembre"
 #elif L==2	// de
-	 "Dezember"
+	"Dezember"
 #elif L==3	// en
-	 "December"
+	"December"
 #elif L==4	// es
-	 "diciembre"
+	"diciembre"
 #elif L==5	// fr
-	 "d&eacute;cembre"
+	"d&eacute;cembre"
 #elif L==6	// gn
-	 "jasypak&otilde;i"
+	"jasypak&otilde;i"
 #elif L==7	// it
-	 "dicembre"
+	"dicembre"
 #elif L==8	// pl
-	 "Grudnia"
+	"Grudnia"
 #elif L==9	// pt
-	 "dezembro"
+	"dezembro"
 #endif
 	};
 
 const char *Txt_MONTHS_SMALL_SHORT[12] =
-   {
+	{
 #if   L==1	// ca
-	 "gen"
+	"gen"
 #elif L==2	// de
-	 "Jan"
+	"Jan"
 #elif L==3	// en
-	 "Jan"
+	"Jan"
 #elif L==4	// es
-	 "ene"
+	"ene"
 #elif L==5	// fr
-	 "jan"
+	"jan"
 #elif L==6	// gn
-	 "ene"	// Okoteve traducción
+	"ene"	// Okoteve traducción
 #elif L==7	// it
-	 "gen"
+	"gen"
 #elif L==8	// pl
-	 "Sty"
+	"Sty"
 #elif L==9	// pt
-	 "jan"
+	"jan"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "feb"
+	"feb"
 #elif L==2	// de
-	 "Feb"
+	"Feb"
 #elif L==3	// en
-	 "Feb"
+	"Feb"
 #elif L==4	// es
-	 "feb"
+	"feb"
 #elif L==5	// fr
-	 "f&eacute;v"
+	"f&eacute;v"
 #elif L==6	// gn
-	 "feb"	// Okoteve traducción
+	"feb"	// Okoteve traducción
 #elif L==7	// it
-	 "feb"
+	"feb"
 #elif L==8	// pl
-	 "Lut"
+	"Lut"
 #elif L==9	// pt
-	 "fev"
+	"fev"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "mar"
+	"mar"
 #elif L==2	// de
-	 "M;&auml;r"
+	"M;&auml;r"
 #elif L==3	// en
-	 "Mar"
+	"Mar"
 #elif L==4	// es
-	 "mar"
+	"mar"
 #elif L==5	// fr
-	 "mar"
+	"mar"
 #elif L==6	// gn
-	 "mar"	// Okoteve traducción
+	"mar"	// Okoteve traducción
 #elif L==7	// it
-	 "mar"
+	"mar"
 #elif L==8	// pl
-	 "Mar"
+	"Mar"
 #elif L==9	// pt
-	 "mar"
+	"mar"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "abr"
+	"abr"
 #elif L==2	// de
-	 "Apr"
+	"Apr"
 #elif L==3	// en
-	 "Apr"
+	"Apr"
 #elif L==4	// es
-	 "abr"
+	"abr"
 #elif L==5	// fr
-	 "avr"
+	"avr"
 #elif L==6	// gn
-	 "abr"	// Okoteve traducción
+	"abr"	// Okoteve traducción
 #elif L==7	// it
-	 "apr"
+	"apr"
 #elif L==8	// pl
-	 "Kwi"
+	"Kwi"
 #elif L==9	// pt
-	 "abr"
+	"abr"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "mai"
+	"mai"
 #elif L==2	// de
-	 "Mai"
+	"Mai"
 #elif L==3	// en
-	 "May"
+	"May"
 #elif L==4	// es
-	 "may"
+	"may"
 #elif L==5	// fr
-	 "mai"
+	"mai"
 #elif L==6	// gn
-	 "may"	// Okoteve traducción
+	"may"	// Okoteve traducción
 #elif L==7	// it
-	 "mag"
+	"mag"
 #elif L==8	// pl
-	 "Maj"
+	"Maj"
 #elif L==9	// pt
-	 "mai"
+	"mai"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "jun"
+	"jun"
 #elif L==2	// de
-	 "Jun"
+	"Jun"
 #elif L==3	// en
-	 "Jun"
+	"Jun"
 #elif L==4	// es
-	 "jun"
+	"jun"
 #elif L==5	// fr
-	 "jui"
+	"jui"
 #elif L==6	// gn
-	 "jun"	// Okoteve traducción
+	"jun"	// Okoteve traducción
 #elif L==7	// it
-	 "giu"
+	"giu"
 #elif L==8	// pl
-	 "Cze"
+	"Cze"
 #elif L==9	// pt
-	 "jun"
+	"jun"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "jul"
+	"jul"
 #elif L==2	// de
-	 "Jul"
+	"Jul"
 #elif L==3	// en
-	 "Jul"
+	"Jul"
 #elif L==4	// es
-	 "jul"
+	"jul"
 #elif L==5	// fr
-	 "jui"
+	"jui"
 #elif L==6	// gn
-	 "jul"	// Okoteve traducción
+	"jul"	// Okoteve traducción
 #elif L==7	// it
-	 "lug"
+	"lug"
 #elif L==8	// pl
-	 "Lip"
+	"Lip"
 #elif L==9	// pt
-	 "jul"
+	"jul"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "ago"
+	"ago"
 #elif L==2	// de
-	 "Aug"
+	"Aug"
 #elif L==3	// en
-	 "Aug"
+	"Aug"
 #elif L==4	// es
-	 "ago"
+	"ago"
 #elif L==5	// fr
-	 "ao&ucirc;"
+	"ao&ucirc;"
 #elif L==6	// gn
-	 "ago"	// Okoteve traducción
+	"ago"	// Okoteve traducción
 #elif L==7	// it
-	 "ago"
+	"ago"
 #elif L==8	// pl
-	 "Sie"
+	"Sie"
 #elif L==9	// pt
-	 "ago"
+	"ago"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "set"
+	"set"
 #elif L==2	// de
-	 "Sep"
+	"Sep"
 #elif L==3	// en
-	 "Sep"
+	"Sep"
 #elif L==4	// es
-	 "sep"
+	"sep"
 #elif L==5	// fr
-	 "sep"
+	"sep"
 #elif L==6	// gn
-	 "sep"	// Okoteve traducción
+	"sep"	// Okoteve traducción
 #elif L==7	// it
-	 "set"
+	"set"
 #elif L==8	// pl
-	 "Wrz"
+	"Wrz"
 #elif L==9	// pt
-	 "set"
+	"set"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "oct"
+	"oct"
 #elif L==2	// de
-	 "Okt"
+	"Okt"
 #elif L==3	// en
-	 "Oct"
+	"Oct"
 #elif L==4	// es
-	 "oct"
+	"oct"
 #elif L==5	// fr
-	 "oct"
+	"oct"
 #elif L==6	// gn
-	 "oct"	// Okoteve traducción
+	"oct"	// Okoteve traducción
 #elif L==7	// it
-	 "ott"
+	"ott"
 #elif L==8	// pl
-	 "Pa&zacute;"
+	"Pa&zacute;"
 #elif L==9	// pt
-	 "out"
+	"out"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "nov"
+	"nov"
 #elif L==2	// de
-	 "Nov"
+	"Nov"
 #elif L==3	// en
-	 "Nov"
+	"Nov"
 #elif L==4	// es
-	 "nov"
+	"nov"
 #elif L==5	// fr
-	 "nov"
+	"nov"
 #elif L==6	// gn
-	 "nov"	// Okoteve traducción
+	"nov"	// Okoteve traducción
 #elif L==7	// it
-	 "nov"
+	"nov"
 #elif L==8	// pl
-	 "Lis"
+	"Lis"
 #elif L==9	// pt
-	 "nov"
+	"nov"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "des"
+	"des"
 #elif L==2	// de
-	 "Dez"
+	"Dez"
 #elif L==3	// en
-	 "Dec"
+	"Dec"
 #elif L==4	// es
-	 "dic"
+	"dic"
 #elif L==5	// fr
-	 "d&eacute;c"
+	"d&eacute;c"
 #elif L==6	// gn
-	 "dic"	// Okoteve traducción
+	"dic"	// Okoteve traducción
 #elif L==7	// it
-	 "dic"
+	"dic"
 #elif L==8	// pl
-	 "Gru"
+	"Gru"
 #elif L==9	// pt
-	 "dez"
+	"dez"
 #endif
 	};
 
@@ -26005,205 +26111,215 @@ const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
 #endif
 
 const char *Txt_No_users_found[Rol_NUM_ROLES] =
-   {
-#if   L==1	// ca	// Rol_UNK
-	 "No hi ha usuaris."
+	{
+	[Rol_UNK] =
+#if   L==1	// ca
+	"No hi ha usuaris."
 #elif L==2	// de
-	 "Keine Benutzer gefunden."
+	"Keine Benutzer gefunden."
 #elif L==3	// en
-	 "No users found."
+	"No users found."
 #elif L==4	// es
-	 "No hay usuarios."
+	"No hay usuarios."
 #elif L==5	// fr
-	 "Aucun utilisateur trouv&eacute;."
+	"Aucun utilisateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay usuarios."	// Okoteve traducción
+	"No hay usuarios."	// Okoteve traducción
 #elif L==7	// it
-	 "Nessun utente trovato."
+	"Nessun utente trovato."
 #elif L==8	// pl
-	 "Nie znaleziono uzytkownik&oacute;w."
+	"Nie znaleziono uzytkownik&oacute;w."
 #elif L==9	// pt
-	 "Nenhum utilizador encontrado."
+	"Nenhum utilizador encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_GST
-	 "No hi ha convidats."
+	,
+	[Rol_GST] =
+#if   L==1	// ca
+	"No hi ha convidats."
 #elif L==2	// de
-	 "Keine Eingeladen gefunden."
+	"Keine Eingeladen gefunden."
 #elif L==3	// en
-	 "No guests found."
+	"No guests found."
 #elif L==4	// es
-	 "No hay invitados."
+	"No hay invitados."
 #elif L==5	// fr
-	 "Aucun invit&eacute; trouv&eacute;."
+	"Aucun invit&eacute; trouv&eacute;."
 #elif L==6	// gn
-	 "No hay invitados."	// Okoteve traducción
+	"No hay invitados."	// Okoteve traducción
 #elif L==7	// it
-	 "Nessun ospite trovato."
+	"Nessun ospite trovato."
 #elif L==8	// pl
-	 "Nie znaleziono zaproszeni."
+	"Nie znaleziono zaproszeni."
 #elif L==9	// pt
-	 "Nenhum convidado encontrado."
+	"Nenhum convidado encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_USR
-	 "No hi ha usuaris."
+	,
+	[Rol_USR] =
+#if   L==1	// ca
+	"No hi ha usuaris."
 #elif L==2	// de
-	 "Keine Benutzer gefunden."
+	"Keine Benutzer gefunden."
 #elif L==3	// en
-	 "No users found."
+	"No users found."
 #elif L==4	// es
-	 "No hay usuarios."
+	"No hay usuarios."
 #elif L==5	// fr
-	 "Aucun utilisateur trouv&eacute;."
+	"Aucun utilisateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay usuarios."	// Okoteve traducción
+	"No hay usuarios."	// Okoteve traducción
 #elif L==7	// it
-	 "Nessun utente trovato."
+	"Nessun utente trovato."
 #elif L==8	// pl
-	 "Nie znaleziono uzytkownik&oacute;w."
+	"Nie znaleziono uzytkownik&oacute;w."
 #elif L==9	// pt
-	 "Nenhum utilizador encontrado."
+	"Nenhum utilizador encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_STD
-	 "No hi ha estudiants."
+	,
+	[Rol_STD] =
+#if   L==1	// ca
+	"No hi ha estudiants."
 #elif L==2	// de
-	 "Keine Studenten gefunden."
+	"Keine Studenten gefunden."
 #elif L==3	// en
-	 "No students found."
+	"No students found."
 #elif L==4	// es
-	 "No hay estudiantes."
+	"No hay estudiantes."
 #elif L==5	// fr
-	 "Aucun &eacute;tudiant trouv&eacute;."
+	"Aucun &eacute;tudiant trouv&eacute;."
 #elif L==6	// gn
-	 "No hay estudiantes."	// Okoteve traducción
+	"No hay estudiantes."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono studenti."
+	"Non ci sono studenti."
 #elif L==8	// pl
-	 "Nie znaleziono uczni&oacute;w."
+	"Nie znaleziono uczni&oacute;w."
 #elif L==9	// pt
-	 "Nenhum estudante encontrado."
+	"Nenhum estudante encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_NET
-	 "No hi ha professors no editors."
+	,
+	[Rol_NET] =
+#if   L==1	// ca
+	"No hi ha professors no editors."
 #elif L==2	// de
-	 "Keine nicht bearbeiteter Lehrkr&auml;ften gefunden."
+	"Keine nicht bearbeiteter Lehrkr&auml;ften gefunden."
 #elif L==3	// en
-	 "No non-editing teachers found."
+	"No non-editing teachers found."
 #elif L==4	// es
-	 "No hay profesores no editores."
+	"No hay profesores no editores."
 #elif L==5	// fr
-	 "Aucun enseignant non-&eacute;diteur trouv&eacute;."
+	"Aucun enseignant non-&eacute;diteur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay profesores no editores."	// Okoteve traducción
+	"No hay profesores no editores."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono professori non-editing."
+	"Non ci sono professori non-editing."
 #elif L==8	// pl
-	 "Nie znaleziono nauczycieli nie edytuj&aogon;cy."
+	"Nie znaleziono nauczycieli nie edytuj&aogon;cy."
 #elif L==9	// pt
-	 "Nenhum professor n&atilde;o editor encontrado."
+	"Nenhum professor n&atilde;o editor encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_TCH
-	 "No hi ha professors."
+	,
+	[Rol_TCH] =
+#if   L==1	// ca
+	"No hi ha professors."
 #elif L==2	// de
-	 "Keine Lehrkr&auml;ften gefunden."
+	"Keine Lehrkr&auml;ften gefunden."
 #elif L==3	// en
-	 "No teachers found."
+	"No teachers found."
 #elif L==4	// es
-	 "No hay profesores."
+	"No hay profesores."
 #elif L==5	// fr
-	 "Aucun enseignant trouv&eacute;."
+	"Aucun enseignant trouv&eacute;."
 #elif L==6	// gn
-	 "No hay profesores."	// Okoteve traducción
+	"No hay profesores."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono professori."
+	"Non ci sono professori."
 #elif L==8	// pl
-	 "Nie znaleziono nauczycieli."
+	"Nie znaleziono nauczycieli."
 #elif L==9	// pt
-	 "Nenhum professor encontrado."
+	"Nenhum professor encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_DEG_ADM
-	 "No hi ha administradors."
+	,
+	[Rol_DEG_ADM] =
+#if   L==1	// ca
+	"No hi ha administradors."
 #elif L==2	// de
-	 "Keine Administratoren gefunden."
+	"Keine Administratoren gefunden."
 #elif L==3	// en
-	 "No administrators found."
+	"No administrators found."
 #elif L==4	// es
-	 "No hay administradores."
+	"No hay administradores."
 #elif L==5	// fr
-	 "Aucun administrateur trouv&eacute;."
+	"Aucun administrateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay administradores."	// Okoteve traducción
+	"No hay administradores."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono amministratori."
+	"Non ci sono amministratori."
 #elif L==8	// pl
-	 "Nie znaleziono administrator&oacute;w."
+	"Nie znaleziono administrator&oacute;w."
 #elif L==9	// pt
-	 "Nenhum administrador encontrado."
+	"Nenhum administrador encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_CTR_ADM
-	 "No hi ha administradors."
+	,
+	[Rol_CTR_ADM] =
+#if   L==1	// ca
+	"No hi ha administradors."
 #elif L==2	// de
-	 "Keine Administratoren gefunden."
+	"Keine Administratoren gefunden."
 #elif L==3	// en
-	 "No administrators found."
+	"No administrators found."
 #elif L==4	// es
-	 "No hay administradores."
+	"No hay administradores."
 #elif L==5	// fr
-	 "Aucun administrateur trouv&eacute;."
+	"Aucun administrateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay administradores."	// Okoteve traducción
+	"No hay administradores."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono amministratori."
+	"Non ci sono amministratori."
 #elif L==8	// pl
-	 "Nie znaleziono administrator&oacute;w."
+	"Nie znaleziono administrator&oacute;w."
 #elif L==9	// pt
-	 "Nenhum administrador encontrado."
+	"Nenhum administrador encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_INS_ADM
-	 "No hi ha administradors."
+	,
+	[Rol_INS_ADM] =
+#if   L==1	// ca
+	"No hi ha administradors."
 #elif L==2	// de
-	 "Keine Administratoren gefunden."
+	"Keine Administratoren gefunden."
 #elif L==3	// en
-	 "No administrators found."
+	"No administrators found."
 #elif L==4	// es
-	 "No hay administradores."
+	"No hay administradores."
 #elif L==5	// fr
-	 "Aucun administrateur trouv&eacute;."
+	"Aucun administrateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay administradores."	// Okoteve traducción
+	"No hay administradores."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono amministratori."
+	"Non ci sono amministratori."
 #elif L==8	// pl
-	 "Nie znaleziono administrator&oacute;w."
+	"Nie znaleziono administrator&oacute;w."
 #elif L==9	// pt
-	 "Nenhum administrador encontrado."
+	"Nenhum administrador encontrado."
 #endif
-	 ,
-#if   L==1	// ca	// Rol_SYS_ADM
-	 "No hi ha superusuaris."
+	,
+	[Rol_SYS_ADM] =
+#if   L==1	// ca
+	"No hi ha superusuaris."
 #elif L==2	// de
-	 "Keine Superuser gefunden."
+	"Keine Superuser gefunden."
 #elif L==3	// en
-	 "No superusers found."
+	"No superusers found."
 #elif L==4	// es
-	 "No hay superusuarios."
+	"No hay superusuarios."
 #elif L==5	// fr
-	 "Aucun superutilisateur trouv&eacute;."
+	"Aucun superutilisateur trouv&eacute;."
 #elif L==6	// gn
-	 "No hay superusuarios."	// Okoteve traducción
+	"No hay superusuarios."	// Okoteve traducción
 #elif L==7	// it
-	 "Non ci sono superutenti."
+	"Non ci sono superutenti."
 #elif L==8	// pl
-	 "Nie znaleziono superu&zdot;ytkownika."
+	"Nie znaleziono superu&zdot;ytkownika."
 #elif L==9	// pt
-	 "Nenhum superutilizador encontrado."
+	"Nenhum superutilizador encontrado."
 #endif
 	};
 
@@ -26491,23 +26607,23 @@ const char *Txt_Notice_removed =
 
 const char *Txt_Notices =
 #if   L==1	// ca
-	 "Avisos";
+	"Avisos";
 #elif L==2	// de
-	 "Ank&uuml;ndigungen";
+	"Ank&uuml;ndigungen";
 #elif L==3	// en
-	 "Notices";
+	"Notices";
 #elif L==4	// es
-	 "Avisos";
+	"Avisos";
 #elif L==5	// fr
-	 "Avis";
+	"Avis";
 #elif L==6	// gn
-	 "Marandu";
+	"Marandu";
 #elif L==7	// it
-	 "Avvisi";
+	"Avvisi";
 #elif L==8	// pl
-	 "Ogloszenia";
+	"Ogloszenia";
 #elif L==9	// pt
-	 "Avisos";
+	"Avisos";
 #endif
 
 const char *Txt_NOTIF_new_SINGULAR =
@@ -26553,85 +26669,89 @@ const char *Txt_NOTIF_new_PLURAL =
 #endif
 
 const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
-   {
-#if   L==1	// ca	// Ntf_STATUS_NO_EMAIL
-	 "No"	// Necessita traduccio
+	{
+	[Ntf_STATUS_NO_EMAIL] =
+#if   L==1	// ca
+	"No"	// Necessita traduccio
 #elif L==2	// de
-	 "Nein"
+	"Nein"
 #elif L==3	// en
-	 "No"
+	"No"
 #elif L==4	// es
-	 "No"
+	"No"
 #elif L==5	// fr
-	 "Non"
+	"Non"
 #elif L==6	// gn
-	 "Nah&aacute;niri"
+	"Nah&aacute;niri"
 #elif L==7	// it
-	 "No"
+	"No"
 #elif L==8	// pl
-	 "No"
+	"No"
 #elif L==9	// pt
-	 "N&atilde;o"
+	"N&atilde;o"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_STATUS_EMAIL_PENDING
-	 "Pendiente"	// Necessita traduccio
+	,
+	[Ntf_STATUS_EMAIL_PENDING] =
+#if   L==1	// ca
+	"Pendiente"	// Necessita traduccio
 #elif L==2	// de
-	 "Offen"
+	"Offen"
 #elif L==3	// en
-	 "Pending"
+	"Pending"
 #elif L==4	// es
-	 "Pendiente"
+	"Pendiente"
 #elif L==5	// fr
-	 "En attente"
+	"En attente"
 #elif L==6	// gn
-	 "Pendiente"	// Okoteve traducción
+	"Pendiente"	// Okoteve traducción
 #elif L==7	// it
-	 "In attesa"
+	"In attesa"
 #elif L==8	// pl
-	 "Do czasu"
+	"Do czasu"
 #elif L==9	// pt
-	 "Pendente"
+	"Pendente"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_STATUS_EMAIL_CANCELLED
-	 "Cancelado"	// Necessita traduccio
+	,
+	[Ntf_STATUS_EMAIL_CANCELLED] =
+#if   L==1	// ca
+	"Cancelado"	// Necessita traduccio
 #elif L==2	// de
-	 "Abgebrochen"
+	"Abgebrochen"
 #elif L==3	// en
-	 "Cancelled"
+	"Cancelled"
 #elif L==4	// es
-	 "Cancelado"
+	"Cancelado"
 #elif L==5	// fr
-	 "Annul&eacute;"
+	"Annul&eacute;"
 #elif L==6	// gn
-	 "Cancelado"	// Okoteve traducción
+	"Cancelado"	// Okoteve traducción
 #elif L==7	// it
-	 "Rimosso"
+	"Rimosso"
 #elif L==8	// pl
-	 "Odwolany"
+	"Odwolany"
 #elif L==9	// pt
-	 "Cancelado"
+	"Cancelado"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_STATUS_EMAIL_SENT
-	 "Enviado"	// Necessita traduccio
+	,
+	[Ntf_STATUS_EMAIL_SENT] =
+#if   L==1	// ca
+	"Enviado"	// Necessita traduccio
 #elif L==2	// de
-	 "Gesendet"
+	"Gesendet"
 #elif L==3	// en
-	 "Sent"
+	"Sent"
 #elif L==4	// es
-	 "Enviado"
+	"Enviado"
 #elif L==5	// fr
-	 "Envoy&eacute;e"
+	"Envoy&eacute;e"
 #elif L==6	// gn
-	 "Enviado"	// Okoteve traducción
+	"Enviado"	// Okoteve traducción
 #elif L==7	// it
-	 "Inviata"
+	"Inviata"
 #elif L==8	// pl
-	 "Wyslane"
+	"Wyslane"
 #elif L==9	// pt
-	 "Enviada"
+	"Enviada"
 #endif
 	};
 
@@ -26699,711 +26819,747 @@ const char *Txt_notifications =
 #endif
 
 const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
-   {
-#if   L==1	// ca	// Ntf_EVENT_UNKNOWN
-	 "Esdeveniments desconeguts"
+	{
+	[Ntf_EVENT_UNKNOWN] =
+#if   L==1	// ca
+	"Esdeveniments desconeguts"
 #elif L==2	// de
-	 "Unbekannte Ereignisse"
+	"Unbekannte Ereignisse"
 #elif L==3	// en
-	 "Unknown events"
+	"Unknown events"
 #elif L==4	// es
-	 "Eventos desconocidos"
+	"Eventos desconocidos"
 #elif L==5	// fr
-	 "&Eacute;v&eacute;nements inconnus"
+	"&Eacute;v&eacute;nements inconnus"
 #elif L==6	// gn
-	 "Eventos desconocidos"	// Okoteve traducción
+	"Eventos desconocidos"	// Okoteve traducción
 #elif L==7	// it
-	 "Eventi sconosciuto"
+	"Eventi sconosciuto"
 #elif L==8	// pl
-	 "Brak wydarzen"
+	"Brak wydarzen"
 #elif L==9	// pt
-	 "Eventos desconhecidos"
+	"Eventos desconhecidos"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_DOCUMENT_FILE
-	 "Nous documents"
+	,
+	[Ntf_EVENT_DOCUMENT_FILE] =
+#if   L==1	// ca
+	"Nous documents"
 #elif L==2	// de
-	 "Neue Dokumentdateien"
+	"Neue Dokumentdateien"
 #elif L==3	// en
-	 "New document files"
+	"New document files"
 #elif L==4	// es
-	 "Nuevos documentos"
+	"Nuevos documentos"
 #elif L==5	// fr
-	 "Nouveaux fichiers de documents"
+	"Nouveaux fichiers de documents"
 #elif L==6	// gn
-	 "Nuevos documentos"	// Okoteve traducción
+	"Nuevos documentos"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi documenti"
+	"Nuovi documenti"
 #elif L==8	// pl
-	 "Nowy plik dokumentu"
+	"Nowy plik dokumentu"
 #elif L==9	// pt
-	 "Novos arquivos de documento"
+	"Novos arquivos de documento"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TEACHERS_FILE
-	 "Nous arxiu de professors"
+	,
+	[Ntf_EVENT_TEACHERS_FILE] =
+#if   L==1	// ca
+	"Nous arxiu de professors"
 #elif L==2	// de
-	 "New Lehrer Dateien"
+	"New Lehrer Dateien"
 #elif L==3	// en
-	 "New teachers' files"
+	"New teachers' files"
 #elif L==4	// es
-	 "Nuevos archivos de profesores"
+	"Nuevos archivos de profesores"
 #elif L==5	// fr
-	 "Nouveaux fichiers d'enseignants"
+	"Nouveaux fichiers d'enseignants"
 #elif L==6	// gn
-	 "Nuevos archivos de profesores"	// Okoteve traducción
+	"Nuevos archivos de profesores"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi file di professori"
+	"Nuovi file di professori"
 #elif L==8	// pl
-	 "Nowy Nauczyciela plik"
+	"Nowy Nauczyciela plik"
 #elif L==9	// pt
-	 "Novos arquivos dos professores"
+	"Novos arquivos dos professores"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_SHARED_FILE
-	 "Nous arxiu compartit"
+	,
+	[Ntf_EVENT_SHARED_FILE] =
+#if   L==1	// ca
+	"Nous arxiu compartit"
 #elif L==2	// de
-	 "New freigegebene Dateien"
+	"New freigegebene Dateien"
 #elif L==3	// en
-	 "New shared files"
+	"New shared files"
 #elif L==4	// es
-	 "Nuevos archivos compartidos"
+	"Nuevos archivos compartidos"
 #elif L==5	// fr
-	 "Nouveaux fichiers partag&eacute;s"
+	"Nouveaux fichiers partag&eacute;s"
 #elif L==6	// gn
-	 "Nuevos archivos compartidos"	// Okoteve traducción
+	"Nuevos archivos compartidos"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi file condiviso"
+	"Nuovi file condiviso"
 #elif L==8	// pl
-	 "Nowy Udost&eogon;pniony plik"
+	"Nowy Udost&eogon;pniony plik"
 #elif L==9	// pt
-	 "Novos arquivos compartilhado"
+	"Novos arquivos compartilhado"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ASSIGNMENT
-	 "Noves activitats"
+	,
+	[Ntf_EVENT_ASSIGNMENT] =
+#if   L==1	// ca
+	"Noves activitats"
 #elif L==2	// de
-	 "Neue Aufgaben"
+	"Neue Aufgaben"
 #elif L==3	// en
-	 "New assignments"
+	"New assignments"
 #elif L==4	// es
-	 "Nuevas actividades"
+	"Nuevas actividades"
 #elif L==5	// fr
-	 "Nouvelles activit&eacute;s"
+	"Nouvelles activit&eacute;s"
 #elif L==6	// gn
-	 "Nuevas actividades"	// Okoteve traducción
+	"Nuevas actividades"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuove attivit&agrave;"
+	"Nuove attivit&agrave;"
 #elif L==8	// pl
-	 "Nowe zadania"
+	"Nowe zadania"
 #elif L==9	// pt
-	 "Novas atividades"
+	"Novas atividades"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-	 "Noves convocat&ograve;ries d'examen"
+	,
+	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
+#if   L==1	// ca
+	"Noves convocat&ograve;ries d'examen"
 #elif L==2	// de
-	 "Neue Aufrufe f&uuml;r Pr&uuml;fung"
+	"Neue Aufrufe f&uuml;r Pr&uuml;fung"
 #elif L==3	// en
-	 "New announcements of exam"
+	"New announcements of exam"
 #elif L==4	// es
-	 "Nuevas convocatorias de examen"
+	"Nuevas convocatorias de examen"
 #elif L==5	// fr
-	 "Nouvelles convocations &agrave; un examen"
+	"Nouvelles convocations &agrave; un examen"
 #elif L==6	// gn
-	 "Nuevas convocatorias de examen"	// Okoteve traducción
+	"Nuevas convocatorias de examen"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi appelli d'esame"
+	"Nuovi appelli d'esame"
 #elif L==8	// pl
-	 "Nowe anonse egzamin"
+	"Nowe anonse egzamin"
 #elif L==9	// pt
-	 "Novas chamadas para exame"
+	"Novas chamadas para exame"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_MARKS_FILE
-	 "Nous fitxers de qualificacions"
+	,
+	[Ntf_EVENT_MARKS_FILE] =
+#if   L==1	// ca
+	"Nous fitxers de qualificacions"
 #elif L==2	// de
-	 "Neue Dateien mit Bewertung"
+	"Neue Dateien mit Bewertung"
 #elif L==3	// en
-	 "New files with marks"
+	"New files with marks"
 #elif L==4	// es
-	 "Nuevos archivos de calificaciones"
+	"Nuevos archivos de calificaciones"
 #elif L==5	// fr
-	 "Nouveaux fichiers avec des notes"
+	"Nouveaux fichiers avec des notes"
 #elif L==6	// gn
-	 "Nuevos archivos de calificaciones"	// Okoteve traducción
+	"Nuevos archivos de calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi file con risultati"
+	"Nuovi file con risultati"
 #elif L==8	// pl
-	 "Nowe pliki ze znakami"
+	"Nowe pliki ze znakami"
 #elif L==9	// pt
-	 "Novos arquivos de notas"
+	"Novos arquivos de notas"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_STD
-	 "Novas inscripci&oacute;s com a estudiant"
+	,
+	[Ntf_EVENT_ENROLMENT_STD] =
+#if   L==1	// ca
+	"Novas inscripci&oacute;s com a estudiant"
 #elif L==2	// de
-	 "New Einschreibungen als Student"
+	"New Einschreibungen als Student"
 #elif L==3	// en
-	 "New enrolments as a student"
+	"New enrolments as a student"
 #elif L==4	// es
-	 "Nuevas inscripciones como estudiante"
+	"Nuevas inscripciones como estudiante"
 #elif L==5	// fr
-	 "Nouvelles inscriptions en tant qu'&eacute;tudiant"
+	"Nouvelles inscriptions en tant qu'&eacute;tudiant"
 #elif L==6	// gn
-	 "Nuevas inscripciones como estudiante"	// Okoteve traducción
+	"Nuevas inscripciones como estudiante"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuova iscrizione come studente"
+	"Nuova iscrizione come studente"
 #elif L==8	// pl
-	 "Nowe zapisy jako student"
+	"Nowe zapisy jako student"
 #elif L==9	// pt
-	 "Novas inscri&ccedil;&otilde;es como estudante"
+	"Novas inscri&ccedil;&otilde;es como estudante"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_TCH
-	 "Novas inscripci&oacute;s com a professor"
+	,
+	[Ntf_EVENT_ENROLMENT_TCH] =
+#if   L==1	// ca
+	"Novas inscripci&oacute;s com a professor"
 #elif L==2	// de
-	 "New Einschreibungen als Lehrkraft"
+	"New Einschreibungen als Lehrkraft"
 #elif L==3	// en
-	 "New enrolments as a teacher"
+	"New enrolments as a teacher"
 #elif L==4	// es
-	 "Nuevas inscripciones como profesor/a"
+	"Nuevas inscripciones como profesor/a"
 #elif L==5	// fr
-	 "Nouvelles inscriptions en tant qu'enseignant"
+	"Nouvelles inscriptions en tant qu'enseignant"
 #elif L==6	// gn
-	 "Nuevas inscripciones como profesor/a"	// Okoteve traducción
+	"Nuevas inscripciones como profesor/a"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuova iscrizione come professore"
+	"Nuova iscrizione come professore"
 #elif L==8	// pl
-	 "Nowe zapisy jako nauczyciel"
+	"Nowe zapisy jako nauczyciel"
 #elif L==9	// pt
-	 "Novas inscri&ccedil;&otilde;es como professor"
+	"Novas inscri&ccedil;&otilde;es como professor"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_REQUEST
-	 "Novas petici&oacute;s d'inscripci&oacute;"
+	,
+	[Ntf_EVENT_ENROLMENT_REQUEST] =
+#if   L==1	// ca
+	"Novas petici&oacute;s d'inscripci&oacute;"
 #elif L==2	// de
-	 "New Registrierungsanforderungen"
+	"New Registrierungsanforderungen"
 #elif L==3	// en
-	 "New enrolment requests"
+	"New enrolment requests"
 #elif L==4	// es
-	 "Nuevas peticiones de inscripci&oacute;n"
+	"Nuevas peticiones de inscripci&oacute;n"
 #elif L==5	// fr
-	 "Nouvelles demandes d'inscription"
+	"Nouvelles demandes d'inscription"
 #elif L==6	// gn
-	 "Nuevas peticiones de inscripci&oacute;n"	// Okoteve traducción
+	"Nuevas peticiones de inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuova richiesta di iscrizione"
+	"Nuova richiesta di iscrizione"
 #elif L==8	// pl
-	 "Nowe pro&sacute;by o rejestracji"
+	"Nowe pro&sacute;by o rejestracji"
 #elif L==9	// pt
-	 "Novos pedidos de inscri&ccedil;&atilde;o"
+	"Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_COMMENT
-	 "Nous comentaris als meus missatges socials"
+	,
+	[Ntf_EVENT_TIMELINE_COMMENT] =
+#if   L==1	// ca
+	"Nous comentaris als meus missatges socials"
 #elif L==2	// de
-	 "Neue Kommentare zu meinem sozialen Beitr&auml;ge"
+	"Neue Kommentare zu meinem sozialen Beitr&auml;ge"
 #elif L==3	// en
-	 "New comments to my social posts"
+	"New comments to my social posts"
 #elif L==4	// es
-	 "Nuevos comentarios a mis mensajes sociales"
+	"Nuevos comentarios a mis mensajes sociales"
 #elif L==5	// fr
-	 "Nouveaux commentaires &agrave; mes messages sociaux"
+	"Nouveaux commentaires &agrave; mes messages sociaux"
 #elif L==6	// gn
-	 "Nuevos comentarios a mis mensajes sociales"	// Okoteve traducción
+	"Nuevos comentarios a mis mensajes sociales"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi commenti ai miei post sociali"
+	"Nuovi commenti ai miei post sociali"
 #elif L==8	// pl
-	 "Nowe komentarze do moich post spo&lstrok;ecznej"
+	"Nowe komentarze do moich post spo&lstrok;ecznej"
 #elif L==9	// pt
-	 "Novos coment&aacute;rio &agrave;s minhos posts sociais"
+	"Novos coment&aacute;rio &agrave;s minhos posts sociais"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_FAV
-	 "Nous favorits als meus missatges socials"
+	,
+	[Ntf_EVENT_TIMELINE_FAV] =
+#if   L==1	// ca
+	"Nous favorits als meus missatges socials"
 #elif L==2	// de
-	 "Neue Favorit zu meinem sozialen Beitr&auml;ge"
+	"Neue Favorit zu meinem sozialen Beitr&auml;ge"
 #elif L==3	// en
-	 "New favourite to my social posts"
+	"New favourite to my social posts"
 #elif L==4	// es
-	 "Nuevos favoritos a mis mensajes sociales"
+	"Nuevos favoritos a mis mensajes sociales"
 #elif L==5	// fr
-	 "Nouveaux favori &agrave; mes messages sociaux"
+	"Nouveaux favori &agrave; mes messages sociaux"
 #elif L==6	// gn
-	 "Nuevos favoritos a mis mensajes sociales"	// Okoteve traducción
+	"Nuevos favoritos a mis mensajes sociales"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi preferito ai miei post sociali"
+	"Nuovi preferito ai miei post sociali"
 #elif L==8	// pl
-	 "Nowe ulubiony do moich post spo&lstrok;ecznej"
+	"Nowe ulubiony do moich post spo&lstrok;ecznej"
 #elif L==9	// pt
-	 "Novos favoritos &agrave;s minhos posts sociais"
+	"Novos favoritos &agrave;s minhos posts sociais"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_SHARE
-	 "Noves comparticions dels meus missatges socials"
+	,
+	[Ntf_EVENT_TIMELINE_SHARE] =
+#if   L==1	// ca
+	"Noves comparticions dels meus missatges socials"
 #elif L==2	// de
-	 "Neue gemeinsame Nutzung zu meinem sozialen Beitr&auml;ge"
+	"Neue gemeinsame Nutzung zu meinem sozialen Beitr&auml;ge"
 #elif L==3	// en
-	 "New sharings of my social posts"
+	"New sharings of my social posts"
 #elif L==4	// es
-	 "Nuevas comparticiones de mis mensajes sociales"
+	"Nuevas comparticiones de mis mensajes sociales"
 #elif L==5	// fr
-	 "Nouveaux partages de mes messages sociaux"
+	"Nouveaux partages de mes messages sociaux"
 #elif L==6	// gn
-	 "Nuevas comparticiones de mis mensajes sociales"	// Okoteve traducción
+	"Nuevas comparticiones de mis mensajes sociales"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuove condivisioni dei miei post sociali"
+	"Nuove condivisioni dei miei post sociali"
 #elif L==8	// pl
-	 "Nowe podzial moich post spo&lstrok;ecznej"
+	"Nowe podzial moich post spo&lstrok;ecznej"
 #elif L==9	// pt
-	 "Novas partilhas de minhos posts sociais"
+	"Novas partilhas de minhos posts sociais"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_MENTION
-	 "Noves mencions"
+	,
+	[Ntf_EVENT_TIMELINE_MENTION] =
+#if   L==1	// ca
+	"Noves mencions"
 #elif L==2	// de
-	 "Neue Erw&auml;hnungen"
+	"Neue Erw&auml;hnungen"
 #elif L==3	// en
-	 "New mentions"
+	"New mentions"
 #elif L==4	// es
-	 "Nuevas menciones"
+	"Nuevas menciones"
 #elif L==5	// fr
-	 "Nouvelles mentions"
+	"Nouvelles mentions"
 #elif L==6	// gn
-	 "Nuevas menciones"	// Okoteve traducción
+	"Nuevas menciones"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi menzioni"
+	"Nuovi menzioni"
 #elif L==8	// pl
-	 "Nowe wzmianki"
+	"Nowe wzmianki"
 #elif L==9	// pt
-	 "Novas men&ccedil;&otilde;es"
+	"Novas men&ccedil;&otilde;es"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FOLLOWER
-	 "Nous seguidors"
+	,
+	[Ntf_EVENT_FOLLOWER] =
+#if   L==1	// ca
+	"Nous seguidors"
 #elif L==2	// de
-	 "Neue Anh&auml;nger"
+	"Neue Anh&auml;nger"
 #elif L==3	// en
-	 "New followers"
+	"New followers"
 #elif L==4	// es
-	 "Nuevos seguidores"
+	"Nuevos seguidores"
 #elif L==5	// fr
-	 "Nouveaux suiveurs"
+	"Nouveaux suiveurs"
 #elif L==6	// gn
-	 "Nuevos seguidores"	// Okoteve traducción
+	"Nuevos seguidores"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi followers"
+	"Nuovi followers"
 #elif L==8	// pl
-	 "Nowe obserwuj&aogon;"
+	"Nowe obserwuj&aogon;"
 #elif L==9	// pt
-	 "Novos seguidores"
+	"Novos seguidores"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FORUM_POST_COURSE
-	 "Novos comentaris en f&ograve;rums"
+	,
+	[Ntf_EVENT_FORUM_POST_COURSE] =
+#if   L==1	// ca
+	"Novos comentaris en f&ograve;rums"
 #elif L==2	// de
-	 "Neue Beitr&auml;ge in den Foren"
+	"Neue Beitr&auml;ge in den Foren"
 #elif L==3	// en
-	 "New posts in course forums"
+	"New posts in course forums"
 #elif L==4	// es
-	 "Nuevos comentarios en foros de asignaturas"
+	"Nuevos comentarios en foros de asignaturas"
 #elif L==5	// fr
-	 "Nouveaux posts dans les forums"
+	"Nouveaux posts dans les forums"
 #elif L==6	// gn
-	 "Nuevos comentarios en foros de asignaturas"	// Okoteve traducción
+	"Nuevos comentarios en foros de asignaturas"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi post nei forum"
+	"Nuovi post nei forum"
 #elif L==8	// pl
-	 "Nowe post&oacute;w na forum"
+	"Nowe post&oacute;w na forum"
 #elif L==9	// pt
-	 "Novos posts em f&oacute;runs"
+	"Novos posts em f&oacute;runs"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FORUM_REPLY
-	 "Noves respostes als meus comentaris en f&ograve;rums"
+	,
+	[Ntf_EVENT_FORUM_REPLY] =
+#if   L==1	// ca
+	"Noves respostes als meus comentaris en f&ograve;rums"
 #elif L==2	// de
-	 "Neue Antworten auf meine Beitr&auml;ge in den Foren"
+	"Neue Antworten auf meine Beitr&auml;ge in den Foren"
 #elif L==3	// en
-	 "New replies to my posts in forums"
+	"New replies to my posts in forums"
 #elif L==4	// es
-	 "Nuevas respuestas a mis comentarios en foros"
+	"Nuevas respuestas a mis comentarios en foros"
 #elif L==5	// fr
-	 "Nouvelles r&eacute;ponses &agrave; mes posts dans les forums"
+	"Nouvelles r&eacute;ponses &agrave; mes posts dans les forums"
 #elif L==6	// gn
-	 "Nuevas respuestas a mis comentarios en foros"	// Okoteve traducción
+	"Nuevas respuestas a mis comentarios en foros"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuove risposte ai miei post nei forum"
+	"Nuove risposte ai miei post nei forum"
 #elif L==8	// pl
-	 "Nowe podejscie do moich post&oacute;w na forum"
+	"Nowe podejscie do moich post&oacute;w na forum"
 #elif L==9	// pt
-	 "Novas respostas aos meus posts em f&oacute;runs"
+	"Novas respostas aos meus posts em f&oacute;runs"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_NOTICE
-	 "Nous avisos"
+	,
+	[Ntf_EVENT_NOTICE] =
+#if   L==1	// ca
+	"Nous avisos"
 #elif L==2	// de
-	 "Neue Ank&uuml;ndigungen"
+	"Neue Ank&uuml;ndigungen"
 #elif L==3	// en
-	 "New notices"
+	"New notices"
 #elif L==4	// es
-	 "Nuevos avisos"
+	"Nuevos avisos"
 #elif L==5	// fr
-	 "Nouveaux avis"
+	"Nouveaux avis"
 #elif L==6	// gn
-	 "Nuevos avisos"	// Okoteve traducción
+	"Nuevos avisos"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi avvisi"
+	"Nuovi avvisi"
 #elif L==8	// pl
-	 "Nowe ogloszenia"
+	"Nowe ogloszenia"
 #elif L==9	// pt
-	 "Novos avisos"
+	"Novos avisos"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_MESSAGE
-	 "Nous missatges"
+	,
+	[Ntf_EVENT_MESSAGE] =
+#if   L==1	// ca
+	"Nous missatges"
 #elif L==2	// de
-	 "Neue Nachrichten"
+	"Neue Nachrichten"
 #elif L==3	// en
-	 "New messages"
+	"New messages"
 #elif L==4	// es
-	 "Nuevos mensajes"
+	"Nuevos mensajes"
 #elif L==5	// fr
-	 "Nouveaux messages"
+	"Nouveaux messages"
 #elif L==6	// gn
-	 "Nuevos mensajes"	// Okoteve traducción
+	"Nuevos mensajes"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuovi messaggi"
+	"Nuovi messaggi"
 #elif L==8	// pl
-	 "Nowa wiadomosc"
+	"Nowa wiadomosc"
 #elif L==9	// pt
-	 "Novas mensagens"
+	"Novas mensagens"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-	 "Noves enquestes"
+	,
+	[Ntf_EVENT_SURVEY] =	// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+#if   L==1	// ca
+	"Noves enquestes"
 #elif L==2	// de
-	 "Neue Umfragen"
+	"Neue Umfragen"
 #elif L==3	// en
-	 "New surveys"
+	"New surveys"
 #elif L==4	// es
-	 "Nuevas encuestas"
+	"Nuevas encuestas"
 #elif L==5	// fr
-	 "Nouveaux sondages"
+	"Nouveaux sondages"
 #elif L==6	// gn
-	 "Nuevas encuestas"	// Okoteve traducción
+	"Nuevas encuestas"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuove sondaggi"
+	"Nuove sondaggi"
 #elif L==8	// pl
-	 "Nowe badania"
+	"Nowe badania"
 #elif L==9	// pt
-	 "Novos inqu&eacute;ritos"
+	"Novos inqu&eacute;ritos"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
-	 "Novas inscripci&oacute;s com a professor/a no editor/a"
+	,
+	[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+#if   L==1	// ca
+	"Novas inscripci&oacute;s com a professor/a no editor/a"
 #elif L==2	// de
-	 "New Einschreibungen als nicht bearbeiteter Lehrkraft"
+	"New Einschreibungen als nicht bearbeiteter Lehrkraft"
 #elif L==3	// en
-	 "New enrolments as a non-editing teacher"
+	"New enrolments as a non-editing teacher"
 #elif L==4	// es
-	 "Nuevas inscripciones como profesor/a/a no editor/a"
+	"Nuevas inscripciones como profesor/a/a no editor/a"
 #elif L==5	// fr
-	 "Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
+	"Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
-	 "Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
+	"Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
 #elif L==7	// it
-	 "Nuova iscrizione come professore/ssa non-editing"
+	"Nuova iscrizione come professore/ssa non-editing"
 #elif L==8	// pl
-	 "Nowe zapisy jako nauczyciel nie edytuj&aogon;cy"
+	"Nowe zapisy jako nauczyciel nie edytuj&aogon;cy"
 #elif L==9	// pt
-	 "Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
+	"Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
 #endif
 	};
 
 const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
-   {
-#if   L==1	// ca	// Ntf_EVENT_UNKNOWN
-	 "Esdeveniment desconegut"
+	{
+	[Ntf_EVENT_UNKNOWN] =
+#if   L==1	// ca	//
+	"Esdeveniment desconegut"
 #elif L==2	// de
-	 "Unbekannt Ereignis"
+	"Unbekannt Ereignis"
 #elif L==3	// en
-	 "Unknown event"
+	"Unknown event"
 #elif L==4	// es
-	 "Evento desconocido"
+	"Evento desconocido"
 #elif L==5	// fr
-	 "&Eacute;v&eacute;nement inconnu"
+	"&Eacute;v&eacute;nement inconnu"
 #elif L==6	// gn
-	 "Evento desconocido"	// Okoteve traducción
+	"Evento desconocido"	// Okoteve traducción
 #elif L==7	// it
-	 "Evento sconosciuto"
+	"Evento sconosciuto"
 #elif L==8	// pl
-	 "Nieznane zdarzenia"
+	"Nieznane zdarzenia"
 #elif L==9	// pt
-	 "Evento desconhecido"
+	"Evento desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_DOCUMENT_FILE
-	 "Document"
+	,
+	[Ntf_EVENT_DOCUMENT_FILE] =
+#if   L==1	// ca
+	"Document"
 #elif L==2	// de
-	 "Dokumentdatei"
+	"Dokumentdatei"
 #elif L==3	// en
-	 "Document file"
+	"Document file"
 #elif L==4	// es
-	 "Documento"
+	"Documento"
 #elif L==5	// fr
-	 "Fichier de document"
+	"Fichier de document"
 #elif L==6	// gn
-	 "Documento"	// Okoteve traducción
+	"Documento"	// Okoteve traducción
 #elif L==7	// it
-	 "Documento"
+	"Documento"
 #elif L==8	// pl
-	 "Plik dokumentu"
+	"Plik dokumentu"
 #elif L==9	// pt
-	 "Arquivo de documento"
+	"Arquivo de documento"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TEACHERS_FILE
-	 "Arxiu de professors"
+	,
+	[Ntf_EVENT_TEACHERS_FILE] =
+#if   L==1	// ca
+	"Arxiu de professors"
 #elif L==2	// de
-	 "Lehrer Datei"
+	"Lehrer Datei"
 #elif L==3	// en
-	 "Teachers' file"
+	"Teachers' file"
 #elif L==4	// es
-	 "Archivo de profesores"
+	"Archivo de profesores"
 #elif L==5	// fr
-	 "Fichier d'enseignants"
+	"Fichier d'enseignants"
 #elif L==6	// gn
-	 "Archivo de profesores"	// Okoteve traducción
+	"Archivo de profesores"	// Okoteve traducción
 #elif L==7	// it
-	 "File di professori"
+	"File di professori"
 #elif L==8	// pl
-	 "Nauczyciela plik"
+	"Nauczyciela plik"
 #elif L==9	// pt
-	 "Arquivo dos professores"
+	"Arquivo dos professores"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_SHARED_FILE
-	 "Arxiu compartit"
+	,
+	[Ntf_EVENT_SHARED_FILE] =
+#if   L==1	// ca
+	"Arxiu compartit"
 #elif L==2	// de
-	 "Freigegebene Datei"
+	"Freigegebene Datei"
 #elif L==3	// en
-	 "Shared file"
+	"Shared file"
 #elif L==4	// es
-	 "Archivo compartido"
+	"Archivo compartido"
 #elif L==5	// fr
-	 "Fichier partag&eacute;"
+	"Fichier partag&eacute;"
 #elif L==6	// gn
-	 "Archivo compartido"	// Okoteve traducción
+	"Archivo compartido"	// Okoteve traducción
 #elif L==7	// it
-	 "File condiviso"
+	"File condiviso"
 #elif L==8	// pl
-	 "Udost&eogon;pniony plik"
+	"Udost&eogon;pniony plik"
 #elif L==9	// pt
-	 "Arquivo compartilhado"
+	"Arquivo compartilhado"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ASSIGNMENT
-	 "Activitat"
+	,
+	[Ntf_EVENT_ASSIGNMENT] =
+#if   L==1	// ca
+	"Activitat"
 #elif L==2	// de
-	 "Aufgabe"
+	"Aufgabe"
 #elif L==3	// en
-	 "Assignment"
+	"Assignment"
 #elif L==4	// es
-	 "Actividad"
+	"Actividad"
 #elif L==5	// fr
-	 "Activit&eacute;"
+	"Activit&eacute;"
 #elif L==6	// gn
-	 "Tar&eacute;a"
+	"Tar&eacute;a"
 #elif L==7	// it
-	 "Attivit&agrave;"
+	"Attivit&agrave;"
 #elif L==8	// pl
-	 "Przyporzadkowanie"
+	"Przyporzadkowanie"
 #elif L==9	// pt
-	 "Atividade"
+	"Atividade"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-	 "Convocat&ograve;ria d'examen"
+	,
+	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
+#if   L==1	// ca
+	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
-	 "Aufrufe für Pr&uuml;fung"
+	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
-	 "Announcement of exam"
+	"Announcement of exam"
 #elif L==4	// es
-	 "Convocatoria de examen"
+	"Convocatoria de examen"
 #elif L==5	// fr
-	 "Convocation &agrave; un examen"
+	"Convocation &agrave; un examen"
 #elif L==6	// gn
-	 "Convocatoria de examen"	// Okoteve traducción
+	"Convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	 "Appello d'esame"
+	"Appello d'esame"
 #elif L==8	// pl
-	 "Ogloszenie egzamin"
+	"Ogloszenie egzamin"
 #elif L==9	// pt
-	 "Chamada para exame"
+	"Chamada para exame"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_MARKS_FILE
-	 "Fitxer de qualificacions"
+	,
+	[Ntf_EVENT_MARKS_FILE] =
+#if   L==1	// ca
+	"Fitxer de qualificacions"
 #elif L==2	// de
-	 "Datei mit Bewertung"
+	"Datei mit Bewertung"
 #elif L==3	// en
-	 "File with marks"
+	"File with marks"
 #elif L==4	// es
-	 "Archivo de calificaciones"
+	"Archivo de calificaciones"
 #elif L==5	// fr
-	 "Fichier avec des notes"
+	"Fichier avec des notes"
 #elif L==6	// gn
-	 "Archivo de calificaciones"	// Okoteve traducción
+	"Archivo de calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "File con risultati"
+	"File con risultati"
 #elif L==8	// pl
-	 "Plik ze znakami"
+	"Plik ze znakami"
 #elif L==9	// pt
-	 "Arquivo de notas"
+	"Arquivo de notas"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_STD
-	 "Inscripci&oacute; com a estudiant"
+	,
+	[Ntf_EVENT_ENROLMENT_STD] =
+#if   L==1	// ca
+	"Inscripci&oacute; com a estudiant"
 #elif L==2	// de
-	 "Einschreibung als Student"
+	"Einschreibung als Student"
 #elif L==3	// en
-	 "Enrolment as a student"
+	"Enrolment as a student"
 #elif L==4	// es
-	 "Inscripci&oacute;n como estudiante"
+	"Inscripci&oacute;n como estudiante"
 #elif L==5	// fr
-	 "Inscription en tant qu'&eacute;tudiant"
+	"Inscription en tant qu'&eacute;tudiant"
 #elif L==6	// gn
-	 "Inscripci&oacute;n como estudiante"	// Okoteve traducción
+	"Inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==7	// it
-	 "Iscrizione come studente"
+	"Iscrizione come studente"
 #elif L==8	// pl
-	 "Zapisy jako student"
+	"Zapisy jako student"
 #elif L==9	// pt
-	 "Inscri&ccedil;&atilde;o como estudante"
+	"Inscri&ccedil;&atilde;o como estudante"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_TCH
-	 "Inscripci&oacute; com a professor/a"
+	,
+	[Ntf_EVENT_ENROLMENT_TCH] =
+#if   L==1	// ca
+	"Inscripci&oacute; com a professor/a"
 #elif L==2	// de
-	 "Einschreibung als Lehrkraft"
+	"Einschreibung als Lehrkraft"
 #elif L==3	// en
-	 "Enrolment as a teacher"
+	"Enrolment as a teacher"
 #elif L==4	// es
-	 "Inscripci&oacute;n como profesor/a"
+	"Inscripci&oacute;n como profesor/a"
 #elif L==5	// fr
-	 "Inscription en tant qu'enseignant"
+	"Inscription en tant qu'enseignant"
 #elif L==6	// gn
-	 "Inscripci&oacute;n como profesor/a"	// Okoteve traducción
+	"Inscripci&oacute;n como profesor/a"	// Okoteve traducción
 #elif L==7	// it
-	 "Iscrizione come professore/ssa"
+	"Iscrizione come professore/ssa"
 #elif L==8	// pl
-	 "Zapisy jako nauczyciel"
+	"Zapisy jako nauczyciel"
 #elif L==9	// pt
-	 "Inscri&ccedil;&atilde;o como professor/a"
+	"Inscri&ccedil;&atilde;o como professor/a"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_REQUEST
-	 "Petici&oacute; d'inscripci&oacute;"
+	,
+	[Ntf_EVENT_ENROLMENT_REQUEST] =
+#if   L==1	// ca
+	"Petici&oacute; d'inscripci&oacute;"
 #elif L==2	// de
-	 "Registrierungsanforderung"
+	"Registrierungsanforderung"
 #elif L==3	// en
-	 "Enrolment request"
+	"Enrolment request"
 #elif L==4	// es
-	 "Petici&oacute;n de inscripci&oacute;n"
+	"Petici&oacute;n de inscripci&oacute;n"
 #elif L==5	// fr
-	 "Demande d'inscription"
+	"Demande d'inscription"
 #elif L==6	// gn
-	 "Petici&oacute;n de inscripci&oacute;n"	// Okoteve traducción
+	"Petici&oacute;n de inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Richiesta di iscrizione"
+	"Richiesta di iscrizione"
 #elif L==8	// pl
-	 "&Zdot;&aogon;danie rejestracji"
+	"&Zdot;&aogon;danie rejestracji"
 #elif L==9	// pt
-	 "Pedido de inscri&ccedil;&atilde;o"
+	"Pedido de inscri&ccedil;&atilde;o"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_COMMENT
-	 "Comentari a un missatge social"
+	,
+	[Ntf_EVENT_TIMELINE_COMMENT] =
+#if   L==1	// ca
+	"Comentari a un missatge social"
 #elif L==2	// de
-	 "Kommentar zu soziale Beitrag"
+	"Kommentar zu soziale Beitrag"
 #elif L==3	// en
-	 "Comment to social post"
+	"Comment to social post"
 #elif L==4	// es
-	 "Comentario a un mensaje social"
+	"Comentario a un mensaje social"
 #elif L==5	// fr
-	 "Commentaire &agrave; message social"
+	"Commentaire &agrave; message social"
 #elif L==6	// gn
-	 "Comentario a un mensaje social"	// Okoteve traducción
+	"Comentario a un mensaje social"	// Okoteve traducción
 #elif L==7	// it
-	 "Commento a un post sociale"
+	"Commento a un post sociale"
 #elif L==8	// pl
-	 "Komentarz do post spo&lstrok;eczna"
+	"Komentarz do post spo&lstrok;eczna"
 #elif L==9	// pt
-	 "Coment&aacute;rio a um post sociais"
+	"Coment&aacute;rio a um post sociais"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_FAV
-	 "Missatge social marcat com favorit"
+	,
+	[Ntf_EVENT_TIMELINE_FAV] =
+#if   L==1	// ca
+	"Missatge social marcat com favorit"
 #elif L==2	// de
-	 "Social Beitrag als Favorit markiert"
+	"Social Beitrag als Favorit markiert"
 #elif L==3	// en
-	 "Social post marked as favourite"
+	"Social post marked as favourite"
 #elif L==4	// es
-	 "Mensaje social marcado como favorito"
+	"Mensaje social marcado como favorito"
 #elif L==5	// fr
-	 "Message social marqu&eacute;e comme favori"
+	"Message social marqu&eacute;e comme favori"
 #elif L==6	// gn
-	 "Mensaje social marcado como favorito"	// Okoteve traducción
+	"Mensaje social marcado como favorito"	// Okoteve traducción
 #elif L==7	// it
-	 "Post sociale segnato come preferito"
+	"Post sociale segnato come preferito"
 #elif L==8	// pl
-	 "Post spo&lstrok;ecznej oznaczone jako ulubiony"
+	"Post spo&lstrok;ecznej oznaczone jako ulubiony"
 #elif L==9	// pt
-	 "Post sociais marcado como favorito"
+	"Post sociais marcado como favorito"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_SHARE
-	 "Missatge social compartit"
+	,
+	[Ntf_EVENT_TIMELINE_SHARE] =
+#if   L==1	// ca
+	"Missatge social compartit"
 #elif L==2	// de
-	 "Social Beitrag gemeinsamer"
+	"Social Beitrag gemeinsamer"
 #elif L==3	// en
-	 "Social post shared"
+	"Social post shared"
 #elif L==4	// es
-	 "Mensaje social compartido"
+	"Mensaje social compartido"
 #elif L==5	// fr
-	 "Message social partagé&eacute;"
+	"Message social partagé&eacute;"
 #elif L==6	// gn
-	 "Mensaje social compartido"	// Okoteve traducción
+	"Mensaje social compartido"	// Okoteve traducción
 #elif L==7	// it
-	 "Post sociale condiviso"
+	"Post sociale condiviso"
 #elif L==8	// pl
-	 "Post spo&lstrok;ecznej wsp&oacute;lne"
+	"Post spo&lstrok;ecznej wsp&oacute;lne"
 #elif L==9	// pt
-	 "Post sociais compartido"
+	"Post sociais compartido"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_TIMELINE_MENTION
-	 "Menci&oacute;"
+	,
+	[Ntf_EVENT_TIMELINE_MENTION] =
+#if   L==1	// ca
+	"Menci&oacute;"
 #elif L==2	// de
-	 "Erw&auml;hnung"
+	"Erw&auml;hnung"
 #elif L==3	// en
-	 "Mention"
+	"Mention"
 #elif L==4	// es
-	 "Menci&oacute;n"
+	"Menci&oacute;n"
 #elif L==5	// fr
-	 "Mention"
+	"Mention"
 #elif L==6	// gn
-	 "Menci&oacute;n"			// Okoteve traducción
+	"Menci&oacute;n"			// Okoteve traducción
 #elif L==7	// it
-	 "Menzione"
+	"Menzione"
 #elif L==8	// pl
-	 "Wzmianka"
+	"Wzmianka"
 #elif L==9	// pt
-	 "Men&ccedil;&atilde;o"
+	"Men&ccedil;&atilde;o"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FOLLOWER
+	,
+	[Ntf_EVENT_FOLLOWER] =
+#if   L==1	// ca
 	"Seguidor"
 #elif L==2	// de
 	"Anh&auml;nger"
@@ -27422,125 +27578,131 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Seguidor"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FORUM_POST_COURSE
-	 "Comentari en un f&ograve;rum"
+	,
+	[Ntf_EVENT_FORUM_POST_COURSE] =
+#if   L==1	// ca
+	"Comentari en un f&ograve;rum"
 #elif L==2	// de
-	 "Beitr&auml;ge in einem Forum"
+	"Beitr&auml;ge in einem Forum"
 #elif L==3	// en
-	 "Post in a forum"
+	"Post in a forum"
 #elif L==4	// es
-	 "Comentario en un foro"
+	"Comentario en un foro"
 #elif L==5	// fr
-	 "Post dans un forum"
+	"Post dans un forum"
 #elif L==6	// gn
-	 "Comentario en un foro"	// Okoteve traducción
+	"Comentario en un foro"	// Okoteve traducción
 #elif L==7	// it
-	 "Post in un forum"
+	"Post in un forum"
 #elif L==8	// pl
-	 "Post na forum"
+	"Post na forum"
 #elif L==9	// pt
-	 "Post em um f&oacute;rum"
+	"Post em um f&oacute;rum"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_FORUM_REPLY
-	 "Resposta en un f&ograve;rum"
+	,
+	[Ntf_EVENT_FORUM_REPLY] =
+#if   L==1	// ca
+	"Resposta en un f&ograve;rum"
 #elif L==2	// de
-	 "Antwort in einem Forum"
+	"Antwort in einem Forum"
 #elif L==3	// en
-	 "Response in a forum"
+	"Response in a forum"
 #elif L==4	// es
-	 "Respuesta en un foro"
+	"Respuesta en un foro"
 #elif L==5	// fr
-	 "R&eacute;ponse dans un forum"
+	"R&eacute;ponse dans un forum"
 #elif L==6	// gn
-	 "Respuesta en un foro"	// Okoteve traducción
+	"Respuesta en un foro"	// Okoteve traducción
 #elif L==7	// it
-	 "Risposta in un forum"
+	"Risposta in un forum"
 #elif L==8	// pl
-	 "Odpowiedz na forum"
+	"Odpowiedz na forum"
 #elif L==9	// pt
-	 "Resposta em um f&oacute;rum"
+	"Resposta em um f&oacute;rum"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_NOTICE
-	 "Av&iacute;s"
+	,
+	[Ntf_EVENT_NOTICE] =
+#if   L==1	// ca
+	"Av&iacute;s"
 #elif L==2	// de
-	 "Ank&uuml;ndigungen"
+	"Ank&uuml;ndigungen"
 #elif L==3	// en
-	 "Notice"
+	"Notice"
 #elif L==4	// es
-	 "Aviso"
+	"Aviso"
 #elif L==5	// fr
-	 "Avis"
+	"Avis"
 #elif L==6	// gn
-	 "Marandu"
+	"Marandu"
 #elif L==7	// it
-	 "Avviso"
+	"Avviso"
 #elif L==8	// pl
-	 "Informacja"
+	"Informacja"
 #elif L==9	// pt
-	 "An&uacute;ncio"
+	"An&uacute;ncio"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_MESSAGE
-	 "Missatge"
+	,
+	[Ntf_EVENT_MESSAGE] =
+#if   L==1	// ca
+	"Missatge"
 #elif L==2	// de
-	 "Nachricht"
+	"Nachricht"
 #elif L==3	// en
-	 "Message"
+	"Message"
 #elif L==4	// es
-	 "Mensaje"
+	"Mensaje"
 #elif L==5	// fr
-	 "Message"
+	"Message"
 #elif L==6	// gn
-	 "Marandu"
+	"Marandu"
 #elif L==7	// it
-	 "Messaggio"
+	"Messaggio"
 #elif L==8	// pl
-	 "Wiadomo&sacute;&cacute;"
+	"Wiadomo&sacute;&cacute;"
 #elif L==9	// pt
-	 "Mensagem"
+	"Mensagem"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-	 "Enquesta"
+	,
+	[Ntf_EVENT_SURVEY] =	// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+#if   L==1	// ca
+	"Enquesta"
 #elif L==2	// de
-	 "Umfrage"
+	"Umfrage"
 #elif L==3	// en
-	 "Survey"
+	"Survey"
 #elif L==4	// es
-	 "Encuesta"
+	"Encuesta"
 #elif L==5	// fr
-	 "Sondage"
+	"Sondage"
 #elif L==6	// gn
-	 "Encuesta"	// Okoteve traducción
+	"Encuesta"	// Okoteve traducción
 #elif L==7	// it
-	 "Sondaggio"
+	"Sondaggio"
 #elif L==8	// pl
-	 "Badania"
+	"Badania"
 #elif L==9	// pt
-	 "Inqu&eacute;rito"
+	"Inqu&eacute;rito"
 #endif
-	 ,
-#if   L==1	// ca	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
-	 "Inscripci&oacute; com a professor/a no editor/a"
+	,
+	[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+#if   L==1	// ca
+	"Inscripci&oacute; com a professor/a no editor/a"
 #elif L==2	// de
-	 "Einschreibung als nicht bearbeiteter Lehrkraft"
+	"Einschreibung als nicht bearbeiteter Lehrkraft"
 #elif L==3	// en
-	 "Enrolment as a non-editing teacher"
+	"Enrolment as a non-editing teacher"
 #elif L==4	// es
-	 "Inscripci&oacute;n como profesor/a no editor/a"
+	"Inscripci&oacute;n como profesor/a no editor/a"
 #elif L==5	// fr
-	 "Inscription en tant qu'enseignant non-&eacute;diteur/trice"
+	"Inscription en tant qu'enseignant non-&eacute;diteur/trice"
 #elif L==6	// gn
-	 "Inscripci&oacute;n como profesor/a no editor/a"	// Okoteve traducción
+	"Inscripci&oacute;n como profesor/a no editor/a"	// Okoteve traducción
 #elif L==7	// it
-	 "Iscrizione come professore/ssa non-editing"
+	"Iscrizione come professore/ssa non-editing"
 #elif L==8	// pl
-	 "Zapisy jako nauczyciel nie edytuj&aogon;cy"
+	"Zapisy jako nauczyciel nie edytuj&aogon;cy"
 #elif L==9	// pt
-	 "Inscri&ccedil;&atilde;o como professor/a n&atilde;o editor/a"
+	"Inscri&ccedil;&atilde;o como professor/a n&atilde;o editor/a"
 #endif
 	};
 
@@ -28988,65 +29150,65 @@ const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very im
 #endif
 
 const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
-   {
+	{
 #if   L==1	// ca
-	 "Rostre seleccionat"
+	"Rostre seleccionat"
 #elif L==2	// de
-	 "Gesicht ausgew&auml;hlt"
+	"Gesicht ausgew&auml;hlt"
 #elif L==3	// en
-	 "Face selected"
+	"Face selected"
 #elif L==4	// es
-	 "Rostro seleccionado"
+	"Rostro seleccionado"
 #elif L==5	// fr
-	 "Visage s&eacute;lectionn&eacute;"
+	"Visage s&eacute;lectionn&eacute;"
 #elif L==6	// gn
-	 "Rostro seleccionado"	// Okoteve traducción
+	"Rostro seleccionado"	// Okoteve traducción
 #elif L==7	// it
-	 "Viso selezionato"
+	"Viso selezionato"
 #elif L==8	// pl
-	 "Twarze wybranych"
+	"Twarze wybranych"
 #elif L==9	// pt
-	 "Rosto selecionado"
+	"Rosto selecionado"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Contraste y saturaci&oacute;n mejorados"	// Necessita traduccio
+	"Contraste y saturaci&oacute;n mejorados"	// Necessita traduccio
 #elif L==2	// de
-	 "Contrast and saturation enhanced"		// Need Übersetzung
+	"Contrast and saturation enhanced"		// Need Übersetzung
 #elif L==3	// en
-	 "Contrast and saturation enhanced"
+	"Contrast and saturation enhanced"
 #elif L==4	// es
-	 "Contraste y saturaci&oacute;n mejorados"
+	"Contraste y saturaci&oacute;n mejorados"
 #elif L==5	// fr
-	 "Contrast and saturation enhanced"		// Besoin de traduction
+	"Contrast and saturation enhanced"		// Besoin de traduction
 #elif L==6	// gn
-	 "Contraste y saturaci&oacute;n mejorados"	// Okoteve traducción
+	"Contraste y saturaci&oacute;n mejorados"	// Okoteve traducción
 #elif L==7	// it
-	 "Contrasto e saturazione migliorata"
+	"Contrasto e saturazione migliorata"
 #elif L==8	// pl
-	 "Zwiekszenie kontrastu i nasycenia"
+	"Zwiekszenie kontrastu i nasycenia"
 #elif L==9	// pt
-	 "Contraste e satura&ccedil;&atilde;o aprimorados"
+	"Contraste e satura&ccedil;&atilde;o aprimorados"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Balance de blancos realizado"		// Necessita traduccio
+	"Balance de blancos realizado"		// Necessita traduccio
 #elif L==2	// de
-	 "White balance made"			// Need Übersetzung
+	"White balance made"			// Need Übersetzung
 #elif L==3	// en
-	 "White balance made"
+	"White balance made"
 #elif L==4	// es
-	 "Balance de blancos realizado"
+	"Balance de blancos realizado"
 #elif L==5	// fr
-	 "White balance made"			// Besoin de traduction
+	"White balance made"			// Besoin de traduction
 #elif L==6	// gn
-	 "Balance de blancos realizado"		// Okoteve traducción
+	"Balance de blancos realizado"		// Okoteve traducción
 #elif L==7	// it
-	 "Bilanciamento di bianco realizzato"
+	"Bilanciamento di bianco realizzato"
 #elif L==8	// pl
-	 "Balans bieli sie"
+	"Balans bieli sie"
 #elif L==9	// pt
-	 "Balan&ccedil;o de branco realizado"
+	"Balan&ccedil;o de branco realizado"
 #endif
 	};
 
@@ -29219,70 +29381,74 @@ const char *Txt_Places =
 #endif
 
 const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
-   {
+	{
+	[Plc_ORDER_BY_PLACE] =
 #if   L==1	// ca
-	 "Ordenar por lugar"	// Necessita traduccio
+	"Ordenar por lugar"	// Necessita traduccio
 #elif L==2	// de
-	 "Nach Standort sortieren"
+	"Nach Standort sortieren"
 #elif L==3	// en
-	 "Sort by place"
+	"Sort by place"
 #elif L==4	// es
-	 "Ordenar por lugar"
+	"Ordenar por lugar"
 #elif L==5	// fr
-	 "Trier par emplacement"
+	"Trier par emplacement"
 #elif L==6	// gn
-	 "Ordenar por lugar"	// Okoteve traducción
+	"Ordenar por lugar"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per localit&grave;"
+	"Ordina per localit&grave;"
 #elif L==8	// pl
-	 "Sortuj wedlug miejsca"
+	"Sortuj wedlug miejsca"
 #elif L==9	// pt
-	 "Classificar por localiza&ccedil;&atilde;o"
+	"Classificar por localiza&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Plc_ORDER_BY_NUM_CTRS] =
 #if   L==1	// ca
-	 "Ordenar per nombre de titulacions"
+	"Ordenar per nombre de titulacions"
 #elif L==2	// de
-	 "Nach Anzahl der Studieng&auml;nge sortieren"
+	"Nach Anzahl der Studieng&auml;nge sortieren"
 #elif L==3	// en
-	 "Sort by no. of degrees"
+	"Sort by no. of degrees"
 #elif L==4	// es
-	 "Ordenar por n&ordm; de titulaciones"
+	"Ordenar por n&ordm; de titulaciones"
 #elif L==5	// fr
-	 "Trier par nombre d'&eacute;tudes"
+	"Trier par nombre d'&eacute;tudes"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
+	"Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero di lauree"
+	"Ordina per numero di lauree"
 #elif L==8	// pl
-	 "Sortuj wedlug stopni"
+	"Sortuj wedlug stopni"
 #elif L==9	// pt
-	 "Classificar por n&uacute;mero de graus"
+	"Classificar por n&uacute;mero de graus"
 #endif
 	};
 
 const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
-   {
+	{
+	[Plc_ORDER_BY_PLACE] =
 #if   L==1	// ca
-	 "Lloc"
+	"Lloc"
 #elif L==2	// de
-	 "Standort"
+	"Standort"
 #elif L==3	// en
-	 "Place"
+	"Place"
 #elif L==4	// es
-	 "Lugar"
+	"Lugar"
 #elif L==5	// fr
-	 "Emplacement"
+	"Emplacement"
 #elif L==6	// gn
-	 "Tenda"
+	"Tenda"
 #elif L==7	// it
-	 "Luogo"
+	"Luogo"
 #elif L==8	// pl
-	 "Miejsce"
+	"Miejsce"
 #elif L==9	// pt
-	 "Localiza&ccedil;&atilde;o"
+	"Localiza&ccedil;&atilde;o"
 #endif
-	 ,
+	,
+	[Plc_ORDER_BY_NUM_CTRS] =
 #if   L==1	// ca
 	"Centres"
 #elif L==2	// de
@@ -29901,105 +30067,110 @@ const char *Txt_Privacy =
 #endif
 
 const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
-   {		// Pri_VISIBILITY_UNKNOWN
+	{
+	 [Pri_VISIBILITY_UNKNOWN] =
 #if   L==1	// ca
-	 "Desconeguda"
+	"Desconeguda"
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocida"
+	"Desconocida"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocida"	// Okoteve traducción
+	"Desconocida"	// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuta"
+	"Sconosciuta"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecida"
+	"Desconhecida"
 #endif
-	 ,	// Pri_VISIBILITY_USER
+	,
+	 [Pri_VISIBILITY_USER] =
 #if   L==1	// ca
-	 "Visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
+	"Visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
 #elif L==2	// de
-	 "Visible by me and my teachers / my students"			// Need Übersetzung
+	"Visible by me and my teachers / my students"			// Need Übersetzung
 #elif L==3	// en
-	 "Visible by me and my teachers / my students"
+	"Visible by me and my teachers / my students"
 #elif L==4	// es
-	 "Visible por m&iacute; y mis profesores / mis estudiantes"
+	"Visible por m&iacute; y mis profesores / mis estudiantes"
 #elif L==5	// fr
-	 "Visible by me and my teachers / my students"			// Besoin de traduction
+	"Visible by me and my teachers / my students"			// Besoin de traduction
 #elif L==6	// gn
-	 "Visible por m&iacute; y mis profesores / mis estudiantes"	// Okoteve traducción
+	"Visible por m&iacute; y mis profesores / mis estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	 "Visible by me and my teachers / my students"			// Bisogno di traduzione
+	"Visible by me and my teachers / my students"			// Bisogno di traduzione
 #elif L==8	// pl
-	 "Visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
+	"Visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Vis&iacute;vel por mim e meus professores / meus estudantes"
+	"Vis&iacute;vel por mim e meus professores / meus estudantes"
 #endif
-	 ,	// Pri_VISIBILITY_COURSE
+	,
+	 [Pri_VISIBILITY_COURSE] =
 #if   L==1	// ca
-	 "Visible por usuarios con los que comparto asignaturas"	// Necessita traduccio
+	"Visible por usuarios con los que comparto asignaturas"	// Necessita traduccio
 #elif L==2	// de
-	 "Visible by users with whom I share courses"			// Need Übersetzung
+	"Visible by users with whom I share courses"			// Need Übersetzung
 #elif L==3	// en
-	 "Visible by users with whom I share courses"
+	"Visible by users with whom I share courses"
 #elif L==4	// es
-	 "Visible por usuarios con los que comparto asignaturas"
+	"Visible por usuarios con los que comparto asignaturas"
 #elif L==5	// fr
-	 "Visible by users with whom I share courses"			// Besoin de traduction
+	"Visible by users with whom I share courses"			// Besoin de traduction
 #elif L==6	// gn
-	 "Visible por usuarios con los que comparto asignaturas"	// Okoteve traducción
+	"Visible por usuarios con los que comparto asignaturas"	// Okoteve traducción
 #elif L==7	// it
-	 "Visible by users with whom I share courses"			// Bisogno di traduzione
+	"Visible by users with whom I share courses"			// Bisogno di traduzione
 #elif L==8	// pl
-	 "Visible by users with whom I share courses"			// Potrzebujesz tlumaczenie
+	"Visible by users with whom I share courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Vis&iacute;vel por usu&aacute;rios com quem compartilho disciplinas"
+	"Vis&iacute;vel por usu&aacute;rios com quem compartilho disciplinas"
 #endif
-	 ,	// Pri_VISIBILITY_SYSTEM
+	,
+	 [Pri_VISIBILITY_SYSTEM] =
 #if   L==1	// ca
-	 "Visible por cualquier usuario identificado"	// Necessita traduccio
+	"Visible por cualquier usuario identificado"	// Necessita traduccio
 #elif L==2	// de
-	 "Visible by any logged user"			// Need Übersetzung
+	"Visible by any logged user"			// Need Übersetzung
 #elif L==3	// en
-	 "Visible by any logged user"
+	"Visible by any logged user"
 #elif L==4	// es
-	 "Visible por cualquier usuario identificado"
+	"Visible por cualquier usuario identificado"
 #elif L==5	// fr
-	 "Visible by any logged user"			// Besoin de traduction
+	"Visible by any logged user"			// Besoin de traduction
 #elif L==6	// gn
-	 "Visible por cualquier usuario identificado"	// Okoteve traducción
+	"Visible por cualquier usuario identificado"	// Okoteve traducción
 #elif L==7	// it
-	 "Visible by any logged user"			// Bisogno di traduzione
+	"Visible by any logged user"			// Bisogno di traduzione
 #elif L==8	// pl
-	 "Visible by any logged user"			// Potrzebujesz tlumaczenie
+	"Visible by any logged user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Vis&iacute;vel por qualquer usu&aacute;rio logado"
+	"Vis&iacute;vel por qualquer usu&aacute;rio logado"
 #endif
-	 ,	// Pri_VISIBILITY_WORLD
+	,
+	 [Pri_VISIBILITY_WORLD] =
 #if   L==1	// ca
-	 "Visible por todo el mundo"	// Necessita traduccio
+	"Visible por todo el mundo"	// Necessita traduccio
 #elif L==2	// de
-	 "Visible by everyone"		// Need Übersetzung
+	"Visible by everyone"		// Need Übersetzung
 #elif L==3	// en
-	 "Visible by everyone"
+	"Visible by everyone"
 #elif L==4	// es
-	 "Visible por todo el mundo"
+	"Visible por todo el mundo"
 #elif L==5	// fr
-	 "Visible by everyone"		// Besoin de traduction
+	"Visible by everyone"		// Besoin de traduction
 #elif L==6	// gn
-	 "Visible por todo el mundo"	// Okoteve traducción
+	"Visible por todo el mundo"	// Okoteve traducción
 #elif L==7	// it
-	 "Visible by everyone"		// Bisogno di traduzione
+	"Visible by everyone"		// Bisogno di traduzione
 #elif L==8	// pl
-	 "Visible by everyone"		// Potrzebujesz tlumaczenie
+	"Visible by everyone"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Vis&iacute;vel em todo o mundo"
+	"Vis&iacute;vel em todo o mundo"
 #endif
 	};
 
@@ -30151,8 +30322,8 @@ const char *Txt_Project_files =
 #endif
 
 const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
-   {
-	 // Prj_ORDER_START_TIME
+	{
+	[Prj_ORDER_START_TIME] =
 #if   L==1	// ca
 	"Data de creaci&oacute;"
 #elif L==2	// de
@@ -30172,8 +30343,8 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Data da cria&ccedil;&atilde;o"
 #endif
-	 ,
-	 // Prj_ORDER_END_TIME
+	,
+	[Prj_ORDER_END_TIME] =
 #if   L==1	// ca
 	"&Uacute;ltima edici&oacute;"
 #elif L==2	// de
@@ -30193,8 +30364,8 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"&Uacute;ltima edi&ccedil;&atilde;o"
 #endif
-	 ,
-	 // Prj_ORDER_TITLE
+	,
+	[Prj_ORDER_TITLE] =
 #if   L==1	// ca
 	"T&iacute;tol"
 #elif L==2	// de
@@ -30214,8 +30385,8 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"T&iacute;tulo"
 #endif
-	 ,
-	 // Prj_ORDER_DEPARTMENT
+	,
+	[Prj_ORDER_DEPARTMENT] =
 #if   L==1	// ca
 	"Departament"
 #elif L==2	// de
@@ -30238,89 +30409,89 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 	};
 
 const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
-   {
-	 // Prj_ORDER_START_TIME
+	{
+	[Prj_ORDER_START_TIME] =
 #if   L==1	// ca
-	 "Ordenar per data de creaci&oacute;"
+	"Ordenar per data de creaci&oacute;"
 #elif L==2	// de
-	 "Sortieren nach Erstellungsdatum"
+	"Sortieren nach Erstellungsdatum"
 #elif L==3	// en
-	 "Sort by date of creation"
+	"Sort by date of creation"
 #elif L==4	// es
-	 "Ordenar por fecha de creaci&oacute;n"
+	"Ordenar por fecha de creaci&oacute;n"
 #elif L==5	// fr
-	 "Trier par date de cr&eacute;ation"
+	"Trier par date de cr&eacute;ation"
 #elif L==6	// gn
-	 "Ordenar por fecha de creaci&oacute;n"	// Okoteve traducción
+	"Ordenar por fecha de creaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data di creazione"
+	"Ordina per data di creazione"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug daty utworzenia"
+	"Sortuj wed&lstrok;ug daty utworzenia"
 #elif L==9	// pt
-	 "Classificar por data de cria&ccedil;&atilde;o"
+	"Classificar por data de cria&ccedil;&atilde;o"
 #endif
-	 ,
-	 // Prj_ORDER_END_TIME
+	,
+	[Prj_ORDER_END_TIME] =
 #if   L==1	// ca
-	 "Ordenar per data de l'&uacute;ltima edici&oacute;"
+	"Ordenar per data de l'&uacute;ltima edici&oacute;"
 #elif L==2	// de
-	 "Sortieren nach letzten Ausgabe"
+	"Sortieren nach letzten Ausgabe"
 #elif L==3	// en
-	 "Sort by date of last edition"
+	"Sort by date of last edition"
 #elif L==4	// es
-	 "Ordenar por fecha de &uacute;ltima edici&oacute;n"
+	"Ordenar por fecha de &uacute;ltima edici&oacute;n"
 #elif L==5	// fr
-	 "Trier par date de derni&egrave;re &eacute;dition"
+	"Trier par date de derni&egrave;re &eacute;dition"
 #elif L==6	// gn
-	 "Ordenar por fecha de &uacute;ltima edici&oacute;n"	// Okoteve traducción
+	"Ordenar por fecha de &uacute;ltima edici&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per data dell'ultima edizione"
+	"Ordina per data dell'ultima edizione"
 #elif L==8	// pl
-	 "Sortuj wed&lstrok;ug daty ostatniej edycji"
+	"Sortuj wed&lstrok;ug daty ostatniej edycji"
 #elif L==9	// pt
-	 "Classificar por data da &uacute;ltima edi&ccedil;&atilde;o"
+	"Classificar por data da &uacute;ltima edi&ccedil;&atilde;o"
 #endif
-	 ,
-	 // Prj_ORDER_TITLE
+	,
+	[Prj_ORDER_TITLE] =
 #if   L==1	// ca
-	 "Ordenar per t&iacute;tol"
+	"Ordenar per t&iacute;tol"
 #elif L==2	// de
-	 "Sortieren nach Titel"
+	"Sortieren nach Titel"
 #elif L==3	// en
-	 "Sort by title"
+	"Sort by title"
 #elif L==4	// es
-	 "Ordenar por t&iacute;tulo"
+	"Ordenar por t&iacute;tulo"
 #elif L==5	// fr
-	 "Trier par titre"
+	"Trier par titre"
 #elif L==6	// gn
-	 "Ordenar por t&iacute;tulo"	// Okoteve traducción
+	"Ordenar por t&iacute;tulo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per titolo"
+	"Ordina per titolo"
 #elif L==8	// pl
-	 "Sortuj wedlug tytu&lstrok;"
+	"Sortuj wedlug tytu&lstrok;"
 #elif L==9	// pt
-	 "Classificar por t&iacute;tulo"
+	"Classificar por t&iacute;tulo"
 #endif
-	 ,
-	 // Prj_ORDER_DEPARTMENT
+	,
+	[Prj_ORDER_DEPARTMENT] =
 #if   L==1	// ca
-	 "Ordenar per departament"
+	"Ordenar per departament"
 #elif L==2	// de
-	 "Sortieren nach Abteilung"
+	"Sortieren nach Abteilung"
 #elif L==3	// en
-	 "Sort by department"
+	"Sort by department"
 #elif L==4	// es
-	 "Ordenar por departamento"
+	"Ordenar por departamento"
 #elif L==5	// fr
-	 "Trier par d&eacute;partement"
+	"Trier par d&eacute;partement"
 #elif L==6	// gn
-	 "Ordenar por departamento"	// Okoteve traducción
+	"Ordenar por departamento"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per dipartimento"
+	"Ordina per dipartimento"
 #elif L==8	// pl
-	 "Sortuj wedlug wydzia&lstrok;"
+	"Sortuj wedlug wydzia&lstrok;"
 #elif L==9	// pt
-	 "Classificar por departamento"
+	"Classificar por departamento"
 #endif
 	};
 
@@ -30347,7 +30518,8 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 
 const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	{
-#if   L==1	// ca	// Prj_ROLE_UNK
+	[Prj_ROLE_UNK] =
+#if   L==1	// ca
 	"Desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -30367,7 +30539,8 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Desconhecido/a"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_STD
+	[Prj_ROLE_STD] =
+#if   L==1	// ca
 	"Estudiant"
 #elif L==2	// de
 	"Student"
@@ -30387,7 +30560,8 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_TUT
+	[Prj_ROLE_TUT] =
+#if   L==1	// ca
 	"Tutor/a"
 #elif L==2	// de
 	"Tutor"
@@ -30407,7 +30581,8 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Tutor/a"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVL
+	[Prj_ROLE_EVL] =
+#if   L==1	// ca
 	"Avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30429,9 +30604,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	};
 
 const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS] =
-{
 	{
-#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_UNKNOWN
+	[Prj_ROLE_UNK][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -30450,8 +30625,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido/a"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_FEMALE
+	,
+	[Prj_ROLE_UNK][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"desconeguda"
 #elif L==2	// de
 	"Unbekanntere"
@@ -30470,8 +30646,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecida"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_MALE
+	,
+	[Prj_ROLE_UNK][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"desconegut"
 #elif L==2	// de
 	"Unbekannter"
@@ -30490,8 +30667,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_ALL
+	,
+	[Prj_ROLE_UNK][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -30510,9 +30688,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_UNKNOWN
+	,
+	[Prj_ROLE_STD][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -30531,8 +30709,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_FEMALE
+	,
+	[Prj_ROLE_STD][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -30551,8 +30730,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_MALE
+	,
+	[Prj_ROLE_STD][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -30571,8 +30751,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_ALL
+	,
+	[Prj_ROLE_STD][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -30591,9 +30772,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_UNKNOWN
+	,
+	[Prj_ROLE_TUT][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"tutor/a"
 #elif L==2	// de
 	"Tutor"
@@ -30612,8 +30793,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor/a"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_FEMALE
+	,
+	[Prj_ROLE_TUT][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"tutora"
 #elif L==2	// de
 	"Tutor"
@@ -30632,8 +30814,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutora"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_MALE
+	,
+	[Prj_ROLE_TUT][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"tutor"
 #elif L==2	// de
 	"Tutor"
@@ -30652,8 +30835,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_ALL
+	,
+	[Prj_ROLE_TUT][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"tutor/a"
 #elif L==2	// de
 	"Tutor"
@@ -30672,9 +30856,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_UNKNOWN
+	,
+	[Prj_ROLE_EVL][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30693,8 +30877,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador/a"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_FEMALE
+	,
+	[Prj_ROLE_EVL][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"avaluadora"
 #elif L==2	// de
 	"Auswerter"
@@ -30713,8 +30898,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliadora"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_MALE
+	,
+	[Prj_ROLE_EVL][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"avaluador"
 #elif L==2	// de
 	"Auswerter"
@@ -30733,8 +30919,9 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador"
 #endif
-	 ,
-#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_ALL
+	,
+	[Prj_ROLE_EVL][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30753,12 +30940,12 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador/a"
 #endif
-	 }
-};
+	};
 
 const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	{
-#if   L==1	// ca	// Prj_ROLE_UNK
+	[Prj_ROLE_UNK] =
+#if   L==1	// ca
 	"Desconeguts"
 #elif L==2	// de
 	"Unbekannte"
@@ -30778,7 +30965,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_STD
+	[Prj_ROLE_STD] =
+#if   L==1	// ca
 	"Estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -30798,7 +30986,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_TUT
+	[Prj_ROLE_TUT] =
+#if   L==1	// ca
 	"Tutors"
 #elif L==2	// de
 	"Tutoren"
@@ -30818,7 +31007,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Tutores"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVL
+	[Prj_ROLE_EVL] =
+#if   L==1	// ca
 	"Avaluadors"
 #elif L==2	// de
 	"Auswerter"
@@ -30841,7 +31031,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 
 const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	{
-#if   L==1	// ca	// Prj_ROLE_UNK
+	[Prj_ROLE_UNK] =
+#if   L==1	// ca
 	"desconeguts"
 #elif L==2	// de
 	"Unbekannte"
@@ -30861,7 +31052,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_STD
+	[Prj_ROLE_STD] =
+#if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
 	"Studenten"
@@ -30881,7 +31073,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_TUT
+	[Prj_ROLE_TUT] =
+#if   L==1	// ca
 	"tutors"
 #elif L==2	// de
 	"Tutoren"
@@ -30901,7 +31094,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"tutores"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVL
+	[Prj_ROLE_EVL] =
+#if   L==1	// ca
 	"avaluadors"
 #elif L==2	// de
 	"Auswerter"
@@ -30924,7 +31118,8 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 
 const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	{
-#if   L==1	// ca	// Prj_PROPOSAL_NEW
+	[Prj_PROPOSAL_NEW] =
+#if   L==1	// ca
 	"Projecte nou"
 #elif L==2	// de
 	"Neues Projekt"
@@ -30944,7 +31139,8 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	"Projeto novo"
 #endif
 	,
-#if   L==1	// ca	// Prj_PROPOSAL_MODIFIED
+	[Prj_PROPOSAL_MODIFIED] =
+#if   L==1	// ca
 	"Projecte ja proposat en convocat&ograve;ries anteriors, amb modificacions"
 #elif L==2	// de
 	"Projekt in fr&uuml;heren Anrufen vorgeschlagen, mit &Auml;nderungen"
@@ -30964,7 +31160,8 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	"Projeto proposto em chamadas anteriores, com modifica&ccedil;&otilde;es"
 #endif
 	,
-#if   L==1	// ca	// Prj_PROPOSAL_UNMODIFIED
+	[Prj_PROPOSAL_UNMODIFIED] =
+#if   L==1	// ca
 	"Projecte ja proposat en convocat&ograve;ries anteriors, sense modificacions"
 #elif L==2	// de
 	"Projekt in fr&uuml;heren Anrufen vorgeschlagen, ohne &Auml;nderungen"
@@ -30987,7 +31184,7 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 
 const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 	{
-	 // Prj_FAULTY
+	[Prj_FAULTY] =
 #if   L==1	// ca
 	"Projectes defectuosos"
 #elif L==2	// de
@@ -31008,7 +31205,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 	"Projetos defeituosos"
 #endif
 	,
-	// Prj_FAULTLESS
+	[Prj_FAULTLESS] =
 #if   L==1	// ca
 	"Projectes correctos"
 #elif L==2	// de
@@ -31032,7 +31229,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 
 const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
-	 // Prj_ASSIGNED
+	[Prj_ASSIGNED] =
 #if   L==1	// ca
 	"Projectes assignats"
 #elif L==2	// de
@@ -31053,7 +31250,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	"Projetos atribu&iacute;dos"
 #endif
 	,
-	// Prj_NONASSIG
+	[Prj_NONASSIG] =
 #if   L==1	// ca
 	"Projectes no assignats"
 #elif L==2	// de
@@ -31077,7 +31274,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 
 const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
-	 // Prj_ASSIGNED
+	[Prj_ASSIGNED] =
 #if   L==1	// ca
 	"Projecte assignat"
 #elif L==2	// de
@@ -31098,7 +31295,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 	"Projeto atribu&iacute;do"
 #endif
 	,
-	// Prj_NONASSIG
+	[Prj_NONASSIG] =
 #if   L==1	// ca
 	"Projecte no assignat"
 #elif L==2	// de
@@ -31122,7 +31319,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 
 const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
 	{
-	// Prj_HIDDEN
+	[Prj_HIDDEN] =
 #if   L==1	// ca
 	"Projectes ocults"
 #elif L==2	// de
@@ -31143,7 +31340,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
 	"Projetos ocultos"
 #endif
 	,
-	// Prj_VISIBL
+	[Prj_VISIBL] =
 #if   L==1	// ca
 	"Projectes visibles"
 #elif L==2	// de
@@ -31649,70 +31846,74 @@ const char *Txt_Record_field_X_removed =	// Warning: it is very important to inc
 #endif
 
 const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
-   {
+	{
+	[Rec_HIDDEN_FIELD] =
 #if   L==1	// ca
-	 "Oculto"	// Necessita traduccio
+	"Oculto"	// Necessita traduccio
 #elif L==2	// de
-	 "Versteckt"
+	"Versteckt"
 #elif L==3	// en
-	 "Hidden"
+	"Hidden"
 #elif L==4	// es
-	 "Oculto"
+	"Oculto"
 #elif L==5	// fr
-	 "Cach&eacute;"
+	"Cach&eacute;"
 #elif L==6	// gn
-	 "Oculto"	// Okoteve traducción
+	"Oculto"	// Okoteve traducción
 #elif L==7	// it
-	 "Nascosto"
+	"Nascosto"
 #elif L==8	// pl
-	 "Ukryty"
+	"Ukryty"
 #elif L==9	// pt
-	 "Oculto"
+	"Oculto"
 #endif
-	 ,
+	,
+	[Rec_VISIBLE_FIELD] =
 #if   L==1	// ca
-	 "Visible pero no editable"	// Necessita traduccio
+	"Visible pero no editable"	// Necessita traduccio
 #elif L==2	// de
-	 "Sichtbar, aber nicht bearbeitet werden"
+	"Sichtbar, aber nicht bearbeitet werden"
 #elif L==3	// en
-	 "Visible but not editable"
+	"Visible but not editable"
 #elif L==4	// es
-	 "Visible pero no editable"
+	"Visible pero no editable"
 #elif L==5	// fr
-	 "Visible mais non modifiable"
+	"Visible mais non modifiable"
 #elif L==6	// gn
-	 "Visible pero no editable"	// Okoteve traducción
+	"Visible pero no editable"	// Okoteve traducción
 #elif L==7	// it
-	 "Visibile ma non modificabile"
+	"Visibile ma non modificabile"
 #elif L==8	// pl
-	 "Widoczne, ale nie mozna edytowa&cacute;"
+	"Widoczne, ale nie mozna edytowa&cacute;"
 #elif L==9	// pt
-	 "Vis&iacute;vel, mas n&atilde;o edit&aacute;vel"
+	"Vis&iacute;vel, mas n&atilde;o edit&aacute;vel"
 #endif
-	 ,
+	,
+	[Rec_EDITABLE_FIELD] =
 #if   L==1	// ca
-	 "Visible y editable"	// Necessita traduccio
+	"Visible y editable"	// Necessita traduccio
 #elif L==2	// de
-	 "Sichtbar und bearbeitet werde"
+	"Sichtbar und bearbeitet werde"
 #elif L==3	// en
-	 "Visible and editable"
+	"Visible and editable"
 #elif L==4	// es
-	 "Visible y editable"
+	"Visible y editable"
 #elif L==5	// fr
-	 "Visible et modifiable"
+	"Visible et modifiable"
 #elif L==6	// gn
-	 "Visible y editable"	// Okoteve traducción
+	"Visible y editable"	// Okoteve traducción
 #elif L==7	// it
-	 "Visibile e modificabile"
+	"Visibile e modificabile"
 #elif L==8	// pl
-	 "Widzialne i mozna edytowa&cacute;"
+	"Widzialne i mozna edytowa&cacute;"
 #elif L==9	// pt
-	 "Vis&iacute;vel e edit&aacute;vel"
+	"Vis&iacute;vel e edit&aacute;vel"
 #endif
 	};
 
 const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warning: it is very important to include %s in the following sentences
 	{
+	[Rec_HIDDEN_FIELD] =
 #if   L==1	// ca
 	"A partir de ahora los estudiantes"
 	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Necessita traduccio
@@ -31742,6 +31943,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	" os estudantes n&atilde;o podem ver o campo <strong>%s</strong> dos cart&otilde;es."
 #endif
 	,
+	[Rec_VISIBLE_FIELD] =
 #if   L==1	// ca
 	"A partir de ahora los estudiantes"
 	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
@@ -31771,6 +31973,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	" os estudantes podem visualizar, mas n&atilde;o editar o campo <strong>%s</strong> dos cart&otilde;es."
 #endif
 	,
+	[Rec_EDITABLE_FIELD] =
 #if   L==1	// ca
 	"A partir de ahora los estudiantes"
 	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
@@ -31802,65 +32005,68 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	};
 
 const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
-   {
+	{
+	[Rec_HIDDEN_FIELD] =
 #if   L==1	// ca
-	 "oculto"	// Necessita traduccio
+	"oculto"	// Necessita traduccio
 #elif L==2	// de
-	 "versteckt"
+	"versteckt"
 #elif L==3	// en
-	 "hidden"
+	"hidden"
 #elif L==4	// es
-	 "oculto"
+	"oculto"
 #elif L==5	// fr
-	 "cach&eacute;"
+	"cach&eacute;"
 #elif L==6	// gn
-	 "oculto"	// Okoteve traducción
+	"oculto"	// Okoteve traducción
 #elif L==7	// it
-	 "nascosto"
+	"nascosto"
 #elif L==8	// pl
-	 "ukryty"
+	"ukryty"
 #elif L==9	// pt
-	 "oculto"
+	"oculto"
 #endif
-	 ,
+	,
+	[Rec_VISIBLE_FIELD] =
 #if   L==1	// ca
-	 "visible"	// Necessita traduccio
+	"visible"	// Necessita traduccio
 #elif L==2	// de
-	 "sichtbar"
+	"sichtbar"
 #elif L==3	// en
-	 "visible"
+	"visible"
 #elif L==4	// es
-	 "visible"
+	"visible"
 #elif L==5	// fr
-	 "visible"
+	"visible"
 #elif L==6	// gn
-	 "visible"	// Okoteve traducción
+	"visible"	// Okoteve traducción
 #elif L==7	// it
-	 "visibile"
+	"visibile"
 #elif L==8	// pl
-	 "widoczny"
+	"widoczny"
 #elif L==9	// pt
-	 "vis&iacute;vel"
+	"vis&iacute;vel"
 #endif
-	 ,
+	,
+	[Rec_EDITABLE_FIELD] =
 #if   L==1	// ca
-	 "editable"	// Necessita traduccio
+	"editable"	// Necessita traduccio
 #elif L==2	// de
-	 "bearbeitet werde"
+	"bearbeitet werde"
 #elif L==3	// en
-	 "editable"
+	"editable"
 #elif L==4	// es
-	 "editable"
+	"editable"
 #elif L==5	// fr
-	 "modifiable"
+	"modifiable"
 #elif L==6	// gn
-	 "editable"	// Okoteve traducción
+	"editable"	// Okoteve traducción
 #elif L==7	// it
-	 "modificabile"
+	"modificabile"
 #elif L==8	// pl
-	 "edytowalne"
+	"edytowalne"
 #elif L==9	// pt
-	 "edit&aacute;vel"
+	"edit&aacute;vel"
 #endif
 	};
 
@@ -33509,7 +33715,8 @@ const char *Txt_Role =
 #endif
 
 const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
-   {	// Sta_ROLE_IDENTIFIED_USRS
+	{
+	[Sta_ROLE_IDENTIFIED_USRS] =
 #if   L==1	// ca
 	"identificats"
 #elif L==2	// de
@@ -33529,7 +33736,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"identificados"
 #endif
-	,	// Sta_ROLE_ALL_USRS
+	,
+	[Sta_ROLE_ALL_USRS] =
 #if   L==1	// ca
 	"identificats o desconeguts"
 #elif L==2	// de
@@ -33549,7 +33757,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"identificados ou desconhecidos"
 #endif
-	,	// Sta_ROLE_INS_ADMINS
+	,
+	[Sta_ROLE_INS_ADMINS] =
 #if   L==1	// ca
 	"administradors d'institucions"
 #elif L==2	// de
@@ -33569,7 +33778,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de institu&ccedil;&otilde;es"
 #endif
-	,	// Sta_ROLE_CTR_ADMINS
+	,
+	[Sta_ROLE_CTR_ADMINS] =
 #if   L==1	// ca
 	"administradors de centres"
 #elif L==2	// de
@@ -33589,7 +33799,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de centros"
 #endif
-	,	// Sta_ROLE_DEG_ADMINS
+	,
+	[Sta_ROLE_DEG_ADMINS] =
 #if   L==1	// ca
 	"administradors de titulacions"
 #elif L==2	// de
@@ -33609,7 +33820,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de graus"
 #endif
-	,	// Sta_ROLE_TEACHERS
+	,
+	[Sta_ROLE_TEACHERS] =
 #if   L==1	// ca
 	"professors"
 #elif L==2	// de
@@ -33629,7 +33841,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"professores"
 #endif
-	,	// Sta_ROLE_NON_EDITING_TEACHERS
+	,
+	[Sta_ROLE_NON_EDITING_TEACHERS] =
 #if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
@@ -33649,7 +33862,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #endif
-	,	// Sta_ROLE_STUDENTS
+	,
+	[Sta_ROLE_STUDENTS] =
 #if   L==1	// ca
 	"estudiants"
 #elif L==2	// de
@@ -33669,27 +33883,29 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"estudantes"
 #endif
-	,	// Sta_ROLE_USERS
+	,
+	[Sta_ROLE_USERS] =
 #if   L==1	// ca
-	 "usuaris"
+	"usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "users"
+	"users"
 #elif L==4	// es
-	 "usuarios"
+	"usuarios"
 #elif L==5	// fr
-	 "utilisateurs"
+	"utilisateurs"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utenti"
+	"utenti"
 #elif L==8	// pl
-	 "u&zdot;ytkownicy"
+	"u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "utilizadores"
+	"utilizadores"
 #endif
-	,	// Sta_ROLE_GUESTS
+	,
+	[Sta_ROLE_GUESTS] =
 #if   L==1	// ca
 	"convidats (sense assignatures)"
 #elif L==2	// de
@@ -33709,7 +33925,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"convidados (sem disciplinas)"
 #endif
-	,	// Sta_ROLE_UNKNOWN_USRS
+	,
+	[Sta_ROLE_UNKNOWN_USRS] =
 #if   L==1	// ca
 	"desconeguts"
 #elif L==2	// de
@@ -33729,7 +33946,8 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"desconhecidos"
 #endif
-	,	// Sta_ROLE_ME
+	,
+	[Sta_ROLE_ME] =
 #if   L==1	// ca
 	"jo"
 #elif L==2	// de
@@ -33752,9 +33970,9 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 	};
 
 const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-{
 	{
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_UNKNOWN
+	[Rol_UNK][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -33774,7 +33992,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecido/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_FEMALE
+	[Rol_UNK][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Desconeguda"
 #elif L==2	// de
 	"Unbekannte"
@@ -33794,7 +34013,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecida"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_MALE
+	[Rol_UNK][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Desconegut"
 #elif L==2	// de
 	"Unbekannter"
@@ -33814,7 +34034,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecido"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_ALL
+	[Rol_UNK][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -33833,9 +34054,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecido/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_GST - Usr_SEX_UNKNOWN
+	,
+	[Rol_GST][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Convidat/da"
 #elif L==2	// de
 	"Gast"
@@ -33855,7 +34076,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidado/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_FEMALE
+	[Rol_GST][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Convidada"
 #elif L==2	// de
 	"Gast"
@@ -33875,7 +34097,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidada"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_MALE
+	[Rol_GST][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Convidat"
 #elif L==2	// de
 	"Gast"
@@ -33895,7 +34118,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidado"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_ALL
+	[Rol_GST][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Convidat/da"
 #elif L==2	// de
 	"Gast"
@@ -33914,9 +34138,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidado/a"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
+	,
+	[Rol_USR][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Usuari/a"
 #elif L==2	// de
 	"Benutzer"
@@ -33936,7 +34160,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizador/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
+	[Rol_USR][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Usuaria"
 #elif L==2	// de
 	"Benutzer"
@@ -33956,7 +34181,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizadora"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
+	[Rol_USR][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Usuari"
 #elif L==2	// de
 	"Benutzer"
@@ -33976,7 +34202,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Utilizador"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
+	[Rol_USR][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Usuari/a"
 #elif L==2	// de
 	"Benutzer"
@@ -33995,9 +34222,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_STD - Usr_SEX_UNKNOWN
+	,
+	[Rol_STD][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Estudiant"
 #elif L==2	// de
 	"Student"
@@ -34017,7 +34244,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_FEMALE
+	[Rol_STD][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Estudiant"
 #elif L==2	// de
 	"Student"
@@ -34037,7 +34265,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_MALE
+	[Rol_STD][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Estudiant"
 #elif L==2	// de
 	"Student"
@@ -34057,7 +34286,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_ALL
+	[Rol_STD][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Estudiant"
 #elif L==2	// de
 	"Student"
@@ -34076,9 +34306,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudante"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_NET - Usr_SEX_UNKNOWN
+	,
+	[Rol_NET][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Professor/a no editor/a"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -34098,7 +34328,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor/a n&atilde;o editor/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_FEMALE
+	[Rol_NET][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Professora no editora"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -34118,7 +34349,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professora n&atilde;o editora"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_MALE
+	[Rol_NET][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Professor no editor"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -34138,7 +34370,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor n&atilde;o editor"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_ALL
+	[Rol_NET][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Professor/a no editor/a"
 #elif L==2	// de
 	"Nicht bearbeiteter Lehrkraft"
@@ -34157,9 +34390,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a n&atilde;o editor/a"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_UNKNOWN
+	,
+	[Rol_TCH][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Professor/a"
 #elif L==2	// de
 	"Lehrkraft"
@@ -34179,7 +34412,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_FEMALE
+	[Rol_TCH][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Professora"
 #elif L==2	// de
 	"Lehrkraft"
@@ -34199,7 +34433,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professora"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_MALE
+	[Rol_TCH][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Professor"
 #elif L==2	// de
 	"Lehrkraft"
@@ -34219,7 +34454,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_ALL
+	[Rol_TCH][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Professor/a"
 #elif L==2	// de
 	"Lehrkraft"
@@ -34238,9 +34474,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -34260,7 +34496,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_FEMALE
+	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -34280,7 +34517,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_MALE
+	[Rol_DEG_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -34300,7 +34538,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_ALL
+	[Rol_DEG_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -34319,9 +34558,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. grau"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -34341,7 +34580,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_FEMALE
+	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -34361,7 +34601,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_MALE
+	[Rol_CTR_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -34381,7 +34622,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_ALL
+	[Rol_CTR_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -34400,9 +34642,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. centro"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -34422,7 +34664,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_FEMALE
+	[Rol_INS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -34442,7 +34685,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_MALE
+	[Rol_INS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -34462,7 +34706,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_ALL
+	[Rol_INS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -34481,9 +34726,9 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. institu&ccedil;&atilde;o"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"Superusuari/a"
 #elif L==2	// de
 	"Superuser"
@@ -34503,7 +34748,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizador/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_FEMALE
+	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"Superusuaria"	// Necessita traduccio
 #elif L==2	// de
 	"Superuser"
@@ -34523,7 +34769,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizadora"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_MALE
+	[Rol_SYS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"Superusuari"
 #elif L==2	// de
 	"Superuser"
@@ -34543,7 +34790,8 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizador"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_ALL
+	[Rol_SYS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"Superusuari/a"	// Necessita traduccio
 #elif L==2	// de
 	"Superuser"
@@ -34562,13 +34810,12 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizador/a"
 #endif
-	 }
-};
+	};
 
 const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-{
 	{
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_UNKNOWN
+	[Rol_UNK][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"desconocido/a"		// Necessita traduccio
 #elif L==2	// de
 	"Unbekannter/e"
@@ -34588,7 +34835,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecido/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_FEMALE
+	[Rol_UNK][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"desconocida"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannte"
@@ -34608,7 +34856,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecida"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_MALE
+	[Rol_UNK][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"desconocido"	// Necessita traduccio
 #elif L==2	// de
 	"Unbekannter"
@@ -34628,7 +34877,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecido"
 #endif
 	,
-#if   L==1	// ca	// Rol_UNK - Usr_SEX_ALL
+	[Rol_UNK][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"desconocido/a"		// Necessita traduccio
 #elif L==2	// de
 	"Unbekannter/e"
@@ -34647,9 +34897,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecido/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_GST - Usr_SEX_UNKNOWN
+	,
+	[Rol_GST][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"invitado/a"	// Necessita traduccio
 #elif L==2	// de
 	"Gast"
@@ -34669,7 +34919,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidado/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_FEMALE
+	[Rol_GST][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"invitada"	// Necessita traduccio
 #elif L==2	// de
 	"Gast"
@@ -34689,7 +34940,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidada"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_MALE
+	[Rol_GST][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"invitado"	// Necessita traduccio
 #elif L==2	// de
 	"Gast"
@@ -34709,7 +34961,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidado"
 #endif
 	,
-#if   L==1	// ca	// Rol_GST - Usr_SEX_ALL
+	[Rol_GST][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"invitado/a"	// Necessita traduccio
 #elif L==2	// de
 	"Gast"
@@ -34728,9 +34981,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidado/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
+	,
+	[Rol_USR][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"usuari/a"
 #elif L==2	// de
 	"Benutzer"
@@ -34750,7 +35003,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizador/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
+	[Rol_USR][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"usuaria"
 #elif L==2	// de
 	"Benutzer"
@@ -34770,7 +35024,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizadora"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
+	[Rol_USR][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"usuari"
 #elif L==2	// de
 	"Benutzer"
@@ -34790,7 +35045,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"utilizador"
 #endif
 	,
-#if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
+	[Rol_USR][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"usuari/a"
 #elif L==2	// de
 	"Benutzer"
@@ -34809,9 +35065,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_STD - Usr_SEX_UNKNOWN
+	,
+	[Rol_STD][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -34831,7 +35087,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_FEMALE
+	[Rol_STD][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -34851,7 +35108,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_MALE
+	[Rol_STD][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -34871,7 +35129,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// ca	// Rol_STD - Usr_SEX_ALL
+	[Rol_STD][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -34890,9 +35149,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudante"
 #endif
-	 },
-	{
-#if   L==1	// ca	// Rol_NET - Usr_SEX_UNKNOWN
+	,
+	[Rol_NET][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"professor/a no editor/a"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -34912,7 +35171,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor/a n&atilde;o editor/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_FEMALE
+	[Rol_NET][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"professora no editora"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -34932,7 +35192,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professora n&atilde;o editora"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_MALE
+	[Rol_NET][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"professor no editor"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -34952,7 +35213,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor n&atilde;o editor"
 #endif
 	,
-#if   L==1	// ca	// Rol_NET - Usr_SEX_ALL
+	[Rol_NET][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"professor/a no editor/a"
 #elif L==2	// de
 	"nicht bearbeiteter Lehrkraft"
@@ -34971,9 +35233,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a n&atilde;o editor/a"
 #endif
-	},
-	 {
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_UNKNOWN
+	,
+	[Rol_TCH][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"professor/a"
 #elif L==2	// de
 	"Lehrkraft"
@@ -34993,7 +35255,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_FEMALE
+	[Rol_TCH][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"professora"
 #elif L==2	// de
 	"Lehrkraft"
@@ -35013,7 +35276,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professora"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_MALE
+	[Rol_TCH][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"professor"
 #elif L==2	// de
 	"Lehrkraft"
@@ -35033,7 +35297,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor"
 #endif
 	,
-#if   L==1	// ca	// Rol_TCH - Usr_SEX_ALL
+	[Rol_TCH][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"professor/a"
 #elif L==2	// de
 	"Lehrkraft"
@@ -35052,9 +35317,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -35074,7 +35339,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_FEMALE
+	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -35094,7 +35360,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_MALE
+	[Rol_DEG_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -35114,7 +35381,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. grau"
 #endif
 	,
-#if   L==1	// ca	// Rol_DEG_ADM - Usr_SEX_ALL
+	[Rol_DEG_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
 	"Admin. Studiengang"
@@ -35133,9 +35401,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. grau"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -35155,7 +35423,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_FEMALE
+	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -35175,7 +35444,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_MALE
+	[Rol_CTR_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -35195,7 +35465,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_ALL
+	[Rol_CTR_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"admin. centre"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
@@ -35214,9 +35485,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. centro"
 #endif
-	},
-	{
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -35236,7 +35507,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_FEMALE
+	[Rol_INS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -35256,7 +35528,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_MALE
+	[Rol_INS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -35276,7 +35549,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_ALL
+	[Rol_INS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"admin. instituci&oacute;"
 #elif L==2	// de
 	"Admin. Hochschule"
@@ -35295,9 +35569,9 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. institu&ccedil;&atilde;o"
 #endif
-	 },
-	 {
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
+	,
+	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"superusuari/a"
 #elif L==2	// de
 	"Superuser"
@@ -35317,7 +35591,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizador/a"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_FEMALE
+	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"superusuaria"		// Necessita traduccio
 #elif L==2	// de
 	"Superuser"
@@ -35337,7 +35612,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizadora"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_MALE
+	[Rol_SYS_ADM][Usr_SEX_MALE] =
+#if   L==1	// ca
 	"superusuari"
 #elif L==2	// de
 	"Superuser"
@@ -35357,7 +35633,8 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizador"
 #endif
 	,
-#if   L==1	// ca	// Rol_SYS_ADM - Usr_SEX_ALL
+	[Rol_SYS_ADM][Usr_SEX_ALL] =
+#if   L==1	// ca
 	"superusuari/a"
 #elif L==2	// de
 	"Superuser"
@@ -35376,8 +35653,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizador/a"
 #endif
-	 }
-};
+	};
 
 const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 {
@@ -35461,8 +35737,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_GST - Usr_SEX_UNKNOWN
 	"Convidats"
 #elif L==2	// de
@@ -35542,89 +35818,89 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidados"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
-	 "Usuaris"
+	"Usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarios"
+	"Usuarios"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Utilizadores"
+	"Utilizadores"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
-	 "Usu&agrave;ries"
+	"Usu&agrave;ries"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarias"
+	"Usuarias"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Utilizadoras"
+	"Utilizadoras"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
-	 "Usuaris"
+	"Usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarios"
+	"Usuarios"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Utilizadores"
+	"Utilizadores"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
-	 "Usuaris"
+	"Usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarios"
+	"Usuarios"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Utilizadores"
+	"Utilizadores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_STD - Usr_SEX_UNKNOWN
 	"Estudiants"
 #elif L==2	// de
@@ -35947,8 +36223,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
 	"Administradors"
 #elif L==2	// de
@@ -36028,8 +36304,8 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
 	"Administradors"
 #elif L==2	// de
@@ -36190,11 +36466,11 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadores"
 #endif
-	 }
+	}
    };
 
 const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
-   {
+	{
 #if   L==1	// ca	// Rol_UNK
 	"Desc."
 #elif L==2	// de
@@ -36236,23 +36512,23 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #endif
 	,
 #if   L==1	// ca	// Rol_USR
-	 "Usua."
+	"Usua."
 #elif L==2	// de
-	 "Benu."
+	"Benu."
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usua."
+	"Usua."
 #elif L==5	// fr
-	 "Util."
+	"Util."
 #elif L==6	// gn
-	 "Puru."
+	"Puru."
 #elif L==7	// it
-	 "Uten."
+	"Uten."
 #elif L==8	// pl
-	 "U&zdot;yt."
+	"U&zdot;yt."
 #elif L==9	// pt
-	 "Util."
+	"Util."
 #endif
 	,
 #if   L==1	// ca	// Rol_STD
@@ -36562,83 +36838,83 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// ca	// Rol_USR - Usr_SEX_UNKNOWN
-	 "usuaris"
+	"usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "users"
+	"users"
 #elif L==4	// es
-	 "usuarios"
+	"usuarios"
 #elif L==5	// fr
-	 "utilisateurs"
+	"utilisateurs"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utenti"
+	"utenti"
 #elif L==8	// pl
-	 "u&zdot;ytkownicy"
+	"u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "utilizadores"
+	"utilizadores"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_FEMALE
-	 "usu&agrave;ries"
+	"usu&agrave;ries"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "users"
+	"users"
 #elif L==4	// es
-	 "usuarias"
+	"usuarias"
 #elif L==5	// fr
-	 "utilisateurs"
+	"utilisateurs"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utenti"
+	"utenti"
 #elif L==8	// pl
-	 "u&zdot;ytkownicy"
+	"u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "utilizadoras"
+	"utilizadoras"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_MALE
-	 "usuaris"
+	"usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "users"
+	"users"
 #elif L==4	// es
-	 "usuarios"
+	"usuarios"
 #elif L==5	// fr
-	 "utilisateurs"
+	"utilisateurs"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utenti"
+	"utenti"
 #elif L==8	// pl
-	 "u&zdot;ytkownicy"
+	"u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "utilizadores"
+	"utilizadores"
 #endif
 	,
 #if   L==1	// ca	// Rol_USR - Usr_SEX_ALL
-	 "usuaris"
+	"usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "users"
+	"users"
 #elif L==4	// es
-	 "usuarios"
+	"usuarios"
 #elif L==5	// fr
-	 "utilisateurs"
+	"utilisateurs"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utenti"
+	"utenti"
 #elif L==8	// pl
-	 "u&zdot;ytkownicy"
+	"u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "utilizadores"
+	"utilizadores"
 #endif
 	},
 	{
@@ -37045,8 +37321,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// ca	// Rol_INS_ADM - Usr_SEX_UNKNOWN
 	"administradors"
 #elif L==2	// de
@@ -37207,7 +37483,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizadores"
 #endif
-	 }
+	}
    };
 
 const char *Txt_Rooms_with_users =
@@ -37232,514 +37508,514 @@ const char *Txt_Rooms_with_users =
 #endif
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
-   {
-	 // Brw_UNKNOWN
-	 "",
-	 // Brw_SHOW_DOC_CRS
+	{
+	// Brw_UNKNOWN
+	"",
+	// Brw_SHOW_DOC_CRS
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_SHOW_MRK_CRS
+	,
+	// Brw_SHOW_MRK_CRS
 #if   L==1	// ca
-	 "qualificacions"
+	"qualificacions"
 #elif L==2	// de
-	 "Bewertungen"
+	"Bewertungen"
 #elif L==3	// en
-	 "marks"
+	"marks"
 #elif L==4	// es
-	 "calificaciones"
+	"calificaciones"
 #elif L==5	// fr
-	 "notes"
+	"notes"
 #elif L==6	// gn
-	 "calificaciones"	// Okoteve traducción
+	"calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "risultati"
+	"risultati"
 #elif L==8	// pl
-	 "marks"		// Potrzebujesz tlumaczenie
+	"marks"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "notas"
+	"notas"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_CRS
+	,
+	// Brw_ADMI_DOC_CRS
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_SHR_CRS
+	,
+	// Brw_ADMI_SHR_CRS
 #if   L==1	// ca
-	 "compartits"
+	"compartits"
 #elif L==2	// de
-	 "Freigegebene"
+	"Freigegebene"
 #elif L==3	// en
-	 "shared"
+	"shared"
 #elif L==4	// es
-	 "compartidos"
+	"compartidos"
 #elif L==5	// fr
-	 "partages"
+	"partages"
 #elif L==6	// gn
-	 "compartidos"			// Okoteve traducción
+	"compartidos"			// Okoteve traducción
 #elif L==7	// it
-	 "condivisi"
+	"condivisi"
 #elif L==8	// pl
-	 "shared"			// Potrzebujesz tlumaczenie
+	"shared"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "comum"
+	"comum"
 #endif
-	 ,
-	 // Brw_ADMI_SHR_GRP
+	,
+	// Brw_ADMI_SHR_GRP
 #if   L==1	// ca
-	 "compartits"
+	"compartits"
 #elif L==2	// de
-	 "Freigegebene"
+	"Freigegebene"
 #elif L==3	// en
-	 "shared"
+	"shared"
 #elif L==4	// es
-	 "compartidos"
+	"compartidos"
 #elif L==5	// fr
-	 "partages"
+	"partages"
 #elif L==6	// gn
-	 "compartidos"			// Okoteve traducción
+	"compartidos"			// Okoteve traducción
 #elif L==7	// it
-	 "condivisi"
+	"condivisi"
 #elif L==8	// pl
-	 "shared"			// Potrzebujesz tlumaczenie
+	"shared"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "comum"
+	"comum"
 #endif
-	 ,
-	 // Brw_ADMI_WRK_USR
+	,
+	// Brw_ADMI_WRK_USR
 #if   L==1	// ca
-	 "treballs"
+	"treballs"
 #elif L==2	// de
-	 "Hausarbeiten"
+	"Hausarbeiten"
 #elif L==3	// en
-	 "homework"
+	"homework"
 #elif L==4	// es
-	 "trabajos"
+	"trabajos"
 #elif L==5	// fr
-	 "travaux"
+	"travaux"
 #elif L==6	// gn
-	 "tembiapo"
+	"tembiapo"
 #elif L==7	// it
-	 "lavori"
+	"lavori"
 #elif L==8	// pl
-	 "homework"		// Potrzebujesz tlumaczenie
+	"homework"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "trabalhos"
+	"trabalhos"
 #endif
-	 ,
-	 // Brw_ADMI_WRK_CRS
+	,
+	// Brw_ADMI_WRK_CRS
 #if   L==1	// ca
-	 "treballs"
+	"treballs"
 #elif L==2	// de
-	 "Hausarbeiten"
+	"Hausarbeiten"
 #elif L==3	// en
-	 "homework"
+	"homework"
 #elif L==4	// es
-	 "trabajos"
+	"trabajos"
 #elif L==5	// fr
-	 "travaux"
+	"travaux"
 #elif L==6	// gn
-	 "tembiapo"
+	"tembiapo"
 #elif L==7	// it
-	 "lavori"
+	"lavori"
 #elif L==8	// pl
-	 "homework"		// Potrzebujesz tlumaczenie
+	"homework"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "trabalhos"
+	"trabalhos"
 #endif
-	 ,
-	 // Brw_ADMI_MRK_CRS
+	,
+	// Brw_ADMI_MRK_CRS
 #if   L==1	// ca
-	 "qualificacions"
+	"qualificacions"
 #elif L==2	// de
-	 "Bewertungen"
+	"Bewertungen"
 #elif L==3	// en
-	 "marks"
+	"marks"
 #elif L==4	// es
-	 "calificaciones"
+	"calificaciones"
 #elif L==5	// fr
-	 "notes"
+	"notes"
 #elif L==6	// gn
-	 "calificaciones"	// Okoteve traducción
+	"calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "risultati"
+	"risultati"
 #elif L==8	// pl
-	 "marks"		// Potrzebujesz tlumaczenie
+	"marks"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "notas"
+	"notas"
 #endif
-	 ,
-	 // Brw_ADMI_BRF_USR
+	,
+	// Brw_ADMI_BRF_USR
 #if   L==1	// ca
-	 "maleti"
+	"maleti"
 #elif L==2	// de
-	 "Aktentasche"
+	"Aktentasche"
 #elif L==3	// en
-	 "briefcase"
+	"briefcase"
 #elif L==4	// es
-	 "maletin"
+	"maletin"
 #elif L==5	// fr
-	 "porte-documents"
+	"porte-documents"
 #elif L==6	// gn
-	 "maletin"		// Okoteve traducción
+	"maletin"		// Okoteve traducción
 #elif L==7	// it
-	 "cartella"
+	"cartella"
 #elif L==8	// pl
-	 "briefcase"		// Potrzebujesz tlumaczenie
+	"briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "pasta"
+	"pasta"
 #endif
-	 ,
-	 // Brw_SHOW_DOC_GRP
+	,
+	// Brw_SHOW_DOC_GRP
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_GRP
+	,
+	// Brw_ADMI_DOC_GRP
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_SHOW_MRK_GRP
+	,
+	// Brw_SHOW_MRK_GRP
 #if   L==1	// ca
-	 "qualificacions"	// Necessita traduccio
+	"qualificacions"	// Necessita traduccio
 #elif L==2	// de
-	 "Bewertungen"
+	"Bewertungen"
 #elif L==3	// en
-	 "marks"
+	"marks"
 #elif L==4	// es
-	 "calificaciones"
+	"calificaciones"
 #elif L==5	// fr
-	 "notes"
+	"notes"
 #elif L==6	// gn
-	 "calificaciones"	// Okoteve traducción
+	"calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "risultati"
+	"risultati"
 #elif L==8	// pl
-	 "marks"		// Potrzebujesz tlumaczenie
+	"marks"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "notas"
+	"notas"
 #endif
-	 ,
-	 // Brw_ADMI_MRK_GRP
+	,
+	// Brw_ADMI_MRK_GRP
 #if   L==1	// ca
-	 "qualificacions"
+	"qualificacions"
 #elif L==2	// de
-	 "Bewertungen"
+	"Bewertungen"
 #elif L==3	// en
-	 "marks"
+	"marks"
 #elif L==4	// es
-	 "calificaciones"
+	"calificaciones"
 #elif L==5	// fr
-	 "notes"
+	"notes"
 #elif L==6	// gn
-	 "calificaciones"	// Okoteve traducción
+	"calificaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "risultati"
+	"risultati"
 #elif L==8	// pl
-	 "marks"		// Potrzebujesz tlumaczenie
+	"marks"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "notas"
+	"notas"
 #endif
-	 ,
-	 // Brw_ADMI_ASG_USR
+	,
+	// Brw_ADMI_ASG_USR
 #if   L==1	// ca
-	 "activitats"
+	"activitats"
 #elif L==2	// de
-	 "Aufgaben"
+	"Aufgaben"
 #elif L==3	// en
-	 "assignments"
+	"assignments"
 #elif L==4	// es
-	 "actividades"
+	"actividades"
 #elif L==5	// fr
-	 "activites"
+	"activites"
 #elif L==6	// gn
-	 "tar&eacute;a"
+	"tar&eacute;a"
 #elif L==7	// it
-	 "attivit&agrave;"
+	"attivit&agrave;"
 #elif L==8	// pl
-	 "assignments"		// Potrzebujesz tlumaczenie
+	"assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "atividades"
+	"atividades"
 #endif
-	 ,
-	 // Brw_ADMI_ASG_CRS
+	,
+	// Brw_ADMI_ASG_CRS
 #if   L==1	// ca
-	 "activitats"
+	"activitats"
 #elif L==2	// de
-	 "Aufgaben"
+	"Aufgaben"
 #elif L==3	// en
-	 "assignments"
+	"assignments"
 #elif L==4	// es
-	 "actividades"
+	"actividades"
 #elif L==5	// fr
-	 "activites"
+	"activites"
 #elif L==6	// gn
-	 "tar&eacute;a"
+	"tar&eacute;a"
 #elif L==7	// it
-	 "attivit&agrave;"
+	"attivit&agrave;"
 #elif L==8	// pl
-	 "assignments"		// Potrzebujesz tlumaczenie
+	"assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "atividades"
+	"atividades"
 #endif
-	 ,
-	 // Brw_SHOW_DOC_DEG
+	,
+	// Brw_SHOW_DOC_DEG
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_DEG
+	,
+	// Brw_ADMI_DOC_DEG
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_SHOW_DOC_CTR
+	,
+	// Brw_SHOW_DOC_CTR
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_CTR
+	,
+	// Brw_ADMI_DOC_CTR
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_SHOW_DOC_INS
+	,
+	// Brw_SHOW_DOC_INS
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_INS
+	,
+	// Brw_ADMI_DOC_INS
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_SHR_DEG
+	,
+	// Brw_ADMI_SHR_DEG
 #if   L==1	// ca
-	 "compartits"
+	"compartits"
 #elif L==2	// de
-	 "Freigegebene"
+	"Freigegebene"
 #elif L==3	// en
-	 "shared"
+	"shared"
 #elif L==4	// es
-	 "compartidos"
+	"compartidos"
 #elif L==5	// fr
-	 "partages"
+	"partages"
 #elif L==6	// gn
-	 "compartidos"			// Okoteve traducción
+	"compartidos"			// Okoteve traducción
 #elif L==7	// it
-	 "condivisi"
+	"condivisi"
 #elif L==8	// pl
-	 "shared"			// Potrzebujesz tlumaczenie
+	"shared"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "comum"
+	"comum"
 #endif
-	 ,
-	 // Brw_ADMI_SHR_CTR
+	,
+	// Brw_ADMI_SHR_CTR
 #if   L==1	// ca
-	 "compartits"
+	"compartits"
 #elif L==2	// de
-	 "Freigegebene"
+	"Freigegebene"
 #elif L==3	// en
-	 "shared"
+	"shared"
 #elif L==4	// es
-	 "compartidos"
+	"compartidos"
 #elif L==5	// fr
-	 "partages"
+	"partages"
 #elif L==6	// gn
-	 "compartidos"			// Okoteve traducción
+	"compartidos"			// Okoteve traducción
 #elif L==7	// it
-	 "condivisi"
+	"condivisi"
 #elif L==8	// pl
-	 "shared"			// Potrzebujesz tlumaczenie
+	"shared"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "comum"
+	"comum"
 #endif
-	 ,
-	 // Brw_ADMI_SHR_INS
+	,
+	// Brw_ADMI_SHR_INS
 #if   L==1	// ca
-	 "compartits"
+	"compartits"
 #elif L==2	// de
-	 "Freigegebene"
+	"Freigegebene"
 #elif L==3	// en
-	 "shared"
+	"shared"
 #elif L==4	// es
-	 "compartidos"
+	"compartidos"
 #elif L==5	// fr
-	 "partages"
+	"partages"
 #elif L==6	// gn
-	 "compartidos"			// Okoteve traducción
+	"compartidos"			// Okoteve traducción
 #elif L==7	// it
-	 "condivisi"
+	"condivisi"
 #elif L==8	// pl
-	 "shared"			// Potrzebujesz tlumaczenie
+	"shared"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "comum"
+	"comum"
 #endif
-	 ,
-	 // Brw_ADMI_TCH_CRS
+	,
+	// Brw_ADMI_TCH_CRS
 #if   L==1	// ca
 	"privats"
 #elif L==2	// de
@@ -37759,8 +38035,8 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"privados"
 #endif
-	 ,
-	 // Brw_ADMI_TCH_GRP
+	,
+	// Brw_ADMI_TCH_GRP
 #if   L==1	// ca
 	"privats"
 #elif L==2	// de
@@ -37780,47 +38056,47 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"privados"
 #endif
-	 ,
-	 // Brw_ADMI_DOC_PRJ
+	,
+	// Brw_ADMI_DOC_PRJ
 #if   L==1	// ca
-	 "documents"
+	"documents"
 #elif L==2	// de
-	 "Dokumente"
+	"Dokumente"
 #elif L==3	// en
-	 "documents"
+	"documents"
 #elif L==4	// es
-	 "documentos"
+	"documentos"
 #elif L==5	// fr
-	 "documents"
+	"documents"
 #elif L==6	// gn
-	 "kuatia"
+	"kuatia"
 #elif L==7	// it
-	 "documenti"
+	"documenti"
 #elif L==8	// pl
-	 "dokumenty"
+	"dokumenty"
 #elif L==9	// pt
-	 "documentos"
+	"documentos"
 #endif
-	 ,
-	 // Brw_ADMI_ASS_PRJ
+	,
+	// Brw_ADMI_ASS_PRJ
 #if   L==1	// ca
-	 "avaluacio"
+	"avaluacio"
 #elif L==2	// de
-	 "Bewertung"
+	"Bewertung"
 #elif L==3	// en
-	 "assessment"
+	"assessment"
 #elif L==4	// es
-	 "evaluacion"
+	"evaluacion"
 #elif L==5	// fr
-	 "evaluation"
+	"evaluation"
 #elif L==6	// gn
-	 "mbohepy"
+	"mbohepy"
 #elif L==7	// it
-	 "valutazione"
+	"valutazione"
 #elif L==8	// pl
-	 "ocena"
+	"ocena"
 #elif L==9	// pt
-	 "avaliacao"
+	"avaliacao"
 #endif
 	};
 
@@ -37994,23 +38270,23 @@ const char *Txt_See_full_notice =
 
 const char *Txt_See_less =
 #if   L==1	// ca
-	 "Veure menys";
+	"Veure menys";
 #elif L==2	// de
-	 "Zeige weniger";
+	"Zeige weniger";
 #elif L==3	// en
-	 "See less";
+	"See less";
 #elif L==4	// es
-	 "Ver menos";
+	"Ver menos";
 #elif L==5	// fr
-	 "Voir moins";
+	"Voir moins";
 #elif L==6	// gn
-	 "Ver menos";	// Okoteve traducción
+	"Ver menos";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedi meno";
+	"Vedi meno";
 #elif L==8	// pl
-	 "Zobacz mniej";
+	"Zobacz mniej";
 #elif L==9	// pt
-	 "Ver menos";
+	"Ver menos";
 #endif
 
 const char *Txt_See_message =
@@ -38057,44 +38333,44 @@ const char *Txt_See_messages_received =
 
 const char *Txt_See_more =
 #if   L==1	// ca
-	 "Veure m&eacute;s";
+	"Veure m&eacute;s";
 #elif L==2	// de
-	 "Siehe mehr";
+	"Siehe mehr";
 #elif L==3	// en
-	 "See more";
+	"See more";
 #elif L==4	// es
-	 "Ver m&aacute;s";
+	"Ver m&aacute;s";
 #elif L==5	// fr
-	 "Voir plus";
+	"Voir plus";
 #elif L==6	// gn
-	 "Ver m&aacute;s";	// Okoteve traducción
+	"Ver m&aacute;s";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedi pi&ugrave;";
+	"Vedi pi&ugrave;";
 #elif L==8	// pl
-	 "Zobacz wi&eogon;cej";
+	"Zobacz wi&eogon;cej";
 #elif L==9	// pt
-	 "Ver mais";
+	"Ver mais";
 #endif
 
 const char *Txt_See_new_activity =
 #if   L==1	// ca
-	 "Veure nova activitat";
+	"Veure nova activitat";
 #elif L==2	// de
-	 "Siehe neue Aktivit&auml;t";
+	"Siehe neue Aktivit&auml;t";
 #elif L==3	// en
-	 "See new activity";
+	"See new activity";
 #elif L==4	// es
-	 "Ver nueva actividad";
+	"Ver nueva actividad";
 #elif L==5	// fr
-	 "Voir nouvelle activit&eacute;";
+	"Voir nouvelle activit&eacute;";
 #elif L==6	// gn
-	 "Ver nueva actividad";	// Okoteve traducción
+	"Ver nueva actividad";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedi nuova attivit&agrave;";
+	"Vedi nuova attivit&agrave;";
 #elif L==8	// pl
-	 "Zobacz now&aogon; aktywno&sacute;&cacute;";
+	"Zobacz now&aogon; aktywno&sacute;&cacute;";
 #elif L==9	// pt
-	 "Ver nova atividade";
+	"Ver nova atividade";
 #endif
 
 const char *Txt_See_notifications =
@@ -38120,44 +38396,44 @@ const char *Txt_See_notifications =
 
 const char *Txt_See_only_the_latest_COMMENTS =
 #if   L==1	// ca
-	 "Veure nom&eacute;s els &uacute;ltims";
+	"Veure nom&eacute;s els &uacute;ltims";
 #elif L==2	// de
-	 "Nur die neuesten anzeigen";
+	"Nur die neuesten anzeigen";
 #elif L==3	// en
-	 "See only the latest";
+	"See only the latest";
 #elif L==4	// es
-	 "Ver s&oacute;lo los &uacute;ltimos";
+	"Ver s&oacute;lo los &uacute;ltimos";
 #elif L==5	// fr
-	 "Voir seulement les derni&egrave;res";
+	"Voir seulement les derni&egrave;res";
 #elif L==6	// gn
-	 "Ver s&oacute;lo los &uacute;ltimos";	// Okoteve traducción
+	"Ver s&oacute;lo los &uacute;ltimos";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedi solo le ultime";
+	"Vedi solo le ultime";
 #elif L==8	// pl
-	 "Zobacz tylko najnowsze";
+	"Zobacz tylko najnowsze";
 #elif L==9	// pt
-	 "Ver apenas os &uacute;ltimos";
+	"Ver apenas os &uacute;ltimos";
 #endif
 
 const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	 "Veure els %u anteriors";
+	"Veure els %u anteriors";
 #elif L==2	// de
-	 "Siehe die vorherigen %u";
+	"Siehe die vorherigen %u";
 #elif L==3	// en
-	 "See the previous %u";
+	"See the previous %u";
 #elif L==4	// es
-	 "Ver los %u anteriores";
+	"Ver los %u anteriores";
 #elif L==5	// fr
-	 "Voir les %u pr&eacute;c&eacute;dents";
+	"Voir les %u pr&eacute;c&eacute;dents";
 #elif L==6	// gn
-	 "Ver los %u anteriores";	// Okoteve traducción
+	"Ver los %u anteriores";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedi i precedente %u";
+	"Vedi i precedente %u";
 #elif L==8	// pl
-	 "Zobacz poprzednie %u";
+	"Zobacz poprzednie %u";
 #elif L==9	// pt
-	 "Ver os %u anteriores";
+	"Ver os %u anteriores";
 #endif
 
 const char *Txt_Select_another_country =
@@ -38793,249 +39069,249 @@ const char *Txt_Sex =
 const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	{
 #if   L==1	// ca	// Usr_SEX_UNKNOWN
-	 "Desconocidos"	// Necessita traduccio
+	"Desconocidos"	// Necessita traduccio
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocidos"
+	"Desconocidos"
 #elif L==5	// fr
-	 "Inconnus"
+	"Inconnus"
 #elif L==6	// gn
-	 "Desconocidos"	// Okoteve traducción
+	"Desconocidos"	// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuti"
+	"Sconosciuti"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecidos"
+	"Desconhecidos"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_FEMALE
-	 "Dones"	// Necessita traduccio
+	"Dones"	// Necessita traduccio
 #elif L==2	// de
-	 "Frauen"
+	"Frauen"
 #elif L==3	// en
-	 "Women"
+	"Women"
 #elif L==4	// es
-	 "Mujeres"
+	"Mujeres"
 #elif L==5	// fr
-	 "Femmes"
+	"Femmes"
 #elif L==6	// gn
-	 "Mujeres"	// Okoteve traducción
+	"Mujeres"	// Okoteve traducción
 #elif L==7	// it
-	 "Donne"
+	"Donne"
 #elif L==8	// pl
-	 "Kobiety"
+	"Kobiety"
 #elif L==9	// pt
-	 "Mulheres"
+	"Mulheres"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_MALE
-	 "Homes"
+	"Homes"
 #elif L==2	// de
-	 "M&auml;nner"
+	"M&auml;nner"
 #elif L==3	// en
-	 "Men"
+	"Men"
 #elif L==4	// es
-	 "Hombres"
+	"Hombres"
 #elif L==5	// fr
-	 "Hommes"
+	"Hommes"
 #elif L==6	// gn
-	 "Hombres"	// Okoteve traducción
+	"Hombres"	// Okoteve traducción
 #elif L==7	// it
-	 "Uomini"
+	"Uomini"
 #elif L==8	// pl
-	 "Mezczyzni"
+	"Mezczyzni"
 #elif L==9	// pt
-	 "Homens"
+	"Homens"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_ALL
-	 "Todos"	// Necessita traduccio
+	"Todos"	// Necessita traduccio
 #elif L==2	// de
-	 "Alle"
+	"Alle"
 #elif L==3	// en
-	 "All"
+	"All"
 #elif L==4	// es
-	 "Todos"
+	"Todos"
 #elif L==5	// fr
-	 "Tous"
+	"Tous"
 #elif L==6	// gn
-	 "Todos"	// Okoteve traducción
+	"Todos"	// Okoteve traducción
 #elif L==7	// it
-	 "Tutti"
+	"Tutti"
 #elif L==8	// pl
-	 "Wszyscy"
+	"Wszyscy"
 #elif L==9	// pt
-	 "Todos"
+	"Todos"
 #endif
 	};
 
 const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	{
 #if   L==1	// ca	// Usr_SEX_UNKNOWN
-	 "desconocidos"	// Necessita traduccio
+	"desconocidos"	// Necessita traduccio
 #elif L==2	// de
-	 "unbekannt"
+	"unbekannt"
 #elif L==3	// en
-	 "unknown"
+	"unknown"
 #elif L==4	// es
-	 "desconocidos"
+	"desconocidos"
 #elif L==5	// fr
-	 "inconnus"
+	"inconnus"
 #elif L==6	// gn
-	 "desconocidos"	// Okoteve traducción
+	"desconocidos"	// Okoteve traducción
 #elif L==7	// it
-	 "sconosciuti"
+	"sconosciuti"
 #elif L==8	// pl
-	 "nieznany"
+	"nieznany"
 #elif L==9	// pt
-	 "desconhecidos"
+	"desconhecidos"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_FEMALE
-	 "dones"
+	"dones"
 #elif L==2	// de
-	 "Frauen"
+	"Frauen"
 #elif L==3	// en
-	 "women"
+	"women"
 #elif L==4	// es
-	 "mujeres"
+	"mujeres"
 #elif L==5	// fr
-	 "femmes"
+	"femmes"
 #elif L==6	// gn
-	 "mujeres"	// Okoteve traducción
+	"mujeres"	// Okoteve traducción
 #elif L==7	// it
-	 "donne"
+	"donne"
 #elif L==8	// pl
-	 "kobiety"
+	"kobiety"
 #elif L==9	// pt
-	 "mulheres"
+	"mulheres"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_MALE
-	 "homes"
+	"homes"
 #elif L==2	// de
-	 "M&auml;nner"
+	"M&auml;nner"
 #elif L==3	// en
-	 "men"
+	"men"
 #elif L==4	// es
-	 "hombres"
+	"hombres"
 #elif L==5	// fr
-	 "hommes"
+	"hommes"
 #elif L==6	// gn
-	 "hombres"	// Okoteve traducción
+	"hombres"	// Okoteve traducción
 #elif L==7	// it
-	 "uomini"
+	"uomini"
 #elif L==8	// pl
-	 "mezczyzni"
+	"mezczyzni"
 #elif L==9	// pt
-	 "homens"
+	"homens"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_ALL
-	 "todos"	// Necessita traduccio
+	"todos"	// Necessita traduccio
 #elif L==2	// de
-	 "alle"
+	"alle"
 #elif L==3	// en
-	 "all"
+	"all"
 #elif L==4	// es
-	 "todos"
+	"todos"
 #elif L==5	// fr
-	 "tous"
+	"tous"
 #elif L==6	// gn
-	 "todos"	// Okoteve traducción
+	"todos"	// Okoteve traducción
 #elif L==7	// it
-	 "tutti"
+	"tutti"
 #elif L==8	// pl
-	 "wszyscy"
+	"wszyscy"
 #elif L==9	// pt
-	 "todos"
+	"todos"
 #endif
 	};
 
 const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 	{
 #if   L==1	// ca	// Usr_SEX_UNKNOWN
-	 "Desconocido"	// Necessita traduccio
+	"Desconocido"	// Necessita traduccio
 #elif L==2	// de
-	 "Unbekannt"
+	"Unbekannt"
 #elif L==3	// en
-	 "Unknown"
+	"Unknown"
 #elif L==4	// es
-	 "Desconocido"
+	"Desconocido"
 #elif L==5	// fr
-	 "Inconnu"
+	"Inconnu"
 #elif L==6	// gn
-	 "Desconocido"	// Okoteve traducción
+	"Desconocido"	// Okoteve traducción
 #elif L==7	// it
-	 "Sconosciuto"
+	"Sconosciuto"
 #elif L==8	// pl
-	 "Nieznany"
+	"Nieznany"
 #elif L==9	// pt
-	 "Desconhecido"
+	"Desconhecido"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_FEMALE
-	 "Dona"
+	"Dona"
 #elif L==2	// de
-	 "Frau"
+	"Frau"
 #elif L==3	// en
-	 "Woman"
+	"Woman"
 #elif L==4	// es
-	 "Mujer"
+	"Mujer"
 #elif L==5	// fr
-	 "Femme"
+	"Femme"
 #elif L==6	// gn
-	 "Ku&ntilde;a"
+	"Ku&ntilde;a"
 #elif L==7	// it
-	 "Donna"
+	"Donna"
 #elif L==8	// pl
-	 "Kobieta"
+	"Kobieta"
 #elif L==9	// pt
-	 "Mulher"
+	"Mulher"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_MALE
-	 "Home"
+	"Home"
 #elif L==2	// de
-	 "Mann"
+	"Mann"
 #elif L==3	// en
-	 "Man"
+	"Man"
 #elif L==4	// es
-	 "Hombre"
+	"Hombre"
 #elif L==5	// fr
-	 "Homme"
+	"Homme"
 #elif L==6	// gn
-	 "Kuimba'e"
+	"Kuimba'e"
 #elif L==7	// it
-	 "Uomo"
+	"Uomo"
 #elif L==8	// pl
-	 "M&eogon;&zdot;czyzna"
+	"M&eogon;&zdot;czyzna"
 #elif L==9	// pt
-	 "Homem"
+	"Homem"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// Usr_SEX_ALL
-	 "Todos"		// Necessita traduccio
+	"Todos"		// Necessita traduccio
 #elif L==2	// de
-	 "Alle"
+	"Alle"
 #elif L==3	// en
-	 "All"
+	"All"
 #elif L==4	// es
-	 "Todos"
+	"Todos"
 #elif L==5	// fr
-	 "Tous"
+	"Tous"
 #elif L==6	// gn
-	 "Todos"		// Okoteve traducción
+	"Todos"		// Okoteve traducción
 #elif L==7	// it
-	 "Tutti"
+	"Tutti"
 #elif L==8	// pl
-	 "Wwszyscy"
+	"Wwszyscy"
 #elif L==9	// pt
-	 "Todos"
+	"Todos"
 #endif
 	};
 
@@ -39733,288 +40009,128 @@ const char *Txt_Source_of_information =
 #endif
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
-   {
-		   // Sta_CLICKS_CRS_DETAILED_LIST
+	{
+		  // Sta_CLICKS_CRS_DETAILED_LIST
 #if   L==1	// ca
-	 "clics detallats"
+	"clics detallats"
 #elif L==2	// de
-	 "detaillierte Klicks"
+	"detaillierte Klicks"
 #elif L==3	// en
-	 "detailed clicks"
+	"detailed clicks"
 #elif L==4	// es
-	 "clics detallados"
+	"clics detallados"
 #elif L==5	// fr
-	 "clics d&eacute;taill&eacute;es"
+	"clics d&eacute;taill&eacute;es"
 #elif L==6	// gn
-	 "clics detallados"	// Okoteve traducción
+	"clics detallados"	// Okoteve traducción
 #elif L==7	// it
-	 "dettagli di scatto"
+	"dettagli di scatto"
 #elif L==8	// pl
-	 "szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
+	"szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
 #elif L==9	// pt
-	 "detalhadamente cliques"
+	"detalhadamente cliques"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_USR
+	,	// Sta_CLICKS_CRS_PER_USR
 #if   L==1	// ca
-	 "usuari"
+	"usuari"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "user"
+	"user"
 #elif L==4	// es
-	 "usuario"
+	"usuario"
 #elif L==5	// fr
-	 "utilisateur"
+	"utilisateur"
 #elif L==6	// gn
-	 "puruh&aacute;ra"
+	"puruh&aacute;ra"
 #elif L==7	// it
-	 "utente"
+	"utente"
 #elif L==8	// pl
-	 "u&zdot;ytkownik"
+	"u&zdot;ytkownik"
 #elif L==9	// pt
-	 "utilizador"
+	"utilizador"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_DAY
+	,	// Sta_CLICKS_CRS_PER_DAY
 #if   L==1	// ca
-	 "dia"
+	"dia"
 #elif L==2	// de
-	 "Tag"
+	"Tag"
 #elif L==3	// en
-	 "day"
+	"day"
 #elif L==4	// es
-	 "d&iacute;a"
+	"d&iacute;a"
 #elif L==5	// fr
-	 "jour"
+	"jour"
 #elif L==6	// gn
-	 "&aacute;ra"
+	"&aacute;ra"
 #elif L==7	// it
-	 "giorno"
+	"giorno"
 #elif L==8	// pl
-	 "dzie&nacute;"
+	"dzie&nacute;"
 #elif L==9	// pt
-	 "dia"
+	"dia"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
+	,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
 #if   L==1	// ca
-	 "dia i hora"
+	"dia i hora"
 #elif L==2	// de
-	 "Tag und Stunde"
+	"Tag und Stunde"
 #elif L==3	// en
-	 "day and hour"
+	"day and hour"
 #elif L==4	// es
-	 "d&iacute;a y hora"
+	"d&iacute;a y hora"
 #elif L==5	// fr
-	 "jour et heure"
+	"jour et heure"
 #elif L==6	// gn
-	 "&aacute;ra ha aravo"
+	"&aacute;ra ha aravo"
 #elif L==7	// it
-	 "giorno e ora"
+	"giorno e ora"
 #elif L==8	// pl
-	 "dzie&nacute; i godzin&eogon;"
+	"dzie&nacute; i godzin&eogon;"
 #elif L==9	// pt
-	 "dia e hora"
+	"dia e hora"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_WEEK
+	,	// Sta_CLICKS_CRS_PER_WEEK
 #if   L==1	// ca
-	 "setmana"
+	"setmana"
 #elif L==2	// de
-	 "Woche"
+	"Woche"
 #elif L==3	// en
-	 "week"
+	"week"
 #elif L==4	// es
-	 "semana"
+	"semana"
 #elif L==5	// fr
-	 "semaine"
+	"semaine"
 #elif L==6	// gn
-	 "arapok&otilde;indy"
+	"arapok&otilde;indy"
 #elif L==7	// it
-	 "settimana"
+	"settimana"
 #elif L==8	// pl
-	 "tydzie&nacute;"
+	"tydzie&nacute;"
 #elif L==9	// pt
-	 "semana"
+	"semana"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_MONTH
+	,	// Sta_CLICKS_CRS_PER_MONTH
 #if   L==1	// ca
-	 "mes"
+	"mes"
 #elif L==2	// de
-	 "Monat"
+	"Monat"
 #elif L==3	// en
-	 "month"
+	"month"
 #elif L==4	// es
-	 "mes"
+	"mes"
 #elif L==5	// fr
-	 "mois"
+	"mois"
 #elif L==6	// gn
-	 "jasy"
+	"jasy"
 #elif L==7	// it
-	 "mese"
+	"mese"
 #elif L==8	// pl
-	 "miesi&aogon;c"
+	"miesi&aogon;c"
 #elif L==9	// pt
-	 "m&ecirc;s"
+	"m&ecirc;s"
 #endif
-	 ,	// Sta_CLICKS_CRS_PER_YEAR
-#if   L==1	// ca
-	"any"
-#elif L==2	// de
-	"Jahr"
-#elif L==3	// en
-	"year"
-#elif L==4	// es
-	"a&ntilde;o"
-#elif L==5	// fr
-	"ann&eacute;e"
-#elif L==6	// gn
-	"ary"
-#elif L==7	// it
-	"anno"
-#elif L==8	// pl
-	"rok"
-#elif L==9	// pt
-	"ano"
-#endif
-	 ,	// Sta_CLICKS_CRS_PER_HOUR
-#if   L==1	// ca
-	 "hora"
-#elif L==2	// de
-	 "Stunde"
-#elif L==3	// en
-	 "hour"
-#elif L==4	// es
-	 "hora"
-#elif L==5	// fr
-	 "heure"
-#elif L==6	// gn
-	 "aravo"
-#elif L==7	// it
-	 "ora"
-#elif L==8	// pl
-	 "godzina"
-#elif L==9	// pt
-	 "hora"
-#endif
-	 ,	// Sta_CLICKS_CRS_PER_MINUTE
-#if   L==1	// ca
-	 "minut"
-#elif L==2	// de
-	 "Minute"
-#elif L==3	// en
-	 "minute"
-#elif L==4	// es
-	 "minuto"
-#elif L==5	// fr
-	 "minute"
-#elif L==6	// gn
-	 "aravo'i"
-#elif L==7	// it
-	 "minuto"
-#elif L==8	// pl
-	 "minut&eogon;"
-#elif L==9	// pt
-	 "minuto"
-#endif
-	 ,	// Sta_CLICKS_CRS_PER_ACTION
-#if   L==1	// ca
-	 "acci&oacute;"
-#elif L==2	// de
-	 "Handlung"
-#elif L==3	// en
-	 "action"
-#elif L==4	// es
-	 "acci&oacute;n"
-#elif L==5	// fr
-	 "action"
-#elif L==6	// gn
-	 "tembiapo"
-#elif L==7	// it
-	 "azione"
-#elif L==8	// pl
-	 "dzia&lstrok;anie"
-#elif L==9	// pt
-	 "a&ccedil;&atilde;o"
-#endif
-	 ,	// Sta_CLICKS_GBL_PER_DAY
-#if   L==1	// ca
-	 "dia"
-#elif L==2	// de
-	 "Tag"
-#elif L==3	// en
-	 "day"
-#elif L==4	// es
-	 "d&iacute;a"
-#elif L==5	// fr
-	 "jour"
-#elif L==6	// gn
-	 "&aacute;ra"
-#elif L==7	// it
-	 "giorno"
-#elif L==8	// pl
-	 "dzie&nacute;"
-#elif L==9	// pt
-	 "dia"
-#endif
-	 ,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
-#if   L==1	// ca
-	 "dia i hora"
-#elif L==2	// de
-	 "Tag und Stunde"
-#elif L==3	// en
-	 "day and hour"
-#elif L==4	// es
-	 "d&iacute;a y hora"
-#elif L==5	// fr
-	 "jour et heure"
-#elif L==6	// gn
-	 "&aacute;ra ha aravo"
-#elif L==7	// it
-	 "giorno e ora"
-#elif L==8	// pl
-	 "dzie&nacute; i godzin&eogon;"
-#elif L==9	// pt
-	 "dia e hora"
-#endif
-	 ,	// Sta_CLICKS_GBL_PER_WEEK
-#if   L==1	// ca
-	 "setmana"
-#elif L==2	// de
-	 "Woche"
-#elif L==3	// en
-	 "week"
-#elif L==4	// es
-	 "semana"
-#elif L==5	// fr
-	 "semaine"
-#elif L==6	// gn
-	 "arapok&otilde;indy"
-#elif L==7	// it
-	 "settimana"
-#elif L==8	// pl
-	 "tydzie&nacute;"
-#elif L==9	// pt
-	 "semana"
-#endif
-	 ,	// Sta_CLICKS_GBL_PER_MONTH
-#if   L==1	// ca
-	 "mes"
-#elif L==2	// de
-	 "Monat"
-#elif L==3	// en
-	 "month"
-#elif L==4	// es
-	 "mes"
-#elif L==5	// fr
-	 "mois"
-#elif L==6	// gn
-	 "jasy"
-#elif L==7	// it
-	 "mese"
-#elif L==8	// pl
-	 "miesi&aogon;c"
-#elif L==9	// pt
-	 "m&ecirc;s"
-#endif
-	 ,	// Sta_CLICKS_GBL_PER_YEAR
+	,	// Sta_CLICKS_CRS_PER_YEAR
 #if   L==1	// ca
 	"any"
 #elif L==2	// de
@@ -40034,127 +40150,287 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"ano"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_HOUR
+	,	// Sta_CLICKS_CRS_PER_HOUR
 #if   L==1	// ca
-	 "hora"
+	"hora"
 #elif L==2	// de
-	 "Stunde"
+	"Stunde"
 #elif L==3	// en
-	 "hour"
+	"hour"
 #elif L==4	// es
-	 "hora"
+	"hora"
 #elif L==5	// fr
-	 "heure"
+	"heure"
 #elif L==6	// gn
-	 "aravo"
+	"aravo"
 #elif L==7	// it
-	 "ora"
+	"ora"
 #elif L==8	// pl
-	 "godzina"
+	"godzina"
 #elif L==9	// pt
-	 "hora"
+	"hora"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_MINUTE
+	,	// Sta_CLICKS_CRS_PER_MINUTE
 #if   L==1	// ca
-	 "minut"
+	"minut"
 #elif L==2	// de
-	 "Minute"
+	"Minute"
 #elif L==3	// en
-	 "minute"
+	"minute"
 #elif L==4	// es
-	 "minuto"
+	"minuto"
 #elif L==5	// fr
-	 "minute"
+	"minute"
 #elif L==6	// gn
-	 "aravo'i"
+	"aravo'i"
 #elif L==7	// it
-	 "minuto"
+	"minuto"
 #elif L==8	// pl
-	 "minut&eogon;"
+	"minut&eogon;"
 #elif L==9	// pt
-	 "minuto"
+	"minuto"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_ACTION
+	,	// Sta_CLICKS_CRS_PER_ACTION
 #if   L==1	// ca
-	 "acci&oacute;"
+	"acci&oacute;"
 #elif L==2	// de
-	 "Handlung"
+	"Handlung"
 #elif L==3	// en
-	 "action"
+	"action"
 #elif L==4	// es
-	 "acci&oacute;n"
+	"acci&oacute;n"
 #elif L==5	// fr
-	 "action"
+	"action"
 #elif L==6	// gn
-	 "tembiapo"
+	"tembiapo"
 #elif L==7	// it
-	 "azione"
+	"azione"
 #elif L==8	// pl
-	 "dzia&lstrok;anie"
+	"dzia&lstrok;anie"
 #elif L==9	// pt
-	 "a&ccedil;&atilde;o"
+	"a&ccedil;&atilde;o"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_PLUGIN
+	,	// Sta_CLICKS_GBL_PER_DAY
 #if   L==1	// ca
-	 "complement"
+	"dia"
 #elif L==2	// de
-	 "Plugin"
+	"Tag"
 #elif L==3	// en
-	 "plugin"
+	"day"
 #elif L==4	// es
-	 "complemento"
+	"d&iacute;a"
 #elif L==5	// fr
-	 "plugin"
+	"jour"
 #elif L==6	// gn
-	 "complemento"	// Okoteve traducción
+	"&aacute;ra"
 #elif L==7	// it
-	 "plugin"
+	"giorno"
 #elif L==8	// pl
-	 "wtyczka"
+	"dzie&nacute;"
 #elif L==9	// pt
-	 "plugin"
+	"dia"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_API_FUNCTION
+	,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
 #if   L==1	// ca
-	 "funci&oacute;"
+	"dia i hora"
 #elif L==2	// de
-	 "Funktion"
+	"Tag und Stunde"
 #elif L==3	// en
-	 "function"
+	"day and hour"
 #elif L==4	// es
-	 "funci&oacute;n"
+	"d&iacute;a y hora"
 #elif L==5	// fr
-	 "fonction"
+	"jour et heure"
 #elif L==6	// gn
-	 "funci&oacute;n"	// Okoteve traducción
+	"&aacute;ra ha aravo"
 #elif L==7	// it
-	 "funzione"
+	"giorno e ora"
 #elif L==8	// pl
-	 "funkcja"
+	"dzie&nacute; i godzin&eogon;"
 #elif L==9	// pt
-	 "fun&ccedil;&atilde;o"
+	"dia e hora"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_BANNER
+	,	// Sta_CLICKS_GBL_PER_WEEK
 #if   L==1	// ca
-	 "banner"
+	"setmana"
 #elif L==2	// de
-	 "Werbebanner"
+	"Woche"
 #elif L==3	// en
-	 "banner"
+	"week"
 #elif L==4	// es
-	 "banner"
+	"semana"
 #elif L==5	// fr
-	 "banni&eacute;re"
+	"semaine"
 #elif L==6	// gn
-	 "banner"	// Okoteve traducción
+	"arapok&otilde;indy"
 #elif L==7	// it
-	 "banner"
+	"settimana"
 #elif L==8	// pl
-	 "banner"
+	"tydzie&nacute;"
 #elif L==9	// pt
-	 "banner"
+	"semana"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_COUNTRY
+	,	// Sta_CLICKS_GBL_PER_MONTH
+#if   L==1	// ca
+	"mes"
+#elif L==2	// de
+	"Monat"
+#elif L==3	// en
+	"month"
+#elif L==4	// es
+	"mes"
+#elif L==5	// fr
+	"mois"
+#elif L==6	// gn
+	"jasy"
+#elif L==7	// it
+	"mese"
+#elif L==8	// pl
+	"miesi&aogon;c"
+#elif L==9	// pt
+	"m&ecirc;s"
+#endif
+	,	// Sta_CLICKS_GBL_PER_YEAR
+#if   L==1	// ca
+	"any"
+#elif L==2	// de
+	"Jahr"
+#elif L==3	// en
+	"year"
+#elif L==4	// es
+	"a&ntilde;o"
+#elif L==5	// fr
+	"ann&eacute;e"
+#elif L==6	// gn
+	"ary"
+#elif L==7	// it
+	"anno"
+#elif L==8	// pl
+	"rok"
+#elif L==9	// pt
+	"ano"
+#endif
+	,	// Sta_CLICKS_GBL_PER_HOUR
+#if   L==1	// ca
+	"hora"
+#elif L==2	// de
+	"Stunde"
+#elif L==3	// en
+	"hour"
+#elif L==4	// es
+	"hora"
+#elif L==5	// fr
+	"heure"
+#elif L==6	// gn
+	"aravo"
+#elif L==7	// it
+	"ora"
+#elif L==8	// pl
+	"godzina"
+#elif L==9	// pt
+	"hora"
+#endif
+	,	// Sta_CLICKS_GBL_PER_MINUTE
+#if   L==1	// ca
+	"minut"
+#elif L==2	// de
+	"Minute"
+#elif L==3	// en
+	"minute"
+#elif L==4	// es
+	"minuto"
+#elif L==5	// fr
+	"minute"
+#elif L==6	// gn
+	"aravo'i"
+#elif L==7	// it
+	"minuto"
+#elif L==8	// pl
+	"minut&eogon;"
+#elif L==9	// pt
+	"minuto"
+#endif
+	,	// Sta_CLICKS_GBL_PER_ACTION
+#if   L==1	// ca
+	"acci&oacute;"
+#elif L==2	// de
+	"Handlung"
+#elif L==3	// en
+	"action"
+#elif L==4	// es
+	"acci&oacute;n"
+#elif L==5	// fr
+	"action"
+#elif L==6	// gn
+	"tembiapo"
+#elif L==7	// it
+	"azione"
+#elif L==8	// pl
+	"dzia&lstrok;anie"
+#elif L==9	// pt
+	"a&ccedil;&atilde;o"
+#endif
+	,	// Sta_CLICKS_GBL_PER_PLUGIN
+#if   L==1	// ca
+	"complement"
+#elif L==2	// de
+	"Plugin"
+#elif L==3	// en
+	"plugin"
+#elif L==4	// es
+	"complemento"
+#elif L==5	// fr
+	"plugin"
+#elif L==6	// gn
+	"complemento"	// Okoteve traducción
+#elif L==7	// it
+	"plugin"
+#elif L==8	// pl
+	"wtyczka"
+#elif L==9	// pt
+	"plugin"
+#endif
+	,	// Sta_CLICKS_GBL_PER_API_FUNCTION
+#if   L==1	// ca
+	"funci&oacute;"
+#elif L==2	// de
+	"Funktion"
+#elif L==3	// en
+	"function"
+#elif L==4	// es
+	"funci&oacute;n"
+#elif L==5	// fr
+	"fonction"
+#elif L==6	// gn
+	"funci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"funzione"
+#elif L==8	// pl
+	"funkcja"
+#elif L==9	// pt
+	"fun&ccedil;&atilde;o"
+#endif
+	,	// Sta_CLICKS_GBL_PER_BANNER
+#if   L==1	// ca
+	"banner"
+#elif L==2	// de
+	"Werbebanner"
+#elif L==3	// en
+	"banner"
+#elif L==4	// es
+	"banner"
+#elif L==5	// fr
+	"banni&eacute;re"
+#elif L==6	// gn
+	"banner"	// Okoteve traducción
+#elif L==7	// it
+	"banner"
+#elif L==8	// pl
+	"banner"
+#elif L==9	// pt
+	"banner"
+#endif
+	,	// Sta_CLICKS_GBL_PER_COUNTRY
 #if   L==1	// ca
 	"pa&iacute;s"
 #elif L==2	// de
@@ -40174,7 +40450,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"pa&iacute;s"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_INSTITUTION
+	,	// Sta_CLICKS_GBL_PER_INSTITUTION
 #if   L==1	// ca
 	"instituci&oacute;"
 #elif L==2	// de
@@ -40194,7 +40470,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"institu&ccedil;&atilde;o"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_CENTRE
+	,	// Sta_CLICKS_GBL_PER_CENTRE
 #if   L==1	// ca
 	"centre"
 #elif L==2	// de
@@ -40214,129 +40490,129 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"centro"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_DEGREE
+	,	// Sta_CLICKS_GBL_PER_DEGREE
 #if   L==1	// ca
-	 "titulaci&oacute;"
+	"titulaci&oacute;"
 #elif L==2	// de
-	 "Studiengang"
+	"Studiengang"
 #elif L==3	// en
-	 "degree"
+	"degree"
 #elif L==4	// es
-	 "titulaci&oacute;n"
+	"titulaci&oacute;n"
 #elif L==5	// fr
-	 "&eacute;tude"
+	"&eacute;tude"
 #elif L==6	// gn
-	 "arandur&atilde;"
+	"arandur&atilde;"
 #elif L==7	// it
-	 "laurea"
+	"laurea"
 #elif L==8	// pl
-	 "stopie&nacute;"
+	"stopie&nacute;"
 #elif L==9	// pt
-	 "grau"
+	"grau"
 #endif
-	 ,	// Sta_CLICKS_GBL_PER_COURSE
+	,	// Sta_CLICKS_GBL_PER_COURSE
 #if   L==1	// ca
-	 "assignatura"
+	"assignatura"
 #elif L==2	// de
-	 "Kurs"
+	"Kurs"
 #elif L==3	// en
-	 "course"
+	"course"
 #elif L==4	// es
-	 "asignatura"
+	"asignatura"
 #elif L==5	// fr
-	 "mati&egrave;re"
+	"mati&egrave;re"
 #elif L==6	// gn
-	 "mbo'esyry"
+	"mbo'esyry"
 #elif L==7	// it
-	 "corso"
+	"corso"
 #elif L==8	// pl
-	 "kurs"
+	"kurs"
 #elif L==9	// pt
-	 "disciplina"
+	"disciplina"
 #endif
 	};
 
 const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
-   {
+	{
 #if   L==1	// ca
-	 "color"
+	"color"
 #elif L==2	// de
-	 "Farbe"
+	"Farbe"
 #elif L==3	// en
-	 "color"
+	"color"
 #elif L==4	// es
-	 "color"
+	"color"
 #elif L==5	// fr
-	 "couleur"
+	"couleur"
 #elif L==6	// gn
-	 "color"	// Okoteve traducción
+	"color"	// Okoteve traducción
 #elif L==7	// it
-	 "colore"
+	"colore"
 #elif L==8	// pl
-	 "kolor"
+	"kolor"
 #elif L==9	// pt
-	 "cor"
+	"cor"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "de negre a blanc"
+	"de negre a blanc"
 #elif L==2	// de
-	 "schwarz zu wei&szlig;"
+	"schwarz zu wei&szlig;"
 #elif L==3	// en
-	 "black to white"
+	"black to white"
 #elif L==4	// es
-	 "de negro a blanco"
+	"de negro a blanco"
 #elif L==5	// fr
-	 "du noir au blanc"
+	"du noir au blanc"
 #elif L==6	// gn
-	 "de negro a blanco"	// Okoteve traducción
+	"de negro a blanco"	// Okoteve traducción
 #elif L==7	// it
-	 "dal nero al bianco"
+	"dal nero al bianco"
 #elif L==8	// pl
-	 "czarny na bia&lstrok;y"
+	"czarny na bia&lstrok;y"
 #elif L==9	// pt
-	 "do preto ao branco"
+	"do preto ao branco"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "de blanc a negre"
+	"de blanc a negre"
 #elif L==2	// de
-	 "wei&szlig; zu schwarz"
+	"wei&szlig; zu schwarz"
 #elif L==3	// en
-	 "white to black"
+	"white to black"
 #elif L==4	// es
-	 "de blanco a negro"
+	"de blanco a negro"
 #elif L==5	// fr
-	 "du blanc au noir"
+	"du blanc au noir"
 #elif L==6	// gn
-	 "de blanco a negro"	// Okoteve traducción
+	"de blanco a negro"	// Okoteve traducción
 #elif L==7	// it
-	 "dal bianco al nero"
+	"dal bianco al nero"
 #elif L==8	// pl
-	 "bia&lstrok;y do czarny"
+	"bia&lstrok;y do czarny"
 #elif L==9	// pt
-	 "do branco ao preto"
+	"do branco ao preto"
 #endif
 	};
 
 const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
-	 {
+	{
 #if   L==1	// ca	// Brw_ADMI_DOC_CRS
-	 "Documents&nbsp;(ass.)"
+	"Documents&nbsp;(ass.)"
 #elif L==2	// de
-	 "Dokumente&nbsp;(Ver.)"
+	"Dokumente&nbsp;(Ver.)"
 #elif L==3	// en
-	 "Documents&nbsp;(crs.)"
+	"Documents&nbsp;(crs.)"
 #elif L==4	// es
-	 "Documentos&nbsp;(asg.)"
+	"Documentos&nbsp;(asg.)"
 #elif L==5	// fr
-	 "Documents&nbsp;(mat.)"
+	"Documents&nbsp;(mat.)"
 #elif L==6	// gn
-	 "Documentos&nbsp;(asg.)"		// Okoteve traducción
+	"Documentos&nbsp;(asg.)"		// Okoteve traducción
 #elif L==7	// it
-	 "Documenti&nbsp;(crs.)"
+	"Documenti&nbsp;(crs.)"
 #elif L==8	// pl
-	 "Dokumenty&nbsp;(kurs)"
+	"Dokumenty&nbsp;(kurs)"
 #elif L==9	// pt
 	"Documentos&nbsp;(crs.)"
 #endif
@@ -40563,439 +40839,439 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	};
 
 const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
-   {
+	{
 #if   L==1	// ca
-	 "proporcional al n&ordm; de estudiantes"	// Necessita traduccio
+	"proporcional al n&ordm; de estudiantes"	// Necessita traduccio
 #elif L==2	// de
-	 "proportional to the number of students"	// Need Übersetzung
+	"proportional to the number of students"	// Need Übersetzung
 #elif L==3	// en
-	 "proportional to the number of students"
+	"proportional to the number of students"
 #elif L==4	// es
-	 "proporcional al n&ordm; de estudiantes"
+	"proporcional al n&ordm; de estudiantes"
 #elif L==5	// fr
-	 "proportional to the number of students"	// Besoin de traduction
+	"proportional to the number of students"	// Besoin de traduction
 #elif L==6	// gn
-	 "proporcional al n&ordm; de estudiantes"	// Okoteve traducción
+	"proporcional al n&ordm; de estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	 "proporzionale al numero di studenti"
+	"proporzionale al numero di studenti"
 #elif L==8	// pl
-	 "proportional to the number of students"	// Potrzebujesz tlumaczenie
+	"proportional to the number of students"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proporcional ao n&uacute;mero de estudantes"
+	"proporcional ao n&uacute;mero de estudantes"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "proporcional al n&ordm; de estudiantes con fotograf&iacute;a"	// Necessita traduccio
+	"proporcional al n&ordm; de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
-	 "proportional to the number of students with photo"		// Need Übersetzung
+	"proportional to the number of students with photo"		// Need Übersetzung
 #elif L==3	// en
-	 "proportional to the number of students with photo"
+	"proportional to the number of students with photo"
 #elif L==4	// es
-	 "proporcional al n&ordm; de estudiantes con fotograf&iacute;a"
+	"proporcional al n&ordm; de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	 "proportional to the number of students with photo"		// Besoin de traduction
+	"proportional to the number of students with photo"		// Besoin de traduction
 #elif L==6	// gn
-	 "proporcional al n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
+	"proporcional al n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	 "proporzionale al numero di studenti con foto"
+	"proporzionale al numero di studenti con foto"
 #elif L==8	// pl
-	 "proportional to the number of students with photo"		// Potrzebujesz tlumaczenie
+	"proportional to the number of students with photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proporcional ao n&uacute;mero de estudantes com foto"
+	"proporcional ao n&uacute;mero de estudantes com foto"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
+	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
-	 "proportional to the percentage of students with photo"		// Need Übersetzung
+	"proportional to the percentage of students with photo"		// Need Übersetzung
 #elif L==3	// en
-	 "proportional to the percentage of students with photo"
+	"proportional to the percentage of students with photo"
 #elif L==4	// es
-	 "proporcional al porcentaje de estudiantes con fotograf&iacute;a"
+	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	 "proportional to the percentage of students with photo"		// Besoin de traduction
+	"proportional to the percentage of students with photo"		// Besoin de traduction
 #elif L==6	// gn
-	 "proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
+	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	 "proporzionale alla percentuale di studenti con foto"
+	"proporzionale alla percentuale di studenti con foto"
 #elif L==8	// pl
-	 "proportional to the percentage of students with photo"		// Potrzebujesz tlumaczenie
+	"proportional to the percentage of students with photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proporcional ao porcentagem de estudantes com foto"
+	"proporcional ao porcentagem de estudantes com foto"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "igual para todas las titulaciones"	// Necessita traduccio
+	"igual para todas las titulaciones"	// Necessita traduccio
 #elif L==2	// de
-	 "same for all degrees"			// Need Übersetzung
+	"same for all degrees"			// Need Übersetzung
 #elif L==3	// en
-	 "same for all degrees"
+	"same for all degrees"
 #elif L==4	// es
-	 "igual para todas las titulaciones"
+	"igual para todas las titulaciones"
 #elif L==5	// fr
-	 "same for all degrees"			// Besoin de traduction
+	"same for all degrees"			// Besoin de traduction
 #elif L==6	// gn
-	 "igual para todas las titulaciones"	// Okoteve traducción
+	"igual para todas las titulaciones"	// Okoteve traducción
 #elif L==7	// it
-	 "uguale per tutte le lauree"
+	"uguale per tutte le lauree"
 #elif L==8	// pl
-	 "same for all degrees"			// Potrzebujesz tlumaczenie
+	"same for all degrees"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "mesmo para todos os graus"
+	"mesmo para todos os graus"
 #endif
 	};
 
 const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
-   {
+	{
 #if   L==1	// ca
-	 "nombre d'estudiants"
+	"nombre d'estudiants"
 #elif L==2	// de
-	 "Anzahl der Studenten"
+	"Anzahl der Studenten"
 #elif L==3	// en
-	 "number of students"
+	"number of students"
 #elif L==4	// es
-	 "n&ordm; de estudiantes"
+	"n&ordm; de estudiantes"
 #elif L==5	// fr
-	 "nombre d'&eacute;tudiants"
+	"nombre d'&eacute;tudiants"
 #elif L==6	// gn
-	 "n&ordm; de estudiantes"	// Okoteve traducción
+	"n&ordm; de estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	 "numero di studenti"
+	"numero di studenti"
 #elif L==8	// pl
-	 "liczba student&oacute;w"
+	"liczba student&oacute;w"
 #elif L==9	// pt
-	 "n&uacute;mero de estudantes"
+	"n&uacute;mero de estudantes"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "nombre d'estudiants amb fotografia"
+	"nombre d'estudiants amb fotografia"
 #elif L==2	// de
-	 "Anzahl der Studenten mit Foto"
+	"Anzahl der Studenten mit Foto"
 #elif L==3	// en
-	 "number of students with photo"
+	"number of students with photo"
 #elif L==4	// es
-	 "n&ordm; de estudiantes con fotograf&iacute;a"
+	"n&ordm; de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	 "nombre d'&eacute;tudiants avec photo"
+	"nombre d'&eacute;tudiants avec photo"
 #elif L==6	// gn
-	 "n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
+	"n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	 "numero di studenti con foto"
+	"numero di studenti con foto"
 #elif L==8	// pl
-	 "liczba student&oacute;w ze zdj&eogon;ciem"
+	"liczba student&oacute;w ze zdj&eogon;ciem"
 #elif L==9	// pt
-	 "n&uacute;mero de estudantes com foto"
+	"n&uacute;mero de estudantes com foto"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
+	"porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
-	 "percentage of students with photo"			// Need Übersetzung
+	"percentage of students with photo"			// Need Übersetzung
 #elif L==3	// en
-	 "percentage of students with photo"
+	"percentage of students with photo"
 #elif L==4	// es
-	 "porcentaje de estudiantes con fotograf&iacute;a"
+	"porcentaje de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	 "percentage of students with photo"			// Besoin de traduction
+	"percentage of students with photo"			// Besoin de traduction
 #elif L==6	// gn
-	 "porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
+	"porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	 "percentuale di studenti con foto"
+	"percentuale di studenti con foto"
 #elif L==8	// pl
-	 "percentage of students with photo"			// Potrzebujesz tlumaczenie
+	"percentage of students with photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "porcentagem de estudantes com foto"
+	"porcentagem de estudantes com foto"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "nombre de titulaci&oacute;n"	// Necessita traduccio
+	"nombre de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "degree name"			// Need Übersetzung
+	"degree name"			// Need Übersetzung
 #elif L==3	// en
-	 "degree name"
+	"degree name"
 #elif L==4	// es
-	 "nombre de titulaci&oacute;n"
+	"nombre de titulaci&oacute;n"
 #elif L==5	// fr
-	 "degree name"			// Besoin de traduction
+	"degree name"			// Besoin de traduction
 #elif L==6	// gn
-	 "nombre de titulaci&oacute;n"	// Okoteve traducción
+	"nombre de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "nome laurea"
+	"nome laurea"
 #elif L==8	// pl
-	 "degree name"			// Potrzebujesz tlumaczenie
+	"degree name"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "nome do grau"
+	"nome do grau"
 #endif
 	};
 
 const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
-   {
+	{
 #if   L==1	// ca
-	 "N&ordm; total de clics"	// Necessita traduccio
+	"N&ordm; total de clics"	// Necessita traduccio
 #elif L==2	// de
-	 "Gesamtzahl der Klicks"
+	"Gesamtzahl der Klicks"
 #elif L==3	// en
-	 "Total number of clicks"
+	"Total number of clicks"
 #elif L==4	// es
-	 "N&ordm; total de clics"
+	"N&ordm; total de clics"
 #elif L==5	// fr
-	 "Nombre total de clics"
+	"Nombre total de clics"
 #elif L==6	// gn
-	 "N&ordm; total de clics"	// Okoteve traducción
+	"N&ordm; total de clics"	// Okoteve traducción
 #elif L==7	// it
-	 "Numero totale di scatti"
+	"Numero totale di scatti"
 #elif L==8	// pl
-	 "Total number of clicks"	// Potrzebujesz tlumaczenie
+	"Total number of clicks"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "N&uacute;mero total de cliques"
+	"N&uacute;mero total de cliques"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "N&ordm; de usuarios distintos"		// Necessita traduccio
+	"N&ordm; de usuarios distintos"		// Necessita traduccio
 #elif L==2	// de
-	 "Anzahl der unterschiedlichen Benutzer"
+	"Anzahl der unterschiedlichen Benutzer"
 #elif L==3	// en
-	 "Number of distinct users"
+	"Number of distinct users"
 #elif L==4	// es
-	 "N&ordm; de usuarios distintos"
+	"N&ordm; de usuarios distintos"
 #elif L==5	// fr
-	 "Nombre des diff&eacute;rents utilisateurs"
+	"Nombre des diff&eacute;rents utilisateurs"
 #elif L==6	// gn
-	 "N&ordm; de usuarios distintos"		// Okoteve traducción
+	"N&ordm; de usuarios distintos"		// Okoteve traducción
 #elif L==7	// it
-	 "Numero di utenti distinti"
+	"Numero di utenti distinti"
 #elif L==8	// pl
-	 "Number of distinct users"			// Potrzebujesz tlumaczenie
+	"Number of distinct users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "N&uacute;mero de utilizadores diferentes"
+	"N&uacute;mero de utilizadores diferentes"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "N&ordm; de clics por usuario"		// Necessita traduccio
+	"N&ordm; de clics por usuario"		// Necessita traduccio
 #elif L==2	// de
-	 "Anzahl der Klicks pro Benutzer"
+	"Anzahl der Klicks pro Benutzer"
 #elif L==3	// en
-	 "Number of clicks per user"
+	"Number of clicks per user"
 #elif L==4	// es
-	 "N&ordm; de clics por usuario"
+	"N&ordm; de clics por usuario"
 #elif L==5	// fr
-	 "Nombre de clics par utilisateur"
+	"Nombre de clics par utilisateur"
 #elif L==6	// gn
-	 "N&ordm; de clics por usuario"		// Okoteve traducción
+	"N&ordm; de clics por usuario"		// Okoteve traducción
 #elif L==7	// it
-	 "Numero di scatti per utente"
+	"Numero di scatti per utente"
 #elif L==8	// pl
-	 "Number of clicks per user"		// Potrzebujesz tlumaczenie
+	"Number of clicks per user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "n&uacute;mero de cliques por utilizador"
+	"n&uacute;mero de cliques por utilizador"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Tiempo de generaci&oacute;n de p&aacute;gina"	// Necessita traduccio
+	"Tiempo de generaci&oacute;n de p&aacute;gina"	// Necessita traduccio
 #elif L==2	// de
-	 "Zeit zur Erzeugung der Seite"
+	"Zeit zur Erzeugung der Seite"
 #elif L==3	// en
-	 "Time to generate page"
+	"Time to generate page"
 #elif L==4	// es
-	 "Tiempo de generaci&oacute;n de p&aacute;gina"
+	"Tiempo de generaci&oacute;n de p&aacute;gina"
 #elif L==5	// fr
-	 "Temps pour g&eacute;n&eacute;rer la page"
+	"Temps pour g&eacute;n&eacute;rer la page"
 #elif L==6	// gn
-	 "Tiempo de generaci&oacute;n de p&aacute;gina"	// Okoteve traducción
+	"Tiempo de generaci&oacute;n de p&aacute;gina"	// Okoteve traducción
 #elif L==7	// it
-	 "Tempo per generare pagina"
+	"Tempo per generare pagina"
 #elif L==8	// pl
-	 "Time to generate page"			// Potrzebujesz tlumaczenie
+	"Time to generate page"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Tempo para gerar p&aacute;gina"
+	"Tempo para gerar p&aacute;gina"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Tiempo de env&iacute;o de p&aacute;gina"	// Necessita traduccio
+	"Tiempo de env&iacute;o de p&aacute;gina"	// Necessita traduccio
 #elif L==2	// de
-	 "Zeit, um die Seite zu senden"
+	"Zeit, um die Seite zu senden"
 #elif L==3	// en
-	 "Time to send page"
+	"Time to send page"
 #elif L==4	// es
-	 "Tiempo de env&iacute;o de p&aacute;gina"
+	"Tiempo de env&iacute;o de p&aacute;gina"
 #elif L==5	// fr
-	 "Temps pour envoyer la page"
+	"Temps pour envoyer la page"
 #elif L==6	// gn
-	 "Tiempo de env&iacute;o de p&aacute;gina"	// Okoteve traducción
+	"Tiempo de env&iacute;o de p&aacute;gina"	// Okoteve traducción
 #elif L==7	// it
-	 "Tempo d'invio della pagina"
+	"Tempo d'invio della pagina"
 #elif L==8	// pl
-	 "Time to send page"				// Potrzebujesz tlumaczenie
+	"Time to send page"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Tempo para enviar a p&aacute;gina"
+	"Tempo para enviar a p&aacute;gina"
 #endif
 	};
 
 const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
-   {
+	{
 #if   L==1	// ca
-	 "n&ordm; total de clics"	// Necessita traduccio
+	"n&ordm; total de clics"	// Necessita traduccio
 #elif L==2	// de
-	 "Gesamtzahl der Klicks"
+	"Gesamtzahl der Klicks"
 #elif L==3	// en
-	 "total number of clicks"
+	"total number of clicks"
 #elif L==4	// es
-	 "n&ordm; total de clics"
+	"n&ordm; total de clics"
 #elif L==5	// fr
-	 "nombre total de clics"
+	"nombre total de clics"
 #elif L==6	// gn
-	 "n&ordm; total de clics"	// Okoteve traducción
+	"n&ordm; total de clics"	// Okoteve traducción
 #elif L==7	// it
-	 "numero totale di scatti"
+	"numero totale di scatti"
 #elif L==8	// pl
-	 "total number of clicks"	// Potrzebujesz tlumaczenie
+	"total number of clicks"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "n&uacute;mero total de cliques"
+	"n&uacute;mero total de cliques"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "n&ordm; de usuarios distintos"		// Necessita traduccio
+	"n&ordm; de usuarios distintos"		// Necessita traduccio
 #elif L==2	// de
-	 "Anzahl der unterschiedliche Benutzer"
+	"Anzahl der unterschiedliche Benutzer"
 #elif L==3	// en
-	 "number of distinct users"
+	"number of distinct users"
 #elif L==4	// es
-	 "n&ordm; de usuarios distintos"
+	"n&ordm; de usuarios distintos"
 #elif L==5	// fr
-	 "nombre des diff&eacute;rents utilisateurs"
+	"nombre des diff&eacute;rents utilisateurs"
 #elif L==6	// gn
-	 "n&ordm; de usuarios distintos"		// Okoteve traducción
+	"n&ordm; de usuarios distintos"		// Okoteve traducción
 #elif L==7	// it
-	 "numero di utenti distinti"
+	"numero di utenti distinti"
 #elif L==8	// pl
-	 "number of distinct users"			// Potrzebujesz tlumaczenie
+	"number of distinct users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "n&uacute;mero de utilizadores diferentes"
+	"n&uacute;mero de utilizadores diferentes"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "n&ordm; de clics por usuario"		// Necessita traduccio
+	"n&ordm; de clics por usuario"		// Necessita traduccio
 #elif L==2	// de
-	 "Anzahl der Klicks pro Benutzer"
+	"Anzahl der Klicks pro Benutzer"
 #elif L==3	// en
-	 "number of clicks per user"
+	"number of clicks per user"
 #elif L==4	// es
-	 "n&ordm; de clics por usuario"
+	"n&ordm; de clics por usuario"
 #elif L==5	// fr
-	 "nombre de clics par utilisateur"
+	"nombre de clics par utilisateur"
 #elif L==6	// gn
-	 "n&ordm; de clics por usuario"		// Okoteve traducción
+	"n&ordm; de clics por usuario"		// Okoteve traducción
 #elif L==7	// it
-	 "numero di scatti per utente"
+	"numero di scatti per utente"
 #elif L==8	// pl
-	 "number of clicks per user"		// Potrzebujesz tlumaczenie
+	"number of clicks per user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "n&uacute;mero de cliques por utilizador"
+	"n&uacute;mero de cliques por utilizador"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "tiempo de generaci&oacute;n"		// Necessita traduccio
+	"tiempo de generaci&oacute;n"		// Necessita traduccio
 #elif L==2	// de
-	 "Zeit zur Erzeugung"
+	"Zeit zur Erzeugung"
 #elif L==3	// en
-	 "time to generate"
+	"time to generate"
 #elif L==4	// es
-	 "tiempo de generaci&oacute;n"
+	"tiempo de generaci&oacute;n"
 #elif L==5	// fr
-	 "temps pour g&eacute;n&eacute;rer"
+	"temps pour g&eacute;n&eacute;rer"
 #elif L==6	// gn
-	 "tiempo de generaci&oacute;n"		// Okoteve traducción
+	"tiempo de generaci&oacute;n"		// Okoteve traducción
 #elif L==7	// it
-	 "tempo per generare"
+	"tempo per generare"
 #elif L==8	// pl
-	 "time to generate"			// Potrzebujesz tlumaczenie
+	"time to generate"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "tempo para gerar"
+	"tempo para gerar"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "tiempo de env&iacute;o"	// Necessita traduccio
+	"tiempo de env&iacute;o"	// Necessita traduccio
 #elif L==2	// de
-	 "Zeit, um Seite"
+	"Zeit, um Seite"
 #elif L==3	// en
-	 "time to send"
+	"time to send"
 #elif L==4	// es
-	 "tiempo de env&iacute;o"
+	"tiempo de env&iacute;o"
 #elif L==5	// fr
-	 "temps pour envoyer"
+	"temps pour envoyer"
 #elif L==6	// gn
-	 "tiempo de env&iacute;o"	// Okoteve traducción
+	"tiempo de env&iacute;o"	// Okoteve traducción
 #elif L==7	// it
-	 "tempo d'invio"
+	"tempo d'invio"
 #elif L==8	// pl
-	 "time to send"			// Potrzebujesz tlumaczenie
+	"time to send"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Tempo para enviar"
+	"Tempo para enviar"
 #endif
 	};
 
 const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
-   {
+	{
 #if   L==1	// ca				// Fig_USERS
-	 "Usuaris"
+	"Usuaris"
 #elif L==2	// de
-	 "Benutzer"
+	"Benutzer"
 #elif L==3	// en
-	 "Users"
+	"Users"
 #elif L==4	// es
-	 "Usuarios"
+	"Usuarios"
 #elif L==5	// fr
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6	// gn
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7	// it
-	 "Utenti"
+	"Utenti"
 #elif L==8	// pl
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Utilizadores"
+	"Utilizadores"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_USERS_RANKING
-	 "R&agrave;nquing"
+	"R&agrave;nquing"
 #elif L==2	// de
-	 "Rang"
+	"Rang"
 #elif L==3	// en
-	 "Ranking"
+	"Ranking"
 #elif L==4	// es
-	 "Ranking"
+	"Ranking"
 #elif L==5	// fr
-	 "Classement"
+	"Classement"
 #elif L==6	// gn
-	 "Ranking"	// Okoteve traducción
+	"Ranking"	// Okoteve traducción
 #elif L==7	// it
-	 "Posto"
+	"Posto"
 #elif L==8	// pl
-	 "Ranking"
+	"Ranking"
 #elif L==9	// pt
-	 "Posi&ccedil;&atilde;o"
+	"Posi&ccedil;&atilde;o"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_HIERARCHY
-	 "Jerarquia"
+	"Jerarquia"
 #elif L==2	// de
-	 "Hierarchie"
+	"Hierarchie"
 #elif L==3	// en
-	 "Hierarchy"
+	"Hierarchy"
 #elif L==4	// es
-	 "Jerarqu&iacute;a"
+	"Jerarqu&iacute;a"
 #elif L==5	// fr
-	 "Hi&eacute;rarchie"
+	"Hi&eacute;rarchie"
 #elif L==6	// gn
-	 "S&atilde;mbyhyha reko"
+	"S&atilde;mbyhyha reko"
 #elif L==7	// it
-	 "Gerarchia"
+	"Gerarchia"
 #elif L==8	// pl
-	 "Hierarchia"
+	"Hierarchia"
 #elif L==9	// pt
-	 "Hierarquia"
+	"Hierarquia"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_INSTITS
 	"Institucions"
 #elif L==2	// de
@@ -41015,7 +41291,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_DEGREE_TYPES
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -41035,67 +41311,67 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Tipos de grau"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_FOLDERS_AND_FILES
-	 "Carpetes i fitxers"
+	"Carpetes i fitxers"
 #elif L==2	// de
-	 "Verzeichnisse und Dateien"
+	"Verzeichnisse und Dateien"
 #elif L==3	// en
-	 "Folders and files"
+	"Folders and files"
 #elif L==4	// es
-	 "Carpetas y archivos"
+	"Carpetas y archivos"
 #elif L==5	// fr
-	 "R&eacute;pertoires et fichiers"
+	"R&eacute;pertoires et fichiers"
 #elif L==6	// gn
-	 "Carpetas y archivos"		// Okoteve traducción
+	"Carpetas y archivos"		// Okoteve traducción
 #elif L==7	// it
-	 "Cartelle e file"
+	"Cartelle e file"
 #elif L==8	// pl
-	 "Folders and files"		// Potrzebujesz tlumaczenie
+	"Folders and files"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Diret&oacute;rios e arquivos"
+	"Diret&oacute;rios e arquivos"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_OER
-	 "Recursos Educatius Oberts (OER)"
+	"Recursos Educatius Oberts (OER)"
 #elif L==2	// de
-	 "Open Educational Resources (OER)"
+	"Open Educational Resources (OER)"
 #elif L==3	// en
-	 "Open Educational Resources (OER)"
+	"Open Educational Resources (OER)"
 #elif L==4	// es
-	 "Recursos Educativos Abiertos (OER)"
+	"Recursos Educativos Abiertos (OER)"
 #elif L==5	// fr
-	 "Ressources &Eacute;ducatives Libres (REL)"
+	"Ressources &Eacute;ducatives Libres (REL)"
 #elif L==6	// gn
-	 "Recursos Educativos Abiertos (OER)"	// Okoteve traducción
+	"Recursos Educativos Abiertos (OER)"	// Okoteve traducción
 #elif L==7	// it
-	 "Risorse Didattiche Aperte (OER)"
+	"Risorse Didattiche Aperte (OER)"
 #elif L==8	// pl
-	 "Otwarte Zasoby Edukacyjne (OER)"
+	"Otwarte Zasoby Edukacyjne (OER)"
 #elif L==9	// pt
-	 "Recursos Educacionais Abertos (OER)"
+	"Recursos Educacionais Abertos (OER)"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_ASSIGNMENTS
-	 "Activitats"
+	"Activitats"
 #elif L==2	// de
-	 "Aufgaben"
+	"Aufgaben"
 #elif L==3	// en
-	 "Assignments"
+	"Assignments"
 #elif L==4	// es
-	 "Actividades"
+	"Actividades"
 #elif L==5	// fr
-	 "Activit&eacute;s"
+	"Activit&eacute;s"
 #elif L==6	// gn
-	 "Tar&eacute;a"
+	"Tar&eacute;a"
 #elif L==7	// it
-	 "Attivit&agrave;"
+	"Attivit&agrave;"
 #elif L==8	// pl
-	 "Zadania"
+	"Zadania"
 #elif L==9	// pt
-	 "Atividades"
+	"Atividades"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_PROJECTS
 	"Projectes"
 #elif L==2	// de
@@ -41115,27 +41391,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Projetos"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_TESTS
-	 "Tests"
+	"Tests"
 #elif L==2	// de
-	 "Tests"
+	"Tests"
 #elif L==3	// en
-	 "Tests"
+	"Tests"
 #elif L==4	// es
-	 "Test"
+	"Test"
 #elif L==5	// fr
-	 "Tests"
+	"Tests"
 #elif L==6	// gn
-	 "Test"		// Okoteve traducción
+	"Test"		// Okoteve traducción
 #elif L==7	// it
-	 "Test"
+	"Test"
 #elif L==8	// pl
-	 "Testy"
+	"Testy"
 #elif L==9	// pt
-	 "Testes"
+	"Testes"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_GAMES
 	"Jocs"
 #elif L==2	// de
@@ -41155,47 +41431,47 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Jogos"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_SURVEYS
-	 "Enquestes"
+	"Enquestes"
 #elif L==2	// de
-	 "Umfragen"
+	"Umfragen"
 #elif L==3	// en
-	 "Surveys"
+	"Surveys"
 #elif L==4	// es
-	 "Encuestas"
+	"Encuestas"
 #elif L==5	// fr
-	 "Sondages"
+	"Sondages"
 #elif L==6	// gn
-	 "Encuestas"	// Okoteve traducción
+	"Encuestas"	// Okoteve traducción
 #elif L==7	// it
-	 "Sondaggi"
+	"Sondaggi"
 #elif L==8	// pl
-	 "Badania"
+	"Badania"
 #elif L==9	// pt
-	 "Inqu&eacute;ritos"
+	"Inqu&eacute;ritos"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_SOCIAL_ACTIVITY
-	 "Timeline"
+	"Timeline"
 #elif L==2	// de
-	 "Timeline"
+	"Timeline"
 #elif L==3	// en
-	 "Timeline"
+	"Timeline"
 #elif L==4	// es
-	 "Timeline"
+	"Timeline"
 #elif L==5	// fr
-	 "Chronologie"
+	"Chronologie"
 #elif L==6	// gn
-	 "Timeline"	// Okoteve traducción
+	"Timeline"	// Okoteve traducción
 #elif L==7	// it
-	 "Timeline"
+	"Timeline"
 #elif L==8	// pl
-	 "Timeline"
+	"Timeline"
 #elif L==9	// pt
-	 "Timeline"
+	"Timeline"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_FOLLOW
 	"Seguits / Seguidors"
 #elif L==2	// de
@@ -41215,27 +41491,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Seguidos / Seguidores"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_FORUMS
-	 "F&ograve;rums"
+	"F&ograve;rums"
 #elif L==2	// de
-	 "Foren"
+	"Foren"
 #elif L==3	// en
-	 "Forums"
+	"Forums"
 #elif L==4	// es
-	 "Foros"
+	"Foros"
 #elif L==5	// fr
-	 "Forums"
+	"Forums"
 #elif L==6	// gn
-	 "Foros"		// Okoteve traducción
+	"Foros"		// Okoteve traducción
 #elif L==7	// it
-	 "Forum"
+	"Forum"
 #elif L==8	// pl
-	 "Forums"		// Potrzebujesz tlumaczenie
+	"Forums"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "F&oacute;runs"
+	"F&oacute;runs"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_NOTIFY_EVENTS
 	"Notificacions enviades per correu"
 #elif L==2	// de
@@ -41255,87 +41531,87 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Notifica&ccedil;&otilde;es enviadas por email"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_NOTICES
-	 "Avisos"
+	"Avisos"
 #elif L==2	// de
-	 "Ank&uuml;ndigungen"
+	"Ank&uuml;ndigungen"
 #elif L==3	// en
-	 "Notices"
+	"Notices"
 #elif L==4	// es
-	 "Avisos"
+	"Avisos"
 #elif L==5	// fr
-	 "Avis"
+	"Avis"
 #elif L==6	// gn
-	 "Marandu"
+	"Marandu"
 #elif L==7	// it
-	 "Avvisi"
+	"Avvisi"
 #elif L==8	// pl
-	 "Ogloszenia"
+	"Ogloszenia"
 #elif L==9	// pt
-	 "Avisos"
+	"Avisos"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_MESSAGES
-	 "Missatges"
+	"Missatges"
 #elif L==2	// de
-	 "Nachrichten"
+	"Nachrichten"
 #elif L==3	// en
-	 "Messages"
+	"Messages"
 #elif L==4	// es
-	 "Mensajes"
+	"Mensajes"
 #elif L==5	// fr
-	 "Messages"
+	"Messages"
 #elif L==6	// gn
-	 "Marandu"
+	"Marandu"
 #elif L==7	// it
-	 "Messaggi"
+	"Messaggi"
 #elif L==8	// pl
-	 "Wiadomo&sacute;ci"
+	"Wiadomo&sacute;ci"
 #elif L==9	// pt
-	 "Mensagens"
+	"Mensagens"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_SOCIAL_NETWORKS
-	 "Webs / xarxes socials"
+	"Webs / xarxes socials"
 #elif L==2	// de
-	 "Webs / Social Networks"
+	"Webs / Social Networks"
 #elif L==3	// en
-	 "Webs / social networks"
+	"Webs / social networks"
 #elif L==4	// es
-	 "Webs / redes sociales"
+	"Webs / redes sociales"
 #elif L==5	// fr
-	 "Webs / r&eacute;seaux sociaux"
+	"Webs / r&eacute;seaux sociaux"
 #elif L==6	// gn
-	 "Webs / redes sociales"	// Okoteve traducción
+	"Webs / redes sociales"	// Okoteve traducción
 #elif L==7	// it
-	 "Webs / reti sociali"
+	"Webs / reti sociali"
 #elif L==8	// pl
-	 "Webs / sieci spo&lstrok;eczne"
+	"Webs / sieci spo&lstrok;eczne"
 #elif L==9	// pt
-	 "Webs / redes sociais"
+	"Webs / redes sociais"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_LANGUAGES
-	 "Idioma"
+	"Idioma"
 #elif L==2	// de
-	 "Sprache"
+	"Sprache"
 #elif L==3	// en
-	 "Language"
+	"Language"
 #elif L==4	// es
-	 "Idioma"
+	"Idioma"
 #elif L==5	// fr
-	 "Langue"
+	"Langue"
 #elif L==6	// gn
-	 "&Ntilde;e'&#7869;"
+	"&Ntilde;e'&#7869;"
 #elif L==7	// it
-	 "Lingua"
+	"Lingua"
 #elif L==8	// pl
-	 "Language"	// Potrzebujesz tlumaczenie
+	"Language"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Lingua"
+	"Lingua"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_FIRST_DAY_OF_WEEK
 	"Calendari"
 #elif L==2	// de
@@ -41355,7 +41631,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Calend&aacute;rio"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_DATE_FORMAT
 	"Dates"
 #elif L==2	// de
@@ -41375,27 +41651,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Datas"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_ICON_SETS
-	 "Icones"
+	"Icones"
 #elif L==2	// de
-	 "Symbole"
+	"Symbole"
 #elif L==3	// en
-	 "Icons"
+	"Icons"
 #elif L==4	// es
-	 "Iconos"
+	"Iconos"
 #elif L==5	// fr
-	 "Ic&ocirc;nes"
+	"Ic&ocirc;nes"
 #elif L==6	// gn
-	 "Iconos"		// Okoteve traducción
+	"Iconos"		// Okoteve traducción
 #elif L==7	// it
-	 "Icone"
+	"Icone"
 #elif L==8	// pl
-	 "Ikony"
+	"Ikony"
 #elif L==9	// pt
-	 "&Iacute;cones"
+	"&Iacute;cones"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_MENUS
 	"Men&uacute;"
 #elif L==2	// de
@@ -41415,47 +41691,47 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Menu"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_THEMES
-	 "Tema (colors)"
+	"Tema (colors)"
 #elif L==2	// de
-	 "Skin"
+	"Skin"
 #elif L==3	// en
-	 "Theme"
+	"Theme"
 #elif L==4	// es
-	 "Tema (colores)"
+	"Tema (colores)"
 #elif L==5	// fr
-	 "Th&egrave;me"
+	"Th&egrave;me"
 #elif L==6	// gn
-	 "Tema (colores)"	// Okoteve traducción
+	"Tema (colores)"	// Okoteve traducción
 #elif L==7	// it
-	 "Tema"
+	"Tema"
 #elif L==8	// pl
-	 "Temat"
+	"Temat"
 #elif L==9	// pt
-	 "Skin"
+	"Skin"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_SIDE_COLUMNS
-	 "Columnes"
+	"Columnes"
 #elif L==2	// de
-	 "Spalten"
+	"Spalten"
 #elif L==3	// en
-	 "Columns"
+	"Columns"
 #elif L==4	// es
-	 "Columnas"
+	"Columnas"
 #elif L==5	// fr
-	 "Colonnes"
+	"Colonnes"
 #elif L==6	// gn
-	 "Columnas"	// Okoteve traducción
+	"Columnas"	// Okoteve traducción
 #elif L==7	// it
-	 "Colonne"
+	"Colonne"
 #elif L==8	// pl
-	 "Kolumny"
+	"Kolumny"
 #elif L==9	// pt
-	 "Colunas"
+	"Colunas"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_PRIVACY
 	"Privacitat"
 #elif L==2	// de
@@ -41475,7 +41751,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Privacidade"
 #endif
-	 ,
+	,
 #if   L==1	// ca				// Fig_COOKIES
 	"Cookies"
 #elif L==2	// de
@@ -41499,44 +41775,44 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 
 const char *Txt_Start =	// As a verb
 #if   L==1	// ca
-	 "Comen&ccedil;ar";
+	"Comen&ccedil;ar";
 #elif L==2	// de
-	 "Starten";
+	"Starten";
 #elif L==3	// en
-	 "Start";
+	"Start";
 #elif L==4	// es
-	 "Comenzar";
+	"Comenzar";
 #elif L==5	// fr
-	 "Commencer";
+	"Commencer";
 #elif L==6	// gn
-	 "&Ntilde;epyr&utilde;";
+	"&Ntilde;epyr&utilde;";
 #elif L==7	// it
-	 "Inizia";
+	"Inizia";
 #elif L==8	// pl
-	 "Rozpocznij";
+	"Rozpocznij";
 #elif L==9	// pt
-	 "Come&ccedil;ar";
+	"Come&ccedil;ar";
 #endif
 
 const char *Txt_Statistic =
 #if   L==1	// ca
-	 "Estad&iacute;stique";
+	"Estad&iacute;stique";
 #elif L==2	// de
-	 "Statistik";
+	"Statistik";
 #elif L==3	// en
-	 "Statistic";
+	"Statistic";
 #elif L==4	// es
-	 "Estad&iacute;stica";
+	"Estad&iacute;stica";
 #elif L==5	// fr
-	 "Statistique";
+	"Statistique";
 #elif L==6	// gn
-	 "Papy'aporeko";
+	"Papy'aporeko";
 #elif L==7	// it
-	 "Statistica";
+	"Statistica";
 #elif L==8	// pl
-	 "Statystyki";
+	"Statystyki";
 #elif L==9	// pt
-	 "Estat&iacute;sticas";
+	"Estat&iacute;sticas";
 #endif
 
 const char *Txt_Statistics_of_all_visits =
@@ -42044,45 +42320,45 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 #endif
 
 const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
-   {
+	{
 #if   L==1	// ca
-	 "Elecci&oacute; &uacute;nica"
+	"Elecci&oacute; &uacute;nica"
 #elif L==2	// de
-	 "Unique-Choice"
+	"Unique-Choice"
 #elif L==3	// en
-	 "Unique choice"
+	"Unique choice"
 #elif L==4	// es
-	 "Elecci&oacute;n &uacute;nica"
+	"Elecci&oacute;n &uacute;nica"
 #elif L==5	// fr
-	 "Choix unique"
+	"Choix unique"
 #elif L==6	// gn
-	 "Elecci&oacute;n &uacute;nica"		// Okoteve traducción
+	"Elecci&oacute;n &uacute;nica"		// Okoteve traducción
 #elif L==7	// it
-	 "Scelta unica"
+	"Scelta unica"
 #elif L==8	// pl
-	 "Unique choice"			// Potrzebujesz tlumaczenie
+	"Unique choice"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "&Uacute;nica escolha"
+	"&Uacute;nica escolha"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Elecci&oacute; m&uacute;ltiple"
+	"Elecci&oacute; m&uacute;ltiple"
 #elif L==2	// de
-	 "Multiple-Choice"
+	"Multiple-Choice"
 #elif L==3	// en
-	 "Multiple choice"
+	"Multiple choice"
 #elif L==4	// es
-	 "Elecci&oacute;n m&uacute;ltiple"
+	"Elecci&oacute;n m&uacute;ltiple"
 #elif L==5	// fr
-	 "Choix multiple"
+	"Choix multiple"
 #elif L==6	// gn
-	 "Elecci&oacute;n m&uacute;ltiple"	// Okoteve traducción
+	"Elecci&oacute;n m&uacute;ltiple"	// Okoteve traducción
 #elif L==7	// it
-	 "Scelta multipla"
+	"Scelta multipla"
 #elif L==8	// pl
-	 "Multiple choice"			// Potrzebujesz tlumaczenie
+	"Multiple choice"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "M&uacute;ltipla escolha"
+	"M&uacute;ltipla escolha"
 #endif
 	};
 
@@ -42150,50 +42426,50 @@ const char *Txt_Syllabus_of_the_course =
 #endif
 
 const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
-	 {
-	 // Lectures
+	{
+	// Lectures
 #if   L==1	// ca
-	 "Teoria"
+	"Teoria"
 #elif L==2	// de
-	 "Vorlesung"
+	"Vorlesung"
 #elif L==3	// en
-	 "Lectures"
+	"Lectures"
 #elif L==4	// es
-	 "Teor&iacute;a"
+	"Teor&iacute;a"
 #elif L==5	// fr
-	 "Th&eacute;orie"
+	"Th&eacute;orie"
 #elif L==6	// gn
-	 "Teor&iacute;a"		// Okoteve traducción
+	"Teor&iacute;a"		// Okoteve traducción
 #elif L==7	// it
-	 "Teoria"
+	"Teoria"
 #elif L==8	// pl
-	 "Wyklady"
+	"Wyklady"
 #elif L==9	// pt
-	 "Teoria"
+	"Teoria"
 #endif
-	 ,
-	 // Practicals
+	,
+	// Practicals
 #if   L==1	// ca
-	 "Pr&agrave;ctiques"
+	"Pr&agrave;ctiques"
 #elif L==2	// de
-	 "&Uuml;bung"
+	"&Uuml;bung"
 #elif L==3	// en
-	 "Practicals"
+	"Practicals"
 #elif L==4	// es
-	 "Pr&aacute;cticas"
+	"Pr&aacute;cticas"
 #elif L==5	// fr
-	 "Pratique"
+	"Pratique"
 #elif L==6	// gn
-	 "Pr&aacute;cticas"		// Okoteve traducción
+	"Pr&aacute;cticas"		// Okoteve traducción
 #elif L==7	// it
-	 "Pratica"
+	"Pratica"
 #elif L==8	// pl
-	 "Praktyki"
+	"Praktyki"
 #elif L==9	// pt
-	 "Pr&aacute;tica"
+	"Pr&aacute;tica"
 #endif
-	 ,
-	 };
+	,
+	};
 
 const char *Txt_System =
 #if   L==1	// ca
@@ -42280,7 +42556,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 #endif
 
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
-   {
+	{
 	// TabUnk
 	""
 	,
@@ -43073,23 +43349,23 @@ const char *Txt_Text =
 
 const char *Txt_TEXT_plain =
 #if   L==1	// ca
-	 "pla";
+	"pla";
 #elif L==2	// de
-	 "Plain";
+	"Plain";
 #elif L==3	// en
-	 "plain";
+	"plain";
 #elif L==4	// es
-	 "plano";
+	"plano";
 #elif L==5	// fr
-	 "plain";
+	"plain";
 #elif L==6	// gn
-	 "plano";	// Okoteve traducción
+	"plano";	// Okoteve traducción
 #elif L==7	// it
-	 "normale";
+	"normale";
 #elif L==8	// pl
-	 "zwykly";
+	"zwykly";
 #elif L==9	// pt
-	 "plano";
+	"plano";
 #endif
 
 const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
@@ -49241,307 +49517,307 @@ const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
 
 const char *Txt_Timeline =
 #if   L==1	// ca
-	 "Timeline";
+	"Timeline";
 #elif L==2	// de
-	 "Timeline";
+	"Timeline";
 #elif L==3	// en
-	 "Timeline";
+	"Timeline";
 #elif L==4	// es
-	 "Timeline";
+	"Timeline";
 #elif L==5	// fr
-	 "Chronologie";
+	"Chronologie";
 #elif L==6	// gn
-	 "Timeline";	// Okoteve traducción
+	"Timeline";	// Okoteve traducción
 #elif L==7	// it
-	 "Timeline";
+	"Timeline";
 #elif L==8	// pl
-	 "Timeline";
+	"Timeline";
 #elif L==9	// pt
-	 "Timeline";
+	"Timeline";
 #endif
 
 const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	 "Timeline de %s";
+	"Timeline de %s";
 #elif L==2	// de
-	 "%s timeline";
+	"%s timeline";
 #elif L==3	// en
-	 "%s timeline";
+	"%s timeline";
 #elif L==4	// es
-	 "Timeline de %s";
+	"Timeline de %s";
 #elif L==5	// fr
-	 "Chronologie de %s";
+	"Chronologie de %s";
 #elif L==6	// gn
-	 "Timeline de %s";	// Okoteve traducción
+	"Timeline de %s";	// Okoteve traducción
 #elif L==7	// it
-	 "Timeline di %s";
+	"Timeline di %s";
 #elif L==8	// pl
-	 "Timeline %s";
+	"Timeline %s";
 #elif L==9	// pt
-	 "Timeline de %s";
+	"Timeline de %s";
 #endif
 
 
 const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	{
 #if   L==1	// ca	// TL_NOTE_UNKNOWN
-	 "Esdeveniment desconegut"
+	"Esdeveniment desconegut"
 #elif L==2	// de
-	 "Unbekannt Ereignis"
+	"Unbekannt Ereignis"
 #elif L==3	// en
-	 "Unknown event"
+	"Unknown event"
 #elif L==4	// es
-	 "Evento desconocido"
+	"Evento desconocido"
 #elif L==5	// fr
-	 "&Eacute;v&eacute;nement inconnu"
+	"&Eacute;v&eacute;nement inconnu"
 #elif L==6	// gn
-	 "Evento desconocido"	// Okoteve traducción
+	"Evento desconocido"	// Okoteve traducción
 #elif L==7	// it
-	 "Evento sconosciuto"
+	"Evento sconosciuto"
 #elif L==8	// pl
-	 "Nieznane zdarzenia"
+	"Nieznane zdarzenia"
 #elif L==9	// pt
-	 "Evento desconhecido"
+	"Evento desconhecido"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_INS_DOC_PUB_FILE
-	 "Document p&uacute;blic (instituci&oacute;)"
+	"Document p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Hochschule)"
+	"&Ouml;ffentliche Dokumentdatei (Hochschule)"
 #elif L==3	// en
-	 "Public document file (institution)"
+	"Public document file (institution)"
 #elif L==4	// es
-	 "Documento p&uacute;blico (instituci&oacute;n)"
+	"Documento p&uacute;blico (instituci&oacute;n)"
 #elif L==5	// fr
-	 "Fichier de document public (&eacute;tablissement)"
+	"Fichier de document public (&eacute;tablissement)"
 #elif L==6	// gn
-	 "Documento p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
+	"Documento p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
 #elif L==7	// it
-	 "Documento pubblico (istituzione)"
+	"Documento pubblico (istituzione)"
 #elif L==8	// pl
-	 "Plik dokumentu publiczne (instytucji)"
+	"Plik dokumentu publiczne (instytucji)"
 #elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
+	"Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_INS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (instituci&oacute;)"
+	"Arxiu compartit p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Hochschule)"
+	"&Ouml;ffentliche Freigegebene Datei (Hochschule)"
 #elif L==3	// en
-	 "Public shared file (institution)"
+	"Public shared file (institution)"
 #elif L==4	// es
-	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"
+	"Archivo compartido p&uacute;blico (instituci&oacute;n)"
 #elif L==5	// fr
-	 "Fichier partag&eacute; public (&eacute;tablissement)"
+	"Fichier partag&eacute; public (&eacute;tablissement)"
 #elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
+	"Archivo compartido p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
 #elif L==7	// it
-	 "File condiviso pubblico (istituzione)"
+	"File condiviso pubblico (istituzione)"
 #elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (instytucji)"
+	"Udost&eogon;pniony plik publiczne (instytucji)"
 #elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
+	"Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_CTR_DOC_PUB_FILE
-	 "Document p&uacute;blic (centre)"
+	"Document p&uacute;blic (centre)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
+	"&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
 #elif L==3	// en
-	 "Public document file (centre)"
+	"Public document file (centre)"
 #elif L==4	// es
-	 "Documento p&uacute;blico (centro)"
+	"Documento p&uacute;blico (centro)"
 #elif L==5	// fr
-	 "Fichier de document public (centre)"
+	"Fichier de document public (centre)"
 #elif L==6	// gn
-	 "Documento p&uacute;blico (centro)"	// Okoteve traducción
+	"Documento p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7	// it
-	 "Documento pubblico (centro)"
+	"Documento pubblico (centro)"
 #elif L==8	// pl
-	 "Plik dokumentu publiczne (centrum)"
+	"Plik dokumentu publiczne (centrum)"
 #elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (centro)"
+	"Arquivo de documento p&uacute;blico (centro)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_CTR_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (centre)"
+	"Arxiu compartit p&uacute;blic (centre)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
+	"&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
 #elif L==3	// en
-	 "Public shared file (centre)"
+	"Public shared file (centre)"
 #elif L==4	// es
-	 "Archivo compartido p&uacute;blico (centro)"
+	"Archivo compartido p&uacute;blico (centro)"
 #elif L==5	// fr
-	 "Fichier partag&eacute; public (centre)"
+	"Fichier partag&eacute; public (centre)"
 #elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
+	"Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7	// it
-	 "File condiviso pubblico (centro)"
+	"File condiviso pubblico (centro)"
 #elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (centrum)"
+	"Udost&eogon;pniony plik publiczne (centrum)"
 #elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (centro)"
+	"Arquivo compartilhado p&uacute;blico (centro)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_DEG_DOC_PUB_FILE
-	 "Document p&uacute;blic (titulaci&oacute;)"
+	"Document p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Studiengang)"
+	"&Ouml;ffentliche Dokumentdatei (Studiengang)"
 #elif L==3	// en
-	 "Public document file (degree)"
+	"Public document file (degree)"
 #elif L==4	// es
-	 "Documento p&uacute;blico (titulaci&oacute;n)"
+	"Documento p&uacute;blico (titulaci&oacute;n)"
 #elif L==5	// fr
-	 "Fichier de document public (&eacute;tude)"
+	"Fichier de document public (&eacute;tude)"
 #elif L==6	// gn
-	 "Documento p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
+	"Documento p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
 #elif L==7	// it
-	 "Documento pubblico (laurea)"
+	"Documento pubblico (laurea)"
 #elif L==8	// pl
-	 "Plik dokumentu publiczne (stopie&nacute;)"
+	"Plik dokumentu publiczne (stopie&nacute;)"
 #elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (grau)"
+	"Arquivo de documento p&uacute;blico (grau)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_DEG_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (titulaci&oacute;)"
+	"Arxiu compartit p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Studiengang)"
+	"&Ouml;ffentliche Freigegebene Datei (Studiengang)"
 #elif L==3	// en
-	 "Public shared file (degree)"
+	"Public shared file (degree)"
 #elif L==4	// es
-	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"
+	"Archivo compartido p&uacute;blico (titulaci&oacute;n)"
 #elif L==5	// fr
-	 "Fichier partag&eacute; public (&eacute;tude)"
+	"Fichier partag&eacute; public (&eacute;tude)"
 #elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
+	"Archivo compartido p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
 #elif L==7	// it
-	 "File condiviso pubblico (laurea)"
+	"File condiviso pubblico (laurea)"
 #elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (stopie&nacute;)"
+	"Udost&eogon;pniony plik publiczne (stopie&nacute;)"
 #elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (grau)"
+	"Arquivo compartilhado p&uacute;blico (grau)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_CRS_DOC_PUB_FILE
-	 "Document p&uacute;blic (assignatura)"
+	"Document p&uacute;blic (assignatura)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Kurs)"
+	"&Ouml;ffentliche Dokumentdatei (Kurs)"
 #elif L==3	// en
-	 "Public document file (course)"
+	"Public document file (course)"
 #elif L==4	// es
-	 "Documento p&uacute;blico (asignatura)"
+	"Documento p&uacute;blico (asignatura)"
 #elif L==5	// fr
-	 "Fichier de document public (mati&egrave;re)"
+	"Fichier de document public (mati&egrave;re)"
 #elif L==6	// gn
-	 "Documento p&uacute;blico (asignatura)"	// Okoteve traducción
+	"Documento p&uacute;blico (asignatura)"	// Okoteve traducción
 #elif L==7	// it
-	 "Documento pubblico (corso)"
+	"Documento pubblico (corso)"
 #elif L==8	// pl
-	 "Plik dokumentu publiczne (kurs)"
+	"Plik dokumentu publiczne (kurs)"
 #elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (disciplina)"
+	"Arquivo de documento p&uacute;blico (disciplina)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_CRS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (assignatura)"
+	"Arxiu compartit p&uacute;blic (assignatura)"
 #elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Kurs)"
+	"&Ouml;ffentliche Freigegebene Datei (Kurs)"
 #elif L==3	// en
-	 "Public shared file (course)"
+	"Public shared file (course)"
 #elif L==4	// es
-	 "Archivo compartido p&uacute;blico (asignatura)"
+	"Archivo compartido p&uacute;blico (asignatura)"
 #elif L==5	// fr
-	 "Fichier partag&eacute; public (mati&egrave;re)"
+	"Fichier partag&eacute; public (mati&egrave;re)"
 #elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (asignatura)"	// Okoteve traducción
+	"Archivo compartido p&uacute;blico (asignatura)"	// Okoteve traducción
 #elif L==7	// it
-	 "File condiviso pubblico (corso)"
+	"File condiviso pubblico (corso)"
 #elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (kurs)"
+	"Udost&eogon;pniony plik publiczne (kurs)"
 #elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (disciplina)"
+	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_EXAM_ANNOUNCEMENT
-	 "Convocat&ograve;ria d'examen"
+	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
-	 "Aufrufe für Pr&uuml;fung"
+	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
-	 "Announcement of exam"
+	"Announcement of exam"
 #elif L==4	// es
-	 "Convocatoria de examen"
+	"Convocatoria de examen"
 #elif L==5	// fr
-	 "Convocation &agrave; un examen"
+	"Convocation &agrave; un examen"
 #elif L==6	// gn
-	 "Convocatoria de examen"	// Okoteve traducción
+	"Convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	 "Appello d'esame"
+	"Appello d'esame"
 #elif L==8	// pl
-	 "Ogloszenie egzamin"
+	"Ogloszenie egzamin"
 #elif L==9	// pt
-	 "Chamada para exame"
+	"Chamada para exame"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_SOCIAL_POST
-	 "Missatge social"
+	"Missatge social"
 #elif L==2	// de
-	 "Social Beitrag"
+	"Social Beitrag"
 #elif L==3	// en
-	 "Social post"
+	"Social post"
 #elif L==4	// es
-	 "Mensaje social"
+	"Mensaje social"
 #elif L==5	// fr
-	 "Message social"
+	"Message social"
 #elif L==6	// gn
-	 "Mensaje social"	// Okoteve traducción
+	"Mensaje social"	// Okoteve traducción
 #elif L==7	// it
-	 "Post sociale"
+	"Post sociale"
 #elif L==8	// pl
-	 "Post spo&lstrok;ecznej"
+	"Post spo&lstrok;ecznej"
 #elif L==9	// pt
-	 "Post sociais"
+	"Post sociais"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_FORUM_POST
-	 "Comentari en un f&ograve;rum"
+	"Comentari en un f&ograve;rum"
 #elif L==2	// de
-	 "Beitr&auml;ge in einem Forum"
+	"Beitr&auml;ge in einem Forum"
 #elif L==3	// en
-	 "Post in a forum"
+	"Post in a forum"
 #elif L==4	// es
-	 "Comentario en un foro"
+	"Comentario en un foro"
 #elif L==5	// fr
-	 "Post dans un forum"
+	"Post dans un forum"
 #elif L==6	// gn
-	 "Comentario en un foro"	// Okoteve traducción
+	"Comentario en un foro"	// Okoteve traducción
 #elif L==7	// it
-	 "Post in un forum"
+	"Post in un forum"
 #elif L==8	// pl
-	 "Post na forum"
+	"Post na forum"
 #elif L==9	// pt
-	 "Post em um f&oacute;rum"
+	"Post em um f&oacute;rum"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// TL_NOTE_NOTICE
-	 "Av&iacute;s"
+	"Av&iacute;s"
 #elif L==2	// de
-	 "Ank&uuml;ndigungen"
+	"Ank&uuml;ndigungen"
 #elif L==3	// en
-	 "Notice"
+	"Notice"
 #elif L==4	// es
-	 "Aviso"
+	"Aviso"
 #elif L==5	// fr
-	 "Avis"
+	"Avis"
 #elif L==6	// gn
-	 "Marandu"
+	"Marandu"
 #elif L==7	// it
-	 "Avviso"
+	"Avviso"
 #elif L==8	// pl
-	 "Informacja"
+	"Informacja"
 #elif L==9	// pt
-	 "An&uacute;ncio"
+	"An&uacute;ncio"
 #endif
 	};
 
@@ -49888,7 +50164,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 #elif L==9	// pt
 	"Hor&aacute;rio"
 #endif
-	 ,
+	,
 	// TT_MY_TIMETABLE
 #if   L==1	// ca
 	"Horari de les meves assignatures"
@@ -49909,7 +50185,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 #elif L==9	// pt
 	"Hor&aacute;rio minha disciplinas"
 #endif
-	 ,
+	,
 	// TT_TUTORING_TIMETABLE
 #if   L==1	// ca
 	"Horari de tutories"
@@ -49936,86 +50212,86 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	{
    // TT_FREE
 #if   L==1	// ca
-	 "Lliure"
+	"Lliure"
 #elif L==2	// de
-	 "Keine Klasse"
+	"Keine Klasse"
 #elif L==3	// en
-	 "No class"
+	"No class"
 #elif L==4	// es
-	 "Libre"
+	"Libre"
 #elif L==5	// fr
-	 "Pas de classe"
+	"Pas de classe"
 #elif L==6	// gn
-	 "Libre"			// Okoteve traducción
+	"Libre"			// Okoteve traducción
 #elif L==7	// it
-	 "Libero"
+	"Libero"
 #elif L==8	// pl
-	 "Bez klasy"
+	"Bez klasy"
 #elif L==9	// pt
-	 "Livre"
+	"Livre"
 #endif
-	 ,
-	 // TT_LECTURE
+	,
+	// TT_LECTURE
 #if   L==1	// ca
-	 "Teoria"
+	"Teoria"
 #elif L==2	// de
-	 "Vorlesung"
+	"Vorlesung"
 #elif L==3	// en
-	 "Lectures"
+	"Lectures"
 #elif L==4	// es
-	 "Teor&iacute;a"
+	"Teor&iacute;a"
 #elif L==5	// fr
-	 "Th&eacute;orie"
+	"Th&eacute;orie"
 #elif L==6	// gn
-	 "Teor&iacute;a"		// Okoteve traducción
+	"Teor&iacute;a"		// Okoteve traducción
 #elif L==7	// it
-	 "Teoria"
+	"Teoria"
 #elif L==8	// pl
-	 "Wyklady"
+	"Wyklady"
 #elif L==9	// pt
-	 "Teoria"
+	"Teoria"
 #endif
-	 ,
-	 // TT_PRACTICAL
+	,
+	// TT_PRACTICAL
 #if   L==1	// ca
-	 "Pr&agrave;ct."
+	"Pr&agrave;ct."
 #elif L==2	// de
-	 "&Uuml;bung"
+	"&Uuml;bung"
 #elif L==3	// en
-	 "Practicals"
+	"Practicals"
 #elif L==4	// es
-	 "Pr&aacute;ct."
+	"Pr&aacute;ct."
 #elif L==5	// fr
-	 "Pratique"
+	"Pratique"
 #elif L==6	// gn
-	 "Pr&aacute;ct."		// Okoteve traducción
+	"Pr&aacute;ct."		// Okoteve traducción
 #elif L==7	// it
-	 "Pratica"
+	"Pratica"
 #elif L==8	// pl
-	 "praktyki"
+	"praktyki"
 #elif L==9	// pt
-	 "Pr&aacute;ct."
+	"Pr&aacute;ct."
 #endif
-	 ,
-	 // TT_TUTORING
+	,
+	// TT_TUTORING
 #if   L==1	// ca
-	 "Tutories"
+	"Tutories"
 #elif L==2	// de
-	 "Anleitungen"
+	"Anleitungen"
 #elif L==3	// en
-	 "Tutoring"
+	"Tutoring"
 #elif L==4	// es
-	 "Tutor&iacute;as"
+	"Tutor&iacute;as"
 #elif L==5	// fr
-	 "Tutorat"
+	"Tutorat"
 #elif L==6	// gn
-	 "Tutor&iacute;as"	// Okoteve traducción
+	"Tutor&iacute;as"	// Okoteve traducción
 #elif L==7	// it
-	 "Tutoraggio"
+	"Tutoraggio"
 #elif L==8	// pl
-	 "Korepetycje"
+	"Korepetycje"
 #elif L==9	// pt
-	 "Tutoria"
+	"Tutoria"
 #endif
 	};
 
@@ -50490,125 +50766,125 @@ const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	};
 
 const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
-   {
+	{
 #if   L==1	// ca
-	 "Nombre enter"
+	"Nombre enter"
 #elif L==2	// de
-	 "Ganze Zahl"
+	"Ganze Zahl"
 #elif L==3	// en
-	 "Integer number"
+	"Integer number"
 #elif L==4	// es
-	 "N&ordm; entero"
+	"N&ordm; entero"
 #elif L==5	// fr
-	 "Nombre entier"
+	"Nombre entier"
 #elif L==6	// gn
-	 "N&ordm; entero"	// Okoteve traducción
+	"N&ordm; entero"	// Okoteve traducción
 #elif L==7	// it
-	 "Numero intero"
+	"Numero intero"
 #elif L==8	// pl
-	 "Integer number"	// Potrzebujesz tlumaczenie
+	"Integer number"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "N&ordm; inteiro"
+	"N&ordm; inteiro"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Nombre real"
+	"Nombre real"
 #elif L==2	// de
-	 "Reelle Zahl"
+	"Reelle Zahl"
 #elif L==3	// en
-	 "Real number"
+	"Real number"
 #elif L==4	// es
-	 "N&ordm; real"
+	"N&ordm; real"
 #elif L==5	// fr
-	 "Nombre r&eacute;el"
+	"Nombre r&eacute;el"
 #elif L==6	// gn
-	 "N&ordm; real"	// Okoteve traducción
+	"N&ordm; real"	// Okoteve traducción
 #elif L==7	// it
-	 "Numero reale"
+	"Numero reale"
 #elif L==8	// pl
-	 "Liczba rzeczywista"
+	"Liczba rzeczywista"
 #elif L==9	// pt
-	 "N&ordm; real"
+	"N&ordm; real"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "V/F"
+	"V/F"
 #elif L==2	// de
-	 "R/F"
+	"R/F"
 #elif L==3	// en
-	 "T/F"
+	"T/F"
 #elif L==4	// es
-	 "V/F"
+	"V/F"
 #elif L==5	// fr
-	 "V/F"
+	"V/F"
 #elif L==6	// gn
-	 "V/F"	// Okoteve traducción
+	"V/F"	// Okoteve traducción
 #elif L==7	// it
-	 "V/F"
+	"V/F"
 #elif L==8	// pl
-	 "P/F"
+	"P/F"
 #elif L==9	// pt
-	 "V/F"
+	"V/F"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Elecci&oacute; &uacute;nica"
+	"Elecci&oacute; &uacute;nica"
 #elif L==2	// de
-	 "Unique-Choice"
+	"Unique-Choice"
 #elif L==3	// en
-	 "Unique choice"
+	"Unique choice"
 #elif L==4	// es
-	 "Elecci&oacute;n &uacute;nica"
+	"Elecci&oacute;n &uacute;nica"
 #elif L==5	// fr
-	 "Choix unique"
+	"Choix unique"
 #elif L==6	// gn
-	 "Elecci&oacute;n &uacute;nica"		// Okoteve traducción
+	"Elecci&oacute;n &uacute;nica"		// Okoteve traducción
 #elif L==7	// it
-	 "Scelta unica"
+	"Scelta unica"
 #elif L==8	// pl
-	 "Unikalny wyb&oacute;r"
+	"Unikalny wyb&oacute;r"
 #elif L==9	// pt
-	 "&Uacute;nica escolha"
+	"&Uacute;nica escolha"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Elecci&oacute; m&uacute;ltiple"
+	"Elecci&oacute; m&uacute;ltiple"
 #elif L==2	// de
-	 "Multiple-Choice"
+	"Multiple-Choice"
 #elif L==3	// en
-	 "Multiple choice"
+	"Multiple choice"
 #elif L==4	// es
-	 "Elecci&oacute;n m&uacute;ltiple"
+	"Elecci&oacute;n m&uacute;ltiple"
 #elif L==5	// fr
-	 "Choix multiple"
+	"Choix multiple"
 #elif L==6	// gn
-	 "Elecci&oacute;n m&uacute;ltiple"	// Okoteve traducción
+	"Elecci&oacute;n m&uacute;ltiple"	// Okoteve traducción
 #elif L==7	// it
-	 "Scelta multipla"
+	"Scelta multipla"
 #elif L==8	// pl
-	 "Wielokrotnego wyboru"
+	"Wielokrotnego wyboru"
 #elif L==9	// pt
-	 "M&uacute;ltipla escolha"
+	"M&uacute;ltipla escolha"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Text"
+	"Text"
 #elif L==2	// de
-	 "Text"
+	"Text"
 #elif L==3	// en
-	 "Text"
+	"Text"
 #elif L==4	// es
-	 "Texto"
+	"Texto"
 #elif L==5	// fr
-	 "Texte"
+	"Texte"
 #elif L==6	// gn
-	 "Mba'ehaipyre"
+	"Mba'ehaipyre"
 #elif L==7	// it
-	 "Testo"
+	"Testo"
 #elif L==8	// pl
-	 "Tekst"
+	"Tekst"
 #elif L==9	// pt
-	 "Texto"
+	"Texto"
 #endif
 	,
 	};
@@ -50616,103 +50892,103 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	{
 #if   L==1	// ca
-	 "Ninguna realimentaci&oacute;n"	// Necessita traduccio
+	"Ninguna realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Keine Feedback"
+	"Keine Feedback"
 #elif L==3	// en
-	 "No feedback"
+	"No feedback"
 #elif L==4	// es
-	 "Ninguna realimentaci&oacute;n"
+	"Ninguna realimentaci&oacute;n"
 #elif L==5	// fr
-	 "Pas de feedback"
+	"Pas de feedback"
 #elif L==6	// gn
-	 "Ninguna realimentaci&oacute;n"	// Okoteve traducción
+	"Ninguna realimentaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Nessun feedback"
+	"Nessun feedback"
 #elif L==8	// pl
-	 "No feedback"				// Potrzebujesz tlumaczenie
+	"No feedback"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Nenhum feedback"
+	"Nenhum feedback"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Poca: solo puntuaci&oacute;n total"	// Necessita traduccio
+	"Poca: solo puntuaci&oacute;n total"	// Necessita traduccio
 #elif L==2	// de
-	 "Kleine: nur die Gesamtnote"
+	"Kleine: nur die Gesamtnote"
 #elif L==3	// en
-	 "Little: only the total score"
+	"Little: only the total score"
 #elif L==4	// es
-	 "Poca: solo puntuaci&oacute;n total"
+	"Poca: solo puntuaci&oacute;n total"
 #elif L==5	// fr
-	 "Petit: seul le note total"
+	"Petit: seul le note total"
 #elif L==6	// gn
-	 "Poca: solo puntuaci&oacute;n total"	// Okoteve traducción
+	"Poca: solo puntuaci&oacute;n total"	// Okoteve traducción
 #elif L==7	// it
-	 "Poco: solo il punteggio totale"
+	"Poco: solo il punteggio totale"
 #elif L==8	// pl
-	 "Little: only the total score"			// Potrzebujesz tlumaczenie
+	"Little: only the total score"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Pouco: apenas a pontua&ccedil;&atilde;o total"
+	"Pouco: apenas a pontua&ccedil;&atilde;o total"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Media: puntuaci&oacute;n de cada pregunta"	// Necessita traduccio
+	"Media: puntuaci&oacute;n de cada pregunta"	// Necessita traduccio
 #elif L==2	// de
-	 "Medium: Ergebnisse der einzelnen Frage"
+	"Medium: Ergebnisse der einzelnen Frage"
 #elif L==3	// en
-	 "Medium: result of each question"
+	"Medium: result of each question"
 #elif L==4	// es
-	 "Media: puntuaci&oacute;n de cada pregunta"
+	"Media: puntuaci&oacute;n de cada pregunta"
 #elif L==5	// fr
-	 "Medium: le r&eacute;sultat de chaque question"
+	"Medium: le r&eacute;sultat de chaque question"
 #elif L==6	// gn
-	 "Media: puntuaci&oacute;n de cada pregunta"	// Okoteve traducción
+	"Media: puntuaci&oacute;n de cada pregunta"	// Okoteve traducción
 #elif L==7	// it
-	 "Medio: risultato di ogni domanda"
+	"Medio: risultato di ogni domanda"
 #elif L==8	// pl
-	 "Medium: result of each question"		// Potrzebujesz tlumaczenie
+	"Medium: result of each question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "M&eacute;dio: pontua&ccedil;&atilde;o de cada quest&atilde;o"
+	"M&eacute;dio: pontua&ccedil;&atilde;o de cada quest&atilde;o"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "Alta: respuesta correcta en cada pregunta"			// Necessita traduccio
+	"Alta: respuesta correcta en cada pregunta"			// Necessita traduccio
 #elif L==2	// de
-	 "Maximale Details: die richtige Antwort f&uuml;r jede Frage"
+	"Maximale Details: die richtige Antwort f&uuml;r jede Frage"
 #elif L==3	// en
-	 "High: correct answer for each question"
+	"High: correct answer for each question"
 #elif L==4	// es
-	 "Alta: respuesta correcta en cada pregunta"
+	"Alta: respuesta correcta en cada pregunta"
 #elif L==5	// fr
-	 "Haute: bonne r&eacute;ponse pour chaque question"
+	"Haute: bonne r&eacute;ponse pour chaque question"
 #elif L==6	// gn
-	 "Alta: respuesta correcta en cada pregunta"			// Okoteve traducción
+	"Alta: respuesta correcta en cada pregunta"			// Okoteve traducción
 #elif L==7	// it
-	 "Alto: la corretta risposta per ogni domanda"
+	"Alto: la corretta risposta per ogni domanda"
 #elif L==8	// pl
-	 "High: correct answer for each question"			// Potrzebujesz tlumaczenie
+	"High: correct answer for each question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Alto: resposta correta para cada quest&atilde;o"
+	"Alto: resposta correta para cada quest&atilde;o"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Necessita traduccio
+	"M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
-	 "Maximale: zeigen Feedback text"
+	"Maximale: zeigen Feedback text"
 #elif L==3	// en
-	 "Maximum: show feedback text"
+	"Maximum: show feedback text"
 #elif L==4	// es
-	 "M&aacute;xima: mostrar texto de realimentaci&oacute;n"
+	"M&aacute;xima: mostrar texto de realimentaci&oacute;n"
 #elif L==5	// fr
-	 "Maximum: afficher le texte de feedback"
+	"Maximum: afficher le texte de feedback"
 #elif L==6	// gn
-	 "M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Okoteve traducción
+	"M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	 "Massimo: visualizzare il testo de feedback"
+	"Massimo: visualizzare il testo de feedback"
 #elif L==8	// pl
-	 "Maximum: show feedback text"					// Potrzebujesz tlumaczenie
+	"Maximum: show feedback text"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "M&aacute;ximo: mostrar o texto de feedback"
+	"M&aacute;ximo: mostrar o texto de feedback"
 #endif
 	};
 
@@ -50931,45 +51207,45 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	};
 
 const char *Txt_TF_QST[2] =
-   {
+	{
 #if   L==1	// ca	// True
-	 "V"
+	"V"
 #elif L==2	// de
-	 "R"
+	"R"
 #elif L==3	// en
-	 "T"
+	"T"
 #elif L==4	// es
-	 "V"
+	"V"
 #elif L==5	// fr
-	 "V"
+	"V"
 #elif L==6	// gn
-	 "V"	// Okoteve traducción
+	"V"	// Okoteve traducción
 #elif L==7	// it
-	 "V"
+	"V"
 #elif L==8	// pl
-	 "P"
+	"P"
 #elif L==9	// pt
-	 "V"
+	"V"
 #endif
-	 ,
+	,
 #if   L==1	// ca	// False
-	 "F"
+	"F"
 #elif L==2	// de
-	 "F"
+	"F"
 #elif L==3	// en
-	 "F"
+	"F"
 #elif L==4	// es
-	 "F"
+	"F"
 #elif L==5	// fr
-	 "F"
+	"F"
 #elif L==6	// gn
-	 "F"	// Okoteve traducción
+	"F"	// Okoteve traducción
 #elif L==7	// it
-	 "F"
+	"F"
 #elif L==8	// pl
-	 "F"
+	"F"
 #elif L==9	// pt
-	 "F"
+	"F"
 #endif
 	};
 
@@ -52413,65 +52689,65 @@ const char *Txt_Users_in_courses =
 
 const char *Txt_Users_of_the_centre =
 #if   L==1	// ca
-	 "Usuaris del centre";
+	"Usuaris del centre";
 #elif L==2	// de
-	 "Benutzer der Lehrinstitut";
+	"Benutzer der Lehrinstitut";
 #elif L==3	// en
-	 "Users of the centre";
+	"Users of the centre";
 #elif L==4	// es
-	 "Usuarios del centro";
+	"Usuarios del centro";
 #elif L==5	// fr
-	 "Utilisateurs du centre";
+	"Utilisateurs du centre";
 #elif L==6	// gn
-	 "Usuarios del centro";	// Okoteve traducción
+	"Usuarios del centro";	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti del centro";
+	"Utenti del centro";
 #elif L==8	// pl
-	 "U&zdot;ytkownicy centrum";
+	"U&zdot;ytkownicy centrum";
 #elif L==9	// pt
-	 "Utilizadores do centro";
+	"Utilizadores do centro";
 #endif
 
 const char *Txt_Users_of_the_country =
 #if   L==1	// ca
-	 "Usuaris del pa&iacute;s";
+	"Usuaris del pa&iacute;s";
 #elif L==2	// de
-	 "Benutzer des Landes";
+	"Benutzer des Landes";
 #elif L==3	// en
-	 "Users of the country";
+	"Users of the country";
 #elif L==4	// es
-	 "Usuarios del pa&iacute;s";
+	"Usuarios del pa&iacute;s";
 #elif L==5	// fr
-	 "Utilisateurs du pays";
+	"Utilisateurs du pays";
 #elif L==6	// gn
-	 "Usuarios del pa&iacute;s";	// Okoteve traducción
+	"Usuarios del pa&iacute;s";	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti del paese";
+	"Utenti del paese";
 #elif L==8	// pl
-	 "U&zdot;ytkownicy kraju";
+	"U&zdot;ytkownicy kraju";
 #elif L==9	// pt
-	 "Utilizadores do pa&iacute;s";
+	"Utilizadores do pa&iacute;s";
 #endif
 
 const char *Txt_Users_of_the_institution =
 #if   L==1	// ca
-	 "Usuaris de la instituci&oacute;";
+	"Usuaris de la instituci&oacute;";
 #elif L==2	// de
-	 "Benutzer der Hochschule";
+	"Benutzer der Hochschule";
 #elif L==3	// en
-	 "Users of the institution";
+	"Users of the institution";
 #elif L==4	// es
-	 "Usuarios de la instituci&oacute;n";
+	"Usuarios de la instituci&oacute;n";
 #elif L==5	// fr
-	 "Utilisateurs du &eacute;tablissement";
+	"Utilisateurs du &eacute;tablissement";
 #elif L==6	// gn
-	 "Usuarios de la instituci&oacute;n";	// Okoteve traducción
+	"Usuarios de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	 "Utenti della istituzione";
+	"Utenti della istituzione";
 #elif L==8	// pl
-	 "U&zdot;ytkownicy instytucji";
+	"U&zdot;ytkownicy instytucji";
 #elif L==9	// pt
-	 "Utilizadores da institu&ccedil;&atilde;o";
+	"Utilizadores da institu&ccedil;&atilde;o";
 #endif
 
 const char *Txt_users_with_no_group =
@@ -52547,47 +52823,47 @@ const char *Txt_X_users_who_have_email =	// Warning: it is very important to inc
 #endif
 
 const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
-   {
-	 ""	// Usr_LIST_UNKNOWN
-	 ,	// Usr_LIST_AS_CLASS_PHOTO
+	{
+	""	// Usr_LIST_UNKNOWN
+	,	// Usr_LIST_AS_CLASS_PHOTO
 #if   L==1	// ca
-	 "Orla"
+	"Orla"
 #elif L==2	// de
-	 "Klass Foto"
+	"Klass Foto"
 #elif L==3	// en
-	 "Class photo"
+	"Class photo"
 #elif L==4	// es
-	 "Orla"
+	"Orla"
 #elif L==5	// fr
-	 "Photo de classe"
+	"Photo de classe"
 #elif L==6	// gn
-	 "Orla"		// Okoteve traducción
+	"Orla"		// Okoteve traducción
 #elif L==7	// it
-	 "Foto di classe"
+	"Foto di classe"
 #elif L==8	// pl
-	 "Class photo"	// Potrzebujesz tlumaczenie
+	"Class photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Foto de formatura"
+	"Foto de formatura"
 #endif
-	 ,	// Usr_LIST_AS_LISTING
+	,	// Usr_LIST_AS_LISTING
 #if   L==1	// ca
-	 "Llista"
+	"Llista"
 #elif L==2	// de
-	 "Liste"
+	"Liste"
 #elif L==3	// en
-	 "List"
+	"List"
 #elif L==4	// es
-	 "Lista"
+	"Lista"
 #elif L==5	// fr
-	 "Liste"
+	"Liste"
 #elif L==6	// gn
-	 "Lista"	// Okoteve traducción
+	"Lista"	// Okoteve traducción
 #elif L==7	// it
-	 "Lista"
+	"Lista"
 #elif L==8	// pl
-	 "List"		// Potrzebujesz tlumaczenie
+	"List"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Lista"
+	"Lista"
 #endif
 	};
 
@@ -53328,10 +53604,10 @@ const char *Txt_Where_s_USER =
 
 const char *Txt_WHO[Usr_NUM_WHO] =
 	{
-	 //    Usr_WHO_UNKNOWN
-	 NULL
-	 ,
-	 //    Usr_WHO_ME
+	//    Usr_WHO_UNKNOWN
+	NULL
+	,
+	//    Usr_WHO_ME
 #if   L==1	// ca
 	"Jo"
 #elif L==2	// de
@@ -53373,7 +53649,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Usu&aacute;rios selecionados"
 #endif
 	,
-	 // Usr_WHO_FOLLOWED
+	// Usr_WHO_FOLLOWED
 #if   L==1	// ca
 	"Usuaris que segueixo"
 #elif L==2	// de
@@ -53393,26 +53669,26 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Usu&aacute;rios que estou seguindo"
 #endif
-	 ,
-	 // Usr_WHO_ALL
+	,
+	// Usr_WHO_ALL
 #if   L==1	// ca
-	 "Tots els usuaris"
+	"Tots els usuaris"
 #elif L==2	// de
-	 "Alle Benutzer"
+	"Alle Benutzer"
 #elif L==3	// en
-	 "All users"
+	"All users"
 #elif L==4	// es
-	 "Todos los usuarios"
+	"Todos los usuarios"
 #elif L==5	// fr
-	 "Tous les utilisateurs"
+	"Tous les utilisateurs"
 #elif L==6	// gn
-	 "Todos los usuarios"	// Okoteve traducción
+	"Todos los usuarios"	// Okoteve traducción
 #elif L==7	// it
-	 "Tutti gli utenti"
+	"Tutti gli utenti"
 #elif L==8	// pl
-	 "Wszyscy u&zdot;ytkownicy"
+	"Wszyscy u&zdot;ytkownicy"
 #elif L==9	// pt
-	 "Todos os usu&aacute;rios"
+	"Todos os usu&aacute;rios"
 #endif
 	};
 
@@ -53753,265 +54029,265 @@ const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...
 #endif
 
 const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
-   {
+	{
 #if   L==1	// ca
-	 "N.A."
+	"N.A."
 #elif L==2	// de
-	 "N.A."
+	"N.A."
 #elif L==3	// en
-	 "N.A."
+	"N.A."
 #elif L==4	// es
-	 "N.A."
+	"N.A."
 #elif L==5	// fr
-	 "N.A."
+	"N.A."
 #elif L==6	// gn
-	 "N.A."		// Okoteve traducción
+	"N.A."		// Okoteve traducción
 #elif L==7	// it
-	 "N.A."
+	"N.A."
 #elif L==8	// pl
-	 "N.D."
+	"N.D."
 #elif L==9	// pt
-	 "N.A."
+	"N.A."
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "1&ordm;"	// Necessita traduccio
+	"1&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "1st"		// Need Übersetzung
+	"1st"		// Need Übersetzung
 #elif L==3	// en
-	 "1st"
+	"1st"
 #elif L==4	// es
-	 "1&ordm;"
+	"1&ordm;"
 #elif L==5	// fr
-	 "1st"		// Besoin de traduction
+	"1st"		// Besoin de traduction
 #elif L==6	// gn
-	 "1&ordm;"	// Okoteve traducción
+	"1&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Primo"
+	"Primo"
 #elif L==8	// pl
-	 "1st"		// Potrzebujesz tlumaczenie
+	"1st"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "1&ordm;"
+	"1&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "2&ordm;"	// Necessita traduccio
+	"2&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "2nd"		// Need Übersetzung
+	"2nd"		// Need Übersetzung
 #elif L==3	// en
-	 "2nd"
+	"2nd"
 #elif L==4	// es
-	 "2&ordm;"
+	"2&ordm;"
 #elif L==5	// fr
-	 "2nd"		// Besoin de traduction
+	"2nd"		// Besoin de traduction
 #elif L==6	// gn
-	 "2&ordm;"	// Okoteve traducción
+	"2&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Secondo"
+	"Secondo"
 #elif L==8	// pl
-	 "2nd"		// Potrzebujesz tlumaczenie
+	"2nd"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "2&ordm;"
+	"2&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "3&ordm;"	// Necessita traduccio
+	"3&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "3rd"
+	"3rd"
 #elif L==3	// en
-	 "3rd"
+	"3rd"
 #elif L==4	// es
-	 "3&ordm;"
+	"3&ordm;"
 #elif L==5	// fr
-	 "3rd"		// Besoin de traduction
+	"3rd"		// Besoin de traduction
 #elif L==6	// gn
-	 "3&ordm;"	// Okoteve traducción
+	"3&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Terzo"
+	"Terzo"
 #elif L==8	// pl
-	 "3rd"		// Potrzebujesz tlumaczenie
+	"3rd"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "3&ordm;"
+	"3&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "4&ordm;"	// Necessita traduccio
+	"4&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "4th"		// Need Übersetzung
+	"4th"		// Need Übersetzung
 #elif L==3	// en
-	 "4th"
+	"4th"
 #elif L==4	// es
-	 "4&ordm;"
+	"4&ordm;"
 #elif L==5	// fr
-	 "Quarto"
+	"Quarto"
 #elif L==6	// gn
-	 "4&ordm;"	// Okoteve traducción
+	"4&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "4th"		// Bisogno di traduzione
+	"4th"		// Bisogno di traduzione
 #elif L==8	// pl
-	 "4th"		// Potrzebujesz tlumaczenie
+	"4th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "4&ordm;"
+	"4&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "5&ordm;"	// Necessita traduccio
+	"5&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "5th"		// Need Übersetzung
+	"5th"		// Need Übersetzung
 #elif L==3	// en
-	 "5th"
+	"5th"
 #elif L==4	// es
-	 "5&ordm;"
+	"5&ordm;"
 #elif L==5	// fr
-	 "5th"		// Besoin de traduction
+	"5th"		// Besoin de traduction
 #elif L==6	// gn
-	 "5&ordm;"	// Okoteve traducción
+	"5&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Quinto"
+	"Quinto"
 #elif L==8	// pl
-	 "5th"		// Potrzebujesz tlumaczenie
+	"5th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "5&ordm;"
+	"5&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "6&ordm;"	// Necessita traduccio
+	"6&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "6th"		// Need Übersetzung
+	"6th"		// Need Übersetzung
 #elif L==3	// en
-	 "6th"
+	"6th"
 #elif L==4	// es
-	 "6&ordm;"
+	"6&ordm;"
 #elif L==5	// fr
-	 "6th"		// Besoin de traduction
+	"6th"		// Besoin de traduction
 #elif L==6	// gn
-	 "6&ordm;"	// Okoteve traducción
+	"6&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Sesto"
+	"Sesto"
 #elif L==8	// pl
-	 "6th"		// Potrzebujesz tlumaczenie
+	"6th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "6&ordm;"
+	"6&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "7&ordm;"	// Necessita traduccio
+	"7&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "7th"		// Need Übersetzung
+	"7th"		// Need Übersetzung
 #elif L==3	// en
-	 "7th"
+	"7th"
 #elif L==4	// es
-	 "7&ordm;"
+	"7&ordm;"
 #elif L==5	// fr
-	 "7th"		// Besoin de traduction
+	"7th"		// Besoin de traduction
 #elif L==6	// gn
-	 "7&ordm;"	// Okoteve traducción
+	"7&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Settimo"
+	"Settimo"
 #elif L==8	// pl
-	 "7th"		// Potrzebujesz tlumaczenie
+	"7th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "7&ordm;"
+	"7&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "8&ordm;"	// Necessita traduccio
+	"8&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "8th"		// Need Übersetzung
+	"8th"		// Need Übersetzung
 #elif L==3	// en
-	 "8th"
+	"8th"
 #elif L==4	// es
-	 "8&ordm;"
+	"8&ordm;"
 #elif L==5	// fr
-	 "8th"		// Besoin de traduction
+	"8th"		// Besoin de traduction
 #elif L==6	// gn
-	 "8&ordm;"	// Okoteve traducción
+	"8&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Ottavo"
+	"Ottavo"
 #elif L==8	// pl
-	 "8th"		// Potrzebujesz tlumaczenie
+	"8th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "8&ordm;"
+	"8&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "9&ordm;"	// Necessita traduccio
+	"9&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "9th"		// Need Übersetzung
+	"9th"		// Need Übersetzung
 #elif L==3	// en
-	 "9th"
+	"9th"
 #elif L==4	// es
-	 "9&ordm;"
+	"9&ordm;"
 #elif L==5	// fr
-	 "9th"		// Besoin de traduction
+	"9th"		// Besoin de traduction
 #elif L==6	// gn
-	 "9&ordm;"	// Okoteve traducción
+	"9&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Nono"
+	"Nono"
 #elif L==8	// pl
-	 "9th"		// Potrzebujesz tlumaczenie
+	"9th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "9&ordm;"
+	"9&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "10&ordm;"	// Necessita traduccio
+	"10&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "10th"		// Need Übersetzung
+	"10th"		// Need Übersetzung
 #elif L==3	// en
-	 "10th"
+	"10th"
 #elif L==4	// es
-	 "10&ordm;"
+	"10&ordm;"
 #elif L==5	// fr
-	 "10th"		// Besoin de traduction
+	"10th"		// Besoin de traduction
 #elif L==6	// gn
-	 "10&ordm;"	// Okoteve traducción
+	"10&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Decimo"
+	"Decimo"
 #elif L==8	// pl
-	 "10th"		// Potrzebujesz tlumaczenie
+	"10th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "10&ordm;"
+	"10&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "11&ordm;"	// Necessita traduccio
+	"11&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "11th"		// Need Übersetzung
+	"11th"		// Need Übersetzung
 #elif L==3	// en
-	 "11th"
+	"11th"
 #elif L==4	// es
-	 "11&ordm;"
+	"11&ordm;"
 #elif L==5	// fr
-	 "11th"		// Besoin de traduction
+	"11th"		// Besoin de traduction
 #elif L==6	// gn
-	 "11&ordm;"	// Okoteve traducción
+	"11&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Undicesimo"
+	"Undicesimo"
 #elif L==8	// pl
-	 "11th"		// Potrzebujesz tlumaczenie
+	"11th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "11&ordm;"
+	"11&ordm;"
 #endif
-	 ,
+	,
 #if   L==1	// ca
-	 "12&ordm;"	// Necessita traduccio
+	"12&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	 "12th"		// Need Übersetzung
+	"12th"		// Need Übersetzung
 #elif L==3	// en
-	 "12th"
+	"12th"
 #elif L==4	// es
-	 "12&ordm;"
+	"12&ordm;"
 #elif L==5	// fr
-	 "12th"		// Besoin de traduction
+	"12th"		// Besoin de traduction
 #elif L==6	// gn
-	 "12&ordm;"	// Okoteve traducción
+	"12&ordm;"	// Okoteve traducción
 #elif L==7	// it
-	 "Sesto"
+	"Sesto"
 #elif L==8	// pl
-	 "12th"		// Potrzebujesz tlumaczenie
+	"12th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "12&ordm;"
+	"12&ordm;"
 #endif
 	};
 

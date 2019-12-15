@@ -167,8 +167,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
    HTM_SELECT_Begin (false,
 		     "name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\"");
-   for (WhatToSearch = (Sch_WhatToSearch_t) 0;
-        WhatToSearch < Sch_NUM_WHAT_TO_SEARCH;
+   for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
+        WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
         WhatToSearch++)
       if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
 	{

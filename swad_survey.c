@@ -62,8 +62,8 @@ extern struct Globals Gbl;
 
 const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =
   {
-   "unique_choice",
-   "multiple_choice",
+   [Svy_ANS_UNIQUE_CHOICE  ] = "unique_choice",
+   [Svy_ANS_MULTIPLE_CHOICE] = "multiple_choice",
   };
 
 #define Svy_MAX_ANSWERS_PER_QUESTION	10
@@ -2714,8 +2714,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   for (AnsType = (Svy_AnswerType_t) 0;
-	AnsType < Svy_NUM_ANS_TYPES;
+   for (AnsType  = (Svy_AnswerType_t) 0;
+	AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
 	AnsType++)
      {
       HTM_LABEL_Begin (NULL);
@@ -2844,8 +2844,8 @@ static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
   {
    Svy_AnswerType_t AnsType;
 
-   for (AnsType = (Svy_AnswerType_t) 0;
-	AnsType < Svy_NUM_ANS_TYPES;
+   for (AnsType  = (Svy_AnswerType_t) 0;
+	AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
 	AnsType++)
       if (!strcmp (StrAnsTypeBD,Svy_StrAnswerTypesDB[AnsType]))
          return AnsType;

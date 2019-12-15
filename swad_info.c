@@ -515,8 +515,8 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    Inf_InfoType_t InfoType;
 
    /***** Reset must-be-read to false for all info types *****/
-   for (InfoType = (Inf_InfoType_t) 0;
-	InfoType < Inf_NUM_INFO_TYPES;
+   for (InfoType  = (Inf_InfoType_t) 0;
+	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
 	InfoType++)
       Gbl.Crs.Info.MustBeRead[InfoType] = false;
 
@@ -572,8 +572,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
    /***** Write every information I must read *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
-   for (InfoType = (Inf_InfoType_t) 0;
-	InfoType < Inf_NUM_INFO_TYPES;
+   for (InfoType  = (Inf_InfoType_t) 0;
+	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
 	InfoType++)
       if (Gbl.Crs.Info.MustBeRead[InfoType])
         {
@@ -1060,14 +1060,14 @@ void Inf_FormsToSelSendInfo (void)
    bool MustBeRead;
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
-      Hlp_COURSE_Links_edit,		// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
      };
 
    /***** Set info type *****/
@@ -1079,8 +1079,8 @@ void Inf_FormsToSelSendInfo (void)
                                  &InfoSrcSelected,&MustBeRead);
 
    /***** Check if info available *****/
-   for (InfoSrc = (Inf_InfoSrc_t) 0;
-	InfoSrc < Inf_NUM_INFO_SOURCES;
+   for (InfoSrc  = (Inf_InfoSrc_t) 0;
+	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
 	InfoSrc++)
       InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
 
@@ -1099,8 +1099,8 @@ void Inf_FormsToSelSendInfo (void)
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
-   for (InfoSrc = (Inf_InfoSrc_t) 0;
-	InfoSrc < Inf_NUM_INFO_SOURCES;
+   for (InfoSrc  = (Inf_InfoSrc_t) 0;
+	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
 	InfoSrc++)
      {
       HTM_TR_Begin (NULL);
@@ -1616,8 +1616,8 @@ Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
   {
    Inf_InfoType_t InfoType;
 
-   for (InfoType = (Inf_InfoType_t) 0;
-	InfoType < Inf_NUM_INFO_TYPES;
+   for (InfoType  = (Inf_InfoType_t) 0;
+	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
 	InfoType++)
       if (!strcmp (StrInfoTypeDB,Inf_NamesInDBForInfoType[InfoType]))
          return InfoType;
@@ -1633,8 +1633,8 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
   {
    Inf_InfoSrc_t InfoSrc;
 
-   for (InfoSrc = (Inf_InfoSrc_t) 0;
-	InfoSrc < Inf_NUM_INFO_SOURCES;
+   for (InfoSrc  = (Inf_InfoSrc_t) 0;
+	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
 	InfoSrc++)
       if (!strcmp (StrInfoSrcDB,Inf_NamesInDBForInfoSrc[InfoSrc]))
          return InfoSrc;
@@ -2016,14 +2016,14 @@ void Inf_EditPlainTxtInfo (void)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
-      Hlp_COURSE_Links_edit,		// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
      };
 
    /***** Set info type *****/
@@ -2066,14 +2066,14 @@ void Inf_EditRichTxtInfo (void)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
-      Hlp_COURSE_Links_edit,		// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
+      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
      };
 
    /***** Set info type *****/

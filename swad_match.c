@@ -363,7 +363,7 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->MchCod                  = -1L;
       Match->GamCod                  = -1L;
       Match->UsrCod                  = -1L;
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
          Match->TimeUTC[StartEndTime] = (time_t) 0;
@@ -583,7 +583,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
    Dat_StartEndTime_t StartEndTime;
    char *Id;
 
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
@@ -887,7 +887,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    Match->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /* Get start/end times (row[3], row[4] hold start/end UTC times) */
-   for (StartEndTime = (Dat_StartEndTime_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
       Match->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[3 + StartEndTime]);

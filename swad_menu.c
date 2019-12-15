@@ -279,8 +279,8 @@ void Mnu_PutIconsToSelectMenu (void)
                  Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
-   for (Menu = (Mnu_Menu_t) 0;
-	Menu < Mnu_NUM_MENUS;
+   for (Menu  = (Mnu_Menu_t) 0;
+	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 	Menu++)
      {
       HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :

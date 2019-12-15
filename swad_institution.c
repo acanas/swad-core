@@ -849,8 +849,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 
    HTM_TR_Begin (NULL);
    HTM_TH_Empty (1);
-   for (Order = Ins_ORDER_BY_INSTITUTION;
-	Order <= Ins_ORDER_BY_NUM_USRS;
+   for (Order  = (Ins_Order_t) 0;
+	Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
 	Order++)
      {
       HTM_TH_Begin (1,1,Order == Ins_ORDER_BY_INSTITUTION ? "LM" :

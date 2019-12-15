@@ -1749,8 +1749,8 @@ static void For_PutFormWhichForums (void)
    HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
    HTM_UL_Begin (NULL);
 
-   for (ForumSet = (For_ForumSet_t) 0;
-	ForumSet < For_NUM_FORUM_SETS;
+   for (ForumSet  = (For_ForumSet_t) 0;
+	ForumSet <= (For_ForumSet_t) (For_NUM_FORUM_SETS - 1);
 	ForumSet++)
      {
       HTM_LI_Begin (NULL);

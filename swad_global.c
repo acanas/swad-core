@@ -194,8 +194,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
    Gbl.Usrs.Selected.ParamSuffix = NULL;// Don't add suffix to param names
    Gbl.Usrs.Selected.Option = Usr_OPTION_UNKNOWN;
-   for (Role = (Rol_Role_t) 0;
-	Role < Rol_NUM_ROLES;
+   for (Role  = (Rol_Role_t) 0;
+	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
 	Role++)
      {
       Gbl.Usrs.LstUsrs[Role].Lst = NULL;
@@ -461,8 +461,8 @@ void Gbl_Cleanup (void)
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();
 
-   for (Role = (Rol_Role_t) 0;
-	Role < Rol_NUM_ROLES;
+   for (Role  = (Rol_Role_t) 0;
+	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
 	Role++)
       Usr_FreeUsrsList (Role);
 

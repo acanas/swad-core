@@ -538,7 +538,7 @@ static void Prj_ShowFormToFilterByAssign (void)
    Prj_AssignedNonassig_t Assign;
 
    Set_StartOneSettingSelector ();
-   for (Assign =  (Prj_AssignedNonassig_t) 0;
+   for (Assign  = (Prj_AssignedNonassig_t) 0;
 	Assign <= (Prj_AssignedNonassig_t) (Prj_NUM_ASSIGNED_NONASSIG - 1);
 	Assign++)
      {
@@ -579,7 +579,7 @@ static void Prj_ShowFormToFilterByHidden (void)
      };
 
    Set_StartOneSettingSelector ();
-   for (HidVis =  (Prj_HiddenVisibl_t) 0;
+   for (HidVis  = (Prj_HiddenVisibl_t) 0;
 	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
 	HidVis++)
      {
@@ -620,7 +620,7 @@ static void Prj_ShowFormToFilterByWarning (void)
      };
 
    Set_StartOneSettingSelector ();
-   for (Faultiness =  (Prj_Faultiness_t) 0;
+   for (Faultiness  = (Prj_Faultiness_t) 0;
 	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
 	Faultiness++)
      {
@@ -888,7 +888,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
      }
 
    /***** Rest of columns *****/
-   for (Order = (Prj_Order_t) 0;
+   for (Order  = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
      {
@@ -937,7 +937,7 @@ static void Prj_ShowTableAllProjectsHead (void)
 
    HTM_TR_Begin (NULL);
 
-   for (Order = (Prj_Order_t) 0;
+   for (Order  = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
       HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
@@ -2271,10 +2271,10 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
    static Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
-      ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActAddStdPrj,	// Prj_ROLE_STD, Student
-      ActAddTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActAddEvlPrj,	// Prj_ROLE_EVL, Evaluator
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActAddStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActAddTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActAddEvlPrj,	// Evaluator
      };
    char TxtButton[Lay_MAX_BYTES_TITLE + 1];
 
@@ -2421,10 +2421,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    extern const char *Txt_Remove_USER_from_this_project;
    static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
-      ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActRemStdPrj,	// Prj_ROLE_STD, Student
-      ActRemTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActRemEvlPrj,	// Prj_ROLE_EVL, Evaluator
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActRemStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActRemTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActRemEvlPrj,	// Evaluator
      };
    struct Project Prj;
    bool ItsMe;

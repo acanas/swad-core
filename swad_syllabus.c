@@ -65,17 +65,17 @@ extern struct Globals Gbl;
 
 static const char *StyleSyllabus[1 + Syl_MAX_LEVELS_SYLLABUS] =
   {
-   "",
-   "T1",
-   "T2",
-   "T3",
-   "T3",
-   "T3",
-   "T3",
-   "T3",
-   "T3",
-   "T3",
-   "T3",
+   [ 0] = "",
+   [ 1] = "T1",
+   [ 2] = "T2",
+   [ 3] = "T3",
+   [ 4] = "T3",
+   [ 5] = "T3",
+   [ 6] = "T3",
+   [ 7] = "T3",
+   [ 8] = "T3",
+   [ 9] = "T3",
+   [10] = "T3",
   };
 
 /*****************************************************************************/
@@ -144,8 +144,8 @@ void Syl_PutFormWhichSyllabus (void)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
-	WhichSyllabus < For_NUM_FORUM_SETS;
+   for (WhichSyllabus  = (Syl_WhichSyllabus_t) 0;
+	WhichSyllabus <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
 	WhichSyllabus++)
      {
       HTM_LI_Begin ("class=\"DAT LM\"");
