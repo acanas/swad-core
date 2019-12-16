@@ -1410,6 +1410,7 @@ void Deg_GetListDegsOfCurrentCtr (void)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumDeg;
+   struct Degree *Deg;
 
    /***** Get degrees of the current centre from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a centre",
@@ -1433,9 +1434,14 @@ void Deg_GetListDegsOfCurrentCtr (void)
 	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
         {
+         Deg = &Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg];
+
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg],row);
+         Deg_GetDataOfDegreeFromRow (Deg,row);
+
+	 /* Get number of courses in this degree */
+	 Deg->Crss.Num = Crs_GetNumCrssInDeg (Deg->DegCod);
         }
      }
    else

@@ -1004,7 +1004,7 @@ static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses)
 	   NumCrs < NumCrss;
 	   NumCrs++)
         {
-         Crs = &(Gbl.Hierarchy.Deg.Crss.Lst[NumCrs]);
+         Crs = &Gbl.Hierarchy.Deg.Crss.Lst[NumCrs];
 
          /* Get next course */
          row = mysql_fetch_row (mysql_res);
