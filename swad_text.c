@@ -27219,7 +27219,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novas mensagens"
 #endif
 	,
-	[Ntf_EVENT_SURVEY] =	// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+	[Ntf_EVENT_SURVEY] =
 #if   L==1	// ca
 	"Noves enquestes"
 #elif L==2	// de
@@ -27663,7 +27663,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Mensagem"
 #endif
 	,
-	[Ntf_EVENT_SURVEY] =	// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+	[Ntf_EVENT_SURVEY] =
 #if   L==1	// ca
 	"Enquesta"
 #elif L==2	// de
@@ -53845,7 +53845,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Eu"
 #endif
 	,
-	[Usr_WHO_SOME] =
+	[Usr_WHO_SELECTED] =
 #if   L==1	// ca
 	"Usuaris seleccionats"
 #elif L==2	// de
