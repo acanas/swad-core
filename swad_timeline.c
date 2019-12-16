@@ -1617,13 +1617,13 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Get centre data */
 		  Ctr.CtrCod = SocNot->HieCod;
-		  Ctr_GetDataOfCentreByCod (&Ctr);
+		  Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Get degree data */
 		  Deg.DegCod = SocNot->HieCod;
-		  Deg_GetDataOfDegreeByCod (&Deg);
+		  Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
 	       case TL_NOTE_CRS_SHA_PUB_FILE:
@@ -1631,7 +1631,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_NOTICE:
 		  /* Get course data */
 		  Crs.CrsCod = SocNot->HieCod;
-		  Crs_GetDataOfCourseByCod (&Crs);
+		  Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */

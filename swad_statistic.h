@@ -144,7 +144,7 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
                                  MYSQL_RES *mysql_res,unsigned Field,
                                  unsigned Divisor);
 
-void Sta_ComputeTimeToGeneratePage (void);
+time_t Sta_ComputeTimeToGeneratePage (void);
 void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);
 void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);

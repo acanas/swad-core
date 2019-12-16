@@ -2014,7 +2014,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
-      Deg_GetDataOfDegreeByCod (&Deg);
+      Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
@@ -2157,7 +2157,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	    Lay_ShowErrorAndExit ("Wrong code of degree.");
 
 	 /* Get data of degree */
-	 Deg_GetDataOfDegreeByCod (&Deg);
+	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
 	 /* Get number of students and number of students with photo in this degree */
 	 Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
@@ -2250,7 +2250,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	    Lay_ShowErrorAndExit ("Wrong code of degree.");
 
 	 /* Get data of degree */
-	 Deg_GetDataOfDegreeByCod (&Deg);
+	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
 	 HTM_TR_Begin (NULL);
 

@@ -656,7 +656,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	    /***** Get data of this centre *****/
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	    if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/
@@ -690,7 +690,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	       /***** Get data of this degree *****/
 	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Deg_GetDataOfDegreeByCod (&Deg))
+	       if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
@@ -724,7 +724,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		  /***** Get data of this course *****/
 		  Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-		  if (!Crs_GetDataOfCourseByCod (&Crs))
+		  if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
@@ -1009,6 +1009,14 @@ static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses)
          /* Get next course */
          row = mysql_fetch_row (mysql_res);
          Crs_GetDataOfCourseFromRow (Crs,row);
+
+	 /* Get number of users in this course */
+	 Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
+	 Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
+	 Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+	 Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
+				 Crs->NumUsrs[Rol_NET] +
+				 Crs->NumUsrs[Rol_TCH];
         }
      }
 
@@ -1570,8 +1578,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 static bool Crs_CheckIfICanEdit (struct Course *Crs)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
-                  ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&		// Course is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));		// I am the requester
+                  ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
+                   Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));	// I am the requester
   }
 
 /*****************************************************************************/
@@ -1806,17 +1814,16 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   struct Degree Deg;
 
    /***** Get parameters from form *****/
    /* Set course degree */
-   Deg.DegCod = Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.DegCod;
+   // Deg.DegCod =
+   Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.DegCod;
 
    /* Get parameters of the new course */
    Crs_GetParamsNewCourse (Crs_EditingCrs);
 
    /***** Check if year is correct *****/
-   Deg_GetDataOfDegreeByCod (&Deg);
    if (Crs_EditingCrs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       if (Crs_EditingCrs->ShrtName[0] &&
@@ -1913,7 +1920,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /***** Get data of the course from database *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_EXTRA_DATA);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -1940,7 +1947,8 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetDataOfCourseByCod (struct Course *Crs)
+bool Crs_GetDataOfCourseByCod (struct Course *Crs,
+                               Crs_GetExtraData_t GetExtraData)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1970,6 +1978,18 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
 	 /***** Get data of the course *****/
 	 row = mysql_fetch_row (mysql_res);
 	 Crs_GetDataOfCourseFromRow (Crs,row);
+
+	 /* Get extra data */
+	 if (GetExtraData == Crs_GET_EXTRA_DATA)
+	   {
+	    /* Get number of users in this course */
+	    Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
+	    Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
+	    Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+	    Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
+				    Crs->NumUsrs[Rol_NET] +
+				    Crs->NumUsrs[Rol_TCH];
+	   }
 
          /* Set return value */
 	 CrsFound = true;
@@ -2016,14 +2036,6 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    /***** Get the full name of the course (row[7]) *****/
    Str_Copy (Crs->FullName,row[7],
              Hie_MAX_BYTES_FULL_NAME);
-
-   /***** Get number of users *****/
-   Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-   Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-   Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
-   Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
-	                   Crs->NumUsrs[Rol_NET] +
-	                   Crs->NumUsrs[Rol_TCH];
   }
 
 /*****************************************************************************/
@@ -2101,7 +2113,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
      {
       /***** Get course data *****/
       Crs.CrsCod = CrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
+      Crs_GetDataOfCourseByCod (&Crs,Crs_GET_EXTRA_DATA);
 
       /***** Remove all the students in the course *****/
       Enr_RemAllStdsInCrs (&Crs);
@@ -2286,7 +2298,7 @@ void Crs_ChangeInsCrsCod (void)
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -2326,7 +2338,7 @@ void Crs_ChangeCrsDegInConfig (void)
    if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)
      {
       /***** Get data of new degree *****/
-      Deg_GetDataOfDegreeByCod (&NewDeg);
+      Deg_GetDataOfDegreeByCod (&NewDeg,Deg_GET_BASIC_DATA);
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
@@ -2446,7 +2458,6 @@ void Crs_ChangeCrsYear (void)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
-   struct Degree Deg;
    char YearStr[2 + 1];
    unsigned NewYear;
 
@@ -2461,13 +2472,10 @@ void Crs_ChangeCrsYear (void)
    Par_GetParToText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
-      Deg.DegCod = Crs_EditingCrs->DegCod;
-      Deg_GetDataOfDegreeByCod (&Deg);
-
       if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
@@ -2610,7 +2618,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    Par_GetParToText (ParamName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
-   Crs_GetDataOfCourseByCod (Crs);
+   Crs_GetDataOfCourseByCod (Crs,Crs_GET_BASIC_DATA);
 
    if (Crs_CheckIfICanEdit (Crs))
      {
@@ -2713,7 +2721,7 @@ void Crs_ChangeCrsStatus (void)
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of course *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
 
    /***** Update status in table of courses *****/
    DB_QueryUPDATE ("can not update the status of a course",
@@ -3129,7 +3137,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of degree.");
-   if (!Deg_GetDataOfDegreeByCod (&Deg))
+   if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
       Lay_ShowErrorAndExit ("Degree not found.");
 
    /***** Get course code (row[1]) *****/

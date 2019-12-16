@@ -1171,11 +1171,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Get course data *****/
    Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+   Crs_GetDataOfCourseByCod (&Crs,Crs_GET_EXTRA_DATA);
 
    /***** Get degree data *****/
    Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
+   Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
    /***** Start row *****/
    fprintf (Gbl.F.Rep,"<li>");

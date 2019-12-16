@@ -206,7 +206,7 @@ void Deg_SeeDegWithPendingCrss (void)
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of degree */
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
          HTM_TR_Begin (NULL);
 
@@ -1194,10 +1194,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    const char *TxtClassStrong;
    const char *BgColor;
    Deg_StatusTxt_t StatusTxt;
-   unsigned NumCrss;
-
-   /***** Get number of courses in this degree *****/
-   NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
@@ -1222,10 +1218,10 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    /***** Put tip if degree has courses *****/
    HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
 		 TxtClassNormal,BgColor,
-		 NumCrss ? Txt_DEGREE_With_courses :
-			   Txt_DEGREE_Without_courses);
-   HTM_Txt (NumCrss ? "&check;" :
-		      "&nbsp;");
+		 Deg->Crss.Num ? Txt_DEGREE_With_courses :
+			         Txt_DEGREE_Without_courses);
+   HTM_Txt (Deg->Crss.Num ? "&check;" :
+		            "&nbsp;");
    HTM_TD_End ();
 
    /***** Number of degree in this list *****/
@@ -1246,7 +1242,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Current number of courses in this degree *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (NumCrss);
+   HTM_Unsigned (Deg->Crss.Num);
    HTM_TD_End ();
 
    /***** Degree status *****/
@@ -1429,7 +1425,7 @@ void Deg_GetListDegsOfCurrentCtr (void)
 
       /***** Create list with degrees of this centre *****/
       if ((Gbl.Hierarchy.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.Hierarchy.Ctr.Degs.Num,
-                                                                   sizeof (struct Degree))) == NULL)
+                                                                  sizeof (struct Degree))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
@@ -1565,10 +1561,10 @@ void Deg_RemoveDegree (void)
    Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg,Deg_GET_EXTRA_DATA);
 
    /***** Check if this degree has courses *****/
-   if (Crs_GetNumCrssInDeg (Deg_EditingDeg->DegCod))	// Degree has courses ==> don't remove
+   if (Deg_EditingDeg->Crss.Num)	// Degree has courses ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
@@ -1623,7 +1619,8 @@ long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
 /*****************************************************************************/
 // Returns true if degree found
 
-bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
+bool Deg_GetDataOfDegreeByCod (struct Degree *Deg,
+                               Deg_GetExtraData_t GetExtraData)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1652,6 +1649,11 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
 	 /***** Get data of degree *****/
 	 row = mysql_fetch_row (mysql_res);
 	 Deg_GetDataOfDegreeFromRow (Deg,row);
+
+	 /* Get extra data */
+	 if (GetExtraData == Deg_GET_EXTRA_DATA)
+	    /* Get number of courses in this degree */
+	    Deg->Crss.Num = Crs_GetNumCrssInDeg (Deg->DegCod);
 
          /* Set return value */
 	 DegFound = true;
@@ -1933,7 +1935,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    Par_GetParToText (ParamName,NewDegName,MaxBytes);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg);
+   Deg_GetDataOfDegreeByCod (Deg,Deg_GET_BASIC_DATA);
 
    /***** Check if new name is empty *****/
    if (!NewDegName[0])
@@ -2017,7 +2019,7 @@ void Deg_ChangeDegCtrInConfig (void)
    if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)
      {
       /***** Get data of new centre *****/
-      Ctr_GetDataOfCentreByCod (&NewCtr);
+      Ctr_GetDataOfCentreByCod (&NewCtr,Ctr_GET_BASIC_DATA);
 
       /***** Check if it already exists a degree with the same name in the new centre *****/
       if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
@@ -2092,7 +2094,7 @@ void Deg_ChangeDegreeType (void)
    NewDegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg,Deg_GET_BASIC_DATA);
 
    /***** Update the table of degrees changing old type by new type *****/
    DB_QueryUPDATE ("can not update the type of a degree",
@@ -2128,7 +2130,7 @@ void Deg_ChangeDegWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg,Deg_GET_BASIC_DATA);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -2219,7 +2221,7 @@ void Deg_ChangeDegStatus (void)
    Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg,Deg_GET_BASIC_DATA);
 
    /***** Update status in table of degrees *****/
    DB_QueryUPDATE ("can not update the status of a degree",
@@ -2491,7 +2493,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Ctr.CtrCod > 0)
 		 {
 		  /* Get data of centre */
-		  Ctr_GetDataOfCentreByCod (&Ctr);
+		  Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
 		  /* Write centre logo and name */
 		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
@@ -2503,7 +2505,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Deg.DegCod > 0)
 		 {
 		  /* Get data of degree */
-		  Deg_GetDataOfDegreeByCod (&Deg);
+		  Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
 		  /* Write degree logo and name */
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
@@ -2562,7 +2564,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	 Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get data of degree */
-	 Deg_GetDataOfDegreeByCod (&Deg);
+	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_EXTRA_DATA);
 
 	 /* Write data of this degree */
 	 Deg_ListOneDegreeForSeeing (&Deg,NumDeg);

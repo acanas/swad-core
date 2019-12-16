@@ -1332,7 +1332,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
    if (!Gbl.Action.IsAJAXAutoRefresh)
-      Sta_ComputeTimeToGeneratePage ();
+      Gbl.TimeGenerationInMicroseconds = (long) Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
      {
@@ -1557,11 +1557,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of degree *****/
    Deg.DegCod = DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
+   Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
    /***** Get data of course *****/
    Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+   Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);

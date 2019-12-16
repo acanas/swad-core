@@ -1032,7 +1032,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get course (row[2]) *****/
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[2]);
-      Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs);
+      Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs,Crs_GET_BASIC_DATA);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Crs.FullName,
                 Hie_MAX_BYTES_FULL_NAME);
@@ -1043,7 +1043,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-      Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg);
+      Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg,Deg_GET_BASIC_DATA);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Deg.FullName,
                 Hie_MAX_BYTES_FULL_NAME);
@@ -2998,7 +2998,7 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].notifCode = (int) NtfCod;
 
          /* Get notification event type (row[1]) */
-         NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[1]);
+         NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[1]);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType =
             (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,
@@ -3013,7 +3013,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get course (row[7]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetDataOfCourseByCod (&Crs);
+         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -3066,11 +3066,11 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get centre (row[5]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCentreByCod (&Ctr);
+         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
          /* Get degree (row[6]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);

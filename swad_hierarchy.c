@@ -541,7 +541,7 @@ void Hie_InitHierarchy (void)
    /***** If course code is available, get course data *****/
    if (Gbl.Hierarchy.Crs.CrsCod > 0)
      {
-      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs))				// Course found
+      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs,Crs_GET_BASIC_DATA))		// Course found
          Gbl.Hierarchy.Deg.DegCod = Gbl.Hierarchy.Crs.DegCod;
       else
          Hie_ResetHierarchy ();
@@ -550,7 +550,7 @@ void Hie_InitHierarchy (void)
    /***** If degree code is available, get degree data *****/
    if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
-      if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg))				// Degree found
+      if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg,Deg_GET_BASIC_DATA))		// Degree found
 	{
 	 Gbl.Hierarchy.Ctr.CtrCod = Gbl.Hierarchy.Deg.CtrCod;
          Gbl.Hierarchy.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
@@ -562,7 +562,7 @@ void Hie_InitHierarchy (void)
    /***** If centre code is available, get centre data *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr))				// Centre found
+      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr,Ctr_GET_BASIC_DATA))		// Centre found
          Gbl.Hierarchy.Ins.InsCod = Gbl.Hierarchy.Ctr.InsCod;
       else
          Hie_ResetHierarchy ();

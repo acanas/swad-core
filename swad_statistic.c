@@ -3476,7 +3476,7 @@ static void Sta_WriteCentre (long CtrCod)
      {
       /***** Get data of centre *****/
       Ctr.CtrCod = CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ctr.FullName);
@@ -3568,7 +3568,7 @@ static void Sta_WriteDegree (long DegCod)
      {
       /***** Get data of degree *****/
       Deg.DegCod = DegCod;
-      Deg_GetDataOfDegreeByCod (&Deg);
+      Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Deg.FullName);
@@ -3636,7 +3636,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
-      CrsOK = Crs_GetDataOfCourseByCod (&Crs);
+      CrsOK = Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
       HTM_TR_Begin (NULL);
 
@@ -3766,21 +3766,14 @@ static void Sta_DrawBarNumHits (char Color,
 /**************** Compute the time used to generate the page *****************/
 /*****************************************************************************/
 
-void Sta_ComputeTimeToGeneratePage (void)
+time_t Sta_ComputeTimeToGeneratePage (void)
   {
    if (gettimeofday (&Gbl.tvPageCreated, &Gbl.tz))
       // Error in gettimeofday
-      Gbl.TimeGenerationInMicroseconds = 0;
-   else
-     {
-      if (Gbl.tvPageCreated.tv_usec < Gbl.tvStart.tv_usec)
-	{
-	 Gbl.tvPageCreated.tv_sec--;
-	 Gbl.tvPageCreated.tv_usec += 1000000;
-	}
-      Gbl.TimeGenerationInMicroseconds = (Gbl.tvPageCreated.tv_sec  - Gbl.tvStart.tv_sec) * 1000000L +
-                                          Gbl.tvPageCreated.tv_usec - Gbl.tvStart.tv_usec;
-     }
+      return (time_t) 0;
+
+   return (time_t) ((Gbl.tvPageCreated.tv_sec  - Gbl.tvStart.tv_sec) * 1000000L +
+                     Gbl.tvPageCreated.tv_usec - Gbl.tvStart.tv_usec);
   }
 
 /*****************************************************************************/

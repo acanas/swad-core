@@ -1547,7 +1547,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
-               Crs_GetDataOfCourseByCod (&Crs);
+               Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
                if (ClassType == TT_LECTURE ||
                    ClassType == TT_PRACTICAL)
         	 {

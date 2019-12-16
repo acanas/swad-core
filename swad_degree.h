@@ -89,6 +89,12 @@ struct ListDegrees
    struct Degree *Lst;		// List of degrees
   };
 
+typedef enum
+  {
+   Deg_GET_BASIC_DATA,
+   Deg_GET_EXTRA_DATA,
+  } Deg_GetExtraData_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -122,7 +128,8 @@ void Deg_RemoveDegree (void);
 void Deg_PutParamDegCod (long DegCod);
 long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed);
 
-bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);
+bool Deg_GetDataOfDegreeByCod (struct Degree *Deg,
+                               Deg_GetExtraData_t GetExtraData);
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg);
 long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);

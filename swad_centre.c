@@ -203,7 +203,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of centre */
-         Ctr_GetDataOfCentreByCod (&Ctr);
+         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
          /* Centre logo and full name */
          HTM_TR_Begin (NULL);
@@ -1155,7 +1155,8 @@ void Ctr_GetListCentres (long InsCod)
 /************************ Get data of centre by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
+bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
+                               Ctr_GetExtraData_t GetExtraData)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1233,14 +1234,18 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
          if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
             Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
 
-         /* Get number of degrees in this centre */
-         Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+	 /* Get extra data */
+	 if (GetExtraData == Ctr_GET_EXTRA_DATA)
+	   {
+	    /* Get number of degrees in this centre */
+	    Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
 
-         /* Get number of courses in this centre */
-         Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
+	    /* Get number of courses in this centre */
+	    Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
 
-	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
+	    /* Get number of users in courses of this centre */
+	    Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
+	   }
 
          /* Set return value */
          CtrFound = true;
@@ -1742,7 +1747,7 @@ void Ctr_RemoveCentre (void)
    Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get data of the centre from database *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_EXTRA_DATA);
 
    /***** Check if this centre has teachers *****/
    if (Ctr_EditingCtr->Degs.Num ||
@@ -1883,7 +1888,7 @@ void Ctr_ChangeCtrPlc (void)
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Get data of centre from database *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
 
    /***** Update place in table of centres *****/
    Ctr_UpdateCtrPlcDB (Ctr_EditingCtr->CtrCod,NewPlcCod);
@@ -2000,7 +2005,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    Par_GetParToText (ParamName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr);
+   Ctr_GetDataOfCentreByCod (Ctr,Ctr_GET_BASIC_DATA);
 
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
@@ -2086,7 +2091,7 @@ void Ctr_ChangeCtrWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -2177,7 +2182,7 @@ void Ctr_ChangeCtrStatus (void)
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
 
    /***** Update status in table of centres *****/
    DB_QueryUPDATE ("can not update the status of a centre",
@@ -2905,7 +2910,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	 Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get data of centre */
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_EXTRA_DATA);
 
 	 /* Write data of this centre */
 	 Ctr_ListOneCentreForSeeing (&Ctr,NumCtr);

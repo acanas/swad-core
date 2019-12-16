@@ -1039,7 +1039,7 @@ void Msg_GetParamMsgsCrsCod (void)
      {
       /* Get data of course */
       Crs.CrsCod = Gbl.Msg.FilterCrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
+      Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
       Str_Copy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName,
                 Hie_MAX_BYTES_SHRT_NAME);
@@ -2579,7 +2579,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
       row = mysql_fetch_row (mysql_res);
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
       if (Crs.CrsCod >= 0 && Gbl.Msg.NumCourses < Crs_MAX_COURSES_PER_USR)
-         if (Crs_GetDataOfCourseByCod (&Crs))
+         if (Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
            {
             Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
             Str_Copy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName,
@@ -3262,7 +3262,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
       Crs.CrsCod = CrsCod;
 
       /* Get data of current degree */
-      if (Crs_GetDataOfCourseByCod (&Crs))
+      if (Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course

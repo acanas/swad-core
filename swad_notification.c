@@ -395,7 +395,7 @@ void Ntf_ShowMyNotifications (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get event type (row[0]) */
-         NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[0]);
+         NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[0]);
 
          /* Get (from) user code (row[1]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -407,15 +407,15 @@ void Ntf_ShowMyNotifications (void)
 
           /* Get centre code (row[3]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-         Ctr_GetDataOfCentreByCod (&Ctr);
+         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
          /* Get degree code (row[4]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
          /* Get course code (row[5]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-         Crs_GetDataOfCourseByCod (&Crs);
+         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
          /* Get message/post/... code (row[6]) */
          Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -567,13 +567,13 @@ void Ntf_ShowMyNotifications (void)
          HTM_TR_End ();
 
          /***** Write content of the event *****/
-         if (PutLink)
+         if (PutLink && !AllNotifications)
            {
             ContentStr = NULL;
+
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                            false);
-
             HTM_TR_Begin (NULL);
 
             HTM_TD_Begin ("colspan=\"2\"");
@@ -584,13 +584,17 @@ void Ntf_ShowMyNotifications (void)
             HTM_TD_End ();
 
             HTM_TR_End ();
-
-            if (ContentStr != NULL)
-              {
-               free (ContentStr);
-               ContentStr = NULL;
-              }
            }
+
+         if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+           {
+            HTM_TR_Begin (NULL);
+            HTM_TD_Begin ("colspan=\"6\" class=\"DAT LT\"");
+            HTM_Long (Sta_ComputeTimeToGeneratePage ());
+            HTM_TD_End ();
+            HTM_TR_End ();
+           }
+
         }
 
       /***** End table *****/
@@ -1648,7 +1652,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get event type (row[0]) */
-	    NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[0]);
+	    NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[0]);
 
 	    /* Get origin user code (row[1]) */
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1660,15 +1664,15 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get centre code (row[3]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Ctr_GetDataOfCentreByCod (&Ctr);
+	    Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 
 	    /* Get degree code (row[4]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
 	    /* Get course code (row[5]) */
 	    Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-	    Crs_GetDataOfCourseByCod (&Crs);
+	    Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
 	    /* Get message/post/... code (row[6]) */
 	    Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -1795,7 +1799,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 /****** Get notify event type from string number coming from database ********/
 /*****************************************************************************/
 
-Ntf_NotifyEvent_t Ntf_GetNotifyEventFromDB (const char *Str)
+Ntf_NotifyEvent_t Ntf_GetNotifyEventFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 

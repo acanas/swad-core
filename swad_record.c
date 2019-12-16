@@ -3637,7 +3637,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 	 if (Ctr.WWW[0])
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
 		         Ctr.WWW);
@@ -4279,7 +4279,7 @@ void Rec_UpdateMyCentre (void)
    /* Get institution of centre */
    if (Ctr.CtrCod > 0)
      {
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
 	{
 	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;

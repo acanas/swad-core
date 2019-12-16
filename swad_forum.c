@@ -2179,14 +2179,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_CENTRE_USRS:
 	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Centre not found.");
          Str_Copy (ForumName,Ctr.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
 	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Centre not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Ctr.ShrtName,
@@ -2195,14 +2195,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_DEGREE_USRS:
 	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	 if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Degree not found.");
          Str_Copy (ForumName,Deg.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	 if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Degree not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Deg.ShrtName,
@@ -2211,14 +2211,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
 	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	 if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Course not found.");
          Str_Copy (ForumName,Crs.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	 if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Course not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Crs.ShrtName,

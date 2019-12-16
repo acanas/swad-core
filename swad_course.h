@@ -88,6 +88,12 @@ struct Course
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users
   };
 
+typedef enum
+  {
+   Crs_GET_BASIC_DATA,
+   Crs_GET_EXTRA_DATA,
+  } Crs_GetExtraData_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -114,7 +120,8 @@ void Crs_RecFormReqCrs (void);
 void Crs_RecFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
-bool Crs_GetDataOfCourseByCod (struct Course *Crs);
+bool Crs_GetDataOfCourseByCod (struct Course *Crs,
+                               Crs_GetExtraData_t GetExtraData);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCodInConfig (void);
 void Crs_ChangeInsCrsCod (void);

@@ -2700,9 +2700,19 @@ void Usr_WelcomeUsr (void)
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
+         Ale_ShowAlert (Ale_INFO,
+			"Herramienta <a href=\"https://github.com/acanas/swad-core/wiki/ASSESSMENT.Games.es\" target=\"_blank\">"
+			"Evaluaci&oacute;n &gt; Juegos</a><br />"
+			"<br />"
+			"Imagen de la izquierda: pantalla proyectada en el aula por el profesor.<br />"
+			"Imagen de la derecha: pantalla del estudiante en su m&oacute;vil."
+			"<br />"
+			"<br />"
+	                "<img src=\"/img/juego.png\" alt=\"Juegos\" style=\"width:100%%\">");
+
          /***** Institutional video *****/
          /*
-         Ale_ShowFixedAlert (Ale_INFO,
+         Ale_ShowAlert (Ale_INFO,
 			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
 			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
 			"Reconocimiento de 1 cr&eacute;dito por actividades universitarias<br />"
@@ -3760,7 +3770,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    if (UsrDat->Tch.CtrCod > 0)
      {
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
      }
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -3983,7 +3993,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    if (ShowData && UsrDat->Tch.CtrCod > 0)
      {
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
      }
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :

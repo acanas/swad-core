@@ -133,7 +133,7 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     struct UsrData *UsrDat,
                                     long Cod,Ntf_Status_t Status);
 void Ntf_SendPendingNotifByEMailToAllUsrs (void);
-Ntf_NotifyEvent_t Ntf_GetNotifyEventFromDB (const char *Str);
+Ntf_NotifyEvent_t Ntf_GetNotifyEventFromStr (const char *Str);
 void Ntf_MarkAllNotifAsSeen (void);
 void Ntf_PutFormChangeNotifSentByEMail (void);
 void Ntf_ChangeNotifyEvents (void);

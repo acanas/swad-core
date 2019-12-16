@@ -175,7 +175,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
      {
       /* Get data of this degree */
       Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
-      if (!Deg_GetDataOfDegreeByCod (&Deg))
+      if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
          Lay_ShowErrorAndExit ("Degree not found.");
 
       /* Link to the room of this degree */
@@ -206,7 +206,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	      {
                /* Get data of this course */
-               Crs_GetDataOfCourseByCod (&Crs);
+               Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
                /* Link to the room of this course */
                IsLastItemInLevel[2] = (NumRow == NumRows - 1);
@@ -521,7 +521,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this degree */
          Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",
@@ -557,7 +557,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this course */
          Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
-         Crs_GetDataOfCourseByCod (&Crs);
+         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",

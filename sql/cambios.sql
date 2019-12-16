@@ -13105,6 +13105,6 @@ SELECT MIN(QstInd) FROM gam_questions WHERE GamCod=47 AND QstInd>5;
  
  
  
- 
+SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod,UNIX_TIMESTAMP(TimeNotif),Status FROM notif WHERE ToUsrCod=1346 ORDER BY TimeNotif DESC;
  
  
