@@ -53038,8 +53038,10 @@ const char *Txt_X_users_who_have_email =	// Warning: it is very important to inc
 
 const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
 	{
-	""	// Usr_LIST_UNKNOWN
-	,	// Usr_LIST_AS_CLASS_PHOTO
+	[Usr_LIST_UNKNOWN] =
+	""
+	,
+	[Usr_LIST_AS_CLASS_PHOTO] =
 #if   L==1	// ca
 	"Orla"
 #elif L==2	// de
@@ -53059,7 +53061,8 @@ const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
 #elif L==9	// pt
 	"Foto de formatura"
 #endif
-	,	// Usr_LIST_AS_LISTING
+	,
+	[Usr_LIST_AS_LISTING] =
 #if   L==1	// ca
 	"Llista"
 #elif L==2	// de
@@ -53818,10 +53821,10 @@ const char *Txt_Where_s_USER =
 
 const char *Txt_WHO[Usr_NUM_WHO] =
 	{
-	//    Usr_WHO_UNKNOWN
+	[Usr_WHO_UNKNOWN] =
 	NULL
 	,
-	//    Usr_WHO_ME
+	[Usr_WHO_ME] =
 #if   L==1	// ca
 	"Jo"
 #elif L==2	// de
@@ -53842,7 +53845,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Eu"
 #endif
 	,
-	//    Usr_WHO_SOME
+	[Usr_WHO_SOME] =
 #if   L==1	// ca
 	"Usuaris seleccionats"
 #elif L==2	// de
@@ -53863,7 +53866,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Usu&aacute;rios selecionados"
 #endif
 	,
-	// Usr_WHO_FOLLOWED
+	[Usr_WHO_FOLLOWED] =
 #if   L==1	// ca
 	"Usuaris que segueixo"
 #elif L==2	// de
@@ -53884,7 +53887,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Usu&aacute;rios que estou seguindo"
 #endif
 	,
-	// Usr_WHO_ALL
+	[Usr_WHO_ALL] =
 #if   L==1	// ca
 	"Tots els usuaris"
 #elif L==2	// de
@@ -54654,7 +54657,8 @@ const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to
 
 const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
+	[Usr_SEX_UNKNOWN] =
+#if   L==1	// ca
 	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2	// de
 	"Sie sind zu keiner Kurs eingeschrieben."
@@ -54674,7 +54678,8 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
+	[Usr_SEX_FEMALE] =
+#if   L==1	// ca
 	"No est&agrave; inscrita en cap assignatura."
 #elif L==2	// de
 	"Sie sind zu keiner Kurs eingeschrieben."
@@ -54694,7 +54699,8 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	"Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_MALE
+	[Usr_SEX_MALE] =
+#if   L==1	// ca
 	"No est&agrave; inscrit en cap assignatura."
 #elif L==2	// de
 	"Sie sind zu keiner Kurs eingeschrieben."
@@ -54714,7 +54720,8 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
 #endif
 	,
-#if   L==1	// ca	// Usr_SEX_ALL
+	[Usr_SEX_ALL] =
+#if   L==1	// ca
 	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2	// de
 	"Sie sind zu keiner Kurs eingeschrieben."
