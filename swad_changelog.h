@@ -497,7 +497,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 
-	Version 19.94.1:  Dec 17, 2019	Fixed bug in listing of degrees. (249176 lines)
+	Version 19.94.1:  Dec 17, 2019	Fixed bug in listing of degrees. (249168 lines)
 	Version 19.94:    Dec 17, 2019	Code optimization getting time to generate page.
 				        Code optimizations getting data of courses, degrees and centres. (? lines)
 	Version 19.93.3:  Dec 16, 2019	Fixed minor bugs. (249132 lines)

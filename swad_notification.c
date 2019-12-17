@@ -567,7 +567,7 @@ void Ntf_ShowMyNotifications (void)
          HTM_TR_End ();
 
          /***** Write content of the event *****/
-         if (PutLink && !AllNotifications)
+         if (PutLink)
            {
             ContentStr = NULL;
 
@@ -585,16 +585,6 @@ void Ntf_ShowMyNotifications (void)
 
             HTM_TR_End ();
            }
-
-         if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-           {
-            HTM_TR_Begin (NULL);
-            HTM_TD_Begin ("colspan=\"6\" class=\"DAT LT\"");
-            HTM_Long (Sta_ComputeTimeToGeneratePage ());
-            HTM_TD_End ();
-            HTM_TR_End ();
-           }
-
         }
 
       /***** End table *****/
