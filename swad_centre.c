@@ -86,7 +86,19 @@ static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the cent
 static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
-static void Ctr_DrawPhoto (bool PrintView,bool PutLink);
+static void Ctr_ConfigTitle (bool PutLink);
+static void Ctr_ConfigMap (void);
+static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
+static void Ctr_ConfigInstitution (bool PrintView);
+static void Ctr_ConfigFullName (bool PrintView);
+static void Ctr_ConfigShortName (bool PrintView);
+static void Ctr_ConfigPlace (bool PrintView);
+static void Ctr_ConfigWWW (bool PrintView);
+static void Ctr_ConfigShortcut (void);
+static void Ctr_ConfigQR (void);
+static void Ctr_ConfigNumUsrs (void);
+static void Ctr_ConfigNumDegs (void);
+static void Ctr_ConfigNumCrss (void);
 static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role);
 
 static void Ctr_ListCentres (void);
@@ -291,23 +303,6 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTRE_Information;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Another_place;
-   extern const char *Txt_Web;
-   extern const char *Txt_Shortcut;
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_QR_code;
-   extern const char *Txt_Users_of_the_centre;
-   extern const char *Txt_Place;
-   extern const char *Txt_Degrees;
-   extern const char *Txt_Degrees_of_CENTRE_X;
-   extern const char *Txt_Courses;
-   unsigned NumIns;
-   unsigned NumPlc;
-   struct Place Plc;
    bool PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
 
    /***** Trivial check *****/
@@ -323,281 +318,44 @@ static void Ctr_Configuration (bool PrintView)
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Ctr.WWW,
-	           Gbl.Hierarchy.Ctr.FullName);
-   Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
-		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
+   Ctr_ConfigTitle (PutLink);
+
+   /***** Centre map *****/
+   Ctr_ConfigMap ();
 
    /***** Centre photo *****/
-   Ctr_DrawPhoto (PrintView,PutLink);
+   Ctr_ConfigPhoto (PrintView,PutLink);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Institution *****/
-   HTM_TR_Begin (NULL);
+   Ctr_ConfigInstitution (PrintView);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Institution);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      // Only system admins can move a centre to another institution
-     {
-      /* Get list of institutions of the current country */
-      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
-
-      /* Put form to select institution */
-      Frm_StartForm (ActChgCtrInsCfg);
-      HTM_SELECT_Begin (true,
-			"id=\"OthInsCod\" name=\"OthInsCod\""
-			" class=\"INPUT_SHORT_NAME\"");
-      for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
-	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
-	             "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of institutions */
-      Ins_FreeListInstitutions ();
-     }
-   else	// I can not move centre to another institution
-      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Centre full name *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Centre);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admins can edit centre full name
-     {
-      /* Form to change centre full name */
-      Frm_StartForm (ActRenCtrFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit centre full name
-      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Centre short name *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Short_name);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admins can edit centre short name
-     {
-      /* Form to change centre short name */
-      Frm_StartForm (ActRenCtrShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit centre short name
-      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   /***** Centre name *****/
+   Ctr_ConfigFullName (PrintView);
+   Ctr_ConfigShortName (PrintView);
 
    /***** Place *****/
-   Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
-   Plc_GetDataOfPlaceByCod (&Plc);
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Place);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can change centre place
-     {
-      /* Get list of places of the current institution */
-      Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
-      Plc_GetListPlaces ();
-
-      /* Put form to select place */
-      Frm_StartForm (ActChgCtrPlcCfg);
-      HTM_SELECT_Begin (true,
-			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
-		  "%s",Txt_Another_place);
-      for (NumPlc = 0;
-	   NumPlc < Gbl.Plcs.Num;
-	   NumPlc++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-		     Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
-		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of places */
-      Plc_FreeListPlaces ();
-     }
-   else	// I can not change centre place
-      HTM_Txt (Plc.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Ctr_ConfigPlace (PrintView);
 
    /***** Centre WWW *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Web);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can change centre WWW
-     {
-      /* Form to change centre WWW */
-      Frm_StartForm (ActChgCtrWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
-		     "class=\"INPUT_WWW\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change centre WWW
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Hierarchy.Ctr.WWW);
-      HTM_Txt (Gbl.Hierarchy.Ctr.WWW);
-      HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Ctr_ConfigWWW (PrintView);
 
    /***** Shortcut to the centre *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Shortcut);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\"",
-	        Cfg_URL_SWAD_CGI,
-	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	        Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_TxtF ("%s/%s?ctr=%ld",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Ctr_ConfigShortcut ();
 
    if (PrintView)
-     {
       /***** QR code with link to the centre *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_QR_code);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
+      Ctr_ConfigQR ();
    else
      {
-      /***** Number of users who claim to belong to this centre *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Users_of_the_centre);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of degrees *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Degrees);
-      HTM_TD_End ();
-
-      /* Form to go to see degrees of this centre */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormGoTo (ActSeeDeg);
-      Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-		Txt_Degrees_of_CENTRE_X,
-		Gbl.Hierarchy.Ctr.ShrtName);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-      HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of courses *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Courses);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
+      /***** Number of users who claim to belong to this centre,
+             number of degrees,
+             number of courses *****/
+      Ctr_ConfigNumUsrs ();
+      Ctr_ConfigNumDegs ();
+      Ctr_ConfigNumCrss ();
 
       /***** Number of users in courses of this centre *****/
       Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
@@ -663,10 +421,39 @@ static void Ctr_PutIconToChangePhoto (void)
   }
 
 /*****************************************************************************/
+/******************** Show title in centre configuration *********************/
+/*****************************************************************************/
+
+static void Ctr_ConfigTitle (bool PutLink)
+  {
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
+   if (PutLink)
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Ctr.WWW,
+	           Gbl.Hierarchy.Ctr.FullName);
+   Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
+		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
+   HTM_BR ();
+   HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+   if (PutLink)
+      HTM_A_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/****************************** Draw centre map ******************************/
+/*****************************************************************************/
+
+static void Ctr_ConfigMap (void)
+  {
+  }
+
+/*****************************************************************************/
 /***************************** Draw centre photo *****************************/
 /*****************************************************************************/
 
-static void Ctr_DrawPhoto (bool PrintView,bool PutLink)
+static void Ctr_ConfigPhoto (bool PrintView,bool PutLink)
   {
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
@@ -738,6 +525,354 @@ static void Ctr_DrawPhoto (bool PrintView,bool PutLink)
       /* Free memory used for photo attribution */
       Ctr_FreePhotoAttribution (&PhotoAttribution);
      }
+  }
+
+/*****************************************************************************/
+/***************** Show institution in centre configuration ******************/
+/*****************************************************************************/
+
+static void Ctr_ConfigInstitution (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Institution;
+   unsigned NumIns;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Institution);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      // Only system admins can move a centre to another institution
+     {
+      /* Get list of institutions of the current country */
+      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
+
+      /* Put form to select institution */
+      Frm_StartForm (ActChgCtrInsCfg);
+      HTM_SELECT_Begin (true,
+			"id=\"OthInsCod\" name=\"OthInsCod\""
+			" class=\"INPUT_SHORT_NAME\"");
+      for (NumIns = 0;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	   NumIns++)
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+	             "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+      HTM_SELECT_End ();
+      Frm_EndForm ();
+
+      /* Free list of institutions */
+      Ins_FreeListInstitutions ();
+     }
+   else	// I can not move centre to another institution
+      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show centre full name in centre configuration ****************/
+/*****************************************************************************/
+
+static void Ctr_ConfigFullName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Centre;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Centre);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admins can edit centre full name
+     {
+      /* Form to change centre full name */
+      Frm_StartForm (ActRenCtrFulCfg);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,true,
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit centre full name
+      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show centre short name in centre configuration ***************/
+/*****************************************************************************/
+
+static void Ctr_ConfigShortName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Short_name;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Short_name);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admins can edit centre short name
+     {
+      /* Form to change centre short name */
+      Frm_StartForm (ActRenCtrShoCfg);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,true,
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit centre short name
+      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/**************** Show centre place in centre configuration ******************/
+/*****************************************************************************/
+
+static void Ctr_ConfigPlace (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Place;
+   extern const char *Txt_Another_place;
+   struct Place Plc;
+   unsigned NumPlc;
+
+   Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
+   Plc_GetDataOfPlaceByCod (&Plc);
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Place);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can change centre place
+     {
+      /* Get list of places of the current institution */
+      Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
+      Plc_GetListPlaces ();
+
+      /* Put form to select place */
+      Frm_StartForm (ActChgCtrPlcCfg);
+      HTM_SELECT_Begin (true,
+			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
+      HTM_OPTION (HTM_Type_STRING,"0",
+		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
+		  "%s",Txt_Another_place);
+      for (NumPlc = 0;
+	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc++)
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
+		     Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
+		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+      HTM_SELECT_End ();
+      Frm_EndForm ();
+
+      /* Free list of places */
+      Plc_FreeListPlaces ();
+     }
+   else	// I can not change centre place
+      HTM_Txt (Plc.FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Show centre WWW in centre configuration *******************/
+/*****************************************************************************/
+
+static void Ctr_ConfigWWW (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Web;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Web);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can change centre WWW
+     {
+      /* Form to change centre WWW */
+      Frm_StartForm (ActChgCtrWWWCfg);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
+		     "class=\"INPUT_WWW\"");
+      Frm_EndForm ();
+     }
+   else	// I can not change centre WWW
+     {
+      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
+	           Gbl.Hierarchy.Ctr.WWW);
+      HTM_Txt (Gbl.Hierarchy.Ctr.WWW);
+      HTM_A_End ();
+      HTM_DIV_End ();
+     }
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************** Show centre shortcut in centre configuration ****************/
+/*****************************************************************************/
+
+static void Ctr_ConfigShortcut (void)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Shortcut;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Shortcut);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_A_Begin ("href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\"",
+	        Cfg_URL_SWAD_CGI,
+	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	        Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_TxtF ("%s/%s?ctr=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_A_End ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****************** Show centre QR in centre configuration *******************/
+/*****************************************************************************/
+
+static void Ctr_ConfigQR (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_QR_code;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_QR_code);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*** Show number of users who claim to belong to centre in centre config. ****/
+/*****************************************************************************/
+
+static void Ctr_ConfigNumUsrs (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Users_of_the_centre;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Users_of_the_centre);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show number of degrees in centre configuration ***************/
+/*****************************************************************************/
+
+static void Ctr_ConfigNumDegs (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Degrees;
+   extern const char *Txt_Degrees_of_CENTRE_X;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Degrees);
+   HTM_TD_End ();
+
+   /* Form to go to see degrees of this centre */
+   HTM_TD_Begin ("class=\"LM\"");
+   Frm_StartFormGoTo (ActSeeDeg);
+   Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Degrees_of_CENTRE_X,
+	     Gbl.Hierarchy.Ctr.ShrtName);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+   HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show number of courses in centre configuration ***************/
+/*****************************************************************************/
+
+static void Ctr_ConfigNumCrss (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Courses;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Courses);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
