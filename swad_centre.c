@@ -86,6 +86,7 @@ static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the cent
 static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
+static void Ctr_DrawPhoto (bool PrintView,bool PutLink);
 static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role);
 
 static void Ctr_ListCentres (void);
@@ -307,25 +308,11 @@ static void Ctr_Configuration (bool PrintView)
    unsigned NumIns;
    unsigned NumPlc;
    struct Place Plc;
-   char PathPhoto[PATH_MAX + 1];
-   bool PhotoExists;
-   char *PhotoAttribution = NULL;
-   bool PutLink;
-   char *URL;
-   char *Icon;
+   bool PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
       return;
-
-   /***** Path to photo *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),
-	     "%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
-   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
    /***** Begin box *****/
    if (PrintView)
@@ -336,7 +323,6 @@ static void Ctr_Configuration (bool PrintView)
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -352,60 +338,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_DIV_End ();
 
    /***** Centre photo *****/
-   if (PhotoExists)
-     {
-      /* Get photo attribution */
-      Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
-
-      /* Photo image */
-      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
-      if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		      Gbl.Hierarchy.Ctr.WWW);
-      if (asprintf (&URL,"%s/%02u/%u",
-		    Cfg_URL_CTR_PUBLIC,
-	            (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	            (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%u.jpg",
-		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	       "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
-			                  "CENTRE_PHOTO_SHOW");
-      free (Icon);
-      free (URL);
-      if (PutLink)
-	 HTM_A_End ();
-      HTM_DIV_End ();
-
-      /* Photo attribution */
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and centre admins
-	 // have permission to edit photo attribution
-	{
-	 HTM_DIV_Begin ("class=\"CM\"");
-	 Frm_StartForm (ActChgCtrPhoAtt);
-	 HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
-			     " onchange=\"document.getElementById('%s').submit();return false;\"",
-		             Gbl.Form.Id);
-	 if (PhotoAttribution)
-	    HTM_Txt (PhotoAttribution);
-	 HTM_TEXTAREA_End ();
-	 Frm_EndForm ();
-	 HTM_DIV_End ();
-	}
-      else if (PhotoAttribution)
-	{
-	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-	 HTM_Txt (PhotoAttribution);
-	 HTM_DIV_End ();
-	}
-
-      /* Free memory used for photo attribution */
-      Ctr_FreePhotoAttribution (&PhotoAttribution);
-     }
+   Ctr_DrawPhoto (PrintView,PutLink);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -727,6 +660,84 @@ static void Ctr_PutIconToChangePhoto (void)
 			          "camera.svg",
 			          PhotoExists ? Txt_Change_photo :
 				                Txt_Upload_photo);
+  }
+
+/*****************************************************************************/
+/***************************** Draw centre photo *****************************/
+/*****************************************************************************/
+
+static void Ctr_DrawPhoto (bool PrintView,bool PutLink)
+  {
+   char PathPhoto[PATH_MAX + 1];
+   bool PhotoExists;
+   char *PhotoAttribution = NULL;
+   char *URL;
+   char *Icon;
+
+   /***** Path to photo *****/
+   snprintf (PathPhoto,sizeof (PathPhoto),
+	     "%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_CTR_PUBLIC,
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+
+   /***** Centre photo *****/
+   if (PhotoExists)
+     {
+      /* Get photo attribution */
+      Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
+
+      /* Photo image */
+      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+      if (PutLink)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+		      Gbl.Hierarchy.Ctr.WWW);
+      if (asprintf (&URL,"%s/%02u/%u",
+		    Cfg_URL_CTR_PUBLIC,
+	            (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	            (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      if (asprintf (&Icon,"%u.jpg",
+		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
+	       "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
+			                  "CENTRE_PHOTO_SHOW");
+      free (Icon);
+      free (URL);
+      if (PutLink)
+	 HTM_A_End ();
+      HTM_DIV_End ();
+
+      /* Photo attribution */
+      if (!PrintView &&
+	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and centre admins
+	 // have permission to edit photo attribution
+	{
+	 HTM_DIV_Begin ("class=\"CM\"");
+	 Frm_StartForm (ActChgCtrPhoAtt);
+	 HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
+			     " onchange=\"document.getElementById('%s').submit();return false;\"",
+		             Gbl.Form.Id);
+	 if (PhotoAttribution)
+	    HTM_Txt (PhotoAttribution);
+	 HTM_TEXTAREA_End ();
+	 Frm_EndForm ();
+	 HTM_DIV_End ();
+	}
+      else if (PhotoAttribution)
+	{
+	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
+	 HTM_Txt (PhotoAttribution);
+	 HTM_DIV_End ();
+	}
+
+      /* Free memory used for photo attribution */
+      Ctr_FreePhotoAttribution (&PhotoAttribution);
+     }
   }
 
 /*****************************************************************************/
