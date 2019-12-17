@@ -2008,6 +2008,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border:solid 1px #EEE;
         box-shadow:1px 1px 6px #999;
 	}
+	
+#centre_mapid
+	{
+	width:480px;
+	height:360px;
+	margin:0 auto;
+	}
 
 /**************** Attribution (author and license) of images *****************/
 #AttributionArea

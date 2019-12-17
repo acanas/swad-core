@@ -490,14 +490,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.94.3 (2019-12-17)"
-#define CSS_FILE		"swad19.90.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.95 (2019-12-17)"
+#define CSS_FILE		"swad19.95.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-//	Version 19.95:    Dec 17, 2019	Trying Leaflet (open-source JavaScript library for mobile-friendly interactive maps). (? lines)
 
+	Version 19.95:    Dec 17, 2019	Trying Leaflet (open-source JavaScript library for mobile-friendly interactive maps). (249323 lines)
 	Version 19.94.3:  Dec 17, 2019	Code refactoring in centre information. (249282 lines)
 	Version 19.94.2:  Dec 17, 2019	Code refactoring in centre information. (249178 lines)
 	Version 19.94.1:  Dec 17, 2019	Fixed bug in listing of degrees. (249168 lines)
