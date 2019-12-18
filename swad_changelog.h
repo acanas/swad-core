@@ -498,6 +498,9 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 
 	Version 19.95.2:  Dec 18, 2019	Buf fixes in swad.sql. (? lines)
+					1 change necessary in database:
+DROP TABLE IF EXISTS log;
+
 	Version 19.95.1:  Dec 18, 2019	Map marker in centre information. (249331 lines)
 	Version 19.95:    Dec 17, 2019	Trying Leaflet (open-source JavaScript library for mobile-friendly interactive maps). (249323 lines)
 	Version 19.94.3:  Dec 17, 2019	Code refactoring in centre information. (249282 lines)
