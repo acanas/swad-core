@@ -472,6 +472,8 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: ¿Añadir dos columnas a resultados de juegos entre "Preguntas contestadas" y "Puntuación total": Preguntas "Correctas" y Preguntas "Erróneas"?
 //       Problema: sólo es aplicable a tipo test
 
+// TODO: Poner en swad.cfg varias líneas de swad_config.h para que sea más configurable
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/

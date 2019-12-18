@@ -63,11 +63,11 @@
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
 #define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO140x40"
 
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"		// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"	// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"openswad.org"			// SMTP server for sending automatic emails
+#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Responsible name"		// Main responsible for the platform
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"Responsible email address"	// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"Your SMTP server"		// SMTP server for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"				// SMTP port for sending automatic emails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"		// Email address from where automatic emails will be sent
+#define Cfg_AUTOMATIC_EMAIL_FROM		"Sender email address"		// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"			// Database host
 #define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_ES			// Default language
 #define Cfg_LOG_START_YEAR			2012				// Year when the log started in the database
