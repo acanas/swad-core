@@ -46,6 +46,7 @@
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_logo.h"
+#include "swad_map.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_string.h"
@@ -88,6 +89,7 @@ static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
 static void Ctr_ConfigTitle (bool PutLink);
 static void Ctr_ConfigMap (void);
+static void Ctr_ConfigCoordinates (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
 static void Ctr_ConfigInstitution (bool PrintView);
 static void Ctr_ConfigFullName (bool PrintView);
@@ -340,6 +342,10 @@ static void Ctr_Configuration (bool PrintView)
    /***** Place *****/
    Ctr_ConfigPlace (PrintView);
 
+   /***** Coordinates *****/
+   if (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      Ctr_ConfigCoordinates ();
+
    /***** Centre WWW *****/
    Ctr_ConfigWWW (PrintView);
 
@@ -489,13 +495,40 @@ static void Ctr_ConfigMap (void)
             "}).addTo(mymap);\n");
 
    /* Marker */
-   HTM_Txt ("\tvar marker = L.marker([37.19704, -3.62451]).addTo(mymap);");
+   HTM_Txt ("\tvar marker = L.marker([37.19684, -3.62436]).addTo(mymap);");
 
    HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
 	     Gbl.Hierarchy.Ctr.ShrtName,
 	     Gbl.Hierarchy.Ins.ShrtName);
 
    HTM_SCRIPT_End ();
+  }
+
+/*****************************************************************************/
+/************************** Edit centre coordinates **************************/
+/*****************************************************************************/
+
+static void Ctr_ConfigCoordinates (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:","Latitud");	// TODO: Need translation!!!!
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   /* Form to change centre WWW */
+   Frm_StartForm (ActChgCtrWWWCfg);
+   HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
+		  "class=\"INPUT_WWW\"");
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

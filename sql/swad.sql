@@ -1058,7 +1058,7 @@ CREATE TABLE IF NOT EXISTS projects (
 	INDEX(CrsCod,Hidden),
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
-	INDEX(CrsCod,DptCod);
+	INDEX(CrsCod,DptCod));
 --
 -- Table sessions: stores the information of open sessions
 --
@@ -1082,7 +1082,8 @@ CREATE TABLE IF NOT EXISTS sessions (
 	SearchString VARCHAR(255) NOT NULL DEFAULT '',
 	SideCols TINYINT NOT NULL DEFAULT 3,
 	UNIQUE INDEX(SessionId),
-	INDEX(UsrCod));--
+	INDEX(UsrCod));
+--
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (

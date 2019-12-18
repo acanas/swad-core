@@ -32,6 +32,7 @@
 #include "swad_action.h"
 #include "swad_constant.h"
 #include "swad_degree.h"
+#include "swad_map.h"
 #include "swad_role_type.h"
 
 /*****************************************************************************/
@@ -64,6 +65,7 @@ struct Centre
    long CtrCod;			// Centre code
    long InsCod;			// Institution code
    long PlcCod;			// Place code
+   struct Coordinates Coordinates;	// Latitude and longitude
    Ctr_Status_t Status;		// Centre status
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
