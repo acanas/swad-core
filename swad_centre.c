@@ -321,7 +321,8 @@ static void Ctr_Configuration (bool PrintView)
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
-   Ctr_ConfigMap ();
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ctr_ConfigMap ();
 
    /***** Centre photo *****/
    Ctr_ConfigPhoto (PrintView,PutLink);
@@ -447,6 +448,7 @@ static void Ctr_ConfigTitle (bool PutLink)
 
 static void Ctr_ConfigMap (void)
   {
+   /* https://leafletjs.com/examples/quick-start/ */
    /***** Leaflet CSS *****/
    HTM_Txt ("<link rel=\"stylesheet\""
 	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
@@ -468,7 +470,7 @@ static void Ctr_ConfigMap (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
-   HTM_Txt ("\tvar mymap = L.map('centre_mapid').setView([37.19704, -3.62451], 18);");
+   HTM_Txt ("\tvar mymap = L.map('centre_mapid').setView([37.19704, -3.62451], 16);\n");
 
    /* Next we'll add a tile layer to add to our map,
       in this case it's a Mapbox Streets tile layer.
@@ -479,12 +481,19 @@ static void Ctr_ConfigMap (void)
       from Mapbox's Static Tiles API
       (in order to use tiles from Mapbox,
       you must also request an access token).*/
-   HTM_Txt ("L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
+   HTM_Txt ("\tL.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
             "attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery &copy; <a href=\"https://www.mapbox.com/\">Mapbox</a>',"
             "maxZoom: 20,"
             "id: 'mapbox/streets-v11',"
             "accessToken: 'pk.eyJ1IjoiYWNhbmFzIiwiYSI6ImNrNGFoNXFxOTAzdHozcnA4d3Y0M3BwOGkifQ.uSg754Lv2iZEJg0W2pjiOQ'"
-            "}).addTo(mymap);");
+            "}).addTo(mymap);\n");
+
+   /* Marker */
+   HTM_Txt ("\tvar marker = L.marker([37.19704, -3.62451]).addTo(mymap);");
+
+   HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
+	     Gbl.Hierarchy.Ctr.ShrtName,
+	     Gbl.Hierarchy.Ins.ShrtName);
 
    HTM_SCRIPT_End ();
   }
