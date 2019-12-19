@@ -329,8 +329,7 @@ static void Ctr_Configuration (bool PrintView)
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ctr_ConfigMap ();
+   Ctr_ConfigMap ();
 
    /***** Centre photo *****/
    Ctr_ConfigPhoto (PrintView,PutLink);

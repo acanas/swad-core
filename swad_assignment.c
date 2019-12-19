@@ -417,7 +417,6 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
-
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -480,9 +479,9 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
   {
    extern const char *Txt_Upload_file_or_create_folder;
    extern const char *Txt_Folder;
-   bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
-                        Asg->Open &&				// It's open (inside dates)
-                        Asg->IBelongToCrsOrGrps;		// I belong to course or groups
+   bool ICanSendFiles = !Asg->Hidden &&			// It's visible (not hidden)
+                        Asg->Open &&			// It's open (inside dates)
+                        Asg->IBelongToCrsOrGrps;	// I belong to course or groups
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
@@ -490,7 +489,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
      {
       /* Form to create a new file or folder */
       Gbl.FileBrowser.FullTree = true;	// By default, show all files
-      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+      switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_STD:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;	// User assignments
@@ -498,11 +497,11 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
+	 case Rol_SYS_ADM:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 		      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected)
-;
+	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
 	    Frm_StartForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
@@ -518,12 +517,13 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
       Ico_PutIconLink ("folder-open-yellow-plus.png",
 		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
-      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+      switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_STD:
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
+	 case Rol_SYS_ADM:
 	    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	    break;
 	 default:
@@ -1718,11 +1718,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 				" AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
 				")",
 				AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 // Admins can view assignments
          return true;
       default:
          return false;
