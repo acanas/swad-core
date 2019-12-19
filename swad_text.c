@@ -18077,6 +18077,27 @@ const char *Txt_Mandatory_enrolment =		// (to a type of group)
 	"Inscri&ccedil;&atilde;o obrigat&oacute;ria?";
 #endif
 
+const char *Txt_Map =
+#if   L==1	// ca
+	"Mapa";
+#elif L==2	// de
+	"Karte";
+#elif L==3	// en
+	"Map";
+#elif L==4	// es
+	"Mapa";
+#elif L==5	// fr
+	"Carte";
+#elif L==6	// gn
+	"Mapa";	// Okoteve traducción
+#elif L==7	// it
+	"Carta";
+#elif L==8	// pl
+	"Mapa";
+#elif L==9	// pt
+	"Mapa";
+#endif
+
 const char *Txt_Mark_all_NOTIFICATIONS_as_read =
 #if   L==1	// ca
 	"Marca totes com llegides";

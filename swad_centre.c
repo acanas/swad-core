@@ -1179,6 +1179,7 @@ static void Ctr_PutIconToEditCentres (void)
 
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
   {
+   extern const char *Txt_Map;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
    const char *TxtClassNormal;
@@ -1224,6 +1225,18 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    /***** Place *****/
    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    HTM_Txt (Plc.ShrtName);
+   HTM_TD_End ();
+
+   /***** Place *****/
+   HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+   if (Ctr->Coord.Latitude ||
+       Ctr->Coord.Longitude)
+     {
+      Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
+      Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
+				     "map-marker-alt.svg",
+				     Txt_Map);
+     }
    HTM_TD_End ();
 
    /***** Number of degrees *****/
@@ -3018,6 +3031,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_CENTRES_HELP_ORDER[2];
    extern const char *Txt_CENTRES_ORDER[2];
    extern const char *Txt_Place;
+   extern const char *Txt_Map;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -3032,12 +3046,15 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	Order++)
      {
       HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTRE ? "LM" :
-						       "RM");
+				                       "RM");
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_CENTRES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_CENTRES_HELP_ORDER[Order],
+				  Order == Ctr_ORDER_BY_CENTRE ? "BT_LINK LM TIT_TBL" :
+					                         "BT_LINK RM TIT_TBL",
+				  NULL);
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    HTM_U_Begin ();
 	}
@@ -3053,6 +3070,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
      }
 
    HTM_TH (1,1,"LM",Txt_Place);
+   HTM_TH (1,1,"CM",Txt_Map);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
