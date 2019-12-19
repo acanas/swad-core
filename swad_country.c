@@ -1676,7 +1676,7 @@ static void Cty_ListCountriesForEdition (void)
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],true,
-			"class=\"INPUT_WWW\"");
+			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2101,7 +2101,7 @@ static void Cty_PutFormToCreateCountry (void)
 		"WWW_%s",
 		Lan_STR_LANG_ID[Lan]);
       HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],false,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       HTM_TD_End ();
 
       HTM_TR_End ();

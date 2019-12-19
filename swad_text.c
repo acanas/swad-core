@@ -1505,6 +1505,27 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
+const char *Txt_Altitude =
+#if   L==1	// ca
+	"Altitud";
+#elif L==2	// de
+	"H&ouml;he";
+#elif L==3	// en
+	"Altitude";
+#elif L==4	// es
+	"Altitud";
+#elif L==5	// fr
+	"Altitude";
+#elif L==6	// gn
+	"Altitud";	// Okoteve traducción
+#elif L==7	// it
+	"Altitudine";
+#elif L==8	// pl
+	"Wysoko&sacute;&cacute; bezwzgl&eogon;dna";
+#elif L==9	// pt
+	"Altitude";
+#endif
+
 const char *Txt_and =
 #if   L==1	// ca
 	"i";
@@ -9328,6 +9349,27 @@ const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follo
 	"Voc&ecirc; quer seguir os %u usu&aacute;rios selecionados que voc&ecirc; n&atilde;o segue ainda?";
 #endif
 
+const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu bloquejar l'edici&oacute;n dels %u projectes seleccionats?";
+#elif L==2	// de
+	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte sperren?";
+#elif L==3	// en
+	"Do you want to lock the editing of the %u selected projects?";
+#elif L==4	// es
+	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";
+#elif L==5	// fr
+	"Voulez-vous verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+#elif L==6	// gn
+	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi bloccare la modifica dei %u progetti selezionati?";
+#elif L==8	// pl
+	"Czy chcesz zablokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
+#elif L==9	// pt
+	"Voc&ecirc; quer bloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
+#endif
+
 const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow =
 #if   L==1	// ca
 	"Voleu deixar de seguir a l'usuari seleccionat a qui segueix?";
@@ -9368,6 +9410,27 @@ const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_foll
 	"Czy chcesz przesta&cacute; &sacute;ledzi&cacute; %u wybranych u&zdot;ytkownik&oacute;w, kt&oacute;rych &sacute;ledzisz?";
 #elif L==9	// pt
 	"Voc&ecirc; quer parar de seguir os %u usu&aacute;rios selecionados que voc&ecirc; segue?";
+#endif
+
+const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu desbloquejar l'edici&oacute; dels %u projectes seleccionats?";
+#elif L==2	// de
+	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte freischalten?";
+#elif L==3	// en
+	"Do you want to unlock the editing of the %u selected projects?";
+#elif L==4	// es
+	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";
+#elif L==5	// fr
+	"Voulez-vous d&eacute;verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+#elif L==6	// gn
+	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi sbloccare la modifica dei %u progetti selezionati?";
+#elif L==8	// pl
+	"Czy chcesz odblokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
+#elif L==9	// pt
+	"Voc&ecirc; quer desbloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
 #endif
 
 const char *Txt_Document =
@@ -17103,6 +17166,27 @@ const char *Txt_Last_clicks_in_real_time =
 	"&Uacute;ltimos cliques em tempo real";
 #endif
 
+const char *Txt_Latitude =
+#if   L==1	// ca
+	"Latitud";
+#elif L==2	// de
+	"Geographische Breite";
+#elif L==3	// en
+	"Latitude";
+#elif L==4	// es
+	"Latitud";
+#elif L==5	// fr
+	"Latitude";
+#elif L==6	// gn
+	"Latitud";	// Okoteve traducción
+#elif L==7	// it
+	"Latitudine";
+#elif L==8	// pl
+	"Szeroko&sacute;&cacute; geograficzna";
+#elif L==9	// pt
+	"Latitude";
+#endif
+
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 	{
 #if   L==1	// ca
@@ -17780,69 +17864,6 @@ const char *Txt_Lock_editing =
 	"Bloquear edi&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Unlock_editing =
-#if   L==1	// ca
-	"Desbloquejar edici&oacute;";
-#elif L==2	// de
-	"Bearbeitung freischalten";
-#elif L==3	// en
-	"Unlock editing";
-#elif L==4	// es
-	"Desbloquear edici&oacute;n";
-#elif L==5	// fr
-	"D&eacute;verrouiller l'&eacute;dition";
-#elif L==6	// gn
-	"Desbloquear edici&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Sblocca la modifica";
-#elif L==8	// pl
-	"Odblokuj edycj&eogon;";
-#elif L==9	// pt
-	"Desbloquear edi&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Voleu bloquejar l'edici&oacute;n dels %u projectes seleccionats?";
-#elif L==2	// de
-	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte sperren?";
-#elif L==3	// en
-	"Do you want to lock the editing of the %u selected projects?";
-#elif L==4	// es
-	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";
-#elif L==5	// fr
-	"Voulez-vous verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
-#elif L==6	// gn
-	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi bloccare la modifica dei %u progetti selezionati?";
-#elif L==8	// pl
-	"Czy chcesz zablokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
-#elif L==9	// pt
-	"Voc&ecirc; quer bloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
-#endif
-
-const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Voleu desbloquejar l'edici&oacute; dels %u projectes seleccionats?";
-#elif L==2	// de
-	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte freischalten?";
-#elif L==3	// en
-	"Do you want to unlock the editing of the %u selected projects?";
-#elif L==4	// es
-	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";
-#elif L==5	// fr
-	"Voulez-vous d&eacute;verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
-#elif L==6	// gn
-	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi sbloccare la modifica dei %u progetti selezionati?";
-#elif L==8	// pl
-	"Czy chcesz odblokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
-#elif L==9	// pt
-	"Voc&ecirc; quer desbloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
-#endif
-
 const char *Txt_LOG_More_info =
 #if   L==1	// ca
 	"Observaciones";	// Necessita traduccio
@@ -18012,6 +18033,27 @@ const char *Txt_Logo =
 	"Logo";
 #elif L==9	// pt
 	"Logotipo";
+#endif
+
+const char *Txt_Longitude =
+#if   L==1	// ca
+	"Longitud";
+#elif L==2	// de
+	"Geographische L&auml;nge";
+#elif L==3	// en
+	"Longitude";
+#elif L==4	// es
+	"Longitud";
+#elif L==5	// fr
+	"Longitude";
+#elif L==6	// gn
+	"Longitud";	// Okoteve traducción
+#elif L==7	// it
+	"Longitudine";
+#elif L==8	// pl
+	"D&lstrok;ugo&sacute;&cacute; geograficzna";
+#elif L==9	// pt
+	"Longitude";
 #endif
 
 const char *Txt_Mandatory_enrolment =		// (to a type of group)
@@ -46464,6 +46506,27 @@ const char *Txt_The_name_of_the_type_of_group_X_has_not_changed =	// Warning: it
 	"O nome do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
+const char *Txt_The_new_altitude_is_X =	// Warning: it is very important to include %lg in the following sentences
+#if   L==1	// ca
+	"La nova altitud &eacute;s <strong>%lg</strong>.";
+#elif L==2	// de
+	"Die neue H&ouml;he ist <strong>%lg</strong>.";
+#elif L==3	// en
+	"The new altitude is <strong>%lg</strong>.";
+#elif L==4	// es
+	"La nueva altitud es <strong>%lg</strong>.";
+#elif L==5	// fr
+	"La nouvelle altitude est <strong>%lg</strong>.";
+#elif L==6	// gn
+	"La nueva altitud es <strong>%lg</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La nuova altitudine &egrave; <strong>%lg</strong>.";
+#elif L==8	// pl
+	"Nowa wysoko&sacute;&cacute; wynosi <strong>%lg</strong>.";
+#elif L==9	// pt
+	"O nova altitude &eacute; <strong>%lg</strong>.";
+#endif
+
 const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La nueva direcci&oacute;n IP es <strong>%s</strong>.";	// Necessita traduccio
@@ -46485,6 +46548,27 @@ const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to in
 	"O novo endere&ccedil;o IP &eacute; <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_new_latitude_is_X =	// Warning: it is very important to include %lg in the following sentences
+#if   L==1	// ca
+	"La nova latitud &eacute;s <strong>%lg</strong>.";
+#elif L==2	// de
+	"Der neue Breitengrad ist <strong>%lg</strong>.";
+#elif L==3	// en
+	"The new latitude is <strong>%lg</strong>.";
+#elif L==4	// es
+	"La nueva latitud es <strong>%lg</strong>.";
+#elif L==5	// fr
+	"La nouvelle latitude est <strong>%lg</strong>.";
+#elif L==6	// gn
+	"La nueva latitud es <strong>%lg</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La nuova latitudine &egrave; <strong>%lg</strong>.";
+#elif L==8	// pl
+	"Nowa szeroko&sacute;&cacute; geograficzna wynosi <strong>%lg</strong>.";
+#elif L==9	// pt
+	"O nova latitude &eacute; <strong>%lg</strong>.";
+#endif
+
 const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nuevo logo es <strong>%s</strong>.";	// Necessita traduccio
@@ -46504,6 +46588,27 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 	"The new logo is <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O novo logotipo &eacute; <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_new_longitude_is_X =	// Warning: it is very important to include %lg in the following sentences
+#if   L==1	// ca
+	"La nova longitud &eacute;s <strong>%lg</strong>.";
+#elif L==2	// de
+	"Der neue L&auml;ngengrad ist <strong>%lg</strong>.";
+#elif L==3	// en
+	"The new longitude is <strong>%lg</strong>.";
+#elif L==4	// es
+	"La nueva longitud es <strong>%lg</strong>.";
+#elif L==5	// fr
+	"La nouvelle longitude est <strong>%lg</strong>.";
+#elif L==6	// gn
+	"La nueva longitud es <strong>%lg</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La nuova longitudine &egrave; <strong>%lg</strong>.";
+#elif L==8	// pl
+	"Nowa d&lstrok;ugo&sacute;&cacute; geograficzna wynosi <strong>%lg</strong>.";
+#elif L==9	// pt
+	"O nova longitude &eacute; <strong>%lg</strong>.";
 #endif
 
 const char *Txt_The_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
@@ -51962,6 +52067,27 @@ const char *Txt_unknown_TIME =
 	"desconhecido";
 #endif
 
+const char *Txt_Unlock_editing =
+#if   L==1	// ca
+	"Desbloquejar edici&oacute;";
+#elif L==2	// de
+	"Bearbeitung freischalten";
+#elif L==3	// en
+	"Unlock editing";
+#elif L==4	// es
+	"Desbloquear edici&oacute;n";
+#elif L==5	// fr
+	"D&eacute;verrouiller l'&eacute;dition";
+#elif L==6	// gn
+	"Desbloquear edici&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Sblocca la modifica";
+#elif L==8	// pl
+	"Odblokuj edycj&eogon;";
+#elif L==9	// pt
+	"Desbloquear edi&ccedil;&atilde;o";
+#endif
+
 const char *Txt_unread_MESSAGE =
 #if   L==1	// ca
 	"no le&iacute;do";	// Necessita traduccio
@@ -54948,7 +55074,28 @@ const char *Txt_You_can_not_leave_the_description_empty =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode deixar a descri&ccedil;&atilde;o vazia.";
 #endif
-
+/*
+const char *Txt_You_can_not_leave_the_field_empty =
+#if   L==1	// ca
+	"No podeu deixar el camp buit.";
+#elif L==2	// de
+	"Sie k&ouml;nnen das Feld nicht leer lassen.";
+#elif L==3	// en
+	"You can not leave the field empty.";
+#elif L==4	// es
+	"No puede dejar el campo vac&iacute;o.";
+#elif L==5	// fr
+	"Vous ne pouvez pas laisser le champ vide.";
+#elif L==6	// gn
+	"No puede dejar el campo vac&iacute;o.";	// Okoteve traducción
+#elif L==7	// it
+	"Non puoi lasciare il campo vuoto.";
+#elif L==8	// pl
+	"Nie mo&zdot;esz zostawi&cacute; pola pustego.";
+#elif L==9	// pt
+	"Voc&ecirc; n&atilde;o pode deixar o campo vazio.";
+#endif
+*/
 const char *Txt_You_can_not_leave_the_image_empty =
 #if   L==1	// ca
 	"No puede dejar la imagen vac&iacute;a.";	// Necessita traduccio

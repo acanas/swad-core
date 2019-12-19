@@ -447,7 +447,7 @@ static void Deg_Configuration (bool PrintView)
       /* Form to change degree WWW */
       Frm_StartForm (ActChgDegWWWCfg);
       HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not change degree WWW
@@ -792,7 +792,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 HTM_INPUT_URL ("WWW",Deg->WWW,true,
-			"class=\"INPUT_WWW\"");
+			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	}
       else
@@ -977,7 +977,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Degree WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Current number of courses in this degree *****/

@@ -492,13 +492,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.96 (2019-12-19)"
-#define CSS_FILE		"swad19.95.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.97 (2019-12-19)"
+#define CSS_FILE		"swad19.97.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
+
+	Version 19.97:    Dec 19, 2019	Forms to edit centro latitude, longitude and altitude. (249807 lines)
+					3 changes necessary in database:
+ALTER TABLE centres ADD COLUMN Latitude DOUBLE PRECISION NOT NULL DEFAULT 0 AFTER RequesterUsrCod;
+ALTER TABLE centres ADD COLUMN Longitude DOUBLE PRECISION NOT NULL DEFAULT 0 AFTER Latitude;
+ALTER TABLE centres ADD COLUMN Altitude DOUBLE PRECISION NOT NULL DEFAULT 0 AFTER Longitude;
 
 	Version 19.96:    Dec 19, 2019	Bug fixes and code refactoring. (249423 lines)
 	Version 19.95.2:  Dec 18, 2019	Bug fixes. (? lines)

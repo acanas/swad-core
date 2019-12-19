@@ -64,9 +64,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 4 + 66 + 38 + 12 + 42 + 36 + 19 + 110 + 186 + 437 + 176 + 169 + 16 + 68)
+#define Act_NUM_ACTIONS	(1 + 4 + 66 + 38 + 12 + 42 + 39 + 19 + 110 + 186 + 437 + 176 + 169 + 16 + 68)
 
-#define Act_MAX_ACTION_COD 1814
+#define Act_MAX_ACTION_COD 1817
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -299,37 +299,40 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRenCtrShoCfg		(ActRenHld +  6)
 #define ActRenCtrFulCfg		(ActRenHld +  7)
 #define ActChgCtrPlcCfg		(ActRenHld +  8)
-#define ActChgCtrWWWCfg		(ActRenHld +  9)
-#define ActReqCtrLog		(ActRenHld + 10)
-#define ActRecCtrLog		(ActRenHld + 11)
-#define ActRemCtrLog		(ActRenHld + 12)
-#define ActReqCtrPho		(ActRenHld + 13)
-#define ActRecCtrPho		(ActRenHld + 14)
-#define ActChgCtrPhoAtt		(ActRenHld + 15)
+#define ActChgCtrLatCfg		(ActRenHld +  9)
+#define ActChgCtrLgtCfg		(ActRenHld + 10)
+#define ActChgCtrAltCfg		(ActRenHld + 11)
+#define ActChgCtrWWWCfg		(ActRenHld + 12)
+#define ActReqCtrLog		(ActRenHld + 13)
+#define ActRecCtrLog		(ActRenHld + 14)
+#define ActRemCtrLog		(ActRenHld + 15)
+#define ActReqCtrPho		(ActRenHld + 16)
+#define ActRecCtrPho		(ActRenHld + 17)
+#define ActChgCtrPhoAtt		(ActRenHld + 18)
 
-#define ActSeeDegTyp		(ActRenHld + 16)
-#define ActEdiDegTyp		(ActRenHld + 17)
-#define ActNewDegTyp		(ActRenHld + 18)
-#define ActRemDegTyp		(ActRenHld + 19)
-#define ActRenDegTyp		(ActRenHld + 20)
+#define ActSeeDegTyp		(ActRenHld + 19)
+#define ActEdiDegTyp		(ActRenHld + 20)
+#define ActNewDegTyp		(ActRenHld + 21)
+#define ActRemDegTyp		(ActRenHld + 22)
+#define ActRenDegTyp		(ActRenHld + 23)
 
-#define ActEdiDeg		(ActRenHld + 21)
-#define ActReqDeg		(ActRenHld + 22)
-#define ActNewDeg		(ActRenHld + 23)
-#define ActRemDeg		(ActRenHld + 24)
-#define ActRenDegSho		(ActRenHld + 25)
-#define ActRenDegFul		(ActRenHld + 26)
-#define ActChgDegTyp		(ActRenHld + 27)
-#define ActChgDegWWW		(ActRenHld + 28)
-#define ActChgDegSta		(ActRenHld + 29)
+#define ActEdiDeg		(ActRenHld + 24)
+#define ActReqDeg		(ActRenHld + 25)
+#define ActNewDeg		(ActRenHld + 26)
+#define ActRemDeg		(ActRenHld + 27)
+#define ActRenDegSho		(ActRenHld + 28)
+#define ActRenDegFul		(ActRenHld + 29)
+#define ActChgDegTyp		(ActRenHld + 30)
+#define ActChgDegWWW		(ActRenHld + 31)
+#define ActChgDegSta		(ActRenHld + 32)
 
-#define ActEdiCla		(ActRenHld + 30)
-#define ActNewCla		(ActRenHld + 31)
-#define ActRemCla		(ActRenHld + 32)
-#define ActRenClaSho		(ActRenHld + 33)
-#define ActRenClaFul		(ActRenHld + 34)
-#define ActChgClaMaxStd		(ActRenHld + 35)
-#define ActRenClaLoc		(ActRenHld + 36)
+#define ActEdiCla		(ActRenHld + 33)
+#define ActNewCla		(ActRenHld + 34)
+#define ActRemCla		(ActRenHld + 35)
+#define ActRenClaSho		(ActRenHld + 36)
+#define ActRenClaFul		(ActRenHld + 37)
+#define ActChgClaMaxStd		(ActRenHld + 38)
+#define ActRenClaLoc		(ActRenHld + 39)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/

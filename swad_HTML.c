@@ -1217,7 +1217,9 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
+void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
+		      double Step,	// Use 0 for "any"
+		      double Value,bool Disabled,
 	              const char *fmt,...)
   {
    va_list ap;
@@ -1226,9 +1228,14 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double 
 
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    HTM_TxtF ("<input type=\"number\" name=\"%s\""
-	     " min=\"%lg\" max=\"%lg\" step=\"%lg\" value=\"%lg\"",
+	     " min=\"%lg\" max=\"%lg\"",
 	     Name,
-	     Min,Max,Step,Value);
+	     Min,Max);
+   if (Step == 0.0)
+      HTM_Txt (" step=\"any\"");
+   else
+      HTM_TxtF (" step=\"%lg\"",Step);
+   HTM_TxtF (" value=\"%lg\"",Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
    if (Disabled)
       HTM_Txt (" disabled=\"disabled\"");

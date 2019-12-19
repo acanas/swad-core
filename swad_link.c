@@ -441,7 +441,7 @@ static void Lnk_ListLinksForEdition (void)
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,true,
-		      "class=\"INPUT_SHORT_NAME\"");
+		      "class=\"INPUT_SHORT_NAME\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -450,7 +450,7 @@ static void Lnk_ListLinksForEdition (void)
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,true,
-		      "class=\"INPUT_FULL_NAME\"");
+		      "class=\"INPUT_FULL_NAME\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -459,7 +459,7 @@ static void Lnk_ListLinksForEdition (void)
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       HTM_INPUT_URL ("WWW",Lnk->WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -756,7 +756,7 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Link WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

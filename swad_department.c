@@ -575,7 +575,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       HTM_INPUT_URL ("WWW",Dpt->WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -940,7 +940,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Department WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

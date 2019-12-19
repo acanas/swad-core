@@ -65,9 +65,9 @@ struct Centre
    long CtrCod;			// Centre code
    long InsCod;			// Institution code
    long PlcCod;			// Place code
-   struct Coordinates Coordinates;	// Latitude and longitude
    Ctr_Status_t Status;		// Centre status
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
+   struct Coordinates Coord;	// Geographical coordinates
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -126,6 +126,9 @@ void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
 void Ctr_RenameCentreShortInConfig (void);
 void Ctr_RenameCentreFullInConfig (void);
+void Ctr_ChangeCtrLatitudeInConfig (void);
+void Ctr_ChangeCtrLongitudeInConfig (void);
+void Ctr_ChangeCtrAltitudeInConfig (void);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrWWWInConfig (void);
 void Ctr_ChangeCtrStatus (void);

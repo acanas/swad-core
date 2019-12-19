@@ -1971,7 +1971,14 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs,
      {
       /***** Get data of a course from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get data of a course",
-			  "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+			  "SELECT CrsCod,"		// row[0]
+			         "DegCod,"		// row[1]
+			         "Year,"		// row[2]
+			         "InsCrsCod,"		// row[3]
+			         "Status,"		// row[4]
+			         "RequesterUsrCod,"	// row[5]
+			         "ShortName,"		// row[6]
+			         "FullName"		// row[7]
 			  " FROM courses WHERE CrsCod=%ld",
 			  Crs->CrsCod)) // Course found...
 	{

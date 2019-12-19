@@ -473,7 +473,7 @@ static void Ban_ListBannersForEdition (void)
       Frm_StartForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit ();
       HTM_INPUT_URL ("WWW",Ban->WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -883,7 +883,7 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Banner WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_URL ("WWW",Ban_EditingBan->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

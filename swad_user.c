@@ -2700,6 +2700,8 @@ void Usr_WelcomeUsr (void)
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
+         /***** Games tool *****/
+         /*
          Ale_ShowAlert (Ale_INFO,
 			"Herramienta <a href=\"https://github.com/acanas/swad-core/wiki/ASSESSMENT.Games.es\" target=\"_blank\">"
 			"Evaluaci&oacute;n &gt; Juegos</a><br />"
@@ -2709,6 +2711,7 @@ void Usr_WelcomeUsr (void)
 			"<br />"
 			"<br />"
 	                "<img src=\"/img/juego.png\" alt=\"Juegos\" style=\"width:100%%\">");
+	 */
 
          /***** Institutional video *****/
          /*

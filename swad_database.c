@@ -427,12 +427,15 @@ mysql> DESCRIBE centres;
 | PlcCod           | int(11)       | NO   | MUL | -1      |                |
 | Status           | tinyint(4)    | NO   | MUL | 0       |                |
 | RequesterUsrCod  | int(11)       | NO   |     | -1      |                |
+| Latitude         | double        | NO   |     | 0       |                |
+| Longitude        | double        | NO   |     | 0       |                |
+| Altitude         | double        | NO   |     | 0       |                |
 | ShortName        | varchar(511)  | NO   |     | NULL    |                |
 | FullName         | varchar(2047) | NO   |     | NULL    |                |
 | WWW              | varchar(255)  | NO   |     | NULL    |                |
 | PhotoAttribution | text          | NO   |     | NULL    |                |
 +------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+12 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS centres ("
 			"CtrCod INT NOT NULL AUTO_INCREMENT,"
@@ -440,6 +443,9 @@ mysql> DESCRIBE centres;
 			"PlcCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
+			"Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
+			"Longitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
+			"Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
@@ -3347,7 +3353,7 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
 
 unsigned long DB_GetNumRowsTable (const char *Table)
   {
-   /***** Get total number of centres from database *****/
+   /***** Get total number of rows from database *****/
    return DB_QueryCOUNT ("can not get number of rows in table",
 			 "SELECT COUNT(*) FROM %s",
 			 Table);

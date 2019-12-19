@@ -89,7 +89,9 @@ static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
 static void Ctr_ConfigTitle (bool PutLink);
 static void Ctr_ConfigMap (void);
-static void Ctr_ConfigCoordinates (void);
+static void Ctr_ConfigLatitude (void);
+static void Ctr_ConfigLongitude (void);
+static void Ctr_ConfigAltitude (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
 static void Ctr_ConfigInstitution (bool PrintView);
 static void Ctr_ConfigFullName (bool PrintView);
@@ -113,6 +115,8 @@ static void Ctr_GetParamCtrOrder (void);
 static void Ctr_EditCentresInternal (void);
 static void Ctr_PutIconsEditingCentres (void);
 
+static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row);
+
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
 static void Ctr_ListCentresForEdition (void);
@@ -128,6 +132,8 @@ static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName);
+
+static void Ctr_UpdateCtrCoordinateDB (long CtrCod,const char *CoordField,double NewCoord);
 
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
@@ -344,7 +350,11 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** Coordinates *****/
    if (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      Ctr_ConfigCoordinates ();
+     {
+      Ctr_ConfigLatitude ();
+      Ctr_ConfigLongitude ();
+      Ctr_ConfigAltitude ();
+     }
 
    /***** Centre WWW *****/
    Ctr_ConfigWWW (PrintView);
@@ -474,9 +484,12 @@ static void Ctr_ConfigMap (void)
 
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
 
    /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
-   HTM_Txt ("\tvar mymap = L.map('centre_mapid').setView([37.19704, -3.62451], 16);\n");
+   HTM_TxtF ("\tvar mymap = L.map('centre_mapid').setView([%lg, %lg], 16);\n",
+	     Gbl.Hierarchy.Ctr.Coord.Latitude,
+	     Gbl.Hierarchy.Ctr.Coord.Longitude);
 
    /* Next we'll add a tile layer to add to our map,
       in this case it's a Mapbox Streets tile layer.
@@ -495,12 +508,15 @@ static void Ctr_ConfigMap (void)
             "}).addTo(mymap);\n");
 
    /* Marker */
-   HTM_Txt ("\tvar marker = L.marker([37.19684, -3.62436]).addTo(mymap);");
+   HTM_TxtF ("\tvar marker = L.marker([%lg, %lg]).addTo(mymap);",
+	     Gbl.Hierarchy.Ctr.Coord.Latitude,
+	     Gbl.Hierarchy.Ctr.Coord.Longitude);
 
    HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
 	     Gbl.Hierarchy.Ctr.ShrtName,
 	     Gbl.Hierarchy.Ins.ShrtName);
 
+   Str_SetDecimalPointToLocal ();	// Return to local system
    HTM_SCRIPT_End ();
   }
 
@@ -508,23 +524,84 @@ static void Ctr_ConfigMap (void)
 /************************** Edit centre coordinates **************************/
 /*****************************************************************************/
 
-static void Ctr_ConfigCoordinates (void)
+static void Ctr_ConfigLatitude (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Latitude;
 
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:","Latitud");	// TODO: Need translation!!!!
+   HTM_LABEL_Begin ("for=\"Latitude\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Latitude);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   /* Form to change centre latitude */
+   Frm_StartForm (ActChgCtrLatCfg);
+   HTM_INPUT_FLOAT ("Latitude",
+		    -90.0,	// South Pole
+		    90.0,	// North Pole
+		    0.0,	// step="any"
+		    Gbl.Hierarchy.Ctr.Coord.Latitude,false,
+		    "class=\"INPUT_COORD\" required=\"required\"");
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+static void Ctr_ConfigLongitude (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Longitude;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"Longitude\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Longitude);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   /* Form to change centre longitude */
+   Frm_StartForm (ActChgCtrLgtCfg);
+   HTM_INPUT_FLOAT ("Longitude",
+		    -180.0,	// West
+		    180.0,	// East
+		    0.0,	// step="any"
+		    Gbl.Hierarchy.Ctr.Coord.Longitude,false,
+		    "class=\"INPUT_COORD\" required=\"required\"");
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+static void Ctr_ConfigAltitude (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Altitude;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"Altitude\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Altitude);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
    /* Form to change centre WWW */
-   Frm_StartForm (ActChgCtrWWWCfg);
-   HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
-		  "class=\"INPUT_WWW\"");
+   Frm_StartForm (ActChgCtrAltCfg);
+   HTM_INPUT_FLOAT ("Altitude",
+		    -413.0,	// Dead Sea shore
+		    8848.0,	// Mount Everest
+		    0.0,	// step="any"
+		    Gbl.Hierarchy.Ctr.Coord.Altitude,false,
+		    "class=\"INPUT_COORD\" required=\"required\"");
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -811,7 +888,7 @@ static void Ctr_ConfigWWW (bool PrintView)
       /* Form to change centre WWW */
       Frm_StartForm (ActChgCtrWWWCfg);
       HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not change centre WWW
@@ -1290,17 +1367,36 @@ void Ctr_GetListCentres (long InsCod)
 
    /***** Get centres from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
-			     "(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
-			     "centres.Status,centres.RequesterUsrCod,"
-			     "centres.ShortName,centres.FullName,centres.WWW,"
-			     "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+			     "(SELECT centres.CtrCod,"			// row[ 0]
+			             "centres.InsCod,"			// row[ 1]
+			             "centres.PlcCod,"			// row[ 2]
+			             "centres.Status,"			// row[ 3]
+			             "centres.RequesterUsrCod,"		// row[ 4]
+			             "centres.Latitude,"		// row[ 5]
+			             "centres.Longitude,"		// row[ 6]
+			             "centres.Altitude,"		// row[ 7]
+			             "centres.ShortName,"		// row[ 8]
+			             "centres.FullName,"		// row[ 9]
+			             "centres.WWW,"			// row[10]
+			             "COUNT(DISTINCT usr_data.UsrCod)"
+			             " AS NumUsrs"			// row[11]
 			     " FROM centres,usr_data"
 			     " WHERE centres.InsCod=%ld"
 			     " AND centres.CtrCod=usr_data.CtrCod"
 			     " GROUP BY centres.CtrCod)"
 			     " UNION "
-			     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-			     "ShortName,FullName,WWW,0 AS NumUsrs"
+			     "(SELECT CtrCod,"				// row[ 0]
+			             "InsCod,"				// row[ 1]
+			             "PlcCod,"				// row[ 2]
+			             "Status,"				// row[ 3]
+			             "RequesterUsrCod,"			// row[ 4]
+			             "Latitude,"			// row[ 5]
+			             "Longitude,"			// row[ 6]
+			             "Altitude,"			// row[ 7]
+			             "ShortName,"			// row[ 8]
+			             "FullName,"			// row[ 9]
+			             "WWW,"				// row[10]
+			             "0 AS NumUsrs"			// row[11]
 			     " FROM centres"
 			     " WHERE centres.InsCod=%ld"
 			     " AND CtrCod NOT IN"
@@ -1316,7 +1412,8 @@ void Ctr_GetListCentres (long InsCod)
       Gbl.Hierarchy.Ins.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,sizeof (struct Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,
+								  sizeof (struct Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
@@ -1328,39 +1425,7 @@ void Ctr_GetListCentres (long InsCod)
 
          /* Get next centre */
          row = mysql_fetch_row (mysql_res);
-
-         /* Get centre code (row[0]) */
-         if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_ShowErrorAndExit ("Wrong code of centre.");
-
-         /* Get institution code (row[1]) */
-         Ctr->InsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-         /* Get place code (row[2]) */
-         Ctr->PlcCod = Str_ConvertStrCodToLongCod (row[2]);
-
-	 /* Get centre status (row[3]) */
-	 if (sscanf (row[3],"%u",&(Ctr->Status)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong centre status.");
-
-	 /* Get requester user's code (row[4]) */
-	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
-
-         /* Get the short name of the centre (row[5]) */
-         Str_Copy (Ctr->ShrtName,row[5],
-                   Hie_MAX_BYTES_SHRT_NAME);
-
-         /* Get the full name of the centre (row[6]) */
-         Str_Copy (Ctr->FullName,row[6],
-                   Hie_MAX_BYTES_FULL_NAME);
-
-         /* Get the URL of the centre (row[7]) */
-         Str_Copy (Ctr->WWW,row[7],
-                   Cns_MAX_BYTES_WWW);
-
-         /* Get number of users who claim to belong to this centre (row[8]) */
-         if (sscanf (row[8],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
-            Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
+         Ctr_GetDataOfCentreFromRow (Ctr,row);
 
          /* Get number of degrees in this centre */
          Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
@@ -1409,19 +1474,36 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
      {
       /***** Get data of a centre from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a centre",
-				"(SELECT centres.InsCod,centres.PlcCod,"
-				"centres.Status,centres.RequesterUsrCod,"
-				"centres.ShortName,centres.FullName,centres.WWW,"
-				"COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+				"(SELECT centres.CtrCod,"		// row[ 0]
+				        "centres.InsCod,"		// row[ 1]
+				        "centres.PlcCod,"		// row[ 2]
+				        "centres.Status,"		// row[ 3]
+				        "centres.RequesterUsrCod,"	// row[ 4]
+			                "centres.Latitude,"		// row[ 5]
+			                "centres.Longitude,"		// row[ 6]
+			                "centres.Altitude,"		// row[ 7]
+				        "centres.ShortName,"		// row[ 8]
+				        "centres.FullName,"		// row[ 9]
+				        "centres.WWW,"			// row[10]
+				        "COUNT(DISTINCT usr_data.UsrCod)"
+				        " AS NumUsrs"			// row[11]
 				" FROM centres,usr_data"
 				" WHERE centres.CtrCod=%ld"
 				" AND centres.CtrCod=usr_data.CtrCod"
 				" GROUP BY centres.CtrCod)"
 				" UNION "
-				"(SELECT InsCod,PlcCod,"
-				"Status,RequesterUsrCod,"
-				"ShortName,FullName,WWW,"
-				"0 AS NumUsrs"
+				"(SELECT CtrCod,"			// row[ 0]
+				        "InsCod,"			// row[ 1]
+				        "PlcCod,"			// row[ 2]
+				        "Status,"			// row[ 3]
+				        "RequesterUsrCod,"		// row[ 4]
+			                "Latitude,"			// row[ 5]
+			                "Longitude,"			// row[ 6]
+			                "Altitude,"			// row[ 7]
+				        "ShortName,"			// row[ 8]
+				        "FullName,"			// row[ 9]
+				        "WWW,"				// row[10]
+				        "0 AS NumUsrs"			// row[11]
 				" FROM centres"
 				" WHERE CtrCod=%ld"
 				" AND CtrCod NOT IN"
@@ -1432,35 +1514,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
-
-         /* Get the code of the institution (row[0]) */
-         Ctr->InsCod = Str_ConvertStrCodToLongCod (row[0]);
-
-         /* Get the code of the place (row[1]) */
-         Ctr->PlcCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	 /* Get centre status (row[2]) */
-	 if (sscanf (row[2],"%u",&(Ctr->Status)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong centre status.");
-
-	 /* Get requester user's code (row[3]) */
-	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
-
-         /* Get the short name of the centre (row[4]) */
-         Str_Copy (Ctr->ShrtName,row[4],
-                   Hie_MAX_BYTES_SHRT_NAME);
-
-         /* Get the full name of the centre (row[5]) */
-         Str_Copy (Ctr->FullName,row[5],
-                   Hie_MAX_BYTES_FULL_NAME);
-
-         /* Get the URL of the centre (row[6]) */
-         Str_Copy (Ctr->WWW,row[6],
-                   Cns_MAX_BYTES_WWW);
-
-         /* Get number of users who claim to belong to this centre (row[7]) */
-         if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
-            Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
+         Ctr_GetDataOfCentreFromRow (Ctr,row);
 
 	 /* Get extra data */
 	 if (GetExtraData == Ctr_GET_EXTRA_DATA)
@@ -1484,6 +1538,67 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
      }
 
    return CtrFound;
+  }
+
+/*****************************************************************************/
+/********** Get data of a centre from a row resulting of a query *************/
+/*****************************************************************************/
+
+static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row)
+  {
+   /***** Get centre code (row[0]) *****/
+   if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of centre.");
+
+   /***** Get institution code (row[1]) *****/
+   Ctr->InsCod = Str_ConvertStrCodToLongCod (row[1]);
+
+   /***** Get place code (row[2]) *****/
+   Ctr->PlcCod = Str_ConvertStrCodToLongCod (row[2]);
+
+   /***** Get centre status (row[3]) *****/
+   if (sscanf (row[3],"%u",&(Ctr->Status)) != 1)
+      Lay_ShowErrorAndExit ("Wrong centre status.");
+
+   /***** Get requester user's code (row[4]) *****/
+   Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
+
+   /***** Get latitude (row[5]) *****/
+   Ctr->Coord.Latitude = Str_GetDoubleFromStr (row[5]);
+   if (Ctr->Coord.Latitude < -90.0)
+      Ctr->Coord.Latitude = -90.0;	// South Pole
+   else if (Ctr->Coord.Latitude > 90.0)
+      Ctr->Coord.Latitude = 90.0;		// North Pole
+
+   /***** Get longitude (row[6]) *****/
+   Ctr->Coord.Longitude = Str_GetDoubleFromStr (row[6]);
+   if (Ctr->Coord.Longitude < -180.0)
+      Ctr->Coord.Longitude = -180.0;	// West
+   else if (Ctr->Coord.Longitude > 180.0)
+      Ctr->Coord.Longitude = 180.0;	// East
+
+   /***** Get altitude (row[7]) *****/
+   Ctr->Coord.Altitude = Str_GetDoubleFromStr (row[7]);
+   if (Ctr->Coord.Altitude < -413.0)
+      Ctr->Coord.Altitude = -413.0;	// Dead Sea shore
+   else if (Ctr->Coord.Altitude > 8848.0)
+      Ctr->Coord.Altitude = 8848.0;	// Mount Everest
+
+   /***** Get the short name of the centre (row[8]) *****/
+   Str_Copy (Ctr->ShrtName,row[8],
+	     Hie_MAX_BYTES_SHRT_NAME);
+
+   /***** Get the full name of the centre (row[9]) *****/
+   Str_Copy (Ctr->FullName,row[9],
+	     Hie_MAX_BYTES_FULL_NAME);
+
+   /***** Get the URL of the centre (row[10]) *****/
+   Str_Copy (Ctr->WWW,row[10],
+	     Cns_MAX_BYTES_WWW);
+
+   /***** Get number of users who claim to belong to this centre (row[11]) *****/
+   if (sscanf (row[11],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
+      Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
   }
 
 /*****************************************************************************/
@@ -1799,7 +1914,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Frm_StartForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 HTM_INPUT_URL ("WWW",Ctr->WWW,true,
-			"class=\"INPUT_WWW\"");
+			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	}
       else
@@ -2300,6 +2415,107 @@ static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *N
   }
 
 /*****************************************************************************/
+/********************** Change the latitude of a centre **********************/
+/*****************************************************************************/
+
+void Ctr_ChangeCtrLatitudeInConfig (void)
+  {
+   extern const char *Txt_The_new_latitude_is_X;
+   char LatitudeStr[64];
+   double NewLatitude;
+
+   /***** Get latitude *****/
+   Par_GetParToText ("Latitude",LatitudeStr,sizeof (LatitudeStr) - 1);
+   NewLatitude = Str_GetDoubleFromStr (LatitudeStr);
+   if (NewLatitude < -90.0)
+      NewLatitude = -90.0;	// South Pole
+   else if (NewLatitude > 90.0)
+      NewLatitude = 90.0;	// North Pole
+
+   /***** Update database changing old latitude by new latitude *****/
+   Ctr_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Latitude",NewLatitude);
+   Gbl.Hierarchy.Ctr.Coord.Latitude = NewLatitude;
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_latitude_is_X,NewLatitude);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/********************** Change the longitude of a centre **********************/
+/*****************************************************************************/
+
+void Ctr_ChangeCtrLongitudeInConfig (void)
+  {
+   extern const char *Txt_The_new_longitude_is_X;
+   char LongitudeStr[64];
+   double NewLongitude;
+
+   /***** Get longitude *****/
+   Par_GetParToText ("Longitude",LongitudeStr,sizeof (LongitudeStr) - 1);
+   NewLongitude = Str_GetDoubleFromStr (LongitudeStr);
+   if (NewLongitude < -180.0)
+      NewLongitude = -180.0;	// West
+   else if (NewLongitude > 180.0)
+      NewLongitude = 180.0;	// East
+
+   /***** Update database changing old longitude by new longitude *****/
+   Ctr_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Longitude",NewLongitude);
+   Gbl.Hierarchy.Ctr.Coord.Longitude = NewLongitude;
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_longitude_is_X,NewLongitude);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/********************** Change the latitude of a centre **********************/
+/*****************************************************************************/
+
+void Ctr_ChangeCtrAltitudeInConfig (void)
+  {
+   extern const char *Txt_The_new_altitude_is_X;
+   char AltitudeStr[64];
+   double NewAltitude;
+
+   /***** Get altitude *****/
+   Par_GetParToText ("Altitude",AltitudeStr,sizeof (AltitudeStr) - 1);
+   NewAltitude = Str_GetDoubleFromStr (AltitudeStr);
+   if (NewAltitude < -413.0)
+      NewAltitude = -413.0;	// Dead Sea shore
+   else if (NewAltitude > 8848.0)
+      NewAltitude = 8848.0;	// Mount Everest
+
+   /***** Update database changing old altitude by new altitude *****/
+   Ctr_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Altitude",NewAltitude);
+   Gbl.Hierarchy.Ctr.Coord.Altitude = NewAltitude;
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_altitude_is_X,NewAltitude);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/******** Update database changing old coordinate by new coordinate **********/
+/*****************************************************************************/
+
+static void Ctr_UpdateCtrCoordinateDB (long CtrCod,const char *CoordField,double NewCoord)
+  {
+   /***** Update database changing old coordinate by new coordinate *****/
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update a coordinate of a centre",
+		   "UPDATE centres SET %s='%lg' WHERE CtrCod=%ld",
+	           CoordField,NewCoord,CtrCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
 /************************* Change the URL of a centre ************************/
 /*****************************************************************************/
 
@@ -2755,7 +2971,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Centre WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of users who claim to belong to this centre *****/

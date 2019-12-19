@@ -3976,11 +3976,18 @@ a.PAG:hover, .PAG_CUR
 	{
 	width:180px;
 	}
-.INPUT_WWW
+.INPUT_WWW_NARROW
 	{
 	width:90px;
 	}
-
+.INPUT_WWW_WIDE
+	{
+	width:180px;
+	}
+.INPUT_COORD
+	{
+	width:180px;
+	}
 .INPUT_STATUS
 	{
 	width:80px;

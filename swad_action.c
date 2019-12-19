@@ -304,6 +304,9 @@ Centre:
 	176. ActRenCtrShoCfg		Change short name centre in centre configuration
 	177. ActRenCtrFulCfg		Change full name centre in centre configuration
 	178. ActChgCtrPlcCfg		Change place of centre in centre configuration
+	NEW. ActChgCtrLatCfg		Change latitude of centre in centre configuration
+	NEW. ActChgCtrLgtCfg		Change longitude of centre in centre configuration
+	NEW. ActChgCtrAltCfg		Change altitude of centre in centre configuration
 	179. ActChgCtrWWWCfg		Change web of centre in centre configuration
 	180. ActReqCtrLog		Show form to send the logo of the current centre
 	181. ActRecCtrLog		Receive and store the logo of the current centre
@@ -1835,6 +1838,9 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreShortInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreFullInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrPlcInConfig	,NULL},
+   [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrLatitudeInConfig	,NULL},
+   [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrLongitudeInConfig	,NULL},
+   [ActChgCtrAltCfg	] = {1817,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrAltitudeInConfig	,NULL},
    [ActChgCtrWWWCfg	] = {1596,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrWWWInConfig	,NULL},
    [ActReqCtrLog	] = {1244,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_RequestLogo		,NULL},
    [ActRecCtrLog	] = {1051,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
@@ -5049,6 +5055,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActSeeMyMchResMch,	// #1812
         ActSeeAllMchResMch,	// #1813
 	ActMchCntDwn,		// #1814
+	ActChgCtrLatCfg,	// #1815
+	ActChgCtrLgtCfg,	// #1816
+	ActChgCtrAltCfg,	// #1817
 	};
 
 /*****************************************************************************/

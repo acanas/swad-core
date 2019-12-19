@@ -461,7 +461,7 @@ static void Ins_Configuration (bool PrintView)
       /* Form to change institution WWW */
       Frm_StartForm (ActChgInsWWWCfg);
       HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,true,
-		     "class=\"INPUT_WWW\"");
+		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not change institution WWW
@@ -1513,7 +1513,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_StartForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 HTM_INPUT_URL ("WWW",Ins->WWW,true,
-			"class=\"INPUT_WWW\"");
+			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 	}
@@ -2216,7 +2216,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Institution WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,false,
-		  "class=\"INPUT_WWW\" required=\"required\"");
+		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of users who claim to belong to this institution ****/
