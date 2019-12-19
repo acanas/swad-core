@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.97.1 (2019-12-19)"
+#define Log_PLATFORM_VERSION	"SWAD 19.97.2 (2019-12-19)"
 #define CSS_FILE		"swad19.97.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -500,6 +500,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
+	Version 19.97.2:  Dec 19, 2019	Don't show centre map when coordinates are 0.
+				        Fixed bug in database installation, reported by José Luis Amador Moreno. (249809 lines)
 	Version 19.97.1:  Dec 19, 2019	Fix bug in assignments. (249804 lines)
 	Version 19.97:    Dec 19, 2019	Forms to edit centro latitude, longitude and altitude. (249807 lines)
 					3 changes necessary in database:

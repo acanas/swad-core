@@ -329,7 +329,10 @@ static void Ctr_Configuration (bool PrintView)
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
-   Ctr_ConfigMap ();
+   // Coordinates 0, 0 means not set ==> don't show map
+   if (Gbl.Hierarchy.Ctr.Coord.Latitude ||
+       Gbl.Hierarchy.Ctr.Coord.Longitude)
+      Ctr_ConfigMap ();
 
    /***** Centre photo *****/
    Ctr_ConfigPhoto (PrintView,PutLink);
