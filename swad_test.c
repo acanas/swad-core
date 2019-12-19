@@ -1505,7 +1505,6 @@ static long Tst_GetParamTagCode (void)
 
 void Tst_RenameTag (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_tag_X_empty;
    extern const char *Txt_The_tag_X_has_been_renamed_as_Y;
    extern const char *Txt_The_tag_X_has_not_changed;
    char OldTagTxt[Tst_MAX_BYTES_TAG + 1];
@@ -1519,10 +1518,7 @@ void Tst_RenameTag (void)
    Par_GetParToText ("NewTagTxt",NewTagTxt,Tst_MAX_BYTES_TAG);
 
    /***** Check that the new tag is not empty *****/
-   if (!NewTagTxt[0])	// New tag empty
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
-                     OldTagTxt);
-   else			// New tag not empty
+   if (NewTagTxt[0])	// New tag not empty
      {
       /***** Check if the old tag is equal to the new one *****/
       if (!strcmp (OldTagTxt,NewTagTxt))	// The old and the new tag
@@ -1613,6 +1609,8 @@ void Tst_RenameTag (void)
 		        OldTagTxt,NewTagTxt);
 	}
      }
+   else			// New tag empty
+      Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Show again the form to configure test *****/
    Tst_ShowFormConfig ();

@@ -666,7 +666,6 @@ void Plc_RenamePlaceFull (void)
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty;
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_place_X_has_not_changed;
@@ -704,11 +703,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/
-   if (!NewPlcName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_place_X_empty,
-                       CurrentPlcName);
-   else
+   if (NewPlcName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -735,6 +730,8 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
                           Txt_The_name_of_the_place_X_has_not_changed,
                           CurrentPlcName);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update place name *****/
    Str_Copy (CurrentPlcName,NewPlcName,

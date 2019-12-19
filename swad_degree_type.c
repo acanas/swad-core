@@ -923,7 +923,6 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
 
 void DT_RenameDegreeType (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty;
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
@@ -944,11 +943,7 @@ void DT_RenameDegreeType (void)
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    /***** Check if new name is empty *****/
-   if (!NewNameDegTyp[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty,
-                       DT_EditingDegTyp->DegTypName);
-   else
+   if (NewNameDegTyp[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -980,6 +975,8 @@ void DT_RenameDegreeType (void)
                           Txt_The_name_of_the_type_of_degree_X_has_not_changed,
                           NewNameDegTyp);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Set degree type name *****/
    Str_Copy (DT_EditingDegTyp->DegTypName,NewNameDegTyp,

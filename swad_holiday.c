@@ -875,7 +875,6 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 
 void Hld_RenameHoliday (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
@@ -895,11 +894,7 @@ void Hld_RenameHoliday (void)
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Check if new name is empty *****/
-   if (!NewHldName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
-                       Hld_EditingHld->Name);
-   else
+   if (NewHldName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -923,6 +918,8 @@ void Hld_RenameHoliday (void)
                           Txt_The_name_of_the_holiday_X_has_not_changed,
                           Hld_EditingHld->Name);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
 /*****************************************************************************/

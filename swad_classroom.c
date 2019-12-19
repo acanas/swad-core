@@ -640,7 +640,6 @@ void Cla_RenameClassroomFull (void)
 
 static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_classroom_X_empty;
    extern const char *Txt_The_classroom_X_already_exists;
    extern const char *Txt_The_classroom_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_classroom_X_has_not_changed;
@@ -678,11 +677,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
    Cla_GetDataOfClassroomByCod (Cla_EditingCla);
 
    /***** Check if new name is empty *****/
-   if (!NewClaName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
-                       CurrentClaName);
-   else
+   if (NewClaName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -709,6 +704,8 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
                           Txt_The_name_of_the_classroom_X_has_not_changed,
                           CurrentClaName);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update classroom name *****/
    Str_Copy (CurrentClaName,NewClaName,

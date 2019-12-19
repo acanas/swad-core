@@ -536,7 +536,6 @@ void Plg_RemovePlugin (void)
 
 void Plg_RenamePlugin (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_plugin_X_empty;
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
@@ -557,11 +556,7 @@ void Plg_RenamePlugin (void)
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new name is empty *****/
-   if (!NewPlgName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
-                       Plg_EditingPlg->Name);
-   else
+   if (NewPlgName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -590,6 +585,8 @@ void Plg_RenamePlugin (void)
                           Txt_The_name_of_the_plugin_X_has_not_changed,
                           Plg_EditingPlg->Name);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
    Str_Copy (Plg_EditingPlg->Name,NewPlgName,
@@ -617,7 +614,6 @@ static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
 void Plg_ChangePlgDescription (void)
   {
    extern const char *Txt_The_new_description_is_X;
-   extern const char *Txt_You_can_not_leave_the_description_empty;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
 
    /***** Plugin constructor *****/
@@ -648,8 +644,7 @@ void Plg_ChangePlgDescription (void)
                        NewDescription);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_description_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update description *****/
    Str_Copy (Plg_EditingPlg->Description,NewDescription,
@@ -663,7 +658,6 @@ void Plg_ChangePlgDescription (void)
 void Plg_ChangePlgLogo (void)
   {
    extern const char *Txt_The_new_logo_is_X;
-   extern const char *Txt_You_can_not_leave_the_logo_empty;
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
 
    /***** Plugin constructor *****/
@@ -694,8 +688,7 @@ void Plg_ChangePlgLogo (void)
                        NewLogo);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_logo_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update logo *****/
    Str_Copy (Plg_EditingPlg->Logo,NewLogo,
@@ -709,7 +702,6 @@ void Plg_ChangePlgLogo (void)
 void Plg_ChangePlgAppKey (void)
   {
    extern const char *Txt_The_new_logo_is_X;			// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   extern const char *Txt_You_can_not_leave_the_logo_empty;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
    /***** Plugin constructor *****/
@@ -740,8 +732,7 @@ void Plg_ChangePlgAppKey (void)
                        NewAppKey);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update app key *****/
    Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
@@ -755,7 +746,6 @@ void Plg_ChangePlgAppKey (void)
 void Plg_ChangePlgURL (void)
   {
    extern const char *Txt_The_new_URL_is_X;
-   extern const char *Txt_You_can_not_leave_the_URL_empty;
    char NewURL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Plugin constructor *****/
@@ -786,8 +776,7 @@ void Plg_ChangePlgURL (void)
                        NewURL);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_URL_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update URL *****/
    Str_Copy (Plg_EditingPlg->URL,NewURL,
@@ -801,7 +790,6 @@ void Plg_ChangePlgURL (void)
 void Plg_ChangePlgIP (void)
   {
    extern const char *Txt_The_new_IP_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_IP_address_empty;
    char NewIP[Cns_MAX_BYTES_IP + 1];
 
    /***** Plugin constructor *****/
@@ -832,8 +820,7 @@ void Plg_ChangePlgIP (void)
                        NewIP);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_IP_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update IP *****/
    Str_Copy (Plg_EditingPlg->IP,NewIP,

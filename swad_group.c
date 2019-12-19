@@ -4644,7 +4644,7 @@ unsigned Grp_ConvertToNumMaxStdsGrp (const char *StrMaxStudents)
 
 void Grp_RenameGroupType (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty;
+   extern const char *Txt_You_can_not_leave_the_field_empty;
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_group_X_has_not_changed;
@@ -4664,14 +4664,7 @@ void Grp_RenameGroupType (void)
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if new name is empty *****/
-   if (!NewNameGrpTyp[0])
-     {
-      AlertType = Ale_WARNING;
-      snprintf (AlertTxt,sizeof (AlertTxt),
-	        Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty,
-                Gbl.Crs.Grps.GrpTyp.GrpTypName);
-     }
-   else
+   if (NewNameGrpTyp[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -4709,6 +4702,12 @@ void Grp_RenameGroupType (void)
                    NewNameGrpTyp);
         }
      }
+   else
+     {
+      AlertType = Ale_WARNING;
+      Str_Copy (AlertTxt,Txt_You_can_not_leave_the_field_empty,
+		sizeof (AlertTxt) - 1);
+     }
 
    /***** Show the form again *****/
    Str_Copy (Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
@@ -4723,7 +4722,7 @@ void Grp_RenameGroupType (void)
 
 void Grp_RenameGroup (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_group_X_empty;
+   extern const char *Txt_You_can_not_leave_the_field_empty;
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_group_X_has_not_changed;
@@ -4748,9 +4747,8 @@ void Grp_RenameGroup (void)
    if (!NewNameGrp[0])
      {
       AlertType = Ale_WARNING;
-      snprintf (AlertTxt,sizeof (AlertTxt),
-	        Txt_You_can_not_leave_the_name_of_the_group_X_empty,
-                GrpDat.GrpName);
+      Str_Copy (AlertTxt,Txt_You_can_not_leave_the_field_empty,
+		sizeof (AlertTxt) - 1);
      }
    else
      {

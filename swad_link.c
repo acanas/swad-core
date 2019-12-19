@@ -550,7 +550,6 @@ void Lnk_RenameLinkFull (void)
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty;
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_link_X_has_not_changed;
@@ -588,11 +587,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
 
    /***** Check if new name is empty *****/
-   if (!NewLnkName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_link_X_empty,
-                       CurrentLnkName);
-   else
+   if (NewLnkName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -619,6 +614,8 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
                           Txt_The_name_of_the_link_X_has_not_changed,
                           CurrentLnkName);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
    Str_Copy (CurrentLnkName,NewLnkName,
@@ -658,7 +655,6 @@ static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *N
 void Lnk_ChangeLinkWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Link constructor *****/
@@ -689,8 +685,7 @@ void Lnk_ChangeLinkWWW (void)
                        NewWWW);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
    Str_Copy (Lnk_EditingLnk->WWW,NewWWW,

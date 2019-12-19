@@ -715,7 +715,6 @@ void Dpt_RenameDepartFull (void)
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_department_X_empty;
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_department_X_has_not_changed;
@@ -752,11 +751,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Check if new name is empty *****/
-   if (!NewDptName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_department_X_empty,
-                       CurrentDptName);
-   else
+   if (NewDptName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -783,6 +778,8 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
                           Txt_The_name_of_the_department_X_has_not_changed,
                           CurrentDptName);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
    Str_Copy (CurrentDptName,NewDptName,
@@ -822,7 +819,6 @@ static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *N
 void Dpt_ChangeDptWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Department constructor *****/
@@ -852,8 +848,7 @@ void Dpt_ChangeDptWWW (void)
                        NewWWW);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
    Str_Copy (Dpt_EditingDpt->WWW,NewWWW,

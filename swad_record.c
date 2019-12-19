@@ -754,7 +754,6 @@ void Rec_RemoveField (void)
 
 void Rec_RenameField (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_field_X_empty;
    extern const char *Txt_The_record_field_X_already_exists;
    extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_field_X_has_not_changed;
@@ -775,10 +774,7 @@ void Rec_RenameField (void)
                       &Gbl.Crs.Records.Field.Visibility);
 
    /***** Check if new name is empty *****/
-   if (!NewFieldName[0])
-      Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_leave_the_name_of_the_field_X_empty,
-                     Gbl.Crs.Records.Field.Name);
-   else
+   if (NewFieldName[0])
      {
       /***** Check if the name of the olde field match the new one
              (this happens when return is pressed without changes) *****/
@@ -805,6 +801,8 @@ void Rec_RenameField (void)
          Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_field_X_has_not_changed,
                         NewFieldName);
      }
+   else
+      Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Show the form again *****/
    Str_Copy (Gbl.Crs.Records.Field.Name,NewFieldName,

@@ -84,5 +84,7 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 
 void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void);
 void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
+void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void);
+void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void);
 
 #endif

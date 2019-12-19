@@ -479,3 +479,25 @@ void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
 
    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
+
+/*****************************************************************************/
+/**************** Create alert when a form field is empty ********************/
+/*****************************************************************************/
+
+void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void)
+  {
+   extern const char *Txt_You_can_not_leave_the_field_empty;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,Txt_You_can_not_leave_the_field_empty);
+  }
+
+/*****************************************************************************/
+/**************** Create alert when a form field is empty ********************/
+/*****************************************************************************/
+
+void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void)
+  {
+   extern const char *Txt_You_can_not_leave_the_field_empty;
+
+   Ale_ShowAlert (Ale_WARNING,NULL,Txt_You_can_not_leave_the_field_empty);
+  }

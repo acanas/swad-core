@@ -1779,7 +1779,6 @@ void Cty_RemoveCountry (void)
 
 void Cty_RenameCountry (void)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_country_X_empty;
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -1804,11 +1803,7 @@ void Cty_RenameCountry (void)
    Cty_GetDataOfCountryByCod (Cty_EditingCty,Cty_GET_EXTRA_DATA);
 
    /***** Check if new name is empty *****/
-   if (!NewCtyName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_country_X_empty,
-	               Cty_EditingCty->Name[Language]);
-   else
+   if (NewCtyName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
@@ -1842,6 +1837,8 @@ void Cty_RenameCountry (void)
 	                  Txt_The_name_of_the_country_X_has_not_changed,
 		          Cty_EditingCty->Name[Language]);
      }
+   else
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
 /*****************************************************************************/

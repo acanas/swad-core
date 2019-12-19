@@ -621,7 +621,6 @@ void Ban_RenameBannerFull (void)
 
 static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_banner_X_empty;
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_banner_X_has_not_changed;
@@ -660,9 +659,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Check if new name is empty *****/
    if (!NewBanName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_banner_X_empty,
-                       CurrentBanName);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
    else
      {
       /***** Check if old and new names are the same
@@ -776,7 +773,6 @@ void Ban_ChangeBannerImg (void)
 void Ban_ChangeBannerWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Banner constructor *****/
@@ -807,8 +803,7 @@ void Ban_ChangeBannerWWW (void)
                        NewWWW);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
    Str_Copy (Ban_EditingBan->WWW,NewWWW,

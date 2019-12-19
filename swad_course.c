@@ -2594,7 +2594,6 @@ void Crs_RenameCourseFullInConfig (void)
 
 static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty;
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
@@ -2630,11 +2629,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    if (Crs_CheckIfICanEdit (Crs))
      {
       /***** Check if new name is empty *****/
-      if (!NewCrsName[0])
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-		          Txt_You_can_not_leave_the_name_of_the_course_X_empty,
-                          CurrentCrsName);
-      else
+      if (NewCrsName[0])
         {
          /***** Check if old and new names are the same
                 (this happens when return is pressed without changes) *****/
@@ -2666,6 +2661,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
 		             Txt_The_name_of_the_course_X_has_not_changed,
                              CurrentCrsName);
         }
+      else
+         Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
      }
    else
       Lay_NoPermissionExit ();

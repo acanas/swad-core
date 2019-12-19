@@ -2332,7 +2332,6 @@ void Ctr_RenameCentreFullInConfig (void)
 
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty;
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_centre_X_has_not_changed;
@@ -2367,9 +2366,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
-                       CurrentCtrName);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
    else
      {
       /***** Check if old and new names are the same
@@ -2537,7 +2534,6 @@ static void Ctr_UpdateCtrCoordinateDB (long CtrCod,const char *CoordField,double
 void Ctr_ChangeCtrWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Centre constructor *****/
@@ -2567,14 +2563,12 @@ void Ctr_ChangeCtrWWW (void)
 		       NewWWW);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
 void Ctr_ChangeCtrWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
@@ -2594,7 +2588,7 @@ void Ctr_ChangeCtrWWWInConfig (void)
 		     NewWWW);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
