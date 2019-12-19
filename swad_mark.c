@@ -706,7 +706,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
-   char PathMarks[PATH_MAX + 1];
+   char PathMarks[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + 3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + PATH_MAX + 1];
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    size_t SizeOfMyMarks;

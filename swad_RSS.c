@@ -60,7 +60,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs);
 void RSS_UpdateRSSFileForACrs (struct Course *Crs)
   {
    char PathRelPublRSSDir[PATH_MAX + 1];
-   char PathRelPublRSSFile[PATH_MAX + 1];
+   char PathRelPublRSSFile[PATH_MAX + 1 + NAME_MAX + 1];
    FILE *FileRSS;
    char RSSLink[Cns_MAX_BYTES_WWW + 1];
    struct tm *tm;

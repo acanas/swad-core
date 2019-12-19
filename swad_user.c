@@ -9193,7 +9193,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 /********** Build the relative path of a user from his user's code ***********/
 /*****************************************************************************/
 
-void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
+void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1])
   {
    char PathAboveUsr[PATH_MAX + 1];
 
@@ -9207,7 +9207,7 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   snprintf (PathUsr,PATH_MAX + 1,
+   snprintf (PathUsr,PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1,
 	     "%s/%ld",
 	     PathAboveUsr,UsrCod);
   }

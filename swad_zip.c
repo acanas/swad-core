@@ -256,7 +256,7 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    char FullNameAndUsrID[NAME_MAX + 1];
    char PathFolderUsrInsideCrs[128 + PATH_MAX + NAME_MAX];
    char LinkTmpUsr[PATH_MAX + 1];
-   char Link[PATH_MAX + 1];
+   char Link[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned NumTry;
    bool Success;
 

@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
-static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
@@ -343,7 +343,7 @@ void Acc_ShowFormCreateMyAccount (void)
 /************ Show form to create a new account using parameters *************/
 /*****************************************************************************/
 
-static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
@@ -632,7 +632,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
 

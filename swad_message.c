@@ -1592,42 +1592,54 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char *SubQuery;
    unsigned NumMsgs;
 
    /***** Get number of unread messages from database *****/
    if (FilterCrsCod >= 0)	// If origin course selected
      {
       if (FilterFromToSubquery[0])
-         sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
-                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
-                           " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                           " AND msg_snt.CrsCod=%ld"
-                           " AND msg_snt.UsrCod=usr_data.UsrCod%s",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  FilterCrsCod,
-                  FilterFromToSubquery);
+	{
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
+				 " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
+				 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				 " AND msg_snt.CrsCod=%ld"
+				 " AND msg_snt.UsrCod=usr_data.UsrCod%s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			FilterCrsCod,
+			FilterFromToSubquery) < 0)
+            Lay_NotEnoughMemoryExit ();
+	}
       else
-         sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt"
-                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
-                           " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                           " AND msg_snt.CrsCod=%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  FilterCrsCod);
+        {
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt"
+				 " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
+				 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				 " AND msg_snt.CrsCod=%ld",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			FilterCrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+        }
      }
    else	// If no origin course selected
      {
       if (FilterFromToSubquery[0])
-         sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
-                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
-                           " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                           " AND msg_snt.UsrCod=usr_data.UsrCod%s",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  FilterFromToSubquery);
+	{
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
+				 " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
+				 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				 " AND msg_snt.UsrCod=usr_data.UsrCod%s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			FilterFromToSubquery) < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       else
-         sprintf (SubQuery,"SELECT MsgCod FROM msg_rcv"
-                           " WHERE UsrCod=%ld AND Open='N'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
+	{
+         if (asprintf (&SubQuery,"SELECT MsgCod FROM msg_rcv"
+			         " WHERE UsrCod=%ld AND Open='N'",
+		        Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
      }
 
    if (Gbl.Msg.FilterContent[0])
@@ -1643,6 +1655,8 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
       (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
 				"SELECT COUNT(*) FROM (%s) AS T",
 				SubQuery);
+
+   free (SubQuery);
 
    return NumMsgs;
   }

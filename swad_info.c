@@ -724,7 +724,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
@@ -758,7 +758,7 @@ static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
 static bool Inf_CheckAndShowPage (void)
   {
    char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
    char URL[PATH_MAX + 1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
@@ -821,7 +821,7 @@ static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[
 int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
   {
    char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
    FILE *FileHTML;
    bool FileExists = false;
    size_t Length;
@@ -2249,10 +2249,10 @@ void Inf_ReceivePagInfo (void)
    struct Param *Param;
    char SourceFileName[PATH_MAX + 1];
    char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
    char PathRelFileZIP[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char StrUnzip[128 + PATH_MAX * 2 + 1];
+   char StrUnzip[128 + PATH_MAX + 1 + NAME_MAX + 1 + PATH_MAX + 1];
    bool WrongType = false;
    bool FileIsOK = false;
 

@@ -5078,7 +5078,7 @@ void Brw_CreateDirDownloadTmp (void)
    static unsigned NumDir = 0;	// When this function is called several times in the same execution of the program, each time a new directory is created
 				// This happens when the trees of assignments and works of several users are being listed
    char PathUniqueDirL[PATH_MAX + 1];
-   char PathUniqueDirR[PATH_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1 + NAME_MAX + 1];
 
    /* Example: /var/www/html/swad/tmp/SS/ujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
@@ -8689,8 +8689,8 @@ void Brw_RenFolderFileBrowser (void)
    extern const char *Txt_You_can_not_rename_this_folder;
    char OldPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
    char NewPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
-   char OldPath[PATH_MAX + 1 + PATH_MAX + 1];
-   char NewPath[PATH_MAX + 1 + PATH_MAX + 1];
+   char OldPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
+   char NewPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8852,7 +8852,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    char SrcFileName[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
-   char PathTmp[PATH_MAX + 1];
+   char PathTmp[PATH_MAX + 1 + PATH_MAX + 4 + 1];
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool AdminMarks;
@@ -9044,7 +9044,7 @@ void Brw_RecLinkFileBrowser (void)
    char FileName[NAME_MAX + 1];
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    FILE *FileURL;
-   char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 4 + 1];
    long FilCod = -1L;	// Code of new file in database
    char FileNameToShow[NAME_MAX + 1];
    struct FileMetadata FileMetadata;

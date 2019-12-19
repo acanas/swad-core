@@ -1587,7 +1587,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    char PathRelAvgPhoto[PATH_MAX + 1];
    char FileNamePhotoNames[PATH_MAX + 1];
    FILE *FilePhotoNames = NULL;	// Initialized to avoid warning
-   char StrCallToProgram[256];	// Call to photo processing program
+   char StrCallToProgram[3 * (PATH_MAX + 1)];	// Call to photo processing program
    int ReturnCode;
    /* To compute execution time of this function */
    struct timeval tvStartComputingStat;

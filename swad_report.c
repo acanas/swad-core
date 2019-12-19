@@ -66,10 +66,8 @@
 
 struct Rep_CurrentTimeUTC
   {
-   char StrDate[10 + 1];	// Example: 2016-10-02
-				//          1234567890
-   char StrTime[8 + 1];		// Example: 19:03:49
-				//          12345678
+   char StrDate[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 2016-10-02
+   char StrTime[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 19:03:49
    unsigned Date;		// Example: 20161002
    unsigned Time;		// Example: 190349
   };
@@ -374,8 +372,8 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
 static void Rep_CreateNewReportFile (struct Rep_Report *Report)
   {
    char PathUniqueDirL[PATH_MAX + 1];
-   char PathUniqueDirR[PATH_MAX + 1];
-   char PathFileReport[PATH_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char PathFileReport[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + NAME_MAX + 1];
    char Permalink[128 +
 		  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 		  NAME_MAX];

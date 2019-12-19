@@ -120,7 +120,7 @@ struct Media
   };
 
 /***** Parameters used in a form to upload an image/video *****/
-#define Med_MAX_BYTES_PARAM_UPLOAD_MEDIA (16 - 1)
+#define Med_MAX_BYTES_PARAM_UPLOAD_MEDIA (32 - 1)
 struct ParamUploadMedia
   {
    char Action  [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];

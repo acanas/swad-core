@@ -1553,7 +1553,7 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUM
                                                long ExaCod,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
-   char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 6) + 1];
+   char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 7) + 1];
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Initializations *****/
