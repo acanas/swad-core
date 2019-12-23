@@ -467,7 +467,7 @@ static void Ins_Configuration (bool PrintView)
    else	// I can not change institution WWW
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\">",
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
 	           Gbl.Hierarchy.Ins.WWW);
       HTM_Txt (Gbl.Hierarchy.Ins.WWW);
       HTM_A_End ();
@@ -1635,6 +1635,15 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt)
 	 return Ins_STATUS_BIT_REMOVED;
      }
    return (Ins_Status_t) 0;
+  }
+
+/*****************************************************************************/
+/************* Write parameter with code of current institution **************/
+/*****************************************************************************/
+
+void Ins_PutParamCurrentInsCod (void)
+  {
+   Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

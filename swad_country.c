@@ -64,6 +64,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static struct Country *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
+long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/

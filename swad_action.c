@@ -5389,11 +5389,11 @@ void Act_AdjustCurrentAction (void)
 	Gbl.Usrs.Me.UsrDat.InsCod < 0             ||
        (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
                                 Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
-        {
-	 Gbl.Action.Act = ActReqEdiRecSha;
-	 Tab_SetCurrentTab ();
-	 return;
-        }
+     {
+      Gbl.Action.Act = ActReqEdiRecSha;
+      Tab_SetCurrentTab ();
+      return;
+     }
 
    /***** Adjustment 5:
           -------------
@@ -5403,11 +5403,11 @@ void Act_AdjustCurrentAction (void)
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
-        {
-	 Gbl.Action.Act = ActReqEdiSet;
-	 Tab_SetCurrentTab ();
-	 return;
-        }
+     {
+      Gbl.Action.Act = ActReqEdiSet;
+      Tab_SetCurrentTab ();
+      return;
+     }
 
    /***** If I belong to current course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)

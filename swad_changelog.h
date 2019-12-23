@@ -492,16 +492,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.97.4 (2019-12-20)"
+#define Log_PLATFORM_VERSION	"SWAD 19.97.6 (2019-12-23)"
 #define CSS_FILE		"swad19.97.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
-// TODO: Sin identificar, pulsando en CENTRO > Información > Lugares/sedes NO deberíamos ir a Países.
-// TODO: Icono de eliminar escudo de un centro --> ponerlo sólo en la esquina, contextual. Comprobar lo mismo con icono de titulación y de institución.
 
+	Version 19.97.6:  Dec 23, 2019	Changes in forms to remove logos. (249199 lines)
+	Version 19.97.5:  Dec 20, 2019	Fixed bug in places. (249180 lines)
 	Version 19.97.4:  Dec 20, 2019	Optimization on alerts related with empty form fields. (249171 lines)
 	Version 19.97.3:  Dec 19, 2019	In list of centres, show link to map. (249847 lines)
 	Version 19.97.2:  Dec 19, 2019	Don't show centre map when coordinates are 0.

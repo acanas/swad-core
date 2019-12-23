@@ -64,6 +64,11 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Lgo_PutIconToRemoveLogoIns (void);
+static void Lgo_PutIconToRemoveLogoCtr (void);
+static void Lgo_PutIconToRemoveLogoDeg (void);
+static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
+
 /*****************************************************************************/
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
@@ -250,14 +255,13 @@ void Lgo_PutIconToChangeLogo (Hie_Level_t Scope)
 void Lgo_RequestLogo (Hie_Level_t Scope)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Remove_logo;
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
    long Cod;
    const char *Folder;
    Act_Action_t ActionRec;
-   Act_Action_t ActionRem;
+   void (*FunctionToDrawContextualIcons) (void);
    char PathLogo[PATH_MAX + 1];
 
    /***** Set action depending on scope *****/
@@ -267,19 +271,19 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 	 Cod = Gbl.Hierarchy.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 ActionRec = ActRecInsLog;
-	 ActionRem = ActRemInsLog;
+	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoIns;
 	 break;
       case Hie_CTR:
 	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 ActionRec = ActRecCtrLog;
-	 ActionRem = ActRemCtrLog;
+	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoCtr;
 	 break;
       case Hie_DEG:
 	 Cod = Gbl.Hierarchy.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 ActionRec = ActRecDegLog;
-	 ActionRem = ActRemDegLog;
+	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoDeg;
 	 break;
       default:
 	 return;	// Nothing to do
@@ -292,22 +296,15 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 	     (unsigned) (Cod % 100),
 	     (unsigned) Cod,
 	     (unsigned) Cod);
-   if (Fil_CheckIfPathExists (PathLogo))
-     {
-      /***** Form to remove photo *****/
-      HTM_DIV_Begin ("class=\"CM\"");
-      Lay_PutContextualLinkIconText (ActionRem,NULL,NULL,
-				     "trash.svg",
-				     Txt_Remove_logo);
-      HTM_DIV_End ();
-     }
+   if (!Fil_CheckIfPathExists (PathLogo))
+      FunctionToDrawContextualIcons = NULL;
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Logo,FunctionToDrawContextualIcons,
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Begin form to upload logo *****/
    Frm_StartForm (ActionRec);
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Logo,NULL,
-                 NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
@@ -319,11 +316,40 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",true,NULL);
    HTM_LABEL_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
-
    /***** End form *****/
    Frm_EndForm ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************** Put a link to request the removal of the logo ****************/
+/*****************************************************************************/
+
+static void Lgo_PutIconToRemoveLogoIns (void)
+  {
+   Lgo_PutIconToRemoveLogo (ActRemInsLog);
+  }
+
+static void Lgo_PutIconToRemoveLogoCtr (void)
+  {
+   Lgo_PutIconToRemoveLogo (ActRemCtrLog);
+  }
+
+static void Lgo_PutIconToRemoveLogoDeg (void)
+  {
+   Lgo_PutIconToRemoveLogo (ActRemDegLog);
+  }
+
+static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
+  {
+   extern const char *Txt_Remove_logo;
+
+   /***** Link to request the removal of the logo *****/
+   Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,NULL,
+				  "trash.svg",
+				  Txt_Remove_logo);
   }
 
 /*****************************************************************************/
