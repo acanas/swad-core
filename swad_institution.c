@@ -71,6 +71,20 @@ static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the inst
 
 static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconsToPrintAndUpload (void);
+static void Ins_ConfigTitle (bool PutLink);
+static bool Ins_GetIfMapIsAvailable (void);
+static void Ins_ConfigMap (void);
+static void Ins_ConfigCountry (bool PrintView);
+static void Ins_ConfigFullName (bool PrintView);
+static void Ins_ConfigShrtName (bool PrintView);
+static void Ins_ConfigWWW (bool PrintView);
+static void Ins_ConfigShortcut (void);
+static void Ins_ConfigQR (void);
+static void Ins_ConfigNumUsrs (void);
+static void Ins_ConfigNumCtrs (void);
+static void Ins_ConfigNumDegs (void);
+static void Ins_ConfigNumCrss (void);
+static void Ins_ConfigNumDpts (void);
 static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role);
 
 static void Ins_ListInstitutions (void);
@@ -304,22 +318,7 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *Hlp_INSTITUTION_Information;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Web;
-   extern const char *Txt_Shortcut;
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_QR_code;
-   extern const char *Txt_Centres;
-   extern const char *Txt_Centres_of_INSTITUTION_X;
-   extern const char *Txt_Degrees;
-   extern const char *Txt_Courses;
-   extern const char *Txt_Departments;
-   extern const char *Txt_Users_of_the_institution;
-   unsigned NumCty;
-   bool PutLink;
+   bool PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
@@ -334,10 +333,85 @@ static void Ins_Configuration (bool PrintView)
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
+   Ins_ConfigTitle (PutLink);
+
+   /***** Institution map *****/
+   if (Ins_GetIfMapIsAvailable ())
+      Ins_ConfigMap ();
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWidePadding (2);
+
+   /***** Country *****/
+   Ins_ConfigCountry (PrintView);
+
+   /***** Institution name *****/
+   Ins_ConfigFullName (PrintView);
+   Ins_ConfigShrtName (PrintView);
+
+   /***** Institution WWW *****/
+   Ins_ConfigWWW (PrintView);
+
+   /***** Shortcut to the institution *****/
+   Ins_ConfigShortcut ();
+
+   if (PrintView)
+      /***** QR code with link to the institution *****/
+      Ins_ConfigQR ();
+   else
+     {
+      /***** Number of users who claim to belong to this institution,
+             number of centres,
+             number of degrees,
+             number of courses,
+             number of departments *****/
+      Ins_ConfigNumUsrs ();
+      Ins_ConfigNumCtrs ();
+      Ins_ConfigNumDegs ();
+      Ins_ConfigNumCrss ();
+      Ins_ConfigNumDpts ();
+
+      /***** Number of users in courses of this institution *****/
+      Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********* Put contextual icons in configuration of an institution ***********/
+/*****************************************************************************/
+
+static void Ins_PutIconsToPrintAndUpload (void)
+  {
+   /***** Icon to print info about institution *****/
+   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
+
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      /***** Icon to upload logo of institution *****/
+      Lgo_PutIconToChangeLogo (Hie_INS);
+
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
+  }
+
+/*****************************************************************************/
+/***************** Show title in institution configuration *******************/
+/*****************************************************************************/
+
+static void Ins_ConfigTitle (bool PutLink)
+  {
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
 	           Gbl.Hierarchy.Ins.WWW,
 	           Gbl.Hierarchy.Ins.FullName);
    Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
@@ -347,15 +421,100 @@ static void Ins_Configuration (bool PrintView)
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
+  }
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+/*****************************************************************************/
+/******************** Check if centre map should be shown ********************/
+/*****************************************************************************/
 
-   /***** Country *****/
+// TODO: Change code!!!!
+
+static bool Ins_GetIfMapIsAvailable (void)
+  {
+   /***** Coordinates 0, 0 means not set ==> don't show map *****/
+   return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
+                  Gbl.Hierarchy.Ctr.Coord.Longitude);
+  }
+
+/*****************************************************************************/
+/****************************** Draw centre map ******************************/
+/*****************************************************************************/
+
+// TODO: Change code!!!!
+
+static void Ins_ConfigMap (void)
+  {
+   /* https://leafletjs.com/examples/quick-start/ */
+   /***** Leaflet CSS *****/
+   HTM_Txt ("<link rel=\"stylesheet\""
+	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
+	    " integrity=\"sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==\""
+	    " crossorigin=\"\" />");
+
+   /***** Leaflet script *****/
+   /* Put this AFTER Leaflet's CSS */
+   HTM_Txt ("<script src=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.js\""
+	    " integrity=\"sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==\""
+	    " crossorigin=\"\">"
+	    "</script>");
+
+   /***** Container for the map *****/
+   HTM_DIV_Begin ("id=\"centre_mapid\"");
+   HTM_DIV_End ();
+
+   /***** Script to draw the map *****/
+   HTM_SCRIPT_Begin (NULL,NULL);
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+
+   /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
+   HTM_TxtF ("\tvar mymap = L.map('centre_mapid').setView([%lg, %lg], 16);\n",
+	     Gbl.Hierarchy.Ctr.Coord.Latitude,
+	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+
+   /* Next we'll add a tile layer to add to our map,
+      in this case it's a Mapbox Streets tile layer.
+      Creating a tile layer usually involves
+      setting the URL template for the tile images,
+      the attribution text and the maximum zoom level of the layer.
+      In this example we'll use the mapbox/streets-v11 tiles
+      from Mapbox's Static Tiles API
+      (in order to use tiles from Mapbox,
+      you must also request an access token).*/
+   HTM_Txt ("\tL.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
+            "attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery &copy; <a href=\"https://www.mapbox.com/\">Mapbox</a>',"
+            "maxZoom: 20,"
+            "id: 'mapbox/streets-v11',"
+            "accessToken: 'pk.eyJ1IjoiYWNhbmFzIiwiYSI6ImNrNGFoNXFxOTAzdHozcnA4d3Y0M3BwOGkifQ.uSg754Lv2iZEJg0W2pjiOQ'"
+            "}).addTo(mymap);\n");
+
+   /* Marker */
+   HTM_TxtF ("\tvar marker = L.marker([%lg, %lg]).addTo(mymap);",
+	     Gbl.Hierarchy.Ctr.Coord.Latitude,
+	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+
+   HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
+	     Gbl.Hierarchy.Ctr.ShrtName,
+	     Gbl.Hierarchy.Ins.ShrtName);
+
+   Str_SetDecimalPointToLocal ();	// Return to local system
+   HTM_SCRIPT_End ();
+  }
+
+/*****************************************************************************/
+/***************** Show country in institution configuration *****************/
+/*****************************************************************************/
+
+static void Ins_ConfigCountry (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Country;
+   unsigned NumCty;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -390,8 +549,17 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Institution full name *****/
+/*****************************************************************************/
+/********* Show institution full name in institution configuration ***********/
+/*****************************************************************************/
+
+static void Ins_ConfigFullName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Institution;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
@@ -416,8 +584,17 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Institution short name *****/
+/*****************************************************************************/
+/********* Show institution short name in institution configuration **********/
+/*****************************************************************************/
+
+static void Ins_ConfigShrtName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Short_name;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
@@ -442,8 +619,17 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Institution WWW *****/
+/*****************************************************************************/
+/************ Show institution WWW in institution configuration **************/
+/*****************************************************************************/
+
+static void Ins_ConfigWWW (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Web;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
@@ -476,8 +662,18 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Shortcut to the institution *****/
+/*****************************************************************************/
+/********** Show institution shortcut in institution configuration ***********/
+/*****************************************************************************/
+
+static void Ins_ConfigShortcut (void)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Shortcut;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -497,126 +693,149 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
-
-   if (PrintView)
-     {
-      /***** QR code with link to the institution *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_QR_code);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LM\"");
-      QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-   else
-     {
-      /***** Number of users who claim to belong to this institution *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Users_of_the_institution);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-      HTM_TR_Begin (NULL);
-
-      /***** Number of centres *****/
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Centres);
-      HTM_TD_End ();
-
-      /* Form to go to see centres of this institution */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormGoTo (ActSeeCtr);
-      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-		Txt_Centres_of_INSTITUTION_X,
-		Gbl.Hierarchy.Ins.ShrtName);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-      HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of degrees *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Degrees);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of courses *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Courses);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of departments *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Departments);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Number of users in courses of this institution *****/
-      Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
-/********* Put contextual icons in configuration of an institution ***********/
+/************* Show institution QR in institution configuration **************/
 /*****************************************************************************/
 
-static void Ins_PutIconsToPrintAndUpload (void)
+static void Ins_ConfigQR (void)
   {
-   /***** Icon to print info about institution *****/
-   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_QR_code;
 
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      /***** Icon to upload logo of institution *****/
-      Lgo_PutIconToChangeLogo (Hie_INS);
+   HTM_TR_Begin (NULL);
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_QR_code);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/** Show number of users who claim to belong to instit. in instit. config. ***/
+/*****************************************************************************/
+
+static void Ins_ConfigNumUsrs (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Users_of_the_institution;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Users_of_the_institution);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*********** Show number of centres in institution configuration *************/
+/*****************************************************************************/
+
+static void Ins_ConfigNumCtrs (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Centres);
+   HTM_TD_End ();
+
+   /* Form to go to see centres of this institution */
+   HTM_TD_Begin ("class=\"LM\"");
+   Frm_StartFormGoTo (ActSeeCtr);
+   Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Centres_of_INSTITUTION_X,
+	     Gbl.Hierarchy.Ins.ShrtName);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+   HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*********** Show number of degrees in institution configuration *************/
+/*****************************************************************************/
+
+static void Ins_ConfigNumDegs (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Degrees;
+
+   /***** Number of degrees *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Degrees);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************ Show number of courses in institution configuration ************/
+/*****************************************************************************/
+
+static void Ins_ConfigNumCrss (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Courses;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Courses);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********** Show number of departments in institution configuration **********/
+/*****************************************************************************/
+
+static void Ins_ConfigNumDpts (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Departments;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Departments);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

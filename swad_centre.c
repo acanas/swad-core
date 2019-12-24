@@ -88,6 +88,7 @@ static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
 static void Ctr_ConfigTitle (bool PutLink);
+static bool Ctr_GetIfMapIsAvailable (void);
 static void Ctr_ConfigMap (void);
 static void Ctr_ConfigLatitude (void);
 static void Ctr_ConfigLongitude (void);
@@ -95,7 +96,7 @@ static void Ctr_ConfigAltitude (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
 static void Ctr_ConfigInstitution (bool PrintView);
 static void Ctr_ConfigFullName (bool PrintView);
-static void Ctr_ConfigShortName (bool PrintView);
+static void Ctr_ConfigShrtName (bool PrintView);
 static void Ctr_ConfigPlace (bool PrintView);
 static void Ctr_ConfigWWW (bool PrintView);
 static void Ctr_ConfigShortcut (void);
@@ -329,9 +330,7 @@ static void Ctr_Configuration (bool PrintView)
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
-   // Coordinates 0, 0 means not set ==> don't show map
-   if (Gbl.Hierarchy.Ctr.Coord.Latitude ||
-       Gbl.Hierarchy.Ctr.Coord.Longitude)
+   if (Ctr_GetIfMapIsAvailable ())
       Ctr_ConfigMap ();
 
    /***** Centre photo *****/
@@ -345,7 +344,7 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** Centre name *****/
    Ctr_ConfigFullName (PrintView);
-   Ctr_ConfigShortName (PrintView);
+   Ctr_ConfigShrtName (PrintView);
 
    /***** Place *****/
    Ctr_ConfigPlace (PrintView);
@@ -458,6 +457,17 @@ static void Ctr_ConfigTitle (bool PutLink)
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************** Check if centre map should be shown ********************/
+/*****************************************************************************/
+
+static bool Ctr_GetIfMapIsAvailable (void)
+  {
+   /***** Coordinates 0, 0 means not set ==> don't show map *****/
+   return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
+                  Gbl.Hierarchy.Ctr.Coord.Longitude);
   }
 
 /*****************************************************************************/
@@ -701,7 +711,8 @@ static void Ctr_ConfigInstitution (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Institution);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -777,7 +788,7 @@ static void Ctr_ConfigFullName (bool PrintView)
 /************** Show centre short name in centre configuration ***************/
 /*****************************************************************************/
 
-static void Ctr_ConfigShortName (bool PrintView)
+static void Ctr_ConfigShrtName (bool PrintView)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Short_name;
