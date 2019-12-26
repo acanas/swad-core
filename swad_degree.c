@@ -395,18 +395,12 @@ static void Deg_ConfigTitle (bool PutLink)
 
 static void Deg_ConfigCentre (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Centre;
    unsigned NumCtr;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Centre);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("OthCtrCod",Txt_Centre);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -447,16 +441,11 @@ static void Deg_ConfigCentre (bool PrintView)
 
 static void Deg_ConfigFullName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Degree;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Degree);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("FullName",Txt_Degree);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -483,16 +472,11 @@ static void Deg_ConfigFullName (bool PrintView)
 
 static void Deg_ConfigShrtName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Short_name);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -519,17 +503,11 @@ static void Deg_ConfigShrtName (bool PrintView)
 
 static void Deg_ConfigWWW (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Web;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Web);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("WWW",Txt_Web);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (!PrintView &&
@@ -540,7 +518,7 @@ static void Deg_ConfigWWW (bool PrintView)
       /* Form to change degree WWW */
       Frm_StartForm (ActChgDegWWWCfg);
       HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
-		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
+		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not change degree WWW
@@ -564,14 +542,11 @@ static void Deg_ConfigWWW (bool PrintView)
 static void Deg_ConfigShortcut (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Shortcut;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Shortcut);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Shortcut);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_A_Begin ("href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\"",
@@ -594,14 +569,11 @@ static void Deg_ConfigShortcut (void)
 
 static void Deg_ConfigQR (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_QR_code;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_QR_code);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_QR_code);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
@@ -616,15 +588,12 @@ static void Deg_ConfigQR (void)
 
 static void Deg_ConfigNumCrss (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Courses);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Courses);
 
    /* Form to go to see courses of this degree */
    HTM_TD_Begin ("class=\"LM\"");
@@ -648,16 +617,13 @@ static void Deg_ConfigNumCrss (void)
 
 static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
-		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
+		                           Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));

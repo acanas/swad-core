@@ -502,18 +502,12 @@ static void Ins_ConfigMap (void)
 
 static void Ins_ConfigCountry (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Country;
    unsigned NumCty;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Country);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("OthCtyCod",Txt_Country);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (!PrintView &&
@@ -553,16 +547,11 @@ static void Ins_ConfigCountry (bool PrintView)
 
 static void Ins_ConfigFullName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Institution;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Institution);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("FullName",Txt_Institution);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -588,16 +577,11 @@ static void Ins_ConfigFullName (bool PrintView)
 
 static void Ins_ConfigShrtName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Short_name);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -623,17 +607,11 @@ static void Ins_ConfigShrtName (bool PrintView)
 
 static void Ins_ConfigWWW (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Web;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Web);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("WWW",Txt_Web);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (!PrintView &&
@@ -644,7 +622,7 @@ static void Ins_ConfigWWW (bool PrintView)
       /* Form to change institution WWW */
       Frm_StartForm (ActChgInsWWWCfg);
       HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,true,
-		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
+		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not change institution WWW
@@ -668,14 +646,11 @@ static void Ins_ConfigWWW (bool PrintView)
 static void Ins_ConfigShortcut (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Shortcut;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Shortcut);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Shortcut);
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_A_Begin ("href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\"",
@@ -698,14 +673,11 @@ static void Ins_ConfigShortcut (void)
 
 static void Ins_ConfigQR (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_QR_code;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_QR_code);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_QR_code);
 
    HTM_TD_Begin ("class=\"LM\"");
    QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
@@ -720,14 +692,11 @@ static void Ins_ConfigQR (void)
 
 static void Ins_ConfigNumUsrs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_institution;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Users_of_the_institution);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Users_of_the_institution);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
@@ -742,15 +711,12 @@ static void Ins_ConfigNumUsrs (void)
 
 static void Ins_ConfigNumCtrs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Centres);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Centres);
 
    /* Form to go to see centres of this institution */
    HTM_TD_Begin ("class=\"LM\"");
@@ -774,15 +740,12 @@ static void Ins_ConfigNumCtrs (void)
 
 static void Ins_ConfigNumDegs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Degrees);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Degrees);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
@@ -797,14 +760,11 @@ static void Ins_ConfigNumDegs (void)
 
 static void Ins_ConfigNumCrss (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Courses);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Courses);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
@@ -819,14 +779,11 @@ static void Ins_ConfigNumCrss (void)
 
 static void Ins_ConfigNumDpts (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Departments;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Departments);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Departments);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
@@ -841,16 +798,13 @@ static void Ins_ConfigNumDpts (void)
 
 static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
-		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
+		                           Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));

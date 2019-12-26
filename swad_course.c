@@ -288,18 +288,12 @@ static void Crs_ConfigTitle (bool PutLink)
 
 static void Crs_ConfigDegree (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Degree);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("OthDegCod",Txt_Degree);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
 
@@ -342,17 +336,11 @@ static void Crs_ConfigDegree (bool PrintView)
 
 static void Crs_ConfigFullName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Course;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Course);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("FullName",Txt_Course);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -379,18 +367,12 @@ static void Crs_ConfigFullName (bool PrintView)
 
 static void Crs_ConfigShrtName (bool PrintView)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    /***** Course short name *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Short_name);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
@@ -417,7 +399,6 @@ static void Crs_ConfigShrtName (bool PrintView)
 
 static void Crs_ConfigYear (bool IsForm)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Not_applicable;
@@ -425,11 +406,7 @@ static void Crs_ConfigYear (bool IsForm)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthCrsYear\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Year_OF_A_DEGREE);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("OthCrsYear",Txt_Year_OF_A_DEGREE);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (IsForm)
@@ -460,17 +437,11 @@ static void Crs_ConfigYear (bool IsForm)
 
 static void Crs_ConfigInstitutionalCode (bool IsForm)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Institutional_code;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Institutional_code);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Hie_ConfigLabel ("InsCrsCod",Txt_Institutional_code);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (IsForm)
@@ -495,14 +466,11 @@ static void Crs_ConfigInstitutionalCode (bool IsForm)
 
 static void Crs_ConfigInternalCode (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Internal_code;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Internal_code);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Internal_code);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
@@ -518,14 +486,11 @@ static void Crs_ConfigInternalCode (void)
 static void Crs_ConfigShortcut (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Shortcut;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Shortcut);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Shortcut);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_A_Begin ("href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\"",
@@ -548,14 +513,11 @@ static void Crs_ConfigShortcut (void)
 
 static void Crs_ConfigQR (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_QR_code;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_QR_code);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_QR_code);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
@@ -570,14 +532,11 @@ static void Crs_ConfigQR (void)
 
 static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
@@ -592,7 +551,6 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
 static void Crs_ConfigIndicators (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs Indicators;
@@ -602,9 +560,7 @@ static void Crs_ConfigIndicators (void)
 				     NumIndicatorsFromDB,&Indicators);
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Indicators);
-   HTM_TD_End ();
+   Hie_ConfigLabel (NULL,Txt_Indicators);
 
    HTM_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActReqStaCrs);

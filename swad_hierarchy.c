@@ -86,6 +86,26 @@ void Hie_ConfigTitle (bool PutLink,
   }
 
 /*****************************************************************************/
+/****************** Show label column in configuration ***********************/
+/*****************************************************************************/
+
+void Hie_ConfigLabel (const char *Id,const char *Label)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+
+   HTM_TD_Begin ("class=\"RM\"");
+   if (Id)
+      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+		       Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+   else
+      HTM_LABEL_Begin ("class=\"%s\"",
+		       The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Label);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
 /*****************************************************************************/
 
