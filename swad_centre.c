@@ -445,19 +445,13 @@ static void Ctr_PutIconToChangePhoto (void)
 
 static void Ctr_ConfigTitle (bool PutLink)
   {
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Ctr.WWW,
-	           Gbl.Hierarchy.Ctr.FullName);
-   Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
-		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
+   Hie_ConfigTitle (PutLink,
+		    Hie_CTR,				// Logo scope
+		    Gbl.Hierarchy.Ctr.CtrCod,		// Logo code
+                    Gbl.Hierarchy.Ctr.ShrtName,		// Logo short name
+		    Gbl.Hierarchy.Ctr.FullName,		// Logo full name
+		    Gbl.Hierarchy.Ctr.WWW,		// Logo www
+		    Gbl.Hierarchy.Ctr.FullName);	// Text full name
   }
 
 /*****************************************************************************/

@@ -61,6 +61,31 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/************************ Show title in configuration ************************/
+/*****************************************************************************/
+
+void Hie_ConfigTitle (bool PutLink,
+		      Hie_Level_t LogoScope,
+		      long LogoCod,
+                      char LogoShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		      char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
+		      char LogoWWW[Cns_MAX_BYTES_WWW + 1],
+		      char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1])
+  {
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
+   if (PutLink)
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           LogoWWW,LogoFullName);
+   Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL,true);
+   HTM_BR ();
+   HTM_Txt (TextFullName);
+   if (PutLink)
+      HTM_A_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
 /*****************************************************************************/
 

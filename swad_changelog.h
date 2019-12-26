@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.97.8 (2019-12-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.97.9 (2019-12-26)"
 #define CSS_FILE		"swad19.97.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -501,6 +501,7 @@ ps2pdf source.ps destination.pdf
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
 	Version 19.98:    Dec 26, 2019	Map in institution information. (? lines)
+	Version 19.97.9:  Dec 26, 2019	Code refactoring in course information. (249557 lines)
 	Version 19.97.8:  Dec 26, 2019	Code refactoring in degree information. (249458 lines)
 	Version 19.97.7:  Dec 24, 2019	Code refactoring in institution information. (249383 lines)
 	Version 19.97.6:  Dec 23, 2019	Changes in forms to remove logos. (249199 lines)

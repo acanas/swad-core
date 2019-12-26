@@ -81,7 +81,17 @@ static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the cour
 
 static void Crs_Configuration (bool PrintView);
 static void Crs_PutIconToPrint (void);
+static void Crs_ConfigTitle (bool PutLink);
+static void Crs_ConfigDegree (bool PrintView);
+static void Crs_ConfigFullName (bool PrintView);
+static void Crs_ConfigShrtName (bool PrintView);
+static void Crs_ConfigYear (bool IsForm);
+static void Crs_ConfigInstitutionalCode (bool IsForm);
+static void Crs_ConfigInternalCode (void);
+static void Crs_ConfigShortcut (void);
+static void Crs_ConfigQR (void);
 static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role);
+static void Crs_ConfigIndicators (void);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
@@ -172,26 +182,8 @@ void Crs_PrintConfiguration (void)
 static void Crs_Configuration (bool PrintView)
   {
    extern const char *Hlp_COURSE_Information;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_Not_applicable;
-   extern const char *Txt_Institutional_code;
-   extern const char *Txt_Internal_code;
-   extern const char *Txt_Shortcut;
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_QR_code;
-   extern const char *Txt_Indicators;
-   extern const char *Txt_of_PART_OF_A_TOTAL;
-   unsigned NumDeg;
-   unsigned Year;
-   int NumIndicatorsFromDB;
-   struct Ind_IndicatorsCrs Indicators;
-   bool IsForm;
    bool PutLink;
+   bool IsForm;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
@@ -217,28 +209,94 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Deg.WWW,
-	           Gbl.Hierarchy.Deg.FullName);
-   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
-                 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
-   HTM_DIV_End ();
+   Crs_ConfigTitle (PutLink);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
+   Crs_ConfigDegree (PrintView);
+
+   /***** Course name *****/
+   Crs_ConfigFullName (PrintView);
+   Crs_ConfigShrtName (PrintView);
+
+   /***** Course year *****/
+   IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
+   Crs_ConfigYear (IsForm);
+
+   if (!PrintView)
+     {
+      /***** Institutional code of the course *****/
+      Crs_ConfigInstitutionalCode (IsForm);
+
+      /***** Internal code of the course *****/
+      Crs_ConfigInternalCode ();
+     }
+
+   /***** Shortcut to the couse *****/
+   Crs_ConfigShortcut ();
+
+   if (PrintView)
+      /***** QR code with link to the course *****/
+      Crs_ConfigQR ();
+   else
+     {
+      /***** Number of users *****/
+      Crs_ShowNumUsrsInCrs (Rol_TCH);
+      Crs_ShowNumUsrsInCrs (Rol_NET);
+      Crs_ShowNumUsrsInCrs (Rol_STD);
+
+      /***** Indicators *****/
+      Crs_ConfigIndicators ();
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************* Put icon to print the configuration of a course ***************/
+/*****************************************************************************/
+
+static void Crs_PutIconToPrint (void)
+  {
+   Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL);
+  }
+
+/*****************************************************************************/
+/******************** Show title in course configuration *********************/
+/*****************************************************************************/
+
+static void Crs_ConfigTitle (bool PutLink)
+  {
+   Hie_ConfigTitle (PutLink,
+		    Hie_DEG,				// Logo scope
+		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
+                    Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
+		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
+		    Gbl.Hierarchy.Deg.WWW,		// Logo www
+		    Gbl.Hierarchy.Crs.FullName);	// Text full name
+  }
+
+/*****************************************************************************/
+/******************** Show degree in course configuration ********************/
+/*****************************************************************************/
+
+static void Crs_ConfigDegree (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Degree;
+   unsigned NumDeg;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -247,7 +305,8 @@ static void Crs_Configuration (bool PrintView)
 
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admin can move a course to another degree
+      // Only centre admins, institution admins and system admin
+      // can move a course to another degree
      {
       /* Get list of degrees of the current centre */
       Deg_GetListDegsOfCurrentCtr ();
@@ -275,12 +334,22 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Course full name *****/
+/*****************************************************************************/
+/************** Show course full name in course configuration ****************/
+/*****************************************************************************/
+
+static void Crs_ConfigFullName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Course;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -288,7 +357,8 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins can edit course full name
+      // Only degree admins, centre admins, institution admins and system admins
+      // can edit course full name
      {
       /* Form to change course full name */
       Frm_StartForm (ActRenCrsFulCfg);
@@ -301,12 +371,23 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show course short name in course configuration ***************/
+/*****************************************************************************/
+
+static void Crs_ConfigShrtName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Short_name;
 
    /***** Course short name *****/
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -314,7 +395,8 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins can edit course short name
+      // Only degree admins, centre admins, institution admins and system admins
+      // can edit course short name
      {
       /* Form to change course short name */
       Frm_StartForm (ActRenCrsShoCfg);
@@ -327,9 +409,20 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   /***** Course year *****/
-   IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
+/*****************************************************************************/
+/***************** Show course year in course configuration ******************/
+/*****************************************************************************/
+
+static void Crs_ConfigYear (bool IsForm)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Year_OF_A_DEGREE;
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_Not_applicable;
+   unsigned Year;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
@@ -359,49 +452,75 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
 
-   if (!PrintView)
+/*****************************************************************************/
+/************* Show institutional code in course configuration ***************/
+/*****************************************************************************/
+
+static void Crs_ConfigInstitutionalCode (bool IsForm)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Institutional_code;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Institutional_code);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (IsForm)
      {
-      /***** Institutional code of the course *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"RM\"");
-      HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Institutional_code);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (IsForm)
-	{
-         Frm_StartForm (ActChgInsCrsCodCfg);
-	 HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			 Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
-			 "id=\"InsCrsCod\" size=\"%u\"",
-			 Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
-         Frm_EndForm ();
-	}
-      else
-         HTM_Txt (Gbl.Hierarchy.Crs.InstitutionalCrsCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Internal code of the course *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Internal_code);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
+      Frm_StartForm (ActChgInsCrsCodCfg);
+      HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+		      Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
+		      "id=\"InsCrsCod\" size=\"%u\"",
+		      Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
+      Frm_EndForm ();
      }
+   else
+      HTM_Txt (Gbl.Hierarchy.Crs.InstitutionalCrsCod);
+   HTM_TD_End ();
 
-   /***** Link to the course *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/**************** Show internal code in course configuration *****************/
+/*****************************************************************************/
+
+static void Crs_ConfigInternalCode (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Internal_code;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Internal_code);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************** Show course shortcut in course configuration ****************/
+/*****************************************************************************/
+
+static void Crs_ConfigShortcut (void)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Shortcut;
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -421,75 +540,32 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TR_End ();
-
-   if (PrintView)
-     {
-      /***** QR code with link to the course *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_QR_code);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-   else
-     {
-      /***** Number of users *****/
-      Crs_ShowNumUsrsInCrs (Rol_TCH);
-      Crs_ShowNumUsrsInCrs (Rol_NET);
-      Crs_ShowNumUsrsInCrs (Rol_STD);
-
-      /***** Indicators *****/
-      NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
-      Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
-                                        NumIndicatorsFromDB,&Indicators);
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Indicators);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartForm (ActReqStaCrs);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s %u",
-                Indicators.NumIndicators,
-		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-      HTM_TxtF ("%s&nbsp;",Gbl.Title);
-      Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
-        	                                                      "exclamation-triangle.svg",
-		   Gbl.Title,"ICO16x16");
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
-/************* Put icon to print the configuration of a course ***************/
+/****************** Show course QR in course configuration *******************/
 /*****************************************************************************/
 
-static void Crs_PutIconToPrint (void)
+static void Crs_ConfigQR (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL);
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_QR_code;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_QR_code);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
-/**************** Number of users in courses of this country *****************/
+/*********************** Number of users in this course **********************/
 /*****************************************************************************/
 
 static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
@@ -505,6 +581,44 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****************** Show indicators in course configuration ******************/
+/*****************************************************************************/
+
+static void Crs_ConfigIndicators (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Indicators;
+   extern const char *Txt_of_PART_OF_A_TOTAL;
+   struct Ind_IndicatorsCrs Indicators;
+   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
+
+   Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
+				     NumIndicatorsFromDB,&Indicators);
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Indicators);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   Frm_StartForm (ActReqStaCrs);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     "%u %s %u",
+	     Indicators.NumIndicators,
+	     Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+   HTM_TxtF ("%s&nbsp;",Gbl.Title);
+   Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
+								   "exclamation-triangle.svg",
+		Gbl.Title,"ICO16x16");
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
    HTM_TD_End ();
 
    HTM_TR_End ();

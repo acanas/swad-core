@@ -410,19 +410,13 @@ static void Ins_PutIconsToPrintAndUpload (void)
 
 static void Ins_ConfigTitle (bool PutLink)
   {
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Ins.WWW,
-	           Gbl.Hierarchy.Ins.FullName);
-   Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
-		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Ins.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
+   Hie_ConfigTitle (PutLink,
+		    Hie_INS,				// Logo scope
+		    Gbl.Hierarchy.Ins.InsCod,		// Logo code
+                    Gbl.Hierarchy.Ins.ShrtName,		// Logo short name
+		    Gbl.Hierarchy.Ins.FullName,		// Logo full name
+		    Gbl.Hierarchy.Ins.WWW,		// Logo www
+		    Gbl.Hierarchy.Ins.FullName);	// Text full name
   }
 
 /*****************************************************************************/

@@ -380,19 +380,13 @@ static void Deg_PutIconsToPrintAndUpload (void)
 
 static void Deg_ConfigTitle (bool PutLink)
   {
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-		   " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Deg.WWW,
-	           Gbl.Hierarchy.Deg.FullName);
-   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
-		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
+   Hie_ConfigTitle (PutLink,
+		    Hie_DEG,				// Logo scope
+		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
+                    Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
+		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
+		    Gbl.Hierarchy.Deg.WWW,		// Logo www
+		    Gbl.Hierarchy.Deg.FullName);	// Text full name
   }
 
 /*****************************************************************************/

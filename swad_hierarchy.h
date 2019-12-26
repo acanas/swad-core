@@ -58,6 +58,14 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Hie_ConfigTitle (bool PutLink,
+		      Hie_Level_t LogoScope,
+		      long LogoCod,
+                      char LogoShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		      char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
+		      char LogoWWW[Cns_MAX_BYTES_WWW + 1],
+		      char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1]);
+
 void Hie_SeePending (void);
 
 void Hie_WriteMenuHierarchy (void);
