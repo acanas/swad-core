@@ -85,8 +85,8 @@ static void Crs_ConfigTitle (bool PutLink);
 static void Crs_ConfigDegree (bool PrintView);
 static void Crs_ConfigFullName (bool PutForm);
 static void Crs_ConfigShrtName (bool PutForm);
-static void Crs_ConfigYear (bool IsForm);
-static void Crs_ConfigInstitutionalCode (bool IsForm);
+static void Crs_ConfigYear (bool PutForm);
+static void Crs_ConfigInstitutionalCode (bool PutForm);
 static void Crs_ConfigInternalCode (void);
 static void Crs_ConfigShortcut (void);
 static void Crs_ConfigQR (void);
@@ -184,7 +184,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
    bool PutFormName;
-   bool IsForm;
+   bool PutFormYear;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
@@ -193,6 +193,7 @@ static void Crs_Configuration (bool PrintView)
    /***** Initializations *****/
    PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
    PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutFormYear = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
 
    /***** Contextual menu *****/
    if (!PrintView)
@@ -226,13 +227,12 @@ static void Crs_Configuration (bool PrintView)
    Crs_ConfigShrtName (PutFormName);
 
    /***** Course year *****/
-   IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-   Crs_ConfigYear (IsForm);
+   Crs_ConfigYear (PutFormYear);
 
    if (!PrintView)
      {
       /***** Institutional code of the course *****/
-      Crs_ConfigInstitutionalCode (IsForm);
+      Crs_ConfigInstitutionalCode (PutFormYear);
 
       /***** Internal code of the course *****/
       Crs_ConfigInternalCode ();
@@ -352,17 +352,14 @@ static void Crs_ConfigFullName (bool PutForm)
 
 static void Crs_ConfigShrtName (bool PutForm)
   {
-   extern const char *Txt_Short_name;
-
-   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenCrsShoCfg,
-		       Gbl.Hierarchy.Crs.ShrtName);
+   Hie_ConfigShrtName (PutForm,ActRenCrsShoCfg,Gbl.Hierarchy.Crs.ShrtName);
   }
 
 /*****************************************************************************/
 /***************** Show course year in course configuration ******************/
 /*****************************************************************************/
 
-static void Crs_ConfigYear (bool IsForm)
+static void Crs_ConfigYear (bool PutForm)
   {
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -374,7 +371,7 @@ static void Crs_ConfigYear (bool IsForm)
    Hie_ConfigLabel ("OthCrsYear",Txt_Year_OF_A_DEGREE);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   if (IsForm)
+   if (PutForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
       HTM_SELECT_Begin (true,
@@ -400,7 +397,7 @@ static void Crs_ConfigYear (bool IsForm)
 /************* Show institutional code in course configuration ***************/
 /*****************************************************************************/
 
-static void Crs_ConfigInstitutionalCode (bool IsForm)
+static void Crs_ConfigInstitutionalCode (bool PutForm)
   {
    extern const char *Txt_Institutional_code;
 
@@ -409,7 +406,7 @@ static void Crs_ConfigInstitutionalCode (bool IsForm)
    Hie_ConfigLabel ("InsCrsCod",Txt_Institutional_code);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   if (IsForm)
+   if (PutForm)
      {
       Frm_StartForm (ActChgInsCrsCodCfg);
       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
@@ -450,26 +447,7 @@ static void Crs_ConfigInternalCode (void)
 
 static void Crs_ConfigShortcut (void)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Shortcut;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_Shortcut);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\"",
-                Cfg_URL_SWAD_CGI,
-                Lan_STR_LANG_ID[Gbl.Prefs.Language],
-                Gbl.Hierarchy.Crs.CrsCod);
-   HTM_TxtF ("%s/%s?crs=%ld",
-             Cfg_URL_SWAD_CGI,
-             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-             Gbl.Hierarchy.Crs.CrsCod);
-   HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShortcut ("crs",Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

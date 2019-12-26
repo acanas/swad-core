@@ -136,12 +136,14 @@ void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 /********* Show institution short name in institution configuration **********/
 /*****************************************************************************/
 
-void Hie_ConfigShrtName (bool PutForm,const char *Label,Act_Action_t NextAction,
+void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
 			 const char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
+   extern const char *Txt_Short_name;
+
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("ShortName",Label);
+   Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (PutForm)
@@ -191,6 +193,34 @@ void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
       HTM_A_End ();
       HTM_DIV_End ();
      }
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********************** Show shortcut in configuration ***********************/
+/*****************************************************************************/
+
+void Hie_ConfigShortcut (const char *ParamName,long HieCod)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Shortcut;
+
+   HTM_TR_Begin (NULL);
+
+   Hie_ConfigLabel (NULL,Txt_Shortcut);
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+                Cfg_URL_SWAD_CGI,
+                Lan_STR_LANG_ID[Gbl.Prefs.Language],
+                ParamName,HieCod);
+   HTM_TxtF ("%s/%s?%s=%ld",
+             Cfg_URL_SWAD_CGI,
+             Lan_STR_LANG_ID[Gbl.Prefs.Language],
+             ParamName,HieCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

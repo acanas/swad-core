@@ -492,8 +492,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.97.12 (2019-12-26)"
-#define CSS_FILE		"swad19.97.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.97.13 (2019-12-26)"
+#define CSS_FILE		"swad19.97.13.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
@@ -502,7 +502,8 @@ ps2pdf source.ps destination.pdf
 
 	Version 19.99:    Dec 26, 2019	Map in country information. (? lines)
 	Version 19.98:    Dec 26, 2019	Map in institution information. (? lines)
-	Version 19.97.13: Dec 26, 2019	Code refactoring in country information. (? lines)
+	Version 19.97.14: Dec 26, 2019	Code refactoring in country information. (? lines)
+	Version 19.97.13: Dec 26, 2019	Code refactoring in course, degree, centre and institution information. (249255 lines)
 	Version 19.97.12: Dec 26, 2019	Code refactoring in course, degree, centre and institution information. (249298 lines)
 	Version 19.97.11: Dec 26, 2019	Code refactoring in course, degree, centre and institution information. (249353 lines)
 	Version 19.97.10: Dec 26, 2019	Code refactoring in course, degree, centre and institution information. (249394 lines)

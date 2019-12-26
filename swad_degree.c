@@ -459,10 +459,7 @@ static void Deg_ConfigFullName (bool PutForm)
 
 static void Deg_ConfigShrtName (bool PutForm)
   {
-   extern const char *Txt_Short_name;
-
-   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenDegShoCfg,
-		       Gbl.Hierarchy.Deg.ShrtName);
+   Hie_ConfigShrtName (PutForm,ActRenDegShoCfg,Gbl.Hierarchy.Deg.ShrtName);
   }
 
 /*****************************************************************************/
@@ -480,26 +477,7 @@ static void Deg_ConfigWWW (bool PutForm)
 
 static void Deg_ConfigShortcut (void)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Shortcut;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_Shortcut);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\"",
-	        Cfg_URL_SWAD_CGI,
-	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	        Gbl.Hierarchy.Deg.DegCod);
-   HTM_TxtF ("%s/%s?deg=%ld",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     Gbl.Hierarchy.Deg.DegCod);
-   HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShortcut ("deg",Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/

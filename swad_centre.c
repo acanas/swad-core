@@ -747,10 +747,7 @@ static void Ctr_ConfigFullName (bool PutForm)
 
 static void Ctr_ConfigShrtName (bool PutForm)
   {
-   extern const char *Txt_Short_name;
-
-   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenCtrShoCfg,
-		       Gbl.Hierarchy.Ctr.ShrtName);
+   Hie_ConfigShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Ctr.ShrtName);
   }
 
 /*****************************************************************************/
@@ -821,26 +818,7 @@ static void Ctr_ConfigWWW (bool PutForm)
 
 static void Ctr_ConfigShortcut (void)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Shortcut;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_Shortcut);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\"",
-	        Cfg_URL_SWAD_CGI,
-	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	        Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_TxtF ("%s/%s?ctr=%ld",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShortcut ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
