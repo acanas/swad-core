@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
+#include "swad_QR.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -86,26 +87,6 @@ void Hie_ConfigTitle (bool PutLink,
   }
 
 /*****************************************************************************/
-/****************** Show label column in configuration ***********************/
-/*****************************************************************************/
-
-void Hie_ConfigLabel (const char *Id,const char *Label)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-
-   HTM_TD_Begin ("class=\"RM\"");
-   if (Id)
-      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-		       Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   else
-      HTM_LABEL_Begin ("class=\"%s\"",
-		       The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Label);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-  }
-
-/*****************************************************************************/
 /********************** Show full name in configuration **********************/
 /*****************************************************************************/
 
@@ -114,9 +95,9 @@ void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
   {
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("FullName",Label);
+   Frm_LabelColumn ("FullName",Label);
 
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LT\"");
    if (PutForm)
      {
       /* Form to change full name */
@@ -143,9 +124,9 @@ void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("ShortName",Txt_Short_name);
+   Frm_LabelColumn ("ShortName",Txt_Short_name);
 
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LT\"");
    if (PutForm)
      {
       /* Form to change short name */
@@ -172,11 +153,11 @@ void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (PutForm ? "WWW" :
+   Frm_LabelColumn (PutForm ? "WWW" :
 	                      NULL,
 		    Txt_Web);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    if (PutForm)
      {
       /* Form to change web */
@@ -209,9 +190,9 @@ void Hie_ConfigShortcut (const char *ParamName,long HieCod)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Shortcut);
+   Frm_LabelColumn (NULL,Txt_Shortcut);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
                 Cfg_URL_SWAD_CGI,
                 Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -221,6 +202,25 @@ void Hie_ConfigShortcut (const char *ParamName,long HieCod)
              Lan_STR_LANG_ID[Gbl.Prefs.Language],
              ParamName,HieCod);
    HTM_A_End ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************* Show QR in configuration **************************/
+/*****************************************************************************/
+
+void Hie_ConfigQR (const char *ParamName,long HieCod)
+  {
+   extern const char *Txt_QR_code;
+
+   HTM_TR_Begin (NULL);
+
+   Frm_LabelColumn (NULL,Txt_QR_code);
+
+   HTM_TD_Begin ("class=\"DAT LT\"");
+   QR_LinkTo (250,ParamName,HieCod);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -256,7 +256,6 @@ void Hie_SeePending (void)
 
 void Hie_WriteMenuHierarchy (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
@@ -270,13 +269,9 @@ void Hie_WriteMenuHierarchy (void)
           with all the countries *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"cty\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Country);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("cty",Txt_Country);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Cty_WriteSelectorOfCountry ();
    HTM_TD_End ();
 
@@ -288,13 +283,9 @@ void Hie_WriteMenuHierarchy (void)
              with the institutions of selected country *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"RM\"");
-      HTM_LABEL_Begin ("for=\"ins\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Institution);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      Frm_LabelColumn ("ins",Txt_Institution);
 
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Ins_WriteSelectorOfInstitution ();
       HTM_TD_End ();
 
@@ -306,13 +297,9 @@ void Hie_WriteMenuHierarchy (void)
                 with all the centres of selected institution *****/
          HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"RM\"");
-         HTM_LABEL_Begin ("for=\"ctr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_Centre);
-         HTM_LABEL_End ();
-         HTM_TD_End ();
+         Frm_LabelColumn ("ctr",Txt_Centre);
 
-         HTM_TD_Begin ("class=\"LM\"");
+         HTM_TD_Begin ("class=\"LT\"");
          Ctr_WriteSelectorOfCentre ();
          HTM_TD_End ();
 
@@ -324,14 +311,9 @@ void Hie_WriteMenuHierarchy (void)
                    with all the degrees of selected centre *****/
             HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM\"");
-	    HTM_LABEL_Begin ("for=\"deg\" class=\"%s\"",
-			     The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtF ("%s:",Txt_Degree);
-	    HTM_LABEL_End ();
-	    HTM_TD_End ();
+            Frm_LabelColumn ("deg",Txt_Degree);
 
-            HTM_TD_Begin ("class=\"LM\"");
+            HTM_TD_Begin ("class=\"LT\"");
             Deg_WriteSelectorOfDegree ();
             HTM_TD_End ();
 
@@ -343,14 +325,9 @@ void Hie_WriteMenuHierarchy (void)
 		      with all the courses of selected degree *****/
 	       HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"RM\"");
-	       HTM_LABEL_Begin ("for=\"crs\" class=\"%s\"",
-			        The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       HTM_TxtF ("%s:",Txt_Course);
-	       HTM_LABEL_End ();
-	       HTM_TD_End ();
+               Frm_LabelColumn ("crs",Txt_Course);
 
-	       HTM_TD_Begin ("class=\"LM\"");
+	       HTM_TD_Begin ("class=\"LT\"");
 	       Crs_WriteSelectorOfCourse ();
 	       HTM_TD_End ();
 

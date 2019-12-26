@@ -274,3 +274,23 @@ void Frm_FreeAnchorStr (char *Anchor)
       Anchor = NULL;
      }
   }
+
+/*****************************************************************************/
+/************************* Show label column in form *************************/
+/*****************************************************************************/
+
+void Frm_LabelColumn (const char *Id,const char *Label)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+
+   HTM_TD_Begin ("class=\"RT\"");
+   if (Id)
+      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+		       Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+   else
+      HTM_LABEL_Begin ("class=\"%s\"",
+		       The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Label);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+  }

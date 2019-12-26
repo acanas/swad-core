@@ -129,7 +129,7 @@ void QR_ImageQRCode (const char *QRString)
 /*************** Show QR code with direct link (shortcut URL) ****************/
 /*****************************************************************************/
 
-void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
+void QR_LinkTo (unsigned Size,const char *ParamName,long Cod)
   {
    extern const char *Txt_Shortcut;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -139,7 +139,7 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
    if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld",
 		 Size,Size,
                  Cfg_URL_SWAD_CGI,
-                 Lan_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod) < 0)
+                 Lan_STR_LANG_ID[Gbl.Prefs.Language],ParamName,Cod) < 0)
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (URL,NULL,Txt_Shortcut,
 	    "style=\"width:%upx;height:%upx;\"",Size,Size);

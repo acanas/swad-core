@@ -1792,13 +1792,9 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"AvgType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Average_type);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("AvgType",Txt_Average_type);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1857,13 +1853,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"PhotoSize\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Size_of_photos);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("PhotoSize",Txt_Size_of_photos);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1922,13 +1914,9 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Order\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Sort_degrees_by);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Order",Txt_Sort_degrees_by);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();

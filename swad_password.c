@@ -734,14 +734,10 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    HTM_TR_Begin (NULL);
 
    /***** Label ****/
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Paswd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Password);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Paswd",Txt_Password);
 
    /***** Input ****/
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
 		       "id=\"Paswd\"");
    HTM_TD_End ();

@@ -303,7 +303,6 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod);
 void Tst_ShowFormAskTst (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Take_a_test;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Generate_test;
@@ -337,13 +336,9 @@ void Tst_ShowFormAskTst (void)
          /***** Number of questions to generate ****/
          HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"RM\"");
-         HTM_LABEL_Begin ("for=\"NumQst\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_No_of_questions);
-         HTM_LABEL_End ();
-         HTM_TD_End ();
+         Frm_LabelColumn ("NumQst",Txt_No_of_questions);
 
-         HTM_TD_Begin ("class=\"LM\"");
+         HTM_TD_Begin ("class=\"LT\"");
          HTM_INPUT_LONG ("NumQst",
 			   (long) Gbl.Test.Config.Min,
 			   (long) Gbl.Test.Config.Max,
@@ -1952,14 +1947,9 @@ static void Tst_ShowFormConfigTst (void)
    /***** Minimum time between consecutive tests, per question *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"MinTimeNxtTstPerQst\" class=\"%s\"",
-                    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Minimum_time_seconds_per_question_between_two_tests);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("MinTimeNxtTstPerQst",Txt_Minimum_time_seconds_per_question_between_two_tests);
 
-   HTM_TD_Begin ("class=\"LB\"");
+   HTM_TD_Begin ("class=\"LT\"");
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
@@ -5203,11 +5193,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Stem and image *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Stem\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Wording);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Stem",Txt_Wording);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""

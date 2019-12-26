@@ -916,11 +916,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"UsrsIDs\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_List_of_nicks_emails_or_IDs);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\" cols=\"60\" rows=\"10\"");
@@ -2261,11 +2257,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /* Scope (whole platform, current centre, current degree or current course) */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ScopeEnr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Scope);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("ScopeEnr",Txt_Scope);
 
    HTM_TD_Begin ("class=\"LM\"");
    Sco_PutSelectorScope ("ScopeEnr",true);
@@ -2276,13 +2268,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /* Users' roles in listing */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Users);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Role",Txt_Users);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
                            1 << Rol_TCH,

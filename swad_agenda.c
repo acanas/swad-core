@@ -1445,7 +1445,6 @@ void Agd_RequestCreatOrEditEvent (void)
   {
    extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Location;
@@ -1508,13 +1507,9 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Event *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Event\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Event);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Event",Txt_Event);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,false,
 		   "id=\"Event\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
@@ -1525,13 +1520,9 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Location *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Location\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Location);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Location",Txt_Location);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,false,
 		   "id=\"Location\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
@@ -1546,11 +1537,7 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Text *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Description);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""

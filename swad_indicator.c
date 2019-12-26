@@ -122,13 +122,9 @@ void Ind_ReqIndicatorsCourses (void)
    /* Scope */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ScopeInd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Scope);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("ScopeInd",Txt_Scope);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Sco_PutSelectorScope ("ScopeInd",true);
    HTM_TD_End ();
 
@@ -137,14 +133,9 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for a type of degree */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthDegTypCod\" class=\"%s\"",
-	            The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Types_of_degree);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("OthDegTypCod",Txt_Types_of_degree);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    DT_WriteSelectorDegreeTypes ();
    HTM_Txt (" (");
    HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
@@ -156,12 +147,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-	            Dpt_PARAM_DPT_COD_NAME,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Department);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn (Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
    HTM_TD_Begin ("class=\"LM\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution

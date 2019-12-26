@@ -42,7 +42,6 @@
 #include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
-#include "swad_QR.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -513,9 +512,9 @@ static void Ins_ConfigCountry (bool PrintView)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("OthCtyCod",Txt_Country);
+   Frm_LabelColumn ("OthCtyCod",Txt_Country);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can move an institution to another country
@@ -592,17 +591,7 @@ static void Ins_ConfigShortcut (void)
 
 static void Ins_ConfigQR (void)
   {
-   extern const char *Txt_QR_code;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_QR_code);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigQR ("ins",Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -615,9 +604,9 @@ static void Ins_ConfigNumUsrs (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Users_of_the_institution);
+   Frm_LabelColumn (NULL,Txt_Users_of_the_institution);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -635,10 +624,10 @@ static void Ins_ConfigNumCtrs (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Centres);
+   Frm_LabelColumn (NULL,Txt_Centres);
 
    /* Form to go to see centres of this institution */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartFormGoTo (ActSeeCtr);
    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -664,9 +653,9 @@ static void Ins_ConfigNumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Degrees);
+   Frm_LabelColumn (NULL,Txt_Degrees);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -683,9 +672,9 @@ static void Ins_ConfigNumCrss (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Courses);
+   Frm_LabelColumn (NULL,Txt_Courses);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -702,9 +691,9 @@ static void Ins_ConfigNumDpts (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Departments);
+   Frm_LabelColumn (NULL,Txt_Departments);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -722,10 +711,10 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
+   Frm_LabelColumn (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
 		                           Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 

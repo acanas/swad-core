@@ -3829,13 +3829,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Subject */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Subject\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_MSG_Subject);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Subject",Txt_MSG_Subject);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 		   IsReply ? Subject :
 		             "",false,
@@ -3847,11 +3843,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Content */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Content\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_MSG_Content);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Content",Txt_MSG_Content);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");

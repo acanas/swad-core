@@ -49,7 +49,6 @@
 #include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_QR.h"
 #include "swad_role.h"
 #include "swad_RSS.h"
 #include "swad_tab.h"
@@ -297,9 +296,9 @@ static void Crs_ConfigDegree (bool PrintView)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("OthDegCod",Txt_Degree);
+   Frm_LabelColumn ("OthDegCod",Txt_Degree);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
 
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -368,9 +367,9 @@ static void Crs_ConfigYear (bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("OthCrsYear",Txt_Year_OF_A_DEGREE);
+   Frm_LabelColumn ("OthCrsYear",Txt_Year_OF_A_DEGREE);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
@@ -403,9 +402,9 @@ static void Crs_ConfigInstitutionalCode (bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("InsCrsCod",Txt_Institutional_code);
+   Frm_LabelColumn ("InsCrsCod",Txt_Institutional_code);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgInsCrsCodCfg);
@@ -432,9 +431,9 @@ static void Crs_ConfigInternalCode (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Internal_code);
+   Frm_LabelColumn (NULL,Txt_Internal_code);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
    HTM_TD_End ();
 
@@ -456,17 +455,7 @@ static void Crs_ConfigShortcut (void)
 
 static void Crs_ConfigQR (void)
   {
-   extern const char *Txt_QR_code;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_QR_code);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigQR ("crs",Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -479,9 +468,9 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn (NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
    HTM_TD_End ();
 
@@ -503,9 +492,9 @@ static void Crs_ConfigIndicators (void)
 				     NumIndicatorsFromDB,&Indicators);
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Indicators);
+   Frm_LabelColumn (NULL,Txt_Indicators);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActReqStaCrs);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%u %s %u",

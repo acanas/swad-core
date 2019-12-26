@@ -427,13 +427,9 @@ void Sta_AskShowGblHits (void)
    /***** Users' roles whose accesses we want to see *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Users);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Role",Txt_Users);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
    for (RoleStat  = (Sta_Role_t) 0;
@@ -456,13 +452,9 @@ void Sta_AskShowGblHits (void)
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ScopeSta\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Scope);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("ScopeSta",Txt_Scope);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 		       1 << Hie_INS |
@@ -479,13 +471,9 @@ void Sta_AskShowGblHits (void)
    /***** Count type for the statistic *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"CountType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Show);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("CountType",Txt_Show);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
@@ -604,11 +592,7 @@ static void Sta_WriteSelectorAction (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"StatAct\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Action);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("StatAct",Txt_Action);
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_SELECT_Begin (false,

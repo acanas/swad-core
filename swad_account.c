@@ -371,13 +371,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
       NewNicknameWithArroba[0] = '\0';
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"NewNick\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Nickname);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("NewNick",Txt_Nickname);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
 		   NewNicknameWithArroba,false,
 		   "id=\"NewNick\" size=\"18\" placeholder=\"%s\" required=\"required\"",
@@ -389,13 +385,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
    /***** Email *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"NewEmail\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Email);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("NewEmail",Txt_Email);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
 	            "id=\"NewEmail\" size=\"18\" placeholder=\"%s\" required=\"required\"",
                     Txt_HELP_email);

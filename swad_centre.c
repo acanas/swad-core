@@ -48,7 +48,6 @@
 #include "swad_logo.h"
 #include "swad_map.h"
 #include "swad_parameter.h"
-#include "swad_QR.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -543,9 +542,9 @@ static void Ctr_ConfigLatitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("Latitude",Txt_Latitude);
+   Frm_LabelColumn ("Latitude",Txt_Latitude);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    /* Form to change centre latitude */
    Frm_StartForm (ActChgCtrLatCfg);
    HTM_INPUT_FLOAT ("Latitude",
@@ -566,9 +565,9 @@ static void Ctr_ConfigLongitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("Longitude",Txt_Longitude);
+   Frm_LabelColumn ("Longitude",Txt_Longitude);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    /* Form to change centre longitude */
    Frm_StartForm (ActChgCtrLgtCfg);
    HTM_INPUT_FLOAT ("Longitude",
@@ -589,9 +588,9 @@ static void Ctr_ConfigAltitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("Altitude",Txt_Altitude);
+   Frm_LabelColumn ("Altitude",Txt_Altitude);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    /* Form to change centre WWW */
    Frm_StartForm (ActChgCtrAltCfg);
    HTM_INPUT_FLOAT ("Altitude",
@@ -695,9 +694,9 @@ static void Ctr_ConfigInstitution (bool PrintView)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("OthInsCod",Txt_Institution);
+   Frm_LabelColumn ("OthInsCod",Txt_Institution);
 
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LT\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can move a centre to another institution
@@ -765,9 +764,9 @@ static void Ctr_ConfigPlace (bool PrintView)
    Plc_GetDataOfPlaceByCod (&Plc);
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("PlcCod",Txt_Place);
+   Frm_LabelColumn ("PlcCod",Txt_Place);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -827,17 +826,7 @@ static void Ctr_ConfigShortcut (void)
 
 static void Ctr_ConfigQR (void)
   {
-   extern const char *Txt_QR_code;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_QR_code);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigQR ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -850,9 +839,9 @@ static void Ctr_ConfigNumUsrs (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Users_of_the_centre);
+   Frm_LabelColumn (NULL,Txt_Users_of_the_centre);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -870,10 +859,10 @@ static void Ctr_ConfigNumDegs (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Degrees);
+   Frm_LabelColumn (NULL,Txt_Degrees);
 
    /* Form to go to see degrees of this centre */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -898,9 +887,9 @@ static void Ctr_ConfigNumCrss (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Courses);
+   Frm_LabelColumn (NULL,Txt_Courses);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -918,10 +907,10 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
-		                           Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 

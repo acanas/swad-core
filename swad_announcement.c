@@ -452,11 +452,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Field,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Label);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn (Field,Label);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",

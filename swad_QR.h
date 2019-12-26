@@ -45,7 +45,7 @@ void QR_PutParamQRString (void);
 void QR_PrintQRCode (void);
 void QR_ImageQRCode (const char *QRString);
 
-void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);
+void QR_LinkTo (unsigned Size,const char *ParamName,long Cod);
 void QR_ExamAnnnouncement (void);
 
 #endif

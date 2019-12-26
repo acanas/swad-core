@@ -1089,11 +1089,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Name of the course *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"CrsName\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Course);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("CrsName",Txt_EXAM_ANNOUNCEMENT_Course);
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)

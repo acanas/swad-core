@@ -67,7 +67,6 @@ void Hie_ConfigTitle (bool PutLink,
 		      char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
 		      char LogoWWW[Cns_MAX_BYTES_WWW + 1],
 		      char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1]);
-void Hie_ConfigLabel (const char *Id,const char *Label);
 void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 			 const char FullName[Hie_MAX_BYTES_FULL_NAME + 1]);
 void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
@@ -75,6 +74,7 @@ void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
 void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
 		    const char WWW[Cns_MAX_BYTES_WWW + 1]);
 void Hie_ConfigShortcut (const char *ParamName,long HieCod);
+void Hie_ConfigQR (const char *ParamName,long HieCod);
 
 void Hie_SeePending (void);
 

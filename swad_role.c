@@ -546,14 +546,14 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
-   for (Role = Rol_UNK;
+   for (Role  = Rol_UNK;
         Role <= Rol_SYS_ADM;
         Role++)
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
 	 HTM_INPUT_CHECKBOX ("Role",SendOnChange,
-			     "value=\"%u\"%s%s",
+			     "id=\"Role\" value=\"%u\"%s%s",
 			     (unsigned) Role,
 			     (RolesSelected & (1 << Role)) ? " checked=\"checked\"" : "",
 		             Disabled ? " disabled=\"disabled\"" : "");

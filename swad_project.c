@@ -3471,13 +3471,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Project title */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Title);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Title",Txt_Title);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
@@ -3488,15 +3484,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Department */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-		    Dpt_PARAM_DPT_COD_NAME,
-                    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Department);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn (Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "TITLE_DESCRIPTION_WIDTH",	// Selector class
@@ -3582,13 +3572,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* URL for additional info */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_URL);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("WWW",Txt_URL);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_INPUT_URL ("URL",Prj->URL,false,
 		  "class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -3620,11 +3606,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Label);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn (Id,Label);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
@@ -3922,17 +3904,13 @@ void Prj_ShowFormConfig (void)
    HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Editable);
-   HTM_TD_End ();
+   Frm_LabelColumn ("Editable",Txt_Editable);
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_LABEL_Begin (NULL);
    HTM_INPUT_CHECKBOX ("Editable",false,
 		       "id=\"Editable\" value=\"Y\"%s",
 		       Gbl.Prjs.Config.Editable ? " checked=\"checked\"" : "");
    HTM_Txt (Txt_Editable_by_non_editing_teachers);
-   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

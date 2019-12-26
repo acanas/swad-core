@@ -51,7 +51,6 @@
 #include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_QR.h"
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_tab.h"
@@ -406,9 +405,9 @@ static void Deg_ConfigCentre (bool PrintView)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel ("OthCtrCod",Txt_Centre);
+   Frm_LabelColumn ("OthCtrCod",Txt_Centre);
 
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LT\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admin
@@ -486,17 +485,7 @@ static void Deg_ConfigShortcut (void)
 
 static void Deg_ConfigQR (void)
   {
-   extern const char *Txt_QR_code;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel (NULL,Txt_QR_code);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigQR ("deg",Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/
@@ -510,10 +499,10 @@ static void Deg_ConfigNumCrss (void)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Txt_Courses);
+   Frm_LabelColumn (NULL,Txt_Courses);
 
    /* Form to go to see courses of this degree */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Frm_StartFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -539,10 +528,10 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Hie_ConfigLabel (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
-		                           Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
+		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
    HTM_TD_End ();
 

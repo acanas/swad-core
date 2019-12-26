@@ -1224,7 +1224,6 @@ long Mch_GetParamMchCod (void)
 static void Mch_PutFormNewMatch (const struct Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_match;
    extern const char *Txt_Title;
    extern const char *Txt_Play;
@@ -1244,13 +1243,9 @@ static void Mch_PutFormNewMatch (const struct Game *Game)
    /***** Match title *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Title);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Title",Txt_Title);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,
 		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
@@ -1306,6 +1301,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       /***** First row: checkbox to select the whole course *****/
       HTM_TR_Begin (NULL);
+
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_CHECKBOX ("WholeCrs",true,

@@ -1001,7 +1001,6 @@ void Att_RequestCreatOrEditAttEvent (void)
   {
    extern const char *Hlp_USERS_Attendance_new_event;
    extern const char *Hlp_USERS_Attendance_edit_event;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Teachers_comment;
@@ -1073,11 +1072,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Attendance event title *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Title);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,false,
@@ -1093,11 +1088,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Visibility of comments *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"ComTchVisible\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Teachers_comment);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("ComTchVisible",Txt_Teachers_comment);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
@@ -1113,11 +1104,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Attendance event description *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Description);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""

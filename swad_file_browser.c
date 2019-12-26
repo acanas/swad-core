@@ -8521,6 +8521,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_URL;
    extern const char *Txt_Save_as;
    extern const char *Txt_optional;
+   char *Label;
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
@@ -8538,13 +8539,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TABLE_Begin (NULL);
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"NewLinkURL\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_URL);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("NewLinkURL",Txt_URL);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_URL ("NewLinkURL","",false,
 		  "size=\"30\" required=\"required\"");
    HTM_TD_End ();
@@ -8554,11 +8551,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /***** Link name *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"NewLinkName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Frm_LabelColumn ("NewLinkName",Label);
+   free (Label);
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",false,
@@ -9606,14 +9602,9 @@ void Brw_ShowFileMetadata (void)
 	 /***** Private or public? *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT\"");
-	 HTM_LABEL_Begin ("for=\"PublicFile\" class=\"%s\"",
-		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Availability);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	 Frm_LabelColumn ("PublicFile",Txt_Availability);
 
-	 HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    HTM_SELECT_Begin (false,
@@ -9636,14 +9627,9 @@ void Brw_ShowFileMetadata (void)
 	 /***** License *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM\"");
-	 HTM_LABEL_Begin ("for=\"License\" class=\"%s\"",
-		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_License);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	 Frm_LabelColumn ("License",Txt_License);
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    HTM_SELECT_Begin (false,

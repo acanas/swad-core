@@ -2295,7 +2295,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    HTM_TD_End ();
 
    /* Number of students who don't belong to any group of this type */
-   for (Role = Rol_TCH;
+   for (Role  = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
      {
