@@ -106,6 +106,43 @@ void Hie_ConfigLabel (const char *Id,const char *Label)
   }
 
 /*****************************************************************************/
+/************************* Show web in configuration *************************/
+/*****************************************************************************/
+
+void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
+		    const char WWW[Cns_MAX_BYTES_WWW + 1])
+  {
+   extern const char *Txt_Web;
+
+   HTM_TR_Begin (NULL);
+
+   Hie_ConfigLabel (PutForm ? "WWW" :
+	                      NULL,
+		    Txt_Web);
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (PutForm)
+     {
+      /* Form to change web */
+      Frm_StartForm (NextAction);
+      HTM_INPUT_URL ("WWW",WWW,true,
+		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
+      Frm_EndForm ();
+     }
+   else	// I can not change web
+     {
+      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
+      HTM_Txt (WWW);
+      HTM_A_End ();
+      HTM_DIV_End ();
+     }
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
 /*****************************************************************************/
 

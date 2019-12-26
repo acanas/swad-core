@@ -75,9 +75,9 @@ static void Ins_ConfigTitle (bool PutLink);
 static bool Ins_GetIfMapIsAvailable (void);
 static void Ins_ConfigMap (void);
 static void Ins_ConfigCountry (bool PrintView);
-static void Ins_ConfigFullName (bool PrintView);
-static void Ins_ConfigShrtName (bool PrintView);
-static void Ins_ConfigWWW (bool PrintView);
+static void Ins_ConfigFullName (bool PutForm);
+static void Ins_ConfigShrtName (bool PutForm);
+static void Ins_ConfigWWW (bool PutForm);
 static void Ins_ConfigShortcut (void);
 static void Ins_ConfigQR (void);
 static void Ins_ConfigNumUsrs (void);
@@ -319,10 +319,17 @@ static void Ins_Configuration (bool PrintView)
   {
    extern const char *Hlp_INSTITUTION_Information;
    bool PutLink;
+   bool PutFormName;
+   bool PutFormWWW;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
       return;
+
+   /***** Initializations *****/
+   PutLink     = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
+   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
 
    /***** Begin box *****/
    if (PrintView)
@@ -334,7 +341,6 @@ static void Ins_Configuration (bool PrintView)
 
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
    Ins_ConfigTitle (PutLink);
 
    /***** Institution map *****/
@@ -348,11 +354,11 @@ static void Ins_Configuration (bool PrintView)
    Ins_ConfigCountry (PrintView);
 
    /***** Institution name *****/
-   Ins_ConfigFullName (PrintView);
-   Ins_ConfigShrtName (PrintView);
+   Ins_ConfigFullName (PutFormName);
+   Ins_ConfigShrtName (PutFormName);
 
    /***** Institution WWW *****/
-   Ins_ConfigWWW (PrintView);
+   Ins_ConfigWWW (PutFormWWW);
 
    /***** Shortcut to the institution *****/
    Ins_ConfigShortcut ();
@@ -545,7 +551,7 @@ static void Ins_ConfigCountry (bool PrintView)
 /********* Show institution full name in institution configuration ***********/
 /*****************************************************************************/
 
-static void Ins_ConfigFullName (bool PrintView)
+static void Ins_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Institution;
 
@@ -554,9 +560,7 @@ static void Ins_ConfigFullName (bool PrintView)
    Hie_ConfigLabel ("FullName",Txt_Institution);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      // Only system admins can edit institution full name
+   if (PutForm)
      {
       /* Form to change institution full name */
       Frm_StartForm (ActRenInsFulCfg);
@@ -575,7 +579,7 @@ static void Ins_ConfigFullName (bool PrintView)
 /********* Show institution short name in institution configuration **********/
 /*****************************************************************************/
 
-static void Ins_ConfigShrtName (bool PrintView)
+static void Ins_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
@@ -584,9 +588,7 @@ static void Ins_ConfigShrtName (bool PrintView)
    Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      // Only system admins can edit institution short name
+   if (PutForm)
      {
       /* Form to change institution short name */
       Frm_StartForm (ActRenInsShoCfg);
@@ -605,38 +607,9 @@ static void Ins_ConfigShrtName (bool PrintView)
 /************ Show institution WWW in institution configuration **************/
 /*****************************************************************************/
 
-static void Ins_ConfigWWW (bool PrintView)
+static void Ins_ConfigWWW (bool PutForm)
   {
-   extern const char *Txt_Web;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("WWW",Txt_Web);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admins
-      // can change institution WWW
-     {
-      /* Form to change institution WWW */
-      Frm_StartForm (ActChgInsWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,true,
-		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change institution WWW
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Hierarchy.Ins.WWW);
-      HTM_Txt (Gbl.Hierarchy.Ins.WWW);
-      HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigWWW (PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
   }
 
 /*****************************************************************************/

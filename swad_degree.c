@@ -91,9 +91,9 @@ static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
 static void Deg_ConfigTitle (bool PutLink);
 static void Deg_ConfigCentre (bool PrintView);
-static void Deg_ConfigFullName (bool PrintView);
-static void Deg_ConfigShrtName (bool PrintView);
-static void Deg_ConfigWWW (bool PrintView);
+static void Deg_ConfigFullName (bool PutForm);
+static void Deg_ConfigShrtName (bool PutForm);
+static void Deg_ConfigWWW (bool PutForm);
 static void Deg_ConfigShortcut (void);
 static void Deg_ConfigQR (void);
 static void Deg_ConfigNumCrss (void);
@@ -303,10 +303,17 @@ static void Deg_Configuration (bool PrintView)
   {
    extern const char *Hlp_DEGREE_Information;
    bool PutLink;
+   bool PutFormName;
+   bool PutFormWWW;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Deg.DegCod <= 0)	// No degree selected
       return;
+
+   /***** Initializations *****/
+   PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Begin box *****/
    if (PrintView)
@@ -317,7 +324,6 @@ static void Deg_Configuration (bool PrintView)
 		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
    Deg_ConfigTitle (PutLink);
 
    /***** Begin table *****/
@@ -327,11 +333,11 @@ static void Deg_Configuration (bool PrintView)
    Deg_ConfigCentre (PrintView);
 
    /***** Degree name *****/
-   Deg_ConfigFullName (PrintView);
-   Deg_ConfigShrtName (PrintView);
+   Deg_ConfigFullName (PutFormName);
+   Deg_ConfigShrtName (PutFormName);
 
    /***** Degree WWW *****/
-   Deg_ConfigWWW (PrintView);
+   Deg_ConfigWWW (PutFormWWW);
 
    /***** Shortcut to the degree *****/
    Deg_ConfigShortcut ();
@@ -439,7 +445,7 @@ static void Deg_ConfigCentre (bool PrintView)
 /************** Show degree full name in degree configuration ****************/
 /*****************************************************************************/
 
-static void Deg_ConfigFullName (bool PrintView)
+static void Deg_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Degree;
 
@@ -448,10 +454,7 @@ static void Deg_ConfigFullName (bool PrintView)
    Hie_ConfigLabel ("FullName",Txt_Degree);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can edit degree full name
+   if (PutForm)
      {
       /* Form to change degree full name */
       Frm_StartForm (ActRenDegFulCfg);
@@ -470,7 +473,7 @@ static void Deg_ConfigFullName (bool PrintView)
 /************** Show degree short name in degree configuration ***************/
 /*****************************************************************************/
 
-static void Deg_ConfigShrtName (bool PrintView)
+static void Deg_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
@@ -479,10 +482,7 @@ static void Deg_ConfigShrtName (bool PrintView)
    Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can edit degree short name
+   if (PutForm)
      {
       /* Form to change degree short name */
       Frm_StartForm (ActRenDegShoCfg);
@@ -501,38 +501,9 @@ static void Deg_ConfigShrtName (bool PrintView)
 /***************** Show degree WWW in degree configuration *******************/
 /*****************************************************************************/
 
-static void Deg_ConfigWWW (bool PrintView)
+static void Deg_ConfigWWW (bool PutForm)
   {
-   extern const char *Txt_Web;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("WWW",Txt_Web);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins
-      // and system admins can change degree WWW
-     {
-      /* Form to change degree WWW */
-      Frm_StartForm (ActChgDegWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
-		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change degree WWW
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Hierarchy.Deg.WWW);
-      HTM_Txt (Gbl.Hierarchy.Deg.WWW);
-      HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigWWW (PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Deg.WWW);
   }
 
 /*****************************************************************************/

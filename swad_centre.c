@@ -95,10 +95,10 @@ static void Ctr_ConfigLongitude (void);
 static void Ctr_ConfigAltitude (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
 static void Ctr_ConfigInstitution (bool PrintView);
-static void Ctr_ConfigFullName (bool PrintView);
-static void Ctr_ConfigShrtName (bool PrintView);
+static void Ctr_ConfigFullName (bool PutForm);
+static void Ctr_ConfigShrtName (bool PutForm);
 static void Ctr_ConfigPlace (bool PrintView);
-static void Ctr_ConfigWWW (bool PrintView);
+static void Ctr_ConfigWWW (bool PutForm);
 static void Ctr_ConfigShortcut (void);
 static void Ctr_ConfigQR (void);
 static void Ctr_ConfigNumUsrs (void);
@@ -313,10 +313,17 @@ static void Ctr_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTRE_Information;
    bool PutLink;
+   bool PutFormName;
+   bool PutFormWWW;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
       return;
+
+   /***** Initializations *****/
+   PutLink     = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
 
    /***** Begin box *****/
    if (PrintView)
@@ -327,7 +334,6 @@ static void Ctr_Configuration (bool PrintView)
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
@@ -344,8 +350,8 @@ static void Ctr_Configuration (bool PrintView)
    Ctr_ConfigInstitution (PrintView);
 
    /***** Centre name *****/
-   Ctr_ConfigFullName (PrintView);
-   Ctr_ConfigShrtName (PrintView);
+   Ctr_ConfigFullName (PutFormName);
+   Ctr_ConfigShrtName (PutFormName);
 
    /***** Place *****/
    Ctr_ConfigPlace (PrintView);
@@ -359,7 +365,7 @@ static void Ctr_Configuration (bool PrintView)
      }
 
    /***** Centre WWW *****/
-   Ctr_ConfigWWW (PrintView);
+   Ctr_ConfigWWW (PutFormWWW);
 
    /***** Shortcut to the centre *****/
    Ctr_ConfigShortcut ();
@@ -727,7 +733,7 @@ static void Ctr_ConfigInstitution (bool PrintView)
 /************** Show centre full name in centre configuration ****************/
 /*****************************************************************************/
 
-static void Ctr_ConfigFullName (bool PrintView)
+static void Ctr_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Centre;
 
@@ -736,9 +742,7 @@ static void Ctr_ConfigFullName (bool PrintView)
    Hie_ConfigLabel ("FullName",Txt_Centre);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admins can edit centre full name
+   if (PutForm)
      {
       /* Form to change centre full name */
       Frm_StartForm (ActRenCtrFulCfg);
@@ -757,7 +761,7 @@ static void Ctr_ConfigFullName (bool PrintView)
 /************** Show centre short name in centre configuration ***************/
 /*****************************************************************************/
 
-static void Ctr_ConfigShrtName (bool PrintView)
+static void Ctr_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
@@ -766,9 +770,7 @@ static void Ctr_ConfigShrtName (bool PrintView)
    Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admins can edit centre short name
+   if (PutForm)
      {
       /* Form to change centre short name */
       Frm_StartForm (ActRenCtrShoCfg);
@@ -840,38 +842,9 @@ static void Ctr_ConfigPlace (bool PrintView)
 /***************** Show centre WWW in centre configuration *******************/
 /*****************************************************************************/
 
-static void Ctr_ConfigWWW (bool PrintView)
+static void Ctr_ConfigWWW (bool PutForm)
   {
-   extern const char *Txt_Web;
-
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("WWW",Txt_Web);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can change centre WWW
-     {
-      /* Form to change centre WWW */
-      Frm_StartForm (ActChgCtrWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
-		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change centre WWW
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Hierarchy.Ctr.WWW);
-      HTM_Txt (Gbl.Hierarchy.Ctr.WWW);
-      HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigWWW (PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
   }
 
 /*****************************************************************************/

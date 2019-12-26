@@ -83,8 +83,8 @@ static void Crs_Configuration (bool PrintView);
 static void Crs_PutIconToPrint (void);
 static void Crs_ConfigTitle (bool PutLink);
 static void Crs_ConfigDegree (bool PrintView);
-static void Crs_ConfigFullName (bool PrintView);
-static void Crs_ConfigShrtName (bool PrintView);
+static void Crs_ConfigFullName (bool PutForm);
+static void Crs_ConfigShrtName (bool PutForm);
 static void Crs_ConfigYear (bool IsForm);
 static void Crs_ConfigInstitutionalCode (bool IsForm);
 static void Crs_ConfigInternalCode (void);
@@ -183,11 +183,16 @@ static void Crs_Configuration (bool PrintView)
   {
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
+   bool PutFormName;
    bool IsForm;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
+
+   /***** Initializations *****/
+   PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Contextual menu *****/
    if (!PrintView)
@@ -208,7 +213,6 @@ static void Crs_Configuration (bool PrintView)
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
    Crs_ConfigTitle (PutLink);
 
    /***** Begin table *****/
@@ -218,8 +222,8 @@ static void Crs_Configuration (bool PrintView)
    Crs_ConfigDegree (PrintView);
 
    /***** Course name *****/
-   Crs_ConfigFullName (PrintView);
-   Crs_ConfigShrtName (PrintView);
+   Crs_ConfigFullName (PutFormName);
+   Crs_ConfigShrtName (PutFormName);
 
    /***** Course year *****/
    IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
@@ -334,7 +338,7 @@ static void Crs_ConfigDegree (bool PrintView)
 /************** Show course full name in course configuration ****************/
 /*****************************************************************************/
 
-static void Crs_ConfigFullName (bool PrintView)
+static void Crs_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Course;
 
@@ -343,10 +347,7 @@ static void Crs_ConfigFullName (bool PrintView)
    Hie_ConfigLabel ("FullName",Txt_Course);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins
-      // can edit course full name
+   if (PutForm)
      {
       /* Form to change course full name */
       Frm_StartForm (ActRenCrsFulCfg);
@@ -365,7 +366,7 @@ static void Crs_ConfigFullName (bool PrintView)
 /************** Show course short name in course configuration ***************/
 /*****************************************************************************/
 
-static void Crs_ConfigShrtName (bool PrintView)
+static void Crs_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
@@ -375,10 +376,7 @@ static void Crs_ConfigShrtName (bool PrintView)
    Hie_ConfigLabel ("ShortName",Txt_Short_name);
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins
-      // can edit course short name
+   if (PutForm)
      {
       /* Form to change course short name */
       Frm_StartForm (ActRenCrsShoCfg);
