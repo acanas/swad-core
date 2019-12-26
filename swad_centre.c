@@ -312,10 +312,10 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTRE_Information;
-   bool PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   bool PutLink;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
       return;
 
    /***** Begin box *****/
@@ -327,6 +327,7 @@ static void Ctr_Configuration (bool PrintView)
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
    Ctr_ConfigTitle (PutLink);
 
    /***** Centre map *****/
@@ -887,7 +888,8 @@ static void Ctr_ConfigWWW (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();

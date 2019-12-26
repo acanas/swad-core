@@ -318,10 +318,10 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *Hlp_INSTITUTION_Information;
-   bool PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
+   bool PutLink;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
       return;
 
    /***** Begin box *****/
@@ -332,7 +332,9 @@ static void Ins_Configuration (bool PrintView)
       Box_BoxBegin (NULL,NULL,Ins_PutIconsToPrintAndUpload,
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
+
    /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
    Ins_ConfigTitle (PutLink);
 
    /***** Institution map *****/
@@ -633,7 +635,8 @@ static void Ins_ConfigWWW (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s:",Txt_Web);
    HTM_LABEL_End ();
    HTM_TD_End ();

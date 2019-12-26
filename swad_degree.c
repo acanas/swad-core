@@ -89,6 +89,14 @@ static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degr
 
 static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
+static void Deg_ConfigTitle (bool PutLink);
+static void Deg_ConfigCentre (bool PrintView);
+static void Deg_ConfigFullName (bool PrintView);
+static void Deg_ConfigShrtName (bool PrintView);
+static void Deg_ConfigWWW (bool PrintView);
+static void Deg_ConfigShortcut (void);
+static void Deg_ConfigQR (void);
+static void Deg_ConfigNumCrss (void);
 static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role);
 
 static void Deg_ListDegreesForEdition (void);
@@ -294,21 +302,10 @@ void Deg_PrintConfiguration (void)
 static void Deg_Configuration (bool PrintView)
   {
    extern const char *Hlp_DEGREE_Information;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Centre;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Web;
-   extern const char *Txt_Shortcut;
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Courses;
-   extern const char *Txt_Courses_of_DEGREE_X;
-   extern const char *Txt_QR_code;
-   unsigned NumCtr;
    bool PutLink;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Deg.DegCod <= 0)		// No degree selected
+   if (Gbl.Hierarchy.Deg.DegCod <= 0)	// No degree selected
       return;
 
    /***** Begin box *****/
@@ -321,206 +318,31 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-		   " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Deg.WWW,
-	           Gbl.Hierarchy.Deg.FullName);
-   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
-		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
+   Deg_ConfigTitle (PutLink);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Centre *****/
-   HTM_TR_Begin (NULL);
+   Deg_ConfigCentre (PrintView);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Centre);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admin can move a degree to another centre
-     {
-      /* Get list of centres of the current institution */
-      Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
-
-      /* Put form to select centre */
-      Frm_StartForm (ActChgDegCtrCfg);
-      HTM_SELECT_Begin (true,
-			"id=\"OthCtrCod\" name=\"OthCtrCod\""
-			" class=\"INPUT_SHORT_NAME\"");
-      for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
-	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-		     "%s",Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of centres */
-      Ctr_FreeListCentres ();
-     }
-   else	// I can not move degree to another centre
-      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Degree full name *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Degree);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can edit degree full name
-     {
-      /* Form to change degree full name */
-      Frm_StartForm (ActRenDegFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit degree full name
-      HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   /***** Degree short name *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Short_name);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can edit degree short name
-     {
-      /* Form to change degree short name */
-      Frm_StartForm (ActRenDegShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit degree short name
-      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   /***** Degree name *****/
+   Deg_ConfigFullName (PrintView);
+   Deg_ConfigShrtName (PrintView);
 
    /***** Degree WWW *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Web);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins
-      // and system admins can change degree WWW
-     {
-      /* Form to change degree WWW */
-      Frm_StartForm (ActChgDegWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
-		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change degree WWW
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Hierarchy.Deg.WWW);
-      HTM_Txt (Gbl.Hierarchy.Deg.WWW);
-      HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
-   HTM_TR_End ();
+   Deg_ConfigWWW (PrintView);
 
    /***** Shortcut to the degree *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Shortcut);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\"",
-	        Cfg_URL_SWAD_CGI,
-	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	        Gbl.Hierarchy.Deg.DegCod);
-   HTM_TxtF ("%s/%s?deg=%ld",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     Gbl.Hierarchy.Deg.DegCod);
-   HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Deg_ConfigShortcut ();
 
    if (PrintView)
-     {
       /***** QR code with link to the degree *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_QR_code);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
+      Deg_ConfigQR ();
    else
      {
-      HTM_TR_Begin (NULL);
-
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Courses);
-      HTM_TD_End ();
-
-      /* Form to go to see courses of this degree */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormGoTo (ActSeeCrs);
-      Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-		Txt_Courses_of_DEGREE_X,
-		Gbl.Hierarchy.Deg.ShrtName);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-      HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
+      Deg_ConfigNumCrss ();
 
       /***** Number of users *****/
       Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
@@ -550,6 +372,280 @@ static void Deg_PutIconsToPrintAndUpload (void)
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
       Lgo_PutIconToChangeLogo (Hie_DEG);
+  }
+
+/*****************************************************************************/
+/******************** Show title in degree configuration *********************/
+/*****************************************************************************/
+
+static void Deg_ConfigTitle (bool PutLink)
+  {
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
+   if (PutLink)
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+		   " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Deg.WWW,
+	           Gbl.Hierarchy.Deg.FullName);
+   Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
+   HTM_BR ();
+   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+   if (PutLink)
+      HTM_A_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************** Show centre in degree configuration ********************/
+/*****************************************************************************/
+
+static void Deg_ConfigCentre (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Centre;
+   unsigned NumCtr;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Centre);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admin
+      // can move a degree to another centre
+     {
+      /* Get list of centres of the current institution */
+      Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+
+      /* Put form to select centre */
+      Frm_StartForm (ActChgDegCtrCfg);
+      HTM_SELECT_Begin (true,
+			"id=\"OthCtrCod\" name=\"OthCtrCod\""
+			" class=\"INPUT_SHORT_NAME\"");
+      for (NumCtr = 0;
+	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr++)
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+		     "%s",Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
+      HTM_SELECT_End ();
+      Frm_EndForm ();
+
+      /* Free list of centres */
+      Ctr_FreeListCentres ();
+     }
+   else	// I can not move degree to another centre
+      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show degree full name in degree configuration ****************/
+/*****************************************************************************/
+
+static void Deg_ConfigFullName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Degree;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Degree);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can edit degree full name
+     {
+      /* Form to change degree full name */
+      Frm_StartForm (ActRenDegFulCfg);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,true,
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit degree full name
+      HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show degree short name in degree configuration ***************/
+/*****************************************************************************/
+
+static void Deg_ConfigShrtName (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Short_name;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Short_name);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can edit degree short name
+     {
+      /* Form to change degree short name */
+      Frm_StartForm (ActRenDegShoCfg);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,true,
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit degree short name
+      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Show degree WWW in degree configuration *******************/
+/*****************************************************************************/
+
+static void Deg_ConfigWWW (bool PrintView)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Web;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"RM\"");
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Web);
+   HTM_LABEL_End ();
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+      // Only degree admins, centre admins, institution admins
+      // and system admins can change degree WWW
+     {
+      /* Form to change degree WWW */
+      Frm_StartForm (ActChgDegWWWCfg);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
+		     "class=\"INPUT_WWW_WIDE\" required=\"required\"");
+      Frm_EndForm ();
+     }
+   else	// I can not change degree WWW
+     {
+      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
+	           Gbl.Hierarchy.Deg.WWW);
+      HTM_Txt (Gbl.Hierarchy.Deg.WWW);
+      HTM_A_End ();
+      HTM_DIV_End ();
+     }
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************** Show degree shortcut in degree configuration ****************/
+/*****************************************************************************/
+
+static void Deg_ConfigShortcut (void)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Shortcut;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Shortcut);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_A_Begin ("href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\"",
+	        Cfg_URL_SWAD_CGI,
+	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	        Gbl.Hierarchy.Deg.DegCod);
+   HTM_TxtF ("%s/%s?deg=%ld",
+	     Cfg_URL_SWAD_CGI,
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     Gbl.Hierarchy.Deg.DegCod);
+   HTM_A_End ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****************** Show degree QR in degree configuration *******************/
+/*****************************************************************************/
+
+static void Deg_ConfigQR (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_QR_code;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_QR_code);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** Show number of courses in degree configuration ***************/
+/*****************************************************************************/
+
+static void Deg_ConfigNumCrss (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Courses);
+   HTM_TD_End ();
+
+   /* Form to go to see courses of this degree */
+   HTM_TD_Begin ("class=\"LM\"");
+   Frm_StartFormGoTo (ActSeeCrs);
+   Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Courses_of_DEGREE_X,
+	     Gbl.Hierarchy.Deg.ShrtName);
+   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+   HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
