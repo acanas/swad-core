@@ -737,24 +737,8 @@ static void Ctr_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Centre;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("FullName",Txt_Centre);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change centre full name */
-      Frm_StartForm (ActRenCtrFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit centre full name
-      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigFullName (PutForm,Txt_Centre,ActRenCtrFulCfg,
+		       Gbl.Hierarchy.Ctr.FullName);
   }
 
 /*****************************************************************************/
@@ -765,24 +749,8 @@ static void Ctr_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("ShortName",Txt_Short_name);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change centre short name */
-      Frm_StartForm (ActRenCtrShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit centre short name
-      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenCtrShoCfg,
+		       Gbl.Hierarchy.Ctr.ShrtName);
   }
 
 /*****************************************************************************/

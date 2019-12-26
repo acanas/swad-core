@@ -449,24 +449,8 @@ static void Deg_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Degree;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("FullName",Txt_Degree);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change degree full name */
-      Frm_StartForm (ActRenDegFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit degree full name
-      HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigFullName (PutForm,Txt_Degree,ActRenDegFulCfg,
+		       Gbl.Hierarchy.Deg.FullName);
   }
 
 /*****************************************************************************/
@@ -477,24 +461,8 @@ static void Deg_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("ShortName",Txt_Short_name);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change degree short name */
-      Frm_StartForm (ActRenDegShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit degree short name
-      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenDegShoCfg,
+		       Gbl.Hierarchy.Deg.ShrtName);
   }
 
 /*****************************************************************************/

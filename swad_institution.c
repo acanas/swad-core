@@ -555,24 +555,8 @@ static void Ins_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Institution;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("FullName",Txt_Institution);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change institution full name */
-      Frm_StartForm (ActRenInsFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ins.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit institution full name
-      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigFullName (PutForm,Txt_Institution,ActRenInsFulCfg,
+		       Gbl.Hierarchy.Ins.FullName);
   }
 
 /*****************************************************************************/
@@ -583,24 +567,8 @@ static void Ins_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("ShortName",Txt_Short_name);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change institution short name */
-      Frm_StartForm (ActRenInsShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ins.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit institution short name
-      HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenInsShoCfg,
+		       Gbl.Hierarchy.Ins.ShrtName);
   }
 
 /*****************************************************************************/

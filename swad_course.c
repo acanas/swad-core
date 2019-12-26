@@ -342,24 +342,8 @@ static void Crs_ConfigFullName (bool PutForm)
   {
    extern const char *Txt_Course;
 
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("FullName",Txt_Course);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change course full name */
-      Frm_StartForm (ActRenCrsFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Crs.FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit course full name
-      HTM_Txt (Gbl.Hierarchy.Crs.FullName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigFullName (PutForm,Txt_Course,ActRenCrsFulCfg,
+		       Gbl.Hierarchy.Crs.FullName);
   }
 
 /*****************************************************************************/
@@ -370,25 +354,8 @@ static void Crs_ConfigShrtName (bool PutForm)
   {
    extern const char *Txt_Short_name;
 
-   /***** Course short name *****/
-   HTM_TR_Begin (NULL);
-
-   Hie_ConfigLabel ("ShortName",Txt_Short_name);
-
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
-   if (PutForm)
-     {
-      /* Form to change course short name */
-      Frm_StartForm (ActRenCrsShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Crs.ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit course short name
-      HTM_Txt (Gbl.Hierarchy.Crs.ShrtName);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   Hie_ConfigShrtName (PutForm,Txt_Short_name,ActRenCrsShoCfg,
+		       Gbl.Hierarchy.Crs.ShrtName);
   }
 
 /*****************************************************************************/

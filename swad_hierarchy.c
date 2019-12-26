@@ -106,6 +106,60 @@ void Hie_ConfigLabel (const char *Id,const char *Label)
   }
 
 /*****************************************************************************/
+/********************** Show full name in configuration **********************/
+/*****************************************************************************/
+
+void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
+			 const char FullName[Hie_MAX_BYTES_FULL_NAME + 1])
+  {
+   HTM_TR_Begin (NULL);
+
+   Hie_ConfigLabel ("FullName",Label);
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (PutForm)
+     {
+      /* Form to change full name */
+      Frm_StartForm (NextAction);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,FullName,true,
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit full name
+      HTM_Txt (FullName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********* Show institution short name in institution configuration **********/
+/*****************************************************************************/
+
+void Hie_ConfigShrtName (bool PutForm,const char *Label,Act_Action_t NextAction,
+			 const char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
+  {
+   HTM_TR_Begin (NULL);
+
+   Hie_ConfigLabel ("ShortName",Label);
+
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (PutForm)
+     {
+      /* Form to change short name */
+      Frm_StartForm (NextAction);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,ShrtName,true,
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
+      Frm_EndForm ();
+     }
+   else	// I can not edit short name
+      HTM_Txt (ShrtName);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /************************* Show web in configuration *************************/
 /*****************************************************************************/
 
