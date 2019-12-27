@@ -452,7 +452,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (Field,Label);
+   Frm_LabelColumn ("RT",Field,Label);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",

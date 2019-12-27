@@ -95,9 +95,11 @@ void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
   {
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("FullName",Label);
+   Frm_LabelColumn ("RM",PutForm ? "FullName" :
+	                           NULL,
+		    Label);
 
-   HTM_TD_Begin ("class=\"DAT_N LT\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (PutForm)
      {
       /* Form to change full name */
@@ -124,9 +126,11 @@ void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("ShortName",Txt_Short_name);
+   Frm_LabelColumn ("RM",PutForm ? "ShortName" :
+	                           NULL,
+		    Txt_Short_name);
 
-   HTM_TD_Begin ("class=\"DAT_N LT\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (PutForm)
      {
       /* Form to change short name */
@@ -153,11 +157,11 @@ void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (PutForm ? "WWW" :
-	                      NULL,
+   Frm_LabelColumn ("RM",PutForm ? "WWW" :
+	                           NULL,
 		    Txt_Web);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
       /* Form to change web */
@@ -190,9 +194,9 @@ void Hie_ConfigShortcut (const char *ParamName,long HieCod)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Shortcut);
+   Frm_LabelColumn ("RM",NULL,Txt_Shortcut);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
                 Cfg_URL_SWAD_CGI,
                 Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -217,7 +221,7 @@ void Hie_ConfigQR (const char *ParamName,long HieCod)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_QR_code);
+   Frm_LabelColumn ("RT",NULL,Txt_QR_code);
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    QR_LinkTo (250,ParamName,HieCod);
@@ -269,7 +273,7 @@ void Hie_WriteMenuHierarchy (void)
           with all the countries *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("cty",Txt_Country);
+   Frm_LabelColumn ("RT","cty",Txt_Country);
 
    HTM_TD_Begin ("class=\"LT\"");
    Cty_WriteSelectorOfCountry ();
@@ -283,7 +287,7 @@ void Hie_WriteMenuHierarchy (void)
              with the institutions of selected country *****/
       HTM_TR_Begin (NULL);
 
-      Frm_LabelColumn ("ins",Txt_Institution);
+      Frm_LabelColumn ("RT","ins",Txt_Institution);
 
       HTM_TD_Begin ("class=\"LT\"");
       Ins_WriteSelectorOfInstitution ();
@@ -297,7 +301,7 @@ void Hie_WriteMenuHierarchy (void)
                 with all the centres of selected institution *****/
          HTM_TR_Begin (NULL);
 
-         Frm_LabelColumn ("ctr",Txt_Centre);
+         Frm_LabelColumn ("RT","ctr",Txt_Centre);
 
          HTM_TD_Begin ("class=\"LT\"");
          Ctr_WriteSelectorOfCentre ();
@@ -311,7 +315,7 @@ void Hie_WriteMenuHierarchy (void)
                    with all the degrees of selected centre *****/
             HTM_TR_Begin (NULL);
 
-            Frm_LabelColumn ("deg",Txt_Degree);
+            Frm_LabelColumn ("RT","deg",Txt_Degree);
 
             HTM_TD_Begin ("class=\"LT\"");
             Deg_WriteSelectorOfDegree ();
@@ -325,7 +329,7 @@ void Hie_WriteMenuHierarchy (void)
 		      with all the courses of selected degree *****/
 	       HTM_TR_Begin (NULL);
 
-               Frm_LabelColumn ("crs",Txt_Course);
+               Frm_LabelColumn ("RT","crs",Txt_Course);
 
 	       HTM_TD_Begin ("class=\"LT\"");
 	       Crs_WriteSelectorOfCourse ();

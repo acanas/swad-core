@@ -93,10 +93,10 @@ static void Ctr_ConfigLatitude (void);
 static void Ctr_ConfigLongitude (void);
 static void Ctr_ConfigAltitude (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
-static void Ctr_ConfigInstitution (bool PrintView);
+static void Ctr_ConfigInstitution (bool PutForm);
 static void Ctr_ConfigFullName (bool PutForm);
 static void Ctr_ConfigShrtName (bool PutForm);
-static void Ctr_ConfigPlace (bool PrintView);
+static void Ctr_ConfigPlace (bool PutForm);
 static void Ctr_ConfigWWW (bool PutForm);
 static void Ctr_ConfigShortcut (void);
 static void Ctr_ConfigQR (void);
@@ -312,7 +312,10 @@ static void Ctr_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTRE_Information;
    bool PutLink;
+   bool PutFormIns;
    bool PutFormName;
+   bool PutFormPlc;
+   bool PutFormCoor;
    bool PutFormWWW;
 
    /***** Trivial check *****/
@@ -321,7 +324,10 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** Initializations *****/
    PutLink     = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   PutFormIns  = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormPlc  =
+   PutFormCoor =
    PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
 
    /***** Begin box *****/
@@ -346,17 +352,17 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Institution *****/
-   Ctr_ConfigInstitution (PrintView);
+   Ctr_ConfigInstitution (PutFormIns);
 
    /***** Centre name *****/
    Ctr_ConfigFullName (PutFormName);
    Ctr_ConfigShrtName (PutFormName);
 
    /***** Place *****/
-   Ctr_ConfigPlace (PrintView);
+   Ctr_ConfigPlace (PutFormPlc);
 
    /***** Coordinates *****/
-   if (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+   if (PutFormCoor)
      {
       Ctr_ConfigLatitude ();
       Ctr_ConfigLongitude ();
@@ -542,9 +548,9 @@ static void Ctr_ConfigLatitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Latitude",Txt_Latitude);
+   Frm_LabelColumn ("RM","Latitude",Txt_Latitude);
 
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    /* Form to change centre latitude */
    Frm_StartForm (ActChgCtrLatCfg);
    HTM_INPUT_FLOAT ("Latitude",
@@ -565,9 +571,9 @@ static void Ctr_ConfigLongitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Longitude",Txt_Longitude);
+   Frm_LabelColumn ("RM","Longitude",Txt_Longitude);
 
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    /* Form to change centre longitude */
    Frm_StartForm (ActChgCtrLgtCfg);
    HTM_INPUT_FLOAT ("Longitude",
@@ -588,10 +594,10 @@ static void Ctr_ConfigAltitude (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Altitude",Txt_Altitude);
+   Frm_LabelColumn ("RM","Altitude",Txt_Altitude);
 
-   HTM_TD_Begin ("class=\"LT\"");
-   /* Form to change centre WWW */
+   HTM_TD_Begin ("class=\"LM\"");
+   /* Form to change centre altitude */
    Frm_StartForm (ActChgCtrAltCfg);
    HTM_INPUT_FLOAT ("Altitude",
 		    -413.0,	// Dead Sea shore
@@ -687,19 +693,19 @@ static void Ctr_ConfigPhoto (bool PrintView,bool PutLink)
 /***************** Show institution in centre configuration ******************/
 /*****************************************************************************/
 
-static void Ctr_ConfigInstitution (bool PrintView)
+static void Ctr_ConfigInstitution (bool PutForm)
   {
    extern const char *Txt_Institution;
    unsigned NumIns;
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("OthInsCod",Txt_Institution);
+   Frm_LabelColumn ("RM",PutForm ? "OthInsCod" :
+	                           NULL,
+		    Txt_Institution);
 
-   HTM_TD_Begin ("class=\"DAT_N LT\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      // Only system admins can move a centre to another institution
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (PutForm)
      {
       /* Get list of institutions of the current country */
       Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
@@ -753,7 +759,7 @@ static void Ctr_ConfigShrtName (bool PutForm)
 /**************** Show centre place in centre configuration ******************/
 /*****************************************************************************/
 
-static void Ctr_ConfigPlace (bool PrintView)
+static void Ctr_ConfigPlace (bool PutForm)
   {
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
@@ -764,13 +770,12 @@ static void Ctr_ConfigPlace (bool PrintView)
    Plc_GetDataOfPlaceByCod (&Plc);
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("PlcCod",Txt_Place);
+   Frm_LabelColumn ("RM",PutForm ? "PlcCod" :
+	                           NULL,
+		    Txt_Place);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // can change centre place
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (PutForm)
      {
       /* Get list of places of the current institution */
       Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
@@ -839,9 +844,9 @@ static void Ctr_ConfigNumUsrs (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Users_of_the_centre);
+   Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_centre);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -859,10 +864,10 @@ static void Ctr_ConfigNumDegs (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Degrees);
+   Frm_LabelColumn ("RM",NULL,Txt_Degrees);
 
    /* Form to go to see degrees of this centre */
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Frm_StartFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -887,9 +892,9 @@ static void Ctr_ConfigNumCrss (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Courses);
+   Frm_LabelColumn ("RM",NULL,Txt_Courses);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -907,10 +912,11 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
-		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn ("RM",NULL,
+		    Role == Rol_UNK ? Txt_Users_in_courses :
+		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 

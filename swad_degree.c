@@ -89,7 +89,7 @@ static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degr
 static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
 static void Deg_ConfigTitle (bool PutLink);
-static void Deg_ConfigCentre (bool PrintView);
+static void Deg_ConfigCentre (bool PutForm);
 static void Deg_ConfigFullName (bool PutForm);
 static void Deg_ConfigShrtName (bool PutForm);
 static void Deg_ConfigWWW (bool PutForm);
@@ -302,6 +302,7 @@ static void Deg_Configuration (bool PrintView)
   {
    extern const char *Hlp_DEGREE_Information;
    bool PutLink;
+   bool PutFormCtr;
    bool PutFormName;
    bool PutFormWWW;
 
@@ -311,6 +312,7 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Initializations *****/
    PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   PutFormCtr  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
    PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
    PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
@@ -329,7 +331,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Centre *****/
-   Deg_ConfigCentre (PrintView);
+   Deg_ConfigCentre (PutFormCtr);
 
    /***** Degree name *****/
    Deg_ConfigFullName (PutFormName);
@@ -398,20 +400,19 @@ static void Deg_ConfigTitle (bool PutLink)
 /******************** Show centre in degree configuration ********************/
 /*****************************************************************************/
 
-static void Deg_ConfigCentre (bool PrintView)
+static void Deg_ConfigCentre (bool PutForm)
   {
    extern const char *Txt_Centre;
    unsigned NumCtr;
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("OthCtrCod",Txt_Centre);
+   Frm_LabelColumn ("RM",PutForm ? "OthCtrCod" :
+	                           NULL,
+		    Txt_Centre);
 
-   HTM_TD_Begin ("class=\"DAT_N LT\"");
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      // Only institution admins and system admin
-      // can move a degree to another centre
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   if (PutForm)
      {
       /* Get list of centres of the current institution */
       Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
@@ -499,10 +500,10 @@ static void Deg_ConfigNumCrss (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Courses);
+   Frm_LabelColumn ("RM",NULL,Txt_Courses);
 
    /* Form to go to see courses of this degree */
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Frm_StartFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -528,10 +529,11 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Role == Rol_UNK ? Txt_Users_in_courses :
-		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn ("RM",NULL,
+		    Role == Rol_UNK ? Txt_Users_in_courses :
+		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
    HTM_TD_End ();
 

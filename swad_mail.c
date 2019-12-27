@@ -1206,7 +1206,6 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 				        bool IMustFillInEmail,bool IShouldConfirmEmail)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
@@ -1248,7 +1247,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    HTM_TABLE_BeginWidePadding (2);
 
    /***** List emails *****/
-   for (NumEmail = 1;
+   for (NumEmail  = 1;
 	NumEmail <= NumEmails;
 	NumEmail++)
      {
@@ -1256,32 +1255,20 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       row = mysql_fetch_row (mysql_res);
       Confirmed = (row[1][0] == 'Y');
 
-      HTM_TR_Begin (NULL);
-
       if (NumEmail == 1)
 	{
+         HTM_TR_Begin (NULL);
+
 	 /* The first mail is the current one */
-	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-	 HTM_LABEL_Begin ("for=\"Email\" class=\"%s\"",
-		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Current_email);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
-      else	// NumEmail >= 2
+      else if (NumEmail == 2)
 	{
-	 if (NumEmail == 2)
-	   {
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
-		          NumEmails - 1);
-	    HTM_LABEL_Begin ("for=\"Email\" class=\"%s\"",
-		             The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtF ("%s:",Txt_Other_emails);
-	    HTM_LABEL_End ();
-	    HTM_TD_End ();
-	   }
+	 HTM_TR_Begin (NULL);
+
+	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 	}
@@ -1353,20 +1340,22 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 Frm_EndForm ();
 	}
 
-      HTM_TD_End ();
-      HTM_TR_End ();
+      if (NumEmail == 1 ||
+	  NumEmail == NumEmails)
+	{
+         HTM_TD_End ();
+         HTM_TR_End ();
+	}
+      else
+	 HTM_BR ();
      }
 
    /***** Form to enter new email *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-   HTM_LABEL_Begin ("for=\"NewEmail\" class=\"%s\"",
-                    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",NumEmails ? Txt_New_email :	// A new email
-        	               Txt_Email);	// The first email
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
+		    NumEmails ? Txt_New_email :	// A new email
+        	                Txt_Email);	// The first email
 
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)

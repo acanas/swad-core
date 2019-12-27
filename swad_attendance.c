@@ -1072,7 +1072,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Attendance event title *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RT","Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,false,
@@ -1088,11 +1088,10 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Visibility of comments *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("ComTchVisible",Txt_Teachers_comment);
+   Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (false,
-		     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
+   HTM_SELECT_Begin (false,"id=\"ComTchVisible\" name=\"ComTchVisible\"");
    HTM_OPTION (HTM_Type_STRING,"N",!Att.CommentTchVisible,false,
 	       "%s",Txt_Hidden_MALE_PLURAL);
    HTM_OPTION (HTM_Type_STRING,"Y",Att.CommentTchVisible,false,
@@ -1104,7 +1103,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Attendance event description *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Description);
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""

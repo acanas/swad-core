@@ -1095,7 +1095,6 @@ void Asg_RequestCreatOrEditAsg (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1166,9 +1165,9 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment title *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RM","Title",Txt_Title);
 
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
@@ -1182,15 +1181,13 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Send work? *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Upload_files_QUESTION);
-   HTM_TD_End ();
+   Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
    HTM_TxtF ("%s:",Txt_Folder);
    HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,false,
-		   "size=\"30\"");
+		   "id=\"Folder\" size=\"30\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1199,7 +1196,7 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment text *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Description);
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""

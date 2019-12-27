@@ -8539,7 +8539,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TABLE_Begin (NULL);
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("NewLinkURL",Txt_URL);
+   Frm_LabelColumn ("RT","NewLinkURL",Txt_URL);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_URL ("NewLinkURL","",false,
@@ -8553,7 +8553,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
       Lay_NotEnoughMemoryExit ();
-   Frm_LabelColumn ("NewLinkName",Label);
+   Frm_LabelColumn ("RT","NewLinkName",Label);
    free (Label);
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -9602,7 +9602,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** Private or public? *****/
 	 HTM_TR_Begin (NULL);
 
-	 Frm_LabelColumn ("PublicFile",Txt_Availability);
+	 Frm_LabelColumn ("RT","PublicFile",Txt_Availability);
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanChangePublic)	// I can change file to public
@@ -9627,7 +9627,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** License *****/
 	 HTM_TR_Begin (NULL);
 
-	 Frm_LabelColumn ("License",Txt_License);
+	 Frm_LabelColumn ("RT","License",Txt_License);
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanEdit)	// I can edit file properties

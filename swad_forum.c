@@ -3829,7 +3829,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Subject */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Subject",Txt_MSG_Subject);
+   Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
@@ -3843,7 +3843,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Content */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Content",Txt_MSG_Content);
+   Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");

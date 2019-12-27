@@ -68,6 +68,6 @@ void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1]);
 void Frm_SetAnchorStr (long Cod,char **Anchor);
 void Frm_FreeAnchorStr (char *Anchor);
 
-void Frm_LabelColumn (const char *Id,const char *Label);
+void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
 
 #endif

@@ -1507,7 +1507,7 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Event *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Event",Txt_Event);
+   Frm_LabelColumn ("RT","Event",Txt_Event);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,false,
@@ -1520,7 +1520,7 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Location *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Location",Txt_Location);
+   Frm_LabelColumn ("RT","Location",Txt_Location);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,false,
@@ -1537,7 +1537,7 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Text *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Description);
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""

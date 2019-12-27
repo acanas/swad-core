@@ -932,7 +932,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
@@ -953,9 +952,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
    extern const char *Txt_Publish_announcement_OF_EXAM;
-   const char *StyleTitle  = "CONV_TIT";
-   const char *StyleForm   = "CONV_NEG";
-   const char *StyleNormal = "CONV";
    struct Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned Year;
@@ -983,20 +979,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Get data of institution of this degree *****/
    Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
-   switch (TypeViewExamAnnouncement)
-     {
-      case Exa_NORMAL_VIEW:
-	 break;
-      case Exa_PRINT_VIEW:
-         StyleTitle  = "CONV_TIT_IMPR";
-         StyleForm   = "CONV_NEG_IMPR";
-         StyleNormal = "CONV_IMPR";
-         break;
-      case Exa_FORM_VIEW:
-         StyleForm = The_ClassFormInBox[Gbl.Prefs.Theme];
-         break;
-     }
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -1043,10 +1025,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      HTM_SPAN_Begin ("class=\"%s\"",StyleTitle);
+      HTM_SPAN_Begin ("class=\"EXAM_TIT\"");
    else
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-                   Ins.WWW,StyleTitle);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
+                   Ins.WWW);
    Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Ins.FullName);
@@ -1059,10 +1041,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    /***** Degree *****/
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleTitle);
+   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM_TIT CM\"");
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-                   Gbl.Hierarchy.Deg.WWW,StyleTitle);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
+                   Gbl.Hierarchy.Deg.WWW);
    HTM_Txt (Gbl.Hierarchy.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       HTM_A_End ();
@@ -1071,7 +1053,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    /***** Title *****/
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",StyleNormal);
+   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM CM\"");
    HTM_NBSP ();
    HTM_BR ();
    HTM_STRONG_Begin ();
@@ -1081,7 +1063,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"%s LM\"",StyleNormal);
+   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM LM\"");
    HTM_NBSP ();
    HTM_TD_End ();
    HTM_TR_End ();
@@ -1089,9 +1071,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Name of the course *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("CrsName",Txt_EXAM_ANNOUNCEMENT_Course);
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "CrsName" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Course);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,Gbl.ExamAnns.ExaDat.CrsFullName,false,
 		      "id=\"CrsName\" size=\"30\"");
@@ -1108,13 +1093,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Year\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Year" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_SELECT_Begin (false,
@@ -1136,13 +1120,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Exam session *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"ExamSession\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Session);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "ExamSession" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Session);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       HTM_INPUT_TEXT ("ExamSession",Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session,false,
 		      "id=\"ExamSession\" size=\"30\"");
@@ -1155,9 +1138,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Date of the exam *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Exam_date);
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Exam_date);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1173,7 +1154,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      {
       Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,
                              StrExamDate);
-      HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+      HTM_TD_Begin ("class=\"EXAM LT\"");
       HTM_Txt (StrExamDate);
       HTM_TD_End ();
      }
@@ -1182,11 +1163,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Start time *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Start_time);
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Start_time);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_SELECT_Begin (false,
@@ -1222,11 +1201,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Approximate duration of the exam *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_SELECT_Begin (false,
@@ -1277,13 +1254,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Place where the exam will be made *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Place\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Place" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
@@ -1304,13 +1280,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Exam mode *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"ExamMode\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Mode);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "ExamMode" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Mode);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
@@ -1331,13 +1306,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Structure of the exam *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"Structure\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Structure" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
@@ -1358,13 +1332,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Documentation required *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"DocRequired\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Documentation_required);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "DocRequired" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Documentation_required);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
@@ -1385,13 +1358,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Material required *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"MatRequired\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Material_required);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "MatRequired" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Material_required);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
@@ -1412,13 +1384,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Material allowed *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"MatAllowed\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Material_allowed);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "MatAllowed" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Material_allowed);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
@@ -1439,13 +1410,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Other information to students *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT\"");
-   HTM_LABEL_Begin ("for=\"OtherInfo\" class=\"%s\"",StyleForm);
-   HTM_TxtF ("%s:",Txt_EXAM_ANNOUNCEMENT_Other_information);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RT",
+		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "OtherInfo" :
+			                                        NULL,
+		    Txt_EXAM_ANNOUNCEMENT_Other_information);
 
-   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
+   HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");

@@ -122,7 +122,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Scope */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("ScopeInd",Txt_Scope);
+   Frm_LabelColumn ("RT","ScopeInd",Txt_Scope);
 
    HTM_TD_Begin ("class=\"LT\"");
    Sco_PutSelectorScope ("ScopeInd",true);
@@ -133,7 +133,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for a type of degree */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("OthDegTypCod",Txt_Types_of_degree);
+   Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    DT_WriteSelectorDegreeTypes ();
@@ -147,9 +147,9 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+   Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
                                 "INDICATORS_INPUT",		// Selector class

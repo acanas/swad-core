@@ -1288,7 +1288,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    /***** Game title *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RT","Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,
@@ -1315,7 +1315,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    /***** Game text *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Description);
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""

@@ -1243,7 +1243,7 @@ static void Mch_PutFormNewMatch (const struct Game *Game)
    /***** Match title *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RT","Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,false,

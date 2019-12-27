@@ -573,7 +573,6 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 			            bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
@@ -603,12 +602,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	{
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-	 HTM_LABEL_Begin ("for=\"UsrID\" class=\"%s\"",
-		          The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_ID);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
@@ -683,13 +677,9 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       /***** Form to enter new user's ID *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-      HTM_LABEL_Begin ("for=\"NewID\" class=\"%s\"",
-	               The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
-		                        Txt_ID);		// The first user's ID
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      Frm_LabelColumn ("REC_C1_BOT RT","NewID",
+		       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
+		                         Txt_ID);		// The first user's ID
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
       if (ItsMe)

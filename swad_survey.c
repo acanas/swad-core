@@ -1863,7 +1863,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Scope of the survey *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("ScopeSvy",Txt_Scope);
+   Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
 
    HTM_TD_Begin ("class=\"LT\"");
    Svy_SetDefaultAndAllowedScope (&Svy);
@@ -1876,7 +1876,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey title *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RT","Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,false,
@@ -1892,7 +1892,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey text *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Description);
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
@@ -2680,7 +2680,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Stem *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Txt",Txt_Wording);
+   Frm_LabelColumn ("RT","Txt",Txt_Wording);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");

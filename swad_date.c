@@ -426,7 +426,6 @@ void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 
 
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
@@ -434,11 +433,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    /***** Start date-time *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_START_TIME]);
 
    /* Date-time */
    HTM_TD_Begin ("class=\"LM\"");
@@ -465,11 +460,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    /***** End date-time *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_START_END_TIME[Dat_END_TIME]);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_END_TIME]);
 
    /* Date-time */
    HTM_TD_Begin ("class=\"LM\"");
@@ -494,7 +485,6 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                                               Dat_FormSeconds FormSeconds)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    Dat_StartEndTime_t StartEndTime;
    const char *Id[Dat_NUM_START_END_TIME] =
@@ -510,11 +500,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
       /* Date-time */
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"RM\"");
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[StartEndTime]);
 
       HTM_TD_Begin ("class=\"LM\"");
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],

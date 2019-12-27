@@ -216,7 +216,6 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
@@ -262,22 +261,19 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    HTM_TABLE_BeginWidePadding (2);
 
    /***** List nicknames *****/
-   for (NumNick = 1;
+   for (NumNick  = 1;
 	NumNick <= NumNicks;
 	NumNick++)
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
 
-      HTM_TR_Begin (NULL);
       if (NumNick == 1)
 	{
 	 /* The first nickname is the current one */
-	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-	 HTM_LABEL_Begin ("for=\"Nick\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Current_nickname);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+         HTM_TR_Begin (NULL);
+
+	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
@@ -285,16 +281,12 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	{
 	 if (NumNick == 2)
 	   {
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
-		          NumNicks - 1);
-	    HTM_LABEL_Begin ("for=\"Nick\" class=\"%s\"",
-		             The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtF ("%s:",Txt_Other_nicknames);
-	    HTM_LABEL_End ();
-	    HTM_TD_End ();
-	   }
+            HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	    Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	   }
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
@@ -362,19 +354,22 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	 Frm_EndForm ();
 	}
 
-      HTM_TD_End ();
-      HTM_TR_End ();
+      if (NumNick == 1 ||
+	  NumNick == NumNicks)
+	{
+         HTM_TD_End ();
+         HTM_TR_End ();
+	}
+      else
+	 HTM_BR ();
      }
 
    /***** Form to enter new nickname *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-   HTM_LABEL_Begin ("for=\"NewNick\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",NumNicks ? Txt_New_nickname :	// A new nickname
-        	              Txt_Nickname);		// The first nickname
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
+		    NumNicks ? Txt_New_nickname :	// A new nickname
+        	               Txt_Nickname);		// The first nickname
 
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
@@ -402,7 +397,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	     Gbl.Usrs.Me.UsrDat.Nickname);
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
 		   NicknameWithArroba,false,
-		   "size=\"18\"");
+		   "id=\"NewNick\" size=\"18\"");
    HTM_BR ();
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save_changes);	// I have no nickname yet);

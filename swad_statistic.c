@@ -427,7 +427,7 @@ void Sta_AskShowGblHits (void)
    /***** Users' roles whose accesses we want to see *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Role",Txt_Users);
+   Frm_LabelColumn ("RT","Role",Txt_Users);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
@@ -452,7 +452,7 @@ void Sta_AskShowGblHits (void)
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("ScopeSta",Txt_Scope);
+   Frm_LabelColumn ("RT","ScopeSta",Txt_Scope);
 
    HTM_TD_Begin ("class=\"LT\"");
    Gbl.Scope.Allowed = 1 << Hie_SYS |
@@ -471,7 +471,7 @@ void Sta_AskShowGblHits (void)
    /***** Count type for the statistic *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("CountType",Txt_Show);
+   Frm_LabelColumn ("RT","CountType",Txt_Show);
 
    HTM_TD_Begin ("class=\"LT\"");
    Sta_WriteSelectorCountType ();
@@ -592,9 +592,9 @@ static void Sta_WriteSelectorAction (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("StatAct",Txt_Action);
+   Frm_LabelColumn ("RT","StatAct",Txt_Action);
 
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",Gbl.Stat.NumAction == 0,false,

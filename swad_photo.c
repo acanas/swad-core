@@ -1792,7 +1792,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("AvgType",Txt_Average_type);
+   Frm_LabelColumn ("RT","AvgType",Txt_Average_type);
 
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
@@ -1853,7 +1853,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("PhotoSize",Txt_Size_of_photos);
+   Frm_LabelColumn ("RT","PhotoSize",Txt_Size_of_photos);
 
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
@@ -1914,7 +1914,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Order",Txt_Sort_degrees_by);
+   Frm_LabelColumn ("RT","Order",Txt_Sort_degrees_by);
 
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);

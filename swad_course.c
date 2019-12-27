@@ -81,7 +81,7 @@ static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the cour
 static void Crs_Configuration (bool PrintView);
 static void Crs_PutIconToPrint (void);
 static void Crs_ConfigTitle (bool PutLink);
-static void Crs_ConfigDegree (bool PrintView);
+static void Crs_ConfigDegree (bool PutForm);
 static void Crs_ConfigFullName (bool PutForm);
 static void Crs_ConfigShrtName (bool PutForm);
 static void Crs_ConfigYear (bool PutForm);
@@ -182,17 +182,21 @@ static void Crs_Configuration (bool PrintView)
   {
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
+   bool PutFormDeg;
    bool PutFormName;
    bool PutFormYear;
+   bool PutFormInsCod;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
 
    /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
-   PutFormYear = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
+   PutLink       = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   PutFormDeg    = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormName   = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutFormYear   =
+   PutFormInsCod = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
 
    /***** Contextual menu *****/
    if (!PrintView)
@@ -219,7 +223,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
-   Crs_ConfigDegree (PrintView);
+   Crs_ConfigDegree (PutFormDeg);
 
    /***** Course name *****/
    Crs_ConfigFullName (PutFormName);
@@ -231,7 +235,7 @@ static void Crs_Configuration (bool PrintView)
    if (!PrintView)
      {
       /***** Institutional code of the course *****/
-      Crs_ConfigInstitutionalCode (PutFormYear);
+      Crs_ConfigInstitutionalCode (PutFormInsCod);
 
       /***** Internal code of the course *****/
       Crs_ConfigInternalCode ();
@@ -289,21 +293,19 @@ static void Crs_ConfigTitle (bool PutLink)
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void Crs_ConfigDegree (bool PrintView)
+static void Crs_ConfigDegree (bool PutForm)
   {
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("OthDegCod",Txt_Degree);
+   Frm_LabelColumn ("RM",PutForm ? "OthDegCod" :
+	                           NULL,
+		    Txt_Degree);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-
-   if (!PrintView &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admin
-      // can move a course to another degree
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   if (PutForm)
      {
       /* Get list of degrees of the current centre */
       Deg_GetListDegsOfCurrentCtr ();
@@ -327,7 +329,6 @@ static void Crs_ConfigDegree (bool PrintView)
      }
    else	// I can not move course to another degree
       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -367,9 +368,11 @@ static void Crs_ConfigYear (bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("OthCrsYear",Txt_Year_OF_A_DEGREE);
+   Frm_LabelColumn ("RM",PutForm ? "OthCrsYear" :
+	                           NULL,
+		    Txt_Year_OF_A_DEGREE);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
@@ -402,9 +405,11 @@ static void Crs_ConfigInstitutionalCode (bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("InsCrsCod",Txt_Institutional_code);
+   Frm_LabelColumn ("RM",PutForm ? "InsCrsCod" :
+	                           NULL,
+		    Txt_Institutional_code);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgInsCrsCodCfg);
@@ -431,9 +436,9 @@ static void Crs_ConfigInternalCode (void)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Internal_code);
+   Frm_LabelColumn ("RM",NULL,Txt_Internal_code);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
    HTM_TD_End ();
 
@@ -468,9 +473,9 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn ("RM",NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
    HTM_TD_End ();
 
@@ -492,9 +497,9 @@ static void Crs_ConfigIndicators (void)
 				     NumIndicatorsFromDB,&Indicators);
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (NULL,Txt_Indicators);
+   Frm_LabelColumn ("RM",NULL,Txt_Indicators);
 
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActReqStaCrs);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%u %s %u",

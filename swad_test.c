@@ -336,7 +336,7 @@ void Tst_ShowFormAskTst (void)
          /***** Number of questions to generate ****/
          HTM_TR_Begin (NULL);
 
-         Frm_LabelColumn ("NumQst",Txt_No_of_questions);
+         Frm_LabelColumn ("RT","NumQst",Txt_No_of_questions);
 
          HTM_TD_Begin ("class=\"LT\"");
          HTM_INPUT_LONG ("NumQst",
@@ -1947,9 +1947,10 @@ static void Tst_ShowFormConfigTst (void)
    /***** Minimum time between consecutive tests, per question *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("MinTimeNxtTstPerQst",Txt_Minimum_time_seconds_per_question_between_two_tests);
+   Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
+		    Txt_Minimum_time_seconds_per_question_between_two_tests);
 
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LB\"");
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
@@ -5193,7 +5194,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Stem and image *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Stem",Txt_Wording);
+   Frm_LabelColumn ("RT","Stem",Txt_Wording);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""

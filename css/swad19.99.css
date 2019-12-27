@@ -3734,46 +3734,16 @@ a.PAG:hover, .PAG_CUR
 	}
 
 /***************************** Calls for exams *******************************/
-.CONV_TIT
+.EXAM_TIT
 	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
+	/* font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif; */
  	color:#202020;
  	font-weight:bold;
  	font-size:18pt;
  	}
-.CONV_TIT_IMPR
+.EXAM
 	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
-	color:#202020;
-	font-weight:bold;
-	font-size:18pt;
-	}
-.CONV_NEG
-	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
-	color:#202020;
-	font-weight:bold;
-	font-size:13pt;
-	white-space:nowrap;
-	}
-.CONV_NEG_IMPR
-	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
-	color:#202020;
-	font-weight:bold;
-	font-size:13pt;
-	white-space:nowrap;
-	text-align:right;
-	}
-.CONV
-	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
-	color:#202020;
-	font-size:13pt;
-	}
-.CONV_IMPR
-	{
-	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
+	/* font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif; */
 	color:#202020;
 	font-size:13pt;
 	}

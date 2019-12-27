@@ -3471,7 +3471,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Project title */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Title",Txt_Title);
+   Frm_LabelColumn ("RT","Title",Txt_Title);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,false,
@@ -3484,7 +3484,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Department */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+   Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
    HTM_TD_Begin ("class=\"LT\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
@@ -3572,7 +3572,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* URL for additional info */
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("WWW",Txt_URL);
+   Frm_LabelColumn ("RT","WWW",Txt_URL);
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_INPUT_URL ("URL",Prj->URL,false,
@@ -3606,7 +3606,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn (Id,Label);
+   Frm_LabelColumn ("RT",Id,Label);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
@@ -3904,7 +3904,7 @@ void Prj_ShowFormConfig (void)
    HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("Editable",Txt_Editable);
+   Frm_LabelColumn ("RT","Editable",Txt_Editable);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_CHECKBOX ("Editable",false,

@@ -534,7 +534,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    /***** Message subject *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("MsgSubject",Txt_MSG_Subject);
+   Frm_LabelColumn ("RT","MsgSubject",Txt_MSG_Subject);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
@@ -581,9 +581,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       HTM_TR_Begin (NULL);
 
-      Frm_LabelColumn ("MsgContent",Txt_MSG_Content);
+      Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
 
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
                           " class=\"MSG_CONTENT\" rows=\"20\"");
 
@@ -611,7 +611,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       HTM_TR_Begin (NULL);
 
-      Frm_LabelColumn ("MsgContent",Txt_MSG_Content);
+      Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
 
       HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""

@@ -371,7 +371,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
       NewNicknameWithArroba[0] = '\0';
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("NewNick",Txt_Nickname);
+   Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
@@ -385,7 +385,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
    /***** Email *****/
    HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("NewEmail",Txt_Email);
+   Frm_LabelColumn ("RT","NewEmail",Txt_Email);
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
