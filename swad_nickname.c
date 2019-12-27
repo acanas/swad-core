@@ -273,8 +273,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	 /* The first nickname is the current one */
          HTM_TR_Begin (NULL);
 
+         /* Label */
 	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
 
+	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else	// NumNick >= 2
@@ -283,8 +285,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	   {
             HTM_TR_Begin (NULL);
 
+            /* Label */
 	    Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
 
+	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 	   }
 
@@ -367,10 +371,12 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    /***** Form to enter new nickname *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
 		    NumNicks ? Txt_New_nickname :	// A new nickname
         	               Txt_Nickname);		// The first nickname
 
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);

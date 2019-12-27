@@ -122,8 +122,10 @@ void Ind_ReqIndicatorsCourses (void)
    /* Scope */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","ScopeInd",Txt_Scope);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Sco_PutSelectorScope ("ScopeInd",true);
    HTM_TD_End ();
@@ -133,8 +135,10 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for a type of degree */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LT\"");
    DT_WriteSelectorDegreeTypes ();
    HTM_Txt (" (");
@@ -147,8 +151,10 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department

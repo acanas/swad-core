@@ -684,8 +684,10 @@ void Pwd_ShowFormChgMyPwd (void)
      {
       HTM_TR_Begin (NULL);
 
+      /* Label */
       Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
 			  "id=\"UsrPwd\"");
@@ -727,12 +729,13 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
+   /***** Password *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label ****/
+   /* Label */
    Frm_LabelColumn ("RT","Paswd",Txt_Password);
 
-   /***** Input ****/
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
 		       "id=\"Paswd\"");
@@ -753,13 +756,12 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_HELP_password;
 
    /***** 1st password *****/
-   /* Begin form element */
    HTM_TR_Begin (NULL);
 
    /* Label */
    Frm_LabelColumn ("REC_C1_BOT RM","Paswd1",Txt_New_password);
 
-   /* Input */
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
 		       "id=\"Paswd1\"");
@@ -768,13 +770,12 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_End ();
 
    /***** 2nd password *****/
-   /* Begin form element */
    HTM_TR_Begin (NULL);
 
    /* Label */
    Frm_LabelColumn ("REC_C1_BOT RM","Paswd2",Txt_Retype_new_password);
 
-   /* Input */
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
 		       "id=\"Paswd2\"");

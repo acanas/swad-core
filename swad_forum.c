@@ -3829,8 +3829,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Subject */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 		   IsReply ? Subject :
@@ -3843,8 +3845,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Content */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
    HTM_TEXTAREA_End ();

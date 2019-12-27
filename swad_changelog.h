@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.99.2 (2019-12-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.100 (2019-12-27)"
 #define CSS_FILE		"swad19.99.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,7 +502,7 @@ ps2pdf source.ps destination.pdf
 
 	Version 19.102:   Dec 27, 2019	Map in country information. (? lines)
 	Version 19.101:   Dec 27, 2019	Map in institution information. (? lines)
-	Version 19.100:   Dec 27, 2019	Code refactoring in country information. (? lines)
+	Version 19.100:   Dec 27, 2019	Code refactoring in country information. (249170 lines)
 	Version 19.99.2:  Dec 27, 2019	Fixed bug in attendance. (248857 lines)
 	Version 19.99.1:  Dec 27, 2019	Code refactoring in form labels. (248855 lines)
 	Version 19.99:    Dec 27, 2019	Code refactoring in form labels. (248924 lines)

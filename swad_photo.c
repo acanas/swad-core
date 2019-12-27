@@ -1790,10 +1790,13 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
    unsigned TypeOfAvgUnsigned;
 
+   /***** Type of average *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","AvgType",Txt_Average_type);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
@@ -1851,10 +1854,13 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_HowComputePhotoSize_t PhoSi;
    unsigned PhoSiUnsigned;
 
+   /***** Photo size *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","PhotoSize",Txt_Size_of_photos);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
@@ -1912,10 +1918,13 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_HowOrderDegrees_t Order;
    unsigned OrderUnsigned;
 
+   /***** Order *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Order",Txt_Sort_degrees_by);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();

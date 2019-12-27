@@ -450,10 +450,13 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
+   /***** Subject or content *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT",Field,Label);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",
 	               Field,Field,Rows);

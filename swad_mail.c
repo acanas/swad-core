@@ -1260,16 +1260,20 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
          HTM_TR_Begin (NULL);
 
 	 /* The first mail is the current one */
+         /* Label */
 	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
 
+	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else if (NumEmail == 2)
 	{
 	 HTM_TR_Begin (NULL);
 
+	 /* Label */
 	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
 
+	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 	}
 
@@ -1353,10 +1357,12 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    /***** Form to enter new email *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
 		    NumEmails ? Txt_New_email :	// A new email
         	                Txt_Email);	// The first email
 
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);

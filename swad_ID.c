@@ -602,8 +602,10 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	{
 	 HTM_TR_Begin (NULL);
 
+	 /* Label */
 	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
 
+	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else	// NumID >= 1
@@ -677,10 +679,12 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       /***** Form to enter new user's ID *****/
       HTM_TR_Begin (NULL);
 
+      /* Label */
       Frm_LabelColumn ("REC_C1_BOT RT","NewID",
 		       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                         Txt_ID);		// The first user's ID
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
       if (ItsMe)
 	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);

@@ -433,9 +433,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    /***** Start date-time *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_START_TIME]);
 
-   /* Date-time */
+   /* Data (date-time) */
    HTM_TD_Begin ("class=\"LM\"");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
                                                 "Start",
@@ -460,9 +461,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    /***** End date-time *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_END_TIME]);
 
-   /* Date-time */
+   /* Data (date-time) */
    HTM_TD_Begin ("class=\"LM\"");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
                                                 "End",
@@ -497,11 +499,13 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	StartEndTime <= Dat_END_TIME;
 	StartEndTime++)
      {
-      /* Date-time */
+      /***** Date-time *****/
       HTM_TR_Begin (NULL);
 
+      /* Label */
       Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[StartEndTime]);
 
+      /* Data */
       HTM_TD_Begin ("class=\"LM\"");
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
                                                    Id[StartEndTime],

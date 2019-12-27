@@ -427,8 +427,10 @@ void Sta_AskShowGblHits (void)
    /***** Users' roles whose accesses we want to see *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Role",Txt_Users);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
@@ -452,8 +454,10 @@ void Sta_AskShowGblHits (void)
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","ScopeSta",Txt_Scope);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
@@ -471,8 +475,10 @@ void Sta_AskShowGblHits (void)
    /***** Count type for the statistic *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","CountType",Txt_Show);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Sta_WriteSelectorCountType ();
 
@@ -576,7 +582,7 @@ static void Sta_WriteSelectorCountType (void)
   }
 
 /*****************************************************************************/
-/****** Put selectors for type of access count and for degree or course ******/
+/******************** Put selector for type of action ************************/
 /*****************************************************************************/
 
 static void Sta_WriteSelectorAction (void)
@@ -590,8 +596,10 @@ static void Sta_WriteSelectorAction (void)
    Tab_Tab_t Tab;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
+   /***** Action *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","StatAct",Txt_Action);
 
    HTM_TD_Begin ("class=\"LT\"");

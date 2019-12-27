@@ -1165,8 +1165,10 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment title *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM","Title",Txt_Title);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
 		   "id=\"Title\" required=\"required\""
@@ -1181,8 +1183,10 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Send work? *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
    HTM_TxtF ("%s:",Txt_Folder);
@@ -1196,8 +1200,10 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment text *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
 	               " class=\"TITLE_DESCRIPTION_WIDTH\"");

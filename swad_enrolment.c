@@ -916,8 +916,10 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\" cols=\"60\" rows=\"10\"");
    HTM_TEXTAREA_End ();
@@ -2257,8 +2259,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /* Scope (whole platform, current centre, current degree or current course) */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","ScopeEnr",Txt_Scope);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    Sco_PutSelectorScope ("ScopeEnr",true);
    HTM_TD_End ();

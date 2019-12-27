@@ -546,12 +546,14 @@ static void Ctr_ConfigLatitude (void)
   {
    extern const char *Txt_Latitude;
 
+   /***** Latitude *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM","Latitude",Txt_Latitude);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   /* Form to change centre latitude */
    Frm_StartForm (ActChgCtrLatCfg);
    HTM_INPUT_FLOAT ("Latitude",
 		    -90.0,	// South Pole
@@ -569,12 +571,14 @@ static void Ctr_ConfigLongitude (void)
   {
    extern const char *Txt_Longitude;
 
+   /***** Longitude *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM","Longitude",Txt_Longitude);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   /* Form to change centre longitude */
    Frm_StartForm (ActChgCtrLgtCfg);
    HTM_INPUT_FLOAT ("Longitude",
 		    -180.0,	// West
@@ -592,12 +596,14 @@ static void Ctr_ConfigAltitude (void)
   {
    extern const char *Txt_Altitude;
 
+   /***** Altitude *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM","Altitude",Txt_Altitude);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   /* Form to change centre altitude */
    Frm_StartForm (ActChgCtrAltCfg);
    HTM_INPUT_FLOAT ("Altitude",
 		    -413.0,	// Dead Sea shore
@@ -698,12 +704,15 @@ static void Ctr_ConfigInstitution (bool PutForm)
    extern const char *Txt_Institution;
    unsigned NumIns;
 
+   /***** Institution *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "OthInsCod" :
 	                           NULL,
 		    Txt_Institution);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (PutForm)
      {
@@ -766,14 +775,19 @@ static void Ctr_ConfigPlace (bool PutForm)
    struct Place Plc;
    unsigned NumPlc;
 
+   /***** Get data of place *****/
    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
    Plc_GetDataOfPlaceByCod (&Plc);
+
+   /***** Place *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "PlcCod" :
 	                           NULL,
 		    Txt_Place);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
@@ -842,10 +856,13 @@ static void Ctr_ConfigNumUsrs (void)
   {
    extern const char *Txt_Users_of_the_centre;
 
+   /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_centre);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
@@ -862,11 +879,13 @@ static void Ctr_ConfigNumDegs (void)
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
 
+   /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Degrees);
 
-   /* Form to go to see degrees of this centre */
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    Frm_StartFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
@@ -890,10 +909,13 @@ static void Ctr_ConfigNumCrss (void)
   {
    extern const char *Txt_Courses;
 
+   /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Courses);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
@@ -910,12 +932,15 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
+   /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();

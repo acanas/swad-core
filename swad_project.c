@@ -3471,8 +3471,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Project title */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Title",Txt_Title);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,false,
 		   "id=\"Title\" required=\"required\""
@@ -3484,8 +3486,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Department */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
@@ -3572,8 +3576,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* URL for additional info */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","WWW",Txt_URL);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LT\"");
    HTM_INPUT_URL ("URL",Prj->URL,false,
 		  "class=\"TITLE_DESCRIPTION_WIDTH\"");
@@ -3604,10 +3610,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
+   /***** Description *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT",Id,Label);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
 	               " class=\"TITLE_DESCRIPTION_WIDTH\"",
@@ -3904,8 +3913,10 @@ void Prj_ShowFormConfig (void)
    HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Editable",Txt_Editable);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_CHECKBOX ("Editable",false,
 		       "id=\"Editable\" value=\"Y\"%s",

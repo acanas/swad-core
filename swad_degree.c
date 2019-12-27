@@ -405,12 +405,15 @@ static void Deg_ConfigCentre (bool PutForm)
    extern const char *Txt_Centre;
    unsigned NumCtr;
 
+   /***** Centre *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "OthCtrCod" :
 	                           NULL,
 		    Txt_Centre);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (PutForm)
      {
@@ -498,11 +501,13 @@ static void Deg_ConfigNumCrss (void)
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
+   /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Courses);
 
-   /* Form to go to see courses of this degree */
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    Frm_StartFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
@@ -527,12 +532,15 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
+   /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
    HTM_TD_End ();

@@ -336,8 +336,10 @@ void Tst_ShowFormAskTst (void)
          /***** Number of questions to generate ****/
          HTM_TR_Begin (NULL);
 
+         /* Label */
          Frm_LabelColumn ("RT","NumQst",Txt_No_of_questions);
 
+         /* Data */
          HTM_TD_Begin ("class=\"LT\"");
          HTM_INPUT_LONG ("NumQst",
 			   (long) Gbl.Test.Config.Min,
@@ -1947,9 +1949,11 @@ static void Tst_ShowFormConfigTst (void)
    /***** Minimum time between consecutive tests, per question *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
 		    Txt_Minimum_time_seconds_per_question_between_two_tests);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LB\"");
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
@@ -5194,8 +5198,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Stem and image *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","Stem",Txt_Wording);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
 	               " rows=\"5\" required=\"required\"");

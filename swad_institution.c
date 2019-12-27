@@ -512,12 +512,15 @@ static void Ins_ConfigCountry (bool PutForm)
    extern const char *Txt_Country;
    unsigned NumCty;
 
+   /***** Country *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "OthCtyCod" :
 	                           NULL,
 		    Txt_Country);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
@@ -604,10 +607,13 @@ static void Ins_ConfigNumUsrs (void)
   {
    extern const char *Txt_Users_of_the_institution;
 
+   /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_institution);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
@@ -624,11 +630,13 @@ static void Ins_ConfigNumCtrs (void)
    extern const char *Txt_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
 
+   /***** Number of centres *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Centres);
 
-   /* Form to go to see centres of this institution */
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    Frm_StartFormGoTo (ActSeeCtr);
    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
@@ -655,8 +663,10 @@ static void Ins_ConfigNumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Degrees);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
@@ -672,10 +682,13 @@ static void Ins_ConfigNumCrss (void)
   {
    extern const char *Txt_Courses;
 
+   /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Courses);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
@@ -691,10 +704,13 @@ static void Ins_ConfigNumDpts (void)
   {
    extern const char *Txt_Departments;
 
+   /***** Number of departments *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Departments);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
@@ -711,12 +727,15 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
+   /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();

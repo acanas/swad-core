@@ -2791,6 +2791,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
   {
    extern const char *Txt_Email;
 
+   /***** Email *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -2824,6 +2825,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Txt_ID;
 
+   /***** User's IDs *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3272,6 +3274,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutFo
   {
    extern const char *Txt_Place_of_origin;
 
+   /***** Origin place *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3303,6 +3306,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
   {
    extern const char *Txt_Date_of_birth;
 
+   /***** Date of birth *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3336,6 +3340,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutF
   {
    extern const char *Txt_Local_address;
 
+   /***** Local address *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3367,6 +3372,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutFor
   {
    extern const char *Txt_Phone;
 
+   /***** Local phone *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3401,6 +3407,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool Put
   {
    extern const char *Txt_Family_address;
 
+   /***** Family address *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3432,6 +3439,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutFo
   {
    extern const char *Txt_Phone;
 
+   /***** Family phone *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3466,6 +3474,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_USER_comments;
 
+   /***** Comments *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3527,6 +3536,7 @@ static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData)
   {
    extern const char *Txt_Institution;
 
+   /***** Institution *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3558,6 +3568,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
    extern const char *Txt_Centre;
    struct Centre Ctr;
 
+   /***** Centre *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3593,6 +3604,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
    extern const char *Txt_Department;
    struct Department Dpt;
 
+   /***** Department *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3627,6 +3639,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Office;
 
+   /***** Office *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -3649,6 +3662,7 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Phone;
 
+   /***** Office phone *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -4099,7 +4113,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TR_End ();
 
-      /***** Phone *****/
+      /***** Office phone *****/
       HTM_TR_Begin (NULL);
 
       /* Label */

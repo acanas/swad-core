@@ -534,8 +534,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    /***** Message subject *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RT","MsgSubject",Txt_MSG_Subject);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
 	               " class=\"MSG_SUBJECT\" rows=\"2\"");
@@ -581,8 +583,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       HTM_TR_Begin (NULL);
 
+      /* Label */
       Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
 
+      /* Data */
       HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
                           " class=\"MSG_CONTENT\" rows=\"20\"");
@@ -611,8 +615,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       HTM_TR_Begin (NULL);
 
+      /* Label */
       Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
 
+      /* Data */
       HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
                           " class=\"MSG_CONTENT\" rows=\"20\"");

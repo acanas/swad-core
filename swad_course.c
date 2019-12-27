@@ -298,12 +298,15 @@ static void Crs_ConfigDegree (bool PutForm)
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
+   /***** Degree *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "OthDegCod" :
 	                           NULL,
 		    Txt_Degree);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
@@ -366,12 +369,15 @@ static void Crs_ConfigYear (bool PutForm)
    extern const char *Txt_Not_applicable;
    unsigned Year;
 
+   /***** Academic year *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "OthCrsYear" :
 	                           NULL,
 		    Txt_Year_OF_A_DEGREE);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
@@ -403,12 +409,15 @@ static void Crs_ConfigInstitutionalCode (bool PutForm)
   {
    extern const char *Txt_Institutional_code;
 
+   /***** Institutional course code *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",PutForm ? "InsCrsCod" :
 	                           NULL,
 		    Txt_Institutional_code);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
@@ -434,10 +443,13 @@ static void Crs_ConfigInternalCode (void)
   {
    extern const char *Txt_Internal_code;
 
+   /***** Internal course code *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Internal_code);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
    HTM_TD_End ();
@@ -471,10 +483,13 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
+   /***** Number of users in course *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
    HTM_TD_End ();
@@ -493,12 +508,17 @@ static void Crs_ConfigIndicators (void)
    struct Ind_IndicatorsCrs Indicators;
    int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
 
+   /***** Compute indicators ******/
    Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
 				     NumIndicatorsFromDB,&Indicators);
+
+   /***** Number of indicators *****/
    HTM_TR_Begin (NULL);
 
+   /* Label */
    Frm_LabelColumn ("RM",NULL,Txt_Indicators);
 
+   /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActReqStaCrs);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
