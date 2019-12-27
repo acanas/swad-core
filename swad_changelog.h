@@ -492,18 +492,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.99 (2019-12-27)"
-#define CSS_FILE		"swad19.99.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.99.2 (2019-12-27)"
+#define CSS_FILE		"swad19.99.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
-CommentTch%ld
+
 	Version 19.102:   Dec 27, 2019	Map in country information. (? lines)
 	Version 19.101:   Dec 27, 2019	Map in institution information. (? lines)
 	Version 19.100:   Dec 27, 2019	Code refactoring in country information. (? lines)
-	Version 19.99.1:  Dec 27, 2019	Code refactoring in form labels. (? lines)
+	Version 19.99.2:  Dec 27, 2019	Fixed bug in attendance. (248857 lines)
+	Version 19.99.1:  Dec 27, 2019	Code refactoring in form labels. (248855 lines)
 	Version 19.99:    Dec 27, 2019	Code refactoring in form labels. (248924 lines)
 	Version 19.98:    Dec 26, 2019	Code refactoring in form labels. (249011 lines)
 	Version 19.97.14: Dec 26, 2019	Code refactoring in course, degree, centre and institution information. (249243 lines)

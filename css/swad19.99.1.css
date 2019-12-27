@@ -2433,18 +2433,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.REC_DAT
-	{
-	color:#808080;
-	font-size:13pt;
-	line-height:110%;
-	}
-.REC_DAT_BOLD
-	{
-	color:black;
-	font-size:13pt;
-	line-height:110%;
-	}
 .REC_FIELDNAME
 	{
 	width:200px;	

@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>
 
@@ -116,60 +118,28 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
-static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm);
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
-                            const char *Anchor);
+static void Rec_ShowEmail (struct UsrData *UsrDat);
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor);
 static void Rec_ShowRole (struct UsrData *UsrDat,
-                          Rec_SharedRecordViewType_t TypeOfView,
-                          const char *ClassForm);
-static void Rec_ShowSurname1 (struct UsrData *UsrDat,
-                              Rec_SharedRecordViewType_t TypeOfView,
-                              bool ICanEdit,
-                              const char *ClassForm);
-static void Rec_ShowSurname2 (struct UsrData *UsrDat,
-                              bool ICanEdit,
-                              const char *ClassForm);
-static void Rec_ShowFirstName (struct UsrData *UsrDat,
-                               Rec_SharedRecordViewType_t TypeOfView,
-                               bool ICanEdit,
-                               const char *ClassForm);
-static void Rec_ShowCountry (struct UsrData *UsrDat,
-                             Rec_SharedRecordViewType_t TypeOfView,
-                             const char *ClassForm);
-static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm);
-static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm);
-static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
-                                  bool ShowData,bool ICanEdit,
-                                  const char *ClassForm);
-static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
-                                bool ShowData,bool ICanEdit,
-                                const char *ClassForm);
-static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
-                                   bool ShowData,bool ICanEdit,
-                                   const char *ClassForm);
-static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm);
-static void Rec_ShowComments (struct UsrData *UsrDat,
-                              bool ShowData,bool ICanEdit,
-                              const char *ClassForm);
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,
-                                 struct Instit *Ins,
-                                 bool ShowData,const char *ClassForm);
-static void Rec_ShowInstitution (struct Instit *Ins,
-                                 bool ShowData,const char *ClassForm);
-static void Rec_ShowCentre (struct UsrData *UsrDat,
-                            bool ShowData,const char *ClassForm);
-static void Rec_ShowDepartment (struct UsrData *UsrDat,
-                                bool ShowData,const char *ClassForm);
-static void Rec_ShowOffice (struct UsrData *UsrDat,
-                            bool ShowData,const char *ClassForm);
-static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
-                                 bool ShowData,const char *ClassForm);
+                          Rec_SharedRecordViewType_t TypeOfView);
+static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm);
+static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm);
+static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm);
+static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm);
+static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
+                                 bool ShowData);
+static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData);
+static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1822,7 +1792,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
          /* Write form, text, or nothing depending on
             the user's role and the visibility of the field */
-         HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LT COLOR%u\"",Gbl.RowEvenOdd);
+         HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
          if (ICanEditThisField)	// Show with form
            {
             HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
@@ -2138,7 +2108,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Sign_up;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2171,7 +2140,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       [Rol_SYS_ADM] = NULL,
      };
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   const char *ClassForm = "REC_DAT";
    bool ItsMe;
    bool IAmLoggedAsTeacherOrSysAdm;
    bool CountryForm;
@@ -2223,23 +2191,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 break;
       default:	// In other options, I can not edit user's data
 	 ICanEdit = false;
-         break;
-     }
-
-   /* Class for labels */
-   switch (TypeOfView)
-     {
-      case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-      case Rec_SHA_MY_RECORD_FORM:
-      case Rec_SHA_OTHER_NEW_USR_FORM:
-      case Rec_SHA_OTHER_EXISTING_USR_FORM:
-         ClassForm = The_ClassFormInBox[Gbl.Prefs.Theme];
-	 break;
-      case Rec_SHA_OTHER_USR_CHECK:
-      case Rec_SHA_RECORD_LIST:
-      case Rec_SHA_RECORD_PUBLIC:
-      case Rec_SHA_RECORD_PRINT:
-         ClassForm = "REC_DAT";
          break;
      }
 
@@ -2297,10 +2248,10 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          HTM_TABLE_BeginWidePadding (2);
 
          /* Show email */
-	 Rec_ShowEmail (UsrDat,ClassForm);
+	 Rec_ShowEmail (UsrDat);
 
 	 /* Show user's IDs */
-	 Rec_ShowUsrIDs (UsrDat,ClassForm,Anchor);
+	 Rec_ShowUsrIDs (UsrDat,Anchor);
 
          HTM_TABLE_End ();
 	}
@@ -2361,46 +2312,46 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       if (ShowIDRows)
 	{
 	 /***** Role or sex *****/
-	 Rec_ShowRole (UsrDat,TypeOfView,ClassForm);
+	 Rec_ShowRole (UsrDat,TypeOfView);
 
 	 /***** Name *****/
-	 Rec_ShowSurname1 (UsrDat,TypeOfView,ICanEdit,ClassForm);
-	 Rec_ShowSurname2 (UsrDat,ICanEdit,ClassForm);
-	 Rec_ShowFirstName (UsrDat,TypeOfView,ICanEdit,ClassForm);
+	 Rec_ShowSurname1 (UsrDat,ICanEdit);
+	 Rec_ShowSurname2 (UsrDat,ICanEdit);
+	 Rec_ShowFirstName (UsrDat,ICanEdit);
 
 	 /***** Country *****/
 	 if (CountryForm)
-            Rec_ShowCountry (UsrDat,TypeOfView,ClassForm);
+            Rec_ShowCountry (UsrDat,ICanEdit);
 	}
 
       /***** Address rows *****/
       if (ShowAddressRows)
 	{
 	 /***** Origin place *****/
-         Rec_ShowOriginPlace (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowOriginPlace (UsrDat,ShowData,ICanEdit);
 
 	 /***** Date of birth *****/
-         Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
 
 	 /***** Local address *****/
-         Rec_ShowLocalAddress (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowLocalAddress (UsrDat,ShowData,ICanEdit);
 
 	 /***** Local phone *****/
-         Rec_ShowLocalPhone (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowLocalPhone (UsrDat,ShowData,ICanEdit);
 
 	 /***** Family address *****/
-         Rec_ShowFamilyAddress (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowFamilyAddress (UsrDat,ShowData,ICanEdit);
 
 	 /***** Family phone *****/
-         Rec_ShowFamilyPhone (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowFamilyPhone (UsrDat,ShowData,ICanEdit);
 
 	 /***** User's comments *****/
-         Rec_ShowComments (UsrDat,ShowData,ICanEdit,ClassForm);
+         Rec_ShowComments (UsrDat,ShowData,ICanEdit);
 	}
 
       /***** Teacher's rows *****/
       if (ShowTeacherRows)
-         Rec_ShowTeacherRows (UsrDat,&Ins,ShowData,ClassForm);
+         Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
 
       HTM_TABLE_End ();
 
@@ -2811,11 +2762,11 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
-   HTM_TD_Begin ("class=\"REC_C2_MID REC_DAT_BOLD LT\"");
+   HTM_TD_Begin ("class=\"REC_C2_MID DAT_N LT\"");
    if (ShowData && UsrDat->CtyCod > 0)
       /* Link to see country information */
       Cty_WriteCountryName (UsrDat->CtyCod,
-                            "BT_LINK REC_DAT_BOLD");	// Put link to country
+                            "BT_LINK DAT_N");	// Put link to country
    HTM_TD_End ();
   }
 
@@ -2836,23 +2787,23 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
 /***************************** Show user's email *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
+static void Rec_ShowEmail (struct UsrData *UsrDat)
   {
    extern const char *Txt_Email;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Email);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Email);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (UsrDat->Email[0])
      {
       HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	{
-	 HTM_A_Begin ("href=\"mailto:%s\" class=\"REC_DAT_BOLD\"",UsrDat->Email);
+	 HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_N\"",UsrDat->Email);
 	 HTM_Txt (UsrDat->Email);
          HTM_A_End ();
         }
@@ -2869,18 +2820,17 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 /******************************* Show user's IDs *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
-                            const char *Anchor)
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Txt_ID;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RT %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_ID);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LT\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    ID_WriteUsrIDs (UsrDat,Anchor);
    HTM_TD_End ();
 
@@ -2892,8 +2842,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
 /*****************************************************************************/
 
 static void Rec_ShowRole (struct UsrData *UsrDat,
-                          Rec_SharedRecordViewType_t TypeOfView,
-                          const char *ClassForm)
+                          Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
    extern const char *Txt_Role;
@@ -2908,6 +2857,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    Rol_Role_t Role;
    unsigned RoleUnsigned;
    Usr_Sex_t Sex;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
@@ -2917,13 +2867,11 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
       /* Get user's roles if not got */
       Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",ClassForm);
-      HTM_TxtF ("%s:",Txt_Role);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
 
-      HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
       switch (TypeOfView)
 	{
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
@@ -3115,16 +3063,19 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    else if (SexForm)
      {
       /***** Form to select a sex *****/
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-      HTM_TxtF ("%s*:",Txt_Sex);
-      HTM_TD_End ();
+      /* Label */
+      if (asprintf (&Label,"%s*",Txt_Sex) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM","",Label);
+      free (Label);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      for (Sex = Usr_SEX_FEMALE;
+      for (Sex  = Usr_SEX_FEMALE;
 	   Sex <= Usr_SEX_MALE;
 	   Sex++)
 	{
-	 HTM_LABEL_Begin ("class=\"REC_DAT_BOLD\"");
+	 HTM_LABEL_Begin ("class=\"DAT_N\"");
 	 HTM_INPUT_RADIO ("Sex",false,
 			  "value=\"%u\"%s  required=\"required\"",
 			  (unsigned) Sex,
@@ -3137,11 +3088,11 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    else	// RoleForm == false, SexForm == false
      {
       /***** No form, only text *****/
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-      HTM_TxtF ("%s:",Txt_Role);
-      HTM_TD_End ();
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Role);
 
-      HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
       HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
       HTM_TD_End ();
      }
@@ -3153,30 +3104,30 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 /*************************** Show user's surname 1 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname1 (struct UsrData *UsrDat,
-                              Rec_SharedRecordViewType_t TypeOfView,
-                              bool ICanEdit,
-                              const char *ClassForm)
+static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_Surname_1;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"Surname1\" class=\"%s\"",ClassForm);
-   HTM_Txt (Txt_Surname_1);
-   if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      HTM_Asterisk ();
-   HTM_Colon ();
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   if (PutForm)
+     {
+      if (asprintf (&Label,"%s*",Txt_Surname_1) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM","Surname1",Label);
+      free (Label);
+     }
+   else
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
-   if (ICanEdit)
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+   if (PutForm)
       HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,false,
-		      "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\"%s",
-		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
-			                                     "");
+		      "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\""
+		      " required=\"required\"");
    else if (UsrDat->Surname1[0])
      {
       HTM_STRONG_Begin ();
@@ -3192,22 +3143,20 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 /*************************** Show user's surname 2 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname2 (struct UsrData *UsrDat,
-                              bool ICanEdit,
-                              const char *ClassForm)
+static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"Surname2\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Surname_2);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Surname2" :
+				              NULL,
+		    Txt_Surname_2);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
-   if (ICanEdit)
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+   if (PutForm)
       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 		      UsrDat->Surname2,false,
 		      "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
@@ -3226,31 +3175,31 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 /************************** Show user's first name ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFirstName (struct UsrData *UsrDat,
-                               Rec_SharedRecordViewType_t TypeOfView,
-                               bool ICanEdit,
-                               const char *ClassForm)
+static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_First_name;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"FirstName\" class=\"%s\"",ClassForm);
-   HTM_Txt (Txt_First_name);
-   if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      HTM_Asterisk ();
-   HTM_Colon ();
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   if (PutForm)
+     {
+      if (asprintf (&Label,"%s*",Txt_First_name) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM","FirstName",Label);
+      free (Label);
+     }
+   else
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
-   if (ICanEdit)
+   /* Data */
+   HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
+   if (PutForm)
       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 		      UsrDat->FirstName,false,
-		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\"%s",
-		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
-			                                     "");
+		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
+		      " required=\"required\"");
    else if (UsrDat->FirstName[0])
      {
       HTM_STRONG_Begin ();
@@ -3266,12 +3215,11 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountry (struct UsrData *UsrDat,
-                             Rec_SharedRecordViewType_t TypeOfView,
-                             const char *ClassForm)
+static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
+   char *Label;
    unsigned NumCty;
 
    /***** If list of countries is empty, try to get it *****/
@@ -3281,20 +3229,22 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
       Cty_GetListCountries (Cty_GET_BASIC_DATA);
      }
 
+   /***** Selector of country *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",ClassForm);
-   HTM_Txt (Txt_Country);
-   if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-      HTM_Asterisk ();
-   HTM_Colon ();
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   if (PutForm)
+     {
+      if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",Label);
+      free (Label);
+     }
+   else
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
 
+   /* Data */
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
-
-   /***** Selector of country *****/
    HTM_SELECT_Begin (false,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
@@ -3318,24 +3268,22 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 /************************ Show user's place of origin ************************/
 /*****************************************************************************/
 
-static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm)
+static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Place_of_origin;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"OriginPlace\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Place_of_origin);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "OriginPlace" :
+				              NULL,
+		    Txt_Place_of_origin);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->OriginPlace,false,
 			 "id=\"OriginPlace\" class=\"REC_C2_BOT_INPUT\"");
@@ -3351,22 +3299,22 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 /************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
-static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm)
+static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Date_of_birth;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Date_of_birth);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "" :
+				              NULL,
+		    Txt_Date_of_birth);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
 			    Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
 			    "Birth",
@@ -3384,24 +3332,22 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
 /************************ Show user's local address **************************/
 /*****************************************************************************/
 
-static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
-                                  bool ShowData,bool ICanEdit,
-                                  const char *ClassForm)
+static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Local_address;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"LocalAddress\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Local_address);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "LocalAddress" :
+				              NULL,
+		    Txt_Local_address);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->LocalAddress,false,
 			 "id=\"LocalAddress\" class=\"REC_C2_BOT_INPUT\"");
@@ -3417,29 +3363,27 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 /************************* Show user's local phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
-                                bool ShowData,bool ICanEdit,
-                                const char *ClassForm)
+static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Phone;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"LocalPhone\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Phone);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "LocalPhone" :
+				              NULL,
+		    Txt_Phone);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,false,
 	                "id=\"LocalPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalPhone[0])
 	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->LocalPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->LocalPhone);
 	 HTM_Txt (UsrDat->LocalPhone);
 	 HTM_A_End ();
 	}
@@ -3453,24 +3397,22 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 /*********************** Show user's family address **************************/
 /*****************************************************************************/
 
-static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
-                                   bool ShowData,bool ICanEdit,
-                                   const char *ClassForm)
+static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Family_address;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"FamilyAddress\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Family_address);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "FamilyAddress" :
+				              NULL,
+		    Txt_Family_address);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,
 			 UsrDat->FamilyAddress,false,
 			 "id=\"FamilyAddress\" class=\"REC_C2_BOT_INPUT\"");
@@ -3486,29 +3428,27 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 /************************ Show user's family phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
-                                 bool ShowData,bool ICanEdit,
-                                 const char *ClassForm)
+static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Phone;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"FamilyPhone\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Phone);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "FamilyPhone" :
+				              NULL,
+		    Txt_Phone);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,false,
 	                "id=\"FamilyPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyPhone[0])
 	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->FamilyPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->FamilyPhone);
 	 HTM_Txt (UsrDat->FamilyPhone);
 	 HTM_A_End ();
 	}
@@ -3522,24 +3462,22 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 /************************** Show user's comments *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowComments (struct UsrData *UsrDat,
-                              bool ShowData,bool ICanEdit,
-                              const char *ClassForm)
+static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_USER_comments;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-   HTM_LABEL_Begin ("for=\"Comments\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_USER_comments);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",PutForm ? "Comments" :
+				              NULL,
+		    Txt_USER_comments);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LT\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    if (ShowData)
      {
-      if (ICanEdit)
+      if (PutForm)
 	{
 	 HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
 	                     " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
@@ -3562,47 +3500,45 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,
-                                 struct Instit *Ins,
-                                 bool ShowData,const char *ClassForm)
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
+                                 bool ShowData)
   {
    /***** Institution *****/
-   Rec_ShowInstitution (Ins,ShowData,ClassForm);
+   Rec_ShowInstitution (Ins,ShowData);
 
    /***** Centre *****/
-   Rec_ShowCentre (UsrDat,ShowData,ClassForm);
+   Rec_ShowCentre (UsrDat,ShowData);
 
    /***** Department *****/
-   Rec_ShowDepartment (UsrDat,ShowData,ClassForm);
+   Rec_ShowDepartment (UsrDat,ShowData);
 
    /***** Office *****/
-   Rec_ShowOffice (UsrDat,ShowData,ClassForm);
+   Rec_ShowOffice (UsrDat,ShowData);
 
    /***** Office phone *****/
-   Rec_ShowOfficePhone (UsrDat,ShowData,ClassForm);
+   Rec_ShowOfficePhone (UsrDat,ShowData);
   }
 
 /*****************************************************************************/
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Instit *Ins,
-                                 bool ShowData,const char *ClassForm)
+static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData)
   {
    extern const char *Txt_Institution;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Institution);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Institution);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    if (ShowData)
       if (Ins->InsCod > 0)
 	{
 	 if (Ins->WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		         Ins->WWW);
 	 HTM_Txt (Ins->FullName);
 	 if (Ins->WWW[0])
@@ -3617,19 +3553,18 @@ static void Rec_ShowInstitution (struct Instit *Ins,
 /*************************** Show user's centre ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowCentre (struct UsrData *UsrDat,
-                            bool ShowData,const char *ClassForm)
+static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Centre;
    struct Centre Ctr;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Centre);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Centre);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    if (ShowData)
      {
       if (UsrDat->Tch.CtrCod > 0)
@@ -3637,7 +3572,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
 	 if (Ctr.WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		         Ctr.WWW);
 	 HTM_Txt (Ctr.FullName);
 	 if (Ctr.WWW[0])
@@ -3653,19 +3588,18 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
 /************************* Show user's department ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowDepartment (struct UsrData *UsrDat,
-                                bool ShowData,const char *ClassForm)
+static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Department;
    struct Department Dpt;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Department);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Department);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    if (ShowData)
      {
       if (UsrDat->Tch.DptCod > 0)
@@ -3673,7 +3607,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDataOfDepartmentByCod (&Dpt);
 	 if (Dpt.WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		         Dpt.WWW);
 	 HTM_Txt (Dpt.FullName);
 	 if (Dpt.WWW[0])
@@ -3689,18 +3623,17 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 /*************************** Show user's office ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowOffice (struct UsrData *UsrDat,
-                            bool ShowData,const char *ClassForm)
+static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Office;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Office);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Office);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
    if (ShowData)
       HTM_Txt (UsrDat->Tch.Office);
    HTM_TD_End ();
@@ -3712,21 +3645,20 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,
 /*************************** Show user's office phone ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
-                                 bool ShowData,const char *ClassForm)
+static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Phone;
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM %s\"",ClassForm);
-   HTM_TxtF ("%s:",Txt_Phone);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Phone);
 
-   HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
+   /* Data */
+   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
-      HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",
+      HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",
 	           UsrDat->Tch.OfficePhone);
       HTM_Txt (UsrDat->Tch.OfficePhone);
       HTM_A_End ();
@@ -3990,7 +3922,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   const char *ClassForm = The_ClassFormInBox[Gbl.Prefs.Theme];
+   char *Label;
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
@@ -4010,12 +3942,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Country *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"OthCtyCod\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s*:",Txt_Country);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   if (asprintf (&Label,"%s*",Txt_Country) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
+   free (Label);
 
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
    /* If list of countries is empty, try to get it */
@@ -4028,7 +3961,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /* Begin form to select the country of my institution */
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    HTM_SELECT_Begin (true,
-		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
+		     "id=\"InsCtyCod\" name=\"OthCtyCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
    HTM_OPTION (HTM_Type_STRING,"-1",
 	       Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
@@ -4048,12 +3981,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   HTM_LABEL_Begin ("for=\"OthInsCod\" class=\"%s\"",ClassForm);
-   HTM_TxtF ("%s*:",Txt_Institution);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+   /* Label */
+   if (asprintf (&Label,"%s*",Txt_Institution) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",Label);
+   free (Label);
 
+   /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
    /* Get list of institutions in this country */
@@ -4089,12 +4023,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Centre *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      HTM_LABEL_Begin ("for=\"OthCtrCod\" class=\"%s\"",ClassForm);
-      HTM_TxtF ("%s*:",Txt_Centre);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      /* Label */
+      if (asprintf (&Label,"%s*",Txt_Centre) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",Label);
+      free (Label);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
       /* Get list of centres in this institution */
@@ -4128,12 +4063,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Department *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Dpt_PARAM_DPT_COD_NAME,ClassForm);
-      HTM_TxtF ("%s*:",Txt_Department);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      /* Label */
+      if (asprintf (&Label,"%s*",Txt_Department) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,Label);
+      free (Label);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
       Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
@@ -4150,12 +4086,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Office *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      HTM_LABEL_Begin ("for=\"Office\" class=\"%s\"",ClassForm);
-      HTM_TxtF ("%s:",Txt_Office);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","Office",Txt_Office);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,true,
@@ -4168,12 +4102,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Phone *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      HTM_LABEL_Begin ("for=\"OfficePhone\" class=\"%s\"",ClassForm);
-      HTM_TxtF ("%s:",Txt_Phone);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","OfficePhone",Txt_Phone);
 
+      /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
       HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,true,

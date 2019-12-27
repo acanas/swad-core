@@ -2084,8 +2084,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanEditStdComment)	// Show with form
      {
-      HTM_TEXTAREA_Begin ("name=\"CommentStd%ld\" cols=\"40\" rows=\"3\"",
-	                  UsrDat->UsrCod);
+      HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\"",
+	                  UsrDat->EncryptedUsrCod);
       HTM_Txt (CommentStd);
       HTM_TEXTAREA_End ();
      }
@@ -2101,8 +2101,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanEditTchComment)		// Show with form
      {
-      HTM_TEXTAREA_Begin ("name=\"CommentTch%ld\" cols=\"40\" rows=\"3\"",
-			  UsrDat->UsrCod);
+      HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\"",
+			  UsrDat->EncryptedUsrCod);
       HTM_Txt (CommentTch);
       HTM_TEXTAREA_End ();
      }
@@ -2201,7 +2201,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    extern const char *Txt_Your_comment_has_been_updated;
    struct AttendanceEvent Att;
    bool Present;
-   char CommentParamName[10 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char *CommentParamName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2215,10 +2215,11 @@ void Att_RegisterMeAsStdInAttEvent (void)
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
-      snprintf (CommentParamName,sizeof (CommentParamName),
-	        "CommentStd%ld",
-		Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (asprintf (&CommentParamName,"CommentStd%s",
+		    Gbl.Usrs.Me.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
       Par_GetParToHTML (CommentParamName,CommentStd,Cns_MAX_BYTES_TEXT);
+      free (CommentParamName);
 
       if (Present ||
 	  CommentStd[0] ||
@@ -2263,7 +2264,7 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct UsrData UsrData;
-   char CommentParamName[10 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char *CommentParamName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2329,10 +2330,11 @@ void Att_RegisterStudentsInAttEvent (void)
 	{
 	 /***** Get comments for this student *****/
 	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
-	 snprintf (CommentParamName,sizeof (CommentParamName),
-	           "CommentTch%ld",
-		   Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod);
+	 if (asprintf (&CommentParamName,"CommentTch%s",
+		       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EncryptedUsrCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
 	 Par_GetParToHTML (CommentParamName,CommentTch,Cns_MAX_BYTES_TEXT);
+	 free (CommentParamName);
 
 	 Present = !Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove;
 

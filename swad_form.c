@@ -279,6 +279,10 @@ void Frm_FreeAnchorStr (char *Anchor)
 /************************* Show label column in form *************************/
 /*****************************************************************************/
 
+// Id    == NULL ==> label class = data
+// Id[0] == '\0' ==> label class = form, no label for
+// Id[0] != '\0' ==> label class = form, label for
+
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -291,8 +295,14 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 
    /***** Label *****/
    if (Id)
-      HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-		       Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+     {
+      if (Id[0])
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+			  Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      else
+	 HTM_LABEL_Begin ("class=\"%s\"",
+			  The_ClassFormInBox[Gbl.Prefs.Theme]);
+     }
    else
       HTM_LABEL_Begin ("class=\"DAT\"");
    HTM_TxtF ("%s:",Label);
