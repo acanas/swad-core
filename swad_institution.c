@@ -73,11 +73,11 @@ static void Ins_PutIconsToPrintAndUpload (void);
 static void Ins_ConfigTitle (bool PutLink);
 static bool Ins_GetIfMapIsAvailable (void);
 static void Ins_ConfigMap (void);
-static void Ins_ConfigCountry (bool PutForm);
+static void Ins_ConfigCountry (bool PrintView,bool PutForm);
 static void Ins_ConfigFullName (bool PutForm);
 static void Ins_ConfigShrtName (bool PutForm);
-static void Ins_ConfigWWW (bool PutForm);
-static void Ins_ConfigShortcut (void);
+static void Ins_ConfigWWW (bool PrintView,bool PutForm);
+static void Ins_ConfigShortcut (bool PrintView);
 static void Ins_ConfigQR (void);
 static void Ins_ConfigNumUsrs (void);
 static void Ins_ConfigNumCtrs (void);
@@ -352,17 +352,17 @@ static void Ins_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Country *****/
-   Ins_ConfigCountry (PutFormCty);
+   Ins_ConfigCountry (PrintView,PutFormCty);
 
    /***** Institution name *****/
    Ins_ConfigFullName (PutFormName);
    Ins_ConfigShrtName (PutFormName);
 
    /***** Institution WWW *****/
-   Ins_ConfigWWW (PutFormWWW);
+   Ins_ConfigWWW (PrintView,PutFormWWW);
 
    /***** Shortcut to the institution *****/
-   Ins_ConfigShortcut ();
+   Ins_ConfigShortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the institution *****/
@@ -507,9 +507,10 @@ static void Ins_ConfigMap (void)
 /***************** Show country in institution configuration *****************/
 /*****************************************************************************/
 
-static void Ins_ConfigCountry (bool PutForm)
+static void Ins_ConfigCountry (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Country;
+   extern const char *Txt_Go_to_X;
    unsigned NumCty;
 
    /***** Country *****/
@@ -545,7 +546,25 @@ static void Ins_ConfigCountry (bool PutForm)
       Cty_FreeListCountries ();
      }
    else	// I can not move institution to another country
+     {
+      if (!PrintView)
+	{
+         Frm_StartFormGoTo (ActSeeCtyInf);
+         Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_Go_to_X,
+		   Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	}
+      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
+      HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      if (!PrintView)
+	{
+	 HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -576,18 +595,18 @@ static void Ins_ConfigShrtName (bool PutForm)
 /************ Show institution WWW in institution configuration **************/
 /*****************************************************************************/
 
-static void Ins_ConfigWWW (bool PutForm)
+static void Ins_ConfigWWW (bool PrintView,bool PutForm)
   {
-   Hie_ConfigWWW (PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
+   Hie_ConfigWWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
   }
 
 /*****************************************************************************/
 /********** Show institution shortcut in institution configuration ***********/
 /*****************************************************************************/
 
-static void Ins_ConfigShortcut (void)
+static void Ins_ConfigShortcut (bool PrintView)
   {
-   Hie_ConfigShortcut ("ins",Gbl.Hierarchy.Ins.InsCod);
+   Hie_ConfigShortcut (PrintView,"ins",Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

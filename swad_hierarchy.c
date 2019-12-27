@@ -156,7 +156,7 @@ void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
 /************************* Show web in configuration *************************/
 /*****************************************************************************/
 
-void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
+void Hie_ConfigWWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		    const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *Txt_Web;
@@ -182,9 +182,11 @@ void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
    else	// I can not change web
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
+      if (!PrintView)
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
       HTM_Txt (WWW);
-      HTM_A_End ();
+      if (!PrintView)
+         HTM_A_End ();
       HTM_DIV_End ();
      }
    HTM_TD_End ();
@@ -196,7 +198,7 @@ void Hie_ConfigWWW (bool PutForm,Act_Action_t NextAction,
 /********************** Show shortcut in configuration ***********************/
 /*****************************************************************************/
 
-void Hie_ConfigShortcut (const char *ParamName,long HieCod)
+void Hie_ConfigShortcut (bool PrintView,const char *ParamName,long HieCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Shortcut;
@@ -209,15 +211,17 @@ void Hie_ConfigShortcut (const char *ParamName,long HieCod)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
-                Cfg_URL_SWAD_CGI,
-                Lan_STR_LANG_ID[Gbl.Prefs.Language],
-                ParamName,HieCod);
+   if (!PrintView)
+      HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+		   Cfg_URL_SWAD_CGI,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   ParamName,HieCod);
    HTM_TxtF ("%s/%s?%s=%ld",
              Cfg_URL_SWAD_CGI,
              Lan_STR_LANG_ID[Gbl.Prefs.Language],
              ParamName,HieCod);
-   HTM_A_End ();
+   if (!PrintView)
+      HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

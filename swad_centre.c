@@ -93,12 +93,12 @@ static void Ctr_ConfigLatitude (void);
 static void Ctr_ConfigLongitude (void);
 static void Ctr_ConfigAltitude (void);
 static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
-static void Ctr_ConfigInstitution (bool PutForm);
+static void Ctr_ConfigInstitution (bool PrintView,bool PutForm);
 static void Ctr_ConfigFullName (bool PutForm);
 static void Ctr_ConfigShrtName (bool PutForm);
 static void Ctr_ConfigPlace (bool PutForm);
-static void Ctr_ConfigWWW (bool PutForm);
-static void Ctr_ConfigShortcut (void);
+static void Ctr_ConfigWWW (bool PrintView,bool PutForm);
+static void Ctr_ConfigShortcut (bool PrintView);
 static void Ctr_ConfigQR (void);
 static void Ctr_ConfigNumUsrs (void);
 static void Ctr_ConfigNumDegs (void);
@@ -352,7 +352,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Institution *****/
-   Ctr_ConfigInstitution (PutFormIns);
+   Ctr_ConfigInstitution (PrintView,PutFormIns);
 
    /***** Centre name *****/
    Ctr_ConfigFullName (PutFormName);
@@ -370,10 +370,10 @@ static void Ctr_Configuration (bool PrintView)
      }
 
    /***** Centre WWW *****/
-   Ctr_ConfigWWW (PutFormWWW);
+   Ctr_ConfigWWW (PrintView,PutFormWWW);
 
    /***** Shortcut to the centre *****/
-   Ctr_ConfigShortcut ();
+   Ctr_ConfigShortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the centre *****/
@@ -699,9 +699,10 @@ static void Ctr_ConfigPhoto (bool PrintView,bool PutLink)
 /***************** Show institution in centre configuration ******************/
 /*****************************************************************************/
 
-static void Ctr_ConfigInstitution (bool PutForm)
+static void Ctr_ConfigInstitution (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Institution;
+   extern const char *Txt_Go_to_X;
    unsigned NumIns;
 
    /***** Institution *****/
@@ -713,7 +714,7 @@ static void Ctr_ConfigInstitution (bool PutForm)
 		    Txt_Institution);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
       /* Get list of institutions of the current country */
@@ -737,7 +738,26 @@ static void Ctr_ConfigInstitution (bool PutForm)
       Ins_FreeListInstitutions ();
      }
    else	// I can not move centre to another institution
+     {
+      if (!PrintView)
+	{
+         Frm_StartFormGoTo (ActSeeInsInf);
+         Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_Go_to_X,
+		   Gbl.Hierarchy.Ins.ShrtName);
+	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	}
+      Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
+		    20,"LM",true);
+      HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Ins.FullName);
+      if (!PrintView)
+	{
+	 HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -825,18 +845,18 @@ static void Ctr_ConfigPlace (bool PutForm)
 /***************** Show centre WWW in centre configuration *******************/
 /*****************************************************************************/
 
-static void Ctr_ConfigWWW (bool PutForm)
+static void Ctr_ConfigWWW (bool PrintView,bool PutForm)
   {
-   Hie_ConfigWWW (PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
+   Hie_ConfigWWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
   }
 
 /*****************************************************************************/
 /*************** Show centre shortcut in centre configuration ****************/
 /*****************************************************************************/
 
-static void Ctr_ConfigShortcut (void)
+static void Ctr_ConfigShortcut (bool PrintView)
   {
-   Hie_ConfigShortcut ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   Hie_ConfigShortcut (PrintView,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/

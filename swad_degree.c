@@ -89,11 +89,11 @@ static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degr
 static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
 static void Deg_ConfigTitle (bool PutLink);
-static void Deg_ConfigCentre (bool PutForm);
+static void Deg_ConfigCentre (bool PrintView,bool PutForm);
 static void Deg_ConfigFullName (bool PutForm);
 static void Deg_ConfigShrtName (bool PutForm);
-static void Deg_ConfigWWW (bool PutForm);
-static void Deg_ConfigShortcut (void);
+static void Deg_ConfigWWW (bool PrintView,bool PutForm);
+static void Deg_ConfigShortcut (bool PrintView);
 static void Deg_ConfigQR (void);
 static void Deg_ConfigNumCrss (void);
 static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role);
@@ -331,17 +331,17 @@ static void Deg_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Centre *****/
-   Deg_ConfigCentre (PutFormCtr);
+   Deg_ConfigCentre (PrintView,PutFormCtr);
 
    /***** Degree name *****/
    Deg_ConfigFullName (PutFormName);
    Deg_ConfigShrtName (PutFormName);
 
    /***** Degree WWW *****/
-   Deg_ConfigWWW (PutFormWWW);
+   Deg_ConfigWWW (PrintView,PutFormWWW);
 
    /***** Shortcut to the degree *****/
-   Deg_ConfigShortcut ();
+   Deg_ConfigShortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the degree *****/
@@ -400,9 +400,10 @@ static void Deg_ConfigTitle (bool PutLink)
 /******************** Show centre in degree configuration ********************/
 /*****************************************************************************/
 
-static void Deg_ConfigCentre (bool PutForm)
+static void Deg_ConfigCentre (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Centre;
+   extern const char *Txt_Go_to_X;
    unsigned NumCtr;
 
    /***** Centre *****/
@@ -414,7 +415,7 @@ static void Deg_ConfigCentre (bool PutForm)
 		    Txt_Centre);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (PutForm)
      {
       /* Get list of centres of the current institution */
@@ -438,7 +439,26 @@ static void Deg_ConfigCentre (bool PutForm)
       Ctr_FreeListCentres ();
      }
    else	// I can not move degree to another centre
+     {
+      if (!PrintView)
+	{
+         Frm_StartFormGoTo (ActSeeCtrInf);
+         Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_Go_to_X,
+		   Gbl.Hierarchy.Ctr.ShrtName);
+	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	}
+      Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
+		    20,"LM",true);
+      HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+      if (!PrintView)
+	{
+	 HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -469,18 +489,18 @@ static void Deg_ConfigShrtName (bool PutForm)
 /***************** Show degree WWW in degree configuration *******************/
 /*****************************************************************************/
 
-static void Deg_ConfigWWW (bool PutForm)
+static void Deg_ConfigWWW (bool PrintView,bool PutForm)
   {
-   Hie_ConfigWWW (PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Deg.WWW);
+   Hie_ConfigWWW (PrintView,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Deg.WWW);
   }
 
 /*****************************************************************************/
 /*************** Show degree shortcut in degree configuration ****************/
 /*****************************************************************************/
 
-static void Deg_ConfigShortcut (void)
+static void Deg_ConfigShortcut (bool PrintView)
   {
-   Hie_ConfigShortcut ("deg",Gbl.Hierarchy.Deg.DegCod);
+   Hie_ConfigShortcut (PrintView,"deg",Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/

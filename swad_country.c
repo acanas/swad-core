@@ -75,7 +75,7 @@ static void Cty_PutIconToPrint (void);
 static void Cty_ConfigTitle (bool PutLink);
 static void Cty_ConfigMap (bool PrintView,bool PutLink);
 static void Cty_ConfigName (bool PutLink);
-static void Cty_ConfigShortcut (void);
+static void Cty_ConfigShortcut (bool PrintView);
 static void Cty_ConfigQR (void);
 static void Cty_ConfigNumUsrs (void);
 static void Cty_ConfigNumInss (void);
@@ -277,7 +277,7 @@ static void Cty_Configuration (bool PrintView)
    Cty_ConfigName (PutLink);
 
    /***** Shortcut to the country *****/
-   Cty_ConfigShortcut ();
+   Cty_ConfigShortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the country *****/
@@ -414,9 +414,9 @@ static void Cty_ConfigName (bool PutLink)
 /************** Show country shortcut in country configuration ***************/
 /*****************************************************************************/
 
-static void Cty_ConfigShortcut (void)
+static void Cty_ConfigShortcut (bool PrintView)
   {
-   Hie_ConfigShortcut ("cty",Gbl.Hierarchy.Cty.CtyCod);
+   Hie_ConfigShortcut (PrintView,"cty",Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/
@@ -553,17 +553,18 @@ static void Cty_ConfigNumCrss (void)
 
 static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
+   /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Role == Rol_UNK ? Txt_Users_in_courses :
-		                     Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+   /* Label */
+   Frm_LabelColumn ("RM",NULL,
+		    Role == Rol_UNK ? Txt_Users_in_courses :
+		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
+   /* Data */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();

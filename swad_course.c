@@ -81,13 +81,13 @@ static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the cour
 static void Crs_Configuration (bool PrintView);
 static void Crs_PutIconToPrint (void);
 static void Crs_ConfigTitle (bool PutLink);
-static void Crs_ConfigDegree (bool PutForm);
+static void Crs_ConfigDegree (bool PrintView,bool PutForm);
 static void Crs_ConfigFullName (bool PutForm);
 static void Crs_ConfigShrtName (bool PutForm);
 static void Crs_ConfigYear (bool PutForm);
 static void Crs_ConfigInstitutionalCode (bool PutForm);
 static void Crs_ConfigInternalCode (void);
-static void Crs_ConfigShortcut (void);
+static void Crs_ConfigShortcut (bool PrintView);
 static void Crs_ConfigQR (void);
 static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role);
 static void Crs_ConfigIndicators (void);
@@ -223,7 +223,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
-   Crs_ConfigDegree (PutFormDeg);
+   Crs_ConfigDegree (PrintView,PutFormDeg);
 
    /***** Course name *****/
    Crs_ConfigFullName (PutFormName);
@@ -242,7 +242,7 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** Shortcut to the couse *****/
-   Crs_ConfigShortcut ();
+   Crs_ConfigShortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the course *****/
@@ -293,9 +293,10 @@ static void Crs_ConfigTitle (bool PutLink)
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void Crs_ConfigDegree (bool PutForm)
+static void Crs_ConfigDegree (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Degree;
+   extern const char *Txt_Go_to_X;
    unsigned NumDeg;
 
    /***** Degree *****/
@@ -331,7 +332,26 @@ static void Crs_ConfigDegree (bool PutForm)
       Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
      }
    else	// I can not move course to another degree
+     {
+      if (!PrintView)
+	{
+         Frm_StartFormGoTo (ActSeeDegInf);
+         Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_Go_to_X,
+		   Gbl.Hierarchy.Deg.ShrtName);
+	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	}
+      Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
+		    20,"LM",true);
+      HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+      if (!PrintView)
+	{
+	 HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -461,9 +481,9 @@ static void Crs_ConfigInternalCode (void)
 /*************** Show course shortcut in course configuration ****************/
 /*****************************************************************************/
 
-static void Crs_ConfigShortcut (void)
+static void Crs_ConfigShortcut (bool PrintView)
   {
-   Hie_ConfigShortcut ("crs",Gbl.Hierarchy.Crs.CrsCod);
+   Hie_ConfigShortcut (PrintView,"crs",Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
