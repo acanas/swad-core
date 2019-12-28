@@ -321,6 +321,7 @@ static void Ins_Configuration (bool PrintView)
    bool PutFormCty;
    bool PutFormName;
    bool PutFormWWW;
+   bool MapIsAvailable;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
@@ -344,9 +345,8 @@ static void Ins_Configuration (bool PrintView)
    /***** Title *****/
    Ins_ConfigTitle (PutLink);
 
-   /***** Institution map *****/
-   if (Ins_GetIfMapIsAvailable ())
-      Ins_ConfigMap ();
+   /**************************** Left part ***********************************/
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -389,6 +389,23 @@ static void Ins_Configuration (bool PrintView)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** End of left part *****/
+   HTM_DIV_End ();
+
+   /**************************** Right part **********************************/
+   /***** Check map *****/
+   MapIsAvailable = Ins_GetIfMapIsAvailable ();
+
+   if (MapIsAvailable)
+     {
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+
+      /***** Institution map *****/
+      Ins_ConfigMap ();
+
+      HTM_DIV_End ();
+     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -434,9 +451,13 @@ static void Ins_ConfigTitle (bool PutLink)
 
 static bool Ins_GetIfMapIsAvailable (void)
   {
+   return true;
+
    /***** Coordinates 0, 0 means not set ==> don't show map *****/
+   /*
    return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
                   Gbl.Hierarchy.Ctr.Coord.Longitude);
+   */
   }
 
 /*****************************************************************************/
@@ -517,12 +538,12 @@ static void Ins_ConfigCountry (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "OthCtyCod" :
+   Frm_LabelColumn ("RT",PutForm ? "OthCtyCod" :
 	                           NULL,
 		    Txt_Country);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Get list of countries */
@@ -630,10 +651,10 @@ static void Ins_ConfigNumUsrs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_institution);
+   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -653,10 +674,10 @@ static void Ins_ConfigNumCtrs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Centres);
+   Frm_LabelColumn ("RT",NULL,Txt_Centres);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCtr);
    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -683,10 +704,10 @@ static void Ins_ConfigNumDegs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Degrees);
+   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -705,10 +726,10 @@ static void Ins_ConfigNumCrss (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Courses);
+   Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -727,10 +748,10 @@ static void Ins_ConfigNumDpts (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Departments);
+   Frm_LabelColumn ("RT",NULL,Txt_Departments);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
@@ -750,12 +771,12 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,
+   Frm_LabelColumn ("RT",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
