@@ -92,7 +92,8 @@ static void Ctr_ConfigMap (void);
 static void Ctr_ConfigLatitude (void);
 static void Ctr_ConfigLongitude (void);
 static void Ctr_ConfigAltitude (void);
-static void Ctr_ConfigPhoto (bool PrintView,bool PutLink);
+static void Ctr_ConfigPhoto (bool PrintView,bool PutForm,bool PutLink,
+			     const char PathPhoto[PATH_MAX + 1]);
 static void Ctr_ConfigInstitution (bool PrintView,bool PutForm);
 static void Ctr_ConfigFullName (bool PutForm);
 static void Ctr_ConfigShrtName (bool PutForm);
@@ -317,18 +318,23 @@ static void Ctr_Configuration (bool PrintView)
    bool PutFormPlc;
    bool PutFormCoor;
    bool PutFormWWW;
+   bool PutFormPhoto;
+   bool MapIsAvailable;
+   char PathPhoto[PATH_MAX + 1];
+   bool PhotoExists;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
       return;
 
    /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
-   PutFormIns  = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-   PutFormPlc  =
-   PutFormCoor =
-   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutLink      = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   PutFormIns   = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   PutFormName  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormPlc   =
+   PutFormCoor  =
+   PutFormWWW   =
+   PutFormPhoto = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
 
    /***** Begin box *****/
    if (PrintView)
@@ -341,12 +347,8 @@ static void Ctr_Configuration (bool PrintView)
    /***** Title *****/
    Ctr_ConfigTitle (PutLink);
 
-   /***** Centre map *****/
-   if (Ctr_GetIfMapIsAvailable ())
-      Ctr_ConfigMap ();
-
-   /***** Centre photo *****/
-   Ctr_ConfigPhoto (PrintView,PutLink);
+   /**************************** Left part ***********************************/
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -396,6 +398,36 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   HTM_DIV_End ();
+
+   /**************************** Right part **********************************/
+   /***** Check map *****/
+   MapIsAvailable = Ctr_GetIfMapIsAvailable ();
+
+   /***** Check photo *****/
+   snprintf (PathPhoto,sizeof (PathPhoto),
+	     "%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_CTR_PUBLIC,
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+
+   if (MapIsAvailable || PhotoExists)
+     {
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+
+      /***** Centre map *****/
+      if (MapIsAvailable)
+	 Ctr_ConfigMap ();
+
+      /***** Centre photo *****/
+      if (PhotoExists)
+	 Ctr_ConfigPhoto (PrintView,PutFormPhoto,PutLink,PathPhoto);
+
+      HTM_DIV_End ();
+     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -550,10 +582,10 @@ static void Ctr_ConfigLatitude (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM","Latitude",Txt_Latitude);
+   Frm_LabelColumn ("RT","Latitude",Txt_Latitude);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActChgCtrLatCfg);
    HTM_INPUT_FLOAT ("Latitude",
 		    -90.0,	// South Pole
@@ -575,10 +607,10 @@ static void Ctr_ConfigLongitude (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM","Longitude",Txt_Longitude);
+   Frm_LabelColumn ("RT","Longitude",Txt_Longitude);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActChgCtrLgtCfg);
    HTM_INPUT_FLOAT ("Longitude",
 		    -180.0,	// West
@@ -600,10 +632,10 @@ static void Ctr_ConfigAltitude (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM","Altitude",Txt_Altitude);
+   Frm_LabelColumn ("RT","Altitude",Txt_Altitude);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActChgCtrAltCfg);
    HTM_INPUT_FLOAT ("Altitude",
 		    -413.0,	// Dead Sea shore
@@ -621,78 +653,67 @@ static void Ctr_ConfigAltitude (void)
 /***************************** Draw centre photo *****************************/
 /*****************************************************************************/
 
-static void Ctr_ConfigPhoto (bool PrintView,bool PutLink)
+static void Ctr_ConfigPhoto (bool PrintView,bool PutForm,bool PutLink,
+			     const char PathPhoto[PATH_MAX + 1])
   {
-   char PathPhoto[PATH_MAX + 1];
-   bool PhotoExists;
    char *PhotoAttribution = NULL;
    char *URL;
    char *Icon;
 
-   /***** Path to photo *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),
-	     "%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
-   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+   /***** Trivial checks *****/
+   if (!PathPhoto)
+      return;
+   if (!PathPhoto[0])
+      return;
 
-   /***** Centre photo *****/
-   if (PhotoExists)
+   /***** Get photo attribution *****/
+   Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
+
+   /***** Photo image *****/
+   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+   if (PutLink)
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+		   Gbl.Hierarchy.Ctr.WWW);
+   if (asprintf (&URL,"%s/%02u/%u",
+		 Cfg_URL_CTR_PUBLIC,
+		 (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (asprintf (&Icon,"%u.jpg",
+		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
+	    "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
+				       "CENTRE_PHOTO_SHOW");
+   free (Icon);
+   free (URL);
+   if (PutLink)
+      HTM_A_End ();
+   HTM_DIV_End ();
+
+   /****** Photo attribution ******/
+   if (PutForm)
      {
-      /* Get photo attribution */
-      Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
-
-      /* Photo image */
-      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
-      if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		      Gbl.Hierarchy.Ctr.WWW);
-      if (asprintf (&URL,"%s/%02u/%u",
-		    Cfg_URL_CTR_PUBLIC,
-	            (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	            (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%u.jpg",
-		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	       "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
-			                  "CENTRE_PHOTO_SHOW");
-      free (Icon);
-      free (URL);
-      if (PutLink)
-	 HTM_A_End ();
-      HTM_DIV_End ();
-
-      /* Photo attribution */
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and centre admins
-	 // have permission to edit photo attribution
-	{
-	 HTM_DIV_Begin ("class=\"CM\"");
-	 Frm_StartForm (ActChgCtrPhoAtt);
-	 HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
-			     " onchange=\"document.getElementById('%s').submit();return false;\"",
-		             Gbl.Form.Id);
-	 if (PhotoAttribution)
-	    HTM_Txt (PhotoAttribution);
-	 HTM_TEXTAREA_End ();
-	 Frm_EndForm ();
-	 HTM_DIV_End ();
-	}
-      else if (PhotoAttribution)
-	{
-	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
+      HTM_DIV_Begin ("class=\"CM\"");
+      Frm_StartForm (ActChgCtrPhoAtt);
+      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
+			  " onchange=\"document.getElementById('%s').submit();return false;\"",
+			  Gbl.Form.Id);
+      if (PhotoAttribution)
 	 HTM_Txt (PhotoAttribution);
-	 HTM_DIV_End ();
-	}
-
-      /* Free memory used for photo attribution */
-      Ctr_FreePhotoAttribution (&PhotoAttribution);
+      HTM_TEXTAREA_End ();
+      Frm_EndForm ();
+      HTM_DIV_End ();
      }
+   else if (PhotoAttribution)
+     {
+      HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
+      HTM_Txt (PhotoAttribution);
+      HTM_DIV_End ();
+     }
+
+   /****** Free memory used for photo attribution ******/
+   Ctr_FreePhotoAttribution (&PhotoAttribution);
   }
 
 /*****************************************************************************/
@@ -709,12 +730,12 @@ static void Ctr_ConfigInstitution (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "OthInsCod" :
+   Frm_LabelColumn ("RT",PutForm ? "OthInsCod" :
 	                           NULL,
 		    Txt_Institution);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Get list of institutions of the current country */
@@ -803,12 +824,12 @@ static void Ctr_ConfigPlace (bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "PlcCod" :
+   Frm_LabelColumn ("RT",PutForm ? "PlcCod" :
 	                           NULL,
 		    Txt_Place);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Get list of places of the current institution */
@@ -880,10 +901,10 @@ static void Ctr_ConfigNumUsrs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_centre);
+   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_centre);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -903,10 +924,10 @@ static void Ctr_ConfigNumDegs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Degrees);
+   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -933,10 +954,10 @@ static void Ctr_ConfigNumCrss (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Courses);
+   Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
@@ -956,12 +977,12 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,
+   Frm_LabelColumn ("RT",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 

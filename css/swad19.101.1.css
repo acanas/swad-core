@@ -1308,6 +1308,14 @@ a:hover						/* Default ==> underlined */
 	width:600px;
 	margin:12px auto;
 	}
+	
+.HIE_CFG_LEFT, .HIE_CFG_RIGHT
+	{
+	display:inline-block;
+	margin:0 6px;
+	vertical-align:top;
+	width:480px;
+	}
 
 /*********************************** Places **********************************/
 .PLC_SEL
@@ -1991,8 +1999,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
-	width:480px;
-	padding:6px; margin:9px;
+	width:460px;
+	padding:2px;
+	margin:9px auto;
 	border:solid 1px #EEE;
 	}
 a:hover img.CENTRE_PHOTO_SHOW
@@ -2003,17 +2012,18 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CENTRE_PHOTO_PRINT
 	{
 	box-sizing:border-box;
-	width:600px;
-	padding:10px; margin:15px;
+	width:460px;
+	padding:2px;
+	margin:9px auto;
 	border:solid 1px #EEE;
         box-shadow:1px 1px 6px #999;
 	}
 	
 #centre_mapid
 	{
-	width:480px;
-	height:360px;
-	margin:0 auto;
+	width:460px;
+	height:345px;
+	margin:9px auto;
 	}
 
 /**************** Attribution (author and license) of images *****************/
@@ -2402,7 +2412,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:358px;
 	}
 
-.REC_HEAD	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:12pt;}
+.REC_HEAD
+	{
+	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
+	color:#808080;
+	font-size:12pt;
+	}
 .REC_NAME
 	{
 	box-sizing:border-box;
@@ -3918,40 +3933,49 @@ a.PAG:hover, .PAG_CUR
 /************* Forms to edit institution, centre, degree, course *************/
 .CODE
 	{
+	box-sizing:border-box;
 	min-width:60px;
 	text-align:right;
 	vertical-align:middle;
 	}
 .INPUT_INS_CODE
 	{
+	box-sizing:border-box;
 	width:90px;
 	}
 .INPUT_SHORT_NAME
 	{
+	box-sizing:border-box;
 	width:180px;
 	}
 .INPUT_FULL_NAME
 	{
+	box-sizing:border-box;
 	width:180px;
 	}
 .INPUT_WWW_NARROW
 	{
+	box-sizing:border-box;
 	width:90px;
 	}
 .INPUT_WWW_WIDE
 	{
+	box-sizing:border-box;
 	width:180px;
 	}
 .INPUT_COORD
 	{
+	box-sizing:border-box;
 	width:180px;
 	}
 .INPUT_STATUS
 	{
+	box-sizing:border-box;
 	width:80px;
 	}
 .INPUT_REQUESTER
 	{
+	box-sizing:border-box;
 	width:90px;
 	}
 

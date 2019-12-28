@@ -97,18 +97,19 @@ void Hie_ConfigFullName (bool PutForm,const char *Label,Act_Action_t NextAction,
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "FullName" :
+   Frm_LabelColumn ("RT",PutForm ? "FullName" :
 	                           NULL,
 		    Label);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LB\"");
    if (PutForm)
      {
       /* Form to change full name */
       Frm_StartForm (NextAction);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,FullName,true,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\"");
+		      "id=\"FullName\" class=\"INPUT_FULL_NAME\""
+		      " required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not edit full name
@@ -131,18 +132,19 @@ void Hie_ConfigShrtName (bool PutForm,Act_Action_t NextAction,
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "ShortName" :
+   Frm_LabelColumn ("RT",PutForm ? "ShortName" :
 	                           NULL,
 		    Txt_Short_name);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LB\"");
    if (PutForm)
      {
       /* Form to change short name */
       Frm_StartForm (NextAction);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,ShrtName,true,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\"");
+		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
+		      " required=\"required\"");
       Frm_EndForm ();
      }
    else	// I can not edit short name
@@ -165,12 +167,12 @@ void Hie_ConfigWWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "WWW" :
+   Frm_LabelColumn ("RT",PutForm ? "WWW" :
 	                           NULL,
 		    Txt_Web);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Form to change web */
@@ -207,10 +209,10 @@ void Hie_ConfigShortcut (bool PrintView,const char *ParamName,long HieCod)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Shortcut);
+   Frm_LabelColumn ("RT",NULL,Txt_Shortcut);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (!PrintView)
       HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
 		   Cfg_URL_SWAD_CGI,
@@ -242,7 +244,7 @@ void Hie_ConfigQR (const char *ParamName,long HieCod)
    Frm_LabelColumn ("RT",NULL,Txt_QR_code);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    QR_LinkTo (250,ParamName,HieCod);
    HTM_TD_End ();
 
