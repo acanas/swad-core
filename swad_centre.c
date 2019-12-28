@@ -697,7 +697,7 @@ static void Ctr_ConfigPhoto (bool PrintView,bool PutForm,bool PutLink,
      {
       HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgCtrPhoAtt);
-      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
+      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
 			  " onchange=\"document.getElementById('%s').submit();return false;\"",
 			  Gbl.Form.Id);
       if (PhotoAttribution)

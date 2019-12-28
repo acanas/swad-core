@@ -247,6 +247,7 @@ static void Cty_Configuration (bool PrintView)
   {
    extern const char *Hlp_COUNTRY_Information;
    bool PutLink;
+   bool MapExists;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
@@ -266,9 +267,8 @@ static void Cty_Configuration (bool PrintView)
    /***** Title *****/
    Cty_ConfigTitle (PutLink);
 
-   /***** Country map *****/
-   if (Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty))
-      Cty_ConfigMap (PrintView,PutLink);
+   /**************************** Left part ***********************************/
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -304,6 +304,23 @@ static void Cty_Configuration (bool PrintView)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** End of left part *****/
+   HTM_DIV_End ();
+
+   /**************************** Right part **********************************/
+   /***** Check map *****/
+   MapExists = Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty);
+
+   if (MapExists)
+     {
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+
+      /***** Country map *****/
+      Cty_ConfigMap (PrintView,PutLink);
+
+      HTM_DIV_End ();
+     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -363,7 +380,7 @@ static void Cty_ConfigMap (bool PrintView,bool PutLink)
      {
       HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgCtyMapAtt);
-      HTM_TEXTAREA_Begin ("name=\"Attribution\" cols=\"50\" rows=\"2\""
+      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
 			  " onchange=\"document.getElementById('%s').submit();return false;\"",
 			  Gbl.Form.Id);
       if (MapAttribution)
@@ -395,10 +412,10 @@ static void Cty_ConfigName (bool PutLink)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Country);
+   Frm_LabelColumn ("RT",NULL,Txt_Country);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LB\"");
    if (PutLink)
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
@@ -440,10 +457,10 @@ static void Cty_ConfigNumUsrs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Users_of_the_country);
+   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
@@ -463,10 +480,10 @@ static void Cty_ConfigNumInss (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Institutions);
+   Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeIns);
    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -493,10 +510,10 @@ static void Cty_ConfigNumCtrs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Centres);
+   Frm_LabelColumn ("RT",NULL,Txt_Centres);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
@@ -515,10 +532,10 @@ static void Cty_ConfigNumDegs (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Degrees);
+   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
@@ -537,10 +554,10 @@ static void Cty_ConfigNumCrss (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Courses);
+   Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
@@ -560,12 +577,12 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,
+   Frm_LabelColumn ("RT",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
