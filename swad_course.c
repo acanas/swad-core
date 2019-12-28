@@ -219,6 +219,9 @@ static void Crs_Configuration (bool PrintView)
    /***** Title *****/
    Crs_ConfigTitle (PutLink);
 
+   /**************************** Left part ***********************************/
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
@@ -260,6 +263,9 @@ static void Crs_Configuration (bool PrintView)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** End of left part *****/
+   HTM_DIV_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -303,12 +309,12 @@ static void Crs_ConfigDegree (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "OthDegCod" :
+   Frm_LabelColumn ("RT",PutForm ? "OthDegCod" :
 	                           NULL,
 		    Txt_Degree);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Get list of degrees of the current centre */
@@ -393,12 +399,12 @@ static void Crs_ConfigYear (bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "OthCrsYear" :
+   Frm_LabelColumn ("RT",PutForm ? "OthCrsYear" :
 	                           NULL,
 		    Txt_Year_OF_A_DEGREE);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
@@ -433,18 +439,18 @@ static void Crs_ConfigInstitutionalCode (bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "InsCrsCod" :
+   Frm_LabelColumn ("RT",PutForm ? "InsCrsCod" :
 	                           NULL,
 		    Txt_Institutional_code);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       Frm_StartForm (ActChgInsCrsCodCfg);
       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 		      Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
-		      "id=\"InsCrsCod\" size=\"%u\"",
+		      "id=\"InsCrsCod\" size=\"%u\" class=\"INPUT_INS_CODE\"",
 		      Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
       Frm_EndForm ();
      }
@@ -467,10 +473,10 @@ static void Crs_ConfigInternalCode (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Internal_code);
+   Frm_LabelColumn ("RT",NULL,Txt_Internal_code);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
    HTM_TD_End ();
 
@@ -507,10 +513,10 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Frm_LabelColumn ("RT",NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
    HTM_TD_End ();
 
@@ -536,10 +542,10 @@ static void Crs_ConfigIndicators (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Indicators);
+   Frm_LabelColumn ("RT",NULL,Txt_Indicators);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActReqStaCrs);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%u %s %u",
