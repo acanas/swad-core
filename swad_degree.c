@@ -327,6 +327,9 @@ static void Deg_Configuration (bool PrintView)
    /***** Title *****/
    Deg_ConfigTitle (PutLink);
 
+   /**************************** Left part ***********************************/
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
@@ -360,6 +363,9 @@ static void Deg_Configuration (bool PrintView)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** End of left part *****/
+   HTM_DIV_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -410,12 +416,12 @@ static void Deg_ConfigCentre (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",PutForm ? "OthCtrCod" :
+   Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
 	                           NULL,
 		    Txt_Centre);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
       /* Get list of centres of the current institution */
@@ -525,10 +531,10 @@ static void Deg_ConfigNumCrss (void)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_Courses);
+   Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -556,12 +562,12 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,
+   Frm_LabelColumn ("RT",NULL,
 		    Role == Rol_UNK ? Txt_Users_in_courses :
 		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
    HTM_TD_End ();
 

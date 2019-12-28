@@ -399,6 +399,7 @@ static void Ctr_Configuration (bool PrintView)
    /***** End table *****/
    HTM_TABLE_End ();
 
+   /***** End of left part *****/
    HTM_DIV_End ();
 
    /**************************** Right part **********************************/
