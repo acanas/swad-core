@@ -90,13 +90,7 @@ static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
-                                           long DegCod,long CtrCod);
 static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName);
-
-static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
 static void Deg_PutParamGoToDeg (void);
@@ -1557,24 +1551,10 @@ void Deg_RenameDegreeFull (void)
   }
 
 /*****************************************************************************/
-/*************** Change the name of a degree in configuration ****************/
-/*****************************************************************************/
-
-void Deg_RenameDegreeShortInConfig (void)
-  {
-   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_SHRT_NAME);
-  }
-
-void Deg_RenameDegreeFullInConfig (void)
-  {
-   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_FULL_NAME);
-  }
-
-/*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
@@ -1648,8 +1628,8 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
 /********************* Check if the name of degree exists ********************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
-                                           long DegCod,long CtrCod)
+bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+                                    long DegCod,long CtrCod)
   {
    /***** Get number of degrees with a type and a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a degree"
@@ -1669,78 +1649,6 @@ static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *N
    DB_QueryUPDATE ("can not update the name of a degree",
 		   "UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
 	           FieldName,NewDegName,DegCod);
-  }
-
-/*****************************************************************************/
-/************************ Change the centre of a degree **********************/
-/*****************************************************************************/
-
-void Deg_ChangeDegCtrInConfig (void)
-  {
-   extern const char *Txt_The_degree_X_already_exists;
-   extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
-   struct Centre NewCtr;
-
-   /***** Get parameter with centre code *****/
-   NewCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
-
-   /***** Check if centre has changed *****/
-   if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)
-     {
-      /***** Get data of new centre *****/
-      Ctr_GetDataOfCentreByCod (&NewCtr,Ctr_GET_BASIC_DATA);
-
-      /***** Check if it already exists a degree with the same name in the new centre *****/
-      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
-         Ale_CreateAlert (Ale_WARNING,
-                          Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Deg.ShrtName);
-      else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
-         Ale_CreateAlert (Ale_WARNING,
-                          Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Deg.FullName);
-      else
-	{
-	 /***** Update centre in table of degrees *****/
-	 Deg_UpdateDegCtrDB (Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod);
-	 Gbl.Hierarchy.Deg.CtrCod =
-	 Gbl.Hierarchy.Ctr.CtrCod = NewCtr.CtrCod;
-
-	 /***** Initialize again current course, degree, centre... *****/
-	 Hie_InitHierarchy ();
-
-	 /***** Create alert to show the change made *****/
-         Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_degree_X_has_been_moved_to_the_centre_Y,
-		          Gbl.Hierarchy.Deg.FullName,
-		          Gbl.Hierarchy.Ctr.FullName);
-	}
-     }
-  }
-
-/*****************************************************************************/
-/** Show message of success after changing a degree in degree configuration **/
-/*****************************************************************************/
-
-void Deg_ContEditAfterChgDegInConfig (void)
-  {
-   /***** Write success / warning message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   DegCfg_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
-/********************** Update centre in table of degrees ********************/
-/*****************************************************************************/
-
-static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
-  {
-   /***** Update centre in table of degrees *****/
-   DB_QueryUPDATE ("can not update the centre of a degree",
-		   "UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
-                   CtrCod,DegCod);
   }
 
 /*****************************************************************************/
@@ -1818,39 +1726,11 @@ void Deg_ChangeDegWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
-void Deg_ChangeDegWWWInConfig (void)
-  {
-   extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
-
-   /***** Get parameters from form *****/
-   /* Get the new WWW for the degree */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
-
-   /***** Check if new WWW is empty *****/
-   if (NewWWW[0])
-     {
-      /***** Update the table changing old WWW by new WWW *****/
-      Deg_UpdateDegWWWDB (Gbl.Hierarchy.Deg.DegCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Deg.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-		     NewWWW);
-     }
-   else
-      Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
-
-   /***** Show the form again *****/
-   DegCfg_ShowConfiguration ();
-  }
-
 /*****************************************************************************/
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a degree",

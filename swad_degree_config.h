@@ -42,4 +42,10 @@
 void DegCfg_ShowConfiguration (void);
 void DegCfg_PrintConfiguration (void);
 
+void DegCfg_ChangeDegCtrInConfig (void);
+void DegCfg_RenameDegreeShortInConfig (void);
+void DegCfg_RenameDegreeFullInConfig (void);
+void DegCfg_ChangeDegWWWInConfig (void);
+void DegCfg_ContEditAfterChgDegInConfig (void);
+
 #endif

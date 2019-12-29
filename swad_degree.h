@@ -133,13 +133,12 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_RenameDegreeShortInConfig (void);
-void Deg_RenameDegreeFullInConfig (void);
-void Deg_ChangeDegCtrInConfig (void);
-void Deg_ContEditAfterChgDegInConfig (void);
+void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
+bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+                                    long DegCod,long CtrCod);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
-void Deg_ChangeDegWWWInConfig (void);
+void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 

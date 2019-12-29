@@ -1883,10 +1883,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // Actions not in menu:
    [ActPrnDegInf	] = {1150,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,DegCfg_PrintConfiguration		,NULL},
-   [ActChgDegCtrCfg	] = {1588,-1,TabUnk,ActSeeDegInf	,    0,    0,0x300,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegCtrInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
-   [ActRenDegShoCfg	] = {1598,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeShortInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
-   [ActRenDegFulCfg	] = {1597,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeFullInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
-   [ActChgDegWWWCfg	] = {1599,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegWWWInConfig	,NULL},
+   [ActChgDegCtrCfg	] = {1588,-1,TabUnk,ActSeeDegInf	,    0,    0,0x300,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_ChangeDegCtrInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
+   [ActRenDegShoCfg	] = {1598,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeShortInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
+   [ActRenDegFulCfg	] = {1597,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeFullInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
+   [ActChgDegWWWCfg	] = {1599,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ChangeDegWWWInConfig	,NULL},
    [ActReqDegLog	] = {1246,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_RequestLogo		,NULL},
    [ActRecDegLog	] = { 553,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_ReceiveLogo		,DegCfg_ShowConfiguration		,NULL},
    [ActRemDegLog	] = {1343,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_RemoveLogo			,DegCfg_ShowConfiguration		,NULL},
