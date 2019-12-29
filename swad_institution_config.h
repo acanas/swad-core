@@ -1,9 +1,9 @@
-// swad_centre_config.h: configuration of current centre
+// swad_institution_config.h: configuration of current institution
 
-#ifndef _SWAD_CTR_CFG
-#define _SWAD_CTR_CFG
+#ifndef _SWAD_INS_CFG
+#define _SWAD_INS_CFG
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -24,34 +24,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/************************ Public types and constants *************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void CtrCfg_ShowConfiguration (void);
-void CtrCfg_PrintConfiguration (void);
+void InsCfg_ShowConfiguration (void);
+void InsCfg_PrintConfiguration (void);
 
-void CtrCfg_RequestLogo (void);
-void CtrCfg_ReceiveLogo (void);
-void CtrCfg_RemoveLogo (void);
-void CtrCfg_RequestPhoto (void);
-void CtrCfg_ReceivePhoto (void);
-void CtrCfg_ChangeCtrPhotoAttribution (void);
-void CtrCfg_ChangeCtrIns (void);
-void CtrCfg_RenameCentreShort (void);
-void CtrCfg_RenameCentreFull (void);
-void CtrCfg_ChangeCtrPlc (void);
-void CtrCfg_ChangeCtrLatitude (void);
-void CtrCfg_ChangeCtrLongitude (void);
-void CtrCfg_ChangeCtrAltitude (void);
-void CtrCfg_ChangeCtrWWW (void);
-void CtrCfg_ContEditAfterChgCtr (void);
+void InsCfg_RequestLogo (void);
+void InsCfg_ReceiveLogo (void);
+void InsCfg_RemoveLogo (void);
+void InsCfg_ChangeInsCty (void);
+void InsCfg_RenameInsShort (void);
+void InsCfg_RenameInsFull (void);
+void InsCfg_ContEditAfterChgIns (void);
+void InsCfg_ChangeInsWWW (void);
 
 #endif

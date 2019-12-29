@@ -55,6 +55,7 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
+#include "swad_institution_config.h"
 #include "swad_language.h"
 #include "swad_log.h"
 #include "swad_mail.h"
@@ -1780,21 +1781,21 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabIns ******************************************************************
    // Actions in menu:
-   [ActSeeInsInf	] = {1153, 0,TabIns,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowConfiguration		,"info"			},
+   [ActSeeInsInf	] = {1153, 0,TabIns,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_ShowConfiguration		,"info"			},
    [ActSeeCtr		] = { 676, 1,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"building"		},
    [ActSeePlc		] = { 703, 2,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"map-marker-alt"	},
    [ActSeeDpt		] = { 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"users"		},
    [ActSeeHld		] = { 707, 4,TabIns,ActSeeHld		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_SeeHolidays		,"calendar-day"		},
 
    // Actions not in menu:
-   [ActPrnInsInf	] = {1154,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ins_PrintConfiguration		,NULL},
-   [ActChgInsCtyCfg	] = {1590,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_ChangeInsCtyInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
-   [ActRenInsShoCfg	] = {1592,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RenameInsShortInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
-   [ActRenInsFulCfg	] = {1591,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RenameInsFullInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
-   [ActChgInsWWWCfg	] = {1593,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ChangeInsWWWInConfig	,NULL},
-   [ActReqInsLog	] = {1245,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_RequestLogo		,NULL},
-   [ActRecInsLog	] = { 699,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Ins_ReceiveLogo		,Ins_ShowConfiguration		,NULL},
-   [ActRemInsLog	] = {1341,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Ins_RemoveLogo			,Ins_ShowConfiguration		,NULL},
+   [ActPrnInsInf	] = {1154,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,InsCfg_PrintConfiguration	,NULL},
+   [ActChgInsCtyCfg	] = {1590,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,InsCfg_ChangeInsCty		,InsCfg_ContEditAfterChgIns	,NULL},
+   [ActRenInsShoCfg	] = {1592,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,InsCfg_RenameInsShort		,InsCfg_ContEditAfterChgIns	,NULL},
+   [ActRenInsFulCfg	] = {1591,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,InsCfg_RenameInsFull		,InsCfg_ContEditAfterChgIns	,NULL},
+   [ActChgInsWWWCfg	] = {1593,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_ChangeInsWWW		,NULL},
+   [ActReqInsLog	] = {1245,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_RequestLogo		,NULL},
+   [ActRecInsLog	] = { 699,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,InsCfg_ReceiveLogo		,InsCfg_ShowConfiguration	,NULL},
+   [ActRemInsLog	] = {1341,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,InsCfg_RemoveLogo		,InsCfg_ShowConfiguration	,NULL},
 
    [ActEdiCtr		] = { 681,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_EditCentres		,NULL},
    [ActReqCtr		] = {1208,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RecFormReqCtr		,Ctr_ContEditAfterChgCtr	,NULL},
@@ -1836,21 +1837,21 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeCla		] = {1744, 2,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom"		},
 
    // Actions not in menu:
-   [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtrCfg_PrintConfiguration		,NULL},
-   [ActChgCtrInsCfg	] = {1589,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_ChangeCtrInsInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
-   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreShortInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
-   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreFullInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
-   [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPlcInConfig	,NULL},
-   [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLatitudeInConfig	,NULL},
-   [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLongitudeInConfig	,NULL},
-   [ActChgCtrAltCfg	] = {1817,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrAltitudeInConfig	,NULL},
-   [ActChgCtrWWWCfg	] = {1596,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrWWWInConfig	,NULL},
+   [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtrCfg_PrintConfiguration	,NULL},
+   [ActChgCtrInsCfg	] = {1589,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_ChangeCtrIns		,CtrCfg_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreShort	,CtrCfg_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreFull	,CtrCfg_ContEditAfterChgCtr	,NULL},
+   [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPlc		,NULL},
+   [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLatitude	,NULL},
+   [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLongitude	,NULL},
+   [ActChgCtrAltCfg	] = {1817,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrAltitude	,NULL},
+   [ActChgCtrWWWCfg	] = {1596,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrWWW		,NULL},
    [ActReqCtrLog	] = {1244,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_RequestLogo		,NULL},
-   [ActRecCtrLog	] = {1051,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_ReceiveLogo		,CtrCfg_ShowConfiguration		,NULL},
-   [ActRemCtrLog	] = {1342,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_RemoveLogo			,CtrCfg_ShowConfiguration		,NULL},
+   [ActRecCtrLog	] = {1051,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_ReceiveLogo		,CtrCfg_ShowConfiguration	,NULL},
+   [ActRemCtrLog	] = {1342,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_RemoveLogo		,CtrCfg_ShowConfiguration	,NULL},
    [ActReqCtrPho	] = {1160,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_RequestPhoto		,NULL},
    [ActRecCtrPho	] = {1161,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,CtrCfg_ReceivePhoto		,NULL},
-   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttribution	,NULL},
+   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttribution,NULL},
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
    [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},
@@ -1878,18 +1879,18 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabDeg ******************************************************************
    // Actions in menu:
-   [ActSeeDegInf	] = {1149, 0,TabDeg,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ShowConfiguration		,"info"			},
+   [ActSeeDegInf	] = {1149, 0,TabDeg,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ShowConfiguration	,"info"			},
    [ActSeeCrs		] = {1009, 1,TabDeg,ActSeeCrs		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowCrssOfCurrentDeg	,"list-ol"		},
 
    // Actions not in menu:
-   [ActPrnDegInf	] = {1150,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,DegCfg_PrintConfiguration		,NULL},
-   [ActChgDegCtrCfg	] = {1588,-1,TabUnk,ActSeeDegInf	,    0,    0,0x300,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_ChangeDegCtrInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
-   [ActRenDegShoCfg	] = {1598,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeShortInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
-   [ActRenDegFulCfg	] = {1597,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeFullInConfig	,DegCfg_ContEditAfterChgDegInConfig,NULL},
-   [ActChgDegWWWCfg	] = {1599,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ChangeDegWWWInConfig	,NULL},
+   [ActPrnDegInf	] = {1150,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,DegCfg_PrintConfiguration	,NULL},
+   [ActChgDegCtrCfg	] = {1588,-1,TabUnk,ActSeeDegInf	,    0,    0,0x300,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_ChangeDegCtr		,DegCfg_ContEditAfterChgDeg	,NULL},
+   [ActRenDegShoCfg	] = {1598,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeShort	,DegCfg_ContEditAfterChgDeg	,NULL},
+   [ActRenDegFulCfg	] = {1597,-1,TabUnk,ActSeeDegInf	,    0,    0,0x380,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegCfg_RenameDegreeFull	,DegCfg_ContEditAfterChgDeg	,NULL},
+   [ActChgDegWWWCfg	] = {1599,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ChangeDegWWW		,NULL},
    [ActReqDegLog	] = {1246,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_RequestLogo		,NULL},
-   [ActRecDegLog	] = { 553,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_ReceiveLogo		,DegCfg_ShowConfiguration		,NULL},
-   [ActRemDegLog	] = {1343,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_RemoveLogo			,DegCfg_ShowConfiguration		,NULL},
+   [ActRecDegLog	] = { 553,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_ReceiveLogo		,DegCfg_ShowConfiguration	,NULL},
+   [ActRemDegLog	] = {1343,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_RemoveLogo			,DegCfg_ShowConfiguration	,NULL},
 
    [ActEdiCrs		] = { 555,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_EditCourses		,NULL},
    [ActReqCrs		] = {1053,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
@@ -1912,12 +1913,12 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeCrsTT		] = {  25, 6,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
 
    // Actions not in menu:
-   [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CrsCfg_PrintConfiguration		,NULL},
-   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsDegInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseShortInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseFullInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeInsCrsCodInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsYearInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CrsCfg_PrintConfiguration	,NULL},
+   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsDeg		,CrsCfg_ContEditAfterChgCrs	,NULL},
+   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseShort	,CrsCfg_ContEditAfterChgCrs	,NULL},
+   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,NULL},
+   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeInsCrsCod		,CrsCfg_ContEditAfterChgCrs	,NULL},
+   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsYear		,CrsCfg_ContEditAfterChgCrs	,NULL},
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},

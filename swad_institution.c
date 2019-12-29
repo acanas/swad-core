@@ -25,24 +25,16 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
-#include "swad_box.h"
-#include "swad_config.h"
-#include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_help.h"
-#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
-#include "swad_language.h"
 #include "swad_logo.h"
-#include "swad_parameter.h"
-#include "swad_user.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -68,24 +60,6 @@ static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the inst
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ins_Configuration (bool PrintView);
-static void Ins_PutIconsToPrintAndUpload (void);
-static void Ins_ConfigTitle (bool PutLink);
-static bool Ins_GetIfMapIsAvailable (void);
-static void Ins_ConfigMap (void);
-static void Ins_ConfigCountry (bool PrintView,bool PutForm);
-static void Ins_ConfigFullName (bool PutForm);
-static void Ins_ConfigShrtName (bool PutForm);
-static void Ins_ConfigWWW (bool PrintView,bool PutForm);
-static void Ins_ConfigShortcut (bool PrintView);
-static void Ins_ConfigQR (void);
-static void Ins_ConfigNumUsrs (void);
-static void Ins_ConfigNumCtrs (void);
-static void Ins_ConfigNumDegs (void);
-static void Ins_ConfigNumCrss (void);
-static void Ins_ConfigNumDpts (void);
-static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role);
-
 static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanCreateInstitutions (void);
 static void Ins_PutIconsListingInstitutions (void);
@@ -109,15 +83,8 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 static void Ins_PutParamOtherInsCod (long InsCod);
 static long Ins_GetParamOtherInsCod (void);
 
-static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
-                                           const char *Name,
-					   long InsCod,
-					   long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 
-static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 static void Ins_ShowAlertAndButtonToGoToIns (void);
 static void Ins_PutParamGoToIns (void);
 
@@ -287,500 +254,6 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
    /***** End form *****/
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/*************** Show information of the current institution *****************/
-/*****************************************************************************/
-
-void Ins_ShowConfiguration (void)
-  {
-   Ins_Configuration (false);
-
-   /***** Show help to enrol me *****/
-   Hlp_ShowHelpWhatWouldYouLikeToDo ();
-  }
-
-/*****************************************************************************/
-/*************** Print information of the current institution ****************/
-/*****************************************************************************/
-
-void Ins_PrintConfiguration (void)
-  {
-   Ins_Configuration (true);
-  }
-
-/*****************************************************************************/
-/***************** Information of the current institution ********************/
-/*****************************************************************************/
-
-static void Ins_Configuration (bool PrintView)
-  {
-   extern const char *Hlp_INSTITUTION_Information;
-   bool PutLink;
-   bool PutFormCty;
-   bool PutFormName;
-   bool PutFormWWW;
-   bool MapIsAvailable;
-
-   /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
-      return;
-
-   /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
-   PutFormCty  =
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-
-   /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,Ins_PutIconsToPrintAndUpload,
-		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
-
-
-   /***** Title *****/
-   Ins_ConfigTitle (PutLink);
-
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
-
-   /***** Country *****/
-   Ins_ConfigCountry (PrintView,PutFormCty);
-
-   /***** Institution name *****/
-   Ins_ConfigFullName (PutFormName);
-   Ins_ConfigShrtName (PutFormName);
-
-   /***** Institution WWW *****/
-   Ins_ConfigWWW (PrintView,PutFormWWW);
-
-   /***** Shortcut to the institution *****/
-   Ins_ConfigShortcut (PrintView);
-
-   if (PrintView)
-      /***** QR code with link to the institution *****/
-      Ins_ConfigQR ();
-   else
-     {
-      /***** Number of users who claim to belong to this institution,
-             number of centres,
-             number of degrees,
-             number of courses,
-             number of departments *****/
-      Ins_ConfigNumUsrs ();
-      Ins_ConfigNumCtrs ();
-      Ins_ConfigNumDegs ();
-      Ins_ConfigNumCrss ();
-      Ins_ConfigNumDpts ();
-
-      /***** Number of users in courses of this institution *****/
-      Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
-      Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapIsAvailable = Ins_GetIfMapIsAvailable ();
-
-   if (MapIsAvailable)
-     {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
-
-      /***** Institution map *****/
-      Ins_ConfigMap ();
-
-      HTM_DIV_End ();
-     }
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********* Put contextual icons in configuration of an institution ***********/
-/*****************************************************************************/
-
-static void Ins_PutIconsToPrintAndUpload (void)
-  {
-   /***** Icon to print info about institution *****/
-   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
-
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      /***** Icon to upload logo of institution *****/
-      Lgo_PutIconToChangeLogo (Hie_INS);
-
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
-  }
-
-/*****************************************************************************/
-/***************** Show title in institution configuration *******************/
-/*****************************************************************************/
-
-static void Ins_ConfigTitle (bool PutLink)
-  {
-   Hie_ConfigTitle (PutLink,
-		    Hie_INS,				// Logo scope
-		    Gbl.Hierarchy.Ins.InsCod,		// Logo code
-                    Gbl.Hierarchy.Ins.ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Ins.FullName,		// Logo full name
-		    Gbl.Hierarchy.Ins.WWW,		// Logo www
-		    Gbl.Hierarchy.Ins.FullName);	// Text full name
-  }
-
-/*****************************************************************************/
-/******************** Check if centre map should be shown ********************/
-/*****************************************************************************/
-
-// TODO: Change code!!!!
-
-static bool Ins_GetIfMapIsAvailable (void)
-  {
-   return true;
-
-   /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   /*
-   return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
-                  Gbl.Hierarchy.Ctr.Coord.Longitude);
-   */
-  }
-
-/*****************************************************************************/
-/****************************** Draw centre map ******************************/
-/*****************************************************************************/
-
-// TODO: Change code!!!!
-
-static void Ins_ConfigMap (void)
-  {
-   /* https://leafletjs.com/examples/quick-start/ */
-   /***** Leaflet CSS *****/
-   HTM_Txt ("<link rel=\"stylesheet\""
-	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
-	    " integrity=\"sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==\""
-	    " crossorigin=\"\" />");
-
-   /***** Leaflet script *****/
-   /* Put this AFTER Leaflet's CSS */
-   HTM_Txt ("<script src=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.js\""
-	    " integrity=\"sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==\""
-	    " crossorigin=\"\">"
-	    "</script>");
-
-   /***** Container for the map *****/
-   HTM_DIV_Begin ("id=\"centre_mapid\"");
-   HTM_DIV_End ();
-
-   /***** Script to draw the map *****/
-   HTM_SCRIPT_Begin (NULL,NULL);
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-
-   /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
-   HTM_TxtF ("\tvar mymap = L.map('centre_mapid').setView([%lg, %lg], 16);\n",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
-
-   /* Next we'll add a tile layer to add to our map,
-      in this case it's a Mapbox Streets tile layer.
-      Creating a tile layer usually involves
-      setting the URL template for the tile images,
-      the attribution text and the maximum zoom level of the layer.
-      In this example we'll use the mapbox/streets-v11 tiles
-      from Mapbox's Static Tiles API
-      (in order to use tiles from Mapbox,
-      you must also request an access token).*/
-   HTM_Txt ("\tL.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
-            "attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery &copy; <a href=\"https://www.mapbox.com/\">Mapbox</a>',"
-            "maxZoom: 20,"
-            "id: 'mapbox/streets-v11',"
-            "accessToken: 'pk.eyJ1IjoiYWNhbmFzIiwiYSI6ImNrNGFoNXFxOTAzdHozcnA4d3Y0M3BwOGkifQ.uSg754Lv2iZEJg0W2pjiOQ'"
-            "}).addTo(mymap);\n");
-
-   /* Marker */
-   HTM_TxtF ("\tvar marker = L.marker([%lg, %lg]).addTo(mymap);",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
-
-   HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
-	     Gbl.Hierarchy.Ctr.ShrtName,
-	     Gbl.Hierarchy.Ins.ShrtName);
-
-   Str_SetDecimalPointToLocal ();	// Return to local system
-   HTM_SCRIPT_End ();
-  }
-
-/*****************************************************************************/
-/***************** Show country in institution configuration *****************/
-/*****************************************************************************/
-
-static void Ins_ConfigCountry (bool PrintView,bool PutForm)
-  {
-   extern const char *Txt_Country;
-   extern const char *Txt_Go_to_X;
-   unsigned NumCty;
-
-   /***** Country *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "OthCtyCod" :
-	                           NULL,
-		    Txt_Country);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of countries */
-      Cty_GetListCountries (Cty_GET_BASIC_DATA);
-
-      /* Put form to select country */
-      Frm_StartForm (ActChgInsCtyCfg);
-      HTM_SELECT_Begin (true,
-			"id=\"OthCtyCod\" name=\"OthCtyCod\""
-		        " class=\"INPUT_SHORT_NAME\"");
-      for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
-	   NumCty++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
-		     Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
-		     "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of countries */
-      Cty_FreeListCountries ();
-     }
-   else	// I can not move institution to another country
-     {
-      if (!PrintView)
-	{
-         Frm_StartFormGoTo (ActSeeCtyInf);
-         Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
-	}
-      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
-      HTM_NBSP ();
-      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-      if (!PrintView)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/********* Show institution full name in institution configuration ***********/
-/*****************************************************************************/
-
-static void Ins_ConfigFullName (bool PutForm)
-  {
-   extern const char *Txt_Institution;
-
-   Hie_ConfigFullName (PutForm,Txt_Institution,ActRenInsFulCfg,
-		       Gbl.Hierarchy.Ins.FullName);
-  }
-
-/*****************************************************************************/
-/********* Show institution short name in institution configuration **********/
-/*****************************************************************************/
-
-static void Ins_ConfigShrtName (bool PutForm)
-  {
-   Hie_ConfigShrtName (PutForm,ActRenInsShoCfg,Gbl.Hierarchy.Ins.ShrtName);
-  }
-
-/*****************************************************************************/
-/************ Show institution WWW in institution configuration **************/
-/*****************************************************************************/
-
-static void Ins_ConfigWWW (bool PrintView,bool PutForm)
-  {
-   Hie_ConfigWWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
-  }
-
-/*****************************************************************************/
-/********** Show institution shortcut in institution configuration ***********/
-/*****************************************************************************/
-
-static void Ins_ConfigShortcut (bool PrintView)
-  {
-   Hie_ConfigShortcut (PrintView,"ins",Gbl.Hierarchy.Ins.InsCod);
-  }
-
-/*****************************************************************************/
-/************* Show institution QR in institution configuration **************/
-/*****************************************************************************/
-
-static void Ins_ConfigQR (void)
-  {
-   Hie_ConfigQR ("ins",Gbl.Hierarchy.Ins.InsCod);
-  }
-
-/*****************************************************************************/
-/** Show number of users who claim to belong to instit. in instit. config. ***/
-/*****************************************************************************/
-
-static void Ins_ConfigNumUsrs (void)
-  {
-   extern const char *Txt_Users_of_the_institution;
-
-   /***** Number of users *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show number of centres in institution configuration *************/
-/*****************************************************************************/
-
-static void Ins_ConfigNumCtrs (void)
-  {
-   extern const char *Txt_Centres;
-   extern const char *Txt_Centres_of_INSTITUTION_X;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeCtr);
-   Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Centres_of_INSTITUTION_X,
-	     Gbl.Hierarchy.Ins.ShrtName);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-   HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show number of degrees in institution configuration *************/
-/*****************************************************************************/
-
-static void Ins_ConfigNumDegs (void)
-  {
-   extern const char *Txt_Degrees;
-
-   /***** Number of degrees *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************ Show number of courses in institution configuration ************/
-/*****************************************************************************/
-
-static void Ins_ConfigNumCrss (void)
-  {
-   extern const char *Txt_Courses;
-
-   /***** Number of courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/********** Show number of departments in institution configuration **********/
-/*****************************************************************************/
-
-static void Ins_ConfigNumDpts (void)
-  {
-   extern const char *Txt_Departments;
-
-   /***** Number of departments *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Departments);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Number of users in courses of this institution ***************/
-/*****************************************************************************/
-
-static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1914,26 +1387,10 @@ void Ins_RenameInsFull (void)
   }
 
 /*****************************************************************************/
-/************ Change the name of an institution in configuration *************/
-/*****************************************************************************/
-
-void Ins_RenameInsShortInConfig (void)
-  {
-   /***** Rename institution *****/
-   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_SHRT_NAME);
-  }
-
-void Ins_RenameInsFullInConfig (void)
-  {
-   /***** Rename institution *****/
-   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_FULL_NAME);
-  }
-
-/*****************************************************************************/
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
@@ -2007,10 +1464,10 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 /****** Check if the name of institution exists in the current country *******/
 /*****************************************************************************/
 
-static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
-                                           const char *Name,
-					   long InsCod,
-					   long CtyCod)
+bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
+                                    const char *Name,
+				    long InsCod,
+				    long CtyCod)
   {
    /***** Get number of institutions in current country with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of an institution"
@@ -2034,77 +1491,6 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
    /***** Flush caches *****/
    Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
-  }
-
-/*****************************************************************************/
-/******************* Change the country of a institution *********************/
-/*****************************************************************************/
-
-void Ins_ChangeInsCtyInConfig (void)
-  {
-   extern const char *Txt_The_institution_X_already_exists;
-   extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
-   struct Country NewCty;
-
-   /***** Get the new country code for the institution *****/
-   NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
-
-   /***** Check if country has changed *****/
-   if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)
-     {
-      /***** Get data of the country from database *****/
-      Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
-
-      /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_institution_X_already_exists,
-		          Gbl.Hierarchy.Ins.ShrtName);
-      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.CtyCod))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_institution_X_already_exists,
-		          Gbl.Hierarchy.Ins.FullName);
-      else
-	{
-	 /***** Update the table changing the country of the institution *****/
-	 Ins_UpdateInsCtyDB (Gbl.Hierarchy.Ins.InsCod,NewCty.CtyCod);
-         Gbl.Hierarchy.Ins.CtyCod =
-         Gbl.Hierarchy.Cty.CtyCod = NewCty.CtyCod;
-
-	 /***** Initialize again current course, degree, centre... *****/
-	 Hie_InitHierarchy ();
-
-	 /***** Write message to show the change made *****/
-         Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		          Gbl.Hierarchy.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
-	}
-     }
-  }
-
-/*****************************************************************************/
-/*** Show msg. of success after changing an institution in instit. config. ***/
-/*****************************************************************************/
-
-void Ins_ContEditAfterChgInsInConfig (void)
-  {
-   /***** Write success / warning message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Ins_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
-/****************** Update country in table of institutions ******************/
-/*****************************************************************************/
-
-static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod)
-  {
-   /***** Update country in table of institutions *****/
-   DB_QueryUPDATE ("can not update the country of an institution",
-		   "UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
-                   CtyCod,InsCod);
   }
 
 /*****************************************************************************/
@@ -2147,39 +1533,11 @@ void Ins_ChangeInsWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
-void Ins_ChangeInsWWWInConfig (void)
-  {
-   extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
-
-   /***** Get parameters from form *****/
-   /* Get the new WWW for the institution */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
-
-   /***** Check if new WWW is empty *****/
-   if (NewWWW[0])
-     {
-      /***** Update database changing old WWW by new WWW *****/
-      Ins_UpdateInsWWWDB (Gbl.Hierarchy.Ins.InsCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-		     NewWWW);
-     }
-   else
-      Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
-
-   /***** Show the form again *****/
-   Ins_ShowConfiguration ();
-  }
-
 /*****************************************************************************/
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of an institution",
@@ -2276,33 +1634,6 @@ static void Ins_PutParamGoToIns (void)
   {
    /***** Put parameter *****/
    Ins_PutParamInsCod (Ins_EditingIns->InsCod);
-  }
-
-/*****************************************************************************/
-/******** Show a form for sending a logo of the current institution **********/
-/*****************************************************************************/
-
-void Ins_RequestLogo (void)
-  {
-   Lgo_RequestLogo (Hie_INS);
-  }
-
-/*****************************************************************************/
-/************** Receive the logo of the current institution ******************/
-/*****************************************************************************/
-
-void Ins_ReceiveLogo (void)
-  {
-   Lgo_ReceiveLogo (Hie_INS);
-  }
-
-/*****************************************************************************/
-/*************** Remove the logo of the current institution ******************/
-/*****************************************************************************/
-
-void Ins_RemoveLogo (void)
-  {
-   Lgo_RemoveLogo (Hie_INS);
   }
 
 /*****************************************************************************/

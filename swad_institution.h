@@ -102,9 +102,6 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size);
 void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo);
 
-void Ins_ShowConfiguration (void);
-void Ins_PrintConfiguration (void);
-
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
@@ -124,18 +121,16 @@ long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInsShortInConfig (void);
-void Ins_RenameInsFullInConfig (void);
-void Ins_ChangeInsCtyInConfig (void);
-void Ins_ContEditAfterChgInsInConfig (void);
+void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
+bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
+                                    const char *Name,
+				    long InsCod,
+				    long CtyCod);
 void Ins_ChangeInsWWW (void);
-void Ins_ChangeInsWWWInConfig (void);
+void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 
-void Ins_RequestLogo (void);
-void Ins_ReceiveLogo (void);
-void Ins_RemoveLogo (void);
 void Ins_RecFormReqIns (void);
 void Ins_RecFormNewIns (void);
 

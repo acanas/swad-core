@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 
 	Version 19.10x:   Dec 29, 2019	Map in country information. (? lines)
 	Version 19.10x:   Dec 29, 2019	Map in institution information. (? lines)
+	Version 19.105:   Dec 29, 2019	New module swad_institution_config for insitution configuration. (249614 lines)
 	Version 19.104.2: Dec 29, 2019	Code refactoring in degree configuration. (249541 lines)
 	Version 19.104.1: Dec 29, 2019	Code refactoring in course configuration. (249536 lines)
 	Version 19.104:   Dec 29, 2019	New module swad_centre_config for centre configuration. (249534 lines)

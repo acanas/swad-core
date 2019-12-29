@@ -376,7 +376,7 @@ static void DegCfg_NumUsrsInCrssOfDeg (Rol_Role_t Role)
 /************************ Change the centre of a degree **********************/
 /*****************************************************************************/
 
-void DegCfg_ChangeDegCtrInConfig (void)
+void DegCfg_ChangeDegCtr (void)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
@@ -435,12 +435,12 @@ static void DegCfg_UpdateDegCtrDB (long DegCod,long CtrCod)
 /*************** Change the name of a degree in configuration ****************/
 /*****************************************************************************/
 
-void DegCfg_RenameDegreeShortInConfig (void)
+void DegCfg_RenameDegreeShort (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_SHRT_NAME);
   }
 
-void DegCfg_RenameDegreeFullInConfig (void)
+void DegCfg_RenameDegreeFull (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_FULL_NAME);
   }
@@ -449,7 +449,7 @@ void DegCfg_RenameDegreeFullInConfig (void)
 /************************* Change the WWW of a degree ************************/
 /*****************************************************************************/
 
-void DegCfg_ChangeDegWWWInConfig (void)
+void DegCfg_ChangeDegWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
@@ -481,7 +481,7 @@ void DegCfg_ChangeDegWWWInConfig (void)
 /** Show message of success after changing a degree in degree configuration **/
 /*****************************************************************************/
 
-void DegCfg_ContEditAfterChgDegInConfig (void)
+void DegCfg_ContEditAfterChgDeg (void)
   {
    /***** Write success / warning message *****/
    Ale_ShowAlerts (NULL);

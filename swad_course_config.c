@@ -475,7 +475,7 @@ static void CrsCfg_Indicators (void)
 /***************** Change the degree of the current course *******************/
 /*****************************************************************************/
 
-void CrsCfg_ChangeCrsDegInConfig (void)
+void CrsCfg_ChangeCrsDeg (void)
   {
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -541,12 +541,12 @@ static void CrsCfg_UpdateCrsDegDB (long CrsCod,long DegCod)
 /*************** Change the name of a course in configuration ****************/
 /*****************************************************************************/
 
-void CrsCfg_RenameCourseShortInConfig (void)
+void CrsCfg_RenameCourseShort (void)
   {
    Crs_RenameCourse (&Gbl.Hierarchy.Crs,Cns_SHRT_NAME);
   }
 
-void CrsCfg_RenameCourseFullInConfig (void)
+void CrsCfg_RenameCourseFull (void)
   {
    Crs_RenameCourse (&Gbl.Hierarchy.Crs,Cns_FULL_NAME);
   }
@@ -555,7 +555,7 @@ void CrsCfg_RenameCourseFullInConfig (void)
 /*********** Change the year of a course in course configuration *************/
 /*****************************************************************************/
 
-void CrsCfg_ChangeCrsYearInConfig (void)
+void CrsCfg_ChangeCrsYear (void)
   {
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -604,7 +604,7 @@ void CrsCfg_ChangeCrsYearInConfig (void)
 /***** Change the institutional code of a course in course configuration *****/
 /*****************************************************************************/
 
-void CrsCfg_ChangeInsCrsCodInConfig (void)
+void CrsCfg_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
@@ -633,7 +633,7 @@ void CrsCfg_ChangeInsCrsCodInConfig (void)
 /** Show message of success after changing a course in course configuration **/
 /*****************************************************************************/
 
-void CrsCfg_ContEditAfterChgCrsInConfig (void)
+void CrsCfg_ContEditAfterChgCrs (void)
   {
    /***** Write error/success message *****/
    Ale_ShowAlerts (NULL);

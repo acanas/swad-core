@@ -1073,7 +1073,7 @@ void CtrCfg_ChangeCtrPhotoAttribution (void)
 /********************* Change the institution of a centre ********************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrInsInConfig (void)
+void CtrCfg_ChangeCtrIns (void)
   {
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
@@ -1139,7 +1139,7 @@ static void CtrCfg_UpdateCtrInsDB (long CtrCod,long InsCod)
 /************************ Change the place of a centre ***********************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrPlcInConfig (void)
+void CtrCfg_ChangeCtrPlc (void)
   {
    extern const char *Txt_The_place_of_the_centre_has_changed;
    long NewPlcCod;
@@ -1162,12 +1162,12 @@ void CtrCfg_ChangeCtrPlcInConfig (void)
 /*************** Change the name of a centre in configuration ****************/
 /*****************************************************************************/
 
-void CtrCfg_RenameCentreShortInConfig (void)
+void CtrCfg_RenameCentreShort (void)
   {
    Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
   }
 
-void CtrCfg_RenameCentreFullInConfig (void)
+void CtrCfg_RenameCentreFull (void)
   {
    Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_FULL_NAME);
   }
@@ -1176,7 +1176,7 @@ void CtrCfg_RenameCentreFullInConfig (void)
 /********************** Change the latitude of a centre **********************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrLatitudeInConfig (void)
+void CtrCfg_ChangeCtrLatitude (void)
   {
    extern const char *Txt_The_new_latitude_is_X;
    char LatitudeStr[64];
@@ -1205,7 +1205,7 @@ void CtrCfg_ChangeCtrLatitudeInConfig (void)
 /********************** Change the longitude of a centre **********************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrLongitudeInConfig (void)
+void CtrCfg_ChangeCtrLongitude (void)
   {
    extern const char *Txt_The_new_longitude_is_X;
    char LongitudeStr[64];
@@ -1234,7 +1234,7 @@ void CtrCfg_ChangeCtrLongitudeInConfig (void)
 /********************** Change the latitude of a centre **********************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrAltitudeInConfig (void)
+void CtrCfg_ChangeCtrAltitude (void)
   {
    extern const char *Txt_The_new_altitude_is_X;
    char AltitudeStr[64];
@@ -1278,7 +1278,7 @@ static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
 /************************* Change the URL of a centre ************************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrWWWInConfig (void)
+void CtrCfg_ChangeCtrWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
@@ -1310,7 +1310,7 @@ void CtrCfg_ChangeCtrWWWInConfig (void)
 /** Show message of success after changing a centre in centre configuration **/
 /*****************************************************************************/
 
-void CtrCfg_ContEditAfterChgCtrInConfig (void)
+void CtrCfg_ContEditAfterChgCtr (void)
   {
    /***** Write error/success message *****/
    Ale_ShowAlerts (NULL);
