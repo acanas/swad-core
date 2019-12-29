@@ -25,8 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
 #include <locale.h>		// For setlocale
+#include <stddef.h>		// For NULL
 #include <stdlib.h>		// For exit
 #include <string.h>		// For string functions
 #include <sys/time.h>		// For gettimeofday

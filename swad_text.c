@@ -54,7 +54,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 
 #include "swad_action.h"
 #include "swad_assignment.h"

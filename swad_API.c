@@ -93,10 +93,10 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 
 #include <dirent.h>		// For scandir, etc.
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
-#include <sys/stat.h>		// For lstat
+#include <stddef.h>		// For NULL
 #include <string.h>
 #include <stdsoap2.h>
+#include <sys/stat.h>		// For lstat
 
 #include "soap/soapH.h"		// gSOAP header
 #include "soap/swad.nsmap"	// Namespaces map used

@@ -26,8 +26,8 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For vasprintf
-#include <linux/stddef.h>	// For NULL
 #include <stdarg.h>		// For va_start, va_end
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For FILE, fprintf, vasprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions

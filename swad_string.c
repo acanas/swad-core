@@ -26,10 +26,10 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <linux/stddef.h>	// For NULL
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <locale.h>		// For setlocale
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions

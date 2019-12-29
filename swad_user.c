@@ -29,7 +29,7 @@
 #include <ctype.h>		// For isalnum, isdigit, etc.
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions

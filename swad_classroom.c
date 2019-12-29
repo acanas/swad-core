@@ -25,8 +25,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
 #include <malloc.h>		// For calloc, free
+#include <stddef.h>		// For NULL
 #include <string.h>		// For string functions
 
 #include "swad_box.h"

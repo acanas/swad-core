@@ -27,7 +27,7 @@
 
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 

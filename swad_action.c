@@ -25,7 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 
@@ -1909,12 +1909,12 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeCrsTT		] = {  25, 6,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
 
    // Actions not in menu:
-   [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Crs_PrintConfiguration		,NULL},
-   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsDegInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseShortInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseFullInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeInsCrsCodInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsYearInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
+   [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CfgCrs_PrintConfiguration		,NULL},
+   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsDegInConfig	,CfgCrs_ContEditAfterChgCrsInConfig,NULL},
+   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseShortInConfig	,CfgCrs_ContEditAfterChgCrsInConfig,NULL},
+   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseFullInConfig	,CfgCrs_ContEditAfterChgCrsInConfig,NULL},
+   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeInsCrsCodInConfig	,CfgCrs_ContEditAfterChgCrsInConfig,NULL},
+   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsYearInConfig	,CfgCrs_ContEditAfterChgCrsInConfig,NULL},
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},

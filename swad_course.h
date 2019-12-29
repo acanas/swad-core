@@ -1,4 +1,4 @@
-// swad_course.c: edition of courses
+// swad_course.h: edition of courses
 
 #ifndef _SWAD_CRS
 #define _SWAD_CRS
@@ -99,8 +99,8 @@ typedef enum
 /*****************************************************************************/
 
 void Crs_ShowIntroduction (void);
-void Crs_PrintConfiguration (void);
-void Crs_ContEditAfterChgCrsInConfig (void);
+void CfgCrs_PrintConfiguration (void);
+void CfgCrs_ContEditAfterChgCrsInConfig (void);
 
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);

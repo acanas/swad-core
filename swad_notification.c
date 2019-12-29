@@ -25,7 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdlib.h>		// For system
 #include <string.h>
 #include <sys/wait.h>		// For the macro WEXITSTATUS

@@ -25,7 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 

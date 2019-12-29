@@ -29,8 +29,8 @@ TODO: Check if web service is called from an authorized IP.
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For fprintf, asprintf
 #include <stdlib.h>		// For calloc, free
 #include <string.h>

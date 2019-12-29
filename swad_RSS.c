@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <string.h>
 
 #include "swad_changelog.h"

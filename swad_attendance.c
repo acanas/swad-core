@@ -27,8 +27,8 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions

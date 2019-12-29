@@ -29,7 +29,7 @@
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For FILE,fprintf
 #include <stdlib.h>		// For exit, system, free, etc.
 #include <string.h>		// For string functions

@@ -27,9 +27,9 @@
 
 #include <unistd.h>		// For SEEK_SET
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
-#include <stdsoap2.h>		// For SOAP_OK and soap functions
+#include <stddef.h>		// For NULL
 #include <stdlib.h>		// For free ()
+#include <stdsoap2.h>		// For SOAP_OK and soap functions
 #include <string.h>		// For string functions
 #include <time.h>		// For time ()
 

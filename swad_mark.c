@@ -27,8 +27,8 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
 #include <malloc.h>		// For malloc
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink

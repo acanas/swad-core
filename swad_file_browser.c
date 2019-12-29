@@ -29,13 +29,13 @@
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, free, etc
 #include <string.h>		// For string functions
-#include <time.h>		// For time
 #include <sys/types.h>		// For lstat, time_t
 #include <sys/stat.h>		// For lstat
+#include <time.h>		// For time
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 
 #include "swad_box.h"

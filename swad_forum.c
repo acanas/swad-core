@@ -26,9 +26,9 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <linux/stddef.h>	// For NULL
 #include <malloc.h>		// For malloc
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <string.h>
 #include <time.h>		// For time_t

@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #include <ctype.h>		// For isspace()
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdlib.h>		// For free ()
 #include <string.h>		// For strlen (), etc.
 

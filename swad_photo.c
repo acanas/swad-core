@@ -27,8 +27,8 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
-#include <linux/stddef.h>	// For NULL
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system, getenv, etc.
 #include <string.h>		// For string functions

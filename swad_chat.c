@@ -25,7 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <linux/stddef.h>	// For NULL
+#include <stddef.h>		// For NULL
 #include <stdbool.h>		// For boolean type
 #include <string.h>
 
