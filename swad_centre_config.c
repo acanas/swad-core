@@ -82,8 +82,8 @@ static void CtrCfg_Longitude (void);
 static void CtrCfg_Altitude (void);
 static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
-static void CtrCfg_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
-static void CtrCfg_FreePhotoAttribution (char **PhotoAttribution);
+static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
+static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
 static void CtrCfg_Institution (bool PrintView,bool PutForm);
 static void CtrCfg_FullName (bool PutForm);
 static void CtrCfg_ShrtName (bool PutForm);
@@ -484,7 +484,7 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
       return;
 
    /***** Get photo attribution *****/
-   CtrCfg_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
+   CtrCfg_GetPhotoAttr (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
 
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
@@ -530,21 +530,21 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
      }
 
    /****** Free memory used for photo attribution ******/
-   CtrCfg_FreePhotoAttribution (&PhotoAttribution);
+   CtrCfg_FreePhotoAttr (&PhotoAttribution);
   }
 
 /*****************************************************************************/
 /******************* Get photo attribution from database *********************/
 /*****************************************************************************/
 
-static void CtrCfg_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
+static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
 
    /***** Free possible former photo attribution *****/
-   CtrCfg_FreePhotoAttribution (PhotoAttribution);
+   CtrCfg_FreePhotoAttr (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
@@ -575,7 +575,7 @@ static void CtrCfg_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
 /****************** Free memory used for photo attribution *******************/
 /*****************************************************************************/
 
-static void CtrCfg_FreePhotoAttribution (char **PhotoAttribution)
+static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
   {
    if (*PhotoAttribution)
      {
@@ -1050,7 +1050,7 @@ void CtrCfg_ReceivePhoto (void)
 /**************** Change the attribution of a centre photo *******************/
 /*****************************************************************************/
 
-void CtrCfg_ChangeCtrPhotoAttribution (void)
+void CtrCfg_ChangeCtrPhotoAttr (void)
   {
    char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1];
 

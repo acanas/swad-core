@@ -39,6 +39,7 @@
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_country.h"
+#include "swad_country_config.h"
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_chat.h"
@@ -1763,12 +1764,12 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabCty ******************************************************************
    // Actions in menu:
-   [ActSeeCtyInf	] = {1155, 0,TabCty,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_ShowConfiguration		,"info"			},
+   [ActSeeCtyInf	] = {1155, 0,TabCty,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtyCfg_ShowConfiguration	,"info"			},
    [ActSeeIns		] = { 696, 1,TabCty,ActSeeIns		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowInssOfCurrentCty	,"university"		},
 
    // Actions not in menu:
-   [ActPrnCtyInf	] = {1156,-1,TabUnk,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cty_PrintConfiguration		,NULL},
-   [ActChgCtyMapAtt	] = {1158,-1,TabUnk,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x200,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_ChangeCtyMapAttribution	,NULL},
+   [ActPrnCtyInf	] = {1156,-1,TabUnk,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtyCfg_PrintConfiguration	,NULL},
+   [ActChgCtyMapAtt	] = {1158,-1,TabUnk,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x200,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtyCfg_ChangeCtyMapAttr	,NULL},
 
    [ActEdiIns		] = { 697,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_EditInstitutions		,NULL},
    [ActReqIns		] = {1210,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RecFormReqIns		,Ins_ContEditAfterChgIns	,NULL},
@@ -1781,7 +1782,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabIns ******************************************************************
    // Actions in menu:
-   [ActSeeInsInf	] = {1153, 0,TabIns,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_ShowConfiguration		,"info"			},
+   [ActSeeInsInf	] = {1153, 0,TabIns,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_ShowConfiguration	,"info"			},
    [ActSeeCtr		] = { 676, 1,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"building"		},
    [ActSeePlc		] = { 703, 2,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"map-marker-alt"	},
    [ActSeeDpt		] = { 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"users"		},
@@ -1832,7 +1833,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabCtr ******************************************************************
    // Actions in menu:
-   [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ShowConfiguration		,"info"			},
+   [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ShowConfiguration	,"info"			},
    [ActSeeDeg		] = {1011, 1,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"graduation-cap"	},
    [ActSeeCla		] = {1744, 2,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom"		},
 
@@ -1851,7 +1852,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemCtrLog	] = {1342,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_RemoveLogo		,CtrCfg_ShowConfiguration	,NULL},
    [ActReqCtrPho	] = {1160,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_RequestPhoto		,NULL},
    [ActRecCtrPho	] = {1161,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,CtrCfg_ReceivePhoto		,NULL},
-   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttribution,NULL},
+   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttr	,NULL},
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
    [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},

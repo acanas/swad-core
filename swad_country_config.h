@@ -1,9 +1,9 @@
-// swad_centre_config.h: configuration of current centre
+// swad_country_config.h:  configuration of current country
 
-#ifndef _SWAD_CTR_CFG
-#define _SWAD_CTR_CFG
+#ifndef _SWAD_CTY_CFG
+#define _SWAD_CTY_CFG
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -32,26 +32,12 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void CtrCfg_ShowConfiguration (void);
-void CtrCfg_PrintConfiguration (void);
+void CtyCfg_ShowConfiguration (void);
+void CtyCfg_PrintConfiguration (void);
 
-void CtrCfg_RequestLogo (void);
-void CtrCfg_ReceiveLogo (void);
-void CtrCfg_RemoveLogo (void);
-void CtrCfg_RequestPhoto (void);
-void CtrCfg_ReceivePhoto (void);
-void CtrCfg_ChangeCtrPhotoAttr (void);
-void CtrCfg_ChangeCtrIns (void);
-void CtrCfg_RenameCentreShort (void);
-void CtrCfg_RenameCentreFull (void);
-void CtrCfg_ChangeCtrPlc (void);
-void CtrCfg_ChangeCtrLatitude (void);
-void CtrCfg_ChangeCtrLongitude (void);
-void CtrCfg_ChangeCtrAltitude (void);
-void CtrCfg_ChangeCtrWWW (void);
-void CtrCfg_ContEditAfterChgCtr (void);
+void CtyCfg_ChangeCtyMapAttr (void);
 
 #endif

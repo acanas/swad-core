@@ -26,24 +26,16 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <math.h>		// For log10, ceil, pow...
+#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
-#include "swad_box.h"
-#include "swad_constant.h"
-#include "swad_country.h"
+#include "swad_country_config.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_help.h"
 #include "swad_HTML.h"
-#include "swad_institution.h"
-#include "swad_language.h"
-#include "swad_QR.h"
-#include "swad_setting.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -70,24 +62,8 @@ long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cty_Configuration (bool PrintView);
-static void Cty_PutIconToPrint (void);
-static void Cty_ConfigTitle (bool PutLink);
-static void Cty_ConfigMap (bool PrintView,bool PutLink);
-static void Cty_ConfigName (bool PutLink);
-static void Cty_ConfigShortcut (bool PrintView);
-static void Cty_ConfigQR (void);
-static void Cty_ConfigNumUsrs (void);
-static void Cty_ConfigNumInss (void);
-static void Cty_ConfigNumCtrs (void);
-static void Cty_ConfigNumDegs (void);
-static void Cty_ConfigNumCrss (void);
-static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role);
-
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
-
-static bool Cty_CheckIfICanEditCountries (void);
 
 static void Cty_PutIconsListingCountries (void);
 static void Cty_PutIconToEditCountries (void);
@@ -99,8 +75,6 @@ static void Cty_EditCountriesInternal (void);
 static void Cty_PutIconsEditingCountries (void);
 static void Cty_PutIconToViewCountries (void);
 
-static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
-static void Cty_FreeMapAttribution (char **MapAttribution);
 static void Cty_ListCountriesForEdition (void);
 static void Cty_PutParamOtherCtyCod (long CtyCod);
 static long Cty_GetParamOtherCtyCod (void);
@@ -216,377 +190,6 @@ void Cty_SeeCtyWithPendingInss (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/***************** Show information of the current country *******************/
-/*****************************************************************************/
-
-void Cty_ShowConfiguration (void)
-  {
-   Cty_Configuration (false);
-
-   /***** Show help to enrol me *****/
-   Hlp_ShowHelpWhatWouldYouLikeToDo ();
-  }
-
-/*****************************************************************************/
-/***************** Print information of the current country ******************/
-/*****************************************************************************/
-
-void Cty_PrintConfiguration (void)
-  {
-   Cty_Configuration (true);
-  }
-
-/*****************************************************************************/
-/******************** Information of the current country *********************/
-/*****************************************************************************/
-
-static void Cty_Configuration (bool PrintView)
-  {
-   extern const char *Hlp_COUNTRY_Information;
-   bool PutLink;
-   bool MapExists;
-
-   /***** Trivial check *****/
-   if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
-      return;
-
-   /***** Initializations *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0];
-
-   /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,Cty_PutIconToPrint,
-		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
-
-   /***** Title *****/
-   Cty_ConfigTitle (PutLink);
-
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
-
-   /***** Country name (an link to WWW if exists) *****/
-   Cty_ConfigName (PutLink);
-
-   /***** Shortcut to the country *****/
-   Cty_ConfigShortcut (PrintView);
-
-   if (PrintView)
-      /***** QR code with link to the country *****/
-      Cty_ConfigQR ();
-   else
-     {
-      /***** Number of users who claim to belong to this centre,
-             number of institutions,
-             number of centres,
-             number of degrees,
-             number of courses *****/
-      Cty_ConfigNumUsrs ();
-      Cty_ConfigNumInss ();
-      Cty_ConfigNumCtrs ();
-      Cty_ConfigNumDegs ();
-      Cty_ConfigNumCrss ();
-
-      /***** Number of users in courses of this country *****/
-      Cty_ShowNumUsrsInCrssOfCty (Rol_TCH);
-      Cty_ShowNumUsrsInCrssOfCty (Rol_NET);
-      Cty_ShowNumUsrsInCrssOfCty (Rol_STD);
-      Cty_ShowNumUsrsInCrssOfCty (Rol_UNK);
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapExists = Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty);
-
-   if (MapExists)
-     {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
-
-      /***** Country map *****/
-      Cty_ConfigMap (PrintView,PutLink);
-
-      HTM_DIV_End ();
-     }
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/************* Put icon to print the configuration of a country **************/
-/*****************************************************************************/
-
-static void Cty_PutIconToPrint (void)
-  {
-   Ico_PutContextualIconToPrint (ActPrnCtyInf,NULL);
-  }
-
-/*****************************************************************************/
-/******************** Show title in country configuration ********************/
-/*****************************************************************************/
-
-static void Cty_ConfigTitle (bool PutLink)
-  {
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-	           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************* Show map in country configuration *********************/
-/*****************************************************************************/
-
-static void Cty_ConfigMap (bool PrintView,bool PutLink)
-  {
-   char *MapAttribution = NULL;
-
-   /***** Get map attribution *****/
-   Cty_GetMapAttribution (Gbl.Hierarchy.Cty.CtyCod,&MapAttribution);
-
-   /***** Map image *****/
-   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		   Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
-   Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
-						      "COUNTRY_MAP_SHOW");
-   if (PutLink)
-      HTM_A_End ();
-   HTM_DIV_End ();
-
-   /***** Map attribution *****/
-   if (!PrintView && Cty_CheckIfICanEditCountries ())
-     {
-      HTM_DIV_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgCtyMapAtt);
-      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-			  " onchange=\"document.getElementById('%s').submit();return false;\"",
-			  Gbl.Form.Id);
-      if (MapAttribution)
-	 HTM_Txt (MapAttribution);
-      HTM_TEXTAREA_End ();
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   else if (MapAttribution)
-     {
-      HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-      HTM_Txt (MapAttribution);
-      HTM_DIV_End ();
-     }
-
-   /***** Free memory used for map attribution *****/
-   Cty_FreeMapAttribution (&MapAttribution);
-  }
-
-/*****************************************************************************/
-/**************** Show country name in country configuration *****************/
-/*****************************************************************************/
-
-static void Cty_ConfigName (bool PutLink)
-  {
-   extern const char *Txt_Country;
-
-   /***** Country name *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Country);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LB\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
-   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show country shortcut in country configuration ***************/
-/*****************************************************************************/
-
-static void Cty_ConfigShortcut (bool PrintView)
-  {
-   Hie_ConfigShortcut (PrintView,"cty",Gbl.Hierarchy.Cty.CtyCod);
-  }
-
-/*****************************************************************************/
-/***************** Show country QR in country configuration ******************/
-/*****************************************************************************/
-
-static void Cty_ConfigQR (void)
-  {
-   Hie_ConfigQR ("cty",Gbl.Hierarchy.Cty.CtyCod);
-  }
-
-/*****************************************************************************/
-/*** Show number of users who claim to belong to country in country config. **/
-/*****************************************************************************/
-
-static void Cty_ConfigNumUsrs (void)
-  {
-   extern const char *Txt_Users_of_the_country;
-
-   /***** Number of users *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show number of institutions in country configuration ************/
-/*****************************************************************************/
-
-static void Cty_ConfigNumInss (void)
-  {
-   extern const char *Txt_Institutions;
-   extern const char *Txt_Institutions_of_COUNTRY_X;
-
-   /***** Number of institutions ******/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Institutions);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeIns);
-   Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Institutions_of_COUNTRY_X,
-	     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-   HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************* Show number of centres in country configuration ***************/
-/*****************************************************************************/
-
-static void Cty_ConfigNumCtrs (void)
-  {
-   extern const char *Txt_Centres;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************* Show number of degrees in country configuration ***************/
-/*****************************************************************************/
-
-static void Cty_ConfigNumDegs (void)
-  {
-   extern const char *Txt_Degrees;
-
-   /***** Number of degrees *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************* Show number of courses in country configuration ***************/
-/*****************************************************************************/
-
-static void Cty_ConfigNumCrss (void)
-  {
-   extern const char *Txt_Courses;
-
-   /***** Number of courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/**************** Number of users in courses of this country *****************/
-/*****************************************************************************/
-
-static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -842,15 +445,6 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
   }
 
 /*****************************************************************************/
-/********************** Check if I can edit countries ************************/
-/*****************************************************************************/
-
-static bool Cty_CheckIfICanEditCountries (void)
-  {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-  }
-
-/*****************************************************************************/
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
@@ -863,6 +457,15 @@ static void Cty_PutIconsListingCountries (void)
    /***** Put icon to show a figure *****/
    Gbl.Figures.FigureType = Fig_HIERARCHY;
    Fig_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/********************** Check if I can edit countries ************************/
+/*****************************************************************************/
+
+bool Cty_CheckIfICanEditCountries (void)
+  {
+   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -1614,56 +1217,6 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
   }
 
 /*****************************************************************************/
-/******************** Get map attribution from database **********************/
-/*****************************************************************************/
-
-static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   size_t Length;
-
-   /***** Free possible former map attribution *****/
-   Cty_FreeMapAttribution (MapAttribution);
-
-   /***** Get photo attribution from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
-	               CtyCod))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get the attribution of the map of the country (row[0]) */
-      if (row[0])
-	 if (row[0][0])
-	   {
-	    Length = strlen (row[0]);
-	    if ((*MapAttribution = (char *) malloc (Length + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
-	    Str_Copy (*MapAttribution,row[0],
-	              Length);
-	   }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************* Free memory used for map attribution ********************/
-/*****************************************************************************/
-
-static void Cty_FreeMapAttribution (char **MapAttribution)
-  {
-   if (*MapAttribution)
-     {
-      free (*MapAttribution);
-      *MapAttribution = NULL;
-     }
-  }
-
-/*****************************************************************************/
 /*************************** Free list of countries **************************/
 /*****************************************************************************/
 
@@ -2031,28 +1584,6 @@ void Cty_ChangeCtyWWW (void)
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_new_web_address_is_X,
 	            NewWWW);
-  }
-
-/*****************************************************************************/
-/*********** Change the attribution of the map of current country ************/
-/*****************************************************************************/
-
-void Cty_ChangeCtyMapAttribution (void)
-  {
-   char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1];
-
-   /***** Get parameters from form *****/
-   /* Get the new map attribution for the country */
-   Par_GetParToText ("Attribution",NewMapAttribution,Med_MAX_BYTES_ATTRIBUTION);
-
-   /***** Update the table changing old attribution by new attribution *****/
-   DB_QueryUPDATE ("can not update the map attribution of a country",
-		   "UPDATE countries SET MapAttribution='%s'"
-		   " WHERE CtyCod='%03ld'",
-	           NewMapAttribution,Gbl.Hierarchy.Cty.CtyCod);
-
-   /***** Show the country information again *****/
-   Cty_ShowConfiguration ();
   }
 
 /*****************************************************************************/
