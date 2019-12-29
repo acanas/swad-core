@@ -35,6 +35,7 @@
 #include "swad_announcement.h"
 #include "swad_banner.h"
 #include "swad_calendar.h"
+#include "swad_centre_config.h"
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_country.h"
@@ -1829,26 +1830,26 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabCtr ******************************************************************
    // Actions in menu:
-   [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowConfiguration		,"info"			},
+   [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ShowConfiguration		,"info"			},
    [ActSeeDeg		] = {1011, 1,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"graduation-cap"	},
    [ActSeeCla		] = {1744, 2,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom"		},
 
    // Actions not in menu:
-   [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ctr_PrintConfiguration		,NULL},
-   [ActChgCtrInsCfg	] = {1589,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
-   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreShortInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
-   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreFullInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
-   [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrPlcInConfig	,NULL},
-   [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrLatitudeInConfig	,NULL},
-   [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrLongitudeInConfig	,NULL},
-   [ActChgCtrAltCfg	] = {1817,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrAltitudeInConfig	,NULL},
-   [ActChgCtrWWWCfg	] = {1596,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrWWWInConfig	,NULL},
-   [ActReqCtrLog	] = {1244,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_RequestLogo		,NULL},
-   [ActRecCtrLog	] = {1051,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
-   [ActRemCtrLog	] = {1342,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Ctr_RemoveLogo			,Ctr_ShowConfiguration		,NULL},
-   [ActReqCtrPho	] = {1160,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_RequestPhoto		,NULL},
-   [ActRecCtrPho	] = {1161,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Ctr_ReceivePhoto		,NULL},
-   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrPhotoAttribution	,NULL},
+   [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtrCfg_PrintConfiguration		,NULL},
+   [ActChgCtrInsCfg	] = {1589,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_ChangeCtrInsInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
+   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreShortInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
+   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreFullInConfig	,CtrCfg_ContEditAfterChgCtrInConfig,NULL},
+   [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPlcInConfig	,NULL},
+   [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLatitudeInConfig	,NULL},
+   [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLongitudeInConfig	,NULL},
+   [ActChgCtrAltCfg	] = {1817,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrAltitudeInConfig	,NULL},
+   [ActChgCtrWWWCfg	] = {1596,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrWWWInConfig	,NULL},
+   [ActReqCtrLog	] = {1244,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_RequestLogo		,NULL},
+   [ActRecCtrLog	] = {1051,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_ReceiveLogo		,CtrCfg_ShowConfiguration		,NULL},
+   [ActRemCtrLog	] = {1342,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,CtrCfg_RemoveLogo			,CtrCfg_ShowConfiguration		,NULL},
+   [ActReqCtrPho	] = {1160,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_RequestPhoto		,NULL},
+   [ActRecCtrPho	] = {1161,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,CtrCfg_ReceivePhoto		,NULL},
+   [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttribution	,NULL},
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
    [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},

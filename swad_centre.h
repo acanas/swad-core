@@ -100,9 +100,6 @@ void Ctr_SeeCtrWithPendingDegs (void);
 void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo);
 
-void Ctr_ShowConfiguration (void);
-void Ctr_PrintConfiguration (void);
-
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCentres (void);
 
@@ -118,28 +115,18 @@ void Ctr_WriteSelectorOfCentre (void);
 void Ctr_PutParamCtrCod (long CtrCod);
 long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed);
 void Ctr_RemoveCentre (void);
-void Ctr_ChangeCtrInsInConfig (void);
-void Ctr_ContEditAfterChgCtrInConfig (void);
 void Ctr_ChangeCtrPlc (void);
-void Ctr_ChangeCtrPlcInConfig (void);
+void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
 void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
-void Ctr_RenameCentreShortInConfig (void);
-void Ctr_RenameCentreFullInConfig (void);
-void Ctr_ChangeCtrLatitudeInConfig (void);
-void Ctr_ChangeCtrLongitudeInConfig (void);
-void Ctr_ChangeCtrAltitudeInConfig (void);
+void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
+bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
+				    long CtrCod,long InsCod);
 void Ctr_ChangeCtrWWW (void);
-void Ctr_ChangeCtrWWWInConfig (void);
+void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
 
-void Ctr_RequestLogo (void);
-void Ctr_ReceiveLogo (void);
-void Ctr_RemoveLogo (void);
-void Ctr_RequestPhoto (void);
-void Ctr_ReceivePhoto (void);
-void Ctr_ChangeCtrPhotoAttribution (void);
 void Ctr_RecFormReqCtr (void);
 void Ctr_RecFormNewCtr (void);
 
