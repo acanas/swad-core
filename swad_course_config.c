@@ -1,4 +1,4 @@
-// swad_config_course.c: configuration of current course
+// swad_course_config.c: configuration of current course
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -56,24 +56,24 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void CfgCrs_PutIconToPrint (void);
-static void CfgCrs_Title (bool PutLink);
-static void CfgCrs_Degree (bool PrintView,bool PutForm);
-static void CfgCrs_FullName (bool PutForm);
-static void CfgCrs_ShrtName (bool PutForm);
-static void CfgCrs_Year (bool PutForm);
-static void CfgCrs_InstitutionalCode (bool PutForm);
-static void CfgCrs_InternalCode (void);
-static void CfgCrs_Shortcut (bool PrintView);
-static void CfgCrs_QR (void);
-static void CfgCrs_NumUsrsInCrs (Rol_Role_t Role);
-static void CfgCrs_Indicators (void);
+static void CrsCfg_PutIconToPrint (void);
+static void CrsCfg_Title (bool PutLink);
+static void CrsCfg_Degree (bool PrintView,bool PutForm);
+static void CrsCfg_FullName (bool PutForm);
+static void CrsCfg_ShrtName (bool PutForm);
+static void CrsCfg_Year (bool PutForm);
+static void CrsCfg_InstitutionalCode (bool PutForm);
+static void CrsCfg_InternalCode (void);
+static void CrsCfg_Shortcut (bool PrintView);
+static void CrsCfg_QR (void);
+static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role);
+static void CrsCfg_Indicators (void);
 
 /*****************************************************************************/
 /***************** Configuration of the current course ***********************/
 /*****************************************************************************/
 
-void CfgCrs_Configuration (bool PrintView)
+void CrsCfg_Configuration (bool PrintView)
   {
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
@@ -108,11 +108,11 @@ void CfgCrs_Configuration (bool PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,CfgCrs_PutIconToPrint,
+      Box_BoxBegin (NULL,NULL,CrsCfg_PutIconToPrint,
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   CfgCrs_Title (PutLink);
+   CrsCfg_Title (PutLink);
 
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
@@ -121,39 +121,39 @@ void CfgCrs_Configuration (bool PrintView)
    HTM_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
-   CfgCrs_Degree (PrintView,PutFormDeg);
+   CrsCfg_Degree (PrintView,PutFormDeg);
 
    /***** Course name *****/
-   CfgCrs_FullName (PutFormName);
-   CfgCrs_ShrtName (PutFormName);
+   CrsCfg_FullName (PutFormName);
+   CrsCfg_ShrtName (PutFormName);
 
    /***** Course year *****/
-   CfgCrs_Year (PutFormYear);
+   CrsCfg_Year (PutFormYear);
 
    if (!PrintView)
      {
       /***** Institutional code of the course *****/
-      CfgCrs_InstitutionalCode (PutFormInsCod);
+      CrsCfg_InstitutionalCode (PutFormInsCod);
 
       /***** Internal code of the course *****/
-      CfgCrs_InternalCode ();
+      CrsCfg_InternalCode ();
      }
 
    /***** Shortcut to the couse *****/
-   CfgCrs_Shortcut (PrintView);
+   CrsCfg_Shortcut (PrintView);
 
    if (PrintView)
       /***** QR code with link to the course *****/
-      CfgCrs_QR ();
+      CrsCfg_QR ();
    else
      {
       /***** Number of users *****/
-      CfgCrs_NumUsrsInCrs (Rol_TCH);
-      CfgCrs_NumUsrsInCrs (Rol_NET);
-      CfgCrs_NumUsrsInCrs (Rol_STD);
+      CrsCfg_NumUsrsInCrs (Rol_TCH);
+      CrsCfg_NumUsrsInCrs (Rol_NET);
+      CrsCfg_NumUsrsInCrs (Rol_STD);
 
       /***** Indicators *****/
-      CfgCrs_Indicators ();
+      CrsCfg_Indicators ();
      }
 
    /***** End table *****/
@@ -170,7 +170,7 @@ void CfgCrs_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a course ***************/
 /*****************************************************************************/
 
-static void CfgCrs_PutIconToPrint (void)
+static void CrsCfg_PutIconToPrint (void)
   {
    Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL);
   }
@@ -179,16 +179,16 @@ static void CfgCrs_PutIconToPrint (void)
 /***************** Print configuration of the current course *****************/
 /*****************************************************************************/
 
-void CfgCrs_PrintConfiguration (void)
+void CrsCfg_PrintConfiguration (void)
   {
-   CfgCrs_Configuration (true);
+   CrsCfg_Configuration (true);
   }
 
 /*****************************************************************************/
 /******************** Show title in course configuration *********************/
 /*****************************************************************************/
 
-static void CfgCrs_Title (bool PutLink)
+static void CrsCfg_Title (bool PutLink)
   {
    Hie_ConfigTitle (PutLink,
 		    Hie_DEG,				// Logo scope
@@ -203,7 +203,7 @@ static void CfgCrs_Title (bool PutLink)
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void CfgCrs_Degree (bool PrintView,bool PutForm)
+static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Degree;
    extern const char *Txt_Go_to_X;
@@ -271,7 +271,7 @@ static void CfgCrs_Degree (bool PrintView,bool PutForm)
 /************** Show course full name in course configuration ****************/
 /*****************************************************************************/
 
-static void CfgCrs_FullName (bool PutForm)
+static void CrsCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Course;
 
@@ -283,7 +283,7 @@ static void CfgCrs_FullName (bool PutForm)
 /************** Show course short name in course configuration ***************/
 /*****************************************************************************/
 
-static void CfgCrs_ShrtName (bool PutForm)
+static void CrsCfg_ShrtName (bool PutForm)
   {
    Hie_ConfigShrtName (PutForm,ActRenCrsShoCfg,Gbl.Hierarchy.Crs.ShrtName);
   }
@@ -292,7 +292,7 @@ static void CfgCrs_ShrtName (bool PutForm)
 /***************** Show course year in course configuration ******************/
 /*****************************************************************************/
 
-static void CfgCrs_Year (bool PutForm)
+static void CrsCfg_Year (bool PutForm)
   {
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -335,7 +335,7 @@ static void CfgCrs_Year (bool PutForm)
 /************* Show institutional code in course configuration ***************/
 /*****************************************************************************/
 
-static void CfgCrs_InstitutionalCode (bool PutForm)
+static void CrsCfg_InstitutionalCode (bool PutForm)
   {
    extern const char *Txt_Institutional_code;
 
@@ -369,7 +369,7 @@ static void CfgCrs_InstitutionalCode (bool PutForm)
 /**************** Show internal code in course configuration *****************/
 /*****************************************************************************/
 
-static void CfgCrs_InternalCode (void)
+static void CrsCfg_InternalCode (void)
   {
    extern const char *Txt_Internal_code;
 
@@ -391,7 +391,7 @@ static void CfgCrs_InternalCode (void)
 /*************** Show course shortcut in course configuration ****************/
 /*****************************************************************************/
 
-static void CfgCrs_Shortcut (bool PrintView)
+static void CrsCfg_Shortcut (bool PrintView)
   {
    Hie_ConfigShortcut (PrintView,"crs",Gbl.Hierarchy.Crs.CrsCod);
   }
@@ -400,7 +400,7 @@ static void CfgCrs_Shortcut (bool PrintView)
 /****************** Show course QR in course configuration *******************/
 /*****************************************************************************/
 
-static void CfgCrs_QR (void)
+static void CrsCfg_QR (void)
   {
    Hie_ConfigQR ("crs",Gbl.Hierarchy.Crs.CrsCod);
   }
@@ -409,7 +409,7 @@ static void CfgCrs_QR (void)
 /*********************** Number of users in this course **********************/
 /*****************************************************************************/
 
-static void CfgCrs_NumUsrsInCrs (Rol_Role_t Role)
+static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -431,7 +431,7 @@ static void CfgCrs_NumUsrsInCrs (Rol_Role_t Role)
 /****************** Show indicators in course configuration ******************/
 /*****************************************************************************/
 
-static void CfgCrs_Indicators (void)
+static void CrsCfg_Indicators (void)
   {
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;

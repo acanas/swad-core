@@ -25,36 +25,17 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <ctype.h>		// For isprint, isspace, etc.
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For fprintf, etc.
-#include <stdlib.h>		// For exit, system, calloc, free, etc.
 #include <string.h>		// For string functions
-#include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_box.h"
-#include "swad_changelog.h"
-#include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree.h"
-#include "swad_degree_type.h"
-#include "swad_exam.h"
+#include "swad_degree_config.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_help.h"
-#include "swad_hierarchy.h"
 #include "swad_HTML.h"
-#include "swad_indicator.h"
-#include "swad_info.h"
-#include "swad_language.h"
 #include "swad_logo.h"
-#include "swad_notification.h"
-#include "swad_parameter.h"
-#include "swad_RSS.h"
-#include "swad_string.h"
-#include "swad_tab.h"
-#include "swad_theme.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -85,18 +66,6 @@ static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degr
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
-
-static void Deg_Configuration (bool PrintView);
-static void Deg_PutIconsToPrintAndUpload (void);
-static void Deg_ConfigTitle (bool PutLink);
-static void Deg_ConfigCentre (bool PrintView,bool PutForm);
-static void Deg_ConfigFullName (bool PutForm);
-static void Deg_ConfigShrtName (bool PutForm);
-static void Deg_ConfigWWW (bool PrintView,bool PutForm);
-static void Deg_ConfigShortcut (bool PrintView);
-static void Deg_ConfigQR (void);
-static void Deg_ConfigNumCrss (void);
-static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role);
 
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEditADegree (struct Degree *Deg);
@@ -271,307 +240,6 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
 
    /***** End form *****/
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/****************** Show information of the current degree *******************/
-/*****************************************************************************/
-
-void Deg_ShowConfiguration (void)
-  {
-   Deg_Configuration (false);
-
-   /***** Show help to enrol me *****/
-   Hlp_ShowHelpWhatWouldYouLikeToDo ();
-  }
-
-/*****************************************************************************/
-/****************** Print information of the current degree ******************/
-/*****************************************************************************/
-
-void Deg_PrintConfiguration (void)
-  {
-   Deg_Configuration (true);
-  }
-
-/*****************************************************************************/
-/******************* Information of the current degree ***********************/
-/*****************************************************************************/
-
-static void Deg_Configuration (bool PrintView)
-  {
-   extern const char *Hlp_DEGREE_Information;
-   bool PutLink;
-   bool PutFormCtr;
-   bool PutFormName;
-   bool PutFormWWW;
-
-   /***** Trivial check *****/
-   if (Gbl.Hierarchy.Deg.DegCod <= 0)	// No degree selected
-      return;
-
-   /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
-   PutFormCtr  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
-   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
-
-   /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,Deg_PutIconsToPrintAndUpload,
-		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
-
-   /***** Title *****/
-   Deg_ConfigTitle (PutLink);
-
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
-
-   /***** Centre *****/
-   Deg_ConfigCentre (PrintView,PutFormCtr);
-
-   /***** Degree name *****/
-   Deg_ConfigFullName (PutFormName);
-   Deg_ConfigShrtName (PutFormName);
-
-   /***** Degree WWW *****/
-   Deg_ConfigWWW (PrintView,PutFormWWW);
-
-   /***** Shortcut to the degree *****/
-   Deg_ConfigShortcut (PrintView);
-
-   if (PrintView)
-      /***** QR code with link to the degree *****/
-      Deg_ConfigQR ();
-   else
-     {
-      /***** Number of courses *****/
-      Deg_ConfigNumCrss ();
-
-      /***** Number of users *****/
-      Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
-      Deg_ShowNumUsrsInCrssOfDeg (Rol_NET);
-      Deg_ShowNumUsrsInCrssOfDeg (Rol_STD);
-      Deg_ShowNumUsrsInCrssOfDeg (Rol_UNK);
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/************ Put contextual icons in configuration of a degree **************/
-/*****************************************************************************/
-
-static void Deg_PutIconsToPrintAndUpload (void)
-  {
-   /***** Link to print info about degree *****/
-   Ico_PutContextualIconToPrint (ActPrnDegInf,NULL);
-
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins
-      // have permission to upload logo of the degree
-      /***** Link to upload logo of degree *****/
-      Lgo_PutIconToChangeLogo (Hie_DEG);
-  }
-
-/*****************************************************************************/
-/******************** Show title in degree configuration *********************/
-/*****************************************************************************/
-
-static void Deg_ConfigTitle (bool PutLink)
-  {
-   Hie_ConfigTitle (PutLink,
-		    Hie_DEG,				// Logo scope
-		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
-                    Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
-		    Gbl.Hierarchy.Deg.WWW,		// Logo www
-		    Gbl.Hierarchy.Deg.FullName);	// Text full name
-  }
-
-/*****************************************************************************/
-/******************** Show centre in degree configuration ********************/
-/*****************************************************************************/
-
-static void Deg_ConfigCentre (bool PrintView,bool PutForm)
-  {
-   extern const char *Txt_Centre;
-   extern const char *Txt_Go_to_X;
-   unsigned NumCtr;
-
-   /***** Centre *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
-	                           NULL,
-		    Txt_Centre);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of centres of the current institution */
-      Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
-
-      /* Put form to select centre */
-      Frm_StartForm (ActChgDegCtrCfg);
-      HTM_SELECT_Begin (true,
-			"id=\"OthCtrCod\" name=\"OthCtrCod\""
-			" class=\"INPUT_SHORT_NAME\"");
-      for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
-	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-		     "%s",Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of centres */
-      Ctr_FreeListCentres ();
-     }
-   else	// I can not move degree to another centre
-     {
-      if (!PrintView)
-	{
-         Frm_StartFormGoTo (ActSeeCtrInf);
-         Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Ctr.ShrtName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
-	}
-      Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
-		    20,"LM",true);
-      HTM_NBSP ();
-      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-      if (!PrintView)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show degree full name in degree configuration ****************/
-/*****************************************************************************/
-
-static void Deg_ConfigFullName (bool PutForm)
-  {
-   extern const char *Txt_Degree;
-
-   Hie_ConfigFullName (PutForm,Txt_Degree,ActRenDegFulCfg,
-		       Gbl.Hierarchy.Deg.FullName);
-  }
-
-/*****************************************************************************/
-/************** Show degree short name in degree configuration ***************/
-/*****************************************************************************/
-
-static void Deg_ConfigShrtName (bool PutForm)
-  {
-   Hie_ConfigShrtName (PutForm,ActRenDegShoCfg,Gbl.Hierarchy.Deg.ShrtName);
-  }
-
-/*****************************************************************************/
-/***************** Show degree WWW in degree configuration *******************/
-/*****************************************************************************/
-
-static void Deg_ConfigWWW (bool PrintView,bool PutForm)
-  {
-   Hie_ConfigWWW (PrintView,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Deg.WWW);
-  }
-
-/*****************************************************************************/
-/*************** Show degree shortcut in degree configuration ****************/
-/*****************************************************************************/
-
-static void Deg_ConfigShortcut (bool PrintView)
-  {
-   Hie_ConfigShortcut (PrintView,"deg",Gbl.Hierarchy.Deg.DegCod);
-  }
-
-/*****************************************************************************/
-/****************** Show degree QR in degree configuration *******************/
-/*****************************************************************************/
-
-static void Deg_ConfigQR (void)
-  {
-   Hie_ConfigQR ("deg",Gbl.Hierarchy.Deg.DegCod);
-  }
-
-/*****************************************************************************/
-/************** Show number of courses in degree configuration ***************/
-/*****************************************************************************/
-
-static void Deg_ConfigNumCrss (void)
-  {
-   extern const char *Txt_Courses;
-   extern const char *Txt_Courses_of_DEGREE_X;
-
-   /***** Number of courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeCrs);
-   Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Courses_of_DEGREE_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-   HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/***************** Number of users in courses of this degree *****************/
-/*****************************************************************************/
-
-static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2060,7 +1728,7 @@ void Deg_ContEditAfterChgDegInConfig (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Deg_ShowConfiguration ();
+   DegCfg_ShowConfiguration ();
   }
 
 /*****************************************************************************/
@@ -2175,7 +1843,7 @@ void Deg_ChangeDegWWWInConfig (void)
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Show the form again *****/
-   Deg_ShowConfiguration ();
+   DegCfg_ShowConfiguration ();
   }
 
 /*****************************************************************************/

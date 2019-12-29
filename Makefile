@@ -30,10 +30,10 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_announcement.o swad_API.o swad_assignment.o swad_attendance.o \
        swad_banner.o swad_box.o swad_button.o \
        swad_calendar.o swad_centre.o swad_chat.o swad_classroom.o \
-       swad_config.o swad_config_course.o swad_connected.o swad_cookie.o \
-       swad_country.o swad_course.o swad_cryptography.o \
-       swad_database.o swad_date.o swad_degree.o swad_degree_type.o \
-       swad_department.o swad_duplicate.o \
+       swad_config.o swad_connected.o swad_cookie.o swad_country.o \
+       swad_course.o swad_course_config.o swad_cryptography.o \
+       swad_database.o swad_date.o swad_degree.o swad_degree_config.o \
+       swad_degree_type.o swad_department.o swad_duplicate.o \
        swad_enrolment.o swad_exam.o \
        swad_figure.o swad_file.o swad_file_browser.o swad_file_extension.o \
        swad_file_MIME.o swad_firewall.o swad_follow.o swad_form.o \

@@ -99,8 +99,8 @@ typedef enum
 /*****************************************************************************/
 
 void Crs_ShowIntroduction (void);
-void CfgCrs_PrintConfiguration (void);
-void CfgCrs_ContEditAfterChgCrsInConfig (void);
+void CrsCfg_PrintConfiguration (void);
+void CrsCfg_ContEditAfterChgCrsInConfig (void);
 
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);

@@ -30,8 +30,8 @@
 #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
-#include "swad_config_course.h"
 #include "swad_course.h"
+#include "swad_course_config.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -127,7 +127,7 @@ void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   CfgCrs_Configuration (false);
+   CrsCfg_Configuration (false);
    HTM_DIV_End ();
 
    /***** Course introduction *****/
@@ -2012,7 +2012,7 @@ void Crs_ChangeCrsDegInConfig (void)
 /** Show message of success after changing a course in course configuration **/
 /*****************************************************************************/
 
-void CfgCrs_ContEditAfterChgCrsInConfig (void)
+void CrsCfg_ContEditAfterChgCrsInConfig (void)
   {
    /***** Write error/success message *****/
    Ale_ShowAlerts (NULL);

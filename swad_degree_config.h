@@ -1,7 +1,7 @@
-// swad_config_course.h: configuration of current course
+// swad_degree_config.h: configuration of current degree
 
-#ifndef _SWAD_CFGCRS
-#define _SWAD_CFGCRS
+#ifndef _SWAD_DEG_CFG
+#define _SWAD_DEG_CFG
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,8 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -41,8 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void CfgCrs_Configuration (bool PrintView);
-void CfgCrs_PrintConfiguration (void);
-void CfgCrs_ContEditAfterChgCrsInConfig (void);
+void DegCfg_ShowConfiguration (void);
+void DegCfg_PrintConfiguration (void);
 
 #endif
