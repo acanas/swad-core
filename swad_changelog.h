@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.104 (2019-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.104.1 (2019-12-29)"
 #define CSS_FILE		"swad19.101.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 
 	Version 19.10x:   Dec 29, 2019	Map in country information. (? lines)
 	Version 19.10x:   Dec 29, 2019	Map in institution information. (? lines)
+	Version 19.104.1: Dec 29, 2019	Code refactoring in course configuration. (249536 lines)
 	Version 19.104:   Dec 29, 2019	New module swad_centre_config for centre configuration. (249534 lines)
 	Version 19.103:   Dec 29, 2019	New module swad_degree_config for degree configuration. (249457 lines)
 	Version 19.102:   Dec 29, 2019	New module swad_course_config for course configuration. (249397 lines)

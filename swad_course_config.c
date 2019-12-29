@@ -27,7 +27,9 @@
 
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <string.h>		// For string functions
 
+#include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -68,6 +70,8 @@ static void CrsCfg_Shortcut (bool PrintView);
 static void CrsCfg_QR (void);
 static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role);
 static void CrsCfg_Indicators (void);
+
+static void CrsCfg_UpdateCrsDegDB (long CrsCod,long DegCod);
 
 /*****************************************************************************/
 /***************** Configuration of the current course ***********************/
@@ -465,4 +469,175 @@ static void CrsCfg_Indicators (void)
    HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Change the degree of the current course *******************/
+/*****************************************************************************/
+
+void CrsCfg_ChangeCrsDegInConfig (void)
+  {
+   extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
+   struct Degree NewDeg;
+
+   /***** Get parameter with degree code *****/
+   NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+
+   /***** Check if degree has changed *****/
+   if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)
+     {
+      /***** Get data of new degree *****/
+      Deg_GetDataOfDegreeByCod (&NewDeg,Deg_GET_BASIC_DATA);
+
+      /***** If name of course was in database in the new degree... *****/
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
+                                               NewDeg.DegCod,Gbl.Hierarchy.Crs.Year))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
+			  NewDeg.FullName,
+		          Gbl.Hierarchy.Crs.ShrtName);
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.FullName,-1L,
+                                                    NewDeg.DegCod,Gbl.Hierarchy.Crs.Year))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
+			  NewDeg.FullName,
+		          Gbl.Hierarchy.Crs.FullName);
+      else	// Update degree in database
+	{
+	 /***** Update degree in table of courses *****/
+	 CrsCfg_UpdateCrsDegDB (Gbl.Hierarchy.Crs.CrsCod,NewDeg.DegCod);
+	 Gbl.Hierarchy.Crs.DegCod =
+	 Gbl.Hierarchy.Deg.DegCod = NewDeg.DegCod;
+
+	 /***** Initialize again current course, degree, centre... *****/
+      	 Hie_InitHierarchy ();
+
+	 /***** Create alert to show the change made *****/
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+	                  Txt_The_course_X_has_been_moved_to_the_degree_Y,
+		          Gbl.Hierarchy.Crs.FullName,
+		          Gbl.Hierarchy.Deg.FullName);
+	}
+     }
+  }
+
+/*****************************************************************************/
+/********************** Update degree in table of courses ********************/
+/*****************************************************************************/
+
+static void CrsCfg_UpdateCrsDegDB (long CrsCod,long DegCod)
+  {
+   /***** Update degree in table of courses *****/
+   DB_QueryUPDATE ("can not move course to another degree",
+		   "UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
+	           DegCod,CrsCod);
+  }
+
+/*****************************************************************************/
+/*************** Change the name of a course in configuration ****************/
+/*****************************************************************************/
+
+void CrsCfg_RenameCourseShortInConfig (void)
+  {
+   Crs_RenameCourse (&Gbl.Hierarchy.Crs,Cns_SHRT_NAME);
+  }
+
+void CrsCfg_RenameCourseFullInConfig (void)
+  {
+   Crs_RenameCourse (&Gbl.Hierarchy.Crs,Cns_FULL_NAME);
+  }
+
+/*****************************************************************************/
+/*********** Change the year of a course in course configuration *************/
+/*****************************************************************************/
+
+void CrsCfg_ChangeCrsYearInConfig (void)
+  {
+   extern const char *Txt_The_course_X_already_exists_in_year_Y;
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_The_year_of_the_course_X_has_changed;
+   extern const char *Txt_The_year_X_is_not_allowed;
+   char YearStr[2 + 1];
+   unsigned NewYear;
+
+   /***** Get parameter with year/semester *****/
+   Par_GetParToText ("OthCrsYear",YearStr,2);
+   NewYear = Deg_ConvStrToYear (YearStr);
+
+   if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
+     {
+      /***** If name of course was in database in the new year... *****/
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
+                                               Gbl.Hierarchy.Crs.DegCod,NewYear))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_course_X_already_exists_in_year_Y,
+		          Gbl.Hierarchy.Crs.ShrtName,
+			  Txt_YEAR_OF_DEGREE[NewYear]);
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.FullName,-1L,
+                                                    Gbl.Hierarchy.Crs.DegCod,NewYear))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_course_X_already_exists_in_year_Y,
+		          Gbl.Hierarchy.Crs.FullName,
+			  Txt_YEAR_OF_DEGREE[NewYear]);
+      else	// Update year in database
+	{
+	 /***** Update year in table of courses *****/
+         Crs_UpdateCrsYear (&Gbl.Hierarchy.Crs,NewYear);
+
+	 /***** Create alert to show the change made *****/
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+	                  Txt_The_year_of_the_course_X_has_changed,
+		          Gbl.Hierarchy.Crs.ShrtName);
+	}
+     }
+   else	// Year not valid
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_The_year_X_is_not_allowed,
+		       NewYear);
+  }
+
+/*****************************************************************************/
+/***** Change the institutional code of a course in course configuration *****/
+/*****************************************************************************/
+
+void CrsCfg_ChangeInsCrsCodInConfig (void)
+  {
+   extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
+   extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
+   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
+
+   /***** Get institutional code from form *****/
+   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+
+   /***** Change the institutional course code *****/
+   if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.InstitutionalCrsCod))
+     {
+      Crs_UpdateInstitutionalCrsCod (&Gbl.Hierarchy.Crs,NewInstitutionalCrsCod);
+
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
+	               Gbl.Hierarchy.Crs.ShrtName,
+		       NewInstitutionalCrsCod);
+     }
+   else	// The same institutional code
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_institutional_code_of_the_course_X_has_not_changed,
+	               Gbl.Hierarchy.Crs.ShrtName);
+  }
+
+/*****************************************************************************/
+/** Show message of success after changing a course in course configuration **/
+/*****************************************************************************/
+
+void CrsCfg_ContEditAfterChgCrsInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Ale_ShowAlerts (NULL);
+
+   /***** Show the form again *****/
+   Crs_ShowIntroduction ();
   }

@@ -99,8 +99,6 @@ typedef enum
 /*****************************************************************************/
 
 void Crs_ShowIntroduction (void);
-void CrsCfg_PrintConfiguration (void);
-void CrsCfg_ContEditAfterChgCrsInConfig (void);
 
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);
@@ -123,16 +121,15 @@ void Crs_RemoveCourse (void);
 bool Crs_GetDataOfCourseByCod (struct Course *Crs,
                                Crs_GetExtraData_t GetExtraData);
 void Crs_RemoveCourseCompletely (long CrsCod);
-void Crs_ChangeInsCrsCodInConfig (void);
 void Crs_ChangeInsCrsCod (void);
-void Crs_ChangeCrsDegInConfig (void);
-void Crs_ChangeCrsYearInConfig (void);
 void Crs_ChangeCrsYear (void);
+void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);
-void Crs_RenameCourseShortInConfig (void);
-void Crs_RenameCourseFullInConfig (void);
+void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
+bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                          long DegCod,unsigned Year);
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);
 

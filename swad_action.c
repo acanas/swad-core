@@ -40,6 +40,7 @@
 #include "swad_cookie.h"
 #include "swad_country.h"
 #include "swad_course.h"
+#include "swad_course_config.h"
 #include "swad_chat.h"
 #include "swad_database.h"
 #include "swad_date.h"
@@ -1912,11 +1913,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // Actions not in menu:
    [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CrsCfg_PrintConfiguration		,NULL},
-   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsDegInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseShortInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseFullInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeInsCrsCodInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
-   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsYearInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActChgCrsDegCfg	] = {1587,-1,TabUnk,ActSeeCrsInf	,0x380,0x380,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsDegInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActRenCrsShoCfg	] = {1601,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseShortInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActRenCrsFulCfg	] = {1600,-1,TabUnk,ActSeeCrsInf	,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_RenameCourseFullInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeInsCrsCodInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
+   [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsYearInConfig	,CrsCfg_ContEditAfterChgCrsInConfig,NULL},
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},

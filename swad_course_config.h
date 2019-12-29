@@ -43,6 +43,12 @@
 
 void CrsCfg_Configuration (bool PrintView);
 void CrsCfg_PrintConfiguration (void);
+
+void CrsCfg_ChangeCrsDegInConfig (void);
+void CrsCfg_RenameCourseShortInConfig (void);
+void CrsCfg_RenameCourseFullInConfig (void);
+void CrsCfg_ChangeCrsYearInConfig (void);
+void CrsCfg_ChangeInsCrsCodInConfig (void);
 void CrsCfg_ContEditAfterChgCrsInConfig (void);
 
 #endif
