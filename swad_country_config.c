@@ -33,6 +33,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 
 /*****************************************************************************/
@@ -289,7 +290,7 @@ static void CtyCfg_Name (bool PutLink)
 
 static void CtyCfg_Shortcut (bool PrintView)
   {
-   Hie_ConfigShortcut (PrintView,"cty",Gbl.Hierarchy.Cty.CtyCod);
+   HieCfg_Shortcut (PrintView,"cty",Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/
@@ -298,7 +299,7 @@ static void CtyCfg_Shortcut (bool PrintView)
 
 static void CtyCfg_QR (void)
   {
-   Hie_ConfigQR ("cty",Gbl.Hierarchy.Cty.CtyCod);
+   HieCfg_QR ("cty",Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/

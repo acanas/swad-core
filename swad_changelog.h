@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.106 (2019-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.107 (2019-12-29)"
 #define CSS_FILE		"swad19.101.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -500,8 +500,9 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
-	Version 19.10x:   Dec 29, 2019	Map in country information. (? lines)
-	Version 19.10x:   Dec 29, 2019	Map in institution information. (? lines)
+	Version 19.10x:   Dec 30, 2019	Map in country information. (? lines)
+	Version 19.10x:   Dec 30, 2019	Map in institution information. (? lines)
+	Version 19.107:   Dec 29, 2019	New module swad_hierarchy_config for common hierarchy configuration functions. (249760 lines)
 	Version 19.106:   Dec 29, 2019	New module swad_country_config for country configuration. (249683 lines)
 	Version 19.105:   Dec 29, 2019	New module swad_institution_config for institution configuration. (249614 lines)
 	Version 19.104.2: Dec 29, 2019	Code refactoring in degree configuration. (249541 lines)

@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 
@@ -305,7 +306,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
 
 static void CtrCfg_Title (bool PutLink)
   {
-   Hie_ConfigTitle (PutLink,
+   HieCfg_Title (PutLink,
 		    Hie_CTR,				// Logo scope
 		    Gbl.Hierarchy.Ctr.CtrCod,		// Logo code
                     Gbl.Hierarchy.Ctr.ShrtName,		// Logo short name
@@ -660,7 +661,7 @@ static void CtrCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Centre;
 
-   Hie_ConfigFullName (PutForm,Txt_Centre,ActRenCtrFulCfg,
+   HieCfg_FullName (PutForm,Txt_Centre,ActRenCtrFulCfg,
 		       Gbl.Hierarchy.Ctr.FullName);
   }
 
@@ -670,7 +671,7 @@ static void CtrCfg_FullName (bool PutForm)
 
 static void CtrCfg_ShrtName (bool PutForm)
   {
-   Hie_ConfigShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Ctr.ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Ctr.ShrtName);
   }
 
 /*****************************************************************************/
@@ -736,7 +737,7 @@ static void CtrCfg_Place (bool PutForm)
 
 static void CtrCfg_WWW (bool PrintView,bool PutForm)
   {
-   Hie_ConfigWWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
   }
 
 /*****************************************************************************/
@@ -745,7 +746,7 @@ static void CtrCfg_WWW (bool PrintView,bool PutForm)
 
 static void CtrCfg_Shortcut (bool PrintView)
   {
-   Hie_ConfigShortcut (PrintView,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_Shortcut (PrintView,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -754,7 +755,7 @@ static void CtrCfg_Shortcut (bool PrintView)
 
 static void CtrCfg_QR (void)
   {
-   Hie_ConfigQR ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_QR ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/

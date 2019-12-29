@@ -1,7 +1,7 @@
-// swad_hierarchy.h: hierarchy (system, institution, centre, degree, course)
+// swad_hierarchy_config.h: hierarchy (country, institution, centre, degree, course) configuration
 
-#ifndef _SWAD_HIE
-#define _SWAD_HIE
+#ifndef _SWAD_HIE_CFG
+#define _SWAD_HIE_CFG
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,49 +27,32 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-#define Hie_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Hie_MAX_BYTES_SHRT_NAME	((Hie_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Hie_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Hie_MAX_BYTES_FULL_NAME	((Hie_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-// Levels in the hierarchy
-#define Hie_NUM_LEVELS	7
-typedef enum
-  {
-   Hie_UNK = 0,	// Unknown
-   Hie_SYS = 1,	// System
-   Hie_CTY = 2,	// Country
-   Hie_INS = 3,	// Institution
-   Hie_CTR = 4,	// Centre
-   Hie_DEG = 5,	// Degree
-   Hie_CRS = 6,	// Course
-  } Hie_Level_t;
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Hie_SeePending (void);
-
-void Hie_WriteMenuHierarchy (void);
-void Hie_WriteHierarchyInBreadcrumb (void);
-void Hie_WriteBigNameCtyInsCtrDegCrs (void);
-
-void Hie_SetHierarchyFromUsrLastHierarchy (void);
-void Hie_InitHierarchy (void);
-void Hie_ResetHierarchy (void);
-
-void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
+void HieCfg_Title (bool PutLink,
+		   Hie_Level_t LogoScope,
+		   long LogoCod,
+                   char LogoShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		   char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
+		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
+		   char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1]);
+void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
+		      const char FullName[Hie_MAX_BYTES_FULL_NAME + 1]);
+void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
+		      const char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1]);
+void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
+		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
+void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
+void HieCfg_QR (const char *ParamName,long HieCod);
 
 #endif

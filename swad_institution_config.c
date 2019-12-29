@@ -32,6 +32,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
@@ -222,7 +223,7 @@ static void InsCfg_PutIconsToPrintAndUpload (void)
 
 static void InsCfg_Title (bool PutLink)
   {
-   Hie_ConfigTitle (PutLink,
+   HieCfg_Title (PutLink,
 		    Hie_INS,				// Logo scope
 		    Gbl.Hierarchy.Ins.InsCod,		// Logo code
                     Gbl.Hierarchy.Ins.ShrtName,		// Logo short name
@@ -387,7 +388,7 @@ static void InsCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Institution;
 
-   Hie_ConfigFullName (PutForm,Txt_Institution,ActRenInsFulCfg,
+   HieCfg_FullName (PutForm,Txt_Institution,ActRenInsFulCfg,
 		       Gbl.Hierarchy.Ins.FullName);
   }
 
@@ -397,7 +398,7 @@ static void InsCfg_FullName (bool PutForm)
 
 static void InsCfg_ShrtName (bool PutForm)
   {
-   Hie_ConfigShrtName (PutForm,ActRenInsShoCfg,Gbl.Hierarchy.Ins.ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,Gbl.Hierarchy.Ins.ShrtName);
   }
 
 /*****************************************************************************/
@@ -406,7 +407,7 @@ static void InsCfg_ShrtName (bool PutForm)
 
 static void InsCfg_WWW (bool PrintView,bool PutForm)
   {
-   Hie_ConfigWWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Ins.WWW);
   }
 
 /*****************************************************************************/
@@ -415,7 +416,7 @@ static void InsCfg_WWW (bool PrintView,bool PutForm)
 
 static void InsCfg_Shortcut (bool PrintView)
   {
-   Hie_ConfigShortcut (PrintView,"ins",Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_Shortcut (PrintView,"ins",Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -424,7 +425,7 @@ static void InsCfg_Shortcut (bool PrintView)
 
 static void InsCfg_QR (void)
   {
-   Hie_ConfigQR ("ins",Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_QR ("ins",Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_role.h"
@@ -194,7 +195,7 @@ void CrsCfg_PrintConfiguration (void)
 
 static void CrsCfg_Title (bool PutLink)
   {
-   Hie_ConfigTitle (PutLink,
+   HieCfg_Title (PutLink,
 		    Hie_DEG,				// Logo scope
 		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
                     Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
@@ -279,7 +280,7 @@ static void CrsCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Course;
 
-   Hie_ConfigFullName (PutForm,Txt_Course,ActRenCrsFulCfg,
+   HieCfg_FullName (PutForm,Txt_Course,ActRenCrsFulCfg,
 		       Gbl.Hierarchy.Crs.FullName);
   }
 
@@ -289,7 +290,7 @@ static void CrsCfg_FullName (bool PutForm)
 
 static void CrsCfg_ShrtName (bool PutForm)
   {
-   Hie_ConfigShrtName (PutForm,ActRenCrsShoCfg,Gbl.Hierarchy.Crs.ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCrsShoCfg,Gbl.Hierarchy.Crs.ShrtName);
   }
 
 /*****************************************************************************/
@@ -397,7 +398,7 @@ static void CrsCfg_InternalCode (void)
 
 static void CrsCfg_Shortcut (bool PrintView)
   {
-   Hie_ConfigShortcut (PrintView,"crs",Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_Shortcut (PrintView,"crs",Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -406,7 +407,7 @@ static void CrsCfg_Shortcut (bool PrintView)
 
 static void CrsCfg_QR (void)
   {
-   Hie_ConfigQR ("crs",Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_QR ("crs",Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
