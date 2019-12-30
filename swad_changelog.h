@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.108 (2019-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.108.2 (2019-12-30)"
 #define CSS_FILE		"swad19.101.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,8 @@ ps2pdf source.ps destination.pdf
 
 	Version 19.10x:   Dec 30, 2019	Map in country information. (? lines)
 	Version 19.10x:   Dec 30, 2019	Map in institution information. (? lines)
+	Version 19.108.2: Dec 30, 2019	Code refactoring related to printing messages. (249739 lines)
+	Version 19.108.1: Dec 30, 2019	Code refactoring related to printing messages. (249746 lines)
 	Version 19.108:   Dec 30, 2019	Code refactoring related to hierarchy. (249730 lines)
 	Version 19.107:   Dec 29, 2019	New module swad_hierarchy_config for common hierarchy configuration functions. (249760 lines)
 	Version 19.106:   Dec 29, 2019	New module swad_country_config for country configuration. (249683 lines)

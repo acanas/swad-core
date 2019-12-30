@@ -420,11 +420,10 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Txt_Create_account;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_New_on_PLATFORM_Sign_up,
-	     Cfg_PLATFORM_SHORT_NAME);
-   Box_BoxBegin (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_New_on_PLATFORM_Sign_up,
+				       Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Button to go to request the creation of a new account *****/
    Frm_StartForm (ActFrmMyAcc);

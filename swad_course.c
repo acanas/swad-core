@@ -743,11 +743,11 @@ static void Crs_ListCourses (void)
    unsigned Year;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Courses_of_DEGREE_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   Box_BoxBegin (NULL,Gbl.Title,Crs_PutIconsListCourses,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Courses_of_DEGREE_X,
+				       Gbl.Hierarchy.Deg.ShrtName),
+		 Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
@@ -947,11 +947,11 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Courses_of_DEGREE_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   Box_BoxBegin (NULL,Gbl.Title,Crs_PutIconsEditingCourses,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Courses_of_DEGREE_X,
+				       Gbl.Hierarchy.Deg.ShrtName),
+		 Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
@@ -2269,10 +2269,9 @@ static void Crs_PutButtonToRegisterInCrs (void)
    // If the course being edited is different to the current one...
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Register_me_in_X,
-	     Crs_EditingCrs->ShrtName);
-   Btn_PutCreateButton (Gbl.Title);
+   Btn_PutCreateButton (Str_BuildStrMsg (Txt_Register_me_in_X,
+					 Crs_EditingCrs->ShrtName));
+   Str_FreeStrMsg ();
    Frm_EndForm ();
   }
 
@@ -2443,15 +2442,13 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /* Heading row */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_USER_in_COURSE,
-                Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-        	                  Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
-
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      HTM_TxtF ("%s:",Gbl.Title);
+      HTM_TxtF ("%s:",Str_BuildStrMsg (Txt_USER_in_COURSE,
+				       Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+							 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
+      Str_FreeStrMsg ();
       HTM_TH_End ();
 
       HTM_TR_End ();

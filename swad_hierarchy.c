@@ -49,12 +49,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/*************************** Private variables *******************************/
-/*****************************************************************************/
-
-char *Hie_GoToMsg = NULL;
-
-/*****************************************************************************/
 /*************************** Private constants *******************************/
 /*****************************************************************************/
 
@@ -794,15 +788,10 @@ char *Hie_BuildGoToMsg (const char *Where)
   {
    extern const char *Txt_Go_to_X;
 
-   Hie_FreeGoToMsg ();
-   if (asprintf (&Hie_GoToMsg,Txt_Go_to_X,Where) < 0)
-      Lay_NotEnoughMemoryExit ();
-
-   return Hie_GoToMsg;
+   return Str_BuildStrMsg (Txt_Go_to_X,Where);
   }
 
 void Hie_FreeGoToMsg (void)
   {
-   if (Hie_GoToMsg != NULL)
-      free (Hie_GoToMsg);
+   Str_FreeStrMsg ();
   }

@@ -356,14 +356,13 @@ void Agd_ShowUsrAgenda (void)
 	 Error = false;
 
 	 /***** Begin box *****/
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Public_agenda_USER,
-		   Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Box_BoxBegin ("100%",Gbl.Title,
+	 Box_BoxBegin ("100%",Str_BuildStrMsg (Txt_Public_agenda_USER,
+		                               Gbl.Usrs.Other.UsrDat.FullName),
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
 			       Agd_PutIconsOtherPublicAgenda,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+         Str_FreeStrMsg ();
 
 	 /***** Show the current events in the user's agenda *****/
 	 Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -400,14 +399,13 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
 	   {
 	    /***** Begin box *****/
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      Txt_Public_agenda_USER,
-		      Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Box_BoxBegin ("100%",Gbl.Title,
+	    Box_BoxBegin ("100%",Str_BuildStrMsg (Txt_Public_agenda_USER,
+		                                  Gbl.Usrs.Other.UsrDat.FullName),
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				  Agd_PutIconsOtherPublicAgenda,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+            Str_FreeStrMsg ();
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -1902,11 +1900,10 @@ void Agd_PrintAgdQRCode (void)
    extern const char *Txt_Where_s_USER;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Where_s_USER,
-	     Gbl.Usrs.Me.UsrDat.FullName);
-   Box_BoxBegin (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Where_s_USER,
+	                               Gbl.Usrs.Me.UsrDat.FullName),NULL,
                  NULL,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Print QR code ****/
    QR_PrintQRCode ();

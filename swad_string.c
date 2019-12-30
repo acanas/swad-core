@@ -2922,3 +2922,29 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    /***** Concatenate ******/
    strcat (Dst,Src);
   }
+
+/*****************************************************************************/
+/************************** Build a string message ***************************/
+/*****************************************************************************/
+// FormatMsg must be a string including "%s"
+// Str_FreeStrMsg() must be called after calling this function
+
+static char *Str_StrMsg = NULL;
+
+char *Str_BuildStrMsg (const char *FormatMsg,const char *Str)
+  {
+   Str_FreeStrMsg ();
+   if (asprintf (&Str_StrMsg,FormatMsg,Str) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   return Str_StrMsg;
+  }
+
+void Str_FreeStrMsg (void)
+  {
+   if (Str_StrMsg != NULL)
+     {
+      free (Str_StrMsg);
+      Str_StrMsg = NULL;
+     }
+  }

@@ -998,14 +998,14 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    long CrsCod;
 
    NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_USER_in_COURSE,
-	     Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
    fprintf (Gbl.F.Rep,"<li>%s %u %s",
-	    Gbl.Title,
+	    Str_BuildStrMsg (Txt_USER_in_COURSE,
+			     Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]),
 	    NumCrss,
 	    NumCrss == 1 ? Txt_course :
 			   Txt_courses);
+   Str_FreeStrMsg ();
+
    if (NumCrss)
      {
       fprintf (Gbl.F.Rep," (%u %s / %u %s):",
