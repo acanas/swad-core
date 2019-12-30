@@ -205,17 +205,13 @@ void Ctr_SeeCtrWithPendingDegs (void)
 void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo)
   {
-   extern const char *Txt_Go_to_X;
-
    /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
    /***** Link to action *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Go_to_X,
-	     Ctr->FullName);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
+   Hie_FreeGoToMsg ();
 
    /***** Centre logo and name *****/
    Lgo_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
@@ -1550,17 +1546,14 @@ void Ctr_ContEditAfterChgCtr (void)
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
-   extern const char *Txt_Go_to_X;
-
    // If the centre being edited is different to the current one...
    if (Ctr_EditingCtr->CtrCod != Gbl.Hierarchy.Ctr.CtrCod)
      {
       /***** Alert with button to go to centre *****/
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Ctr_EditingCtr->ShrtName);
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
-                                  Btn_CONFIRM_BUTTON,Gbl.Title);
+                                  Btn_CONFIRM_BUTTON,
+				  Hie_BuildGoToMsg (Ctr_EditingCtr->ShrtName));
+      Hie_FreeGoToMsg ();
      }
    else
       /***** Alert *****/

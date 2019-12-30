@@ -320,7 +320,6 @@ static void InsCfg_Map (void)
 static void InsCfg_Country (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Country;
-   extern const char *Txt_Go_to_X;
    unsigned NumCty;
 
    /***** Country *****/
@@ -361,10 +360,9 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	{
          Frm_StartFormGoTo (ActSeeCtyInf);
          Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
 	}
       Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
       HTM_NBSP ();

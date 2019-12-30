@@ -72,4 +72,7 @@ void Hie_ResetHierarchy (void);
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
+char *Hie_BuildGoToMsg (const char *Where);
+void Hie_FreeGoToMsg (void);
+
 #endif

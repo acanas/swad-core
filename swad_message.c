@@ -3255,7 +3255,6 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
    extern const char *Txt_from_this_course;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_no_course_of_origin;
    struct Course Crs;
    bool FromThisCrs = true;
@@ -3283,10 +3282,9 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             Crs_PutParamCrsCod (Crs.CrsCod);
             HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
             HTM_Txt ("(");
-            snprintf (Gbl.Title,sizeof (Gbl.Title),
-        	      Txt_Go_to_X,
-		      Crs.FullName);
-            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK AUTHOR_TXT",NULL);
+            HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
+				     "BT_LINK AUTHOR_TXT",NULL);
+            Hie_FreeGoToMsg ();
             HTM_Txt (Crs.ShrtName);
             HTM_BUTTON_End ();
             HTM_Txt (")");

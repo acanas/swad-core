@@ -211,7 +211,6 @@ static void CrsCfg_Title (bool PutLink)
 static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Degree;
-   extern const char *Txt_Go_to_X;
    unsigned NumDeg;
 
    /***** Degree *****/
@@ -252,10 +251,9 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	{
          Frm_StartFormGoTo (ActSeeDegInf);
          Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Deg.ShrtName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
 	}
       Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
 		    20,"LM",true);

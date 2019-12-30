@@ -2435,7 +2435,6 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2460,10 +2459,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
      {
       Frm_StartFormGoTo (ActSeeDegInf);
       Deg_PutParamDegCod (Deg->DegCod);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Deg->FullName);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK",NULL);
+      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
+      Hie_FreeGoToMsg ();
      }
 
    /***** Check if photo of degree can be shown *****/

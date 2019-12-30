@@ -2214,7 +2214,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Requester;
    extern const char *Txt_Role;
    extern const char *Txt_Date;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
@@ -2827,10 +2826,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             HTM_TD_Begin ("class=\"DAT LT\"");
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            snprintf (Gbl.Title,sizeof (Gbl.Title),
-        	      Txt_Go_to_X,
-		      Crs.FullName);
-            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+            HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
+				     "BT_LINK DAT",NULL);
+            Hie_FreeGoToMsg ();
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             HTM_BUTTON_End ();
             Frm_EndForm ();

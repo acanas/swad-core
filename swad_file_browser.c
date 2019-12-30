@@ -11876,7 +11876,6 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Project_assessment;
    extern const char *Txt_Marks_area;
    extern const char *Txt_Temporary_private_storage_area;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_Folder;
    struct FileMetadata FileMetadata;
    long InsCod;
@@ -11948,10 +11947,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	{
          Frm_StartFormGoTo (ActSeeInsInf);
          Deg_PutParamDegCod (InsCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Go_to_X,
-		   InsShortName);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
          Lgo_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 HTM_BUTTON_End ();
@@ -11965,10 +11963,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	{
          Frm_StartFormGoTo (ActSeeCtrInf);
          Deg_PutParamDegCod (CtrCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Go_to_X,
-		   CtrShortName);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
          Lgo_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 HTM_BUTTON_End ();
@@ -11982,10 +11979,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	{
          Frm_StartFormGoTo (ActSeeDegInf);
          Deg_PutParamDegCod (DegCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Go_to_X,
-		   DegShortName);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
          Lgo_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 HTM_BUTTON_End ();
@@ -11999,10 +11995,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	{
 	 Frm_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (CrsCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Go_to_X,
-		   CrsShortName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CrsShortName),"BT_LINK DAT",NULL);
+         Hie_FreeGoToMsg ();
 	 HTM_Txt (CrsShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();

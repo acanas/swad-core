@@ -3592,7 +3592,6 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned long NumRow;
    unsigned long Ranking;
@@ -3657,10 +3656,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
         {
          Frm_StartFormGoTo (ActSeeCrsInf);
          Crs_PutParamCrsCod (Crs.CrsCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Go_to_X,
-		   Crs.FullName);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT LOG",NULL);
+         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
+         Hie_FreeGoToMsg ();
          HTM_Txt (Crs.ShrtName);
          HTM_BUTTON_End ();
         }

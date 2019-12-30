@@ -501,7 +501,6 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
                                         const char *ClassMap,
                                         const char *ClassLink)
   {
-   extern const char *Txt_Go_to_X;
    char CountryName[Cty_MAX_BYTES_NAME + 1];
 
    /***** Begin form *****/
@@ -510,10 +509,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
    /***** Link to action *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Go_to_X,
-	     Cty->Name[Gbl.Prefs.Language]);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
+			    ClassLink,NULL);
+   Hie_FreeGoToMsg ();
 
    /***** Draw country map *****/
    Cty_DrawCountryMap (Cty,ClassMap);
@@ -1610,17 +1608,14 @@ void Cty_ContEditAfterChgCty (void)
 
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
-   extern const char *Txt_Go_to_X;
-
    // If the country being edited is different to the current one...
    if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
      {
       /***** Alert with button to go to couuntry *****/
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Cty_EditingCty->Name[Gbl.Prefs.Language]);
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,Cty_PutParamGoToCty,
-                                  Btn_CONFIRM_BUTTON,Gbl.Title);
+                                  Btn_CONFIRM_BUTTON,
+				  Hie_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
+      Hie_FreeGoToMsg ();
      }
    else
       /***** Alert *****/

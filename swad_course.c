@@ -143,7 +143,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
-   extern const char *Txt_Go_to_X;
    struct Country Cty;
    struct Instit Ins;
    struct Centre Ctr;
@@ -356,13 +355,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
                   Frm_StartForm (ActMyCrs);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  snprintf (Gbl.Title,sizeof (Gbl.Title),
-			    Txt_Go_to_X,
-			    Crs.ShrtName);
-		  HTM_BUTTON_SUBMIT_Begin (Gbl.Title,
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.ShrtName),
 					   Highlight ? ClassHighlight :
 						       ClassNormal,
 					   NULL);
+		  Hie_FreeGoToMsg ();
 		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Crs.ShrtName);
 		  HTM_BUTTON_End ();
@@ -828,7 +825,6 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    unsigned NumCrs;
    struct Course *Crs;
@@ -887,10 +883,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	 Frm_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Go_to_X,
-		   Crs->FullName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,TxtClassStrong,NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs->FullName),
+				  TxtClassStrong,NULL);
+         Hie_FreeGoToMsg ();
 	 HTM_Txt (Crs->FullName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2251,17 +2246,13 @@ void Crs_ContEditAfterChgCrs (void)
 
 static void Crs_PutButtonToGoToCrs (void)
   {
-   extern const char *Txt_Go_to_X;
-
    // If the course being edited is different to the current one...
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
      {
       Frm_StartForm (ActSeeCrsInf);
       Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Crs_EditingCrs->ShrtName);
-      Btn_PutConfirmButton (Gbl.Title);
+      Btn_PutConfirmButton (Hie_BuildGoToMsg (Crs_EditingCrs->ShrtName));
+      Hie_FreeGoToMsg ();
       Frm_EndForm ();
      }
   }
@@ -2564,7 +2555,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    struct Degree Deg;
    long CrsCod;
@@ -2640,10 +2630,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    HTM_TD_Begin ("class=\"LT %s\"",BgColor);
    Frm_StartFormGoTo (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Go_to_X,
-	     row[2]);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (row[2]),ClassLink,NULL);
+   Hie_FreeGoToMsg ();
    Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
    HTM_BUTTON_End ();
@@ -2659,10 +2647,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    HTM_TD_Begin ("class=\"LT %s\"",BgColor);
    Frm_StartFormGoTo (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Go_to_X,
-	     row[5]);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (row[5]),ClassLink,NULL);
+   Hie_FreeGoToMsg ();
    HTM_Txt (row[5]);
    HTM_BUTTON_End ();
    Frm_EndForm ();

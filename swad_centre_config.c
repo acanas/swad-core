@@ -592,7 +592,6 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Institution;
-   extern const char *Txt_Go_to_X;
    unsigned NumIns;
 
    /***** Institution *****/
@@ -633,10 +632,9 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	{
          Frm_StartFormGoTo (ActSeeInsInf);
          Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Ins.ShrtName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
+				  "BT_LINK LT DAT",NULL);
+	 Hie_FreeGoToMsg ();
 	}
       Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
 		    20,"LM",true);

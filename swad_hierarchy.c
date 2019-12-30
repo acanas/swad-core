@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
 
+#include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -48,11 +49,17 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
+/*************************** Private variables *******************************/
+/*****************************************************************************/
+
+char *Hie_GoToMsg = NULL;
+
+/*****************************************************************************/
+/*************************** Private constants *******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/**************************** Private prototypes *****************************/
+/*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -651,4 +658,151 @@ void Hie_ResetHierarchy (void)
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = Hie_UNK;
    Gbl.Hierarchy.Cod   = -1L;
+  }
+
+/*****************************************************************************/
+/***** Write institutions, centres and degrees administrated by an admin *****/
+/*****************************************************************************/
+
+void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
+  {
+   extern const char *Txt_all_degrees;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRow;
+   unsigned NumRows;
+   struct Instit Ins;
+   struct Centre Ctr;
+   struct Degree Deg;
+
+   /***** Get institutions, centres, degrees admin by user from database *****/
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions,"
+						   " centres, degrees"
+						   " admin by a user",
+				        "(SELECT %u AS S,-1 AS Cod,'' AS FullName"
+				        " FROM admin"
+				        " WHERE UsrCod=%ld"
+				        " AND Scope='%s')"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,institutions.FullName"
+				        " FROM admin,institutions"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=institutions.InsCod)"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,centres.FullName"
+				        " FROM admin,centres"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=centres.CtrCod)"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,degrees.FullName"
+				        " FROM admin,degrees"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=degrees.DegCod)"
+				        " ORDER BY S,FullName",
+				        (unsigned) Hie_SYS,UsrCod,Sco_GetDBStrFromScope (Hie_SYS),
+				        (unsigned) Hie_INS,UsrCod,Sco_GetDBStrFromScope (Hie_INS),
+				        (unsigned) Hie_CTR,UsrCod,Sco_GetDBStrFromScope (Hie_CTR),
+				        (unsigned) Hie_DEG,UsrCod,Sco_GetDBStrFromScope (Hie_DEG));
+   if (NumRows)
+      /***** Get the list of degrees *****/
+      for (NumRow = 1;
+	   NumRow <= NumRows;
+	   NumRow++)
+	{
+         HTM_TR_Begin (NULL);
+
+         /***** Indent *****/
+         HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+         Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
+                	                  "submid20x20.gif",
+		      "","ICO25x25");
+         HTM_TD_End ();
+
+         /***** Write institution, centre, degree *****/
+         HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
+                       ColSpan - 1,Gbl.RowEvenOdd);
+
+         /* Get next institution, centre, degree */
+         row = mysql_fetch_row (mysql_res);
+
+	 /* Get scope */
+	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
+	   {
+	    case Hie_SYS:	// System
+	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
+	       HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
+	       break;
+	    case Hie_INS:	// Institution
+	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Ins.InsCod > 0)
+		 {
+		  /* Get data of institution */
+		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
+		  /* Write institution logo and name */
+		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
+						          "BT_LINK DAT_SMALL_NOBR","LT");
+		 }
+	       break;
+	    case Hie_CTR:	// Centre
+	       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Ctr.CtrCod > 0)
+		 {
+		  /* Get data of centre */
+		  Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+
+		  /* Write centre logo and name */
+		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+						     "BT_LINK DAT_SMALL_NOBR","LT");
+		 }
+	       break;
+	    case Hie_DEG:	// Degree
+	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Deg.DegCod > 0)
+		 {
+		  /* Get data of degree */
+		  Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+
+		  /* Write degree logo and name */
+		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+						     "BT_LINK DAT_SMALL_NOBR","LT");
+		 }
+	       break;
+	    default:	// There are no administrators in other scopes
+	       Lay_WrongScopeExit ();
+	       break;
+           }
+         HTM_TD_End ();
+
+         HTM_TR_End ();
+        }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Build a "Go to <where>" message ***********************/
+/*****************************************************************************/
+// Where is a hierarchy member (country, institution, centre, degree or course
+// Hie_FreeGoToMsg() must be called after calling this function
+
+char *Hie_BuildGoToMsg (const char *Where)
+  {
+   extern const char *Txt_Go_to_X;
+
+   Hie_FreeGoToMsg ();
+   if (asprintf (&Hie_GoToMsg,Txt_Go_to_X,Where) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   return Hie_GoToMsg;
+  }
+
+void Hie_FreeGoToMsg (void)
+  {
+   if (Hie_GoToMsg != NULL)
+      free (Hie_GoToMsg);
   }

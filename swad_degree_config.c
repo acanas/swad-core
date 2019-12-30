@@ -208,7 +208,6 @@ static void DegCfg_Title (bool PutLink)
 static void DegCfg_Centre (bool PrintView,bool PutForm)
   {
    extern const char *Txt_Centre;
-   extern const char *Txt_Go_to_X;
    unsigned NumCtr;
 
    /***** Centre *****/
@@ -249,10 +248,9 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
 	{
          Frm_StartFormGoTo (ActSeeCtrInf);
          Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Go_to_X,
-		   Gbl.Hierarchy.Ctr.ShrtName);
-	 HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK LT DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
+				  "BT_LINK LT DAT",NULL);
+         Hie_FreeGoToMsg ();
 	}
       Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
 		    20,"LM",true);

@@ -233,17 +233,13 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
 void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo)
   {
-   extern const char *Txt_Go_to_X;
-
    /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Ins_PutParamInsCod (Ins->InsCod);
 
    /***** Link to action *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Go_to_X,
-	     Ins->FullName);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
+   Hie_FreeGoToMsg ();
 
    /***** Institution logo and name *****/
    Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
@@ -1613,17 +1609,14 @@ void Ins_ContEditAfterChgIns (void)
 
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
-   extern const char *Txt_Go_to_X;
-
    // If the institution being edited is different to the current one...
    if (Ins_EditingIns->InsCod != Gbl.Hierarchy.Ins.InsCod)
      {
       /***** Alert with button to go to institution *****/
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Ins_EditingIns->ShrtName);
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
-                                  Btn_CONFIRM_BUTTON,Gbl.Title);
+                                  Btn_CONFIRM_BUTTON,
+				  Hie_BuildGoToMsg (Ins_EditingIns->ShrtName));
+      Hie_FreeGoToMsg ();
      }
    else
       /***** Alert *****/
