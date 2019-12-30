@@ -763,11 +763,11 @@ static void Deg_ListDegrees (void)
    unsigned NumDeg;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Degrees_of_CENTRE_X,
-	     Gbl.Hierarchy.Ctr.ShrtName);
-   Box_BoxBegin (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Degrees_of_CENTRE_X,
+				       Gbl.Hierarchy.Ctr.ShrtName),
+		 Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
      {
@@ -945,11 +945,11 @@ static void Deg_EditDegreesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Degrees_of_CENTRE_X,
-             Gbl.Hierarchy.Ctr.ShrtName);
-   Box_BoxBegin (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Degrees_of_CENTRE_X,
+				       Gbl.Hierarchy.Ctr.ShrtName),
+		 Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    if (Gbl.DegTypes.Num)
      {

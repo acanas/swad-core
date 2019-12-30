@@ -1869,12 +1869,11 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Put icon to move up the question */
       if (ICanEditQuestions && QstInd > 1)
 	{
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Move_up_X,
-		   StrQstInd);
 	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
 				        "arrow-up.svg",
-					Gbl.Title);
+					Str_BuildStrMsg (Txt_Move_up_X,
+							 StrQstInd));
+	 Str_FreeStrMsg ();
 	}
       else
          Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -1882,12 +1881,11 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Put icon to move down the question */
       if (ICanEditQuestions && QstInd < MaxQstInd)
 	{
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Move_down_X,
-		   StrQstInd);
 	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
 				        "arrow-down.svg",
-					Gbl.Title);
+					Str_BuildStrMsg (Txt_Move_down_X,
+							 StrQstInd));
+	 Str_FreeStrMsg ();
 	}
       else
          Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);

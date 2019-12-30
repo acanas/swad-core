@@ -1507,13 +1507,12 @@ static void Grp_ListGroupsForEdition (void)
                                           ActOpeGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Grp->Open ? Txt_Group_X_open_click_to_close_it :
-                               Txt_Group_X_closed_click_to_open_it,
-                   Grp->GrpName);
 	 Ico_PutIconLink (Grp->Open ? "unlock.svg" :
                 	              "lock.svg",
-                          Gbl.Title);
+                          Str_BuildStrMsg (Grp->Open ? Txt_Group_X_open_click_to_close_it :
+                        			       Txt_Group_X_closed_click_to_open_it,
+					   Grp->GrpName));
+	 Str_FreeStrMsg ();
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1523,13 +1522,12 @@ static void Grp_ListGroupsForEdition (void)
                                                ActEnaFilZonGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
-                                    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
-                   Grp->GrpName);
 	 Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
                 	                   "folder-red.svg",
-                          Gbl.Title);
+                          Str_BuildStrMsg (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
+							    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
+					   Grp->GrpName));
+	 Str_FreeStrMsg ();
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2377,17 +2375,16 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write icon to show if group is open or closed *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Grp->Open ? Txt_Group_X_open :
-	                 Txt_Group_X_closed,
-             Grp->GrpName);
    if (Highlight)
       HTM_TD_Begin ("class=\"BM LIGHT_BLUE\"");
    else
       HTM_TD_Begin ("class=\"BM\"");
    Ico_PutIconOff (Grp->Open ? "unlock.svg" :
         	               "lock.svg",
-	           Gbl.Title);
+	           Str_BuildStrMsg (Grp->Open ? Txt_Group_X_open :
+						Txt_Group_X_closed,
+				    Grp->GrpName));
+   Str_FreeStrMsg ();
    HTM_TD_End ();
 
    /***** Group name *****/

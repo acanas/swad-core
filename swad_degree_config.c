@@ -334,10 +334,10 @@ static void DegCfg_NumCrss (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Courses_of_DEGREE_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
+   HTM_BUTTON_SUBMIT_Begin (Str_BuildStrMsg (Txt_Courses_of_DEGREE_X,
+					     Gbl.Hierarchy.Deg.ShrtName),
+			    "BT_LINK DAT",NULL);
+   Str_FreeStrMsg ();
    HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();
