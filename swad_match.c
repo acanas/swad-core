@@ -3881,18 +3881,6 @@ static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumResponders
    unsigned i;
    unsigned BarWidth = 0;
 
-   /***** String with the number of users *****/
-   if (NumRespondersQst)
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-                NumRespondersAns,
-                (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
-                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
-   else
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
-
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"MCH_RESULT\"");
 
@@ -3918,7 +3906,14 @@ static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumResponders
    HTM_TABLE_End ();
 
    /***** Write the number of users *****/
-   HTM_Txt (Gbl.Title);
+   if (NumRespondersQst)
+      HTM_TxtF ("%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+                NumRespondersAns,
+                (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
+                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
+   else
+      HTM_TxtF ("0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
+                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
 
    /***** End container *****/
    HTM_DIV_End ();

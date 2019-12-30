@@ -158,11 +158,10 @@ void Rep_ReqMyUsageReport (void)
    Frm_StartForm (ActSeeMyUsgRep);
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Report_of_use_of_PLATFORM,
-	     Cfg_PLATFORM_SHORT_NAME);
-   Box_BoxBegin (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Report_of_use_of_PLATFORM,
+				       Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Header *****/
    Rep_TitleReport (NULL);	// NULL means do not write date
@@ -265,11 +264,10 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Report_of_use_of_PLATFORM,
-	     Cfg_PLATFORM_SHORT_NAME);
-   Box_BoxBegin (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Report_of_use_of_PLATFORM,
+				       Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Header *****/
    Rep_TitleReport (&Report->CurrentTimeUTC);
@@ -458,14 +456,11 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    extern const char *Txt_Date;
    extern const char *Txt_Permalink;
 
-   /***** Start header *****/
+   /***** Begin header *****/
    fprintf (Gbl.F.Rep,"<header>");
-
-   /***** Main title *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Report_of_use_of_PLATFORM,
-	     Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Rep,"<h1>%s</h1>",Gbl.Title);
+   fprintf (Gbl.F.Rep,"<h1>");
+   fprintf (Gbl.F.Rep,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   fprintf (Gbl.F.Rep,"</h1>");
    HTM_UL_Begin (NULL);
 
    /***** User *****/
@@ -1119,12 +1114,10 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    if (NumCrss)
      {
       /* Heading row */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Hits_as_a_USER,
-                Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-      fprintf (Gbl.F.Rep,"<li>%s:"
-	                 "<ol>",
-	       Gbl.Title);
+      fprintf (Gbl.F.Rep,"<li>");
+      fprintf (Gbl.F.Rep,Txt_Hits_as_a_USER,
+	       Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+      fprintf (Gbl.F.Rep,":<ol>");
 
       /* Write courses */
       for (NumCrs = 1;

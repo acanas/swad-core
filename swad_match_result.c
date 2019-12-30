@@ -176,10 +176,9 @@ void McR_ShowMyMchResultsInGam (void)
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in game *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Results_of_game_X,
-	     Game.Title);
-   McR_ShowResultsBegin (Gbl.Title,false);	// Do not list games to select
+   McR_ShowResultsBegin (Str_BuildStrMsg (Txt_Results_of_game_X,Game.Title),
+			 false);	// Do not list games to select
+   Str_FreeStrMsg ();
    McR_ListMyMchResultsInGam (Game.GamCod);
    McR_ShowResultsEnd ();
 
@@ -221,10 +220,9 @@ void McR_ShowMyMchResultsInMch (void)
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in match *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Results_of_match_X,
-	     Match.Title);
-   McR_ShowResultsBegin (Gbl.Title,false);	// Do not list games to select
+   McR_ShowResultsBegin (Str_BuildStrMsg (Txt_Results_of_match_X,Match.Title),
+			 false);	// Do not list games to select
+   Str_FreeStrMsg ();
    McR_ListMyMchResultsInMch (Match.MchCod);
    McR_ShowResultsEnd ();
 
@@ -322,10 +320,9 @@ void McR_ShowAllMchResultsInGam (void)
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in game *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Results_of_game_X,
-	     Game.Title);
-   McR_ShowResultsBegin (Gbl.Title,false);	// Do not list games to select
+   McR_ShowResultsBegin (Str_BuildStrMsg (Txt_Results_of_game_X,Game.Title),
+			 false);	// Do not list games to select
+   Str_FreeStrMsg ();
    McR_ListAllMchResultsInGam (Game.GamCod);
    McR_ShowResultsEnd ();
 
@@ -408,10 +405,9 @@ void McR_ShowAllMchResultsInMch (void)
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in match *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Results_of_match_X,
-	     Match.Title);
-   McR_ShowResultsBegin (Gbl.Title,false);	// Do not list games to select
+   McR_ShowResultsBegin (Str_BuildStrMsg (Txt_Results_of_match_X,Match.Title),
+			 false);	// Do not list games to select
+   Str_FreeStrMsg ();
    McR_ListAllMchResultsInMch (Match.MchCod);
    McR_ShowResultsEnd ();
 

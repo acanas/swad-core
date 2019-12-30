@@ -2059,12 +2059,11 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      Txt_Add_USERS,
-		      Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
 	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
 				        Prj_PutCurrentParams,
-				        Gbl.Title);
+				        Str_BuildStrMsg (Txt_Add_USERS,
+							 Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]));
+	    Str_FreeStrMsg ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
@@ -2461,10 +2460,9 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Frm_StartForm (ActionRemUsr[RoleInProject]);
 	 Gbl.Prjs.PrjCod = Prj.PrjCod;
 	 Prj_PutCurrentParams ();
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Remove_USER_from_this_project,
-		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]);
-	 Btn_PutRemoveButton (Gbl.Title);
+	 Btn_PutRemoveButton (Str_BuildStrMsg (Txt_Remove_USER_from_this_project,
+					       Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]));
+	 Str_FreeStrMsg ();
 	 Frm_EndForm ();
 
 	 /* End alert */

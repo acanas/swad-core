@@ -620,15 +620,14 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-            snprintf (Gbl.Title,sizeof (Gbl.Title),
-                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-                                                                  Txt_Move_up_X,
-                      StrItemCod);
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 										      ActUp_IteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-up.svg",
-					   Gbl.Title);
+					   Str_BuildStrMsg (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
+													Txt_Move_up_X,
+							    StrItemCod));
+	    Str_FreeStrMsg ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -639,15 +638,14 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-            snprintf (Gbl.Title,sizeof (Gbl.Title),
-                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-                                                                  Txt_Move_down_X,
-                      StrItemCod);
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 										      ActDwnIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-down.svg",
-					   Gbl.Title);
+					   Str_BuildStrMsg (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
+													Txt_Move_down_X,
+							    StrItemCod));
+	    Str_FreeStrMsg ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
@@ -657,14 +655,13 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	 if (Level > 1)
 	   {
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      Txt_Increase_level_of_X,
-		      StrItemCod);
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-										      ActRgtIteSylPra,
+									       ActRgtIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-left.svg",
-					   Gbl.Title);
+					   Str_BuildStrMsg (Txt_Increase_level_of_X,
+							    StrItemCod));
+	    Str_FreeStrMsg ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
@@ -675,14 +672,13 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 if (Level < LastLevel + 1 &&
 	     Level < Syl_MAX_LEVELS_SYLLABUS)
 	   {
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      Txt_Decrease_level_of_X,
-		      StrItemCod);
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-										      ActLftIteSylPra,
+									       ActLftIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-right.svg",
-					   Gbl.Title);
+					   Str_BuildStrMsg (Txt_Decrease_level_of_X,
+							    StrItemCod));
+	    Str_FreeStrMsg ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);

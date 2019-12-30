@@ -1840,10 +1840,10 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActEnableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Tag_X_not_allowed_Click_to_allow_it,
-	     TagTxt);
-   Ico_PutIconLink ("eye-slash.svg",Gbl.Title);
+   Ico_PutIconLink ("eye-slash.svg",
+		    Str_BuildStrMsg (Txt_Tag_X_not_allowed_Click_to_allow_it,
+				     TagTxt));
+   Str_FreeStrMsg ();
    Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -1859,10 +1859,10 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActDisableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Tag_X_allowed_Click_to_disable_it,
-	     TagTxt);
-   Ico_PutIconLink ("eye.svg",Gbl.Title);
+   Ico_PutIconLink ("eye.svg",
+		    Str_BuildStrMsg (Txt_Tag_X_allowed_Click_to_disable_it,
+				     TagTxt));
+   Str_FreeStrMsg ();
    Frm_EndForm ();
    HTM_TD_End ();
   }

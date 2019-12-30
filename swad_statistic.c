@@ -230,11 +230,10 @@ void Sta_AskShowCrsHits (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Statistics_of_visits_to_the_course_X,
-	     Gbl.Hierarchy.Crs.ShrtName);
-   Box_BoxBegin (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Statistics_of_visits_to_the_course_X,
+				       Gbl.Hierarchy.Crs.ShrtName),NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
+   Str_FreeStrMsg ();
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,Grp_MY_GROUPS);

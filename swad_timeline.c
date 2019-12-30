@@ -507,10 +507,10 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Timeline_OF_A_USER,
-	     Gbl.Usrs.Other.UsrDat.FirstName);
-   TL_ShowTimeline (Query,Gbl.Title,NotCod);
+   TL_ShowTimeline (Query,Str_BuildStrMsg (Txt_Timeline_OF_A_USER,
+					   Gbl.Usrs.Other.UsrDat.FirstName),
+		    NotCod);
+   Str_FreeStrMsg ();
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -3121,17 +3121,18 @@ static void TL_PutDisabledIconShare (unsigned NumShared)
    extern const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS;
    extern const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone;
 
+   /***** Disabled icon to share *****/
    if (NumShared)
+     {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_TIMELINE_NOTE_Shared_by_X_USERS,
 		NumShared);
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
+		      Gbl.Title);
+     }
    else
-      Str_Copy (Gbl.Title,Txt_TIMELINE_NOTE_Not_shared_by_anyone,
-                Lay_MAX_BYTES_TITLE);
-
-   /***** Disabled icon to share *****/
-   Ico_PutDivIcon ("TL_ICO_DISABLED",
-		   TL_ICON_SHARE,Gbl.Title);
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
+		      Txt_TIMELINE_NOTE_Not_shared_by_anyone);
   }
 
 /*****************************************************************************/
@@ -3143,17 +3144,18 @@ static void TL_PutDisabledIconFav (unsigned NumFavs)
    extern const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS;
    extern const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone;
 
+   /***** Disabled icon to mark as favourite *****/
    if (NumFavs)
+     {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
 		NumFavs);
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
+		      Gbl.Title);
+     }
    else
-      Str_Copy (Gbl.Title,Txt_TIMELINE_NOTE_Not_favourited_by_anyone,
-                Lay_MAX_BYTES_TITLE);
-
-   /***** Disabled icon to mark as favourite *****/
-   Ico_PutDivIcon ("TL_ICO_DISABLED",
-		   TL_ICON_FAV,Gbl.Title);
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
+		      Txt_TIMELINE_NOTE_Not_favourited_by_anyone);
   }
 
 /*****************************************************************************/

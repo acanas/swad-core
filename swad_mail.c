@@ -1308,10 +1308,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       /* Email confirmed? */
       if (Confirmed)
 	{
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Email_X_confirmed,
-		   row[0]);
-	 Ico_PutIcon ("check-circle.svg",Gbl.Title,"ICO16x16");
+	 Ico_PutIcon ("check-circle.svg",
+		      Str_BuildStrMsg (Txt_Email_X_confirmed,row[0]),
+		      "ICO16x16");
+	 Str_FreeStrMsg ();
 	}
 
       /* Form to change user's email */
