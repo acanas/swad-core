@@ -2044,12 +2044,11 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
      {
       /***** Begin box and table *****/
       /* Number of countries found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-                NumCtys,NumCtys == 1 ? Txt_country :
-				       Txt_countries);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCtys,
+						   NumCtys == 1 ? Txt_country :
+								  Txt_countries),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Write heading *****/
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable

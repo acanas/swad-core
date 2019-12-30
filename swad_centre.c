@@ -2003,12 +2003,11 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
      {
       /***** Begin box and table *****/
       /* Number of centres found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-                NumCtrs,(NumCtrs == 1) ? Txt_centre :
-	                                 Txt_centres);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCtrs,
+						   (NumCtrs == 1) ? Txt_centre :
+	                                                            Txt_centres),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Write heading *****/
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable

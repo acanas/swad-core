@@ -11807,12 +11807,11 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
      {
       /***** Begin box and table *****/
       /* Number of documents found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%lu %s",
-                NumDocs,(NumDocs == 1) ? TitleSingular :
-        	                         TitlePlural);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumDocs,
+						   (NumDocs == 1) ? TitleSingular :
+								    TitlePlural),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);

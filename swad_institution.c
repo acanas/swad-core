@@ -1968,12 +1968,11 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
      {
       /***** Begin box and table *****/
       /* Number of institutions found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-                NumInss,NumInss == 1 ? Txt_institution :
-				       Txt_institutions);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumInss,
+						   NumInss == 1 ? Txt_institution :
+								  Txt_institutions),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

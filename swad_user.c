@@ -7390,15 +7390,13 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       /***** Begin box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-	        NumUsrs,
-	        (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
-		                                      Txt_users[Sex]) :
-		                    ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-		                                      Txt_ROLES_PLURAL_abc[Role][Sex]));
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumUsrs,
+						   (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+											 Txt_users[Sex]) :
+								       ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+											 Txt_ROLES_PLURAL_abc[Role][Sex])),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;

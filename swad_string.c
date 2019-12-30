@@ -2953,6 +2953,17 @@ char *Str_BuildMsgLong (const char *fmt,long Num)
    return Str_Msg;
   }
 
+// Str_FreeMsg() must be called after calling this function
+
+char *Str_BuildMsgLongStr (long Num,const char *Str)
+  {
+   Str_FreeMsg ();
+   if (asprintf (&Str_Msg,"%ld %s",Num,Str) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   return Str_Msg;
+  }
+
 void Str_FreeMsg (void)
   {
    if (Str_Msg != NULL)

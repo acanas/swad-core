@@ -1957,12 +1957,11 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
      {
       /***** Begin box and table *****/
       /* Number of degrees found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-                NumDegs,(NumDegs == 1) ? Txt_degree :
-        	                         Txt_degrees);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumDegs,
+						   (NumDegs == 1) ? Txt_degree :
+								    Txt_degrees),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Write heading *****/
       Deg_PutHeadDegreesForSeeing ();

@@ -2696,24 +2696,27 @@ static void Mch_ShowFormColumns (const struct Match *Match)
 	NumCols <= Mch_MAX_COLS;
 	NumCols++)
      {
+      /* Begin container for this option */
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Match->Status.NumCols == NumCols) ? "PREF_ON" :
 							  "PREF_OFF");
 
-      /***** Begin form *****/
+      /* Begin form */
       Frm_StartForm (ActChgNumColMch);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
       Mch_PutParamNumCols (NumCols);		// Number of columns
 
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-		"%u %s",
-		NumCols,NumCols == 1 ? Txt_column :
-		                       Txt_columns);
-      Ico_PutSettingIconLink (NumColsIcon[NumCols],Gbl.Title);
+      /* Number of columns */
+      Ico_PutSettingIconLink (NumColsIcon[NumCols],
+			      Str_BuildMsgLongStr ((long) NumCols,
+						   NumCols == 1 ? Txt_column :
+								  Txt_columns));
+      Str_FreeMsg ();
 
-      /***** End form *****/
+      /* End form */
       Frm_EndForm ();
 
+      /* End container for this option */
       HTM_DIV_End ();
      }
 

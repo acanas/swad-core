@@ -2505,12 +2505,11 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
      {
       /***** Begin box and table *****/
       /* Number of courses found */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
-                NumCrss,(NumCrss == 1) ? Txt_course :
-	                                 Txt_courses);
-      Box_BoxTableBegin (NULL,Gbl.Title,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCrss,
+						   (NumCrss == 1) ? Txt_course :
+								    Txt_courses),
+			 NULL,NULL,Box_NOT_CLOSABLE,2);
+      Str_FreeMsg ();
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
