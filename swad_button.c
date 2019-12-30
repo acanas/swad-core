@@ -25,8 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>		// For fprintf
-
 #include "swad_button.h"
 #include "swad_global.h"
 #include "swad_HTML.h"

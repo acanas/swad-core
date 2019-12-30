@@ -95,7 +95,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 						const char *FilterFromToSubquery,
 						MYSQL_RES **mysql_res);
 
-static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs);
+static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs);
 
 static void Msg_PutIconsListMsgs (void);
 static void Msg_PutHiddenParamsOneMsg (void);
@@ -1700,6 +1700,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
+   char *NumMsgsStr;
    unsigned long NumMsg = 0;		// Initialized to avoid warning
    unsigned NumUnreadMsgs = 0;		// Initialized to avoid warning
    struct Pagination Pagination;
@@ -1755,8 +1756,10 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Begin box with messages *****/
-   Box_BoxBegin ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
+   Msg_SetNumMsgsStr (&NumMsgsStr,NumUnreadMsgs);
+   Box_BoxBegin ("97%",NumMsgsStr,Msg_PutIconsListMsgs,
                  Help[Gbl.Msg.TypeOfMessages],Box_NOT_CLOSABLE);
+   free (NumMsgsStr);
 
    /***** Filter messages *****/
    /* Begin box with filter */
@@ -2425,11 +2428,11 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
   }
 
 /*****************************************************************************/
-/********* Write number of messages and number of unread messages ************/
+/***** Set string with number of messages and number of unread messages ******/
 /*****************************************************************************/
-// Fill Gbl.Title
+// The string must be deallocated after calling this function
 
-static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs)
+static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs)
   {
    extern const char *Txt_message_received;
    extern const char *Txt_message_sent;
@@ -2444,45 +2447,55 @@ static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs)
 	 if (Gbl.Msg.NumMsgs == 1)
 	   {
 	    if (NumUnreadMsgs)
-	       snprintf (Gbl.Title,sizeof (Gbl.Title),
-		         "1 %s, 1 %s",
-			 Txt_message_received,Txt_unread_MESSAGE);
+	      {
+	       if (asprintf (NumMsgsStr,"1 %s, 1 %s",
+			     Txt_message_received,Txt_unread_MESSAGE) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
 	    else
-	       snprintf (Gbl.Title,sizeof (Gbl.Title),
-		         "1 %s",
-			 Txt_message_received);
+	      {
+	       if (asprintf (NumMsgsStr,"1 %s",Txt_message_received) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
 	   }
 	 else
 	   {
 	    if (NumUnreadMsgs == 0)
-	       snprintf (Gbl.Title,sizeof (Gbl.Title),
-		         "%u %s",
-			 Gbl.Msg.NumMsgs,Txt_messages_received);
+	      {
+	       if (asprintf (NumMsgsStr,"%u %s",
+			     Gbl.Msg.NumMsgs,Txt_messages_received) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
 	    else if (NumUnreadMsgs == 1)
-	       snprintf (Gbl.Title,sizeof (Gbl.Title),
-		         "%u %s, 1 %s",
-			 Gbl.Msg.NumMsgs,Txt_messages_received,
-			 Txt_unread_MESSAGE);
+	      {
+	       if (asprintf (NumMsgsStr,"%u %s, 1 %s",
+			     Gbl.Msg.NumMsgs,Txt_messages_received,
+			     Txt_unread_MESSAGE) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
 	    else
-	       snprintf (Gbl.Title,sizeof (Gbl.Title),
-		         "%u %s, %u %s",
-			 Gbl.Msg.NumMsgs,Txt_messages_received,
-			 NumUnreadMsgs,Txt_unread_MESSAGES);
+	      {
+	       if (asprintf (NumMsgsStr,"%u %s, %u %s",
+			     Gbl.Msg.NumMsgs,Txt_messages_received,
+			     NumUnreadMsgs,Txt_unread_MESSAGES) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	      }
 	   }
 	 break;
       case Msg_MESSAGES_SENT:
 	 if (Gbl.Msg.NumMsgs == 1)
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      "1 %s",
-		      Txt_message_sent);
+	   {
+	    if (asprintf (NumMsgsStr,"1 %s",Txt_message_sent) < 0)
+               Lay_NotEnoughMemoryExit ();
+	   }
 	 else
-	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      "%u %s",
-		      Gbl.Msg.NumMsgs,Txt_messages_sent);
+	   {
+	    if (asprintf (NumMsgsStr,"%u %s",
+			  Gbl.Msg.NumMsgs,Txt_messages_sent) < 0)
+               Lay_NotEnoughMemoryExit ();
+	   }
 	 break;
      }
-
-   return Gbl.Title;
   }
 
 /*****************************************************************************/

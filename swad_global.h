@@ -202,7 +202,6 @@ struct Globals
    time_t StartExecutionTimeUTC;
    struct DateTime Now;
    struct Date Yesterday;
-   char Title[Lay_MAX_BYTES_TITLE + 1];		// String for the help message in a link
    unsigned RowEvenOdd;	// To alternate row colors in listings
    char *ColorRows[2];
    const char *XMLPtr;

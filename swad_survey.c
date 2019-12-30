@@ -2606,6 +2606,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    MYSQL_ROW row;
    unsigned NumAns;
    unsigned NumAnswers = 0;
+   char *Title;
    Svy_AnswerType_t AnsType;
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
@@ -2664,11 +2665,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Svy_CurrentSvyCod    = SvyCod;
       Svy_CurrentQstCod = SvyQst->QstCod;
 
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%s %u",
-                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Box_BoxBegin (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
+      if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
+	 Lay_NotEnoughMemoryExit ();
+      Box_BoxBegin (NULL,Title,Svy_PutIconToRemoveOneQst,
                     NULL,Box_NOT_CLOSABLE);
+      free (Title);
      }
    else
       Box_BoxBegin (NULL,Txt_New_question,NULL,
@@ -3473,18 +3474,23 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned BarWidth = 0;
+   char *Title;
 
-   /***** String with the number of users *****/
+   /***** Build string with the number of users *****/
    if (MaxUsrs)
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-                NumUsrs,
-                (unsigned) ((((double) NumUsrs * 100.0) / (double) MaxUsrs) + 0.5),
-                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+     {
+      if (asprintf (&Title,"%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+                    NumUsrs,
+                    (unsigned) ((((double) NumUsrs * 100.0) / (double) MaxUsrs) + 0.5),
+                    Txt_of_PART_OF_A_TOTAL,MaxUsrs) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
    else
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+     {
+      if (asprintf (&Title,"0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
+                    Txt_of_PART_OF_A_TOTAL,MaxUsrs) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
 
    HTM_TD_Begin ("class=\"DAT LT\" style=\"width:%upx;\"",Svy_MAX_BAR_WIDTH + 125);
 
@@ -3494,11 +3500,14 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	                       (double) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Gbl.Title,
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Title,
 	    "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
    /***** Write the number of users *****/
-   HTM_TxtF ("&nbsp;%s",Gbl.Title);
+   HTM_TxtF ("&nbsp;%s",Title);
+
+   /***** Free string with the number of users *****/
+   free (Title);
 
    HTM_TD_End ();
   }

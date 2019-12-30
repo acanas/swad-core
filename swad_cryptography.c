@@ -25,7 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 

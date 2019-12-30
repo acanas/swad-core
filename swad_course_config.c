@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -440,6 +442,7 @@ static void CrsCfg_Indicators (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs Indicators;
    int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
+   char *Title;
 
    /***** Compute indicators ******/
    Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
@@ -454,16 +457,17 @@ static void CrsCfg_Indicators (void)
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActReqStaCrs);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     "%u %s %u",
-	     Indicators.NumIndicators,
-	     Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,"BT_LINK DAT",NULL);
-   HTM_TxtF ("%s&nbsp;",Gbl.Title);
+   if (asprintf (&Title,"%u %s %u",
+	         Indicators.NumIndicators,
+	         Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_BUTTON_SUBMIT_Begin (Title,"BT_LINK DAT",NULL);
+   HTM_TxtF ("%s&nbsp;",Title);
    Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
 								   "exclamation-triangle.svg",
-		Gbl.Title,"ICO16x16");
+		Title,"ICO16x16");
    HTM_BUTTON_End ();
+   free (Title);
    Frm_EndForm ();
    HTM_TD_End ();
 

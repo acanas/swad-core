@@ -31,7 +31,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For fprintf, asprintf, etc.
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
@@ -5085,6 +5085,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    bool DisplayRightColumn;
    char StrTagTxt[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrInteger[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char *Title;
 
    /***** Begin box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -5361,29 +5362,29 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       HTM_TxtF ("%c)",'a' + (char) NumOpt);
 
       /* Icon to expand (show the answer) */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%s %c)",
-		Txt_Expand,'a' + (char) NumOpt);
       HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"
 	           " onclick=\"toggleAnswer('%u');return false;\"",
                    NumOpt,
 		   DisplayRightColumn ?	" style=\"display:none;\"" :	// Answer does have content ==> Hide icon
 	                                "",
 	           NumOpt);
-      Ico_PutIcon ("caret-right.svg",Gbl.Title,"ICO16x16");
+      if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ico_PutIcon ("caret-right.svg",Title,"ICO16x16");
+      free (Title);
       HTM_A_End ();
 
       /* Icon to contract (hide the answer) */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%s %c)",
-		Txt_Contract,'a' + (char) NumOpt);
       HTM_A_Begin ("href=\"\" id=\"con_%u\"%s"
 	           " onclick=\"toggleAnswer(%u);return false;\"",
 		   NumOpt,
                    DisplayRightColumn ? "" :
 	                                " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
                    NumOpt);
-      Ico_PutIcon ("caret-down.svg",Gbl.Title,"ICO16x16");
+      if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ico_PutIcon ("caret-down.svg",Title,"ICO16x16");
+      free (Title);
       HTM_A_End ();
 
       HTM_TD_End ();

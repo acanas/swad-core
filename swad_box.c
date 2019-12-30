@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For fprintf
 #include <stdlib.h>		// For malloc and free
 
 #include "swad_action.h"

@@ -155,6 +155,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    extern const char *Txt_FORUM_Post_banned;
    unsigned NumPage;
    char *ClassLink;
+   char *Title;
 
    /***** Link to page 1, including a text *****/
    if (Subject)
@@ -243,12 +244,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Page_X_of_Y,
-                   1,Pagination->NumPags);
 	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
 	    Lay_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+         if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
+         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+         free (Title);
          free (ClassLink);
         }
       else
@@ -357,12 +358,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Page_X_of_Y,
-                   1,Pagination->NumPags);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+         if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
+         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (1);
          HTM_BUTTON_End ();
+         free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
@@ -457,13 +458,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Page_X_of_Y,
-                   Pagination->LeftPage,
-                   Pagination->NumPags);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+         if (asprintf (&Title,Txt_Page_X_of_Y,
+		       Pagination->LeftPage,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
+         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->LeftPage);
          HTM_BUTTON_End ();
+         free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
@@ -478,12 +479,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   NumPage <= Pagination->EndPage;
 	   NumPage++)
         {
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Page_X_of_Y,
-		   NumPage,Pagination->NumPags);
+         if (asprintf (&Title,Txt_Page_X_of_Y,NumPage,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
-            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Gbl.Title,ClassTxt);
+            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Title,ClassTxt);
             HTM_Unsigned (NumPage);
             HTM_SPAN_End ();
            }
@@ -570,11 +570,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Usr_PutParamOtherUsrCodEncrypted ();
                   break;
               }
-            HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+            HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
             HTM_Unsigned (NumPage);
             HTM_BUTTON_End ();
             Frm_EndForm ();
            }
+         free (Title);
         }
 
       /***** Posible link to page right *****/
@@ -668,12 +669,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Page_X_of_Y,
-                   Pagination->RightPage,Pagination->NumPags);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+         if (asprintf (&Title,Txt_Page_X_of_Y,
+		       Pagination->RightPage,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
+         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->RightPage);
          HTM_BUTTON_End ();
+         free (Title);
          Frm_EndForm ();
         }
 
@@ -767,12 +769,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         snprintf (Gbl.Title,sizeof (Gbl.Title),
-                   Txt_Page_X_of_Y,
-                   Pagination->NumPags,Pagination->NumPags);
-         HTM_BUTTON_SUBMIT_Begin (Gbl.Title,ClassLink,NULL);
+         if (asprintf (&Title,Txt_Page_X_of_Y,
+		       Pagination->NumPags,Pagination->NumPags) < 0)
+	    Lay_NotEnoughMemoryExit ();
+         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->NumPags);
          HTM_BUTTON_End ();
+         free (Title);
          Frm_EndForm ();
         }
 

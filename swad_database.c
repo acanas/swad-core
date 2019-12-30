@@ -30,7 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdarg.h>		// For va_start, va_end
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For FILE, fprintf, vasprintf
+#include <stdio.h>		// For FILE, vasprintf
 #include <stdlib.h>		// For free
 
 #include "swad_config.h"

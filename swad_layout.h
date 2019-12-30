@@ -33,8 +33,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Lay_MAX_BYTES_TITLE (4096 - 1)
-
 #define Lay_HIDE_BOTH_COLUMNS	0						// 00
 #define Lay_SHOW_RIGHT_COLUMN	1						// 01
 #define Lay_SHOW_LEFT_COLUMN	2						// 10

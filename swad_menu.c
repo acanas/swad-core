@@ -25,8 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>		// For fprintf, etc.
-
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"

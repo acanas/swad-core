@@ -27,7 +27,7 @@
 
 #define _GNU_SOURCE 		// For vasprintf
 #include <stdarg.h>		// For va_start, va_end
-#include <stdio.h>		// For fprintf, vasprintf
+#include <stdio.h>		// For vasprintf
 #include <stdlib.h>		// For free
 
 #include "swad_global.h"

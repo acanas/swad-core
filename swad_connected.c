@@ -25,10 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For fprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -83,6 +84,7 @@ void Con_ShowConnectedUsrs (void)
   {
    extern const char *Hlp_USERS_Connected;
    extern const char *Txt_Connected_users;
+   char *Title;
 
    /***** Contextual menu *****/
    if (Gbl.Usrs.Me.Logged)
@@ -98,12 +100,13 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Begin box *****/
    /* Current time */
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     "%s"
-	     "<div id=\"connected_current_time\"></div>",
-	     Txt_Connected_users);
-   Box_BoxBegin (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
+   if (asprintf (&Title,"%s"
+	                "<div id=\"connected_current_time\"></div>",
+	         Txt_Connected_users) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Con_PutIconToUpdateConnected,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
+   free (Title);
    Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
                                  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				 false,false,true,0x7);

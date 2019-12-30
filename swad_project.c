@@ -2275,7 +2275,7 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
       [Prj_ROLE_TUT] = ActAddTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActAddEvlPrj,	// Evaluator
      };
-   char TxtButton[Lay_MAX_BYTES_TITLE + 1];
+   char *TxtButton;
 
    /***** Get parameters *****/
    Prj_GetParams ();
@@ -2283,15 +2283,16 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Put form to select users *****/
-   snprintf (TxtButton,sizeof (TxtButton),
-	     Txt_Add_USERS,
-	     Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
+   if (asprintf (&TxtButton,Txt_Add_USERS,
+	         Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]) < 0)
+      Lay_NotEnoughMemoryExit ();
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
 				     ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton,
 				     false);	// Do not put form with date range
+   free (TxtButton);
 
    /***** Put a form to create/edit project *****/
    Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCod);

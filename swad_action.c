@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"

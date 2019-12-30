@@ -25,7 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -943,17 +945,16 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
    extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
-
-   /***** Part of a total and end container *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     "#%lu %s %lu",
-	     Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
+   char *Title;
 
    /***** Rank in form to go to ranking *****/
    Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Hie_SYS);
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
+   if (asprintf (&Title,"#%lu %s %lu",Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_BUTTON_SUBMIT_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
+   free (Title);
    HTM_TxtF ("#%lu",Rank);
    HTM_BUTTON_End ();
    Frm_EndForm ();
