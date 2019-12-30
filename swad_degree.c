@@ -763,11 +763,11 @@ static void Deg_ListDegrees (void)
    unsigned NumDeg;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Degrees_of_CENTRE_X,
-				       Gbl.Hierarchy.Ctr.ShrtName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
      {
@@ -945,11 +945,11 @@ static void Deg_EditDegreesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Degrees_of_CENTRE_X,
-				       Gbl.Hierarchy.Ctr.ShrtName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    if (Gbl.DegTypes.Num)
      {
@@ -1957,11 +1957,11 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
      {
       /***** Begin box and table *****/
       /* Number of degrees found */
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumDegs,
-						   (NumDegs == 1) ? Txt_degree :
-								    Txt_degrees),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumDegs,
+						      (NumDegs == 1) ? Txt_degree :
+								       Txt_degrees),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Write heading *****/
       Deg_PutHeadDegreesForSeeing ();

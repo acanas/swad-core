@@ -2924,51 +2924,51 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   }
 
 /*****************************************************************************/
-/******************* Build and free a message with format ********************/
+/******************** Build and free a text with format **********************/
 /*****************************************************************************/
 
-static char *Str_Msg = NULL;
+static char *Str_String = NULL;
 
-// FormatMsg must be a string including "%s"
+// fmt must be a string including "%s"
 // Str_FreeMsg() must be called after calling this function
 
-char *Str_BuildMsgStr (const char *fmt,const char *Str)
+char *Str_BuildStringStr (const char *fmt,const char *Str)
   {
-   Str_FreeMsg ();
-   if (asprintf (&Str_Msg,fmt,Str) < 0)
+   Str_FreeString ();
+   if (asprintf (&Str_String,fmt,Str) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   return Str_Msg;
+   return Str_String;
   }
 
-// FormatMsg must be a string including "%ld"
+// fmt must be a string including "%ld"
 // Str_FreeMsg() must be called after calling this function
 
-char *Str_BuildMsgLong (const char *fmt,long Num)
+char *Str_BuildStringLong (const char *fmt,long Num)
   {
-   Str_FreeMsg ();
-   if (asprintf (&Str_Msg,fmt,Num) < 0)
+   Str_FreeString ();
+   if (asprintf (&Str_String,fmt,Num) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   return Str_Msg;
+   return Str_String;
   }
 
 // Str_FreeMsg() must be called after calling this function
 
-char *Str_BuildMsgLongStr (long Num,const char *Str)
+char *Str_BuildStringLongStr (long Num,const char *Str)
   {
-   Str_FreeMsg ();
-   if (asprintf (&Str_Msg,"%ld %s",Num,Str) < 0)
+   Str_FreeString ();
+   if (asprintf (&Str_String,"%ld %s",Num,Str) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   return Str_Msg;
+   return Str_String;
   }
 
-void Str_FreeMsg (void)
+void Str_FreeString (void)
   {
-   if (Str_Msg != NULL)
+   if (Str_String != NULL)
      {
-      free (Str_Msg);
-      Str_Msg = NULL;
+      free (Str_String);
+      Str_String = NULL;
      }
   }

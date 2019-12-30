@@ -2407,7 +2407,6 @@ static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *C
   {
    extern const char *Txt_Countdown;
    char *OnSubmit;
-   char *Class;
    bool PutForm = Match->Status.Showing != Mch_END;
 
    if (PutForm)
@@ -2421,24 +2420,21 @@ static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *C
 	 Lay_NotEnoughMemoryExit ();
       Frm_StartFormOnSubmit (ActUnk,OnSubmit);
 
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK MCH_BUTTON_ON %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
      }
    else
      {
-      /***** Set class *****/
-      if (asprintf (&Class,"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",Color) < 0)
-	 Lay_NotEnoughMemoryExit ();
      }
 
    /***** Put icon *****/
    HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
 
-   if (PutForm)
-      HTM_BUTTON_SUBMIT_Begin (Txt_Countdown,Class,NULL);
-   else
-      HTM_BUTTON_BUTTON_Begin (NULL,Class,NULL);
+   HTM_BUTTON_SUBMIT_Begin (PutForm ? Txt_Countdown :
+				      NULL,
+			    Str_BuildStringStr (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
+				                          "BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
+						Color),
+			    NULL);
+   Str_FreeString ();
 
    HTM_NBSP ();
    if (Seconds >= 0)
@@ -2452,9 +2448,6 @@ static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *C
    HTM_BUTTON_End ();
 
    HTM_DIV_End ();
-
-   /***** Free class *****/
-   free (Class);
 
    /***** End form *****/
    if (PutForm)
@@ -2708,10 +2701,10 @@ static void Mch_ShowFormColumns (const struct Match *Match)
 
       /* Number of columns */
       Ico_PutSettingIconLink (NumColsIcon[NumCols],
-			      Str_BuildMsgLongStr ((long) NumCols,
-						   NumCols == 1 ? Txt_column :
-								  Txt_columns));
-      Str_FreeMsg ();
+			      Str_BuildStringLongStr ((long) NumCols,
+						      NumCols == 1 ? Txt_column :
+								     Txt_columns));
+      Str_FreeString ();
 
       /* End form */
       Frm_EndForm ();
@@ -3170,7 +3163,6 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    unsigned Color;
    unsigned BarWidth;
    char *Icon;
-   char *Title;
 
    /***** Compute color *****/
    /*
@@ -3223,16 +3215,14 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
    if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
       Lay_NotEnoughMemoryExit ();
-   if (asprintf (&Title,"%u %s",
-		 NumUsrs,
-		 NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
-		                Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
+	    Str_BuildStringLongStr ((long) NumUsrs,
+				    NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
+						   Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
 	    "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
-   HTM_TxtF ("&nbsp;%u",NumUsrs);
-   free (Title);
+   Str_FreeString ();
    free (Icon);
+   HTM_TxtF ("&nbsp;%u",NumUsrs);
    HTM_TD_End ();
 
    HTM_TR_End ();

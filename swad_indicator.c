@@ -25,9 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For aprintf
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_action.h"

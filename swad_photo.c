@@ -577,7 +577,6 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
    char FileNameTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
    char PathRelPhoto[PATH_MAX + 1];
-   char *Img;
    FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool WrongType = false;
@@ -784,11 +783,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
              Cfg_PATH_PHOTO_TMP_PUBLIC,
 	     Gbl.UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
-   if (asprintf (&Img,"%s_map.jpg",Gbl.UniqueNameEncrypted) < 0)
-      Lay_NotEnoughMemoryExit ();
-   HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_Faces_detected,
+   HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,
+	    Str_BuildStringStr ("%s_map.jpg",Gbl.UniqueNameEncrypted),
+	    Txt_Faces_detected,
 	    "usemap=\"#faces_map\"");
-   free (Img);
+   Str_FreeString ();
    HTM_DIV_End ();
 
    /***** End alert *****/

@@ -264,11 +264,11 @@ static void Ctr_ListCentres (void)
    unsigned NumCtr;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Centres_of_INSTITUTION_X,
-				       Gbl.Hierarchy.Ins.FullName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
+				          Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
@@ -476,11 +476,11 @@ static void Ctr_EditCentresInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Centres_of_INSTITUTION_X,
-				       Gbl.Hierarchy.Ins.FullName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
+				          Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsEditingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Put a form to create a new centre *****/
    Ctr_PutFormToCreateCentre ();
@@ -2003,11 +2003,11 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
      {
       /***** Begin box and table *****/
       /* Number of centres found */
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCtrs,
-						   (NumCtrs == 1) ? Txt_centre :
-	                                                            Txt_centres),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtrs,
+						      (NumCtrs == 1) ? Txt_centre :
+	                                                               Txt_centres),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Write heading *****/
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable

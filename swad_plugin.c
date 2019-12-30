@@ -28,10 +28,8 @@ TODO: Check if web service is called from an authorized IP.
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For fprintf, asprintf
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
@@ -98,7 +96,6 @@ void Plg_ListPlugins (void)
    unsigned NumPlg;
    struct Plugin *Plg;
    char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
-   char *Icon;
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {
@@ -141,12 +138,11 @@ void Plg_ListPlugins (void)
       HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
                    URL,Plg->Name);
-      if (asprintf (&Icon,"%s24x24.gif",
-		    Gbl.Plugins.Lst[NumPlg].Logo) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
+      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
+	       Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+	       Plg->Name,
 	       "class=\"ICO40x40\"");
-      free (Icon);
+      Str_FreeString ();
       HTM_A_End ();
       HTM_TD_End ();
 
@@ -383,7 +379,6 @@ static void Plg_ListPluginsForEdition (void)
   {
    unsigned NumPlg;
    struct Plugin *Plg;
-   char *Icon;
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -414,12 +409,11 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
       HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
-      if (asprintf (&Icon,"%s24x24.gif",
-		    Gbl.Plugins.Lst[NumPlg].Logo) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Gbl.Plugins.Lst[NumPlg].Name,
+      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
+	       Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+	       Gbl.Plugins.Lst[NumPlg].Name,
 	       "class=\"ICO40x40\"");
-      free (Icon);
+      Str_FreeString ();
       HTM_TD_End ();
 
       /* Plugin name */

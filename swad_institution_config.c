@@ -467,10 +467,10 @@ static void InsCfg_NumCtrs (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCtr);
    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildMsgStr (Txt_Centres_of_INSTITUTION_X,
-					     Gbl.Hierarchy.Ins.ShrtName),
+   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
+					        Gbl.Hierarchy.Ins.ShrtName),
 			    "BT_LINK DAT",NULL);
-   Str_FreeMsg ();
+   Str_FreeString ();
    HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();

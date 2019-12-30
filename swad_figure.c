@@ -4974,10 +4974,10 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		       FirstDayOfWeek) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 Ico_PutIcon (Icon,
-		      Str_BuildMsgStr (Txt_First_day_of_the_week_X,
-				       Txt_DAYS_SMALL[FirstDayOfWeek]),
+		      Str_BuildStringStr (Txt_First_day_of_the_week_X,
+				          Txt_DAYS_SMALL[FirstDayOfWeek]),
 		      "ICO40x40");
-	 Str_FreeMsg ();
+	 Str_FreeString ();
 	 free (Icon);
 	 HTM_TD_End ();
 

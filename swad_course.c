@@ -743,11 +743,11 @@ static void Crs_ListCourses (void)
    unsigned Year;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Courses_of_DEGREE_X,
-				       Gbl.Hierarchy.Deg.ShrtName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+				          Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
@@ -947,11 +947,11 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Courses_of_DEGREE_X,
-				       Gbl.Hierarchy.Deg.ShrtName),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+				          Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
@@ -2269,9 +2269,9 @@ static void Crs_PutButtonToRegisterInCrs (void)
    // If the course being edited is different to the current one...
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
-   Btn_PutCreateButton (Str_BuildMsgStr (Txt_Register_me_in_X,
-					 Crs_EditingCrs->ShrtName));
-   Str_FreeMsg ();
+   Btn_PutCreateButton (Str_BuildStringStr (Txt_Register_me_in_X,
+					    Crs_EditingCrs->ShrtName));
+   Str_FreeString ();
    Frm_EndForm ();
   }
 
@@ -2445,10 +2445,10 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      HTM_TxtF ("%s:",Str_BuildMsgStr (Txt_USER_in_COURSE,
-				       Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-							 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
-      Str_FreeMsg ();
+      HTM_TxtF ("%s:",Str_BuildStringStr (Txt_USER_in_COURSE,
+				          Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+							    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
+      Str_FreeString ();
       HTM_TH_End ();
 
       HTM_TR_End ();
@@ -2505,11 +2505,11 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
      {
       /***** Begin box and table *****/
       /* Number of courses found */
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCrss,
-						   (NumCrss == 1) ? Txt_course :
-								    Txt_courses),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCrss,
+						      (NumCrss == 1) ? Txt_course :
+								       Txt_courses),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);

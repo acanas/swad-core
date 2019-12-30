@@ -165,14 +165,12 @@ void Dat_PutSpanDateFormat (Dat_Format_t Format)
 
 void Dat_PutScriptDateFormat (Dat_Format_t Format)
   {
-   char *Id;
-
-   if (asprintf (&Id,"date_format_%u",(unsigned) Format) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
+   Dat_WriteLocalDateHMSFromUTC (Str_BuildStringLong ("date_format_%ld",
+						      (long) Format),
+				 Gbl.StartExecutionTimeUTC,
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);
-   free (Id);
+   Str_FreeString ();
   }
 
 /*****************************************************************************/

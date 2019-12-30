@@ -291,11 +291,11 @@ static void Ins_ListInstitutions (void)
    unsigned NumIns;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Institutions_of_COUNTRY_X,
-				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
      {
@@ -538,11 +538,11 @@ static void Ins_EditInstitutionsInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Institutions_of_COUNTRY_X,
-				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsEditingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
@@ -1968,11 +1968,11 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
      {
       /***** Begin box and table *****/
       /* Number of institutions found */
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumInss,
-						   NumInss == 1 ? Txt_institution :
-								  Txt_institutions),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumInss,
+						      NumInss == 1 ? Txt_institution :
+								     Txt_institutions),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

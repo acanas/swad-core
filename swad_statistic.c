@@ -230,10 +230,10 @@ void Sta_AskShowCrsHits (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Statistics_of_visits_to_the_course_X,
-				       Gbl.Hierarchy.Crs.ShrtName),NULL,
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Statistics_of_visits_to_the_course_X,
+				          Gbl.Hierarchy.Crs.ShrtName),NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,Grp_MY_GROUPS);
@@ -1494,10 +1494,10 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    HTM_TD_Begin ("class=\"LM\"");
    if (FirstRow > 1)
      {
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildMsgLong (Txt_Show_previous_X_clicks,
-						 (long) Gbl.Stat.RowsPerPage),
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
+						    (long) Gbl.Stat.RowsPerPage),
 			       "BT_LINK TIT_TBL",NULL);
-      Str_FreeMsg ();
+      Str_FreeString ();
       HTM_STRONG_Begin ();
       HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
       HTM_STRONG_End ();
@@ -1532,10 +1532,10 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    HTM_TD_Begin ("class=\"RM\"");
    if (LastRow < NumRows)
      {
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildMsgLong (Txt_Show_next_X_clicks,
-						 (long) Gbl.Stat.RowsPerPage),
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
+						    (long) Gbl.Stat.RowsPerPage),
 			       "BT_LINK TIT_TBL",NULL);
-      Str_FreeMsg ();
+      Str_FreeString ();
       HTM_STRONG_Begin ();
       HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
       HTM_STRONG_End ();

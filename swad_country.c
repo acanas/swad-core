@@ -537,7 +537,6 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
   {
    char *URL;
-   char *Icon;
 
    /***** Draw country map *****/
    if (Cty_CheckIfCountryMapExists (Cty))
@@ -546,12 +545,10 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
 		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	            Cty->Alpha2) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%s.png",
-		    Cty->Alpha2) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Cty->Name[Gbl.Prefs.Language],
+      HTM_IMG (URL,Str_BuildStringStr ("%s.png",Cty->Alpha2),
+	       Cty->Name[Gbl.Prefs.Language],
 	       "class=\"%s\"",Class);
-      free (Icon);
+      Str_FreeString ();
       free (URL);
      }
    else
@@ -2044,11 +2041,11 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
      {
       /***** Begin box and table *****/
       /* Number of countries found */
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumCtys,
-						   NumCtys == 1 ? Txt_country :
-								  Txt_countries),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtys,
+						      NumCtys == 1 ? Txt_country :
+								     Txt_countries),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Write heading *****/
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable

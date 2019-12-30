@@ -2818,7 +2818,6 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *ClassLink;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
@@ -2828,16 +2827,15 @@ void Usr_WriteLoggedUsrHead (void)
    /***** User's role *****/
    if (NumAvailableRoles == 1)
      {
-      if (asprintf (&ClassLink,"BT_LINK %s",The_ClassUsr[Gbl.Prefs.Theme]) < 0)
-	 Lay_NotEnoughMemoryExit ();
-
       Frm_StartForm (ActFrmRolSes);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Role,ClassLink,NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_Role,
+			       Str_BuildStringStr ("BT_LINK %s",
+						   The_ClassUsr[Gbl.Prefs.Theme]),
+			       NULL);
+      Str_FreeString ();
       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       HTM_BUTTON_End ();
       Frm_EndForm ();
-
-      free (ClassLink);
 
       HTM_Colon ();
      }
@@ -7390,13 +7388,13 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       /***** Begin box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
-      Box_BoxTableBegin (NULL,Str_BuildMsgLongStr ((long) NumUsrs,
-						   (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
-											 Txt_users[Sex]) :
-								       ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-											 Txt_ROLES_PLURAL_abc[Role][Sex])),
+      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumUsrs,
+						      (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+											    Txt_users[Sex]) :
+								          ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+											    Txt_ROLES_PLURAL_abc[Role][Sex])),
 			 NULL,NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeMsg ();
+      Str_FreeString ();
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;

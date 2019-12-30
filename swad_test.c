@@ -1841,9 +1841,9 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    Frm_StartForm (ActEnableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    Ico_PutIconLink ("eye-slash.svg",
-		    Str_BuildMsgStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
-				     TagTxt));
-   Str_FreeMsg ();
+		    Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
+				        TagTxt));
+   Str_FreeString ();
    Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -1860,9 +1860,9 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    Frm_StartForm (ActDisableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    Ico_PutIconLink ("eye.svg",
-		    Str_BuildMsgStr (Txt_Tag_X_allowed_Click_to_disable_it,
-				     TagTxt));
-   Str_FreeMsg ();
+		    Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
+				        TagTxt));
+   Str_FreeString ();
    Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -5089,10 +5089,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Begin box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
-      Box_BoxBegin (NULL,Str_BuildMsgLong (Txt_Question_code_X,Gbl.Test.QstCod),
+      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Gbl.Test.QstCod),
 		    Tst_PutIconToRemoveOneQst,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
-      Str_FreeMsg ();
+      Str_FreeString ();
      }
    else
       Box_BoxBegin (NULL,Txt_New_question,NULL,

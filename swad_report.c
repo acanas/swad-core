@@ -158,10 +158,10 @@ void Rep_ReqMyUsageReport (void)
    Frm_StartForm (ActSeeMyUsgRep);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Report_of_use_of_PLATFORM,
-				       Cfg_PLATFORM_SHORT_NAME),NULL,
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Report_of_use_of_PLATFORM,
+				          Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Header *****/
    Rep_TitleReport (NULL);	// NULL means do not write date
@@ -264,10 +264,10 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Report_of_use_of_PLATFORM,
-				       Cfg_PLATFORM_SHORT_NAME),NULL,
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Report_of_use_of_PLATFORM,
+				          Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Header *****/
    Rep_TitleReport (&Report->CurrentTimeUTC);
@@ -993,13 +993,13 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    long CrsCod;
 
    NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
-   fprintf (Gbl.F.Rep,"<li>%s %u %s",
-	    Str_BuildMsgStr (Txt_USER_in_COURSE,
-			     Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]),
+   fprintf (Gbl.F.Rep,"<li>");
+   fprintf (Gbl.F.Rep,Txt_USER_in_COURSE,
+	    Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+   fprintf (Gbl.F.Rep," %u %s",
 	    NumCrss,
 	    NumCrss == 1 ? Txt_course :
 			   Txt_courses);
-   Str_FreeMsg ();
 
    if (NumCrss)
      {

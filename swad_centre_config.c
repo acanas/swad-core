@@ -797,10 +797,10 @@ static void CtrCfg_NumDegs (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildMsgStr (Txt_Degrees_of_CENTRE_X,
-	                                     Gbl.Hierarchy.Ctr.ShrtName),
+   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+	                                        Gbl.Hierarchy.Ctr.ShrtName),
 			    "BT_LINK DAT",NULL);
-   Str_FreeMsg ();
+   Str_FreeString ();
    HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();

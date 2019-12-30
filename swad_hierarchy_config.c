@@ -25,9 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
-
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"

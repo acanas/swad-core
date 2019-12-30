@@ -624,10 +624,10 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 										      ActUp_IteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-up.svg",
-					   Str_BuildMsgStr (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-													Txt_Move_up_X,
-							    StrItemCod));
-	    Str_FreeMsg ();
+					   Str_BuildStringStr (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
+													   Txt_Move_up_X,
+							       StrItemCod));
+	    Str_FreeString ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -642,10 +642,10 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 										      ActDwnIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-down.svg",
-					   Str_BuildMsgStr (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-													Txt_Move_down_X,
-							    StrItemCod));
-	    Str_FreeMsg ();
+					   Str_BuildStringStr (LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
+													   Txt_Move_down_X,
+							       StrItemCod));
+	    Str_FreeString ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
@@ -659,9 +659,9 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 									       ActRgtIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-left.svg",
-					   Str_BuildMsgStr (Txt_Increase_level_of_X,
-							    StrItemCod));
-	    Str_FreeMsg ();
+					   Str_BuildStringStr (Txt_Increase_level_of_X,
+							       StrItemCod));
+	    Str_FreeString ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
@@ -676,9 +676,9 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 									       ActLftIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-right.svg",
-					   Str_BuildMsgStr (Txt_Decrease_level_of_X,
-							    StrItemCod));
-	    Str_FreeMsg ();
+					   Str_BuildStringStr (Txt_Decrease_level_of_X,
+							       StrItemCod));
+	    Str_FreeString ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);

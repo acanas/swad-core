@@ -2208,7 +2208,6 @@ void Att_RegisterMeAsStdInAttEvent (void)
    extern const char *Txt_Your_comment_has_been_updated;
    struct AttendanceEvent Att;
    bool Present;
-   char *CommentParamName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2222,11 +2221,10 @@ void Att_RegisterMeAsStdInAttEvent (void)
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
-      if (asprintf (&CommentParamName,"CommentStd%s",
-		    Gbl.Usrs.Me.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Par_GetParToHTML (CommentParamName,CommentStd,Cns_MAX_BYTES_TEXT);
-      free (CommentParamName);
+      Par_GetParToHTML (Str_BuildStringStr ("CommentStd%s",
+					    Gbl.Usrs.Me.UsrDat.EncryptedUsrCod),
+			CommentStd,Cns_MAX_BYTES_TEXT);
+      Str_FreeString ();
 
       if (Present ||
 	  CommentStd[0] ||
@@ -2271,7 +2269,6 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct UsrData UsrData;
-   char *CommentParamName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2337,11 +2334,10 @@ void Att_RegisterStudentsInAttEvent (void)
 	{
 	 /***** Get comments for this student *****/
 	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
-	 if (asprintf (&CommentParamName,"CommentTch%s",
-		       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EncryptedUsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Par_GetParToHTML (CommentParamName,CommentTch,Cns_MAX_BYTES_TEXT);
-	 free (CommentParamName);
+	 Par_GetParToHTML (Str_BuildStringStr ("CommentTch%s",
+					       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EncryptedUsrCod),
+			   CommentTch,Cns_MAX_BYTES_TEXT);
+	 Str_FreeString ();
 
 	 Present = !Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove;
 

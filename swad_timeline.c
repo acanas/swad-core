@@ -507,10 +507,10 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Query,Str_BuildMsgStr (Txt_Timeline_OF_A_USER,
-					   Gbl.Usrs.Other.UsrDat.FirstName),
+   TL_ShowTimeline (Query,Str_BuildStringStr (Txt_Timeline_OF_A_USER,
+					      Gbl.Usrs.Other.UsrDat.FirstName),
 		    NotCod);
-   Str_FreeMsg ();
+   Str_FreeString ();
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -1925,7 +1925,6 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
-   char *Class;
    char *Anchor = NULL;
    static const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
      {
@@ -2062,14 +2061,14 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	}
 
       /***** Icon and link to go to action *****/
-      if (asprintf (&Class,"BT_LINK %s ICO_HIGHLIGHT",
-		    The_ClassFormInBoxBold[Gbl.Prefs.Theme]) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],Class,NULL);
+      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],
+			       Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
+						   The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
+			       NULL);
       Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       HTM_BUTTON_End ();
-      free (Class);
+      Str_FreeString ();
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2778,9 +2777,9 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
    /* Put icon and text with link to show the first hidden comments */
    HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("angle-up.svg",
-			Str_BuildMsgLong (Txt_See_the_previous_X_COMMENTS,
-					  (long) NumInitialComments));
-   Str_FreeMsg ();
+			Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+					     (long) NumInitialComments));
+   Str_FreeString ();
    HTM_BUTTON_End ();
 
    /* End form */
@@ -2931,9 +2930,9 @@ static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_I
 	          " style=\"display:none;\"",	// Hidden
 		  IdComments);
    TL_PutIconToToggleComments (IdComments,"angle-up.svg",
-			       Str_BuildMsgLong (Txt_See_the_previous_X_COMMENTS,
-						 (long) NumInitialComments));
-   Str_FreeMsg ();
+			       Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+						    (long) NumInitialComments));
+   Str_FreeString ();
    HTM_DIV_End ();
   }
 
@@ -3123,9 +3122,9 @@ static void TL_PutDisabledIconShare (unsigned NumShared)
    if (NumShared)
      {
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
-		      Str_BuildMsgLong (Txt_TIMELINE_NOTE_Shared_by_X_USERS,
-					(long) NumShared));
-      Str_FreeMsg ();
+		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Shared_by_X_USERS,
+					   (long) NumShared));
+      Str_FreeString ();
      }
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
@@ -3145,9 +3144,9 @@ static void TL_PutDisabledIconFav (unsigned NumFavs)
    if (NumFavs)
      {
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
-		      Str_BuildMsgLong (Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
-					(long) NumFavs));
-      Str_FreeMsg ();
+		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
+					   (long) NumFavs));
+      Str_FreeString ();
      }
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,

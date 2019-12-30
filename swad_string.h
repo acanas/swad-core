@@ -136,9 +136,9 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length);
 void Str_Copy (char *Dst,const char *Src,size_t DstSize);
 void Str_Concat (char *Dst,const char *Src,size_t DstSize);
 
-char *Str_BuildMsgStr (const char *fmt,const char *Str);
-char *Str_BuildMsgLong (const char *fmt,long Num);
-char *Str_BuildMsgLongStr (long Num,const char *Str);
-void Str_FreeMsg (void);
+char *Str_BuildStringStr (const char *fmt,const char *Str);
+char *Str_BuildStringLong (const char *fmt,long Num);
+char *Str_BuildStringLongStr (long Num,const char *Str);
+void Str_FreeString (void);
 
 #endif

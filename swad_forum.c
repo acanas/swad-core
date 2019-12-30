@@ -1236,21 +1236,21 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   PstCod);
       Ico_PutIconLink (Enabled ? "eye.svg" :
 			         "eye-slash.svg",
-	               Str_BuildMsgLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-	        				   Txt_FORUM_Post_X_banned_Click_to_unban_it,
-					 (long) PstNum));
-      Str_FreeMsg ();
+	               Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+	        				      Txt_FORUM_Post_X_banned_Click_to_unban_it,
+					    (long) PstNum));
+      Str_FreeString ();
       Frm_EndForm ();
      }
    else
      {
       Ico_PutIcon (Enabled ? "eye.svg" :
 			     "eye-slash.svg",
-	           Str_BuildMsgLong (Enabled ? Txt_FORUM_Post_X_allowed :
-	        			       Txt_FORUM_Post_X_banned,
-				     (long) PstNum),
+	           Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed :
+	        			          Txt_FORUM_Post_X_banned,
+				        (long) PstNum),
 		   "ICO_HIDDEN ICO16x16");
-      Str_FreeMsg ();
+      Str_FreeString ();
      }
 
    /***** Form to remove post *****/

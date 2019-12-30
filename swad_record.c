@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>
 
@@ -2859,7 +2857,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    Rol_Role_t Role;
    unsigned RoleUnsigned;
    Usr_Sex_t Sex;
-   char *Label;
 
    HTM_TR_Begin (NULL);
 
@@ -3066,10 +3063,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      {
       /***** Form to select a sex *****/
       /* Label */
-      if (asprintf (&Label,"%s*",Txt_Sex) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM","",Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM","",
+		       Str_BuildStringStr ("%s*",Txt_Sex));
+      Str_FreeString ();
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3109,17 +3105,15 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_Surname_1;
-   char *Label;
 
    HTM_TR_Begin (NULL);
 
    /* Label */
    if (PutForm)
      {
-      if (asprintf (&Label,"%s*",Txt_Surname_1) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM","Surname1",Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM","Surname1",
+		       Str_BuildStringStr ("%s*",Txt_Surname_1));
+      Str_FreeString ();
      }
    else
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
@@ -3180,17 +3174,15 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_First_name;
-   char *Label;
 
    HTM_TR_Begin (NULL);
 
    /* Label */
    if (PutForm)
      {
-      if (asprintf (&Label,"%s*",Txt_First_name) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM","FirstName",Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM","FirstName",
+		       Str_BuildStringStr ("%s*",Txt_First_name));
+      Str_FreeString ();
      }
    else
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
@@ -3221,7 +3213,6 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
-   char *Label;
    unsigned NumCty;
 
    /***** If list of countries is empty, try to get it *****/
@@ -3237,10 +3228,9 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
    /* Label */
    if (PutForm)
      {
-      if (asprintf (&Label,"%s*",Txt_Country) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",
+		       Str_BuildStringStr ("%s*",Txt_Country));
+      Str_FreeString ();
      }
    else
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
@@ -3936,7 +3926,6 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   char *Label;
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
@@ -3957,10 +3946,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   if (asprintf (&Label,"%s*",Txt_Country) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
-   free (Label);
+   Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",
+		    Str_BuildStringStr ("%s*",Txt_Country));
+   Str_FreeString ();
 
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3996,10 +3984,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_TR_Begin (NULL);
 
    /* Label */
-   if (asprintf (&Label,"%s*",Txt_Institution) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",Label);
-   free (Label);
+   Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",
+		    Str_BuildStringStr ("%s*",Txt_Institution));
+   Str_FreeString ();
 
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -4038,10 +4025,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_TR_Begin (NULL);
 
       /* Label */
-      if (asprintf (&Label,"%s*",Txt_Centre) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
+		       Str_BuildStringStr ("%s*",Txt_Centre));
+      Str_FreeString ();
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -4078,10 +4064,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_TR_Begin (NULL);
 
       /* Label */
-      if (asprintf (&Label,"%s*",Txt_Department) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,Label);
-      free (Label);
+      Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,
+		       Str_BuildStringStr ("%s*",Txt_Department));
+      Str_FreeString ();
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
