@@ -264,11 +264,11 @@ static void Ctr_ListCentres (void)
    unsigned NumCtr;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Centres_of_INSTITUTION_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Centres_of_INSTITUTION_X,
 				       Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
@@ -476,11 +476,11 @@ static void Ctr_EditCentresInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Centres_of_INSTITUTION_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Centres_of_INSTITUTION_X,
 				       Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsEditingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Put a form to create a new centre *****/
    Ctr_PutFormToCreateCentre ();

@@ -1509,10 +1509,10 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
 	 Ico_PutIconLink (Grp->Open ? "unlock.svg" :
                 	              "lock.svg",
-                          Str_BuildStrMsg (Grp->Open ? Txt_Group_X_open_click_to_close_it :
+                          Str_BuildMsgStr (Grp->Open ? Txt_Group_X_open_click_to_close_it :
                         			       Txt_Group_X_closed_click_to_open_it,
 					   Grp->GrpName));
-	 Str_FreeStrMsg ();
+	 Str_FreeMsg ();
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1524,10 +1524,10 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
 	 Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
                 	                   "folder-red.svg",
-                          Str_BuildStrMsg (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
+                          Str_BuildMsgStr (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
 							    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
 					   Grp->GrpName));
-	 Str_FreeStrMsg ();
+	 Str_FreeMsg ();
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2381,10 +2381,10 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       HTM_TD_Begin ("class=\"BM\"");
    Ico_PutIconOff (Grp->Open ? "unlock.svg" :
         	               "lock.svg",
-	           Str_BuildStrMsg (Grp->Open ? Txt_Group_X_open :
+	           Str_BuildMsgStr (Grp->Open ? Txt_Group_X_open :
 						Txt_Group_X_closed,
 				    Grp->GrpName));
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
    HTM_TD_End ();
 
    /***** Group name *****/

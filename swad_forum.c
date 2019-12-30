@@ -1234,27 +1234,23 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   PstCod);
-
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-			  Txt_FORUM_Post_X_banned_Click_to_unban_it,
-	        PstNum);
       Ico_PutIconLink (Enabled ? "eye.svg" :
 			         "eye-slash.svg",
-	               Gbl.Title);
+	               Str_BuildMsgLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+	        				   Txt_FORUM_Post_X_banned_Click_to_unban_it,
+					 (long) PstNum));
+      Str_FreeMsg ();
       Frm_EndForm ();
      }
    else
      {
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Enabled ? Txt_FORUM_Post_X_allowed :
-			  Txt_FORUM_Post_X_banned,
-	        PstNum);
-      HTM_SPAN_Begin ("title=\"%s\"",Gbl.Title);	// TODO: Remove?
       Ico_PutIcon (Enabled ? "eye.svg" :
 			     "eye-slash.svg",
-	           Gbl.Title,"ICO_HIDDEN ICO16x16");
-      HTM_SPAN_End ();					// TODO: Remove?
+	           Str_BuildMsgLong (Enabled ? Txt_FORUM_Post_X_allowed :
+	        			       Txt_FORUM_Post_X_banned,
+				     (long) PstNum),
+		   "ICO_HIDDEN ICO16x16");
+      Str_FreeMsg ();
      }
 
    /***** Form to remove post *****/

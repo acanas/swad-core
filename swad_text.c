@@ -12464,25 +12464,25 @@ const char *Txt_Filter =	// As a noun
 	"Filtro";
 #endif
 
-const char *Txt_First_day_of_the_week =
+const char *Txt_First_day_of_the_week_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Primer dia de la setmana";
+	"Primer dia de la setmana: %s";
 #elif L==2	// de
-	"Erster Tag der Woche";
+	"Erster Tag der Woche: %s";
 #elif L==3	// en
-	"First day of the week";
+	"First day of the week: %s";
 #elif L==4	// es
-	"Primer d&iacute;a de la semana";
+	"Primer d&iacute;a de la semana: %s";
 #elif L==5	// fr
-	"Premier jour de la semaine";
+	"Premier jour de la semaine: %s";
 #elif L==6	// gn
-	"Primer d&iacute;a de la semana";	// Okoteve traducción
+	"Primer d&iacute;a de la semana: %s";	// Okoteve traducción
 #elif L==7	// it
-	"Primo giorno della settimana";
+	"Primo giorno della settimana: %s";
 #elif L==8	// pl
-	"Pierwszy dzie&nacute; tygodnia";
+	"Pierwszy dzie&nacute; tygodnia: %s";
 #elif L==9	// pt
-	"Primeiro dia da semana";
+	"Primeiro dia da semana: %s";
 #endif
 
 const char *Txt_First_name =
@@ -13053,46 +13053,46 @@ const char *Txt_FORUM_posts =
 	"posts";
 #endif
 
-const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Comentario %u permitido.";	// Necessita traduccio
+	"Comentario %ld permitido.";	// Necessita traduccio
 #elif L==2	// de
-	"Post %u allowed.";		// Need Übersetzung
+	"Post %ld allowed.";		// Need Übersetzung
 #elif L==3	// en
-	"Post %u allowed.";
+	"Post %ld allowed.";
 #elif L==4	// es
-	"Comentario %u permitido.";
+	"Comentario %ld permitido.";
 #elif L==5	// fr
-	"Post %u allowed.";		// Besoin de traduction
+	"Post %ld allowed.";		// Besoin de traduction
 #elif L==6	// gn
-	"Comentario %u permitido.";	// Okoteve traducción
+	"Comentario %ld permitido.";	// Okoteve traducción
 #elif L==7	// it
-	"Post %u autorizzato.";
+	"Post %ld autorizzato.";
 #elif L==8	// pl
-	"Post %u dozwolone.";
+	"Post %ld dozwolone.";
 #elif L==9	// pt
-	"Post %u permitido.";
+	"Post %ld permitido.";
 #endif
 
-const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Comentario %u permitido. Pulse para censurarlo.";	// Necessita traduccio
+	"Comentario %ld permitido. Pulse para censurarlo.";	// Necessita traduccio
 #elif L==2	// de
-	"Post %u allowed. Click to ban it.";			// Need Übersetzung
+	"Post %ld allowed. Click to ban it.";			// Need Übersetzung
 #elif L==3	// en
-	"Post %u allowed. Click to ban it.";
+	"Post %ld allowed. Click to ban it.";
 #elif L==4	// es
-	"Comentario %u permitido. Pulse para censurarlo.";
+	"Comentario %ld permitido. Pulse para censurarlo.";
 #elif L==5	// fr
-	"Post %u allowed. Click to ban it.";			// Besoin de traduction
+	"Post %ld allowed. Click to ban it.";			// Besoin de traduction
 #elif L==6	// gn
-	"Comentario %u permitido. Pulse para censurarlo.";	// Okoteve traducción
+	"Comentario %ld permitido. Pulse para censurarlo.";	// Okoteve traducción
 #elif L==7	// it
-	"Post %u autorizzato. Clicca per censurarlo.";
+	"Post %ld autorizzato. Clicca per censurarlo.";
 #elif L==8	// pl
-	"Post% u dozwolone. Kliknij, aby to zakazac.";
+	"Post %ld dozwolone. Kliknij, aby to zakazac.";
 #elif L==9	// pt
-	"Post %u permitido. Clique para censur&aacute;-lo.";
+	"Post %ld permitido. Clique para censur&aacute;-lo.";
 #endif
 
 const char *Txt_FORUM_Post_and_thread_removed =
@@ -13137,46 +13137,46 @@ const char *Txt_FORUM_Post_banned =
 	"Post n&atilde;o permitido.";
 #endif
 
-const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Comentario %u no permitido";	// Necessita traduccio
+	"Comentario %ld no permitido";	// Necessita traduccio
 #elif L==2	// de
-	"Post %u banned.";		// Need Übersetzung
+	"Post %ld banned.";		// Need Übersetzung
 #elif L==3	// en
-	"Post %u banned.";
+	"Post %ld banned.";
 #elif L==4	// es
-	"Comentario %u no permitido";
+	"Comentario %ld no permitido";
 #elif L==5	// fr
-	"Post %u banned.";		// Besoin de traduction
+	"Post %ld banned.";		// Besoin de traduction
 #elif L==6	// gn
-	"Comentario %u no permitido";	// Okoteve traducción
+	"Comentario %ld no permitido";	// Okoteve traducción
 #elif L==7	// it
-	"Post %u censurato.";
+	"Post %ld censurato.";
 #elif L==8	// pl
-	"Post %u zakazany.";
+	"Post %ld zakazany.";
 #elif L==9	// pt
-	"Post %u n&atilde;o permitido.";
+	"Post %ld n&atilde;o permitido.";
 #endif
 
-const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Comentario %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
+	"Comentario %ld no permitido. Pulse para permitirlo.";	// Necessita traduccio
 #elif L==2	// de
-	"Post %u banned. Click to unban it.";			// Need Übersetzung
+	"Post %ld banned. Click to unban it.";			// Need Übersetzung
 #elif L==3	// en
-	"Post %u banned. Click to unban it.";
+	"Post %ld banned. Click to unban it.";
 #elif L==4	// es
-	"Comentario %u no permitido. Pulse para permitirlo.";
+	"Comentario %ld no permitido. Pulse para permitirlo.";
 #elif L==5	// fr
-	"Post %u banned. Click to unban it.";			// Besoin de traduction
+	"Post %ld banned. Click to unban it.";			// Besoin de traduction
 #elif L==6	// gn
-	"Comentario %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
+	"Comentario %ld no permitido. Pulse para permitirlo.";	// Okoteve traducción
 #elif L==7	// it
-	"Post %u censurato. Clicca per autorizzarlo.";
+	"Post %ld censurato. Clicca per autorizzarlo.";
 #elif L==8	// pl
-	"Post %u zakazany.Kliknij, aby to odbanowac.";
+	"Post %ld zakazany.Kliknij, aby to odbanowac.";
 #elif L==9	// pt
-	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
+	"Post %ld n&atilde;o permitido. Clique para permiti-lo.";
 #endif
 
 const char *Txt_FORUM_Post_sent =
@@ -31614,7 +31614,7 @@ const char *Txt_Question =
 	"Quest&atilde;o";
 #endif
 
-const char *Txt_Question_code_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Question_code_X =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
 	"Pregunta amb codi %ld";
 #elif L==2	// de
@@ -38546,25 +38546,25 @@ const char *Txt_See_only_the_latest_COMMENTS =
 	"Ver apenas os &uacute;ltimos";
 #endif
 
-const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Veure els %u anteriors";
+	"Veure els %ld anteriors";
 #elif L==2	// de
-	"Siehe die vorherigen %u";
+	"Siehe die vorherigen %ld";
 #elif L==3	// en
-	"See the previous %u";
+	"See the previous %ld";
 #elif L==4	// es
-	"Ver los %u anteriores";
+	"Ver los %ld anteriores";
 #elif L==5	// fr
-	"Voir les %u pr&eacute;c&eacute;dents";
+	"Voir les %ld pr&eacute;c&eacute;dents";
 #elif L==6	// gn
-	"Ver los %u anteriores";	// Okoteve traducción
+	"Ver los %ld anteriores";	// Okoteve traducción
 #elif L==7	// it
-	"Vedi i precedente %u";
+	"Vedi i precedente %ld";
 #elif L==8	// pl
-	"Zobacz poprzednie %u";
+	"Zobacz poprzednie %ld";
 #elif L==9	// pt
-	"Ver os %u anteriores";
+	"Ver os %ld anteriores";
 #endif
 
 const char *Txt_Select_another_country =
@@ -39878,25 +39878,25 @@ const char *Txt_Show_more_recipients =
 	"Ver mais destinat&aacute;rios";
 #endif
 
-const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include %lu in the following sentences
+const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Mostrar %lu clics posteriores";	// Necessita traduccio
+	"Mostrar %ld clics posteriores";	// Necessita traduccio
 #elif L==2	// de
-	"Show next %lu clicks";			// Need Übersetzung
+	"Show next %ld clicks";			// Need Übersetzung
 #elif L==3	// en
-	"Show next %lu clicks";
+	"Show next %ld clicks";
 #elif L==4	// es
-	"Mostrar %lu clics posteriores";
+	"Mostrar %ld clics posteriores";
 #elif L==5	// fr
-	"Show next %lu clicks";			// Besoin de traduction
+	"Show next %ld clicks";			// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar %lu clics posteriores";	// Okoteve traducción
+	"Mostrar %ld clics posteriores";	// Okoteve traducción
 #elif L==7	// it
-	"Mostra %lu scatti seguenti";
+	"Mostra %ld scatti seguenti";
 #elif L==8	// pl
-	"Show next %lu clicks";			// Potrzebujesz tlumaczenie
+	"Show next %ld clicks";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Mostrar %lu cliques subsequentes";
+	"Mostrar %ld cliques subsequentes";
 #endif
 
 const char *Txt_Show_office_hours =
@@ -39920,25 +39920,25 @@ const char *Txt_Show_office_hours =
 	"Mostrar hor&aacute;rios tutor";
 #endif
 
-const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Mostrar %u clics anteriores";		// Necessita traduccio
+	"Mostrar %ld clics anteriores";		// Necessita traduccio
 #elif L==2	// de
-	"Show previous %u clicks";		// Need Übersetzung
+	"Show previous %ld clicks";		// Need Übersetzung
 #elif L==3	// en
-	"Show previous %u clicks";
+	"Show previous %ld clicks";
 #elif L==4	// es
-	"Mostrar %u clics anteriores";
+	"Mostrar %ld clics anteriores";
 #elif L==5	// fr
-	"Show previous %u clicks";		// Besoin de traduction
+	"Show previous %ld clicks";		// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar %u clics anteriores";		// Okoteve traducción
+	"Mostrar %ld clics anteriores";		// Okoteve traducción
 #elif L==7	// it
-	"Mostra %u scatti precedenti";
+	"Mostra %ld scatti precedenti";
 #elif L==8	// pl
-	"Show previous %u clicks";		// Potrzebujesz tlumaczenie
+	"Show previous %ld clicks";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Mostrar %u cliques anteriores";
+	"Mostrar %ld cliques anteriores";
 #endif
 
 const char *Txt_Show_questions =
@@ -50149,25 +50149,25 @@ const char *Txt_TIMELINE_NOTE_Favourite =
 	"Favorito";
 #endif
 
-const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Marcat com favorit per %u";
+	"Marcat com favorit per %ld";
 #elif L==2	// de
-	"Von %u vorgemerkt";
+	"Von %ld vorgemerkt";
 #elif L==3	// en
-	"Favourited by %u";
+	"Favourited by %ld";
 #elif L==4	// es
-	"Marcado como favorito por %u";
+	"Marcado como favorito por %ld";
 #elif L==5	// fr
-	"Ajout&eacute; aux favoris par %u";
+	"Ajout&eacute; aux favoris par %ld";
 #elif L==6	// gn
-	"Marcado como favorito por %u";	// Okoteve traducción
+	"Marcado como favorito por %ld";	// Okoteve traducción
 #elif L==7	// it
-	"Preferiti da %u";
+	"Preferiti da %ld";
 #elif L==8	// pl
-	"Dodane do ulubionych przez %u";
+	"Dodane do ulubionych przez %ld";
 #elif L==9	// pt
-	"Marcado como favorito por %u";
+	"Marcado como favorito por %ld";
 #endif
 
 const char *Txt_TIMELINE_NOTE_Shared =
@@ -50191,25 +50191,25 @@ const char *Txt_TIMELINE_NOTE_Shared =
 	"Compartilhado";
 #endif
 
-const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Compartit per %u";
+	"Compartit per %ld";
 #elif L==2	// de
-	"Von %u geteilt";
+	"Von %ld geteilt";
 #elif L==3	// en
-	"Shared by %u";
+	"Shared by %ld";
 #elif L==4	// es
-	"Compartido por %u";
+	"Compartido por %ld";
 #elif L==5	// fr
-	"Partag&eacute; par %u";
+	"Partag&eacute; par %ld";
 #elif L==6	// gn
-	"Compartido por %u";	// Okoteve traducción
+	"Compartido por %ld";	// Okoteve traducción
 #elif L==7	// it
-	"Condiviso da %u";
+	"Condiviso da %ld";
 #elif L==8	// pl
-	"Udost&eogon;pnione przez %u";
+	"Udost&eogon;pnione przez %ld";
 #elif L==9	// pt
-	"Compartilhado por %u";
+	"Compartilhado por %ld";
 #endif
 
 const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone =	// No longer shared

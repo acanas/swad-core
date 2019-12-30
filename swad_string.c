@@ -2924,27 +2924,40 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   }
 
 /*****************************************************************************/
-/************************** Build a string message ***************************/
+/******************* Build and free a message with format ********************/
 /*****************************************************************************/
+
+static char *Str_Msg = NULL;
+
 // FormatMsg must be a string including "%s"
-// Str_FreeStrMsg() must be called after calling this function
+// Str_FreeMsg() must be called after calling this function
 
-static char *Str_StrMsg = NULL;
-
-char *Str_BuildStrMsg (const char *FormatMsg,const char *Str)
+char *Str_BuildMsgStr (const char *fmt,const char *Str)
   {
-   Str_FreeStrMsg ();
-   if (asprintf (&Str_StrMsg,FormatMsg,Str) < 0)
+   Str_FreeMsg ();
+   if (asprintf (&Str_Msg,fmt,Str) < 0)
       Lay_NotEnoughMemoryExit ();
 
-   return Str_StrMsg;
+   return Str_Msg;
   }
 
-void Str_FreeStrMsg (void)
+// FormatMsg must be a string including "%ld"
+// Str_FreeMsg() must be called after calling this function
+
+char *Str_BuildMsgLong (const char *fmt,long Num)
   {
-   if (Str_StrMsg != NULL)
+   Str_FreeMsg ();
+   if (asprintf (&Str_Msg,fmt,Num) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   return Str_Msg;
+  }
+
+void Str_FreeMsg (void)
+  {
+   if (Str_Msg != NULL)
      {
-      free (Str_StrMsg);
-      Str_StrMsg = NULL;
+      free (Str_Msg);
+      Str_Msg = NULL;
      }
   }

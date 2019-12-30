@@ -111,12 +111,12 @@ void Dpt_SeeDepts (void)
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Str_BuildStrMsg (Txt_Departments_of_INSTITUTION_X,
+   Box_BoxTableBegin (NULL,Str_BuildMsgStr (Txt_Departments_of_INSTITUTION_X,
 					    Gbl.Hierarchy.Ins.FullName),
 		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
 							       NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -266,10 +266,10 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Departments_of_INSTITUTION_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Departments_of_INSTITUTION_X,
 				       Gbl.Hierarchy.Ins.FullName),NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Put a form to create a new department *****/
    Dpt_PutFormToCreateDepartment ();

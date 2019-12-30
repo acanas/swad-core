@@ -357,12 +357,12 @@ void Agd_ShowUsrAgenda (void)
 
 	 /***** Begin box *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Box_BoxBegin ("100%",Str_BuildStrMsg (Txt_Public_agenda_USER,
+	 Box_BoxBegin ("100%",Str_BuildMsgStr (Txt_Public_agenda_USER,
 		                               Gbl.Usrs.Other.UsrDat.FullName),
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
 			       Agd_PutIconsOtherPublicAgenda,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-         Str_FreeStrMsg ();
+         Str_FreeMsg ();
 
 	 /***** Show the current events in the user's agenda *****/
 	 Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -400,12 +400,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	   {
 	    /***** Begin box *****/
 	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Box_BoxBegin ("100%",Str_BuildStrMsg (Txt_Public_agenda_USER,
+	    Box_BoxBegin ("100%",Str_BuildMsgStr (Txt_Public_agenda_USER,
 		                                  Gbl.Usrs.Other.UsrDat.FullName),
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				  Agd_PutIconsOtherPublicAgenda,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-            Str_FreeStrMsg ();
+            Str_FreeMsg ();
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -1900,10 +1900,10 @@ void Agd_PrintAgdQRCode (void)
    extern const char *Txt_Where_s_USER;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Where_s_USER,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Where_s_USER,
 	                               Gbl.Usrs.Me.UsrDat.FullName),NULL,
                  NULL,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Print QR code ****/
    QR_PrintQRCode ();

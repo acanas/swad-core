@@ -158,10 +158,10 @@ void Rep_ReqMyUsageReport (void)
    Frm_StartForm (ActSeeMyUsgRep);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Report_of_use_of_PLATFORM,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Report_of_use_of_PLATFORM,
 				       Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Header *****/
    Rep_TitleReport (NULL);	// NULL means do not write date
@@ -264,10 +264,10 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Report_of_use_of_PLATFORM,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Report_of_use_of_PLATFORM,
 				       Cfg_PLATFORM_SHORT_NAME),NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Header *****/
    Rep_TitleReport (&Report->CurrentTimeUTC);
@@ -994,12 +994,12 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 
    NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
    fprintf (Gbl.F.Rep,"<li>%s %u %s",
-	    Str_BuildStrMsg (Txt_USER_in_COURSE,
+	    Str_BuildMsgStr (Txt_USER_in_COURSE,
 			     Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]),
 	    NumCrss,
 	    NumCrss == 1 ? Txt_course :
 			   Txt_courses);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    if (NumCrss)
      {

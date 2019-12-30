@@ -649,10 +649,10 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
                       UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
                                                           "USR_ID_NC",
-                      Str_BuildStrMsg (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+                      Str_BuildMsgStr (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
 									   Txt_ID_X_not_confirmed,
 				       UsrDat->IDs.List[NumID].ID));
-      Str_FreeStrMsg ();
+      Str_FreeMsg ();
       HTM_Txt (UsrDat->IDs.List[NumID].ID);
       HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
 		                                    "");

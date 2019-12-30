@@ -1309,9 +1309,9 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       if (Confirmed)
 	{
 	 Ico_PutIcon ("check-circle.svg",
-		      Str_BuildStrMsg (Txt_Email_X_confirmed,row[0]),
+		      Str_BuildMsgStr (Txt_Email_X_confirmed,row[0]),
 		      "ICO16x16");
-	 Str_FreeStrMsg ();
+	 Str_FreeMsg ();
 	}
 
       /* Form to change user's email */

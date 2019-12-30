@@ -507,10 +507,10 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Query,Str_BuildStrMsg (Txt_Timeline_OF_A_USER,
+   TL_ShowTimeline (Query,Str_BuildMsgStr (Txt_Timeline_OF_A_USER,
 					   Gbl.Usrs.Other.UsrDat.FirstName),
 		    NotCod);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -2776,11 +2776,11 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
      }
 
    /* Put icon and text with link to show the first hidden comments */
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_See_the_previous_X_COMMENTS,
-	     NumInitialComments);
    HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("angle-up.svg",Gbl.Title);
+   Ico_PutIconTextLink ("angle-up.svg",
+			Str_BuildMsgLong (Txt_See_the_previous_X_COMMENTS,
+					  (long) NumInitialComments));
+   Str_FreeMsg ();
    HTM_BUTTON_End ();
 
    /* End form */
@@ -2926,16 +2926,14 @@ static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_I
   {
    extern const char *Txt_See_the_previous_X_COMMENTS;
 
-   /***** Build text to show *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_See_the_previous_X_COMMENTS,
-	     NumInitialComments);
-
    /***** Icon and text to show only the latest comments ****/
    HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
 	          " style=\"display:none;\"",	// Hidden
 		  IdComments);
-   TL_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
+   TL_PutIconToToggleComments (IdComments,"angle-up.svg",
+			       Str_BuildMsgLong (Txt_See_the_previous_X_COMMENTS,
+						 (long) NumInitialComments));
+   Str_FreeMsg ();
    HTM_DIV_End ();
   }
 
@@ -3124,11 +3122,10 @@ static void TL_PutDisabledIconShare (unsigned NumShared)
    /***** Disabled icon to share *****/
    if (NumShared)
      {
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_TIMELINE_NOTE_Shared_by_X_USERS,
-		NumShared);
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
-		      Gbl.Title);
+		      Str_BuildMsgLong (Txt_TIMELINE_NOTE_Shared_by_X_USERS,
+					(long) NumShared));
+      Str_FreeMsg ();
      }
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
@@ -3147,11 +3144,10 @@ static void TL_PutDisabledIconFav (unsigned NumFavs)
    /***** Disabled icon to mark as favourite *****/
    if (NumFavs)
      {
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
-		NumFavs);
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
-		      Gbl.Title);
+		      Str_BuildMsgLong (Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
+					(long) NumFavs));
+      Str_FreeMsg ();
      }
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,

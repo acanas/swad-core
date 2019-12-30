@@ -788,10 +788,10 @@ char *Hie_BuildGoToMsg (const char *Where)
   {
    extern const char *Txt_Go_to_X;
 
-   return Str_BuildStrMsg (Txt_Go_to_X,Where);
+   return Str_BuildMsgStr (Txt_Go_to_X,Where);
   }
 
 void Hie_FreeGoToMsg (void)
   {
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
   }

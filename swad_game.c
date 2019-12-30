@@ -1871,9 +1871,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
 				        "arrow-up.svg",
-					Str_BuildStrMsg (Txt_Move_up_X,
+					Str_BuildMsgStr (Txt_Move_up_X,
 							 StrQstInd));
-	 Str_FreeStrMsg ();
+	 Str_FreeMsg ();
 	}
       else
          Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -1883,9 +1883,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
 				        "arrow-down.svg",
-					Str_BuildStrMsg (Txt_Move_down_X,
+					Str_BuildMsgStr (Txt_Move_down_X,
 							 StrQstInd));
-	 Str_FreeStrMsg ();
+	 Str_FreeMsg ();
 	}
       else
          Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);

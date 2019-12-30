@@ -743,11 +743,11 @@ static void Crs_ListCourses (void)
    unsigned Year;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Courses_of_DEGREE_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Courses_of_DEGREE_X,
 				       Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
@@ -947,11 +947,11 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Courses_of_DEGREE_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Courses_of_DEGREE_X,
 				       Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
@@ -2269,9 +2269,9 @@ static void Crs_PutButtonToRegisterInCrs (void)
    // If the course being edited is different to the current one...
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
-   Btn_PutCreateButton (Str_BuildStrMsg (Txt_Register_me_in_X,
+   Btn_PutCreateButton (Str_BuildMsgStr (Txt_Register_me_in_X,
 					 Crs_EditingCrs->ShrtName));
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
    Frm_EndForm ();
   }
 
@@ -2445,10 +2445,10 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      HTM_TxtF ("%s:",Str_BuildStrMsg (Txt_USER_in_COURSE,
+      HTM_TxtF ("%s:",Str_BuildMsgStr (Txt_USER_in_COURSE,
 				       Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
 							 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
-      Str_FreeStrMsg ();
+      Str_FreeMsg ();
       HTM_TH_End ();
 
       HTM_TR_End ();

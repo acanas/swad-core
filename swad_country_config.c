@@ -343,10 +343,10 @@ static void CtyCfg_NumInss (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeIns);
    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStrMsg (Txt_Institutions_of_COUNTRY_X,
+   HTM_BUTTON_SUBMIT_Begin (Str_BuildMsgStr (Txt_Institutions_of_COUNTRY_X,
 					     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 			    "BT_LINK DAT",NULL);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
    HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();

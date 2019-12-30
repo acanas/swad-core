@@ -291,11 +291,11 @@ static void Ins_ListInstitutions (void)
    unsigned NumIns;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Institutions_of_COUNTRY_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Institutions_of_COUNTRY_X,
 				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
      {
@@ -538,11 +538,11 @@ static void Ins_EditInstitutionsInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStrMsg (Txt_Institutions_of_COUNTRY_X,
+   Box_BoxBegin (NULL,Str_BuildMsgStr (Txt_Institutions_of_COUNTRY_X,
 				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsEditingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeStrMsg ();
+   Str_FreeMsg ();
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();

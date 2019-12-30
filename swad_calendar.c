@@ -106,7 +106,7 @@ static void Cal_PutIconsFirstDayOfWeek (void)
 
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (void))
   {
-   extern const char *Txt_First_day_of_the_week;
+   extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
    char Icon[32 + 1];
@@ -124,13 +124,13 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (vo
 	 Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           "%s: %s",
-	           Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
 	 snprintf (Icon,sizeof (Icon),
 	           "first-day-of-week-%u.png",
 	           FirstDayOfWeek);
-	 Ico_PutSettingIconLink (Icon,Gbl.Title);
+	 Ico_PutSettingIconLink (Icon,
+				 Str_BuildMsgStr (Txt_First_day_of_the_week_X,
+						  Txt_DAYS_SMALL[FirstDayOfWeek]));
+	 Str_FreeMsg ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
         }

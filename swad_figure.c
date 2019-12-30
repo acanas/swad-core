@@ -4921,14 +4921,13 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    extern const char *Hlp_ANALYTICS_Figures_calendar;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;
-   extern const char *Txt_First_day_of_the_week;
+   extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned FirstDayOfWeek;
    char *SubQuery;
    char *Icon;
-   char *Title;
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
@@ -4974,11 +4973,11 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 if (asprintf (&Icon,"first-day-of-week-%u.png",
 		       FirstDayOfWeek) < 0)
 	    Lay_NotEnoughMemoryExit ();
-	 if (asprintf (&Title,"%s: %s",
-		       Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Ico_PutIcon (Icon,Title,"ICO40x40");
-	 free (Title);
+	 Ico_PutIcon (Icon,
+		      Str_BuildMsgStr (Txt_First_day_of_the_week_X,
+				       Txt_DAYS_SMALL[FirstDayOfWeek]),
+		      "ICO40x40");
+	 Str_FreeMsg ();
 	 free (Icon);
 	 HTM_TD_End ();
 
