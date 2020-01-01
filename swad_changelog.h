@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2019 Antonio Cañas Vargas
+    Copyright (C) 1999-2020 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -492,16 +492,17 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.108.8 (2019-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.109 (2020-01-01)"
 #define CSS_FILE		"swad19.101.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
+// TODO: Version 19.1xx:   Jan xx, 2020	Map in country information. (? lines)
+// TODO: Version 19.1xx:   Jan xx, 2020	Map in institution information. (? lines)
 
-	Version 19.10x:   Dec 31, 2019	Map in country information. (? lines)
-	Version 19.10x:   Dec 31, 2019	Map in institution information. (? lines)
+	Version 19.109:   Jan 01, 2020	Changing action descriptions from database to swad-core. Not finished. (278686 lines)
 	Version 19.108.8: Dec 30, 2019	Code refactoring related to printing messages. (249700 lines)
 	Version 19.108.7: Dec 30, 2019	Code refactoring related to printing messages. (249674 lines)
 	Version 19.108.6: Dec 30, 2019	Code refactoring related to printing messages. (249717 lines)

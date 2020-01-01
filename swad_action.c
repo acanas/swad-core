@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2019 Antonio Cañas Vargas
+    Copyright (C) 1999-2020 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -94,15 +94,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 /*
-1380 actions in one CGI:
-	  0. ActAll			Any action (used for statistics)
-	  1. ActUnk			Unknown action
-	  2. ActMnu			Show menu of a tab
-	  3. ActRefCon			Refresh number of notifications and connected users via AJAX
-	  4. ActWebSvc			Call plugin function
-
 Start:
-          5. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
 	  6. ActReqSch			Request search in system tab
           7. ActSeeSocTmlGbl		Show social timeline (global)
           8. ActSeeSocPrf		Suggest list of users to follow
@@ -2000,7 +1992,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActPlaTxtEdiSylPra	] = { 389,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditPlainTxtInfo		,NULL},
    [ActPlaTxtEdiBib	] = { 377,-1,TabUnk,ActSeeBib		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditPlainTxtInfo		,NULL},
    [ActPlaTxtEdiFAQ	] = { 405,-1,TabUnk,ActSeeFAQ		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditPlainTxtInfo   	,NULL},
-   [ActPlaTxtEdiCrsLnk] = { 400,-1,TabUnk,ActSeeCrsLnk		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   [ActPlaTxtEdiCrsLnk	] = { 400,-1,TabUnk,ActSeeCrsLnk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditPlainTxtInfo		,NULL},
 
    [ActRchTxtEdiCrsInf	] = {1093,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditRichTxtInfo		,NULL},
    [ActRchTxtEdiTchGui	] = {1094,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_EditRichTxtInfo		,NULL},
@@ -2964,7 +2956,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRevNot		] = { 764,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RevealHiddenNotice		,Not_ListFullNotices		,NULL},
    [ActReqRemNot	] = {1472,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_RequestRemNotice		,NULL},
    [ActRemNot		] = {  73,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
-
 
    [ActSeeForCrsUsr	] = { 345,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
    [ActSeeForCrsTch	] = { 431,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},

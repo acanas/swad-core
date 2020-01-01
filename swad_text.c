@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2019 Antonio Cañas Vargas
+    Copyright (C) 1999-2020 Antonio Cañas Vargas
 
     Català translation:
 	Antonio Cañas Vargas
@@ -41069,19 +41069,19 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #if   L==1	// ca
 	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
 #elif L==2	// de
-	"proportional to the percentage of students with photo"		// Need Übersetzung
+	"proportional to the percentage of students with photo"			// Need Übersetzung
 #elif L==3	// en
 	"proportional to the percentage of students with photo"
 #elif L==4	// es
 	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	"proportional to the percentage of students with photo"		// Besoin de traduction
+	"proportional to the percentage of students with photo"			// Besoin de traduction
 #elif L==6	// gn
 	"proporcional al porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	"proporzionale alla percentuale di studenti con foto"
 #elif L==8	// pl
-	"proportional to the percentage of students with photo"		// Potrzebujesz tlumaczenie
+	"proportional to the percentage of students with photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"proporcional ao porcentagem de estudantes com foto"
 #endif
@@ -41234,7 +41234,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Numero di utenti distinti"
 #elif L==8	// pl
-	"Number of distinct users"			// Potrzebujesz tlumaczenie
+	"Number of distinct users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"N&uacute;mero de utilizadores diferentes"
 #endif
@@ -41276,7 +41276,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Tempo per generare pagina"
 #elif L==8	// pl
-	"Time to generate page"			// Potrzebujesz tlumaczenie
+	"Time to generate page"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Tempo para gerar p&aacute;gina"
 #endif
@@ -41342,7 +41342,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"numero di utenti distinti"
 #elif L==8	// pl
-	"number of distinct users"			// Potrzebujesz tlumaczenie
+	"number of distinct users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"n&uacute;mero de utilizadores diferentes"
 #endif
