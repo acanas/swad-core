@@ -95,14 +95,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /*
 Start:
-	  6. ActReqSch			Request search in system tab
-          7. ActSeeSocTmlGbl		Show social timeline (global)
-          8. ActSeeSocPrf		Suggest list of users to follow
-	  9. ActSeeCal			Show the academic calendar
-         10. ActSeeNtf			Show my recent notifications
-
-         11. ActLogIn			Authentify user internally (directly from the platform)
-         12. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
          13. ActLogInLan		Change language to my language just after authentication
          14. ActAnnSee			Mark announcement as seen
          15. ActReqSndNewPwd		Show form to send a new password via email

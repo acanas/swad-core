@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Version 19.1xx:   Jan xx, 2020	Map in country information. (? lines)
 // TODO: Version 19.1xx:   Jan xx, 2020	Map in institution information. (? lines)
 
+	Version 19.109.1: Jan 01, 2020	Changing action descriptions from database to swad-core. Not finished. (278680 lines)
 	Version 19.109:   Jan 01, 2020	Changing action descriptions from database to swad-core. Not finished. (278686 lines)
 	Version 19.108.8: Dec 30, 2019	Code refactoring related to printing messages. (249700 lines)
 	Version 19.108.7: Dec 30, 2019	Code refactoring related to printing messages. (249674 lines)
