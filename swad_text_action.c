@@ -91,11 +91,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show menu"
 #elif L==4	// es
-	"Ver men&uacute;"
+	"Mostrar men&uacute;"
 #elif L==5	// fr
 	"Show menu"					// Besoin de traduction
 #elif L==6	// gn
-	"Ver men&uacute;"				// Okoteve traducción
+	"Mostrar men&uacute;"				// Okoteve traducción
 #elif L==7	// it
 	"Show menu"					// Bisogno di traduzione
 #elif L==8	// pl
@@ -196,11 +196,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show timeline (global)"
 #elif L==4	// es
-	"Ver timeline (global)"
+	"Mostrar timeline (global)"
 #elif L==5	// fr
 	"Show timeline (global)"			// Besoin de traduction
 #elif L==6	// gn
-	"Ver timeline (global)"				// Okoteve traducción
+	"Mostrar timeline (global)"				// Okoteve traducción
 #elif L==7	// it
 	"Show timeline (global)"			// Bisogno di traduzione
 #elif L==8	// pl
@@ -238,11 +238,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show calendar"
 #elif L==4	// es
-	"Ver calendario"
+	"Mostrar calendario"
 #elif L==5	// fr
 	"Show calendar"					// Besoin de traduction
 #elif L==6	// gn
-	"Ver calendario"				// Okoteve traducción
+	"Mostrar calendario"				// Okoteve traducción
 #elif L==7	// it
 	"Show calendar"					// Bisogno di traduzione
 #elif L==8	// pl
@@ -259,11 +259,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show notifications"
 #elif L==4	// es
-	"Ver notificaciones"
+	"Mostrar notificaciones"
 #elif L==5	// fr
 	"Show notifications"				// Besoin de traduction
 #elif L==6	// gn
-	"Ver notificaciones"				// Okoteve traducción
+	"Mostrar notificaciones"			// Okoteve traducción
 #elif L==7	// it
 	"Show notifications"				// Bisogno di traduzione
 #elif L==8	// pl
@@ -316,1220 +316,1220 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActLogInLan] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change language after authentication"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change language after authentication"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change language after authentication"
 #elif L==4	// es
-	""
+	"Cambiar idioma tras autenticar"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change language after authentication"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar idioma tras autenticar"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change language after authentication"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change language after authentication"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change language after authentication"		// Precisa de tradução
 #endif
 	,
 	[ActAnnSee] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Mark announcement as seen"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Mark announcement as seen"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Mark announcement as seen"
 #elif L==4	// es
-	""
+	"Marcar anuncio como visto"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Mark announcement as seen"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar anuncio como visto"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Mark announcement as seen"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Mark announcement as seen"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Mark announcement as seen"			// Precisa de tradução
 #endif
 	,
 	[ActReqSndNewPwd] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request to send a new password"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request to send a new password"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request to send a new password"
 #elif L==4	// es
-	""
+	"Solicitar env&iacute;o de nueva contrase&ntilde;a"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request to send a new password"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar env&iacute;o de nueva contrase&ntilde;a"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request to send a new password"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request to send a new password"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request to send a new password"		// Precisa de tradução
 #endif
 	,
 	[ActSndNewPwd] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Send a new password"				// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Send a new password"				// Need Übersetzung
 #elif L==3	// en
-	""
+	"Send a new password"
 #elif L==4	// es
-	""
+	"Enviar nueva contrase&ntilde;a"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Send a new password"				// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar nueva contrase&ntilde;a"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Send a new password"				// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Send a new password"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Send a new password"				// Precisa de tradução
 #endif
 	,
 	[ActLogOut] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Close session"					// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Close session"					// Need Übersetzung
 #elif L==3	// en
-	""
+	"Close session"
 #elif L==4	// es
-	""
+	"Cerrar sesi&oacute;n"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Close session"					// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cerrar sesi&oacute;n"				// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Close session"					// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Close session"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Close session"					// Precisa de tradução
 #endif
 	,
 	[ActSch] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Search"					// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Search"					// Need Übersetzung
 #elif L==3	// en
-	""
+	"Search"
 #elif L==4	// es
-	""
+	"Buscar"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Search"					// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Buscar"					// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Search"					// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Search"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Search"					// Precisa de tradução
 #endif
 	,
 	[ActRefNewSocPubGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Refresh global timeline (new publications)"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Refresh global timeline (new publications)"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Refresh global timeline (new publications)"
 #elif L==4	// es
-	""
+	"Refrescar timeline global (nuevas publicaciones)"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Refresh global timeline (new publications)"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Refrescar timeline global (nuevas publicaciones)"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Refresh global timeline (new publications)"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Refresh global timeline (new publications)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Refresh global timeline (new publications)"	// Precisa de tradução
 #endif
 	,
 	[ActRefOldSocPubGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show previous publications in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show previous publications in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show previous publications in global timeline"
 #elif L==4	// es
-	""
+	"Mostrar publicaciones anteriores en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show previous publications in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar publicaciones anteriores en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show previous publications in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show previous publications in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show previous publications in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRcvSocPstGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Create post in global timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Create post in global timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create post in global timeline"
 #elif L==4	// es
-	""
+	"Crear post en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Create post in global timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear post en timeline global"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Create post in global timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Create post in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Create post in global timeline"		// Precisa de tradução
 #endif
 	,
 	[ActRcvSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Create comment in global timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Create comment in global timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create comment in global timeline"
 #elif L==4	// es
-	""
+	"Crear comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Create comment in global timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear comentario en timeline global"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Create comment in global timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Create comment in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Create comment in global timeline"		// Precisa de tradução
 #endif
 	,
 	[ActShoHidSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show hidden comments in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show hidden comments in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show hidden comments in global timeline"
 #elif L==4	// es
-	""
+	"Mostrar comentarios ocultos en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show hidden comments in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar comentarios ocultos en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show hidden comments in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show hidden comments in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show hidden comments in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActAllShaSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who shared a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who shared a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who shared a publication in global timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes compartieron una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who shared a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes compartieron una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who shared a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who shared a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who shared a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActAllFavSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who favourited a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who favourited a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who favourited a publication in global timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes marcaron como favorita una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who favourited a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes marcaron como favorita una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who favourited a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who favourited a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who favourited a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActAllFavSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who favourited a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who favourited a comment in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who favourited a comment in global timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes marcaron como favorito un comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who favourited a comment in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes marcaron como favorito un comentario en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who favourited a comment in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who favourited a comment in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who favourited a comment in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActShaSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Share a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Share a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Share a publication in global timeline"
 #elif L==4	// es
-	""
+	"Compartir una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Share a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Compartir una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Share a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Share a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Share a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActUnsSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unshare a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unshare a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unshare a publication in global timeline"
 #elif L==4	// es
-	""
+	"Dejar de compartir una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unshare a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de compartir una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unshare a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unshare a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unshare a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActFavSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Favourite a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Favourite a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Favourite a publication in global timeline"
 #elif L==4	// es
-	""
+	"Marcar como favorita una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Favourite a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar como favorita una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Favourite a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Favourite a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Favourite a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActUnfSocNotGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unfavourite a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unfavourite a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unfavourite a publication in global timeline"
 #elif L==4	// es
-	""
+	"Dejar de marcar como favorita una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unfavourite a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de marcar como favorita una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unfavourite a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unfavourite a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unfavourite a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActFavSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Favourite a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Favourite a comment in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Favourite a comment in global timeline"
 #elif L==4	// es
-	""
+	"Marcar como favorito un comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Favourite a comment in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar como favorito un comentario en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Favourite a comment in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Favourite a comment in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Favourite a comment in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActUnfSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unfavourite a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unfavourite a comment in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unfavourite a comment in global timeline"
 #elif L==4	// es
-	""
+	"Desmarcar como favorito un comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unfavourite a comment in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Desmarcar como favorito un comentario en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unfavourite a comment in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unfavourite a comment in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unfavourite a comment in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActReqRemSocPubGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request deletion of a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request deletion of a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request deletion of a publication in global timeline"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request deletion of a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request deletion of a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request deletion of a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request deletion of a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRemSocPubGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Delete a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Delete a publication in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Delete a publication in global timeline"
 #elif L==4	// es
-	""
+	"Eliminar una publicaci&oacute;n en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Delete a publication in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una publicaci&oacute;n en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Delete a publication in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Delete a publication in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Delete a publication in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActReqRemSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request deletion of a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request deletion of a comment in global timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request deletion of a comment in global timeline"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de un comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request deletion of a comment in global timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de un comentario en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request deletion of a comment in global timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request deletion of a comment in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request deletion of a comment in global timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRemSocComGbl] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Delete a comment in global timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Delete a comment in global timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Delete a comment in global timeline"
 #elif L==4	// es
-	""
+	"Eliminar un comentario en timeline global"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Delete a comment in global timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un comentario en timeline global"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Delete a comment in global timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Delete a comment in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Delete a comment in global timeline"		// Precisa de tradução
 #endif
 	,
 	[ActReqOthPubPrf] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request to show public user profile"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request to show public user profile"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request to show public user profile"
 #elif L==4	// es
-	""
+	"Solicitar mostrar perfil de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request to show public user profile"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar mostrar perfil de usuario"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request to show public user profile"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request to show public user profile"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request to show public user profile"		// Precisa de tradução
 #endif
 	,
 	[ActRefOldSocPubUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show previous publications in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show previous publications in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show previous publications in user timeline"
 #elif L==4	// es
-	""
+	"Mostrar publicaciones anteriores en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show previous publications in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar publicaciones anteriores en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show previous publications in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show previous publications in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show previous publications in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRcvSocPstUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Create post in user timeline"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Create post in user timeline"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create post in user timeline"
 #elif L==4	// es
-	""
+	"Crear post en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Create post in user timeline"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear post en timeline de usuario"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Create post in user timeline"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Create post in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Create post in user timeline"			// Precisa de tradução
 #endif
 	,
 	[ActRcvSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Create comment in user timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Create comment in user timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create comment in user timeline"
 #elif L==4	// es
-	""
+	"Crear comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Create comment in user timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Create comment in user timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Create comment in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Create comment in user timeline"		// Precisa de tradução
 #endif
 	,
 	[ActShoHidSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show hidden comments in user timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show hidden comments in user timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show hidden comments in user timeline"
 #elif L==4	// es
-	""
+	"Mostrar comentarios ocultos en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show hidden comments in user timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar comentarios ocultos en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show hidden comments in user timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show hidden comments in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show hidden comments in user timeline"		// Precisa de tradução
 #endif
 	,
 	[ActAllShaSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who shared a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who shared a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who shared a publication in user timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes compartieron una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who shared a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes compartieron una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who shared a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who shared a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who shared a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActAllFavSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who favourited a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who favourited a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who favourited a publication in user timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes marcaron como favorita una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who favourited a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes marcaron como favorita una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who favourited a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who favourited a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who favourited a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActAllFavSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show who favourited a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show who favourited a comment in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show who favourited a comment in user timeline"
 #elif L==4	// es
-	""
+	"Mostrar qui&eacute;nes marcaron como favorito un comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show who favourited a comment in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar qui&eacute;nes marcaron como favorito un comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show who favourited a comment in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show who favourited a comment in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show who favourited a comment in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActShaSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Share a publication in user timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Share a publication in user timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Share a publication in user timeline"
 #elif L==4	// es
-	""
+	"Compartir una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Share a publication in user timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Compartir una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Share a publication in user timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Share a publication in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Share a publication in user timeline"		// Precisa de tradução
 #endif
 	,
 	[ActUnsSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unshare a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unshare a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unshare a publication in user timeline"
 #elif L==4	// es
-	""
+	"Dejar de compartir una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unshare a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de compartir una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unshare a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unshare a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unshare a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActFavSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Favourite a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Favourite a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Favourite a publication in user timeline"
 #elif L==4	// es
-	""
+	"Marcar como favorita una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Favourite a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar como favorita una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Favourite a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Favourite a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Favourite a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActUnfSocNotUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unfavourite a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unfavourite a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unfavourite a publication in user timeline"
 #elif L==4	// es
-	""
+	"Dejar de marcar como favorita una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unfavourite a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de marcar como favorita una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unfavourite a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unfavourite a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unfavourite a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActFavSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Favourite a comment in user timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Favourite a comment in user timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Favourite a comment in user timeline"
 #elif L==4	// es
-	""
+	"Marcar como favorito un comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Favourite a comment in user timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar como favorito un comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Favourite a comment in user timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Favourite a comment in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Favourite a comment in user timeline"		// Precisa de tradução
 #endif
 	,
 	[ActUnfSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unfavourite a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unfavourite a comment in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unfavourite a comment in user timeline"
 #elif L==4	// es
-	""
+	"Desmarcar como favorito un comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unfavourite a comment in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Desmarcar como favorito un comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unfavourite a comment in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unfavourite a comment in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unfavourite a comment in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActReqRemSocPubUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request deletion of a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request deletion of a publication in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request deletion of a publication in user timeline"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request deletion of a publication in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request deletion of a publication in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request deletion of a publication in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request deletion of a publication in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRemSocPubUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Delete a publication in user timeline"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Delete a publication in user timeline"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Delete a publication in user timeline"
 #elif L==4	// es
-	""
+	"Eliminar una publicaci&oacute;n en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Delete a publication in user timeline"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una publicaci&oacute;n en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Delete a publication in user timeline"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Delete a publication in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Delete a publication in user timeline"		// Precisa de tradução
 #endif
 	,
 	[ActReqRemSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request deletion of a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request deletion of a comment in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request deletion of a comment in user timeline"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de un comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request deletion of a comment in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de un comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request deletion of a comment in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request deletion of a comment in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request deletion of a comment in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActRemSocComUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Delete a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Delete a comment in user timeline"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Delete a comment in user timeline"
 #elif L==4	// es
-	""
+	"Eliminar un comentario en timeline de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Delete a comment in user timeline"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un comentario en timeline de usuario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Delete a comment in user timeline"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Delete a comment in user timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Delete a comment in user timeline"	// Precisa de tradução
 #endif
 	,
 	[ActSeeOthPubPrf] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show user profile"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show user profile"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show user profile"
 #elif L==4	// es
-	""
+	"Mostrar perfil de usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show user profile"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar perfil de usuario"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show user profile"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show user profile"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show user profile"			// Precisa de tradução
 #endif
 	,
 	[ActCalFig] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Calculate user figures"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Calculate user figures"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Calculate user figures"
 #elif L==4	// es
-	""
+	"Calcular cifras de un usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Calculate user figures"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Calcular cifras de un usuario"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Calculate user figures"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Calculate user figures"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Calculate user figures"		// Precisa de tradução
 #endif
 	,
 	[ActFolUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Follow a user"				// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Follow a user"				// Need Übersetzung
 #elif L==3	// en
-	""
+	"Follow a user"
 #elif L==4	// es
-	""
+	"Seguir a un usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Follow a user"				// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Seguir a un usuario"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Follow a user"				// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Follow a user"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Follow a user"				// Precisa de tradução
 #endif
 	,
 	[ActUnfUsr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Unfollow a user"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Unfollow a user"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Unfollow a user"
 #elif L==4	// es
-	""
+	"Dejar de seguir a un usuario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Unfollow a user"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de seguir a un usuario"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Unfollow a user"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Unfollow a user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Unfollow a user"			// Precisa de tradução
 #endif
 	,
 	[ActSeeFlg] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show followed users"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show followed users"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show followed users"
 #elif L==4	// es
-	""
+	"Mostrar usuarios seguidos"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show followed users"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar usuarios seguidos"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show followed users"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show followed users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show followed users"			// Precisa de tradução
 #endif
 	,
 	[ActSeeFlr] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show followers"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show followers"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show followers"
 #elif L==4	// es
-	""
+	"Mostrar seguidores"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show followers"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar seguidores"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show followers"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show followers"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show followers"			// Precisa de tradução
 #endif
 	,
 	[ActPrnCal] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Print calendar"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Print calendar"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Print calendar"
 #elif L==4	// es
-	""
+	"Imprimir calendario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Print calendar"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Imprimir calendario"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Print calendar"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Print calendar"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Print calendar"			// Precisa de tradução
 #endif
 	,
 	[ActChgCal1stDay] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change first day of the week in calendar"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change first day of the week in calendar"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change first day of the week in calendar"
 #elif L==4	// es
-	""
+	"Cambiar primer d&iacute;a de la semana en calendario"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change first day of the week in calendar"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar primer d&iacute;a de la semana en calendario"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change first day of the week in calendar"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change first day of the week in calendar"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change first day of the week in calendar"	// Precisa de tradução
 #endif
 	,
 	[ActSeeNewNtf] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show notifications"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show notifications"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show notifications"
 #elif L==4	// es
-	""
+	"Mostrar notificaciones"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show notifications"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar notificaciones"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show notifications"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show notifications"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show notifications"			// Precisa de tradução
 #endif
 	,
 	[ActMrkNtfSee] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Mark notifications as seen"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Mark notifications as seen"		// Need Übersetzung
 #elif L==3	// en
-	""
+	"Mark notifications as seen"
 #elif L==4	// es
-	""
+	"Marcar notificaciones como vistas"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Mark notifications as seen"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Marcar notificaciones como vistas"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Mark notifications as seen"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Mark notifications as seen"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Mark notifications as seen"		// Precisa de tradução
 #endif
 	,
 	[ActSeeMai] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Show mail domains"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Show mail domains"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show mail domains"
 #elif L==4	// es
-	""
+	"Mostrar dominios de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Show mail domains"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar dominios de correo"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Show mail domains"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Show mail domains"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Show mail domains"			// Precisa de tradução
 #endif
 	,
 	[ActEdiMai] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Edit mail domains"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Edit mail domains"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit mail domains"
 #elif L==4	// es
-	""
+	"Editar dominios de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Edit mail domains"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar dominios de correo"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Edit mail domains"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Edit mail domains"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Edit mail domains"			// Precisa de tradução
 #endif
 	,
 	[ActNewMai] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Create email domain"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Create email domain"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create email domain"
 #elif L==4	// es
-	""
+	"Crear dominio de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Create email domain"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear dominio de correo"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Create email domain"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Create email domain"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Create email domain"			// Precisa de tradução
 #endif
 	,
 	[ActRemMai] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Remove email domain"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Remove email domain"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove email domain"
 #elif L==4	// es
-	""
+	"Eliminar dominio de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Remove email domain"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar dominio de correo"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Remove email domain"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Remove email domain"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Remove email domain"			// Precisa de tradução
 #endif
 	,
 	[ActRenMaiSho] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change email domain"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change email domain"			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change email domain"
 #elif L==4	// es
-	""
+	"Cambiar dominio de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change email domain"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar dominio de correo"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change email domain"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change email domain"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change email domain"			// Precisa de tradução
 #endif
 	,
 	[ActRenMaiFul] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change email domain information"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change email domain information"	// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change email domain information"
 #elif L==4	// es
-	""
+	"Cambiar informaci&oacute;n de dominio de correo"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change email domain information"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar informaci&oacute;n de dominio de correo"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change email domain information"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change email domain information"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change email domain information"	// Precisa de tradução
 #endif
 	,
 	[ActSeeCty] =
