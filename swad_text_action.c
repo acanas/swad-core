@@ -1538,7 +1538,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List countries"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1559,7 +1559,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List pending institutions, centres, degrees and courses in hierarchy"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1580,7 +1580,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"See institutional links"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1601,7 +1601,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List plugins"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1622,7 +1622,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Initial set up"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1643,7 +1643,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit countries"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1664,7 +1664,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1685,7 +1685,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1706,7 +1706,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the name of a country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1727,7 +1727,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1748,7 +1748,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the total removal of old courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1769,7 +1769,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove completely old courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1790,7 +1790,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"See banners"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1811,7 +1811,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit banners"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1832,7 +1832,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1853,7 +1853,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1874,7 +1874,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show a hidden banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1895,7 +1895,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide a visible banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1916,7 +1916,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the short name of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1937,7 +1937,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the full name of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1958,7 +1958,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the image of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -1979,7 +1979,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the web of a banner"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2000,7 +2000,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Go to a banner when clicked"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2021,7 +2021,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit institutional links"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2042,7 +2042,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of an institutional link"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2063,7 +2063,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of an institutional link"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2084,7 +2084,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the short name of an institutional link"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2105,7 +2105,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the full name of an institutional link"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2126,7 +2126,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the change of the web of an institutional link"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2147,7 +2147,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit plugins"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2168,7 +2168,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2189,7 +2189,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2210,7 +2210,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Rename a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2231,7 +2231,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the description of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2252,7 +2252,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the logo of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2273,7 +2273,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the application key of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2294,7 +2294,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the URL of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2315,7 +2315,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the IP address of a plugin"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2336,7 +2336,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show information on the current country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2357,7 +2357,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List institutions"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2378,7 +2378,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Print information on the current country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2399,7 +2399,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change map attribution of country"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2420,7 +2420,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit institutions"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2441,7 +2441,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a request for a new institution (a teacher makes the petition to an administrator)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2462,7 +2462,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of an institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2483,7 +2483,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2504,7 +2504,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name of institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2525,7 +2525,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name of institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2546,7 +2546,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2567,7 +2567,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of status of an institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2588,7 +2588,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show information on the current institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2609,7 +2609,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List centres"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2630,7 +2630,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List places"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2651,7 +2651,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List departments"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2672,7 +2672,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List holidays"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2693,7 +2693,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Print information on the current institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2714,7 +2714,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change country of institution in institution configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2735,7 +2735,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name of institution in institution configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2756,7 +2756,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name of institution in institution configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2777,7 +2777,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of institution in institution configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2798,7 +2798,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to send the logo of the current institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2819,7 +2819,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive and store the logo of the current institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2840,7 +2840,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove the logo of the current institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2861,7 +2861,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit centres"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2882,7 +2882,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a request for a new centre (a teacher makes the petition to an administrator)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2903,7 +2903,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2924,7 +2924,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2945,7 +2945,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the place of a centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2966,7 +2966,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2987,7 +2987,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3008,7 +3008,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3029,7 +3029,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of status of a centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3050,7 +3050,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit places"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3071,7 +3071,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a place"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3092,7 +3092,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a place"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3113,7 +3113,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name of a place"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3134,7 +3134,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name of a place"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3155,7 +3155,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit departments"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3176,7 +3176,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3197,7 +3197,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3218,7 +3218,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the institution of a department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3239,7 +3239,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3260,7 +3260,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3281,7 +3281,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3302,7 +3302,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit holidays"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3323,7 +3323,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3344,7 +3344,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3365,7 +3365,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change place of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3386,7 +3386,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change type of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3407,7 +3407,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change start date of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3428,7 +3428,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change end date of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3449,7 +3449,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change name of a holiday"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3470,7 +3470,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show information on the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3491,7 +3491,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List degrees in a centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3512,7 +3512,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List classrooms in a centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3533,7 +3533,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Print information on the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3554,7 +3554,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the institution of a centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3575,7 +3575,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3596,7 +3596,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3617,7 +3617,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change place of centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3638,7 +3638,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change latitude of centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3659,7 +3659,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change longitude of centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3680,7 +3680,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change altitude of centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3701,7 +3701,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change web of centre in centre configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3722,7 +3722,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to send the logo of the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3743,7 +3743,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive and store the logo of the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3764,7 +3764,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove the logo of the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3785,7 +3785,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to send the photo of the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3806,7 +3806,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive and store the photo of the current centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3827,7 +3827,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change attribution of centre photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3848,7 +3848,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List types of degrees"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3869,7 +3869,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request edition of types of degrees"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3890,7 +3890,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a type of degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3911,7 +3911,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a type of degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3932,7 +3932,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request renaming of a type of degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3953,7 +3953,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request edition of degrees of a type"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3974,7 +3974,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a request for a new degree (a teacher makes the petition to an administrator)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3995,7 +3995,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4016,7 +4016,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4037,7 +4037,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the short name of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4058,7 +4058,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the full name of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4079,7 +4079,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the type of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4100,7 +4100,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of the web of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4121,7 +4121,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request change of status of a degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4142,7 +4142,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit classrooms"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4163,7 +4163,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the creation of a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4184,7 +4184,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4205,7 +4205,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change short name of a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4226,7 +4226,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change full name of a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4247,7 +4247,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change number of students in a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4268,7 +4268,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change location of a classroom"
 #elif L==4	// es
 	""
 #elif L==5	// fr
