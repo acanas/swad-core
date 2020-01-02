@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.109.6 (2020-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 19.109.7 (2020-01-02)"
 #define CSS_FILE		"swad19.101.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Version 19.1xx:   Jan xx, 2020	Map in country information. (? lines)
 // TODO: Version 19.1xx:   Jan xx, 2020	Map in institution information. (? lines)
 
+	Version 19.109.7: Jan 02, 2020	Changing action descriptions from database to swad-core. Not finished. (278368 lines)
 	Version 19.109.6: Jan 02, 2020	Changing action descriptions from database to swad-core. Not finished. (278570 lines)
 	Version 19.109.5: Jan 02, 2020	Changed query in last clicks. (278708 lines)
 	Version 19.109.4: Jan 02, 2020	Code refactoring in actions. (278712 lines)

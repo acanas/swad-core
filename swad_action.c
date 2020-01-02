@@ -94,249 +94,35 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 /*
-Degree:
-	202. ActSeeDegInf		Show information on the current degree
-	203. ActSeeCrs			List courses of a degree
-
-	204. ActPrnDegInf		Print information on the current degree
-	205. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
-	206. ActRenDegShoCfg		Request change of the short name of a degree in degree configuration
-	207. ActRenDegFulCfg		Request change of the full name of a degree in degree configuration
-	208. ActChgDegWWWCfg		Request change of the web of a degree in degree configuration
-	209. ActReqDegLog		Show form to send the logo of the current degree
-	210. ActRecDegLog		Receive and store the logo of the current degree
-	211. ActRemDegLog		Remove the logo of the current degree
-
-	212. ActEdiCrs			Request edition of courses of a degree
-	213. ActReqCrs			Request the creation of a request for a new course (a teacher makes the petition to an administrator)
-	214. ActNewCrs			Request the creation of a course
-	215. ActRemCrs			Request the removal of a course
-	216. ActChgInsCrsCod		Request change of institutional code of a course
-	217. ActChgCrsYea		Request change of year of a course inside of its degree
-	218. ActRenCrsSho		Request change of short name of a course
-	219. ActRenCrsFul		Request change of full name of a course
-	220. ActChgCrsSta		Request change of status of a course
-
-Course:
-	221. ActSeeCrsInf		Show information on the current course
-	222. ActSeeTchGui		Show teaching guide of the course
-	223. ActSeeSyl			Show syllabus (lectures or practicals)
-	224. ActSeeSylLec		Show the syllabus of lectures
-	225. ActSeeSylPra		Show the syllabus of practicals
-	226. ActSeeBib			Show the bibliography
-	227. ActSeeFAQ			Show the FAQ
-	228. ActSeeCrsLnk		Show links related to the course
-	229. ActSeeCrsTT		Show the timetable
-
-	230. ActPrnCrsInf		Print information on the course
-	231. ActChgCrsDegCfg		Request change of degree in course configuration
-	232. ActRenCrsShoCfg		Request change of short name of a course in course configuration
-	233. ActRenCrsFulCfg		Request change of full name of a course in course configuration
-	234. ActChgInsCrsCodCfg		Change institutional code in course configuration
-	235. ActChgCrsYeaCfg		Change year/semester in course configuration
-	236. ActEdiCrsInf		Edit general information about the course
-	237. ActEdiTchGui		Edit teaching guide of the course
-	238. ActEdiSylLec		Edit the syllabus of lectures
-	239. ActEdiSylPra		Edit the syllabus of practicals
-	240. ActDelItmSylLec		Remove a item from syllabus of lectures
-	241. ActDelItmSylPra		Remove a item from syllabus of practicals
-	242. ActUp_IteSylLec		Subir the posición of a subtree of the syllabus of lectures
-	243. ActUp_IteSylPra		Subir the posición of a subtree of the syllabus of practicals
-	244. ActDwnIteSylLec		Bajar the posición of a subtree of the syllabus of lectures
-	245. ActDwnIteSylPra		Bajar the posición of a subtree of the syllabus of practicals
-	246. ActRgtIteSylLec		Aumentar the level of a item of the syllabus of lectures
-	247. ActRgtIteSylPra		Aumentar the level of a item of the syllabus of practicals
-	248. ActLftIteSylLec		Disminuir the level of a item of the syllabus of lectures
-	249. ActLftIteSylPra		Disminuir the level of a item of the syllabus of practicals
-	250. ActInsIteSylLec		Insertar a new item in the syllabus of lectures
-	251. ActInsIteSylPra		Insertar a new item in the syllabus of practicals
-	252. ActModIteSylLec		Modify a item of the syllabus of lectures
-	253. ActModIteSylPra		Modify a item of the syllabus of practicals
-
-	254. ActEdiBib			Edit the bibliography
-	255. ActEdiFAQ			Edit the FAQ
-	256. ActEdiCrsLnk		Edit the links relacionados with the course
-	257. ActChgFrcReaCrsInf		Change force students to read course info
-	258. ActChgFrcReaTchGui		Change force students to read teaching guide
-	259. ActChgFrcReaSylLec		Change force students to read lectures syllabus
-	260. ActChgFrcReaSylPra		Change force students to read practicals syllabus
-	261. ActChgFrcReaBib		Change force students to read bibliography
-	262. ActChgFrcReaFAQ		Change force students to read FAQ
-	263. ActChgFrcReaCrsLnk		Change force students to read links
-	264. ActChgHavReaCrsInf		Change if I have read course info
-	265. ActChgHavReaTchGui		Change if I have read teaching guide
-	266. ActChgHavReaSylLec		Change if I have read lectures syllabus
-	267. ActChgHavReaSylPra		Change if I have read practicals syllabus
-	268. ActChgHavReaBib		Change if I have read bibliography
-	269. ActChgHavReaFAQ		Change if I have read FAQ
-	270. ActChgHavReaCrsLnk		Change if I have read links
-	271. ActSelInfSrcCrsInf		Select the type of info shown in the general information about the course
-	272. ActSelInfSrcTchGui		Select the type of info shown in the teaching guide
-	273. ActSelInfSrcSylLec		Select the type of info shown in the lectures syllabus
-	274. ActSelInfSrcSylPra		Select the type of info shown in the practicals syllabus
-	275. ActSelInfSrcBib		Select the type of info shown in the bibliography
-	276. ActSelInfSrcFAQ		Select the type of info shown in the FAQ
-	277. ActSelInfSrcCrsLnk		Select the type of info shown in the links
-	278. ActRcvURLCrsInf		Receive a link a the general information about the course
-	279. ActRcvURLTchGui		Receive a link a the teaching guide
-	280. ActRcvURLSylLec		Receive a link al syllabus of lectures
-	281. ActRcvURLSylPra		Receive a link al syllabus of practicals
-	282. ActRcvURLBib		Receive a link a bibliography
-	283. ActRcvURLFAQ		Receive a link a FAQ
-	284. ActRcvURLCrsLnk		Receive a link a links
-	285. ActRcvPagCrsInf		Receive a page with the general information about the course
-	286. ActRcvPagTchGui		Receive a page with the teaching guide
-	287. ActRcvPagSylLec		Receive a page with the syllabus of lectures
-	288. ActRcvPagSylPra		Receive a page with the syllabus of practicals
-	289. ActRcvPagBib		Receive a page with bibliography
-	290. ActRcvPagFAQ		Receive a page with FAQ
-	291. ActRcvPagCrsLnk		Receive a page with links
-	292. ActEditorCrsInf		Integrated editor of the general information about the course
-	293. ActEditorTchGui		Integrated editor of the teaching guide
-	294. ActEditorSylLec		Integrated editor of the syllabus of lectures
-	295. ActEditorSylPra		Integrated editor of the syllabus of practicals
-	296. ActEditorBib		Integrated editor of bibliography
-	297. ActEditorFAQ		Integrated editor of FAQ
-	298. ActEditorCrsLnk		Integrated editor of links
-	299. ActPlaTxtEdiCrsInf		Editor of plain text of the general information about the course
-	300. ActPlaTxtEdiTchGui		Editor of plain text of the teaching guide
-	301. ActPlaTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	302. ActPlaTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	303. ActPlaTxtEdiBib		Editor of plain text of the bibliography
-	304. ActPlaTxtEdiFAQ		Editor of plain text of the FAQ
-	305. ActPlaTxtEdiCrsLnk		Editor of plain text of the links
-	306. ActRchTxtEdiCrsInf		Editor of plain text of the general information about the course
-	307. ActRchTxtEdiTchGui		Editor of plain text of the teaching guide
-	308. ActRchTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	309. ActRchTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	310. ActRchTxtEdiBib		Editor of plain text of the bibliography
-	311. ActRchTxtEdiFAQ		Editor of plain text of the FAQ
-	312. ActRchTxtEdiCrsLnk		Editor of plain text of the links
-	313. ActRcvPlaTxtCrsInf		Receive and change the plain text of the general information about the course
-	314. ActRcvPlaTxtTchGui		Receive and change the plain text of the teaching guide
-	315. ActRcvPlaTxtSylLec		Receive and change the plain text of the syllabus of lectures
-	316. ActRcvPlaTxtSylPra		Receive and change the plain text of the syllabus of practicals
-	317. ActRcvPlaTxtBib		Receive and change the plain text of the bibliography
-	318. ActRcvPlaTxtFAQ		Receive and change the plain text of the FAQ
-	319. ActRcvPlaTxtCrsLnk		Receive and change the plain text of the links
-	320. ActRcvPlaTxtCrsInf		Receive and change the rich text of the general information about the course
-	321. ActRcvPlaTxtTchGui		Receive and change the rich text of the teaching guide
-	322. ActRcvPlaTxtSylLec		Receive and change the rich text of the syllabus of lectures
-	323. ActRcvPlaTxtSylPra		Receive and change the rich text of the syllabus of practicals
-	324. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
-	325. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
-	326. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
-
-	327. ActPrnCrsTT		Show print view of the timetable
-	328. ActEdiCrsTT		Edit the timetable
-	329. ActChgCrsTT		Modify the timetable of the course
-        330. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
-
 Assessment:
-	331. ActSeeAss			Show the assessment system
-	332. ActSeeAsg			Show assignments
-	333. ActSeePrj			Show projects
-	334. ActReqTst			Request a test of self-assesment
-        335. ActSeeAllGam		Remote control
-        336. ActSeeAllSvy		List all surveys in pages
-	337. ActSeeAllExaAnn		Show the exam announcements
 
-	338. ActEdiAss			Edit the assessment system
-	339. ActChgFrcReaAss		Change force students to read assessment system
-	340. ActChgHavReaAss		Change if I have read assessment system
-	341. ActSelInfSrcAss		Selec. type of assessment
-	342. ActRcvURLAss		Receive a link a assessment
-	343. ActRcvPagAss		Receive a page with assessment
-	344. ActEditorAss		Integrated editor of assessment
-	345. ActPlaTxtEdiAss		Editor of plain text of assessment
-	346. ActRchTxtEdiAss		Editor of rich text of assessment
-	347. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
-	348. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
+        403. ActConDocPrj
+        404. ActZIPDocPrj
+        405. ActReqDatDocPrj
+        406. ActChgDatDocPrj
+        407. ActDowDocPrj
 
-	349. ActFrmNewAsg		Form to create a new assignment
-	350. ActEdiOneAsg		Edit one assignment
-	351. ActPrnOneAsg		Print one assignment
-	352. ActNewAsg			Create new assignment
-	353. ActChgAsg			Modify data of an existing assignment
-	354. ActReqRemAsg		Request the removal of an assignment
-	355. ActRemAsg			Remove assignment
-	356. ActHidAsg			Hide assignment
-	357. ActShoAsg			Show assignment
+	408. ActAdmAssPrj
+        409. ActReqRemFilAssPrj
+        410. ActRemFilAssPrj
+        411. ActRemFolAssPrj
+        412. ActCopAssPrj
+        413. ActPasAssPrj
+        414. ActRemTreAssPrj
+        415. ActFrmCreAssPrj
+        416. ActCreFolAssPrj
+        417. ActCreLnkAssPrj
+        418. ActRenFolAssPrj
+        419. ActRcvFilAssPrjDZ
+        420. ActRcvFilAssPrjCla
+        421. ActExpAssPrj
+        422. ActConAssPrj
+        423. ActZIPAssPrj
+        424. ActReqDatAssPrj
+        425. ActChgDatAssPrj
+        426. ActDowAssPrj
 
-        358. ActReqUsrPrj		Select users to list their projects
-	359. ActSeeTblAllPrj		Show all projects in a table
-	360. ActCfgPrj			Configure all projects
-	361. ActRcvCfgPrj		Receive configuration of all projects
-	362. ActReqLckAllPrj		Request locking of all projects
-	363. ActReqUnlAllPrj		Request unlocking of all projects
-	364. ActLckAllPrj		Lock all projects
-	365. ActUnlAllPrj		Unlock all projects
-
-	366. ActFrmNewPrj		Form to create a new project
-	367. ActEdiOnePrj		Edit one project
-	368. ActPrnOnePrj		Print one project
-	369. ActNewPrj			Create new project
-	370. ActChgPrj			Modify data of an existing project
-	371. ActReqRemPrj		Request the removal of an project
-	372. ActRemPrj			Remove project
-	373. ActHidPrj			Hide project
-	374. ActShoPrj			Show project
-	375. ActLckPrj			Lock project edition
-	376. ActUnlPrj			Unlock project edition
-	377. ActReqAddStdPrj		Request adding a student to a project
-	378. ActReqAddTutPrj		Request adding a tutor to a project
-	379. ActReqAddEvlPrj		Request adding an evaluator to a project
-	380. ActAddStdPrj		Add a student to a project
-	381. ActAddTutPrj		Add a tutor to a project
-	382. ActAddEvlPrj		Add an evaluator to a project
-	383. ActReqRemStdPrj		Request removing a student from a project
-	384. ActReqRemTutPrj		Request removing a tutor from a project
-	385. ActReqRemEvlPrj		Request removing an evaluator from a project
-	386. ActRemStdPrj		Remove a student from a project
-	387. ActRemTutPrj		Remove a tutor from a project
-	388. ActRemEvlPrj		Remove an emulator from a project
-
-	389. ActAdmDocPrj		Admin. project documents
-        390. ActReqRemFilDocPrj		Request removal of a file from project documents
-        391. ActRemFilDocPrj		Remove a file from project documents
-        392. ActRemFolDocPrj		Remove an empty folder from project documents
-        393. ActCopDocPrj		Set source of copy in project documents
-        394. ActPasDocPrj		Paste a folder or file into project documents
-        395. ActRemTreDocPrj		Remove a non empty folder from project documents
-        396. ActFrmCreDocPrj		Form to create a folder or file in project documents
-        397. ActCreFolDocPrj		Create a new folder in project documents
-        398. ActCreLnkDocPrj		Create a new link in project documents
-        399. ActRenFolDocPrj		Rename a folder in project documents
-        400. ActRcvFilDocPrjDZ		Receive a file in project documents using Dropzone.js
-        401. ActRcvFilDocPrjCla		Receive a file in project documents using the classic way
-        402. ActExpDocPrj		Expand a folder in project documents
-        403. ActConDocPrj		Contract a folder in project documents
-        404. ActZIPDocPrj		Compress a folder in project documents
-        405. ActReqDatDocPrj		Ask for metadata of a file in project documents
-        406. ActChgDatDocPrj		Change metadata of a file in project documents
-        407. ActDowDocPrj		Download a file from project documents
-
-	408. ActAdmAssPrj		Admin. project assessment
-        409. ActReqRemFilAssPrj		Request removal of a file from project assessment
-        410. ActRemFilAssPrj		Remove a file from project assessment
-        411. ActRemFolAssPrj		Remove an empty folder from project assessment
-        412. ActCopAssPrj		Set source of copy in project assessment
-        413. ActPasAssPrj		Paste a folder or file into project assessment
-        414. ActRemTreAssPrj		Remove a non empty folder from project assessment
-        415. ActFrmCreAssPrj		Form to create a folder or file in project assessment
-        416. ActCreFolAssPrj		Create a new folder in project assessment
-        417. ActCreLnkAssPrj		Create a new link in project assessment
-        418. ActRenFolAssPrj		Rename a folder in project assessment
-        419. ActRcvFilAssPrjDZ		Receive a file in project assessment using Dropzone.js
-        420. ActRcvFilAssPrjCla		Receive a file in project assessment using the classic way
-        421. ActExpAssPrj		Expand a folder in project assessment
-        422. ActConAssPrj		Contract a folder in project assessment
-        423. ActZIPAssPrj		Compress a folder in project assessment
-        424. ActReqDatAssPrj		Ask for metadata of a file in project assessment
-        425. ActChgDatAssPrj		Change metadata of a file in project assessment
-        426. ActDowAssPrj		Download a file from project assessment
-
-	427. ActSeeTst			Show the seft-assessment test
+	427. ActSeeTst
 	428. ActAssTst			Assess a self-assessment test
 	429. ActEdiTstQst		Request the edition of self-assessment questions
 	430. ActEdiOneTstQst		Edit one self-assesment test question
