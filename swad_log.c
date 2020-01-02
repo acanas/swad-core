@@ -231,6 +231,7 @@ void Log_GetAndShowLastClicks (void)
    unsigned long NumRow;
    unsigned long NumRows;
    long ActCod;
+   Act_Action_t Action;
    const char *ClassRow;
    time_t TimeDiff;
    struct Country Cty;
@@ -239,23 +240,18 @@ void Log_GetAndShowLastClicks (void)
    struct Degree Deg;
 
    /***** Get last clicks from database *****/
-   /* Important for maximum performance:
-      do the LIMIT in the big log table before the JOIN */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",
-			     "SELECT last_logs.LogCod,last_logs.ActCod,"
-			     "last_logs.Dif,last_logs.Role,"
-			     "last_logs.CtyCod,last_logs.InsCod,"
-			     "last_logs.CtrCod,last_logs.DegCod,"
-			     "actions.Txt"
-			     " FROM"
-			     " (SELECT LogCod,ActCod,"
-			     "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
-			     "Role,CtyCod,InsCod,CtrCod,DegCod"
-			     " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
-			     " AS last_logs LEFT JOIN actions"	// LEFT JOIN because action may be not present in table of actions
-			     " ON last_logs.ActCod=actions.ActCod"
-			     " WHERE actions.Language='es'"	// TODO: Change to user's language
-			     " OR actions.Language IS NULL");	// When action is not present in table of actions
+			     "SELECT LogCod,"				// row[0]
+			            "ActCod,"				// row[1]
+			            "UNIX_TIMESTAMP()-"
+			            "UNIX_TIMESTAMP(ClickTime),"	// row[2]
+			            "Role,"				// row[3]
+			            "CtyCod,"				// row[4]
+			            "InsCod,"				// row[5]
+			            "CtrCod,"				// row[6]
+			            "DegCod"				// row[7]
+			     " FROM log_recent"
+			     " ORDER BY LogCod DESC LIMIT 20");
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);
@@ -280,9 +276,10 @@ void Log_GetAndShowLastClicks (void)
 
       /* Get action code (row[1]) */
       ActCod = Str_ConvertStrCodToLongCod (row[1]);
+      Action = Act_GetActionFromActCod (ActCod);
 
       /* Use a special color for this row depending on the action */
-      ClassRow = (Act_GetBrowserTab (Act_GetActionFromActCod (ActCod)) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
+      ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
 	         (ActCod == Act_GetActCod (ActLogIn   ) ||
 	          ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
                  (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
@@ -313,38 +310,36 @@ void Log_GetAndShowLastClicks (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
-      HTM_Txt (row[0]);				// Click
+      HTM_Txt (row[0]);					// Click
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);		// Elapsed time
+      HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);	// Elapsed time
       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
-      HTM_Txt (					// Role
+      HTM_Txt (						// Role
 	       Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
-      HTM_Txt (Cty.Name[Gbl.Prefs.Language]);	// Country
+      HTM_Txt (Cty.Name[Gbl.Prefs.Language]);		// Country
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
-      HTM_Txt (Ins.ShrtName);			// Institution
+      HTM_Txt (Ins.ShrtName);				// Institution
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-      HTM_Txt (Ctr.ShrtName);			// Centre
+      HTM_Txt (Ctr.ShrtName);				// Centre
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-      HTM_Txt (Deg.ShrtName);			// Degree
+      HTM_Txt (Deg.ShrtName);				// Degree
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
-      if (row[8])
-	 if (row[8][0])
-	    HTM_Txt (row[8]);			// Action
+      HTM_Txt (Act_GetActionText (Action));		// Action
       HTM_TD_End ();
 
       HTM_TR_End ();

@@ -190,23 +190,23 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeSocTmlGbl] =
 #if   L==1	// ca
-	"Show timeline (global)"			// Necessita traducció
+	"Show timeline global"				// Necessita traducció
 #elif L==2	// de
-	"Show timeline (global)"			// Need Übersetzung
+	"Show timeline global"				// Need Übersetzung
 #elif L==3	// en
-	"Show timeline (global)"
+	"Show timeline global"
 #elif L==4	// es
-	"Mostrar timeline (global)"
+	"Mostrar timeline global"
 #elif L==5	// fr
-	"Show timeline (global)"			// Besoin de traduction
+	"Show timeline global"				// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar timeline (global)"				// Okoteve traducción
+	"Mostrar timeline global"			// Okoteve traducción
 #elif L==7	// it
-	"Show timeline (global)"			// Bisogno di traduzione
+	"Show timeline global"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Show timeline (global)"			// Potrzebujesz tlumaczenie
+	"Show timeline global"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show timeline (global)"			// Precisa de tradução
+	"Show timeline global"				// Precisa de tradução
 #endif
 	,
 	[ActSeeSocPrf] =

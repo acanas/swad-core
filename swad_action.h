@@ -1699,7 +1699,6 @@ const char *Act_GetIcon (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
 const char *Act_GetActionText (Act_Action_t Action);
-const char *Act_GetActionTextFromDB (long ActCod);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);

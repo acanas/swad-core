@@ -4984,6 +4984,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
+static const char *Act_GetActionTextFromDB (long ActCod);	// TODO: Remove when database table actions is removed
+
 /*****************************************************************************/
 /****************** Get action from permanent action code ********************/
 /*****************************************************************************/
@@ -5189,7 +5191,7 @@ const char *Act_GetActionText (Act_Action_t Action)
 /********************* Get text for action from database *********************/
 /*****************************************************************************/
 
-const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when database table actions is removed
+static const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when database table actions is removed
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
