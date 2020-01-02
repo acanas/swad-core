@@ -5169,18 +5169,38 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 /********************* Get text for action from database *********************/
 /*****************************************************************************/
 
-char *Act_GetActionTextFromDB (long ActCod,
-                               char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1])
+const char *Act_GetActionText (Act_Action_t Action)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+
+   if (Action >= 0 && Action < Act_NUM_ACTIONS)
+      if (Txt_Actions[Action])
+	{
+	 if (Txt_Actions[Action][0])
+	    return Txt_Actions[Action];
+
+	 return Act_GetActionTextFromDB (Act_GetActCod (Action));	// TODO: Remove when database table actions is removed
+	}
+
+   return "?";
+  }
+
+/*****************************************************************************/
+/********************* Get text for action from database *********************/
+/*****************************************************************************/
+
+const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when database table actions is removed
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   static char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Get test for an action from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get text for an action",
 	               "SELECT Txt FROM actions"
 	               " WHERE ActCod=%ld AND Language='%s'",
-                       ActCod,Lan_STR_LANG_ID[Lan_LANGUAGE_ES]))	// !!! TODO: Replace Lan_LANGUAGE_ES by Gbl.Prefs.Language !!!
+                       ActCod,Lan_STR_LANG_ID[Lan_LANGUAGE_ES]))
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);

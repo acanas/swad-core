@@ -590,11 +590,9 @@ static void Sta_WriteSelectorAction (void)
    extern const char *Txt_Action;
    extern const char *Txt_Any_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    Act_Action_t Action;
    unsigned ActionUnsigned;
    Tab_Tab_t Tab;
-   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Action *****/
    HTM_TR_Begin (NULL);
@@ -613,26 +611,10 @@ static void Sta_WriteSelectorAction (void)
      {
       Tab = Act_GetTab (Act_GetSuperAction (Action));
       ActionUnsigned = (unsigned) Action;
-
-      if (Txt_Actions[Action])
-	{
-	 if (Txt_Actions[Action][0])
-	    HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			Action == Gbl.Stat.NumAction,false,
-			"%u: %s &gt; %s",
-			(unsigned) Action,Txt_TABS_TXT[Tab],Txt_Actions[Action]);
-	 else
-	    HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			Action == Gbl.Stat.NumAction,false,
-			"%u: %s &gt; %s",
-			(unsigned) Action,Txt_TABS_TXT[Tab],
-			Act_GetActionTextFromDB (Act_GetActCod (Action),ActTxt));
-	}
-      else
-	 HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-		     Action == Gbl.Stat.NumAction,false,
-		     "%u: %s &gt; %s",
-		     (unsigned) Action,Txt_TABS_TXT[Tab],"?????????????");
+      HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
+		  Action == Gbl.Stat.NumAction,false,
+		  "%u: %s &gt; %s",
+		  (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
      }
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -1441,7 +1423,6 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_Action;
    extern const char *Txt_LOG_More_info;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    unsigned long NumRow;
    unsigned long FirstRow;	// First row to show
    unsigned long LastRow;	// Last rows to show
@@ -1455,8 +1436,6 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    unsigned UniqueId;
    char *Id;
    long ActCod;
-   Act_Action_t Action;
-   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Initialize estructura of data of the user *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1640,22 +1619,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_ShowErrorAndExit ("Wrong action code.");
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       if (ActCod >= 0)
-	{
-	 if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
-	   {
-	    if (Txt_Actions[Action])
-	      {
-	       if (Txt_Actions[Action][0])
-		  HTM_TxtF ("%s&nbsp;",Txt_Actions[Action]);
-	       else
-		  HTM_TxtF ("%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
-	      }
-	    else
-	       HTM_TxtF ("?&nbsp;");
-	   }
-	 else
-            HTM_TxtF ("?&nbsp;");
-	}
+         HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
       else
          HTM_TxtF ("?&nbsp;");
       HTM_TD_End ();
@@ -3021,13 +2985,10 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Action;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    unsigned long NumRow;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
    long ActCod;
-   Act_Action_t Action;
-   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -3055,22 +3016,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
 
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (ActCod >= 0)
-	{
-	 if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
-	   {
-	    if (Txt_Actions[Action])
-	      {
-	       if (Txt_Actions[Action][0])
-		  HTM_TxtF ("%s&nbsp;",Txt_Actions[Action]);
-	       else
-		  HTM_TxtF ("%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
-	      }
-	    else
-	       HTM_Txt ("?&nbsp;");
-	   }
-	 else
-	    HTM_Txt ("?&nbsp;");
-	}
+	 HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
       else
          HTM_Txt ("?&nbsp;");
       HTM_TD_End ();
