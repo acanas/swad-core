@@ -143,6 +143,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct Country Cty;
    struct Instit Ins;
    struct Centre Ctr;
@@ -219,10 +220,24 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
-      HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
-			       Highlight ? ClassHighlight :
-					   ClassNormal,
-			       NULL);
+      if (Txt_Actions[ActSeeCtyInf])
+	{
+	 if (Txt_Actions[ActSeeCtyInf][0])
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Actions[ActSeeCtyInf],
+				     Highlight ? ClassHighlight :
+						 ClassNormal,
+				     NULL);
+	 else
+	    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+				     Highlight ? ClassHighlight :
+						 ClassNormal,
+				     NULL);
+	}
+      else
+	 HTM_BUTTON_SUBMIT_Begin ("?",
+				  Highlight ? ClassHighlight :
+					      ClassNormal,
+				  NULL);
       Cty_DrawCountryMap (&Cty,"ICO16x16");
       HTM_TxtF ("&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       HTM_BUTTON_End ();
@@ -253,10 +268,24 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
          Frm_StartForm (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
-				  Highlight ? ClassHighlight :
-					      ClassNormal,
-				  NULL);
+	 if (Txt_Actions[ActSeeInsInf])
+	   {
+	    if (Txt_Actions[ActSeeInsInf][0])
+	       HTM_BUTTON_SUBMIT_Begin (Txt_Actions[ActSeeInsInf],
+					Highlight ? ClassHighlight :
+						    ClassNormal,
+					NULL);
+	    else
+	       HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
+					Highlight ? ClassHighlight :
+						    ClassNormal,
+					NULL);
+	   }
+	 else
+	    HTM_BUTTON_SUBMIT_Begin ("?",
+				     Highlight ? ClassHighlight :
+						 ClassNormal,
+				     NULL);
 	 Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 HTM_TxtF ("&nbsp;%s",Ins.ShrtName);
 	 HTM_BUTTON_End ();
@@ -287,10 +316,24 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
             Frm_StartForm (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
-	    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
-				     Highlight ? ClassHighlight :
-						 ClassNormal,
-				     NULL);
+	    if (Txt_Actions[ActSeeCtrInf])
+	      {
+	       if (Txt_Actions[ActSeeCtrInf][0])
+		  HTM_BUTTON_SUBMIT_Begin (Txt_Actions[ActSeeCtrInf],
+					   Highlight ? ClassHighlight :
+						       ClassNormal,
+					   NULL);
+	       else
+		  HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
+					   Highlight ? ClassHighlight :
+						       ClassNormal,
+					   NULL);
+	      }
+	    else
+	       HTM_BUTTON_SUBMIT_Begin ("?",
+					Highlight ? ClassHighlight :
+						    ClassNormal,
+					NULL);
 	    Lgo_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    HTM_TxtF ("&nbsp;%s",Ctr.ShrtName);
 	    HTM_BUTTON_End ();
@@ -321,10 +364,24 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
                Frm_StartForm (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
-	       HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
-				        Highlight ? ClassHighlight :
-						    ClassNormal,
-				        NULL);
+	       if (Txt_Actions[ActSeeDegInf])
+		 {
+		  if (Txt_Actions[ActSeeDegInf][0])
+		     HTM_BUTTON_SUBMIT_Begin (Txt_Actions[ActSeeDegInf],
+					      Highlight ? ClassHighlight :
+							  ClassNormal,
+					      NULL);
+		  else
+		     HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
+					      Highlight ? ClassHighlight :
+							  ClassNormal,
+					      NULL);
+		 }
+	       else
+		  HTM_BUTTON_SUBMIT_Begin ("?",
+					   Highlight ? ClassHighlight :
+						       ClassNormal,
+					   NULL);
 	       Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       HTM_TxtF ("&nbsp;%s",Deg.ShrtName);
 	       HTM_BUTTON_End ();

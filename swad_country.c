@@ -966,6 +966,7 @@ void Cty_WriteSelectorOfCountry (void)
 
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
   {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_NAME + 1];
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    bool PutForm = ClassLink &&
@@ -980,8 +981,16 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       /***** Write country name with link to country information *****/
       Frm_StartForm (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
-      HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
-		        ClassLink,NULL);
+      if (Txt_Actions[ActSeeCtyInf])
+	{
+	 if (Txt_Actions[ActSeeCtyInf][0])
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Actions[ActSeeCtyInf],ClassLink,NULL);
+	 else
+	    HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+				     ClassLink,NULL);
+	}
+      else
+         HTM_BUTTON_SUBMIT_Begin ("?",ClassLink,NULL);
       HTM_Txt (CtyName);
       HTM_BUTTON_End ();
       Frm_EndForm ();

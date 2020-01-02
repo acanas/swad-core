@@ -767,6 +767,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Other_actions;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -820,14 +821,22 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"&nbsp;");
       if (ActCod >= 0)
 	{
-	 Action = Act_FromActCodToAction[ActCod];
-	 if (Action >= 0)
+	 if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
 	   {
 	    Tab = Act_GetTab (Act_GetSuperAction (Action));
 	    if (Txt_TABS_TXT[Tab])
 	       fprintf (Gbl.F.Rep,"%s &gt; ",Txt_TABS_TXT[Tab]);
 	   }
-	 fprintf (Gbl.F.Rep,"%s",Act_GetActionTextFromDB (ActCod,ActTxt));
+
+	 if (Txt_Actions[Action])
+	   {
+	    if (Txt_Actions[Action][0])
+	       fprintf (Gbl.F.Rep,"%s",Txt_Actions[Action]);
+	    else
+	       fprintf (Gbl.F.Rep,"%s",Act_GetActionTextFromDB (ActCod,ActTxt));
+	   }
+	 else
+	    fprintf (Gbl.F.Rep,"?");
 	}
       else
 	 fprintf (Gbl.F.Rep,"?");

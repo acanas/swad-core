@@ -2014,6 +2014,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
@@ -2065,8 +2066,18 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                 Forum->Location,
                                 -1L,
                                 -1L);
-   HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
-                            Class,NULL);
+
+   if (Txt_Actions[For_ActionsSeeFor[Forum->Type]])
+     {
+      if (Txt_Actions[For_ActionsSeeFor[Forum->Type]][0])
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Actions[For_ActionsSeeFor[Forum->Type]],
+				  Class,NULL);
+      else
+	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
+				  Class,NULL);
+     }
+   else
+      HTM_BUTTON_SUBMIT_Begin ("?",Class,NULL);
    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
    switch (Forum->Type)
      {

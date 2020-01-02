@@ -2813,6 +2813,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActRecInsLog] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	""
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActRemInsLog] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -3696,6 +3717,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #endif
 	,
 	[ActReqCtrLog] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	""
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRecCtrLog] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -25179,6 +25221,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #endif
 	,
 	[ActReqDelThrCrsTch] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	""
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqDelThrDegUsr] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	""
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqDelThrDegTch] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

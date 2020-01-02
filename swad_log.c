@@ -354,4 +354,3 @@ void Log_GetAndShowLastClicks (void)
    /***** Free structure that stores the query result *****/
    mysql_free_result (mysql_res);
   }
-
