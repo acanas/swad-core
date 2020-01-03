@@ -95,7 +95,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
                                         const char *ClassMap,
                                         const char *ClassLink);
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class);
-bool Cty_CheckIfCountryMapExists (struct Country *Cty);
+bool Cty_CheckIfCountryPhotoExists (struct Country *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutHiddenParamCtyOrder (void);

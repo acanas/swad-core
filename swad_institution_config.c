@@ -243,7 +243,7 @@ static bool InsCfg_GetIfMapIsAvailable (void)
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of centres in an institution",
+   (unsigned) DB_QueryCOUNT ("can not get centres with coordinates",
 			     "SELECT COUNT(*) FROM centres"
 			     " WHERE InsCod=%ld"
 			     " AND Latitude<>0"
@@ -264,8 +264,7 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
    /***** Get average coordinates of centres of current institution
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get centres"
-				  " with coordinates",
+   if (DB_QuerySELECT (&mysql_res,"can not get centres with coordinates",
 		       "SELECT AVG(Latitude),"				// row[0]
 			      "AVG(Longitude),"				// row[1]
 			      "GREATEST(MAX(Latitude)-MIN(Latitude),"

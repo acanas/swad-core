@@ -539,7 +539,7 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
    char *URL;
 
    /***** Draw country map *****/
-   if (Cty_CheckIfCountryMapExists (Cty))
+   if (Cty_CheckIfCountryPhotoExists (Cty))
      {
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
@@ -559,7 +559,7 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfCountryMapExists (struct Country *Cty)
+bool Cty_CheckIfCountryPhotoExists (struct Country *Cty)
   {
    char PathMap[PATH_MAX + 1];
 

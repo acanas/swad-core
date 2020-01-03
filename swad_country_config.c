@@ -61,7 +61,10 @@ extern struct Globals Gbl;
 static void CtyCfg_Configuration (bool PrintView);
 static void CtyCfg_PutIconToPrint (void);
 static void CtyCfg_Title (bool PutLink);
-static void CtyCfg_Map (bool PrintView,bool PutLink);
+static bool CtyCfg_GetIfMapIsAvailable (void);
+static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
+static void CtyCfg_Map (void);
+static void CtyCfg_MapImage (bool PrintView,bool PutLink);
 static void CtyCfg_Name (bool PutLink);
 static void CtyCfg_Shortcut (bool PrintView);
 static void CtyCfg_QR (void);
@@ -104,7 +107,8 @@ static void CtyCfg_Configuration (bool PrintView)
   {
    extern const char *Hlp_COUNTRY_Information;
    bool PutLink;
-   bool MapExists;
+   bool MapIsAvailable;
+   bool MapImageExists;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
@@ -167,14 +171,22 @@ static void CtyCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /***** Check map *****/
-   MapExists = Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty);
+   MapIsAvailable = CtyCfg_GetIfMapIsAvailable ();
 
-   if (MapExists)
+   /***** Check country map *****/
+   MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Cty);
+
+   if (MapIsAvailable || MapImageExists)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
       /***** Country map *****/
-      CtyCfg_Map (PrintView,PutLink);
+      if (MapIsAvailable)
+	 CtyCfg_Map ();
+
+      /***** Country map image *****/
+      if (MapImageExists)
+         CtyCfg_MapImage (PrintView,PutLink);
 
       HTM_DIV_End ();
      }
@@ -211,10 +223,158 @@ static void CtyCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/********************* Show map in country configuration *********************/
+/******************** Check if country map should be shown *******************/
 /*****************************************************************************/
 
-static void CtyCfg_Map (bool PrintView,bool PutLink)
+static bool CtyCfg_GetIfMapIsAvailable (void)
+  {
+   /***** Get number of centres of current country
+          with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get centres with coordinates",
+			     "SELECT COUNT(*) FROM institutions,centres"
+			     " WHERE institutions.CtyCod=%ld"
+			     " AND institutions.InsCod=centres.InsCod"
+			     " AND centres.Latitude<>0"
+			     " AND centres.Longitude<>0",
+			     Gbl.Hierarchy.Cty.CtyCod);
+  }
+
+/*****************************************************************************/
+/********* Get average coordinates of centres in current institution *********/
+/*****************************************************************************/
+
+static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   double MaxDistance;
+
+   /***** Get average coordinates of centres of current country
+          with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get centres with coordinates",
+		       "SELECT AVG(centres.Latitude),"					// row[0]
+			      "AVG(centres.Longitude),"					// row[1]
+			      "GREATEST(MAX(centres.Latitude)-MIN(centres.Latitude),"
+			               "MAX(centres.Longitude)-MIN(centres.Longitude))"	// row[2]
+		       " FROM institutions,centres"
+		       " WHERE institutions.CtyCod=%ld"
+		       " AND institutions.InsCod=centres.InsCod"
+		       " AND centres.Latitude<>0"
+		       " AND centres.Longitude<>0",
+		       Gbl.Hierarchy.Cty.CtyCod))
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get latitude (row[0]) */
+      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
+
+      /* Get longitude (row[1]) */
+      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
+
+      /* Get maximum distance (row[2]) */
+      MaxDistance = Str_GetDoubleFromStr (row[2]);
+     }
+   else
+      Coord->Latitude  =
+      Coord->Longitude =
+      MaxDistance      = 0.0;
+
+   /***** Convert distance to zoom *****/
+   *Zoom = Map_GetZoomFromDistance (MaxDistance);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****************************** Draw country map *****************************/
+/*****************************************************************************/
+
+#define CtyCfg_MAP_CONTAINER_ID "cty_mapid"
+
+static void CtyCfg_Map (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   struct Coordinates CtyAvgCoord;
+   unsigned Zoom;
+   unsigned NumCtrs;
+   unsigned NumCtr;
+   struct Centre Ctr;
+   struct Instit Ins;
+
+   /***** Leaflet CSS *****/
+   Map_LeafletCSS ();
+
+   /***** Leaflet script *****/
+   Map_LeafletScript ();
+
+   /***** Container for the map *****/
+   HTM_DIV_Begin ("id=\"%s\"",CtyCfg_MAP_CONTAINER_ID);
+   HTM_DIV_End ();
+
+   /***** Script to draw the map *****/
+   HTM_SCRIPT_Begin (NULL,NULL);
+
+   /* Let's create a map with pretty Mapbox Streets tiles */
+   CtyCfg_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
+   Map_CreateMap (CtyCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
+
+   /* Add Mapbox Streets tile layer to our map */
+   Map_AddTileLayer ();
+
+   /* Get centres with coordinates */
+   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+						   " with coordinates",
+					"SELECT CtrCod"	// row[0]
+					" FROM institutions,centres"
+					" WHERE institutions.CtyCod=%ld"
+					" AND institutions.InsCod=centres.InsCod"
+					" AND centres.Latitude<>0"
+					" AND centres.Longitude<>0",
+					Gbl.Hierarchy.Cty.CtyCod);
+
+   /* Add a marker and a popup for each centre */
+   for (NumCtr = 0;
+	NumCtr < NumCtrs;
+	NumCtr++)
+     {
+      /* Get next centre */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get centre code (row[0]) */
+      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get data of centre */
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+
+      /* Get data of institution */
+      Ins.InsCod = Ctr.InsCod;
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
+      /* Add marker */
+      Map_AddMarker (&Ctr.Coord);
+
+      /* Add popup */
+      Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
+		    false);	// Closed
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   HTM_SCRIPT_End ();
+  }
+
+/*****************************************************************************/
+/************* Show country map image in country configuration ***************/
+/*****************************************************************************/
+
+static void CtyCfg_MapImage (bool PrintView,bool PutLink)
   {
    char *MapAttribution = NULL;
 
