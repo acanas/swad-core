@@ -9035,7 +9035,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Assess a self-assessment test"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9056,7 +9056,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the edition of self-assessment questions"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9077,7 +9077,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit one self-assesment test question"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9098,7 +9098,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Put form to ask for an XML with test questions to import"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9119,7 +9119,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Import test questions from XML file"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9140,7 +9140,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List for edition several self-assessment test questions"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9161,7 +9161,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive a question of self-assessment"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9182,7 +9182,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request removing a self-assesment test question"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9203,7 +9203,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove a self-assesment test question"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9224,7 +9224,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change shuffle of of a question of self-assessment"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9245,7 +9245,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request renaming of tags of questions of self-assesment"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9266,7 +9266,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Enable a tag"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9287,7 +9287,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Disable a tag"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9308,7 +9308,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Rename a tag"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9329,7 +9329,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive configuration of test"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9350,7 +9350,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Select range of dates to see my test results"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9371,7 +9371,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show my test results"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9392,7 +9392,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Select users and range of dates to see test results"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9413,7 +9413,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show test results of several users"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9434,7 +9434,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one test result of me as student"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9455,7 +9455,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one test result of other user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9476,7 +9476,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9497,7 +9497,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9518,7 +9518,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Confirm the removal of a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9539,7 +9539,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Put form to create a new match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9560,7 +9560,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create a new match showing first question in a new browser tab"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9581,7 +9581,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Resume an unfinished match showing current question in a new browser tab"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9602,7 +9602,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Go back when playing a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9623,7 +9623,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Play/pause current match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9644,7 +9644,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Go forward when playing a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9665,7 +9665,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change number of columns when playing a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9686,7 +9686,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change visibility of question results when playing a match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9707,7 +9707,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Start match countdown"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9728,7 +9728,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Refresh current question when playing a match (as teacher)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9749,7 +9749,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show current question when playing a game (as student)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9770,7 +9770,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"View my answer to a match question (as student)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9791,7 +9791,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove my answer to a match question (as student)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9812,7 +9812,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Answer a match question (as student)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9833,7 +9833,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Refresh current question when playing a game (as student)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9854,7 +9854,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all my matches results in the current course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9875,7 +9875,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all my matches results in a given game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9896,7 +9896,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all my matches results in a given match"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9917,7 +9917,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one match result of me as student"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9938,7 +9938,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Select users and range of dates to see matches results"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9959,7 +9959,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all matches results of selected users in the current course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -9980,7 +9980,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all matches results in a given game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10001,7 +10001,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show all matches results in a given game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10022,7 +10022,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one match result of other user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10043,7 +10043,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change visibility of match results for students"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10064,7 +10064,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Form to create a new game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10085,7 +10085,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit one game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10106,7 +10106,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create new game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10127,7 +10127,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Modify data of an existing game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10148,7 +10148,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10169,7 +10169,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10190,7 +10190,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10211,7 +10211,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10232,7 +10232,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Add a new question to a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10253,7 +10253,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"List test questions to select one or several questions"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10274,7 +10274,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Add selected test questions to game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10295,7 +10295,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a question of a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10316,7 +10316,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Confirm the removal of a question of a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10337,7 +10337,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Move up a question of a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10358,7 +10358,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Move down a question of a game"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10379,7 +10379,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10400,7 +10400,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Answer a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10421,7 +10421,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Form to create a new survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10442,7 +10442,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit one survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10463,7 +10463,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create new survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10484,7 +10484,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Modify data of an existing survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10505,7 +10505,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10526,7 +10526,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10547,7 +10547,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the reset of answers of a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10568,7 +10568,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Reset answers of survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10589,7 +10589,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10610,7 +10610,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10631,7 +10631,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit a new question for a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10652,7 +10652,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive a question of a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10673,7 +10673,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of a question of a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10694,7 +10694,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Confirm the removal of a question of a survey"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10715,7 +10715,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show one exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10736,7 +10736,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show exam announcements of a given date"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10757,7 +10757,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit an exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10778,7 +10778,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive an exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10799,7 +10799,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show an exam announcement ready to be printed"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10820,7 +10820,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of an exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10841,7 +10841,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove an exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10862,7 +10862,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -10883,7 +10883,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27662,7 +27662,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to log out and to change current role in this session"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27683,7 +27683,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Select one of my courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27704,7 +27704,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show the timetable of all courses of the logged user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27725,7 +27725,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show my full agenda (personal organizer)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27746,7 +27746,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to the creation or change of user's account"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27767,7 +27767,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the edition of the record with the personal data of the user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27788,7 +27788,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show forms to edit settings"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27809,7 +27809,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change type of logged user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27830,7 +27830,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Form to create a new event in my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27851,7 +27851,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit one event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27872,7 +27872,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create a new event in my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27893,7 +27893,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Modify data of an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27914,7 +27914,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27935,7 +27935,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27956,7 +27956,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27977,7 +27977,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27998,7 +27998,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Make private an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28019,7 +28019,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Make public an event from my agenda"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28040,7 +28040,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show agenda QR code ready to print"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28061,7 +28061,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Check if already exists a new account without password associated to a ID"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28082,7 +28082,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Form to create a new account for me"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28103,7 +28103,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create new user account"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28124,7 +28124,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove one of my user's IDs"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28145,7 +28145,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Create a new user's ID for me"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28166,7 +28166,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove one of my old nicknames"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28187,7 +28187,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my nickname"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28208,7 +28208,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove one of my old emails"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28229,7 +28229,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my email address"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28250,7 +28250,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Confirm email address"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28271,7 +28271,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my password"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28292,7 +28292,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of my account"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28313,7 +28313,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove my account"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28334,7 +28334,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Update my personal data"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28355,7 +28355,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show form to send my photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28376,7 +28376,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Receive my photo and detect faces on it"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28397,7 +28397,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Update my photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28418,7 +28418,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the removal of my photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28439,7 +28439,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Remove my photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28460,7 +28460,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change the country of my institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28481,7 +28481,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28502,7 +28502,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my centre"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28523,7 +28523,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my department"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28544,7 +28544,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my office"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28565,7 +28565,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my office phone"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28586,7 +28586,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Request the edition of my social networks"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28607,7 +28607,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change my web and social networks"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28628,7 +28628,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change theme"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28649,7 +28649,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Ask if change language"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28670,7 +28670,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change language"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28691,7 +28691,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change first day of the week"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28712,7 +28712,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change date format"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28733,7 +28733,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change side columns"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28754,7 +28754,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide left side column"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28775,7 +28775,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Hide right side column"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28796,7 +28796,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show left side column"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28817,7 +28817,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show right side column"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28838,7 +28838,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change icon set"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28859,7 +28859,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change menu"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28880,7 +28880,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change privacy of my photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28901,7 +28901,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change privacy of my basic public profile"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28922,7 +28922,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change privacy of my extended public profile"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28943,7 +28943,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change setting about third party cookies"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28964,7 +28964,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change whether to notify by email new messages"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28985,7 +28985,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show my QR code ready to print"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -29006,7 +29006,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Show the timetable listo to impresión of all my courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -29027,7 +29027,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Edit the timetable of tutorías"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -29048,7 +29048,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Modify the timetable of tutorías"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -29069,7 +29069,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	""
+	"Change first day of week and show timetable of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
