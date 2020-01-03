@@ -49,10 +49,10 @@ void Map_CreateMap (const char *ContainerId,
 void Map_AddTileLayer (void);
 void Map_AddMarker (const struct Coordinates *Coord);
 void Map_AddPopup (const char *Title,const char *Subtitle,bool Open);
-
+void Map_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom,
+			  const char *Query);
 double Map_GetLatitudeFromStr (char *Str);
 double Map_GetLongitudeFromStr (char *Str);
 double Map_GetAltitudeFromStr (char *Str);
-unsigned Map_GetZoomFromDistance (double MaxDistance);
 
 #endif

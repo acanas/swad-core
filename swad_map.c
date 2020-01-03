@@ -25,14 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <stdbool.h>		// For boolean type
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <string.h>		// For string functions
-// #include <unistd.h>		// For unlink
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 
-// #include "swad_global.h"
+#include "swad_database.h"
 #include "swad_HTML.h"
 #include "swad_map.h"
 #include "swad_string.h"
@@ -59,11 +55,13 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-/* https://leafletjs.com/examples/quick-start/ */
+static unsigned Map_GetZoomFromDistance (double MaxDistance);
 
 /*****************************************************************************/
-/******************************* Leaflet CSS ******************************/
+/******************************** Leaflet CSS ********************************/
 /*****************************************************************************/
+
+/* https://leafletjs.com/examples/quick-start/ */
 
 void Map_LeafletCSS (void)
   {
@@ -166,6 +164,45 @@ void Map_AddPopup (const char *Title,const char *Subtitle,bool Open)
   }
 
 /*****************************************************************************/
+/********* Get average coordinates of centres in current institution *********/
+/*****************************************************************************/
+
+void Map_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom,
+			  const char *Query)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   double MaxDistance;
+
+   /***** Get average coordinates *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get coordinates",
+		       "%s",Query))
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get latitude (row[0]) */
+      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
+
+      /* Get longitude (row[1]) */
+      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
+
+      /* Get maximum distance (row[2]) */
+      MaxDistance = Str_GetDoubleFromStr (row[2]);
+     }
+   else
+      Coord->Latitude  =
+      Coord->Longitude =
+      MaxDistance      = 0.0;
+
+   /***** Convert distance to zoom *****/
+   *Zoom = Map_GetZoomFromDistance (MaxDistance);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /************************ Get latitude from a string *************************/
 /*****************************************************************************/
 // This function may change Str on wrong double
@@ -217,7 +254,7 @@ double Map_GetAltitudeFromStr (char *Str)
 /*********************** Get zoom level from distance ************************/
 /*****************************************************************************/
 
-unsigned Map_GetZoomFromDistance (double MaxDistance)
+static unsigned Map_GetZoomFromDistance (double MaxDistance)
   {
    /***** Convert distance to zoom *****/
    return (MaxDistance <   0.01) ? 16 :

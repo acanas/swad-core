@@ -247,47 +247,25 @@ static bool CtyCfg_GetIfMapIsAvailable (void)
 
 static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   double MaxDistance;
+   char *Query;
 
    /***** Get average coordinates of centres of current country
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get centres with coordinates",
-		       "SELECT AVG(centres.Latitude),"					// row[0]
-			      "AVG(centres.Longitude),"					// row[1]
-			      "GREATEST(MAX(centres.Latitude)-MIN(centres.Latitude),"
-			               "MAX(centres.Longitude)-MIN(centres.Longitude))"	// row[2]
-		       " FROM institutions,centres"
-		       " WHERE institutions.CtyCod=%ld"
-		       " AND institutions.InsCod=centres.InsCod"
-		       " AND centres.Latitude<>0"
-		       " AND centres.Longitude<>0",
-		       Gbl.Hierarchy.Cty.CtyCod))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get latitude (row[0]) */
-      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
-
-      /* Get longitude (row[1]) */
-      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-
-      /* Get maximum distance (row[2]) */
-      MaxDistance = Str_GetDoubleFromStr (row[2]);
-     }
-   else
-      Coord->Latitude  =
-      Coord->Longitude =
-      MaxDistance      = 0.0;
-
-   /***** Convert distance to zoom *****/
-   *Zoom = Map_GetZoomFromDistance (MaxDistance);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   if (asprintf (&Query,
+		 "SELECT AVG(centres.Latitude),"					// row[0]
+			"AVG(centres.Longitude),"					// row[1]
+			"GREATEST(MAX(centres.Latitude)-MIN(centres.Latitude),"
+				 "MAX(centres.Longitude)-MIN(centres.Longitude))"	// row[2]
+		 " FROM institutions,centres"
+		 " WHERE institutions.CtyCod=%ld"
+		 " AND institutions.InsCod=centres.InsCod"
+		 " AND centres.Latitude<>0"
+		 " AND centres.Longitude<>0",
+		 Gbl.Hierarchy.Cty.CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Map_GetCoordAndZoom (Coord,Zoom,Query);
+   free (Query);
   }
 
 /*****************************************************************************/

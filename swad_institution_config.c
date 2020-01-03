@@ -257,46 +257,24 @@ static bool InsCfg_GetIfMapIsAvailable (void)
 
 static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   double MaxDistance;
+   char *Query;
 
    /***** Get average coordinates of centres of current institution
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get centres with coordinates",
-		       "SELECT AVG(Latitude),"				// row[0]
-			      "AVG(Longitude),"				// row[1]
-			      "GREATEST(MAX(Latitude)-MIN(Latitude),"
-			               "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		       " FROM centres"
-		       " WHERE InsCod=%ld"
-		       " AND Latitude<>0"
-		       " AND Longitude<>0",
-		       Gbl.Hierarchy.Ins.InsCod))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get latitude (row[0]) */
-      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
-
-      /* Get longitude (row[1]) */
-      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-
-      /* Get maximum distance (row[2]) */
-      MaxDistance = Str_GetDoubleFromStr (row[2]);
-     }
-   else
-      Coord->Latitude  =
-      Coord->Longitude =
-      MaxDistance      = 0.0;
-
-   /***** Convert distance to zoom *****/
-   *Zoom = Map_GetZoomFromDistance (MaxDistance);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   if (asprintf (&Query,
+		 "SELECT AVG(Latitude),"				// row[0]
+			"AVG(Longitude),"				// row[1]
+			"GREATEST(MAX(Latitude)-MIN(Latitude),"
+				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
+		 " FROM centres"
+		 " WHERE InsCod=%ld"
+		 " AND Latitude<>0"
+		 " AND Longitude<>0",
+		 Gbl.Hierarchy.Ins.InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Map_GetCoordAndZoom (Coord,Zoom,Query);
+   free (Query);
   }
 
 /*****************************************************************************/
