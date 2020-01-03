@@ -357,7 +357,8 @@ static void CtrCfg_Map (void)
    Map_AddMarker (&Gbl.Hierarchy.Ctr.Coord);
 
    /* Add popup */
-   Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName);
+   Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
+		 true);	// Open
 
    HTM_SCRIPT_End ();
   }

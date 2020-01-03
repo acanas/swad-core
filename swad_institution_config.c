@@ -361,7 +361,8 @@ static void InsCfg_Map (void)
       Map_AddMarker (&Ctr.Coord);
 
       /* Add popup */
-      Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName);
+      Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
+		    false);	// Closed
      }
 
    /* Free structure that stores the query result */

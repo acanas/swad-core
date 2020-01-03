@@ -147,16 +147,19 @@ void Map_AddMarker (const struct Coordinates *Coord)
   }
 
 /*****************************************************************************/
-/************************** Add a marker to our map **************************/
+/************************* Add a marker to our map ***************************/
 /*****************************************************************************/
 
-void Map_AddPopup (const char *Title,const char *Subtitle)
+void Map_AddPopup (const char *Title,const char *Subtitle,bool Open)
   {
    /* The bindPopup method attaches a popup with the specified HTML content
       to your marker so the popup appears when you click on the object,
-      and the openPopup method (for markers only) immediately opens the attached popup. */
-
+      and the openPopup method (for markers only)
+      immediately opens the attached popup. */
    HTM_TxtF ("\t"
-	     "marker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();\n",
+	     "marker.bindPopup(\"<strong>%s</strong><br />%s\")",
 	     Title,Subtitle);
+   if (Open)
+      HTM_Txt (".openPopup()");
+   HTM_Txt (";\n");
   }
