@@ -90,13 +90,14 @@ void Map_LeafletScript (void)
 /************** Create a map centered in the given coordinates ***************/
 /*****************************************************************************/
 
-void Map_CreateMap (const char *ContainerId,const struct Coordinates *Coord)
+void Map_CreateMap (const char *ContainerId,
+		    const struct Coordinates *Coord,unsigned Zoom)
   {
    /* Let's create a map with pretty Mapbox Streets tiles */
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    HTM_TxtF ("\t"
-	     "var mymap = L.map('%s').setView([%lg, %lg], 16);\n",
-	     ContainerId,Coord->Latitude,Coord->Longitude);
+	     "var mymap = L.map('%s').setView([%lg, %lg], %u);\n",
+	     ContainerId,Coord->Latitude,Coord->Longitude,Zoom);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

@@ -348,7 +348,7 @@ static void CtrCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord);
+   Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord,16);
 
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();

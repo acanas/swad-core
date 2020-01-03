@@ -44,7 +44,8 @@ struct Coordinates
 
 void Map_LeafletCSS (void);
 void Map_LeafletScript (void);
-void Map_CreateMap (const char *ContainerId,const struct Coordinates *Coord);
+void Map_CreateMap (const char *ContainerId,
+		    const struct Coordinates *Coord,unsigned Zoom);
 void Map_AddTileLayer (void);
 void Map_AddMarker (const struct Coordinates *Coord);
 void Map_AddPopup (const char *Title,const char *Subtitle,bool Open);

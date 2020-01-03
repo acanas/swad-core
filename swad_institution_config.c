@@ -63,7 +63,7 @@ static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (void);
 static void InsCfg_Title (bool PutLink);
 static bool InsCfg_GetIfMapIsAvailable (void);
-static void InsCfg_GetAverageCoord (struct Coordinates *Coord);
+static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
@@ -252,21 +252,24 @@ static bool InsCfg_GetIfMapIsAvailable (void)
   }
 
 /*****************************************************************************/
-/******************** Check if centre map should be shown ********************/
+/********* Get average coordinates of centres in current institution *********/
 /*****************************************************************************/
 
-static void InsCfg_GetAverageCoord (struct Coordinates *Coord)
+static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   double MaxDistance;
 
    /***** Get average coordinates of centres of current institution
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get centres"
 				  " with coordinates",
-		       "SELECT AVG(Latitude),"	// row[0]
-			      "AVG(Longitude)"	// row[1]
+		       "SELECT AVG(Latitude),"				// row[0]
+			      "AVG(Longitude),"				// row[1]
+			      "GREATEST(MAX(Latitude)-MIN(Latitude),"
+			               "MAX(Longitude)-MIN(Longitude))"	// row[2]
 		       " FROM centres"
 		       " WHERE InsCod=%ld"
 		       " AND Latitude<>0"
@@ -289,10 +292,22 @@ static void InsCfg_GetAverageCoord (struct Coordinates *Coord)
 	 Coord->Longitude = -180.0;	// West
       else if (Coord->Longitude > 180.0)
 	 Coord->Longitude = 180.0;	// East
+
+      /* Get maximum distance (row[2]) */
+      MaxDistance = Str_GetDoubleFromStr (row[2]);
      }
    else
       Coord->Latitude  =
-      Coord->Longitude = 0.0;
+      Coord->Longitude =
+      MaxDistance      = 0.0;
+
+   /***** Convert distance to zoom *****/
+   *Zoom =  (MaxDistance <   0.01) ? 16 :
+           ((MaxDistance <   0.1 ) ? 12 :
+           ((MaxDistance <   1.0 ) ?  8 :
+           ((MaxDistance <  10.0 ) ?  6 :
+           ((MaxDistance < 100.0 ) ?  3 :
+                                      1))));
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -309,6 +324,7 @@ static void InsCfg_Map (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Coordinates InsAvgCoord;
+   unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Centre Ctr;
@@ -327,8 +343,8 @@ static void InsCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   InsCfg_GetAverageCoord (&InsAvgCoord);
-   Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord);
+   InsCfg_GetCoordAndZoom (&InsAvgCoord,&Zoom);
+   Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord,Zoom);
 
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();

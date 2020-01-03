@@ -13106,5 +13106,12 @@ SELECT MIN(QstInd) FROM gam_questions WHERE GamCod=47 AND QstInd>5;
  
  
 SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod,UNIX_TIMESTAMP(TimeNotif),Status FROM notif WHERE ToUsrCod=1346 ORDER BY TimeNotif DESC;
- 
+
+
+SELECT AVG(Latitude),AVG(Longitude),MAX(MAX(Latitude)-MIN(Latitude),MAX(Longitude)-MIN(Longitude)) FROM centres WHERE InsCod=1 AND Latitude<>0 AND Longitude<>0;
+
+
+
+
+
  
