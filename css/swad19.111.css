@@ -2012,7 +2012,7 @@ a:hover img.CENTRE_PHOTO_SHOW
         box-shadow:1px 1px 6px #999;
 	}
 	
-#centre_mapid
+#ctr_mapid, #ins_mapid
 	{
 	width:460px;
 	height:345px;

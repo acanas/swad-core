@@ -330,7 +330,7 @@ static bool CtrCfg_GetIfMapIsAvailable (void)
 /****************************** Draw centre map ******************************/
 /*****************************************************************************/
 
-#define CtrCfg_MAP_CONTAINER_ID "centre_mapid"
+#define CtrCfg_MAP_CONTAINER_ID "ctr_mapid"
 
 static void CtrCfg_Map (void)
   {
@@ -347,7 +347,7 @@ static void CtrCfg_Map (void)
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
+   /* Let's create a map with pretty Mapbox Streets tiles */
    Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord);
 
    /* Add Mapbox Streets tile layer to our map */

@@ -63,6 +63,7 @@ static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (void);
 static void InsCfg_Title (bool PutLink);
 static bool InsCfg_GetIfMapIsAvailable (void);
+static void InsCfg_GetAverageCoord (struct Coordinates *Coord);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
@@ -236,80 +237,136 @@ static void InsCfg_Title (bool PutLink)
 /******************** Check if centre map should be shown ********************/
 /*****************************************************************************/
 
-// TODO: Change code!!!!
-
 static bool InsCfg_GetIfMapIsAvailable (void)
   {
-   return true;
+   /***** Get number of centres of current institution
+          with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres in an institution",
+			     "SELECT COUNT(*) FROM centres"
+			     " WHERE InsCod=%ld"
+			     " AND Latitude<>0"
+			     " AND Longitude<>0",
+			     Gbl.Hierarchy.Ins.InsCod);
+  }
 
-   /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   /*
-   return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
-                  Gbl.Hierarchy.Ctr.Coord.Longitude);
-   */
+/*****************************************************************************/
+/******************** Check if centre map should be shown ********************/
+/*****************************************************************************/
+
+static void InsCfg_GetAverageCoord (struct Coordinates *Coord)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get average coordinates of centres of current institution
+          with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get centres"
+				  " with coordinates",
+		       "SELECT AVG(Latitude),"	// row[0]
+			      "AVG(Longitude)"	// row[1]
+		       " FROM centres"
+		       " WHERE InsCod=%ld"
+		       " AND Latitude<>0"
+		       " AND Longitude<>0",
+		       Gbl.Hierarchy.Ins.InsCod))
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get latitude (row[0]) */
+      Coord->Latitude = Str_GetDoubleFromStr (row[0]);
+      if (Coord->Latitude < -90.0)
+	 Coord->Latitude = -90.0;	// South Pole
+      else if (Coord->Latitude > 90.0)
+	 Coord->Latitude = 90.0;	// North Pole
+
+      /* Get longitude (row[1]) */
+      Coord->Longitude = Str_GetDoubleFromStr (row[1]);
+      if (Coord->Longitude < -180.0)
+	 Coord->Longitude = -180.0;	// West
+      else if (Coord->Longitude > 180.0)
+	 Coord->Longitude = 180.0;	// East
+     }
+   else
+      Coord->Latitude  =
+      Coord->Longitude = 0.0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
 /****************************** Draw centre map ******************************/
 /*****************************************************************************/
 
-// TODO: Change code!!!!
+#define InsCfg_MAP_CONTAINER_ID "ins_mapid"
 
 static void InsCfg_Map (void)
   {
-   /* https://leafletjs.com/examples/quick-start/ */
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   struct Coordinates InsAvgCoord;
+   unsigned NumCtrs;
+   unsigned NumCtr;
+   struct Centre Ctr;
+
    /***** Leaflet CSS *****/
-   HTM_Txt ("<link rel=\"stylesheet\""
-	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
-	    " integrity=\"sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==\""
-	    " crossorigin=\"\" />");
+   Map_LeafletCSS ();
 
    /***** Leaflet script *****/
-   /* Put this AFTER Leaflet's CSS */
-   HTM_Txt ("<script src=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.js\""
-	    " integrity=\"sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==\""
-	    " crossorigin=\"\">"
-	    "</script>");
+   Map_LeafletScript ();
 
    /***** Container for the map *****/
-   HTM_DIV_Begin ("id=\"centre_mapid\"");
+   HTM_DIV_Begin ("id=\"%s\"",InsCfg_MAP_CONTAINER_ID);
    HTM_DIV_End ();
 
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
 
-   /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
-   HTM_TxtF ("\tvar mymap = L.map('centre_mapid').setView([%lg, %lg], 16);\n",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+   /* Let's create a map with pretty Mapbox Streets tiles */
+   InsCfg_GetAverageCoord (&InsAvgCoord);
+   Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord);
 
-   /* Next we'll add a tile layer to add to our map,
-      in this case it's a Mapbox Streets tile layer.
-      Creating a tile layer usually involves
-      setting the URL template for the tile images,
-      the attribution text and the maximum zoom level of the layer.
-      In this example we'll use the mapbox/streets-v11 tiles
-      from Mapbox's Static Tiles API
-      (in order to use tiles from Mapbox,
-      you must also request an access token).*/
-   HTM_Txt ("\tL.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
-            "attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery &copy; <a href=\"https://www.mapbox.com/\">Mapbox</a>',"
-            "maxZoom: 20,"
-            "id: 'mapbox/streets-v11',"
-            "accessToken: 'pk.eyJ1IjoiYWNhbmFzIiwiYSI6ImNrNGFoNXFxOTAzdHozcnA4d3Y0M3BwOGkifQ.uSg754Lv2iZEJg0W2pjiOQ'"
-            "}).addTo(mymap);\n");
+   /* Add Mapbox Streets tile layer to our map */
+   Map_AddTileLayer ();
 
-   /* Marker */
-   HTM_TxtF ("\tvar marker = L.marker([%lg, %lg]).addTo(mymap);",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+   /* Get centres with coordinates */
+   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+						   " with coordinates",
+					"SELECT CtrCod"	// row[0]
+					" FROM centres"
+					" WHERE InsCod=%ld"
+					" AND Latitude<>0"
+					" AND Longitude<>0",
+					Gbl.Hierarchy.Ins.InsCod);
 
-   HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
-	     Gbl.Hierarchy.Ctr.ShrtName,
-	     Gbl.Hierarchy.Ins.ShrtName);
+   /* Add a marker and a popup for each centre */
+   for (NumCtr = 0;
+	NumCtr < NumCtrs;
+	NumCtr++)
+     {
+      /* Get next centre */
+      row = mysql_fetch_row (mysql_res);
 
-   Str_SetDecimalPointToLocal ();	// Return to local system
+      /* Get centre code (row[0]) */
+      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get data of centre */
+      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+
+      /* Add marker */
+      Map_AddMarker (&Ctr.Coord);
+
+      /* Add popup */
+      Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName);
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
    HTM_SCRIPT_End ();
   }
 
