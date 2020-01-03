@@ -1158,11 +1158,7 @@ void CtrCfg_ChangeCtrLatitude (void)
 
    /***** Get latitude *****/
    Par_GetParToText ("Latitude",LatitudeStr,sizeof (LatitudeStr) - 1);
-   NewLatitude = Str_GetDoubleFromStr (LatitudeStr);
-   if (NewLatitude < -90.0)
-      NewLatitude = -90.0;	// South Pole
-   else if (NewLatitude > 90.0)
-      NewLatitude = 90.0;	// North Pole
+   NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Latitude",NewLatitude);
@@ -1187,11 +1183,7 @@ void CtrCfg_ChangeCtrLongitude (void)
 
    /***** Get longitude *****/
    Par_GetParToText ("Longitude",LongitudeStr,sizeof (LongitudeStr) - 1);
-   NewLongitude = Str_GetDoubleFromStr (LongitudeStr);
-   if (NewLongitude < -180.0)
-      NewLongitude = -180.0;	// West
-   else if (NewLongitude > 180.0)
-      NewLongitude = 180.0;	// East
+   NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Longitude",NewLongitude);
@@ -1216,11 +1208,7 @@ void CtrCfg_ChangeCtrAltitude (void)
 
    /***** Get altitude *****/
    Par_GetParToText ("Altitude",AltitudeStr,sizeof (AltitudeStr) - 1);
-   NewAltitude = Str_GetDoubleFromStr (AltitudeStr);
-   if (NewAltitude < -413.0)
-      NewAltitude = -413.0;	// Dead Sea shore
-   else if (NewAltitude > 8848.0)
-      NewAltitude = 8848.0;	// Mount Everest
+   NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Altitude",NewAltitude);

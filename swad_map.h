@@ -50,4 +50,9 @@ void Map_AddTileLayer (void);
 void Map_AddMarker (const struct Coordinates *Coord);
 void Map_AddPopup (const char *Title,const char *Subtitle,bool Open);
 
+double Map_GetLatitudeFromStr (char *Str);
+double Map_GetLongitudeFromStr (char *Str);
+double Map_GetAltitudeFromStr (char *Str);
+unsigned Map_GetZoomFromDistance (double MaxDistance);
+
 #endif

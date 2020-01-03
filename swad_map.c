@@ -164,3 +164,66 @@ void Map_AddPopup (const char *Title,const char *Subtitle,bool Open)
       HTM_Txt (".openPopup()");
    HTM_Txt (";\n");
   }
+
+/*****************************************************************************/
+/************************ Get latitude from a string *************************/
+/*****************************************************************************/
+// This function may change Str on wrong double
+
+double Map_GetLatitudeFromStr (char *Str)
+  {
+   double Latitude = Str_GetDoubleFromStr (Str);
+
+   if (Latitude < -90.0)
+      return -90.0;	// South Pole
+   if (Latitude > 90.0)
+      return 90.0;	// North Pole
+   return Latitude;
+  }
+
+/*****************************************************************************/
+/*********************** Get longitude from a string *************************/
+/*****************************************************************************/
+// This function may change Str on wrong double
+
+double Map_GetLongitudeFromStr (char *Str)
+  {
+   double Longitude = Str_GetDoubleFromStr (Str);
+
+   if (Longitude < -180.0)
+      return -180.0;	// West
+   if (Longitude > 180.0)
+      return 180.0;	// East
+   return Longitude;
+  }
+
+/*****************************************************************************/
+/************************ Get altitude from a string *************************/
+/*****************************************************************************/
+// This function may change Str on wrong double
+
+double Map_GetAltitudeFromStr (char *Str)
+  {
+   double Altitude = Str_GetDoubleFromStr (Str);
+
+   if (Altitude < -413.0)
+      return -413.0;	// Dead Sea shore
+   if (Altitude > 8848.0)
+      return 8848.0;	// Mount Everest
+   return Altitude;
+  }
+
+/*****************************************************************************/
+/*********************** Get zoom level from distance ************************/
+/*****************************************************************************/
+
+unsigned Map_GetZoomFromDistance (double MaxDistance)
+  {
+   /***** Convert distance to zoom *****/
+   return (MaxDistance <   0.01) ? 16 :
+         ((MaxDistance <   0.1 ) ? 12 :
+         ((MaxDistance <   1.0 ) ?  8 :
+         ((MaxDistance <  10.0 ) ?  6 :
+         ((MaxDistance < 100.0 ) ?  3 :
+                                    1))));
+  }

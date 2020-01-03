@@ -280,18 +280,10 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
       row = mysql_fetch_row (mysql_res);
 
       /* Get latitude (row[0]) */
-      Coord->Latitude = Str_GetDoubleFromStr (row[0]);
-      if (Coord->Latitude < -90.0)
-	 Coord->Latitude = -90.0;	// South Pole
-      else if (Coord->Latitude > 90.0)
-	 Coord->Latitude = 90.0;	// North Pole
+      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
 
       /* Get longitude (row[1]) */
-      Coord->Longitude = Str_GetDoubleFromStr (row[1]);
-      if (Coord->Longitude < -180.0)
-	 Coord->Longitude = -180.0;	// West
-      else if (Coord->Longitude > 180.0)
-	 Coord->Longitude = 180.0;	// East
+      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
 
       /* Get maximum distance (row[2]) */
       MaxDistance = Str_GetDoubleFromStr (row[2]);
@@ -302,12 +294,7 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
       MaxDistance      = 0.0;
 
    /***** Convert distance to zoom *****/
-   *Zoom =  (MaxDistance <   0.01) ? 16 :
-           ((MaxDistance <   0.1 ) ? 12 :
-           ((MaxDistance <   1.0 ) ?  8 :
-           ((MaxDistance <  10.0 ) ?  6 :
-           ((MaxDistance < 100.0 ) ?  3 :
-                                      1))));
+   *Zoom = Map_GetZoomFromDistance (MaxDistance);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

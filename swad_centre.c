@@ -743,25 +743,13 @@ static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row)
    Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get latitude (row[5]) *****/
-   Ctr->Coord.Latitude = Str_GetDoubleFromStr (row[5]);
-   if (Ctr->Coord.Latitude < -90.0)
-      Ctr->Coord.Latitude = -90.0;	// South Pole
-   else if (Ctr->Coord.Latitude > 90.0)
-      Ctr->Coord.Latitude = 90.0;		// North Pole
+   Ctr->Coord.Latitude = Map_GetLatitudeFromStr (row[5]);
 
    /***** Get longitude (row[6]) *****/
-   Ctr->Coord.Longitude = Str_GetDoubleFromStr (row[6]);
-   if (Ctr->Coord.Longitude < -180.0)
-      Ctr->Coord.Longitude = -180.0;	// West
-   else if (Ctr->Coord.Longitude > 180.0)
-      Ctr->Coord.Longitude = 180.0;	// East
+   Ctr->Coord.Longitude = Map_GetLongitudeFromStr (row[6]);
 
    /***** Get altitude (row[7]) *****/
-   Ctr->Coord.Altitude = Str_GetDoubleFromStr (row[7]);
-   if (Ctr->Coord.Altitude < -413.0)
-      Ctr->Coord.Altitude = -413.0;	// Dead Sea shore
-   else if (Ctr->Coord.Altitude > 8848.0)
-      Ctr->Coord.Altitude = 8848.0;	// Mount Everest
+   Ctr->Coord.Altitude = Map_GetAltitudeFromStr (row[7]);
 
    /***** Get the short name of the centre (row[8]) *****/
    Str_Copy (Ctr->ShrtName,row[8],
