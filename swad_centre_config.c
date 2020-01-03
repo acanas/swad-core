@@ -330,61 +330,35 @@ static bool CtrCfg_GetIfMapIsAvailable (void)
 /****************************** Draw centre map ******************************/
 /*****************************************************************************/
 
+#define CtrCfg_MAP_CONTAINER_ID "centre_mapid"
+
 static void CtrCfg_Map (void)
   {
-   /* https://leafletjs.com/examples/quick-start/ */
    /***** Leaflet CSS *****/
-   HTM_Txt ("<link rel=\"stylesheet\""
-	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
-	    " integrity=\"sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==\""
-	    " crossorigin=\"\" />");
+   Map_LeafletCSS ();
 
    /***** Leaflet script *****/
-   /* Put this AFTER Leaflet's CSS */
-   HTM_Txt ("<script src=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.js\""
-	    " integrity=\"sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==\""
-	    " crossorigin=\"\">"
-	    "</script>");
+   Map_LeafletScript ();
 
    /***** Container for the map *****/
-   HTM_DIV_Begin ("id=\"centre_mapid\"");
+   HTM_DIV_Begin ("id=\"%s\"",CtrCfg_MAP_CONTAINER_ID);
    HTM_DIV_End ();
 
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
 
    /* Let's create a map of the center of London with pretty Mapbox Streets tiles */
-   HTM_TxtF ("\tvar mymap = L.map('centre_mapid').setView([%lg, %lg], 16);\n",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+   Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord);
 
-   /* Next we'll add a tile layer to add to our map,
-      in this case it's a Mapbox Streets tile layer.
-      Creating a tile layer usually involves
-      setting the URL template for the tile images,
-      the attribution text and the maximum zoom level of the layer.
-      In this example we'll use the mapbox/streets-v11 tiles
-      from Mapbox's Static Tiles API
-      (in order to use tiles from Mapbox,
-      you must also request an access token).*/
-   HTM_Txt ("\tL.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {"
-            "attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery &copy; <a href=\"https://www.mapbox.com/\">Mapbox</a>',"
-            "maxZoom: 20,"
-            "id: 'mapbox/streets-v11',"
-            "accessToken: 'pk.eyJ1IjoiYWNhbmFzIiwiYSI6ImNrNGFoNXFxOTAzdHozcnA4d3Y0M3BwOGkifQ.uSg754Lv2iZEJg0W2pjiOQ'"
-            "}).addTo(mymap);\n");
+   /* Add Mapbox Streets tile layer to our map */
+   Map_AddTileLayer ();
 
-   /* Marker */
-   HTM_TxtF ("\tvar marker = L.marker([%lg, %lg]).addTo(mymap);",
-	     Gbl.Hierarchy.Ctr.Coord.Latitude,
-	     Gbl.Hierarchy.Ctr.Coord.Longitude);
+   /* Add marker */
+   Map_AddMarker (&Gbl.Hierarchy.Ctr.Coord);
 
-   HTM_TxtF ("\tmarker.bindPopup(\"<strong>%s</strong><br />%s\").openPopup();",
-	     Gbl.Hierarchy.Ctr.ShrtName,
-	     Gbl.Hierarchy.Ins.ShrtName);
+   /* Add popup */
+   Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName);
 
-   Str_SetDecimalPointToLocal ();	// Return to local system
    HTM_SCRIPT_End ();
   }
 
