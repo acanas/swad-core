@@ -27,6 +27,7 @@
 
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
 #include "swad_centre.h"
