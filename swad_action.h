@@ -64,11 +64,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 4 + 66 + 38 + 12 + 42 + 39 + 19 + 110 + 186 + 437 + 176 + 169 + 16 + 68)
+#define Act_MAX_ACTION_COD		1817
 
-#define Act_MAX_ACTION_COD 1817
-
-#define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
+#define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
 /*****************************************************************************/
 /************************* Not asociates with tabs ***************************/
@@ -1632,24 +1630,22 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChg1stDay		(ActSeeMyUsgRep + 50)
 #define ActChgDatFmt		(ActSeeMyUsgRep + 51)
 #define ActChgCol		(ActSeeMyUsgRep + 52)
-#define ActHidLftCol		(ActSeeMyUsgRep + 53)
-#define ActHidRgtCol		(ActSeeMyUsgRep + 54)
-#define ActShoLftCol		(ActSeeMyUsgRep + 55)
-#define ActShoRgtCol		(ActSeeMyUsgRep + 56)
-#define ActChgIco		(ActSeeMyUsgRep + 57)
-#define ActChgMnu		(ActSeeMyUsgRep + 58)
-#define ActChgPriPho		(ActSeeMyUsgRep + 59)
-#define ActChgBasPriPrf		(ActSeeMyUsgRep + 60)
-#define ActChgExtPriPrf		(ActSeeMyUsgRep + 61)
-#define ActChgCooPrf		(ActSeeMyUsgRep + 62)
-#define ActChgNtfPrf		(ActSeeMyUsgRep + 63)
+#define ActChgIco		(ActSeeMyUsgRep + 53)
+#define ActChgMnu		(ActSeeMyUsgRep + 54)
+#define ActChgPriPho		(ActSeeMyUsgRep + 55)
+#define ActChgBasPriPrf		(ActSeeMyUsgRep + 56)
+#define ActChgExtPriPrf		(ActSeeMyUsgRep + 57)
+#define ActChgCooPrf		(ActSeeMyUsgRep + 58)
+#define ActChgNtfPrf		(ActSeeMyUsgRep + 59)
 
-#define ActPrnUsrQR		(ActSeeMyUsgRep + 64)
+#define ActPrnUsrQR		(ActSeeMyUsgRep + 60)
 
-#define ActPrnMyTT		(ActSeeMyUsgRep + 65)
-#define ActEdiTut		(ActSeeMyUsgRep + 66)
-#define ActChgTut		(ActSeeMyUsgRep + 67)
-#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 68)
+#define ActPrnMyTT		(ActSeeMyUsgRep + 61)
+#define ActEdiTut		(ActSeeMyUsgRep + 62)
+#define ActChgTut		(ActSeeMyUsgRep + 63)
+#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 64)
+
+#define Act_NUM_ACTIONS		(ActChgMyTT1stDay + 1)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

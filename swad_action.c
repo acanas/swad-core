@@ -2560,10 +2560,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChg1stDay	] = {1484,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Set_EditSettings			,NULL},
    [ActChgDatFmt	] = {1638,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_ChangeDateFormat		,Set_EditSettings			,NULL},
    [ActChgCol		] = { 674,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ChangeSideCols		,Set_EditSettings			,NULL},
-   [ActHidLftCol	] = { 668,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_HideLeftCol		,Set_EditSettings			,NULL},
-   [ActHidRgtCol	] = { 669,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_HideRightCol		,Set_EditSettings			,NULL},
-   [ActShoLftCol	] = { 670,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ShowLeftCol		,Set_EditSettings			,NULL},
-   [ActShoRgtCol	] = { 671,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ShowRightCol		,Set_EditSettings			,NULL},
    [ActChgIco		] = {1092,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ico_ChangeIconSet		,Set_EditSettings			,NULL},
    [ActChgMnu		] = {1243,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Set_EditSettings			,NULL},
    [ActChgPriPho	] = { 774,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
@@ -3250,10 +3246,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqSndNewPwd,	// #665
 	-1,			// #666 (obsolete action)
 	-1,			// #667 (obsolete action)
-	ActHidLftCol,		// #668
-	ActHidRgtCol,		// #669
-	ActShoLftCol,		// #670
-	ActShoRgtCol,		// #671
+	-1,			// #668 (obsolete action)
+	-1,			// #669 (obsolete action)
+	-1,			// #670 (obsolete action)
+	-1,			// #671 (obsolete action)
 	-1,			// #672 (obsolete action)
 	ActReqEdiSet,		// #673
 	ActChgCol,		// #674

@@ -46,10 +46,6 @@ void Set_SetSettingsFromIP (void);
 void Set_RemoveOldSettingsFromIP (void);
 
 void Set_ChangeSideCols (void);
-void Set_HideLeftCol (void);
-void Set_HideRightCol (void);
-void Set_ShowLeftCol (void);
-void Set_ShowRightCol (void);
 unsigned Set_GetParamSideCols (void);
 
 void Set_StartSettingsHead (void);

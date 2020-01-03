@@ -299,62 +299,6 @@ void Set_ChangeSideCols (void)
   }
 
 /*****************************************************************************/
-/*************************** Hide left side column ***************************/
-/*****************************************************************************/
-
-void Set_HideLeftCol (void)
-  {
-   Gbl.Prefs.SideCols &= ~Lay_SHOW_LEFT_COLUMN;	//  And with 1...101 to hide left column
-   if (Gbl.Usrs.Me.Logged)
-      Set_UpdateSideColsOnUsrDataTable ();
-
-   /***** Set settings from current IP *****/
-   Set_SetSettingsFromIP ();
-  }
-
-/*****************************************************************************/
-/*************************** Hide right side column **************************/
-/*****************************************************************************/
-
-void Set_HideRightCol (void)
-  {
-   Gbl.Prefs.SideCols &= ~Lay_SHOW_RIGHT_COLUMN;	//  And with 1...110 to hide right column
-   if (Gbl.Usrs.Me.Logged)
-      Set_UpdateSideColsOnUsrDataTable ();
-
-   /***** Set settings from current IP *****/
-   Set_SetSettingsFromIP ();
-  }
-
-/*****************************************************************************/
-/**************************** Show left side column **************************/
-/*****************************************************************************/
-
-void Set_ShowLeftCol (void)
-  {
-   Gbl.Prefs.SideCols |= Lay_SHOW_LEFT_COLUMN;	// Or with 10 to show left column
-   if (Gbl.Usrs.Me.Logged)
-      Set_UpdateSideColsOnUsrDataTable ();
-
-   /***** Set settings from current IP *****/
-   Set_SetSettingsFromIP ();
-  }
-
-/*****************************************************************************/
-/**************************** Show right side column *************************/
-/*****************************************************************************/
-
-void Set_ShowRightCol (void)
-  {
-   Gbl.Prefs.SideCols |= Lay_SHOW_RIGHT_COLUMN;	// Or with 01 to show right column
-   if (Gbl.Usrs.Me.Logged)
-      Set_UpdateSideColsOnUsrDataTable ();
-
-   /***** Set settings from current IP *****/
-   Set_SetSettingsFromIP ();
-  }
-
-/*****************************************************************************/
 /************** Update layout of side colums on user data table **************/
 /*****************************************************************************/
 
