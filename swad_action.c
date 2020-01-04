@@ -94,55 +94,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 /*
-
 Files:
-	517. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
-	518. ActAdmShaIns		Admin the shared files zone of the institution
-	519. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
-	520. ActAdmShaCtr		Admin the shared files zone of the centre
-	521. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
-	522. ActAdmShaDeg		Admin the shared files zone of the degree
-	523. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
-	524. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
-	525. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
-        526. ActAdmAsgWrkUsr		One user sends works of the course
-        527. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
-	528. ActSeeAdmMrk		Marks zone (see or admin)
-        529. ActAdmBrf			Show the briefcase of private archives
-
-	530. ActChgToSeeDocIns		Change to see institution documents
-
-	531. ActSeeDocIns		See the files of the documents zone of the institution
-	532. ActExpSeeDocIns		Expand a folder in institution documents
-	533. ActConSeeDocIns		Contract a folder in institution documents
-	534. ActZIPSeeDocIns		Compress a folder in institution documents
-	535. ActReqDatSeeDocIns		Ask for metadata of a file of the documents zone of the institution
-	536. ActDowSeeDocIns		Download a file in documents zone of the institution
-
-	537. ActChgToAdmDocIns		Change to administrate institution documents
-
-	538. ActAdmDocIns		Admin the files of the documents zone of the institution
-	539. ActReqRemFilDocIns		Request removal of a file in the documents zone of the institution
-	540. ActRemFilDocIns		Remove a file in the documents zone of the institution
-	541. ActRemFolDocIns		Remove a folder empty the documents zone of the institution
-	542. ActCopDocIns		Set source of copy in the documents zone of the institution
-	543. ActPasDocIns		Paste a folder or file in the documents zone of the institution
-	544. ActRemTreDocIns		Remove a folder no empty in the documents zone of the institution
-	545. ActFrmCreDocIns		Form to crear a folder or file in the documents zone of the institution
-	546. ActCreFolDocIns		Create a new folder in the documents zone of the institution
-	547. ActCreLnkDocIns		Create a new link in the documents zone of the institution
-	548. ActRenFolDocIns		Rename a folder in the documents zone of the institution
-	549. ActRcvFilDocInsDZ		Receive a file in the documents zone of the institution using Dropzone.js
-	550. ActRcvFilDocInsCla		Receive a file in the documents zone of the institution using the classic way
-	551. ActExpAdmDocIns		Expand a folder when administrating the documents zone of the institution
-	552. ActConAdmDocIns		Contract a folder when administrating the documents zone of the institution
-	553. ActZIPAdmDocIns		Compress a folder when administrating the documents zone of the institution
-	554. ActShoDocIns		Show hidden folder or file of the documents zone of the institution
-	555. ActHidDocIns		Hide folder or file of the documents zone of the institution
-	556. ActReqDatAdmDocIns		Ask for metadata of a file of the documents zone of the institution
-	557. ActChgDatAdmDocIns		Change metadata of a file of the documents zone of the institution
-	558. ActDowAdmDocIns		Download a file of the documents zone of the institution
-
 	559. ActReqRemFilShaIns		Request removal of a shared file of the institution
 	560. ActRemFilShaIns		Remove a shared file of the institution
 	561. ActRemFolShaIns		Remove an empty shared folder of the institution

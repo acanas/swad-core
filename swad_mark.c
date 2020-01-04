@@ -613,7 +613,7 @@ void Mrk_ShowMyMarks (void)
       /* Select a random student from the course */
       if (Gbl.Crs.Grps.GrpCod > 0)	// Group zone
         {
-         if (Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))
+         if (Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))	// If there are students in this group
            {
             Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
@@ -623,7 +623,8 @@ void Mrk_ShowMyMarks (void)
         }
       else					// Course zone
         {
-         if (Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])	// If there are students in this course
+	 // if (Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))	// If there are students in this course
+         if (Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])
            {
             Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromCrs (Gbl.Hierarchy.Crs.CrsCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
