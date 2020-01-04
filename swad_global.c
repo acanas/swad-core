@@ -412,6 +412,7 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
+   Ctr_FlushCacheNumUsrsInCrssOfCtr ();
    Usr_FlushCacheUsrIsSuperuser ();
    Usr_FlushCacheUsrBelongsToIns ();
    Usr_FlushCacheUsrBelongsToCtr ();

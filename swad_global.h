@@ -773,6 +773,12 @@ struct Globals
 	 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
 	} InstitutionShrtNameAndCty;
       struct
+        {
+	 Rol_Role_t Role;
+	 long CtrCod;
+	 unsigned NumUsrs;
+        } NumUsrsInCrssOfCtr;
+      struct
 	{
 	 long UsrCod;
 	 bool IsSuperuser;

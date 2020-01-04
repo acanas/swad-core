@@ -409,6 +409,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
+void Ctr_FlushCacheNumUsrsInCrssOfCtr (void);
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod);
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod);
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod);

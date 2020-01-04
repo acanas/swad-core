@@ -416,7 +416,8 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ctr->NumUsrs);
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,		// Here Rol_UNK means "all users"
+					    Ctr->CtrCod));
    HTM_TD_End ();
 
    /***** Centre status *****/
@@ -612,9 +613,6 @@ void Ctr_GetListCentres (long InsCod)
 
          /* Get number of courses in this centre */
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
-
-	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
         }
      }
    else
@@ -647,7 +645,6 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
    Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
    Ctr->Degs.Num =
    Ctr->NumCrss  = 0;
-   Ctr->NumUsrs  = 0;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -704,9 +701,6 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
 
 	    /* Get number of courses in this centre */
 	    Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
-
-	    /* Get number of users in courses of this centre */
-	    Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
 	   }
 
          /* Set return value */
@@ -944,12 +938,16 @@ static void Ctr_ListCentresForEdition (void)
       /* Put icon to remove centre */
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"BM\"");
-      if (Ctr->Degs.Num ||
-	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
-	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
-          !ICanEdit)
+      if (!ICanEdit)
 	 Ico_PutIconRemovalNotAllowed ();
-      else
+      else if (Ctr->Degs.Num)				// Centre has degrees
+	 Ico_PutIconRemovalNotAllowed ();
+      else if (Ctr->NumUsrsWhoClaimToBelongToCtr)	// Centre has users who claim to belong to it
+	 Ico_PutIconRemovalNotAllowed ();
+      else if (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,	// Here Rol_UNK means "all users"
+					  Ctr->CtrCod))	// Centre has users
+	 Ico_PutIconRemovalNotAllowed ();
+      else						// I can remove centre
         {
          Frm_StartForm (ActRemCtr);
          Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
@@ -1059,7 +1057,8 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Number of users in courses of this centre */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ctr->NumUsrs);
+      HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,		// Here Rol_UNK means "all users"
+					       Ctr->CtrCod));
       HTM_TD_End ();
 
       /* Centre requester */
@@ -1210,11 +1209,14 @@ void Ctr_RemoveCentre (void)
    Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_EXTRA_DATA);
 
    /***** Check if this centre has teachers *****/
-   if (Ctr_EditingCtr->Degs.Num ||
-       Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr ||
-       Ctr_EditingCtr->NumUsrs)	// Centre has degrees or users ==> don't remove
+   if (Ctr_EditingCtr->Degs.Num)				// Centre has degrees
       Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
-   else	// Centre has no teachers ==> remove it
+   else if (Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr)	// Centre has users who claim to belong to it
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
+   else if (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,			// Here Rol_UNK means "all users"
+				       Ctr_EditingCtr->CtrCod))	// Centre has users
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
+   else	// Centre has no degrees or users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the centre *****/
       For_RemoveForums (Hie_CTR,Ctr_EditingCtr->CtrCod);
@@ -1240,6 +1242,9 @@ void Ctr_RemoveCentre (void)
       DB_QueryDELETE ("can not remove a centre",
 		      "DELETE FROM centres WHERE CtrCod=%ld",
 		      Ctr_EditingCtr->CtrCod);
+
+      /***** Flush caches *****/
+      Ctr_FlushCacheNumUsrsInCrssOfCtr ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2052,7 +2057,6 @@ static void Ctr_EditingCentreConstructor (void)
    Ctr_EditingCtr->Degs.Num        = 0;
    Ctr_EditingCtr->Degs.Lst        = NULL;
    Ctr_EditingCtr->NumCrss         = 0;
-   Ctr_EditingCtr->NumUsrs         = 0;
    Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr = 0;
   }
 

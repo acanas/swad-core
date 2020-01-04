@@ -4200,13 +4200,30 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 /*****************************************************************************/
 // Here Rol_UNK means any user (students, non-editing teachers or teachers)
 
+void Ctr_FlushCacheNumUsrsInCrssOfCtr (void)
+  {
+   Gbl.Cache.NumUsrsInCrssOfCtr.Role    = Rol_UNK;
+   Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod  = -1L;
+   Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs = 0;
+  }
+
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {
-   unsigned NumUsrs;
+   /***** 1. Fast check: Trivial case *****/
+   if (CtrCod <= 0)
+      return 0;
 
-   /***** Get the number of users in courses of a centre from database ******/
+   /***** 2. Fast check: If cached... *****/
+   if (Role == Gbl.Cache.NumUsrsInCrssOfCtr.Role &&
+       CtrCod == Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod)
+      return Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs;
+
+   /***** 3. Slow: get number of users in courses of a centre
+                   from database *****/
+   Gbl.Cache.NumUsrsInCrssOfCtr.Role   = Role;
+   Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod = CtrCod;
    if (Role == Rol_UNK)	// Any user
-      NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
@@ -4218,7 +4235,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of centres
-      NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
@@ -4228,7 +4245,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 				" AND courses.CrsCod=crs_usr.CrsCod"
 				" AND crs_usr.Role=%u",
 				CtrCod,(unsigned) Role);
-   return NumUsrs;
+   return Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs;
   }
 
 /*****************************************************************************/

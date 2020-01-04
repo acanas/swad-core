@@ -73,7 +73,6 @@ struct Centre
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct ListDegrees Degs;	// List of degrees in this centre
    unsigned NumCrss;		// Number of courses in this centre
-   unsigned NumUsrs;		// Number of users in courses of this centre
    unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
   };
 
