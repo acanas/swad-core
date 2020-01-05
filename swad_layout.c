@@ -1561,7 +1561,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of course *****/
    Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);

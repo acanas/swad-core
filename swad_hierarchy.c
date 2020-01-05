@@ -525,8 +525,7 @@ void Hie_InitHierarchy (void)
    /***** If course code is available, get course data *****/
    if (Gbl.Hierarchy.Crs.CrsCod > 0)
      {
-      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs,		// Course found
-				    Crs_GET_EXTRA_DATA))	// Get extra data because they may be needed later
+      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs))	// Course found
          Gbl.Hierarchy.Deg.DegCod = Gbl.Hierarchy.Crs.DegCod;
       else
          Hie_ResetHierarchy ();

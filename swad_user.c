@@ -4167,14 +4167,56 @@ static void Usr_WriteUsrData (const char *BgColor,
 /************* Get number of users with a role in a course *******************/
 /*****************************************************************************/
 
+void Usr_FlushCacheNumUsrsInCrs (void)
+  {
+   Gbl.Cache.NumUsrsInCrs[Rol_UNK].CrsCod =
+   Gbl.Cache.NumUsrsInCrs[Rol_STD].CrsCod =
+   Gbl.Cache.NumUsrsInCrs[Rol_NET].CrsCod =
+   Gbl.Cache.NumUsrsInCrs[Rol_TCH].CrsCod = -1L;
+
+   Gbl.Cache.NumUsrsInCrs[Rol_UNK].NumUsrs =
+   Gbl.Cache.NumUsrsInCrs[Rol_STD].NumUsrs =
+   Gbl.Cache.NumUsrsInCrs[Rol_NET].NumUsrs =
+   Gbl.Cache.NumUsrsInCrs[Rol_TCH].NumUsrs = 0;
+  }
+
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
   {
-   /***** Get the number of teachers in a course from database ******/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
-			     "SELECT COUNT(*) FROM crs_usr"
-			     " WHERE CrsCod=%ld AND Role=%u",
-			     CrsCod,(unsigned) Role);
+   /***** 1. Fast check: Trivial case *****/
+   if (CrsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: Trivial case *****/
+   switch (Role)
+     {
+      case Rol_UNK:	// Here Rol_UNK means all
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 break;
+      default:
+	 return 0;
+     }
+
+   /***** 3. Fast check: If cached... *****/
+   if (CrsCod == Gbl.Cache.NumUsrsInCrs[Role].CrsCod)
+      return Gbl.Cache.NumUsrsInCrs[Role].NumUsrs;
+
+   /***** 4. Slow: number of users in a course from database *****/
+   Gbl.Cache.NumUsrsInCrs[Role].CrsCod = CrsCod;
+   if (Role == Rol_UNK)
+      Gbl.Cache.NumUsrsInCrs[Rol_UNK].NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
+				"SELECT COUNT(*) FROM crs_usr"
+				" WHERE CrsCod=%ld",
+				CrsCod);
+   else
+      Gbl.Cache.NumUsrsInCrs[Role].NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
+				"SELECT COUNT(*) FROM crs_usr"
+				" WHERE CrsCod=%ld AND Role=%u",
+				CrsCod,(unsigned) Role);
+   return Gbl.Cache.NumUsrsInCrs[Role].NumUsrs;
   }
 
 /*****************************************************************************/
@@ -4202,9 +4244,15 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 
 void Usr_FlushCacheNumUsrsInCrssOfCtr (void)
   {
-   Gbl.Cache.NumUsrsInCrssOfCtr.Role    = Rol_UNK;
-   Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod  = -1L;
-   Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs = 0;
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_UNK].CtrCod =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_STD].CtrCod =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_NET].CtrCod =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_TCH].CtrCod = -1L;
+
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_UNK].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_STD].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_NET].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCtr[Rol_TCH].NumUsrs = 0;
   }
 
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
@@ -4213,17 +4261,27 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
    if (CtrCod <= 0)
       return 0;
 
-   /***** 2. Fast check: If cached... *****/
-   if (Role == Gbl.Cache.NumUsrsInCrssOfCtr.Role &&
-       CtrCod == Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod)
-      return Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs;
+   /***** 2. Fast check: Trivial case *****/
+   switch (Role)
+     {
+      case Rol_UNK:	// Here Rol_UNK means all
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 break;
+      default:
+	 return 0;
+     }
 
-   /***** 3. Slow: get number of users in courses of a centre
+   /***** 3. Fast check: If cached... *****/
+   if (CtrCod == Gbl.Cache.NumUsrsInCrssOfCtr[Role].CtrCod)
+      return Gbl.Cache.NumUsrsInCrssOfCtr[Role].NumUsrs;
+
+   /***** 4. Slow: get number of users in courses of a centre
                    from database *****/
-   Gbl.Cache.NumUsrsInCrssOfCtr.Role   = Role;
-   Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod = CtrCod;
+   Gbl.Cache.NumUsrsInCrssOfCtr[Role].CtrCod = CtrCod;
    if (Role == Rol_UNK)	// Any user
-      Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCtr[Rol_UNK].NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
@@ -4235,7 +4293,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of centres
-      Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCtr[Role].NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
@@ -4245,7 +4303,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 				" AND courses.CrsCod=crs_usr.CrsCod"
 				" AND crs_usr.Role=%u",
 				CtrCod,(unsigned) Role);
-   return Gbl.Cache.NumUsrsInCrssOfCtr.NumUsrs;
+   return Gbl.Cache.NumUsrsInCrssOfCtr[Role].NumUsrs;
   }
 
 /*****************************************************************************/
@@ -9804,21 +9862,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    (unsigned) Role);
          break;
       case Hie_CRS:
-	 switch (Role)
-	   {
-	    case Rol_UNK:
-	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Any user
-	    case Rol_STD:
-	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_STD];	// Students
-	    case Rol_NET:
-	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
-	    case Rol_TCH:
-	       return (double) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Teachers
-	    default:
-	       Rol_WrongRoleExit ();
-	       break;	// Not reached
-	   }
-	 break;
+	 return (double) Usr_GetNumUsrsInCrs (Role,Gbl.Hierarchy.Crs.CrsCod);
       default:
          Lay_WrongScopeExit ();
          break;

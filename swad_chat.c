@@ -206,7 +206,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	      {
                /* Get data of this course */
-               Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+               Crs_GetDataOfCourseByCod (&Crs);
 
                /* Link to the room of this course */
                IsLastItemInLevel[2] = (NumRow == NumRows - 1);
@@ -557,7 +557,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this course */
          Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
-         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+         Crs_GetDataOfCourseByCod (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",

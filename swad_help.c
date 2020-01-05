@@ -161,17 +161,17 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
-	 if (Gbl.Hierarchy.Level == Hie_CRS &&			// Course selected
-	     !Gbl.Hierarchy.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
+	 if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
-	   {
-	    /* Request students enrolment */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_students_in_COURSE_X,
-								     Gbl.Hierarchy.Crs.ShrtName),
-						 ActReqEnrSevStd,
-						 Btn_CREATE_BUTTON,Txt_Register_students);
-	    Str_FreeString ();
-	   }
+	    if (!Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))// Current course has no students
+	      {
+	       /* Request students enrolment */
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_students_in_COURSE_X,
+									Gbl.Hierarchy.Crs.ShrtName),
+						    ActReqEnrSevStd,
+						    Btn_CREATE_BUTTON,Txt_Register_students);
+	       Str_FreeString ();
+	      }
 
 	 if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 	    /* Request list my courses */

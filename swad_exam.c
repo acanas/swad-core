@@ -1607,7 +1607,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
 
    /***** Get data of course *****/
    Crs.CrsCod = Gbl.ExamAnns.ExaDat.CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Get data of degree *****/
    Deg.DegCod = Crs.DegCod;

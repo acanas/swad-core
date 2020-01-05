@@ -415,7 +415,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get course code (row[5]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+         Crs_GetDataOfCourseByCod (&Crs);
 
          /* Get message/post/... code (row[6]) */
          Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -1244,7 +1244,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Gbl.Hierarchy.Crs.NumUsrs[Rol_TCH])
+	 if (Usr_GetNumUsrsInCrs (Rol_TCH,Gbl.Hierarchy.Crs.CrsCod))
 	   {
 	    // If this course has teachers ==> send notification to teachers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
@@ -1662,7 +1662,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get course code (row[5]) */
 	    Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-	    Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+	    Crs_GetDataOfCourseByCod (&Crs);
 
 	    /* Get message/post/... code (row[6]) */
 	    Cod = Str_ConvertStrCodToLongCod (row[6]);

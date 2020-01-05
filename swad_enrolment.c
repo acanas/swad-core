@@ -184,7 +184,7 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   {
    /***** Put link to register students *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])	// No students in course
+      if (!Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))	// No students in course
           Usr_ShowWarningNoUsersFound (Rol_STD);
   }
 
@@ -675,7 +675,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
             Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
             /* Put link to remove all the students in the current course */
-            if (Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])	// This course has students
+            if (Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))	// This course has students
                Enr_PutLinkToRemAllStdsThisCrs ();
 	    break;
 	 case Rol_NET:
@@ -1821,17 +1821,18 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
+   unsigned NumStds = Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Remove_all_students,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
-   if (Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])
+   if (NumStds)
      {
       /***** Show question and button to remove students *****/
       /* Start alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-                               Gbl.Hierarchy.Crs.NumUsrs[Rol_STD],
+                               NumStds,
                                Gbl.Hierarchy.Crs.FullName);
 
       /* Show form to request confirmation */
@@ -2002,9 +2003,9 @@ void Enr_SignUpInCrs (void)
       /***** Notify teachers or admins by email about the new enrolment request *****/
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
-      if (Gbl.Hierarchy.Crs.NumUsrs[Rol_TCH] ||
-	  RoleFromForm == Rol_TCH)
-         Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
+      if (RoleFromForm == Rol_TCH)	// TODO: What happens in user wants to enrole as a non-editing teacher?
+	 if (Usr_GetNumUsrsInCrs (Rol_TCH,Gbl.Hierarchy.Crs.CrsCod))
+            Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
      }
   }
 
@@ -2820,7 +2821,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	    HTM_TD_End ();
 
             /***** Link to course *****/
-            Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+            Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
             HTM_TD_Begin ("class=\"DAT LT\"");
@@ -2836,7 +2837,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Number of teachers in the course *****/
             HTM_TD_Begin ("class=\"DAT RT\"");
-            HTM_Unsigned (Crs.NumUsrs[Rol_TCH]);
+            HTM_Unsigned (Usr_GetNumUsrsInCrs (Rol_TCH,Crs.CrsCod));
             HTM_TD_End ();
 
             /***** User photo *****/

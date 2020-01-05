@@ -343,7 +343,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		  /***** Get data of this course *****/
 		  Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-		  if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
+		  if (!Crs_GetDataOfCourseByCod (&Crs))
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
@@ -658,14 +658,6 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
          /* Get next course */
          row = mysql_fetch_row (mysql_res);
          Crs_GetDataOfCourseFromRow (Crs,row);
-
-	 /* Get number of users in this course */
-	 Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-	 Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-	 Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
-	 Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
-				 Crs->NumUsrs[Rol_NET] +
-				 Crs->NumUsrs[Rol_TCH];
         }
      }
 
@@ -865,6 +857,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
    bool ThisYearHasCourses = false;
+   unsigned NumUsrs[Rol_NUM_ROLES];
 
    /***** Write all the courses of this year *****/
    for (NumCrs = 0;
@@ -892,13 +885,19 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 HTM_TR_Begin (NULL);
 
+	 /* Get number of users */
+	 NumUsrs[Rol_UNK] = Usr_GetNumUsrsInCrs (Rol_UNK,Crs->CrsCod);
+	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
+	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
+	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+
 	 /* Put green tip if course has users */
 	 HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
 		       TxtClassNormal,BgColor,
-		       Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
-					       Txt_COURSE_Without_users);
-	 HTM_Txt (Crs->NumUsrs[Rol_UNK] ? "&check;" :
-				          "&nbsp;");
+		       NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
+				          Txt_COURSE_Without_users);
+	 HTM_Txt (NumUsrs[Rol_UNK] ? "&check;" :
+			             "&nbsp;");
 	 HTM_TD_End ();
 
 	 /* Institutional code of the course */
@@ -925,13 +924,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Current number of teachers in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Crs->NumUsrs[Rol_TCH] +
-		       Crs->NumUsrs[Rol_NET]);
+	 HTM_Unsigned (NumUsrs[Rol_TCH] +
+		       NumUsrs[Rol_NET]);
 	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Crs->NumUsrs[Rol_STD]);
+	 HTM_Unsigned (NumUsrs[Rol_STD]);
 	 HTM_TD_End ();
 
 	 /* Course status */
@@ -1065,6 +1064,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    unsigned NumCrs;
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumUsrs[Rol_NUM_ROLES];
    Crs_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
 
@@ -1081,11 +1081,17 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
+	 /* Get number of users */
+	 NumUsrs[Rol_UNK] = Usr_GetNumUsrsInCrs (Rol_UNK,Crs->CrsCod);
+	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
+	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
+	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+
 	 HTM_TR_Begin (NULL);
 
 	 /* Put icon to remove course */
 	 HTM_TD_Begin ("class=\"BM\"");
-	 if (Crs->NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
+	 if (NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
 	     !ICanEdit)
 	    Ico_PutIconRemovalNotAllowed ();
 	 else	// Crs->NumUsrs == 0 && ICanEdit
@@ -1168,13 +1174,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	 /* Current number of teachers in this course */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (Crs->NumUsrs[Rol_TCH] +
-		       Crs->NumUsrs[Rol_NET]);
+	 HTM_Unsigned (NumUsrs[Rol_TCH] +
+		       NumUsrs[Rol_NET]);
 	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (Crs->NumUsrs[Rol_STD]);
+	 HTM_Unsigned (NumUsrs[Rol_STD]);
 	 HTM_TD_End ();
 
 	 /* Course requester */
@@ -1567,14 +1573,15 @@ void Crs_RemoveCourse (void)
    Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /***** Get data of the course from database *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_EXTRA_DATA);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Check if this course has users *****/
-      if (Crs_EditingCrs->NumUsrs[Rol_UNK])	// Course has users ==> don't remove
-         Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
-      else			// Course has no users ==> remove it
+      if (Usr_GetNumUsrsInCrs (Rol_UNK,Crs_EditingCrs->CrsCod))	// Course has users ==> don't remove
+         Ale_ShowAlert (Ale_WARNING,
+			Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
+      else	// Course has no users ==> remove it
         {
          /***** Remove course *****/
          Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
@@ -1594,8 +1601,7 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetDataOfCourseByCod (struct Course *Crs,
-                               Crs_GetExtraData_t GetExtraData)
+bool Crs_GetDataOfCourseByCod (struct Course *Crs)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1608,10 +1614,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs,
    Crs->RequesterUsrCod = -1L;
    Crs->ShrtName[0] = '\0';
    Crs->FullName[0] = '\0';
-   Crs->NumUsrs[Rol_UNK] =
-   Crs->NumUsrs[Rol_STD] =
-   Crs->NumUsrs[Rol_NET] =
-   Crs->NumUsrs[Rol_TCH] = 0;
 
    /***** Check if course code is correct *****/
    if (Crs->CrsCod > 0)
@@ -1632,18 +1634,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs,
 	 /***** Get data of the course *****/
 	 row = mysql_fetch_row (mysql_res);
 	 Crs_GetDataOfCourseFromRow (Crs,row);
-
-	 /* Get extra data */
-	 if (GetExtraData == Crs_GET_EXTRA_DATA)
-	   {
-	    /* Get number of users in this course */
-	    Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-	    Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-	    Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
-	    Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
-				    Crs->NumUsrs[Rol_NET] +
-				    Crs->NumUsrs[Rol_TCH];
-	   }
 
          /* Set return value */
 	 CrsFound = true;
@@ -1749,6 +1739,9 @@ void Crs_RemoveCourseCompletely (long CrsCod)
       DB_QueryDELETE ("can not remove a course",
 		      "DELETE FROM courses WHERE CrsCod=%ld",
 		      CrsCod);
+
+      /***** Flush caches *****/
+      Usr_FlushCacheNumUsrsInCrs ();
      }
   }
 
@@ -1767,7 +1760,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
      {
       /***** Get course data *****/
       Crs.CrsCod = CrsCod;
-      Crs_GetDataOfCourseByCod (&Crs,Crs_GET_EXTRA_DATA);
+      Crs_GetDataOfCourseByCod (&Crs);
 
       /***** Remove all the students in the course *****/
       Enr_RemAllStdsInCrs (&Crs);
@@ -1923,7 +1916,7 @@ void Crs_ChangeInsCrsCod (void)
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -1969,7 +1962,7 @@ void Crs_ChangeCrsYear (void)
    Par_GetParToText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -2100,7 +2093,7 @@ void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParToText (ParamName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
-   Crs_GetDataOfCourseByCod (Crs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (Crs);
 
    if (Crs_CheckIfICanEdit (Crs))
      {
@@ -2201,7 +2194,7 @@ void Crs_ChangeCrsStatus (void)
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of course *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs,Crs_GET_BASIC_DATA);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    /***** Update status in table of courses *****/
    DB_QueryUPDATE ("can not update the status of a course",
@@ -2838,8 +2831,6 @@ void Crs_RemoveOldCrss (void)
 
 static void Crs_EditingCourseConstructor (void)
   {
-   Rol_Role_t Role;
-
    /***** Pointer must be NULL *****/
    if (Crs_EditingCrs != NULL)
       Lay_ShowErrorAndExit ("Error initializing course.");
@@ -2856,10 +2847,6 @@ static void Crs_EditingCourseConstructor (void)
    Crs_EditingCrs->Status      = 0;
    Crs_EditingCrs->ShrtName[0] = '\0';
    Crs_EditingCrs->FullName[0] = '\0';
-   for (Role  = (Rol_Role_t) 0;
-	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
-	Role++)
-      Crs_EditingCrs->NumUsrs[Role] = 0;
   }
 
 static void Crs_EditingCourseDestructor (void)

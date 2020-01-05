@@ -2207,14 +2207,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
 	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
+	 if (!Crs_GetDataOfCourseByCod (&Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
          Str_Copy (ForumName,Crs.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA))
+	 if (!Crs_GetDataOfCourseByCod (&Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Crs.ShrtName,

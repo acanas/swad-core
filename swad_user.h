@@ -407,6 +407,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
 
+void Usr_FlushCacheNumUsrsInCrs (void);
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
 void Usr_FlushCacheNumUsrsInCrssOfCtr (void);

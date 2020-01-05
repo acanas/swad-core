@@ -3619,7 +3619,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
-      CrsOK = Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+      CrsOK = Crs_GetDataOfCourseByCod (&Crs);
 
       HTM_TR_Begin (NULL);
 

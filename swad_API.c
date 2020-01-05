@@ -1032,7 +1032,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get course (row[2]) *****/
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[2]);
-      Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs,Crs_GET_BASIC_DATA);
+      Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Crs.FullName,
                 Hie_MAX_BYTES_FULL_NAME);
@@ -3013,7 +3013,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get course (row[7]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+         Crs_GetDataOfCourseByCod (&Crs);
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);

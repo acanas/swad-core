@@ -427,7 +427,7 @@ static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Gbl.Hierarchy.Crs.NumUsrs[Role]);
+   HTM_Unsigned (Usr_GetNumUsrsInCrs (Role,Gbl.Hierarchy.Crs.CrsCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -85,14 +85,7 @@ struct Course
    long RequesterUsrCod;			// User code of the person who requested the creation of this course
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of course
-   unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users
   };
-
-typedef enum
-  {
-   Crs_GET_BASIC_DATA,
-   Crs_GET_EXTRA_DATA,
-  } Crs_GetExtraData_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -120,8 +113,7 @@ void Crs_RecFormReqCrs (void);
 void Crs_RecFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
-bool Crs_GetDataOfCourseByCod (struct Course *Crs,
-                               Crs_GetExtraData_t GetExtraData);
+bool Crs_GetDataOfCourseByCod (struct Course *Crs);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);

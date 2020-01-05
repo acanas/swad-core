@@ -1631,7 +1631,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_NOTICE:
 		  /* Get course data */
 		  Crs.CrsCod = SocNot->HieCod;
-		  Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
+		  Crs_GetDataOfCourseByCod (&Crs);
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */

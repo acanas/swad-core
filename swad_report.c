@@ -1161,7 +1161,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Get course data *****/
    Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs,Crs_GET_EXTRA_DATA);
+   Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Get degree data *****/
    Deg.DegCod = Crs.DegCod;
