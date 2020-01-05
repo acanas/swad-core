@@ -1557,7 +1557,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of degree *****/
    Deg.DegCod = DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+   Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Get data of course *****/
    Crs.CrsCod = CrsCod;

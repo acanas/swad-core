@@ -1623,7 +1623,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Get degree data */
 		  Deg.DegCod = SocNot->HieCod;
-		  Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+		  Deg_GetDataOfDegreeByCod (&Deg);
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
 	       case TL_NOTE_CRS_SHA_PUB_FILE:

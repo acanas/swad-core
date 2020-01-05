@@ -1165,7 +1165,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Get degree data *****/
    Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+   Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Start row *****/
    fprintf (Gbl.F.Rep,"<li>");

@@ -2191,14 +2191,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_DEGREE_USRS:
 	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+	 if (!Deg_GetDataOfDegreeByCod (&Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
          Str_Copy (ForumName,Deg.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+	 if (!Deg_GetDataOfDegreeByCod (&Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Deg.ShrtName,

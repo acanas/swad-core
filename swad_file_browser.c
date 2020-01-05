@@ -6882,7 +6882,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -6890,7 +6890,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -7891,7 +7891,7 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
             Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+            if (Deg_GetDataOfDegreeByCod (&Deg))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%02u/%u/%s",
 		         Cfg_PATH_DEG_PRIVATE,
@@ -11062,7 +11062,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *GrpCod = -1L;
 	 *CrsCod = -1L;
 	 *DegCod = Deg.DegCod = Cod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
@@ -11078,7 +11078,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *CrsCod = Crs.CrsCod = Cod;
 	 Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 	 *DegCod = Deg.DegCod = Crs.DegCod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
@@ -11093,7 +11093,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *CrsCod = Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 	 *DegCod = Deg.DegCod = Crs.DegCod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
@@ -11105,7 +11105,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *CrsCod = Crs.CrsCod = Prj_GetCourseOfProject (Cod);
 	 Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
 	 *DegCod = Deg.DegCod = Crs.DegCod;
-	 Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;

@@ -2822,7 +2822,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             /***** Link to course *****/
             Crs_GetDataOfCourseByCod (&Crs,Crs_GET_BASIC_DATA);
             Deg.DegCod = Crs.DegCod;
-            Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+            Deg_GetDataOfDegreeByCod (&Deg);
             HTM_TD_Begin ("class=\"DAT LT\"");
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);

@@ -1043,7 +1043,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-      Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg,Deg_GET_BASIC_DATA);
+      Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Deg.FullName,
                 Hie_MAX_BYTES_FULL_NAME);
@@ -3070,7 +3070,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get degree (row[6]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+         Deg_GetDataOfDegreeByCod (&Deg);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);

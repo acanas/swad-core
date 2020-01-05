@@ -67,7 +67,7 @@ static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the cour
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
-static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses);
+static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static bool Crs_CheckIfICanCreateCourses (void);
 static void Crs_PutIconsListCourses (void);
@@ -309,7 +309,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	       /***** Get data of this degree *****/
 	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+	       if (!Deg_GetDataOfDegreeByCod (&Deg))
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
@@ -475,14 +475,30 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 /******************** Get number of courses in a degree **********************/
 /*****************************************************************************/
 
+void Crs_FlushCacheNumCrssInDeg (void)
+  {
+   Gbl.Cache.NumCrssInDeg.DegCod  = -1L;
+   Gbl.Cache.NumCrssInDeg.NumCrss = 0;
+  }
+
 unsigned Crs_GetNumCrssInDeg (long DegCod)
   {
-   /***** Get number of courses in a degree from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (DegCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (DegCod == Gbl.Cache.NumCrssInDeg.DegCod)
+      return Gbl.Cache.NumCrssInDeg.NumCrss;
+
+   /***** 3. Slow: number of courses in a degree from database *****/
+   Gbl.Cache.NumCrssInDeg.DegCod  = DegCod;
+   Gbl.Cache.NumCrssInDeg.NumCrss =
    (unsigned) DB_QueryCOUNT ("can not get the number of courses in a degree",
 			     "SELECT COUNT(*) FROM courses"
 			     " WHERE DegCod=%ld",
 			     DegCod);
+   return Gbl.Cache.NumCrssInDeg.NumCrss;
   }
 
 /*****************************************************************************/
@@ -578,7 +594,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
       return;
 
    /***** Get list of courses in this degree *****/
-   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
+   Crs_GetListCrssInCurrentDeg (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
    /***** Write menu to select country, institution, centre and degree *****/
    Hie_WriteMenuHierarchy ();
@@ -594,7 +610,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
 /*************** Create a list with courses in current degree ****************/
 /*****************************************************************************/
 
-static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses)
+static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -790,7 +806,7 @@ static void Crs_ListCourses (void)
      {
       Frm_StartForm (ActEdiCrs);
       Btn_PutConfirmButton (Gbl.Hierarchy.Deg.Crss.Num ? Txt_Create_another_course :
-	                                                           Txt_Create_course);
+	                                                 Txt_Create_course);
       Frm_EndForm ();
      }
 
@@ -954,10 +970,10 @@ static void Crs_EditCoursesInternal (void)
    extern const char *Txt_Courses_of_DEGREE_X;
 
    /***** Get list of degrees in this centre *****/
-   Deg_GetListDegsOfCurrentCtr ();
+   Deg_GetListDegsInCurrentCtr ();
 
    /***** Get list of courses in this degree *****/
-   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
+   Crs_GetListCrssInCurrentDeg (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
    /***** Write menu to select country, institution, centre and degree *****/
    Hie_WriteMenuHierarchy ();
@@ -2592,7 +2608,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of degree.");
-   if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+   if (!Deg_GetDataOfDegreeByCod (&Deg))
       Lay_ShowErrorAndExit ("Degree not found.");
 
    /***** Get course code (row[1]) *****/

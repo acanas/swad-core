@@ -535,8 +535,7 @@ void Hie_InitHierarchy (void)
    /***** If degree code is available, get degree data *****/
    if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
-      if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg,		// Degree found
-				    Deg_GET_EXTRA_DATA))	// Get extra data because they may be needed later
+      if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg))	// Degree found
 	{
 	 Gbl.Hierarchy.Ctr.CtrCod = Gbl.Hierarchy.Deg.CtrCod;
          Gbl.Hierarchy.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
@@ -548,7 +547,7 @@ void Hie_InitHierarchy (void)
    /***** If centre code is available, get centre data *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr))	// Degree found
+      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr))	// Centre found
          Gbl.Hierarchy.Ins.InsCod = Gbl.Hierarchy.Ctr.InsCod;
       else
          Hie_ResetHierarchy ();
@@ -762,7 +761,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Deg.DegCod > 0)
 		 {
 		  /* Get data of degree */
-		  Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+		  Deg_GetDataOfDegreeByCod (&Deg);
 
 		  /* Write degree logo and name */
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,

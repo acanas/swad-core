@@ -784,6 +784,11 @@ struct Globals
         } NumCrssInCtr;
       struct
         {
+	 long DegCod;
+	 unsigned NumCrss;
+        } NumCrssInDeg;
+      struct
+        {
 	 long CtrCod;
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToCtr;

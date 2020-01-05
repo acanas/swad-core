@@ -229,7 +229,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    if (PutForm)
      {
       /* Get list of degrees of the current centre */
-      Deg_GetListDegsOfCurrentCtr ();
+      Deg_GetListDegsInCurrentCtr ();
 
       /* Put form to select degree */
       Frm_StartForm (ActChgCrsDegCfg);
@@ -493,7 +493,7 @@ void CrsCfg_ChangeCrsDeg (void)
    if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)
      {
       /***** Get data of new degree *****/
-      Deg_GetDataOfDegreeByCod (&NewDeg,Deg_GET_BASIC_DATA);
+      Deg_GetDataOfDegreeByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,

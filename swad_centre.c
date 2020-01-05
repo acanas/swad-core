@@ -606,15 +606,15 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    bool CtrFound = false;
 
    /***** Clear data *****/
-   Ctr->InsCod = -1L;
-   Ctr->PlcCod = -1L;
-   Ctr->Status = (Ctr_Status_t) 0;
+   Ctr->InsCod          = -1L;
+   Ctr->PlcCod          = -1L;
+   Ctr->Status          = (Ctr_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
-   Ctr->ShrtName[0] = '\0';
-   Ctr->FullName[0] = '\0';
-   Ctr->WWW[0]      = '\0';
-   Ctr->Degs.Num = 0;
-   Ctr->Degs.Lst = NULL;
+   Ctr->ShrtName[0]     = '\0';
+   Ctr->FullName[0]     = '\0';
+   Ctr->WWW[0]          = '\0';
+   Ctr->Degs.Num        = 0;
+   Ctr->Degs.Lst        = NULL;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -1990,6 +1990,7 @@ static void Ctr_EditingCentreConstructor (void)
    Ctr_EditingCtr->CtrCod          = -1L;
    Ctr_EditingCtr->InsCod          = -1L;
    Ctr_EditingCtr->PlcCod          = -1L;
+   Ctr_EditingCtr->Status          = (Ctr_Status_t) 0;
    Ctr_EditingCtr->RequesterUsrCod = -1L;
    Ctr_EditingCtr->ShrtName[0]     = '\0';
    Ctr_EditingCtr->FullName[0]     = '\0';

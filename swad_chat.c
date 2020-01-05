@@ -175,7 +175,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
      {
       /* Get data of this degree */
       Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
-      if (!Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA))
+      if (!Deg_GetDataOfDegreeByCod (&Deg))
          Lay_ShowErrorAndExit ("Degree not found.");
 
       /* Link to the room of this degree */
@@ -521,7 +521,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this degree */
          Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
-         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+         Deg_GetDataOfDegreeByCod (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",

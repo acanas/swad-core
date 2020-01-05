@@ -411,7 +411,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get degree code (row[4]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-         Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+         Deg_GetDataOfDegreeByCod (&Deg);
 
          /* Get course code (row[5]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -1658,7 +1658,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get degree code (row[4]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-	    Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+	    Deg_GetDataOfDegreeByCod (&Deg);
 
 	    /* Get course code (row[5]) */
 	    Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);

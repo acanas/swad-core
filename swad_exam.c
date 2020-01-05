@@ -1611,7 +1611,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
 
    /***** Get data of degree *****/
    Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+   Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Get data of institution *****/
    Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);

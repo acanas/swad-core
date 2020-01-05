@@ -3552,7 +3552,7 @@ static void Sta_WriteDegree (long DegCod)
      {
       /***** Get data of degree *****/
       Deg.DegCod = DegCod;
-      Deg_GetDataOfDegreeByCod (&Deg,Deg_GET_BASIC_DATA);
+      Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Deg.FullName);
