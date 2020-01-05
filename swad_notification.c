@@ -407,7 +407,7 @@ void Ntf_ShowMyNotifications (void)
 
           /* Get centre code (row[3]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+         Ctr_GetDataOfCentreByCod (&Ctr);
 
          /* Get degree code (row[4]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1654,7 +1654,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get centre code (row[3]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+	    Ctr_GetDataOfCentreByCod (&Ctr);
 
 	    /* Get degree code (row[4]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);

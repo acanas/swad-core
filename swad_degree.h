@@ -149,6 +149,7 @@ void Deg_RemoveLogo (void);
 unsigned Deg_GetNumDegsTotal (void);
 unsigned Deg_GetNumDegsInCty (long InsCod);
 unsigned Deg_GetNumDegsInIns (long InsCod);
+void Deg_FlushCacheNumDegsInCtr (void);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetNumDegsWithCrss (const char *SubQuery);
 unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);

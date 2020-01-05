@@ -388,7 +388,7 @@ void DegCfg_ChangeDegCtr (void)
    if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)
      {
       /***** Get data of new centre *****/
-      Ctr_GetDataOfCentreByCod (&NewCtr,Ctr_GET_BASIC_DATA);
+      Ctr_GetDataOfCentreByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new centre *****/
       if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))

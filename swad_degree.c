@@ -793,7 +793,7 @@ static void Deg_ListDegrees (void)
      {
       Frm_StartForm (ActEdiDeg);
       Btn_PutConfirmButton (Gbl.Hierarchy.Ctr.Degs.Num ? Txt_Create_another_degree :
-	                                                  Txt_Create_degree);
+	                                                 Txt_Create_degree);
       Frm_EndForm ();
      }
 
@@ -1895,14 +1895,30 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 /******************** Get number of degrees in a centre **********************/
 /*****************************************************************************/
 
+void Deg_FlushCacheNumDegsInCtr (void)
+  {
+   Gbl.Cache.NumDegsInCtr.CtrCod  = -1L;
+   Gbl.Cache.NumDegsInCtr.NumDegs = 0;
+  }
+
 unsigned Deg_GetNumDegsInCtr (long CtrCod)
   {
-   /***** Get number of degrees in a centre from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (CtrCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (CtrCod == Gbl.Cache.NumDegsInCtr.CtrCod)
+      return Gbl.Cache.NumDegsInCtr.NumDegs;
+
+   /***** 3. Slow: number of degrees in a centre from database *****/
+   Gbl.Cache.NumDegsInCtr.CtrCod  = CtrCod;
+   Gbl.Cache.NumDegsInCtr.NumDegs =
    (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a centre",
 			     "SELECT COUNT(*) FROM degrees"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
+   return Gbl.Cache.NumDegsInCtr.NumDegs;
   }
 
 /*****************************************************************************/

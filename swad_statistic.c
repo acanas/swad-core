@@ -3460,7 +3460,7 @@ static void Sta_WriteCentre (long CtrCod)
      {
       /***** Get data of centre *****/
       Ctr.CtrCod = CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+      Ctr_GetDataOfCentreByCod (&Ctr);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ctr.FullName);

@@ -1617,7 +1617,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Get centre data */
 		  Ctr.CtrCod = SocNot->HieCod;
-		  Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+		  Ctr_GetDataOfCentreByCod (&Ctr);
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:

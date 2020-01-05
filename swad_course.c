@@ -275,7 +275,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	    /***** Get data of this centre *****/
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
+	    if (!Ctr_GetDataOfCentreByCod (&Ctr))
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/

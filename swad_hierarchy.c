@@ -548,8 +548,7 @@ void Hie_InitHierarchy (void)
    /***** If centre code is available, get centre data *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr,		// Degree found
-				    Ctr_GET_EXTRA_DATA))	// Get extra data because they may be needed later
+      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr))	// Degree found
          Gbl.Hierarchy.Ins.InsCod = Gbl.Hierarchy.Ctr.InsCod;
       else
          Hie_ResetHierarchy ();
@@ -751,7 +750,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Ctr.CtrCod > 0)
 		 {
 		  /* Get data of centre */
-		  Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+		  Ctr_GetDataOfCentreByCod (&Ctr);
 
 		  /* Write centre logo and name */
 		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,

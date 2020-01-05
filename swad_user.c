@@ -3771,7 +3771,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    if (UsrDat->Tch.CtrCod > 0)
      {
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+      Ctr_GetDataOfCentreByCod (&Ctr);
      }
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -3994,7 +3994,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    if (ShowData && UsrDat->Tch.CtrCod > 0)
      {
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+      Ctr_GetDataOfCentreByCod (&Ctr);
      }
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :

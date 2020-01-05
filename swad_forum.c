@@ -2175,14 +2175,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_CENTRE_USRS:
 	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
          Str_Copy (ForumName,Ctr.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
 	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA))
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Ctr.ShrtName,

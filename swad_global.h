@@ -775,6 +775,11 @@ struct Globals
       struct
         {
 	 long CtrCod;
+	 unsigned NumDegs;
+        } NumDegsInCtr;
+      struct
+        {
+	 long CtrCod;
 	 unsigned NumCrss;
         } NumCrssInCtr;
       struct

@@ -3066,7 +3066,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get centre (row[5]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+         Ctr_GetDataOfCentreByCod (&Ctr);
 
          /* Get degree (row[6]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);

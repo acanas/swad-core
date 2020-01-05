@@ -82,12 +82,6 @@ typedef enum
   } Ctr_Order_t;
 #define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
 
-typedef enum
-  {
-   Ctr_GET_BASIC_DATA,
-   Ctr_GET_EXTRA_DATA,
-  } Ctr_GetExtraData_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -103,8 +97,7 @@ void Ctr_EditCentres (void);
 void Ctr_PutIconToViewCentres (void);
 
 void Ctr_GetListCentres (long InsCod);
-bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
-                               Ctr_GetExtraData_t GetExtraData);
+bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr);
 long Ctr_GetInsCodOfCentreByCod (long CtrCod);
 void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr);
 void Ctr_FreeListCentres (void);

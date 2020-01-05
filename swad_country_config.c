@@ -331,7 +331,7 @@ static void CtyCfg_Map (void)
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of centre */
-      Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+      Ctr_GetDataOfCentreByCod (&Ctr);
 
       /* Get data of institution */
       Ins.InsCod = Ctr.InsCod;

@@ -170,7 +170,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of centre */
-         Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_BASIC_DATA);
+         Ctr_GetDataOfCentreByCod (&Ctr);
 
          /* Centre logo and full name */
          HTM_TR_Begin (NULL);
@@ -406,7 +406,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of degrees *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ctr->Degs.Num);
+   HTM_Unsigned (Deg_GetNumDegsInCtr (Ctr->CtrCod));
    HTM_TD_End ();
 
    /***** Number of courses *****/
@@ -585,9 +585,6 @@ void Ctr_GetListCentres (long InsCod)
          /* Get next centre */
          row = mysql_fetch_row (mysql_res);
          Ctr_GetDataOfCentreFromRow (Ctr,row);
-
-         /* Get number of degrees in this centre */
-         Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
         }
      }
    else
@@ -601,8 +598,7 @@ void Ctr_GetListCentres (long InsCod)
 /************************ Get data of centre by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
-                               Ctr_GetExtraData_t GetExtraData)
+bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -618,6 +614,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
    Ctr->FullName[0] = '\0';
    Ctr->WWW[0]      = '\0';
    Ctr->Degs.Num = 0;
+   Ctr->Degs.Lst = NULL;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -643,11 +640,6 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr,
          /* Get row */
          row = mysql_fetch_row (mysql_res);
          Ctr_GetDataOfCentreFromRow (Ctr,row);
-
-	 /* Get extra data */
-	 if (GetExtraData == Ctr_GET_EXTRA_DATA)
-	    /* Get number of degrees in this centre */
-	    Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
 
          /* Set return value */
          CtrFound = true;
@@ -882,7 +874,7 @@ static void Ctr_ListCentresForEdition (void)
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit)
 	 Ico_PutIconRemovalNotAllowed ();
-      else if (Ctr->Degs.Num)						// Centre has degrees
+      else if (Deg_GetNumDegsInCtr (Ctr->CtrCod))			// Centre has degrees
 	 Ico_PutIconRemovalNotAllowed ();
       else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod))	// Centre has users who claim to belong to it
 	 Ico_PutIconRemovalNotAllowed ();
@@ -994,7 +986,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Number of degrees */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ctr->Degs.Num);
+      HTM_Unsigned (Deg_GetNumDegsInCtr (Ctr->CtrCod));
       HTM_TD_End ();
 
       /* Number of users in courses of this centre */
@@ -1148,10 +1140,10 @@ void Ctr_RemoveCentre (void)
    Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get data of the centre from database *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_EXTRA_DATA);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Check if this centre has teachers *****/
-   if (Ctr_EditingCtr->Degs.Num)						// Centre has degrees
+   if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->CtrCod))				// Centre has degrees
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr->CtrCod))	// Centre has users who claim to belong to it
@@ -1189,6 +1181,7 @@ void Ctr_RemoveCentre (void)
 		      Ctr_EditingCtr->CtrCod);
 
       /***** Flush caches *****/
+      Deg_FlushCacheNumDegsInCtr ();
       Crs_FlushCacheNumCrssInCtr ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
       Usr_FlushCacheNumUsrsInCrssOfCtr ();
@@ -1221,7 +1214,7 @@ void Ctr_ChangeCtrPlc (void)
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Get data of centre from database *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Update place in table of centres *****/
    Ctr_UpdateCtrPlcDB (Ctr_EditingCtr->CtrCod,NewPlcCod);
@@ -1304,7 +1297,7 @@ void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParToText (ParamName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr,Ctr_GET_BASIC_DATA);
+   Ctr_GetDataOfCentreByCod (Ctr);
 
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
@@ -1388,7 +1381,7 @@ void Ctr_ChangeCtrWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1448,7 +1441,7 @@ void Ctr_ChangeCtrStatus (void)
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr,Ctr_GET_BASIC_DATA);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Update status in table of centres *****/
    DB_QueryUPDATE ("can not update the status of a centre",
@@ -1965,7 +1958,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	 Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get data of centre */
-	 Ctr_GetDataOfCentreByCod (&Ctr,Ctr_GET_EXTRA_DATA);
+	 Ctr_GetDataOfCentreByCod (&Ctr);
 
 	 /* Write data of this centre */
 	 Ctr_ListOneCentreForSeeing (&Ctr,NumCtr);
