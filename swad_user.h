@@ -409,7 +409,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
-void Ctr_FlushCacheNumUsrsInCrssOfCtr (void);
+void Usr_FlushCacheNumUsrsInCrssOfCtr (void);
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod);
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod);
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod);
@@ -420,6 +420,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod);
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 

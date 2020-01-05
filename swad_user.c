@@ -4200,7 +4200,7 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 /*****************************************************************************/
 // Here Rol_UNK means any user (students, non-editing teachers or teachers)
 
-void Ctr_FlushCacheNumUsrsInCrssOfCtr (void)
+void Usr_FlushCacheNumUsrsInCrssOfCtr (void)
   {
    Gbl.Cache.NumUsrsInCrssOfCtr.Role    = Rol_UNK;
    Gbl.Cache.NumUsrsInCrssOfCtr.CtrCod  = -1L;
@@ -4440,14 +4440,31 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
 /*********** Get number of users who claim to belong to a centre *************/
 /*****************************************************************************/
 
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
+  }
+
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
   {
-   /***** Get the number of users in a centre from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (CtrCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (CtrCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
+      return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+
+   /***** 3. Slow: number of users who claim to belong to a centre
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = CtrCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get the number of users in a centre",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
+   return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
   }
 
 /*****************************************************************************/

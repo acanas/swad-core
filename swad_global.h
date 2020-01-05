@@ -774,6 +774,16 @@ struct Globals
 	} InstitutionShrtNameAndCty;
       struct
         {
+	 long CtrCod;
+	 unsigned NumCrss;
+        } NumCrssInCtr;
+      struct
+        {
+	 long CtrCod;
+	 unsigned NumUsrs;
+        } NumUsrsWhoClaimToBelongToCtr;
+      struct
+        {
 	 Rol_Role_t Role;
 	 long CtrCod;
 	 unsigned NumUsrs;

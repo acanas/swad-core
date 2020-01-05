@@ -103,6 +103,7 @@ void Crs_ShowIntroduction (void);
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);
 unsigned Crs_GetNumCrssInIns (long InsCod);
+void Crs_FlushCacheNumCrssInCtr (void);
 unsigned Crs_GetNumCrssInCtr (long CtrCod);
 unsigned Crs_GetNumCrssInDeg (long DegCod);
 unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery);

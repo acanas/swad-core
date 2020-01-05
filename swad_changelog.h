@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.112.4 (2020-01-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.112.6 (2020-01-05)"
 #define CSS_FILE		"swad19.112.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -501,6 +501,8 @@ ps2pdf source.ps destination.pdf
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: Mapas más estrechos en móvil
 
+	Version 19.112.6: Jan 05, 2020	Optimization in number of courses in a centre. (278374 lines)
+	Version 19.112.5: Jan 05, 2020	Optimization in number of users who claim to belong to a centre. (278361 lines)
 	Version 19.112.4: Jan 05, 2020	Optimization in number of users in courses of a centre. (278385 lines)
 	Version 19.112.3: Jan 04, 2020	Fixed bug in hierarchy. (278357 lines)
 	Version 19.112.2: Jan 04, 2020	Changing action descriptions from database to swad-core. Not finished. (278351 lines)
