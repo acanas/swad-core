@@ -799,6 +799,11 @@ struct Globals
         } NumUsrsInCrssOfCtr[Rol_NUM_ROLES];
       struct
         {
+	 long DegCod;
+	 unsigned NumUsrs;
+        } NumUsrsInCrssOfDeg[Rol_NUM_ROLES];
+      struct
+        {
 	 long CrsCod;
 	 unsigned NumUsrs;
         } NumUsrsInCrs[Rol_NUM_ROLES];

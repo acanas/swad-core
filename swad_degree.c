@@ -1514,6 +1514,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Flush caches *****/
    Crs_FlushCacheNumCrssInDeg ();
+   Usr_FlushCacheNumUsrsInCrssOfDeg ();
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
    Pho_RemoveObsoleteStatDegrees ();

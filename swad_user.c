@@ -4223,18 +4223,63 @@ unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
 /*********** Count how many users with a role belong to a degree *************/
 /*****************************************************************************/
 
+void Usr_FlushCacheNumUsrsInCrssOfDeg (void)
+  {
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_UNK].DegCod =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_STD].DegCod =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_NET].DegCod =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_TCH].DegCod = -1L;
+
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_UNK].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_STD].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_NET].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfDeg[Rol_TCH].NumUsrs = 0;
+  }
+
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
   {
-   /***** Get the number of users in courses of a degree from database ******/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of users"
-			     " in courses of a degree",
-			     "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-			     " FROM courses,crs_usr"
-			     " WHERE courses.DegCod=%ld"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u",
-			     DegCod,(unsigned) Role);
+   /***** 1. Fast check: Trivial case *****/
+   if (DegCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: Trivial case *****/
+   switch (Role)
+     {
+      case Rol_UNK:	// Here Rol_UNK means all
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 break;
+      default:
+	 return 0;
+     }
+
+   /***** 3. Fast check: If cached... *****/
+   if (DegCod == Gbl.Cache.NumUsrsInCrssOfDeg[Role].DegCod)
+      return Gbl.Cache.NumUsrsInCrssOfDeg[Role].NumUsrs;
+
+   /***** 4. Slow: number of users in courses of a degree from database *****/
+   Gbl.Cache.NumUsrsInCrssOfDeg[Role].DegCod = DegCod;
+   if (Role == Rol_UNK)
+      Gbl.Cache.NumUsrsInCrssOfDeg[Rol_UNK].NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a degree",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM courses,crs_usr"
+				" WHERE courses.DegCod=%ld"
+				" AND courses.CrsCod=crs_usr.CrsCod",
+				DegCod);
+   else
+      Gbl.Cache.NumUsrsInCrssOfDeg[Role].NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a degree",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM courses,crs_usr"
+				" WHERE courses.DegCod=%ld"
+				" AND courses.CrsCod=crs_usr.CrsCod"
+				" AND crs_usr.Role=%u",
+				DegCod,(unsigned) Role);
+   return Gbl.Cache.NumUsrsInCrssOfDeg[Role].NumUsrs;
   }
 
 /*****************************************************************************/
