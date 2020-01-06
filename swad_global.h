@@ -794,6 +794,11 @@ struct Globals
         } NumUsrsWhoClaimToBelongToCtr;
       struct
         {
+	 long InsCod;
+	 unsigned NumUsrs;
+        } NumUsrsInCrssOfIns[Rol_NUM_ROLES];
+      struct
+        {
 	 long CtrCod;
 	 unsigned NumUsrs;
         } NumUsrsInCrssOfCtr[Rol_NUM_ROLES];

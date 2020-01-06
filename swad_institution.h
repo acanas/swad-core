@@ -74,7 +74,6 @@ struct Instit
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumDpts;
-   unsigned NumUsrs;		// Number of users in courses of this institution
    unsigned NumUsrsWhoClaimToBelongToIns;
   };
 

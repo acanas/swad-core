@@ -413,6 +413,7 @@ void Usr_FlushCacheNumUsrsInCrssOfDeg (void);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
 void Usr_FlushCacheNumUsrsInCrssOfCtr (void);
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod);
+void Usr_FlushCacheNumUsrsInCrssOfIns (void);
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod);
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod);
 

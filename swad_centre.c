@@ -850,6 +850,7 @@ static void Ctr_ListCentresForEdition (void)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumUsrsInCrssOfCtr;
    Ctr_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
 
@@ -868,18 +869,17 @@ static void Ctr_ListCentresForEdition (void)
       Ctr = &Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr];
 
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
+      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
 
       /* Put icon to remove centre */
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"BM\"");
-      if (!ICanEdit)
+      if (!ICanEdit ||							// I cannot edit
+	  NumUsrsInCrssOfCtr)						// Centre has users
 	 Ico_PutIconRemovalNotAllowed ();
       else if (Deg_GetNumDegsInCtr (Ctr->CtrCod))			// Centre has degrees
 	 Ico_PutIconRemovalNotAllowed ();
       else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod))	// Centre has users who claim to belong to it
-	 Ico_PutIconRemovalNotAllowed ();
-      else if (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,	// Here Rol_UNK means "all users"
-					  Ctr->CtrCod))			// Centre has users
 	 Ico_PutIconRemovalNotAllowed ();
       else	// I can remove centre
         {
@@ -991,8 +991,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Number of users in courses of this centre */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,		// Here Rol_UNK means "all users"
-					       Ctr->CtrCod));
+      HTM_Unsigned (NumUsrsInCrssOfCtr);
       HTM_TD_End ();
 
       /* Centre requester */

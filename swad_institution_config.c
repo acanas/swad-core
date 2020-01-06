@@ -428,7 +428,7 @@ static void InsCfg_FullName (bool PutForm)
    extern const char *Txt_Institution;
 
    HieCfg_FullName (PutForm,Txt_Institution,ActRenInsFulCfg,
-		       Gbl.Hierarchy.Ins.FullName);
+		    Gbl.Hierarchy.Ins.FullName);
   }
 
 /*****************************************************************************/

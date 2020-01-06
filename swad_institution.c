@@ -427,7 +427,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ins->NumUsrs);
+   HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod));	// Here Rol_UNK means "all users"
    HTM_TD_End ();
 
    /***** Institution status *****/
@@ -688,7 +688,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
             case Ins_GET_BASIC_DATA:
                Ins->NumUsrsWhoClaimToBelongToIns = 0;
                Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
-               Ins->NumUsrs = 0;
                break;
             case Ins_GET_EXTRA_DATA:
                /* Get number of users who claim to belong to this institution (row[7]) */
@@ -706,9 +705,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
                /* Get number of departments in this institution */
                Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
-
-               /* Get number of users in courses */
-	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
                break;
            }
         }
@@ -758,7 +754,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    Ins->WWW[0] = '\0';
    Ins->NumUsrsWhoClaimToBelongToIns = 0;
    Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
-   Ins->NumUsrs = 0;
 
    /***** Check if institution code is correct *****/
    if (Ins->InsCod > 0)
@@ -805,9 +800,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 
 	    /* Get number of degrees in this institution */
 	    Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
-
-	    /* Get number of users in courses of this institution */
-	    Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
 	   }
 
          /* Set return value */
@@ -1041,6 +1033,7 @@ static void Ins_ListInstitutionsForEdition (void)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumUsrsInCrssOfIns;
    Ins_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
 
@@ -1059,15 +1052,17 @@ static void Ins_ListInstitutionsForEdition (void)
       Ins = &Gbl.Hierarchy.Cty.Inss.Lst[NumIns];
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
+      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
 
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove institution */
       HTM_TD_Begin ("class=\"BM\"");
-      if (Ins->Ctrs.Num ||
-	  Ins->NumUsrsWhoClaimToBelongToIns ||
-	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
-          !ICanEdit)
+      if (!ICanEdit ||
+	  Ins->Ctrs.Num ||		// Institution has centres
+	  NumUsrsInCrssOfIns ||		// Institution has users
+	  Ins->NumUsrsWhoClaimToBelongToIns)
+	 // Institution has centres or users ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
         {
@@ -1152,7 +1147,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of users in courses of this institution */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ins->NumUsrs);
+      HTM_Unsigned (NumUsrsInCrssOfIns);
       HTM_TD_End ();
 
       /* Institution requester */
@@ -1318,8 +1313,12 @@ void Ins_RemoveInstitution (void)
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Lay_NoPermissionExit ();
    else if (Ins_EditingIns->Ctrs.Num ||
-            Ins_EditingIns->NumUsrsWhoClaimToBelongToIns ||
-            Ins_EditingIns->NumUsrs)	// Institution has centres or users ==> don't remove
+            Ins_EditingIns->NumUsrsWhoClaimToBelongToIns)
+      // Institution has centres or users ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+   else if (Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins_EditingIns->InsCod))	// Here Rol_UNK means "all users"
+      // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
@@ -1349,6 +1348,7 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
+      Usr_FlushCacheNumUsrsInCrssOfIns ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2029,7 +2029,6 @@ static void Ins_EditingInstitutionConstructor (void)
    Ins_EditingIns->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
    Ins_EditingIns->NumDpts            = 0;
    Ins_EditingIns->NumDegs            = 0;
-   Ins_EditingIns->NumUsrs            = 0;
    Ins_EditingIns->NumUsrsWhoClaimToBelongToIns = 0;
   }
 
