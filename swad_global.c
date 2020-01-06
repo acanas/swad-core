@@ -220,7 +220,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ins.FullName[0] = '\0';
    Gbl.Hierarchy.Ins.WWW[0] = '\0';
-   Gbl.Hierarchy.Ins.Ctrs.Num = Gbl.Hierarchy.Ins.NumDegs = 0;
+   Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+   Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
 
    Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ctr.FullName[0] = '\0';
@@ -413,6 +414,7 @@ void Gbl_InitializeGlobals (void)
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
    Dpt_FlushCacheNumDptsInIns ();
    Deg_FlushCacheNumDegsInCtr ();
+   Crs_FlushCacheNumCrssInIns ();
    Crs_FlushCacheNumCrssInCtr ();
    Crs_FlushCacheNumCrssInDeg ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();

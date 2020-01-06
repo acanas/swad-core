@@ -427,10 +427,25 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 /**************** Get number of courses in an institution ********************/
 /*****************************************************************************/
 
+void Crs_FlushCacheNumCrssInIns (void)
+  {
+   Gbl.Cache.NumCrssInIns.InsCod  = -1L;
+   Gbl.Cache.NumCrssInIns.NumCrss = 0;
+  }
+
 unsigned Crs_GetNumCrssInIns (long InsCod)
   {
-   /***** Get number of courses in a degree from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (InsCod == Gbl.Cache.NumCrssInIns.InsCod)
+      return Gbl.Cache.NumCrssInIns.NumCrss;
+
+   /***** 3. Slow: number of courses in an institution from database *****/
+   Gbl.Cache.NumCrssInIns.InsCod  = InsCod;
+   Gbl.Cache.NumCrssInIns.NumCrss =
    (unsigned) DB_QueryCOUNT ("can not get the number of courses"
 			     " in an institution",
 			     "SELECT COUNT(*) FROM centres,degrees,courses"
@@ -438,6 +453,7 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 			     " AND centres.CtrCod=degrees.CtrCod"
 			     " AND degrees.DegCod=courses.DegCod",
 			     InsCod);
+   return Gbl.Cache.NumCrssInIns.NumCrss;
   }
 
 /*****************************************************************************/

@@ -95,6 +95,7 @@ void Crs_ShowIntroduction (void);
 
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);
+void Crs_FlushCacheNumCrssInIns (void);
 unsigned Crs_GetNumCrssInIns (long InsCod);
 void Crs_FlushCacheNumCrssInCtr (void);
 unsigned Crs_GetNumCrssInCtr (long CtrCod);

@@ -71,8 +71,6 @@ struct Instit
       struct Centre *Lst;	// List of centres
       Ctr_Order_t SelectedOrder;
      } Ctrs;
-   unsigned NumDegs;
-   unsigned NumCrss;
   };
 
 #define Ins_NUM_ORDERS 2

@@ -141,6 +141,7 @@ void Deg_RemoveLogo (void);
 
 unsigned Deg_GetNumDegsTotal (void);
 unsigned Deg_GetNumDegsInCty (long InsCod);
+void Deg_FlushCacheNumDegsInIns (void);
 unsigned Deg_GetNumDegsInIns (long InsCod);
 void Deg_FlushCacheNumDegsInCtr (void);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);

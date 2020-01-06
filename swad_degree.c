@@ -1876,16 +1876,32 @@ unsigned Deg_GetNumDegsInCty (long InsCod)
 /****************** Get number of degrees in an institution ******************/
 /*****************************************************************************/
 
+void Deg_FlushCacheNumDegsInIns (void)
+  {
+   Gbl.Cache.NumDegsInIns.InsCod  = -1L;
+   Gbl.Cache.NumDegsInIns.NumDegs = 0;
+  }
+
 unsigned Deg_GetNumDegsInIns (long InsCod)
   {
-   /***** Get number of degrees in an institution from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (InsCod == Gbl.Cache.NumDegsInIns.InsCod)
+      return Gbl.Cache.NumDegsInIns.NumDegs;
+
+   /***** 3. Slow: number of degrees in an institution from database *****/
+   Gbl.Cache.NumDegsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumDegsInIns.NumDegs =
    (unsigned) DB_QueryCOUNT ("can not get the number of degrees"
 	                     " in an institution",
 			     "SELECT COUNT(*) FROM centres,degrees"
 			     " WHERE centres.InsCod=%ld"
 			     " AND centres.CtrCod=degrees.CtrCod",
 			     InsCod);
+   return Gbl.Cache.NumDegsInIns.NumDegs;
   }
 
 /*****************************************************************************/
