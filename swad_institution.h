@@ -129,6 +129,7 @@ void Ins_RecFormReqIns (void);
 void Ins_RecFormNewIns (void);
 
 unsigned Ins_GetNumInssTotal (void);
+void Ins_FlushCacheNumInssInCty (void);
 unsigned Ins_GetNumInssInCty (long CtyCod);
 unsigned Ins_GetNumInssWithCtrs (const char *SubQuery);
 unsigned Ins_GetNumInssWithDegs (const char *SubQuery);

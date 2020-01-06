@@ -779,6 +779,12 @@ struct Globals
         } NumDptsInIns;
       struct
         {
+         bool Valid;
+	 long CtyCod;
+	 unsigned NumInss;
+        } NumInssInCty;
+      struct
+        {
 	 long InsCod;
 	 unsigned NumCtrs;
         } NumCtrsInIns;

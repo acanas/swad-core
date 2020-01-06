@@ -421,7 +421,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Cty->Inss.Num);
+   HTM_Unsigned (Ins_GetNumInssInCty (Cty->CtyCod));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
@@ -880,9 +880,6 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                            &Cty->NumUsrsWhoClaimToBelongToCty) != 1)
                   Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
-               /* Get number of institutions in this country */
-               Cty->Inss.Num = Ins_GetNumInssInCty (Cty->CtyCod);
-
                /* Get number of centres in this country */
                Cty->NumCtrs = Ctr_GetNumCtrsInCty (Cty->CtyCod);
 
@@ -1140,9 +1137,6 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    /* Get number of user in courses of this institution */
 	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Cty->CtyCod);	// Here Rol_UNK means "all users"
 
-	    /* Get number of institutions in this country */
-	    Cty->Inss.Num = Ins_GetNumInssInCty (Cty->CtyCod);
-
 	    break;
 	}
      }
@@ -1234,6 +1228,7 @@ static void Cty_ListCountriesForEdition (void)
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
+   unsigned NumInssInCty;
    Lan_Language_t Lan;
 
    /***** Write heading *****/
@@ -1246,14 +1241,16 @@ static void Cty_ListCountriesForEdition (void)
 	NumCty++)
      {
       Cty = &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty];
+      NumInssInCty = Ins_GetNumInssInCty (Cty->CtyCod);
 
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove country */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
-      if (Cty->Inss.Num ||
+      if (NumInssInCty ||			// Country has institutions
 	  Cty->NumUsrsWhoClaimToBelongToCty ||
-	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
+	  Cty->NumUsrs)				// Country has users
+	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
       else
         {
@@ -1283,7 +1280,7 @@ static void Cty_ListCountriesForEdition (void)
 
       /* Number of institutions */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      HTM_Unsigned (Cty->Inss.Num);
+      HTM_Unsigned (NumInssInCty);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1386,9 +1383,11 @@ void Cty_RemoveCountry (void)
    Cty_GetDataOfCountryByCod (Cty_EditingCty,Cty_GET_EXTRA_DATA);
 
    /***** Check if this country has users *****/
-   if (Cty_EditingCty->Inss.Num ||
-       Cty_EditingCty->NumUsrsWhoClaimToBelongToCty ||
-       Cty_EditingCty->NumUsrs)	// Country has institutions or users ==> don't remove
+   if (Ins_GetNumInssInCty (Cty_EditingCty->CtyCod))	// Country has institutions ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
+   else if (Cty_EditingCty->NumUsrsWhoClaimToBelongToCty ||
+            Cty_EditingCty->NumUsrs)			// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
@@ -1403,6 +1402,7 @@ void Cty_RemoveCountry (void)
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
+      Ins_FlushCacheNumInssInCty ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,

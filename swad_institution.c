@@ -321,7 +321,7 @@ static void Ins_ListInstitutions (void)
      {
       Frm_StartForm (ActEdiIns);
       Btn_PutConfirmButton (Gbl.Hierarchy.Cty.Inss.Num ? Txt_Create_another_institution :
-	                                   Txt_Create_institution);
+	                                                 Txt_Create_institution);
       Frm_EndForm ();
      }
 
@@ -696,7 +696,10 @@ void Ins_GetListInstitutions (long CtyCod)
         }
      }
    else
+     {
       Gbl.Hierarchy.Cty.Inss.Num = 0;
+      Gbl.Hierarchy.Cty.Inss.Lst = NULL;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -925,8 +928,8 @@ void Ins_FreeListInstitutions (void)
      {
       /***** Free memory used by the list of institutions *****/
       free (Gbl.Hierarchy.Cty.Inss.Lst);
-      Gbl.Hierarchy.Cty.Inss.Lst = NULL;
       Gbl.Hierarchy.Cty.Inss.Num = 0;
+      Gbl.Hierarchy.Cty.Inss.Lst = NULL;
      }
   }
 
@@ -1860,15 +1863,28 @@ unsigned Ins_GetNumInssTotal (void)
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 
+void Ins_FlushCacheNumInssInCty (void)
+  {
+   Gbl.Cache.NumInssInCty.Valid = false;
+  }
+
 unsigned Ins_GetNumInssInCty (long CtyCod)
   {
-   /***** Get number of degrees of a place from database *****/
-   return
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.NumInssInCty.Valid &&
+       CtyCod == Gbl.Cache.NumInssInCty.CtyCod)
+      return Gbl.Cache.NumInssInCty.NumInss;
+
+   /***** 2. Slow: number of institutions in a country from database *****/
+   Gbl.Cache.NumInssInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumInssInCty.NumInss =
    (unsigned) DB_QueryCOUNT ("can not get the number of institutions"
 			     " in a country",
 			     "SELECT COUNT(*) FROM institutions"
 			     " WHERE CtyCod=%ld",
 			     CtyCod);
+   Gbl.Cache.NumInssInCty.Valid = true;
+   return Gbl.Cache.NumInssInCty.NumInss;
   }
 
 /*****************************************************************************/
