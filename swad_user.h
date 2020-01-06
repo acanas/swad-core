@@ -422,6 +422,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod);
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);

@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.112.11 (2020-01-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.112.12 (2020-01-06)"
 #define CSS_FILE		"swad19.112.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Mapas más estrechos en móvil
 // TODO: Quitar todos los EXTRA_DATA.
 
+	Version 19.112.12:Jan 06, 2020	Optimization in number of users who claim to belong to an institution. (278519 lines)
 	Version 19.112.11:Jan 06, 2020	Optimization in number of users in courses of an institution. (278486 lines)
 	Version 19.112.10:Jan 06, 2020	Optimization in number of users in courses of a degree. (278468 lines)
 	Version 19.112.9: Jan 05, 2020	Optimization in number of users in a course. (278419 lines)

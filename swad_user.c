@@ -4562,15 +4562,32 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
 /******** Get number of users who claim to belong to an institution **********/
 /*****************************************************************************/
 
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
+  }
+
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
   {
-   /***** Get the number of users in an institution from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (InsCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
+      return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+
+   /***** 3. Slow: number of users who claim to belong to an institution
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = InsCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get the number of users"
 			     " in an institution",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE InsCod=%ld",
 			     InsCod);
+   return Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
   }
 
 /*****************************************************************************/

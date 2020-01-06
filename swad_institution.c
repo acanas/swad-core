@@ -402,7 +402,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    /***** Stats *****/
    /* Number of users who claim to belong to this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ins->NumUsrsWhoClaimToBelongToIns);
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of centres in this institution */
@@ -593,11 +593,6 @@ static void Ins_PutIconToViewInstitutions (void)
 
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
   {
-   static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
-     {
-      [Ins_ORDER_BY_INSTITUTION] = "FullName",
-      [Ins_ORDER_BY_NUM_USRS   ] = "NumUsrs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
@@ -605,35 +600,51 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
    struct Instit *Ins;
 
    /***** Get institutions from database *****/
-   switch (GetExtraData)
+   switch (Gbl.Hierarchy.Cty.Inss.SelectedOrder)
      {
-      case Ins_GET_BASIC_DATA:
+      case Ins_ORDER_BY_INSTITUTION:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-				   "SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+				   "SELECT InsCod,"				// row[0]
+				          "CtyCod,"				// row[1]
+				          "Status,"				// row[2]
+				          "RequesterUsrCod,"			// row[3]
+				          "ShortName,"				// row[4]
+				          "FullName,"				// row[5]
+				          "WWW"					// row[6]
 				   " FROM institutions"
 				   " WHERE CtyCod=%ld"
 				   " ORDER BY FullName",
 				   CtyCod);
          break;
-      case Ins_GET_EXTRA_DATA:
+      case Ins_ORDER_BY_NUM_USRS:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-				   "(SELECT institutions.InsCod,institutions.CtyCod,"
-				   "institutions.Status,institutions.RequesterUsrCod,"
-				   "institutions.ShortName,institutions.FullName,"
-				   "institutions.WWW,COUNT(*) AS NumUsrs"
+				   "(SELECT institutions.InsCod,"		// row[0]
+				           "institutions.CtyCod,"		// row[1]
+				           "institutions.Status,"		// row[2]
+				           "institutions.RequesterUsrCod,"	// row[3]
+				           "institutions.ShortName,"		// row[4]
+				           "institutions.FullName,"		// row[5]
+				           "institutions.WWW,"			// row[6]
+				           "COUNT(*) AS NumUsrs"		// row[7]
 				   " FROM institutions,usr_data"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=usr_data.InsCod"
 				   " GROUP BY institutions.InsCod)"
 				   " UNION "
-				   "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
+				   "(SELECT InsCod,"				// row[0]
+				           "CtyCod,"				// row[1]
+				           "Status,"				// row[2]
+				           "RequesterUsrCod,"			// row[3]
+				           "ShortName,"				// row[4]
+				           "FullName,"				// row[5]
+				           "WWW,"				// row[6]
+				           "0 AS NumUsrs"			// row[7]
 				   " FROM institutions"
 				   " WHERE CtyCod=%ld"
 				   " AND InsCod NOT IN"
 				   " (SELECT DISTINCT InsCod FROM usr_data))"
-				   " ORDER BY %s",
-				   CtyCod,CtyCod,
-				   OrderBySubQuery[Gbl.Hierarchy.Cty.Inss.SelectedOrder]);
+				   " ORDER BY NumUsrs DESC,FullName",
+				   CtyCod,CtyCod);
          break;
      }
 
@@ -643,7 +654,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
       Gbl.Hierarchy.Cty.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Cty.Inss.Lst = (struct Instit *) calloc (NumRows,sizeof (struct Instit))) == NULL)
+      if ((Gbl.Hierarchy.Cty.Inss.Lst = (struct Instit *)
+	                                calloc (NumRows,sizeof (struct Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -686,14 +698,9 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
          switch (GetExtraData)
            {
             case Ins_GET_BASIC_DATA:
-               Ins->NumUsrsWhoClaimToBelongToIns = 0;
                Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
                break;
             case Ins_GET_EXTRA_DATA:
-               /* Get number of users who claim to belong to this institution (row[7]) */
-               if (sscanf (row[7],"%u",&Ins->NumUsrsWhoClaimToBelongToIns) != 1)
-        	  Ins->NumUsrsWhoClaimToBelongToIns = 0;
-
                /* Get number of centres in this institution */
                Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
@@ -752,7 +759,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    Ins->ShrtName[0] =
    Ins->FullName[0] =
    Ins->WWW[0] = '\0';
-   Ins->NumUsrsWhoClaimToBelongToIns = 0;
    Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
 
    /***** Check if institution code is correct *****/
@@ -1034,6 +1040,7 @@ static void Ins_ListInstitutionsForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    unsigned NumUsrsInCrssOfIns;
+   unsigned NumUsrsWhoClaimToBelongToIns;
    Ins_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
 
@@ -1053,6 +1060,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
+      NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod);
 
       HTM_TR_Begin (NULL);
 
@@ -1061,7 +1069,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (!ICanEdit ||
 	  Ins->Ctrs.Num ||		// Institution has centres
 	  NumUsrsInCrssOfIns ||		// Institution has users
-	  Ins->NumUsrsWhoClaimToBelongToIns)
+	  NumUsrsWhoClaimToBelongToIns)	// Institution has users
 	 // Institution has centres or users ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -1137,7 +1145,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of users who claim to belong to this institution */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ins->NumUsrsWhoClaimToBelongToIns);
+      HTM_Unsigned (NumUsrsWhoClaimToBelongToIns);
       HTM_TD_End ();
 
       /* Number of centres */
@@ -1312,12 +1320,15 @@ void Ins_RemoveInstitution (void)
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Lay_NoPermissionExit ();
-   else if (Ins_EditingIns->Ctrs.Num ||
-            Ins_EditingIns->NumUsrsWhoClaimToBelongToIns)
-      // Institution has centres or users ==> don't remove
+   else if (Ins_EditingIns->Ctrs.Num)
+      // Institution has centres ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else if (Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins_EditingIns->InsCod))	// Here Rol_UNK means "all users"
+      // Institution has users ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns->InsCod))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
@@ -1348,6 +1359,7 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
+      Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
       Usr_FlushCacheNumUsrsInCrssOfIns ();
 
       /***** Write message to show the change made *****/
@@ -2029,7 +2041,6 @@ static void Ins_EditingInstitutionConstructor (void)
    Ins_EditingIns->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
    Ins_EditingIns->NumDpts            = 0;
    Ins_EditingIns->NumDegs            = 0;
-   Ins_EditingIns->NumUsrsWhoClaimToBelongToIns = 0;
   }
 
 static void Ins_EditingInstitutionDestructor (void)

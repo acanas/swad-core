@@ -74,7 +74,6 @@ struct Instit
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumDpts;
-   unsigned NumUsrsWhoClaimToBelongToIns;
   };
 
 #define Ins_NUM_ORDERS 2
