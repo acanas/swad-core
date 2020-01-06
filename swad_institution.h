@@ -73,7 +73,6 @@ struct Instit
      } Ctrs;
    unsigned NumDegs;
    unsigned NumCrss;
-   unsigned NumDpts;
   };
 
 #define Ins_NUM_ORDERS 2

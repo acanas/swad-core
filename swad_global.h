@@ -774,6 +774,11 @@ struct Globals
 	} InstitutionShrtNameAndCty;
       struct
         {
+	 long InsCod;
+	 unsigned NumDpts;
+        } NumDptsInIns;
+      struct
+        {
 	 long CtrCod;
 	 unsigned NumDegs;
         } NumDegsInCtr;

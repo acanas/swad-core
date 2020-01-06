@@ -422,7 +422,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of departments in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ins->NumDpts);
+   HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of users in courses of this institution */
@@ -698,7 +698,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
          switch (GetExtraData)
            {
             case Ins_GET_BASIC_DATA:
-               Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+               Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = 0;
                break;
             case Ins_GET_EXTRA_DATA:
                /* Get number of centres in this institution */
@@ -709,9 +709,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
                /* Get number of degrees in this institution */
                Ins->NumCrss = Crs_GetNumCrssInIns (Ins->InsCod);
-
-               /* Get number of departments in this institution */
-               Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
                break;
            }
         }
@@ -759,7 +756,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    Ins->ShrtName[0] =
    Ins->FullName[0] =
    Ins->WWW[0] = '\0';
-   Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+   Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = 0;
 
    /***** Check if institution code is correct *****/
    if (Ins->InsCod > 0)
@@ -800,9 +797,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	   {
 	    /* Get number of centres in this institution */
 	    Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
-
-	    /* Get number of departments in this institution */
-	    Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
 
 	    /* Get number of degrees in this institution */
 	    Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
@@ -1359,6 +1353,7 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
+      Dpt_FlushCacheNumDptsInIns ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
       Usr_FlushCacheNumUsrsInCrssOfIns ();
 
@@ -2039,7 +2034,6 @@ static void Ins_EditingInstitutionConstructor (void)
    Ins_EditingIns->Ctrs.Num           = 0;
    Ins_EditingIns->Ctrs.Lst           = NULL;
    Ins_EditingIns->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
-   Ins_EditingIns->NumDpts            = 0;
    Ins_EditingIns->NumDegs            = 0;
   }
 

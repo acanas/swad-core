@@ -1058,15 +1058,31 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 /**************** Get number of departments in a institution *****************/
 /*****************************************************************************/
 
+void Dpt_FlushCacheNumDptsInIns (void)
+  {
+   Gbl.Cache.NumDptsInIns.InsCod  = -1L;
+   Gbl.Cache.NumDptsInIns.NumDpts = 0;
+  }
+
 unsigned Dpt_GetNumDptsInIns (long InsCod)
   {
-   /***** Get departments in an institution from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (InsCod == Gbl.Cache.NumDptsInIns.InsCod)
+      return Gbl.Cache.NumDptsInIns.NumDpts;
+
+   /***** 3. Slow: number of departments of an institution from database *****/
+   Gbl.Cache.NumDptsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumDptsInIns.NumDpts =
    (unsigned) DB_QueryCOUNT ("can not get number of departments"
 			     " in an institution",
 			     "SELECT COUNT(*) FROM departments"
 			     " WHERE InsCod=%ld",
 			     InsCod);
+   return Gbl.Cache.NumDptsInIns.NumDpts;
   }
 
 /*****************************************************************************/

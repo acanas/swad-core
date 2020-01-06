@@ -73,6 +73,7 @@ void Dpt_ContEditAfterChgDpt (void);
 
 void Dpt_RecFormNewDpt (void);
 unsigned Dpt_GetTotalNumberOfDepartments (void);
+void Dpt_FlushCacheNumDptsInIns (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
