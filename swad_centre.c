@@ -294,7 +294,7 @@ static void Ctr_ListCentres (void)
      {
       Frm_StartForm (ActEdiCtr);
       Btn_PutConfirmButton (Gbl.Hierarchy.Ins.Ctrs.Num ? Txt_Create_another_centre :
-	                                   Txt_Create_centre);
+	                                                 Txt_Create_centre);
       Frm_EndForm ();
      }
 
@@ -1843,14 +1843,31 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 /**************** Get number of centres in an institution ********************/
 /*****************************************************************************/
 
+void Ctr_FlushCacheNumCtrsInIns (void)
+  {
+   Gbl.Cache.NumCtrsInIns.InsCod  = -1L;
+   Gbl.Cache.NumCtrsInIns.NumCtrs = 0;
+  }
+
 unsigned Ctr_GetNumCtrsInIns (long InsCod)
   {
-   /***** Get number of centres of an institution from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (InsCod == Gbl.Cache.NumCtrsInIns.InsCod)
+      return Gbl.Cache.NumCtrsInIns.NumCtrs;
+
+   /***** 3. Slow: number of centres in an institution from database *****/
+   Gbl.Cache.NumCtrsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumCtrsInIns.NumCtrs =
    (unsigned) DB_QueryCOUNT ("can not get number of centres in an institution",
 			     "SELECT COUNT(*) FROM centres"
 			     " WHERE InsCod=%ld",
 			     InsCod);
+
+   return Gbl.Cache.NumCtrsInIns.NumCtrs;
   }
 
 /*****************************************************************************/

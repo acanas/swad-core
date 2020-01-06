@@ -217,11 +217,20 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
+   Gbl.Hierarchy.Sys.Ctys.Num = 0;
+   Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
+   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
+
+   Gbl.Hierarchy.Cty.Inss.Num = 0;
+   Gbl.Hierarchy.Cty.Inss.Lst = NULL;
+   Gbl.Hierarchy.Cty.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+
    Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ins.FullName[0] = '\0';
    Gbl.Hierarchy.Ins.WWW[0] = '\0';
    Gbl.Hierarchy.Ins.Ctrs.Num = 0;
    Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
+   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ctr.FullName[0] = '\0';
@@ -231,20 +240,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Deg.ShrtName[0] = Gbl.Hierarchy.Deg.FullName[0] = '\0';
 
    Gbl.Hierarchy.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.FullName[0] = '\0';
-   Gbl.Crs.Info.ShowMsgMustBeRead = 0;
-   Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
-
-   Gbl.Hierarchy.Cty.Inss.Num = 0;
-   Gbl.Hierarchy.Cty.Inss.Lst = NULL;
-   Gbl.Hierarchy.Cty.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
-
-   Gbl.Hierarchy.Sys.Ctys.Num = 0;
-   Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
-   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
-
-   Gbl.Hierarchy.Ins.Ctrs.Num = 0;
-   Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
-   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
 
    Gbl.Dpts.Num = 0;
    Gbl.Dpts.Lst = NULL;
@@ -262,6 +257,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.DegTypes.Num = 0;
    Gbl.DegTypes.Lst = NULL;
 
+   Gbl.Crs.Info.ShowMsgMustBeRead = 0;
+   Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
    Gbl.Crs.Grps.NumGrps = 0;
    Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
@@ -280,13 +277,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
-
-   Gbl.Usrs.ClassPhoto.AllGroups = true;
-
    Gbl.Crs.Records.Field.Name[0] = '\0';
    Gbl.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
    Gbl.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
-
    Gbl.Crs.Records.LstFields.Lst = NULL;
    Gbl.Crs.Records.LstFields.Num = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
@@ -342,6 +335,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Listing.RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
+   Gbl.Usrs.ClassPhoto.AllGroups = true;
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
    /* Statistics */
@@ -413,6 +407,8 @@ void Gbl_InitializeGlobals (void)
    Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
    Dpt_FlushCacheNumDptsInIns ();
+   Ctr_FlushCacheNumCtrsInIns ();
+   Deg_FlushCacheNumDegsInIns ();
    Deg_FlushCacheNumDegsInCtr ();
    Crs_FlushCacheNumCrssInIns ();
    Crs_FlushCacheNumCrssInCtr ();

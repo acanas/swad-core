@@ -403,7 +403,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get institution code (row[2]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+         Ins_GetDataOfInstitutionByCod (&Ins);
 
           /* Get centre code (row[3]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1650,7 +1650,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get institution code (row[2]) */
 	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+	    Ins_GetDataOfInstitutionByCod (&Ins);
 
 	    /* Get centre code (row[3]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);

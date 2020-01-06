@@ -2159,14 +2159,14 @@ void For_SetForumName (struct Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
 	 Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
          Str_Copy (ForumName,Ins.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
                    "%s%s",Ins.ShrtName,

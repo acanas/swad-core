@@ -780,6 +780,11 @@ struct Globals
       struct
         {
 	 long InsCod;
+	 unsigned NumCtrs;
+        } NumCtrsInIns;
+      struct
+        {
+	 long InsCod;
 	 unsigned NumDegs;
         } NumDegsInIns;
       struct

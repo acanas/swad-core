@@ -6850,7 +6850,7 @@ static void Brw_WriteCurrentClipboard (void)
      {
       case Brw_ADMI_DOC_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+	 Ins_GetDataOfInstitutionByCod (&Ins);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -6858,7 +6858,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+	 Ins_GetDataOfInstitutionByCod (&Ins);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -7865,7 +7865,7 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_DOC_INS:
          case Brw_ADMI_SHR_INS:
             Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
+            if (Ins_GetDataOfInstitutionByCod (&Ins))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%02u/%u/%s",
 		         Cfg_PATH_INS_PRIVATE,

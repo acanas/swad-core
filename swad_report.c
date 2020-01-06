@@ -563,7 +563,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** User's institution *****/
    Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);

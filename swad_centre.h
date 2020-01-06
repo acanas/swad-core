@@ -122,6 +122,7 @@ void Ctr_RecFormNewCtr (void);
 
 unsigned Ctr_GetNumCtrsTotal (void);
 unsigned Ctr_GetNumCtrsInCty (long CtyCod);
+void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
 unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);

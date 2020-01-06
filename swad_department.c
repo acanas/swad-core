@@ -260,7 +260,7 @@ static void Dpt_EditDepartmentsInternal (void)
       return;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
+   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
@@ -510,7 +510,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Get data of institution of this department */
       Ins.InsCod = Dpt->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins);
 
       HTM_TR_Begin (NULL);
 

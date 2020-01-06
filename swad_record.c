@@ -2199,7 +2199,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins);
 
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -3994,7 +3994,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /* Get list of institutions in this country */
    Ins_FreeListInstitutions ();
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-      Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
+      Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
 
    /* Begin form to select institution */
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
@@ -4172,7 +4172,7 @@ void Rec_UpdateMyInstitution (void)
    /* Get country of institution */
    if (Ins.InsCod > 0)
      {
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
      }

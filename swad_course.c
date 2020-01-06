@@ -241,7 +241,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	 /***** Get data of this institution *****/
 	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/

@@ -99,11 +99,10 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
-void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
+void Ins_GetListInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
-bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
-                                    Ins_GetExtraData_t GetExtraData);
+bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins);
 void Ins_FlushCacheShortNameOfInstitution (void);
 void Ins_GetShortNameOfInstitution (struct Instit *Ins);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);

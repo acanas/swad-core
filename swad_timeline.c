@@ -1611,7 +1611,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Get institution data */
 		  Ins.InsCod = SocNot->HieCod;
-		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+		  Ins_GetDataOfInstitutionByCod (&Ins);
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:

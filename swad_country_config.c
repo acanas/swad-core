@@ -335,7 +335,7 @@ static void CtyCfg_Map (void)
 
       /* Get data of institution */
       Ins.InsCod = Ctr.InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins);
 
       /* Add marker */
       Map_AddMarker (&Ctr.Coord);

@@ -3062,7 +3062,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get institution (row[4]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+         Ins_GetDataOfInstitutionByCod (&Ins);
 
          /* Get centre (row[5]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);

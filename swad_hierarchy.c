@@ -555,8 +555,7 @@ void Hie_InitHierarchy (void)
    /***** If institution code is available, get institution data *****/
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
-      if (Ins_GetDataOfInstitutionByCod (&Gbl.Hierarchy.Ins,	// Institution found
-					 Ins_GET_EXTRA_DATA))	// Get extra data because they may be needed later
+      if (Ins_GetDataOfInstitutionByCod (&Gbl.Hierarchy.Ins))	// Institution found
 	 Gbl.Hierarchy.Cty.CtyCod = Gbl.Hierarchy.Ins.CtyCod;
       else
          Hie_ResetHierarchy ();
@@ -736,7 +735,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Ins.InsCod > 0)
 		 {
 		  /* Get data of institution */
-		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+		  Ins_GetDataOfInstitutionByCod (&Ins);
 
 		  /* Write institution logo and name */
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,

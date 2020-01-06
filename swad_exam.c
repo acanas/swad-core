@@ -978,7 +978,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    /***** Get data of institution of this degree *****/
    Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -1615,7 +1615,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
 
    /***** Get data of institution *****/
    Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,StrExamDate);

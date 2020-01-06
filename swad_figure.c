@@ -1515,7 +1515,7 @@ static unsigned Fig_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res)
 
    /***** Get data of this institution (row[0]) *****/
    Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
-   if (!Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA))
+   if (!Ins_GetDataOfInstitutionByCod (Ins))
       Lay_ShowErrorAndExit ("Institution not found.");
 
    /***** Get statistic (row[1]) *****/

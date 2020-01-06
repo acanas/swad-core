@@ -3716,7 +3716,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    /***** Write rest of main user's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
    HTM_TD_Begin ("class=\"LM %s\"",BgColor);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
@@ -3760,7 +3760,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -3864,7 +3864,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -3983,7 +3983,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -4061,7 +4061,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);

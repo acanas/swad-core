@@ -583,7 +583,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    if (PutForm)
      {
       /* Get list of institutions of the current country */
-      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
+      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
       /* Put form to select institution */
       Frm_StartForm (ActChgCtrInsCfg);
@@ -1061,7 +1061,7 @@ void CtrCfg_ChangeCtrIns (void)
    if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)
      {
       /***** Get data of new institution *****/
-      Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
+      Ins_GetDataOfInstitutionByCod (&NewIns);
 
       /***** Check if it already exists a centre with the same name in the new institution *****/
       if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",

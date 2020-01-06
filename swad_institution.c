@@ -175,7 +175,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of institution */
-         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+         Ins_GetDataOfInstitutionByCod (&Ins);
 
          /* Institution logo and name */
          HTM_TR_Begin (NULL);
@@ -265,7 +265,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_GetParamInsOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_EXTRA_DATA);
+      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
@@ -407,7 +407,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of centres in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ins->Ctrs.Num);
+   HTM_Unsigned (Ctr_GetNumCtrsInIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of degrees in this institution */
@@ -533,7 +533,7 @@ static void Ins_EditInstitutionsInternal (void)
    extern const char *Txt_Institutions_of_COUNTRY_X;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_EXTRA_DATA);
+   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -549,7 +549,7 @@ static void Ins_EditInstitutionsInternal (void)
    Ins_PutFormToCreateInstitution ();
 
    /***** Forms to edit current institutions *****/
-   if (Gbl.Hierarchy.Cty.Inss.Num)
+   if (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod))
       Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
@@ -591,7 +591,7 @@ static void Ins_PutIconToViewInstitutions (void)
 /*****************************************************************************/
 // If CtyCod <= 0, get all institutions
 
-void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
+void Ins_GetListInstitutions (long CtyCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -693,18 +693,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
          /* Get the URL of the institution (row[6]) */
          Str_Copy (Ins->WWW,row[6],
                    Cns_MAX_BYTES_WWW);
-
-         /* Get extra data */
-         switch (GetExtraData)
-           {
-            case Ins_GET_BASIC_DATA:
-               Ins->Ctrs.Num = 0;
-               break;
-            case Ins_GET_EXTRA_DATA:
-               /* Get number of centres in this institution */
-               Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
-               break;
-           }
         }
      }
    else
@@ -736,21 +724,23 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
-                                    Ins_GetExtraData_t GetExtraData)
+bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool InsFound = false;
 
    /***** Clear data *****/
-   Ins->CtyCod = -1L;
-   Ins->Status = (Ins_Status_t) 0;
-   Ins->RequesterUsrCod = -1L;
-   Ins->ShrtName[0] =
-   Ins->FullName[0] =
-   Ins->WWW[0] = '\0';
-   Ins->Ctrs.Num = 0;
+   Ins->CtyCod             = -1L;
+   Ins->Status             = (Ins_Status_t) 0;
+   Ins->RequesterUsrCod    = -1L;
+   Ins->ShrtName[0]        =
+   Ins->FullName[0]        =
+   Ins->WWW[0]             = '\0';
+   Ins->Ctrs.Num           = 0;
+   Ins->Ctrs.Lst           = NULL;
+   Ins->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
+
 
    /***** Check if institution code is correct *****/
    if (Ins->InsCod > 0)
@@ -785,11 +775,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	 /* Get the URL of the institution (row[5]) */
 	 Str_Copy (Ins->WWW,row[5],
 	           Cns_MAX_BYTES_WWW);
-
-	 /* Get extra data */
-	 if (GetExtraData == Ins_GET_EXTRA_DATA)
-	    /* Get number of centres in this institution */
-	    Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
          /* Set return value */
 	 InsFound = true;
@@ -1022,6 +1007,7 @@ static void Ins_ListInstitutionsForEdition (void)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumCtrss;
    unsigned NumUsrsInCrssOfIns;
    unsigned NumUsrsWhoClaimToBelongToIns;
    Ins_StatusTxt_t StatusTxt;
@@ -1042,6 +1028,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Ins = &Gbl.Hierarchy.Cty.Inss.Lst[NumIns];
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
+      NumCtrss = Ctr_GetNumCtrsInIns (Ins->InsCod);
       NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
       NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod);
 
@@ -1050,7 +1037,7 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Put icon to remove institution */
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit ||
-	  Ins->Ctrs.Num ||		// Institution has centres
+	  NumCtrss ||			// Institution has centres
 	  NumUsrsInCrssOfIns ||		// Institution has users
 	  NumUsrsWhoClaimToBelongToIns)	// Institution has users
 	 // Institution has centres or users ==> deletion forbidden
@@ -1133,7 +1120,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of centres */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ins->Ctrs.Num);
+      HTM_Unsigned (NumCtrss);
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
@@ -1298,12 +1285,12 @@ void Ins_RemoveInstitution (void)
    Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns,Ins_GET_EXTRA_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Lay_NoPermissionExit ();
-   else if (Ins_EditingIns->Ctrs.Num)
+   else if (Ctr_GetNumCtrsInIns (Ins_EditingIns->InsCod))
       // Institution has centres ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
@@ -1343,6 +1330,8 @@ void Ins_RemoveInstitution (void)
       Ins_FlushCacheShortNameOfInstitution ();
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
       Dpt_FlushCacheNumDptsInIns ();
+      Ctr_FlushCacheNumCtrsInIns ();
+      Deg_FlushCacheNumDegsInIns ();
       Crs_FlushCacheNumCrssInIns ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
       Usr_FlushCacheNumUsrsInCrssOfIns ();
@@ -1415,7 +1404,7 @@ void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullNa
    Par_GetParToText (ParamName,NewInsName,MaxBytes);
 
    /***** Get from the database the old names of the institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins);
 
    /***** Check if new name is empty *****/
    if (NewInsName[0])
@@ -1507,7 +1496,7 @@ void Ins_ChangeInsWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1568,7 +1557,7 @@ void Ins_ChangeInsStatus (void)
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
 
    /***** Update status in table of institutions *****/
    DB_QueryUPDATE ("can not update the status of an institution",
@@ -1987,7 +1976,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get data of institution */
-	 Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_EXTRA_DATA);
+	 Ins_GetDataOfInstitutionByCod (&Ins);
 
 	 /* Write data of this institution */
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);

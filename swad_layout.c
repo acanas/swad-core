@@ -1553,7 +1553,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of institution *****/
    Ins.InsCod = InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins);
 
    /***** Get data of degree *****/
    Deg.DegCod = DegCod;

@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.112.15 (2020-01-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.112.16 (2020-01-06)"
 #define CSS_FILE		"swad19.112.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -501,7 +501,9 @@ ps2pdf source.ps destination.pdf
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: Mapas más estrechos en móvil
 // TODO: Quitar todos los EXTRA_DATA.
+Optimize Ins_GetNumInssInCty
 
+	Version 19.112.16:Jan 06, 2020	Optimization in number of centres in an institution. (? lines)
 	Version 19.112.15:Jan 06, 2020	Optimization in number of degrees in an institution. (278567 lines)
 	Version 19.112.14:Jan 06, 2020	Optimization in number of courses in an institution. (278555 lines)
 	Version 19.112.13:Jan 06, 2020	Optimization in number of departments in an institution. (278535 lines)
