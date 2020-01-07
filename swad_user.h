@@ -31,6 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
+#include "swad_country.h"
 #include "swad_cryptography.h"
 #include "swad_date.h"
 #include "swad_degree.h"
@@ -421,7 +422,11 @@ long Usr_GetRamdomStdFromCrs (long CrsCod);
 long Usr_GetRamdomStdFromGrp (long GrpCod);
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
+void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);

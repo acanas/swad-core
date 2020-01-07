@@ -1177,7 +1177,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 		     Usr_MAX_BYTES_ROLES_STR);
         }
    NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of users",
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			     " FROM crs_usr,usr_courses_tmp"
 			     " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
@@ -4206,13 +4206,13 @@ unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
    Gbl.Cache.NumUsrsInCrs[Role].CrsCod = CrsCod;
    if (Role == Rol_UNK)
       Gbl.Cache.NumUsrsInCrs[Rol_UNK].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(*) FROM crs_usr"
 				" WHERE CrsCod=%ld",
 				CrsCod);
    else
       Gbl.Cache.NumUsrsInCrs[Role].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(*) FROM crs_usr"
 				" WHERE CrsCod=%ld AND Role=%u",
 				CrsCod,(unsigned) Role);
@@ -4263,7 +4263,7 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
    Gbl.Cache.NumUsrsInCrssOfDeg[Role].DegCod = DegCod;
    if (Role == Rol_UNK)	// Any user
       Gbl.Cache.NumUsrsInCrssOfDeg[Rol_UNK].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+      (unsigned) DB_QueryCOUNT ("can not get number of users"
 				" in courses of a degree",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM courses,crs_usr"
@@ -4272,7 +4272,7 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 				DegCod);
    else
       Gbl.Cache.NumUsrsInCrssOfDeg[Role].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+      (unsigned) DB_QueryCOUNT ("can not get number of users"
 				" in courses of a degree",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM courses,crs_usr"
@@ -4328,7 +4328,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
    Gbl.Cache.NumUsrsInCrssOfCtr[Role].CtrCod = CtrCod;
    if (Role == Rol_UNK)	// Any user
       Gbl.Cache.NumUsrsInCrssOfCtr[Rol_UNK].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+      (unsigned) DB_QueryCOUNT ("can not get number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM degrees,courses,crs_usr"
@@ -4340,7 +4340,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of centres
       Gbl.Cache.NumUsrsInCrssOfCtr[Role].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+      (unsigned) DB_QueryCOUNT ("can not get number of users"
 				" in courses of a centre",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM degrees,courses,crs_usr"
@@ -4397,8 +4397,7 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
    Gbl.Cache.NumUsrsInCrssOfIns[Role].InsCod = InsCod;
    if (Role == Rol_UNK)	// Any user
       Gbl.Cache.NumUsrsInCrssOfIns[Rol_UNK].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				" in courses of an institution",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM centres,degrees,courses,crs_usr"
 				" WHERE centres.InsCod=%ld"
@@ -4410,8 +4409,7 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of institutions
       Gbl.Cache.NumUsrsInCrssOfIns[Role].NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				" in courses of an institution",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM centres,degrees,courses,crs_usr"
 				" WHERE centres.InsCod=%ld"
@@ -4435,8 +4433,7 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
    /***** Get the number of users in courses of a country from database ******/
    if (Role == Rol_UNK)	// Any user
       NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				" in courses of a country",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			        " FROM institutions,centres,degrees,courses,crs_usr"
 			        " WHERE institutions.CtyCod=%ld"
@@ -4449,8 +4446,7 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of countries
       NumUsrs =
-      (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				" in courses of a country",
+      (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM institutions,centres,degrees,courses,crs_usr"
 				" WHERE institutions.CtyCod=%ld"
@@ -4545,17 +4541,90 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
   }
 
 /*****************************************************************************/
+/******* Get number of users who don't claim to belong to any country ********/
+/*****************************************************************************/
+
+void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = false;
+  }
+
+unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid)
+      return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
+
+   /***** 2. Slow: number of users who don't claim to belong to any country
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs =
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
+			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     " WHERE CtyCod<0");
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
+   return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to another country *********/
+/*****************************************************************************/
+
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = false;
+  }
+
+unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid)
+      return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
+
+   /***** 2. Slow: number of users who claim to belong to another country
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs =
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
+			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     " WHERE CtyCod=0");
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
+   return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
+  }
+
+/*****************************************************************************/
 /*********** Get number of users who claim to belong to a country ************/
 /*****************************************************************************/
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void)
   {
-   /***** Get the number of users in a country from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of users in a country",
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs = 0;
+  }
+
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (Cty->CtyCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (Cty->CtyCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
+     {
+      Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
+      Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+     }
+
+   /***** 3. Slow: number of users who claim to belong to an institution
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
+   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs =
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE CtyCod=%ld",
-			     CtyCod);
+			     Cty->CtyCod);
+   Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+   return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
   }
 
 /*****************************************************************************/
@@ -4582,8 +4651,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = InsCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of users"
-			     " in an institution",
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE InsCod=%ld",
 			     InsCod);
@@ -4614,7 +4682,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = CtrCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of users in a centre",
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);

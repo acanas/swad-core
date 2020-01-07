@@ -61,7 +61,11 @@ struct Country
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumUsrs;		// Number of users in courses of the institution
-   unsigned NumUsrsWhoClaimToBelongToCty;
+   struct
+     {
+      bool Valid;
+      unsigned NumUsrs;
+     } NumUsrsWhoClaimToBelongToCty;
   };
 
 #define Cty_NUM_ORDERS 2

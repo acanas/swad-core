@@ -815,6 +815,21 @@ struct Globals
         } NumCrssInDeg;
       struct
         {
+	 bool Valid;
+	 unsigned NumUsrs;
+        } NumUsrsWhoDontClaimToBelongToAnyCty;
+      struct
+        {
+	 bool Valid;
+	 unsigned NumUsrs;
+        } NumUsrsWhoClaimToBelongToAnotherCty;
+      struct
+        {
+	 long CtyCod;
+	 unsigned NumUsrs;
+        } NumUsrsWhoClaimToBelongToCty;
+      struct
+        {
 	 long InsCod;
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToIns;

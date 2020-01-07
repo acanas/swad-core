@@ -459,7 +459,7 @@ static void CtyCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
    HTM_TD_End ();
 
    HTM_TR_End ();
