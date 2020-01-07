@@ -71,6 +71,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
 void Lay_NotEnoughMemoryExit (void);
 void Lay_WrongScopeExit (void);
+void Lay_WrongOrderExit (void);
 void Lay_NoPermissionExit (void);
 void Lay_ShowErrorAndExit (const char *Txt);
 

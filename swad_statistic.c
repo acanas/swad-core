@@ -3280,7 +3280,7 @@ static void Sta_WriteCountry (long CtyCod)
      {
       /***** Get data of country *****/
       Cty.CtyCod = CtyCod;
-      Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
+      Cty_GetDataOfCountryByCod (&Cty);
 
       /***** Form to go to country *****/
       Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,

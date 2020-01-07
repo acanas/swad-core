@@ -73,6 +73,8 @@ static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (void);
 static void Ins_PutIconToViewInstitutions (void);
 
+static void Ins_GetDataOfInstitFromRow (struct Instit *Ins,MYSQL_ROW row);
+
 static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
@@ -265,7 +267,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_GetParamInsOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
@@ -402,7 +404,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    /***** Stats *****/
    /* Number of users who claim to belong to this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod));
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins));
    HTM_TD_End ();
 
    /* Number of centres in this institution */
@@ -533,7 +535,7 @@ static void Ins_EditInstitutionsInternal (void)
    extern const char *Txt_Institutions_of_COUNTRY_X;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -549,7 +551,7 @@ static void Ins_EditInstitutionsInternal (void)
    Ins_PutFormToCreateInstitution ();
 
    /***** Forms to edit current institutions *****/
-   if (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod))
+   if (Gbl.Hierarchy.Cty.Inss.Num)
       Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
@@ -587,11 +589,10 @@ static void Ins_PutIconToViewInstitutions (void)
   }
 
 /*****************************************************************************/
-/********************** Get list of current institutions *********************/
+/******* Get basic list of institutions ordered by name of institution *******/
 /*****************************************************************************/
-// If CtyCod <= 0, get all institutions
 
-void Ins_GetListInstitutions (long CtyCod)
+void Ins_GetBasicListOfInstitutions (long CtyCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -600,53 +601,18 @@ void Ins_GetListInstitutions (long CtyCod)
    struct Instit *Ins;
 
    /***** Get institutions from database *****/
-   switch (Gbl.Hierarchy.Cty.Inss.SelectedOrder)
-     {
-      case Ins_ORDER_BY_INSTITUTION:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-				   "SELECT InsCod,"				// row[0]
-				          "CtyCod,"				// row[1]
-				          "Status,"				// row[2]
-				          "RequesterUsrCod,"			// row[3]
-				          "ShortName,"				// row[4]
-				          "FullName,"				// row[5]
-				          "WWW"					// row[6]
-				   " FROM institutions"
-				   " WHERE CtyCod=%ld"
-				   " ORDER BY FullName",
-				   CtyCod);
-         break;
-      case Ins_ORDER_BY_NUM_USRS:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-				   "(SELECT institutions.InsCod,"		// row[0]
-				           "institutions.CtyCod,"		// row[1]
-				           "institutions.Status,"		// row[2]
-				           "institutions.RequesterUsrCod,"	// row[3]
-				           "institutions.ShortName,"		// row[4]
-				           "institutions.FullName,"		// row[5]
-				           "institutions.WWW,"			// row[6]
-				           "COUNT(*) AS NumUsrs"		// row[7]
-				   " FROM institutions,usr_data"
-				   " WHERE institutions.CtyCod=%ld"
-				   " AND institutions.InsCod=usr_data.InsCod"
-				   " GROUP BY institutions.InsCod)"
-				   " UNION "
-				   "(SELECT InsCod,"				// row[0]
-				           "CtyCod,"				// row[1]
-				           "Status,"				// row[2]
-				           "RequesterUsrCod,"			// row[3]
-				           "ShortName,"				// row[4]
-				           "FullName,"				// row[5]
-				           "WWW,"				// row[6]
-				           "0 AS NumUsrs"			// row[7]
-				   " FROM institutions"
-				   " WHERE CtyCod=%ld"
-				   " AND InsCod NOT IN"
-				   " (SELECT DISTINCT InsCod FROM usr_data))"
-				   " ORDER BY NumUsrs DESC,FullName",
-				   CtyCod,CtyCod);
-         break;
-     }
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
+			     "SELECT InsCod,"			// row[0]
+				    "CtyCod,"			// row[1]
+				    "Status,"			// row[2]
+				    "RequesterUsrCod,"		// row[3]
+				    "ShortName,"		// row[4]
+				    "FullName,"			// row[5]
+				    "WWW"			// row[6]
+			     " FROM institutions"
+			     " WHERE CtyCod=%ld"
+			     " ORDER BY FullName",
+			     CtyCod);
 
    if (NumRows) // Institutions found...
      {
@@ -665,34 +631,117 @@ void Ins_GetListInstitutions (long CtyCod)
         {
          Ins = &(Gbl.Hierarchy.Cty.Inss.Lst[NumIns]);
 
-         /* Get next institution */
+         /* Get institution data */
          row = mysql_fetch_row (mysql_res);
+         Ins_GetDataOfInstitFromRow (Ins,row);
 
-         /* Get institution code (row[0]) */
-         if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of institution.");
+	 /* Reset number of users who claim to belong to this institution */
+         Ins->NumUsrsWhoClaimToBelongToIns.Valid = false;
 
-         /* Get country code (row[1]) */
-         Ins->CtyCod = Str_ConvertStrCodToLongCod (row[1]);
+         /* Reset other fields */
+	 Ins->Ctrs.Num = 0;
+	 Ins->Ctrs.Lst = NULL;
+         Ins->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
+        }
+     }
+   else
+     {
+      Gbl.Hierarchy.Cty.Inss.Num = 0;
+      Gbl.Hierarchy.Cty.Inss.Lst = NULL;
+     }
 
-	 /* Get institution status (row[2]) */
-	 if (sscanf (row[2],"%u",&(Ins->Status)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong institution status.");
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
 
-	 /* Get requester user's code (row[3]) */
-	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+/*****************************************************************************/
+/************* Get full list of institutions                    **************/
+/************* with number of users who claim to belong to them **************/
+/*****************************************************************************/
 
-         /* Get the short name of the institution (row[4]) */
-         Str_Copy (Ins->ShrtName,row[4],
-                   Hie_MAX_BYTES_SHRT_NAME);
+void Ins_GetFullListOfInstitutions (long CtyCod)
+  {
+   char *OrderBySubQuery = NULL;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows = 0;	// Initialized to avoid warning
+   unsigned NumIns;
+   struct Instit *Ins;
 
-         /* Get the full name of the institution (row[5]) */
-         Str_Copy (Ins->FullName,row[5],
-                   Hie_MAX_BYTES_FULL_NAME);
+   /***** Get institutions from database *****/
+   /* Build order subquery */
+   switch (Gbl.Hierarchy.Cty.Inss.SelectedOrder)
+     {
+      case Ins_ORDER_BY_INSTITUTION:
+	 OrderBySubQuery = "FullName";
+	 break;
+      case Ins_ORDER_BY_NUM_USRS:
+	 OrderBySubQuery = "NumUsrs DESC,FullName";
+	 break;
+      default:
+	 Lay_WrongOrderExit ();
+     }
 
-         /* Get the URL of the institution (row[6]) */
-         Str_Copy (Ins->WWW,row[6],
-                   Cns_MAX_BYTES_WWW);
+   /* Query database */
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
+			     "(SELECT institutions.InsCod,"		// row[0]
+				     "institutions.CtyCod,"		// row[1]
+				     "institutions.Status,"		// row[2]
+				     "institutions.RequesterUsrCod,"	// row[3]
+				     "institutions.ShortName,"		// row[4]
+				     "institutions.FullName,"		// row[5]
+				     "institutions.WWW,"		// row[6]
+				     "COUNT(*) AS NumUsrs"		// row[7]
+			     " FROM institutions,usr_data"
+			     " WHERE institutions.CtyCod=%ld"
+			     " AND institutions.InsCod=usr_data.InsCod"
+			     " GROUP BY institutions.InsCod)"
+			     " UNION "
+			     "(SELECT InsCod,"				// row[0]
+				     "CtyCod,"				// row[1]
+				     "Status,"				// row[2]
+				     "RequesterUsrCod,"			// row[3]
+				     "ShortName,"			// row[4]
+				     "FullName,"			// row[5]
+				     "WWW,"				// row[6]
+				     "0 AS NumUsrs"			// row[7]
+			     " FROM institutions"
+			     " WHERE CtyCod=%ld"
+			     " AND InsCod NOT IN"
+			     " (SELECT DISTINCT InsCod FROM usr_data))"
+			     " ORDER BY %s",
+			     CtyCod,CtyCod,OrderBySubQuery);
+
+   if (NumRows) // Institutions found...
+     {
+      // NumRows should be equal to Deg->NumCourses
+      Gbl.Hierarchy.Cty.Inss.Num = (unsigned) NumRows;
+
+      /***** Create list with institutions *****/
+      if ((Gbl.Hierarchy.Cty.Inss.Lst = (struct Instit *)
+	                                calloc (NumRows,sizeof (struct Instit))) == NULL)
+          Lay_NotEnoughMemoryExit ();
+
+      /***** Get the institutions *****/
+      for (NumIns = 0;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	   NumIns++)
+        {
+         Ins = &(Gbl.Hierarchy.Cty.Inss.Lst[NumIns]);
+
+         /* Get institution data */
+         row = mysql_fetch_row (mysql_res);
+         Ins_GetDataOfInstitFromRow (Ins,row);
+
+	 /* Get number of users who claim to belong to this institution (row[7]) */
+         Ins->NumUsrsWhoClaimToBelongToIns.Valid = false;
+	 if (sscanf (row[7],"%u",&(Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs)) == 1)
+	    Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
+
+         /* Reset other fields */
+	 Ins->Ctrs.Num = 0;
+	 Ins->Ctrs.Lst = NULL;
+         Ins->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
         }
      }
    else
@@ -743,41 +792,26 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins)
    Ins->Ctrs.Num           = 0;
    Ins->Ctrs.Lst           = NULL;
    Ins->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
-
+   Ins->NumUsrsWhoClaimToBelongToIns.Valid = false;
 
    /***** Check if institution code is correct *****/
    if (Ins->InsCod > 0)
      {
       /***** Get data of an institution from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get data of an institution",
-			  "SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+			  "SELECT InsCod,"		// row[0]
+			         "CtyCod,"		// row[1]
+			         "Status,"		// row[2]
+			         "RequesterUsrCod,"	// row[3]
+			         "ShortName,"		// row[4]
+			         "FullName,"		// row[5]
+			         "WWW"			// row[6]
 			  " FROM institutions WHERE InsCod=%ld",
 			  Ins->InsCod))	// Institution found...
 	{
-	 /* Get row */
+         /* Get institution data */
 	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get country code (row[0]) */
-	 Ins->CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get centre status (row[1]) */
-	 if (sscanf (row[1],"%u",&(Ins->Status)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong institution status.");
-
-	 /* Get requester user's code (row[2]) */
-	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-	 /* Get the short name of the institution (row[3]) */
-	 Str_Copy (Ins->ShrtName,row[3],
-	           Hie_MAX_BYTES_SHRT_NAME);
-
-	 /* Get the full name of the institution (row[4]) */
-	 Str_Copy (Ins->FullName,row[4],
-	           Hie_MAX_BYTES_FULL_NAME);
-
-	 /* Get the URL of the institution (row[5]) */
-	 Str_Copy (Ins->WWW,row[5],
-	           Cns_MAX_BYTES_WWW);
+         Ins_GetDataOfInstitFromRow (Ins,row);
 
          /* Set return value */
 	 InsFound = true;
@@ -788,6 +822,39 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins)
      }
 
    return InsFound;
+  }
+
+/*****************************************************************************/
+/********** Get data of a centre from a row resulting of a query *************/
+/*****************************************************************************/
+
+static void Ins_GetDataOfInstitFromRow (struct Instit *Ins,MYSQL_ROW row)
+  {
+   /***** Get institution code (row[0]) *****/
+   if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      Lay_ShowErrorAndExit ("Wrong code of institution.");
+
+   /***** Get country code (row[1]) *****/
+   Ins->CtyCod = Str_ConvertStrCodToLongCod (row[1]);
+
+   /***** Get institution status (row[2]) *****/
+   if (sscanf (row[2],"%u",&(Ins->Status)) != 1)
+      Lay_ShowErrorAndExit ("Wrong institution status.");
+
+   /***** Get requester user's code (row[3]) *****/
+   Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+   /***** Get the short name of the institution (row[4]) *****/
+   Str_Copy (Ins->ShrtName,row[4],
+	     Hie_MAX_BYTES_SHRT_NAME);
+
+   /***** Get the full name of the institution (row[5]) *****/
+   Str_Copy (Ins->FullName,row[5],
+	     Hie_MAX_BYTES_FULL_NAME);
+
+   /***** Get the URL of the institution (row[6]) *****/
+   Str_Copy (Ins->WWW,row[6],
+	     Cns_MAX_BYTES_WWW);
   }
 
 /*****************************************************************************/
@@ -1033,7 +1100,7 @@ static void Ins_ListInstitutionsForEdition (void)
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumCtrss = Ctr_GetNumCtrsInIns (Ins->InsCod);
       NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
-      NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod);
+      NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
 
       HTM_TR_Begin (NULL);
 
@@ -1301,7 +1368,7 @@ void Ins_RemoveInstitution (void)
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns->InsCod))
+   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);

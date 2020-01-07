@@ -4674,25 +4674,35 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
   }
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Instit *Ins)
   {
    /***** 1. Fast check: Trivial case *****/
-   if (InsCod <= 0)
+   if (Ins->InsCod <= 0)
       return 0;
 
-   /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
-      return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+   /***** 2. Fast check: If already got... *****/
+   if (Ins->NumUsrsWhoClaimToBelongToIns.Valid)
+      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
 
-   /***** 3. Slow: number of users who claim to belong to an institution
+   /***** 3. Fast check: If cached... *****/
+   if (Ins->InsCod == Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod)
+     {
+      Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
+      Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
+      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to an institution
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = InsCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = Ins->InsCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
+   Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE InsCod=%ld",
-			     InsCod);
-   return Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
+			     Ins->InsCod);
+   Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
+   return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
   }
 
 /*****************************************************************************/

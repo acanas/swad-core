@@ -759,6 +759,7 @@ struct Globals
       struct
 	{
 	 long CtyCod;
+	 Lan_Language_t Language;
 	 char CtyName[Cty_MAX_BYTES_NAME + 1];
 	} CountryName;
       struct

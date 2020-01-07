@@ -376,7 +376,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    if (PutForm)
      {
       /* Get list of countries */
-      Cty_GetListCountries (Cty_GET_BASIC_DATA);
+      Cty_GetBasicListOfCountries ();
 
       /* Put form to select country */
       Frm_StartForm (ActChgInsCtyCfg);
@@ -483,7 +483,7 @@ static void InsCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -655,7 +655,7 @@ void InsCfg_ChangeInsCty (void)
    if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)
      {
       /***** Get data of the country from database *****/
-      Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
+      Cty_GetDataOfCountryByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))

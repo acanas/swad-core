@@ -3217,10 +3217,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 
    /***** If list of countries is empty, try to get it *****/
    if (!Gbl.Hierarchy.Sys.Ctys.Num)
-     {
-      Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
-      Cty_GetListCountries (Cty_GET_BASIC_DATA);
-     }
+      Cty_GetBasicListOfCountries ();
 
    /***** Selector of country *****/
    HTM_TR_Begin (NULL);
@@ -3955,10 +3952,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /* If list of countries is empty, try to get it */
    if (!Gbl.Hierarchy.Sys.Ctys.Num)
-     {
-      Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
-      Cty_GetListCountries (Cty_GET_BASIC_DATA);
-     }
+      Cty_GetBasicListOfCountries ();
 
    /* Begin form to select the country of my institution */
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
@@ -3994,7 +3988,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /* Get list of institutions in this country */
    Ins_FreeListInstitutions ();
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-      Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
+      Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
 
    /* Begin form to select institution */
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);

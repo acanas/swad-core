@@ -563,10 +563,8 @@ void Hie_InitHierarchy (void)
 
    /***** If country code is available, get country data *****/
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
-     {
-      if (!Cty_GetDataOfCountryByCod (&Gbl.Hierarchy.Cty,Cty_GET_BASIC_DATA))		// Country not found
+      if (!Cty_GetDataOfCountryByCod (&Gbl.Hierarchy.Cty))		// Country not found
          Hie_ResetHierarchy ();
-     }
 
    /***** Set current hierarchy level and code
           depending on course code, degree code, etc. *****/

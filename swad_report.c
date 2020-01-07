@@ -556,7 +556,7 @@ static void Rep_WriteSectionUsrInfo (void)
             Gbl.Usrs.Me.UsrDat.Email);
 
    /***** User's country *****/
-   Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
+   Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,Gbl.Prefs.Language,CtyName);
    fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Country,
             CtyName);

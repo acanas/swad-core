@@ -292,7 +292,8 @@ void Log_GetAndShowLastClicks (void)
 
       /* Get country code (row[4]) */
       Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
-      Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
+      Cty_GetCountryName (Cty.CtyCod,Gbl.Prefs.Language,
+			  Cty.Name[Gbl.Prefs.Language]);
 
       /* Get institution code (row[5]) */
       Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);

@@ -72,12 +72,6 @@ typedef enum
   } Cty_Order_t;
 #define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
 
-typedef enum
-  {
-   Cty_GET_BASIC_DATA,
-   Cty_GET_EXTRA_DATA,
-  } Cty_GetExtraData_t;
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -100,13 +94,15 @@ bool Cty_CheckIfCountryPhotoExists (struct Country *Cty);
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutHiddenParamCtyOrder (void);
 void Cty_EditCountries (void);
-void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData);
+void Cty_GetBasicListOfCountries (void);
+void Cty_GetFullListOfCountries (void);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink);
-bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData);
+bool Cty_GetDataOfCountryByCod (struct Country *Cty);
 void Cty_FlushCacheCountryName (void);
-void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1]);
+void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
+			 char CtyName[Cty_MAX_BYTES_NAME + 1]);
 void Cty_PutParamCtyCod (long CtyCod);
 long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed);
 void Cty_RemoveCountry (void);

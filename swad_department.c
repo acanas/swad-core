@@ -260,7 +260,7 @@ static void Dpt_EditDepartmentsInternal (void)
       return;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);

@@ -71,6 +71,11 @@ struct Instit
       struct Centre *Lst;	// List of centres
       Ctr_Order_t SelectedOrder;
      } Ctrs;
+   struct
+     {
+      bool Valid;
+      unsigned NumUsrs;
+     } NumUsrsWhoClaimToBelongToIns;
   };
 
 #define Ins_NUM_ORDERS 2
@@ -80,12 +85,6 @@ typedef enum
    Ins_ORDER_BY_NUM_USRS    = 1,
   } Ins_Order_t;
 #define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
-
-typedef enum
-  {
-   Ins_GET_BASIC_DATA,
-   Ins_GET_EXTRA_DATA,
-  } Ins_GetExtraData_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -99,7 +98,8 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
-void Ins_GetListInstitutions (long CtyCod);
+void Ins_GetBasicListOfInstitutions (long CtyCod);
+void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins);

@@ -583,7 +583,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    if (PutForm)
      {
       /* Get list of institutions of the current country */
-      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+      Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
       /* Put form to select institution */
       Frm_StartForm (ActChgCtrInsCfg);

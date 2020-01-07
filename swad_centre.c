@@ -582,7 +582,7 @@ void Ctr_GetListCentres (long InsCod)
         {
          Ctr = &(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]);
 
-         /* Get next centre */
+         /* Get centre data */
          row = mysql_fetch_row (mysql_res);
          Ctr_GetDataOfCentreFromRow (Ctr,row);
         }
