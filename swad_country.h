@@ -60,7 +60,6 @@ struct Country
    unsigned NumCtrs;
    unsigned NumDegs;
    unsigned NumCrss;
-   unsigned NumUsrs;		// Number of users in courses of the institution
    struct
      {
       bool Valid;

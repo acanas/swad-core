@@ -4424,15 +4424,48 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 /*****************************************************************************/
 /****** Count how many users with a role belong to courses of a country ******/
 /*****************************************************************************/
-// Here Rol_UNK means students or teachers
+// Here Rol_UNK means any user (students, non-editing teachers or teachers)
+
+void Usr_FlushCacheNumUsrsInCrssOfCty (void)
+  {
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_UNK].CtyCod =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_STD].CtyCod =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_NET].CtyCod =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_TCH].CtyCod = -1L;
+
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_UNK].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_STD].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_NET].NumUsrs =
+   Gbl.Cache.NumUsrsInCrssOfCty[Rol_TCH].NumUsrs = 0;
+  }
 
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
   {
-   unsigned NumUsrs;
+   /***** 1. Fast check: Trivial case *****/
+   if (CtyCod <= 0)
+      return 0;
 
-   /***** Get the number of users in courses of a country from database ******/
+   /***** 2. Fast check: Trivial case *****/
+   switch (Role)
+     {
+      case Rol_UNK:	// Here Rol_UNK means all
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 break;
+      default:
+	 return 0;
+     }
+
+   /***** 3. Fast check: If cached... *****/
+   if (CtyCod == Gbl.Cache.NumUsrsInCrssOfCty[Role].CtyCod)
+      return Gbl.Cache.NumUsrsInCrssOfCty[Role].NumUsrs;
+
+   /***** 4. Slow: get number of users in courses of a country
+                   from database *****/
+   Gbl.Cache.NumUsrsInCrssOfCty[Role].CtyCod = CtyCod;
    if (Role == Rol_UNK)	// Any user
-      NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCty[Rol_UNK].NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			        " FROM institutions,centres,degrees,courses,crs_usr"
@@ -4445,7 +4478,7 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of countries
-      NumUsrs =
+      Gbl.Cache.NumUsrsInCrssOfCty[Role].NumUsrs =
       (unsigned) DB_QueryCOUNT ("can not get number of users",
 				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 				" FROM institutions,centres,degrees,courses,crs_usr"
@@ -4456,7 +4489,7 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
 				" AND courses.CrsCod=crs_usr.CrsCod"
 				" AND crs_usr.Role=%u",
 				CtyCod,(unsigned) Role);
-   return NumUsrs;
+   return Gbl.Cache.NumUsrsInCrssOfCty[Role].NumUsrs;
   }
 
 /*****************************************************************************/
