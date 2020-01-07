@@ -59,7 +59,7 @@ struct Country
      } Inss;
    unsigned NumCtrs;
    unsigned NumDegs;
-   unsigned NumCrss;
+   // unsigned NumCrss;
    struct
      {
       bool Valid;

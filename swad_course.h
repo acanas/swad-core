@@ -94,6 +94,7 @@ struct Course
 void Crs_ShowIntroduction (void);
 
 unsigned Crs_GetNumCrssTotal (void);
+void Crs_FlushCacheNumCrssInCty (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);
 void Crs_FlushCacheNumCrssInIns (void);
 unsigned Crs_GetNumCrssInIns (long InsCod);

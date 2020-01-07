@@ -409,10 +409,25 @@ unsigned Crs_GetNumCrssTotal (void)
 /****************** Get number of courses in a country ***********************/
 /*****************************************************************************/
 
+void Crs_FlushCacheNumCrssInCty (void)
+  {
+   Gbl.Cache.NumCrssInCty.CtyCod  = -1L;
+   Gbl.Cache.NumCrssInCty.NumCrss = 0;
+  }
+
 unsigned Crs_GetNumCrssInCty (long CtyCod)
   {
-   /***** Get number of courses in a country from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (CtyCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (CtyCod == Gbl.Cache.NumCrssInCty.CtyCod)
+      return Gbl.Cache.NumCrssInCty.NumCrss;
+
+   /***** 3. Slow: number of courses in a country from database *****/
+   Gbl.Cache.NumCrssInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumCrssInCty.NumCrss =
    (unsigned) DB_QueryCOUNT ("can not get the number of courses in a country",
 			     "SELECT COUNT(*)"
 			     " FROM institutions,centres,degrees,courses"
@@ -421,6 +436,7 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 			     " AND centres.CtrCod=degrees.CtrCod"
 			     " AND degrees.DegCod=courses.DegCod",
 			     CtyCod);
+   return Gbl.Cache.NumCrssInCty.NumCrss;
   }
 
 /*****************************************************************************/

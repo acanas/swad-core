@@ -800,6 +800,11 @@ struct Globals
         } NumDegsInCtr;
       struct
         {
+	 long CtyCod;
+	 unsigned NumCrss;
+        } NumCrssInCty;
+      struct
+        {
 	 long InsCod;
 	 unsigned NumCrss;
         } NumCrssInIns;

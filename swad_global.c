@@ -406,14 +406,20 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
+
    Ins_FlushCacheNumInssInCty ();
+   Crs_FlushCacheNumCrssInCty ();
+
    Dpt_FlushCacheNumDptsInIns ();
    Ctr_FlushCacheNumCtrsInIns ();
    Deg_FlushCacheNumDegsInIns ();
-   Deg_FlushCacheNumDegsInCtr ();
    Crs_FlushCacheNumCrssInIns ();
+
+   Deg_FlushCacheNumDegsInCtr ();
    Crs_FlushCacheNumCrssInCtr ();
+
    Crs_FlushCacheNumCrssInDeg ();
+
    Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();

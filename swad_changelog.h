@@ -502,7 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Mapas más estrechos en móvil
 // TODO: Quitar todos los EXTRA_DATA.
 
-	Version 19.112.20:Jan 07, 2020	Optimization in number of users in a country. (? lines)
+	Version 19.112.20:Jan 07, 2020	Optimization in number of courses in a country. (278724 lines)
 	Version 19.112.19:Jan 07, 2020	Optimization in number of users in a country. (278675 lines)
 	Version 19.112.18:Jan 07, 2020	Optimization in number of users in a country. (278668 lines)
 	Version 19.112.17:Jan 07, 2020	Optimization in number of institutions in a country. (278600 lines)
