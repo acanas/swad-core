@@ -670,7 +670,11 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 
 void Ins_GetFullListOfInstitutions (long CtyCod)
   {
-   char *OrderBySubQuery = NULL;
+   static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
+     {
+      [Ins_ORDER_BY_INSTITUTION] = "FullName",
+      [Ins_ORDER_BY_NUM_USRS   ] = "NumUsrs DESC,FullName",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
@@ -678,19 +682,6 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
    struct Instit *Ins;
 
    /***** Get institutions from database *****/
-   /* Build order subquery */
-   switch (Gbl.Hierarchy.Cty.Inss.SelectedOrder)
-     {
-      case Ins_ORDER_BY_INSTITUTION:
-	 OrderBySubQuery = "FullName";
-	 break;
-      case Ins_ORDER_BY_NUM_USRS:
-	 OrderBySubQuery = "NumUsrs DESC,FullName";
-	 break;
-      default:
-	 Lay_WrongOrderExit ();
-     }
-
    /* Query database */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
 			     "(SELECT institutions.InsCod,"		// row[0]
@@ -719,7 +710,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 			     " AND InsCod NOT IN"
 			     " (SELECT DISTINCT InsCod FROM usr_data))"
 			     " ORDER BY %s",
-			     CtyCod,CtyCod,OrderBySubQuery);
+			     CtyCod,CtyCod,OrderBySubQuery[Gbl.Hierarchy.Cty.Inss.SelectedOrder]);
 
    if (NumRows) // Institutions found...
      {

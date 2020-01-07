@@ -309,7 +309,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       return;
 
    /***** Get list of centres and degrees *****/
-   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+   Ctr_GetBasicListOfCentres (Gbl.Hierarchy.Ins.InsCod);
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Write menu to select country, institution and centre *****/

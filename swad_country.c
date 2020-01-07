@@ -767,7 +767,7 @@ void Cty_GetBasicListOfCountries (void)
 	 Str_Copy (Cty->Name[Gbl.Prefs.Language],row[2],
 		   Cty_MAX_BYTES_NAME);
 
-	 /* Number of users who claim to belong to country not got */
+	 /* Reset number of users who claim to belong to country */
 	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
 
 	 /* Reset other fields */
@@ -798,6 +798,11 @@ void Cty_GetFullListOfCountries (void)
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char *OrderBySubQuery = NULL;
+   static const char *OrderBySubQueryFmt[Cty_NUM_ORDERS] =
+     {
+      [Cty_ORDER_BY_COUNTRY ] = "Name_%s",
+      [Cty_ORDER_BY_NUM_USRS] = "NumUsrs DESC,Name_%s",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;
@@ -838,21 +843,9 @@ void Cty_GetFullListOfCountries (void)
      }
 
    /* Build order subquery */
-   switch (Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
-     {
-      case Cty_ORDER_BY_COUNTRY:
-	 if (asprintf (&OrderBySubQuery,"Name_%s",
-		       Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 break;
-      case Cty_ORDER_BY_NUM_USRS:
-	 if (asprintf (&OrderBySubQuery,"NumUsrs DESC,Name_%s",
-		       Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 break;
-      default:
-	 Lay_WrongOrderExit ();
-     }
+   if (asprintf (&OrderBySubQuery,OrderBySubQueryFmt[Gbl.Hierarchy.Sys.Ctys.SelectedOrder],
+		 Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /* Query database */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
@@ -912,11 +905,14 @@ void Cty_GetFullListOfCountries (void)
 	   }
 
 	 /* Get number of users who claim to belong to this country */
+	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
 	 if (sscanf (row[1 + Lan_NUM_LANGUAGES * 2 + 1],"%u",
 		     &(Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs)) == 1)
 	    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
-	 else
-	    Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
+
+	 /* Reset other fields */
+	 Cty->Inss.Num = 0;
+	 Cty->Inss.Lst = NULL;
         }
      }
    else

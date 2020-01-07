@@ -4029,7 +4029,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /* Get list of centres in this institution */
       Ctr_FreeListCentres ();
       if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-	 Ctr_GetListCentres (Gbl.Usrs.Me.UsrDat.InsCod);
+	 Ctr_GetBasicListOfCentres (Gbl.Usrs.Me.UsrDat.InsCod);
 
       /* Begin form to select centre */
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);

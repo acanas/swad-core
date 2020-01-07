@@ -239,7 +239,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    Ctr_GetParamCtrOrder ();
 
    /***** Get list of centres *****/
-   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+   Ctr_GetFullListOfCentres (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -384,7 +384,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users who claim to belong to this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod));
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr));
    HTM_TD_End ();
 
    /***** Place *****/
@@ -472,7 +472,7 @@ static void Ctr_EditCentresInternal (void)
 
    /***** Get list of centres *****/
    Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
-   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+   Ctr_GetFullListOfCentres (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -528,18 +528,11 @@ void Ctr_PutIconToViewCentres (void)
   }
 
 /*****************************************************************************/
-/***** Get a list with all the centres or with those of an institution *******/
+/************ Get basic list of centres ordered by name of centre ************/
 /*****************************************************************************/
-// If InsCod <= 0 ==> get all the centres, of any institution
-// In InsCod >  0 ==> get only the centres of the specified institution
 
-void Ctr_GetListCentres (long InsCod)
+void Ctr_GetBasicListOfCentres (long InsCod)
   {
-   static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
-     {
-      [Ctr_ORDER_BY_CENTRE  ] = "FullName",
-      [Ctr_ORDER_BY_NUM_USRS] = "NumUsrs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -561,8 +554,100 @@ void Ctr_GetListCentres (long InsCod)
 			            "WWW"		// row[10]
 			     " FROM centres"
 			     " WHERE InsCod=%ld"
+			     " ORDER BY FullName",
+			     InsCod);
+
+   if (NumRows) // Centres found...
+     {
+      // NumRows should be equal to Deg->NumCourses
+      Gbl.Hierarchy.Ins.Ctrs.Num = (unsigned) NumRows;
+
+      /***** Create list with courses in degree *****/
+      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,
+								  sizeof (struct Centre))) == NULL)
+         Lay_NotEnoughMemoryExit ();
+
+      /***** Get the centres *****/
+      for (NumCtr = 0;
+	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr++)
+        {
+         Ctr = &(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]);
+
+         /* Get centre data */
+         row = mysql_fetch_row (mysql_res);
+         Ctr_GetDataOfCentreFromRow (Ctr,row);
+
+	 /* Reset number of users who claim to belong to this centre */
+         Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
+
+         /* Reset other fields */
+	 Ctr->Degs.Num = 0;
+	 Ctr->Degs.Lst = NULL;
+        }
+     }
+   else
+      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************* Get full list of centres                         **************/
+/************* with number of users who claim to belong to them **************/
+/*****************************************************************************/
+
+void Ctr_GetFullListOfCentres (long InsCod)
+  {
+   static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
+     {
+      [Ctr_ORDER_BY_CENTRE  ] = "FullName",
+      [Ctr_ORDER_BY_NUM_USRS] = "NumUsrs DESC,FullName",
+     };
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned NumCtr;
+   struct Centre *Ctr;
+
+   /***** Get centres from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
+			     "(SELECT centres.CtrCod,"		// row[ 0]
+			             "centres.InsCod,"		// row[ 1]
+			             "centres.PlcCod,"		// row[ 2]
+			             "centres.Status,"		// row[ 3]
+			             "centres.RequesterUsrCod,"	// row[ 4]
+			             "centres.Latitude,"	// row[ 5]
+			             "centres.Longitude,"	// row[ 6]
+			             "centres.Altitude,"	// row[ 7]
+			             "centres.ShortName,"	// row[ 8]
+			             "centres.FullName,"	// row[ 9]
+			             "centres.WWW,"		// row[10]
+				     "COUNT(*) AS NumUsrs"	// row[11]
+			     " FROM centres,usr_data"
+			     " WHERE centres.InsCod=%ld"
+			     " AND centres.CtrCod=usr_data.CtrCod"
+			     " GROUP BY centres.CtrCod)"
+			     " UNION "
+			     "(SELECT CtrCod,"			// row[ 0]
+			             "InsCod,"			// row[ 1]
+			             "PlcCod,"			// row[ 2]
+			             "Status,"			// row[ 3]
+			             "RequesterUsrCod,"		// row[ 4]
+			             "Latitude,"		// row[ 5]
+			             "Longitude,"		// row[ 6]
+			             "Altitude,"		// row[ 7]
+			             "ShortName,"		// row[ 8]
+			             "FullName,"		// row[ 9]
+			             "WWW,"			// row[10]
+				     "0 AS NumUsrs"		// row[11]
+			     " FROM centres"
+			     " WHERE InsCod=%ld"
+			     " AND CtrCod NOT IN"
+			     " (SELECT DISTINCT CtrCod FROM usr_data))"
 			     " ORDER BY %s",
-			     InsCod,
+			     InsCod,InsCod,
 			     OrderBySubQuery[Gbl.Hierarchy.Ins.Ctrs.SelectedOrder]);
 
    if (NumRows) // Centres found...
@@ -585,6 +670,15 @@ void Ctr_GetListCentres (long InsCod)
          /* Get centre data */
          row = mysql_fetch_row (mysql_res);
          Ctr_GetDataOfCentreFromRow (Ctr,row);
+
+	 /* Get number of users who claim to belong to this centre (row[11]) */
+         Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
+	 if (sscanf (row[11],"%u",&(Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs)) == 1)
+	    Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
+
+         /* Reset other fields */
+	 Ctr->Degs.Num = 0;
+	 Ctr->Degs.Lst = NULL;
         }
      }
    else
@@ -615,6 +709,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->WWW[0]          = '\0';
    Ctr->Degs.Num        = 0;
    Ctr->Degs.Lst        = NULL;
+   Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -874,12 +969,12 @@ static void Ctr_ListCentresForEdition (void)
       /* Put icon to remove centre */
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"BM\"");
-      if (!ICanEdit ||							// I cannot edit
-	  NumUsrsInCrssOfCtr)						// Centre has users
+      if (!ICanEdit ||						// I cannot edit
+	  NumUsrsInCrssOfCtr)					// Centre has users
 	 Ico_PutIconRemovalNotAllowed ();
-      else if (Deg_GetNumDegsInCtr (Ctr->CtrCod))			// Centre has degrees
+      else if (Deg_GetNumDegsInCtr (Ctr->CtrCod))		// Centre has degrees
 	 Ico_PutIconRemovalNotAllowed ();
-      else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod))	// Centre has users who claim to belong to it
+      else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr))	// Centre has users who claim to belong to it
 	 Ico_PutIconRemovalNotAllowed ();
       else	// I can remove centre
         {
@@ -981,7 +1076,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Number of users who claim to belong to this centre */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod));
+      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr));
       HTM_TD_End ();
 
       /* Number of degrees */
@@ -1142,14 +1237,14 @@ void Ctr_RemoveCentre (void)
    Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Check if this centre has teachers *****/
-   if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->CtrCod))				// Centre has degrees
+   if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->CtrCod))			// Centre has degrees
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr->CtrCod))	// Centre has users who claim to belong to it
+   else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Centre has users who claim to belong to it
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else if (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,	// Here Rol_UNK means "all users"
-				       Ctr_EditingCtr->CtrCod))			// Centre has users
+				       Ctr_EditingCtr->CtrCod))		// Centre has users
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else	// Centre has no degrees or users ==> remove it

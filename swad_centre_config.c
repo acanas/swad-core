@@ -748,7 +748,7 @@ static void CtrCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
    HTM_TD_End ();
 
    HTM_TR_End ();

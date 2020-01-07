@@ -4715,25 +4715,34 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
   }
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr)
   {
    /***** 1. Fast check: Trivial case *****/
-   if (CtrCod <= 0)
+   if (Ctr->CtrCod <= 0)
       return 0;
 
-   /***** 2. Fast check: If cached... *****/
-   if (CtrCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
-      return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+   /***** 2. Fast check: If already got... *****/
+   if (Ctr->NumUsrsWhoClaimToBelongToCtr.Valid)
+      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
 
-   /***** 3. Slow: number of users who claim to belong to a centre
+   /***** 3. Fast check: If cached... *****/
+   if (Ctr->CtrCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
+     {
+      Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+      Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
+      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to a centre
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = CtrCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->CtrCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
+   Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(UsrCod) FROM usr_data"
 			     " WHERE CtrCod=%ld",
-			     CtrCod);
-   return Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+			     Ctr->CtrCod);
+   return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
   }
 
 /*****************************************************************************/

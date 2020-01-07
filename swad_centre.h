@@ -72,6 +72,11 @@ struct Centre
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct ListDegrees Degs;	// List of degrees in this centre
+   struct
+     {
+      bool Valid;
+      unsigned NumUsrs;
+     } NumUsrsWhoClaimToBelongToCtr;
   };
 
 #define Ctr_NUM_ORDERS 2
@@ -96,7 +101,8 @@ void Ctr_EditCentres (void);
 
 void Ctr_PutIconToViewCentres (void);
 
-void Ctr_GetListCentres (long InsCod);
+void Ctr_GetBasicListOfCentres (long InsCod);
+void Ctr_GetFullListOfCentres (long InsCod);
 bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr);
 long Ctr_GetInsCodOfCentreByCod (long CtrCod);
 void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr);

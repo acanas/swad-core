@@ -223,7 +223,7 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
    if (PutForm)
      {
       /* Get list of centres of the current institution */
-      Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+      Ctr_GetBasicListOfCentres (Gbl.Hierarchy.Ins.InsCod);
 
       /* Put form to select centre */
       Frm_StartForm (ActChgDegCtrCfg);
