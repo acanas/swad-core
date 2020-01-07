@@ -458,6 +458,16 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Departments_ABBREVIATION;
    Ins_Order_t Order;
+   static const char *ClassTH[Ins_NUM_ORDERS] =
+     {
+      [Ins_ORDER_BY_INSTITUTION] = "LM",
+      [Ins_ORDER_BY_NUM_USRS   ] = "RM"
+     };
+   static const char *ClassButton[Ins_NUM_ORDERS] =
+     {
+      [Ins_ORDER_BY_INSTITUTION] = "BT_LINK LM TIT_TBL",
+      [Ins_ORDER_BY_NUM_USRS   ] = "BT_LINK RM TIT_TBL"
+     };
 
    HTM_TR_Begin (NULL);
    HTM_TH_Empty (1);
@@ -465,13 +475,12 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
 	Order++)
      {
-      HTM_TH_Begin (1,1,Order == Ins_ORDER_BY_INSTITUTION ? "LM" :
-						            "RM");
+      HTM_TH_Begin (1,1,ClassTH[Order]);
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    HTM_U_Begin ();
 	}
@@ -1168,7 +1177,6 @@ static void Ins_ListInstitutionsForEdition (void)
 	 HTM_INPUT_URL ("WWW",Ins->WWW,true,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
-	 HTM_TD_End ();
 	}
       else
 	{
