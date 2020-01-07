@@ -121,6 +121,7 @@ void Ctr_RecFormReqCtr (void);
 void Ctr_RecFormNewCtr (void);
 
 unsigned Ctr_GetNumCtrsTotal (void);
+void Ctr_FlushCacheNumCtrsInCty (void);
 unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);

@@ -1828,15 +1828,31 @@ unsigned Ctr_GetNumCtrsTotal (void)
 /******************* Get number of centres in a country **********************/
 /*****************************************************************************/
 
+void Ctr_FlushCacheNumCtrsInCty (void)
+  {
+   Gbl.Cache.NumCtrsInCty.CtyCod  = -1L;
+   Gbl.Cache.NumCtrsInCty.NumCtrs = 0;
+  }
+
 unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
-   /***** Get number of centres of a country from database *****/
-   return
+   /***** 1. Fast check: Trivial case *****/
+   if (CtyCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (CtyCod == Gbl.Cache.NumCtrsInCty.CtyCod)
+      return Gbl.Cache.NumCtrsInCty.NumCtrs;
+
+   /***** 3. Slow: number of centres in a country from database *****/
+   Gbl.Cache.NumCtrsInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumCtrsInCty.NumCtrs =
    (unsigned) DB_QueryCOUNT ("can not get number of centres in a country",
 			     "SELECT COUNT(*) FROM institutions,centres"
 			     " WHERE institutions.CtyCod=%ld"
 			     " AND institutions.InsCod=centres.InsCod",
 			     CtyCod);
+   return Gbl.Cache.NumCtrsInCty.NumCtrs;
   }
 
 /*****************************************************************************/

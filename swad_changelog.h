@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.112.21 (2020-01-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.112.22 (2020-01-07)"
 #define CSS_FILE		"swad19.112.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Mapas más estrechos en móvil
 // TODO: Quitar todos los EXTRA_DATA.
 
+	Version 19.112.22:Jan 07, 2020	Optimization in number of centres in a country. (278761 lines)
 	Version 19.112.21:Jan 07, 2020	Optimization in number of degrees in a country. (278741 lines)
 	Version 19.112.20:Jan 07, 2020	Optimization in number of courses in a country. (278724 lines)
 	Version 19.112.19:Jan 07, 2020	Optimization in number of users in a country. (278675 lines)

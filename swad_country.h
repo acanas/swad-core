@@ -57,7 +57,6 @@ struct Country
       struct Instit *Lst;	// List of institutions in this country
       Ins_Order_t SelectedOrder;
      } Inss;
-   unsigned NumCtrs;
    struct
      {
       bool Valid;

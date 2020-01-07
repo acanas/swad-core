@@ -785,6 +785,11 @@ struct Globals
         } NumInssInCty;
       struct
         {
+	 long CtyCod;
+	 unsigned NumCtrs;
+        } NumCtrsInCty;
+      struct
+        {
 	 long InsCod;
 	 unsigned NumCtrs;
         } NumCtrsInIns;
