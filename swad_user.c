@@ -4606,7 +4606,11 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty)
    if (Cty->CtyCod <= 0)
       return 0;
 
-   /***** 2. Fast check: If cached... *****/
+   /***** 2. Fast check: If already got... *****/
+   if (Cty->NumUsrsWhoClaimToBelongToCty.Valid)
+      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+
+   /***** 3. Fast check: If cached... *****/
    if (Cty->CtyCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
      {
       Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
@@ -4614,7 +4618,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty)
       return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
      }
 
-   /***** 3. Slow: number of users who claim to belong to an institution
+   /***** 4. Slow: number of users who claim to belong to an institution
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =

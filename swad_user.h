@@ -426,6 +426,7 @@ void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
+void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);

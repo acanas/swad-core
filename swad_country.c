@@ -1384,6 +1384,7 @@ void Cty_RemoveCountry (void)
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
       Ins_FlushCacheNumInssInCty ();
+      Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,

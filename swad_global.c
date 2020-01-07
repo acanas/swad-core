@@ -416,6 +416,7 @@ void Gbl_InitializeGlobals (void)
    Crs_FlushCacheNumCrssInDeg ();
    Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
+   Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
    Usr_FlushCacheNumUsrsInCrssOfIns ();
