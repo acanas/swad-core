@@ -790,6 +790,11 @@ struct Globals
         } NumCtrsInIns;
       struct
         {
+	 long CtyCod;
+	 unsigned NumDegs;
+        } NumDegsInCty;
+      struct
+        {
 	 long InsCod;
 	 unsigned NumDegs;
         } NumDegsInIns;

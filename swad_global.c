@@ -408,6 +408,7 @@ void Gbl_InitializeGlobals (void)
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
    Ins_FlushCacheNumInssInCty ();
+   Deg_FlushCacheNumDegsInCty ();
    Crs_FlushCacheNumCrssInCty ();
 
    Dpt_FlushCacheNumDptsInIns ();

@@ -1860,16 +1860,32 @@ unsigned Deg_GetNumDegsTotal (void)
 /********************* Get number of degrees in a country ********************/
 /*****************************************************************************/
 
-unsigned Deg_GetNumDegsInCty (long InsCod)
+void Deg_FlushCacheNumDegsInCty (void)
   {
-   /***** Get number of degrees in a country from database *****/
-   return
+   Gbl.Cache.NumDegsInCty.CtyCod  = -1L;
+   Gbl.Cache.NumDegsInCty.NumDegs = 0;
+  }
+
+unsigned Deg_GetNumDegsInCty (long CtyCod)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (CtyCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If cached... *****/
+   if (CtyCod == Gbl.Cache.NumDegsInCty.CtyCod)
+      return Gbl.Cache.NumDegsInCty.NumDegs;
+
+   /***** 3. Slow: number of degrees in a country from database *****/
+   Gbl.Cache.NumDegsInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumDegsInCty.NumDegs =
    (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a country",
 			     "SELECT COUNT(*) FROM institutions,centres,degrees"
 			     " WHERE institutions.CtyCod=%ld"
 			     " AND institutions.InsCod=centres.InsCod"
 			     " AND centres.CtrCod=degrees.CtrCod",
-			     InsCod);
+			     CtyCod);
+   return Gbl.Cache.NumDegsInCty.NumDegs;
   }
 
 /*****************************************************************************/

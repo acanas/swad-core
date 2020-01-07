@@ -58,8 +58,6 @@ struct Country
       Ins_Order_t SelectedOrder;
      } Inss;
    unsigned NumCtrs;
-   unsigned NumDegs;
-   // unsigned NumCrss;
    struct
      {
       bool Valid;

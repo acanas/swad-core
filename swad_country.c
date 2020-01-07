@@ -428,7 +428,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Cty->NumDegs);
+   HTM_Unsigned (Deg_GetNumDegsInCty (Cty->CtyCod));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
@@ -844,7 +844,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                   Cty->WWW[Lan][0] = '\0';
         	 }
                Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
-               Cty->Inss.Num = Cty->NumCtrs = Cty->NumDegs = 0;
+               Cty->Inss.Num = Cty->NumCtrs = 0;
 
                /* Get the name of the country in current language */
                Str_Copy (Cty->Name[Gbl.Prefs.Language],row[2],
@@ -871,9 +871,6 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
                /* Get number of centres in this country */
                Cty->NumCtrs = Ctr_GetNumCtrsInCty (Cty->CtyCod);
-
-               /* Get number of degrees in this country */
-               Cty->NumDegs = Deg_GetNumDegsInCty (Cty->CtyCod);
                break;
            }
         }
@@ -1001,7 +998,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       Cty->WWW[Lan][0] = '\0';
      }
    Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
-   Cty->Inss.Num = Cty->NumCtrs = Cty->NumDegs = 0;
+   Cty->Inss.Num = Cty->NumCtrs = 0;
 
    /***** Check if country code is correct *****/
    if (Cty->CtyCod == 0)
@@ -1376,6 +1373,7 @@ void Cty_RemoveCountry (void)
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
       Ins_FlushCacheNumInssInCty ();
+      Deg_FlushCacheNumDegsInCty ();
       Crs_FlushCacheNumCrssInCty ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();
 
@@ -2080,7 +2078,6 @@ static void Cty_EditingCountryConstructor (void)
    Cty_EditingCty->Inss.Lst = NULL;
    Cty_EditingCty->Inss.SelectedOrder = Ins_ORDER_DEFAULT;
    Cty_EditingCty->NumCtrs = 0;
-   Cty_EditingCty->NumDegs = 0;
    Cty_EditingCty->NumUsrsWhoClaimToBelongToCty.Valid = false;
   }
 

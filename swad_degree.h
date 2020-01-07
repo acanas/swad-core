@@ -140,7 +140,8 @@ void Deg_ReceiveLogo (void);
 void Deg_RemoveLogo (void);
 
 unsigned Deg_GetNumDegsTotal (void);
-unsigned Deg_GetNumDegsInCty (long InsCod);
+void Deg_FlushCacheNumDegsInCty (void);
+unsigned Deg_GetNumDegsInCty (long CtyCod);
 void Deg_FlushCacheNumDegsInIns (void);
 unsigned Deg_GetNumDegsInIns (long InsCod);
 void Deg_FlushCacheNumDegsInCtr (void);
