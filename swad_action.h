@@ -64,7 +64,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1817
+#define Act_MAX_ACTION_COD		1819
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -165,50 +165,53 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 /******************************** System tab *********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActSeeCty		(ActRenMaiFul +  1)
-#define ActSeePen		(ActRenMaiFul +  2)
-#define ActSeeLnk		(ActRenMaiFul +  3)
-#define ActLstPlg		(ActRenMaiFul +  4)
-#define ActSetUp		(ActRenMaiFul +  5)
+#define ActSeeSysInf		(ActRenMaiFul +  1)
+#define ActSeeCty		(ActRenMaiFul +  2)
+#define ActSeePen		(ActRenMaiFul +  3)
+#define ActSeeLnk		(ActRenMaiFul +  4)
+#define ActLstPlg		(ActRenMaiFul +  5)
+#define ActSetUp		(ActRenMaiFul +  6)
 
 // Secondary actions
-#define ActEdiCty		(ActRenMaiFul +  6)
-#define ActNewCty		(ActRenMaiFul +  7)
-#define ActRemCty		(ActRenMaiFul +  8)
-#define ActRenCty		(ActRenMaiFul +  9)
-#define ActChgCtyWWW		(ActRenMaiFul + 10)
+#define ActPrnSysInf		(ActRenMaiFul +  7)
 
-#define ActReqRemOldCrs		(ActRenMaiFul + 11)
-#define ActRemOldCrs		(ActRenMaiFul + 12)
+#define ActEdiCty		(ActRenMaiFul +  8)
+#define ActNewCty		(ActRenMaiFul +  9)
+#define ActRemCty		(ActRenMaiFul + 10)
+#define ActRenCty		(ActRenMaiFul + 11)
+#define ActChgCtyWWW		(ActRenMaiFul + 12)
 
-#define ActSeeBan		(ActRenMaiFul + 13)
-#define ActEdiBan		(ActRenMaiFul + 14)
-#define ActNewBan		(ActRenMaiFul + 15)
-#define ActRemBan		(ActRenMaiFul + 16)
-#define ActShoBan		(ActRenMaiFul + 17)
-#define ActHidBan		(ActRenMaiFul + 18)
-#define ActRenBanSho		(ActRenMaiFul + 19)
-#define ActRenBanFul		(ActRenMaiFul + 20)
-#define ActChgBanImg		(ActRenMaiFul + 21)
-#define ActChgBanWWW		(ActRenMaiFul + 22)
-#define ActClkBan		(ActRenMaiFul + 23)
+#define ActReqRemOldCrs		(ActRenMaiFul + 13)
+#define ActRemOldCrs		(ActRenMaiFul + 14)
 
-#define ActEdiLnk		(ActRenMaiFul + 24)
-#define ActNewLnk		(ActRenMaiFul + 25)
-#define ActRemLnk		(ActRenMaiFul + 26)
-#define ActRenLnkSho		(ActRenMaiFul + 27)
-#define ActRenLnkFul		(ActRenMaiFul + 28)
-#define ActChgLnkWWW		(ActRenMaiFul + 29)
+#define ActSeeBan		(ActRenMaiFul + 15)
+#define ActEdiBan		(ActRenMaiFul + 16)
+#define ActNewBan		(ActRenMaiFul + 17)
+#define ActRemBan		(ActRenMaiFul + 18)
+#define ActShoBan		(ActRenMaiFul + 19)
+#define ActHidBan		(ActRenMaiFul + 20)
+#define ActRenBanSho		(ActRenMaiFul + 21)
+#define ActRenBanFul		(ActRenMaiFul + 22)
+#define ActChgBanImg		(ActRenMaiFul + 23)
+#define ActChgBanWWW		(ActRenMaiFul + 24)
+#define ActClkBan		(ActRenMaiFul + 25)
 
-#define ActEdiPlg		(ActRenMaiFul + 30)
-#define ActNewPlg		(ActRenMaiFul + 31)
-#define ActRemPlg		(ActRenMaiFul + 32)
-#define ActRenPlg		(ActRenMaiFul + 33)
-#define ActChgPlgDes		(ActRenMaiFul + 34)
-#define ActChgPlgLog		(ActRenMaiFul + 35)
-#define ActChgPlgAppKey		(ActRenMaiFul + 36)
-#define ActChgPlgURL		(ActRenMaiFul + 37)
-#define ActChgPlgIP		(ActRenMaiFul + 38)
+#define ActEdiLnk		(ActRenMaiFul + 26)
+#define ActNewLnk		(ActRenMaiFul + 27)
+#define ActRemLnk		(ActRenMaiFul + 28)
+#define ActRenLnkSho		(ActRenMaiFul + 29)
+#define ActRenLnkFul		(ActRenMaiFul + 30)
+#define ActChgLnkWWW		(ActRenMaiFul + 31)
+
+#define ActEdiPlg		(ActRenMaiFul + 32)
+#define ActNewPlg		(ActRenMaiFul + 33)
+#define ActRemPlg		(ActRenMaiFul + 34)
+#define ActRenPlg		(ActRenMaiFul + 35)
+#define ActChgPlgDes		(ActRenMaiFul + 36)
+#define ActChgPlgLog		(ActRenMaiFul + 37)
+#define ActChgPlgAppKey		(ActRenMaiFul + 38)
+#define ActChgPlgURL		(ActRenMaiFul + 39)
+#define ActChgPlgIP		(ActRenMaiFul + 40)
 
 /*****************************************************************************/
 /******************************** Country tab ********************************/

@@ -918,10 +918,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 HTM_TR_Begin (NULL);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_UNK] = Usr_GetNumUsrsInCrs (Rol_UNK,Crs->CrsCod);
-	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
+	                    NumUsrs[Rol_NET] +
+			    NumUsrs[Rol_TCH];
 
 	 /* Put green tip if course has users */
 	 HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
@@ -1114,10 +1116,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_UNK] = Usr_GetNumUsrsInCrs (Rol_UNK,Crs->CrsCod);
-	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
+	                    NumUsrs[Rol_NET] +
+			    NumUsrs[Rol_TCH];
 
 	 HTM_TR_Begin (NULL);
 
@@ -1610,10 +1614,13 @@ void Crs_RemoveCourse (void)
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Check if this course has users *****/
-      if (Usr_GetNumUsrsInCrs (Rol_UNK,Crs_EditingCrs->CrsCod))	// Course has users ==> don't remove
+      if (Usr_GetNumUsrsInCrss (Hie_CRS,Crs_EditingCrs->CrsCod,
+				1 << Rol_STD |
+				1 << Rol_NET |
+				1 << Rol_TCH))	// Course has users ==> don't remove
          Ale_ShowAlert (Ale_WARNING,
 			Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
-      else	// Course has no users ==> remove it
+      else					// Course has no users ==> remove it
         {
          /***** Remove course *****/
          Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
@@ -1771,9 +1778,6 @@ void Crs_RemoveCourseCompletely (long CrsCod)
       DB_QueryDELETE ("can not remove a course",
 		      "DELETE FROM courses WHERE CrsCod=%ld",
 		      CrsCod);
-
-      /***** Flush caches *****/
-      Usr_FlushCacheNumUsrsInCrs ();
      }
   }
 
@@ -2641,9 +2645,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod) +
-	     Usr_GetNumUsrsInCrs (Rol_NET,CrsCod);
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
+   NumTchs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+				   1 << Rol_NET |
+				   1 << Rol_TCH);
+   NumStds = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+				   1 << Rol_STD);
    if (NumTchs + NumStds)
      {
       ClassTxt  = "DAT_N";

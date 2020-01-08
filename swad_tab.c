@@ -222,7 +222,10 @@ void Tab_SetCurrentTab (void)
      {
       case TabCty:
 	 if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
+	   {
 	    Gbl.Action.Act = ActSeeCty;
+            Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
+	   }
 	 break;
       case TabIns:
 	 if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
@@ -231,6 +234,7 @@ void Tab_SetCurrentTab (void)
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
+            Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	  }
 	break;
       case TabCtr:
@@ -242,6 +246,7 @@ void Tab_SetCurrentTab (void)
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
+            Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	   }
          break;
       case TabDeg:
@@ -255,13 +260,12 @@ void Tab_SetCurrentTab (void)
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
+            Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	   }
          break;
       default:
          break;
      }
-
-   Gbl.Action.Tab = Act_GetTab (Act_GetSuperAction (Gbl.Action.Act));
 
    Tab_DisableIncompatibleTabs ();
   }

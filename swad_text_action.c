@@ -1532,6 +1532,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change email domain information"	// Precisa de tradução
 #endif
 	,
+	[ActSeeSysInf] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Show information on the platform"
+#elif L==4	// es
+	"Mostrar informaci&oacute;n sobre la plataforma"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActSeeCty] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -1625,6 +1646,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Initial set up"
 #elif L==4	// es
 	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActPrnSysInf] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Print information on the platform"
+#elif L==4	// es
+	"Imprimir informaci&oacute;n sobre la plataforma"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -2336,9 +2378,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the current country"
+	"Show information on the country"
 #elif L==4	// es
-	""
+	"Mostrar informaci&oacute;n sobre el pa&iacute;s"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -2378,9 +2420,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the current country"
+	"Print information on the country"
 #elif L==4	// es
-	""
+	"Imprimir informaci&oacute;n sobre el pa&iacute;s"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -2588,9 +2630,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the current institution"
+	"Show information on the institution"
 #elif L==4	// es
-	""
+	"Mostrar informaci&oacute;n sobre la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -2693,9 +2735,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the current institution"
+	"Print information on the institution"
 #elif L==4	// es
-	""
+	"Imprimir informaci&oacute;n sobre la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -3470,9 +3512,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the current centre"
+	"Show information on the centre"
 #elif L==4	// es
-	""
+	"Mostrar informaci&oacute;n sobre el centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -3533,9 +3575,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the current centre"
+	"Print information on the centre"
 #elif L==4	// es
-	""
+	"Imprimir informaci&oacute;n sobre el centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4289,9 +4331,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the current degree"
+	"Show information on the degree"
 #elif L==4	// es
-	""
+	"Mostrar informaci&oacute;n sobre la titulaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4331,9 +4373,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the current degree"
+	"Print information on the degree"
 #elif L==4	// es
-	""
+	"Imprimir informaci&oacute;n sobre la titulaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4688,9 +4730,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the current course"
+	"Show information on the course"
 #elif L==4	// es
-	""
+	"Mostrar informaci&oacute;n sobre la asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4837,7 +4879,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Print information on the course"
 #elif L==4	// es
-	""
+	"Imprimir informaci&oacute;n sobre la asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

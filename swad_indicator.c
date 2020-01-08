@@ -999,9 +999,11 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  break;
 	       case Ind_INDICATORS_FULL:
 		  /* Get number of users */
-		  NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);	// Students
-		  NumTchs = Usr_GetNumUsrsInCrs (Rol_NET,CrsCod) +	// Non-editing teachers
-			    Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);	// Teachers
+		  NumTchs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+				                  1 << Rol_NET |	// Non-editing teachers
+						  1 << Rol_TCH);	// Teachers
+		  NumStds = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+				                  1 << Rol_STD);	// Students
 
 		  HTM_TR_Begin (NULL);
 

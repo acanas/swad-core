@@ -623,7 +623,8 @@ void Mrk_ShowMyMarks (void)
         }
       else					// Course zone
         {
-	 if (Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))	// If there are students in this course
+	 if (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+				   1 << Rol_STD))	// If there are students in this course
            {
             Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromCrs (Gbl.Hierarchy.Crs.CrsCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;

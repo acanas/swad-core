@@ -605,7 +605,11 @@ static void InsCfg_NumUsrsInCrssOfIns (Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+				       Role == Rol_UNK ? 1 << Rol_STD |
+							 1 << Rol_NET |
+							 1 << Rol_TCH :	// Any user
+							 1 << Role));
    HTM_TD_End ();
 
    HTM_TR_End ();

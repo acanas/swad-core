@@ -427,7 +427,11 @@ static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrs (Role,Gbl.Hierarchy.Crs.CrsCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+				       Role == Rol_UNK ? 1 << Rol_STD |
+							 1 << Rol_NET |
+							 1 << Rol_TCH :	// Any user
+							 1 << Role));
    HTM_TD_End ();
 
    HTM_TR_End ();

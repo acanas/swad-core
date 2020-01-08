@@ -135,12 +135,22 @@ void QR_LinkTo (unsigned Size,const char *ParamName,long Cod)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char *URL;
 
-   /***** Show QR code with direct link to the current centre *****/
-   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld",
-		 Size,Size,
-                 Cfg_URL_SWAD_CGI,
-                 Lan_STR_LANG_ID[Gbl.Prefs.Language],ParamName,Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
+   /***** Show QR code with link *****/
+   if (ParamName)
+     {
+      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld",
+		    Size,Size,
+		    Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		    ParamName,Cod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s",
+		    Size,Size,
+		    Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
    HTM_IMG (URL,NULL,Txt_Shortcut,
 	    "style=\"width:%upx;height:%upx;\"",Size,Size);
    free (URL);

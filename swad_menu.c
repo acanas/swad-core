@@ -72,11 +72,12 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 5] = ActSeeNtf,
 	       },
    [TabSys] =  {
-		[ 0] = ActSeeCty,
-		[ 1] = ActSeePen,
-		[ 2] = ActSeeLnk,
-		[ 3] = ActLstPlg,
-		[ 4] = ActSetUp,
+		[ 0] = ActSeeSysInf,
+		[ 1] = ActSeeCty,
+		[ 2] = ActSeePen,
+		[ 3] = ActSeeLnk,
+		[ 4] = ActLstPlg,
+		[ 5] = ActSetUp,
 	       },
    [TabCty] =  {
 		[ 0] = ActSeeCtyInf,

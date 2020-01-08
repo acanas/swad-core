@@ -159,6 +159,27 @@ const char *Hlp_START_Calendar =
 
 /***** SYSTEM tab *****/
 
+const char *Hlp_SYSTEM_Information =
+#if   L==1
+	"SYSTEM.Information.es";
+#elif L==2
+	"SYSTEM.Information.en";
+#elif L==3
+	"SYSTEM.Information.en";
+#elif L==4
+	"SYSTEM.Information.es";
+#elif L==5
+	"SYSTEM.Information.en";
+#elif L==6
+	"SYSTEM.Information.es";
+#elif L==7
+	"SYSTEM.Information.en";
+#elif L==8
+	"SYSTEM.Information.en";
+#elif L==9
+	"SYSTEM.Information.en";
+#endif
+
 const char *Hlp_SYSTEM_Countries =
 #if   L==1
 	"SYSTEM.Countries.es";

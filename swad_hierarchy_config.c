@@ -206,14 +206,26 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (!PrintView)
-      HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
-		   Cfg_URL_SWAD_CGI,
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		   ParamName,HieCod);
-   HTM_TxtF ("%s/%s?%s=%ld",
-             Cfg_URL_SWAD_CGI,
-             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-             ParamName,HieCod);
+     {
+      if (ParamName)
+	 HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+		      Cfg_URL_SWAD_CGI,
+		      Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		      ParamName,HieCod);
+      else
+	 HTM_A_Begin ("href=\"%s/%s\" class=\"DAT\" target=\"_blank\"",
+		      Cfg_URL_SWAD_CGI,
+		      Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+     }
+   if (ParamName)
+      HTM_TxtF ("%s/%s?%s=%ld",
+		Cfg_URL_SWAD_CGI,
+		Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		ParamName,HieCod);
+   else
+      HTM_TxtF ("%s/%s",
+		Cfg_URL_SWAD_CGI,
+		Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    if (!PrintView)
       HTM_A_End ();
    HTM_TD_End ();

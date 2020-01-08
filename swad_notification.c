@@ -1244,8 +1244,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Usr_GetNumUsrsInCrs (Rol_TCH,Gbl.Hierarchy.Crs.CrsCod))
-	   {
+	 if (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
@@ -1256,9 +1256,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod,
 				      (unsigned) Rol_TCH);
-	   }
 	 else	// Course without teachers
-	   {
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
 	    // to not send requests to be a student to admins)
@@ -1276,7 +1274,6 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      Sco_GetDBStrFromScope (Hie_CTR),Gbl.Hierarchy.Ctr.CtrCod,
 				      Sco_GetDBStrFromScope (Hie_DEG),Gbl.Hierarchy.Deg.DegCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
-	   }
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing

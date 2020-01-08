@@ -411,11 +411,17 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
 	                                 (1 << Rol_NET) |
 	                                 (1 << Rol_TCH)) :
-	                                (1 << Role);
+	                                 (1 << Role);
 
    /***** Get the number of users belonging to any course *****/
-   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-						 Roles);
+   NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+				  (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+				  (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+				  (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+				  (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+				  (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+								  -1L))))),
+				   Roles);
 
    /***** Get average number of courses per user *****/
    NumCrssPerUsr = Usr_GetNumCrssPerUsr (Role);
@@ -3286,11 +3292,18 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                                   Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                                                       1 << Rol_STD |
-                                                                                       1 << Rol_NET |
-                                                                                       1 << Rol_TCH);
+   NumUsrsTotal =
+   (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+                                    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											 -1L))))),
+							  1 << Rol_STD |
+							  1 << Rol_NET |
+							  1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (NoteType  = (TL_NoteType_t) 0;
@@ -3590,11 +3603,18 @@ static void Fig_GetAndShowFollowStats (void)
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                                                             1 << Rol_STD |
-                                                                                             1 << Rol_NET |
-                                                                                             1 << Rol_TCH);
+   NumUsrsTotal =
+   (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+				    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											 -1L))))),
+							  1 << Rol_STD |
+							  1 << Rol_NET |
+							  1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (Fol = 0;
@@ -4220,11 +4240,18 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                                                             1 << Rol_STD |
-                                                                                             1 << Rol_NET |
-                                                                                             1 << Rol_TCH);
+   NumUsrsTotal =
+   (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+				    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											 -1L))))),
+							  1 << Rol_STD |
+							  1 << Rol_NET |
+							  1 << Rol_TCH);
 
    /***** Get total number of users who want to be
           notified by email on some event, from database *****/

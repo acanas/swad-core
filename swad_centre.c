@@ -416,8 +416,10 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,		// Here Rol_UNK means "all users"
-					    Ctr->CtrCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
+				       1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    /***** Centre status *****/
@@ -954,7 +956,10 @@ static void Ctr_ListCentresForEdition (void)
       Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
 
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
-      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
+      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
+						 1 << Rol_STD |
+						 1 << Rol_NET |
+						 1 << Rol_TCH);	// Any user
 
       /* Put icon to remove centre */
       HTM_TR_Begin (NULL);
@@ -1233,8 +1238,10 @@ void Ctr_RemoveCentre (void)
    else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Centre has users who claim to belong to it
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
-   else if (Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,	// Here Rol_UNK means "all users"
-				       Ctr_EditingCtr->CtrCod))		// Centre has users
+   else if (Usr_GetNumUsrsInCrss (Hie_CTR,Ctr_EditingCtr->CtrCod,
+				  1 << Rol_STD |
+				  1 << Rol_NET |
+				  1 << Rol_TCH))			// Centre has users
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else	// Centre has no degrees or users ==> remove it
@@ -1268,7 +1275,6 @@ void Ctr_RemoveCentre (void)
       Deg_FlushCacheNumDegsInCtr ();
       Crs_FlushCacheNumCrssInCtr ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
-      Usr_FlushCacheNumUsrsInCrssOfCtr ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,

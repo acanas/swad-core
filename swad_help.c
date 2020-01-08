@@ -163,7 +163,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
-	    if (!Usr_GetNumUsrsInCrs (Rol_STD,Gbl.Hierarchy.Crs.CrsCod))// Current course has no students
+	    if (!Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+				       1 << Rol_STD))			// Current course has no students
 	      {
 	       /* Request students enrolment */
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_students_in_COURSE_X,

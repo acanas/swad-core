@@ -197,9 +197,9 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
-						     1 << Rol_NET |
-						     1 << Rol_TCH) -
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+				       1 << Rol_NET |	// Non-editing teachers
+				       1 << Rol_TCH) -	// Teachers
 	         NumTchsInsWithDpt);
    HTM_TD_End ();
 

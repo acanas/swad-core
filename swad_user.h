@@ -408,16 +408,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
 
-void Usr_FlushCacheNumUsrsInCrs (void);
-unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
-void Usr_FlushCacheNumUsrsInCrssOfDeg (void);
-unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
-void Usr_FlushCacheNumUsrsInCrssOfCtr (void);
-unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod);
-void Usr_FlushCacheNumUsrsInCrssOfIns (void);
-unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod);
-unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod);
-
 long Usr_GetRamdomStdFromCrs (long CrsCod);
 long Usr_GetRamdomStdFromGrp (long GrpCod);
 
@@ -522,7 +512,7 @@ bool Usr_ChkIfUsrCodExists (long UsrCod);
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
-unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles);
+unsigned Usr_GetNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles);
 unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
 double Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 double Usr_GetNumUsrsPerCrs (Rol_Role_t Role);

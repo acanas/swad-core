@@ -277,7 +277,9 @@ void Cty_ListCountries2 (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,0,
+				       1 << Rol_NET |	// Non-editing teachers
+				       1 << Rol_TCH));	// Teachers
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -436,7 +438,10 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Cty->CtyCod));	// Here Rol_UNK means "all users"
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+				       1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1186,8 +1191,10 @@ static void Cty_ListCountriesForEdition (void)
       else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty))	// Country has users
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
-      else if (Usr_GetNumUsrsInCrssOfCty (Rol_UNK,		// Here Rol_UNK means "all users"
-					  Cty->CtyCod))		// Country has users
+      else if (Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+				     1 << Rol_STD |
+				     1 << Rol_NET |
+				     1 << Rol_TCH))		// Country has users
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
       else
@@ -1327,8 +1334,10 @@ void Cty_RemoveCountry (void)
    else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Usr_GetNumUsrsInCrssOfCty (Rol_UNK,				// Here Rol_UNK means "all users"
-				       Cty_EditingCty->CtyCod))		// Country has users
+   else if (Usr_GetNumUsrsInCrss (Hie_CTY,Cty_EditingCty->CtyCod,
+				  1 << Rol_STD |
+				  1 << Rol_NET |
+				  1 << Rol_TCH))			// Country has users
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it

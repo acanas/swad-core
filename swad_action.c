@@ -79,6 +79,7 @@
 #include "swad_search.h"
 #include "swad_setting.h"
 #include "swad_setup.h"
+#include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_test_import.h"
 #include "swad_timeline.h"
@@ -186,13 +187,16 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabSys ******************************************************************
    // Actions in menu:
-   [ActSeeCty		] = { 862, 0,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ListCountries1		,Cty_ListCountries2		,"globe"		},
-   [ActSeePen		] = {1060, 1,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_SeePending			,"sitemap"		},
-   [ActSeeLnk		] = { 748, 2,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"link"			},
-   [ActLstPlg		] = { 777, 3,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
-   [ActSetUp		] = { 840, 4,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SUp_SetUp			,"bolt"			},
+   [ActSeeSysInf	] = {1818, 0,TabSys,ActSeeSysInf	,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SysCfg_ShowConfiguration	,"info"			},
+   [ActSeeCty		] = { 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ListCountries1		,Cty_ListCountries2		,"globe"		},
+   [ActSeePen		] = {1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_SeePending			,"sitemap"		},
+   [ActSeeLnk		] = { 748, 3,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"link"			},
+   [ActLstPlg		] = { 777, 4,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
+   [ActSetUp		] = { 840, 5,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SUp_SetUp			,"bolt"			},
 
    // Actions not in menu:
+   [ActPrnSysInf	] = {1819,-1,TabUnk,ActSeeSysInf	,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,SysCfg_PrintConfiguration	,NULL},
+
    [ActEdiCty		] = { 863,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_EditCountries		,NULL},
    [ActNewCty		] = { 864,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RecFormNewCountry		,Cty_ContEditAfterChgCty	,NULL},
    [ActRemCty		] = { 893,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RemoveCountry		,Cty_ContEditAfterChgCty	,NULL},
@@ -3527,6 +3531,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgCtrLatCfg,	// #1815
 	ActChgCtrLgtCfg,	// #1816
 	ActChgCtrAltCfg,	// #1817
+	ActSeeSysInf,		// #1818
+	ActPrnSysInf,		// #1819
 	};
 
 /*****************************************************************************/

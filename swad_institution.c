@@ -429,7 +429,10 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod));	// Here Rol_UNK means "all users"
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
+				       1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    /***** Institution status *****/
@@ -1086,7 +1089,10 @@ static void Ins_ListInstitutionsForEdition (void)
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumCtrss = Ctr_GetNumCtrsInIns (Ins->InsCod);
-      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
+      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
+						 1 << Rol_STD |
+						 1 << Rol_NET |
+						 1 << Rol_TCH);	// Any user
       NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
 
       HTM_TR_Begin (NULL);
@@ -1350,11 +1356,14 @@ void Ins_RemoveInstitution (void)
       // Institution has centres ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins_EditingIns->InsCod))	// Here Rol_UNK means "all users"
+   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
+   else if (Usr_GetNumUsrsInCrss (Hie_INS,Ins_EditingIns->InsCod,
+				  1 << Rol_STD |
+				  1 << Rol_NET |
+				  1 << Rol_TCH))	// Any user
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
@@ -1390,7 +1399,6 @@ void Ins_RemoveInstitution (void)
       Deg_FlushCacheNumDegsInIns ();
       Crs_FlushCacheNumCrssInIns ();
       Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
-      Usr_FlushCacheNumUsrsInCrssOfIns ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1908,7 +1916,7 @@ static void Ins_CreateInstitution (unsigned Status)
 
 unsigned Ins_GetNumInssTotal (void)
   {
-   /***** Get total number of degrees from database *****/
+   /***** Get total number of institutions from database *****/
    return (unsigned) DB_GetNumRowsTable ("institutions");
   }
 

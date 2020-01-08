@@ -18761,7 +18761,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 [TabSys] =
 	{
-	//  0: ActSeeCty
+	//  0: ActSeeSysInf
+#if   L==1	// ca
+	"Informaci&oacute;"
+#elif L==2	// de
+	"Information"
+#elif L==3	// en
+	"Information"
+#elif L==4	// es
+	"Informaci&oacute;n"
+#elif L==5	// fr
+	"Information"
+#elif L==6	// gn
+	"Informaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Informazione"
+#elif L==8	// pl
+	"Informacja"
+#elif L==9	// pt
+	"Informa&ccedil;&atilde;o"
+#endif
+	,
+	//  1: ActSeeCty
 #if   L==1	// ca
 	"Pa&iuml;sos"
 #elif L==2	// de
@@ -18782,7 +18803,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	//  1: ActSeePen
+	//  2: ActSeePen
 #if   L==1	// ca
 	"Jerarquia"
 #elif L==2	// de
@@ -18803,7 +18824,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hierarquia"
 #endif
 	,
-	//  2: ActSeeLnk
+	//  3: ActSeeLnk
 #if   L==1	// ca
 	"Enlla&ccedil;os"
 #elif L==2	// de
@@ -18824,7 +18845,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  3: ActLstPlg
+	//  4: ActLstPlg
 #if   L==1	// ca
 	"Complements"
 #elif L==2	// de
@@ -18845,7 +18866,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  4: ActSetUp
+	//  5: ActSetUp
 #if   L==1	// ca
 	"Instal lar"
 #elif L==2	// de
@@ -18866,7 +18887,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -20568,7 +20588,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 [TabSys] =
 	{
-	//  0: ActSeeCty
+	//  0: ActSeeSysInf
+#if   L==1	// ca
+	"Informaci&oacute; sobre aquesta plataforma"
+#elif L==2	// de
+	"Informationen auf dieser Plattform"
+#elif L==3	// en
+	"Information on this platform"
+#elif L==4	// es
+	"Informaci&oacute;n sobre esta plataforma"
+#elif L==5	// fr
+	"Information sur cette plateforme"
+#elif L==6	// gn
+	"Informaci&oacute;n sobre esta plataforma"	// Okoteve traducción
+#elif L==7	// it
+	"Informazione su questa piattaforma"
+#elif L==8	// pl
+	"Informacja na temat tej platformy"
+#elif L==9	// pt
+	"Informa&ccedil;&atilde;o sobre esta plataforma"
+#endif
+	,
+	//  1: ActSeeCty
 #if   L==1	// ca
 	"Llista de pa&iuml;sos i del nombre d'usuaris de cada pa&iacute;s"
 #elif L==2	// de
@@ -20589,7 +20630,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	//  1: ActSeePen
+	//  2: ActSeePen
 #if   L==1	// ca
 	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
@@ -20610,7 +20651,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
 #endif
 	,
-	//  2: ActSeeLnk
+	//  3: ActSeeLnk
 #if   L==1	// ca
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2	// de
@@ -20631,7 +20672,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	//  3: ActLstPlg
+	//  4: ActLstPlg
 #if   L==1	// ca
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2	// de
@@ -20652,7 +20693,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  4: ActSetUp
+	//  5: ActSetUp
 #if   L==1	// ca
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2	// de
@@ -20673,7 +20714,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -29532,6 +29572,27 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 	"Centros"
 #endif
 	};
+
+const char *Txt_Platform =
+#if   L==1	// ca
+	"Plataforma";
+#elif L==2	// de
+	"Plattform";
+#elif L==3	// en
+	"Platform";
+#elif L==4	// es
+	"Plataforma";
+#elif L==5	// fr
+	"Plate-forme";
+#elif L==6	// gn
+	"Plataforma";	// Okoteve traducción
+#elif L==7	// it
+	"Piattaforma";
+#elif L==8	// pl
+	"Platforma";
+#elif L==9	// pt
+	"Plataforma";
+#endif
 
 const char *Txt_Play =	// To play a game match
 #if   L==1	// ca

@@ -858,31 +858,6 @@ struct Globals
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToCtr;
       struct
-        {
-	 long CtyCod;
-	 unsigned NumUsrs;
-        } NumUsrsInCrssOfCty[Rol_NUM_ROLES];
-      struct
-        {
-	 long InsCod;
-	 unsigned NumUsrs;
-        } NumUsrsInCrssOfIns[Rol_NUM_ROLES];
-      struct
-        {
-	 long CtrCod;
-	 unsigned NumUsrs;
-        } NumUsrsInCrssOfCtr[Rol_NUM_ROLES];
-      struct
-        {
-	 long DegCod;
-	 unsigned NumUsrs;
-        } NumUsrsInCrssOfDeg[Rol_NUM_ROLES];
-      struct
-        {
-	 long CrsCod;
-	 unsigned NumUsrs;
-        } NumUsrsInCrs[Rol_NUM_ROLES];
-      struct
 	{
 	 long UsrCod;
 	 bool IsSuperuser;

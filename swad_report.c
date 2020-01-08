@@ -1187,10 +1187,12 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		     Usr_GetNumUsrsInCrs (Rol_NET,Crs.CrsCod) +
-		     Usr_GetNumUsrsInCrs (Rol_TCH,Crs.CrsCod),
+		     Usr_GetNumUsrsInCrss (Hie_CRS,Crs.CrsCod,
+				           1 << Rol_NET |
+					   1 << Rol_TCH),
 		     Txt_teachers_ABBREVIATION,
-		     Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod),
+		     Usr_GetNumUsrsInCrss (Hie_CRS,Crs.CrsCod,
+				           1 << Rol_STD),
 		     Txt_students_ABBREVIATION);
 	}
       else

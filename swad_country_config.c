@@ -68,6 +68,7 @@ static bool CtyCfg_GetIfMapIsAvailable (void);
 static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void CtyCfg_Map (void);
 static void CtyCfg_MapImage (bool PrintView,bool PutLink);
+static void CtyCfg_Platform (bool PrintView);
 static void CtyCfg_Name (bool PutLink);
 static void CtyCfg_Shortcut (bool PrintView);
 static void CtyCfg_QR (void);
@@ -137,6 +138,9 @@ static void CtyCfg_Configuration (bool PrintView)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
+   /***** Platform *****/
+   CtyCfg_Platform (PrintView);
+
    /***** Country name (an link to WWW if exists) *****/
    CtyCfg_Name (PutLink);
 
@@ -148,7 +152,7 @@ static void CtyCfg_Configuration (bool PrintView)
       CtyCfg_QR ();
    else
      {
-      /***** Number of users who claim to belong to this centre,
+      /***** Number of users who claim to belong to this country,
              number of institutions,
              number of centres,
              number of degrees,
@@ -311,7 +315,7 @@ static void CtyCfg_Map (void)
    /* Get centres with coordinates */
    NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
 						   " with coordinates",
-					"SELECT CtrCod"	// row[0]
+					"SELECT centres.CtrCod"	// row[0]
 					" FROM institutions,centres"
 					" WHERE institutions.CtyCod=%ld"
 					" AND institutions.InsCod=centres.InsCod"
@@ -396,6 +400,42 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 
    /***** Free memory used for map attribution *****/
    CtyCfg_FreeMapAttr (&MapAttribution);
+  }
+
+/*****************************************************************************/
+/****************** Show platform in country configuration *******************/
+/*****************************************************************************/
+
+static void CtyCfg_Platform (bool PrintView)
+  {
+   extern const char *Txt_Platform;
+
+   /***** Institution *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT",NULL,Txt_Platform);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   if (!PrintView)
+     {
+      Frm_StartFormGoTo (ActSeeSysInf);
+      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
+			       "BT_LINK LT DAT",NULL);
+      Hie_FreeGoToMsg ();
+     }
+   Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
+   HTM_NBSP ();
+   HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+   if (!PrintView)
+     {
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+     }
+   HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -581,7 +621,11 @@ static void CtyCfg_NumUsrsInCrssOfCty (Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
+				       Role == Rol_UNK ? 1 << Rol_STD |
+							 1 << Rol_NET |
+							 1 << Rol_TCH :	// Any user
+							 1 << Role));
    HTM_TD_End ();
 
    HTM_TR_End ();
