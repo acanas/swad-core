@@ -271,7 +271,7 @@ static void Ctr_ListCentres (void)
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
+   if (Gbl.Hierarchy.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -279,9 +279,9 @@ static void Ctr_ListCentres (void)
 
       /***** Write all the centres and their nuber of teachers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
-	 Ctr_ListOneCentreForSeeing (&(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]),NumCtr + 1);
+	 Ctr_ListOneCentreForSeeing (&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -293,7 +293,7 @@ static void Ctr_ListCentres (void)
    if (Ctr_CheckIfICanCreateCentres ())
      {
       Frm_StartForm (ActEdiCtr);
-      Btn_PutConfirmButton (Gbl.Hierarchy.Ins.Ctrs.Num ? Txt_Create_another_centre :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Ctrs.Num ? Txt_Create_another_centre :
 	                                                 Txt_Create_centre);
       Frm_EndForm ();
      }
@@ -438,11 +438,11 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
 static void Ctr_GetParamCtrOrder (void)
   {
-   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = (Ctr_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-                                                      0,
-                                                      Ctr_NUM_ORDERS - 1,
-                                                      (unsigned long) Ctr_ORDER_DEFAULT);
+   Gbl.Hierarchy.Ctrs.SelectedOrder = (Ctr_Order_t)
+					  Par_GetParToUnsignedLong ("Order",
+								    0,
+								    Ctr_NUM_ORDERS - 1,
+								    (unsigned long) Ctr_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -471,7 +471,7 @@ static void Ctr_EditCentresInternal (void)
    Plc_GetListPlaces ();
 
    /***** Get list of centres *****/
-   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
+   Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
    Ctr_GetFullListOfCentres (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Write menu to select country and institution *****/
@@ -488,7 +488,7 @@ static void Ctr_EditCentresInternal (void)
    Ctr_PutFormToCreateCentre ();
 
    /***** List current centres *****/
-   if (Gbl.Hierarchy.Ins.Ctrs.Num)
+   if (Gbl.Hierarchy.Ctrs.Num)
       Ctr_ListCentresForEdition ();
 
    /***** End box *****/
@@ -560,19 +560,19 @@ void Ctr_GetBasicListOfCentres (long InsCod)
    if (NumRows) // Centres found...
      {
       // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Ins.Ctrs.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Centre *) calloc (NumRows,
 								  sizeof (struct Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
         {
-         Ctr = &(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]);
+         Ctr = &(Gbl.Hierarchy.Ctrs.Lst[NumCtr]);
 
          /* Get centre data */
          row = mysql_fetch_row (mysql_res);
@@ -580,14 +580,10 @@ void Ctr_GetBasicListOfCentres (long InsCod)
 
 	 /* Reset number of users who claim to belong to this centre */
          Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
-
-         /* Reset other fields */
-	 Ctr->Degs.Num = 0;
-	 Ctr->Degs.Lst = NULL;
         }
      }
    else
-      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+      Gbl.Hierarchy.Ctrs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -648,24 +644,24 @@ void Ctr_GetFullListOfCentres (long InsCod)
 			     " (SELECT DISTINCT CtrCod FROM usr_data))"
 			     " ORDER BY %s",
 			     InsCod,InsCod,
-			     OrderBySubQuery[Gbl.Hierarchy.Ins.Ctrs.SelectedOrder]);
+			     OrderBySubQuery[Gbl.Hierarchy.Ctrs.SelectedOrder]);
 
    if (NumRows) // Centres found...
      {
       // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Ins.Ctrs.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Centre *) calloc (NumRows,
 								  sizeof (struct Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
         {
-         Ctr = &(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]);
+         Ctr = &(Gbl.Hierarchy.Ctrs.Lst[NumCtr]);
 
          /* Get centre data */
          row = mysql_fetch_row (mysql_res);
@@ -675,14 +671,10 @@ void Ctr_GetFullListOfCentres (long InsCod)
          Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
 	 if (sscanf (row[11],"%u",&(Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs)) == 1)
 	    Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
-
-         /* Reset other fields */
-	 Ctr->Degs.Num = 0;
-	 Ctr->Degs.Lst = NULL;
         }
      }
    else
-      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+      Gbl.Hierarchy.Ctrs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -707,8 +699,6 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->ShrtName[0]     = '\0';
    Ctr->FullName[0]     = '\0';
    Ctr->WWW[0]          = '\0';
-   Ctr->Degs.Num        = 0;
-   Ctr->Degs.Lst        = NULL;
    Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
 
    /***** Check if centre code is correct *****/
@@ -857,12 +847,12 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 
 void Ctr_FreeListCentres (void)
   {
-   if (Gbl.Hierarchy.Ins.Ctrs.Lst)
+   if (Gbl.Hierarchy.Ctrs.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hierarchy.Ins.Ctrs.Lst);
-      Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
-      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+      free (Gbl.Hierarchy.Ctrs.Lst);
+      Gbl.Hierarchy.Ctrs.Lst = NULL;
+      Gbl.Hierarchy.Ctrs.Num = 0;
      }
   }
 
@@ -958,10 +948,10 @@ static void Ctr_ListCentresForEdition (void)
 
    /***** Write all the centres *****/
    for (NumCtr = 0;
-	NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	NumCtr++)
      {
-      Ctr = &Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr];
+      Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
 
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
       NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
@@ -1734,13 +1724,13 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 				  Order == Ctr_ORDER_BY_CENTRE ? "BT_LINK LM TIT_TBL" :
 					                         "BT_LINK RM TIT_TBL",
 				  NULL);
-	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
 	    HTM_U_Begin ();
 	}
       HTM_Txt (Txt_CENTRES_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
 	    HTM_U_End ();
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2122,8 +2112,6 @@ static void Ctr_EditingCentreConstructor (void)
    Ctr_EditingCtr->ShrtName[0]     = '\0';
    Ctr_EditingCtr->FullName[0]     = '\0';
    Ctr_EditingCtr->WWW[0]          = '\0';
-   Ctr_EditingCtr->Degs.Num        = 0;
-   Ctr_EditingCtr->Degs.Lst        = NULL;
   }
 
 static void Ctr_EditingCentreDestructor (void)

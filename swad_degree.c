@@ -319,7 +319,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
    Deg_ListDegrees ();
 
    /***** Free list of degrees and centres *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
    Ctr_FreeListCentres ();
   }
 
@@ -350,10 +350,10 @@ static void Deg_ListDegreesForEdition (void)
 
    /***** List the degrees *****/
    for (NumDeg = 0;
-	NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
+	NumDeg < Gbl.Hierarchy.Degs.Num;
 	NumDeg++)
      {
-      Deg = &(Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg]);
+      Deg = &(Gbl.Hierarchy.Degs.Lst[NumDeg]);
 
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
@@ -770,7 +770,7 @@ static void Deg_ListDegrees (void)
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
+   if (Gbl.Hierarchy.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -778,9 +778,9 @@ static void Deg_ListDegrees (void)
 
       /***** List the degrees *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
-	 Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
+	 Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -792,7 +792,7 @@ static void Deg_ListDegrees (void)
    if (Deg_CheckIfICanCreateDegrees ())
      {
       Frm_StartForm (ActEdiDeg);
-      Btn_PutConfirmButton (Gbl.Hierarchy.Ctr.Degs.Num ? Txt_Create_another_degree :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Degs.Num ? Txt_Create_another_degree :
 	                                                 Txt_Create_degree);
       Frm_EndForm ();
      }
@@ -959,7 +959,7 @@ static void Deg_EditDegreesInternal (void)
       Deg_PutFormToCreateDegree ();
 
       /***** Forms to edit current degrees *****/
-      if (Gbl.Hierarchy.Ctr.Degs.Num)
+      if (Gbl.Hierarchy.Degs.Num)
          Deg_ListDegreesForEdition ();
      }
    else	// No degree types
@@ -979,7 +979,7 @@ static void Deg_EditDegreesInternal (void)
    DT_FreeListDegreeTypes ();
 
    /***** Free list of degrees in the current centre *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
   }
 
 /*****************************************************************************/
@@ -1080,19 +1080,19 @@ void Deg_GetListDegsInCurrentCtr (void)
    /***** Count number of rows in result *****/
    if (NumRows) // Degrees found...
      {
-      Gbl.Hierarchy.Ctr.Degs.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Degs.Num = (unsigned) NumRows;
 
       /***** Create list with degrees of this centre *****/
-      if ((Gbl.Hierarchy.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.Hierarchy.Ctr.Degs.Num,
+      if ((Gbl.Hierarchy.Degs.Lst = (struct Degree *) calloc (Gbl.Hierarchy.Degs.Num,
                                                                   sizeof (struct Degree))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
         {
-         Deg = &Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg];
+         Deg = &Gbl.Hierarchy.Degs.Lst[NumDeg];
 
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
@@ -1100,7 +1100,7 @@ void Deg_GetListDegsInCurrentCtr (void)
         }
      }
    else
-      Gbl.Hierarchy.Ctr.Degs.Num = 0;
+      Gbl.Hierarchy.Degs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1294,8 +1294,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
    Deg->ShrtName[0]     = '\0';
    Deg->FullName[0]     = '\0';
    Deg->WWW[0]          = '\0';
-   Deg->Crss.Num        = 0;
-   Deg->Crss.Lst        = NULL;
 
    /***** Check if degree code is correct *****/
    if (Deg->DegCod > 0)
@@ -2061,8 +2059,6 @@ static void Deg_EditingDegreeConstructor (void)
    Deg_EditingDeg->ShrtName[0]     = '\0';
    Deg_EditingDeg->FullName[0]     = '\0';
    Deg_EditingDeg->WWW[0]          = '\0';
-   Deg_EditingDeg->Crss.Num        = 0;
-   Deg_EditingDeg->Crss.Lst        = NULL;
   }
 
 static void Deg_EditingDegreeDestructor (void)

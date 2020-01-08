@@ -217,29 +217,33 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Hierarchy.Sys.Ctys.Num = 0;
-   Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
-   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
+   Gbl.Hierarchy.Ctys.Num = 0;
+   Gbl.Hierarchy.Ctys.Lst = NULL;
+   Gbl.Hierarchy.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
 
-   Gbl.Hierarchy.Cty.Inss.Num = 0;
-   Gbl.Hierarchy.Cty.Inss.Lst = NULL;
-   Gbl.Hierarchy.Cty.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+   Gbl.Hierarchy.Inss.Num = 0;
+   Gbl.Hierarchy.Inss.Lst = NULL;
+   Gbl.Hierarchy.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ins.FullName[0] = '\0';
    Gbl.Hierarchy.Ins.WWW[0] = '\0';
-   Gbl.Hierarchy.Ins.Ctrs.Num = 0;
-   Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
-   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
+
+   Gbl.Hierarchy.Ctrs.Num = 0;
+   Gbl.Hierarchy.Ctrs.Lst = NULL;
+   Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ctr.FullName[0] = '\0';
-   Gbl.Hierarchy.Ctr.Degs.Num = 0;
-   Gbl.Hierarchy.Ctr.Degs.Lst = NULL;
 
-   Gbl.Hierarchy.Deg.ShrtName[0] = Gbl.Hierarchy.Deg.FullName[0] = '\0';
+   Gbl.Hierarchy.Degs.Num = 0;
+   Gbl.Hierarchy.Degs.Lst = NULL;
 
-   Gbl.Hierarchy.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.FullName[0] = '\0';
+   Gbl.Hierarchy.Deg.ShrtName[0] =
+   Gbl.Hierarchy.Deg.FullName[0] = '\0';
+
+   Gbl.Hierarchy.Crs.ShrtName[0] =
+   Gbl.Hierarchy.Crs.FullName[0] = '\0';
 
    Gbl.Dpts.Num = 0;
    Gbl.Dpts.Lst = NULL;
@@ -469,7 +473,7 @@ void Gbl_Cleanup (void)
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInCurrentDegree ();
-   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
    DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();

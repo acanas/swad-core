@@ -384,11 +384,11 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 			"id=\"OthCtyCod\" name=\"OthCtyCod\""
 		        " class=\"INPUT_SHORT_NAME\"");
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
+	   NumCty < Gbl.Hierarchy.Ctys.Num;
 	   NumCty++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
-		     Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
-		     "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+		     Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
+		     "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
       HTM_SELECT_End ();
       Frm_EndForm ();
 

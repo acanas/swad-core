@@ -67,12 +67,6 @@ struct Instit
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {
-      unsigned Num;		// Number of centres
-      struct Centre *Lst;	// List of centres
-      Ctr_Order_t SelectedOrder;
-     } Ctrs;
-   struct
-     {
       bool Valid;
       unsigned NumUsrs;
      } NumUsrsWhoClaimToBelongToIns;
@@ -85,6 +79,13 @@ typedef enum
    Ins_ORDER_BY_NUM_USRS    = 1,
   } Ins_Order_t;
 #define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
+
+struct ListInstits
+  {
+   unsigned Num;		// Number of institutions
+   struct Instit *Lst;		// List of institutions
+   Ins_Order_t SelectedOrder;	// Order of institutions
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

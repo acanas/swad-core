@@ -676,7 +676,7 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
    if (NumCrss) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Deg.Crss.Lst = (struct Course *) calloc ((size_t) NumCrss,
+      if ((Gbl.Hierarchy.Crss.Lst = (struct Course *) calloc ((size_t) NumCrss,
 	                                                         sizeof (struct Course))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -685,7 +685,7 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
 	   NumCrs < NumCrss;
 	   NumCrs++)
         {
-         Crs = &Gbl.Hierarchy.Deg.Crss.Lst[NumCrs];
+         Crs = &Gbl.Hierarchy.Crss.Lst[NumCrs];
 
          /* Get next course */
          row = mysql_fetch_row (mysql_res);
@@ -693,7 +693,7 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
         }
      }
 
-   Gbl.Hierarchy.Deg.Crss.Num = NumCrss;
+   Gbl.Hierarchy.Crss.Num = NumCrss;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -705,11 +705,11 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
 
 void Crs_FreeListCoursesInCurrentDegree (void)
   {
-   if (Gbl.Hierarchy.Deg.Crss.Lst)
+   if (Gbl.Hierarchy.Crss.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hierarchy.Deg.Crss.Lst);
-      Gbl.Hierarchy.Deg.Crss.Lst = NULL;
+      free (Gbl.Hierarchy.Crss.Lst);
+      Gbl.Hierarchy.Crss.Lst = NULL;
      }
   }
 
@@ -805,7 +805,7 @@ static void Crs_ListCourses (void)
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
+   if (Gbl.Hierarchy.Crss.Num)	// There are courses in the current degree
      {
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -829,7 +829,7 @@ static void Crs_ListCourses (void)
    if (Crs_CheckIfICanCreateCourses ())
      {
       Frm_StartForm (ActEdiCrs);
-      Btn_PutConfirmButton (Gbl.Hierarchy.Deg.Crss.Num ? Txt_Create_another_course :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Crss.Num ? Txt_Create_another_course :
 	                                                 Txt_Create_course);
       Frm_EndForm ();
      }
@@ -893,10 +893,10 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
    /***** Write all the courses of this year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.Hierarchy.Deg.Crss.Num;
+	NumCrs < Gbl.Hierarchy.Crss.Num;
 	NumCrs++)
      {
-      Crs = &(Gbl.Hierarchy.Deg.Crss.Lst[NumCrs]);
+      Crs = &(Gbl.Hierarchy.Crss.Lst[NumCrs]);
       if (Crs->Year == Year)	// The year of the course is this?
 	{
 	 ThisYearHasCourses = true;
@@ -1020,7 +1020,7 @@ static void Crs_EditCoursesInternal (void)
    Crs_PutFormToCreateCourse ();
 
    /***** Forms to edit current courses *****/
-   if (Gbl.Hierarchy.Deg.Crss.Num)
+   if (Gbl.Hierarchy.Crss.Num)
       Crs_ListCoursesForEdition ();
 
    /***** End box *****/
@@ -1030,7 +1030,7 @@ static void Crs_EditCoursesInternal (void)
    Crs_FreeListCoursesInCurrentDegree ();
 
    /***** Free list of degrees in this centre *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
   }
 
 /*****************************************************************************/
@@ -1105,10 +1105,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
    /***** List courses of a given year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.Hierarchy.Deg.Crss.Num;
+	NumCrs < Gbl.Hierarchy.Crss.Num;
 	NumCrs++)
      {
-      Crs = &(Gbl.Hierarchy.Deg.Crss.Lst[NumCrs]);
+      Crs = &(Gbl.Hierarchy.Crss.Lst[NumCrs]);
       if (Crs->Year == Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);

@@ -87,6 +87,12 @@ struct Course
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of course
   };
 
+struct ListCourses
+  {
+   unsigned Num;	// Number of courses
+   struct Course *Lst;	// List of courses
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

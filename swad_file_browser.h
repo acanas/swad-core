@@ -29,6 +29,7 @@
 
 #include <linux/limits.h>	// For PATH_MAX
 
+#include "swad_course.h"
 #include "swad_group.h"
 #include "swad_notification.h"
 

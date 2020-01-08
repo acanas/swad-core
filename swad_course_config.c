@@ -237,16 +237,16 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 			"id=\"OthDegCod\" name=\"OthDegCod\""
 			" class=\"INPUT_SHORT_NAME\"");
       for (NumDeg = 0;
-	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod,
-		     Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod,false,
-		     "%s",Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Degs.Lst[NumDeg].DegCod,
+		     Gbl.Hierarchy.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod,false,
+		     "%s",Gbl.Hierarchy.Degs.Lst[NumDeg].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of degrees of the current centre */
-      Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+      Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
      }
    else	// I can not move course to another degree
      {

@@ -53,12 +53,6 @@ struct Country
    char WWW [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
    struct
      {
-      unsigned Num;		// Number of institutions in this country
-      struct Instit *Lst;	// List of institutions in this country
-      Ins_Order_t SelectedOrder;
-     } Inss;
-   struct
-     {
       bool Valid;
       unsigned NumUsrs;
      } NumUsrsWhoClaimToBelongToCty;
@@ -71,6 +65,13 @@ typedef enum
    Cty_ORDER_BY_NUM_USRS = 1,
   } Cty_Order_t;
 #define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
+
+struct ListCountries
+  {
+   unsigned Num;		// Number of countries
+   struct Country *Lst;		// List of countries
+   Cty_Order_t SelectedOrder;	// Order of countries
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

@@ -3216,7 +3216,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
    unsigned NumCty;
 
    /***** If list of countries is empty, try to get it *****/
-   if (!Gbl.Hierarchy.Sys.Ctys.Num)
+   if (!Gbl.Hierarchy.Ctys.Num)
       Cty_GetBasicListOfCountries ();
 
    /***** Selector of country *****/
@@ -3242,11 +3242,11 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
    HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
 	       "%s",Txt_Another_country);
    for (NumCty = 0;
-	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
+	NumCty < Gbl.Hierarchy.Ctys.Num;
 	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
-		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
+		  "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
    HTM_TD_End ();
 
@@ -3951,7 +3951,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
    /* If list of countries is empty, try to get it */
-   if (!Gbl.Hierarchy.Sys.Ctys.Num)
+   if (!Gbl.Hierarchy.Ctys.Num)
       Cty_GetBasicListOfCountries ();
 
    /* Begin form to select the country of my institution */
@@ -3963,11 +3963,11 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
 	       NULL);
    for (NumCty = 0;
-	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
+	NumCty < Gbl.Hierarchy.Ctys.Num;
 	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
-		  "%s",Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
+		  "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
    HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -4002,11 +4002,11 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Usrs.Me.UsrDat.InsCod == 0,false,
 	       "%s",Txt_Another_institution);
    for (NumIns = 0;
-	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	NumIns < Gbl.Hierarchy.Inss.Num;
 	NumIns++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
-		  "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].FullName);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+		  Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
+		  "%s",Gbl.Hierarchy.Inss.Lst[NumIns].FullName);
    HTM_SELECT_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -4043,11 +4043,11 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
 		  Txt_Another_centre);
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
-		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].FullName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
+		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].FullName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();

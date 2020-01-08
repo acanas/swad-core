@@ -77,7 +77,6 @@
 #include "swad_session.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
-#include "swad_system.h"
 #include "swad_test.h"
 #include "swad_timeline.h"
 #include "swad_timetable.h"
@@ -213,11 +212,15 @@ struct Globals
      {
       Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
       long Cod;			// Code of the current country, institution, centre, degree or course
-      struct System Sys;	// Top level of the hierarchy (system or platform)
+      struct ListCountries Ctys;// List of countries
       struct Country Cty;	// Current country
+      struct ListInstits Inss;	// List of institutions in current country
       struct Instit Ins;	// Current institution
+      struct ListCentres Ctrs;	// List of centres in current institution
       struct Centre Ctr;	// Current centre
+      struct ListDegrees Degs;	// List of degrees in current centre
       struct Degree Deg;	// Current degree
+      struct ListCourses Crss;	// List of courses in current degree
       struct Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
    struct

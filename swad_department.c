@@ -541,11 +541,11 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
 		  "%s",Txt_Another_institution);
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
-		     "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+		     Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
+		     "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -910,11 +910,11 @@ static void Dpt_PutFormToCreateDepartment (void)
    HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
 	       "%s",Txt_Another_institution);
    for (NumIns = 0;
-	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	NumIns < Gbl.Hierarchy.Inss.Num;
 	NumIns++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
-		  "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+		  Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
+		  "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 

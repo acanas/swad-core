@@ -591,11 +591,11 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 			"id=\"OthInsCod\" name=\"OthInsCod\""
 			" class=\"INPUT_SHORT_NAME\"");
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-		     Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
-	             "%s",Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+		     Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+	             "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 

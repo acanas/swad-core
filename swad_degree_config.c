@@ -231,11 +231,11 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
 			" class=\"INPUT_SHORT_NAME\"");
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-		     "%s",Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+		     "%s",Gbl.Hierarchy.Ctrs.Lst[NumCtr].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 

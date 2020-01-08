@@ -71,7 +71,6 @@ struct Centre
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct ListDegrees Degs;	// List of degrees in this centre
    struct
      {
       bool Valid;
@@ -86,6 +85,13 @@ typedef enum
    Ctr_ORDER_BY_NUM_USRS = 1,
   } Ctr_Order_t;
 #define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
+
+struct ListCentres
+  {
+   unsigned Num;		// Number of centres
+   struct Centre *Lst;		// List of centres
+   Ctr_Order_t SelectedOrder;	// Order of centres
+  };
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
