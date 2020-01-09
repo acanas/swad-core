@@ -1651,12 +1651,17 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    for (Dur = 0;
 		 Dur <= MaxDuration;
 		 Dur++)
-	       HTM_OPTION (HTM_Type_STRING,"",
+	      {
+	       if (asprintf (&TTDur,"%u:%02u",
+			     (Dur / Gbl.TimeTable.Config.IntervalsPerHour),		// Hours
+			     (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
+			     Gbl.TimeTable.Config.Range.MinutesPerInterval) < 0)	// Minutes
+		  Lay_NotEnoughMemoryExit ();
+	       HTM_OPTION (HTM_Type_STRING,TTDur,
 			   Dur == DurationNumIntervals,false,
-			   "%u:%02u",
-			   (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-		           (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
-		           Gbl.TimeTable.Config.Range.MinutesPerInterval);	// Minutes
+			   "%s",TTDur);
+	       free (TTDur);
+	      }
 	    HTM_SELECT_End ();
 
 	    if (Gbl.TimeTable.View == TT_CRS_EDIT)

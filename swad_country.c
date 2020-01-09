@@ -2069,3 +2069,34 @@ static void Cty_EditingCountryDestructor (void)
       Cty_EditingCty = NULL;
      }
   }
+
+/*****************************************************************************/
+/************ Check if any of the centres in a country has map ***************/
+/*****************************************************************************/
+
+bool Cty_GetIfMapIsAvailable (long CtyCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool MapIsAvailable = false;
+
+   /***** Get if any centre in current country has a coordinate set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
+		       "SELECT EXISTS"
+		       "(SELECT * FROM FROM institutions,centres"
+		       " WHERE institutions.CtyCod=%ld"
+		       " AND institutions.InsCod=centres.InsCod"
+		       " AND (centres.Latitude<>0 OR centres.Longitude<>0))",
+		       CtyCod))
+     {
+      /* Get if map is available */
+      row = mysql_fetch_row (mysql_res);
+      MapIsAvailable = (row[0][0] == '1');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MapIsAvailable;
+  }

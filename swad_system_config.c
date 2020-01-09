@@ -186,18 +186,31 @@ static void SysCfg_PutIconToPrint (void)
   }
 
 /*****************************************************************************/
-/******************** Check if country map should be shown *******************/
+/******************* Check if any of the centres has map *********************/
 /*****************************************************************************/
 
 static bool SysCfg_GetIfMapIsAvailable (void)
   {
-   /***** Get number of centres with both coordinates set
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool MapIsAvailable = false;
+
+   /***** Get if any centre has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get centres with coordinates",
-			     "SELECT COUNT(*) FROM centres"
-			     " WHERE centres.Latitude<>0"
-			     " AND centres.Longitude<>0");
+   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
+		       "SELECT EXISTS"
+		       "(SELECT * FROM centres"
+		       " WHERE centres.Latitude<>0 OR centres.Longitude<>0)"))
+     {
+      /* Get if map is available */
+      row = mysql_fetch_row (mysql_res);
+      MapIsAvailable = (row[0] == '1');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MapIsAvailable;
   }
 
 /*****************************************************************************/

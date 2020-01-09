@@ -64,7 +64,6 @@ extern struct Globals Gbl;
 static void CtyCfg_Configuration (bool PrintView);
 static void CtyCfg_PutIconToPrint (void);
 static void CtyCfg_Title (bool PutLink);
-static bool CtyCfg_GetIfMapIsAvailable (void);
 static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void CtyCfg_Map (void);
 static void CtyCfg_MapImage (bool PrintView,bool PutLink);
@@ -178,7 +177,7 @@ static void CtyCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /***** Check map *****/
-   MapIsAvailable = CtyCfg_GetIfMapIsAvailable ();
+   MapIsAvailable = Cty_GetIfMapIsAvailable (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Check country map *****/
    MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Cty);
@@ -227,25 +226,6 @@ static void CtyCfg_Title (bool PutLink)
    if (PutLink)
       HTM_A_End ();
    HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/******************** Check if country map should be shown *******************/
-/*****************************************************************************/
-
-static bool CtyCfg_GetIfMapIsAvailable (void)
-  {
-   /***** Get number of centres of current country
-          with both coordinates set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get centres with coordinates",
-			     "SELECT COUNT(*) FROM institutions,centres"
-			     " WHERE institutions.CtyCod=%ld"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.Latitude<>0"
-			     " AND centres.Longitude<>0",
-			     Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/

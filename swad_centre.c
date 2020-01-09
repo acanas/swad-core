@@ -392,10 +392,9 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    HTM_Txt (Plc.ShrtName);
    HTM_TD_End ();
 
-   /***** Place *****/
+   /***** Map *****/
    HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
-   if (Ctr->Coord.Latitude ||
-       Ctr->Coord.Longitude)
+   if (Ctr_GetIfMapIsAvailable (Ctr))
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
@@ -2128,4 +2127,15 @@ static void Ctr_EditingCentreDestructor (void)
       free (Ctr_EditingCtr);
       Ctr_EditingCtr = NULL;
      }
+  }
+
+/*****************************************************************************/
+/************************ Check if a centre has map **************************/
+/*****************************************************************************/
+
+bool Ctr_GetIfMapIsAvailable (const struct Centre *Ctr)
+  {
+   /***** Coordinates 0, 0 means not set ==> don't show map *****/
+   return (bool) (Ctr->Coord.Latitude ||
+                  Ctr->Coord.Longitude);
   }

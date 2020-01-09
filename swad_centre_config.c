@@ -77,7 +77,6 @@ static void CtrCfg_Configuration (bool PrintView);
 static void CtrCfg_PutIconsCtrConfig (void);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Title (bool PutLink);
-static bool CtrCfg_GetIfMapIsAvailable (void);
 static void CtrCfg_Map (void);
 static void CtrCfg_Latitude (void);
 static void CtrCfg_Longitude (void);
@@ -222,7 +221,7 @@ static void CtrCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /***** Check map *****/
-   MapIsAvailable = CtrCfg_GetIfMapIsAvailable ();
+   MapIsAvailable = Ctr_GetIfMapIsAvailable (&Gbl.Hierarchy.Ctr);
 
    /***** Check photo *****/
    snprintf (PathPhoto,sizeof (PathPhoto),
@@ -314,17 +313,6 @@ static void CtrCfg_Title (bool PutLink)
 		    Gbl.Hierarchy.Ctr.FullName,		// Logo full name
 		    Gbl.Hierarchy.Ctr.WWW,		// Logo www
 		    Gbl.Hierarchy.Ctr.FullName);	// Text full name
-  }
-
-/*****************************************************************************/
-/******************** Check if centre map should be shown ********************/
-/*****************************************************************************/
-
-static bool CtrCfg_GetIfMapIsAvailable (void)
-  {
-   /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   return (bool) (Gbl.Hierarchy.Ctr.Coord.Latitude ||
-                  Gbl.Hierarchy.Ctr.Coord.Longitude);
   }
 
 /*****************************************************************************/

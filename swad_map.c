@@ -261,6 +261,6 @@ static unsigned Map_GetZoomFromDistance (double MaxDistance)
          ((MaxDistance <   0.1 ) ? 12 :
          ((MaxDistance <   1.0 ) ?  8 :
          ((MaxDistance <  10.0 ) ?  6 :
-         ((MaxDistance < 100.0 ) ?  3 :
+         ((MaxDistance <  50.0 ) ?  2 :
                                     1))));
   }

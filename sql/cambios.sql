@@ -13112,6 +13112,10 @@ SELECT AVG(Latitude),AVG(Longitude),MAX(MAX(Latitude)-MIN(Latitude),MAX(Longitud
 
 
 
+SELECT COUNT(*) FROM centres WHERE InsCod=1 AND Latitude<>0 AND Longitude<>0;
+SELECT EXISTS (SELECT * FROM centres WHERE InsCod=1 AND Latitude<>0 AND Longitude<>0);
+
+
 
 
  

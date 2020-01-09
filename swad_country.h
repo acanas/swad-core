@@ -121,4 +121,6 @@ unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 
+bool Cty_GetIfMapIsAvailable (long CtyCod);
+
 #endif

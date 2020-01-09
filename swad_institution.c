@@ -369,6 +369,7 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
   {
+   extern const char *Txt_Map;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -401,12 +402,23 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
                                            TxtClassStrong,"CM");
    HTM_TD_End ();
 
-   /***** Stats *****/
-   /* Number of users who claim to belong to this institution */
+   /***** Number of users who claim to belong to this institution *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins));
    HTM_TD_End ();
 
+   /***** Map *****/
+   HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+   if (Ins_GetIfMapIsAvailable (Ins->InsCod))
+     {
+      Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
+      Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,Ins_PutParamGoToIns,
+				     "map-marker-alt.svg",
+				     Txt_Map);
+     }
+   HTM_TD_End ();
+
+   /***** Other stats *****/
    /* Number of centres in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    HTM_Unsigned (Ctr_GetNumCtrsInIns (Ins->InsCod));
@@ -456,6 +468,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
+   extern const char *Txt_Map;
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -498,6 +511,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH_End ();
      }
 
+   HTM_TH (1,1,"CM",Txt_Map);
    HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
@@ -2097,4 +2111,34 @@ static void Ins_EditingInstitutionDestructor (void)
       free (Ins_EditingIns);
       Ins_EditingIns = NULL;
      }
+  }
+
+/*****************************************************************************/
+/********** Check if any of the centres in an institution has map ************/
+/*****************************************************************************/
+
+bool Ins_GetIfMapIsAvailable (long InsCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool MapIsAvailable = false;
+
+   /***** Get if any centre in current institution has a coordinate set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
+		       "SELECT EXISTS"
+		       "(SELECT * FROM centres"
+		       " WHERE InsCod=%ld"
+		       " AND (Latitude<>0 OR Longitude<>0))",
+		       InsCod))
+     {
+      /* Get if map is available */
+      row = mysql_fetch_row (mysql_res);
+      MapIsAvailable = (row[0][0] == '1');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MapIsAvailable;
   }

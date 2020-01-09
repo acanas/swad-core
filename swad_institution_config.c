@@ -65,7 +65,6 @@ extern struct Globals Gbl;
 static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (void);
 static void InsCfg_Title (bool PutLink);
-static bool InsCfg_GetIfMapIsAvailable (void);
 static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
@@ -188,7 +187,7 @@ static void InsCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /***** Check map *****/
-   MapIsAvailable = InsCfg_GetIfMapIsAvailable ();
+   MapIsAvailable = Ins_GetIfMapIsAvailable (Gbl.Hierarchy.Ins.InsCod);
 
    if (MapIsAvailable)
      {
@@ -234,24 +233,6 @@ static void InsCfg_Title (bool PutLink)
 		    Gbl.Hierarchy.Ins.FullName,		// Logo full name
 		    Gbl.Hierarchy.Ins.WWW,		// Logo www
 		    Gbl.Hierarchy.Ins.FullName);	// Text full name
-  }
-
-/*****************************************************************************/
-/******************** Check if centre map should be shown ********************/
-/*****************************************************************************/
-
-static bool InsCfg_GetIfMapIsAvailable (void)
-  {
-   /***** Get number of centres of current institution
-          with both coordinates set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get centres with coordinates",
-			     "SELECT COUNT(*) FROM centres"
-			     " WHERE InsCod=%ld"
-			     " AND Latitude<>0"
-			     " AND Longitude<>0",
-			     Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
