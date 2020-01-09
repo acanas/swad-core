@@ -2012,10 +2012,10 @@ a:hover img.CENTRE_PHOTO_SHOW
         box-shadow:1px 1px 6px #999;
 	}
 	
-#ctr_mapid, #ins_mapid, #cty_mapid
+#sys_mapid, #cty_mapid, #ins_mapid, #ctr_mapid
 	{
 	width:460px;
-	height:345px;
+	height:460px;
 	margin:9px auto;
 	}
 

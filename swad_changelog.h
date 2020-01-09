@@ -493,7 +493,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 #define Log_PLATFORM_VERSION	"SWAD 19.115 (2020-01-09)"
-#define CSS_FILE		"swad19.112.css"
+#define CSS_FILE		"swad19.115.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)

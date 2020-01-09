@@ -240,7 +240,7 @@ static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 /****************************** Draw country map *****************************/
 /*****************************************************************************/
 
-#define SysCfg_MAP_CONTAINER_ID "cty_mapid"
+#define SysCfg_MAP_CONTAINER_ID "sys_mapid"
 
 static void SysCfg_Map (void)
   {

@@ -257,10 +257,10 @@ double Map_GetAltitudeFromStr (char *Str)
 static unsigned Map_GetZoomFromDistance (double MaxDistance)
   {
    /***** Convert distance to zoom *****/
-   return (MaxDistance <   0.01) ? 16 :
+   return (MaxDistance <   0.01) ? 15 :
          ((MaxDistance <   0.1 ) ? 12 :
          ((MaxDistance <   1.0 ) ?  8 :
-         ((MaxDistance <  10.0 ) ?  6 :
+         ((MaxDistance <  10.0 ) ?  5 :
          ((MaxDistance <  50.0 ) ?  2 :
                                     1))));
   }
