@@ -2084,7 +2084,7 @@ bool Cty_GetIfMapIsAvailable (long CtyCod)
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
 		       "SELECT EXISTS"
-		       "(SELECT * FROM FROM institutions,centres"
+		       "(SELECT * FROM institutions,centres"
 		       " WHERE institutions.CtyCod=%ld"
 		       " AND institutions.InsCod=centres.InsCod"
 		       " AND (centres.Latitude<>0 OR centres.Longitude<>0))",
