@@ -204,7 +204,7 @@ static bool SysCfg_GetIfMapIsAvailable (void)
      {
       /* Get if map is available */
       row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0] == '1');
+      MapIsAvailable = (row[0][0] == '1');
      }
 
    /* Free structure that stores the query result */

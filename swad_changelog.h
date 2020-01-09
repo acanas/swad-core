@@ -502,7 +502,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Mapas más estrechos en móvil
 
 	Version 19.115:   Jan 09, 2020	Map column in listing of institutions.
-					Fixed bug in edition of timetable, reported by Miguel Damas Hermoso. (? lines)
+					Fixed bug in edition of timetable, reported by Miguel Damas Hermoso.
+					Language removed from shortcuts. (278515 lines)
 	Version 19.114:   Jan 08, 2020	New option in System tab to view platform configuration.
 					Optimizations in number of users in courses. (278462 lines)
 	Version 19.113:   Jan 08, 2020	Code refactoring related to hierarchy.

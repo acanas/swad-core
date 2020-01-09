@@ -194,7 +194,6 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 
 void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Shortcut;
 
    /***** Short cut *****/
@@ -208,24 +207,20 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
    if (!PrintView)
      {
       if (ParamName)
-	 HTM_A_Begin ("href=\"%s/%s?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+	 HTM_A_Begin ("href=\"%s/?%s=%ld\" class=\"DAT\" target=\"_blank\"",
 		      Cfg_URL_SWAD_CGI,
-		      Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		      ParamName,HieCod);
       else
-	 HTM_A_Begin ("href=\"%s/%s\" class=\"DAT\" target=\"_blank\"",
-		      Cfg_URL_SWAD_CGI,
-		      Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+	 HTM_A_Begin ("href=\"%s/\" class=\"DAT\" target=\"_blank\"",
+		      Cfg_URL_SWAD_CGI);
      }
    if (ParamName)
-      HTM_TxtF ("%s/%s?%s=%ld",
+      HTM_TxtF ("%s/?%s=%ld",
 		Cfg_URL_SWAD_CGI,
-		Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		ParamName,HieCod);
    else
-      HTM_TxtF ("%s/%s",
-		Cfg_URL_SWAD_CGI,
-		Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+      HTM_TxtF ("%s/",
+		Cfg_URL_SWAD_CGI);
    if (!PrintView)
       HTM_A_End ();
    HTM_TD_End ();
