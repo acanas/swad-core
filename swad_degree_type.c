@@ -585,75 +585,90 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 	    all degree types with degrees
 	    union with
 	    all degree types without any degree */
-	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
-							    "(SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-							    "COUNT(degrees.DegCod) AS NumDegs"
-							    " FROM degrees,deg_types"
-							    " WHERE degrees.DegTypCod=deg_types.DegTypCod"
-							    " GROUP BY degrees.DegTypCod)"
-							    " UNION "
-							    "(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
-							    " FROM deg_types"
-							    " WHERE DegTypCod NOT IN"
-							    " (SELECT DegTypCod FROM degrees))"
-							    " ORDER BY %s",
-							    OrderBySubQuery[Order]);
+	 Gbl.DegTypes.Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
+			 "(SELECT deg_types.DegTypCod,"			// row[0]
+				 "deg_types.DegTypName,"		// row[1]
+				 "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM degrees,deg_types"
+			 " WHERE degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY degrees.DegTypCod)"
+			 " UNION "
+			 "(SELECT DegTypCod,"				// row[0]
+				 "DegTypName,"				// row[1]
+				 "0 AS NumDegs"				// row[2]
+				 // do not use '0' because
+				 // NumDegs will be casted to string
+				 // and order will be wrong
+			 " FROM deg_types"
+			 " WHERE DegTypCod NOT IN"
+			 " (SELECT DegTypCod FROM degrees))"
+			 " ORDER BY %s",
+			 OrderBySubQuery[Order]);
          break;
       case Hie_CTY:
 	 /* Get only degree types with degrees in the current country */
-	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
-							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-							    "COUNT(degrees.DegCod) AS NumDegs"
-							    " FROM institutions,centres,degrees,deg_types"
-							    " WHERE institutions.CtyCod=%ld"
-							    " AND institutions.InsCod=centres.InsCod"
-							    " AND centres.CtrCod=degrees.CtrCod"
-							    " AND degrees.DegTypCod=deg_types.DegTypCod"
-							    " GROUP BY degrees.DegTypCod"
-							    " ORDER BY %s",
-							    Gbl.Hierarchy.Cty.CtyCod,
-							    OrderBySubQuery[Order]);
+	 Gbl.DegTypes.Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
+			 "SELECT deg_types.DegTypCod,"			// row[0]
+			        "deg_types.DegTypName,"			// row[1]
+			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM institutions,centres,degrees,deg_types"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY degrees.DegTypCod"
+			 " ORDER BY %s",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 OrderBySubQuery[Order]);
          break;
       case Hie_INS:
 	 /* Get only degree types with degrees in the current institution */
-	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
-							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-							    "COUNT(degrees.DegCod) AS NumDegs"
-							    " FROM centres,degrees,deg_types"
-							    " WHERE centres.InsCod=%ld"
-							    " AND centres.CtrCod=degrees.CtrCod"
-							    " AND degrees.DegTypCod=deg_types.DegTypCod"
-							    " GROUP BY degrees.DegTypCod"
-							    " ORDER BY %s",
-							    Gbl.Hierarchy.Ins.InsCod,
-							    OrderBySubQuery[Order]);
+	 Gbl.DegTypes.Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
+			 "SELECT deg_types.DegTypCod,"			// row[0]
+			        "deg_types.DegTypName,"			// row[1]
+			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM centres,degrees,deg_types"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY degrees.DegTypCod"
+			 " ORDER BY %s",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 OrderBySubQuery[Order]);
 	 break;
       case Hie_CTR:
 	 /* Get only degree types with degrees in the current centre */
-	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
-							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-							    "COUNT(degrees.DegCod) AS NumDegs"
-							    " FROM degrees,deg_types"
-							    " WHERE degrees.CtrCod=%ld"
-							    " AND degrees.DegTypCod=deg_types.DegTypCod"
-							    " GROUP BY degrees.DegTypCod"
-							    " ORDER BY %s",
-							    Gbl.Hierarchy.Ctr.CtrCod,
-							    OrderBySubQuery[Order]);
+	 Gbl.DegTypes.Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
+			 "SELECT deg_types.DegTypCod,"			// row[0]
+			        "deg_types.DegTypName,"			// row[1]
+			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM degrees,deg_types"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY degrees.DegTypCod"
+			 " ORDER BY %s",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 OrderBySubQuery[Order]);
 	 break;
       case Hie_DEG:
       case Hie_CRS:
 	 /* Get only degree types with degrees in the current degree */
-	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
-							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-							    "COUNT(degrees.DegCod) AS NumDegs"
-							    " FROM degrees,deg_types"
-							    " WHERE degrees.DegCod=%ld"
-							    " AND degrees.DegTypCod=deg_types.DegTypCod"
-							    " GROUP BY degrees.DegTypCod"
-							    " ORDER BY %s",
-							    Gbl.Hierarchy.Deg.DegCod,
-							    OrderBySubQuery[Order]);
+	 Gbl.DegTypes.Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
+			 "SELECT deg_types.DegTypCod,"			// row[0]
+			        "deg_types.DegTypName,"			// row[1]
+			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM degrees,deg_types"
+			 " WHERE degrees.DegCod=%ld"
+			 " AND degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY degrees.DegTypCod"
+			 " ORDER BY %s",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 OrderBySubQuery[Order]);
 	 break;
       default:
 	 Lay_WrongScopeExit ();

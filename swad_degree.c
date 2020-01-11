@@ -356,7 +356,6 @@ static void Deg_ListDegreesForEdition (void)
       Deg = &(Gbl.Hierarchy.Degs.Lst[NumDeg]);
 
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
-
       ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 
       HTM_TR_Begin (NULL);
@@ -427,7 +426,7 @@ static void Deg_ListDegreesForEdition (void)
 	   {
 	    DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
 	    HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-			Gbl.Hierarchy.Deg.DegCod > 0 &&
+			// Gbl.Hierarchy.Deg.DegCod > 0 &&
 			DegTyp->DegTypCod == Deg->DegTypCod,false,
 			"%s",DegTyp->DegTypName);
 	   }
@@ -516,8 +515,8 @@ static void Deg_ListDegreesForEdition (void)
 static bool Deg_CheckIfICanEditADegree (struct Degree *Deg)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a centre administrator or higher
-                  ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&		// Degree is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));		// I am the requester
+                  ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
+                   Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));	// I am the requester
   }
 
 /*****************************************************************************/
