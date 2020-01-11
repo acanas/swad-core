@@ -145,7 +145,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
                  current centre, current degree or current course) *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 		       1 << Hie_INS |

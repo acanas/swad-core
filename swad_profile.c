@@ -208,7 +208,7 @@ void Prf_RequestUserProfile (void)
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Nickname);
+   HTM_TxtColonNBSP (Txt_Nickname);
 
    snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
 	     "@%s",
@@ -603,7 +603,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_Double ((double) UsrFigures->NumClicks /
+	 HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
 		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
@@ -643,7 +643,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_Double ((double) UsrFigures->NumFileViews /
+	 HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
 	             (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
@@ -680,7 +680,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_Double ((double) UsrFigures->NumSocPub /
+	 HTM_DoubleFewDigits ((double) UsrFigures->NumSocPub /
 		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
@@ -717,7 +717,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_Double ((double) UsrFigures->NumForPst /
+	 HTM_DoubleFewDigits ((double) UsrFigures->NumForPst /
 		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
@@ -754,7 +754,7 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_Double ((double) UsrFigures->NumMsgSnt /
+	 HTM_DoubleFewDigits ((double) UsrFigures->NumMsgSnt /
 		     (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
@@ -1726,7 +1726,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 		       ItsMe ? "DAT_SMALL_N" :
 		               "DAT_SMALL",
 		       Gbl.RowEvenOdd);
-	 HTM_Double (NumClicksPerDay);
+	 HTM_DoubleFewDigits (NumClicksPerDay);
 	 HTM_TD_End ();
 	 HTM_TR_End ();
 	}

@@ -380,7 +380,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       FuncParams ();
    HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
                     The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_nick_email_or_ID);
+   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
    HTM_LABEL_End ();
 
    HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",false,

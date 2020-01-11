@@ -516,9 +516,11 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    /* Number of questions and maximum grade */
    HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
         	                                "ASG_GRP");
-   HTM_TxtF ("%s:&nbsp;%u",Txt_No_of_questions,Game->NumQsts);
+   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_Unsigned (Game->NumQsts);
    HTM_BR ();
-   HTM_TxtF ("%s:&nbsp;%lg",Txt_Maximum_grade,Game->MaxGrade);
+   HTM_TxtColonNBSP (Txt_Maximum_grade);
+   HTM_Double (Game->MaxGrade);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -537,7 +539,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
 				           "BT_LINK LT ASG_TITLE",
 			    NULL);
    if (ShowOnlyThisGame)
-      HTM_TxtF ("%s:&nbsp;",Txt_Matches);
+      HTM_TxtColonNBSP (Txt_Matches);
    HTM_Unsigned (Game->NumMchs);
    HTM_BUTTON_End ();
    Frm_EndForm ();
@@ -1432,7 +1434,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 				"INSERT INTO gam_games"
 				" (CrsCod,Hidden,UsrCod,MaxGrade,Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,%lg,'%s','%s')",
+				" (%ld,'N',%ld,%.15lg,'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->MaxGrade,
@@ -1458,7 +1460,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    DB_QueryUPDATE ("can not update game",
 		   "UPDATE gam_games"
 		   " SET CrsCod=%ld,"
-		        "MaxGrade=%lg,"
+		        "MaxGrade=%.15lg,"
 		        "Title='%s',"
 		        "Txt='%s'"
 		   " WHERE GamCod=%ld",

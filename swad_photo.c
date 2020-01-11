@@ -336,7 +336,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
    /***** Form to upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_File_with_the_photo);
+   HTM_TxtColonNBSP (Txt_File_with_the_photo);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 

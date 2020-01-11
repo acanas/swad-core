@@ -858,11 +858,23 @@ char Str_ConvertToLowerLetter (char Ch)
   }
 
 /*****************************************************************************/
-/** Write a number in floating point with the correct accuracy to a string ***/
+/****************** Write a number in floating point *************************/
 /*****************************************************************************/
 // Str should be freed after calling this function
 
 void Str_DoubleNumToStr (char **Str,double Number)
+  {
+   if (asprintf (Str,"%.15lg",
+		 Number) < 0)
+      Lay_NotEnoughMemoryExit ();
+  }
+
+/*****************************************************************************/
+/******* Write a number in floating point with few digits to a string ********/
+/*****************************************************************************/
+// Str should be freed after calling this function
+
+void Str_DoubleNumToStrFewDigits (char **Str,double Number)
   {
    double IntegerPart;
    double FractionaryPart;
@@ -927,7 +939,7 @@ double Str_GetDoubleFromStr (char *Str)
           (it must have a point, not a comma as decimal separator) *****/
    Str_ConvertStrFloatCommaToStrFloatPoint (Str);
    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-   if (sscanf (Str,"%lg",&DoubleNum) != 1)
+   if (sscanf (Str,"%lf",&DoubleNum) != 1)
      {			// If the string does not hold a valid number...
       DoubleNum = 0.0;	// ...the number is reset to 0
       Str[0] = '\0';	// ...and the string is reset to ""

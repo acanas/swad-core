@@ -171,8 +171,8 @@ void Grp_WriteNamesOfSelectedGrps (void)
    struct GroupData GrpDat;
 
    /***** Show the selected groups *****/
-   HTM_TxtF ("%s:&nbsp;",Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
-                                                                Txt_Groups);
+   HTM_TxtColonNBSP (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
+                                                            Txt_Groups);
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
@@ -2335,7 +2335,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_BR ();
-      HTM_TxtF ("%s:&nbsp;",Txt_Opening_of_groups);
+      HTM_TxtColonNBSP (Txt_Opening_of_groups);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       HTM_SPAN_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,

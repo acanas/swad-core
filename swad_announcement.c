@@ -415,7 +415,7 @@ void Ann_ShowFormAnnouncement (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Users);
+   HTM_TxtColonNBSP (Txt_Users);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");

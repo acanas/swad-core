@@ -3527,7 +3527,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    if (Rol_GetNumAvailableRoles () == 1)
      {
       HTM_SPAN_Begin ("class=\"DAT\"");
-      HTM_TxtF ("%s:&nbsp;",Txt_Role);
+      HTM_TxtColonNBSP (Txt_Role);
       HTM_SPAN_End ();
 
       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
@@ -3537,7 +3537,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    else
      {
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:&nbsp;",Txt_Role);
+      HTM_TxtColonNBSP (Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
       HTM_LABEL_End ();
      }
@@ -7518,7 +7518,7 @@ void Usr_ListDataAdms (void)
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -7985,7 +7985,7 @@ void Usr_SeeGuests (void)
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+      HTM_TxtColonNBSP (Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       HTM_LABEL_End ();
       Frm_EndForm ();
@@ -8130,7 +8130,7 @@ void Usr_SeeStudents (void)
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+	 HTM_TxtColonNBSP (Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 HTM_LABEL_End ();
 	 Frm_EndForm ();
@@ -8308,7 +8308,7 @@ void Usr_SeeTeachers (void)
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
    Frm_EndForm ();

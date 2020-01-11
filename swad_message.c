@@ -2671,7 +2671,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtColonNBSP (TxtFromTo[Gbl.Msg.TypeOfMessages]);
    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 		     Gbl.Msg.FilterFromTo,
 	             "size=\"20\"");
@@ -2681,7 +2681,7 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter message content *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_MSG_Content);
+   HTM_TxtColonNBSP (Txt_MSG_Content);
    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 		     Gbl.Msg.FilterContent,
 	             "size=\"20\"");
@@ -3035,7 +3035,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "From:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtF ("%s:&nbsp;",Txt_MSG_From);
+      HTM_TxtColonNBSP (Txt_MSG_From);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3048,7 +3048,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtF ("%s:&nbsp;",Txt_MSG_To);
+      HTM_TxtColonNBSP (Txt_MSG_To);
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -3061,7 +3061,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "Content:" *****/
       HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtF ("%s:&nbsp;",Txt_MSG_Content);
+      HTM_TxtColonNBSP (Txt_MSG_Content);
       HTM_TD_End ();
 
       /***** Initialize image *****/

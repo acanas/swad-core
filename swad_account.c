@@ -150,7 +150,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    /***** Form to request user's ID for possible account already created *****/
    Frm_StartForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_ID);
+   HTM_TxtColonNBSP (Txt_ID);
    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",false,
 		   "size=\"18\" required=\"required\"");
    HTM_LABEL_End ();
@@ -285,7 +285,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
    HTM_BR ();
-   HTM_TxtF ("%s:&nbsp;",Txt_Name);
+   HTM_TxtColonNBSP (Txt_Name);
    if (UsrDat->FullName[0])
      {
       HTM_STRONG_Begin ();

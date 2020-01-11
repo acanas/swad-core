@@ -94,7 +94,7 @@ void Map_CreateMap (const char *ContainerId,
    /* Let's create a map with pretty Mapbox Streets tiles */
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    HTM_TxtF ("\t"
-	     "var mymap = L.map('%s').setView([%lg, %lg], %u);\n",
+	     "var mymap = L.map('%s').setView([%.15lg, %.15lg], %u);\n",
 	     ContainerId,Coord->Latitude,Coord->Longitude,Zoom);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -140,7 +140,7 @@ void Map_AddMarker (const struct Coordinates *Coord)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    HTM_TxtF ("\t"
-	     "var marker = L.marker([%lg, %lg]).addTo(mymap);\n",
+	     "var marker = L.marker([%.15lg, %.15lg]).addTo(mymap);\n",
 	     Coord->Latitude,Coord->Longitude);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

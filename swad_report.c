@@ -304,7 +304,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    HTM_DIV_Begin ("class=\"TITLE_REPORT DAT\"");
 
    /***** User *****/
-   HTM_TxtF ("%s:&nbsp;",Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
+   HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
    HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
    HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
    HTM_SPAN_End ();
@@ -313,7 +313,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    if (CurrentTimeUTC)
      {
       HTM_BR ();
-      HTM_TxtF ("%s:&nbsp;",Txt_Date);
+      HTM_TxtColonNBSP (Txt_Date);
       HTM_SPAN_Begin ("class=\"DAT_N\"");
       HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
 	                    CurrentTimeUTC->StrTime);
@@ -1383,7 +1383,7 @@ static void Rep_WriteDouble (double Num)
 
    /***** Write from floating point number to string
           with the correct accuracy *****/
-   Str_DoubleNumToStr (&Str,Num);
+   Str_DoubleNumToStrFewDigits (&Str,Num);
 
    /***** Write number from string to file *****/
    fputs (Str,Gbl.F.Rep);

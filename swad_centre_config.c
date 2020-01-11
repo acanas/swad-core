@@ -883,7 +883,7 @@ void CtrCfg_RequestPhoto (void)
 
    /***** Upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_File_with_the_photo);
+   HTM_TxtColonNBSP (Txt_File_with_the_photo);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
    HTM_LABEL_End ();
 
@@ -1145,7 +1145,6 @@ void CtrCfg_RenameCentreFull (void)
 
 void CtrCfg_ChangeCtrLatitude (void)
   {
-   extern const char *Txt_The_new_latitude_is_X;
    char LatitudeStr[64];
    double NewLatitude;
 
@@ -1157,9 +1156,6 @@ void CtrCfg_ChangeCtrLatitude (void)
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Latitude",NewLatitude);
    Gbl.Hierarchy.Ctr.Coord.Latitude = NewLatitude;
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_latitude_is_X,NewLatitude);
-
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
   }
@@ -1170,7 +1166,6 @@ void CtrCfg_ChangeCtrLatitude (void)
 
 void CtrCfg_ChangeCtrLongitude (void)
   {
-   extern const char *Txt_The_new_longitude_is_X;
    char LongitudeStr[64];
    double NewLongitude;
 
@@ -1182,9 +1177,6 @@ void CtrCfg_ChangeCtrLongitude (void)
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Longitude",NewLongitude);
    Gbl.Hierarchy.Ctr.Coord.Longitude = NewLongitude;
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_longitude_is_X,NewLongitude);
-
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
   }
@@ -1195,7 +1187,6 @@ void CtrCfg_ChangeCtrLongitude (void)
 
 void CtrCfg_ChangeCtrAltitude (void)
   {
-   extern const char *Txt_The_new_altitude_is_X;
    char AltitudeStr[64];
    double NewAltitude;
 
@@ -1206,9 +1197,6 @@ void CtrCfg_ChangeCtrAltitude (void)
    /***** Update database changing old altitude by new altitude *****/
    CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Altitude",NewAltitude);
    Gbl.Hierarchy.Ctr.Coord.Altitude = NewAltitude;
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_altitude_is_X,NewAltitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1224,7 +1212,7 @@ static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
    /***** Update database changing old coordinate by new coordinate *****/
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update a coordinate of a centre",
-		   "UPDATE centres SET %s='%lg' WHERE CtrCod=%ld",
+		   "UPDATE centres SET %s='%.15lg' WHERE CtrCod=%ld",
 	           CoordField,NewCoord,CtrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

@@ -283,7 +283,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** User's ID/nickname *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_nick_email_or_ID);
+   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,false,
 		   "size=\"8\" required=\"required\"");
    HTM_LABEL_End ();
@@ -861,7 +861,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
    /***** Password *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_For_security_enter_your_password);
+   HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
    HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
 		       NULL);
    HTM_LABEL_End ();

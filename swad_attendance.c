@@ -1482,8 +1482,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtF ("%s:&nbsp;",NumGrps == 1 ? Txt_Group  :
-                                        Txt_Groups);
+   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumGrps) // Groups found...

@@ -533,10 +533,10 @@ void Tst_AssessTest (void)
 	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
 	   {
 	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	    HTM_TxtF ("%s:&nbsp;",Txt_Score);
+	    HTM_TxtColonNBSP (Txt_Score);
 	    HTM_Double2Decimals (TotalScore);
 	    HTM_BR ();
-	    HTM_TxtF ("%s:&nbsp;",Txt_Grade);
+	    HTM_TxtColonNBSP (Txt_Grade);
 	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
@@ -1155,7 +1155,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 		       UniqueId,
 		       (unsigned) Med_ACTION_NEW_MEDIA,
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      HTM_TxtF ("%s:&nbsp;",Txt_Change_image_video);
+      HTM_TxtColonNBSP (Txt_Change_image_video);
       HTM_LABEL_End ();
       Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
 
@@ -1210,7 +1210,7 @@ static void Tst_UpdateScoreQst (long QstCod,double ScoreThisQst,bool AnswerIsNot
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
 	              " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
-	              "Score=Score+(%lf)"
+	              "Score=Score+(%.15lg)"
                       " WHERE QstCod=%ld",
 		      ScoreThisQst,QstCod);
    else	// The answer is blank
@@ -3317,7 +3317,11 @@ void Tst_WriteAnswersEdit (long QstCod)
             FloatNum[i] = Str_GetDoubleFromStr (row[1]);
            }
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
-         HTM_TxtF ("([%lg; %lg])",FloatNum[0],FloatNum[1]);
+         HTM_Txt ("([");
+         HTM_Double (FloatNum[0]);
+         HTM_Txt ("; ");
+         HTM_Double (FloatNum[1]);
+         HTM_Txt ("])");
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
@@ -4638,7 +4642,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 			  FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
 							    "ANS_BAD") :
 		        "ANS_0");
-         HTM_TxtF ("%lg",FloatAnsUsr);
+         HTM_Double (FloatAnsUsr);
         }
       else				// Not a floating point number
 	{
@@ -4654,7 +4658,13 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-      HTM_TxtF ("[%lg; %lg]",FloatAnsCorr[0],FloatAnsCorr[1]);
+     {
+      HTM_Txt ("[");
+      HTM_Double (FloatAnsCorr[0]);
+      HTM_Txt ("; ");
+      HTM_Double (FloatAnsCorr[1]);
+      HTM_Txt ("]");
+     }
    else
       HTM_Txt ("?");
    HTM_TD_End ();
@@ -4735,7 +4745,7 @@ static void Tst_WriteScoreStart (unsigned ColSpan)
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LM\"",ColSpan);
-   HTM_TxtF ("%s:&nbsp;",Txt_Score);
+   HTM_TxtColonNBSP (Txt_Score);
   }
 
 static void Tst_WriteScoreEnd (void)
@@ -5260,7 +5270,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Integer_number);
+   HTM_TxtColonNBSP (Txt_Integer_number);
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
 	     Gbl.Test.Answer.Integer);
@@ -5461,7 +5471,7 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",Label);
    snprintf (StrDouble,sizeof (StrDouble),
-	     "%lg",
+	     "%.15lg",
 	     Value);
    HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,false,
 		   "size=\"11\" required=\"required\"%s",
@@ -6813,7 +6823,7 @@ static void Tst_InsertAnswersIntoDB (void)
         		    "INSERT INTO tst_answers"
                             " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                             " VALUES"
-                            " (%ld,%u,'%lg','',-1,'Y')",
+                            " (%ld,%u,'%.15lg','',-1,'Y')",
 			    Gbl.Test.QstCod,i,
 			    Gbl.Test.Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
@@ -7609,7 +7619,7 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryUPDATE ("can not update result of test result",
 		   "UPDATE tst_exams"
-	           " SET NumQstsNotBlank=%u,Score='%lf'"
+	           " SET NumQstsNotBlank=%u,Score='%.15lg'"
 	           " WHERE TstCod=%ld",
 		   NumQstsNotBlank,Score,
 		   TstCod);
@@ -7950,7 +7960,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
 
    /***** Row title *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%s:&nbsp;",Txt_Visible_tests);
+   HTM_TxtColonNBSP (Txt_Visible_tests);
    HTM_Unsigned (NumExams);
    HTM_TD_End ();
 
@@ -8202,10 +8212,10 @@ void Tst_ShowOneTstResult (void)
       if (ICanViewScore)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
+	 HTM_TxtColonNBSP (Txt_Score);
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
-	 HTM_TxtF ("%s:&nbsp;",Txt_Grade);
+	 HTM_TxtColonNBSP (Txt_Grade);
          Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
@@ -8389,7 +8399,7 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
 		   "INSERT INTO tst_exam_questions"
 		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		   " VALUES"
-		   " (%ld,%ld,%u,'%lf','%s','%s')",
+		   " (%ld,%ld,%u,'%.15lg','%s','%s')",
 		   TstCod,QstCod,
 		   NumQst,	// 0, 1, 2, 3...
 		   Score,

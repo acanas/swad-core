@@ -659,8 +659,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
-   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
-                                        Txt_Groups);
+   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...
@@ -3134,12 +3134,12 @@ static void Mch_DrawEmptyScoreRow (unsigned NumRow,double MinScore,double MaxSco
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
    if (NumRow == 0)
      {
-      HTM_Double (MaxScore);
+      HTM_DoubleFewDigits (MaxScore);
       HTM_NBSP ();
      }
    else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
      {
-      HTM_Double (MinScore);
+      HTM_DoubleFewDigits (MinScore);
       HTM_NBSP ();
      }
    HTM_TD_End ();
@@ -3207,7 +3207,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 
    /* Write score */
    HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
-   HTM_Double (Score);
+   HTM_DoubleFewDigits (Score);
    HTM_NBSP ();
    HTM_TD_End ();
 
@@ -3724,7 +3724,7 @@ void Mch_ReceiveQuestionAnswer (void)
 			  " SET EndTime=NOW(),"
 			       "NumQsts=%u,"
 			       "NumQstsNotBlank=%u,"
-			       "Score='%lf'"
+			       "Score='%.15lg'"
 			  " WHERE MchCod=%ld AND UsrCod=%ld",
 			  NumQsts,NumQstsNotBlank,TotalScore,
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3740,7 +3740,7 @@ void Mch_ReceiveQuestionAnswer (void)
 			  "NOW(),"	// EndTime
 			  "%u,"		// NumQsts
 			  "%u,"		// NumQstsNotBlank
-			  "'%lf')",	// Score
+			  "'%.15lg')",	// Score
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 			  NumQsts,NumQstsNotBlank,TotalScore);
       Str_SetDecimalPointToLocal ();	// Return to local system

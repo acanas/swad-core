@@ -492,7 +492,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.115.1 (2020-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.116 (2020-01-11)"
 #define CSS_FILE		"swad19.115.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -501,6 +501,8 @@ ps2pdf source.ps destination.pdf
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: Mapas más estrechos en móvil
 
+	Version 19.116:   Jan 11, 2020	Changes in number of digits printed in doubles.
+					Code refactoring related to printing some strings. (278506 lines)
 	Version 19.115.1: Jan 11, 2020	Fixed bug in edition of degrees. (278531 lines)
 	Version 19.115:   Jan 09, 2020	Map column in listing of institutions.
 					Fixed bug in edition of timetable, reported by Miguel Damas Hermoso.

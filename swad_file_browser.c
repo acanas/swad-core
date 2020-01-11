@@ -8374,7 +8374,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Folder *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Folder);
+   HTM_TxtColonNBSP (Txt_Folder);
    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",false,
 		   "size=\"30\" required=\"required\"");
    HTM_LABEL_End ();

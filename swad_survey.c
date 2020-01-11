@@ -528,10 +528,10 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
    HTM_DIV_Begin ("class=\"%s\"",
                   Svy.Status.Visible ? "ASG_GRP" :
         	                       "ASG_GRP_LIGHT");
-   HTM_TxtF ("%s:&nbsp;",Txt_No_of_questions);
+   HTM_TxtColonNBSP (Txt_No_of_questions);
    HTM_Unsigned (Svy.NumQsts);
    HTM_Txt ("; ");
-   HTM_TxtF ("%s:&nbsp;",Txt_No_of_users);
+   HTM_TxtColonNBSP (Txt_No_of_users);
    HTM_Unsigned (Svy.NumUsrs);
    HTM_DIV_End ();
 
@@ -601,7 +601,7 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
    /* Scope of the survey */
    HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
         	                                      "ASG_GRP_LIGHT");
-   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    switch (Svy.Scope)
      {
       case Hie_UNK:	// Unknown
@@ -2432,8 +2432,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
         	                                       "ASG_GRP_LIGHT");
-   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
-                                        Txt_Groups);
+   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...

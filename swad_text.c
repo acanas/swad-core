@@ -46588,27 +46588,6 @@ const char *Txt_The_name_of_the_type_of_group_X_has_not_changed =	// Warning: it
 	"O nome do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
-const char *Txt_The_new_altitude_is_X =	// Warning: it is very important to include %lg in the following sentences
-#if   L==1	// ca
-	"La nova altitud &eacute;s <strong>%lg</strong>.";
-#elif L==2	// de
-	"Die neue H&ouml;he ist <strong>%lg</strong>.";
-#elif L==3	// en
-	"The new altitude is <strong>%lg</strong>.";
-#elif L==4	// es
-	"La nueva altitud es <strong>%lg</strong>.";
-#elif L==5	// fr
-	"La nouvelle altitude est <strong>%lg</strong>.";
-#elif L==6	// gn
-	"La nueva altitud es <strong>%lg</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"La nuova altitudine &egrave; <strong>%lg</strong>.";
-#elif L==8	// pl
-	"Nowa wysoko&sacute;&cacute; wynosi <strong>%lg</strong>.";
-#elif L==9	// pt
-	"O nova altitude &eacute; <strong>%lg</strong>.";
-#endif
-
 const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La nueva direcci&oacute;n IP es <strong>%s</strong>.";	// Necessita traduccio
@@ -46630,27 +46609,6 @@ const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to in
 	"O novo endere&ccedil;o IP &eacute; <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_new_latitude_is_X =	// Warning: it is very important to include %lg in the following sentences
-#if   L==1	// ca
-	"La nova latitud &eacute;s <strong>%lg</strong>.";
-#elif L==2	// de
-	"Der neue Breitengrad ist <strong>%lg</strong>.";
-#elif L==3	// en
-	"The new latitude is <strong>%lg</strong>.";
-#elif L==4	// es
-	"La nueva latitud es <strong>%lg</strong>.";
-#elif L==5	// fr
-	"La nouvelle latitude est <strong>%lg</strong>.";
-#elif L==6	// gn
-	"La nueva latitud es <strong>%lg</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"La nuova latitudine &egrave; <strong>%lg</strong>.";
-#elif L==8	// pl
-	"Nowa szeroko&sacute;&cacute; geograficzna wynosi <strong>%lg</strong>.";
-#elif L==9	// pt
-	"O nova latitude &eacute; <strong>%lg</strong>.";
-#endif
-
 const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nuevo logo es <strong>%s</strong>.";	// Necessita traduccio
@@ -46670,27 +46628,6 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 	"The new logo is <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O novo logotipo &eacute; <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_new_longitude_is_X =	// Warning: it is very important to include %lg in the following sentences
-#if   L==1	// ca
-	"La nova longitud &eacute;s <strong>%lg</strong>.";
-#elif L==2	// de
-	"Der neue L&auml;ngengrad ist <strong>%lg</strong>.";
-#elif L==3	// en
-	"The new longitude is <strong>%lg</strong>.";
-#elif L==4	// es
-	"La nueva longitud es <strong>%lg</strong>.";
-#elif L==5	// fr
-	"La nouvelle longitude est <strong>%lg</strong>.";
-#elif L==6	// gn
-	"La nueva longitud es <strong>%lg</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"La nuova longitudine &egrave; <strong>%lg</strong>.";
-#elif L==8	// pl
-	"Nowa d&lstrok;ugo&sacute;&cacute; geograficzna wynosi <strong>%lg</strong>.";
-#elif L==9	// pt
-	"O nova longitude &eacute; <strong>%lg</strong>.";
 #endif
 
 const char *Txt_The_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences

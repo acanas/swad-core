@@ -171,6 +171,7 @@ void HTM_BR (void);
 
 void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
+void HTM_TxtColonNBSP (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Colon (void);
 void HTM_Comma (void);
@@ -181,6 +182,7 @@ void HTM_Int (int Num);
 void HTM_UnsignedLong (unsigned long Num);
 void HTM_Long (long Num);
 void HTM_Double (double Num);
+void HTM_DoubleFewDigits (double Num);
 void HTM_Double2Decimals (double Num);
 void HTM_Percentage (double Percentage);
 

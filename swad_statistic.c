@@ -1761,7 +1761,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  BarWidth);
 	 HTM_NBSP ();
 	}
-      HTM_Double (Hits.Num);
+      HTM_DoubleFewDigits (Hits.Num);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1955,7 +1955,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
      }
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Color_of_the_graphic);
+   HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
    HTM_SELECT_Begin (true,
 		     "name=\"ColorType\"");
    for (ColorType  = (Sta_ColorType_t) 0;
@@ -2211,14 +2211,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LOG CB\" style=\"width:%upx;\"",
 		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
 		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      HTM_Double ((double) Interval * HitsMax / 5.0);
+      HTM_DoubleFewDigits ((double) Interval * HitsMax / 5.0);
       HTM_TD_End ();
      }
 
    HTM_TD_Begin ("colspan=\"%u\" class=\"LOG RB\" style=\"width:%upx;\"",
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   HTM_Double (HitsMax);
+   HTM_DoubleFewDigits (HitsMax);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2260,7 +2260,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,double Hit
       Sta_SetColor (ColorType,HitsNum[Hour],HitsMax,&R,&G,&B);
 
       /***** Write from floating point number to string *****/
-      Str_DoubleNumToStr (&Str,HitsNum[Hour]);
+      Str_DoubleNumToStrFewDigits (&Str,HitsNum[Hour]);
 
       /***** Write cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\""
@@ -2730,7 +2730,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       HTM_TxtF ("%u%%",(unsigned) (((Hits->Num * 100.0) /
 		                     Hits->Total) + 0.5));
       HTM_BR ();
-      HTM_Double (Hits->Num);
+      HTM_DoubleFewDigits (Hits->Num);
       HTM_BR ();
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
@@ -3730,7 +3730,7 @@ static void Sta_DrawBarNumHits (char Color,
 
       /***** Write the number of hits *****/
       HTM_NBSP ();
-      HTM_Double (HitsNum);
+      HTM_DoubleFewDigits (HitsNum);
       HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
         	                          HitsTotal) + 0.5));
      }

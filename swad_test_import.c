@@ -141,7 +141,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    /***** Write a form to import questions *****/
    Frm_StartForm (ActImpTstQst);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_XML_file);
+   HTM_TxtColonNBSP (Txt_XML_file);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",true,NULL);
    HTM_LABEL_End ();
    Frm_EndForm ();
@@ -330,8 +330,8 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             FloatNum[i] = Str_GetDoubleFromStr (row[1]);
            }
          fprintf (Gbl.Test.XML.FileXML,"%s"
-                                       "<lower>%lg</lower>%s"
-                                       "<upper>%lg</upper>%s",
+                                       "<lower>%.15lg</lower>%s"
+                                       "<upper>%.15lg</upper>%s",
                   Txt_NEW_LINE,
                   FloatNum[0],Txt_NEW_LINE,
                   FloatNum[1],Txt_NEW_LINE);
@@ -970,9 +970,11 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          break;
       case Tst_ANS_FLOAT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-         HTM_TxtF ("([%lg; %lg])",
-		   Gbl.Test.Answer.FloatingPoint[0],
-		   Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_Txt ("([");
+         HTM_Double (Gbl.Test.Answer.FloatingPoint[0]);
+         HTM_Txt ("; ");
+         HTM_Double (Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_Txt ("])");
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:

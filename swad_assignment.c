@@ -1629,8 +1629,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtF ("%s:&nbsp;",NumRows == 1 ? Txt_Group  :
-                                        Txt_Groups);
+   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+                                    Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...

@@ -207,7 +207,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Compute stats for anywhere, degree or course? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Scope);
+   HTM_TxtColonNBSP (Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 	               1 << Hie_INS |
@@ -222,7 +222,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:&nbsp;",Txt_Statistic);
+   HTM_TxtColonNBSP (Txt_Statistic);
    HTM_SELECT_Begin (false,
 		     "name=\"FigureType\"");
    for (FigureType  = (Fig_FigureType_t) 0;

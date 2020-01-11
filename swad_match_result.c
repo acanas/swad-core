@@ -816,12 +816,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
 
 	    /* Get score (row[5]) */
-	    if (sscanf (row[5],"%lg",&ScoreInThisResult) != 1)
+	    if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
 	       ScoreInThisResult = 0.0;
 	    TotalScoreOfAllResults += ScoreInThisResult;
 
 	    /* Get maximum grade (row[6]) */
-	    if (sscanf (row[6],"%lg",&MaxGrade) != 1)
+	    if (sscanf (row[6],"%lf",&MaxGrade) != 1)
 	       MaxGrade = 0.0;
 
 	    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -936,7 +936,7 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%s:&nbsp;",Txt_Matches);
+   HTM_TxtColonNBSP (Txt_Matches);
    HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
@@ -1229,10 +1229,10 @@ void McR_ShowOneMchResult (void)
       if (ICanViewScore)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtF ("%s:&nbsp;",Txt_Score);
+	 HTM_TxtColonNBSP (Txt_Score);
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
-	 HTM_TxtF ("%s:&nbsp;",Txt_Grade);
+	 HTM_TxtColonNBSP (Txt_Grade);
          Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
          HTM_DIV_End ();
 	}
@@ -1361,7 +1361,7 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lg",Score) != 1)
+      if (sscanf (row[4],"%lf",Score) != 1)
 	 *Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
