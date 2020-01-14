@@ -99,6 +99,8 @@ static void Ins_CreateInstitution (unsigned Status);
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
 
+static void Ins_FormToGoToMap (struct Instit *Ins);
+
 /*****************************************************************************/
 /***************** List institutions with pending centres ********************/
 /*****************************************************************************/
@@ -253,6 +255,9 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 
    /***** End form *****/
    Frm_EndForm ();
+
+   /***** Map *****/
+   Ins_FormToGoToMap (Ins);
   }
 
 /*****************************************************************************/
@@ -2107,10 +2112,10 @@ static void Ins_EditingInstitutionDestructor (void)
   }
 
 /*****************************************************************************/
-/************************ Form to go to centre map ***************************/
+/********************* Form to go to institution map *************************/
 /*****************************************************************************/
 
-void Ins_FormToGoToMap (struct Instit *Ins)
+static void Ins_FormToGoToMap (struct Instit *Ins)
   {
    extern const char *Txt_Map;
 

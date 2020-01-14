@@ -94,6 +94,8 @@ static void Cty_CreateCountry (void);
 static void Cty_EditingCountryConstructor (void);
 static void Cty_EditingCountryDestructor (void);
 
+static void Cty_FormToGoToMap (struct Country *Cty);
+
 /*****************************************************************************/
 /***************** List countries with pending institutions ******************/
 /*****************************************************************************/
@@ -533,6 +535,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** End form *****/
    HTM_DIV_End ();
    Frm_EndForm ();
+
+   /***** Map *****/
+   Cty_FormToGoToMap (Cty);
   }
 
 /*****************************************************************************/
@@ -2082,6 +2087,23 @@ static void Cty_EditingCountryDestructor (void)
      {
       free (Cty_EditingCty);
       Cty_EditingCty = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Form to go to country map **************************/
+/*****************************************************************************/
+
+static void Cty_FormToGoToMap (struct Country *Cty)
+  {
+   extern const char *Txt_Map;
+
+   if (Cty_GetIfMapIsAvailable (Cty->CtyCod))
+     {
+      Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
+      Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,Cty_PutParamGoToCty,
+				     "map-marker-alt.svg",
+				     Txt_Map);
      }
   }
 

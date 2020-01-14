@@ -3376,9 +3376,6 @@ static void Sta_WriteInstit (long InsCod)
       /***** Form to go to institution *****/
       Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
                                               "BT_LINK LT LOG","CT");
-
-      /***** Map *****/
-      Ins_FormToGoToMap (&Ins);
      }
    else			// Hit with no institution selected
      {
@@ -3471,9 +3468,6 @@ static void Sta_WriteCentre (long CtrCod)
       /***** Form to go to centre *****/
       Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
                                          "BT_LINK LT LOG","CT");
-
-      /***** Map *****/
-      Ctr_FormToGoToMap (&Ctr);
      }
    else			// Hit with no centre selected
      {

@@ -95,6 +95,8 @@ static void Ctr_CreateCentre (unsigned Status);
 static void Ctr_EditingCentreConstructor (void);
 static void Ctr_EditingCentreDestructor (void);
 
+static void Ctr_FormToGoToMap (struct Centre *Ctr);
+
 /*****************************************************************************/
 /******************* List centres with pending degrees ***********************/
 /*****************************************************************************/
@@ -223,6 +225,9 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
 
    /***** End form *****/
    Frm_EndForm ();
+
+   /***** Map *****/
+   Ctr_FormToGoToMap (Ctr);
   }
 
 /*****************************************************************************/
@@ -2126,11 +2131,11 @@ static void Ctr_EditingCentreDestructor (void)
 /************************ Form to go to centre map ***************************/
 /*****************************************************************************/
 
-void Ctr_FormToGoToMap (struct Centre *Ctr)
+static void Ctr_FormToGoToMap (struct Centre *Ctr)
   {
    extern const char *Txt_Map;
 
-   if (Ctr_GetIfMapIsAvailable (&Ctr))
+   if (Ctr_GetIfMapIsAvailable (Ctr))
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
