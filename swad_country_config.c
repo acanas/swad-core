@@ -132,7 +132,7 @@ static void CtyCfg_Configuration (bool PrintView)
    CtyCfg_Title (PutLink);
 
    /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -184,7 +184,7 @@ static void CtyCfg_Configuration (bool PrintView)
 
    if (MapIsAvailable || MapImageExists)
      {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
       /***** Country map *****/
       if (MapIsAvailable)

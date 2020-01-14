@@ -118,7 +118,7 @@ static void SysCfg_Configuration (bool PrintView)
 		    Hlp_SYSTEM_Information,Box_NOT_CLOSABLE);
 
    /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -164,7 +164,7 @@ static void SysCfg_Configuration (bool PrintView)
 
    if (MapIsAvailable)
      {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
       /***** Country map *****/
       SysCfg_Map ();

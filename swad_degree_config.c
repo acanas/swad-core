@@ -127,7 +127,7 @@ static void DegCfg_Configuration (bool PrintView)
    DegCfg_Title (PutLink);
 
    /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);

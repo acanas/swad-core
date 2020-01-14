@@ -494,16 +494,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.117 (2020-01-14)"
-#define CSS_FILE		"swad19.115.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.118 (2020-01-14)"
+#define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
-// TODO: Mapas más estrechos en móvil
 
-	Version 19.117:   Jan 14, 2020	Column map moved in countries, institutions and centres. (? lines)
+	Version 19.118:   Jan 14, 2020	Responsive maps. (278546 lines)
+	Version 19.117:   Jan 14, 2020	Column map moved in countries, institutions and centres. (278523 lines)
 	Version 19.116.3: Jan 14, 2020	Form to go to country map in statistics. (278547 lines)
 	Version 19.116.2: Jan 14, 2020	Form to go to institution map in statistics. (278529 lines)
 	Version 19.116.1: Jan 14, 2020	Form to go to centre map in statistics. (278518 lines)

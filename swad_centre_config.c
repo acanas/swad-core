@@ -165,7 +165,7 @@ static void CtrCfg_Configuration (bool PrintView)
    CtrCfg_Title (PutLink);
 
    /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -234,7 +234,7 @@ static void CtrCfg_Configuration (bool PrintView)
 
    if (MapIsAvailable || PhotoExists)
      {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
       /***** Centre map *****/
       if (MapIsAvailable)
@@ -465,8 +465,8 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	    "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
-				       "CENTRE_PHOTO_SHOW");
+	    "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT CENTRE_PHOTO_WIDTH" :
+				       "CENTRE_PHOTO_SHOW CENTRE_PHOTO_WIDTH");
    free (Icon);
    free (URL);
    if (PutLink)

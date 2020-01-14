@@ -138,7 +138,7 @@ static void InsCfg_Configuration (bool PrintView)
    InsCfg_Title (PutLink);
 
    /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
+   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -191,7 +191,7 @@ static void InsCfg_Configuration (bool PrintView)
 
    if (MapIsAvailable)
      {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
       /***** Institution map *****/
       InsCfg_Map ();
