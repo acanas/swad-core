@@ -144,6 +144,7 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
+void Ctr_FormToGoToMap (struct Centre *Ctr);
 bool Ctr_GetIfMapIsAvailable (const struct Centre *Ctr);
 
 #endif

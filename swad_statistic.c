@@ -3468,6 +3468,9 @@ static void Sta_WriteCentre (long CtrCod)
       /***** Form to go to centre *****/
       Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
                                          "BT_LINK LT LOG","CT");
+
+      /***** Map *****/
+      Ctr_FormToGoToMap (&Ctr);
      }
    else			// Hit with no centre selected
      {

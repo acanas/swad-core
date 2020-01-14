@@ -344,7 +344,6 @@ static void Ctr_PutIconToEditCentres (void)
 
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
   {
-   extern const char *Txt_Map;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
    const char *TxtClassNormal;
@@ -394,13 +393,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Map *****/
    HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
-   if (Ctr_GetIfMapIsAvailable (Ctr))
-     {
-      Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
-      Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
-				     "map-marker-alt.svg",
-				     Txt_Map);
-     }
+   Ctr_FormToGoToMap (Ctr);
    HTM_TD_End ();
 
    /***** Number of degrees *****/
@@ -2126,6 +2119,23 @@ static void Ctr_EditingCentreDestructor (void)
      {
       free (Ctr_EditingCtr);
       Ctr_EditingCtr = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Form to go to centre map ***************************/
+/*****************************************************************************/
+
+void Ctr_FormToGoToMap (struct Centre *Ctr)
+  {
+   extern const char *Txt_Map;
+
+   if (Ctr_GetIfMapIsAvailable (&Ctr))
+     {
+      Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
+      Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
+				     "map-marker-alt.svg",
+				     Txt_Map);
      }
   }
 
