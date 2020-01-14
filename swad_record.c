@@ -2665,7 +2665,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	{
 	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD LM",NULL);
 	}
       HTM_Txt (Ins->FullName);
       if (PutFormLinks)

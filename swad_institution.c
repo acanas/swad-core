@@ -411,11 +411,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins));
    HTM_TD_End ();
 
-   /***** Map *****/
-   HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
-   Ins_FormToGoToMap (Ins);
-   HTM_TD_End ();
-
    /***** Other stats *****/
    /* Number of centres in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
@@ -466,7 +461,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   extern const char *Txt_Map;
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -509,7 +503,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH_End ();
      }
 
-   HTM_TH (1,1,"CM",Txt_Map);
    HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);

@@ -344,7 +344,6 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
   {
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
-   extern const char *Txt_Map;
    extern const char *Txt_Institutions_ABBREVIATION;
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -380,7 +379,6 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
       HTM_TH_End ();
      }
 
-   HTM_TH (1,1,"CM",Txt_Map);
    HTM_TH (1,1,"RM",Txt_Institutions_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
@@ -400,7 +398,6 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
   {
-   extern const char *Txt_Map;
    const char *BgColor;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
@@ -424,17 +421,6 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    /***** Number of users who claim to belong to this country *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty));
-   HTM_TD_End ();
-
-   /***** Map *****/
-   HTM_TD_Begin ("class=\"DAT CM %s\"",BgColor);
-   if (Cty_GetIfMapIsAvailable (Cty->CtyCod))
-     {
-      Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
-      Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,Cty_PutParamGoToCty,
-				     "map-marker-alt.svg",
-				     Txt_Map);
-     }
    HTM_TD_End ();
 
    /***** Other stats *****/

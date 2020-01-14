@@ -396,11 +396,6 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    HTM_Txt (Plc.ShrtName);
    HTM_TD_End ();
 
-   /***** Map *****/
-   HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
-   Ctr_FormToGoToMap (Ctr);
-   HTM_TD_End ();
-
    /***** Number of degrees *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    HTM_Unsigned (Deg_GetNumDegsInCtr (Ctr->CtrCod));
@@ -1703,7 +1698,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_CENTRES_HELP_ORDER[2];
    extern const char *Txt_CENTRES_ORDER[2];
    extern const char *Txt_Place;
-   extern const char *Txt_Map;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -1742,7 +1736,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
      }
 
    HTM_TH (1,1,"LM",Txt_Place);
-   HTM_TH (1,1,"CM",Txt_Map);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
