@@ -139,6 +139,7 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
+void Ins_FormToGoToMap (struct Instit *Ins);
 bool Ins_GetIfMapIsAvailable (long InsCod);
 
 #endif

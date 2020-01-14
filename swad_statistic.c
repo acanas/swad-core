@@ -139,7 +139,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
 static void Sta_WriteCountry (long CtyCod);
 static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
                                            MYSQL_RES *mysql_res);
-static void Sta_WriteInstitution (long InsCod);
+static void Sta_WriteInstit (long InsCod);
 static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 static void Sta_WriteCentre (long CtrCod);
@@ -3344,7 +3344,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       HTM_TD_End ();
 
       /* Write institution */
-      Sta_WriteInstitution (InsCod);
+      Sta_WriteInstit (InsCod);
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -3359,7 +3359,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
 /********************** Write institution with an icon ***********************/
 /*****************************************************************************/
 
-static void Sta_WriteInstitution (long InsCod)
+static void Sta_WriteInstit (long InsCod)
   {
    struct Instit Ins;
 
@@ -3376,6 +3376,9 @@ static void Sta_WriteInstitution (long InsCod)
       /***** Form to go to institution *****/
       Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
                                               "BT_LINK LT LOG","CT");
+
+      /***** Map *****/
+      Ins_FormToGoToMap (&Ins);
      }
    else			// Hit with no institution selected
      {

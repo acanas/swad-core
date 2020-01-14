@@ -369,7 +369,6 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
   {
-   extern const char *Txt_Map;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -409,13 +408,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /***** Map *****/
    HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
-   if (Ins_GetIfMapIsAvailable (Ins->InsCod))
-     {
-      Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
-      Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,Ins_PutParamGoToIns,
-				     "map-marker-alt.svg",
-				     Txt_Map);
-     }
+   Ins_FormToGoToMap (Ins);
    HTM_TD_End ();
 
    /***** Other stats *****/
@@ -2110,6 +2103,23 @@ static void Ins_EditingInstitutionDestructor (void)
      {
       free (Ins_EditingIns);
       Ins_EditingIns = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Form to go to centre map ***************************/
+/*****************************************************************************/
+
+void Ins_FormToGoToMap (struct Instit *Ins)
+  {
+   extern const char *Txt_Map;
+
+   if (Ins_GetIfMapIsAvailable (Ins->InsCod))
+     {
+      Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
+      Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,Ins_PutParamGoToIns,
+				     "map-marker-alt.svg",
+				     Txt_Map);
      }
   }
 
