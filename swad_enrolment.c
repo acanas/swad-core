@@ -1943,6 +1943,7 @@ void Enr_SignUpInCrs (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Rol_Role_t RoleFromForm;
+   bool Notify;
    long ReqCod = -1L;
 
    /***** Check if I already belong to course *****/
@@ -2005,12 +2006,15 @@ void Enr_SignUpInCrs (void)
                      Gbl.Hierarchy.Crs.FullName);
 
       /***** Notify teachers or admins by email about the new enrolment request *****/
+      // If I want to be a teacher ==> send notification to other teachers, administrators or superusers
       // If this course has teachers ==> send notification to teachers
-      // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
-      if (RoleFromForm == Rol_TCH)	// TODO: What happens in user wants to enrole as a non-editing teacher?
-	 if (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
-				   1 << Rol_TCH))	// This course has teachers
-            Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
+      if (RoleFromForm == Rol_TCH)
+         Notify = true;
+      else
+	 Notify = (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+				         1 << Rol_TCH) != 0);	// This course has teachers
+      if (Notify)
+         Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
      }
   }
 

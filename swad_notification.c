@@ -1248,7 +1248,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
+					         " to be notified",
 				      "SELECT UsrCod FROM crs_usr"
 				      " WHERE CrsCod=%ld"
 				      " AND UsrCod<>%ld"
