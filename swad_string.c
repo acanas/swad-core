@@ -2173,7 +2173,8 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 
 	    /***** Skip spaces *****/
 	    if (isspace (Ch) ||
-		Ch == 0xA0)	// Unicode translation for &nbsp;
+		Ch == 0xC2   ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+		Ch == 0xA0)	// Used in Unicode &nbsp;
 		SpaceFound = true;
 
 	    if (SpaceFound)
@@ -2229,12 +2230,14 @@ void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLen
 	 (*StrSrc)++;
      }
    while (isspace (Ch) ||
-	  Ch == 0xA0);	// Unicode translation for &nbsp;
+	  Ch == 0xC2   ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	  Ch == 0xA0);		// Used in Unicode &nbsp;
 
    /***** Copy string while non-space characters *****/
    while (Ch &&
 	  !(isspace (Ch) ||
-	    Ch == 0xA0))	// Unicode translation for &nbsp;
+	    Ch == 0xC2   ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	    Ch == 0xA0))	// Used in Unicode &nbsp;
      {
       if (i < MaxLength)
 	 StrDst[i++] = (char) Ch;
@@ -2261,14 +2264,16 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
 	 (*StrSrc)++;
      }
    while (isspace (Ch)    ||
-	  Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	  Ch == 0xC2      ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	  Ch == 0xA0      ||	// Used in Unicode &nbsp;
 	  Ch == (int) ',' ||
 	  Ch == (int) ';');
 
    /***** Copy string while no separator found *****/
    while (Ch &&
 	  !(isspace (Ch)    ||
-	    Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	    Ch == 0xC2      ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	    Ch == 0xA0      ||	// Used in Unicode &nbsp;
 	    Ch == (int) ',' ||
 	    Ch == (int) ';'))
      {
@@ -2296,7 +2301,8 @@ void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLen
    /***** Skip leading spaces and ',' *****/
    Ch = (int) **StrSrc;
    while (isspace (Ch) ||
-	  Ch == 0xA0   ||	// Unicode translation for &nbsp;
+	  Ch == 0xC2   ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	  Ch == 0xA0   ||	// Used in Unicode &nbsp;
 	  Ch == (int) ',')
      {
       (*StrSrc)++;
@@ -2532,7 +2538,8 @@ void Str_SkipSpacesInFile (FILE *FileSrc)
 
    while ((Ch = fgetc (FileSrc)) != EOF)
       if (!(isspace (Ch) ||
-	    Ch == 0xA0))	// Unicode translation for &nbsp;
+	    Ch == 0xC2   ||	// Used in Unicode &nbsp;	// TODO: Skip '\xA0' or the sequence "\xC2\xA0"
+    	    Ch == 0xA0))	// Used in Unicode &nbsp;
 	{
 	 fseek (FileSrc,-1L,SEEK_CUR);
 	 break;

@@ -494,7 +494,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.118 (2020-01-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.118.1 (2020-01-23)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
+	Version 19.118.1: Jan 23, 2020	Fixed bug in marks, reported by Diana Alexandra Dumitru. (278554 lines)
 	Version 19.118:   Jan 14, 2020	Responsive maps. (278546 lines)
 	Version 19.117:   Jan 14, 2020	Column map moved in countries, institutions and centres. (278523 lines)
 	Version 19.116.3: Jan 14, 2020	Form to go to country map in statistics. (278547 lines)

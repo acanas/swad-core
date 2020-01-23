@@ -464,7 +464,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
          Ptr = CellContent;
 	 while (*Ptr && !UsrIDFound)
 	   {
-	    /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
+	    /* Find next string in text until separator (leading and trailing spaces are removed) */
             Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
 	    // Users' IDs are always stored internally in capitals and without leading zeros
@@ -621,7 +621,7 @@ void Mrk_ShowMyMarks (void)
          else
             UsrIsOK = false;
         }
-      else					// Course zone
+      else				// Course zone
         {
 	 if (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				   1 << Rol_STD))	// If there are students in this course

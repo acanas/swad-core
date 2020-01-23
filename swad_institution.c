@@ -1216,7 +1216,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
 		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
 	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
-	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
 		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
