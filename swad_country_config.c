@@ -73,7 +73,6 @@ static void CtyCfg_Shortcut (bool PrintView);
 static void CtyCfg_QR (void);
 static void CtyCfg_NumUsrs (void);
 static void CtyCfg_NumInss (void);
-static void CtyCfg_NumCtrs (void);
 static void CtyCfg_NumDegs (void);
 static void CtyCfg_NumCrss (void);
 static void CtyCfg_NumUsrsInCrssOfCty (Rol_Role_t Role);
@@ -110,8 +109,9 @@ static void CtyCfg_Configuration (bool PrintView)
   {
    extern const char *Hlp_COUNTRY_Information;
    bool PutLink;
-   bool MapIsAvailable;
    bool MapImageExists;
+   unsigned NumCtrs;
+   unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
@@ -146,11 +146,14 @@ static void CtyCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    CtyCfg_Shortcut (PrintView);
 
+   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.CtyCod);
    if (PrintView)
       /***** QR code with link to the country *****/
       CtyCfg_QR ();
    else
      {
+      NumCtrs = Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
+
       /***** Number of users who claim to belong to this country,
              number of institutions,
              number of centres,
@@ -158,7 +161,8 @@ static void CtyCfg_Configuration (bool PrintView)
              number of courses *****/
       CtyCfg_NumUsrs ();
       CtyCfg_NumInss ();
-      CtyCfg_NumCtrs ();
+      HieCfg_NumCtrs (NumCtrs);
+      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       CtyCfg_NumDegs ();
       CtyCfg_NumCrss ();
 
@@ -176,18 +180,15 @@ static void CtyCfg_Configuration (bool PrintView)
    HTM_DIV_End ();
 
    /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapIsAvailable = Cty_GetIfMapIsAvailable (Gbl.Hierarchy.Cty.CtyCod);
-
    /***** Check country map *****/
    MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Cty);
 
-   if (MapIsAvailable || MapImageExists)
+   if (NumCtrsWithMap || MapImageExists)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
       /***** Country map *****/
-      if (MapIsAvailable)
+      if (NumCtrsWithMap)
 	 CtyCfg_Map ();
 
       /***** Country map image *****/
@@ -511,28 +512,6 @@ static void CtyCfg_NumInss (void)
    HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************* Show number of centres in country configuration ***************/
-/*****************************************************************************/
-
-static void CtyCfg_NumCtrs (void)
-  {
-   extern const char *Txt_Centres;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

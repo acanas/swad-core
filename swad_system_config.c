@@ -73,8 +73,6 @@ static void SysCfg_Shortcut (bool PrintView);
 static void SysCfg_QR (void);
 static void SysCfg_NumCtys (void);
 static void SysCfg_NumInss (void);
-static void SysCfg_NumCtrs (unsigned NumCtrs);
-static void SysCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 static void SysCfg_NumDegs (void);
 static void SysCfg_NumCrss (void);
 static void SysCfg_NumUsrsInCrss (Rol_Role_t Role);
@@ -130,13 +128,13 @@ static void SysCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    SysCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetNumCtrsWithMap ();
+   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInSys ();
    if (PrintView)
       /***** QR code with link to the country *****/
       SysCfg_QR ();
    else
      {
-      NumCtrs = Ctr_GetNumCtrsTotal ();
+      NumCtrs = Ctr_GetNumCtrsInSys ();
 
       /***** Number of countries,
              number of institutions,
@@ -145,8 +143,8 @@ static void SysCfg_Configuration (bool PrintView)
              number of courses *****/
       SysCfg_NumCtys ();
       SysCfg_NumInss ();
-      SysCfg_NumCtrs (NumCtrs);
-      SysCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+      HieCfg_NumCtrs (NumCtrs);
+      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       SysCfg_NumDegs ();
       SysCfg_NumCrss ();
 
@@ -370,54 +368,6 @@ static void SysCfg_NumInss (void)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Ins_GetNumInssTotal ());
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show number of centres in system configuration ***************/
-/*****************************************************************************/
-
-static void SysCfg_NumCtrs (unsigned NumCtrs)
-  {
-   extern const char *Txt_Centres;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (NumCtrs);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/********** Show number of centres with map in system configuration **********/
-/*****************************************************************************/
-
-static void SysCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
-  {
-   extern const char *Txt_Centres_with_map;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres_with_map);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_TxtF ("%u (%.1lf%%)",
-	     NumCtrsWithMap,
-	     NumCtrs ? (double) NumCtrsWithMap * 100.0 /
-		       (double) NumCtrs :
-		       0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();

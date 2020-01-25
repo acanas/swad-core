@@ -229,6 +229,54 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
   }
 
 /*****************************************************************************/
+/************************** Show number of centres ***************************/
+/*****************************************************************************/
+
+void HieCfg_NumCtrs (unsigned NumCtrs)
+  {
+   extern const char *Txt_Centres;
+
+   /***** Number of centres *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT",NULL,Txt_Centres);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   HTM_Unsigned (NumCtrs);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********************* Show number of centres with map ***********************/
+/*****************************************************************************/
+
+void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
+  {
+   extern const char *Txt_Centres_with_map;
+
+   /***** Number of centres with map *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT",NULL,Txt_Centres_with_map);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   HTM_TxtF ("%u (%.1lf%%)",
+	     NumCtrsWithMap,
+	     NumCtrs ? (double) NumCtrsWithMap * 100.0 /
+		       (double) NumCtrs :
+		       0.0);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /************************* Show QR in configuration **************************/
 /*****************************************************************************/
 

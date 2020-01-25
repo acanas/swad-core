@@ -1899,7 +1899,7 @@ static void Ctr_CreateCentre (unsigned Status)
 /************************** Get number of centres ****************************/
 /*****************************************************************************/
 
-unsigned Ctr_GetNumCtrsTotal (void)
+unsigned Ctr_GetNumCtrsInSys (void)
   {
    /***** Get total number of centres from database *****/
    return (unsigned) DB_GetNumRowsTable ("centres");
@@ -1909,7 +1909,7 @@ unsigned Ctr_GetNumCtrsTotal (void)
 /********************** Get number of centres with map ***********************/
 /*****************************************************************************/
 
-unsigned Ctr_GetNumCtrsWithMap (void)
+unsigned Ctr_GetNumCtrsWithMapInSys (void)
   {
    /***** Get number of centres with map from database
           (coordinates 0, 0 means not set ==> don't show map) *****/
@@ -1947,6 +1947,22 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 			     " AND institutions.InsCod=centres.InsCod",
 			     CtyCod);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
+  }
+
+/*****************************************************************************/
+/********************** Get number of centres with map ***********************/
+/*****************************************************************************/
+
+unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod)
+  {
+   /***** Get number of centres with map from database
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return (unsigned) DB_QueryCOUNT ("can not get if map is available",
+				    "SELECT COUNT(*) FROM institutions,centres"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
+				    CtyCod);
   }
 
 /*****************************************************************************/

@@ -927,7 +927,7 @@ static void Fig_GetAndShowHierarchyTotal (void)
       case Hie_SYS:
 	 NumCtysTotal = Cty_GetNumCtysTotal ();
 	 NumInssTotal = Ins_GetNumInssTotal ();
-	 NumCtrsTotal = Ctr_GetNumCtrsTotal ();
+	 NumCtrsTotal = Ctr_GetNumCtrsInSys ();
 	 NumDegsTotal = Deg_GetNumDegsTotal ();
 	 NumCrssTotal = Crs_GetNumCrssTotal ();
          break;

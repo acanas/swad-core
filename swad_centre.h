@@ -132,10 +132,11 @@ void Ctr_ContEditAfterChgCtr (void);
 void Ctr_RecFormReqCtr (void);
 void Ctr_RecFormNewCtr (void);
 
-unsigned Ctr_GetNumCtrsTotal (void);
-unsigned Ctr_GetNumCtrsWithMap (void);
+unsigned Ctr_GetNumCtrsInSys (void);
+unsigned Ctr_GetNumCtrsWithMapInSys (void);
 void Ctr_FlushCacheNumCtrsInCty (void);
 unsigned Ctr_GetNumCtrsInCty (long CtyCod);
+unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod);
 void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
