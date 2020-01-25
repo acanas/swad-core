@@ -1906,6 +1906,19 @@ unsigned Ctr_GetNumCtrsTotal (void)
   }
 
 /*****************************************************************************/
+/********************** Get number of centres with map ***********************/
+/*****************************************************************************/
+
+unsigned Ctr_GetNumCtrsWithMap (void)
+  {
+   /***** Get number of centres with map from database
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return (unsigned) DB_QueryCOUNT ("can not get if map is available",
+				    "SELECT COUNT(*) FROM centres"
+				    " WHERE Latitude<>0 OR Longitude<>0");
+  }
+
+/*****************************************************************************/
 /******************* Get number of centres in a country **********************/
 /*****************************************************************************/
 

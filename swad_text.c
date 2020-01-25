@@ -3527,6 +3527,27 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 #endif
 	};
 
+const char *Txt_Centres_with_map =
+#if   L==1	// ca
+	"Centres amb mapa";
+#elif L==2	// de
+	"Lehrinstitute mit Karte";
+#elif L==3	// en
+	"Centres with map";
+#elif L==4	// es
+	"Centros con mapa";
+#elif L==5	// fr
+	"Centres avec carte";
+#elif L==6	// gn
+	"Centros con mapa";	// Okoteve traducción
+#elif L==7	// it
+	"Centri con mappa";
+#elif L==8	// pl
+	"Centra z map&aogon;";
+#elif L==9	// pt
+	"Centros com mapa";
+#endif
+
 const char *Txt_Centres_with_pending_degrees =
 #if   L==1	// ca
 	"Centres amb titulacions pendents d'activar";

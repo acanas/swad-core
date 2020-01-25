@@ -66,7 +66,6 @@
 
 static void SysCfg_Configuration (bool PrintView);
 static void SysCfg_PutIconToPrint (void);
-static bool SysCfg_GetIfMapIsAvailable (void);
 static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
@@ -74,7 +73,8 @@ static void SysCfg_Shortcut (bool PrintView);
 static void SysCfg_QR (void);
 static void SysCfg_NumCtys (void);
 static void SysCfg_NumInss (void);
-static void SysCfg_NumCtrs (void);
+static void SysCfg_NumCtrs (unsigned NumCtrs);
+static void SysCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 static void SysCfg_NumDegs (void);
 static void SysCfg_NumCrss (void);
 static void SysCfg_NumUsrsInCrss (Rol_Role_t Role);
@@ -107,7 +107,8 @@ void SysCfg_PrintConfiguration (void)
 static void SysCfg_Configuration (bool PrintView)
   {
    extern const char *Hlp_SYSTEM_Information;
-   bool MapIsAvailable;
+   unsigned NumCtrs;
+   unsigned NumCtrsWithMap;
 
    /***** Begin box *****/
    if (PrintView)
@@ -129,11 +130,14 @@ static void SysCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    SysCfg_Shortcut (PrintView);
 
+   NumCtrsWithMap = Ctr_GetNumCtrsWithMap ();
    if (PrintView)
       /***** QR code with link to the country *****/
       SysCfg_QR ();
    else
      {
+      NumCtrs = Ctr_GetNumCtrsTotal ();
+
       /***** Number of countries,
              number of institutions,
              number of centres,
@@ -141,7 +145,8 @@ static void SysCfg_Configuration (bool PrintView)
              number of courses *****/
       SysCfg_NumCtys ();
       SysCfg_NumInss ();
-      SysCfg_NumCtrs ();
+      SysCfg_NumCtrs (NumCtrs);
+      SysCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       SysCfg_NumDegs ();
       SysCfg_NumCrss ();
 
@@ -159,10 +164,7 @@ static void SysCfg_Configuration (bool PrintView)
    HTM_DIV_End ();
 
    /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapIsAvailable = SysCfg_GetIfMapIsAvailable ();
-
-   if (MapIsAvailable)
+   if (NumCtrsWithMap)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
@@ -183,34 +185,6 @@ static void SysCfg_Configuration (bool PrintView)
 static void SysCfg_PutIconToPrint (void)
   {
    Ico_PutContextualIconToPrint (ActPrnSysInf,NULL);
-  }
-
-/*****************************************************************************/
-/******************* Check if any of the centres has map *********************/
-/*****************************************************************************/
-
-static bool SysCfg_GetIfMapIsAvailable (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool MapIsAvailable = false;
-
-   /***** Get if any centre has a coordinate set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"
-		       "(SELECT * FROM centres"
-		       " WHERE centres.Latitude<>0 OR centres.Longitude<>0)"))
-     {
-      /* Get if map is available */
-      row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0][0] == '1');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MapIsAvailable;
   }
 
 /*****************************************************************************/
@@ -405,7 +379,7 @@ static void SysCfg_NumInss (void)
 /************** Show number of centres in system configuration ***************/
 /*****************************************************************************/
 
-static void SysCfg_NumCtrs (void)
+static void SysCfg_NumCtrs (unsigned NumCtrs)
   {
    extern const char *Txt_Centres;
 
@@ -417,7 +391,33 @@ static void SysCfg_NumCtrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Ctr_GetNumCtrsTotal ());
+   HTM_Unsigned (NumCtrs);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********** Show number of centres with map in system configuration **********/
+/*****************************************************************************/
+
+static void SysCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
+  {
+   extern const char *Txt_Centres_with_map;
+
+   /***** Number of centres *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT",NULL,Txt_Centres_with_map);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   HTM_TxtF ("%u (%.1lf%%)",
+	     NumCtrsWithMap,
+	     NumCtrs ? (double) NumCtrsWithMap * 100.0 /
+		       (double) NumCtrs :
+		       0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();

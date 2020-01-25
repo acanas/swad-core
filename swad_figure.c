@@ -3434,7 +3434,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-        	            0.0);
+        	           0.0);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3554,7 +3554,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-		         0.0);
+		        0.0);
    HTM_TD_End ();
 
    HTM_TR_End ();
