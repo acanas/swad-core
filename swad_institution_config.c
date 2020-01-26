@@ -74,7 +74,6 @@ static void InsCfg_WWW (bool PrintView,bool PutForm);
 static void InsCfg_Shortcut (bool PrintView);
 static void InsCfg_QR (void);
 static void InsCfg_NumUsrs (void);
-static void InsCfg_NumCtrs (void);
 static void InsCfg_NumDegs (void);
 static void InsCfg_NumCrss (void);
 static void InsCfg_NumDpts (void);
@@ -113,7 +112,8 @@ static void InsCfg_Configuration (bool PrintView)
    bool PutFormCty;
    bool PutFormName;
    bool PutFormWWW;
-   bool MapIsAvailable;
+   unsigned NumCtrs;
+   unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
@@ -156,18 +156,23 @@ static void InsCfg_Configuration (bool PrintView)
    /***** Shortcut to the institution *****/
    InsCfg_Shortcut (PrintView);
 
+   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
    if (PrintView)
       /***** QR code with link to the institution *****/
       InsCfg_QR ();
    else
      {
+      NumCtrs = Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+
       /***** Number of users who claim to belong to this institution,
              number of centres,
              number of degrees,
              number of courses,
              number of departments *****/
       InsCfg_NumUsrs ();
-      InsCfg_NumCtrs ();
+      HieCfg_NumCtrs (NumCtrs,
+		      true);	// Put form
+      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       InsCfg_NumDegs ();
       InsCfg_NumCrss ();
       InsCfg_NumDpts ();
@@ -186,10 +191,7 @@ static void InsCfg_Configuration (bool PrintView)
    HTM_DIV_End ();
 
    /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapIsAvailable = Ins_GetIfMapIsAvailable (Gbl.Hierarchy.Ins.InsCod);
-
-   if (MapIsAvailable)
+   if (NumCtrsWithMap)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
@@ -465,37 +467,6 @@ static void InsCfg_NumUsrs (void)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show number of centres in institution configuration *************/
-/*****************************************************************************/
-
-static void InsCfg_NumCtrs (void)
-  {
-   extern const char *Txt_Centres;
-   extern const char *Txt_Centres_of_INSTITUTION_X;
-
-   /***** Number of centres *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeCtr);
-   Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
-					        Gbl.Hierarchy.Ins.ShrtName),
-			    "BT_LINK DAT",NULL);
-   Str_FreeString ();
-   HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
    HTM_TD_End ();
 
    HTM_TR_End ();

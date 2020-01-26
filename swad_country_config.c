@@ -161,7 +161,8 @@ static void CtyCfg_Configuration (bool PrintView)
              number of courses *****/
       CtyCfg_NumUsrs ();
       CtyCfg_NumInss ();
-      HieCfg_NumCtrs (NumCtrs);
+      HieCfg_NumCtrs (NumCtrs,
+		      false);	// Don't put form
       HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       CtyCfg_NumDegs ();
       CtyCfg_NumCrss ();

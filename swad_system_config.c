@@ -143,7 +143,8 @@ static void SysCfg_Configuration (bool PrintView)
              number of courses *****/
       SysCfg_NumCtys ();
       SysCfg_NumInss ();
-      HieCfg_NumCtrs (NumCtrs);
+      HieCfg_NumCtrs (NumCtrs,
+		      false);	// Don't put form
       HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
       SysCfg_NumDegs ();
       SysCfg_NumCrss ();

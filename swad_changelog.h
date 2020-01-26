@@ -494,7 +494,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.120 (2020-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.121 (2020-01-26)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
+	Version 19.121:   Jan 26, 2020	Number of centres with map shown in institution configuration. (278601 lines)
 	Version 19.120:   Jan 25, 2020	Number of centres with map shown in country configuration. (278592 lines)
 	Version 19.119:   Jan 25, 2020	Number of centres with map shown in platform configuration. (278591 lines)
 	Version 19.118.2: Jan 23, 2020	Fixed bug in enrolment notifications. (278559 lines)

@@ -53,7 +53,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
 void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
-void HieCfg_NumCtrs (unsigned NumCtrs);
+void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (const char *ParamName,long HieCod);
 

@@ -133,12 +133,13 @@ void Ctr_RecFormReqCtr (void);
 void Ctr_RecFormNewCtr (void);
 
 unsigned Ctr_GetNumCtrsInSys (void);
-unsigned Ctr_GetNumCtrsWithMapInSys (void);
 void Ctr_FlushCacheNumCtrsInCty (void);
 unsigned Ctr_GetNumCtrsInCty (long CtyCod);
-unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod);
 void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);
+unsigned Ctr_GetNumCtrsWithMapInSys (void);
+unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod);
+unsigned Ctr_GetNumCtrsWithMapInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
 unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);

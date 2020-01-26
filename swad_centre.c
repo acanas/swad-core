@@ -1906,19 +1906,6 @@ unsigned Ctr_GetNumCtrsInSys (void)
   }
 
 /*****************************************************************************/
-/********************** Get number of centres with map ***********************/
-/*****************************************************************************/
-
-unsigned Ctr_GetNumCtrsWithMapInSys (void)
-  {
-   /***** Get number of centres with map from database
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return (unsigned) DB_QueryCOUNT ("can not get if map is available",
-				    "SELECT COUNT(*) FROM centres"
-				    " WHERE Latitude<>0 OR Longitude<>0");
-  }
-
-/*****************************************************************************/
 /******************* Get number of centres in a country **********************/
 /*****************************************************************************/
 
@@ -1950,22 +1937,6 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   }
 
 /*****************************************************************************/
-/********************** Get number of centres with map ***********************/
-/*****************************************************************************/
-
-unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod)
-  {
-   /***** Get number of centres with map from database
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return (unsigned) DB_QueryCOUNT ("can not get if map is available",
-				    "SELECT COUNT(*) FROM institutions,centres"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
-				    CtyCod);
-  }
-
-/*****************************************************************************/
 /**************** Get number of centres in an institution ********************/
 /*****************************************************************************/
 
@@ -1994,6 +1965,50 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 			     InsCod);
 
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
+  }
+
+/*****************************************************************************/
+/********************** Get number of centres with map ***********************/
+/*****************************************************************************/
+
+unsigned Ctr_GetNumCtrsWithMapInSys (void)
+  {
+   /***** Get number of centres with map from database
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return (unsigned) DB_QueryCOUNT ("can not get number of centres with map",
+				    "SELECT COUNT(*) FROM centres"
+				    " WHERE Latitude<>0 OR Longitude<>0");
+  }
+
+/*****************************************************************************/
+/************** Get number of centres with map in a country ******************/
+/*****************************************************************************/
+
+unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod)
+  {
+   /***** Get number of centres with map from database
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return (unsigned) DB_QueryCOUNT ("ccan not get number of centres with map",
+				    "SELECT COUNT(*) FROM institutions,centres"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
+				    CtyCod);
+  }
+
+/*****************************************************************************/
+/************* Get number of centres with map in an institution **************/
+/*****************************************************************************/
+
+unsigned Ctr_GetNumCtrsWithMapInIns (long InsCod)
+  {
+   /***** Get number of centres with map from database
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   return (unsigned) DB_QueryCOUNT ("can not get number of centres with map",
+				    "SELECT COUNT(*) FROM centres"
+				    " WHERE InsCod=%ld"
+				    " AND (Latitude<>0 OR Longitude<>0)",
+				    InsCod);
   }
 
 /*****************************************************************************/

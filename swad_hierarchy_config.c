@@ -232,9 +232,10 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
 /************************** Show number of centres ***************************/
 /*****************************************************************************/
 
-void HieCfg_NumCtrs (unsigned NumCtrs)
+void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
   {
    extern const char *Txt_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
 
    /***** Number of centres *****/
    HTM_TR_Begin (NULL);
@@ -243,8 +244,22 @@ void HieCfg_NumCtrs (unsigned NumCtrs)
    Frm_LabelColumn ("RT",NULL,Txt_Centres);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
+   HTM_TD_Begin ("class=\"LB\"");
+   if (PutForm)
+     {
+      Frm_StartFormGoTo (ActSeeCtr);
+      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
+						   Gbl.Hierarchy.Ins.ShrtName),
+			       "BT_LINK DAT",NULL);
+      Str_FreeString ();
+     }
    HTM_Unsigned (NumCtrs);
+   if (PutForm)
+     {
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
