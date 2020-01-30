@@ -45,14 +45,15 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_icon.o swad_ID.o swad_indicator.o swad_info.o swad_institution.o \
        swad_institution_config.o \
        swad_language.o swad_layout.o swad_link.o swad_log.o swad_logo.o \
-       swad_mail.o swad_main.o swad_map.o swad_mark.o swad_match.o \
-       swad_match_result.o swad_media.o swad_menu.o swad_message.o swad_MFU.o \
+       swad_mail.o swad_main.o swad_maintenance.o swad_map.o swad_mark.o \
+       swad_match.o swad_match_result.o swad_media.o swad_menu.o \
+       swad_message.o swad_MFU.o \
        swad_network.o swad_nickname.o swad_notice.o swad_notification.o \
        swad_pagination.o swad_parameter.o swad_password.o swad_photo.o \
        swad_place.o swad_plugin.o swad_privacy.o swad_profile.o swad_project.o \
        swad_QR.o \
        swad_record.o swad_report.o swad_role.o swad_RSS.o \
-       swad_scope.o swad_search.o swad_session.o swad_setting.o swad_setup.o \
+       swad_scope.o swad_search.o swad_session.o swad_setting.o \
        swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_system_config.o \
        swad_tab.o swad_test.o swad_test_import.o swad_theme.o swad_timeline.o \

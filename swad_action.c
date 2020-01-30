@@ -59,6 +59,7 @@
 #include "swad_language.h"
 #include "swad_log.h"
 #include "swad_mail.h"
+#include "swad_maintenance.h"
 #include "swad_mark.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
@@ -78,7 +79,6 @@
 #include "swad_role.h"
 #include "swad_search.h"
 #include "swad_setting.h"
-#include "swad_setup.h"
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_test_import.h"
@@ -192,7 +192,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeePen		] = {1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_SeePending			,"sitemap"		},
    [ActSeeLnk		] = { 748, 3,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"link"			},
    [ActLstPlg		] = { 777, 4,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
-   [ActSetUp		] = { 840, 5,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SUp_SetUp			,"bolt"			},
+   [ActMtn		] = {1820, 5,TabSys,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_Maintenance		,"tools"		},
 
    // Actions not in menu:
    [ActPrnSysInf	] = {1819,-1,TabUnk,ActSeeSysInf	,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,SysCfg_PrintConfiguration	,NULL},
@@ -202,9 +202,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemCty		] = { 893,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RemoveCountry		,Cty_ContEditAfterChgCty	,NULL},
    [ActRenCty		] = { 866,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RenameCountry		,Cty_ContEditAfterChgCty	,NULL},
    [ActChgCtyWWW	] = {1157,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ChangeCtyWWW		,Cty_ContEditAfterChgCty	,NULL},
-
-   [ActReqRemOldCrs	] = {1109,-1,TabUnk,ActSeePen		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_AskRemoveOldCrss		,NULL},
-   [ActRemOldCrs	] = {1110,-1,TabUnk,ActSeePen		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_RemoveOldCrss		,NULL},
 
    [ActSeeBan		] = {1137,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3FF,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ban_SeeBanners			,NULL},
    [ActEdiBan		] = {1138,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ban_EditBanners		,NULL},
@@ -234,6 +231,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgPlgAppKey	] = { 986,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgAppKey		,Plg_ContEditAfterChgPlg	,NULL},
    [ActChgPlgURL	] = { 783,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgURL		,Plg_ContEditAfterChgPlg	,NULL},
    [ActChgPlgIP		] = { 780,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgIP		,Plg_ContEditAfterChgPlg	,NULL},
+
+   [ActSetUp		] = { 840, 5,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_SetUp			,NULL},
+   [ActReqRemOldCrs	] = {1109,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_RemoveOldCrss		,NULL},
+   [ActRemOldCrs	] = {1110,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_RemoveOldCrss		,NULL},
 
    // TabCty ******************************************************************
    // Actions in menu:
@@ -3533,6 +3534,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgCtrAltCfg,	// #1817
 	ActSeeSysInf,		// #1818
 	ActPrnSysInf,		// #1819
+	ActMtn,			// #1820
 	};
 
 /*****************************************************************************/

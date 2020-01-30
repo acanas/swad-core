@@ -102,7 +102,7 @@ static void Cty_FormToGoToMap (struct Country *Cty);
 
 void Cty_SeeCtyWithPendingInss (void)
   {
-   extern const char *Hlp_SYSTEM_Hierarchy_pending;
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
@@ -139,7 +139,7 @@ void Cty_SeeCtyWithPendingInss (void)
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
+                         Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);

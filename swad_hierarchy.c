@@ -63,11 +63,6 @@ extern struct Globals Gbl;
 
 void Hie_SeePending (void)
   {
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-   Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
-   Mnu_ContextMenuEnd ();
-
    /***** List countries with pending institutions *****/
    Cty_SeeCtyWithPendingInss ();
 

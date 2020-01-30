@@ -105,7 +105,7 @@ static void Deg_EditingDegreeDestructor (void);
 
 void Deg_SeeDegWithPendingCrss (void)
   {
-   extern const char *Hlp_SYSTEM_Hierarchy_pending;
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -153,7 +153,7 @@ void Deg_SeeDegWithPendingCrss (void)
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Degrees_with_pending_courses,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
+                         Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);

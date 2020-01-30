@@ -494,7 +494,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.121 (2020-01-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.122 (2020-01-30)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,6 +502,13 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 
+	Version 19.122:   Jan 30, 2020	Some options changed in system tab. (278690 lines)
+Copy the following icons to icon public directory:
+sudo cp -a icon/bolt.svg /var/www/html/swad/icon/
+sudo cp -a icon/iconset/awesome/tools.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp -a icon/iconset/nuvola/tools.svg /var/www/html/swad/icon/iconset/nuvola/
+
+	Version 19.121.1: Jan 30, 2020	Fixed bug in database. (? lines)
 	Version 19.121:   Jan 26, 2020	Number of centres with map shown in institution configuration. (278601 lines)
 	Version 19.120:   Jan 25, 2020	Number of centres with map shown in country configuration. (278592 lines)
 	Version 19.119:   Jan 25, 2020	Number of centres with map shown in platform configuration. (278591 lines)

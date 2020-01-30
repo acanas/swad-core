@@ -107,7 +107,7 @@ static void Ins_FormToGoToMap (struct Instit *Ins);
 
 void Ins_SeeInsWithPendingCtrs (void)
   {
-   extern const char *Hlp_SYSTEM_Hierarchy_pending;
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Institutions_with_pending_centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Centres_ABBREVIATION;
@@ -155,7 +155,7 @@ void Ins_SeeInsWithPendingCtrs (void)
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Institutions_with_pending_centres,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
+                         Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);

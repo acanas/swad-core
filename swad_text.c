@@ -18826,23 +18826,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeePen
 #if   L==1	// ca
-	"Jerarquia"
+	"Pendents"
 #elif L==2	// de
-	"Hierarchie"
+	"Anh&auml;ngig"
 #elif L==3	// en
-	"Hierarchy"
+	"Pending"
 #elif L==4	// es
-	"Jerarqu&iacute;a"
+	"Pendientes"
 #elif L==5	// fr
-	"Hi&eacute;rarchie"
+	"En&nbsp;attente"
 #elif L==6	// gn
-	"S&atilde;mbyhyha reko"
+	"Pendientes"	// Okoteve traducción
 #elif L==7	// it
-	"Gerarchia"
+	"In&nbsp;attesa"
 #elif L==8	// pl
-	"Hierarchia"
+	"Oczekuj&aogon;cy"
 #elif L==9	// pt
-	"Hierarquia"
+	"Pendentes"
 #endif
 	,
 	//  3: ActSeeLnk
@@ -18887,25 +18887,25 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  5: ActSetUp
+	//  5: ActMtn
 #if   L==1	// ca
-	"Instal lar"
+	"Manteniment"
 #elif L==2	// de
-	"Einrichten"
+	"Erhaltung"
 #elif L==3	// en
-	"Set up"
+	"Maintenance"
 #elif L==4	// es
-	"Instalar"
+	"Mantenimiento"
 #elif L==5	// fr
-	"Installer"
+	"Entretien"
 #elif L==6	// gn
-	"Instalar"	// Okoteve traducción
+	"&Ntilde;emyatyr&otilde;"
 #elif L==7	// it
-	"Setup"
+	"Manutenzione"
 #elif L==8	// pl
-	"Set up"
+	"Utrzymanie"
 #elif L==9	// pt
-	"Instalar"
+	"Manuten&ccedil;&atilde;o"
 #endif
 	,
 	NULL,	//  6
@@ -20665,7 +20665,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6	// gn
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
 #elif L==7	// it
-	"Istituzioni, centri, lauree e corsi in sospeso"
+	"Istituzioni, centri, lauree e corsi in attesa di essere attivati"
 #elif L==8	// pl
 	"Instytucje, centra, stopnie i kurs&otilde;w oczekuj&aogon;cy"
 #elif L==9	// pt
@@ -20714,25 +20714,25 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  5: ActSetUp
+	//  5: ActMtn
 #if   L==1	// ca
-	"Instal laci&oacute; de la plataforma (en proves)"
+	"Instal&centerdot;laci&oacute; i manteniment de la plataforma"
 #elif L==2	// de
-	"Einrichten"
+	"Plattformeinrichtung und Wartung"
 #elif L==3	// en
-	"Set up"
+	"Platform set up and maintenance"
 #elif L==4	// es
-	"Instalaci&oacute;n de la plataforma (en pruebas)"
+	"Instalaci&oacute;n y mantenimiento de la plataforma"
 #elif L==5	// fr
-	"Installer"
+	"Mise en place et maintenance de la plateforme"
 #elif L==6	// gn
-	"Instalaci&oacute;n de la plataforma (en pruebas)"// Okoteve traducción
+	"Instalaci&oacute;n y mantenimiento de la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	"Setup"
+	"Installazione e manutenzione della piattaforma"
 #elif L==8	// pl
-	"Set up"
+	"Konfiguracja i utrzymanie platformy"
 #elif L==9	// pt
-	"Instalar"
+	"Instala&ccedil;&atilde;o e manuten&ccedil;&atilde;o da plataforma"
 #endif
 	,
 	NULL,	//  6
@@ -39235,6 +39235,27 @@ const char *Txt_Set_password =
 	"Ustaw has&lstrok;o";
 #elif L==9	// pt
 	"Definir senha";
+#endif
+
+const char *Txt_Set_up =
+#if   L==1	// ca
+	"Instal&centerdot;lar";
+#elif L==2	// de
+	"Einrichten";
+#elif L==3	// en
+	"Set up";
+#elif L==4	// es
+	"Instalar";
+#elif L==5	// fr
+	"Installer";
+#elif L==6	// gn
+	"Instalar";	// Okoteve traducción
+#elif L==7	// it
+	"Setup";
+#elif L==8	// pl
+	"Set up";
+#elif L==9	// pt
+	"Instalar";
 #endif
 
 const char *Txt_Settings =

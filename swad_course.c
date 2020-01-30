@@ -2763,7 +2763,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
 
 void Crs_AskRemoveOldCrss (void)
   {
-   extern const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses;
+   extern const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
@@ -2777,7 +2777,7 @@ void Crs_AskRemoveOldCrss (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Eliminate_old_courses,NULL,
-                 Hlp_SYSTEM_Hierarchy_eliminate_old_courses,Box_NOT_CLOSABLE);
+                 Hlp_SYSTEM_Maintenance_eliminate_old_courses,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);

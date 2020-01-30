@@ -1,4 +1,4 @@
-// swad_setup.c: initial setup after installation
+// swad_maintenance.c: platform maintenance
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_course.h"
 #include "swad_database.h"
+#include "swad_menu.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -47,12 +49,61 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Mtn_PutLinkToSetUp (void);
+
+/*****************************************************************************/
+/******************************** Maintenance ********************************/
+/*****************************************************************************/
+
+void Mtn_Maintenance (void)
+  {
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Mtn_PutLinkToSetUp ();		// Set up
+   Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
+   Mnu_ContextMenuEnd ();
+  }
+
+/*****************************************************************************/
+/************************ Put link to set up platform ************************/
+/*****************************************************************************/
+
+static void Mtn_PutLinkToSetUp (void)
+  {
+   extern const char *Txt_Set_up;
+
+   /***** Put form to set up platform *****/
+   Lay_PutContextualLinkIconText (ActSetUp,NULL,NULL,
+				  "bolt.svg",
+				  Txt_Set_up);
+  }
+
 /*****************************************************************************/
 /****************************** Initial set up *******************************/
 /*****************************************************************************/
 
-void SUp_SetUp (void)
+void Mtn_SetUp (void)
   {
-   /***** Create tables in database *****/
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
+   Mnu_ContextMenuEnd ();
+
+   /***** Create database tables if not exist *****/
    DB_CreateTablesIfNotExist ();
+  }
+
+/*****************************************************************************/
+/****************************** Initial set up *******************************/
+/*****************************************************************************/
+
+void Mtn_RemoveOldCrss (void)
+  {
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Mtn_PutLinkToSetUp ();		// Set up
+   Mnu_ContextMenuEnd ();
+
+   /***** Write form to remove old courses *****/
+   Crs_AskRemoveOldCrss ();
   }

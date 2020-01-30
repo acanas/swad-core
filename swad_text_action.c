@@ -1576,23 +1576,23 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeePen] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
 #elif L==3	// en
-	"List pending institutions, centres, degrees and courses in hierarchy"
+	"Pending institutions, centres, degrees and courses"
 #elif L==4	// es
-	""
+	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"&Eacute;tablissements, centres, &eacute;tudes et mati&egrave;res en attente"
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Istituzioni, centri, lauree e corsi in attesa di essere attivati"
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Instytucje, centra, stopnie i kurs&otilde;w oczekuj&aogon;cy"
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
 #endif
 	,
 	[ActSeeLnk] =
@@ -1637,25 +1637,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSetUp] =
+	[ActMtn] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Manteniment"
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Erhaltung"
 #elif L==3	// en
-	"Initial set up"
+	"Maintenance"
 #elif L==4	// es
-	""
+	"Mantenimiento"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Entretien"
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"&Ntilde;emyatyr&otilde;"
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Manutenzione"
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Utrzymanie"
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Manuten&ccedil;&atilde;o"
 #endif
 	,
 	[ActPrnSysInf] =
@@ -1770,48 +1770,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Need Übersetzung
 #elif L==3	// en
 	"Change web of country"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActReqRemOldCrs] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request the total removal of old courses"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActRemOldCrs] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Remove completely old courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2358,6 +2316,69 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Need Übersetzung
 #elif L==3	// en
 	"Change the IP address of a plugin"
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSetUp] =
+#if   L==1	// ca
+	"Instal lar"
+#elif L==2	// de
+	"Einrichten"
+#elif L==3	// en
+	"Set up"
+#elif L==4	// es
+	"Instalar"
+#elif L==5	// fr
+	"Installer"
+#elif L==6	// gn
+	"Instalar"	// Okoteve traducción
+#elif L==7	// it
+	"Setup"
+#elif L==8	// pl
+	"Set up"
+#elif L==9	// pt
+	"Instalar"
+#endif
+	,
+	[ActReqRemOldCrs] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request the total removal of old courses"
+#elif L==4	// es
+	""
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRemOldCrs] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Remove completely old courses"
 #elif L==4	// es
 	""
 #elif L==5	// fr

@@ -201,46 +201,46 @@ const char *Hlp_SYSTEM_Countries =
 	"SYSTEM.Countries.en";
 #endif
 
-const char *Hlp_SYSTEM_Hierarchy_pending =
+const char *Hlp_SYSTEM_Pending =
 #if   L==1
-	"SYSTEM.Hierarchy.es#pendientes";
+	"SYSTEM.Pending.es";
 #elif L==2
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #elif L==3
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #elif L==4
-	"SYSTEM.Hierarchy.es#pendientes";
+	"SYSTEM.Pending.es";
 #elif L==5
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #elif L==6
-	"SYSTEM.Hierarchy.es#pendientes";
+	"SYSTEM.Pending.es";
 #elif L==7
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #elif L==8
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #elif L==9
-	"SYSTEM.Hierarchy.en#pending";
+	"SYSTEM.Pending.en";
 #endif
 
-const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses =
+const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses =
 #if   L==1
-	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
 #elif L==2
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==3
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==4
-	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
 #elif L==5
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==6
-	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
 #elif L==7
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==8
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==9
-	"SYSTEM.Hierarchy.en#eliminate-old-courses";
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #endif
 
 const char *Hlp_SYSTEM_Banners =

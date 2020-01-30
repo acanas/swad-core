@@ -1884,7 +1884,7 @@ mysql> DESCRIBE msg_content;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
+		   "INDEX(MedCod)) ENGINE = MYISAM");
 
    /***** Table msg_content_deleted *****/
 /*
@@ -1906,7 +1906,7 @@ mysql> DESCRIBE msg_content_deleted;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
+		   "INDEX(MedCod)) ENGINE = MYISAM");
 
    /***** Table msg_rcv *****/
 /*
@@ -2535,11 +2535,11 @@ mysql> DESCRIBE tl_comments;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_comments ("
 			"PubCod BIGINT NOT NULL,"
-			"Content Txt NOT NULL,"
+			"Txt LONGTEXT NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
 		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
+		   "INDEX(MedCod)) ENGINE = MYISAM");
 
    /***** Table tl_comments_fav *****/
 /*
@@ -2632,7 +2632,7 @@ mysql> DESCRIBE tl_posts;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
 		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM;");
+		   "INDEX(MedCod)) ENGINE = MYISAM");
 
    /***** Table tl_pubs *****/
 /*

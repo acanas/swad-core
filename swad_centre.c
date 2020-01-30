@@ -103,7 +103,7 @@ static void Ctr_FormToGoToMap (struct Centre *Ctr);
 
 void Ctr_SeeCtrWithPendingDegs (void)
   {
-   extern const char *Hlp_SYSTEM_Hierarchy_pending;
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Centres_with_pending_degrees;
    extern const char *Txt_Centre;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -148,7 +148,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Centres_with_pending_degrees,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
+                         Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Wrtie heading *****/
       HTM_TR_Begin (NULL);
