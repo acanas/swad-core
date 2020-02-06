@@ -494,14 +494,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.122 (2020-01-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.122.1 (2020-02-07)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
+// TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 
+	Version 19.122.1: Feb 07, 2020	Fixed bug removing test tags, reported by Mancia Anguita López. (278692 lines)
 	Version 19.122:   Jan 30, 2020	Some options changed in system tab. (278690 lines)
 Copy the following icons to icon public directory:
 sudo cp -a icon/bolt.svg /var/www/html/swad/icon/

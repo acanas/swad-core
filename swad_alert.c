@@ -499,5 +499,5 @@ void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void)
   {
    extern const char *Txt_You_can_not_leave_the_field_empty;
 
-   Ale_ShowAlert (Ale_WARNING,NULL,Txt_You_can_not_leave_the_field_empty);
+   Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_field_empty);
   }

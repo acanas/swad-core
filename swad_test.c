@@ -1812,7 +1812,7 @@ static void Tst_ShowFormEditTags (void)
          Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
 	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],true,
-			 "size=\"36\"");
+			 "size=\"36\" required=\"required\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
