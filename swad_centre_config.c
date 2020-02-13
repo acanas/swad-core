@@ -58,8 +58,8 @@ extern struct Globals Gbl;
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define Ctr_RECOMMENDED_ASPECT_RATIO	"3:2"
 #define Ctr_PHOTO_SAVED_MAX_WIDTH	768
-#define Ctr_PHOTO_SAVED_MAX_HEIGHT	512
-#define Ctr_PHOTO_SAVED_QUALITY		 75	// 1 to 100
+#define Ctr_PHOTO_SAVED_MAX_HEIGHT	768
+#define Ctr_PHOTO_SAVED_QUALITY		 90	// 1 to 100
 
 /*****************************************************************************/
 /******************************* Private types *******************************/

@@ -118,8 +118,8 @@ static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
 // - maximum height of Tst_IMAGE_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define Tst_IMAGE_SAVED_MAX_WIDTH	768
-#define Tst_IMAGE_SAVED_MAX_HEIGHT	512
-#define Tst_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+#define Tst_IMAGE_SAVED_MAX_HEIGHT	768
+#define Tst_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 
 /*****************************************************************************/
 /******************************* Private types *******************************/

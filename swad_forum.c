@@ -281,8 +281,8 @@ static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
 // - maximum height of For_IMAGE_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define For_IMAGE_SAVED_MAX_WIDTH	768
-#define For_IMAGE_SAVED_MAX_HEIGHT	512
-#define For_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+#define For_IMAGE_SAVED_MAX_HEIGHT	768
+#define For_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 
 /*****************************************************************************/
 /***************************** Private prototypes ***************************/

@@ -101,8 +101,8 @@ struct PostContent
    · maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 */
 #define TL_IMAGE_SAVED_MAX_WIDTH	768
-#define TL_IMAGE_SAVED_MAX_HEIGHT	512
-#define TL_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+#define TL_IMAGE_SAVED_MAX_HEIGHT	768
+#define TL_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 // in timeline posts, the quality should not be high in order to speed up the loading of images
 
 /*

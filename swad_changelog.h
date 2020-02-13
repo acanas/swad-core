@@ -476,6 +476,9 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 
 // TODO: Poner en swad.cfg varias líneas de swad_config.h para que sea más configurable
 
+// TODO: Al exportar tests, los & hay que exportarlos como &amp; o &#numero;, ya que un & no es correcto en XML.
+// TODO: Junto al enlace test.xml hay que indicar que se descarga con "Guardar enlace como..." porque si se abre, se copia y se pega, son incorrectos los <
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -494,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.122.1 (2020-02-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.122.2 (2020-02-13)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -502,7 +505,11 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
+// TODO: En la lista de solicitudes de inscripción, alinear a la izquierda el nombre de la asignatura
+// TODO: Urgente: en swad.ugr.es sale error al refrescar una titulación en la orla de titulaciones.
+// TODO: URGENTÍSIMO: NO SE PUEDEN AÑADIR PREGUNTAS EN LOS JUEGOS. FALLA LA SELECCIÓN DE FECHAS.
 
+	Version 19.122.2: Feb 13, 2020	Increased quality in images. (278698 lines)
 	Version 19.122.1: Feb 07, 2020	Fixed bug removing test tags, reported by Mancia Anguita López. (278692 lines)
 	Version 19.122:   Jan 30, 2020	Some options changed in system tab. (278690 lines)
 Copy the following icons to icon public directory:

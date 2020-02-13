@@ -68,8 +68,8 @@ extern struct Globals Gbl;
 // - maximum height of Msg_IMAGE_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define Msg_IMAGE_SAVED_MAX_WIDTH	768
-#define Msg_IMAGE_SAVED_MAX_HEIGHT	512
-#define Msg_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+#define Msg_IMAGE_SAVED_MAX_HEIGHT	768
+#define Msg_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 
 static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
   {
