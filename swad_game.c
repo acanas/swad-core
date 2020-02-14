@@ -1503,7 +1503,7 @@ unsigned Gam_GetNumQstsGame (long GamCod)
   }
 
 /*****************************************************************************/
-/*********** Put a form to edit/create a question in game  *****************/
+/*************** Put a form to edit/create a question in game ****************/
 /*****************************************************************************/
 
 void Gam_RequestNewQuestion (void)

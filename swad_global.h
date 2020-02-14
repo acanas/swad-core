@@ -701,7 +701,7 @@ struct Globals
      {
       struct DateTime DateIni;	// TODO: Remove in future versions
       struct DateTime DateEnd;	// TODO: Remove in future versions
-      time_t TimeUTC[2];
+      time_t TimeUTC[Dat_NUM_START_END_TIME];
      } DateRange;
    struct
      {

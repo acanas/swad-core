@@ -438,7 +438,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    HTM_TD_Begin ("class=\"LM\"");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
                                                 "Start",
-                                                Gbl.DateRange.TimeUTC[0],
+                                                Gbl.DateRange.TimeUTC[Dat_START_TIME],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
@@ -466,7 +466,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    HTM_TD_Begin ("class=\"LM\"");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
                                                 "End",
-                                                Gbl.DateRange.TimeUTC[1],
+                                                Gbl.DateRange.TimeUTC[Dat_END_TIME],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
@@ -956,8 +956,8 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 
 void Dat_SetIniEndDates (void)
   {
-   Gbl.DateRange.TimeUTC[0] = (time_t) 0;
-   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Gbl.DateRange.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC;
   }
 
 /*****************************************************************************/
@@ -966,8 +966,8 @@ void Dat_SetIniEndDates (void)
 
 void Dat_WriteParamsIniEndDates (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
-   Par_PutHiddenParamUnsigned (NULL,"EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
+   Par_PutHiddenParamUnsigned (NULL,"StartTimeUTC",Gbl.DateRange.TimeUTC[Dat_START_TIME]);
+   Par_PutHiddenParamUnsigned (NULL,"EndTimeUTC"  ,Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
   }
 
 /*****************************************************************************/
@@ -980,11 +980,11 @@ void Dat_GetIniEndDatesFromForm (void)
    struct tm *tm_ptr;
 
    /***** Get initial date *****/
-   Gbl.DateRange.TimeUTC[0] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   if (Gbl.DateRange.TimeUTC[0])
+   Gbl.DateRange.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   if (Gbl.DateRange.TimeUTC[Dat_START_TIME])
       /* Convert time UTC to a local date */
-      tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
-   else	// Gbl.DateRange.TimeUTC[0] == 0 ==> initial date not specified
+      tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[Dat_START_TIME]);
+   else	// Gbl.DateRange.TimeUTC[Dat_START_TIME] == 0 ==> initial date not specified
      {
       tm.tm_year  = Cfg_LOG_START_YEAR - 1900;
       tm.tm_mon   =  0;	// January
@@ -996,8 +996,8 @@ void Dat_GetIniEndDatesFromForm (void)
 				// (use timezone information and system databases to)
 				// attempt to determine whether DST
 				// is in effect at the specified time.
-      if ((Gbl.DateRange.TimeUTC[0] = mktime (&tm)) < 0)
-	 Gbl.DateRange.TimeUTC[0] = (time_t) 0;
+      if ((Gbl.DateRange.TimeUTC[Dat_START_TIME] = mktime (&tm)) < 0)
+	 Gbl.DateRange.TimeUTC[Dat_START_TIME] = (time_t) 0;
       tm_ptr = &tm;
      }
 
@@ -1009,12 +1009,12 @@ void Dat_GetIniEndDatesFromForm (void)
    Gbl.DateRange.DateIni.Time.Second = tm_ptr->tm_sec;
 
    /***** Get end date *****/
-   Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
-   if (Gbl.DateRange.TimeUTC[1] == 0)	// Gbl.DateRange.TimeUTC[1] == 0 ==> end date not specified
-      Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
+   if (Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0)	// Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0 ==> end date not specified
+      Gbl.DateRange.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC;
 
    /* Convert current time UTC to a local date */
-   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[1]);
+   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[Dat_END_TIME]);
 
    Gbl.DateRange.DateEnd.Date.Year   = tm_ptr->tm_year + 1900;
    Gbl.DateRange.DateEnd.Date.Month  = tm_ptr->tm_mon  + 1;

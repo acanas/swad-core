@@ -2489,14 +2489,14 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
-	     (long) Gbl.DateRange.TimeUTC[0]);
+	     (long) Gbl.DateRange.TimeUTC[Dat_START_TIME]);
    Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
-	     (long) Gbl.DateRange.TimeUTC[1]);
+	     (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
    Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"')",
@@ -7748,8 +7748,8 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 			      " ORDER BY TstCod",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      UsrDat->UsrCod,
-			      (long) Gbl.DateRange.TimeUTC[0],
-			      (long) Gbl.DateRange.TimeUTC[1]);
+			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
+			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);

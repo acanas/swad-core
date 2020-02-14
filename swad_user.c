@@ -4224,7 +4224,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
   }
 
 /*****************************************************************************/
-/**** Get number of teachers from the current institution in a department ****/
+/* Get number of teachers in courses of the current instit. in a department **/
 /*****************************************************************************/
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
@@ -4235,13 +4235,18 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
    (unsigned) DB_QueryCOUNT ("can not get the number of teachers"
 			     " in a department",
 			     "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			     " FROM usr_data,crs_usr"
-			     " WHERE usr_data.InsCod=%ld"
-			     " AND usr_data.DptCod=%ld"
-			     " AND usr_data.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role IN (%u,%u)",
+			     " FROM usr_data,crs_usr,courses,degrees,centres"
+			     " WHERE usr_data.InsCod=%ld"		// User in the current institution...
+			     " AND usr_data.DptCod=%ld"			// ...and the specified department...
+			     " AND usr_data.UsrCod=crs_usr.UsrCod"	// ...who is...
+			     " AND crs_usr.Role IN (%u,%u)"		// ...a teacher...
+			     " AND crs_usr.CrsCod=courses.CrsCod"	// ...in a course...
+			     " AND courses.DegCod=degrees.DegCod"	// ...of a degree...
+			     " AND degrees.CtrCod=centres.InsCod"	// ...of a centre...
+			     " AND centres.InsCod=%ld",			// ...of the current institution
 			     Gbl.Hierarchy.Ins.InsCod,DptCod,
-			     (unsigned) Rol_NET,(unsigned) Rol_TCH);
+			     (unsigned) Rol_NET,(unsigned) Rol_TCH,
+			     Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

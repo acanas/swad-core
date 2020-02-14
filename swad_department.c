@@ -97,8 +97,8 @@ void Dpt_SeeDepts (void)
    extern const char *Txt_Department_unspecified;
    Dpt_Order_t Order;
    unsigned NumDpt;
-   unsigned NumTchsInsWithDpt = 0;	// Number of teachers from the current institution with department
-   unsigned NumTchsInOtherDpts;
+   unsigned NumTchsInsInOtherDpts;
+   unsigned NumTchsInsWithNoDpt;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
@@ -124,7 +124,8 @@ void Dpt_SeeDepts (void)
 	Order <= Dpt_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      HTM_TH_Begin (1,1,"LM");
+      HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "RM" :
+	                                                 "LM");
 
       Frm_StartForm (ActSeeDpt);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
@@ -161,10 +162,6 @@ void Dpt_SeeDepts (void)
       HTM_TD_End ();
 
       HTM_TR_End ();
-
-      /* Update number of teachers from the current institution
-	 with department */
-      NumTchsInsWithDpt += Gbl.Dpts.Lst[NumDpt].NumTchs;
      }
 
    /***** Separation row *****/
@@ -174,8 +171,9 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
    HTM_TR_End ();
 
-   /***** Write teachers with other department *****/
-   NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+   /***** Write teachers of this institution with other department *****/
+   NumTchsInsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -183,13 +181,14 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumTchsInOtherDpts);
+   HTM_Unsigned (NumTchsInsInOtherDpts);
    HTM_TD_End ();
 
    HTM_TR_End ();
-   NumTchsInsWithDpt += NumTchsInOtherDpts;
 
    /***** Write teachers with no department *****/
+   NumTchsInsWithNoDpt = Usr_GetNumTchsCurrentInsInDepartment (-1L);
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -197,10 +196,7 @@ void Dpt_SeeDepts (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
-				       1 << Rol_NET |	// Non-editing teachers
-				       1 << Rol_TCH) -	// Teachers
-	         NumTchsInsWithDpt);
+   HTM_Unsigned (NumTchsInsWithNoDpt);
    HTM_TD_End ();
 
    HTM_TR_End ();

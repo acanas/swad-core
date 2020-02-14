@@ -629,8 +629,8 @@ static void Sta_WriteSelectorAction (void)
 
 void Sta_SetIniEndDates (void)
   {
-   Gbl.DateRange.TimeUTC[0] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
-   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
+   Gbl.DateRange.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC;
   }
 
 /*****************************************************************************/
@@ -987,8 +987,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    sprintf (QueryAux," WHERE %s.ClickTime"
 	             " BETWEEN FROM_UNIXTIME(%ld) AND FROM_UNIXTIME(%ld)",
             LogTable,
-            (long) Gbl.DateRange.TimeUTC[0],
-            (long) Gbl.DateRange.TimeUTC[1]);
+            (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
+            (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
    Str_Concat (Query,QueryAux,
                Sta_MAX_BYTES_QUERY_ACCESS);
 
