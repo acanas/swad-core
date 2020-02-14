@@ -2833,11 +2833,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
-            HTM_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin (NULL);
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
-				     "BT_LINK DAT",NULL);
+				     "BT_LINK LT DAT",NULL);
             Hie_FreeGoToMsg ();
             HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
             HTM_BUTTON_End ();

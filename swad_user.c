@@ -5343,7 +5343,7 @@ static void Usr_GetGstsLst (Hie_Level_t Scope)
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
   {
-   char *Query;
+   char *Query = NULL;
 
    /***** Get the students in a degree from database *****/
    DB_BuildQuery (&Query,

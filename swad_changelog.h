@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.122.3 (2020-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.122.4 (2020-02-14)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -505,12 +505,11 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
-// TODO: En la lista de solicitudes de inscripción, alinear a la izquierda el nombre de la asignatura
 // TODO: Urgente: Añadir nuevos niveles de realimentación tras sugerencia de Mancia y conversación con Javier.
-// TODO: Urgente: en swad.ugr.es sale error al refrescar una titulación en la orla de titulaciones.
 
+	Version 19.122.4: Feb 14, 2020	Fixed bug refreshing degree average photo. (278699 lines)
 	Version 19.122.3: Feb 14, 2020	Fixed bug in games, reported by Gustavo Romero López.
-					Fixed bug in listing of departments, reported by Daniel Haro Contreras. (278698 lines)
+					Fixed bug in listing of departments, reported by Daniel Haro Contreras. (278700 lines)
 	Version 19.122.2: Feb 13, 2020	Increased quality in images. (278698 lines)
 	Version 19.122.1: Feb 07, 2020	Fixed bug removing test tags, reported by Mancia Anguita López. (278692 lines)
 	Version 19.122:   Jan 30, 2020	Some options changed in system tab. (278690 lines)
