@@ -51,22 +51,13 @@
 #include "swad_theme.h"
 #include "swad_test.h"
 #include "swad_test_import.h"
+#include "swad_test_result.h"
 #include "swad_user.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-// strings are limited to Tst_MAX_BYTES_FEEDBACK_TYPE bytes
-const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
-  {
-   [Tst_FEEDBACK_NOTHING      ] = "nothing",
-   [Tst_FEEDBACK_TOTAL_RESULT ] = "totalResult",
-   [Tst_FEEDBACK_EACH_RESULT  ] = "eachResult",
-   [Tst_FEEDBACK_EACH_GOOD_BAD] = "eachGoodBad",
-   [Tst_FEEDBACK_FULL_FEEDBACK] = "fullFeedback",
-  };
 
 // strings are limited to Tst_MAX_BYTES_ANSWER_TYPE characters
 const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
@@ -91,16 +82,6 @@ static const char *Tst_PluggableDB[Tst_NUM_OPTIONS_PLUGGABLE] =
    [Tst_PLUGGABLE_UNKNOWN] = "unknown",
    [Tst_PLUGGABLE_NO     ] = "N",
    [Tst_PLUGGABLE_YES    ] = "Y",
-  };
-
-// Feedback to students in tests
-static const char *Tst_FeedbackDB[Tst_NUM_TYPES_FEEDBACK] =
-  {
-   [Tst_FEEDBACK_NOTHING      ] = "nothing",		// No feedback
-   [Tst_FEEDBACK_TOTAL_RESULT ] = "total_result",	// Little
-   [Tst_FEEDBACK_EACH_RESULT  ] = "each_result",	// Medium
-   [Tst_FEEDBACK_EACH_GOOD_BAD] = "each_good_bad",	// High
-   [Tst_FEEDBACK_FULL_FEEDBACK] = "full_feedback",	// Maximum
   };
 
 static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
@@ -154,10 +135,6 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
 static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
-static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-			            struct UsrData *UsrDat,
-                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
-                                    double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,double ScoreThisQst,bool AnswerIsNotBlank);
@@ -180,7 +157,6 @@ static void Tst_ShowFormConfigTst (void);
 static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
                                      unsigned Value);
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
-static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
 static void Tst_ShowFormAnswerTypes (void);
 static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
@@ -277,24 +253,6 @@ static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
 static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
-
-static long Tst_CreateTestResultInDB (void);
-static void Tst_StoreScoreOfTestResultInDB (long TstCod,
-                                          unsigned NumQstsNotBlank,double Score);
-static void Tst_ShowUsrsTstResults (void);
-static void Tst_ShowHeaderTestResults (void);
-static void Tst_ShowTstResults (struct UsrData *UsrDat);
-static void Tst_PutParamTstCod (long TstCod);
-static long Tst_GetParamTstCod (void);
-static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
-                                           unsigned NumExams,
-                                           unsigned NumTotalQsts,
-                                           unsigned NumTotalQstsNotBlank,
-                                           double TotalScoreOfAllTests);
-static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQstsNotBlank,double *Score);
-static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
-static void Tst_GetTestResultQuestionsFromDB (long TstCod);
 
 /*****************************************************************************/
 /*************** Show form to generate a self-assessment test ****************/
@@ -506,7 +464,7 @@ void Tst_AssessTest (void)
 	 Tst_GetQuestionsAndAnswersFromForm ();
 
 	 /***** Create new test in database to store the result *****/
-	 TstCod = Tst_CreateTestResultInDB ();
+	 TstCod = TsR_CreateTestResultInDB ();
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -530,14 +488,14 @@ void Tst_AssessTest (void)
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
-	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
+	 if (Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING)
 	   {
 	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	    HTM_TxtColonNBSP (Txt_Score);
 	    HTM_Double2Decimals (TotalScore);
 	    HTM_BR ();
 	    HTM_TxtColonNBSP (Txt_Grade);
-	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
+	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,TsR_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
 
@@ -545,7 +503,7 @@ void Tst_AssessTest (void)
 	 Box_BoxEnd ();
 
 	 /***** Store test result in database *****/
-	 Tst_StoreScoreOfTestResultInDB (TstCod,
+	 TsR_StoreScoreOfTestResultInDB (TstCod,
 				         NumQstsNotBlank,TotalScore);
 
          /***** Set test status *****/
@@ -854,35 +812,6 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
-/******************** Show test tags in this test result *********************/
-/*****************************************************************************/
-
-static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned long NumTags;
-
-   /***** Get all tags of questions in this test *****/
-   NumTags = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get tags"
-					" present in a test result",
-			     "SELECT tst_tags.TagTxt"	// row[0]
-			     " FROM"
-			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
-			     " FROM tst_question_tags,tst_exam_questions"
-			     " WHERE tst_exam_questions.TstCod=%ld"
-			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod)"
-			     " AS TagsCods,tst_tags"
-			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
-			     " ORDER BY tst_tags.TagTxt",
-			     TstCod);
-   Tst_ShowTagList (NumTags,mysql_res);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /************************** Show list of test tags ***************************/
 /*****************************************************************************/
 
@@ -964,7 +893,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
-	 Tst_StoreOneTestResultQstInDB (TstCod,QstCod,
+	 TsR_StoreOneTestResultQstInDB (TstCod,QstCod,
 				        NumQst,	// 0, 1, 2, 3...
 				        ScoreThisQst);
 
@@ -1002,10 +931,10 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-			            struct UsrData *UsrDat,
-                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
-                                    double *ScoreThisQst,bool *AnswerIsNotBlank)
+void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+			     struct UsrData *UsrDat,
+                             unsigned NumQst,long QstCod,MYSQL_ROW row,
+                             double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    /*
@@ -1063,7 +992,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
 	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
-	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+	 if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
       default:
@@ -1884,10 +1813,10 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_maximum;
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
    extern const char *Txt_Feedback_to_students;
-   extern const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK];
+   extern const char *Txt_TST_STR_FEEDBACK[TsR_NUM_TYPES_FEEDBACK];
    extern const char *Txt_Save_changes;
    Tst_Pluggable_t Pluggable;
-   Tst_Feedback_t Feedback;
+   TsR_Feedback_t Feedback;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
 
    /***** Read test configuration from database *****/
@@ -1972,8 +1901,8 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
-   for (Feedback  = (Tst_Feedback_t) 0;
-	Feedback <= (Tst_Feedback_t) (Tst_NUM_TYPES_FEEDBACK - 1);
+   for (Feedback  = (TsR_Feedback_t) 0;
+	Feedback <= (TsR_Feedback_t) (TsR_NUM_TYPES_FEEDBACK - 1);
 	Feedback++)
      {
       HTM_LABEL_Begin ("class=\"DAT\"");
@@ -2049,7 +1978,7 @@ void Tst_GetConfigTstFromDB (void)
 			     " FROM tst_config WHERE CrsCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod);
 
-   Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
+   Gbl.Test.Config.Feedback = TsR_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
    if (NumRows == 0)
      {
@@ -2075,10 +2004,11 @@ void Tst_GetConfigTstFromDB (void)
 
 void Tst_GetConfigFromRow (MYSQL_ROW row)
   {
+   extern const char *TsR_FeedbackDB[TsR_NUM_TYPES_FEEDBACK];
    int IntNum;
    long LongNum;
    Tst_Pluggable_t Pluggable;
-   Tst_Feedback_t Feedback;
+   TsR_Feedback_t Feedback;
 
    /***** Get whether test are visible via plugins or not *****/
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2119,10 +2049,10 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 	                                                     (unsigned long) LongNum;
 
    /***** Get feedback type (row[5]) *****/
-   for (Feedback  = (Tst_Feedback_t) 0;
-	Feedback <= (Tst_Feedback_t) (Tst_NUM_TYPES_FEEDBACK - 1);
+   for (Feedback  = (TsR_Feedback_t) 0;
+	Feedback <= (TsR_Feedback_t) (TsR_NUM_TYPES_FEEDBACK - 1);
 	Feedback++)
-      if (!strcmp (row[5],Tst_FeedbackDB[Feedback]))
+      if (!strcmp (row[5],TsR_FeedbackDB[Feedback]))
         {
          Gbl.Test.Config.Feedback = Feedback;
          break;
@@ -2183,6 +2113,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 
 void Tst_ReceiveConfigTst (void)
   {
+   extern const char *TsR_FeedbackDB[TsR_NUM_TYPES_FEEDBACK];
    extern const char *Txt_The_test_configuration_has_been_updated;
 
    /***** Get whether test are visible via plugins or not *****/
@@ -2220,7 +2151,7 @@ void Tst_ReceiveConfigTst (void)
                                                                    0);
 
    /***** Get type of feedback from form *****/
-   Gbl.Test.Config.Feedback = Tst_GetFeedbackTypeFromForm ();
+   Gbl.Test.Config.Feedback = TsR_GetFeedbackTypeFromForm ();
 
    /***** Update database *****/
    DB_QueryREPLACE ("can not save configuration of tests",
@@ -2232,7 +2163,7 @@ void Tst_ReceiveConfigTst (void)
 		    Tst_PluggableDB[Gbl.Test.Config.Pluggable],
 		    Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
 		    Gbl.Test.Config.MinTimeNxtTstPerQst,
-		    Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
+		    TsR_FeedbackDB[Gbl.Test.Config.Feedback]);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
@@ -2252,19 +2183,6 @@ static Tst_Pluggable_t Tst_GetPluggableFromForm (void)
 	                            0,
                                     Tst_NUM_OPTIONS_PLUGGABLE - 1,
                                     (unsigned long) Tst_PLUGGABLE_UNKNOWN);
-  }
-
-/*****************************************************************************/
-/*********************** Get type of feedback from form **********************/
-/*****************************************************************************/
-
-static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void)
-  {
-   return (Tst_Feedback_t)
-	  Par_GetParToUnsignedLong ("Feedback",
-	                            0,
-                                    Tst_NUM_TYPES_FEEDBACK - 1,
-                                    (unsigned long) Tst_FEEDBACK_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -3602,8 +3520,8 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the user answer *****/
    HTM_TD_Begin ("class=\"%s CM\"",
-		      (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-		       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
+		      (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+		       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
 		      (AnsTF == row[1][0] ? "ANS_OK" :
 					    "ANS_BAD") :
 		      "ANS_0");
@@ -3612,8 +3530,8 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
    else
       HTM_Txt ("?");
@@ -3622,9 +3540,9 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_End ();
 
    /***** Write the mark *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
@@ -3812,8 +3730,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       /* Draw icon depending on user's answer */
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
-         if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-             Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+         if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+             Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
            {
             if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
               {
@@ -3841,8 +3759,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
          HTM_TD_Empty (1);
 
       /* Draw icon that indicates whether the answer is correct */
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-          Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+          Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
            {
@@ -3876,7 +3794,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
                      "TEST_MED_SHOW");
       HTM_DIV_End ();
 
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
@@ -3891,9 +3809,9 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the total score of this question *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
@@ -3951,7 +3869,7 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
 
       /***** Copy answer feedback (row[2]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4280,7 +4198,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4333,8 +4251,8 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
            }
         }
       HTM_TD_Begin ("class=\"%s CT\"",
-			 (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-			  Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
+			 (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+			  Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
 			  (Correct ? "ANS_OK" :
 				     "ANS_BAD") :
                           "ANS_0");
@@ -4345,8 +4263,8 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    /***** Write the correct answers *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       HTM_TD_Begin ("class=\"CT\"");
       HTM_TABLE_BeginPadding (2);
@@ -4369,7 +4287,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 
-	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+	 if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
@@ -4410,9 +4328,9 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the mark *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4493,8 +4411,8 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-		        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
+		       (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+		        Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
 		        (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
 						         "ANS_BAD") :
 		        "ANS_0");
@@ -4514,8 +4432,8 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
       HTM_Long (IntAnswerCorr);
    else
       HTM_Txt ("?");
@@ -4539,9 +4457,9 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the score *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4636,8 +4554,8 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-		        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
+		       (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+		        Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
 		        ((FloatAnsUsr >= FloatAnsCorr[0] &&
 			  FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
 							    "ANS_BAD") :
@@ -4656,8 +4574,8 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       HTM_Txt ("[");
       HTM_Double (FloatAnsCorr[0]);
@@ -4688,9 +4606,9 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write mark *****/
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -6869,6 +6787,54 @@ static void Tst_InsertAnswersIntoDB (void)
   }
 
 /*****************************************************************************/
+/******************* Remove all test exams made in a course ******************/
+/*****************************************************************************/
+
+void Tst_RemoveCrsTests (long CrsCod)
+  {
+   /***** Remove tests status in the course *****/
+   DB_QueryDELETE ("can not remove status of tests of a course",
+		   "DELETE FROM tst_status WHERE CrsCod=%ld",
+		   CrsCod);
+
+   /***** Remove test configuration of the course *****/
+   DB_QueryDELETE ("can not remove configuration of tests of a course",
+		   "DELETE FROM tst_config WHERE CrsCod=%ld",
+		   CrsCod);
+
+   /***** Remove associations between test questions
+          and test tags in the course *****/
+   DB_QueryDELETE ("can not remove tags associated"
+		   " to questions of tests of a course",
+		   "DELETE FROM tst_question_tags"
+	           " USING tst_questions,tst_question_tags"
+                   " WHERE tst_questions.CrsCod=%ld"
+                   " AND tst_questions.QstCod=tst_question_tags.QstCod",
+		   CrsCod);
+
+   /***** Remove test tags in the course *****/
+   DB_QueryDELETE ("can not remove tags of test of a course",
+		   "DELETE FROM tst_tags WHERE CrsCod=%ld",
+		   CrsCod);
+
+   /***** Remove test answers in the course *****/
+   DB_QueryDELETE ("can not remove answers of tests of a course",
+		   "DELETE FROM tst_answers USING tst_questions,tst_answers"
+                   " WHERE tst_questions.CrsCod=%ld"
+                   " AND tst_questions.QstCod=tst_answers.QstCod",
+		   CrsCod);
+
+   /***** Remove media associated to test questions in the course *****/
+   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
+
+   /***** Remove test questions in the course *****/
+   DB_QueryDELETE ("can not remove test questions of a course",
+		   "DELETE FROM tst_questions WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /******************** Remove answers from a test question ********************/
 /*****************************************************************************/
 
@@ -7516,1052 +7482,4 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
    DB_FreeMySQLResult (&mysql_res);
 
    return NumCourses;
-  }
-
-/*****************************************************************************/
-/************ Select users and dates to show their test results **************/
-/*****************************************************************************/
-
-void Tst_SelUsrsToViewUsrsTstResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
-   extern const char *Txt_View_test_results;
-
-   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeUsrTstRes,NULL,
-				     Txt_Results,
-                                     Hlp_ASSESSMENT_Tests_results,
-                                     Txt_View_test_results,
-				     true);	// Put form with date range
-  }
-
-/*****************************************************************************/
-/******************* Select dates to show my test results ********************/
-/*****************************************************************************/
-
-void Tst_SelDatesToSeeMyTstResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
-   extern const char *Txt_View_test_results;
-
-   /***** Begin form *****/
-   Frm_StartForm (ActSeeMyTstRes);
-
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
-                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
-
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_test_results);
-
-   /***** End form *****/
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/***************************** Show my test results **************************/
-/*****************************************************************************/
-
-void Tst_ShowMyTstResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
-
-   /***** Get starting and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
-
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
-                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-
-   /***** Header of the table with the list of users *****/
-   Tst_ShowHeaderTestResults ();
-
-   /***** List my test results *****/
-   Tst_GetConfigTstFromDB ();	// To get feedback type
-   Tst_ShowTstResults (&Gbl.Usrs.Me.UsrDat);
-
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/********************* Store test result in database *************************/
-/*****************************************************************************/
-
-static long Tst_CreateTestResultInDB (void)
-  {
-   /***** Insert new test result into table *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create new test result",
-				"INSERT INTO tst_exams"
-				" (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
-				" VALUES"
-				" (%ld,%ld,'%c',NOW(),%u)",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Test.AllowTeachers ? 'Y' :
-							 'N',
-				Gbl.Test.NumQsts);
-  }
-
-/*****************************************************************************/
-/********************* Store test result in database *************************/
-/*****************************************************************************/
-
-static void Tst_StoreScoreOfTestResultInDB (long TstCod,
-                                          unsigned NumQstsNotBlank,double Score)
-  {
-   /***** Update score in test result *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update result of test result",
-		   "UPDATE tst_exams"
-	           " SET NumQstsNotBlank=%u,Score='%.15lg'"
-	           " WHERE TstCod=%ld",
-		   NumQstsNotBlank,Score,
-		   TstCod);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
-/******************* Get users and show their test results *******************/
-/*****************************************************************************/
-
-void Tst_GetUsrsAndShowTstResults (void)
-  {
-   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Tst_ShowUsrsTstResults,
-                                  Tst_SelUsrsToViewUsrsTstResults);
-  }
-
-/*****************************************************************************/
-/******************** Show test results for several users ********************/
-/*****************************************************************************/
-
-static void Tst_ShowUsrsTstResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
-   const char *Ptr;
-
-   /***** Get starting and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
-
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
-		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-
-   /***** Header of the table with the list of users *****/
-   Tst_ShowHeaderTestResults ();
-
-   /***** List the test exams of the selected users *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-	   {
-	    /***** Show test results *****/
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	    Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
-	   }
-     }
-
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/*********************** Show header of my test results **********************/
-/*****************************************************************************/
-
-static void Tst_ShowHeaderTestResults (void)
-  {
-   extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Date;
-   extern const char *Txt_Questions;
-   extern const char *Txt_Non_blank_BR_questions;
-   extern const char *Txt_Score;
-   extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
-   extern const char *Txt_Grade;
-
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"RT",Txt_Date);
-   HTM_TH (1,1,"RT",Txt_Questions);
-   HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
-   HTM_TH (1,1,"RT",Txt_Score);
-   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   HTM_TH (1,1,"RT",Txt_Grade);
-   HTM_TH_Empty (1);
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show the test results of a user in the current course ***********/
-/*****************************************************************************/
-
-static void Tst_ShowTstResults (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_View_test;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumExams;
-   unsigned NumTest;
-   static unsigned UniqueId = 0;
-   char *Id;
-   long TstCod;
-   unsigned NumQstsInThisTest;
-   unsigned NumQstsNotBlankInThisTest;
-   unsigned NumTotalQsts = 0;
-   unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisTest;
-   double TotalScoreOfAllTests = 0.0;
-   unsigned NumExamsVisibleByTchs = 0;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   bool ICanViewTest;
-   bool ICanViewScore;
-   time_t TimeUTC;
-   char *ClassDat;
-
-   /***** Make database query *****/
-   NumExams =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
-			      "SELECT TstCod,"			// row[0]
-			             "AllowTeachers,"		// row[1]
-			             "UNIX_TIMESTAMP(TstTime),"	// row[2]
-			             "NumQsts,"			// row[3]
-			             "NumQstsNotBlank,"		// row[4]
-			             "Score"			// row[5]
-			      " FROM tst_exams"
-			      " WHERE CrsCod=%ld AND UsrCod=%ld"
-			      " AND TstTime>=FROM_UNIXTIME(%ld)"
-			      " AND TstTime<=FROM_UNIXTIME(%ld)"
-			      " ORDER BY TstCod",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      UsrDat->UsrCod,
-			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
-			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
-
-   /***** Show user's data *****/
-   HTM_TR_Begin (NULL);
-   Usr_ShowTableCellWithUsrData (UsrDat,NumExams);
-
-   /***** Get and print test results *****/
-   if (NumExams)
-     {
-      for (NumTest = 0;
-           NumTest < NumExams;
-           NumTest++)
-        {
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get test code (row[0]) */
-	 if ((TstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of test result.");
-
-	 /* Get if teachers are allowed to see this test result (row[1]) */
-	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
-	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
-	                                     "DAT_LIGHT";
-
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       ICanViewTest  = ItsMe;
-	       ICanViewScore = ItsMe &&
-		               Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_DEG_ADM:
-	    case Rol_CTR_ADM:
-	    case Rol_INS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe ||
-	                       Gbl.Test.AllowTeachers;
-	       break;
-	    case Rol_SYS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = true;
-	       break;
-	    default:
-	       ICanViewTest  =
-	       ICanViewScore = false;
-               break;
-	   }
-
-         if (NumTest)
-            HTM_TR_Begin (NULL);
-
-         /* Write date and time (row[2] holds UTC date-time) */
-         TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
-         UniqueId++;
-	 if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
-		       Id,ClassDat,Gbl.RowEvenOdd);
-	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,false,0x7);
-	 HTM_TD_End ();
-         free (Id);
-
-         /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
-            NumQstsInThisTest = 0;
-	 if (Gbl.Test.AllowTeachers)
-	    NumTotalQsts += NumQstsInThisTest;
-
-         /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
-            NumQstsNotBlankInThisTest = 0;
-	 if (Gbl.Test.AllowTeachers)
-	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
-
-         /* Get score (row[5]) */
-	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
-            ScoreInThisTest = 0.0;
-         Str_SetDecimalPointToLocal ();	// Return to local system
-	 if (Gbl.Test.AllowTeachers)
-	    TotalScoreOfAllTests += ScoreInThisTest;
-
-         /* Write number of questions */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	    HTM_Unsigned (NumQstsInThisTest);
-	 HTM_TD_End ();
-
-         /* Write number of questions not blank */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	    HTM_Unsigned (NumQstsNotBlankInThisTest);
-	 HTM_TD_End ();
-
-	 /* Write score */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-	    HTM_Double2Decimals (ScoreInThisTest);
-	 HTM_TD_End ();
-
-         /* Write average score per question */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-	    HTM_Double2Decimals (NumQstsInThisTest ? ScoreInThisTest /
-		                            (double) NumQstsInThisTest :
-			                    0.0);
-	 HTM_TD_End ();
-
-         /* Write grade */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-            Tst_ComputeAndShowGrade (NumQstsInThisTest,ScoreInThisTest,Tst_SCORE_MAX);
-	 HTM_TD_End ();
-
-	 /* Link to show this result */
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	   {
-	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
-						              ActSeeOneTstResOth);
-	    Tst_PutParamTstCod (TstCod);
-	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
-	    Frm_EndForm ();
-	   }
-	 HTM_TD_End ();
-	 HTM_TR_End ();
-
-	 if (Gbl.Test.AllowTeachers)
-            NumExamsVisibleByTchs++;
-        }
-
-      /***** Write totals for this user *****/
-      Tst_ShowTestResultsSummaryRow (ItsMe,NumExamsVisibleByTchs,
-                                     NumTotalQsts,NumTotalQstsNotBlank,
-                                     TotalScoreOfAllTests);
-     }
-   else
-     {
-      HTM_TD_ColouredEmpty (7);
-      HTM_TR_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of test **********************/
-/*****************************************************************************/
-
-static void Tst_PutParamTstCod (long TstCod)
-  {
-   Par_PutHiddenParamLong (NULL,"TstCod",TstCod);
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of test ***********************/
-/*****************************************************************************/
-
-static long Tst_GetParamTstCod (void)
-  {
-   /***** Get code of test *****/
-   return Par_GetParToLong ("TstCod");
-  }
-
-/*****************************************************************************/
-/**************** Show row with summary of user's test results ***************/
-/*****************************************************************************/
-
-static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
-                                           unsigned NumExams,
-                                           unsigned NumTotalQsts,
-                                           unsigned NumTotalQstsNotBlank,
-                                           double TotalScoreOfAllTests)
-  {
-   extern const char *Txt_Visible_tests;
-   bool ICanViewTotalScore;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 ICanViewTotalScore = ItsMe &&
-			      Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-	 ICanViewTotalScore = ItsMe ||
-			      NumExams;
-	 break;
-      case Rol_SYS_ADM:
-	 ICanViewTotalScore = true;
-	 break;
-      default:
-	 ICanViewTotalScore = false;
-	 break;
-     }
-
-   /***** Start row *****/
-   HTM_TR_Begin (NULL);
-
-   /***** Row title *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Visible_tests);
-   HTM_Unsigned (NumExams);
-   HTM_TD_End ();
-
-   /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumExams)
-      HTM_Unsigned (NumTotalQsts);
-   HTM_TD_End ();
-
-   /***** Write total number of questions not blank *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumExams)
-      HTM_Unsigned (NumTotalQstsNotBlank);
-   HTM_TD_End ();
-
-   /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-      HTM_Double2Decimals (TotalScoreOfAllTests);
-   HTM_TD_End ();
-
-   /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-      HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
-			         0.0);
-   HTM_TD_End ();
-
-   /***** Write score over Tst_SCORE_MAX *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-      Tst_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,Tst_SCORE_MAX);
-   HTM_TD_End ();
-
-   /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/******************* Show one test result of another user ********************/
-/*****************************************************************************/
-
-void Tst_ShowOneTstResult (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Test_result;
-   extern const char *Txt_The_user_does_not_exist;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Date;
-   extern const char *Txt_Questions;
-   extern const char *Txt_non_blank_QUESTIONS;
-   extern const char *Txt_Score;
-   extern const char *Txt_Grade;
-   extern const char *Txt_Tags;
-   long TstCod;
-   time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
-   unsigned NumQstsNotBlank;
-   double TotalScore;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
-   bool ItsMe;
-   bool ICanViewTest;
-   bool ICanViewScore;
-
-   /***** Get the code of the test *****/
-   if ((TstCod = Tst_GetParamTstCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of test is missing.");
-
-   /***** Get test result data *****/
-   Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
-				  &NumQstsNotBlank,&TotalScore);
-   Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
-
-   /***** Check if I can view this test result *****/
-   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 ICanViewTest = ItsMe;
-	 if (ItsMe)
-	   {
-	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
-	   }
-	 else
-	    ICanViewScore = false;
-	 break;
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActSeeOneTstResMe:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe;
-	       break;
-	    case ActSeeOneTstResOth:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe ||
-			       Gbl.Test.AllowTeachers;
-	       break;
-	    default:
-	       ICanViewTest  =
-	       ICanViewScore = false;
-	       break;
-	   }
-	 break;
-      case Rol_SYS_ADM:
-	 ICanViewTest  =
-	 ICanViewScore = true;
-	 break;
-      default:
-	 ICanViewTest  =
-	 ICanViewScore = false;
-	 break;
-     }
-
-   if (ICanViewTest)	// I am allowed to view this test result
-     {
-      /***** Get questions and user's answers of the test result from database *****/
-      Tst_GetTestResultQuestionsFromDB (TstCod);
-
-      /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Test_result,NULL,
-                    Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
-
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
-
-      /***** Header row *****/
-      /* Get data of the user who made the test */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
-      if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-         Lay_NoPermissionExit ();
-
-      /* User */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-      HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
-      if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-	 HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
-      if (Gbl.Usrs.Other.UsrDat.FirstName[0])
-	 HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
-      HTM_BR ();
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-							   NULL,
-			"PHOTO45x60",Pho_ZOOM,false);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /* Test date */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Date);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
-      Dat_WriteLocalDateHMSFromUTC ("test",TstTimeUTC,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,true,0x7);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /* Number of questions */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Questions);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_TxtF ("%u (%u %s)",
-	        Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /* Score */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Score);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      if (ICanViewScore)
-	 HTM_Double2Decimals (TotalScore);
-      else
-	 HTM_Txt ("?");	// No feedback
-      HTM_TD_End ();
-
-      /* Grade */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Grade);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      if (ICanViewScore)
-         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
-      else
-	 HTM_Txt ("?");	// No feedback
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /* Tags present in this test */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Tags);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      Tst_ShowTstTagsPresentInATestResult (TstCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Write answers and solutions *****/
-      Tst_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  Gbl.Test.NumQsts,TstTimeUTC);
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Write total mark of test *****/
-      if (ICanViewScore)
-	{
-	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (TotalScore);
-	 HTM_BR ();
-	 HTM_TxtColonNBSP (Txt_Grade);
-         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,Tst_SCORE_MAX);
-	 HTM_DIV_End ();
-	}
-
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
-   else	// I am not allowed to view this test result
-      Lay_NoPermissionExit ();
-  }
-
-/*****************************************************************************/
-/************************* Show the result of a test *************************/
-/*****************************************************************************/
-
-void Tst_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC)
-  {
-   extern const char *Txt_Question_modified;
-   extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQst;
-   long QstCod;
-   double ScoreThisQst;
-   bool AnswerIsNotBlank;
-   bool ThisQuestionHasBeenEdited;
-   time_t EditTimeUTC;
-
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
-     {
-      Gbl.RowEvenOdd = NumQst % 2;
-
-      /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Gbl.Test.QstCodes[NumQst],&mysql_res))	// Question exists
-	{
-	 /***** Get row of the result of the query *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] QstCod
-	 row[1] UNIX_TIMESTAMP(EditTime)
-	 row[2] AnsType
-	 row[3] Shuffle
-	 row[4] Stem
-	 row[5] Feedback
-	 row[6] MedCod
-	 row[7] NumHits
-	 row[8] NumHitsNotBlank
-	 row[9] Score
-	 */
-	 /***** If this question has been edited later than test time
-	        ==> don't show question ****/
-	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-	 ThisQuestionHasBeenEdited = false;
-	 if (EditTimeUTC > TstTimeUTC)
-	    ThisQuestionHasBeenEdited = true;
-
-	 if (ThisQuestionHasBeenEdited)
-	   {
-	    /***** Question has been edited *****/
-	    HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	    HTM_Unsigned (NumQst + 1);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	    HTM_Txt (Txt_Question_modified);
-	    HTM_TD_End ();
-
-	    HTM_TR_End ();
-	   }
-	 else
-	   {
-	    /***** Get the code of question (row[0]) *****/
-	    if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong code of question.");
-
-	    /***** Write questions and answers *****/
-	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                            UsrDat,
-				    NumQst,QstCod,row,
-				    &ScoreThisQst,	// Not used here
-				    &AnswerIsNotBlank);	// Not used here
-	   }
-	}
-      else
-	{
-	 /***** Question does not exists *****/
-         HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumQst + 1);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Txt (Txt_Question_removed);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-  }
-
-/*****************************************************************************/
-/********* Get data of a test result using its test result code **************/
-/*****************************************************************************/
-
-static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQstsNotBlank,double *Score)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data"
-				  " of a test result of a user",
-		       "SELECT UsrCod,"				// row[0]
-		              "AllowTeachers,"			// row[1]
-			      "UNIX_TIMESTAMP(TstTime),"	// row[2]
-		              "NumQsts,"			// row[3]
-		              "NumQstsNotBlank,"		// row[4]
-		              "Score"				// row[5]
-		       " FROM tst_exams"
-		       " WHERE TstCod=%ld AND CrsCod=%ld",
-		       TstCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get user code (row[0]) */
-      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get if teachers are allowed to see this test result (row[1]) */
-      Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
-
-      /* Get date-time (row[2] holds UTC date-time) */
-      *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
-
-      /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Gbl.Test.NumQsts) != 1)
-	 Gbl.Test.NumQsts = 0;
-
-      /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
-	 *NumQstsNotBlank = 0;
-
-      /* Get score (row[5]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[5],"%lf",Score) != 1)
-	 *Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************ Store user's answers of an test result into database ***********/
-/*****************************************************************************/
-
-static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
-  {
-   char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
-   char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-
-   /***** Replace each separator of multiple parameters by a comma *****/
-   /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
-   Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrAnswersOneQst[NumQst],Answers);
-
-   /***** Insert question and user's answers into database *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryINSERT ("can not insert a question of a test result",
-		   "INSERT INTO tst_exam_questions"
-		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
-		   " VALUES"
-		   " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		   TstCod,QstCod,
-		   NumQst,	// 0, 1, 2, 3...
-		   Score,
-		   Indexes,
-		   Answers);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
-/************ Get the questions of a test result from database ***************/
-/*****************************************************************************/
-
-static void Tst_GetTestResultQuestionsFromDB (long TstCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQst;
-
-   /***** Get questions of a test result from database *****/
-   Gbl.Test.NumQsts =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
-					 " of a test result",
-			      "SELECT QstCod,"	// row[0]
-			             "Indexes,"	// row[1]
-			             "Answers"	// row[2]
-			      " FROM tst_exam_questions"
-			      " WHERE TstCod=%ld ORDER BY QstInd",
-			      TstCod);
-
-   /***** Get questions codes *****/
-   for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
-	NumQst++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get question code */
-      if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-
-      /* Get indexes for this question (row[1]) */
-      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],
-                Tst_MAX_BYTES_INDEXES_ONE_QST);
-
-      /* Get answers selected by user for this question (row[2]) */
-      Str_Copy (Gbl.Test.StrAnswersOneQst[NumQst],row[2],
-                Tst_MAX_BYTES_ANSWERS_ONE_QST);
-
-      /* Replace each comma by a separator of multiple parameters */
-      /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrIndexesOneQst[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrAnswersOneQst[NumQst]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********************** Remove test results made by a user ********************/
-/*****************************************************************************/
-
-void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod)
-  {
-   /***** Remove test results made by the specified user *****/
-   DB_QueryDELETE ("can not remove test results made by a user",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
-                   " WHERE tst_exams.UsrCod=%ld"
-                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-		   UsrCod);
-
-   DB_QueryDELETE ("can not remove test results made by a user",
-		   "DELETE FROM tst_exams"
-	           " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/************** Remove test results made by a user in a course ***************/
-/*****************************************************************************/
-
-void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod)
-  {
-   /***** Remove test results made by the specified user *****/
-   DB_QueryDELETE ("can not remove test results made by a user in a course",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
-                   " WHERE tst_exams.CrsCod=%ld AND tst_exams.UsrCod=%ld"
-                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-		   CrsCod,UsrCod);
-
-   DB_QueryDELETE ("can not remove test results made by a user in a course",
-		   "DELETE FROM tst_exams"
-	           " WHERE CrsCod=%ld AND UsrCod=%ld",
-		   CrsCod,UsrCod);
-  }
-
-/*****************************************************************************/
-/****************** Remove all test results made in a course *****************/
-/*****************************************************************************/
-
-void Tst_RemoveCrsTestResults (long CrsCod)
-  {
-   /***** Remove questions of test results made in the course *****/
-   DB_QueryDELETE ("can not remove test results made in a course",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
-                   " WHERE tst_exams.CrsCod=%ld"
-                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-		   CrsCod);
-
-   /***** Remove test results made in the course *****/
-   DB_QueryDELETE ("can not remove test results made in a course",
-		   "DELETE FROM tst_exams WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/******************* Remove all test exams made in a course ******************/
-/*****************************************************************************/
-
-void Tst_RemoveCrsTests (long CrsCod)
-  {
-   /***** Remove tests status in the course *****/
-   DB_QueryDELETE ("can not remove status of tests of a course",
-		   "DELETE FROM tst_status WHERE CrsCod=%ld",
-		   CrsCod);
-
-   /***** Remove test configuration of the course *****/
-   DB_QueryDELETE ("can not remove configuration of tests of a course",
-		   "DELETE FROM tst_config WHERE CrsCod=%ld",
-		   CrsCod);
-
-   /***** Remove associations between test questions
-          and test tags in the course *****/
-   DB_QueryDELETE ("can not remove tags associated"
-		   " to questions of tests of a course",
-		   "DELETE FROM tst_question_tags"
-	           " USING tst_questions,tst_question_tags"
-                   " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_question_tags.QstCod",
-		   CrsCod);
-
-   /***** Remove test tags in the course *****/
-   DB_QueryDELETE ("can not remove tags of test of a course",
-		   "DELETE FROM tst_tags WHERE CrsCod=%ld",
-		   CrsCod);
-
-   /***** Remove test answers in the course *****/
-   DB_QueryDELETE ("can not remove answers of tests of a course",
-		   "DELETE FROM tst_answers USING tst_questions,tst_answers"
-                   " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_answers.QstCod",
-		   CrsCod);
-
-   /***** Remove media associated to test questions in the course *****/
-   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
-   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
-
-   /***** Remove test questions in the course *****/
-   DB_QueryDELETE ("can not remove test questions of a course",
-		   "DELETE FROM tst_questions WHERE CrsCod=%ld",
-		   CrsCod);
   }

@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.122.4 (2020-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.123 (2020-02-16)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -507,6 +507,7 @@ ps2pdf source.ps destination.pdf
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Urgente: Añadir nuevos niveles de realimentación tras sugerencia de Mancia y conversación con Javier.
 
+	Version 19.123:   Feb 16, 2020	New module swad_test_result for test results. (278815 lines)
 	Version 19.122.4: Feb 14, 2020	Fixed bug refreshing degree average photo. (278699 lines)
 	Version 19.122.3: Feb 14, 2020	Fixed bug in games, reported by Gustavo Romero López.
 					Fixed bug in listing of departments, reported by Daniel Haro Contreras. (278700 lines)

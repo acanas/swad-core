@@ -3627,7 +3627,7 @@ int swad__getTestConfig (struct soap *soap,
                          char *wsKey,int courseCode,				// input
                          struct swad__getTestConfigOutput *getTestConfigOut)	// output
   {
-   extern const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK];
+   extern const char *TsR_FeedbackXML[TsR_NUM_TYPES_FEEDBACK];
    int ReturnCode;
 
    /***** Initializations *****/
@@ -3671,7 +3671,7 @@ int swad__getTestConfig (struct soap *soap,
 
    /***** Set default result to empty *****/
    getTestConfigOut->numQuestions = getTestConfigOut->minQuestions = getTestConfigOut->defQuestions = getTestConfigOut->maxQuestions = 0;
-   getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_FEEDBACK_TYPE + 1);
+   getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
@@ -3683,8 +3683,8 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->defQuestions = (int) Gbl.Test.Config.Def;
    getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
    Str_Copy (getTestConfigOut->feedback,
-             Tst_FeedbackXML[Gbl.Test.Config.Feedback],
-             Tst_MAX_BYTES_FEEDBACK_TYPE);
+             TsR_FeedbackXML[Gbl.Test.Config.Feedback],
+             TsR_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
    if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES &&
@@ -3717,7 +3717,7 @@ static int API_GetTstConfig (long CrsCod)
      {
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
       Gbl.Test.Config.Min = Gbl.Test.Config.Def = Gbl.Test.Config.Max = 0;
-      Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
+      Gbl.Test.Config.Feedback = TsR_FEEDBACK_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

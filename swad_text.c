@@ -51241,9 +51241,9 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #endif
 	};
 
-const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
+const char *Txt_TST_STR_FEEDBACK[TsR_NUM_TYPES_FEEDBACK] =
 	{
-	[Tst_FEEDBACK_NOTHING] =
+	[TsR_FEEDBACK_NOTHING] =
 #if   L==1	// ca
 	"Ninguna realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -51264,7 +51264,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Nenhum feedback"
 #endif
 	,
-	[Tst_FEEDBACK_TOTAL_RESULT] =
+	[TsR_FEEDBACK_TOTAL_RESULT] =
 #if   L==1	// ca
 	"Poca: solo puntuaci&oacute;n total"	// Necessita traduccio
 #elif L==2	// de
@@ -51285,7 +51285,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Pouco: apenas a pontua&ccedil;&atilde;o total"
 #endif
 	,
-	[Tst_FEEDBACK_EACH_RESULT] =
+	[TsR_FEEDBACK_EACH_RESULT] =
 #if   L==1	// ca
 	"Media: puntuaci&oacute;n de cada pregunta"	// Necessita traduccio
 #elif L==2	// de
@@ -51306,7 +51306,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"M&eacute;dio: pontua&ccedil;&atilde;o de cada quest&atilde;o"
 #endif
 	,
-	[Tst_FEEDBACK_EACH_GOOD_BAD] =
+	[TsR_FEEDBACK_EACH_GOOD_BAD] =
 #if   L==1	// ca
 	"Alta: respuesta correcta en cada pregunta"			// Necessita traduccio
 #elif L==2	// de
@@ -51327,7 +51327,7 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	"Alto: resposta correta para cada quest&atilde;o"
 #endif
 	,
-	[Tst_FEEDBACK_FULL_FEEDBACK] =
+	[TsR_FEEDBACK_FULL_FEEDBACK] =
 #if   L==1	// ca
 	"M&aacute;xima: mostrar texto de realimentaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de

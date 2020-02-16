@@ -1032,7 +1032,7 @@ void McR_ShowOneMchResult (void)
 				   &NumQsts,
 				   &NumQstsNotBlank,
 				   &TotalScore);
-   Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
+   Gbl.Test.Config.Feedback = TsR_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
 
    /***** Check if I can view this match result *****/
    ItsMe = Usr_ItsMe (UsrDat->UsrCod);
@@ -1049,7 +1049,7 @@ void McR_ShowOneMchResult (void)
 	       if (ICanViewResult)
 		 {
 		  Tst_GetConfigTstFromDB ();	// To get feedback type
-		  ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+		  ICanViewScore = Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING;
 		 }
 	       else
 		  ICanViewScore  = false;
@@ -1220,7 +1220,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      Tst_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
+      TsR_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1383,7 +1383,7 @@ static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
+	 if (ItsMe && Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING)
 	    ShowResultThisMatch = McR_GetVisibilityMchResultFromDB (MchCod);
 	 else
 	    ShowResultThisMatch = false;
