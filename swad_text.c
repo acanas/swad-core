@@ -51447,7 +51447,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 
 const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	{
-	[TsR_VISIBLE_QST_ANS_TEXT] =
+	[TsR_VISIBLE_QST_ANS_TXT] =
 #if   L==1	// ca
 	"Text de preguntes i respostes"
 #elif L==2	// de
@@ -51468,7 +51468,7 @@ const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	"Texto de perguntas e respostas"
 #endif
 	,
-	[TsR_VISIBLE_FEEDBACK_TEXT] =
+	[TsR_VISIBLE_FEEDBACK_TXT] =
 #if   L==1	// ca
 	"Text de realimentaci&oacute;"
 #elif L==2	// de

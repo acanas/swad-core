@@ -3623,6 +3623,8 @@ int swad__sendNotice (struct soap *soap,
 /****************** Return test configuration in a course ********************/
 /*****************************************************************************/
 
+#define TsR_MAX_BYTES_FEEDBACK_TYPE		  32
+
 int swad__getTestConfig (struct soap *soap,
                          char *wsKey,int courseCode,				// input
                          struct swad__getTestConfigOutput *getTestConfigOut)	// output
@@ -3687,19 +3689,19 @@ int swad__getTestConfig (struct soap *soap,
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */
-        if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE   )) == 0)
+   if (!TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"nothing",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) == 0)
+   else if (!TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"totalResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) == 0)
+   else if (!TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"eachResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT )) == 0)
+   else if (!TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"eachGoodBad",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);

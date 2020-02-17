@@ -1049,7 +1049,7 @@ void McR_ShowOneMchResult (void)
 	       if (ICanViewResult)
 		 {
 		  Tst_GetConfigTstFromDB ();	// To get feedback type
-		  ICanViewScore = (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
+		  ICanViewScore = TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 		 }
 	       else
 		  ICanViewScore  = false;

@@ -349,7 +349,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
-		               (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
+		               TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
@@ -508,7 +508,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
      {
       case Rol_STD:
 	 ICanViewTotalScore = ItsMe &&
-		              (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
+		              TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -618,7 +618,7 @@ void TsR_ShowOneTstResult (void)
 	 if (ItsMe)
 	   {
 	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
+	    ICanViewScore = TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	   }
 	 else
 	    ICanViewScore = false;
@@ -1182,4 +1182,33 @@ void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility)
       HTM_LABEL_End ();
       HTM_BR ();
      }
+  }
+
+/*****************************************************************************/
+/***************************** Get visibility items **************************/
+/*****************************************************************************/
+
+bool TsR_IsVisibleQstAndAnsTxt (unsigned Visibility)
+  {
+   return (Visibility & (1 << TsR_VISIBLE_QST_ANS_TXT)) != 0;
+  }
+
+bool TsR_IsVisibleFeedbackTxt (unsigned Visibility)
+  {
+   return (Visibility & (1 << TsR_VISIBLE_FEEDBACK_TXT)) != 0;
+  }
+
+bool TsR_IsVisibleCorrectAns (unsigned Visibility)
+  {
+   return (Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0;
+  }
+
+bool TsR_IsVisibleEachQstScore (unsigned Visibility)
+  {
+   return (Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0;
+  }
+
+bool TsR_IsVisibleTotalScore (unsigned Visibility)
+  {
+   return (Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
   }

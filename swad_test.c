@@ -488,7 +488,7 @@ void Tst_AssessTest (void)
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
-	 if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0)
+	 if (TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility))
 	   {
 	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	    HTM_TxtColonNBSP (Txt_Score);
@@ -992,7 +992,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
-	 if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
+	 if (TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
       default:
@@ -3499,16 +3499,16 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the user answer *****/
    HTM_TD_Begin ("class=\"%s CM\"",
-		 (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
-		 (AnsTF == row[1][0] ? "ANS_OK" :
-				       "ANS_BAD") :
-		 "ANS_0");
+		 TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility) ?
+		    (AnsTF == row[1][0] ? "ANS_OK" :
+					  "ANS_BAD") :
+		    "ANS_0");
    Tst_WriteAnsTF (AnsTF);
    HTM_TD_End ();
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+   if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
       Tst_WriteAnsTF (row[1][0]);
    else
       HTM_Txt ("?");
@@ -3517,7 +3517,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_End ();
 
    /***** Write the score of this question *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
+   if (TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
@@ -3705,7 +3705,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       /* Draw icon depending on user's answer */
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
-         if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+         if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
            {
             if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
               {
@@ -3733,7 +3733,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
          HTM_TD_Empty (1);
 
       /* Draw icon that indicates whether the answer is correct */
-      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+      if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
            {
@@ -3767,7 +3767,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
                      "TEST_MED_SHOW");
       HTM_DIV_End ();
 
-      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+      if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
@@ -3781,8 +3781,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       HTM_TR_End ();
      }
 
-   /***** Write the total score of this question *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
+   /***** Write the score of this question *****/
+   if (TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
@@ -3840,7 +3840,7 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
 
       /***** Copy answer feedback (row[2]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
+      if (TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4169,7 +4169,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
-      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
+      if (TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4222,10 +4222,10 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
            }
         }
       HTM_TD_Begin ("class=\"%s CT\"",
-		    (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
-		    (Correct ? "ANS_OK" :
-			       "ANS_BAD") :
-		    "ANS_0");
+		    TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility) ?
+		       (Correct ? "ANS_OK" :
+				  "ANS_BAD") :
+		       "ANS_0");
       HTM_Txt (Gbl.Test.StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
@@ -4233,7 +4233,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    /***** Write the correct answers *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+   if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
      {
       HTM_TD_Begin ("class=\"CT\"");
       HTM_TABLE_BeginPadding (2);
@@ -4256,7 +4256,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 
-         if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
+         if (TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
@@ -4296,8 +4296,8 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          *ScoreThisQst = 0.0;
      }
 
-   /***** Write the mark *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
+   /***** Write the score of this question *****/
+   if (TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4378,10 +4378,10 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
-		       (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
-						        "ANS_BAD") :
-		       "ANS_0");
+		       TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility) ?
+			  (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
+							   "ANS_BAD") :
+			  "ANS_0");
          HTM_Long (IntAnswerUsr);
          HTM_TD_End ();
 	}
@@ -4398,7 +4398,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+   if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
       HTM_Long (IntAnswerCorr);
    else
       HTM_Txt ("?");
@@ -4421,8 +4421,8 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
          *ScoreThisQst = 0.0;
      }
 
-   /***** Write the score *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
+   /***** Write the score of this question *****/
+   if (TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4517,11 +4517,11 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
-		       ((FloatAnsUsr >= FloatAnsCorr[0] &&
-			 FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
-							   "ANS_BAD") :
-		       "ANS_0");
+		       TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility) ?
+			  ((FloatAnsUsr >= FloatAnsCorr[0] &&
+			    FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
+							      "ANS_BAD") :
+			  "ANS_0");
          HTM_Double (FloatAnsUsr);
         }
       else				// Not a floating point number
@@ -4536,7 +4536,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
+   if (TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
      {
       HTM_Txt ("[");
       HTM_Double (FloatAnsCorr[0]);
@@ -4566,8 +4566,8 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
          *ScoreThisQst = 0.0;
      }
 
-   /***** Write mark *****/
-   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
+   /***** Write the score of this question *****/
+   if (TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer

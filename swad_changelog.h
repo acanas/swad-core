@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.125 (2020-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.125.1 (2020-02-17)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -509,6 +509,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Add visibility to API function getTestConfig
 // TODO: Add visibility to games
 
+	Version 19.125.1: Feb 17, 2020	Code refactoring in test. (278851 lines)
 	Version 19.125:   Feb 17, 2020	Removed feedback from test config form. (278823 lines)
 	Version 19.124.1: Feb 17, 2020	Fixed bug reported by Javier Fernández Baldomero.
 					Result visibility in tests is stored in database. (279010 lines)

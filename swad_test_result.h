@@ -33,9 +33,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define TsR_SCORE_MAX				  10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
-
-#define TsR_MAX_BYTES_FEEDBACK_TYPE		  32
+#define TsR_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -44,8 +42,8 @@
 #define TsR_NUM_ITEMS_VISIBILITY 5
 typedef enum
   {
-   TsR_VISIBLE_QST_ANS_TEXT   = 0,	// Questions and answers text
-   TsR_VISIBLE_FEEDBACK_TEXT  = 1,	// Feedback text
+   TsR_VISIBLE_QST_ANS_TXT    = 0,	// Questions and answers text
+   TsR_VISIBLE_FEEDBACK_TXT   = 1,	// Feedback text
    TsR_VISIBLE_CORRECT_ANSWER = 2,	// Correct answers
    TsR_VISIBLE_EACH_QST_SCORE = 3,	// Score of each question
    TsR_VISIBLE_TOTAL_SCORE    = 4,	// Total score
@@ -74,5 +72,11 @@ void TsR_RemoveCrsTestResults (long CrsCod);
 
 unsigned TsR_GetVisibilityFromForm (void);
 void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility);
+
+bool TsR_IsVisibleQstAndAnsTxt (unsigned Visibility);
+bool TsR_IsVisibleFeedbackTxt (unsigned Visibility);
+bool TsR_IsVisibleCorrectAns (unsigned Visibility);
+bool TsR_IsVisibleEachQstScore (unsigned Visibility);
+bool TsR_IsVisibleTotalScore (unsigned Visibility);
 
 #endif
