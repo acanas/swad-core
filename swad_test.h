@@ -136,6 +136,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			     struct UsrData *UsrDat,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
+			     unsigned Visibility,
                              double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);

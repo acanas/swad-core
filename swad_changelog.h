@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.125.3 (2020-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.125.4 (2020-02-17)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -509,6 +509,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Add visibility to games
 // TODO: Sugerencia de Jesús González Peñalver: añadir un poco más de espacio entre pregunta y pregunta en las opciones de un juego
 
+	Version 19.125.4: Feb 17, 2020	Changes in visibility of answers. (278930 lines)
 	Version 19.125.3: Feb 17, 2020	Changes in visibility of question stem. (278898 lines)
 	Version 19.125.2: Feb 17, 2020	Removed Feedback field from tst_config database table. (278850 lines)
 					1 change necessary in database:

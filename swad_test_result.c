@@ -900,6 +900,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            UsrDat,
 				    NumQst,QstCod,row,
+				    Gbl.Test.Config.Visibility,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }
