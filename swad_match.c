@@ -2886,7 +2886,8 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
    /* Write stem (row[1]) */
-   Tst_WriteQstStem (row[1],"MCH_TCH_STEM");
+   Tst_WriteQstStem (row[1],"MCH_TCH_STEM",
+		     true);	// Visible
 
    /* Get media (row[2]) */
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);

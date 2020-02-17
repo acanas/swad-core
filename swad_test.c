@@ -972,7 +972,19 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 
    /***** Write stem (row[4]) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteQstStem (row[4],"TEST_EXA");
+   switch (ActionToDoWithQuestions)
+     {
+      case Tst_SHOW_TEST_TO_ANSWER:
+         Tst_WriteQstStem (row[4],"TEST_EXA",
+			   true);	// Visible
+	 break;
+      case Tst_SHOW_TEST_RESULT:
+         Tst_WriteQstStem (row[4],"TEST_EXA",
+			   TsR_IsVisibleQstAndAnsTxt (Gbl.Test.Config.Visibility));
+	 break;
+      default:
+	 break;
+     }
 
    /***** Get and show media (row[6]) *****/
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
@@ -1009,27 +1021,38 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 /********************* Write the stem of a test question *********************/
 /*****************************************************************************/
 
-void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
+void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
   {
+   extern const char *Txt_Question_not_visible;
    unsigned long StemLength;
    char *StemRigorousHTML;
 
-   /***** Convert the stem, that is in HTML, to rigorous HTML *****/
-   StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-   if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-   Str_Copy (StemRigorousHTML,Stem,
-             StemLength);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	             StemRigorousHTML,StemLength,false);
-
-   /***** Write the stem *****/
+   /***** DIV begin *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassStem);
-   HTM_Txt (StemRigorousHTML);
-   HTM_DIV_End ();
 
-   /***** Free memory allocated for the stem *****/
-   free (StemRigorousHTML);
+   /***** Write stem *****/
+   if (Visible)
+     {
+      /* Convert the stem, that is in HTML, to rigorous HTML */
+      StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
+      if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
+	 Lay_NotEnoughMemoryExit ();
+      Str_Copy (StemRigorousHTML,Stem,
+		StemLength);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			StemRigorousHTML,StemLength,false);
+
+      /* Write stem text */
+      HTM_Txt (StemRigorousHTML);
+
+      /* Free memory allocated for the stem */
+      free (StemRigorousHTML);
+     }
+   else
+      HTM_Txt (Txt_Question_not_visible);
+
+   /***** DIV end *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2849,7 +2872,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write stem (row[4]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[4],"TEST_EDI");
+      Tst_WriteQstStem (row[4],"TEST_EDI",
+		        true);	// Visible
 
       /***** Get and show media (row[6]) *****/
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
@@ -3050,7 +3074,8 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
       /* Write stem (row[4]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[4],"TEST_EDI");
+      Tst_WriteQstStem (row[4],"TEST_EDI",
+		        true);	// Visible
 
       /***** Get and show media (row[6]) *****/
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);

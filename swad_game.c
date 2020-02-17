@@ -1925,7 +1925,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Write stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[3],"TEST_EDI");
+      Tst_WriteQstStem (row[3],"TEST_EDI",
+			true);	// Visible
 
       /* Get media (row[5]) */
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);

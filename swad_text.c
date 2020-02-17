@@ -31717,6 +31717,27 @@ const char *Txt_Question_modified =
 	"Quest&atilde;o modificada.";
 #endif
 
+const char *Txt_Question_not_visible =
+#if   L==1	// ca
+	"Pregunta no visible";
+#elif L==2	// de
+	"Frage nicht sichtbar";
+#elif L==3	// en
+	"Question not visible";
+#elif L==4	// es
+	"Pregunta no visible";
+#elif L==5	// fr
+	"Question non visible";
+#elif L==6	// gn
+	"Pregunta no visible";	// Okoteve traducción
+#elif L==7	// it
+	"Domanda non visibile";
+#elif L==8	// pl
+	"Pytanie niewidoczne";
+#elif L==9	// pt
+	"Pergunta n&atilde;o vis&iacute;vel";
+#endif
+
 const char *Txt_Question_removed =
 #if   L==1	// ca
 	"Pregunta eliminada.";
@@ -43599,7 +43620,7 @@ const char *Txt_Test =
 
 const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Test n&ordm; %u que realiza usted en esta asignatura";	// Necessita traduccio
+	"Test n&ordm; %u que realitza vost&egrave; en aquesta assignatura";
 #elif L==2	// de
 	"Der %u. Test, den Sie in dieser Kurs machen";
 #elif L==3	// en
@@ -43613,7 +43634,7 @@ const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very 
 #elif L==7	// it
 	"Test n. %u che fai in questo corso";
 #elif L==8	// pl
-	"Test No. %u that you make in this course";		// Potrzebujesz tlumaczenie
+	"Test nr %u kt&oacute;ry przeprowadzasz na ten kurs";
 #elif L==9	// pt
 	"Teste n&ordm; %u que voc&ecirc; faz nesta disciplina";
 #endif

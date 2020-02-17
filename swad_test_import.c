@@ -959,7 +959,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the stem and the answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteQstStem (Stem,ClassStem);
+   Tst_WriteQstStem (Stem,ClassStem,
+		     true);	// Visible
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
    switch (Gbl.Test.AnswerType)
      {

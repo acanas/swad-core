@@ -137,7 +137,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 			     struct UsrData *UsrDat,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
                              double *ScoreThisQst,bool *AnswerIsNotBlank);
-void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
+void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_ShowFormAskEditTsts (void);
