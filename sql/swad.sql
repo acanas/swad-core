@@ -1281,6 +1281,7 @@ CREATE TABLE IF NOT EXISTS tst_config (
 	Def INT NOT NULL,
 	Max INT NOT NULL,
 	MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,
+	Visibility INT NOT NULL DEFAULT 0x1f,
 	Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL,
 	UNIQUE INDEX(CrsCod));
 --

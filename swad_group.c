@@ -2261,10 +2261,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	      }
      }
    else
-     {
       Checked = false;
-      HTM_Txt (" disabled=\"disabled\"");
-     }
 
    HTM_TR_Begin (NULL);
 

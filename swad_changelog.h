@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.124 (2020-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.124.1 (2020-02-17)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -506,6 +506,16 @@ ps2pdf source.ps destination.pdf
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Urgente: Añadir nuevos niveles de realimentación tras sugerencia de Mancia y conversación con Javier.
+
+	Version 19.124.1: Feb 17, 2020	Fixed bug reported by Javier Fernández Baldomero.
+					Result visibility in tests is stored in database. (279010 lines)
+					6 changes necessary in database:
+ALTER TABLE tst_config ADD COLUMN Visibility INT NOT NULL DEFAULT 0x1f AFTER MinTimeNxtTstPerQst;
+UPDATE tst_config SET Visibility=0x01 WHERE Feedback='nothing';
+UPDATE tst_config SET Visibility=0x11 WHERE Feedback='total_result';
+UPDATE tst_config SET Visibility=0x19 WHERE Feedback='each_result';
+UPDATE tst_config SET Visibility=0x1d WHERE Feedback='each_good_bad';
+UPDATE tst_config SET Visibility=0x1f WHERE Feedback='full_feedback';
 
 	Version 19.124:   Feb 17, 2020	New form for result visibility in tests. (279001 lines)
 	Version 19.123:   Feb 16, 2020	New module swad_test_result for test results. (278815 lines)

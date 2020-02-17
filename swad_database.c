@@ -2713,9 +2713,10 @@ mysql> DESCRIBE tst_config;
 | Def                 | int(11)                                                                      | NO   |     | NULL    |       |
 | Max                 | int(11)                                                                      | NO   |     | NULL    |       |
 | MinTimeNxtTstPerQst | int(11)                                                                      | NO   |     | 0       |       |
+| Visibility          | int(11)                                                                      | NO   |     | 31      |       |
 | Feedback            | enum('nothing','total_result','each_result','each_good_bad','full_feedback') | NO   |     | NULL    |       |
 +---------------------+------------------------------------------------------------------------------+------+-----+---------+-------+
-7 rows in set (0,00 sec)
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_config ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
@@ -2724,6 +2725,7 @@ mysql> DESCRIBE tst_config;
 			"Def INT NOT NULL,"
 			"Max INT NOT NULL,"
 			"MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,"
+			"Visibility INT NOT NULL DEFAULT 0x1f,"
 			"Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL,"
 		   "UNIQUE INDEX(CrsCod))");
 
