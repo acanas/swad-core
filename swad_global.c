@@ -356,6 +356,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Tests */
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
+   Gbl.Test.Config.Visibility = TsR_VISIBILITY_DEFAULT;
    Gbl.Test.NumQsts = Tst_CONFIG_DEFAULT_DEF_QUESTIONS;
    Gbl.Test.AllowTeachers = false;	// Must the test result be saved?
    Gbl.Test.AllAnsTypes = false;

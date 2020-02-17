@@ -51574,6 +51574,114 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 #endif
 	};
 
+const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
+	{
+	[TsR_VISIBLE_QST_ANS_TEXT] =
+#if   L==1	// ca
+	"Text de preguntes i respostes"
+#elif L==2	// de
+	"Fragen und Antworten Text"
+#elif L==3	// en
+	"Questions and answers text"
+#elif L==4	// es
+	"Texto de preguntas y respuestas"
+#elif L==5	// fr
+	"Texte de questions et r&eacute;ponses."
+#elif L==6	// gn
+	"Texto de preguntas y respuestas"	// Okoteve traducción
+#elif L==7	// it
+	"Testo di domande e risposte"
+#elif L==8	// pl
+	"Tekst pyta&nacute; i odpowiedzi"
+#elif L==9	// pt
+	"Texto de perguntas e respostas"
+#endif
+	,
+	[TsR_VISIBLE_FEEDBACK_TEXT] =
+#if   L==1	// ca
+	"Text de realimentaci&oacute;"
+#elif L==2	// de
+	"Feedback-Text"
+#elif L==3	// en
+	"Feedback text"
+#elif L==4	// es
+	"Texto de realimentaci&oacute;n"
+#elif L==5	// fr
+	"Texte de r&eacute;troaction"
+#elif L==6	// gn
+	"Texto de realimentaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Testo di feedback"
+#elif L==8	// pl
+	"Tekst feedback"
+#elif L==9	// pt
+	"Texto de feedback"
+#endif
+	,
+	[TsR_VISIBLE_CORRECT_ANSWER] =
+#if   L==1	// ca
+	"Respostes correctes"
+#elif L==2	// de
+	"Richtige Antworten"
+#elif L==3	// en
+	"Correct answers"
+#elif L==4	// es
+	"Respuestas correctas"
+#elif L==5	// fr
+	"Bonnes r&eacute;ponses"
+#elif L==6	// gn
+	"Respuestas correctas"	// Okoteve traducción
+#elif L==7	// it
+	"Risposte corrette"
+#elif L==8	// pl
+	"Prawid&lstrok;owe odpowiedzi"
+#elif L==9	// pt
+	"Respostas corretas"
+#endif
+	,
+	[TsR_VISIBLE_EACH_QST_SCORE] =
+#if   L==1	// ca
+	"Puntuaci&oacute; de cada pregunta"
+#elif L==2	// de
+	"Punktzahl jeder Frage"
+#elif L==3	// en
+	"Score of each question"
+#elif L==4	// es
+	"Puntuaci&oacute;n de cada pregunta"
+#elif L==5	// fr
+	"Score de chaque question"
+#elif L==6	// gn
+	"Puntuaci&oacute;n de cada pregunta"			// Okoteve traducción
+#elif L==7	// it
+	"Punteggio di ogni domanda"
+#elif L==8	// pl
+	"Wynik ka&zdot;dego pytania"
+#elif L==9	// pt
+	"Pontua&ccedil;&atilde;o de cada pergunta"
+#endif
+	,
+	[TsR_VISIBLE_TOTAL_SCORE] =
+#if   L==1	// ca
+	"Puntuaci&oacute; total"
+#elif L==2	// de
+	"Gesamtpunktzahl"
+#elif L==3	// en
+	"Total score"
+#elif L==4	// es
+	"Puntuaci&oacute;n total"
+#elif L==5	// fr
+	"Score total"
+#elif L==6	// gn
+	"Puntuaci&oacute;n total"	// Okoteve traducción
+#elif L==7	// it
+	"Punteggio totale"
+#elif L==8	// pl
+	"&Lstrok;&aogon;czny wynik"
+#elif L==9	// pt
+	"Pontua&ccedil;&atilde;o total"
+#endif
+	};
+
 const char *Txt_TF_QST[2] =
 	{
 #if   L==1	// ca	// True
@@ -53710,6 +53818,27 @@ const char *Txt_View_homework =
 	"Zobacz prac&eogon; domow&aogon;";
 #elif L==9	// pt
 	"Ver trabalhos";
+#endif
+
+const char *Txt_Result_visibility =
+#if   L==1	// ca
+	"Visibilitat de resultats";
+#elif L==2	// de
+	"Ergebnis Sichtbarkeit";
+#elif L==3	// en
+	"Result visibility";
+#elif L==4	// es
+	"Visibilidad de resultados";
+#elif L==5	// fr
+	"Visibilit&eacute; des r&eacute;sultats";
+#elif L==6	// gn
+	"Visibilidad de resultados";		// Okoteve traducción
+#elif L==7	// it
+	"Visibilit&agrave; dei risultati";
+#elif L==8	// pl
+	"Widoczno&sacute;&cacute; wynik&oacute;w";
+#elif L==9	// pt
+	"Visibilidade dos resultados";
 #endif
 
 const char *Txt_Visible_by_BR_the_student =

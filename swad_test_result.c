@@ -58,6 +58,7 @@ Visibility of results:
 * Score of each question
 * Total score
 */
+
 // strings are limited to TsR_MAX_BYTES_FEEDBACK_TYPE bytes
 const char *TsR_FeedbackXML[TsR_NUM_TYPES_FEEDBACK] =
   {
@@ -1165,3 +1166,27 @@ TsR_Feedback_t TsR_GetFeedbackTypeFromForm (void)
                                     (unsigned long) TsR_FEEDBACK_DEFAULT);
   }
 
+/*****************************************************************************/
+/************ Put checkboxes in form to select result visibility *************/
+/*****************************************************************************/
+
+void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility)
+  {
+   extern const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY];
+   TsR_ResultVisibility_t Visibility;
+
+   for (Visibility  = (TsR_ResultVisibility_t) 0;
+	Visibility <= (TsR_ResultVisibility_t) (TsR_NUM_ITEMS_VISIBILITY - 1);
+	Visibility++)
+     {
+      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_INPUT_CHECKBOX ("Visibility",false,
+		          "value=\"%u\"%s",
+		          (unsigned) Visibility,
+		          (SelectedVisibility & (1 << Visibility)) != 0 ? " checked=\"checked\"" :
+		        	                                          "");
+      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
+      HTM_LABEL_End ();
+      HTM_BR ();
+     }
+  }

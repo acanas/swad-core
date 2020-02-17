@@ -27,7 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_game.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -41,6 +40,31 @@
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
+/*
+Visibilidad de resultados:
+* Texto de preguntas y respuestas
+* Texto de realimentación
+* Respuestas correctas
+* Puntuación de cada pregunta
+* Puntuación total
+
+Visibility of results:
+* Text of questions and answers
+* Feedback text
+* Correct answers
+* Score of each question
+* Total score
+*/
+#define TsR_NUM_ITEMS_VISIBILITY 5
+typedef enum
+  {
+   TsR_VISIBLE_QST_ANS_TEXT   = 0,	// Questions and answers text
+   TsR_VISIBLE_FEEDBACK_TEXT  = 1,	// Feedback text
+   TsR_VISIBLE_CORRECT_ANSWER = 2,	// Correct answers
+   TsR_VISIBLE_EACH_QST_SCORE = 3,	// Score of each question
+   TsR_VISIBLE_TOTAL_SCORE    = 4,	// Total score
+  } TsR_ResultVisibility_t;
+#define TsR_VISIBILITY_DEFAULT ((1 << TsR_NUM_ITEMS_VISIBILITY) - 1)	// All visible
 
 #define TsR_NUM_TYPES_FEEDBACK		5
 typedef enum
@@ -73,5 +97,7 @@ void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TsR_RemoveCrsTestResults (long CrsCod);
 
 TsR_Feedback_t TsR_GetFeedbackTypeFromForm (void);
+
+void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility);
 
 #endif

@@ -1812,6 +1812,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_default;
    extern const char *Txt_maximum;
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
+   extern const char *Txt_Result_visibility;
    extern const char *Txt_Feedback_to_students;
    extern const char *Txt_TST_STR_FEEDBACK[TsR_NUM_TYPES_FEEDBACK];
    extern const char *Txt_Save_changes;
@@ -1889,6 +1890,19 @@ static void Tst_ShowFormConfigTst (void)
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
    HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,false,
 		   "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Visibility of results *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Result_visibility);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LB\"");
+   TsR_PutVisibilityCheckboxes (Gbl.Test.Config.Visibility);
    HTM_TD_End ();
 
    HTM_TR_End ();
