@@ -83,7 +83,6 @@ struct Tst_Config
    unsigned Max;	// Maximum number of questions
    unsigned long MinTimeNxtTstPerQst;
    unsigned Visibility;	// One bit for each visibility item
-   TsR_Feedback_t Feedback;
   };
 
 #define Tst_NUM_ANS_TYPES	6

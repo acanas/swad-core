@@ -2808,7 +2808,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void)
 
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
   {
-   unsigned MaxSizeListAttCodsSelected;
+   size_t MaxSizeListAttCodsSelected;
    unsigned NumAttEvent;
    const char *Ptr;
    long AttCod;
@@ -2821,7 +2821,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxSizeListAttCodsSelected = (size_t) Gbl.AttEvents.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
@@ -2840,7 +2840,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
       /* Set some events as selected */
       for (Ptr = *StrAttCodsSelected;
 	   *Ptr;
-	   )
+	  )
 	{
 	 /* Get next attendance event selected */
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);

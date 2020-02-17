@@ -3627,7 +3627,6 @@ int swad__getTestConfig (struct soap *soap,
                          char *wsKey,int courseCode,				// input
                          struct swad__getTestConfigOutput *getTestConfigOut)	// output
   {
-   extern const char *TsR_FeedbackXML[TsR_NUM_TYPES_FEEDBACK];
    int ReturnCode;
 
    /***** Initializations *****/
@@ -3670,7 +3669,10 @@ int swad__getTestConfig (struct soap *soap,
      return ReturnCode;
 
    /***** Set default result to empty *****/
-   getTestConfigOut->numQuestions = getTestConfigOut->minQuestions = getTestConfigOut->defQuestions = getTestConfigOut->maxQuestions = 0;
+   getTestConfigOut->numQuestions =
+   getTestConfigOut->minQuestions =
+   getTestConfigOut->defQuestions =
+   getTestConfigOut->maxQuestions = 0;
    getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
@@ -3682,9 +3684,29 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->minQuestions = (int) Gbl.Test.Config.Min;
    getTestConfigOut->defQuestions = (int) Gbl.Test.Config.Def;
    getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
-   Str_Copy (getTestConfigOut->feedback,
-             TsR_FeedbackXML[Gbl.Test.Config.Feedback],
-             TsR_MAX_BYTES_FEEDBACK_TYPE);
+
+   /* Convert from visibility to old feedback */
+   /* TODO: Remove these lines in 2021 */
+        if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE   )) == 0)
+      Str_Copy (getTestConfigOut->feedback,
+		"nothing",
+		TsR_MAX_BYTES_FEEDBACK_TYPE);
+   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) == 0)
+      Str_Copy (getTestConfigOut->feedback,
+		"totalResult",
+		TsR_MAX_BYTES_FEEDBACK_TYPE);
+   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) == 0)
+      Str_Copy (getTestConfigOut->feedback,
+		"eachResult",
+		TsR_MAX_BYTES_FEEDBACK_TYPE);
+   else if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT )) == 0)
+      Str_Copy (getTestConfigOut->feedback,
+		"eachGoodBad",
+		TsR_MAX_BYTES_FEEDBACK_TYPE);
+   else
+      Str_Copy (getTestConfigOut->feedback,
+		"fullFeedback",
+		TsR_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
    if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES &&
@@ -3705,7 +3727,7 @@ static int API_GetTstConfig (long CrsCod)
 
    /***** Query database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get test configuration",
-		       "SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
+		       "SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Visibility"
 		       " FROM tst_config WHERE CrsCod=%ld",
 		       CrsCod))
      {
@@ -3717,7 +3739,7 @@ static int API_GetTstConfig (long CrsCod)
      {
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
       Gbl.Test.Config.Min = Gbl.Test.Config.Def = Gbl.Test.Config.Max = 0;
-      Gbl.Test.Config.Feedback = TsR_FEEDBACK_DEFAULT;
+      Gbl.Test.Config.Visibility = TsR_VISIBILITY_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

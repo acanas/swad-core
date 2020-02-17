@@ -40,21 +40,7 @@
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
-/*
-Visibilidad de resultados:
-* Texto de preguntas y respuestas
-* Texto de realimentación
-* Respuestas correctas
-* Puntuación de cada pregunta
-* Puntuación total
 
-Visibility of results:
-* Text of questions and answers
-* Feedback text
-* Correct answers
-* Score of each question
-* Total score
-*/
 #define TsR_NUM_ITEMS_VISIBILITY 5
 typedef enum
   {
@@ -64,18 +50,8 @@ typedef enum
    TsR_VISIBLE_EACH_QST_SCORE = 3,	// Score of each question
    TsR_VISIBLE_TOTAL_SCORE    = 4,	// Total score
   } TsR_ResultVisibility_t;
-#define TsR_VISIBILITY_DEFAULT ((1 << TsR_NUM_ITEMS_VISIBILITY) - 1)	// All visible
-
-#define TsR_NUM_TYPES_FEEDBACK		5
-typedef enum
-  {
-   TsR_FEEDBACK_NOTHING        = 0,
-   TsR_FEEDBACK_TOTAL_RESULT   = 1,
-   TsR_FEEDBACK_EACH_RESULT    = 2,
-   TsR_FEEDBACK_EACH_GOOD_BAD  = 3,
-   TsR_FEEDBACK_FULL_FEEDBACK  = 4,
-  } TsR_Feedback_t;
-#define TsR_FEEDBACK_DEFAULT TsR_FEEDBACK_FULL_FEEDBACK
+#define TsR_MAX_VISIBILITY ((1 << TsR_NUM_ITEMS_VISIBILITY) - 1)	// All visible
+#define TsR_VISIBILITY_DEFAULT TsR_MAX_VISIBILITY
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -96,8 +72,7 @@ void TsR_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TsR_RemoveCrsTestResults (long CrsCod);
 
-TsR_Feedback_t TsR_GetFeedbackTypeFromForm (void);
-
+unsigned TsR_GetVisibilityFromForm (void);
 void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility);
 
 #endif

@@ -43,45 +43,10 @@
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-/*
-Visibilidad de resultados:
-* Texto de preguntas y respuestas
-* Texto de realimentación
-* Respuestas correctas
-* Puntuación de cada pregunta
-* Puntuación total
-
-Visibility of results:
-* Text of questions and answers
-* Feedback text
-* Correct answers
-* Score of each question
-* Total score
-*/
-
-// strings are limited to TsR_MAX_BYTES_FEEDBACK_TYPE bytes
-const char *TsR_FeedbackXML[TsR_NUM_TYPES_FEEDBACK] =
-  {
-   [TsR_FEEDBACK_NOTHING      ] = "nothing",
-   [TsR_FEEDBACK_TOTAL_RESULT ] = "totalResult",
-   [TsR_FEEDBACK_EACH_RESULT  ] = "eachResult",
-   [TsR_FEEDBACK_EACH_GOOD_BAD] = "eachGoodBad",
-   [TsR_FEEDBACK_FULL_FEEDBACK] = "fullFeedback",
-  };
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
-
-// Feedback to students in tests
-const char *TsR_FeedbackDB[TsR_NUM_TYPES_FEEDBACK] =
-  {
-   [TsR_FEEDBACK_NOTHING      ] = "nothing",		// No feedback
-   [TsR_FEEDBACK_TOTAL_RESULT ] = "total_result",	// Little
-   [TsR_FEEDBACK_EACH_RESULT  ] = "each_result",	// Medium
-   [TsR_FEEDBACK_EACH_GOOD_BAD] = "each_good_bad",	// High
-   [TsR_FEEDBACK_FULL_FEEDBACK] = "full_feedback",	// Maximum
-  };
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -384,7 +349,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
-		               Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING;
+		               (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
@@ -543,7 +508,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
      {
       case Rol_STD:
 	 ICanViewTotalScore = ItsMe &&
-			      Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING;
+		              (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -642,7 +607,7 @@ void TsR_ShowOneTstResult (void)
    /***** Get test result data *****/
    TsR_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
 				  &NumQstsNotBlank,&TotalScore);
-   Gbl.Test.Config.Feedback = TsR_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
+   Gbl.Test.Config.Visibility = TsR_MAX_VISIBILITY;
 
    /***** Check if I can view this test result *****/
    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -653,7 +618,7 @@ void TsR_ShowOneTstResult (void)
 	 if (ItsMe)
 	   {
 	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING;
+	    ICanViewScore = (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
 	   }
 	 else
 	    ICanViewScore = false;
@@ -1157,13 +1122,41 @@ void TsR_RemoveCrsTestResults (long CrsCod)
 /*********************** Get type of feedback from form **********************/
 /*****************************************************************************/
 
-TsR_Feedback_t TsR_GetFeedbackTypeFromForm (void)
+unsigned TsR_GetVisibilityFromForm (void)
   {
-   return (TsR_Feedback_t)
-	  Par_GetParToUnsignedLong ("Feedback",
-	                            0,
-                                    TsR_NUM_TYPES_FEEDBACK - 1,
-                                    (unsigned long) TsR_FEEDBACK_DEFAULT);
+   size_t MaxSizeListVisibilitySelected;
+   char *StrVisibilitySelected;
+   const char *Ptr;
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   unsigned UnsignedNum;
+   TsR_ResultVisibility_t VisibilityItem;
+   unsigned Visibility = 0;	// Nothing selected
+
+   /***** Allocate memory for list of attendance events selected *****/
+   MaxSizeListVisibilitySelected = TsR_NUM_ITEMS_VISIBILITY * (Cns_MAX_DECIMAL_DIGITS_UINT + 1);
+   if ((StrVisibilitySelected = (char *) malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Get parameter multiple with list of visibility items selected *****/
+   Par_GetParMultiToText ("Visibility",StrVisibilitySelected,MaxSizeListVisibilitySelected);
+
+   /***** Set which attendance events will be shown as selected (checkboxes on) *****/
+   if (StrVisibilitySelected[0])	// There are events selected
+      for (Ptr = StrVisibilitySelected;
+	   *Ptr;
+	  )
+	{
+	 /* Get next visibility item selected */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+         if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+            if (UnsignedNum < TsR_NUM_ITEMS_VISIBILITY)
+              {
+               VisibilityItem = (TsR_ResultVisibility_t) UnsignedNum;
+               Visibility |= (1 << VisibilityItem);
+              }
+	}
+
+   return Visibility;
   }
 
 /*****************************************************************************/

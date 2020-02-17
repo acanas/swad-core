@@ -488,7 +488,7 @@ void Tst_AssessTest (void)
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
-	 if (Gbl.Test.Config.Feedback != TsR_FEEDBACK_NOTHING)
+	 if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0)
 	   {
 	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	    HTM_TxtColonNBSP (Txt_Score);
@@ -992,7 +992,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
-	 if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+	 if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
       default:
@@ -1324,8 +1324,7 @@ static void Tst_PutIconsTests (void)
 				     Txt_New_question);
 
       /***** Put form to go to test configuration *****/
-      if (Gbl.Action.Act != ActCfgTst)
-         Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
+      Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
      }
 
    /***** Put icon to view tests results *****/
@@ -1813,11 +1812,8 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_maximum;
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
    extern const char *Txt_Result_visibility;
-   extern const char *Txt_Feedback_to_students;
-   extern const char *Txt_TST_STR_FEEDBACK[TsR_NUM_TYPES_FEEDBACK];
    extern const char *Txt_Save_changes;
    Tst_Pluggable_t Pluggable;
-   TsR_Feedback_t Feedback;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
 
    /***** Read test configuration from database *****/
@@ -1907,30 +1903,6 @@ static void Tst_ShowFormConfigTst (void)
 
    HTM_TR_End ();
 
-   /***** Feedback to students *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Feedback_to_students);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"LB\"");
-   for (Feedback  = (TsR_Feedback_t) 0;
-	Feedback <= (TsR_Feedback_t) (TsR_NUM_TYPES_FEEDBACK - 1);
-	Feedback++)
-     {
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_RADIO ("Feedback",false,
-		       "value=\"%u\"%s",
-		       (unsigned) Feedback,
-		       Feedback == Gbl.Test.Config.Feedback ? " checked=\"checked\"" : "");
-      HTM_Txt (Txt_TST_STR_FEEDBACK[Feedback]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
    HTM_TABLE_End ();
 
    /***** Send button *****/
@@ -1988,12 +1960,13 @@ void Tst_GetConfigTstFromDB (void)
 				    "Def,"			// row[2]
 				    "Max,"			// row[3]
 				    "MinTimeNxtTstPerQst,"	// row[4]
-				    "Feedback"			// row[5]
-			     " FROM tst_config WHERE CrsCod=%ld",
+				    "Visibility"		// row[5]
+			     " FROM tst_config"
+			     " WHERE CrsCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod);
 
-   Gbl.Test.Config.Feedback = TsR_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
+   Gbl.Test.Config.Visibility = TsR_VISIBILITY_DEFAULT;
    if (NumRows == 0)
      {
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2018,11 +1991,10 @@ void Tst_GetConfigTstFromDB (void)
 
 void Tst_GetConfigFromRow (MYSQL_ROW row)
   {
-   extern const char *TsR_FeedbackDB[TsR_NUM_TYPES_FEEDBACK];
    int IntNum;
    long LongNum;
+   unsigned UnsignedNum;
    Tst_Pluggable_t Pluggable;
-   TsR_Feedback_t Feedback;
 
    /***** Get whether test are visible via plugins or not *****/
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2062,15 +2034,9 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
       Gbl.Test.Config.MinTimeNxtTstPerQst = (LongNum < 1L) ? 0UL :
 	                                                     (unsigned long) LongNum;
 
-   /***** Get feedback type (row[5]) *****/
-   for (Feedback  = (TsR_Feedback_t) 0;
-	Feedback <= (TsR_Feedback_t) (TsR_NUM_TYPES_FEEDBACK - 1);
-	Feedback++)
-      if (!strcmp (row[5],TsR_FeedbackDB[Feedback]))
-        {
-         Gbl.Test.Config.Feedback = Feedback;
-         break;
-        }
+   /***** Get visibility (row[5]) *****/
+   if (sscanf (row[5],"%u",&UnsignedNum) == 1)
+      Gbl.Test.Config.Visibility = UnsignedNum & TsR_MAX_VISIBILITY;
   }
 
 /*****************************************************************************/
@@ -2127,7 +2093,6 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 
 void Tst_ReceiveConfigTst (void)
   {
-   extern const char *TsR_FeedbackDB[TsR_NUM_TYPES_FEEDBACK];
    extern const char *Txt_The_test_configuration_has_been_updated;
 
    /***** Get whether test are visible via plugins or not *****/
@@ -2165,19 +2130,19 @@ void Tst_ReceiveConfigTst (void)
                                                                    0);
 
    /***** Get type of feedback from form *****/
-   Gbl.Test.Config.Feedback = TsR_GetFeedbackTypeFromForm ();
+   Gbl.Test.Config.Visibility = TsR_GetVisibilityFromForm ();
 
    /***** Update database *****/
    DB_QueryREPLACE ("can not save configuration of tests",
 		    "REPLACE INTO tst_config"
-	            " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
+	            " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Visibility)"
                     " VALUES"
-                    " (%ld,'%s',%u,%u,%u,'%lu','%s')",
+                    " (%ld,'%s',%u,%u,%u,'%lu',%u)",
 		    Gbl.Hierarchy.Crs.CrsCod,
 		    Tst_PluggableDB[Gbl.Test.Config.Pluggable],
 		    Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
 		    Gbl.Test.Config.MinTimeNxtTstPerQst,
-		    TsR_FeedbackDB[Gbl.Test.Config.Feedback]);
+		    Gbl.Test.Config.Visibility);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
@@ -3534,18 +3499,16 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the user answer *****/
    HTM_TD_Begin ("class=\"%s CM\"",
-		      (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-		       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
-		      (AnsTF == row[1][0] ? "ANS_OK" :
-					    "ANS_BAD") :
-		      "ANS_0");
+		 (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
+		 (AnsTF == row[1][0] ? "ANS_OK" :
+				       "ANS_BAD") :
+		 "ANS_0");
    Tst_WriteAnsTF (AnsTF);
    HTM_TD_End ();
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
       Tst_WriteAnsTF (row[1][0]);
    else
       HTM_Txt ("?");
@@ -3553,10 +3516,8 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    HTM_TR_End ();
 
-   /***** Write the mark *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   /***** Write the score of this question *****/
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
@@ -3744,8 +3705,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       /* Draw icon depending on user's answer */
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
-         if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-             Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+         if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
            {
             if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
               {
@@ -3773,8 +3733,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
          HTM_TD_Empty (1);
 
       /* Draw icon that indicates whether the answer is correct */
-      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-          Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
            {
@@ -3808,7 +3767,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
                      "TEST_MED_SHOW");
       HTM_DIV_End ();
 
-      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
@@ -3823,9 +3782,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the total score of this question *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
@@ -3883,7 +3840,7 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
 
       /***** Copy answer feedback (row[2]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4212,7 +4169,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+      if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4265,11 +4222,10 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
            }
         }
       HTM_TD_Begin ("class=\"%s CT\"",
-			 (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-			  Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
-			  (Correct ? "ANS_OK" :
-				     "ANS_BAD") :
-                          "ANS_0");
+		    (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
+		    (Correct ? "ANS_OK" :
+			       "ANS_BAD") :
+		    "ANS_0");
       HTM_Txt (Gbl.Test.StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
@@ -4277,8 +4233,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    /***** Write the correct answers *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
      {
       HTM_TD_Begin ("class=\"CT\"");
       HTM_TABLE_BeginPadding (2);
@@ -4301,7 +4256,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 
-	 if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+         if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_FEEDBACK_TEXT)) != 0)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
@@ -4342,9 +4297,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the mark *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4425,11 +4378,10 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-		        Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
-		        (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
-						         "ANS_BAD") :
-		        "ANS_0");
+		       (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
+		       (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
+						        "ANS_BAD") :
+		       "ANS_0");
          HTM_Long (IntAnswerUsr);
          HTM_TD_End ();
 	}
@@ -4446,8 +4398,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
       HTM_Long (IntAnswerCorr);
    else
       HTM_Txt ("?");
@@ -4471,9 +4422,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write the score *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4568,12 +4517,11 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
          HTM_TD_Begin ("class=\"%s CM\"",
-		       (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-		        Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK) ?
-		        ((FloatAnsUsr >= FloatAnsCorr[0] &&
-			  FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
-							    "ANS_BAD") :
-		        "ANS_0");
+		       (Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0 ?
+		       ((FloatAnsUsr >= FloatAnsCorr[0] &&
+			 FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
+							   "ANS_BAD") :
+		       "ANS_0");
          HTM_Double (FloatAnsUsr);
         }
       else				// Not a floating point number
@@ -4588,8 +4536,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0)
      {
       HTM_Txt ("[");
       HTM_Double (FloatAnsCorr[0]);
@@ -4620,9 +4567,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Write mark *****/
-   if (Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == TsR_FEEDBACK_FULL_FEEDBACK)
+   if ((Gbl.Test.Config.Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
