@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.125.1 (2020-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.125.2 (2020-02-17)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -505,9 +505,12 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
-// TODO: Remove Feedback field from tst_config database table
 // TODO: Add visibility to API function getTestConfig
 // TODO: Add visibility to games
+
+	Version 19.125.2: Feb 17, 2020	Removed Feedback field from tst_config database table. (278850 lines)
+					1 change necessary in database:
+ALTER TABLE tst_config DROP COLUMN Feedback;
 
 	Version 19.125.1: Feb 17, 2020	Code refactoring in test. (278851 lines)
 	Version 19.125:   Feb 17, 2020	Removed feedback from test config form. (278823 lines)
