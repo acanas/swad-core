@@ -88,6 +88,7 @@
 #include "swad_syllabus.h"
 #include "swad_tab.h"
 #include "swad_test.h"
+#include "swad_test_visibility.h"
 #include "swad_timeline.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
@@ -51466,9 +51467,9 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 #endif
 	};
 
-const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
+const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY] =
 	{
-	[TsR_VISIBLE_QST_ANS_TXT] =
+	[TsV_VISIBLE_QST_ANS_TXT] =
 #if   L==1	// ca
 	"Text de preguntes i respostes"
 #elif L==2	// de
@@ -51489,7 +51490,7 @@ const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	"Texto de perguntas e respostas"
 #endif
 	,
-	[TsR_VISIBLE_FEEDBACK_TXT] =
+	[TsV_VISIBLE_FEEDBACK_TXT] =
 #if   L==1	// ca
 	"Text de realimentaci&oacute;"
 #elif L==2	// de
@@ -51510,7 +51511,7 @@ const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	"Texto de feedback"
 #endif
 	,
-	[TsR_VISIBLE_CORRECT_ANSWER] =
+	[TsV_VISIBLE_CORRECT_ANSWER] =
 #if   L==1	// ca
 	"Respostes correctes"
 #elif L==2	// de
@@ -51531,7 +51532,7 @@ const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	"Respostas corretas"
 #endif
 	,
-	[TsR_VISIBLE_EACH_QST_SCORE] =
+	[TsV_VISIBLE_EACH_QST_SCORE] =
 #if   L==1	// ca
 	"Puntuaci&oacute; de cada pregunta"
 #elif L==2	// de
@@ -51552,7 +51553,7 @@ const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY] =
 	"Pontua&ccedil;&atilde;o de cada pergunta"
 #endif
 	,
-	[TsR_VISIBLE_TOTAL_SCORE] =
+	[TsV_VISIBLE_TOTAL_SCORE] =
 #if   L==1	// ca
 	"Puntuaci&oacute; total"
 #elif L==2	// de

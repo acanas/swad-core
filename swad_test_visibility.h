@@ -1,7 +1,7 @@
-// swad_test_results.h: test results
+// swad_test_visibility.h: visibility of test results
 
-#ifndef _SWAD_TSR
-#define _SWAD_TSR
+#ifndef _SWAD_TSV
+#define _SWAD_TSV
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -33,29 +33,33 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define TsR_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
+
+#define TsV_NUM_ITEMS_VISIBILITY 5
+typedef enum
+  {
+   TsV_VISIBLE_QST_ANS_TXT    = 0,	// Questions and answers text
+   TsV_VISIBLE_FEEDBACK_TXT   = 1,	// Feedback text
+   TsV_VISIBLE_CORRECT_ANSWER = 2,	// Correct answers
+   TsV_VISIBLE_EACH_QST_SCORE = 3,	// Score of each question
+   TsV_VISIBLE_TOTAL_SCORE    = 4,	// Total score
+  } TsV_ResultVisibility_t;
+#define TsV_MAX_VISIBILITY ((1 << TsV_NUM_ITEMS_VISIBILITY) - 1)	// All visible
+#define TsV_VISIBILITY_DEFAULT TsV_MAX_VISIBILITY
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TsR_SelUsrsToViewUsrsTstResults (void);
-void TsR_SelDatesToSeeMyTstResults (void);
-void TsR_ShowMyTstResults (void);
-long TsR_CreateTestResultInDB (void);
-void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     unsigned NumQstsNotBlank,double Score);
-void TsR_GetUsrsAndShowTstResults (void);
-void TsR_ShowOneTstResult (void);
-void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC);
-void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
-void TsR_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
-void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void TsR_RemoveCrsTestResults (long CrsCod);
+unsigned TsV_GetVisibilityFromForm (void);
+void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility);
+
+bool TsV_IsVisibleQstAndAnsTxt (unsigned Visibility);
+bool TsV_IsVisibleFeedbackTxt (unsigned Visibility);
+bool TsV_IsVisibleCorrectAns (unsigned Visibility);
+bool TsV_IsVisibleEachQstScore (unsigned Visibility);
+bool TsV_IsVisibleTotalScore (unsigned Visibility);
 
 #endif

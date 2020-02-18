@@ -47,6 +47,7 @@
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_setting.h"
+#include "swad_test_visibility.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -356,7 +357,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Tests */
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
-   Gbl.Test.Config.Visibility = TsR_VISIBILITY_DEFAULT;
+   Gbl.Test.Config.Visibility = TsV_VISIBILITY_DEFAULT;
    Gbl.Test.NumQsts = Tst_CONFIG_DEFAULT_DEF_QUESTIONS;
    Gbl.Test.AllowTeachers = false;	// Must the test result be saved?
    Gbl.Test.AllAnsTypes = false;

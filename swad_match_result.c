@@ -41,6 +41,7 @@
 #include "swad_ID.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
+#include "swad_test_visibility.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -1032,7 +1033,7 @@ void McR_ShowOneMchResult (void)
 				   &NumQsts,
 				   &NumQstsNotBlank,
 				   &TotalScore);
-   Gbl.Test.Config.Visibility = TsR_MAX_VISIBILITY;   // Initialize visibility to maximum
+   Gbl.Test.Config.Visibility = TsV_MAX_VISIBILITY;   // Initialize visibility to maximum
 
    /***** Check if I can view this match result *****/
    ItsMe = Usr_ItsMe (UsrDat->UsrCod);
@@ -1049,7 +1050,7 @@ void McR_ShowOneMchResult (void)
 	       if (ICanViewResult)
 		 {
 		  Tst_GetConfigTstFromDB ();	// To get feedback type
-		  ICanViewScore = TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+		  ICanViewScore = TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 		 }
 	       else
 		  ICanViewScore  = false;

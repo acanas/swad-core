@@ -113,6 +113,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notification.h"
 #include "swad_password.h"
 #include "swad_search.h"
+#include "swad_test_visibility.h"
 #include "swad_user.h"
 #include "swad_xml.h"
 
@@ -3689,19 +3690,19 @@ int swad__getTestConfig (struct soap *soap,
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */
-   if (!TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility))
+   if (!TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"nothing",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsR_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"totalResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsR_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"eachResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsR_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
       Str_Copy (getTestConfigOut->feedback,
 		"eachGoodBad",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
@@ -3741,7 +3742,7 @@ static int API_GetTstConfig (long CrsCod)
      {
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
       Gbl.Test.Config.Min = Gbl.Test.Config.Def = Gbl.Test.Config.Max = 0;
-      Gbl.Test.Config.Visibility = TsR_VISIBILITY_DEFAULT;
+      Gbl.Test.Config.Visibility = TsV_VISIBILITY_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

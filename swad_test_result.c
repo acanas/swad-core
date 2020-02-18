@@ -37,7 +37,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_test.h"
-#include "swad_test_result.h"
+#include "swad_test_visibility.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -349,7 +349,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
-		               TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+		               TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
@@ -508,7 +508,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
      {
       case Rol_STD:
 	 ICanViewTotalScore = ItsMe &&
-		              TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+		              TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -607,7 +607,7 @@ void TsR_ShowOneTstResult (void)
    /***** Get test result data *****/
    TsR_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
 				  &NumQstsNotBlank,&TotalScore);
-   Gbl.Test.Config.Visibility = TsR_MAX_VISIBILITY;
+   Gbl.Test.Config.Visibility = TsV_MAX_VISIBILITY;
 
    /***** Check if I can view this test result *****/
    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -618,7 +618,7 @@ void TsR_ShowOneTstResult (void)
 	 if (ItsMe)
 	   {
 	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = TsR_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+	    ICanViewScore = TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
 	   }
 	 else
 	    ICanViewScore = false;
@@ -1117,99 +1117,4 @@ void TsR_RemoveCrsTestResults (long CrsCod)
    DB_QueryDELETE ("can not remove test results made in a course",
 		   "DELETE FROM tst_exams WHERE CrsCod=%ld",
 		   CrsCod);
-  }
-
-/*****************************************************************************/
-/*********************** Get type of feedback from form **********************/
-/*****************************************************************************/
-
-unsigned TsR_GetVisibilityFromForm (void)
-  {
-   size_t MaxSizeListVisibilitySelected;
-   char *StrVisibilitySelected;
-   const char *Ptr;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   unsigned UnsignedNum;
-   TsR_ResultVisibility_t VisibilityItem;
-   unsigned Visibility = 0;	// Nothing selected
-
-   /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListVisibilitySelected = TsR_NUM_ITEMS_VISIBILITY * (Cns_MAX_DECIMAL_DIGITS_UINT + 1);
-   if ((StrVisibilitySelected = (char *) malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   /***** Get parameter multiple with list of visibility items selected *****/
-   Par_GetParMultiToText ("Visibility",StrVisibilitySelected,MaxSizeListVisibilitySelected);
-
-   /***** Set which attendance events will be shown as selected (checkboxes on) *****/
-   if (StrVisibilitySelected[0])	// There are events selected
-      for (Ptr = StrVisibilitySelected;
-	   *Ptr;
-	  )
-	{
-	 /* Get next visibility item selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
-         if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-            if (UnsignedNum < TsR_NUM_ITEMS_VISIBILITY)
-              {
-               VisibilityItem = (TsR_ResultVisibility_t) UnsignedNum;
-               Visibility |= (1 << VisibilityItem);
-              }
-	}
-
-   return Visibility;
-  }
-
-/*****************************************************************************/
-/************ Put checkboxes in form to select result visibility *************/
-/*****************************************************************************/
-
-void TsR_PutVisibilityCheckboxes (unsigned SelectedVisibility)
-  {
-   extern const char *Txt_TST_STR_VISIBILITY[TsR_NUM_ITEMS_VISIBILITY];
-   TsR_ResultVisibility_t Visibility;
-
-   for (Visibility  = (TsR_ResultVisibility_t) 0;
-	Visibility <= (TsR_ResultVisibility_t) (TsR_NUM_ITEMS_VISIBILITY - 1);
-	Visibility++)
-     {
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("Visibility",false,
-		          "value=\"%u\"%s",
-		          (unsigned) Visibility,
-		          (SelectedVisibility & (1 << Visibility)) != 0 ? " checked=\"checked\"" :
-		        	                                          "");
-      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-  }
-
-/*****************************************************************************/
-/***************************** Get visibility items **************************/
-/*****************************************************************************/
-
-bool TsR_IsVisibleQstAndAnsTxt (unsigned Visibility)
-  {
-   return (Visibility & (1 << TsR_VISIBLE_QST_ANS_TXT)) != 0;
-  }
-
-bool TsR_IsVisibleFeedbackTxt (unsigned Visibility)
-  {
-   return (Visibility & (1 << TsR_VISIBLE_FEEDBACK_TXT)) != 0;
-  }
-
-bool TsR_IsVisibleCorrectAns (unsigned Visibility)
-  {
-   return (Visibility & (1 << TsR_VISIBLE_CORRECT_ANSWER)) != 0;
-  }
-
-bool TsR_IsVisibleEachQstScore (unsigned Visibility)
-  {
-   return (Visibility & (1 << TsR_VISIBLE_EACH_QST_SCORE)) != 0;
-  }
-
-bool TsR_IsVisibleTotalScore (unsigned Visibility)
-  {
-   return (Visibility & (1 << TsR_VISIBLE_TOTAL_SCORE)) != 0;
   }
