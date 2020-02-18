@@ -100,8 +100,8 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    unsigned *NumQstsNotBlank,
 					    double *Score);
 
-static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod);
-static bool McR_GetVisibilityMchResultFromDB (long MchCod);
+static bool McR_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod);
+static bool McR_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
 /*****************************************************************************/
 /*********** Select users and dates to show their matches results ************/
@@ -668,8 +668,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData *UsrDat;
-   bool ShowResultThisMatch;
-   bool ShowSummaryResults = true;
+   bool ICanViewResult;
+   bool ICanViewScore;
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
@@ -685,6 +685,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
+   unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
    /***** Set user *****/
@@ -738,7 +739,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				     "mch_results.NumQsts,"			// row[3]
 				     "mch_results.NumQstsNotBlank,"		// row[4]
 				     "mch_results.Score,"			// row[5]
-				     "gam_games.MaxGrade"			// row[6]
+				     "gam_games.MaxGrade,"			// row[6]
+				     "gam_games.Visibility"			// row[7]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      "%s"	// Match subquery
@@ -772,9 +774,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 	 Mch_GetDataOfMatchByCod (&Match);
 
+	 /* Get visibility (row[7]) */
+	 Visibility = TsV_GetVisibilityFromStr (row[7]);
+
 	 /* Show match result? */
-	 ShowResultThisMatch = McR_CheckIfICanSeeMatchResult (Match.MchCod,UsrDat->UsrCod);
-	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
+	 ICanViewResult = McR_CheckIfICanSeeMatchResult (&Match,UsrDat->UsrCod);
+         ICanViewScore  = McR_CheckIfICanViewScore (ICanViewResult,Visibility);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -802,7 +807,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
-	 if (ShowResultThisMatch)
+	 if (ICanViewResult)
 	   {
 	    /* Get number of questions (row[3]) */
 	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
@@ -830,7 +835,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewResult)
 	    HTM_Unsigned (NumQstsInThisResult);
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
@@ -838,7 +843,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewResult)
 	    HTM_Unsigned (NumQstsNotBlankInThisResult);
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
@@ -846,7 +851,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewScore)
 	    HTM_Double2Decimals (ScoreInThisResult);
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
@@ -854,17 +859,17 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewScore)
 	    HTM_Double2Decimals (NumQstsInThisResult ? ScoreInThisResult /
-					      (double) NumQstsInThisResult :
-					      0.0);
+					               (double) NumQstsInThisResult :
+					               0.0);
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewScore)
 	   {
             Grade = Tst_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
 	    Tst_ShowGrade (Grade,MaxGrade);
@@ -876,7 +881,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ShowResultThisMatch)
+	 if (ICanViewResult)
 	   {
 	    Gam_SetCurrentGamCod (Match.GamCod);	// Used to pass parameter
 	    Mch_SetCurrentMchCod (Match.MchCod);	// Used to pass parameter
@@ -1004,8 +1009,6 @@ void McR_ShowOneMchResult (void)
    double TotalScore;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   bool ItsMe;
-   bool ICanPlayThisMatchBasedOnGrps;
    bool ICanViewResult;
    bool ICanViewScore;
 
@@ -1033,55 +1036,22 @@ void McR_ShowOneMchResult (void)
 				   &NumQsts,
 				   &NumQstsNotBlank,
 				   &TotalScore);
-   Gbl.Test.Config.Visibility = TsV_MAX_VISIBILITY;   // Initialize visibility to maximum
 
    /***** Check if I can view this match result *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 switch (MeOrOther)
-	   {
-	    case Usr_ME:
-	       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);
-	       ICanViewResult = ItsMe && ICanPlayThisMatchBasedOnGrps &&
-		                Match.Status.ShowUsrResults;
-
-	       if (ICanViewResult)
-		 {
-		  Tst_GetConfigTstFromDB ();	// To get feedback type
-		  ICanViewScore = TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
-		 }
-	       else
-		  ICanViewScore  = false;
-	       break;
-	    default:
-	       ICanViewResult =
-	       ICanViewScore  = false;
-	       break;
-	   }
+	 ICanViewResult = McR_CheckIfICanSeeMatchResult (&Match,UsrDat->UsrCod);
+	 if (ICanViewResult)
+	    ICanViewScore = TsV_IsVisibleTotalScore (Game.Visibility);
+	 else
+	    ICanViewScore = false;
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 switch (MeOrOther)
-	   {
-	    case Usr_ME:
-	       ICanViewResult =
-	       ICanViewScore  = ItsMe;
-	       break;
-	    case Usr_OTHER:
-	       ICanViewResult =
-	       ICanViewScore  = true;
-	       break;
-	    default:
-	       ICanViewResult =
-	       ICanViewScore  = false;
-	       break;
-	   }
-	 break;
       case Rol_SYS_ADM:
 	 ICanViewResult =
 	 ICanViewScore  = true;
@@ -1202,7 +1172,7 @@ void McR_ShowOneMchResult (void)
       if (ICanViewScore)
          Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
       else
-	 HTM_Txt ("?");	// No feedback
+	 HTM_Txt ("?");	// Not visible
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1221,7 +1191,8 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TsR_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
+      TsR_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME],
+			  Game.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1372,22 +1343,44 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
   }
 
 /*****************************************************************************/
-/********************* Get if I can see match result  ************************/
+/********************** Get if I can see match result ************************/
 /*****************************************************************************/
 
-static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
+static bool McR_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod)
   {
    bool ItsMe;
-   bool ShowResultThisMatch;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Gbl.Test.Config.Visibility != 0)
-	    ShowResultThisMatch = McR_GetVisibilityMchResultFromDB (MchCod);
-	 else
-	    ShowResultThisMatch = false;
+	 if (ItsMe && Match->Status.ShowUsrResults)
+	    return Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match);
+         return false;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/********************** Get if I can see match result ************************/
+/*****************************************************************************/
+
+static bool McR_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 if (ICanViewResult)
+	    return TsV_IsVisibleTotalScore (Visibility);
+	 return false;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1395,48 +1388,9 @@ static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 ShowResultThisMatch = true;
-	 break;
+	 return true;
       default:
-	 ShowResultThisMatch = false;
-	 break;
+	 return false;
      }
-
-   return ShowResultThisMatch;
   }
 
-/*****************************************************************************/
-/********************* Get visibility of match result ************************/
-/*****************************************************************************/
-
-static bool McR_GetVisibilityMchResultFromDB (long MchCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   bool ShowUsrResults;
-
-   /***** Get visibility of match result from database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get if show result",
-					"SELECT ShowUsrResults"		// row[0]
-					" FROM mch_matches"
-					" WHERE MchCod=%ld"
-					" AND GamCod IN"		// Extra check
-					" (SELECT GamCod FROM gam_games"
-					" WHERE CrsCod='%ld')",
-					MchCod,
-					Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows) // Match found...
-     {
-      /* Get whether to show user results or not (row(0)) */
-      row = mysql_fetch_row (mysql_res);
-      ShowUsrResults = (row[0][0] == 'Y');
-     }
-   else
-      ShowUsrResults = false;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return ShowUsrResults;
-  }

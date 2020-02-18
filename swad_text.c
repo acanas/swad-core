@@ -14600,6 +14600,27 @@ const char *Txt_HELP_password =
 	"8 ou mais caracteres";
 #endif
 
+const char *Txt_Hidden =
+#if   L==1	// ca
+	"Ocult";
+#elif L==2	// de
+	"Verborgen";
+#elif L==3	// en
+	"Hidden";
+#elif L==4	// es
+	"Oculto";
+#elif L==5	// fr
+	"Cach&eacute;";
+#elif L==6	// gn
+	"Oculto";	// Okoteve traducción
+#elif L==7	// it
+	"Nascosto";
+#elif L==8	// pl
+	"Ukryty";
+#elif L==9	// pt
+	"Oculto";
+#endif
+
 const char *Txt_Hidden_MALE_PLURAL =
 #if   L==1	// ca
 	"Ocultos";	// Necessita traduccio
@@ -53732,6 +53753,27 @@ const char *Txt_Result_visibility =
 	"Widoczno&sacute;&cacute; wynik&oacute;w";
 #elif L==9	// pt
 	"Visibilidade dos resultados";
+#endif
+
+const char *Txt_Visible =
+#if   L==1	// ca
+	"Visible";
+#elif L==2	// de
+	"Sichtbare";
+#elif L==3	// en
+	"Visible";
+#elif L==4	// es
+	"Visible";
+#elif L==5	// fr
+	"Visible";
+#elif L==6	// gn
+	"Visible";	// Okoteve traducción
+#elif L==7	// it
+	"Visibile";
+#elif L==8	// pl
+	"Widoczny";
+#elif L==9	// pt
+	"Vis&iacute;vel";
 #endif
 
 const char *Txt_Visible_by_BR_the_student =

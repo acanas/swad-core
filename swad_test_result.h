@@ -52,7 +52,8 @@ void TsR_StoreScoreOfTestResultInDB (long TstCod,
 void TsR_GetUsrsAndShowTstResults (void);
 void TsR_ShowOneTstResult (void);
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC);
+			 unsigned NumQsts,time_t TstTimeUTC,
+			 unsigned Visibility);
 void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
 void TsR_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);

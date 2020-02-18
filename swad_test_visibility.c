@@ -56,7 +56,60 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/*********************** Get type of feedback from form **********************/
+/************ Put checkboxes in form to select result visibility *************/
+/*****************************************************************************/
+
+void TsV_ShowVisibility (unsigned SelectedVisibility,const char *Class)
+  {
+   extern const char *Txt_Visible;
+   extern const char *Txt_Hidden;
+   extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
+   TsV_Visibility_t Visibility;
+   bool ItemVisible;
+
+   for (Visibility  = (TsV_Visibility_t) 0;
+	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
+	Visibility++)
+     {
+      HTM_LABEL_Begin ("class=\"%s\"",Class);
+      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+      Ico_PutIconOff (ItemVisible ? "eye.svg" :
+                                    "eye-slash.svg",
+		      ItemVisible ? Txt_Visible :
+			            Txt_Hidden);
+      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
+      HTM_LABEL_End ();
+      HTM_BR ();
+     }
+  }
+
+/*****************************************************************************/
+/************ Put checkboxes in form to select result visibility *************/
+/*****************************************************************************/
+
+void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility)
+  {
+   extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
+   TsV_Visibility_t Visibility;
+
+   for (Visibility  = (TsV_Visibility_t) 0;
+	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
+	Visibility++)
+     {
+      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_INPUT_CHECKBOX ("Visibility",false,
+		          "value=\"%u\"%s",
+		          (unsigned) Visibility,
+		          (SelectedVisibility & (1 << Visibility)) != 0 ? " checked=\"checked\"" :
+		        	                                          "");
+      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
+      HTM_LABEL_End ();
+      HTM_BR ();
+     }
+  }
+
+/*****************************************************************************/
+/************************** Get visibility from form *************************/
 /*****************************************************************************/
 
 unsigned TsV_GetVisibilityFromForm (void)
@@ -66,7 +119,7 @@ unsigned TsV_GetVisibilityFromForm (void)
    const char *Ptr;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned UnsignedNum;
-   TsV_ResultVisibility_t VisibilityItem;
+   TsV_Visibility_t VisibilityItem;
    unsigned Visibility = 0;	// Nothing selected
 
    /***** Allocate memory for list of attendance events selected *****/
@@ -88,7 +141,7 @@ unsigned TsV_GetVisibilityFromForm (void)
          if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
             if (UnsignedNum < TsV_NUM_ITEMS_VISIBILITY)
               {
-               VisibilityItem = (TsV_ResultVisibility_t) UnsignedNum;
+               VisibilityItem = (TsV_Visibility_t) UnsignedNum;
                Visibility |= (1 << VisibilityItem);
               }
 	}
@@ -97,28 +150,21 @@ unsigned TsV_GetVisibilityFromForm (void)
   }
 
 /*****************************************************************************/
-/************ Put checkboxes in form to select result visibility *************/
+/************************** Get visibility from string *************************/
 /*****************************************************************************/
 
-void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility)
+unsigned TsV_GetVisibilityFromStr (const char *Str)
   {
-   extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
-   TsV_ResultVisibility_t Visibility;
+   unsigned UnsignedNum;
+   unsigned Visibility = TsV_MIN_VISIBILITY;	// In nothing is read, return minimum visibility
 
-   for (Visibility  = (TsV_ResultVisibility_t) 0;
-	Visibility <= (TsV_ResultVisibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
-	Visibility++)
-     {
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("Visibility",false,
-		          "value=\"%u\"%s",
-		          (unsigned) Visibility,
-		          (SelectedVisibility & (1 << Visibility)) != 0 ? " checked=\"checked\"" :
-		        	                                          "");
-      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
+   /***** Get visibility from string *****/
+   if (Str)
+      if (Str[0])
+         if (sscanf (Str,"%u",&UnsignedNum) == 1)
+            Visibility = UnsignedNum & TsV_MAX_VISIBILITY;
+
+   return Visibility;
   }
 
 /*****************************************************************************/

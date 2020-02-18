@@ -43,6 +43,7 @@
 #include "swad_pagination.h"
 #include "swad_role.h"
 #include "swad_test.h"
+#include "swad_test_visibility.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -433,8 +434,9 @@ void Gam_ShowOnlyOneGameEnd (void)
 static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
   {
    extern const char *Txt_View_game;
-   extern const char *Txt_Maximum_grade;
    extern const char *Txt_No_of_questions;
+   extern const char *Txt_Maximum_grade;
+   extern const char *Txt_Result_visibility;
    extern const char *Txt_Matches;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -513,7 +515,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 
-   /* Number of questions and maximum grade */
+   /* Number of questions, maximum grade, visibility of results */
    HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
         	                                "ASG_GRP");
    HTM_TxtColonNBSP (Txt_No_of_questions);
@@ -521,9 +523,16 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Maximum_grade);
    HTM_Double (Game->MaxGrade);
+   if (ShowOnlyThisGame)
+     {
+      HTM_BR ();
+      HTM_TxtColonNBSP (Txt_Result_visibility);
+      HTM_BR ();
+      TsV_ShowVisibility (Game->Visibility,
+			  Game->Hidden ? "ASG_GRP_LIGHT" :
+					 "ASG_GRP");
+     }
    HTM_DIV_End ();
-
-   HTM_TD_End ();
 
    /***** Number of matches in game *****/
    if (ShowOnlyThisGame)
@@ -899,7 +908,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 			            "gam_games.Hidden,"		// row[2]
 			            "gam_games.UsrCod,"		// row[3]
 			            "gam_games.MaxGrade,"	// row[4]
-			            "gam_games.Title"		// row[5]
+			            "gam_games.Visibility,"	// row[5]
+			            "gam_games.Title"		// row[6]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
@@ -927,8 +937,11 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       if (Game->MaxGrade < 0.0)	// Only positive values allowed
 	 Game->MaxGrade = 0.0;
 
-      /* Get the title of the game (row[5]) */
-      Str_Copy (Game->Title,row[5],
+      /* Get visibility (row[5]) */
+      Game->Visibility = TsV_GetVisibilityFromStr (row[5]);
+
+      /* Get the title of the game (row[6]) */
+      Str_Copy (Game->Title,row[6],
                 Gam_MAX_BYTES_TITLE);
 
       /* Get number of questions */
@@ -989,6 +1002,7 @@ static void Gam_ResetGame (struct Game *Game)
    Game->CrsCod                  = -1L;
    Game->UsrCod                  = -1L;
    Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
+   Game->Visibility              = TsV_VISIBILITY_DEFAULT;
    Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Game->Title[0]                = '\0';
@@ -1254,6 +1268,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
+   extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
@@ -1312,6 +1327,19 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
 		    "required=\"required\"");
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Visibility of results *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Result_visibility);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LB\"");
+   TsV_PutVisibilityCheckboxes (Game->Visibility);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1378,6 +1406,9 @@ void Gam_RecFormGame (void)
       if (Game.MaxGrade < 0.0)	// Only positive values allowed
 	 Game.MaxGrade = 0.0;
 
+      /***** Get visibility from form *****/
+      Game.Visibility = TsV_GetVisibilityFromForm ();
+
       /***** Get game text and insert links *****/
       Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
@@ -1432,12 +1463,13 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO gam_games"
-				" (CrsCod,Hidden,UsrCod,MaxGrade,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,%.15lg,'%s','%s')",
+				" (%ld,'N',%ld,%.15lg,%u,'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->MaxGrade,
+				Game->Visibility,
 				Game->Title,
 				Txt);
    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -1461,11 +1493,13 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 		   "UPDATE gam_games"
 		   " SET CrsCod=%ld,"
 		        "MaxGrade=%.15lg,"
+		        "Visibility=%u,"
 		        "Title='%s',"
 		        "Txt='%s'"
 		   " WHERE GamCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   Game->MaxGrade,
+		   Game->Visibility,
 	           Game->Title,
 	           Txt,
 	           Game->GamCod);

@@ -4470,15 +4470,18 @@ int swad__getGames (struct soap *soap,
 			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[2]
 			            "MAX(mch_matches.EndTime) AS EndTime,"	// row[3]
 				    "gam_games.MaxGrade,"			// row[4]
-			            "gam_games.Title,"				// row[5]
-			            "gam_games.Txt"				// row[6]
+				    "gam_games.Visibility,"			// row[5]
+			            "gam_games.Title,"				// row[6]
+			            "gam_games.Txt"				// row[7]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
 			     " WHERE gam_games.CrsCod=%ld"
 			     " AND Hidden='N'"
 			     " GROUP BY gam_games.GamCod"
-			     " ORDER BY StartTime DESC,EndTime DESC,gam_games.Title DESC",
+			     " ORDER BY StartTime DESC,"
+			               "EndTime DESC,"
+			               "gam_games.Title DESC",
 			     Gbl.Hierarchy.Crs.CrsCod);
    getGamesOut->gamesArray.__size =
    getGamesOut->numGames          = (int) NumRows;
@@ -4560,18 +4563,22 @@ int swad__getGames (struct soap *soap,
 	 if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
 	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
-	 /* Get title of the game (row[5]) */
-         Length = strlen (row[5]);
+	 /* Get visibility (row[5]) */
+	 // TODO: Get visibility
+         // getGamesOut->gamesArray.__ptr[NumGame].Visibility = TsV_GetVisibilityFromStr (row[5]);
+
+	 /* Get title of the game (row[6]) */
+         Length = strlen (row[6]);
          getGamesOut->gamesArray.__ptr[NumGame].title =
             (char *) soap_malloc (Gbl.soap,Length + 1);
-         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[5],
+         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[6],
                    Length);
 
-	 /* Get Txt (row[6]) */
-         Length = strlen (row[6]);
+	 /* Get Txt (row[7]) */
+         Length = strlen (row[7]);
          getGamesOut->gamesArray.__ptr[NumGame].text =
             (char *) soap_malloc (Gbl.soap,Length + 1);
-         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[6],
+         Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[7],
                    Length);
 	}
      }

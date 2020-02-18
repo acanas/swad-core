@@ -501,13 +501,31 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
+ *
+// TODO: Geolocalización:
+ * Función API
+sendLocation
+Parámetros: string con ubicación (ej. "Aula 0.1")
+
+Poblar base de datos:
+En Usuarios > Ubicación aparecería un botón pequeño de "Añadir ubicación". Se preguntaría a SWAD a través de una función de la API
+si el usuario tiene permiso para añadir ubicaciones. Si es así, se llamaría a la función:
+sendPoint
+Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
+
+ *
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Add visibility to API function getTestConfig
-// TODO: Add visibility to games
+// TODO: Get visibility IN API function getGames
 // TODO: Sugerencia de Jesús González Peñalver: añadir un poco más de espacio entre pregunta y pregunta en las opciones de un juego
+
+	Version 19.127:   Feb 18, 2020	Form to define visibility of match results in games. (279103 lines)
+					2 changes necessary in database:
+ALTER TABLE gam_games ADD COLUMN Visibility INT NOT NULL DEFAULT 0x1f AFTER MaxGrade;
+UPDATE gam_games,tst_config SET gam_games.Visibility=tst_config.Visibility WHERE gam_games.CrsCod=tst_config.CrsCod;
 
 	Version 19.126:   Feb 18, 2020	New module swad_test_visibility for visibility of test results. (279013 lines)
 	Version 19.125.4: Feb 17, 2020	Changes in visibility of answers. (278930 lines)

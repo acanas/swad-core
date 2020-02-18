@@ -774,7 +774,8 @@ void TsR_ShowOneTstResult (void)
 
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  Gbl.Test.NumQsts,TstTimeUTC);
+			  Gbl.Test.NumQsts,TstTimeUTC,
+			  Gbl.Test.Config.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -832,7 +833,8 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 /*****************************************************************************/
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC)
+			 unsigned NumQsts,time_t TstTimeUTC,
+			 unsigned Visibility)
   {
    extern const char *Txt_Question_modified;
    extern const char *Txt_Question_removed;
@@ -900,7 +902,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            UsrDat,
 				    NumQst,QstCod,row,
-				    Gbl.Test.Config.Visibility,
+				    Visibility,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }

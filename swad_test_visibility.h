@@ -45,7 +45,8 @@ typedef enum
    TsV_VISIBLE_CORRECT_ANSWER = 2,	// Correct answers
    TsV_VISIBLE_EACH_QST_SCORE = 3,	// Score of each question
    TsV_VISIBLE_TOTAL_SCORE    = 4,	// Total score
-  } TsV_ResultVisibility_t;
+  } TsV_Visibility_t;
+#define TsV_MIN_VISIBILITY 0						// Nothing visible
 #define TsV_MAX_VISIBILITY ((1 << TsV_NUM_ITEMS_VISIBILITY) - 1)	// All visible
 #define TsV_VISIBILITY_DEFAULT TsV_MAX_VISIBILITY
 
@@ -53,8 +54,10 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned TsV_GetVisibilityFromForm (void);
+void TsV_ShowVisibility (unsigned SelectedVisibility,const char *Class);
 void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility);
+unsigned TsV_GetVisibilityFromForm (void);
+unsigned TsV_GetVisibilityFromStr (const char *Str);
 
 bool TsV_IsVisibleQstAndAnsTxt (unsigned Visibility);
 bool TsV_IsVisibleFeedbackTxt (unsigned Visibility);

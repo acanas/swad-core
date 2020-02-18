@@ -1674,12 +1674,10 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
         {
          TagHidden = (row[2][0] == 'Y');
          HTM_TD_Begin ("class=\"LM\"");
-         if (TagHidden)
-            HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye-slash.svg",Txt_Tag_not_allowed,
-	             "class=\"ICO_HIDDEN ICO16x16\"");
-         else
-            HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye.svg",Txt_Tag_allowed,
-	             "class=\"ICO_HIDDEN ICO16x16\"");
+         Ico_PutIconOff (TagHidden ? "eye-slash.svg" :
+                                     "eye.svg",
+			 TagHidden ? Txt_Tag_not_allowed :
+			             Txt_Tag_allowed);
          HTM_TD_End ();
         }
 
@@ -2018,7 +2016,6 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
   {
    int IntNum;
    long LongNum;
-   unsigned UnsignedNum;
    Tst_Pluggable_t Pluggable;
 
    /***** Get whether test are visible via plugins or not *****/
@@ -2060,8 +2057,7 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 	                                                     (unsigned long) LongNum;
 
    /***** Get visibility (row[5]) *****/
-   if (sscanf (row[5],"%u",&UnsignedNum) == 1)
-      Gbl.Test.Config.Visibility = UnsignedNum & TsV_MAX_VISIBILITY;
+   Gbl.Test.Config.Visibility = TsV_GetVisibilityFromStr (row[5]);
   }
 
 /*****************************************************************************/
@@ -2154,7 +2150,7 @@ void Tst_ReceiveConfigTst (void)
                                                                    ULONG_MAX,
                                                                    0);
 
-   /***** Get type of feedback from form *****/
+   /***** Get visibility from form *****/
    Gbl.Test.Config.Visibility = TsV_GetVisibilityFromForm ();
 
    /***** Update database *****/

@@ -1332,6 +1332,7 @@ mysql> DESCRIBE gam_games;
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
 			"MaxGrade DOUBLE PRECISION NOT NULL DEFAULT 1,"	// Scale from score [0...num.answers] to grade [0...MaxGrade]
+			"Visibility INT NOT NULL DEFAULT 0x1f,"
 			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
