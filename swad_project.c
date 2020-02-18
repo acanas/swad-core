@@ -574,8 +574,8 @@ static void Prj_ShowFormToFilterByHidden (void)
    Prj_HiddenVisibl_t HidVis;
    static const char *HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
      {
-      [Prj_HIDDEN] = "eye-slash.svg",
-      [Prj_VISIBL] = "eye.svg",
+      [Prj_HIDDEN] = "eye-slash-red.svg",
+      [Prj_VISIBL] = "eye-green.svg",
      };
 
    Set_StartOneSettingSelector ();

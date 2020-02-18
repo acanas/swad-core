@@ -258,8 +258,8 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
    Agd_HiddenVisiblEvents_t HidVis;
    static const char *Icon[2] =
      {
-      [Agd_HIDDEN_EVENTS] = "eye-slash.svg",
-      [Agd_VISIBL_EVENTS] = "eye.svg",
+      [Agd_HIDDEN_EVENTS] = "eye-slash-red.svg",
+      [Agd_VISIBL_EVENTS] = "eye-green.svg",
      };
 
    Set_StartOneSettingSelector ();

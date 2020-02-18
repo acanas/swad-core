@@ -528,9 +528,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
       HTM_BR ();
       HTM_TxtColonNBSP (Txt_Result_visibility);
       HTM_BR ();
-      TsV_ShowVisibility (Game->Visibility,
-			  Game->Hidden ? "ASG_GRP_LIGHT" :
-					 "ASG_GRP");
+      TsV_ShowVisibility (Game->Visibility);
      }
    HTM_DIV_End ();
 

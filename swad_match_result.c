@@ -662,7 +662,6 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 				const char *GamesSelectedCommas)
   {
    extern const char *Txt_Match_result;
-   extern const char *Txt_Hidden_results;
    char *MchSubQuery;
    char *GamSubQuery;
    MYSQL_RES *mysql_res;
@@ -807,7 +806,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
-	 if (ICanViewResult)
+	 if (ICanViewScore)
 	   {
 	    /* Get number of questions (row[3]) */
 	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
@@ -835,18 +834,18 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewResult)
+	 if (ICanViewScore)
 	    HTM_Unsigned (NumQstsInThisResult);
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
-	 HTM_TD_End ();
+            Ico_PutIconNotVisible ();
+         HTM_TD_End ();
 
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewResult)
+	 if (ICanViewScore)
 	    HTM_Unsigned (NumQstsNotBlankInThisResult);
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write score */
@@ -854,7 +853,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 if (ICanViewScore)
 	    HTM_Double2Decimals (ScoreInThisResult);
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write average score per question */
@@ -864,7 +863,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 					               (double) NumQstsInThisResult :
 					               0.0);
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
@@ -876,7 +875,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    TotalGrade += Grade;
 	   }
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -901,7 +900,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	    Frm_EndForm ();
 	   }
 	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -965,8 +964,9 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
-			      0.0);
+   HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllResults /
+	                               (double) NumTotalQsts :
+			               0.0);
    HTM_TD_End ();
 
    /***** Write total grade *****/
@@ -1156,7 +1156,7 @@ void McR_ShowOneMchResult (void)
       if (ICanViewScore)
          HTM_Double2Decimals (TotalScore);
       else
-	 HTM_Txt ("?");	// No feedback
+         Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1172,7 +1172,7 @@ void McR_ShowOneMchResult (void)
       if (ICanViewScore)
          Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
       else
-	 HTM_Txt ("?");	// Not visible
+         Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       HTM_TR_End ();

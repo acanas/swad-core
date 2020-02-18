@@ -1234,8 +1234,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   PstCod);
-      Ico_PutIconLink (Enabled ? "eye.svg" :
-			         "eye-slash.svg",
+      Ico_PutIconLink (Enabled ? "eye-green.svg" :
+			         "eye-slash-red.svg",
 	               Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
 	        				      Txt_FORUM_Post_X_banned_Click_to_unban_it,
 					    (long) PstNum));
@@ -1244,8 +1244,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
      {
-      Ico_PutIcon (Enabled ? "eye.svg" :
-			     "eye-slash.svg",
+      Ico_PutIcon (Enabled ? "eye-green.svg" :
+			     "eye-slash-red.svg",
 	           Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed :
 	        			          Txt_FORUM_Post_X_banned,
 				        (long) PstNum),

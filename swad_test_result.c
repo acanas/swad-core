@@ -740,7 +740,7 @@ void TsR_ShowOneTstResult (void)
       if (ICanViewScore)
 	 HTM_Double2Decimals (TotalScore);
       else
-	 HTM_Txt ("?");	// No feedback
+         Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       /* Grade */
@@ -754,7 +754,7 @@ void TsR_ShowOneTstResult (void)
       if (ICanViewScore)
          Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,TsR_SCORE_MAX);
       else
-	 HTM_Txt ("?");	// No feedback
+         Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       HTM_TR_End ();

@@ -54,7 +54,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TsV_ShowVisibility (unsigned SelectedVisibility,const char *Class);
+void TsV_ShowVisibility (unsigned SelectedVisibility);
 void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility);
 unsigned TsV_GetVisibilityFromForm (void);
 unsigned TsV_GetVisibilityFromStr (const char *Str);

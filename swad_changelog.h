@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.126 (2020-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.127.1 (2020-02-19)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -521,6 +521,13 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Add visibility to API function getTestConfig
 // TODO: Get visibility IN API function getGames
 // TODO: Sugerencia de Jesús González Peñalver: añadir un poco más de espacio entre pregunta y pregunta en las opciones de un juego
+// TODO: Remove Txt_Result
+
+	Version 19.127.1: Feb 18, 2020	Changes in match results.
+					Changes in icon. (279116 lines)
+				        Copy the following icons to icon public directory:
+sudo cp -a icon/eye-green.svg /var/www/html/swad/icon/
+sudo cp -a icon/eye-slash-red.svg /var/www/html/swad/icon/
 
 	Version 19.127:   Feb 18, 2020	Form to define visibility of match results in games. (279103 lines)
 					2 changes necessary in database:
@@ -554,7 +561,7 @@ UPDATE tst_config SET Visibility=0x1f WHERE Feedback='full_feedback';
 	Version 19.122.2: Feb 13, 2020	Increased quality in images. (278698 lines)
 	Version 19.122.1: Feb 07, 2020	Fixed bug removing test tags, reported by Mancia Anguita López. (278692 lines)
 	Version 19.122:   Jan 30, 2020	Some options changed in system tab. (278690 lines)
-Copy the following icons to icon public directory:
+				        Copy the following icons to icon public directory:
 sudo cp -a icon/bolt.svg /var/www/html/swad/icon/
 sudo cp -a icon/iconset/awesome/tools.svg /var/www/html/swad/icon/iconset/awesome/
 sudo cp -a icon/iconset/nuvola/tools.svg /var/www/html/swad/icon/iconset/nuvola/

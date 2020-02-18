@@ -1025,7 +1025,6 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
   {
-   extern const char *Txt_Question_not_visible;
    unsigned long StemLength;
    char *StemRigorousHTML;
 
@@ -1051,7 +1050,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
       free (StemRigorousHTML);
      }
    else
-      HTM_Txt (Txt_Question_not_visible);
+      Ico_PutIconNotVisible ();
 
    /***** DIV end *****/
    HTM_DIV_End ();
@@ -1674,8 +1673,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
         {
          TagHidden = (row[2][0] == 'Y');
          HTM_TD_Begin ("class=\"LM\"");
-         Ico_PutIconOff (TagHidden ? "eye-slash.svg" :
-                                     "eye.svg",
+         Ico_PutIconOff (TagHidden ? "eye-slash-red.svg" :
+                                     "eye-green.svg",
 			 TagHidden ? Txt_Tag_not_allowed :
 			             Txt_Tag_allowed);
          HTM_TD_End ();
@@ -1791,7 +1790,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActEnableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye-slash.svg",
+   Ico_PutIconLink ("eye-slash-red.svg",
 		    Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
 				        TagTxt));
    Str_FreeString ();
@@ -1810,7 +1809,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActDisableTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye.svg",
+   Ico_PutIconLink ("eye-green.svg",
 		    Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
 				        TagTxt));
    Str_FreeString ();
@@ -3546,7 +3545,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
        TsV_IsVisibleCorrectAns   (Visibility))
       Tst_WriteAnsTF (row[1][0]);
    else
-      HTM_Txt ("?");
+      Ico_PutIconNotVisible ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3702,7 +3701,6 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
-   extern const char *Txt_Question_not_visible;
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
@@ -3785,7 +3783,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       else
 	{
 	 HTM_TD_Begin ("class=\"ANS_0 CT\"");
-	 HTM_Txt ("?");
+         Ico_PutIconNotVisible ();
          HTM_TD_End ();
 	}
 
@@ -3806,7 +3804,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 			"TEST_MED_SHOW");
 	}
       else
-	 HTM_Txt (Txt_Question_not_visible);
+         Ico_PutIconNotVisible ();
       HTM_DIV_End ();
 
       if (TsV_IsVisibleCorrectAns (Visibility))
@@ -4320,7 +4318,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    else
      {
       HTM_TD_Begin ("class=\"ANS_0 CT\"");
-      HTM_Txt ("?");
+      Ico_PutIconNotVisible ();
       HTM_TD_End ();
      }
    HTM_TR_End ();
@@ -4447,7 +4445,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
        TsV_IsVisibleCorrectAns   (Visibility))
       HTM_Long (IntAnswerCorr);
    else
-      HTM_Txt ("?");
+      Ico_PutIconNotVisible ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4593,7 +4591,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       HTM_Txt ("]");
      }
    else
-      HTM_Txt ("?");
+      Ico_PutIconNotVisible ();
    HTM_TD_End ();
 
    HTM_TR_End ();

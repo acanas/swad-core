@@ -276,7 +276,7 @@ void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,voi
    extern const char *Txt_Hide;
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
-				  "eye.svg",
+				  "eye-green.svg",
 				  Txt_Hide);
   }
 
@@ -285,7 +285,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,v
    extern const char *Txt_Show;
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
-				  "eye-slash.svg",
+				  "eye-slash-red.svg",
 				  Txt_Show);
   }
 
@@ -509,4 +509,15 @@ void Ico_PutIconPaste (void)
    extern const char *Txt_Paste;
 
    Ico_PutIconLink ("paste.svg",Txt_Paste);
+  }
+
+/*****************************************************************************/
+/************* Put icon indicating that a content is not visible *************/
+/*****************************************************************************/
+
+void Ico_PutIconNotVisible (void)
+  {
+   extern const char *Txt_Not_visible;
+
+   Ico_PutIconOff ("eye-slash-red.svg",Txt_Not_visible);
   }

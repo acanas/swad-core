@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /************ Put checkboxes in form to select result visibility *************/
 /*****************************************************************************/
 
-void TsV_ShowVisibility (unsigned SelectedVisibility,const char *Class)
+void TsV_ShowVisibility (unsigned SelectedVisibility)
   {
    extern const char *Txt_Visible;
    extern const char *Txt_Hidden;
@@ -71,10 +71,11 @@ void TsV_ShowVisibility (unsigned SelectedVisibility,const char *Class)
 	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      HTM_LABEL_Begin ("class=\"%s\"",Class);
       ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
-      Ico_PutIconOff (ItemVisible ? "eye.svg" :
-                                    "eye-slash.svg",
+      HTM_LABEL_Begin ("class=\"%s\"",ItemVisible ? "DAT_SMALL_GREEN" :
+	                                            "DAT_SMALL_RED");
+      Ico_PutIconOff (ItemVisible ? "eye-green.svg" :
+                                    "eye-slash-red.svg",
 		      ItemVisible ? Txt_Visible :
 			            Txt_Hidden);
       HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);

@@ -90,4 +90,6 @@ void Ico_PutIconRemove (void);
 void Ico_PutIconCut (void);
 void Ico_PutIconPaste (void);
 
+void Ico_PutIconNotVisible (void);
+
 #endif

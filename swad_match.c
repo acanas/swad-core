@@ -481,7 +481,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    extern const char *Txt_Match;
    extern const char *Txt_Players;
    extern const char *Txt_Status;
-   extern const char *Txt_Result;
+   extern const char *Txt_Results;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -497,7 +497,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    HTM_TH (1,1,"LT",Txt_Match);
    HTM_TH (1,1,"RT",Txt_Players);
    HTM_TH (1,1,"CT",Txt_Status);
-   HTM_TH (1,1,"CT",Txt_Result);
+   HTM_TH (1,1,"CT",Txt_Results);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -768,7 +768,6 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
 
 static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
   {
-   extern const char *Txt_Hidden_results;
    extern const char *Txt_Results;
 
    /***** Is match result visible or hidden? *****/
@@ -784,7 +783,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
      }
    else
       /* Result is forbidden to me */
-      Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_results);
+      Ico_PutIconNotVisible ();
   }
 
 static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
@@ -808,15 +807,15 @@ static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
       /* I can edit visibility */
       Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 				     Mch_PutParamsEdit,
-				     Match->Status.ShowUsrResults ? "eye.svg" :
-								    "eye-slash.svg",
+				     Match->Status.ShowUsrResults ? "eye-green.svg" :
+								    "eye-slash-red.svg",
 				     Match->Status.ShowUsrResults ? Txt_Visible_results :
 								    Txt_Hidden_results);
      }
    else
       /* I can not edit visibility */
-      Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
-						     "eye-slash.svg",
+      Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye-green.svg" :
+						     "eye-slash-red.svg",
 		      Match->Status.ShowUsrResults ? Txt_Visible_results :
 						     Txt_Hidden_results);
   }
