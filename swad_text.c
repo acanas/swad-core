@@ -33712,28 +33712,7 @@ const char *Txt_Reset_survey =
 #elif L==9	// pt
 	"Reiniciar inqu&eacute;rito";
 #endif
-/*
-const char *Txt_Result =
-#if   L==1	// ca
-	"Resultat";
-#elif L==2	// de
-	"Ergebnis";
-#elif L==3	// en
-	"Result";
-#elif L==4	// es
-	"Resultado";
-#elif L==5	// fr
-	"R&eacute;sultat";
-#elif L==6	// gn
-	"Resultado";	// Okoteve traducción
-#elif L==7	// it
-	"Risultato";
-#elif L==8	// pl
-	"Wynik";
-#elif L==9	// pt
-	"Resultado";
-#endif
-*/
+
 const char *Txt_Results =
 #if   L==1	// ca
 	"Resultats";

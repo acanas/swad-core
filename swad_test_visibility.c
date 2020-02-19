@@ -108,36 +108,6 @@ void TsV_ShowVisibilityIcons (unsigned SelectedVisibility)
   }
 
 /*****************************************************************************/
-/*********************** Show visibility with text ***************************/
-/*****************************************************************************/
-
-void TsV_ShowVisibilityIconsAndTxt (unsigned SelectedVisibility)
-  {
-   extern const char *Txt_Visible;
-   extern const char *Txt_Hidden;
-   extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
-   TsV_Visibility_t Visibility;
-   bool ItemVisible;
-
-   for (Visibility  = (TsV_Visibility_t) 0;
-	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
-	Visibility++)
-     {
-      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
-      HTM_LABEL_Begin ("class=\"%s\"",ItemVisible ? "DAT_SMALL_GREEN" :
-						    "DAT_SMALL_RED");
-      Ico_PutIcon (ItemVisible ? "eye-green.svg" :
-                                 "eye-slash-red.svg",
-		   ItemVisible ? Txt_Visible :
-		                 Txt_Hidden,
-		   "CONTEXT_OPT CONTEXT_ICO_16x16");
-      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-  }
-
-/*****************************************************************************/
 /************ Put checkboxes in form to select result visibility *************/
 /*****************************************************************************/
 
