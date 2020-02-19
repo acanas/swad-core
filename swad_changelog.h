@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.127.1 (2020-02-19)"
+#define Log_PLATFORM_VERSION	"SWAD 19.128 (2020-02-19)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -522,6 +522,19 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Get visibility IN API function getGames
 // TODO: Sugerencia de Jesús González Peñalver: añadir un poco más de espacio entre pregunta y pregunta en las opciones de un juego
 // TODO: Remove Txt_Result
+
+	Version 19.128:   Feb 18, 2020	Changes in match results. (279175 lines)
+				        Copy the following icons to icon public directory:
+sudo cp -a icon/file-regular-red.svg /var/www/html/swad/icon/
+sudo cp -a icon/file-alt-regular-green.svg /var/www/html/swad/icon/
+sudo cp -a icon/file-regular-red.svg /var/www/html/swad/icon/
+sudo cp -a icon/file-alt-regular-green.svg /var/www/html/swad/icon/
+sudo cp -a icon/spell-red.svg /var/www/html/swad/icon/
+sudo cp -a icon/spell-check-green.svg /var/www/html/swad/icon/
+sudo cp -a icon/list-ul-red.svg /var/www/html/swad/icon/
+sudo cp -a icon/tasks-green.svg /var/www/html/swad/icon/
+sudo cp -a icon/circle-regular-red.svg /var/www/html/swad/icon/
+sudo cp -a icon/check-circle-regular-green.svg /var/www/html/swad/icon/
 
 	Version 19.127.1: Feb 18, 2020	Changes in match results.
 					Changes in icon. (279116 lines)

@@ -25,6 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_test_visibility.h"
@@ -51,15 +54,64 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
+static const char *TsV_Icons[TsV_NUM_ITEMS_VISIBILITY][2] =
+  {
+   [TsV_VISIBLE_QST_ANS_TXT   ][0] = "file-regular-red.svg",
+   [TsV_VISIBLE_QST_ANS_TXT   ][1] = "file-alt-regular-green.svg",
+
+   [TsV_VISIBLE_FEEDBACK_TXT  ][0] = "file-regular-red.svg",
+   [TsV_VISIBLE_FEEDBACK_TXT  ][1] = "file-alt-regular-green.svg",
+
+   [TsV_VISIBLE_CORRECT_ANSWER][0] = "spell-red.svg",
+   [TsV_VISIBLE_CORRECT_ANSWER][1] = "spell-check-green.svg",
+
+   [TsV_VISIBLE_EACH_QST_SCORE][0] = "list-ul-red.svg",
+   [TsV_VISIBLE_EACH_QST_SCORE][1] = "tasks-green.svg",
+
+   [TsV_VISIBLE_TOTAL_SCORE   ][0] = "circle-regular-red.svg",
+   [TsV_VISIBLE_TOTAL_SCORE   ][1] = "check-circle-regular-green.svg",
+  };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/************ Put checkboxes in form to select result visibility *************/
+/******************************* Show visibility *****************************/
 /*****************************************************************************/
 
-void TsV_ShowVisibility (unsigned SelectedVisibility)
+void TsV_ShowVisibilityIcons (unsigned SelectedVisibility)
+  {
+   extern const char *Txt_Visible;
+   extern const char *Txt_Hidden;
+   extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
+   TsV_Visibility_t Visibility;
+   bool ItemVisible;
+   char *Title;
+
+   for (Visibility  = (TsV_Visibility_t) 0;
+	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
+	Visibility++)
+     {
+      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+      if (asprintf (&Title,"%s: %s",
+		    Txt_TST_STR_VISIBILITY[Visibility],
+		    ItemVisible ? Txt_Visible :
+			          Txt_Hidden) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ico_PutIcon (ItemVisible ? TsV_Icons[Visibility][1] :
+                                 TsV_Icons[Visibility][0],
+		   Title,
+		   "CONTEXT_OPT CONTEXT_ICO_16x16");
+      free (Title);
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Show visibility with text ***************************/
+/*****************************************************************************/
+
+void TsV_ShowVisibilityIconsAndTxt (unsigned SelectedVisibility)
   {
    extern const char *Txt_Visible;
    extern const char *Txt_Hidden;
@@ -73,11 +125,12 @@ void TsV_ShowVisibility (unsigned SelectedVisibility)
      {
       ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
       HTM_LABEL_Begin ("class=\"%s\"",ItemVisible ? "DAT_SMALL_GREEN" :
-	                                            "DAT_SMALL_RED");
-      Ico_PutIconOff (ItemVisible ? "eye-green.svg" :
-                                    "eye-slash-red.svg",
-		      ItemVisible ? Txt_Visible :
-			            Txt_Hidden);
+						    "DAT_SMALL_RED");
+      Ico_PutIcon (ItemVisible ? "eye-green.svg" :
+                                 "eye-slash-red.svg",
+		   ItemVisible ? Txt_Visible :
+		                 Txt_Hidden,
+		   "CONTEXT_OPT CONTEXT_ICO_16x16");
       HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
       HTM_LABEL_End ();
       HTM_BR ();

@@ -523,13 +523,15 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Maximum_grade);
    HTM_Double (Game->MaxGrade);
+   HTM_BR ();
+   HTM_TxtColonNBSP (Txt_Result_visibility);
    if (ShowOnlyThisGame)
      {
       HTM_BR ();
-      HTM_TxtColonNBSP (Txt_Result_visibility);
-      HTM_BR ();
-      TsV_ShowVisibility (Game->Visibility);
+      TsV_ShowVisibilityIconsAndTxt (Game->Visibility);
      }
+   else
+      TsV_ShowVisibilityIcons (Game->Visibility);
    HTM_DIV_End ();
 
    /***** Number of matches in game *****/
