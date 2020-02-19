@@ -29,6 +29,7 @@
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_action.h"
 #include "swad_database.h"

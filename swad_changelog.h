@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.128.6 (2020-02-19)"
+#define Log_PLATFORM_VERSION	"SWAD 19.128.7 (2020-02-19)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -521,6 +521,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 
+	Version 19.128.7: Feb 19, 2020	Programa is changed by Temario.
+				        Fixed bug in plugins. (279167 lines)
 	Version 19.128.6: Feb 19, 2020	Visibility added to API function getTestConfig. (279156 lines)
 	Version 19.128.5: Feb 19, 2020	Visibility added to API function getGames. (279151 lines)
 	Version 19.128.4: Feb 19, 2020	Increased separation between answers in matches, suggested by Jesús González Peñalver. (279151 lines)

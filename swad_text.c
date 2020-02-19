@@ -19246,23 +19246,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeeSyl
 #if   L==1	// ca
-	"Programa"
+	"Temari"
 #elif L==2	// de
 	"Studienplan"
 #elif L==3	// en
 	"Syllabus"
 #elif L==4	// es
-	"Programa"
+	"Temario"
 #elif L==5	// fr
 	"Plan"
 #elif L==6	// gn
-	"Programa"	// Okoteve traducción
+	"Temario"	// Okoteve traducción
 #elif L==7	// it
 	"Programma"
 #elif L==8	// pl
-	"Syllabus"
+	"Sylabus"
 #elif L==9	// pt
-	"Programa"
+	"Conte&uacute;do"
 #endif
 	,
 	//  3: ActSeeBib

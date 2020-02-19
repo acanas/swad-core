@@ -1313,18 +1313,19 @@ mysql> DESCRIBE forum_thread;
    /***** Table gam_games *****/
 /*
 mysql> DESCRIBE gam_games;
-+----------+---------------+------+-----+---------+----------------+
-| Field    | Type          | Null | Key | Default | Extra          |
-+----------+---------------+------+-----+---------+----------------+
-| GamCod   | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod   | int(11)       | NO   | MUL | -1      |                |
-| Hidden   | enum('N','Y') | NO   |     | N       |                |
-| UsrCod   | int(11)       | NO   |     | NULL    |                |
-| MaxGrade | double        | NO   |     | 1       |                |
-| Title    | varchar(2047) | NO   |     | NULL    |                |
-| Txt      | text          | NO   |     | NULL    |                |
-+----------+---------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| GamCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod     | int(11)       | NO   | MUL | -1      |                |
+| Hidden     | enum('N','Y') | NO   |     | N       |                |
+| UsrCod     | int(11)       | NO   |     | NULL    |                |
+| MaxGrade   | double        | NO   |     | 1       |                |
+| Visibility | int(11)       | NO   |     | 31      |                |
+| Title      | varchar(2047) | NO   |     | NULL    |                |
+| Txt        | text          | NO   |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_games ("
 			"GamCod INT NOT NULL AUTO_INCREMENT,"

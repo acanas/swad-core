@@ -391,6 +391,7 @@ static void Plg_ListPluginsForEdition (void)
      {
       Plg = &Gbl.Plugins.Lst[NumPlg];
 
+      /* Row begin */
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove plugin */
@@ -469,6 +470,8 @@ static void Plg_ListPluginsForEdition (void)
 		      "size=\"10\"");
       Frm_EndForm ();
       HTM_TD_End ();
+
+      /* Row end */
       HTM_TR_End ();
      }
 
@@ -871,6 +874,9 @@ static void Plg_PutFormToCreatePlugin (void)
 
    HTM_TR_End ();
 
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
    /***** Plugin name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,false,
@@ -908,6 +914,7 @@ static void Plg_PutFormToCreatePlugin (void)
 		   "size=\"10\" required=\"required\"");
    HTM_TD_End ();
 
+   /***** Row end *****/
    HTM_TR_End ();
 
    /***** End table, send button and end box *****/
