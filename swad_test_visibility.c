@@ -54,24 +54,6 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static const char *TsV_Icons[TsV_NUM_ITEMS_VISIBILITY][2] =
-  {
-   [TsV_VISIBLE_QST_ANS_TXT   ][0] = "file-regular-red.svg",
-   [TsV_VISIBLE_QST_ANS_TXT   ][1] = "file-alt-regular-green.svg",
-
-   [TsV_VISIBLE_FEEDBACK_TXT  ][0] = "file-regular-red.svg",
-   [TsV_VISIBLE_FEEDBACK_TXT  ][1] = "file-alt-regular-green.svg",
-
-   [TsV_VISIBLE_CORRECT_ANSWER][0] = "spell-red.svg",
-   [TsV_VISIBLE_CORRECT_ANSWER][1] = "spell-check-green.svg",
-
-   [TsV_VISIBLE_EACH_QST_SCORE][0] = "list-ul-red.svg",
-   [TsV_VISIBLE_EACH_QST_SCORE][1] = "tasks-green.svg",
-
-   [TsV_VISIBLE_TOTAL_SCORE   ][0] = "circle-regular-red.svg",
-   [TsV_VISIBLE_TOTAL_SCORE   ][1] = "check-circle-regular-green.svg",
-  };
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -80,26 +62,44 @@ static const char *TsV_Icons[TsV_NUM_ITEMS_VISIBILITY][2] =
 /******************************* Show visibility *****************************/
 /*****************************************************************************/
 
-void TsV_ShowVisibilityIcons (unsigned SelectedVisibility)
+void TsV_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden)
   {
    extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
    extern const char *Txt_TST_HIDDEN_VISIBLE[2];
+   static const char *Icons[TsV_NUM_ITEMS_VISIBILITY][2] =
+     {
+      [TsV_VISIBLE_QST_ANS_TXT   ][false] = "file-alt-red.svg",
+      [TsV_VISIBLE_QST_ANS_TXT   ][true ] = "file-alt-green.svg",
+
+      [TsV_VISIBLE_FEEDBACK_TXT  ][false] = "file-signature-red.svg",
+      [TsV_VISIBLE_FEEDBACK_TXT  ][true ] = "file-signature-green.svg",
+
+      [TsV_VISIBLE_CORRECT_ANSWER][false] = "spell-check-red.svg",
+      [TsV_VISIBLE_CORRECT_ANSWER][true ] = "spell-check-green.svg",
+
+      [TsV_VISIBLE_EACH_QST_SCORE][false] = "tasks-red.svg",
+      [TsV_VISIBLE_EACH_QST_SCORE][true ] = "tasks-green.svg",
+
+      [TsV_VISIBLE_TOTAL_SCORE   ][false] = "check-circle-regular-red.svg",
+      [TsV_VISIBLE_TOTAL_SCORE   ][true ] = "check-circle-regular-green.svg",
+     };
    TsV_Visibility_t Visibility;
-   unsigned ItemVisible;
+   bool ItemVisible;
    char *Title;
 
    for (Visibility  = (TsV_Visibility_t) 0;
 	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      ItemVisible = (SelectedVisibility & (1 << Visibility)) == 0 ? 0 :
-	                                                            1;
+      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
       if (asprintf (&Title,"%s: %s",
 		    Txt_TST_STR_VISIBILITY[Visibility],
 		    Txt_TST_HIDDEN_VISIBLE[ItemVisible]) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Ico_PutIconOff (TsV_Icons[Visibility][ItemVisible],
-		      Title);
+      if (ItemVisible && !Hidden)
+	 Ico_PutIconOn  (Icons[Visibility][ItemVisible],Title);
+      else
+	 Ico_PutIconOff (Icons[Visibility][ItemVisible],Title);
       free (Title);
      }
   }
@@ -111,18 +111,29 @@ void TsV_ShowVisibilityIcons (unsigned SelectedVisibility)
 void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility)
   {
    extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
+   static const char *Icons[TsV_NUM_ITEMS_VISIBILITY] =
+     {
+      [TsV_VISIBLE_QST_ANS_TXT   ] = "file-alt.svg",
+      [TsV_VISIBLE_FEEDBACK_TXT  ] = "file-signature.svg",
+      [TsV_VISIBLE_CORRECT_ANSWER] = "spell-check.svg",
+      [TsV_VISIBLE_EACH_QST_SCORE] = "tasks.svg",
+      [TsV_VISIBLE_TOTAL_SCORE   ] = "check-circle-regular.svg",
+     };
    TsV_Visibility_t Visibility;
+   bool ItemVisible;
 
    for (Visibility  = (TsV_Visibility_t) 0;
 	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
+      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
       HTM_LABEL_Begin ("class=\"DAT\"");
       HTM_INPUT_CHECKBOX ("Visibility",false,
 		          "value=\"%u\"%s",
 		          (unsigned) Visibility,
-		          (SelectedVisibility & (1 << Visibility)) != 0 ? " checked=\"checked\"" :
-		        	                                          "");
+		          ItemVisible ? " checked=\"checked\"" :
+		        	        "");
+      Ico_PutIconOn (Icons[Visibility],Txt_TST_STR_VISIBILITY[Visibility]);
       HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
       HTM_LABEL_End ();
       HTM_BR ();

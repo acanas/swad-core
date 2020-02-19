@@ -407,8 +407,13 @@ void Ico_PutSettingIconLink (const char *Icon,const char *Title)
   }
 
 /*****************************************************************************/
-/********************** Put an inactive/disabled icon ************************/
+/********************* Put an active or disabled icon ************************/
 /*****************************************************************************/
+
+void Ico_PutIconOn (const char *Icon,const char *Title)
+  {
+   Ico_PutIcon (Icon,Title,"CONTEXT_OPT CONTEXT_ICO_16x16");
+  }
 
 void Ico_PutIconOff (const char *Icon,const char *Title)
   {
