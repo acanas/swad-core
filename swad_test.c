@@ -4096,7 +4096,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    Mch_GetIndexes (MchCod,QstInd,Indexes);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (5);
+   HTM_TABLE_BeginWidePadding (10);
 
    /***** Show options distributed in columns *****/
    for (NumOpt = 0;

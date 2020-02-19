@@ -256,6 +256,7 @@ struct swad__game
    char *text;
    int numQuestions;
    float maxGrade;
+   int visibility;
   };
 struct swad__gamesArray
   {

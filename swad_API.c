@@ -4564,8 +4564,7 @@ int swad__getGames (struct soap *soap,
 	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
 	 /* Get visibility (row[5]) */
-	 // TODO: Get visibility
-         // getGamesOut->gamesArray.__ptr[NumGame].Visibility = TsV_GetVisibilityFromStr (row[5]);
+         getGamesOut->gamesArray.__ptr[NumGame].visibility = TsV_GetVisibilityFromStr (row[5]);
 
 	 /* Get title of the game (row[6]) */
          Length = strlen (row[6]);
