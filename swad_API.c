@@ -3676,6 +3676,9 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->minQuestions =
    getTestConfigOut->defQuestions =
    getTestConfigOut->maxQuestions = 0;
+   getTestConfigOut->visibility   = TsV_MIN_VISIBILITY;
+
+   /* TODO: Remove these lines in 2021 */
    getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
@@ -3687,6 +3690,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->minQuestions = (int) Gbl.Test.Config.Min;
    getTestConfigOut->defQuestions = (int) Gbl.Test.Config.Def;
    getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
+   getTestConfigOut->visibility   = (int) Gbl.Test.Config.Visibility;
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */

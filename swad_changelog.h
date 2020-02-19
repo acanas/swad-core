@@ -497,29 +497,31 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.128.5 (2020-02-19)"
+#define Log_PLATFORM_VERSION	"SWAD 19.128.6 (2020-02-19)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
  *
 // TODO: Geolocalización:
- * Función API
-sendLocation
+Función API sendLocation...
 Parámetros: string con ubicación (ej. "Aula 0.1")
 
 Poblar base de datos:
-En Usuarios > Ubicación aparecería un botón pequeño de "Añadir ubicación". Se preguntaría a SWAD a través de una función de la API
-si el usuario tiene permiso para añadir ubicaciones. Si es así, se llamaría a la función:
-sendPoint
+En Usuarios > Ubicación aparecería un botón pequeño de "Añadir ubicación".
+Se preguntaría a SWAD a través de una función de la API
+si el usuario tiene permiso para añadir ubicaciones.
+Función API checkPermission...
+
+Si es así, se llamaría a la función:
+Función API newLocation...
 Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 
- *
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
-// TODO: Add visibility to API function getTestConfig
 
+	Version 19.128.6: Feb 19, 2020	Visibility added to API function getTestConfig. (279156 lines)
 	Version 19.128.5: Feb 19, 2020	Visibility added to API function getGames. (279151 lines)
 	Version 19.128.4: Feb 19, 2020	Increased separation between answers in matches, suggested by Jesús González Peñalver. (279151 lines)
 	Version 19.128.3: Feb 19, 2020	Changes in match results. (279151 lines)

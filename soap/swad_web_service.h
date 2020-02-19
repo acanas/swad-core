@@ -179,6 +179,7 @@ struct swad__getTestConfigOutput
    int defQuestions;
    int maxQuestions;
    char *feedback;
+   int visibility;
   };
 
 /* getTests */
