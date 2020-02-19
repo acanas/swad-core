@@ -192,7 +192,7 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       [TabIns] = "university",
       [TabCtr] = "building",
       [TabDeg] = "graduation-cap",
-      [TabCrs] = "list-ol",
+      [TabCrs] = "chalkboard-teacher",
       [TabAss] = "check",
       [TabFil] = "folder-open",
       [TabUsr] = "users",

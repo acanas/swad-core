@@ -355,7 +355,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabDeg ******************************************************************
    // Actions in menu:
    [ActSeeDegInf	] = {1149, 0,TabDeg,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegCfg_ShowConfiguration	,"info"			},
-   [ActSeeCrs		] = {1009, 1,TabDeg,ActSeeCrs		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowCrssOfCurrentDeg	,"list-ol"		},
+   [ActSeeCrs		] = {1009, 1,TabDeg,ActSeeCrs		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowCrssOfCurrentDeg	,"chalkboard-teacher"	},
 
    // Actions not in menu:
    [ActPrnDegInf	] = {1150,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,DegCfg_PrintConfiguration	,NULL},
@@ -380,12 +380,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCrs ******************************************************************
    // Actions in menu:
    [ActSeeCrsInf	] = { 847, 0,TabCrs,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"info"			},
-   [ActSeeTchGui	] = { 784, 1,TabCrs,ActSeeTchGui	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book-open"		},
-   [ActSeeSyl		] = {1242, 2,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"list-ol"		},
-   [ActSeeBib		] = {  32, 3,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book"			},
-   [ActSeeFAQ		] = {  54, 4,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"question"		},
-   [ActSeeCrsLnk	] = {   9, 5,TabCrs,ActSeeCrsLnk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"link"			},
-   [ActSeeCrsTT		] = {  25, 6,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
+   [ActSeeScd		] = {1821, 1,TabCrs,ActSeeScd		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"clipboard-list"	},
+   [ActSeeTchGui	] = { 784, 2,TabCrs,ActSeeTchGui	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book-open"		},
+   [ActSeeSyl		] = {1242, 3,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"list-ol"		},
+   [ActSeeBib		] = {  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book"			},
+   [ActSeeFAQ		] = {  54, 5,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"question"		},
+   [ActSeeCrsLnk	] = {   9, 6,TabCrs,ActSeeCrsLnk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"link"			},
+   [ActSeeCrsTT		] = {  25, 7,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
 
    // Actions not in menu:
    [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CrsCfg_PrintConfiguration	,NULL},
@@ -727,7 +728,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAdmShaCrsGrp	] = { 461, 8,TabFil,ActAdmShaCrsGrp	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"folder-open"		},
    [ActAdmAsgWrkUsr	] = { 792, 9,TabFil,ActAdmAsgWrkUsr	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"folder-open"		},
    [ActReqAsgWrkCrs	] = { 899,10,TabFil,ActReqAsgWrkCrs	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskEditWorksCrs		,"folder-open"		},
-   [ActSeeAdmMrk	] = {  17,11,TabFil,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"clipboard-list"	},
+   [ActSeeAdmMrk	] = {  17,11,TabFil,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"list-alt"		},
    [ActAdmBrf		] = {  23,12,TabFil,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"briefcase"		},
 
    // Actions not in menu:
@@ -3535,6 +3536,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeSysInf,		// #1818
 	ActPrnSysInf,		// #1819
 	ActMtn,			// #1820
+	ActSeeScd,		// #1821
 	};
 
 /*****************************************************************************/

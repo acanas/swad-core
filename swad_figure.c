@@ -624,7 +624,7 @@ static void Fig_WriteHeadHierarchy (void)
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("list-ol.svg",Txt_Courses,"CONTEXT_ICO_x16");
+   Ico_PutIcon ("chalkboard-teacher.svg",Txt_Courses,"CONTEXT_ICO_x16");
    HTM_BR ();
    HTM_Txt (Txt_Courses);
    HTM_TH_End ();
@@ -4037,12 +4037,12 @@ static void Fig_ShowStatOfAForumType (For_ForumType_t ForumType,
          break;
       case For_FORUM_COURSE_USRS:
          Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "list-ol.svg",FiguresForum,
+                                      "chalkboard-teacher.svg",FiguresForum,
                                       Txt_Courses,"");
          break;
       case For_FORUM_COURSE_TCHS:
          Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "list-ol.svg",FiguresForum,
+                                      "chalkboard-teacher.svg",FiguresForum,
                                       Txt_Courses,Txt_only_teachers);
          break;
       default:

@@ -15908,44 +15908,44 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 	,
 	[Inf_LECTURES] =
 #if   L==1	// ca
-	"Programa teoria"
+	"Temari teoria"
 #elif L==2	// de
 	"Studienplan (Vorlesungen)"
 #elif L==3	// en
 	"Syllabus (lectures)"
 #elif L==4	// es
-	"Programa teor&iacute;a"
+	"Temario teor&iacute;a"
 #elif L==5	// fr
 	"Plan th&eacute;orie"
 #elif L==6	// gn
-	"Programa teor&iacute;a"	// Okoteve traducción
+	"Temario teor&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	"Programma teoria"
+	"Temi teoria"
 #elif L==8	// pl
-	"Syllabus (wyklady)"
+	"Sylabus (wyklady)"
 #elif L==9	// pt
-	"Programa teoria"
+	"Conte&uacute;do teoria"
 #endif
 	,
 	[Inf_PRACTICALS] =
 #if   L==1	// ca
-	"Programa pr&agrave;ctiques"
+	"Temari pr&agrave;ctiques"
 #elif L==2	// de
 	"Studienplan (&Uuml;bungen)"
 #elif L==3	// en
 	"Syllabus (practicals)"
 #elif L==4	// es
-	"Programa pr&aacute;cticas"
+	"Temario pr&aacute;cticas"
 #elif L==5	// fr
-	"Plan pratique"
+	"Temi pratique"
 #elif L==6	// gn
-	"Programa pr&aacute;cticas"	// Okoteve traducción
+	"Temario pr&aacute;cticas"	// Okoteve traducción
 #elif L==7	// it
 	"Programma pratica"
 #elif L==8	// pl
-	"Syllabus (practicals)"
+	"Sylabus (practicals)"
 #elif L==9	// pt
-	"Programa pr&aacute;tica"
+	"Conte&uacute;do pr&aacute;tica"
 #endif
 	,
 	[Inf_BIBLIOGRAPHY] =
@@ -19223,7 +19223,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  1: ActSeeTchGui
+	//  1: ActSeeScd
+#if   L==1	// ca
+	"Programa"
+#elif L==2	// de
+	"Programm"
+#elif L==3	// en
+	"Schedule"
+#elif L==4	// es
+	"Programa"
+#elif L==5	// fr
+	"Programme"
+#elif L==6	// gn
+	"Programa"	// Okoteve traducción
+#elif L==7	// it
+	"Programma"
+#elif L==8	// pl
+	"Program"
+#elif L==9	// pt
+	"Programa"
+#endif
+	,
+	//  2: ActSeeTchGui
 #if   L==1	// ca
 	"Guia"
 #elif L==2	// de
@@ -19244,7 +19265,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia"
 #endif
 	,
-	//  2: ActSeeSyl
+	//  3: ActSeeSyl
 #if   L==1	// ca
 	"Temari"
 #elif L==2	// de
@@ -19258,14 +19279,14 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6	// gn
 	"Temario"	// Okoteve traducción
 #elif L==7	// it
-	"Programma"
+	"Temi"
 #elif L==8	// pl
 	"Sylabus"
 #elif L==9	// pt
 	"Conte&uacute;do"
 #endif
 	,
-	//  3: ActSeeBib
+	//  4: ActSeeBib
 #if   L==1	// ca
 	"Bibliografia"
 #elif L==2	// de
@@ -19286,7 +19307,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  4: ActSeeFAQ
+	//  5: ActSeeFAQ
 #if   L==1	// ca
 	"FAQ"	// Necessita traduccio
 #elif L==2	// de
@@ -19307,7 +19328,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	//  5: ActSeeCrsLnk
+	//  6: ActSeeCrsLnk
 #if   L==1	// ca
 	"Enlla&ccedil;os"
 #elif L==2	// de
@@ -19328,7 +19349,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  6: ActSeeCrsTT
+	//  7: ActSeeCrsTT
 #if   L==1	// ca
 	"Horari"
 #elif L==2	// de
@@ -19349,7 +19370,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -21059,7 +21079,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta disciplina"
 #endif
 	,
-	//  1: ActSeeTchGui
+	//  1: ActSeeScd
+#if   L==1	// ca
+	"Programaci&oacute; did&agrave;ctica de l'assignatura"
+#elif L==2	// de
+	"Didaktische Programmierung des Kurses"
+#elif L==3	// en
+	"Didactic programming of the course"
+#elif L==4	// es
+	"Programaci&oacute;n did&aacute;ctica de la asignatura"
+#elif L==5	// fr
+	"Programmation didactique de la mati&egrave;re"
+#elif L==6	// gn
+	"Programaci&oacute;n did&aacute;ctica de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Programmazione didattica della materia"
+#elif L==8	// pl
+	"Programowanie dydaktyczne przedmiotu"
+#elif L==9	// pt
+	"Programa&ccedil;&atilde;o did&aacute;tica da disciplina"
+#endif
+	,
+	//  2: ActSeeTchGui
 #if   L==1	// ca
 	"Guia docent de l'assignatura"
 #elif L==2	// de
@@ -21080,28 +21121,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia de ensino"
 #endif
 	,
-	//  2: ActSeeSyl
+	//  3: ActSeeSyl
 #if   L==1	// ca
-	"Programa de l'assignatura"
+	"Temari de l'assignatura"
 #elif L==2	// de
 	"Studienplan"
 #elif L==3	// en
 	"Syllabus"
 #elif L==4	// es
-	"Programa de la asignatura"
+	"Temario de la asignatura"
 #elif L==5	// fr
 	"Plan"
 #elif L==6	// gn
-	"Programa de la asignatura"// Okoteve traducción
+	"Temario de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Programma"
+	"Temi"
 #elif L==8	// pl
-	"Syllabus"
+	"Sylabus"
 #elif L==9	// pt
-	"Programa"
+	"Conte&uacute;do"
 #endif
 	,
-	//  3: ActSeeBib
+	//  4: ActSeeBib
 #if   L==1	// ca
 	"Bibliografia relacionada amb els continguts de l'assignatura"
 #elif L==2	// de
@@ -21122,7 +21163,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  4: ActSeeFAQ
+	//  5: ActSeeFAQ
 #if   L==1	// ca
 	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
 #elif L==2	// de
@@ -21143,7 +21184,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	//  5: ActSeeCrsLnk
+	//  6: ActSeeCrsLnk
 #if   L==1	// ca
 	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
 #elif L==2	// de
@@ -21164,7 +21205,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  6: ActSeeCrsTT
+	//  7: ActSeeCrsTT
 #if   L==1	// ca
 	"Horari de classes de l'assignatura"
 #elif L==2	// de
@@ -21185,7 +21226,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10

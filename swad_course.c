@@ -360,7 +360,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						       ClassNormal,
 					   NULL);
 		  Hie_FreeGoToMsg ();
-		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
+		  Ico_PutIcon ("chalkboard-teacher.svg",Crs.FullName,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Crs.ShrtName);
 		  HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -1058,7 +1058,7 @@ static void Crs_PutIconToViewCourses (void)
    extern const char *Txt_Courses;
 
    Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,NULL,
-                                  "list-ol.svg",
+                                  "chalkboard-teacher.svg",
                                   Txt_Courses);
   }
 

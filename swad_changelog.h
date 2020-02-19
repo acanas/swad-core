@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.128.7 (2020-02-19)"
+#define Log_PLATFORM_VERSION	"SWAD 19.129 (2020-02-20)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -520,6 +520,16 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
+
+	Version 19.129:   Feb 20, 2020	New option for schedule in course. (279240 lines)
+				        Copy the following icons to icon public directory:
+sudo cp -a icon/iconset/nuvola/list-alt.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp -a icon/iconset/awesome/list-alt.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp -a icon/iconset/nuvola/clipboard-list.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp -a icon/iconset/awesome/clipboard-list.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp -a icon/iconset/nuvola/chalkboard-teacher.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp -a icon/iconset/awesome/chalkboard-teacher.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp -a icon/chalkboard-teacher.svg /var/www/html/swad/icon/
 
 	Version 19.128.7: Feb 19, 2020	Programa is changed by Temario.
 				        Fixed bug in plugins. (279167 lines)

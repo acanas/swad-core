@@ -340,7 +340,7 @@ void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,void (*F
    extern const char *Txt_Attendance_list;
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
-				  "list-ol.svg",
+				  "tasks.svg",
 				  Txt_Attendance_list);
   }
 

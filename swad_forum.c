@@ -2092,7 +2092,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         Ico_PutIcon ("list-ol.svg",ForumName,"ICO16x16");
+         Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
          break;
       default:
          break;

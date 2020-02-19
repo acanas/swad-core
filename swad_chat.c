@@ -220,7 +220,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
         	         "%s %s",
 			 Txt_Course,Crs.ShrtName);
                Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
-               Ico_PutIcon ("list-ol.svg",ThisRoomFullName,"ICO16x16");
+               Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }
 	   }
