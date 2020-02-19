@@ -82,27 +82,24 @@ static const char *TsV_Icons[TsV_NUM_ITEMS_VISIBILITY][2] =
 
 void TsV_ShowVisibilityIcons (unsigned SelectedVisibility)
   {
-   extern const char *Txt_Visible;
-   extern const char *Txt_Hidden;
    extern const char *Txt_TST_STR_VISIBILITY[TsV_NUM_ITEMS_VISIBILITY];
+   extern const char *Txt_TST_HIDDEN_VISIBLE[2];
    TsV_Visibility_t Visibility;
-   bool ItemVisible;
+   unsigned ItemVisible;
    char *Title;
 
    for (Visibility  = (TsV_Visibility_t) 0;
 	Visibility <= (TsV_Visibility_t) (TsV_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+      ItemVisible = (SelectedVisibility & (1 << Visibility)) == 0 ? 0 :
+	                                                            1;
       if (asprintf (&Title,"%s: %s",
 		    Txt_TST_STR_VISIBILITY[Visibility],
-		    ItemVisible ? Txt_Visible :
-			          Txt_Hidden) < 0)
+		    Txt_TST_HIDDEN_VISIBLE[ItemVisible]) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Ico_PutIcon (ItemVisible ? TsV_Icons[Visibility][1] :
-                                 TsV_Icons[Visibility][0],
-		   Title,
-		   "CONTEXT_OPT CONTEXT_ICO_16x16");
+      Ico_PutIconOff (TsV_Icons[Visibility][ItemVisible],
+		      Title);
       free (Title);
      }
   }

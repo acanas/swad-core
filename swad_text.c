@@ -14600,27 +14600,6 @@ const char *Txt_HELP_password =
 	"8 ou mais caracteres";
 #endif
 
-const char *Txt_Hidden =
-#if   L==1	// ca
-	"Ocult";
-#elif L==2	// de
-	"Verborgen";
-#elif L==3	// en
-	"Hidden";
-#elif L==4	// es
-	"Oculto";
-#elif L==5	// fr
-	"Cach&eacute;";
-#elif L==6	// gn
-	"Oculto";	// Okoteve traducción
-#elif L==7	// it
-	"Nascosto";
-#elif L==8	// pl
-	"Ukryty";
-#elif L==9	// pt
-	"Oculto";
-#endif
-
 const char *Txt_Hidden_MALE_PLURAL =
 #if   L==1	// ca
 	"Ocultos";	// Necessita traduccio
@@ -32175,7 +32154,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 	{
 	[Rec_HIDDEN_FIELD] =
 #if   L==1	// ca
-	"oculto"	// Necessita traduccio
+	"ocult"
 #elif L==2	// de
 	"versteckt"
 #elif L==3	// en
@@ -32196,7 +32175,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 	,
 	[Rec_VISIBLE_FIELD] =
 #if   L==1	// ca
-	"visible"	// Necessita traduccio
+	"visible"
 #elif L==2	// de
 	"sichtbar"
 #elif L==3	// en
@@ -51066,6 +51045,51 @@ const char *Txt_TST_Answer_given_by_the_user =
 	"Resposta dada pelo usu&aacute;rio/a";
 #endif
 
+const char *Txt_TST_HIDDEN_VISIBLE[2] =
+	{
+	[false] =
+#if   L==1	// ca
+	"ocult"
+#elif L==2	// de
+	"versteckt"
+#elif L==3	// en
+	"hidden"
+#elif L==4	// es
+	"oculto"
+#elif L==5	// fr
+	"cach&eacute;"
+#elif L==6	// gn
+	"oculto"	// Okoteve traducción
+#elif L==7	// it
+	"nascosto"
+#elif L==8	// pl
+	"ukryty"
+#elif L==9	// pt
+	"oculto"
+#endif
+	,
+	[true] =
+#if   L==1	// ca
+	"visible"
+#elif L==2	// de
+	"sichtbar"
+#elif L==3	// en
+	"visible"
+#elif L==4	// es
+	"visible"
+#elif L==5	// fr
+	"visible"
+#elif L==6	// gn
+	"visible"	// Okoteve traducción
+#elif L==7	// it
+	"visibile"
+#elif L==8	// pl
+	"widoczny"
+#elif L==9	// pt
+	"vis&iacute;vel"
+#endif
+	};
+
 const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	{
 	[Tst_PLUGGABLE_UNKNOWN] =
@@ -53732,27 +53756,6 @@ const char *Txt_Result_visibility =
 	"Widoczno&sacute;&cacute; wynik&oacute;w";
 #elif L==9	// pt
 	"Visibilidade dos resultados";
-#endif
-
-const char *Txt_Visible =
-#if   L==1	// ca
-	"Visible";
-#elif L==2	// de
-	"Sichtbare";
-#elif L==3	// en
-	"Visible";
-#elif L==4	// es
-	"Visible";
-#elif L==5	// fr
-	"Visible";
-#elif L==6	// gn
-	"Visible";	// Okoteve traducción
-#elif L==7	// it
-	"Visibile";
-#elif L==8	// pl
-	"Widoczny";
-#elif L==9	// pt
-	"Vis&iacute;vel";
 #endif
 
 const char *Txt_Visible_by_BR_the_student =
