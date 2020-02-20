@@ -1506,6 +1506,27 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
+const char *Txt_Already_existed_an_item_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Ja existia un &iacute;tem amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2	// de
+	"Es gibt bereits einen Artikel mit dem Namen <strong>%s</strong>.";
+#elif L==3	// en
+	"Already existed an item with the title <strong>%s</strong>.";
+#elif L==4	// es
+	"Ya exist&iacute;a un &iacute;tem con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5	// fr
+	"Il existe d&eacute;j&agrave; un article du titre <strong>%s</strong>.";
+#elif L==6	// gn
+	"Ya exist&iacute;a un &iacute;tem con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Esiste gi&agrave; un articolo con il titolo <strong>%s</strong>.";
+#elif L==8	// pl
+	"Istniala juz przedmiot z tytulu <strong>%s</strong>.";
+#elif L==9	// pt
+	"J&aacute; existe um item com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Altitude =
 #if   L==1	// ca
 	"Altitud";
@@ -5182,6 +5203,27 @@ const char *Txt_course =
 	"disciplina";
 #endif
 
+const char *Txt_Course_program =
+#if   L==1	// ca
+	"Programa de l'assignatura";
+#elif L==2	// de
+	"Kursprogramm";
+#elif L==3	// en
+	"Course program";
+#elif L==4	// es
+	"Programa de la asignatura";
+#elif L==5	// fr
+	"Programme de la mati&egrave;re";
+#elif L==6	// gn
+	"Programa de la asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Programma del corso";
+#elif L==8	// pl
+	"Program kursu";
+#elif L==9	// pt
+	"Programa da disciplina";
+#endif
+
 const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
 	{
 	[Crs_STATUS_UNKNOWN] =
@@ -5941,6 +5983,27 @@ const char *Txt_Create_institution =
 	"Criar institu&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_item =
+#if   L==1	// ca
+	"Crear &iacute;tem";
+#elif L==2	// de
+	"Artikel eingeben";
+#elif L==3	// en
+	"Create item";
+#elif L==4	// es
+	"Crear &iacute;tem";
+#elif L==5	// fr
+	"Cr&eacute;er article";
+#elif L==6	// gn
+	"Crear &iacute;tem";	// Okoteve traducción
+#elif L==7	// it
+	"Crea articolo";
+#elif L==8	// pl
+	"Utw&oacute;rz przedmiot";
+#elif L==9	// pt
+	"Criar item";
+#endif
+
 const char *Txt_Create_link =
 #if   L==1	// ca
 	"Crear enlla&ccedil;";
@@ -6527,6 +6590,27 @@ const char *Txt_Created_new_institution_X =	// Warning: it is very important to 
 	"Utworzono nowa instytucje <strong>%s</strong>.";
 #elif L==9	// pt
 	"Criada nova institu&ccedil;&atilde;o <strong>%s</strong>.";
+#endif
+
+const char *Txt_Created_new_item_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creado nuevo &iacute;tem <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2	// de
+	"Neue Artikel <strong>%s</strong> eingegeben.";
+#elif L==3	// en
+	"Created new item <strong>%s</strong>.";
+#elif L==4	// es
+	"Creado nuevo &iacute;tem <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute;e nouvel article <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creado nuevo &iacute;tem <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creato nuovo articolo <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono nowa przedmiot <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criado novo item <strong>%s</strong>.";
 #endif
 
 const char *Txt_Created_new_link_X =	// Warning: it is very important to include %s in the following sentences
@@ -9080,6 +9164,27 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Ao fazer isso, voc&ecirc; remover&aacute; %u estudantes desse grupo.";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar l'&iacute;tem <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Artikel <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the item <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el &iacute;tem <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer l'article <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el &iacute;tem <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere il articolo <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usunac przedmiot <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o item <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"De veres voleu eliminar la partida <strong>%s</strong>?";
@@ -9145,7 +9250,7 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar pregunta <strong>%ld</strong>?";
+	"De veres voleu eliminar la pregunta <strong>%ld</strong>?";
 #elif L==2	// de
 	"Wollen Sie die Frage <strong>%ld</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9894,6 +9999,27 @@ const char *Txt_Edit_game =
 	"Edycja gra";
 #elif L==9	// pt
 	"Editar jogo";
+#endif
+
+const char *Txt_Edit_item =
+#if   L==1	// ca
+	"Editar &iacute;tem";
+#elif L==2	// de
+	"Artikel bearbeiten";
+#elif L==3	// en
+	"Edit item";
+#elif L==4	// es
+	"Editar &iacute;tem";
+#elif L==5	// fr
+	"&Eacute;diter article";
+#elif L==6	// gn
+	"Editar &iacute;tem";	// Okoteve traducción
+#elif L==7	// it
+	"Editare articolo";
+#elif L==8	// pl
+	"Edycja przedmiot";
+#elif L==9	// pt
+	"Editar item";
 #endif
 
 const char *Txt_Edit_my_personal_data =
@@ -15912,7 +16038,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #elif L==2	// de
 	"Studienplan (Vorlesungen)"
 #elif L==3	// en
-	"Syllabus (lectures)"
+	"Topics (lectures)"
 #elif L==4	// es
 	"Temario teor&iacute;a"
 #elif L==5	// fr
@@ -15933,7 +16059,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #elif L==2	// de
 	"Studienplan (&Uuml;bungen)"
 #elif L==3	// en
-	"Syllabus (practicals)"
+	"Topics (practicals)"
 #elif L==4	// es
 	"Temario pr&aacute;cticas"
 #elif L==5	// fr
@@ -17081,6 +17207,27 @@ const char *Txt_It_is_optional_to_choose_a_group =
 	"Opcjonalnie mozna wybrac grupe";
 #elif L==9	// pt
 	"Escolher um grupo &eacute; volunt&aacute;rio";
+#endif
+
+const char *Txt_Item =
+#if   L==1	// ca
+	"&Iacute;tem";
+#elif L==2	// de
+	"Artikel";
+#elif L==3	// en
+	"Item";
+#elif L==4	// es
+	"&Iacute;tem";
+#elif L==5	// fr
+	"Article";
+#elif L==6	// gn
+	"&Iacute;tem";	// Okoteve traducción
+#elif L==7	// it
+	"Articolo";
+#elif L==8	// pl
+	"Pozycja";
+#elif L==9	// pt
+	"Item";
 #endif
 
 const char *Txt_Its_me =
@@ -19223,13 +19370,13 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  1: ActSeeScd
+	//  1: ActSeePrg
 #if   L==1	// ca
 	"Programa"
 #elif L==2	// de
 	"Programm"
 #elif L==3	// en
-	"Schedule"
+	"Program"
 #elif L==4	// es
 	"Programa"
 #elif L==5	// fr
@@ -19271,7 +19418,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Studienplan"
 #elif L==3	// en
-	"Syllabus"
+	"Topics"
 #elif L==4	// es
 	"Temario"
 #elif L==5	// fr
@@ -21079,7 +21226,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta disciplina"
 #endif
 	,
-	//  1: ActSeeScd
+	//  1: ActSeePrg
 #if   L==1	// ca
 	"Programaci&oacute; did&agrave;ctica de l'assignatura"
 #elif L==2	// de
@@ -21127,7 +21274,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Studienplan"
 #elif L==3	// en
-	"Syllabus"
+	"Topics"
 #elif L==4	// es
 	"Temario de la asignatura"
 #elif L==5	// fr
@@ -24463,6 +24610,27 @@ const char *Txt_New_institution =
 	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...)";
 #endif
 
+const char *Txt_New_item =
+#if   L==1	// ca
+	"Nou &iacute;tem";
+#elif L==2	// de
+	"Neuer Artikel";
+#elif L==3	// en
+	"New item";
+#elif L==4	// es
+	"Nuevo &iacute;tem";
+#elif L==5	// fr
+	"Nouvel article";
+#elif L==6	// gn
+	"Nuevo &iacute;tem";	// Okoteve traducción
+#elif L==7	// it
+	"Nuovo articolo";
+#elif L==8	// pl
+	"Nowa pozycja";
+#elif L==9	// pt
+	"Novo item";
+#endif
+
 const char *Txt_New_link =
 #if   L==1	// ca
 	"Nuevo enlace";		// Necessita traduccio
@@ -25508,6 +25676,27 @@ const char *Txt_No_institutions =
 	"Brak instytucje.";
 #elif L==9	// pt
 	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
+#endif
+
+const char *Txt_No_items =
+#if   L==1	// ca
+	"No hi ha items";
+#elif L==2	// de
+	"Keine Artikel";
+#elif L==3	// en
+	"No items";
+#elif L==4	// es
+	"No hay items";
+#elif L==5	// fr
+	"Il n'y a pas d'articles";
+#elif L==6	// gn
+	"No hay items";	// Okoteve traducción
+#elif L==7	// it
+	"Non ci sono articoli";
+#elif L==8	// pl
+	"Brak przedmiot&oacute;w";
+#elif L==9	// pt
+	"N&atilde;o h&aacute; itens";
 #endif
 
 const char *Txt_No_links =
@@ -32857,6 +33046,27 @@ const char *Txt_Remove_group =
 	"Usu&nacute; gruper";
 #elif L==9	// pt
 	"Remover grupo";
+#endif
+
+const char *Txt_Remove_item =
+#if   L==1	// ca
+	"Eliminar &iacute;tem";
+#elif L==2	// de
+	"Entfernen Artikel";
+#elif L==3	// en
+	"Remove item";
+#elif L==4	// es
+	"Eliminar &iacute;tem";
+#elif L==5	// fr
+	"Supprimer article";
+#elif L==6	// gn
+	"Eliminar &iacute;tem";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere articolo";
+#elif L==8	// pl
+	"Usu&nacute; przedmiot";
+#elif L==9	// pt
+	"Remover item";
 #endif
 
 const char *Txt_Remove_link =
@@ -41683,6 +41893,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Recursos Educacionais Abertos (OER)"
 #endif
 	,
+	[Fig_COURSE_PROGRAM] =
+#if   L==1	// ca
+	"Programa"
+#elif L==2	// de
+	"Programm"
+#elif L==3	// en
+	"Program"
+#elif L==4	// es
+	"Programa"
+#elif L==5	// fr
+	"Programme"
+#elif L==6	// gn
+	"Programa"	// Okoteve traducción
+#elif L==7	// it
+	"Programma"
+#elif L==8	// pl
+	"Program"
+#elif L==9	// pt
+	"Programa"
+#endif
+	,
 	[Fig_ASSIGNMENTS] =
 #if   L==1	// ca
 	"Activitats"
@@ -45892,6 +46123,27 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 	"The integrated editor is not yet available.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O editor integrado ainda n&atilde;o est&aacute; dispon&iacute;vel.";
+#endif
+
+const char *Txt_The_item_has_been_modified =
+#if   L==1	// ca
+	"El &iacute;tem ha estat modificat.";
+#elif L==2	// de
+	"Das Artikel wurde ge&auml;ndert.";
+#elif L==3	// en
+	"The item has been modified.";
+#elif L==4	// es
+	"El &iacute;tem ha sido modificado.";
+#elif L==5	// fr
+	"L'article a &eacute;t&eacute; modifi&eacute;.";
+#elif L==6	// gn
+	"El &iacute;tem ha sido modificado.";	// Okoteve traducción
+#elif L==7	// it
+	"Il articolo &egrave; stato modificato.";
+#elif L==8	// pl
+	"Gra przedmiot zmodyfikowane.";
+#elif L==9	// pt
+	"O item foi modificado.";
 #endif
 
 const char *Txt_The_link_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -56819,6 +57071,27 @@ const char *Txt_You_must_specify_the_title_of_the_game =
 	"Musisz poda&cacute; tytu&lstrok; gra.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o t&iacute;tulo do jogo.";
+#endif
+
+const char *Txt_You_must_specify_the_title_of_the_item =
+#if   L==1	// ca
+	"Cal especificar el t&iacute;tol del &iacute;tem.";
+#elif L==2	// de
+	"Die Artikel muss angegeben werden.";
+#elif L==3	// en
+	"You must specify the title of the item.";
+#elif L==4	// es
+	"Debe especificar el t&iacute;tulo del &iacute;tem.";
+#elif L==5	// fr
+	"Vous devez sp&eacute;cifier le titre du article.";
+#elif L==6	// gn
+	"Debe especificar el t&iacute;tulo del &iacute;tem.";	// Okoteve traducción
+#elif L==7	// it
+	"&Egrave; necessario specificare il titolo del articolo.";
+#elif L==8	// pl
+	"Musisz poda&cacute; tytu&lstrok; przedmiot.";
+#elif L==9	// pt
+	"Voc&ecirc; deve especificar o t&iacute;tulo do item.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_project =

@@ -73,6 +73,7 @@
 #include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
+#include "swad_program.h"
 #include "swad_project.h"
 #include "swad_QR.h"
 #include "swad_report.h"
@@ -380,7 +381,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCrs ******************************************************************
    // Actions in menu:
    [ActSeeCrsInf	] = { 847, 0,TabCrs,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"info"			},
-   [ActSeeScd		] = {1821, 1,TabCrs,ActSeeScd		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"clipboard-list"	},
+   [ActSeePrg		] = {1821, 1,TabCrs,ActSeePrg		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_SeeCourseProgram		,"clipboard-list"	},
    [ActSeeTchGui	] = { 784, 2,TabCrs,ActSeeTchGui	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book-open"		},
    [ActSeeSyl		] = {1242, 3,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"list-ol"		},
    [ActSeeBib		] = {  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book"			},
@@ -396,6 +397,16 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgInsCrsCodCfg	] = {1024,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeInsCrsCod		,CrsCfg_ContEditAfterChgCrs	,NULL},
    [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsYear		,CrsCfg_ContEditAfterChgCrs	,NULL},
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
+
+   [ActFrmNewPrgIte	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
+   [ActEdiOnePrgIte	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
+   [ActPrnOnePrgIte	] = {1824,-1,TabUnk,ActSeePrg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prg_PrintOnePrgItem		,NULL},
+   [ActNewPrgIte	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
+   [ActChgPrgIte	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
+   [ActReqRemPrgIte	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemPrgItem		,NULL},
+   [ActRemPrgIte	] = {1828,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RemovePrgItem		,NULL},
+   [ActHidPrgIte	] = {1829,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_HidePrgItem		,NULL},
+   [ActShoPrgIte	] = {1830,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ShowPrgItem		,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
@@ -3536,7 +3547,16 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeSysInf,		// #1818
 	ActPrnSysInf,		// #1819
 	ActMtn,			// #1820
-	ActSeeScd,		// #1821
+	ActSeePrg,		// #1821
+	ActFrmNewPrgIte,	// #1822
+	ActEdiOnePrgIte,	// #1823
+	ActPrnOnePrgIte,	// #1824
+	ActNewPrgIte,		// #1825
+	ActChgPrgIte,		// #1826
+	ActReqRemPrgIte,	// #1827
+	ActRemPrgIte,		// #1828
+	ActHidPrgIte,		// #1829
+	ActShoPrgIte,		// #1830
 	};
 
 /*****************************************************************************/

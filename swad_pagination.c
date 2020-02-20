@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_program.h"
 #include "swad_project.h"
 
 /*****************************************************************************/
@@ -53,6 +54,7 @@ extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 
 static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
+   [Pag_COURSE_PROGRAM   ] = "NumPagPrg",
    [Pag_ASSIGNMENTS      ] = "NumPagAsg",
    [Pag_PROJECTS         ] = "NumPagPrj",
    [Pag_GAMES            ] = "NumPagGam",
@@ -165,6 +167,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          switch (WhatPaginate)
            {
+            case Pag_COURSE_PROGRAM:
+               Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Prg_PutHiddenParamPrgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -279,6 +287,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          switch (WhatPaginate)
            {
+            case Pag_COURSE_PROGRAM:
+               Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Prg_PutHiddenParamPrgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -379,6 +393,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          switch (WhatPaginate)
            {
+            case Pag_COURSE_PROGRAM:
+               Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+               Prg_PutHiddenParamPrgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
@@ -491,6 +511,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             switch (WhatPaginate)
               {
+	       case Pag_COURSE_PROGRAM:
+		  Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		  Prg_PutHiddenParamPrgOrder ();
+		  Grp_PutParamWhichGrps ();
+		  break;
                case Pag_ASSIGNMENTS:
                   Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
@@ -590,6 +616,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
          switch (WhatPaginate)
            {
+	    case Pag_COURSE_PROGRAM:
+	       Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+	       Prg_PutHiddenParamPrgOrder ();
+	       Grp_PutParamWhichGrps ();
+	       break;
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
@@ -690,6 +722,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
          switch (WhatPaginate)
            {
+	    case Pag_COURSE_PROGRAM:
+	       Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
+	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+	       Prg_PutHiddenParamPrgOrder ();
+	       Grp_PutParamWhichGrps ();
+	       break;
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);

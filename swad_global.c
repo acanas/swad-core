@@ -44,6 +44,7 @@
 #include "swad_global.h"
 #include "swad_icon.h"
 #include "swad_parameter.h"
+#include "swad_program.h"
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_setting.h"
@@ -295,6 +296,11 @@ void Gbl_InitializeGlobals (void)
    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    Gbl.Search.Str[0] = '\0';
    Gbl.Search.LogSearch = false;
+
+   Gbl.Prg.LstIsRead = false;	// List is not read
+   Gbl.Prg.Num = 0;
+   Gbl.Prg.LstPrgIteCods = NULL;
+   Gbl.Prg.SelectedOrder = Prg_ORDER_DEFAULT;
 
    Gbl.Asgs.LstIsRead = false;	// List is not read
    Gbl.Asgs.Num = 0;

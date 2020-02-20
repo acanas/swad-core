@@ -101,7 +101,7 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 	       },
    [TabCrs] =  {
 		[ 0] = ActSeeCrsInf,
-		[ 1] = ActSeeScd,
+		[ 1] = ActSeePrg,
 		[ 2] = ActSeeTchGui,
 		[ 3] = ActSeeSyl,
 		[ 4] = ActSeeBib,

@@ -145,6 +145,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 static void Fig_GetAndShowOERsStats (void);
 static void Fig_GetNumberOfOERsFromDB (Hie_Level_t Scope,Brw_License_t License,unsigned long NumFiles[2]);
 
+static void Fig_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
+
 static void Fig_GetAndShowAssignmentsStats (void);
 static void Fig_GetAndShowProjectsStats (void);
 static void Fig_GetAndShowTestsStats (void);
@@ -315,6 +317,7 @@ void Fig_ShowFigures (void)
       [Fig_DEGREE_TYPES     ] = Fig_GetAndShowDegreeTypesStats,
       [Fig_FOLDERS_AND_FILES] = Fig_GetAndShowFileBrowsersStats,
       [Fig_OER              ] = Fig_GetAndShowOERsStats,
+      [Fig_COURSE_PROGRAM   ] = Fig_GetAndShowCourseProgramStats,
       [Fig_ASSIGNMENTS      ] = Fig_GetAndShowAssignmentsStats,
       [Fig_PROJECTS         ] = Fig_GetAndShowProjectsStats,
       [Fig_TESTS            ] = Fig_GetAndShowTestsStats,
@@ -2934,6 +2937,68 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Level_t Scope,Brw_License_t License,u
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************** Show stats about schedule items **********************/
+/*****************************************************************************/
+
+static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
+  {
+   extern const char *Hlp_ANALYTICS_Figures_assignments;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_assignments;
+   extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
+   extern const char *Txt_Average_number_BR_of_ASSIG_BR_per_course;
+   extern const char *Txt_Number_of_BR_notifications;
+   unsigned NumAssignments;
+   unsigned NumNotif;
+   unsigned NumCoursesWithAssignments = 0;
+   double NumAssignmentsPerCourse = 0.0;
+
+   /***** Get the number of assignments from this location *****/
+   if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
+      if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
+         NumAssignmentsPerCourse = (double) NumAssignments /
+	                           (double) NumCoursesWithAssignments;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,
+                      Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
+
+   /***** Write table heading *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+
+   HTM_TR_End ();
+
+   /***** Write number of assignments *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumAssignments);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumCoursesWithAssignments);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Double2Decimals (NumAssignmentsPerCourse);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumNotif);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/

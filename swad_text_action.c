@@ -4766,7 +4766,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeScd] =
+	[ActSeePrg] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

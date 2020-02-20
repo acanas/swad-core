@@ -520,6 +520,15 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
+// TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
+// TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
+// TODO: Análisis > Informe: "Informe de uso de SWAD" sale descentrado
+// TODO: Fig_GetAndShowCourseProgramStats
+
+	Version 19.130:   Feb 20, 2020	New module swad_program. (281273 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS prg_grp (PrgIteCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrgIteCod,GrpCod));
+CREATE TABLE IF NOT EXISTS prg_items (PrgIteCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrgIteCod),INDEX(CrsCod,Hidden));
 
 	Version 19.129:   Feb 20, 2020	New option for schedule in course. (279240 lines)
 				        Copy the following icons to icon public directory:

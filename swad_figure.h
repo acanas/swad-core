@@ -31,7 +31,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fig_NUM_FIGURES 28
+#define Fig_NUM_FIGURES 29
 typedef enum
   {
    Fig_USERS,			// Number of users
@@ -41,6 +41,7 @@ typedef enum
    Fig_DEGREE_TYPES,		// Number of degrees in each type of degree
    Fig_FOLDERS_AND_FILES,	// Number of folders and files
    Fig_OER,			// Number of OERs (Open Educational Resources)
+   Fig_COURSE_PROGRAM,		// Number of program items
    Fig_ASSIGNMENTS,		// Number of assignments
    Fig_PROJECTS,		// Number of projects
    Fig_TESTS,			// Number of test questions

@@ -778,6 +778,69 @@ const char *Hlp_COURSE_Information_edit =
 	"COURSE.Information.en#edit";
 #endif
 
+const char *Hlp_COURSE_Program =
+#if   L==1
+	"COURSE.Program.es";
+#elif L==2
+	"COURSE.Program.en";
+#elif L==3
+	"COURSE.Program.en";
+#elif L==4
+	"COURSE.Program.es";
+#elif L==5
+	"COURSE.Program.en";
+#elif L==6
+	"COURSE.Program.es";
+#elif L==7
+	"COURSE.Program.en";
+#elif L==8
+	"COURSE.Program.en";
+#elif L==9
+	"COURSE.Program.en";
+#endif
+
+const char *Hlp_COURSE_Program_new_item =
+#if   L==1
+	"COURSE.Program.es#nuevo-item";
+#elif L==2
+	"COURSE.Program.en#new-item";
+#elif L==3
+	"COURSE.Program.en#new-item";
+#elif L==4
+	"COURSE.Program.es#nuevo-item";
+#elif L==5
+	"COURSE.Program.en#new-item";
+#elif L==6
+	"COURSE.Program.es#nuevo-item";
+#elif L==7
+	"COURSE.Program.en#new-item";
+#elif L==8
+	"COURSE.Program.en#new-item";
+#elif L==9
+	"COURSE.Program.en#new-item";
+#endif
+
+const char *Hlp_COURSE_Program_edit_item =
+#if   L==1
+	"COURSE.Program.es#editar-item";
+#elif L==2
+	"COURSE.Program.en#edit-item";
+#elif L==3
+	"COURSE.Program.en#edit-item";
+#elif L==4
+	"COURSE.Program.es#editar-item";
+#elif L==5
+	"COURSE.Program.en#edit-item";
+#elif L==6
+	"COURSE.Program.es#editar-item";
+#elif L==7
+	"COURSE.Program.en#edit-item";
+#elif L==8
+	"COURSE.Program.en#edit-item";
+#elif L==9
+	"COURSE.Program.en#edit-item";
+#endif
+
 const char *Hlp_COURSE_Guide =
 #if   L==1
 	"COURSE.Guide.es";
