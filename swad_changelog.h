@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.132 (2020-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.132.1 (2020-02-24)"
 #define CSS_FILE		"swad19.118.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -523,6 +523,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.132.1: Feb 24, 2020	Change in columns of course program. (281427 lines)
 	Version 19.132:   Feb 24, 2020	Stats on course program items. (281426 lines)
 	Version 19.131.1: Feb 24, 2020	Fixed bug in API. (281360 lines)
 	Version 19.131:   Feb 24, 2020	Code refactoring in API. (281350 lines)

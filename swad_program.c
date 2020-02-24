@@ -160,7 +160,7 @@ static void Prg_ShowAllPrgItems (void)
       Prg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the program items *****/
-      for (NumAsg = Pagination.FirstItemVisible;
+      for (NumAsg  = Pagination.FirstItemVisible;
 	   NumAsg <= Pagination.LastItemVisible;
 	   NumAsg++)
 	 Prg_ShowOnePrgItem (Gbl.Prg.LstPrgIteCods[NumAsg - 1],
@@ -202,7 +202,8 @@ static void Prg_PutHeadForSeeing (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-   for (Order = Dat_START_TIME;
+   HTM_TH (1,1,"LM",Txt_Item);
+   for (Order  = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
      {
@@ -229,7 +230,6 @@ static void Prg_PutHeadForSeeing (bool PrintView)
 
       HTM_TH_End ();
      }
-   HTM_TH (1,1,"LM",Txt_Item);
 
    HTM_TR_End ();
   }
@@ -360,6 +360,21 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView)
      }
    HTM_TD_End ();
 
+   /* Program item title */
+   if (PrintView)
+      HTM_TD_Begin ("class=\"%s LT\"",
+		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
+				     "ASG_TITLE");
+   else
+      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
+				     "ASG_TITLE",
+		    Gbl.RowEvenOdd);
+   HTM_ARTICLE_Begin (Anchor);
+   HTM_Txt (PrgItem.Title);
+   HTM_ARTICLE_End ();
+   HTM_TD_End ();
+
    /* Start/end date/time */
    UniqueId++;
 
@@ -391,33 +406,10 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView)
       free (Id);
      }
 
-   /* Schedule item title */
-   if (PrintView)
-      HTM_TD_Begin ("class=\"%s LT\"",
-		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
-				     "ASG_TITLE");
-   else
-      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
-				     "ASG_TITLE",
-		    Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   HTM_Txt (PrgItem.Title);
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
-
    HTM_TR_End ();
 
    /***** Write second row of data of this program item *****/
    HTM_TR_Begin (NULL);
-
-   /* Author of the program item */
-   if (PrintView)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Prg_WritePrgItemAuthor (&PrgItem);
-   HTM_TD_End ();
 
    /* Text of the program item */
    Prg_GetPrgItemTxtFromDB (PrgItem.PrgIteCod,Txt);
@@ -425,15 +417,23 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView)
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    if (PrintView)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      HTM_TD_Begin ("class=\"LT\"");
    else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (&PrgItem);
    HTM_DIV_Begin ("class=\"PAR %s\"",PrgItem.Hidden ? "DAT_LIGHT" :
         	                                      "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
+   HTM_TD_End ();
+
+   /* Author of the program item */
+   if (PrintView)
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+   else
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   Prg_WritePrgItemAuthor (&PrgItem);
    HTM_TD_End ();
 
    HTM_TR_End ();
