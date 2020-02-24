@@ -206,6 +206,7 @@ static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
 /*****************************************************************************/
 
 static void API_Set_gSOAP_RuntimeEnv (struct soap *soap);
+static void API_FreeSoapContext (struct soap *soap);
 
 static int API_GetPlgCodFromAppKey (struct soap *soap,
                                     const char *appKey);
@@ -299,8 +300,7 @@ void API_WebService (void)
      {
       soap_serve (soap);
 
-      soap_end (soap);	// Clean up and remove deserialized data
-      soap_free (soap);	// Detach and free runtime context
+      API_FreeSoapContext (soap);
      }
   }
 
@@ -320,11 +320,22 @@ void API_Exit (const char *DetailErrorMessage)
 	                                                      DetailErrorMessage) :
 	                                 0);
 
-      soap_end (soap);	// Clean up and remove deserialized data
-      soap_free (soap);	// Detach and free runtime context
+      API_FreeSoapContext (soap);
      }
 
    exit (ReturnCode);
+  }
+
+/*****************************************************************************/
+/****************************** Free SOAP context ****************************/
+/*****************************************************************************/
+
+static void API_FreeSoapContext (struct soap *soap)
+  {
+   soap_destroy (soap);			// delete managed C++ objects
+   soap_end (soap);			// delete managed memory
+   soap_free (soap);			// free the context
+   API_Set_gSOAP_RuntimeEnv (NULL);	// set pointer to NULL in order to not try to free the context again
   }
 
 /*****************************************************************************/
