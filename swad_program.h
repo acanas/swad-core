@@ -85,6 +85,6 @@ void Prg_RemoveCrsPrgItems (long CrsCod);
 unsigned Prg_GetNumPrgItemsInCrs(long CrsCod);
 
 unsigned Prg_GetNumCoursesWithPrgItems (Hie_Level_t Scope);
-unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif);
+unsigned Prg_GetNumPrgItems (Hie_Level_t Scope);
 
 #endif

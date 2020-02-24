@@ -72,7 +72,7 @@ CC = gcc
 # LIBS when using MariaDB (also valid with MySQL):
 LIBS = -lssl -lcrypto -lpthread -lrt -lmysqlclient -lz -L/usr/lib64/mysql -lm -lgsoap
 
-CFLAGS = -Wall -Wextra -mtune=native -O2
+CFLAGS = -Wall -Wextra -mtune=native -O2 -s
 
 all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt
 

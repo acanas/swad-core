@@ -47,6 +47,7 @@
 #include "swad_notice.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
+#include "swad_program.h"
 #include "swad_role.h"
 
 /*****************************************************************************/
@@ -317,7 +318,7 @@ void Fig_ShowFigures (void)
       [Fig_DEGREE_TYPES     ] = Fig_GetAndShowDegreeTypesStats,
       [Fig_FOLDERS_AND_FILES] = Fig_GetAndShowFileBrowsersStats,
       [Fig_OER              ] = Fig_GetAndShowOERsStats,
-      [Fig_COURSE_PROGRAM   ] = Fig_GetAndShowCourseProgramStats,
+      [Fig_COURSE_PROGRAMS   ] = Fig_GetAndShowCourseProgramStats,
       [Fig_ASSIGNMENTS      ] = Fig_GetAndShowAssignmentsStats,
       [Fig_PROJECTS         ] = Fig_GetAndShowProjectsStats,
       [Fig_TESTS            ] = Fig_GetAndShowTestsStats,
@@ -2945,34 +2946,31 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Level_t Scope,Brw_License_t License,u
 
 static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
   {
-   extern const char *Hlp_ANALYTICS_Figures_assignments;
+   extern const char *Hlp_ANALYTICS_Figures_course_programs;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
-   extern const char *Txt_Number_of_BR_assignments;
-   extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
-   extern const char *Txt_Average_number_BR_of_ASSIG_BR_per_course;
-   extern const char *Txt_Number_of_BR_notifications;
-   unsigned NumAssignments;
-   unsigned NumNotif;
-   unsigned NumCoursesWithAssignments = 0;
-   double NumAssignmentsPerCourse = 0.0;
+   extern const char *Txt_Number_of_BR_program_items;
+   extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
+   extern const char *Txt_Average_number_BR_of_items_BR_per_course;
+   unsigned NumPrgItems;
+   unsigned NumCoursesWithPrgItems = 0;
+   double NumPrgItemsPerCourse = 0.0;
 
-   /***** Get the number of assignments from this location *****/
-   if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
-      if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
-         NumAssignmentsPerCourse = (double) NumAssignments /
-	                           (double) NumCoursesWithAssignments;
+   /***** Get the number of program items from this location *****/
+   if ((NumPrgItems = Prg_GetNumPrgItems (Gbl.Scope.Current)))
+      if ((NumCoursesWithPrgItems = Prg_GetNumCoursesWithPrgItems (Gbl.Scope.Current)) != 0)
+         NumPrgItemsPerCourse = (double) NumPrgItems /
+	                        (double) NumCoursesWithPrgItems;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,
-                      Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_course_programs,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_program_items);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_program_items);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_items_BR_per_course);
 
    HTM_TR_End ();
 
@@ -2980,19 +2978,15 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumAssignments);
+   HTM_Unsigned (NumPrgItems);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithAssignments);
+   HTM_Unsigned (NumCoursesWithPrgItems);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumAssignmentsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNotif);
+   HTM_Double2Decimals (NumPrgItemsPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();

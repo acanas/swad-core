@@ -2763,6 +2763,27 @@ const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer =
 	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_course_programs =
+#if   L==1
+	"ANALYTICS.Figures.es#programas-de-asignaturas";
+#elif L==2
+	"ANALYTICS.Figures.en#course-programs";
+#elif L==3
+	"ANALYTICS.Figures.en#course-programs";
+#elif L==4
+	"ANALYTICS.Figures.es#programas-de-asignaturas";
+#elif L==5
+	"ANALYTICS.Figures.en#course-programs";
+#elif L==6
+	"ANALYTICS.Figures.es#programas-de-asignaturas";
+#elif L==7
+	"ANALYTICS.Figures.en#course-programs";
+#elif L==8
+	"ANALYTICS.Figures.en#course-programs";
+#elif L==9
+	"ANALYTICS.Figures.en#course-programs";
+#endif
+
 const char *Hlp_ANALYTICS_Figures_assignments =
 #if   L==1
 	"ANALYTICS.Figures.es#actividades";

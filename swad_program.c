@@ -255,7 +255,7 @@ static void Prg_PutIconsListPrgItems (void)
       Prg_PutIconToCreateNewPrgItem ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_COURSE_PROGRAM;
+   Gbl.Figures.FigureType = Fig_COURSE_PROGRAMS;
    Fig_PutIconToShowFigure ();
   }
 
@@ -1612,10 +1612,9 @@ unsigned Prg_GetNumCoursesWithPrgItems (Hie_Level_t Scope)
 /*****************************************************************************/
 /************************ Get number of program items ************************/
 /*****************************************************************************/
-// Returns the number of program items
-// in this location (all the platform, current degree or current course)
+// Returns the number of program items in a hierarchy scope
 
-unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
+unsigned Prg_GetNumPrgItems (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1626,13 +1625,13 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
      {
       case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM prg_items"
 			 " WHERE CrsCod>0");
          break;
       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(prg_items.NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,prg_items"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
@@ -1643,7 +1642,7 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(prg_items.NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,prg_items"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=degrees.CtrCod"
@@ -1653,7 +1652,7 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(prg_items.NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM degrees,courses,prg_items"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
@@ -1662,7 +1661,7 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(prg_items.NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM courses,prg_items"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=prg_items.CrsCod",
@@ -1670,7 +1669,7 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of program items",
-                         "SELECT COUNT(*),SUM(NumNotif)"
+                         "SELECT COUNT(*)"
 			 " FROM prg_items"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
@@ -1684,15 +1683,6 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope,unsigned *NumNotif)
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumPrgItems) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of program items.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of program items.");
-     }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

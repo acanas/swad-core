@@ -2457,6 +2457,27 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 	"N&ordm; medio<br />de jogos<br />por disciplina";
 #endif
 
+const char *Txt_Average_number_BR_of_items_BR_per_course =
+#if   L==1	// ca
+	"Nombre mitj&acute;<br />d'items<br />per assignatura";
+#elif L==2	// de
+	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
+#elif L==3	// en
+	"Average number<br />of items<br />per course";
+#elif L==4	// es
+	"N&ordm; medio<br />de items<br />por asignatura";
+#elif L==5	// fr
+	"Nombre moyen<br />d'&eacute;l&eacute;ments<br />par mati&egrave;re";
+#elif L==6	// gn
+	"N&ordm; medio<br />de items<br />por asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio<br />di elementi<br />per corso";
+#elif L==8	// pl
+	"&Sacute;rednia liczba<br />pozycji<br />na kurs";
+#elif L==9	// pt
+	"N&ordm; medio<br />de itens<br />por disciplina";
+#endif
+
 const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de projectes<br />per assignatura";
@@ -25682,17 +25703,17 @@ const char *Txt_No_items =
 #if   L==1	// ca
 	"No hi ha items";
 #elif L==2	// de
-	"Keine Artikel";
+	"Keine Programmelement";
 #elif L==3	// en
 	"No items";
 #elif L==4	// es
 	"No hay items";
 #elif L==5	// fr
-	"Il n'y a pas d'articles";
+	"Il n'y a pas d'&eacute;l&eacute;ments";
 #elif L==6	// gn
 	"No hay items";	// Okoteve traducción
 #elif L==7	// it
-	"Non ci sono articoli";
+	"Non ci sono elementi";
 #elif L==8	// pl
 	"Brak przedmiot&oacute;w";
 #elif L==9	// pt
@@ -26117,6 +26138,27 @@ const char *Txt_No_of_threads_BR_per_forum =
 	"Liczba watk&oacute;w<br />per forum";
 #elif L==9	// pt
 	"N&ordm; de discuss&otilde;es<br />por f&oacute;rum";
+#endif
+
+const char *Txt_Number_of_BR_program_items =
+#if   L==1	// ca
+	"Nombre d'elements<br />de programes";
+#elif L==2	// de
+	"Anzahl der Programmelemente";
+#elif L==3	// en
+	"Number of<br />program items";
+#elif L==4	// es
+	"N&ordm; de<br />items en programas";
+#elif L==5	// fr
+	"Nombre d'&eacute;l&eacute;ments<br />de programme";
+#elif L==6	// gn
+	"N&ordm; de<br />items en programas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di elementi<br />di programmi";
+#elif L==8	// pl
+	"Liczba<br />pozycji programu";
+#elif L==9	// pt
+	"N&ordm; de<br />itens de programas";
 #endif
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
@@ -28205,6 +28247,27 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 	"Liczba<br />kurs&oacute;w z<br />gry";
 #elif L==9	// pt
 	"N&ordm; de<br />disciplinas<br />com jogos";
+#endif
+
+const char *Txt_Number_of_BR_courses_with_BR_program_items =
+#if   L==1	// ca
+	"Nombre<br />d'assignatures amb<br />elements de programes";
+#elif L==2	// de
+	"Anzahl der<br />Kursen mit<br />Programmelemente";
+#elif L==3	// en
+	"Number of<br />courses with<br />program items";
+#elif L==4	// es
+	"N&ordm; de<br />asignaturas con<br />items de programas";
+#elif L==5	// fr
+	"Nombre de<br />mati&egrave;res avec<br />d'&eacute;l&eacute;ments de programme";
+#elif L==6	// gn
+	"N&ordm; de<br />asignaturas con<br />items de programas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />corsi con<br />elementi di programmi";
+#elif L==8	// pl
+	"Liczba<br />kurs&oacute;w z<br />pozycji programu";
+#elif L==9	// pt
+	"N&ordm; de<br />disciplinas com<br />itens de programas";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
@@ -41893,7 +41956,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Recursos Educacionais Abertos (OER)"
 #endif
 	,
-	[Fig_COURSE_PROGRAM] =
+	[Fig_COURSE_PROGRAMS] =
 #if   L==1	// ca
 	"Programa"
 #elif L==2	// de
