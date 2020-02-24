@@ -77,11 +77,14 @@ static void Prg_PutIconsListPrgItems (void);
 static void Prg_PutIconToCreateNewPrgItem (void);
 static void Prg_PutButtonToCreateNewPrgItem (void);
 static void Prg_ParamsWhichGroupsToShow (void);
-static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView);
+static void Prg_ShowOnePrgItem (long PrgIteCod,
+				unsigned ItemIndex,unsigned MaxItemIndex,
+				bool PrintView);
 static void Prg_WritePrgItemAuthor (struct ProgramItem *PrgItem);
 static void Prg_GetParamPrgOrder (void);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
+					     unsigned ItemIndex,unsigned MaxItemIndex,
                                              const char *Anchor);
 static void Prg_PutParams (void);
 static void Prg_GetDataOfPrgItem (struct ProgramItem *PrgItem,
@@ -125,7 +128,7 @@ static void Prg_ShowAllPrgItems (void)
    extern const char *Txt_Course_program;
    extern const char *Txt_No_items;
    struct Pagination Pagination;
-   unsigned NumAsg;
+   unsigned NumItem;
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
@@ -160,11 +163,12 @@ static void Prg_ShowAllPrgItems (void)
       Prg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the program items *****/
-      for (NumAsg  = Pagination.FirstItemVisible;
-	   NumAsg <= Pagination.LastItemVisible;
-	   NumAsg++)
-	 Prg_ShowOnePrgItem (Gbl.Prg.LstPrgIteCods[NumAsg - 1],
-	                        false);	// Not print view
+      for (NumItem  = Pagination.FirstItemVisible;
+	   NumItem <= Pagination.LastItemVisible;
+	   NumItem++)
+	 Prg_ShowOnePrgItem (Gbl.Prg.LstPrgIteCods[NumItem - 1],
+			     NumItem,Gbl.Prg.Num,
+	                     false);	// Not print view
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -299,39 +303,12 @@ static void Prg_ParamsWhichGroupsToShow (void)
   }
 
 /*****************************************************************************/
-/******************* Show print view of one program item *********************/
-/*****************************************************************************/
-
-void Prg_PrintOnePrgItem (void)
-  {
-   long PrgIteCod;
-
-   /***** Get the code of the program item *****/
-   PrgIteCod = Prg_GetParamPrgItemCod ();
-
-   /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Table head *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
-   Prg_PutHeadForSeeing (true);		// Print view
-
-   /***** Write program item *****/
-   Prg_ShowOnePrgItem (PrgIteCod,
-                       true);		// Print view
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView)
+static void Prg_ShowOnePrgItem (long PrgIteCod,
+				unsigned ItemIndex,unsigned MaxItemIndex,
+				bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -356,7 +333,9 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,bool PrintView)
    else
      {
       HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (&PrgItem,Anchor);
+      Prg_PutFormsToRemEditOnePrgItem (&PrgItem,
+				       ItemIndex,MaxItemIndex,
+				       Anchor);
      }
    HTM_TD_End ();
 
@@ -485,31 +464,63 @@ void Prg_PutHiddenParamPrgOrder (void)
 /*****************************************************************************/
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
+					     unsigned ItemIndex,unsigned MaxItemIndex,
                                              const char *Anchor)
   {
+   extern const char *Txt_Move_up_X;
+   extern const char *Txt_Move_down_X;
+   extern const char *Txt_Movement_not_allowed;
+   char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+
    Gbl.Prg.PrgIteCodToEdit = PrgItem->PrgIteCod;	// Used as parameter in contextual links
+
+   /***** Initialize item index string *****/
+   snprintf (StrItemIndex,sizeof (StrItemIndex),
+	     "%u",
+	     ItemIndex);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
-	 Ico_PutContextualIconToRemove (ActReqRemAsg,Prg_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemPrgIte,Prg_PutParams);
 
 	 /***** Put form to hide/show program item *****/
 	 if (PrgItem->Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,Prg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrgIte,Anchor,Prg_PutParams);
 	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,Prg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidPrgIte,Anchor,Prg_PutParams);
+
+	 /***** Put icon to move up the question *****/
+	 if (ItemIndex > 1)
+	   {
+	    Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,Prg_PutParams, // TODO: Change action
+					   "arrow-up.svg",
+					   Str_BuildStringStr (Txt_Move_up_X,
+							       StrItemIndex));
+	    Str_FreeString ();
+	   }
+	 else
+	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+
+	 /***** Put icon to move down the question *****/
+	 if (ItemIndex < MaxItemIndex)
+	   {
+	    Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,Prg_PutParams, // TODO: Change action
+					   "arrow-down.svg",
+					   Str_BuildStringStr (Txt_Move_down_X,
+							       StrItemIndex));
+	    Str_FreeString ();
+	   }
+	 else
+	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Prg_PutParams);
-	 /* falls through */
-	 /* no break */
+	 Ico_PutContextualIconToEdit (ActEdiOnePrgIte,Prg_PutParams);
+	 break;
       case Rol_STD:
       case Rol_NET:
-	 /***** Put form to print program item *****/
-	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Prg_PutParams);
 	 break;
       default:
          break;

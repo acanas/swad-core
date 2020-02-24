@@ -400,7 +400,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewPrgIte	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
    [ActEdiOnePrgIte	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
-   [ActPrnOnePrgIte	] = {1824,-1,TabUnk,ActSeePrg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prg_PrintOnePrgItem		,NULL},
    [ActNewPrgIte	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
    [ActChgPrgIte	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
    [ActReqRemPrgIte	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemPrgItem		,NULL},
@@ -3550,7 +3549,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeePrg,		// #1821
 	ActFrmNewPrgIte,	// #1822
 	ActEdiOnePrgIte,	// #1823
-	ActPrnOnePrgIte,	// #1824
+	-1,			// #1824
 	ActNewPrgIte,		// #1825
 	ActChgPrgIte,		// #1826
 	ActReqRemPrgIte,	// #1827

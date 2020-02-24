@@ -60,7 +60,6 @@ struct ProgramItem
 /*****************************************************************************/
 
 void Prg_SeeCourseProgram (void);
-void Prg_PrintOnePrgItem (void);
 
 void Prg_PutHiddenParamPrgOrder (void);
 void Prg_RequestCreatOrEditPrgItem (void);
