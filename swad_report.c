@@ -461,7 +461,7 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<h1>");
    fprintf (Gbl.F.Rep,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Rep,"</h1>");
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** User *****/
    fprintf (Gbl.F.Rep,"<li>%s: <strong>%s</strong></li>",
@@ -504,7 +504,7 @@ static void Rep_WriteSectionPlatform (void)
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>",
 	    Txt_Teaching_platform);
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** Platform name *****/
    fprintf (Gbl.F.Rep,"<li>%s: %s, %s</li>",
@@ -543,7 +543,7 @@ static void Rep_WriteSectionUsrInfo (void)
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>",
 	    Txt_Personal_information);
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** User's name *****/
    fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
@@ -605,7 +605,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Figures);
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** Time since first click until now *****/
    fprintf (Gbl.F.Rep,"<li>%s ",Txt_TIME_Since);
@@ -865,7 +865,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
    if (Report->CurrentTimeUTC.StrDate[0])
       fprintf (Gbl.F.Rep," (%s)",Report->CurrentTimeUTC.StrDate);
    fprintf (Gbl.F.Rep,"</h3>");
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** Number of courses in which the user is student/teacher *****/
    for (Role  = Rol_STD;
@@ -896,7 +896,7 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
 	    Txt_Courses,Txt_historical_log);
    fprintf (Gbl.F.Rep,Txt_Only_courses_with_more_than_X_clicks_are_shown,
             Rep_MIN_CLICKS_CRS);
-   HTM_UL_Begin (NULL);
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /********* Historic clicks of a user without course selected ***********/
    Rep_GetAndWriteMyHistoricClicsWithoutCrs (Report);

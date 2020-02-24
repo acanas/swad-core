@@ -11724,7 +11724,6 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
 /*****************************************************************************/
 /******************** Get summary and content of a file **********************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,

@@ -348,5 +348,5 @@ void Log_GetAndShowLastClicks (void)
    HTM_TABLE_End ();
 
    /***** Free structure that stores the query result *****/
-   mysql_free_result (mysql_res);
+   DB_FreeMySQLResult (&mysql_res);
   }

@@ -488,7 +488,6 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Rol_Role_t Role;
 
    SummaryStr[0] = '\0';        // Return nothing on error
-   // This function may be called inside a web service, so don't report error
 
    /***** Get user's role in course from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get user's role"
@@ -2033,7 +2032,6 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Rol_Role_t DesiredRole;
 
    SummaryStr[0] = '\0';        // Return nothing on error
-   // This function may be called inside a web service, so don't report error
 
    /***** Get user and requested role from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get enrolment request",

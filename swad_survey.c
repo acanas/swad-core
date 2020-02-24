@@ -1452,13 +1452,11 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
 /*****************************************************************************/
 /******************** Get summary and content of a survey  *******************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -1466,33 +1464,33 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM surveys WHERE SvyCod=%ld",
-            SvyCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get row *****/
-            row = mysql_fetch_row (mysql_res);
+   if (DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
+	               "SELECT Title,"	// row[0]
+	                      "Txt"	// row[1]
+	               " FROM surveys"
+	               " WHERE SvyCod=%ld",
+                       SvyCod) == 1)
+     {
+      /***** Get row *****/
+      row = mysql_fetch_row (mysql_res);
 
-            /***** Get summary *****/
-            Str_Copy (SummaryStr,row[0],
-                      Ntf_MAX_BYTES_SUMMARY);
+      /***** Get summary *****/
+      Str_Copy (SummaryStr,row[0],
+		Ntf_MAX_BYTES_SUMMARY);
 
-            /***** Get content *****/
-            if (GetContent)
-              {
-               Length = strlen (row[1]);
-               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[1],
-                         Length);
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
+      /***** Get content *****/
+      if (GetContent)
+	{
+	 Length = strlen (row[1]);
+	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
+	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
+	 Str_Copy (*ContentStr,row[1],
+		   Length);
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

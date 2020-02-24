@@ -1447,7 +1447,6 @@ void Fol_GetAndShowRankingFollowers (void)
 /*****************************************************************************/
 /********************* Get notification of a new follower ********************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                            char **ContentStr)

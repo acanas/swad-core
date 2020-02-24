@@ -3099,7 +3099,6 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
-   // This function may be called inside a web service, so don't report error
 
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get subject and content"

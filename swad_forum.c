@@ -1366,53 +1366,49 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 /*****************************************************************************/
 /***************** Get summary and content for a forum post ******************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
                                        long PstCod,bool GetContent)
   {
-   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
-   /***** Get subject of message from database *****/
-   if (asprintf (&Query,"SELECT Subject,Content FROM forum_post"
-                        " WHERE PstCod=%ld",PstCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get subject and content of the message *****/
-            row = mysql_fetch_row (mysql_res);
+   /***** Get post subject and content from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get subject and content",
+		       "SELECT Subject,"	// row[0]
+		              "Content"		// row[1]
+		       " FROM forum_post"
+                       " WHERE PstCod=%ld",PstCod) == 1)
+     {
+      /***** Get subject and content of the post *****/
+      row = mysql_fetch_row (mysql_res);
 
-            /***** Copy subject *****/
-	    Str_Copy (SummaryStr,row[0],
-		      Ntf_MAX_BYTES_SUMMARY);
+      /***** Copy subject *****/
+      Str_Copy (SummaryStr,row[0],
+		Ntf_MAX_BYTES_SUMMARY);
 
-            /***** Copy content *****/
-            if (GetContent)
-              {
-               Length = strlen (row[1]);
+      /***** Copy content *****/
+      if (GetContent)
+	{
+	 Length = strlen (row[1]);
 
-               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
+	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
+	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
 
-               if (Length)
-                  Str_Copy (*ContentStr,row[1],
-                            Length);
-               else
-        	  **ContentStr = '\0';
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
+	 if (Length)
+	    Str_Copy (*ContentStr,row[1],
+		      Length);
+	 else
+	    **ContentStr = '\0';
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

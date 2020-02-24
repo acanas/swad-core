@@ -711,7 +711,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
            }
 
    /***** Free structure that stores the query result *****/
-   mysql_free_result (mysql_res);
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -761,7 +761,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
      }
 
    /***** Free structure that stores the query result *****/
-   mysql_free_result (mysql_res);
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

@@ -716,7 +716,6 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    char *Ptr;
 
    SummaryStr[0] = '\0';	// Return nothing on error
-   // This function may be called inside a web service, so don't report error
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
