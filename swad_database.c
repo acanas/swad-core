@@ -3588,11 +3588,12 @@ void DB_Query (const char *MsgError,const char *fmt,...)
 
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res)
   {
-   if (*mysql_res)
-     {
-      mysql_free_result (*mysql_res);
-      *mysql_res = NULL;
-     }
+   if (mysql_res)
+      if (*mysql_res)
+	{
+	 mysql_free_result (*mysql_res);
+	 *mysql_res = NULL;
+	}
   }
 
 /*****************************************************************************/

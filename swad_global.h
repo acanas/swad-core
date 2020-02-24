@@ -140,8 +140,6 @@ struct Globals
       size_t LengthWithCRLF;
      } Boundary;
 
-   struct soap *soap;	// gSOAP runtime environment
-
    struct
      {
       bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error

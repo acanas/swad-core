@@ -280,7 +280,6 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
 static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowPage (void);
-static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1]);
 
 static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowURL (void);
@@ -292,9 +291,6 @@ static void Inf_ShowPage (const char *URL);
 static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc);
 static Inf_InfoType_t Inf_AsignInfoType (void);
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
-static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                                  char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
-                                  char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (void);
@@ -805,87 +801,12 @@ static bool Inf_CheckAndShowPage (void)
 /* Build path inside a course for a given a info type to store web page file */
 /*****************************************************************************/
 
-static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
+void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
   {
    snprintf (PathDir,PATH_MAX + 1,
 	     "%s/%ld/%s",
              Cfg_PATH_CRS_PUBLIC,CrsCod,
              Inf_FileNamesForInfoType[InfoType]);
-  }
-
-/*****************************************************************************/
-/************* Check if exists and write page into HTML buffer ***************/
-/*****************************************************************************/
-// This function is called only from web service
-
-int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
-  {
-   char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
-   FILE *FileHTML;
-   bool FileExists = false;
-   size_t Length;
-
-   /***** Initialize buffer *****/
-   *HTMLBuffer = NULL;
-
-   /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathRelDirHTML);
-
-   /***** Open file with web page *****/
-   /* 1. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	     "%s/index.html",
-	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))		// TODO: Check if not empty?
-      FileExists = true;
-   else
-     {
-      /* 2. If index.html not exists, try index.htm */
-      snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	        "%s/index.htm",
-		PathRelDirHTML);
-      if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-         FileExists = true;
-     }
-
-   if (FileExists)
-     {
-      /***** Write page from file to text buffer *****/
-      /* Open file */
-      if ((FileHTML = fopen (PathRelFileHTML,"rb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open XML file.");
-
-      /* Compute file size */
-      fseek (FileHTML,0L,SEEK_END);
-      Length = (size_t) ftell (FileHTML);
-      fseek (FileHTML,0L,SEEK_SET);
-
-      /* Allocate memory for buffer */
-      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
-	{
-	 fclose (FileHTML);
-	 Lay_NotEnoughMemoryExit ();
-         return soap_receiver_fault (Gbl.soap,
-                                     "Web page can not be copied into buffer",
-                                     "Not enough memory for buffer");
-	}
-
-      /* Copy file content into buffer */
-      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTML) != Length)
-	{
-	 fclose (FileHTML);
-         return soap_receiver_fault (Gbl.soap,
-                                     "Web page can not be copied into buffer",
-                                     "Error reading web page into buffer");
-	}
-      (*HTMLBuffer)[Length] = '\0';
-
-      /***** Close HTML file *****/
-      fclose (FileHTML);
-     }
-
-   return SOAP_OK;
   }
 
 /*****************************************************************************/
@@ -1663,9 +1584,9 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                                  char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
-                                  char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
+void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                           char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
+                           char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1918,91 +1839,6 @@ static bool Inf_CheckAndShowRichTxt (void)
      }
 
    return false;
-  }
-
-/*****************************************************************************/
-/************* Check if exists and write page into HTML buffer ***************/
-/*****************************************************************************/
-// This function is called only from web service
-
-int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
-  {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   char FileNameHTMLTmp[PATH_MAX + 1];
-   FILE *FileHTMLTmp;
-   size_t Length;
-
-   /***** Initialize buffer *****/
-   *HTMLBuffer = NULL;
-
-   /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
-                         TxtHTML,NULL);
-
-   if (TxtHTML[0])
-     {
-      /***** Create a unique name for the file *****/
-      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
-	        "%s/%s_info.html",
-	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
-
-      /***** Create a new temporary file for writing and reading *****/
-      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
-         return soap_receiver_fault (Gbl.soap,
-                                     "Plain text can not be copied into buffer",
-                                     "Can not create temporary file");
-
-      /***** Write start of HTML code *****/
-      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
-      fprintf (FileHTMLTmp,"<body>\n"
-                           "<div class=\"DAT LM\">\n");
-
-      /***** Write plain text into text buffer *****/
-      /* Convert to respectful HTML and insert links */
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML
-      Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
-
-      /* Write text */
-      fprintf (FileHTMLTmp,"%s",TxtHTML);
-
-      /***** Write end of page into file *****/
-      fprintf (FileHTMLTmp,"</div>\n"
-			   "</html>\n"
-			   "</body>\n");
-
-      /***** Compute length of file *****/
-      Length = (size_t) ftell (FileHTMLTmp);
-
-      /***** Allocate memory for buffer *****/
-      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
-	{
-	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
-         return soap_receiver_fault (Gbl.soap,
-                                     "Plain text can not be copied into buffer",
-                                     "Not enough memory for buffer");
-	}
-
-      /***** Copy file content into buffer *****/
-      fseek (FileHTMLTmp,0L,SEEK_SET);
-      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
-	{
-	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
-         return soap_receiver_fault (Gbl.soap,
-                                     "Plain text can not be copied into buffer",
-                                     "Error reading file into buffer");
-	}
-      (*HTMLBuffer)[Length] = '\0';
-
-      /***** Close and remove temporary file *****/
-      fclose (FileHTMLTmp);
-      unlink (FileNameHTMLTmp);
-     }
-
-   return SOAP_OK;
   }
 
 /*****************************************************************************/

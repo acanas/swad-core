@@ -202,21 +202,23 @@ static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
 #define API_BYTES_WS_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
 /*****************************************************************************/
-/********************************* Data types ********************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static int API_GetPlgCodFromAppKey (const char *appKey);
-static int API_CheckIdSession (const char *IdSession);
+static void API_Set_gSOAP_RuntimeEnv (struct soap *soap);
+
+static int API_GetPlgCodFromAppKey (struct soap *soap,
+                                    const char *appKey);
+static int API_CheckIdSession (struct soap *soap,
+			       const char *IdSession);
 static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1]);
 
-static int API_CheckCourseAndGroupCodes (long CrsCod,long GrpCod);
-static int API_GenerateNewWSKey (long UsrCod,
+static int API_CheckCourseAndGroupCodes (struct soap *soap,
+					 long CrsCod,long GrpCod);
+static int API_GenerateNewWSKey (struct soap *soap,
+                                 long UsrCod,
                                  char WSKey[API_BYTES_WS_KEY + 1]);
-static int API_RemoveOldWSKeys (void);
+static int API_RemoveOldWSKeys (struct soap *soap);
 static int API_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
@@ -226,28 +228,64 @@ static int API_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword);	// Output
 
-static void API_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getUsersOut);
-static void API_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible);
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+                                            char **HTMLBuffer);
+static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
+                                             char **HTMLBuffer);
+static int API_WritePageIntoHTMLBuffer (struct soap *soap,
+                                        char **HTMLBuffer);
 
-static void API_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroups);
+static void API_CopyListUsers (struct soap *soap,
+                               Rol_Role_t Role,
+			       struct swad__getUsersOutput *getUsersOut);
+static void API_CopyUsrData (struct soap *soap,
+			     struct swad__user *Usr,struct UsrData *UsrDat,
+			     bool UsrIDIsVisible);
+
+static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
+						    long AttCod,char **ListGroups);
 static void API_GetLstGrpsSel (const char *Groups);
 
-static int API_GetMyLanguage (void);
+static int API_GetMyLanguage (struct soap *soap);
 
 static int API_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
 static int API_GetTstConfig (long CrsCod);
 static int API_GetNumTestQuestionsInCrs (long CrsCod);
-static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut);
-static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut);
-static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut);
-static int API_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut);
+static int API_GetTstTags (struct soap *soap,
+			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
+static int API_GetTstQuestions (struct soap *soap,
+				long CrsCod,long BeginTime,
+				struct swad__getTestsOutput *getTestsOut);
+static int API_GetTstAnswers (struct soap *soap,
+		              long CrsCod,long BeginTime,
+			      struct swad__getTestsOutput *getTestsOut);
+static int API_GetTstQuestionTags (struct soap *soap,
+		                   long CrsCod,long BeginTime,
+				   struct swad__getTestsOutput *getTestsOut);
 
-static void API_GetListGrpsInGameFromDB (long MchCod,char **ListGroups);
+static void API_GetListGrpsInGameFromDB (struct soap *soap,
+					 long MchCod,char **ListGroups);
 
 static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree);
 static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,const char *FileName);
 static void API_IndentXMLLine (unsigned Level);
+
+/*****************************************************************************/
+/******* Function called when a web service if required by a plugin **********/
+/*****************************************************************************/
+
+static struct soap *API_soap = NULL;	// gSOAP runtime environment
+
+static void API_Set_gSOAP_RuntimeEnv (struct soap *soap)
+  {
+   API_soap = soap;
+  }
+
+struct soap *API_Get_gSOAP_RuntimeEnv (void)
+  {
+   return API_soap;
+  }
 
 /*****************************************************************************/
 /******* Function called when a web service if required by a plugin **********/
@@ -272,13 +310,19 @@ void API_WebService (void)
 
 void API_Exit (const char *DetailErrorMessage)
   {
-   int ReturnCode = (DetailErrorMessage ? soap_receiver_fault (Gbl.soap,
-	                                                       "Error in swad web service",
-	                                                       DetailErrorMessage) :
-	                                  0);
+   struct soap *soap = API_Get_gSOAP_RuntimeEnv ();
+   int ReturnCode = 0;
 
-   soap_end (Gbl.soap);		// Clean up and remove deserialized data
-   soap_free (Gbl.soap);	// Detach and free runtime context
+   if (soap)
+     {
+      ReturnCode = (DetailErrorMessage ? soap_receiver_fault (soap,
+	                                                      "Error in swad web service",
+	                                                      DetailErrorMessage) :
+	                                 0);
+
+      soap_end (soap);	// Clean up and remove deserialized data
+      soap_free (soap);	// Detach and free runtime context
+     }
 
    exit (ReturnCode);
   }
@@ -288,7 +332,8 @@ void API_Exit (const char *DetailErrorMessage)
 /****** is one of the application keys allowed in the plugins          *******/
 /*****************************************************************************/
 
-static int API_GetPlgCodFromAppKey (const char *appKey)
+static int API_GetPlgCodFromAppKey (struct soap *soap,
+                                    const char *appKey)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -309,7 +354,7 @@ static int API_GetPlgCodFromAppKey (const char *appKey)
    DB_FreeMySQLResult (&mysql_res);
 
    if (Gbl.WebService.PlgCod < 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Unknown application key",
 	                        "Unknown application");
 
@@ -331,20 +376,21 @@ const char *API_GetFunctionNameFromFunCod (long FunCod)
 /****** Check if a session identifier is valid and exists in database ********/
 /*****************************************************************************/
 
-static int API_CheckIdSession (const char *IdSession)
+static int API_CheckIdSession (struct soap *soap,
+			       const char *IdSession)
   {
    const char *Ptr;
    unsigned i;
 
    /***** Check if pointer is NULL *****/
    if (IdSession == NULL)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad session identifier",
 	                        "Session identifier is a null pointer");
 
    /***** Check length of session identifier *****/
    if (strlen (IdSession) != Cns_BYTES_SESSION_ID)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad session identifier",
 	                        "The length of the session identifier is wrong");
 
@@ -359,7 +405,7 @@ static int API_CheckIdSession (const char *IdSession)
          if (*Ptr == Str_BIN_TO_BASE64URL[i])
             break;
       if (i == 64)	// Character not found
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Bad session identifier",
                                    "The session identifier must contain only base64url characters");
      }
@@ -369,7 +415,7 @@ static int API_CheckIdSession (const char *IdSession)
 		      "SELECT COUNT(*) FROM sessions"
 		      " WHERE SessionId='%s'",
                       IdSession) != 1)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
 
@@ -412,11 +458,12 @@ static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1])
 /** Check if a course code and a group code are valid and exist in database **/
 /*****************************************************************************/
 
-static int API_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
+static int API_CheckCourseAndGroupCodes (struct soap *soap,
+					 long CrsCod,long GrpCod)
   {
    /***** Check if course code is correct *****/
    if (CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
@@ -425,7 +472,7 @@ static int API_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 		      "SELECT COUNT(*) FROM courses"
 		      " WHERE CrsCod=%ld",
 		      CrsCod) != 1)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code does not exist in database");
 
@@ -439,7 +486,7 @@ static int API_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 			 " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			 " AND crs_grp.GrpCod=%ld",
 			 CrsCod,GrpCod) != 1)
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Bad group code",
                                    "Group code does not exist in database or it's not a group of the specified course");
      }
@@ -451,13 +498,14 @@ static int API_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 /***** Generate a key used in subsequents calls to other web services ********/
 /*****************************************************************************/
 
-static int API_GenerateNewWSKey (long UsrCod,
+static int API_GenerateNewWSKey (struct soap *soap,
+                                 long UsrCod,
                                  char WSKey[API_BYTES_WS_KEY + 1])
   {
    int ReturnCode;
 
    /***** Remove expired web service keys *****/
-   if ((ReturnCode = API_RemoveOldWSKeys ()) != SOAP_OK)
+   if ((ReturnCode = API_RemoveOldWSKeys (soap)) != SOAP_OK)
       return ReturnCode;
 
    /***** Create a unique name for the key *****/
@@ -469,7 +517,7 @@ static int API_GenerateNewWSKey (long UsrCod,
 		      "SELECT COUNT(*) FROM ws_keys"
 		      " WHERE WSKey='%s'",
 		      WSKey))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Error when generating key",
 	                          "Generated key already existed in database");
 
@@ -488,7 +536,7 @@ static int API_GenerateNewWSKey (long UsrCod,
 /************************ Remove old web service keys ************************/
 /*****************************************************************************/
 
-static int API_RemoveOldWSKeys (void)
+static int API_RemoveOldWSKeys (struct soap *soap)
   {
    char Query[512];
 
@@ -499,7 +547,7 @@ static int API_RemoveOldWSKeys (void)
 	          " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
             Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY);
    if (mysql_query (&Gbl.mysql,Query))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not remove old web service keys from database",
 	                          mysql_error (&Gbl.mysql));
 
@@ -675,18 +723,18 @@ int swad__createAccount (struct soap *soap,
    int ReturnCode;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_createAccount;
 
    /***** Allocate space for strings *****/
-   createAccountOut->wsKey = (char *) soap_malloc (Gbl.soap,API_BYTES_WS_KEY + 1);
+   createAccountOut->wsKey = (char *) soap_malloc (soap,API_BYTES_WS_KEY + 1);
 
    /***** Default values returned on error *****/
    createAccountOut->userCode = 0;	// Undefined error
    createAccountOut->wsKey[0] = '\0';
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,(const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check parameters used to create the new account *****/
@@ -731,7 +779,8 @@ int swad__createAccount (struct soap *soap,
    createAccountOut->userCode = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Generate a key used in subsequents calls to other web services *****/
-   return API_GenerateNewWSKey ((long) createAccountOut->userCode,
+   return API_GenerateNewWSKey (soap,
+				(long) createAccountOut->userCode,
 				createAccountOut->wsKey);
   }
 
@@ -803,18 +852,18 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    bool UsrFound;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_loginByUserPasswordKey;
 
    /***** Allocate space for strings *****/
-   loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,API_BYTES_WS_KEY + 1);
-   loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
-   loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
-   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
-   loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
+   loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (soap,API_BYTES_WS_KEY + 1);
+   loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
+   loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (soap,ID_MAX_BYTES_USR_ID + 1);
+   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
+   loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (soap,Dat_LENGTH_YYYYMMDD + 1);
 
    /***** Default values returned on error *****/
    loginByUserPasswordKeyOut->userCode          = -1;
@@ -829,7 +878,8 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->userRole          = 0;	// unknown
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
+					      (const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if user's email, @nickname or ID are valid *****/
@@ -881,7 +931,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 				    UsrIDNickOrEmail,userPassword);
 	}
       else	// String is not a valid user's nickname, email or ID
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Bad log in",
 				     "User's ID or nickname don't exist or password is wrong");
      }
@@ -940,7 +990,8 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       loginByUserPasswordKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role];
 
       /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewWSKey ((long) loginByUserPasswordKeyOut->userCode,
+      return API_GenerateNewWSKey (soap,
+				   (long) loginByUserPasswordKeyOut->userCode,
                                    loginByUserPasswordKeyOut->wsKey);
      }
    else
@@ -953,7 +1004,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       loginByUserPasswordKeyOut->userPhoto     = NULL;
       loginByUserPasswordKeyOut->userRole      = 0;
 
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad log in",
 	                          "User's ID or nickname don't exist or password is wrong");
      }
@@ -975,20 +1026,20 @@ int swad__loginBySessionKey (struct soap *soap,
    bool UsrFound;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_loginBySessionKey;
 
    /***** Allocate space for strings *****/
-   loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,API_BYTES_WS_KEY + 1);
-   loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
-   loginBySessionKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
-   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
-   loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
-   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
-   loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
+   loginBySessionKeyOut->wsKey          = (char *) soap_malloc (soap,API_BYTES_WS_KEY + 1);
+   loginBySessionKeyOut->userNickname   = (char *) soap_malloc (soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
+   loginBySessionKeyOut->userID         = (char *) soap_malloc (soap,ID_MAX_BYTES_USR_ID + 1);
+   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
+   loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (soap,Dat_LENGTH_YYYYMMDD + 1);
+   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
+   loginBySessionKeyOut->courseName     = (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
 
    /***** Default values returned on error *****/
    loginBySessionKeyOut->userCode          = -1;
@@ -1007,17 +1058,18 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->courseName[0]     = '\0';
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
+					      (const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check length of session identifier *****/
    if (sessionID == NULL)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "SessionID is null",
 	                        "Login by session");
 
    /***** Check session identifier coming from an external plugin *****/
-   if ((ReturnCode = API_CheckIdSession (sessionID)) != SOAP_OK)
+   if ((ReturnCode = API_CheckIdSession (soap,sessionID)) != SOAP_OK)
       return ReturnCode;
 
    // Now, we know that sessionID is a valid session identifier
@@ -1095,11 +1147,12 @@ int swad__loginBySessionKey (struct soap *soap,
       loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role];
 
       /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewWSKey ((long) loginBySessionKeyOut->userCode,
+      return API_GenerateNewWSKey (soap,
+				   (long) loginBySessionKeyOut->userCode,
                                    loginBySessionKeyOut->wsKey);
      }
    else
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
   }
@@ -1120,14 +1173,15 @@ int swad__getNewPassword (struct soap *soap,
    char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getNewPassword;
 
    /***** Default values returned on error *****/
    getNewPasswordOut->success = 0;	// error
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
+					      (const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if user's email, @nickname or ID are valid *****/
@@ -1170,7 +1224,7 @@ int swad__getNewPassword (struct soap *soap,
 				    UsrIDNickOrEmail);
 	}
       else	// String is not a valid user's nickname, email or ID
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Bad log in",
 				     "User's email, nickname or ID don't exist");
      }
@@ -1215,20 +1269,20 @@ int swad__getCourses (struct soap *soap,
    Rol_Role_t Role;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getCourses;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1254,7 +1308,7 @@ int swad__getCourses (struct soap *soap,
       getCoursesOut->coursesArray.__ptr = NULL;
    else	// Courses found
      {
-      getCoursesOut->coursesArray.__ptr = soap_malloc (Gbl.soap,
+      getCoursesOut->coursesArray.__ptr = soap_malloc (soap,
 						       (getCoursesOut->coursesArray.__size) *
 						       sizeof (*(getCoursesOut->coursesArray.__ptr)));
 
@@ -1270,13 +1324,13 @@ int swad__getCourses (struct soap *soap,
 
          /* Get course short name (row[1]) */
          getCoursesOut->coursesArray.__ptr[NumRow].courseShortName =
-            (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_SHRT_NAME + 1);
+            (char *) soap_malloc (soap,Hie_MAX_BYTES_SHRT_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,row[1],
 	           Hie_MAX_BYTES_SHRT_NAME);
 
          /* Get course full name (row[2]) */
          getCoursesOut->coursesArray.__ptr[NumRow].courseFullName =
-            (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
+            (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,row[2],
 	           Hie_MAX_BYTES_FULL_NAME);
 
@@ -1330,7 +1384,7 @@ int swad__getCourseInfo (struct soap *soap,
      };
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getCourseInfo;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -1338,17 +1392,19 @@ int swad__getCourseInfo (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check course and group codes *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,-1L)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1358,7 +1414,7 @@ int swad__getCourseInfo (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -1369,13 +1425,13 @@ int swad__getCourseInfo (struct soap *soap,
       if (!strcmp (infoType,NamesInWSForInfoType[InfoType]))
 	 break;
    if (InfoType == Inf_NUM_INFO_TYPES)	// Not found!
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
    Inf_GetAndCheckInfoSrcFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,&InfoSrc,&MustBeRead);
    Length = strlen (NamesInWSForInfoSrc[InfoSrc]);
-   getCourseInfo->infoSrc = (char *) soap_malloc (Gbl.soap,Length + 1);
+   getCourseInfo->infoSrc = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc],
              Length);
 
@@ -1393,7 +1449,7 @@ int swad__getCourseInfo (struct soap *soap,
 	   {
 	    case Inf_LECTURES:		// Syllabus (lectures)
 	    case Inf_PRACTICALS:	// Syllabys (practicals)
-	       Result = Syl_WriteSyllabusIntoHTMLBuffer (&(getCourseInfo->infoTxt));
+	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1401,13 +1457,13 @@ int swad__getCourseInfo (struct soap *soap,
 	 break;
       case Inf_INFO_SRC_PLAIN_TEXT:	// Plain text
       case Inf_INFO_SRC_RICH_TEXT:	// Rich text (not yet available)
-	 Result = Inf_WritePlainTextIntoHTMLBuffer (&(getCourseInfo->infoTxt));
+	 Result = API_WritePlainTextIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_PAGE:		// Web page hosted in SWAD server
-	 Result = Inf_WritePageIntoHTMLBuffer (&(getCourseInfo->infoTxt));
+	 Result = API_WritePageIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_URL:		// Link to a web page
-         getCourseInfo->infoTxt = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
+         getCourseInfo->infoTxt = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
          Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
          break;
      }
@@ -1415,11 +1471,247 @@ int swad__getCourseInfo (struct soap *soap,
    /***** Return empty text if pointer is null *****/
    if (getCourseInfo->infoTxt == NULL)
      {
-      getCourseInfo->infoTxt = (char *) soap_malloc (Gbl.soap,1);
+      getCourseInfo->infoTxt = (char *) soap_malloc (soap,1);
       getCourseInfo->infoTxt[0] = '\0';
      }
 
    return Result;
+  }
+
+/*****************************************************************************/
+/************** Write the syllabus into a temporary HTML file ****************/
+/*****************************************************************************/
+
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+                                            char **HTMLBuffer)
+  {
+   extern struct LstItemsSyllabus Syl_LstItemsSyllabus;
+   char FileNameHTMLTmp[PATH_MAX + 1];
+   FILE *FileHTMLTmp;
+   size_t Length;
+
+   /***** Initialize buffer *****/
+   *HTMLBuffer = NULL;
+
+   /***** Load syllabus from XML file to list of items in memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.CrsCod);
+
+   if (Syl_LstItemsSyllabus.NumItems)
+     {
+      /***** Create a unique name for the file *****/
+      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
+	        "%s/%s_syllabus.html",
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+
+      /***** Create a new temporary file for writing and reading *****/
+      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
+	{
+         Syl_FreeListItemsSyllabus ();
+         return soap_receiver_fault (soap,
+                                     "Syllabus can not be copied into buffer",
+                                     "Can not create temporary file");
+	}
+
+      /***** Write syllabus in HTML into a temporary file *****/
+      Syl_WriteSyllabusIntoHTMLTmpFile (FileHTMLTmp);
+
+      /***** Write syllabus from list of items in memory to text buffer *****/
+      /* Compute length of file */
+      Length = (size_t) ftell (FileHTMLTmp);
+
+      /* Allocate memory for buffer */
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
+	{
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
+         Syl_FreeListItemsSyllabus ();
+         return soap_receiver_fault (soap,
+                                     "Syllabus can not be copied into buffer",
+                                     "Not enough memory for buffer");
+	}
+
+      /* Copy file content into buffer */
+      fseek (FileHTMLTmp,0L,SEEK_SET);
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
+	{
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
+         Syl_FreeListItemsSyllabus ();
+         return soap_receiver_fault (soap,
+                                     "Syllabus can not be copied into buffer",
+                                     "Error reading file into buffer");
+	}
+      (*HTMLBuffer)[Length] = '\0';
+
+      /***** Close and remove temporary file *****/
+      fclose (FileHTMLTmp);
+      unlink (FileNameHTMLTmp);
+     }
+
+   /***** Free list of items *****/
+   Syl_FreeListItemsSyllabus ();
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/************* Check if exists and write page into HTML buffer ***************/
+/*****************************************************************************/
+
+static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
+                                             char **HTMLBuffer)
+  {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char FileNameHTMLTmp[PATH_MAX + 1];
+   FILE *FileHTMLTmp;
+   size_t Length;
+
+   /***** Initialize buffer *****/
+   *HTMLBuffer = NULL;
+
+   /***** Get info text from database *****/
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+                         TxtHTML,NULL);
+
+   if (TxtHTML[0])
+     {
+      /***** Create a unique name for the file *****/
+      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
+	        "%s/%s_info.html",
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+
+      /***** Create a new temporary file for writing and reading *****/
+      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
+         return soap_receiver_fault (soap,
+                                     "Plain text can not be copied into buffer",
+                                     "Can not create temporary file");
+
+      /***** Write start of HTML code *****/
+      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+      fprintf (FileHTMLTmp,"<body>\n"
+                           "<div class=\"DAT LM\">\n");
+
+      /***** Write plain text into text buffer *****/
+      /* Convert to respectful HTML and insert links */
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML
+      Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+
+      /* Write text */
+      fprintf (FileHTMLTmp,"%s",TxtHTML);
+
+      /***** Write end of page into file *****/
+      fprintf (FileHTMLTmp,"</div>\n"
+			   "</html>\n"
+			   "</body>\n");
+
+      /***** Compute length of file *****/
+      Length = (size_t) ftell (FileHTMLTmp);
+
+      /***** Allocate memory for buffer *****/
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
+	{
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
+         return soap_receiver_fault (soap,
+                                     "Plain text can not be copied into buffer",
+                                     "Not enough memory for buffer");
+	}
+
+      /***** Copy file content into buffer *****/
+      fseek (FileHTMLTmp,0L,SEEK_SET);
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
+	{
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
+         return soap_receiver_fault (soap,
+                                     "Plain text can not be copied into buffer",
+                                     "Error reading file into buffer");
+	}
+      (*HTMLBuffer)[Length] = '\0';
+
+      /***** Close and remove temporary file *****/
+      fclose (FileHTMLTmp);
+      unlink (FileNameHTMLTmp);
+     }
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/************* Check if exists and write page into HTML buffer ***************/
+/*****************************************************************************/
+
+static int API_WritePageIntoHTMLBuffer (struct soap *soap,
+                                        char **HTMLBuffer)
+  {
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
+   FILE *FileHTML;
+   bool FileExists = false;
+   size_t Length;
+
+   /***** Initialize buffer *****/
+   *HTMLBuffer = NULL;
+
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathRelDirHTML);
+
+   /***** Open file with web page *****/
+   /* 1. Check if index.html exists */
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.html",
+	     PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))		// TODO: Check if not empty?
+      FileExists = true;
+   else
+     {
+      /* 2. If index.html not exists, try index.htm */
+      snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	        "%s/index.htm",
+		PathRelDirHTML);
+      if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+         FileExists = true;
+     }
+
+   if (FileExists)
+     {
+      /***** Write page from file to text buffer *****/
+      /* Open file */
+      if ((FileHTML = fopen (PathRelFileHTML,"rb")) == NULL)
+	 Lay_ShowErrorAndExit ("Can not open XML file.");
+
+      /* Compute file size */
+      fseek (FileHTML,0L,SEEK_END);
+      Length = (size_t) ftell (FileHTML);
+      fseek (FileHTML,0L,SEEK_SET);
+
+      /* Allocate memory for buffer */
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
+	{
+	 fclose (FileHTML);
+	 Lay_NotEnoughMemoryExit ();
+         return soap_receiver_fault (soap,
+                                     "Web page can not be copied into buffer",
+                                     "Not enough memory for buffer");
+	}
+
+      /* Copy file content into buffer */
+      if (fread (*HTMLBuffer,sizeof (char),Length,FileHTML) != Length)
+	{
+	 fclose (FileHTML);
+         return soap_receiver_fault (soap,
+                                     "Web page can not be copied into buffer",
+                                     "Error reading web page into buffer");
+	}
+      (*HTMLBuffer)[Length] = '\0';
+
+      /***** Close HTML file *****/
+      fclose (FileHTML);
+     }
+
+   return SOAP_OK;
   }
 
 /*****************************************************************************/
@@ -1434,7 +1726,7 @@ int swad__getUsers (struct soap *soap,
    Rol_Role_t Role;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getUsers;
    Gbl.Hierarchy.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
 	                                          -1L;
@@ -1443,17 +1735,19 @@ int swad__getUsers (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check course *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,-1L)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1463,7 +1757,7 @@ int swad__getUsers (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must belong to course");
 
@@ -1474,7 +1768,7 @@ int swad__getUsers (struct soap *soap,
    /***** Check requested users' role *****/
    if (userRole != API_ROLE_STUDENT &&	// Students
        userRole != API_ROLE_TEACHER)	// Teachers
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad requested users' type",
 	                        "User roles allowed are 2 (students) or 3 (teachers)");
    Role = API_SvcRole_to_RolRole[userRole];
@@ -1487,7 +1781,8 @@ int swad__getUsers (struct soap *soap,
 
    /***** Get list of users *****/
    Usr_GetListUsrs (Hie_CRS,Role);
-   API_CopyListUsers (Role,getUsersOut);
+   API_CopyListUsers (soap,
+		      Role,getUsersOut);
    Usr_FreeUsrsList (Role);
 
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1512,7 +1807,7 @@ int swad__findUsers (struct soap *soap,
    bool FilterTooShort = false;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_findUsers;
    Gbl.Hierarchy.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
 	                                          -1L;
@@ -1521,18 +1816,20 @@ int swad__findUsers (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
       /***** Check course *****/
-      if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,-1L)) != SOAP_OK)
+      if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						      Gbl.Hierarchy.Crs.CrsCod,
+						      -1L)) != SOAP_OK)
 	 return ReturnCode;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1543,7 +1840,7 @@ int swad__findUsers (struct soap *soap,
       if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
           Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
 	  Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
 
@@ -1557,7 +1854,7 @@ int swad__findUsers (struct soap *soap,
    /***** Check requested users' role *****/
    if (userRole < API_ROLE_UNKNOWN ||
        userRole > API_ROLE_TEACHER)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad requested users' type",
 	                        "User roles allowed are 0 (all), 1 (guests), 2 (students) or 3 (teachers)");
    Role = API_SvcRole_to_RolRole[userRole];
@@ -1580,7 +1877,8 @@ int swad__findUsers (struct soap *soap,
 
 	 /***** Search for users *****/
 	 Usr_SearchListUsrs (Role);
-	 API_CopyListUsers (Role,getUsersOut);
+	 API_CopyListUsers (soap,
+			    Role,getUsersOut);
 	 Usr_FreeUsrsList (Role);
 
 	 /***** Drop temporary table with candidate users *****/
@@ -1607,7 +1905,9 @@ int swad__findUsers (struct soap *soap,
 /***************************** Copy users from list **************************/
 /*****************************************************************************/
 
-static void API_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getUsersOut)
+static void API_CopyListUsers (struct soap *soap,
+                               Rol_Role_t Role,
+			       struct swad__getUsersOutput *getUsersOut)
   {
    unsigned NumUsrs;
    unsigned NumUsr;
@@ -1624,7 +1924,7 @@ static void API_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getU
      {
       getUsersOut->numUsers = (int) NumUsrs;
       getUsersOut->usersArray.__size = (int) NumUsrs;
-      getUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+      getUsersOut->usersArray.__ptr = soap_malloc (soap,
 						   (getUsersOut->usersArray.__size) *
 						   sizeof (*(getUsersOut->usersArray.__ptr)));
 
@@ -1647,7 +1947,10 @@ static void API_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getU
          Nck_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
 
 	 /* Copy user's data into output structure */
-	 API_CopyUsrData (&(getUsersOut->usersArray.__ptr[NumUsr]),&UsrDat,ICanSeeUsrID);
+	 API_CopyUsrData (soap,
+			  &(getUsersOut->usersArray.__ptr[NumUsr]),
+			  &UsrDat,
+			  ICanSeeUsrID);
 	}
 
       /***** Free memory used for user's data *****/
@@ -1671,7 +1974,7 @@ int swad__getGroupTypes (struct soap *soap,
    long OpenTime;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGroupTypes;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -1683,19 +1986,19 @@ int swad__getGroupTypes (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1705,7 +2008,7 @@ int swad__getGroupTypes (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -1729,7 +2032,7 @@ int swad__getGroupTypes (struct soap *soap,
       getGroupTypesOut->groupTypesArray.__ptr = NULL;
    else	// Groups found
      {
-      getGroupTypesOut->groupTypesArray.__ptr = soap_malloc (Gbl.soap,
+      getGroupTypesOut->groupTypesArray.__ptr = soap_malloc (soap,
 							     (getGroupTypesOut->groupTypesArray.__size) *
 							     sizeof (*(getGroupTypesOut->groupTypesArray.__ptr)));
 
@@ -1745,7 +2048,7 @@ int swad__getGroupTypes (struct soap *soap,
 
          /* Get group type name (row[1]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName =
-            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+            (char *) soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -1787,7 +2090,7 @@ int swad__getGroups (struct soap *soap,
    unsigned MaxStudents;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGroups;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -1799,19 +2102,19 @@ int swad__getGroups (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1821,7 +2124,7 @@ int swad__getGroups (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -1849,7 +2152,7 @@ int swad__getGroups (struct soap *soap,
       getGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
-      getGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,
+      getGroupsOut->groupsArray.__ptr = soap_malloc (soap,
 						     (getGroupsOut->groupsArray.__size) *
 						     sizeof (*(getGroupsOut->groupsArray.__ptr)));
 
@@ -1865,7 +2168,7 @@ int swad__getGroups (struct soap *soap,
 
          /* Get group type name (row[1]) */
          getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
-            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+            (char *) soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -1875,7 +2178,7 @@ int swad__getGroups (struct soap *soap,
 
          /* Get group name (row[3]) */
          getGroupsOut->groupsArray.__ptr[NumRow].groupName =
-            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
+            (char *) soap_malloc (soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
@@ -1928,7 +2231,7 @@ int swad__sendMyGroups (struct soap *soap,
    unsigned MaxStudents;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendMyGroups;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -1936,19 +2239,19 @@ int swad__sendMyGroups (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -1958,7 +2261,7 @@ int swad__sendMyGroups (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -2020,7 +2323,7 @@ int swad__sendMyGroups (struct soap *soap,
       SendMyGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
-      SendMyGroupsOut->groupsArray.__ptr = soap_malloc (Gbl.soap,
+      SendMyGroupsOut->groupsArray.__ptr = soap_malloc (soap,
 							(SendMyGroupsOut->groupsArray.__size) *
 							sizeof (*(SendMyGroupsOut->groupsArray.__ptr)));
 
@@ -2036,7 +2339,7 @@ int swad__sendMyGroups (struct soap *soap,
 
          /* Get group type name (row[1]) */
          SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
-            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
+            (char *) soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
@@ -2046,7 +2349,7 @@ int swad__sendMyGroups (struct soap *soap,
 
          /* Get group name (row[3]) */
          SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName =
-            (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
+            (char *) soap_malloc (soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
@@ -2082,7 +2385,9 @@ int swad__sendMyGroups (struct soap *soap,
 /*********** Copy data of a user from database to soap structure *************/
 /*****************************************************************************/
 
-static void API_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible)
+static void API_CopyUsrData (struct soap *soap,
+			     struct swad__user *Usr,struct UsrData *UsrDat,
+			     bool UsrIDIsVisible)
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    const char *FirstID;
@@ -2093,7 +2398,7 @@ static void API_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
 
    /* Copy user's nickname */
    Length = strlen (UsrDat->Nickname);
-   Usr->userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userNickname = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userNickname,UsrDat->Nickname,
              Length);
 
@@ -2103,32 +2408,32 @@ static void API_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
    else	// Hide user's ID
       FirstID = "********";
    Length = strlen (FirstID);
-   Usr->userID = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userID = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userID,FirstID,
              Length);
 
    /* Copy user's surname1 */
    Length = strlen (UsrDat->Surname1);
-   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userSurname1 = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userSurname1,UsrDat->Surname1,
              Length);
 
    /* Copy user's surname2 */
    Length = strlen (UsrDat->Surname2);
-   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userSurname2 = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userSurname2,UsrDat->Surname2,
              Length);
 
    /* Copy user's first name */
    Length = strlen (UsrDat->FirstName);
-   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userFirstname = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userFirstname,UsrDat->FirstName,
              Length);
 
    /* User's photo URL */
    Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
    Length = strlen (PhotoURL);
-   Usr->userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Usr->userPhoto = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userPhoto,PhotoURL,
              Length);
   }
@@ -2153,7 +2458,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getAttendanceEvents;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -2161,19 +2466,19 @@ int swad__getAttendanceEvents (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -2181,7 +2486,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 
    /***** Check if I am a teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -2204,7 +2509,7 @@ int swad__getAttendanceEvents (struct soap *soap,
       getAttendanceEventsOut->eventsArray.__ptr = NULL;
    else	// Events found
      {
-      getAttendanceEventsOut->eventsArray.__ptr = soap_malloc (Gbl.soap,
+      getAttendanceEventsOut->eventsArray.__ptr = soap_malloc (soap,
 							       (getAttendanceEventsOut->eventsArray.__size) *
 							       sizeof (*(getAttendanceEventsOut->eventsArray.__ptr)));
 
@@ -2229,21 +2534,21 @@ int swad__getAttendanceEvents (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
@@ -2251,7 +2556,7 @@ int swad__getAttendanceEvents (struct soap *soap,
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
                       PhotoURL,
                       Length);
@@ -2283,19 +2588,21 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 /* Get title of the event (row[6]) */
          Length = strlen (row[6]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,row[6],
                    Length);
 
 	 /* Get Txt (row[7]) */
          Length = strlen (row[7]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,row[7],
                    Length);
 
 	 /* Get list of groups for this attendance event */
-	 API_GetListGrpsInAttendanceEventFromDB (AttCod,&(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
+	 API_GetListGrpsInAttendanceEventFromDB (soap,
+						 AttCod,
+						 &(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
 	}
      }
 
@@ -2309,7 +2616,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 /**************** Get lists of groups of an attendance event *****************/
 /*****************************************************************************/
 
-static void API_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroups)
+static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
+						    long AttCod,char **ListGroups)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2330,7 +2638,7 @@ static void API_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    else	// Events found
      {
       Length = NumGrps * (10 + 1) - 1;
-      *ListGroups = soap_malloc (Gbl.soap,Length + 1);
+      *ListGroups = soap_malloc (soap,Length + 1);
       (*ListGroups)[0] = '\0';
 
       for (NumGrp = 0;
@@ -2370,7 +2678,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    bool ItsANewAttEvent;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendAttendanceEvent;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -2378,19 +2686,19 @@ int swad__sendAttendanceEvent (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -2398,7 +2706,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /***** Check if I am a teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -2411,7 +2719,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
      {
       Att_GetDataOfAttEventByCod (&Att);
       if (Att.CrsCod != (long) courseCode)
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Attendance event does not belong to course");
       ItsANewAttEvent = false;
@@ -2441,7 +2749,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /* Title */
    if (!title[0])
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Title of attendance event is empty");
    Str_Copy (Att.Title,title,
@@ -2476,7 +2784,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    struct AttendanceEvent Att;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_removeAttendanceEvent;
    removeAttendanceEventOut->attendanceEventCode = 0;
 
@@ -2484,7 +2792,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
@@ -2499,19 +2807,19 @@ int swad__removeAttendanceEvent (struct soap *soap,
       Gbl.Hierarchy.Crs.CrsCod = Att.CrsCod;
      }
    else
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Attendance event does not exist");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -2519,7 +2827,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
 
    /***** Check if I am a teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -2588,14 +2896,14 @@ int swad__getAttendanceUsers (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getAttendanceUsers;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
@@ -2606,7 +2914,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -2614,7 +2922,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 
    /***** Check if I am a teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -2672,7 +2980,7 @@ int swad__getAttendanceUsers (struct soap *soap,
       getAttendanceUsersOut->usersArray.__ptr = NULL;
    else	// Events found
      {
-      getAttendanceUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+      getAttendanceUsersOut->usersArray.__ptr = soap_malloc (soap,
 							     (getAttendanceUsersOut->usersArray.__size) *
 							     sizeof (*(getAttendanceUsersOut->usersArray.__ptr)));
 
@@ -2692,7 +3000,7 @@ int swad__getAttendanceUsers (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,
                       Gbl.Usrs.Other.UsrDat.Nickname,
                       Length);
@@ -2701,7 +3009,7 @@ int swad__getAttendanceUsers (struct soap *soap,
               {
 	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
 	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
-	          (char *) soap_malloc (Gbl.soap,Length + 1);
+	          (char *) soap_malloc (soap,Length + 1);
 	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,
 	                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
 	                 Length);
@@ -2709,27 +3017,27 @@ int swad__getAttendanceUsers (struct soap *soap,
             else
               {
 	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
-	          (char *) soap_malloc (Gbl.soap,1);
+	          (char *) soap_malloc (soap,1);
 	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID[0] = '\0';
               }
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
@@ -2737,7 +3045,7 @@ int swad__getAttendanceUsers (struct soap *soap,
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,
                       PhotoURL,
                       Length);
@@ -2784,7 +3092,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    size_t Length = 0;	// Initialized to avoid warning
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendAttendanceUsers;
 
    /***** Initialize output *****/
@@ -2795,7 +3103,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
@@ -2807,7 +3115,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -2815,7 +3123,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
    /***** Check if I am a teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -2834,7 +3142,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
       /* Allocate subquery used to mark not present users as absent */
       Length = 256 + NumCodsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
       if ((SubQueryAllUsrs = (char *) malloc (Length + 1)) == NULL)
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
       SubQueryAllUsrs[0] = '\0';
@@ -2938,27 +3246,27 @@ int swad__getNotifications (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getNotifications;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Get my language from database *****/
-   if ((ReturnCode = API_GetMyLanguage ()) != SOAP_OK)
+   if ((ReturnCode = API_GetMyLanguage (soap)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get my notifications from database *****/
@@ -2983,7 +3291,7 @@ int swad__getNotifications (struct soap *soap,
      {
       getNotificationsOut->numNotifications = (int) NumNotifications;
       getNotificationsOut->notificationsArray.__size = (int) NumNotifications;
-      getNotificationsOut->notificationsArray.__ptr = soap_malloc (Gbl.soap,
+      getNotificationsOut->notificationsArray.__ptr = soap_malloc (soap,
 								   (getNotificationsOut->notificationsArray.__size) *
 								   sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
 
@@ -3001,7 +3309,7 @@ int swad__getNotifications (struct soap *soap,
          /* Get notification event type (row[1]) */
          NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[1]);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType =
-            (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
+            (char *) soap_malloc (soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,
                    Ntf_WSNotifyEvents[NotifyEvent],
                    Ntf_MAX_BYTES_NOTIFY_EVENT);
@@ -3022,32 +3330,32 @@ int swad__getNotifications (struct soap *soap,
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Crs.CrsCod))	// Get some user's data from database
            {
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
-               (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
+               (char *) soap_malloc (soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,
                       Gbl.Usrs.Other.UsrDat.Nickname,
                       Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 =
-               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+               (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 =
-               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+               (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname =
-               (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+               (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
-               (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
+               (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
                       PhotoURL,
                       Cns_MAX_BYTES_WWW);
@@ -3079,7 +3387,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Set location */
          getNotificationsOut->notificationsArray.__ptr[NumNotif].location =
-            (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_LOCATION + 1);
+            (char *) soap_malloc (soap,Ntf_MAX_BYTES_NOTIFY_LOCATION + 1);
 
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
@@ -3119,7 +3427,7 @@ int swad__getNotifications (struct soap *soap,
 
          Length = strlen (SummaryStr);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].summary =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].summary,
                    SummaryStr,
                    Length);
@@ -3127,14 +3435,14 @@ int swad__getNotifications (struct soap *soap,
          if (ContentStr == NULL)
            {
             getNotificationsOut->notificationsArray.__ptr[NumNotif].content =
-               (char *) soap_malloc (Gbl.soap,1);
+               (char *) soap_malloc (soap,1);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].content[0] = '\0';
            }
          else
            {
             Length = strlen (ContentStr);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].content =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].content,
                       ContentStr,
                       Length);
@@ -3162,7 +3470,7 @@ int swad__getNotifications (struct soap *soap,
 /********************* Get my language from database *************************/
 /*****************************************************************************/
 
-static int API_GetMyLanguage (void)
+static int API_GetMyLanguage (struct soap *soap)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
@@ -3174,7 +3482,7 @@ static int API_GetMyLanguage (void)
 		       "SELECT Language FROM usr_data"
 		       " WHERE UsrCod=%ld",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's language from database",
 	                          "User doen't exist in database");
 
@@ -3216,20 +3524,20 @@ int swad__markNotificationsAsRead (struct soap *soap,
    long NtfCod;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_markNotificationsAsRead;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -3289,20 +3597,20 @@ int swad__sendMessage (struct soap *soap,
    bool NotifyByEmail;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendMessage;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -3321,14 +3629,14 @@ int swad__sendMessage (struct soap *soap,
 			   " WHERE UsrCod=%ld AND MsgCod=%ld) AS T",
 			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
 			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode))
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Can not check original message",
                                    "Error reading from database");
 
       /***** Get number of rows *****/
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%u",&NumRows) != 1)
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Can not check original message",
                                    "Error reading from database");
 
@@ -3336,7 +3644,7 @@ int swad__sendMessage (struct soap *soap,
       DB_FreeMySQLResult (&mysql_res);
 
       if (!NumRows)
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Can not send reply message",
                                    "Original message does not exist");
 
@@ -3359,7 +3667,7 @@ int swad__sendMessage (struct soap *soap,
       DB_FreeMySQLResult (&mysql_res);
 
       if (!NumRows)
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Can not send reply message",
                                    "Original message does not exist");
      }
@@ -3392,7 +3700,7 @@ int swad__sendMessage (struct soap *soap,
 	 /* Check for overflow in query */
 	 if (strlen (Query) + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 32 >
 	     API_MAX_BYTES_QUERY_RECIPIENTS)
-	    return soap_sender_fault (Gbl.soap,
+	    return soap_sender_fault (soap,
 				      "Can not send message",
 				      "Too many recipients");
 
@@ -3438,7 +3746,7 @@ int swad__sendMessage (struct soap *soap,
 
       if (NumRows)	// Users found
         {
-         sendMessageOut->usersArray.__ptr = soap_malloc (Gbl.soap,
+         sendMessageOut->usersArray.__ptr = soap_malloc (soap,
 							 (sendMessageOut->usersArray.__size) *
 							 sizeof (*(sendMessageOut->usersArray.__ptr)));
 
@@ -3467,7 +3775,10 @@ int swad__sendMessage (struct soap *soap,
                     }
 
                   /* Copy user's data into output structure */
-                  API_CopyUsrData (&(sendMessageOut->usersArray.__ptr[NumRow]),&Gbl.Usrs.Other.UsrDat,false);
+                  API_CopyUsrData (soap,
+				   &(sendMessageOut->usersArray.__ptr[NumRow]),
+				   &Gbl.Usrs.Other.UsrDat,
+				   false);
         	 }
            }
         }
@@ -3565,7 +3876,7 @@ int swad__sendNotice (struct soap *soap,
    long NotCod;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendNotice;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -3573,20 +3884,22 @@ int swad__sendNotice (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Check course and group codes *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,-1L)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get degree of current course *****/
@@ -3595,7 +3908,7 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Check if I am a teacher *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
@@ -3633,7 +3946,7 @@ int swad__getTestConfig (struct soap *soap,
    int ReturnCode;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getTestConfig;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -3641,13 +3954,13 @@ int swad__getTestConfig (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -3655,7 +3968,7 @@ int swad__getTestConfig (struct soap *soap,
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
@@ -3663,7 +3976,7 @@ int swad__getTestConfig (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -3679,7 +3992,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->visibility   = TsV_MIN_VISIBILITY;
 
    /* TODO: Remove these lines in 2021 */
-   getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
+   getTestConfigOut->feedback = (char *) soap_malloc (soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
@@ -3794,7 +4107,7 @@ int swad__getTests (struct soap *soap,
    int ReturnCode;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getTests;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -3802,13 +4115,13 @@ int swad__getTests (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -3816,7 +4129,7 @@ int swad__getTests (struct soap *soap,
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
@@ -3824,7 +4137,7 @@ int swad__getTests (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
@@ -3849,19 +4162,23 @@ int swad__getTests (struct soap *soap,
    if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES)
      {
       /***** Get tags *****/
-      if ((ReturnCode = API_GetTstTags ((long) courseCode,getTestsOut)) != SOAP_OK)
+      if ((ReturnCode = API_GetTstTags (soap,
+					(long) courseCode,getTestsOut)) != SOAP_OK)
          return ReturnCode;
 
       /***** Get questions *****/
-      if ((ReturnCode = API_GetTstQuestions ((long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+      if ((ReturnCode = API_GetTstQuestions (soap,
+					     (long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
 
       /***** Get answers *****/
-      if ((ReturnCode = API_GetTstAnswers ((long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+      if ((ReturnCode = API_GetTstAnswers (soap,
+					   (long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
 
       /***** Get tags for each question *****/
-      if ((ReturnCode = API_GetTstQuestionTags ((long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+      if ((ReturnCode = API_GetTstQuestionTags (soap,
+						(long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
      }
 
@@ -3872,7 +4189,8 @@ int swad__getTests (struct soap *soap,
 /**** Get test tags (only not hidden) from database giving a course code *****/
 /*****************************************************************************/
 
-static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
+static int API_GetTstTags (struct soap *soap,
+			   long CrsCod,struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
@@ -3894,7 +4212,7 @@ static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
       getTestsOut->tagsArray.__ptr = NULL;
    else	// Tags found
      {
-      getTestsOut->tagsArray.__ptr = soap_malloc (Gbl.soap,
+      getTestsOut->tagsArray.__ptr = soap_malloc (soap,
 						  (getTestsOut->tagsArray.__size) *
 						  sizeof (*(getTestsOut->tagsArray.__ptr)));
 
@@ -3910,7 +4228,7 @@ static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
 
          /* Get tag text (row[1]) */
          getTestsOut->tagsArray.__ptr[NumRow].tagText =
-            (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_TAG + 1);
+            (char *) soap_malloc (soap,Tst_MAX_BYTES_TAG + 1);
 	 Str_Copy (getTestsOut->tagsArray.__ptr[NumRow].tagText,row[1],
 	           Tst_MAX_BYTES_TAG);
 	}
@@ -3926,7 +4244,9 @@ static int API_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
 /******* Get recent test questions from database giving a course code ********/
 /*****************************************************************************/
 
-static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut)
+static int API_GetTstQuestions (struct soap *soap,
+				long CrsCod,long BeginTime,
+				struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
@@ -3968,7 +4288,7 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
       getTestsOut->questionsArray.__ptr = NULL;
    else	// Questions found
      {
-      getTestsOut->questionsArray.__ptr = soap_malloc (Gbl.soap,
+      getTestsOut->questionsArray.__ptr = soap_malloc (soap,
 						       (getTestsOut->questionsArray.__size) *
 						       sizeof (*(getTestsOut->questionsArray.__ptr)));
 
@@ -3985,7 +4305,7 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
          /* Get answer type (row[1]) */
          AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
          getTestsOut->questionsArray.__ptr[NumRow].answerType =
-            (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+            (char *) soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
 	           Tst_StrAnswerTypesXML[AnswerType],
 	           Tst_MAX_BYTES_ANSWER_TYPE);
@@ -3996,13 +4316,13 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 
          /* Get question stem (row[3]) */
          getTestsOut->questionsArray.__ptr[NumRow].stem =
-            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+            (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].stem,row[3],
                    Cns_MAX_BYTES_TEXT);
 
          /* Get question feedback (row[4]) */
          getTestsOut->questionsArray.__ptr[NumRow].feedback =
-            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+            (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].feedback,row[4],
                    Cns_MAX_BYTES_TEXT);
 	}
@@ -4018,7 +4338,9 @@ static int API_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 /** Get answers of recent test questions from database giving a course code **/
 /*****************************************************************************/
 
-static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut)
+static int API_GetTstAnswers (struct soap *soap,
+		              long CrsCod,long BeginTime,
+			      struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
@@ -4059,7 +4381,7 @@ static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
       getTestsOut->answersArray.__ptr = NULL;
    else	// Answers found
      {
-      getTestsOut->answersArray.__ptr = soap_malloc (Gbl.soap,
+      getTestsOut->answersArray.__ptr = soap_malloc (soap,
 						     (getTestsOut->answersArray.__size) *
 						     sizeof (*(getTestsOut->answersArray.__ptr)));
 
@@ -4085,13 +4407,13 @@ static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
 
          /* Get answer (row[3]) */
          getTestsOut->answersArray.__ptr[NumRow].answerText =
-            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+            (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerText,row[3],
                    Cns_MAX_BYTES_TEXT);
 
          /* Get feedback (row[4]) */
          getTestsOut->answersArray.__ptr[NumRow].answerFeedback =
-            (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+            (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
          Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerFeedback,row[4],
                    Cns_MAX_BYTES_TEXT);
 	}
@@ -4107,7 +4429,9 @@ static int API_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
 /*** Get tags of recent test questions from database giving a course code ****/
 /*****************************************************************************/
 
-static int API_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTestsOutput *getTestsOut)
+static int API_GetTstQuestionTags (struct soap *soap,
+		                   long CrsCod,long BeginTime,
+				   struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
@@ -4148,7 +4472,7 @@ static int API_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
       getTestsOut->questionTagsArray.__ptr = NULL;
    else	// Answers found
      {
-      getTestsOut->questionTagsArray.__ptr = soap_malloc (Gbl.soap,
+      getTestsOut->questionTagsArray.__ptr = soap_malloc (soap,
 							  (getTestsOut->questionTagsArray.__size) *
 							  sizeof (*(getTestsOut->questionTagsArray.__ptr)));
 
@@ -4207,20 +4531,20 @@ int swad__getTrivialQuestion (struct soap *soap,
    unsigned Index;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getTrivialQuestion;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -4258,7 +4582,7 @@ int swad__getTrivialQuestion (struct soap *soap,
      }
 
    if (!DegreesStr[0])	// Degrees not found
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad list of degrees codes",
 	                        "Degrees codes must be integers greater than 0 separated by commas");
 
@@ -4266,7 +4590,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (lowerScore < -1.0 || lowerScore > 1.0 ||
        upperScore < -1.0 || upperScore > 1.0 ||
        upperScore < lowerScore)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad score interval",
 	                        "lowerScore or upperScore values not valid");
 
@@ -4308,7 +4632,7 @@ int swad__getTrivialQuestion (struct soap *soap,
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       getTrivialQuestionOut->question.answerType =
-         (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+         (char *) soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
                 Tst_StrAnswerTypesXML[AnswerType],
                 Tst_MAX_BYTES_ANSWER_TYPE);
@@ -4319,13 +4643,13 @@ int swad__getTrivialQuestion (struct soap *soap,
 
       /* Get question stem (row[3]) */
       getTrivialQuestionOut->question.stem =
-         (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
       Str_Copy (getTrivialQuestionOut->question.stem,row[3],
                 Cns_MAX_BYTES_TEXT);
 
       /* Get question feedback (row[4]) */
       getTrivialQuestionOut->question.feedback =
-         (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+         (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
       Str_Copy (getTrivialQuestionOut->question.feedback,row[4],
                 Cns_MAX_BYTES_TEXT);
      }
@@ -4336,18 +4660,18 @@ int swad__getTrivialQuestion (struct soap *soap,
       getTrivialQuestionOut->question.questionCode = -1;
 
       /* Answer type (row[1]) */
-      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (soap,1);
       getTrivialQuestionOut->question.answerType[0] = '\0';
 
       /* Shuffle (row[2]) */
       getTrivialQuestionOut->question.shuffle = 0;
 
       /* Question stem (row[3]) */
-      getTrivialQuestionOut->question.stem = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.stem = (char *) soap_malloc (soap,1);
       getTrivialQuestionOut->question.stem[0] = '\0';
 
       /* Get question feedback (row[4]) */
-      getTrivialQuestionOut->question.feedback = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.feedback = (char *) soap_malloc (soap,1);
       getTrivialQuestionOut->question.feedback[0] = '\0';
      }
 
@@ -4370,7 +4694,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	 getTrivialQuestionOut->answersArray.__ptr = NULL;
       else	// Answers found
 	{
-	 getTrivialQuestionOut->answersArray.__ptr = soap_malloc (Gbl.soap,
+	 getTrivialQuestionOut->answersArray.__ptr = soap_malloc (soap,
 								  (getTrivialQuestionOut->answersArray.__size) *
 								  sizeof (*(getTrivialQuestionOut->answersArray.__ptr)));
 
@@ -4396,13 +4720,13 @@ int swad__getTrivialQuestion (struct soap *soap,
 
 	    /* Get answer (row[3]) */
 	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText =
-	       (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+	       (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
 	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText,row[3],
 	              Cns_MAX_BYTES_TEXT);
 
 	    /* Get feedback (row[4]) */
 	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback =
-	       (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT + 1);
+	       (char *) soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
 	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback,row[4],
 	              Cns_MAX_BYTES_TEXT);
 	   }
@@ -4435,7 +4759,7 @@ int swad__getGames (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGames;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
@@ -4443,19 +4767,19 @@ int swad__getGames (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -4463,7 +4787,7 @@ int swad__getGames (struct soap *soap,
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must be a student in the course");
 
@@ -4494,7 +4818,7 @@ int swad__getGames (struct soap *soap,
       getGamesOut->gamesArray.__ptr = NULL;
    else	// Games found
      {
-      getGamesOut->gamesArray.__ptr = soap_malloc (Gbl.soap,
+      getGamesOut->gamesArray.__ptr = soap_malloc (soap,
 						   (getGamesOut->gamesArray.__size) *
 						   sizeof (*(getGamesOut->gamesArray.__ptr)));
 
@@ -4515,21 +4839,21 @@ int swad__getGames (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getGamesOut->gamesArray.__ptr[NumGame].userSurname1 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getGamesOut->gamesArray.__ptr[NumGame].userSurname2 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getGamesOut->gamesArray.__ptr[NumGame].userFirstname =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
@@ -4537,7 +4861,7 @@ int swad__getGames (struct soap *soap,
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getGamesOut->gamesArray.__ptr[NumGame].userPhoto =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userPhoto,
                       PhotoURL,
                       Length);
@@ -4573,14 +4897,14 @@ int swad__getGames (struct soap *soap,
 	 /* Get title of the game (row[6]) */
          Length = strlen (row[6]);
          getGamesOut->gamesArray.__ptr[NumGame].title =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].title,row[6],
                    Length);
 
 	 /* Get Txt (row[7]) */
          Length = strlen (row[7]);
          getGamesOut->gamesArray.__ptr[NumGame].text =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].text,row[7],
                    Length);
 	}
@@ -4613,21 +4937,21 @@ int swad__getMatches (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatches;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get game data from database *****/
    Game.GamCod = (long) gameCode;
    if (Game.GamCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
    Gam_GetDataOfGameByCod (&Game);
@@ -4635,13 +4959,13 @@ int swad__getMatches (struct soap *soap,
    /***** Check if course code is correct *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -4649,7 +4973,7 @@ int swad__getMatches (struct soap *soap,
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must be a student in the course");
 
@@ -4682,7 +5006,7 @@ int swad__getMatches (struct soap *soap,
       getMatchesOut->matchesArray.__ptr = NULL;
    else	// Matches found
      {
-      getMatchesOut->matchesArray.__ptr = soap_malloc (Gbl.soap,
+      getMatchesOut->matchesArray.__ptr = soap_malloc (soap,
 						       (getMatchesOut->matchesArray.__size) *
 						       sizeof (*(getMatchesOut->matchesArray.__ptr)));
 
@@ -4703,21 +5027,21 @@ int swad__getMatches (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
                       Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
                       Length);
@@ -4725,7 +5049,7 @@ int swad__getMatches (struct soap *soap,
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto =
-               (char *) soap_malloc (Gbl.soap,Length + 1);
+               (char *) soap_malloc (soap,Length + 1);
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto,
                       PhotoURL,
                       Length);
@@ -4753,7 +5077,7 @@ int swad__getMatches (struct soap *soap,
 	 /* Get title of the match (row[4]) */
          Length = strlen (row[4]);
          getMatchesOut->matchesArray.__ptr[NumMatch].title =
-            (char *) soap_malloc (Gbl.soap,Length + 1);
+            (char *) soap_malloc (soap,Length + 1);
          Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].title,row[4],
                    Length);
 
@@ -4761,7 +5085,8 @@ int swad__getMatches (struct soap *soap,
          getMatchesOut->matchesArray.__ptr[NumMatch].questionIndex = (int) Gam_GetQstIndFromStr (row[5]);
 
 	 /* Get list of groups for this match */
-	 API_GetListGrpsInGameFromDB (MchCod,&(getMatchesOut->matchesArray.__ptr[NumMatch].groups));
+	 API_GetListGrpsInGameFromDB (soap,
+				      MchCod,&(getMatchesOut->matchesArray.__ptr[NumMatch].groups));
 	}
      }
 
@@ -4787,21 +5112,21 @@ int swad__getMatchStatus (struct soap *soap,
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatchStatus;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get match data from database *****/
    Match.MchCod = (long) matchCode;
    if (Match.MchCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad match code",
 	                        "Match code must be a integer greater than 0");
    Mch_GetDataOfMatchByCod (&Match);
@@ -4809,7 +5134,7 @@ int swad__getMatchStatus (struct soap *soap,
    /***** Get game data from database *****/
    Game.GamCod = Match.GamCod;
    if (Game.GamCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
    Gam_GetDataOfGameByCod (&Game);
@@ -4817,13 +5142,13 @@ int swad__getMatchStatus (struct soap *soap,
    /***** Check if course code is correct *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -4831,20 +5156,20 @@ int swad__getMatchStatus (struct soap *soap,
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must be a student in the course");
 
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);
    if (!ICanPlayThisMatchBasedOnGrps)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester can not join this match");
 
    /***** Check question *****/
    if (!Tst_CheckIfQuestionIsValidForGame (Match.Status.QstCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 				  "Wrong question",
 				  "Type of answer not valid in a game.");
 
@@ -4893,14 +5218,14 @@ int swad__answerMatchQuestion (struct soap *soap,
    // unsigned NumOpt;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_answerMatchQuestion;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
@@ -4925,7 +5250,8 @@ int swad__answerMatchQuestion (struct soap *soap,
 /*********************** Get lists of groups of a match **********************/
 /*****************************************************************************/
 
-static void API_GetListGrpsInGameFromDB (long MchCod,char **ListGroups)
+static void API_GetListGrpsInGameFromDB (struct soap *soap,
+					 long MchCod,char **ListGroups)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4945,7 +5271,7 @@ static void API_GetListGrpsInGameFromDB (long MchCod,char **ListGroups)
    else	// Groups found
      {
       Length = NumGrps * (10 + 1) - 1;
-      *ListGroups = soap_malloc (Gbl.soap,Length + 1);
+      *ListGroups = soap_malloc (soap,Length + 1);
       (*ListGroups)[0] = '\0';
 
       for (NumGrp = 0;
@@ -4989,7 +5315,7 @@ int swad__getDirectoryTree (struct soap *soap,
    unsigned long NumBytesRead;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getDirectoryTree;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
    Gbl.Crs.Grps.GrpCod = (long) groupCode;
@@ -4998,39 +5324,41 @@ int swad__getDirectoryTree (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Check course and group codes *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
    /***** Check if I belong to course/group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
       if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
 
    /***** Check if tree code is correct *****/
    if (treeCode <= 0 || treeCode > 3)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad tree code",
 	                        "Tree code must be 1 (documents), 2 (shared files) or 3 (marks)");
 
@@ -5066,7 +5394,7 @@ int swad__getDirectoryTree (struct soap *soap,
 	   }
      }
    else
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
@@ -5096,7 +5424,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Open file for writing and reading */
    if ((Gbl.F.XML = fopen (XMLFileName,"w+t")) == NULL)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get tree",
 	                          "Can not create temporary XML file");
 
@@ -5113,7 +5441,7 @@ int swad__getDirectoryTree (struct soap *soap,
    fseek (Gbl.F.XML,0L,SEEK_SET);
 
    /* Copy XML content from file to memory */
-   getDirectoryTreeOut->tree = (char *) soap_malloc (Gbl.soap,FileSize + 1);
+   getDirectoryTreeOut->tree = (char *) soap_malloc (soap,FileSize + 1);
    NumBytesRead = fread (getDirectoryTreeOut->tree,1,FileSize,Gbl.F.XML);
    getDirectoryTreeOut->tree[NumBytesRead] = '\0';
 
@@ -5285,15 +5613,15 @@ int swad__getFile (struct soap *soap,
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getFile;
 
    /***** Allocate space for strings *****/
-   getFileOut->fileName        = (char *) soap_malloc (Gbl.soap,NAME_MAX + 1);
-   getFileOut->URL             = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
-   getFileOut->license         = (char *) soap_malloc (Gbl.soap,Brw_MAX_BYTES_LICENSE + 1);
-   getFileOut->publisherName   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FULL_NAME + 1);
-   getFileOut->publisherPhoto  = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
+   getFileOut->fileName        = (char *) soap_malloc (soap,NAME_MAX + 1);
+   getFileOut->URL             = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
+   getFileOut->license         = (char *) soap_malloc (soap,Brw_MAX_BYTES_LICENSE + 1);
+   getFileOut->publisherName   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FULL_NAME + 1);
+   getFileOut->publisherPhoto  = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
 
    /***** Default values returned on error *****/
    getFileOut->fileName[0]       = '\0';
@@ -5308,20 +5636,20 @@ int swad__getFile (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = (long) fileCode;
    if (FileMetadata.FilCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "Bad file code",
 	                        "File code must be a integer greater than 0");
 
    Brw_GetFileMetadataByCod (&FileMetadata);
    if (FileMetadata.FilCod <= 0)
-      return soap_sender_fault (Gbl.soap,
+      return soap_sender_fault (soap,
 	                        "File does not exist, please refresh",
 	                        "The file requested does not exists");
 
@@ -5335,28 +5663,30 @@ int swad__getFile (struct soap *soap,
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Check course and group codes *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
    /***** Check if I belong to group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
       if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
 
@@ -5373,12 +5703,12 @@ int swad__getFile (struct soap *soap,
       case Brw_ADMI_MRK_GRP:
 	 // Downloading a file of marks is only allowed for teachers
 	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-	    return soap_receiver_fault (Gbl.soap,
+	    return soap_receiver_fault (soap,
 					"Wrong tree",
 					"Wrong file zone");
 	 break;
       default:
-         return soap_sender_fault (Gbl.soap,
+         return soap_sender_fault (soap,
                                    "Wrong tree",
                                    "Wrong file zone");
      }
@@ -5448,7 +5778,7 @@ int swad__getMarks (struct soap *soap,
    size_t Length;
 
    /***** Initializations *****/
-   Gbl.soap = soap;
+   API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMarks;
    getMarksOut->content = NULL;
 
@@ -5456,7 +5786,7 @@ int swad__getMarks (struct soap *soap,
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
@@ -5468,7 +5798,7 @@ int swad__getMarks (struct soap *soap,
        FileMetadata.IsHidden ||
        (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
 	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Bad file code",
 	                          "You can not get marks from this file");
 
@@ -5481,12 +5811,14 @@ int swad__getMarks (struct soap *soap,
                                   &Gbl.Crs.Grps.GrpCod);
 
    /***** Check course and group codes *****/
-   if ((ReturnCode = API_CheckCourseAndGroupCodes (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
+   if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
+						   Gbl.Hierarchy.Crs.CrsCod,
+						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
@@ -5496,14 +5828,14 @@ int swad__getMarks (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
-      return soap_receiver_fault (Gbl.soap,
+      return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
    /***** Check if I belong to group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
       if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
-	 return soap_receiver_fault (Gbl.soap,
+	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
 
@@ -5515,7 +5847,7 @@ int swad__getMarks (struct soap *soap,
    if (ContentStr != NULL)
      {
       Length = strlen (ContentStr);
-      getMarksOut->content = (char *) soap_malloc (Gbl.soap,Length + 1);
+      getMarksOut->content = (char *) soap_malloc (soap,Length + 1);
       Str_Copy (getMarksOut->content,ContentStr,
                 Length);
       free (ContentStr);
@@ -5523,7 +5855,7 @@ int swad__getMarks (struct soap *soap,
      }
    else
      {
-      getMarksOut->content = (char *) soap_malloc (Gbl.soap,1);
+      getMarksOut->content = (char *) soap_malloc (soap,1);
       getMarksOut->content[0] = '\0';
      }
 

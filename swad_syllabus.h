@@ -51,6 +51,14 @@ typedef enum
    Syl_DECREASE_LEVEL,
   } Syl_ChangeLevelItem_t;
 
+struct LstItemsSyllabus
+  {
+   struct ItemSyllabus *Lst;		// List of items of a syllabus
+   unsigned NumItems;			// Number of items in the list
+   unsigned NumItemsWithChildren;	// Number of items with children
+   int NumLevels;			// Number of levels in the list
+  };
+
 // Structure used to get the limits (number of items) of the subtrees to exchange in a syllabus
 struct MoveSubtrees
   {
@@ -78,7 +86,8 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod);
 void Syl_FreeListItemsSyllabus (void);
 
 int Syl_ReadLevelItemSyllabus (void);
-int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
+
+void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
 
 void Syl_RemoveItemSyllabus (void);
 void Syl_UpItemSyllabus (void);

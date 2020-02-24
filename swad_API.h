@@ -78,6 +78,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+struct soap *API_Get_gSOAP_RuntimeEnv (void);
 void API_WebService (void);
 void API_Exit (const char *DetailErrorMessage);
 const char *API_GetFunctionNameFromFunCod (long FunCod);

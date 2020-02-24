@@ -74,7 +74,7 @@ void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
-int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer);
+void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
@@ -91,7 +91,10 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
                                    Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
 Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
 Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
-int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer);
+
+void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                           char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
+                           char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 void Inf_EditPlainTxtInfo (void);
 void Inf_EditRichTxtInfo (void);
