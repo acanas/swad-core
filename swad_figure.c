@@ -2956,8 +2956,8 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
    double NumPrgItemsPerCourse = 0.0;
 
    /***** Get the number of program items from this location *****/
-   if ((NumPrgItems = Prg_GetNumPrgItems (Gbl.Scope.Current)))
-      if ((NumCoursesWithPrgItems = Prg_GetNumCoursesWithPrgItems (Gbl.Scope.Current)) != 0)
+   if ((NumPrgItems = Prg_GetNumItems (Gbl.Scope.Current)))
+      if ((NumCoursesWithPrgItems = Prg_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
          NumPrgItemsPerCourse = (double) NumPrgItems /
 	                        (double) NumCoursesWithPrgItems;
 

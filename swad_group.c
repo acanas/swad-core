@@ -42,6 +42,7 @@
 #include "swad_match.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_program.h"
 #include "swad_project.h"
 #include "swad_setting.h"
 
@@ -1688,9 +1689,12 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
       AssociatedToGrp = false;
-      if (Cod > 0)	// Cod == -1L means new assignment or survey
+      if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey or match
          switch (Grp_AsgAttOrSvy)
            {
+            case Grp_PROGRAM_ITEM:
+               AssociatedToGrp = Prg_CheckIfItemIsAssociatedToGrp (Cod,Grp->GrpCod);
+               break;
             case Grp_ASSIGNMENT:
                AssociatedToGrp = Asg_CheckIfAsgIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;

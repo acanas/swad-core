@@ -1028,14 +1028,15 @@ CREATE TABLE IF NOT EXISTS plugins (
 -- Table prg_grp: stores the groups associated to each program item
 --
 CREATE TABLE IF NOT EXISTS prg_grp (
-	PrgIteCod INT NOT NULL,
+	ItmCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(PrgIteCod,GrpCod));
+	UNIQUE INDEX(ItmCod,GrpCod));
 --
 -- Table prg_items: stores the items of the course program
 --
 CREATE TABLE IF NOT EXISTS prg_items (
-	PrgIteCod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL AUTO_INCREMENT,
+	ItmInd INT NOT NULL DEFAULT 0,
 	CrsCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UsrCod INT NOT NULL,
@@ -1043,7 +1044,7 @@ CREATE TABLE IF NOT EXISTS prg_items (
 	EndTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
-	UNIQUE INDEX(PrgIteCod),
+	UNIQUE INDEX(ItmCod),
 	INDEX(CrsCod,Hidden));
 --
 -- Table prj_config: stores the configuration of projects for each course

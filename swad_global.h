@@ -541,10 +541,10 @@ struct Globals
    struct
      {
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
-      unsigned Num;		// Number of schedule items
-      long *LstPrgIteCods;	// List of schedule items codes
+      unsigned Num;		// Number of items
+      long *LstItmCods;		// List of items codes
       Dat_StartEndTime_t SelectedOrder;
-      long PrgIteCodToEdit;	// Used as parameter in contextual links
+      // long ItmCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
      } Prg;
    struct

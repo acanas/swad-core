@@ -93,6 +93,7 @@ void Gam_ShowOnlyOneGameEnd (void);
 void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 
+void Gam_SetCurrentGamCod (long GamCod);
 void Gam_PutParams (void);
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
@@ -141,8 +142,6 @@ unsigned Gam_GetNumGames (Hie_Level_t Scope);
 double Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
-
-void Gam_SetCurrentGamCod (long GamCod);
 
 void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore);
 

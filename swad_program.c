@@ -39,7 +39,6 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_HTML.h"
-#include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -66,42 +65,61 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+long Prg_CurrentItmCod;		// Used as parameter in contextual links
+unsigned Prg_CurrentItmInd;	// Used as parameter in contextual links
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowAllPrgItems (void);
+static void Prg_ShowAllItems (void);
 static void Prg_PutHeadForSeeing (bool PrintView);
-static bool Prg_CheckIfICanCreatePrgItems (void);
-static void Prg_PutIconsListPrgItems (void);
-static void Prg_PutIconToCreateNewPrgItem (void);
-static void Prg_PutButtonToCreateNewPrgItem (void);
+static bool Prg_CheckIfICanCreateItems (void);
+static void Prg_PutIconsListItems (void);
+static void Prg_PutIconToCreateNewItem (void);
+static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ParamsWhichGroupsToShow (void);
-static void Prg_ShowOnePrgItem (long PrgIteCod,
-				unsigned ItemIndex,unsigned MaxItemIndex,
-				bool PrintView);
-static void Prg_WritePrgItemAuthor (struct ProgramItem *PrgItem);
+static void Prg_ShowOneItem (long ItmCod,
+			     unsigned ItmInd,unsigned MaxItmInd,
+			     bool PrintView);
+static void Prg_WritePrgItemAuthor (struct ProgramItem *Item);
 static void Prg_GetParamPrgOrder (void);
 
-static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
-					     unsigned ItemIndex,unsigned MaxItemIndex,
+static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
+					     unsigned ItmInd,unsigned MaxItmInd,
                                              const char *Anchor);
+
+static void Prg_SetCurrentItmCod (long ItmCod);
+static long Prg_GetCurrentItmCod (void);
+static void Prg_SetCurrentItmInd (unsigned ItmInd);
+static unsigned Prg_GetCurrentItmInd (void);
 static void Prg_PutParams (void);
-static void Prg_GetDataOfPrgItem (struct ProgramItem *PrgItem,
-                                  MYSQL_RES **mysql_res,
-				  unsigned long NumRows);
-static void Prg_ResetPrgItem (struct ProgramItem *PrgItem);
-static void Prg_GetPrgItemTxtFromDB (long PrgIteCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static void Prg_PutParamPrgItemCod (long PrgIteCod);
-static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long PrgIteCod);
-static void Prg_ShowLstGrpsToEditPrgItem (long PrgIteCod);
-static void Prg_CreatePrgItem (struct ProgramItem *PrgItem,const char *Txt);
-static void Prg_UpdatePrgItem (struct ProgramItem *PrgItem,const char *Txt);
-static bool Prg_CheckIfPrgItemIsAssociatedToGrps (long PrgIteCod);
-static void Prg_RemoveAllTheGrpsAssociatedToAPrgItem (long PrgIteCod);
-static void Prg_CreateGrps (long PrgIteCod);
-static void Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (struct ProgramItem *PrgItem);
-static bool Prg_CheckIfIBelongToCrsOrGrpsThisPrgItem (long PrgIteCod);
+static void Prg_PutParamItmInd (unsigned ItmInd);
+static unsigned Prg_GetParamItmInd (void);
+
+static void Prg_GetDataOfItem (struct ProgramItem *Item,
+                               MYSQL_RES **mysql_res,
+			       unsigned long NumRows);
+static unsigned Prg_GetItmIndFromStr (const char *UnsignedStr);
+static void Prg_ResetItem (struct ProgramItem *Item);
+static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Prg_PutParamItmCod (long ItmCod);
+
+static unsigned Prg_GetMaxItemIndex (void);
+static unsigned Prg_GetPrevItemIndex (unsigned ItmInd);
+static unsigned Prg_GetNextItemIndex (unsigned ItmInd);
+static void Prg_ExchangeItems (unsigned ItmIndTop,unsigned ItmIndBottom);
+static long Prg_GetItmCodFromItmInd (unsigned ItmInd);
+
+static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
+static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
+static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt);
+static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
+static bool Prg_CheckIfItemIsAssociatedToGrps (long ItmCod);
+static void Prg_RemoveAllTheGrpsAssociatedToAnItem (long ItmCod);
+static void Prg_CreateGrps (long ItmCod);
+static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item);
+static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod);
 
 /*****************************************************************************/
 /************************ List all the program items *************************/
@@ -115,14 +133,14 @@ void Prg_SeeCourseProgram (void)
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Show all the program items *****/
-   Prg_ShowAllPrgItems ();
+   Prg_ShowAllItems ();
   }
 
 /*****************************************************************************/
 /*********************** Show all the program items **************************/
 /*****************************************************************************/
 
-static void Prg_ShowAllPrgItems (void)
+static void Prg_ShowAllItems (void)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
@@ -140,7 +158,7 @@ static void Prg_ShowAllPrgItems (void)
    Gbl.Prg.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListPrgItems,
+   Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -166,7 +184,7 @@ static void Prg_ShowAllPrgItems (void)
       for (NumItem  = Pagination.FirstItemVisible;
 	   NumItem <= Pagination.LastItemVisible;
 	   NumItem++)
-	 Prg_ShowOnePrgItem (Gbl.Prg.LstPrgIteCods[NumItem - 1],
+	 Prg_ShowOneItem (Gbl.Prg.LstItmCods[NumItem - 1],
 			     NumItem,Gbl.Prg.Num,
 	                     false);	// Not print view
 
@@ -182,14 +200,14 @@ static void Prg_ShowAllPrgItems (void)
 				  0);
 
    /***** Button to create a new program item *****/
-   if (Prg_CheckIfICanCreatePrgItems ())
-      Prg_PutButtonToCreateNewPrgItem ();
+   if (Prg_CheckIfICanCreateItems ())
+      Prg_PutButtonToCreateNewItem ();
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of program items *****/
-   Prg_FreeListPrgItems ();
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
@@ -242,7 +260,7 @@ static void Prg_PutHeadForSeeing (bool PrintView)
 /******************* Check if I can create program items *********************/
 /*****************************************************************************/
 
-static bool Prg_CheckIfICanCreatePrgItems (void)
+static bool Prg_CheckIfICanCreateItems (void)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -252,11 +270,11 @@ static bool Prg_CheckIfICanCreatePrgItems (void)
 /************** Put contextual icons in list of program items ****************/
 /*****************************************************************************/
 
-static void Prg_PutIconsListPrgItems (void)
+static void Prg_PutIconsListItems (void)
   {
    /***** Put icon to create a new program item *****/
-   if (Prg_CheckIfICanCreatePrgItems ())
-      Prg_PutIconToCreateNewPrgItem ();
+   if (Prg_CheckIfICanCreateItems ())
+      Prg_PutIconToCreateNewItem ();
 
    /***** Put icon to show a figure *****/
    Gbl.Figures.FigureType = Fig_COURSE_PROGRAMS;
@@ -267,12 +285,13 @@ static void Prg_PutIconsListPrgItems (void)
 /****************** Put icon to create a new program item ********************/
 /*****************************************************************************/
 
-static void Prg_PutIconToCreateNewPrgItem (void)
+static void Prg_PutIconToCreateNewItem (void)
   {
    extern const char *Txt_New_item;
 
    /***** Put form to create a new program item *****/
-   Gbl.Prg.PrgIteCodToEdit = -1L;
+   Prg_SetCurrentItmCod (-1L);
+   Prg_SetCurrentItmInd (0);
    Ico_PutContextualIconToAdd (ActFrmNewPrgIte,NULL,Prg_PutParams,
 			       Txt_New_item);
   }
@@ -281,11 +300,12 @@ static void Prg_PutIconToCreateNewPrgItem (void)
 /***************** Put button to create a new program item *******************/
 /*****************************************************************************/
 
-static void Prg_PutButtonToCreateNewPrgItem (void)
+static void Prg_PutButtonToCreateNewItem (void)
   {
    extern const char *Txt_New_item;
 
-   Gbl.Prg.PrgIteCodToEdit = -1L;
+   Prg_SetCurrentItmCod (-1L);
+   Prg_SetCurrentItmInd (0);
    Frm_StartForm (ActFrmNewPrgIte);
    Prg_PutParams ();
    Btn_PutConfirmButton (Txt_New_item);
@@ -306,23 +326,23 @@ static void Prg_ParamsWhichGroupsToShow (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowOnePrgItem (long PrgIteCod,
-				unsigned ItemIndex,unsigned MaxItemIndex,
-				bool PrintView)
+static void Prg_ShowOneItem (long ItmCod,
+			     unsigned ItmInd,unsigned MaxItmInd,
+			     bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
-   struct ProgramItem PrgItem;
+   struct ProgramItem Item;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this program item *****/
-   PrgItem.PrgIteCod = PrgIteCod;
-   Prg_GetDataOfPrgItemByCod (&PrgItem);
+   Item.ItmCod = ItmCod;
+   Prg_GetDataOfItemByCod (&Item);
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (PrgItem.PrgIteCod,&Anchor);
+   Frm_SetAnchorStr (Item.ItmCod,&Anchor);
 
    /***** Write first row of data of this program item *****/
    HTM_TR_Begin (NULL);
@@ -333,8 +353,8 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
    else
      {
       HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (&PrgItem,
-				       ItemIndex,MaxItemIndex,
+      Prg_PutFormsToRemEditOnePrgItem (&Item,
+				       ItmInd,MaxItmInd,
 				       Anchor);
      }
    HTM_TD_End ();
@@ -342,15 +362,15 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
    /* Program item title */
    if (PrintView)
       HTM_TD_Begin ("class=\"%s LT\"",
-		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
-				     "ASG_TITLE");
+		    Item.Hidden ? "ASG_TITLE_LIGHT" :
+				  "ASG_TITLE");
    else
       HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		    PrgItem.Hidden ? "ASG_TITLE_LIGHT" :
-				     "ASG_TITLE",
+		    Item.Hidden ? "ASG_TITLE_LIGHT" :
+				  "ASG_TITLE",
 		    Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
-   HTM_Txt (PrgItem.Title);
+   HTM_Txt (Item.Title);
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -366,19 +386,19 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
       if (PrintView)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
 		       Id,
-		       PrgItem.Hidden ? (PrgItem.Open ? "DATE_GREEN_LIGHT" :
-					                "DATE_RED_LIGHT") :
-				        (PrgItem.Open ? "DATE_GREEN" :
-					                "DATE_RED"));
+		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
+					          "DATE_RED_LIGHT") :
+				     (Item.Open ? "DATE_GREEN" :
+					          "DATE_RED"));
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
 		       Id,
-		       PrgItem.Hidden ? (PrgItem.Open ? "DATE_GREEN_LIGHT" :
-					                "DATE_RED_LIGHT") :
-				        (PrgItem.Open ? "DATE_GREEN" :
-					                "DATE_RED"),
+		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
+					          "DATE_RED_LIGHT") :
+				     (Item.Open ? "DATE_GREEN" :
+					          "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,PrgItem.TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC (Id,Item.TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
@@ -391,7 +411,7 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
    HTM_TR_Begin (NULL);
 
    /* Text of the program item */
-   Prg_GetPrgItemTxtFromDB (PrgItem.PrgIteCod,Txt);
+   Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -400,8 +420,8 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
-      Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (&PrgItem);
-   HTM_DIV_Begin ("class=\"PAR %s\"",PrgItem.Hidden ? "DAT_LIGHT" :
+      Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
+   HTM_DIV_Begin ("class=\"PAR %s\"",Item.Hidden ? "DAT_LIGHT" :
         	                                      "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
@@ -412,7 +432,7 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Prg_WritePrgItemAuthor (&PrgItem);
+   Prg_WritePrgItemAuthor (&Item);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -421,20 +441,15 @@ static void Prg_ShowOnePrgItem (long PrgIteCod,
    Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-
-   /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	                PrgIteCod,Gbl.Hierarchy.Crs.CrsCod,
-	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
 /********************* Write the author of a program item ********************/
 /*****************************************************************************/
 
-static void Prg_WritePrgItemAuthor (struct ProgramItem *PrgItem)
+static void Prg_WritePrgItemAuthor (struct ProgramItem *Item)
   {
-   Usr_WriteAuthor1Line (PrgItem->UsrCod,PrgItem->Hidden);
+   Usr_WriteAuthor1Line (Item->UsrCod,Item->Hidden);
   }
 
 /*****************************************************************************/
@@ -463,8 +478,8 @@ void Prg_PutHiddenParamPrgOrder (void)
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
-static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
-					     unsigned ItemIndex,unsigned MaxItemIndex,
+static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
+					     unsigned ItmInd,unsigned MaxItmInd,
                                              const char *Anchor)
   {
    extern const char *Txt_Move_up_X;
@@ -472,12 +487,13 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
    extern const char *Txt_Movement_not_allowed;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   Gbl.Prg.PrgIteCodToEdit = PrgItem->PrgIteCod;	// Used as parameter in contextual links
+   Prg_SetCurrentItmCod (Item->ItmCod);	// Used as parameter in contextual links
+   Prg_SetCurrentItmInd (Item->ItmInd);	// Used as parameter in contextual links
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),
 	     "%u",
-	     ItemIndex);
+	     ItmInd);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -487,15 +503,15 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
 	 Ico_PutContextualIconToRemove (ActReqRemPrgIte,Prg_PutParams);
 
 	 /***** Put form to hide/show program item *****/
-	 if (PrgItem->Hidden)
+	 if (Item->Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoPrgIte,Anchor,Prg_PutParams);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgIte,Anchor,Prg_PutParams);
 
-	 /***** Put icon to move up the question *****/
-	 if (ItemIndex > 1)
+	 /***** Put icon to move up the item *****/
+	 if (ItmInd > 1)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,Prg_PutParams, // TODO: Change action
+	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgIte,NULL,Prg_PutParams,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Txt_Move_up_X,
 							       StrItemIndex));
@@ -504,10 +520,10 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
-	 /***** Put icon to move down the question *****/
-	 if (ItemIndex < MaxItemIndex)
+	 /***** Put icon to move down the item *****/
+	 if (ItmInd < MaxItmInd)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,Prg_PutParams, // TODO: Change action
+	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgIte,NULL,Prg_PutParams,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Txt_Move_down_X,
 							       StrItemIndex));
@@ -528,16 +544,69 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *PrgItem,
   }
 
 /*****************************************************************************/
+/**************** Access to variables used to pass parameter *****************/
+/*****************************************************************************/
+
+static void Prg_SetCurrentItmCod (long ItmCod)
+  {
+   Prg_CurrentItmCod = ItmCod;
+  }
+
+static long Prg_GetCurrentItmCod (void)
+  {
+   return Prg_CurrentItmCod;
+  }
+
+static void Prg_SetCurrentItmInd (unsigned ItmInd)
+  {
+   Prg_CurrentItmInd = ItmInd;
+  }
+
+static unsigned Prg_GetCurrentItmInd (void)
+  {
+   return Prg_CurrentItmInd;
+  }
+
+/*****************************************************************************/
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
 static void Prg_PutParams (void)
   {
-   if (Gbl.Prg.PrgIteCodToEdit > 0)
-      Prg_PutParamPrgItemCod (Gbl.Prg.PrgIteCodToEdit);
+   long CurrentItmCod = Prg_GetCurrentItmCod ();
+   long CurrentItmInd = Prg_GetCurrentItmInd ();
+
+   if (CurrentItmCod > 0)
+      Prg_PutParamItmCod (CurrentItmCod);
+   if (CurrentItmInd > 0)
+      Prg_PutParamItmInd (CurrentItmInd);
    Prg_PutHiddenParamPrgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with index of item *********************/
+/*****************************************************************************/
+
+static void Prg_PutParamItmInd (unsigned ItmInd)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"ItmInd",ItmInd);
+  }
+
+/*****************************************************************************/
+/********************* Get parameter with index of item **********************/
+/*****************************************************************************/
+
+static unsigned Prg_GetParamItmInd (void)
+  {
+   long ItmInd;
+
+   ItmInd = Par_GetParToLong ("ItmInd");
+   if (ItmInd < 0)
+      Lay_ShowErrorAndExit ("Wrong item index.");
+
+   return (unsigned) ItmInd;
   }
 
 /*****************************************************************************/
@@ -570,16 +639,16 @@ void Prg_GetListPrgItems (void)
    unsigned NumAsg;
 
    if (Gbl.Prg.LstIsRead)
-      Prg_FreeListPrgItems ();
+      Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT PrgIteCod"
+	                        "SELECT ItmCod"
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
-				" AND (PrgIteCod NOT IN (SELECT PrgIteCod FROM prg_grp) OR"
-				" PrgIteCod IN (SELECT prg_grp.PrgIteCod FROM prg_grp,crs_grp_usr"
+				" AND (ItmCod NOT IN (SELECT ItmCod FROM prg_grp) OR"
+				" ItmCod IN (SELECT prg_grp.ItmCod FROM prg_grp,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld AND prg_grp.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
@@ -588,7 +657,7 @@ void Prg_GetListPrgItems (void)
 				OrderBySubQuery[Gbl.Prg.SelectedOrder]);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT PrgIteCod"
+	                        "SELECT ItmCod"
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
@@ -596,12 +665,12 @@ void Prg_GetListPrgItems (void)
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				OrderBySubQuery[Gbl.Prg.SelectedOrder]);
 
-   if (NumRows) // Assignments found...
+   if (NumRows) // Items found...
      {
       Gbl.Prg.Num = (unsigned) NumRows;
 
       /***** Create list of program items *****/
-      if ((Gbl.Prg.LstPrgIteCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Gbl.Prg.LstItmCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the program items codes *****/
@@ -611,7 +680,7 @@ void Prg_GetListPrgItems (void)
         {
          /* Get next program item code */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Prg.LstPrgIteCods[NumAsg] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Prg.LstItmCods[NumAsg] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong program item code.");
         }
      }
@@ -628,78 +697,91 @@ void Prg_GetListPrgItems (void)
 /****************** Get program item data using its code *********************/
 /*****************************************************************************/
 
-void Prg_GetDataOfPrgItemByCod (struct ProgramItem *PrgItem)
+void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   if (PrgItem->PrgIteCod > 0)
+   if (Item->ItmCod > 0)
      {
       /***** Build query *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program item data",
-				"SELECT PrgIteCod,Hidden,UsrCod,"
-				"UNIX_TIMESTAMP(StartTime),"
-				"UNIX_TIMESTAMP(EndTime),"
-				"NOW() BETWEEN StartTime AND EndTime,"
-				"Title"
+				"SELECT ItmCod,"				// row[0]
+				       "ItmInd,"				// row[1]
+				       "Hidden,"				// row[2]
+				       "UsrCod,"				// row[3]
+				       "UNIX_TIMESTAMP(StartTime),"		// row[4]
+				       "UNIX_TIMESTAMP(EndTime),"		// row[5]
+				       "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+				       "Title"					// row[7]
 				" FROM prg_items"
-				" WHERE PrgIteCod=%ld AND CrsCod=%ld",
-				PrgItem->PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
+				" WHERE ItmCod=%ld AND CrsCod=%ld",
+				Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of program item *****/
-      Prg_GetDataOfPrgItem (PrgItem,&mysql_res,NumRows);
+      Prg_GetDataOfItem (Item,&mysql_res,NumRows);
      }
    else
-     {
       /***** Clear all program item data *****/
-      PrgItem->PrgIteCod = -1L;
-      Prg_ResetPrgItem (PrgItem);
-     }
+      Prg_ResetItem (Item);
   }
 
 /*****************************************************************************/
 /************************* Get program item data *****************************/
 /*****************************************************************************/
 
-static void Prg_GetDataOfPrgItem (struct ProgramItem *PrgItem,
-                                  MYSQL_RES **mysql_res,
-				  unsigned long NumRows)
+static void Prg_GetDataOfItem (struct ProgramItem *Item,
+                               MYSQL_RES **mysql_res,
+			       unsigned long NumRows)
   {
    MYSQL_ROW row;
 
    /***** Clear all program item data *****/
-   Prg_ResetPrgItem (PrgItem);
+   Prg_ResetItem (Item);
 
    /***** Get data of program item from database *****/
    if (NumRows) // Schedule item found...
      {
       /* Get row */
       row = mysql_fetch_row (*mysql_res);
+      /*
+      ItmCod					row[0]
+      ItmInd					row[1]
+      Hidden					row[2]
+      UsrCod					row[3]
+      UNIX_TIMESTAMP(StartTime)			row[4]
+      UNIX_TIMESTAMP(EndTime)			row[5]
+      NOW() BETWEEN StartTime AND EndTime	row[6]
+      Title					row[7]
+      */
 
       /* Get code of the program item (row[0]) */
-      PrgItem->PrgIteCod = Str_ConvertStrCodToLongCod (row[0]);
+      Item->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get whether the program item is hidden or not (row[1]) */
-      PrgItem->Hidden = (row[1][0] == 'Y');
+      /* Get index of the program item (row[1]) */
+      Item->ItmInd = Prg_GetItmIndFromStr (row[1]);
 
-      /* Get author of the program item (row[2]) */
-      PrgItem->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+      /* Get whether the program item is hidden or not (row[2]) */
+      Item->Hidden = (row[2][0] == 'Y');
 
-      /* Get start date (row[3] holds the start UTC time) */
-      PrgItem->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      /* Get author of the program item (row[3]) */
+      Item->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get end date   (row[4] holds the end   UTC time) */
-      PrgItem->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get start date (row[4] holds the start UTC time) */
+      Item->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the program item is open or closed (row(5)) */
-      PrgItem->Open = (row[5][0] == '1');
+      /* Get end date   (row[5] holds the end   UTC time) */
+      Item->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
-      /* Get the title of the program item (row[6]) */
-      Str_Copy (PrgItem->Title,row[6],
+      /* Get whether the program item is open or closed (row(6)) */
+      Item->Open = (row[6][0] == '1');
+
+      /* Get the title of the program item (row[7]) */
+      Str_Copy (Item->Title,row[7],
                 Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
       /* Can I do this program item? */
-      PrgItem->IBelongToCrsOrGrps = Prg_CheckIfIBelongToCrsOrGrpsThisPrgItem (PrgItem->PrgIteCod);
+      Item->IBelongToCrsOrGrps = Prg_CheckIfIBelongToCrsOrGrpsThisItem (Item->ItmCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -707,34 +789,46 @@ static void Prg_GetDataOfPrgItem (struct ProgramItem *PrgItem,
   }
 
 /*****************************************************************************/
+/******************* Get parameter with index of question ********************/
+/*****************************************************************************/
+
+static unsigned Prg_GetItmIndFromStr (const char *UnsignedStr)
+  {
+   long QstInd;
+
+   QstInd = Str_ConvertStrCodToLongCod (UnsignedStr);
+   return (QstInd > 0) ? (unsigned) QstInd :
+	                 0;
+  }
+
+/*****************************************************************************/
 /************************ Clear all program item data ************************/
 /*****************************************************************************/
 
-static void Prg_ResetPrgItem (struct ProgramItem *PrgItem)
+static void Prg_ResetItem (struct ProgramItem *Item)
   {
-   if (PrgItem->PrgIteCod <= 0)	// If > 0 ==> keep value
-      PrgItem->PrgIteCod = -1L;
-   PrgItem->PrgIteCod = -1L;
-   PrgItem->Hidden = false;
-   PrgItem->UsrCod = -1L;
-   PrgItem->TimeUTC[Dat_START_TIME] =
-   PrgItem->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   PrgItem->Open = false;
-   PrgItem->Title[0] = '\0';
-   PrgItem->IBelongToCrsOrGrps = false;
+   Item->ItmCod = -1L;
+   Item->ItmInd = 0;
+   Item->Hidden = false;
+   Item->UsrCod = -1L;
+   Item->TimeUTC[Dat_START_TIME] =
+   Item->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Item->Open = false;
+   Item->Title[0] = '\0';
+   Item->IBelongToCrsOrGrps = false;
   }
 
 /*****************************************************************************/
 /************************ Free list of program items *************************/
 /*****************************************************************************/
 
-void Prg_FreeListPrgItems (void)
+void Prg_FreeListItems (void)
   {
-   if (Gbl.Prg.LstIsRead && Gbl.Prg.LstPrgIteCods)
+   if (Gbl.Prg.LstIsRead && Gbl.Prg.LstItmCods)
      {
       /***** Free memory used by the list of program items *****/
-      free (Gbl.Prg.LstPrgIteCods);
-      Gbl.Prg.LstPrgIteCods = NULL;
+      free (Gbl.Prg.LstItmCods);
+      Gbl.Prg.LstItmCods = NULL;
       Gbl.Prg.Num = 0;
       Gbl.Prg.LstIsRead = false;
      }
@@ -744,7 +838,7 @@ void Prg_FreeListPrgItems (void)
 /******************* Get program item text from database *********************/
 /*****************************************************************************/
 
-static void Prg_GetPrgItemTxtFromDB (long PrgIteCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -753,8 +847,8 @@ static void Prg_GetPrgItemTxtFromDB (long PrgIteCod,char Txt[Cns_MAX_BYTES_TEXT 
    /***** Get text of program item from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get program item text",
 	                     "SELECT Txt FROM prg_items"
-			     " WHERE PrgIteCod=%ld AND CrsCod=%ld",
-			     PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
+			     " WHERE ItmCod=%ld AND CrsCod=%ld",
+			     ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -775,69 +869,22 @@ static void Prg_GetPrgItemTxtFromDB (long PrgIteCod,char Txt[Cns_MAX_BYTES_TEXT 
   }
 
 /*****************************************************************************/
-/***************** Get summary and content of a program item  ****************/
-/*****************************************************************************/
-// This function may be called inside a web service
-
-void Prg_GetNotifPrgItem (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,
-                          long PrgIteCod,bool GetContent)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   size_t Length;
-
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Build query *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get program item title and text",
-	                     "SELECT Title,Txt FROM prg_items"
-	                     " WHERE PrgIteCod=%ld",
-			     PrgIteCod);
-
-   /***** Result should have a unique row *****/
-   if (NumRows == 1)
-     {
-      /***** Get row *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Get summary *****/
-      Str_Copy (SummaryStr,row[0],
-		Ntf_MAX_BYTES_SUMMARY);
-
-      /***** Get content *****/
-      if (GetContent)
-	{
-	 Length = strlen (row[1]);
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-	 Str_Copy (*ContentStr,row[1],
-		   Length);
-	}
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /**************** Write parameter with code of program item ******************/
 /*****************************************************************************/
 
-static void Prg_PutParamPrgItemCod (long PrgIteCod)
+static void Prg_PutParamItmCod (long ItmCod)
   {
-   Par_PutHiddenParamLong (NULL,"PrgIteCod",PrgIteCod);
+   Par_PutHiddenParamLong (NULL,"ItmCod",ItmCod);
   }
 
 /*****************************************************************************/
 /***************** Get parameter with code of program item *******************/
 /*****************************************************************************/
 
-long Prg_GetParamPrgItemCod (void)
+long Prg_GetParamItmCod (void)
   {
    /***** Get code of program item *****/
-   return Par_GetParToLong ("PrgIteCod");
+   return Par_GetParToLong ("ItmCod");
   }
 
 /*****************************************************************************/
@@ -848,7 +895,7 @@ void Prg_ReqRemPrgItem (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    extern const char *Txt_Remove_item;
-   struct ProgramItem PrgItem;
+   struct ProgramItem Item;
 
    /***** Get parameters *****/
    Prg_GetParamPrgOrder ();
@@ -856,18 +903,19 @@ void Prg_ReqRemPrgItem (void)
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Get program item code *****/
-   if ((PrgItem.PrgIteCod = Prg_GetParamPrgItemCod ()) == -1L)
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
-   Prg_GetDataOfPrgItemByCod (&PrgItem);
+   Prg_GetDataOfItemByCod (&Item);
 
    /***** Show question and button to remove the program item *****/
-   Gbl.Prg.PrgIteCodToEdit = PrgItem.PrgIteCod;
+   Prg_SetCurrentItmCod (Item.ItmCod);
+   Prg_SetCurrentItmInd (Item.ItmInd);
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,Prg_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
-                           PrgItem.Title);
+                           Item.Title);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -879,30 +927,26 @@ void Prg_ReqRemPrgItem (void)
 
 void Prg_RemovePrgItem (void)
   {
-   extern const char *Txt_Assignment_X_removed;
-   struct ProgramItem PrgItem;
+   extern const char *Txt_Item_X_removed;
+   struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((PrgItem.PrgIteCod = Prg_GetParamPrgItemCod ()) == -1L)
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
-   Prg_GetDataOfPrgItemByCod (&PrgItem);	// Inside this function, the course is checked to be the current one
+   Prg_GetDataOfItemByCod (&Item);	// Inside this function, the course is checked to be the current one
 
    /***** Remove all the groups of this program item *****/
-   Prg_RemoveAllTheGrpsAssociatedToAPrgItem (PrgItem.PrgIteCod);
+   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item.ItmCod);
 
    /***** Remove program item *****/
    DB_QueryDELETE ("can not remove program item",
-		   "DELETE FROM prg_items WHERE PrgIteCod=%ld AND CrsCod=%ld",
-                   PrgItem.PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,PrgItem.PrgIteCod);
+		   "DELETE FROM prg_items WHERE ItmCod=%ld AND CrsCod=%ld",
+                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,
-                  PrgItem.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -914,20 +958,20 @@ void Prg_RemovePrgItem (void)
 
 void Prg_HidePrgItem (void)
   {
-   struct ProgramItem PrgItem;
+   struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((PrgItem.PrgIteCod = Prg_GetParamPrgItemCod ()) == -1L)
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
-   Prg_GetDataOfPrgItemByCod (&PrgItem);
+   Prg_GetDataOfItemByCod (&Item);
 
    /***** Hide program item *****/
    DB_QueryUPDATE ("can not hide program item",
 		   "UPDATE prg_items SET Hidden='Y'"
-		   " WHERE PrgIteCod=%ld AND CrsCod=%ld",
-                   PrgItem.PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
+		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -939,38 +983,310 @@ void Prg_HidePrgItem (void)
 
 void Prg_ShowPrgItem (void)
   {
-   struct ProgramItem PrgItem;
+   struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((PrgItem.PrgIteCod = Prg_GetParamPrgItemCod ()) == -1L)
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
-   Prg_GetDataOfPrgItemByCod (&PrgItem);
+   Prg_GetDataOfItemByCod (&Item);
 
    /***** Hide program item *****/
    DB_QueryUPDATE ("can not show program item",
 		   "UPDATE prg_items SET Hidden='N'"
-		   " WHERE PrgIteCod=%ld AND CrsCod=%ld",
-                   PrgItem.PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
+		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
   }
 
 /*****************************************************************************/
+/************** Move up position of an item in a course program **************/
+/*****************************************************************************/
+
+void Prg_MoveUpPrgItem (void)
+  {
+   extern const char *Txt_The_item_has_been_moved_up;
+   extern const char *Txt_Movement_not_allowed;
+   struct ProgramItem Item;
+   unsigned ItmIndTop;
+   unsigned ItmIndBottom;
+
+   /***** Get program item code *****/
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of program item is missing.");
+
+   /***** Get data of the program item from database *****/
+   Prg_GetDataOfItemByCod (&Item);
+
+   /***** Get item index *****/
+   ItmIndBottom = Prg_GetParamItmInd ();
+
+   /***** Move up item *****/
+   if (ItmIndBottom > 1)
+     {
+      /* Indexes of items to be exchanged */
+      ItmIndTop = Prg_GetPrevItemIndex (ItmIndBottom);
+      if (!ItmIndTop)
+	 Lay_ShowErrorAndExit ("Wrong index of item.");
+
+      /* Exchange items */
+      Prg_ExchangeItems (ItmIndTop,ItmIndBottom);
+
+      /* Success alert */
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_up);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
+
+/*****************************************************************************/
+/************* Move down position of an item in a course program *************/
+/*****************************************************************************/
+
+void Prg_MoveDownPrgItem (void)
+  {
+   extern const char *Txt_The_item_has_been_moved_down;
+   extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_No_items;
+   struct ProgramItem Item;
+   unsigned ItmIndTop;
+   unsigned ItmIndBottom;
+   unsigned MaxItmInd;	// 0 if no items
+
+   /***** Get program item code *****/
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of program item is missing.");
+
+   /***** Get data of the program item from database *****/
+   Prg_GetDataOfItemByCod (&Item);
+
+   /***** Get item index *****/
+   ItmIndTop = Prg_GetParamItmInd ();
+
+   /***** Get maximum item index *****/
+   MaxItmInd = Prg_GetMaxItemIndex ();
+
+   /***** Move down item *****/
+   if (MaxItmInd)
+     {
+      if (ItmIndTop < MaxItmInd)
+	{
+	 /* Indexes of items to be exchanged */
+	 ItmIndBottom = Prg_GetNextItemIndex (ItmIndTop);
+	 if (!ItmIndBottom)
+	    Lay_ShowErrorAndExit ("Wrong index of item.");
+
+	 /* Exchange items */
+	 Prg_ExchangeItems (ItmIndTop,ItmIndBottom);
+
+	 /* Success alert */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_down);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_No_items);
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
+
+
+/*****************************************************************************/
+/**************** Get maximum item index in a course program *****************/
+/*****************************************************************************/
+// Question index can be 1, 2, 3...
+// Return 0 if no items
+
+static unsigned Prg_GetMaxItemIndex (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned ItmInd = 0;
+
+   /***** Get maximum item index in a course program from database *****/
+   DB_QuerySELECT (&mysql_res,"can not get last item index",
+		   "SELECT MAX(ItmInd)"
+		   " FROM prg_items"
+		   " WHERE CrsCod=%ld",
+                   Gbl.Hierarchy.Crs.CrsCod);
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])	// There are items
+      if (sscanf (row[0],"%u",&ItmInd) != 1)
+         Lay_ShowErrorAndExit ("Error when getting last item index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return ItmInd;
+  }
+
+/*****************************************************************************/
+/*********** Get previous item index to a given index in a course ************/
+/*****************************************************************************/
+// Input item index can be 1, 2, 3... n-1
+// Return item index will be 1, 2, 3... n if previous item exists, or 0 if no previous item
+
+static unsigned Prg_GetPrevItemIndex (unsigned ItmInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned PrevItmInd = 0;
+
+   /***** Get previous item index in a course from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get previous item index",
+			"SELECT MAX(ItmInd) FROM prg_items"
+			" WHERE CrsCod=%ld AND ItmInd<%u",
+			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+      Lay_ShowErrorAndExit ("Error: previous item index not found.");
+
+   /***** Get previous item index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&PrevItmInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting previous item index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return PrevItmInd;
+  }
+
+/*****************************************************************************/
+/************** Get next item index to a given index in a course *************/
+/*****************************************************************************/
+// Input item index can be 0, 1, 2, 3... n-1
+// Return item index will be 1, 2, 3... n if next item exists, or 0 if no next item
+
+static unsigned Prg_GetNextItemIndex (unsigned ItmInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NextItmInd = 0;
+
+   /***** Get next item index in a course from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get next item index",
+			"SELECT MIN(ItmInd) FROM prg_items"
+			" WHERE CrsCod=%ld AND ItmInd>%u",
+			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+      Lay_ShowErrorAndExit ("Error: next item index not found.");
+
+   /***** Get next item index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&NextItmInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting next item index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NextItmInd;
+  }
+
+/*****************************************************************************/
+/****** Exchange the order of two consecutive items in a course program ******/
+/*****************************************************************************/
+
+static void Prg_ExchangeItems (unsigned ItmIndTop,unsigned ItmIndBottom)
+  {
+   long ItmCodTop;
+   long ItmCodBottom;
+
+   /***** Lock table to make the move atomic *****/
+   DB_Query ("can not lock tables to move program item",
+	     "LOCK TABLES prg_items WRITE");
+   Gbl.DB.LockedTables = true;
+
+   /***** Get item codes of the items to be moved *****/
+   ItmCodTop    = Prg_GetItmCodFromItmInd (ItmIndTop);
+   ItmCodBottom = Prg_GetItmCodFromItmInd (ItmIndBottom);
+
+   /***** Exchange indexes of items *****/
+   /*
+   Example:
+   ItmIndTop    = 1; ItmCodTop    = 218
+   ItmIndBottom = 2; ItmCodBottom = 220
+   +--------+--------+		+--------+--------+	+--------+--------+
+   | ItmInd | ItmCod |		| ItmInd | ItmCod |	| ItmInd | ItmCod |
+   +--------+--------+		+--------+--------+	+--------+--------+
+   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
+   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
+   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
+   +--------+--------+		+--------+--------+	+--------+--------+
+ */
+   DB_QueryUPDATE ("can not exchange indexes of items",
+		   "UPDATE prg_items SET ItmInd=%u"
+		   " WHERE CrsCod=%ld AND ItmCod=%ld",
+	           ItmIndBottom,
+	           Gbl.Hierarchy.Crs.CrsCod,ItmCodTop);
+
+   DB_QueryUPDATE ("can not exchange indexes of items",
+		   "UPDATE prg_items SET ItmInd=%u"
+		   " WHERE CrsCod=%ld AND ItmCod=%ld",
+	           ItmIndTop,
+	           Gbl.Hierarchy.Crs.CrsCod,ItmCodBottom);
+
+   /***** Unlock table *****/
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after moving items",
+	     "UNLOCK TABLES");
+  }
+
+/*****************************************************************************/
+/*************** Get item code given course and index of item ****************/
+/*****************************************************************************/
+
+static long Prg_GetItmCodFromItmInd (unsigned ItmInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long ItmCod;
+
+   /***** Get item code of the item to be moved up *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get item code",
+			"SELECT QstCod FROM prg_items"
+			" WHERE CrsCod=%ld AND QstInd=%u",
+			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+      Lay_ShowErrorAndExit ("Error: wrong item index.");
+
+   /***** Get item code (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if ((ItmCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Error: wrong item code.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return ItmCod;
+  }
+
+/*****************************************************************************/
 /*************** Check if the title of a program item exists *****************/
 /*****************************************************************************/
 
-static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long PrgIteCod)
+static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod)
   {
    /***** Get number of program items with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar program items",
 			  "SELECT COUNT(*) FROM prg_items"
 			  " WHERE CrsCod=%ld"
-			  " AND %s='%s' AND PrgIteCod<>%ld",
+			  " AND %s='%s' AND ItmCod<>%ld",
 			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,PrgIteCod) != 0);
+			  Field,Value,ItmCod) != 0);
   }
 
 /*****************************************************************************/
@@ -987,8 +1303,8 @@ void Prg_RequestCreatOrEditPrgItem (void)
    extern const char *Txt_Description;
    extern const char *Txt_Create_item;
    extern const char *Txt_Save_changes;
-   struct ProgramItem PrgItem;
-   bool ItsANewPrgItem;
+   struct ProgramItem Item;
+   bool ItsANewItem;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
@@ -997,49 +1313,51 @@ void Prg_RequestCreatOrEditPrgItem (void)
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Get the code of the program item *****/
-   ItsANewPrgItem = ((PrgItem.PrgIteCod = Prg_GetParamPrgItemCod ()) == -1L);
+   ItsANewItem = ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L);
 
    /***** Get from the database the data of the program item *****/
-   if (ItsANewPrgItem)
+   if (ItsANewItem)
      {
       /* Initialize to empty program item */
-      PrgItem.PrgIteCod = -1L;
-      PrgItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      PrgItem.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      PrgItem.Open = true;
-      PrgItem.Title[0] = '\0';
-      PrgItem.IBelongToCrsOrGrps = false;
+      Item.ItmCod = -1L;
+      Item.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Item.Open = true;
+      Item.Title[0] = '\0';
+      Item.IBelongToCrsOrGrps = false;
      }
    else
      {
       /* Get data of the program item from database */
-      Prg_GetDataOfPrgItemByCod (&PrgItem);
+      Prg_GetDataOfItemByCod (&Item);
 
       /* Get text of the program item from database */
-      Prg_GetPrgItemTxtFromDB (PrgItem.PrgIteCod,Txt);
+      Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
      }
 
    /***** Begin form *****/
-   if (ItsANewPrgItem)
+   if (ItsANewItem)
      {
       Frm_StartForm (ActNewPrgIte);
-      Gbl.Prg.PrgIteCodToEdit = -1L;
+      Prg_SetCurrentItmCod (-1L);
+      Prg_SetCurrentItmInd (0);
      }
    else
      {
       Frm_StartForm (ActChgPrgIte);
-      Gbl.Prg.PrgIteCodToEdit = PrgItem.PrgIteCod;
+      Prg_SetCurrentItmCod (Item.ItmCod);
+      Prg_SetCurrentItmInd (Item.ItmInd);
      }
    Prg_PutParams ();
 
    /***** Begin box and table *****/
-   if (ItsANewPrgItem)
+   if (ItsANewItem)
       Box_BoxTableBegin (NULL,Txt_New_item,NULL,
 			 Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,
-                         PrgItem.Title[0] ? PrgItem.Title :
-                	                    Txt_Edit_item,
+                         Item.Title[0] ? Item.Title :
+                	                 Txt_Edit_item,
                          NULL,
 			 Hlp_COURSE_Program_edit_item,Box_NOT_CLOSABLE,2);
 
@@ -1052,7 +1370,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,PrgItem.Title,false,
+   HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item.Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1060,7 +1378,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TR_End ();
 
    /***** Schedule item start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (PrgItem.TimeUTC,Dat_FORM_SECONDS_ON);
+   Dat_PutFormStartEndClientLocalDateTimes (Item.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Schedule item text *****/
    HTM_TR_Begin (NULL);
@@ -1072,7 +1390,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
 	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewPrgItem)
+   if (!ItsANewItem)
       HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
@@ -1080,10 +1398,10 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TR_End ();
 
    /***** Groups *****/
-   Prg_ShowLstGrpsToEditPrgItem (PrgItem.PrgIteCod);
+   Prg_ShowLstGrpsToEditPrgItem (Item.ItmCod);
 
    /***** End table, send button and end box *****/
-   if (ItsANewPrgItem)
+   if (ItsANewItem)
       Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_item);
    else
       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
@@ -1092,14 +1410,14 @@ void Prg_RequestCreatOrEditPrgItem (void)
    Frm_EndForm ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllPrgItems ();
+   Prg_ShowAllItems ();
   }
 
 /*****************************************************************************/
 /*************** Show list of groups to edit and program item ****************/
 /*****************************************************************************/
 
-static void Prg_ShowLstGrpsToEditPrgItem (long PrgIteCod)
+static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -1131,7 +1449,7 @@ static void Prg_ShowLstGrpsToEditPrgItem (long PrgIteCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",false,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Prg_CheckIfPrgItemIsAssociatedToGrps (PrgIteCod) ? "" :
+			  Prg_CheckIfItemIsAssociatedToGrps (ItmCod) ? "" :
 				                                             " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
@@ -1145,7 +1463,7 @@ static void Prg_ShowLstGrpsToEditPrgItem (long PrgIteCod)
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                            PrgIteCod,Grp_ASSIGNMENT);
+                                            ItmCod,Grp_PROGRAM_ITEM);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -1168,80 +1486,77 @@ void Prg_RecFormPrgItem (void)
    extern const char *Txt_You_must_specify_the_title_of_the_item;
    extern const char *Txt_Created_new_item_X;
    extern const char *Txt_The_item_has_been_modified;
-   struct ProgramItem OldPrgItem;	// Current program item data in database
-   struct ProgramItem NewPrgItem;	// Schedule item data received from form
-   bool ItsANewPrgItem;
-   bool NewPrgItemIsCorrect = true;
+   struct ProgramItem OldItem;	// Current program item data in database
+   struct ProgramItem NewItem;	// Schedule item data received from form
+   bool ItsANewItem;
+   bool NewItemIsCorrect = true;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the program item *****/
-   NewPrgItem.PrgIteCod = Prg_GetParamPrgItemCod ();
-   ItsANewPrgItem = (NewPrgItem.PrgIteCod < 0);
+   NewItem.ItmCod = Prg_GetParamItmCod ();
+   ItsANewItem = (NewItem.ItmCod < 0);
 
-   if (ItsANewPrgItem)
-     {
+   if (ItsANewItem)
       /***** Reset old (current, not existing) program item data *****/
-      OldPrgItem.PrgIteCod = -1L;
-      Prg_ResetPrgItem (&OldPrgItem);
-     }
+      Prg_ResetItem (&OldItem);
    else
      {
       /***** Get data of the old (current) program item from database *****/
-      OldPrgItem.PrgIteCod = NewPrgItem.PrgIteCod;
-      Prg_GetDataOfPrgItemByCod (&OldPrgItem);
+      OldItem.ItmCod = NewItem.ItmCod;
+      Prg_GetDataOfItemByCod (&OldItem);
      }
 
    /***** Get start/end date-times *****/
-   NewPrgItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewPrgItem.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewItem.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get program item title *****/
-   Par_GetParToText ("Title",NewPrgItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+   Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
    /***** Get program item text *****/
    Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewPrgItem.TimeUTC[Dat_START_TIME] == 0)
-      NewPrgItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewPrgItem.TimeUTC[Dat_END_TIME] == 0)
-      NewPrgItem.TimeUTC[Dat_END_TIME] = NewPrgItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+   if (NewItem.TimeUTC[Dat_START_TIME] == 0)
+      NewItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewItem.TimeUTC[Dat_END_TIME] == 0)
+      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
-   if (NewPrgItem.Title[0])	// If there's a program item title
+   if (NewItem.Title[0])	// If there's a program item title
      {
       /* If title of program item was in database... */
-      if (Prg_CheckIfSimilarPrgItemExists ("Title",NewPrgItem.Title,NewPrgItem.PrgIteCod))
+      if (Prg_CheckIfSimilarPrgItemExists ("Title",NewItem.Title,NewItem.ItmCod))
         {
-         NewPrgItemIsCorrect = false;
+         NewItemIsCorrect = false;
 
 	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_item_with_the_title_X,
-                        NewPrgItem.Title);
+                        NewItem.Title);
         }
      }
    else	// If there is not a program item title
      {
-      NewPrgItemIsCorrect = false;
+      NewItemIsCorrect = false;
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_item);
      }
 
    /***** Create a new program item or update an existing one *****/
-   if (NewPrgItemIsCorrect)
+   if (NewItemIsCorrect)
      {
       /* Get groups for this program items */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewPrgItem)
+      if (ItsANewItem)
 	{
-         Prg_CreatePrgItem (&NewPrgItem,Description);	// Add new program item to database
+         Prg_CreatePrgItem (&NewItem,Description);	// Add new program item to database
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_item_X,
-		        NewPrgItem.Title);
+		        NewItem.Title);
 	}
       else
         {
-	 Prg_UpdatePrgItem (&NewPrgItem,Description);
+	 Prg_UpdatePrgItem (&NewItem,Description);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_modified);
@@ -1262,10 +1577,10 @@ void Prg_RecFormPrgItem (void)
 /************************ Create a new program item **************************/
 /*****************************************************************************/
 
-static void Prg_CreatePrgItem (struct ProgramItem *PrgItem,const char *Txt)
+static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
   {
    /***** Create a new program item *****/
-   PrgItem->PrgIteCod =
+   Item->ItmCod =
    DB_QueryINSERTandReturnCode ("can not create new program item",
 				"INSERT INTO prg_items"
 				" (CrsCod,UsrCod,StartTime,EndTime,Title,Txt)"
@@ -1274,21 +1589,21 @@ static void Prg_CreatePrgItem (struct ProgramItem *PrgItem,const char *Txt)
 				"'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				PrgItem->TimeUTC[Dat_START_TIME],
-				PrgItem->TimeUTC[Dat_END_TIME  ],
-				PrgItem->Title,
+				Item->TimeUTC[Dat_START_TIME],
+				Item->TimeUTC[Dat_END_TIME  ],
+				Item->Title,
 				Txt);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (PrgItem->PrgIteCod);
+      Prg_CreateGrps (Item->ItmCod);
   }
 
 /*****************************************************************************/
 /******************** Update an existing program item ************************/
 /*****************************************************************************/
 
-static void Prg_UpdatePrgItem (struct ProgramItem *PrgItem,const char *Txt)
+static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt)
   {
    /***** Update the data of the program item *****/
    DB_QueryUPDATE ("can not update program item",
@@ -1296,59 +1611,59 @@ static void Prg_UpdatePrgItem (struct ProgramItem *PrgItem,const char *Txt)
 		   "StartTime=FROM_UNIXTIME(%ld),"
 		   "EndTime=FROM_UNIXTIME(%ld),"
 		   "Title='%s',Txt='%s'"
-		   " WHERE PrgIteCod=%ld AND CrsCod=%ld",
-                   PrgItem->TimeUTC[Dat_START_TIME],
-                   PrgItem->TimeUTC[Dat_END_TIME  ],
-                   PrgItem->Title,
+		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+                   Item->TimeUTC[Dat_START_TIME],
+                   Item->TimeUTC[Dat_END_TIME  ],
+                   Item->Title,
                    Txt,
-                   PrgItem->PrgIteCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
-   Prg_RemoveAllTheGrpsAssociatedToAPrgItem (PrgItem->PrgIteCod);
+   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item->ItmCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (PrgItem->PrgIteCod);
+      Prg_CreateGrps (Item->ItmCod);
   }
 
 /*****************************************************************************/
 /*********** Check if a program item is associated to any group **************/
 /*****************************************************************************/
 
-static bool Prg_CheckIfPrgItemIsAssociatedToGrps (long PrgIteCod)
+static bool Prg_CheckIfItemIsAssociatedToGrps (long ItmCod)
   {
    /***** Get if a program item is associated to a group from database *****/
    return (DB_QueryCOUNT ("can not check if a program item"
 			  " is associated to groups",
-			  "SELECT COUNT(*) FROM prg_grp WHERE PrgIteCod=%ld",
-			  PrgIteCod) != 0);
+			  "SELECT COUNT(*) FROM prg_grp WHERE ItmCod=%ld",
+			  ItmCod) != 0);
   }
 
 /*****************************************************************************/
 /************ Check if a program item is associated to a group ***************/
 /*****************************************************************************/
 
-bool Prg_CheckIfPrgItemIsAssociatedToGrp (long PrgIteCod,long GrpCod)
+bool Prg_CheckIfItemIsAssociatedToGrp (long ItmCod,long GrpCod)
   {
    /***** Get if a program item is associated to a group from database *****/
    return (DB_QueryCOUNT ("can not check if a program item"
 			  " is associated to a group",
 			  "SELECT COUNT(*) FROM prg_grp"
-			  " WHERE PrgIteCod=%ld AND GrpCod=%ld",
-		  	  PrgIteCod,GrpCod) != 0);
+			  " WHERE ItmCod=%ld AND GrpCod=%ld",
+		  	  ItmCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/
 /********************* Remove groups of a program item ***********************/
 /*****************************************************************************/
 
-static void Prg_RemoveAllTheGrpsAssociatedToAPrgItem (long PrgIteCod)
+static void Prg_RemoveAllTheGrpsAssociatedToAnItem (long ItmCod)
   {
    /***** Remove groups of the program item *****/
    DB_QueryDELETE ("can not remove the groups associated to a program item",
-		   "DELETE FROM prg_grp WHERE PrgIteCod=%ld",
-		   PrgIteCod);
+		   "DELETE FROM prg_grp WHERE ItmCod=%ld",
+		   ItmCod);
   }
 
 /*****************************************************************************/
@@ -1383,7 +1698,7 @@ void Prg_RemoveGroupsOfType (long GrpTypCod)
 /********************* Create groups of a program item ***********************/
 /*****************************************************************************/
 
-static void Prg_CreateGrps (long PrgIteCod)
+static void Prg_CreateGrps (long ItmCod)
   {
    unsigned NumGrpSel;
 
@@ -1394,10 +1709,10 @@ static void Prg_CreateGrps (long PrgIteCod)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a program item",
 		      "INSERT INTO prg_grp"
-		      " (PrgIteCod,GrpCod)"
+		      " (ItmCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      PrgIteCod,
+                      ItmCod,
 		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
@@ -1405,7 +1720,7 @@ static void Prg_CreateGrps (long PrgIteCod)
 /********* Get and write the names of the groups of a program item ***********/
 /*****************************************************************************/
 
-static void Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (struct ProgramItem *PrgItem)
+static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -1420,15 +1735,15 @@ static void Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (struct ProgramItem *P
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a program item",
 	                     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
 			     " FROM prg_grp,crs_grp,crs_grp_types"
-			     " WHERE prg_grp.PrgIteCod=%ld"
+			     " WHERE prg_grp.ItmCod=%ld"
 			     " AND prg_grp.GrpCod=crs_grp.GrpCod"
 			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-			     PrgItem->PrgIteCod);
+			     Item->ItmCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",PrgItem->Hidden ? "ASG_GRP_LIGHT" :
-        	                                   "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s\"",Item->Hidden ? "ASG_GRP_LIGHT" :
+        	                                "ASG_GRP");
    HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
                                     Txt_Groups);
 
@@ -1469,14 +1784,14 @@ static void Prg_GetAndWriteNamesOfGrpsAssociatedToPrgItem (struct ProgramItem *P
 /***************** Remove all the program items of a course ******************/
 /*****************************************************************************/
 
-void Prg_RemoveCrsPrgItems (long CrsCod)
+void Prg_RemoveCrsItems (long CrsCod)
   {
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups associated"
 		   " to program items of a course",
 		   "DELETE FROM prg_grp USING prg_items,prg_grp"
 		   " WHERE prg_items.CrsCod=%ld"
-		   " AND prg_items.PrgIteCod=prg_grp.PrgIteCod",
+		   " AND prg_items.ItmCod=prg_grp.ItmCod",
                    CrsCod);
 
    /***** Remove program items *****/
@@ -1489,7 +1804,7 @@ void Prg_RemoveCrsPrgItems (long CrsCod)
 /******** Check if I belong to any of the groups of a program item ***********/
 /*****************************************************************************/
 
-static bool Prg_CheckIfIBelongToCrsOrGrpsThisPrgItem (long PrgIteCod)
+static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1500,19 +1815,19 @@ static bool Prg_CheckIfIBelongToCrsOrGrpsThisPrgItem (long PrgIteCod)
 	 /***** Get if I can do a program item from database *****/
 	 return (DB_QueryCOUNT ("can not check if I can do a program item",
 			        "SELECT COUNT(*) FROM prg_items"
-				" WHERE PrgIteCod=%ld"
+				" WHERE ItmCod=%ld"
 				" AND "
 				"("
 				// Schedule item is for the whole course
-				"PrgIteCod NOT IN (SELECT PrgIteCod FROM prg_grp)"
+				"ItmCod NOT IN (SELECT ItmCod FROM prg_grp)"
 				" OR "
 				// Schedule item is for specific groups
-				"PrgIteCod IN"
-				" (SELECT prg_grp.PrgIteCod FROM prg_grp,crs_grp_usr"
+				"ItmCod IN"
+				" (SELECT prg_grp.ItmCod FROM prg_grp,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld"
 				" AND prg_grp.GrpCod=crs_grp_usr.GrpCod)"
 				")",
-				PrgIteCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+				ItmCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
       case Rol_SYS_ADM:
          return true;
       default:
@@ -1521,14 +1836,14 @@ static bool Prg_CheckIfIBelongToCrsOrGrpsThisPrgItem (long PrgIteCod)
   }
 
 /*****************************************************************************/
-/***************** Get number of program items in a course *******************/
+/***************** Get number of items in a course program *******************/
 /*****************************************************************************/
 
-unsigned Prg_GetNumPrgItemsInCrs (long CrsCod)
+unsigned Prg_GetNumItemsInCrsProgram (long CrsCod)
   {
-   /***** Get number of program items in a course from database *****/
+   /***** Get number of items in a course program from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of program items in course",
+   (unsigned) DB_QueryCOUNT ("can not get number of items in course program",
 			     "SELECT COUNT(*) FROM prg_items"
 			     " WHERE CrsCod=%ld",
 			     CrsCod);
@@ -1540,7 +1855,7 @@ unsigned Prg_GetNumPrgItemsInCrs (long CrsCod)
 // Returns the number of courses with program items
 // in this location (all the platform, current degree or current course)
 
-unsigned Prg_GetNumCoursesWithPrgItems (Hie_Level_t Scope)
+unsigned Prg_GetNumCoursesWithItems (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1625,11 +1940,11 @@ unsigned Prg_GetNumCoursesWithPrgItems (Hie_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of program items in a hierarchy scope
 
-unsigned Prg_GetNumPrgItems (Hie_Level_t Scope)
+unsigned Prg_GetNumItems (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumPrgItems;
+   unsigned NumItems;
 
    /***** Get number of program items from database *****/
    switch (Scope)
@@ -1692,11 +2007,11 @@ unsigned Prg_GetNumPrgItems (Hie_Level_t Scope)
 
    /***** Get number of program items *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumPrgItems) != 1)
+   if (sscanf (row[0],"%u",&NumItems) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of program items.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumPrgItems;
+   return NumItems;
   }

@@ -125,6 +125,8 @@ static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
 
+static long Gam_GetCurrentGamCod (void);
+static void Gam_PutParamsOneQst (void);
 static void Gam_PutParamCurrentGamCod (void);
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
@@ -156,14 +158,10 @@ static void Gam_AllocateListSelectedQuestions (void);
 static void Gam_FreeListsSelectedQuestions (void);
 static unsigned Gam_CountNumQuestionsInList (void);
 
-static void Gam_PutParamsOneQst (void);
-
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
 static bool Gam_CheckIfEditable (const struct Game *Game);
-
-static long Gam_GetCurrentGamCod (void);
 
 /*****************************************************************************/
 /***************************** List all games ********************************/
@@ -651,6 +649,30 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
+  }
+
+/*****************************************************************************/
+/**************** Access to variable used to pass parameter ******************/
+/*****************************************************************************/
+
+void Gam_SetCurrentGamCod (long GamCod)
+  {
+   Gam_CurrentGamCod = GamCod;
+  }
+
+static long Gam_GetCurrentGamCod (void)
+  {
+   return Gam_CurrentGamCod;
+  }
+
+/*****************************************************************************/
+/**************** Put parameter to move/remove one question ******************/
+/*****************************************************************************/
+
+static void Gam_PutParamsOneQst (void)
+  {
+   Gam_PutParams ();
+   Gam_PutParamQstInd (Gam_CurrentQstInd);
   }
 
 /*****************************************************************************/
@@ -1651,7 +1673,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 			"SELECT QstCod FROM gam_questions"
 			" WHERE GamCod=%ld AND QstInd=%u",
 			GamCod,QstInd))
-      Lay_ShowErrorAndExit ("Error: wrong question code.");
+      Lay_ShowErrorAndExit ("Error: wrong question index.");
 
    /***** Get question code (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
@@ -1678,7 +1700,9 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
 
    /***** Get maximum question index in a game from database *****/
    DB_QuerySELECT (&mysql_res,"can not get last question index",
-		   "SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
+		   "SELECT MAX(QstInd)"
+		   " FROM gam_questions"
+		   " WHERE GamCod=%ld",
                    GamCod);
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
@@ -1735,7 +1759,7 @@ unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextQstInd = Mch_AFTER_LAST_QUESTION;	// End of questions has been reached
+   unsigned NextQstInd = 0;
 
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
@@ -2128,16 +2152,6 @@ static unsigned Gam_CountNumQuestionsInList (void)
   }
 
 /*****************************************************************************/
-/**************** Put parameter to move/remove one question ******************/
-/*****************************************************************************/
-
-static void Gam_PutParamsOneQst (void)
-  {
-   Gam_PutParams ();
-   Gam_PutParamQstInd (Gam_CurrentQstInd);
-  }
-
-/*****************************************************************************/
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
@@ -2392,7 +2406,6 @@ static void Gam_ExchangeQuestions (long GamCod,
    DB_Query ("can not unlock tables after moving game questions",
 	     "UNLOCK TABLES");
   }
-
 
 /*****************************************************************************/
 /*********** Get number of matches and check is edition is possible **********/
@@ -2725,20 +2738,6 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/**************** Access to variable used to pass parameter ******************/
-/*****************************************************************************/
-
-void Gam_SetCurrentGamCod (long GamCod)
-  {
-   Gam_CurrentGamCod = GamCod;
-  }
-
-static long Gam_GetCurrentGamCod (void)
-  {
-   return Gam_CurrentGamCod;
   }
 
 /*****************************************************************************/

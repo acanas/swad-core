@@ -41,7 +41,8 @@
 
 struct ProgramItem
   {
-   long PrgIteCod;
+   long ItmCod;
+   unsigned ItmInd;
    bool Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -64,26 +65,24 @@ void Prg_SeeCourseProgram (void);
 void Prg_PutHiddenParamPrgOrder (void);
 void Prg_RequestCreatOrEditPrgItem (void);
 void Prg_GetListPrgItems (void);
-void Prg_GetDataOfPrgItemByCod (struct ProgramItem *PrgItem);
-void Prg_FreeListPrgItems (void);
+void Prg_GetDataOfItemByCod (struct ProgramItem *PrgItem);
+void Prg_FreeListItems (void);
 
-void Prg_GetNotifPrgItem (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,
-                          long PrgIteCod,bool GetContent);
-
-long Prg_GetParamPrgItemCod (void);
+long Prg_GetParamItemCode (void);
 void Prg_ReqRemPrgItem (void);
 void Prg_RemovePrgItem (void);
 void Prg_HidePrgItem (void);
 void Prg_ShowPrgItem (void);
+void Prg_MoveUpPrgItem (void);
+void Prg_MoveDownPrgItem (void);
 void Prg_RecFormPrgItem (void);
-bool Prg_CheckIfPrgItemIsAssociatedToGrp (long PrgIteCod,long GrpCod);
+bool Prg_CheckIfItemIsAssociatedToGrp (long PrgIteCod,long GrpCod);
 void Prg_RemoveGroup (long GrpCod);
 void Prg_RemoveGroupsOfType (long GrpTypCod);
-void Prg_RemoveCrsPrgItems (long CrsCod);
-unsigned Prg_GetNumPrgItemsInCrs(long CrsCod);
+void Prg_RemoveCrsItems (long CrsCod);
+unsigned Prg_GetNumItemsInCrsProgram(long CrsCod);
 
-unsigned Prg_GetNumCoursesWithPrgItems (Hie_Level_t Scope);
-unsigned Prg_GetNumPrgItems (Hie_Level_t Scope);
+unsigned Prg_GetNumCoursesWithItems (Hie_Level_t Scope);
+unsigned Prg_GetNumItems (Hie_Level_t Scope);
 
 #endif

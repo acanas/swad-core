@@ -2191,18 +2191,18 @@ mysql> DESCRIBE plugins;
    /***** Table prg_grp *****/
 /*
 mysql> DESCRIBE prg_grp;
-+-----------+---------+------+-----+---------+-------+
-| Field     | Type    | Null | Key | Default | Extra |
-+-----------+---------+------+-----+---------+-------+
-| PrgIteCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod    | int(11) | NO   | PRI | NULL    |       |
-+-----------+---------+------+-----+---------+-------+
-2 rows in set (0.06 sec)
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| ItmCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_grp ("
-			"PrgIteCod INT NOT NULL,"
+			"ItmCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(PrgIteCod,GrpCod))");
+		   "UNIQUE INDEX(ItmCod,GrpCod))");
 
    /***** Table prg_items *****/
 /*
@@ -2210,7 +2210,8 @@ mysql> DESCRIBE prg_items;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
-| PrgIteCod | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ItmCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ItmInd    | int(11)       | NO   |     | 0       |                |
 | CrsCod    | int(11)       | NO   | MUL | -1      |                |
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
 | UsrCod    | int(11)       | NO   |     | NULL    |                |
@@ -2219,10 +2220,11 @@ mysql> DESCRIBE prg_items;
 | Title     | varchar(2047) | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-8 rows in set (0.01 sec)
+9 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_items ("
-			"PrgIteCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmInd INT NOT NULL DEFAULT 0,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
@@ -2230,7 +2232,7 @@ mysql> DESCRIBE prg_items;
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"		// Prg_MAX_BYTES_PROGRAM_ITEM_TITLE
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(PrgIteCod),"
+		   "UNIQUE INDEX(ItmCod),"
 		   "INDEX(CrsCod,Hidden))");
 
    /***** Table prj_config *****/

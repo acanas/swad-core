@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.133.1 (2020-02-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.134 (2020-02-26)"
 #define CSS_FILE		"swad19.133.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -522,6 +522,16 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
+// TODO: Order program items on indexes
+
+	Version 19.134:   Feb 26, 2020	Move up and down a course program item. Not finished. (281991 lines)
+					5 changes necessary in database:
+ALTER TABLE prg_items CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE prg_items ADD COLUMN ItmInd INT NOT NULL DEFAULT 0 AFTER ItmCod;
+ALTER TABLE prg_grp CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL;
+Only if you use MyISAM:
+ALTER TABLE prg_items ENGINE=MyISAM;
+ALTER TABLE prg_grp ENGINE=MyISAM;
 
 	Version 19.133.1: Feb 25, 2020	Changes in layout of tabs. (281610 lines)
 	Version 19.133:   Feb 25, 2020	Removed icon to print a course program item.

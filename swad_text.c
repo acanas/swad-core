@@ -17234,21 +17234,42 @@ const char *Txt_Item =
 #if   L==1	// ca
 	"&Iacute;tem";
 #elif L==2	// de
-	"Artikel";
+	"Programmelement";
 #elif L==3	// en
 	"Item";
 #elif L==4	// es
 	"&Iacute;tem";
 #elif L==5	// fr
-	"Article";
+	"&Eacute;l&eacute;ment";
 #elif L==6	// gn
 	"&Iacute;tem";	// Okoteve traducción
 #elif L==7	// it
-	"Articolo";
+	"Elemento";
 #elif L==8	// pl
 	"Pozycja";
 #elif L==9	// pt
 	"Item";
+#endif
+
+const char *Txt_Item_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"&Iacute;tem <strong>%s</strong> eliminat.";
+#elif L==2	// de
+	"Programmelement <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Item <strong>s</strong> removed.";
+#elif L==4	// es
+	"&Iacute;tem <strong>%s</strong> eliminado.";
+#elif L==5	// fr
+	"&Eacute;l&eacute;ment <strong>%s</strong> supprim&eacute;.";
+#elif L==6	// gn
+	"&Iacute;tem <strong>%s</strong> eliminado.";	// Okoteve traducción
+#elif L==7	// it
+	"Elemento <strong>%s</strong> rimosso.";
+#elif L==8	// pl
+	"Pozycja <strong>%s</strong> usuniete.";
+#elif L==9	// pt
+	"Item <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Its_me =
@@ -47757,6 +47778,48 @@ const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is ver
 	"As propriedades do arquivo %s foram salvas.";
 #endif
 
+const char *Txt_The_item_has_been_moved_down =
+#if   L==1	// ca
+	"El &iacute;tem ha estat moguda cap avall.";
+#elif L==2	// de
+	"Der Programmelement wurde nach unten bewegt.";
+#elif L==3	// en
+	"The item has been moved down.";
+#elif L==4	// es
+	"El &iacute;tem se ha movido hacia abajo.";
+#elif L==5	// fr
+	"L'&eacute;l&eacute;ment a &eacute;t&eacute; d&eacute;plac&eacute; vers le bas.";
+#elif L==6	// gn
+	"El &iacute;tem se ha movido hacia abajo.";	// Okoteve traducción
+#elif L==7	// it
+	"Il elemento &egrave; stato abbattuto.";
+#elif L==8	// pl
+	"Pozycja zosta&lstrok;o przeniesione.";
+#elif L==9	// pt
+	"O item foi movido para baixo.";
+#endif
+
+const char *Txt_The_item_has_been_moved_up =
+#if   L==1	// ca
+	"El &iacute;tem ha estat moguda cap amunt.";
+#elif L==2	// de
+	"Der Programmelement wurde nach oben verschoben.";
+#elif L==3	// en
+	"The item has been moved up.";
+#elif L==4	// es
+	"El &iacute;tem se ha movido hacia arriba.";
+#elif L==5	// fr
+	"L'&eacute;l&eacute;ment a &eacute;t&eacute; d&eacute;plac&eacute; vers le haut.";
+#elif L==6	// gn
+	"El &iacute;tem se ha movido hacia arriba.";	// Okoteve traducción
+#elif L==7	// it
+	"Il elemento &egrave; stato spostato.";
+#elif L==8	// pl
+	"Pozycja zosta&lstrok;o poruszone.";
+#elif L==9	// pt
+	"O item foi movido para cima.";
+#endif
+
 const char *Txt_The_question_has_been_moved_down =
 #if   L==1	// ca
 	"La pregunta ha estat moguda cap avall.";
@@ -47769,7 +47832,7 @@ const char *Txt_The_question_has_been_moved_down =
 #elif L==5	// fr
 	"La question a &eacute;t&eacute; d&eacute;plac&eacute;e vers le bas.";
 #elif L==6	// gn
-	"La pregunta se ha movido hacia arriba.";	// Okoteve traducción
+	"La pregunta se ha movido hacia abajo.";	// Okoteve traducción
 #elif L==7	// it
 	"La questione &egrave; stata abbattuta.";
 #elif L==8	// pl
