@@ -170,7 +170,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_COURSE_PROGRAM:
                Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Prg_PutHiddenParamPrgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ASSIGNMENTS:
@@ -290,7 +289,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_COURSE_PROGRAM:
                Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Prg_PutHiddenParamPrgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ASSIGNMENTS:
@@ -396,7 +394,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_COURSE_PROGRAM:
                Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Prg_PutHiddenParamPrgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ASSIGNMENTS:
@@ -514,7 +511,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       case Pag_COURSE_PROGRAM:
 		  Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		  Prg_PutHiddenParamPrgOrder ();
 		  Grp_PutParamWhichGrps ();
 		  break;
                case Pag_ASSIGNMENTS:
@@ -619,7 +615,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_COURSE_PROGRAM:
 	       Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       Prg_PutHiddenParamPrgOrder ();
 	       Grp_PutParamWhichGrps ();
 	       break;
             case Pag_ASSIGNMENTS:
@@ -725,7 +720,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_COURSE_PROGRAM:
 	       Frm_StartFormAnchor (ActSeePrg,Pagination->Anchor);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       Prg_PutHiddenParamPrgOrder ();
 	       Grp_PutParamWhichGrps ();
 	       break;
             case Pag_ASSIGNMENTS:

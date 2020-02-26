@@ -1216,6 +1216,11 @@ void Tst_ShowFormAskEditTsts (void)
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -1241,7 +1246,7 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_ShowFormAnswerTypes ();
 
       /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
       HTM_TABLE_End ();
 
@@ -1277,6 +1282,11 @@ void Tst_ShowFormAskSelectTstsForGame (void)
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Select_questions,NULL,
@@ -1294,7 +1304,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
       Tst_ShowFormSelTags (NumRows,mysql_res,false);
 
       /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
       HTM_TABLE_End ();
 

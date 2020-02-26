@@ -1106,6 +1106,11 @@ void Asg_RequestCreatOrEditAsg (void)
    struct Assignment Asg;
    bool ItsANewAssignment;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_TO_000000,
+      Dat_HMS_TO_235959
+     };
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
@@ -1178,7 +1183,9 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_End ();
 
    /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,Dat_FORM_SECONDS_ON);
+   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,
+					    Dat_FORM_SECONDS_ON,
+					    SetHMS);
 
    /***** Send work? *****/
    HTM_TR_Begin (NULL);

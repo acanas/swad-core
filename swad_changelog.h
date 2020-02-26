@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.134 (2020-02-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.134.1 (2020-02-26)"
 #define CSS_FILE		"swad19.133.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -522,13 +522,13 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
-// TODO: Order program items on indexes
 
+	Version 19.134.1: Feb 26, 2020	Order course program items by indexes. (282022 lines)
 	Version 19.134:   Feb 26, 2020	Move up and down a course program item. Not finished. (281991 lines)
 					5 changes necessary in database:
-ALTER TABLE prg_items CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE prg_items CHANGE COLUMN PrgItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE prg_items ADD COLUMN ItmInd INT NOT NULL DEFAULT 0 AFTER ItmCod;
-ALTER TABLE prg_grp CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL;
+ALTER TABLE prg_grp CHANGE COLUMN PrgItmCod ItmCod INT NOT NULL;
 Only if you use MyISAM:
 ALTER TABLE prg_items ENGINE=MyISAM;
 ALTER TABLE prg_grp ENGINE=MyISAM;
@@ -544,8 +544,8 @@ ALTER TABLE prg_grp ENGINE=MyISAM;
 	Version 19.130.1: Feb 24, 2020	Fixed bugs related to database. (281259 lines)
 	Version 19.130:   Feb 20, 2020	New module swad_program. (281273 lines)
 					2 changes necessary in database:
-CREATE TABLE IF NOT EXISTS prg_grp (PrgIteCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrgIteCod,GrpCod));
-CREATE TABLE IF NOT EXISTS prg_items (PrgIteCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrgIteCod),INDEX(CrsCod,Hidden));
+CREATE TABLE IF NOT EXISTS prg_grp (PrgItmCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrgItmCod,GrpCod));
+CREATE TABLE IF NOT EXISTS prg_items (PrgItmCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrgItmCod),INDEX(CrsCod,Hidden));
 
 	Version 19.129:   Feb 20, 2020	New option for schedule in course. (279240 lines)
 				        Copy the following icons to icon public directory:

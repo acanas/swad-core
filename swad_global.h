@@ -543,8 +543,6 @@ struct Globals
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of items
       long *LstItmCods;		// List of items codes
-      Dat_StartEndTime_t SelectedOrder;
-      // long ItmCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
      } Prg;
    struct

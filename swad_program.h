@@ -62,7 +62,6 @@ struct ProgramItem
 
 void Prg_SeeCourseProgram (void);
 
-void Prg_PutHiddenParamPrgOrder (void);
 void Prg_RequestCreatOrEditPrgItem (void);
 void Prg_GetListPrgItems (void);
 void Prg_GetDataOfItemByCod (struct ProgramItem *PrgItem);
@@ -76,7 +75,7 @@ void Prg_ShowPrgItem (void);
 void Prg_MoveUpPrgItem (void);
 void Prg_MoveDownPrgItem (void);
 void Prg_RecFormPrgItem (void);
-bool Prg_CheckIfItemIsAssociatedToGrp (long PrgIteCod,long GrpCod);
+bool Prg_CheckIfItemIsAssociatedToGrp (long PrgItmCod,long GrpCod);
 void Prg_RemoveGroup (long GrpCod);
 void Prg_RemoveGroupsOfType (long GrpTypCod);
 void Prg_RemoveCrsItems (long CrsCod);

@@ -73,7 +73,7 @@ unsigned Prg_CurrentItmInd;	// Used as parameter in contextual links
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (void);
-static void Prg_PutHeadForSeeing (bool PrintView);
+static void Prg_PutHeadForSeeing (void);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
@@ -83,7 +83,6 @@ static void Prg_ShowOneItem (long ItmCod,
 			     unsigned ItmInd,unsigned MaxItmInd,
 			     bool PrintView);
 static void Prg_WritePrgItemAuthor (struct ProgramItem *Item);
-static void Prg_GetParamPrgOrder (void);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 					     unsigned ItmInd,unsigned MaxItmInd,
@@ -128,7 +127,6 @@ static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod);
 void Prg_SeeCourseProgram (void)
   {
    /***** Get parameters *****/
-   Prg_GetParamPrgOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
@@ -178,15 +176,15 @@ static void Prg_ShowAllItems (void)
      {
       /***** Table head *****/
       HTM_TABLE_BeginWideMarginPadding (2);
-      Prg_PutHeadForSeeing (false);	// Not print view
+      Prg_PutHeadForSeeing ();
 
       /***** Write all the program items *****/
       for (NumItem  = Pagination.FirstItemVisible;
 	   NumItem <= Pagination.LastItemVisible;
 	   NumItem++)
 	 Prg_ShowOneItem (Gbl.Prg.LstItmCods[NumItem - 1],
-			     NumItem,Gbl.Prg.Num,
-	                     false);	// Not print view
+			  NumItem,Gbl.Prg.Num,
+	                  false);	// Not print view
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -214,44 +212,17 @@ static void Prg_ShowAllItems (void)
 /***************** Write header with fields of a program item ****************/
 /*****************************************************************************/
 
-static void Prg_PutHeadForSeeing (bool PrintView)
+static void Prg_PutHeadForSeeing (void)
   {
-   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Item;
-   Dat_StartEndTime_t Order;
 
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
    HTM_TH (1,1,"LM",Txt_Item);
-   for (Order  = Dat_START_TIME;
-	Order <= Dat_END_TIME;
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-
-      if (!PrintView)
-	{
-	 Frm_StartForm (ActSeePrg);
-	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Gbl.Prg.SelectedOrder)
-	    HTM_U_Begin ();
-	}
-      HTM_Txt (Txt_START_END_TIME[Order]);
-      if (!PrintView)
-	{
-	 if (Order == Gbl.Prg.SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-
-      HTM_TH_End ();
-     }
+   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
 
    HTM_TR_End ();
   }
@@ -292,7 +263,7 @@ static void Prg_PutIconToCreateNewItem (void)
    /***** Put form to create a new program item *****/
    Prg_SetCurrentItmCod (-1L);
    Prg_SetCurrentItmInd (0);
-   Ico_PutContextualIconToAdd (ActFrmNewPrgIte,NULL,Prg_PutParams,
+   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,NULL,Prg_PutParams,
 			       Txt_New_item);
   }
 
@@ -306,7 +277,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 
    Prg_SetCurrentItmCod (-1L);
    Prg_SetCurrentItmInd (0);
-   Frm_StartForm (ActFrmNewPrgIte);
+   Frm_StartForm (ActFrmNewPrgItm);
    Prg_PutParams ();
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
@@ -318,7 +289,6 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 static void Prg_ParamsWhichGroupsToShow (void)
   {
-   Prg_PutHiddenParamPrgOrder ();
    Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
   }
 
@@ -453,28 +423,6 @@ static void Prg_WritePrgItemAuthor (struct ProgramItem *Item)
   }
 
 /*****************************************************************************/
-/******* Get parameter with the type or order in list of program items *******/
-/*****************************************************************************/
-
-static void Prg_GetParamPrgOrder (void)
-  {
-   Gbl.Prg.SelectedOrder = (Dat_StartEndTime_t)
-	                    Par_GetParToUnsignedLong ("Order",
-                                                      0,
-                                                      Dat_NUM_START_END_TIME - 1,
-                                                      (unsigned long) Prg_ORDER_DEFAULT);
-  }
-
-/*****************************************************************************/
-/** Put a hidden parameter with the type of order in list of program items ***/
-/*****************************************************************************/
-
-void Prg_PutHiddenParamPrgOrder (void)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Prg.SelectedOrder);
-  }
-
-/*****************************************************************************/
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
@@ -500,18 +448,18 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrgIte,Prg_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,Prg_PutParams);
 
 	 /***** Put form to hide/show program item *****/
 	 if (Item->Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoPrgIte,Anchor,Prg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrgItm,Anchor,Prg_PutParams);
 	 else
-	    Ico_PutContextualIconToHide (ActHidPrgIte,Anchor,Prg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
 
 	 /***** Put icon to move up the item *****/
 	 if (ItmInd > 1)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgIte,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,NULL,Prg_PutParams,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Txt_Move_up_X,
 							       StrItemIndex));
@@ -523,7 +471,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 /***** Put icon to move down the item *****/
 	 if (ItmInd < MaxItmInd)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgIte,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,NULL,Prg_PutParams,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Txt_Move_down_X,
 							       StrItemIndex));
@@ -533,7 +481,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActEdiOnePrgIte,Prg_PutParams);
+	 Ico_PutContextualIconToEdit (ActEdiOnePrgItm,Prg_PutParams);
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -580,7 +528,6 @@ static void Prg_PutParams (void)
       Prg_PutParamItmCod (CurrentItmCod);
    if (CurrentItmInd > 0)
       Prg_PutParamItmInd (CurrentItmInd);
-   Prg_PutHiddenParamPrgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
   }
@@ -628,15 +575,10 @@ void Prg_GetListPrgItems (void)
       [Rol_INS_ADM] = " AND Hidden='N'",
       [Rol_SYS_ADM] = "",
      };
-   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_START_TIME] = "StartTime DESC,EndTime DESC,Title DESC",
-      [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   unsigned NumAsg;
+   unsigned NumItem;
 
    if (Gbl.Prg.LstIsRead)
       Prg_FreeListItems ();
@@ -647,23 +589,24 @@ void Prg_GetListPrgItems (void)
 	                        "SELECT ItmCod"
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
-				" AND (ItmCod NOT IN (SELECT ItmCod FROM prg_grp) OR"
-				" ItmCod IN (SELECT prg_grp.ItmCod FROM prg_grp,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld AND prg_grp.GrpCod=crs_grp_usr.GrpCod))"
-				" ORDER BY %s",
+				" AND "
+				"(ItmCod NOT IN (SELECT ItmCod FROM prg_grp) OR"
+				" ItmCod IN (SELECT prg_grp.ItmCod"
+				            " FROM prg_grp,crs_grp_usr"
+				            " WHERE crs_grp_usr.UsrCod=%ld"
+				            " AND prg_grp.GrpCod=crs_grp_usr.GrpCod))"
+				" ORDER BY ItmInd",
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				OrderBySubQuery[Gbl.Prg.SelectedOrder]);
+				Gbl.Usrs.Me.UsrDat.UsrCod);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
 	                        "SELECT ItmCod"
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
-				" ORDER BY %s",
+				" ORDER BY ItmInd",
 				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				OrderBySubQuery[Gbl.Prg.SelectedOrder]);
+				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
 
    if (NumRows) // Items found...
      {
@@ -674,13 +617,13 @@ void Prg_GetListPrgItems (void)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the program items codes *****/
-      for (NumAsg = 0;
-	   NumAsg < Gbl.Prg.Num;
-	   NumAsg++)
+      for (NumItem = 0;
+	   NumItem < Gbl.Prg.Num;
+	   NumItem++)
         {
          /* Get next program item code */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Prg.LstItmCods[NumAsg] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Prg.LstItmCods[NumItem] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong program item code.");
         }
      }
@@ -898,7 +841,6 @@ void Prg_ReqRemPrgItem (void)
    struct ProgramItem Item;
 
    /***** Get parameters *****/
-   Prg_GetParamPrgOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
@@ -912,7 +854,7 @@ void Prg_ReqRemPrgItem (void)
    /***** Show question and button to remove the program item *****/
    Prg_SetCurrentItmCod (Item.ItmCod);
    Prg_SetCurrentItmInd (Item.ItmInd);
-   Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,Prg_PutParams,
+   Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,Prg_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
@@ -1256,11 +1198,14 @@ static long Prg_GetItmCodFromItmInd (unsigned ItmInd)
    MYSQL_ROW row;
    long ItmCod;
 
-   /***** Get item code of the item to be moved up *****/
+   /***** Get item code from item index *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get item code",
-			"SELECT QstCod FROM prg_items"
-			" WHERE CrsCod=%ld AND QstInd=%u",
-			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+			"SELECT ItmCod"		// row[0]
+			" FROM prg_items"
+			" WHERE CrsCod=%ld"
+			" AND ItmInd=%u",
+			Gbl.Hierarchy.Crs.CrsCod,
+			ItmInd))
       Lay_ShowErrorAndExit ("Error: wrong item index.");
 
    /***** Get item code (row[0]) *****/
@@ -1306,9 +1251,13 @@ void Prg_RequestCreatOrEditPrgItem (void)
    struct ProgramItem Item;
    bool ItsANewItem;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_TO_000000,
+      Dat_HMS_TO_235959
+     };
 
    /***** Get parameters *****/
-   Prg_GetParamPrgOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
@@ -1319,12 +1268,10 @@ void Prg_RequestCreatOrEditPrgItem (void)
    if (ItsANewItem)
      {
       /* Initialize to empty program item */
-      Item.ItmCod = -1L;
+      Prg_ResetItem (&Item);
       Item.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
       Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Item.Open = true;
-      Item.Title[0] = '\0';
-      Item.IBelongToCrsOrGrps = false;
      }
    else
      {
@@ -1338,13 +1285,13 @@ void Prg_RequestCreatOrEditPrgItem (void)
    /***** Begin form *****/
    if (ItsANewItem)
      {
-      Frm_StartForm (ActNewPrgIte);
+      Frm_StartForm (ActNewPrgItm);
       Prg_SetCurrentItmCod (-1L);
       Prg_SetCurrentItmInd (0);
      }
    else
      {
-      Frm_StartForm (ActChgPrgIte);
+      Frm_StartForm (ActChgPrgItm);
       Prg_SetCurrentItmCod (Item.ItmCod);
       Prg_SetCurrentItmInd (Item.ItmInd);
      }
@@ -1377,10 +1324,12 @@ void Prg_RequestCreatOrEditPrgItem (void)
 
    HTM_TR_End ();
 
-   /***** Schedule item start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Item.TimeUTC,Dat_FORM_SECONDS_ON);
+   /***** Program item start and end dates *****/
+   Dat_PutFormStartEndClientLocalDateTimes (Item.TimeUTC,
+					    Dat_FORM_SECONDS_ON,
+					    SetHMS);
 
-   /***** Schedule item text *****/
+   /***** Program item text *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -1579,20 +1528,38 @@ void Prg_RecFormPrgItem (void)
 
 static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
   {
+   unsigned MaxItmInd;
+
+   /***** Lock table to create program item *****/
+   DB_Query ("can not lock tables to create program item",
+	     "LOCK TABLES prg_items WRITE");
+   Gbl.DB.LockedTables = true;
+
+   /***** Get maximum item index *****/
+   MaxItmInd = Prg_GetMaxItemIndex ();
+
    /***** Create a new program item *****/
+   Item->ItmInd = MaxItmInd + 1;
    Item->ItmCod =
    DB_QueryINSERTandReturnCode ("can not create new program item",
 				"INSERT INTO prg_items"
-				" (CrsCod,UsrCod,StartTime,EndTime,Title,Txt)"
+				" (ItmInd,CrsCod,UsrCod,StartTime,EndTime,Title,Txt)"
 				" VALUES"
-				" (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				" (%u,%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s')",
+				Item->ItmInd,
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Item->TimeUTC[Dat_START_TIME],
 				Item->TimeUTC[Dat_END_TIME  ],
 				Item->Title,
 				Txt);
+
+   /***** Unlock table *****/
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after moving items",
+	     "UNLOCK TABLES");
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1733,12 +1700,15 @@ static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item
 
    /***** Get groups associated to a program item from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a program item",
-	                     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-			     " FROM prg_grp,crs_grp,crs_grp_types"
+	                     "SELECT crs_grp_types.GrpTypName,"	// row[0]
+	                            "crs_grp.GrpName"		// row[1]
+			     " FROM prg_grp,crs_grp,"
+			           "crs_grp_types"
 			     " WHERE prg_grp.ItmCod=%ld"
-			     " AND prg_grp.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			       " AND prg_grp.GrpCod=crs_grp.GrpCod"
+			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " ORDER BY crs_grp_types.GrpTypName,"
+			               "crs_grp.GrpName",
 			     Item->ItmCod);
 
    /***** Write heading *****/

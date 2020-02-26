@@ -1453,6 +1453,11 @@ void Agd_RequestCreatOrEditEvent (void)
    struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_TO_000000,
+      Dat_HMS_TO_235959
+     };
 
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
@@ -1534,7 +1539,8 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
-                                            Dat_FORM_SECONDS_OFF);
+                                            Dat_FORM_SECONDS_OFF,
+					    SetHMS);
 
    /***** Text *****/
    HTM_TR_Begin (NULL);

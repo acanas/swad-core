@@ -202,6 +202,7 @@ void Sta_AskShowCrsHits (void)
       Sta_MAX_ROWS_PER_PAGE,
      };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
+   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
@@ -278,7 +279,17 @@ void Sta_AskShowCrsHits (void)
          HTM_TR_End ();
 
          /***** Initial and final dates of the search *****/
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccCrs);
+         if (Gbl.Action.Act == ActReqAccCrs)
+           {
+            SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
+	    SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
+	   }
+         else
+           {
+            SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
+	    SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
+	   }
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
          /***** Selection of action *****/
          Sta_WriteSelectorAction ();
@@ -402,6 +413,7 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
+   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    Sta_Role_t RoleStat;
    unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
@@ -421,7 +433,17 @@ void Sta_AskShowGblHits (void)
                       Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccGbl);
+   if (Gbl.Action.Act == ActReqAccCrs)
+     {
+      SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
+      SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
+     }
+   else
+     {
+      SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
+      SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
+     }
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
    /***** Users' roles whose accesses we want to see *****/
    HTM_TR_Begin (NULL);

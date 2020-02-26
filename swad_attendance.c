@@ -1013,6 +1013,11 @@ void Att_RequestCreatOrEditAttEvent (void)
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
    char Description[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
@@ -1085,7 +1090,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_End ();
 
    /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC,Dat_FORM_SECONDS_ON);
+   Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC,
+					    Dat_FORM_SECONDS_ON,
+					    SetHMS);
 
    /***** Visibility of comments *****/
    HTM_TR_Begin (NULL);

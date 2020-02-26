@@ -300,7 +300,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prg.LstIsRead = false;	// List is not read
    Gbl.Prg.Num = 0;
    Gbl.Prg.LstItmCods = NULL;
-   Gbl.Prg.SelectedOrder = Prg_ORDER_DEFAULT;
 
    Gbl.Asgs.LstIsRead = false;	// List is not read
    Gbl.Asgs.Num = 0;

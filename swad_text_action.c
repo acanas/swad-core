@@ -4787,7 +4787,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActFrmNewPrgIte] =
+	[ActFrmNewPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4808,7 +4808,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActEdiOnePrgIte] =
+	[ActEdiOnePrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4829,7 +4829,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActNewPrgIte] =
+	[ActNewPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4850,7 +4850,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActChgPrgIte] =
+	[ActChgPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4871,7 +4871,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqRemPrgIte] =
+	[ActReqRemPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4892,7 +4892,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRemPrgIte] =
+	[ActRemPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4913,7 +4913,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActHidPrgIte] =
+	[ActHidPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4934,7 +4934,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActShoPrgIte] =
+	[ActShoPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4955,7 +4955,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActUp_PrgIte] =
+	[ActUp_PrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -4976,7 +4976,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActDwnPrgIte] =
+	[ActDwnPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

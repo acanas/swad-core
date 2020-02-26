@@ -143,9 +143,10 @@ void Dat_ShowClientLocalTime (void);
 struct tm *Dat_GetLocalTimeFromClock (const time_t *timep);
 void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1]);
 
-void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959);
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME]);
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
-                                              Dat_FormSeconds FormSeconds);
+                                              Dat_FormSeconds FormSeconds,
+					      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME]);
 
 void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   const char *ParamName,

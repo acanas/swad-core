@@ -6311,6 +6311,11 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    extern const char *Txt_Select_users;
    extern const char *Txt_Users;
    unsigned NumTotalUsrs;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
@@ -6385,7 +6390,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 
          /* Starting and ending dates in the search */
          if (PutFormDateRange)
-            Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+            Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
          HTM_TABLE_End ();
 

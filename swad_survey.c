@@ -1796,6 +1796,11 @@ void Svy_RequestCreatOrEditSvy (void)
    struct Survey Svy;
    bool ItsANewSurvey;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_TO_000000,
+      Dat_HMS_TO_235959
+     };
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
@@ -1889,7 +1894,9 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_End ();
 
    /***** Survey start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,Dat_FORM_SECONDS_ON);
+   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,
+					    Dat_FORM_SECONDS_ON,
+					    SetHMS);
 
    /***** Survey text *****/
    HTM_TR_Begin (NULL);

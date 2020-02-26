@@ -422,7 +422,7 @@ void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 
 /*************** Show forms to enter initial and ending dates ****************/
 /*****************************************************************************/
 
-void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959)
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME])
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Yesterday;
@@ -432,7 +432,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_START_TIME]);
+   Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_START_TIME]);
 
    /* Data (date-time) */
    HTM_TD_Begin ("class=\"LM\"");
@@ -442,9 +442,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
-				                SetHMS000000To235959 ? Dat_HMS_TO_000000 :	// Set hour, minute and second to 00:00:00
-				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second to 00:00:00
-				                false);						// Don't submit on change
+				                SetHMS[Dat_START_TIME],
+				                false);	// Don't submit on change
 
    /* "Yesterday" and "Today" buttons */
    HTM_NBSP ();
@@ -460,7 +459,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[Dat_END_TIME]);
+   Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_END_TIME]);
 
    /* Data (date-time) */
    HTM_TD_Begin ("class=\"LM\"");
@@ -470,9 +469,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
-				                SetHMS000000To235959 ? Dat_HMS_TO_235959 :	// Set hour, minute and second to 23:59:59
-				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
-				                false);						// Don't submit on change
+				                SetHMS[Dat_END_TIME],
+				                false);	// Don't submit on change
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -483,7 +481,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 /*****************************************************************************/
 
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
-                                              Dat_FormSeconds FormSeconds)
+                                              Dat_FormSeconds FormSeconds,
+					      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME])
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    Dat_StartEndTime_t StartEndTime;
@@ -501,7 +500,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
       HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RM",NULL,Txt_START_END_TIME[StartEndTime]);
+      Frm_LabelColumn ("RM","",Txt_START_END_TIME[StartEndTime]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LM\"");
@@ -511,8 +510,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	                                           Cfg_LOG_START_YEAR,
 	                                           Gbl.Now.Date.Year + 1,
 				                   FormSeconds,
-				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
-				                   false);		// Don't submit on change
+				                   SetHMS[StartEndTime],	// Set hour, minute and second?
+				                   false);			// Don't submit on change
       HTM_TD_End ();
 
       HTM_TR_End ();

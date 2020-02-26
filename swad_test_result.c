@@ -117,6 +117,11 @@ void TsR_SelDatesToSeeMyTstResults (void)
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_test_results;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
 
    /***** Begin form *****/
    Frm_StartForm (ActSeeMyTstRes);
@@ -124,7 +129,7 @@ void TsR_SelDatesToSeeMyTstResults (void)
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
    /***** End table, send button and end box *****/
    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_test_results);
