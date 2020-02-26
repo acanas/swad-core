@@ -601,7 +601,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 else
 	   {
 	    Frm_StartForm (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
-		                                                      ActDelItmSylPra);
+		                                               ActDelItmSylPra);
 	    Syl_PutParamNumItem ();
             Ico_PutIconRemove ();
             Frm_EndForm ();
@@ -614,7 +614,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 if (Subtree.MovAllowed)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-										      ActUp_IteSylPra,
+									       ActUp_IteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
@@ -632,7 +632,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 if (Subtree.MovAllowed)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-										      ActDwnIteSylPra,
+									       ActDwnIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
@@ -823,18 +823,16 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    HTM_TD_Begin ("colspan=\"%d\" class=\"LM COLOR%u\"",
 		 Syl_LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
    Frm_StartForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
-	                                                                ActInsIteSylPra) :
+	                                                         ActInsIteSylPra) :
                             (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
-                        	                                        ActModIteSylPra));
+                        	                                 ActModIteSylPra));
    Gbl.Syllabus.ParamNumItem = NumItem;
    Syl_PutParamNumItem ();
-   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,false,
-		   "size=\"60\" placeholder=\"%s\"",
-	           Txt_Enter_a_new_item_here);
-   if (NewItem)
-      HTM_Txt (" autofocus=\"autofocus\"");
-   HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\" />",
-	     Gbl.Form.Id);
+   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,true,
+		   "size=\"60\" placeholder=\"%s\"%s",
+	           Txt_Enter_a_new_item_here,
+                   NewItem ? " autofocus=\"autofocus\"" :
+                	     "");
    Frm_EndForm ();
    HTM_TD_End ();
   }
