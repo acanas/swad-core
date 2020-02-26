@@ -17229,7 +17229,7 @@ const char *Txt_It_is_optional_to_choose_a_group =
 #elif L==9	// pt
 	"Escolher um grupo &eacute; volunt&aacute;rio";
 #endif
-
+/*
 const char *Txt_Item =
 #if   L==1	// ca
 	"&Iacute;tem";
@@ -17250,7 +17250,7 @@ const char *Txt_Item =
 #elif L==9	// pt
 	"Item";
 #endif
-
+*/
 const char *Txt_Item_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"&Iacute;tem <strong>%s</strong> eliminat.";

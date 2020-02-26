@@ -73,7 +73,6 @@ unsigned Prg_CurrentItmInd;	// Used as parameter in contextual links
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (void);
-static void Prg_PutHeadForSeeing (void);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
@@ -176,7 +175,6 @@ static void Prg_ShowAllItems (void)
      {
       /***** Table head *****/
       HTM_TABLE_BeginWideMarginPadding (2);
-      Prg_PutHeadForSeeing ();
 
       /***** Write all the program items *****/
       for (NumItem  = Pagination.FirstItemVisible;
@@ -206,25 +204,6 @@ static void Prg_ShowAllItems (void)
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/***************** Write header with fields of a program item ****************/
-/*****************************************************************************/
-
-static void Prg_PutHeadForSeeing (void)
-  {
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Item;
-
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-   HTM_TH (1,1,"LM",Txt_Item);
-   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/

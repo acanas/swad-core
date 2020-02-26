@@ -314,12 +314,12 @@ a:hover						/* Default ==> underlined */
 	background-color:rgba(255, 255, 255, 0.8);
 	width:80px;
 	margin-left:6px;
-	border-radius:4px;
+	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	}
 #current_month
 	{
-	border-radius:4px 4px 0 0;
+	border-radius:2px 2px 0 0;
 	background-color:rgba(222, 33, 33, 0.8);
 	color:white;
 	font-size:10pt;
@@ -345,7 +345,7 @@ a:hover						/* Default ==> underlined */
 	}
 #current_time
 	{
-	border-radius:0 0 4px 4px;
+	border-radius:0 0 2px 2px;
 	color:#606060;
 	font-size:12pt;
 	font-weight:bold;
@@ -619,7 +619,7 @@ a:hover						/* Default ==> underlined */
 		height:58px;
 		margin:0;
 		padding:0;
-		border-radius:4px 4px 0 0;
+		border-radius:2px 2px 0 0;
 		box-shadow:inset 0 -1px 1px 0 rgba(50,50,50,0.2);
 		text-align:center;
 		vertical-align:top;
@@ -668,7 +668,7 @@ a:hover						/* Default ==> underlined */
 		height:58px;
 		margin:0;
 		padding:0;
-		border-radius:4px 4px 0 0;
+		border-radius:2px 2px 0 0;
 		box-shadow:inset 0 -1px 1px 0 rgba(50,50,50,0.2);
 		text-align:center;
 		vertical-align:top;
@@ -717,7 +717,7 @@ a:hover						/* Default ==> underlined */
 		height:58px;
 		margin:0;
 		padding:0;
-		border-radius:4px 4px 0 0;
+		border-radius:2px 2px 0 0;
 		box-shadow:inset 0 -1px 1px 0 rgba(50,50,50,0.2);
 		text-align:center;
 		vertical-align:top;
@@ -871,7 +871,7 @@ a:hover						/* Default ==> underlined */
 		box-sizing:border-box;
 		margin:-6px 0 0 0;
 		padding:4px 0;
-		border-radius:4px;
+		border-radius:2px;
 		box-shadow:inset 0 -1px 1px 0 rgba(50,50,50,0.2);
 		text-align:center;
 		vertical-align:top;
@@ -886,7 +886,7 @@ a:hover						/* Default ==> underlined */
 		min-height:900px;
 		margin:-6px 0 0 0;
 		padding:4px 0;
-		border-radius:4px;
+		border-radius:2px;
 		box-shadow:inset 0 -1px 1px 0 rgba(50,50,50,0.2);
 		text-align:center;
 		vertical-align:top;
@@ -1143,7 +1143,7 @@ a:hover						/* Default ==> underlined */
 	border-color:#80C040;
 	margin:6px 0;
 	padding:5px;
-	border-radius:4px;
+	border-radius:2px;
 	font-size:12pt;
 	color:#398000;
 	white-space:nowrap;
@@ -1243,7 +1243,7 @@ a:hover						/* Default ==> underlined */
 	border-width:1px;
 	border-color:#8CBCCE;
 	padding:5px;
-	border-radius:4px;
+	border-radius:2px;
 	font-size:11pt;
 	color:#4D88A1;
 	}
@@ -1417,7 +1417,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border-style:solid;
 	border-width:1px;
 	border-color:#8CBCCE;
-	border-radius:4px;
+	border-radius:2px;
 	text-align:center;
 	overflow:hidden;
 	}
@@ -1533,7 +1533,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	margin:8px auto;
 	padding:10px 20px;
-	border-radius:4px;
+	border-radius:2px;
 	border-width:1px;
 	border-style:solid;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
@@ -1549,7 +1549,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	min-width:170px;
 	margin:0 10px;
 	padding:2px 4px;
-	border-radius:4px;
+	border-radius:2px;
 	border-width:1px;
 	border-style:solid;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
@@ -1723,7 +1723,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border-width:1px;
 	border-color:#8CBCCE;
 	padding:5px;
-	border-radius:4px;
+	border-radius:2px;
 	font-size:11pt;
 	color:#4D88A1;
 	}
@@ -1875,7 +1875,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
-	border-radius:4px;
+	border-radius:2px;
 	box-shadow:2px 5px 15px #888;
 	text-align:center;
 	overflow:hidden;
@@ -2061,15 +2061,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /******************************* User's photo ********************************/
 .PHOTO12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
-.PHOTO15x20	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
-.PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTO15x20	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle;}
+.PHOTO15x20B	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle; display:block; margin:0 auto;}
 .PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
 .PHOTO21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
 .PHOTO30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
 .PHOTO42x56	{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
 .PHOTO45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
 .PHOTO60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
-.PHOTO186x248	{width:186px; height:248px; border-radius:8px; vertical-align:middle;}
+.PHOTO186x248	{width:186px; height:248px; border-radius:4px; vertical-align:middle;}
 .IMG_USR
 	{
 	box-sizing:border-box;
@@ -2089,7 +2089,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
-	border-radius:6px;
+	border-radius:4px;
 	box-shadow:2px 5px 15px #888;
 	}
 .ZOOM_TXT_LINE
@@ -2612,7 +2612,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	box-sizing:border-box;
 	width:100%;
-	border-radius:4px;
+	border-radius:2px;
 	}
 .TEST_MED_EDIT_LIST_CONT
 	{
@@ -2650,7 +2650,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	box-sizing:border-box;
 	width:100%;
-	border-radius:4px;
+	border-radius:2px;
 	}
 
 .TEST_EDI_ANS_LEFT_COL
@@ -2918,7 +2918,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:64px;
 	margin:8px;
 	padding:8px;
-	border-radius:4px;
+	border-radius:2px;
 	border-width:1px;
 	border-style:solid;
 	color:rgba(255,255,255,0.75);
@@ -2939,7 +2939,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:100%;
 	margin:10px auto;
 	padding:20px;
-	border-radius:4px;
+	border-radius:2px;
 	border-width:1px;
 	border-style:solid;
 	color:rgba(255,255,255,0.75);
@@ -3432,7 +3432,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .TL_PST_MED
 	{
 	box-sizing:border-box;
-	border-radius:4px;
+	border-radius:2px;
 	}
 .TL_COM_CONT
 	{
@@ -3458,7 +3458,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .TL_COM_MED
 	{
 	box-sizing:border-box;
-	border-radius:4px;
+	border-radius:2px;
 	}
 .TL_FORM_NEW_COM
 	{
@@ -3615,7 +3615,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	box-sizing:border-box;
 	width:100%;
-	border-radius:4px;
+	border-radius:2px;
 	}
 .FOR_MED_INPUT
 	{
@@ -3642,7 +3642,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	box-sizing:border-box;
 	width:100%;
-	border-radius:4px;
+	border-radius:2px;
 	}
 .MSG_MED_INPUT
 	{
@@ -3731,7 +3731,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	padding:2px 8px;
 	border-style:solid;
 	border-width:1px;
-	border-radius:4px;
+	border-radius:2px;
 	border-color:#C0DAE4;
 	}
 a.PAG:hover, .PAG_CUR
@@ -3742,7 +3742,7 @@ a.PAG:hover, .PAG_CUR
 	padding:2px 8px;
 	border-style:solid;
 	border-width:1px;
-	border-radius:4px;
+	border-radius:2px;
 	border-color:#C0DAE4;
 	background-color:#DDECF1;
 	text-decoration:none;
