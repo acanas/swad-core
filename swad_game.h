@@ -121,7 +121,6 @@ void Gam_ListTstQuestionsToSelect (void);
 
 void Gam_PutParamQstInd (unsigned QstInd);
 unsigned Gam_GetParamQstInd (void);
-unsigned Gam_GetQstIndFromStr (const char *UnsignedStr);
 long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);

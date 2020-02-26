@@ -115,7 +115,10 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
 void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLength);
 void Str_ReplaceSeveralSpacesForOne (char *Str);
 void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithoutSpaces,unsigned MaxLength);
+
 long Str_ConvertStrCodToLongCod (const char *Str);
+unsigned Str_ConvertStrToUnsigned (const char *UnsignedStr);
+
 size_t Str_GetLengthRootFileName (const char *FileName);
 void Str_SplitFullPathIntoPathAndFileName (const char FullPath[PATH_MAX + 1],
                                            char PathWithoutFileName[PATH_MAX + 1],

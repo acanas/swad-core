@@ -5093,7 +5093,7 @@ int swad__getMatches (struct soap *soap,
                    Length);
 
 	 /* Get current question index (row[5]) */
-         getMatchesOut->matchesArray.__ptr[NumMatch].questionIndex = (int) Gam_GetQstIndFromStr (row[5]);
+         getMatchesOut->matchesArray.__ptr[NumMatch].questionIndex = (int) Str_ConvertStrToUnsigned (row[5]);
 
 	 /* Get list of groups for this match */
 	 API_GetListGrpsInGameFromDB (soap,

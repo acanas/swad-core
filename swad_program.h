@@ -43,6 +43,7 @@ struct ProgramItem
   {
    long ItmCod;
    unsigned ItmInd;
+   unsigned Level;
    bool Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -68,12 +69,17 @@ void Prg_GetDataOfItemByCod (struct ProgramItem *PrgItem);
 void Prg_FreeListItems (void);
 
 long Prg_GetParamItemCode (void);
+
 void Prg_ReqRemPrgItem (void);
 void Prg_RemovePrgItem (void);
 void Prg_HidePrgItem (void);
 void Prg_ShowPrgItem (void);
+
 void Prg_MoveUpPrgItem (void);
 void Prg_MoveDownPrgItem (void);
+void Prg_MoveRightPrgItem (void);
+void Prg_MoveLeftPrgItem (void);
+
 void Prg_RecFormPrgItem (void);
 bool Prg_CheckIfItemIsAssociatedToGrp (long PrgItmCod,long GrpCod);
 void Prg_RemoveGroup (long GrpCod);

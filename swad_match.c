@@ -909,7 +909,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    row[12]	ShowUsrResults
    */
    /* Current question index (row[6]) */
-   Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
+   Match->Status.QstInd = Str_ConvertStrToUnsigned (row[6]);
 
    /* Current question code (row[7]) */
    Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);

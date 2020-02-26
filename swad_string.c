@@ -2417,6 +2417,19 @@ long Str_ConvertStrCodToLongCod (const char *Str)
   }
 
 /*****************************************************************************/
+/******************* Get parameter with index of question ********************/
+/*****************************************************************************/
+
+unsigned Str_ConvertStrToUnsigned (const char *UnsignedStr)
+  {
+   long LongNum = Str_ConvertStrCodToLongCod (UnsignedStr);
+
+   return (LongNum >= 0 &&
+	   LongNum <= UINT_MAX) ? (unsigned) LongNum :
+	                          0;
+  }
+
+/*****************************************************************************/
 /**** Compute length of root (all except extension) of the name of a file ****/
 /*****************************************************************************/
 

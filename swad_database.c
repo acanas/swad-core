@@ -2212,6 +2212,7 @@ mysql> DESCRIBE prg_items;
 +-----------+---------------+------+-----+---------+----------------+
 | ItmCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
 | ItmInd    | int(11)       | NO   |     | 0       |                |
+| Level     | int(11)       | NO   |     | 1       |                |
 | CrsCod    | int(11)       | NO   | MUL | -1      |                |
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
 | UsrCod    | int(11)       | NO   |     | NULL    |                |
@@ -2220,11 +2221,12 @@ mysql> DESCRIBE prg_items;
 | Title     | varchar(2047) | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-9 rows in set (0.01 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_items ("
 			"ItmCod INT NOT NULL AUTO_INCREMENT,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
+			"Level INT NOT NULL DEFAULT 1,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"

@@ -78,12 +78,10 @@ static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ParamsWhichGroupsToShow (void);
-static void Prg_ShowOneItem (long ItmCod,
-			     unsigned ItmInd,unsigned MaxItmInd,
-			     bool PrintView);
+static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned ItmInd,unsigned MaxItmInd,
+					     unsigned MaxItmInd,
                                              const char *Anchor);
 
 static void Prg_SetCurrentItmCod (long ItmCod);
@@ -97,7 +95,6 @@ static unsigned Prg_GetParamItmInd (void);
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned long NumRows);
-static unsigned Prg_GetItmIndFromStr (const char *UnsignedStr);
 static void Prg_ResetItem (struct ProgramItem *Item);
 static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prg_PutParamItmCod (long ItmCod);
@@ -180,7 +177,7 @@ static void Prg_ShowAllItems (void)
 	   NumItem <= Pagination.LastItemVisible;
 	   NumItem++)
 	 Prg_ShowOneItem (Gbl.Prg.LstItmCods[NumItem - 1],
-			  NumItem,Gbl.Prg.Num,
+			  Gbl.Prg.Num,
 	                  false);	// Not print view
 
       /***** End table *****/
@@ -274,9 +271,7 @@ static void Prg_ParamsWhichGroupsToShow (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowOneItem (long ItmCod,
-			     unsigned ItmInd,unsigned MaxItmInd,
-			     bool PrintView)
+static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -299,9 +294,7 @@ static void Prg_ShowOneItem (long ItmCod,
    if (!PrintView)
      {
       HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (&Item,
-				       ItmInd,MaxItmInd,
-				       Anchor);
+      Prg_PutFormsToRemEditOnePrgItem (&Item,MaxItmInd,Anchor);
       HTM_TD_End ();
      }
 
@@ -386,12 +379,15 @@ static void Prg_ShowOneItem (long ItmCod,
 /*****************************************************************************/
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned ItmInd,unsigned MaxItmInd,
+					     unsigned MaxItmInd,
                                              const char *Anchor)
   {
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
+   extern const char *Txt_Increase_level_of_X;
+   extern const char *Txt_Decrease_level_of_X;
    extern const char *Txt_Movement_not_allowed;
+   static unsigned LastLevel = 0;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    Prg_SetCurrentItmCod (Item->ItmCod);	// Used as parameter in contextual links
@@ -400,7 +396,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),
 	     "%u",
-	     ItmInd);
+	     Item->ItmInd);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -418,8 +414,10 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 /***** Put form to edit program item *****/
 	 Ico_PutContextualIconToEdit (ActEdiOnePrgItm,Prg_PutParams);
 
+	 HTM_BR ();
+
 	 /***** Put icon to move up the item *****/
-	 if (ItmInd > 1)
+	 if (Item->ItmInd > 1)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,NULL,Prg_PutParams,
 					   "arrow-up.svg",
@@ -431,7 +429,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
-	 if (ItmInd < MaxItmInd)
+	 if (Item->ItmInd < MaxItmInd)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,NULL,Prg_PutParams,
 					   "arrow-down.svg",
@@ -441,6 +439,34 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+
+	 HTM_BR ();
+
+	 /***** Icon to increase the level of an item *****/
+	 if (Item->Level > 1)
+	   {
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
+					   "arrow-left.svg",
+					   Str_BuildStringStr (Txt_Increase_level_of_X,
+							       StrItemIndex));
+	    Str_FreeString ();
+	   }
+	 else
+            Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
+
+	 /***** Icon to decrease level item *****/
+	 if (Item->Level < LastLevel + 1)
+	   {
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
+					   "arrow-right.svg",
+					   Str_BuildStringStr (Txt_Decrease_level_of_X,
+							       StrItemIndex));
+	    Str_FreeString ();
+	   }
+	 else
+            Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
+
+	 LastLevel = Item->Level;
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -610,12 +636,13 @@ void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program item data",
 				"SELECT ItmCod,"				// row[0]
 				       "ItmInd,"				// row[1]
-				       "Hidden,"				// row[2]
-				       "UsrCod,"				// row[3]
-				       "UNIX_TIMESTAMP(StartTime),"		// row[4]
-				       "UNIX_TIMESTAMP(EndTime),"		// row[5]
-				       "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-				       "Title"					// row[7]
+				       "Level,"					// row[2]
+				       "Hidden,"				// row[3]
+				       "UsrCod,"				// row[4]
+				       "UNIX_TIMESTAMP(StartTime),"		// row[5]
+				       "UNIX_TIMESTAMP(EndTime),"		// row[6]
+				       "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
+				       "Title"					// row[8]
 				" FROM prg_items"
 				" WHERE ItmCod=%ld AND CrsCod=%ld",
 				Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
@@ -649,37 +676,41 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       /*
       ItmCod					row[0]
       ItmInd					row[1]
-      Hidden					row[2]
-      UsrCod					row[3]
-      UNIX_TIMESTAMP(StartTime)			row[4]
-      UNIX_TIMESTAMP(EndTime)			row[5]
-      NOW() BETWEEN StartTime AND EndTime	row[6]
-      Title					row[7]
+      Level					row[2]
+      Hidden					row[3]
+      UsrCod					row[4]
+      UNIX_TIMESTAMP(StartTime)			row[5]
+      UNIX_TIMESTAMP(EndTime)			row[6]
+      NOW() BETWEEN StartTime AND EndTime	row[7]
+      Title					row[8]
       */
 
       /* Get code of the program item (row[0]) */
       Item->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get index of the program item (row[1]) */
-      Item->ItmInd = Prg_GetItmIndFromStr (row[1]);
+      Item->ItmInd = Str_ConvertStrToUnsigned (row[1]);
 
-      /* Get whether the program item is hidden or not (row[2]) */
-      Item->Hidden = (row[2][0] == 'Y');
+      /* Get level of the program item (row[2]) */
+      Item->Level = Str_ConvertStrToUnsigned (row[2]);
 
-      /* Get author of the program item (row[3]) */
-      Item->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+      /* Get whether the program item is hidden or not (row[3]) */
+      Item->Hidden = (row[3][0] == 'Y');
 
-      /* Get start date (row[4] holds the start UTC time) */
-      Item->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get author of the program item (row[4]) */
+      Item->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
-      /* Get end date   (row[5] holds the end   UTC time) */
-      Item->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+      /* Get start date (row[5] holds the start UTC time) */
+      Item->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
 
-      /* Get whether the program item is open or closed (row(6)) */
-      Item->Open = (row[6][0] == '1');
+      /* Get end date   (row[6] holds the end   UTC time) */
+      Item->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[6]);
 
-      /* Get the title of the program item (row[7]) */
-      Str_Copy (Item->Title,row[7],
+      /* Get whether the program item is open or closed (row(7)) */
+      Item->Open = (row[7][0] == '1');
+
+      /* Get the title of the program item (row[8]) */
+      Str_Copy (Item->Title,row[8],
                 Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
       /* Can I do this program item? */
@@ -691,19 +722,6 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
   }
 
 /*****************************************************************************/
-/******************* Get parameter with index of question ********************/
-/*****************************************************************************/
-
-static unsigned Prg_GetItmIndFromStr (const char *UnsignedStr)
-  {
-   long QstInd;
-
-   QstInd = Str_ConvertStrCodToLongCod (UnsignedStr);
-   return (QstInd > 0) ? (unsigned) QstInd :
-	                 0;
-  }
-
-/*****************************************************************************/
 /************************ Clear all program item data ************************/
 /*****************************************************************************/
 
@@ -711,6 +729,7 @@ static void Prg_ResetItem (struct ProgramItem *Item)
   {
    Item->ItmCod = -1L;
    Item->ItmInd = 0;
+   Item->Level  = 1;
    Item->Hidden = false;
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_START_TIME] =
@@ -999,6 +1018,49 @@ void Prg_MoveDownPrgItem (void)
    Prg_SeeCourseProgram ();
   }
 
+/*****************************************************************************/
+/**** Move right (increase level) position of an item in a course program ****/
+/*****************************************************************************/
+
+void Prg_MoveRightPrgItem (void)
+  {
+   struct ProgramItem Item;
+
+   /***** Get program item code *****/
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of program item is missing.");
+
+   /***** Get data of the program item from database *****/
+   Prg_GetDataOfItemByCod (&Item);
+
+   /***** Move right item (increase level) *****/
+   // TODO: Implement
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
+
+/*****************************************************************************/
+/**** Move left (decrease level) position of an item in a course program *****/
+/*****************************************************************************/
+
+void Prg_MoveLeftPrgItem (void)
+  {
+   struct ProgramItem Item;
+
+   /***** Get program item code *****/
+   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of program item is missing.");
+
+   /***** Get data of the program item from database *****/
+   Prg_GetDataOfItemByCod (&Item);
+
+   /***** Move left item (decrease level) *****/
+   // TODO: Implement
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
 
 /*****************************************************************************/
 /**************** Get maximum item index in a course program *****************/

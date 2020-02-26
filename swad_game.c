@@ -1630,19 +1630,6 @@ unsigned Gam_GetParamQstInd (void)
   }
 
 /*****************************************************************************/
-/******************* Get parameter with index of question ********************/
-/*****************************************************************************/
-
-unsigned Gam_GetQstIndFromStr (const char *UnsignedStr)
-  {
-   long QstInd;
-
-   QstInd = Str_ConvertStrCodToLongCod (UnsignedStr);
-   return (QstInd > 0) ? (unsigned) QstInd :
-	                 0;
-  }
-
-/*****************************************************************************/
 /********************** Remove answers of a game question ********************/
 /*****************************************************************************/
 
@@ -1893,7 +1880,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       Tst_QstConstructor ();
 
       /* Get question index (row[0]) */
-      QstInd = Gam_GetQstIndFromStr (row[0]);
+      QstInd = Str_ConvertStrToUnsigned (row[0]);
       snprintf (StrQstInd,sizeof (StrQstInd),
 	        "%u",
 		QstInd);

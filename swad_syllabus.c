@@ -369,7 +369,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
    /***** Return to the start of the list *****/
    fseek (Gbl.F.XML,PostBeginList,SEEK_SET);
 
-   for (N = 1;
+   for (N  = 1;
 	N <= Syl_MAX_LEVELS_SYLLABUS;
 	N++)
       CodItem[N] = 0;
