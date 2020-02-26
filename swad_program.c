@@ -81,7 +81,6 @@ static void Prg_ParamsWhichGroupsToShow (void);
 static void Prg_ShowOneItem (long ItmCod,
 			     unsigned ItmInd,unsigned MaxItmInd,
 			     bool PrintView);
-static void Prg_WritePrgItemAuthor (struct ProgramItem *Item);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 					     unsigned ItmInd,unsigned MaxItmInd,
@@ -297,16 +296,14 @@ static void Prg_ShowOneItem (long ItmCod,
    HTM_TR_Begin (NULL);
 
    /* Forms to remove/edit this program item */
-   if (PrintView)
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-   else
+   if (!PrintView)
      {
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Prg_PutFormsToRemEditOnePrgItem (&Item,
 				       ItmInd,MaxItmInd,
 				       Anchor);
+      HTM_TD_End ();
      }
-   HTM_TD_End ();
 
    /* Program item title */
    if (PrintView)
@@ -333,14 +330,14 @@ static void Prg_ShowOneItem (long ItmCod,
       if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       if (PrintView)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+	 HTM_TD_Begin ("rowspan=\"2\" id=\"%s\" class=\"%s LT\"",
 		       Id,
 		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
 					          "DATE_RED_LIGHT") :
 				     (Item.Open ? "DATE_GREEN" :
 					          "DATE_RED"));
       else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+	 HTM_TD_Begin ("rowspan=\"2\" id=\"%s\" class=\"%s LT COLOR%u\"",
 		       Id,
 		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
 					          "DATE_RED_LIGHT") :
@@ -371,17 +368,9 @@ static void Prg_ShowOneItem (long ItmCod,
    if (Gbl.Crs.Grps.NumGrps)
       Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
    HTM_DIV_Begin ("class=\"PAR %s\"",Item.Hidden ? "DAT_LIGHT" :
-        	                                      "DAT");
+        	                                   "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
-   HTM_TD_End ();
-
-   /* Author of the program item */
-   if (PrintView)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Prg_WritePrgItemAuthor (&Item);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -390,15 +379,6 @@ static void Prg_ShowOneItem (long ItmCod,
    Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/********************* Write the author of a program item ********************/
-/*****************************************************************************/
-
-static void Prg_WritePrgItemAuthor (struct ProgramItem *Item)
-  {
-   Usr_WriteAuthor1Line (Item->UsrCod,Item->Hidden);
   }
 
 /*****************************************************************************/
@@ -435,6 +415,9 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
 
+	 /***** Put form to edit program item *****/
+	 Ico_PutContextualIconToEdit (ActEdiOnePrgItm,Prg_PutParams);
+
 	 /***** Put icon to move up the item *****/
 	 if (ItmInd > 1)
 	   {
@@ -458,9 +441,6 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-
-	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActEdiOnePrgItm,Prg_PutParams);
 	 break;
       case Rol_STD:
       case Rol_NET:
