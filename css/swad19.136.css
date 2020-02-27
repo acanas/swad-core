@@ -1584,6 +1584,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-decoration:underline;
 	}
 
+/****************************** Course program *******************************/
+.PRG_COL1
+	{
+	box-sizing:border-box;
+	width:64px;
+	}
+
 /********************************** Notice ***********************************/
 .NOTICE_HIGHLIGHT
 	{

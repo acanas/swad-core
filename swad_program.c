@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 long Prg_CurrentItmCod;		// Used as parameter in contextual links
-unsigned Prg_CurrentItmInd;	// Used as parameter in contextual links
+unsigned Prg_CurrentIndex;	// Used as parameter in contextual links
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -78,18 +78,19 @@ static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ParamsWhichGroupsToShow (void);
-static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView);
+static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView);
+static void Prg_WriteNumItem (unsigned Level);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned MaxItmInd,
+					     unsigned MaxIndex,
                                              const char *Anchor);
 
 static void Prg_SetCurrentItmCod (long ItmCod);
 static long Prg_GetCurrentItmCod (void);
-static void Prg_SetCurrentItmInd (unsigned ItmInd);
+static void Prg_SetCurrentIndex (unsigned Index);
 static unsigned Prg_GetCurrentItmInd (void);
 static void Prg_PutParams (void);
-static void Prg_PutParamItmInd (unsigned ItmInd);
+static void Prg_PutParamItmInd (unsigned Index);
 static unsigned Prg_GetParamItmInd (void);
 
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
@@ -99,11 +100,14 @@ static void Prg_ResetItem (struct ProgramItem *Item);
 static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prg_PutParamItmCod (long ItmCod);
 
+static unsigned Prg_GetMaxItemLevel (void);
 static unsigned Prg_GetMaxItemIndex (void);
-static unsigned Prg_GetPrevItemIndex (unsigned ItmInd);
-static unsigned Prg_GetNextItemIndex (unsigned ItmInd);
-static void Prg_ExchangeItems (unsigned ItmIndTop,unsigned ItmIndBottom);
-static long Prg_GetItmCodFromItmInd (unsigned ItmInd);
+static unsigned Prg_GetPrevItemIndex (unsigned Index);
+static unsigned Prg_GetNextItemIndex (unsigned Index);
+static unsigned Prg_GetItemLevelFromIndex (unsigned Index);
+static unsigned Prg_GetNextIndexNotChild (const struct ProgramItem *Item);
+static void Prg_ExchangeItems (unsigned TopIndex,unsigned BottomIndex);
+static void Prg_MoveItemAndChildrenToRight (unsigned Index,unsigned NextIndex);
 
 static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
 static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
@@ -143,6 +147,10 @@ static void Prg_ShowAllItems (void)
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
+   if (Gbl.Prg.Num)
+      Gbl.Prg.MaxLevel = Prg_GetMaxItemLevel ();
+   else
+      Gbl.Prg.MaxLevel = 0;
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Prg.Num;
@@ -237,7 +245,7 @@ static void Prg_PutIconToCreateNewItem (void)
 
    /***** Put form to create a new program item *****/
    Prg_SetCurrentItmCod (-1L);
-   Prg_SetCurrentItmInd (0);
+   Prg_SetCurrentIndex (0);
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,NULL,Prg_PutParams,
 			       Txt_New_item);
   }
@@ -251,7 +259,7 @@ static void Prg_PutButtonToCreateNewItem (void)
    extern const char *Txt_New_item;
 
    Prg_SetCurrentItmCod (-1L);
-   Prg_SetCurrentItmInd (0);
+   Prg_SetCurrentIndex (0);
    Frm_StartForm (ActFrmNewPrgItm);
    Prg_PutParams ();
    Btn_PutConfirmButton (Txt_New_item);
@@ -271,12 +279,15 @@ static void Prg_ParamsWhichGroupsToShow (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
+#define Prg_WIDTH_NUM_ITEM 20
+
+static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
    struct ProgramItem Item;
+   unsigned ColSpan;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -287,33 +298,72 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Item.ItmCod,&Anchor);
 
-   /***** Write first row of data of this program item *****/
+   /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /* Forms to remove/edit this program item */
+   /***** Forms to remove/edit this program item *****/
    if (!PrintView)
      {
-      HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (&Item,MaxItmInd,Anchor);
+      HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
+      Prg_PutFormsToRemEditOnePrgItem (&Item,MaxIndex,Anchor);
       HTM_TD_End ();
      }
 
-   /* Program item title */
+   /***** Indent depending on the level *****/
+   if (Item.Level > 1)
+     {
+      HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
+		    Item.Level - 1,Gbl.RowEvenOdd);
+      HTM_TD_End ();
+     }
+
+   /***** Item number *****/
+   HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
+		 Item.Hidden ? "ASG_TITLE_LIGHT" :
+			       "ASG_TITLE",
+		 Gbl.RowEvenOdd,
+		 Item.Level * Prg_WIDTH_NUM_ITEM);
+   Prg_WriteNumItem (Item.Level);
+   HTM_TD_End ();
+
+   /***** Title, groups and text *****/
+   /* Begin title, groups and text */
+   ColSpan = Gbl.Prg.MaxLevel - Item.Level + 1;
    if (PrintView)
-      HTM_TD_Begin ("class=\"%s LT\"",
-		    Item.Hidden ? "ASG_TITLE_LIGHT" :
-				  "ASG_TITLE");
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+		    ColSpan);
    else
-      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		    Item.Hidden ? "ASG_TITLE_LIGHT" :
-				  "ASG_TITLE",
-		    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
+		    ColSpan,Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
+
+   /* Title */
+   HTM_DIV_Begin ("class=\"%s\"",
+		  Item.Hidden ? "ASG_TITLE_LIGHT" :
+				"ASG_TITLE");
    HTM_Txt (Item.Title);
+   HTM_DIV_End ();
+
+   /* Groups */
+   if (Gbl.Crs.Grps.NumGrps)
+      Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
+
+   /* Text */
+   Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+
+   HTM_DIV_Begin ("class=\"PAR %s\"",Item.Hidden ? "DAT_LIGHT" :
+        	                                   "DAT");
+   HTM_Txt (Txt);
+   HTM_DIV_End ();
+
+   /* End title, groups and text */
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
-   /* Start/end date/time */
+   /***** Start/end date/time *****/
    UniqueId++;
 
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
@@ -323,14 +373,14 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
       if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       if (PrintView)
-	 HTM_TD_Begin ("rowspan=\"2\" id=\"%s\" class=\"%s LT\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		       Id,
 		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
 					          "DATE_RED_LIGHT") :
 				     (Item.Open ? "DATE_GREEN" :
 					          "DATE_RED"));
       else
-	 HTM_TD_Begin ("rowspan=\"2\" id=\"%s\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		       Id,
 		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
 					          "DATE_RED_LIGHT") :
@@ -346,28 +396,6 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
 
    HTM_TR_End ();
 
-   /***** Write second row of data of this program item *****/
-   HTM_TR_Begin (NULL);
-
-   /* Text of the program item */
-   Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   if (PrintView)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Gbl.Crs.Grps.NumGrps)
-      Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
-   HTM_DIV_Begin ("class=\"PAR %s\"",Item.Hidden ? "DAT_LIGHT" :
-        	                                   "DAT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
@@ -375,11 +403,33 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxItmInd,bool PrintView)
   }
 
 /*****************************************************************************/
+/******************** Write number of item in legal style ********************/
+/*****************************************************************************/
+
+static void Prg_WriteNumItem (unsigned Level)
+  {
+   static unsigned CodItem[100] = {0};	// TODO: Limit level?
+   unsigned N;
+
+   CodItem[Level]++;
+
+   for (N  = 1;
+	N <= Level;
+	N++)
+     {
+      if (N > 1)
+	 HTM_Txt (".");
+
+      HTM_Unsigned (CodItem[N]);
+     }
+  }
+
+/*****************************************************************************/
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned MaxItmInd,
+					     unsigned MaxIndex,
                                              const char *Anchor)
   {
    extern const char *Txt_Move_up_X;
@@ -391,12 +441,12 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    Prg_SetCurrentItmCod (Item->ItmCod);	// Used as parameter in contextual links
-   Prg_SetCurrentItmInd (Item->ItmInd);	// Used as parameter in contextual links
+   Prg_SetCurrentIndex (Item->Index);	// Used as parameter in contextual links
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),
 	     "%u",
-	     Item->ItmInd);
+	     Item->Index);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -417,7 +467,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
-	 if (Item->ItmInd > 1)
+	 if (Item->Index > 1)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,NULL,Prg_PutParams,
 					   "arrow-up.svg",
@@ -429,7 +479,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
-	 if (Item->ItmInd < MaxItmInd)
+	 if (Item->Index < MaxIndex)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,NULL,Prg_PutParams,
 					   "arrow-down.svg",
@@ -445,7 +495,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 /***** Icon to increase the level of an item *****/
 	 if (Item->Level > 1)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemIndex));
@@ -457,7 +507,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 /***** Icon to decrease level item *****/
 	 if (Item->Level < LastLevel + 1)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemIndex));
@@ -490,14 +540,14 @@ static long Prg_GetCurrentItmCod (void)
    return Prg_CurrentItmCod;
   }
 
-static void Prg_SetCurrentItmInd (unsigned ItmInd)
+static void Prg_SetCurrentIndex (unsigned Index)
   {
-   Prg_CurrentItmInd = ItmInd;
+   Prg_CurrentIndex = Index;
   }
 
 static unsigned Prg_GetCurrentItmInd (void)
   {
-   return Prg_CurrentItmInd;
+   return Prg_CurrentIndex;
   }
 
 /*****************************************************************************/
@@ -521,9 +571,9 @@ static void Prg_PutParams (void)
 /******************** Write parameter with index of item *********************/
 /*****************************************************************************/
 
-static void Prg_PutParamItmInd (unsigned ItmInd)
+static void Prg_PutParamItmInd (unsigned Index)
   {
-   Par_PutHiddenParamUnsigned (NULL,"ItmInd",ItmInd);
+   Par_PutHiddenParamUnsigned (NULL,"Index",Index);
   }
 
 /*****************************************************************************/
@@ -532,13 +582,13 @@ static void Prg_PutParamItmInd (unsigned ItmInd)
 
 static unsigned Prg_GetParamItmInd (void)
   {
-   long ItmInd;
+   long Index;
 
-   ItmInd = Par_GetParToLong ("ItmInd");
-   if (ItmInd < 0)
+   Index = Par_GetParToLong ("Index");
+   if (Index < 0)
       Lay_ShowErrorAndExit ("Wrong item index.");
 
-   return (unsigned) ItmInd;
+   return (unsigned) Index;
   }
 
 /*****************************************************************************/
@@ -644,7 +694,8 @@ void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
 				       "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
 				       "Title"					// row[8]
 				" FROM prg_items"
-				" WHERE ItmCod=%ld AND CrsCod=%ld",
+				" WHERE ItmCod=%ld"
+				" AND CrsCod=%ld",	// Extra check
 				Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of program item *****/
@@ -689,7 +740,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       Item->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get index of the program item (row[1]) */
-      Item->ItmInd = Str_ConvertStrToUnsigned (row[1]);
+      Item->Index = Str_ConvertStrToUnsigned (row[1]);
 
       /* Get level of the program item (row[2]) */
       Item->Level = Str_ConvertStrToUnsigned (row[2]);
@@ -728,7 +779,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
 static void Prg_ResetItem (struct ProgramItem *Item)
   {
    Item->ItmCod = -1L;
-   Item->ItmInd = 0;
+   Item->Index = 0;
    Item->Level  = 1;
    Item->Hidden = false;
    Item->UsrCod = -1L;
@@ -768,7 +819,8 @@ static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1
    /***** Get text of program item from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get program item text",
 	                     "SELECT Txt FROM prg_items"
-			     " WHERE ItmCod=%ld AND CrsCod=%ld",
+			     " WHERE ItmCod=%ld"
+			     " AND CrsCod=%ld",	// Extra check
 			     ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** The result of the query must have one row or none *****/
@@ -831,7 +883,7 @@ void Prg_ReqRemPrgItem (void)
 
    /***** Show question and button to remove the program item *****/
    Prg_SetCurrentItmCod (Item.ItmCod);
-   Prg_SetCurrentItmInd (Item.ItmInd);
+   Prg_SetCurrentIndex (Item.Index);
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,Prg_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
@@ -890,7 +942,8 @@ void Prg_HidePrgItem (void)
    /***** Hide program item *****/
    DB_QueryUPDATE ("can not hide program item",
 		   "UPDATE prg_items SET Hidden='Y'"
-		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+		   " WHERE ItmCod=%ld"
+		   " AND CrsCod=%ld",	// Extra check
                    Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
@@ -915,7 +968,8 @@ void Prg_ShowPrgItem (void)
    /***** Hide program item *****/
    DB_QueryUPDATE ("can not show program item",
 		   "UPDATE prg_items SET Hidden='N'"
-		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+		   " WHERE ItmCod=%ld"
+		   " AND CrsCod=%ld",	// Extra check
                    Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
@@ -931,8 +985,8 @@ void Prg_MoveUpPrgItem (void)
    extern const char *Txt_The_item_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct ProgramItem Item;
-   unsigned ItmIndTop;
-   unsigned ItmIndBottom;
+   unsigned TopIndex;
+   unsigned BottomIndex;
 
    /***** Get program item code *****/
    if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -942,18 +996,18 @@ void Prg_MoveUpPrgItem (void)
    Prg_GetDataOfItemByCod (&Item);
 
    /***** Get item index *****/
-   ItmIndBottom = Prg_GetParamItmInd ();
+   BottomIndex = Prg_GetParamItmInd ();
 
    /***** Move up item *****/
-   if (ItmIndBottom > 1)
+   if (BottomIndex > 1)
      {
       /* Indexes of items to be exchanged */
-      ItmIndTop = Prg_GetPrevItemIndex (ItmIndBottom);
-      if (!ItmIndTop)
+      TopIndex = Prg_GetPrevItemIndex (BottomIndex);
+      if (!TopIndex)
 	 Lay_ShowErrorAndExit ("Wrong index of item.");
 
       /* Exchange items */
-      Prg_ExchangeItems (ItmIndTop,ItmIndBottom);
+      Prg_ExchangeItems (TopIndex,BottomIndex);
 
       /* Success alert */
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_up);
@@ -975,9 +1029,9 @@ void Prg_MoveDownPrgItem (void)
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_No_items;
    struct ProgramItem Item;
-   unsigned ItmIndTop;
-   unsigned ItmIndBottom;
-   unsigned MaxItmInd;	// 0 if no items
+   unsigned TopIndex;
+   unsigned BottomIndex;
+   unsigned MaxIndex;	// 0 if no items
 
    /***** Get program item code *****/
    if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -987,23 +1041,23 @@ void Prg_MoveDownPrgItem (void)
    Prg_GetDataOfItemByCod (&Item);
 
    /***** Get item index *****/
-   ItmIndTop = Prg_GetParamItmInd ();
+   TopIndex = Prg_GetParamItmInd ();
 
    /***** Get maximum item index *****/
-   MaxItmInd = Prg_GetMaxItemIndex ();
+   MaxIndex = Prg_GetMaxItemIndex ();
 
    /***** Move down item *****/
-   if (MaxItmInd)
+   if (MaxIndex)
      {
-      if (ItmIndTop < MaxItmInd)
+      if (TopIndex < MaxIndex)
 	{
 	 /* Indexes of items to be exchanged */
-	 ItmIndBottom = Prg_GetNextItemIndex (ItmIndTop);
-	 if (!ItmIndBottom)
+	 BottomIndex = Prg_GetNextItemIndex (TopIndex);
+	 if (!BottomIndex)
 	    Lay_ShowErrorAndExit ("Wrong index of item.");
 
 	 /* Exchange items */
-	 Prg_ExchangeItems (ItmIndTop,ItmIndBottom);
+	 Prg_ExchangeItems (TopIndex,BottomIndex);
 
 	 /* Success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_down);
@@ -1024,7 +1078,12 @@ void Prg_MoveDownPrgItem (void)
 
 void Prg_MoveRightPrgItem (void)
   {
+   extern const char *Txt_The_item_has_been_moved_to_the_right;
+   extern const char *Txt_Movement_not_allowed;
    struct ProgramItem Item;
+   unsigned PrevIndex;
+   unsigned PrevLevel;
+   unsigned NextIndex;
 
    /***** Get program item code *****/
    if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -1034,7 +1093,27 @@ void Prg_MoveRightPrgItem (void)
    Prg_GetDataOfItemByCod (&Item);
 
    /***** Move right item (increase level) *****/
-   // TODO: Implement
+   /* Index of previous item */
+   PrevIndex = Prg_GetPrevItemIndex (Item.Index);
+   if (PrevIndex)	// Must be >= 1
+     {
+      PrevLevel = Prg_GetItemLevelFromIndex (PrevIndex);
+      if (Item.Level <= PrevLevel)
+	{
+	 /* Get index of next item not children */
+	 NextIndex = Prg_GetNextIndexNotChild (&Item);
+
+	 /* Move item and its children to right */
+         Prg_MoveItemAndChildrenToRight (Item.Index,NextIndex);
+
+	 /* Success alert */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_to_the_right);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1063,6 +1142,34 @@ void Prg_MoveLeftPrgItem (void)
   }
 
 /*****************************************************************************/
+/******************* Get maximum level in a course program *******************/
+/*****************************************************************************/
+// Return 0 if no items
+
+static unsigned Prg_GetMaxItemLevel (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned MaxLevel = 0;
+
+   /***** Get maximum item index in a course program from database *****/
+   DB_QuerySELECT (&mysql_res,"can not get last item index",
+		   "SELECT MAX(Level)"
+		   " FROM prg_items"
+		   " WHERE CrsCod=%ld",
+                   Gbl.Hierarchy.Crs.CrsCod);
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])	// There are items
+      if (sscanf (row[0],"%u",&MaxLevel) != 1)
+         Lay_ShowErrorAndExit ("Error when getting maximum item level.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MaxLevel;
+  }
+
+/*****************************************************************************/
 /**************** Get maximum item index in a course program *****************/
 /*****************************************************************************/
 // Question index can be 1, 2, 3...
@@ -1072,7 +1179,7 @@ static unsigned Prg_GetMaxItemIndex (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned ItmInd = 0;
+   unsigned MaxIndex = 0;
 
    /***** Get maximum item index in a course program from database *****/
    DB_QuerySELECT (&mysql_res,"can not get last item index",
@@ -1082,162 +1189,221 @@ static unsigned Prg_GetMaxItemIndex (void)
                    Gbl.Hierarchy.Crs.CrsCod);
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are items
-      if (sscanf (row[0],"%u",&ItmInd) != 1)
+      if (sscanf (row[0],"%u",&MaxIndex) != 1)
          Lay_ShowErrorAndExit ("Error when getting last item index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return ItmInd;
+   return MaxIndex;
   }
 
 /*****************************************************************************/
-/*********** Get previous item index to a given index in a course ************/
+/******** Get previous item index to a given index in current course *********/
 /*****************************************************************************/
 // Input item index can be 1, 2, 3... n-1
 // Return item index will be 1, 2, 3... n if previous item exists, or 0 if no previous item
 
-static unsigned Prg_GetPrevItemIndex (unsigned ItmInd)
+static unsigned Prg_GetPrevItemIndex (unsigned Index)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned PrevItmInd = 0;
+   unsigned PrevIndex = 0;
 
    /***** Get previous item index in a course from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get previous item index",
-			"SELECT MAX(ItmInd) FROM prg_items"
-			" WHERE CrsCod=%ld AND ItmInd<%u",
-			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+			"SELECT MAX(ItmInd)"	// row[0]
+			" FROM prg_items"
+			" WHERE CrsCod=%ld"
+			" AND ItmInd<%u",
+			Gbl.Hierarchy.Crs.CrsCod,Index))
       Lay_ShowErrorAndExit ("Error: previous item index not found.");
 
    /***** Get previous item index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
    if (row)
       if (row[0])
-	 if (sscanf (row[0],"%u",&PrevItmInd) != 1)
+	 if (sscanf (row[0],"%u",&PrevIndex) != 1)
 	    Lay_ShowErrorAndExit ("Error when getting previous item index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return PrevItmInd;
+   return PrevIndex;
   }
 
 /*****************************************************************************/
-/************** Get next item index to a given index in a course *************/
+/********** Get next item index to a given index in current course ***********/
 /*****************************************************************************/
 // Input item index can be 0, 1, 2, 3... n-1
 // Return item index will be 1, 2, 3... n if next item exists, or 0 if no next item
 
-static unsigned Prg_GetNextItemIndex (unsigned ItmInd)
+static unsigned Prg_GetNextItemIndex (unsigned Index)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextItmInd = 0;
+   unsigned NextIndex = 0;
 
    /***** Get next item index in a course from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get next item index",
-			"SELECT MIN(ItmInd) FROM prg_items"
-			" WHERE CrsCod=%ld AND ItmInd>%u",
-			Gbl.Hierarchy.Crs.CrsCod,ItmInd))
+			"SELECT MIN(ItmInd)"	// row[0]
+			" FROM prg_items"
+			" WHERE CrsCod=%ld"
+			" AND ItmInd>%u",
+			Gbl.Hierarchy.Crs.CrsCod,Index))
       Lay_ShowErrorAndExit ("Error: next item index not found.");
 
    /***** Get next item index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
    if (row)
       if (row[0])
-	 if (sscanf (row[0],"%u",&NextItmInd) != 1)
+	 if (sscanf (row[0],"%u",&NextIndex) != 1)
 	    Lay_ShowErrorAndExit ("Error when getting next item index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NextItmInd;
+   return NextIndex;
+  }
+
+/*****************************************************************************/
+/************** Get item level from item index in current course *************/
+/*****************************************************************************/
+
+static unsigned Prg_GetItemLevelFromIndex (unsigned Index)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned Level = 0;
+
+   /***** Get previous item index in a course from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get item level",
+			"SELECT Level"	// row[0]
+			" FROM prg_items"
+			" WHERE CrsCod=%ld AND ItmInd=%u",
+			Gbl.Hierarchy.Crs.CrsCod,Index))
+      Lay_ShowErrorAndExit ("Error: previous item index not found.");
+
+   /***** Get previous item index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&Level) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting previous item index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return Level;
+  }
+
+/*****************************************************************************/
+/************** Get next index not children in current course ****************/
+/*****************************************************************************/
+// Return 0 if no item found
+
+static unsigned Prg_GetNextIndexNotChild (const struct ProgramItem *Item)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NextIndex = 0;	// 0 means no next item found
+
+   /***** Get next item index which is not child of the given item *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get next item",
+			"SELECT MIN(ItmInd)"	// row[0]
+			" FROM prg_items"
+			" WHERE CrsCod=%ld"
+			" AND ItmInd>%u AND Level<=%u",
+			Gbl.Hierarchy.Crs.CrsCod,
+			Item->Index,Item->Level))
+      Lay_ShowErrorAndExit ("Error: next item not found.");
+
+   /***** Get next item index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&NextIndex) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting next item.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NextIndex;
+  }
+
+/*****************************************************************************/
+/******************** Move item and its children to right ********************/
+/*****************************************************************************/
+
+static void Prg_MoveItemAndChildrenToRight (unsigned Index,unsigned NextIndex)
+  {
+   DB_QueryUPDATE ("can not update items",
+		   "UPDATE prg_items SET Level=Level+1"
+		   " WHERE CrsCod=%ld"
+		   " AND ItmInd>=%u AND ItmInd<%u",
+	           Gbl.Hierarchy.Crs.CrsCod,
+		   Index,NextIndex);
   }
 
 /*****************************************************************************/
 /****** Exchange the order of two consecutive items in a course program ******/
 /*****************************************************************************/
 
-static void Prg_ExchangeItems (unsigned ItmIndTop,unsigned ItmIndBottom)
+static void Prg_ExchangeItems (unsigned TopIndex,unsigned BottomIndex)
   {
-   long ItmCodTop;
-   long ItmCodBottom;
-
    /***** Lock table to make the move atomic *****/
    DB_Query ("can not lock tables to move program item",
 	     "LOCK TABLES prg_items WRITE");
    Gbl.DB.LockedTables = true;
 
-   /***** Get item codes of the items to be moved *****/
-   ItmCodTop    = Prg_GetItmCodFromItmInd (ItmIndTop);
-   ItmCodBottom = Prg_GetItmCodFromItmInd (ItmIndBottom);
-
    /***** Exchange indexes of items *****/
    /*
    Example:
-   ItmIndTop    = 1; ItmCodTop    = 218
-   ItmIndBottom = 2; ItmCodBottom = 220
-   +--------+--------+		+--------+--------+	+--------+--------+
-   | ItmInd | ItmCod |		| ItmInd | ItmCod |	| ItmInd | ItmCod |
-   +--------+--------+		+--------+--------+	+--------+--------+
-   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
-   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
-   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
-   +--------+--------+		+--------+--------+	+--------+--------+
- */
+   TopIndex    = 1; TopItmCod    = 218
+   BottomIndex = 2; BottomItmCod = 220
+                     Step 1            Step 2            Step 3          (Equivalent to)
+   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod| |ItmInd|ItmCod|
+   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+   Top:  1|   218|   |     1|   218|-->|   ->2|   218|   |     2|   218|=|     1|   220|
+Bottom:  2|   220|-->|   ->0|   220|   |     0|   220|-->|   ->1|   220| |     2|   218|
+   |     3|   232|   |     3|   232|   |     3|   232|   |     3|   232| |     3|   232|
+   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+   */
+   /* Step 1: Set temporary bottom index to 0,
+              necessary to preserve unique index (CrsCod,ItmInd) */
    DB_QueryUPDATE ("can not exchange indexes of items",
-		   "UPDATE prg_items SET ItmInd=%u"
-		   " WHERE CrsCod=%ld AND ItmCod=%ld",
-	           ItmIndBottom,
-	           Gbl.Hierarchy.Crs.CrsCod,ItmCodTop);
+		   "UPDATE prg_items SET ItmInd=0"
+		   " WHERE CrsCod=%ld AND ItmInd=%u",
+	           Gbl.Hierarchy.Crs.CrsCod,BottomIndex);
 
+   /* Step 2: Set new top index to old bottom index */
    DB_QueryUPDATE ("can not exchange indexes of items",
 		   "UPDATE prg_items SET ItmInd=%u"
-		   " WHERE CrsCod=%ld AND ItmCod=%ld",
-	           ItmIndTop,
-	           Gbl.Hierarchy.Crs.CrsCod,ItmCodBottom);
+		   " WHERE CrsCod=%ld AND ItmInd=%u",
+		   BottomIndex,
+	           Gbl.Hierarchy.Crs.CrsCod,TopIndex);
+
+   /* Step 3: Set new bottom index to old top index */
+   DB_QueryUPDATE ("can not exchange indexes of items",
+		   "UPDATE prg_items SET ItmInd=%u"
+		   " WHERE CrsCod=%ld AND ItmInd=0",
+	           TopIndex,
+	           Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				// ...to not retry the unlock if error in unlocking
    DB_Query ("can not unlock tables after moving items",
 	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
-/*************** Get item code given course and index of item ****************/
-/*****************************************************************************/
-
-static long Prg_GetItmCodFromItmInd (unsigned ItmInd)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long ItmCod;
-
-   /***** Get item code from item index *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get item code",
-			"SELECT ItmCod"		// row[0]
-			" FROM prg_items"
-			" WHERE CrsCod=%ld"
-			" AND ItmInd=%u",
-			Gbl.Hierarchy.Crs.CrsCod,
-			ItmInd))
-      Lay_ShowErrorAndExit ("Error: wrong item index.");
-
-   /***** Get item code (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if ((ItmCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong item code.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return ItmCod;
   }
 
 /*****************************************************************************/
@@ -1308,13 +1474,13 @@ void Prg_RequestCreatOrEditPrgItem (void)
      {
       Frm_StartForm (ActNewPrgItm);
       Prg_SetCurrentItmCod (-1L);
-      Prg_SetCurrentItmInd (0);
+      Prg_SetCurrentIndex (0);
      }
    else
      {
       Frm_StartForm (ActChgPrgItm);
       Prg_SetCurrentItmCod (Item.ItmCod);
-      Prg_SetCurrentItmInd (Item.ItmInd);
+      Prg_SetCurrentIndex (Item.Index);
      }
    Prg_PutParams ();
 
@@ -1549,7 +1715,7 @@ void Prg_RecFormPrgItem (void)
 
 static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
   {
-   unsigned MaxItmInd;
+   unsigned MaxIndex;
 
    /***** Lock table to create program item *****/
    DB_Query ("can not lock tables to create program item",
@@ -1557,10 +1723,10 @@ static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
    Gbl.DB.LockedTables = true;
 
    /***** Get maximum item index *****/
-   MaxItmInd = Prg_GetMaxItemIndex ();
+   MaxIndex = Prg_GetMaxItemIndex ();
 
    /***** Create a new program item *****/
-   Item->ItmInd = MaxItmInd + 1;
+   Item->Index = MaxIndex + 1;
    Item->ItmCod =
    DB_QueryINSERTandReturnCode ("can not create new program item",
 				"INSERT INTO prg_items"
@@ -1568,7 +1734,7 @@ static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
 				" VALUES"
 				" (%u,%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s')",
-				Item->ItmInd,
+				Item->Index,
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Item->TimeUTC[Dat_START_TIME],
@@ -1599,7 +1765,8 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt)
 		   "StartTime=FROM_UNIXTIME(%ld),"
 		   "EndTime=FROM_UNIXTIME(%ld),"
 		   "Title='%s',Txt='%s'"
-		   " WHERE ItmCod=%ld AND CrsCod=%ld",
+		   " WHERE ItmCod=%ld"
+		   " AND CrsCod=%ld",	// Extra check
                    Item->TimeUTC[Dat_START_TIME],
                    Item->TimeUTC[Dat_END_TIME  ],
                    Item->Title,

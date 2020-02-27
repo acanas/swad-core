@@ -2211,9 +2211,9 @@ mysql> DESCRIBE prg_items;
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
 | ItmCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int(11)       | NO   | MUL | -1      |                |
 | ItmInd    | int(11)       | NO   |     | 0       |                |
 | Level     | int(11)       | NO   |     | 1       |                |
-| CrsCod    | int(11)       | NO   | MUL | -1      |                |
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
 | UsrCod    | int(11)       | NO   |     | NULL    |                |
 | StartTime | datetime      | NO   |     | NULL    |                |
@@ -2225,9 +2225,9 @@ mysql> DESCRIBE prg_items;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_items ("
 			"ItmCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
 			"Level INT NOT NULL DEFAULT 1,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
@@ -2235,7 +2235,7 @@ mysql> DESCRIBE prg_items;
 			"Title VARCHAR(2047) NOT NULL,"		// Prg_MAX_BYTES_PROGRAM_ITEM_TITLE
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ItmCod),"
-		   "INDEX(CrsCod,Hidden))");
+		   "UNIQUE INDEX(CrsCod,ItmInd))");
 
    /***** Table prj_config *****/
 /*

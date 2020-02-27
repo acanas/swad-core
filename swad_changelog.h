@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.135 (2020-02-27)"
-#define CSS_FILE		"swad19.133.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.136 (2020-02-27)"
+#define CSS_FILE		"swad19.136.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
  *
@@ -522,6 +522,12 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
+
+	Version 19.136:   Feb 27, 2020	Indent items in course program. (282292 lines)
+					3 changes necessary in database:
+DROP INDEX CrsCod ON prg_items;
+ALTER TABLE prg_items CHANGE COLUMN CrsCod CrsCod INT NOT NULL DEFAULT -1 AFTER ItmCod;
+ALTER TABLE prg_items ADD UNIQUE INDEX(CrsCod,ItmInd);
 
 	Version 19.135:   Feb 27, 2020	Buttons in course program to indent items. Not finished. (282097 lines)
 					1 change necessary in database:

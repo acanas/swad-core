@@ -1036,9 +1036,9 @@ CREATE TABLE IF NOT EXISTS prg_grp (
 --
 CREATE TABLE IF NOT EXISTS prg_items (
 	ItmCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
 	ItmInd INT NOT NULL DEFAULT 0,
 	Level INT NOT NULL DEFAULT 1,
-	CrsCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UsrCod INT NOT NULL,
 	StartTime DATETIME NOT NULL,
@@ -1046,7 +1046,7 @@ CREATE TABLE IF NOT EXISTS prg_items (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(ItmCod),
-	INDEX(CrsCod,Hidden));
+	UNIQUE INDEX(CrsCod,ItmInd));
 --
 -- Table prj_config: stores the configuration of projects for each course
 --

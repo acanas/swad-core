@@ -42,7 +42,7 @@
 struct ProgramItem
   {
    long ItmCod;
-   unsigned ItmInd;
+   unsigned Index;
    unsigned Level;
    bool Hidden;
    long UsrCod;

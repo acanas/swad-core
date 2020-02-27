@@ -47780,9 +47780,9 @@ const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is ver
 
 const char *Txt_The_item_has_been_moved_down =
 #if   L==1	// ca
-	"El &iacute;tem ha estat moguda cap avall.";
+	"L'element s'ha despla&ccedil;at cap avall.";
 #elif L==2	// de
-	"Der Programmelement wurde nach unten bewegt.";
+	"Der Programmelement wurde nach unten verschoben.";
 #elif L==3	// en
 	"The item has been moved down.";
 #elif L==4	// es
@@ -47792,16 +47792,58 @@ const char *Txt_The_item_has_been_moved_down =
 #elif L==6	// gn
 	"El &iacute;tem se ha movido hacia abajo.";	// Okoteve traducción
 #elif L==7	// it
-	"Il elemento &egrave; stato abbattuto.";
+	"Il elemento &egrave; stato spostato verso il basso.";
 #elif L==8	// pl
-	"Pozycja zosta&lstrok;o przeniesione.";
+	"Przedmiot zosta&lstrok; przeniesiony w d&oacute;&lstrok;.";
 #elif L==9	// pt
 	"O item foi movido para baixo.";
 #endif
 
+const char *Txt_The_item_has_been_moved_to_the_left =
+#if   L==1	// ca
+	"L'element s'ha despla&ccedil;at a l'esquerra.";
+#elif L==2	// de
+	"Der Programmelement wurde nach links verschoben.";
+#elif L==3	// en
+	"The item has been moved to the left.";
+#elif L==4	// es
+	"El &iacute;tem se ha movido hacia la izquierda.";
+#elif L==5	// fr
+	"L'&eacute;l&eacute;ment a &eacute;t&eacute; d&eacute;plac&eacute; vers la gauche.";
+#elif L==6	// gn
+	"El &iacute;tem se ha movido hacia la izquierda.";	// Okoteve traducción
+#elif L==7	// it
+	"Il elemento &egrave; stato spostato a sinistra.";
+#elif L==8	// pl
+	"Przedmiot zosta&lstrok; przeniesiony w lewo.";
+#elif L==9	// pt
+	"O item foi movido para a esquerda.";
+#endif
+
+const char *Txt_The_item_has_been_moved_to_the_right =
+#if   L==1	// ca
+	"L'element s'ha despla&ccedil;at a la dreta.";
+#elif L==2	// de
+	"Der Programmelement wurde nach rechts verschoben.";
+#elif L==3	// en
+	"The item has been moved to the right.";
+#elif L==4	// es
+	"El &iacute;tem se ha movido hacia la derecha.";
+#elif L==5	// fr
+	"L'&eacute;l&eacute;ment a &eacute;t&eacute; d&eacute;plac&eacute; vers la droite.";
+#elif L==6	// gn
+	"El &iacute;tem se ha movido hacia la derecha.";	// Okoteve traducción
+#elif L==7	// it
+	"Il elemento &egrave; stato spostato a destra.";
+#elif L==8	// pl
+	"Przedmiot zosta&lstrok; przeniesiony w prawo.";
+#elif L==9	// pt
+	"O item foi movido para a direita.";
+#endif
+
 const char *Txt_The_item_has_been_moved_up =
 #if   L==1	// ca
-	"El &iacute;tem ha estat moguda cap amunt.";
+	"L'element s'ha despla&ccedil;at cap amunt.";
 #elif L==2	// de
 	"Der Programmelement wurde nach oben verschoben.";
 #elif L==3	// en
@@ -47813,9 +47855,9 @@ const char *Txt_The_item_has_been_moved_up =
 #elif L==6	// gn
 	"El &iacute;tem se ha movido hacia arriba.";	// Okoteve traducción
 #elif L==7	// it
-	"Il elemento &egrave; stato spostato.";
+	"Il elemento &egrave; stato spostato verso l'alto.";
 #elif L==8	// pl
-	"Pozycja zosta&lstrok;o poruszone.";
+	"Przedmiot zosta&lstrok; przeniesiony w g&oacute;r&eogon;.";
 #elif L==9	// pt
 	"O item foi movido para cima.";
 #endif

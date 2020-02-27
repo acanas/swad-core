@@ -543,6 +543,7 @@ struct Globals
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of items
       long *LstItmCods;		// List of items codes
+      unsigned MaxLevel;	// Maximum level of items
       unsigned CurrentPage;
      } Prg;
    struct

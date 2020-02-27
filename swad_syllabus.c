@@ -381,7 +381,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
       /* Level of the item */
       Syl_LstItemsSyllabus.Lst[0].Level = 1;
 
-      /* Code (numeración) of the item */
+      /* Code (numeration) of the item */
       CodItem[1] = 1;
       for (N = 1;
 	   N <= Syl_MAX_LEVELS_SYLLABUS;
@@ -858,7 +858,7 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
    if (StrDst)
       StrDst[0] = '\0';
 
-   for (N = 1;
+   for (N  = 1;
 	N <= Level;
 	N++)
      {
