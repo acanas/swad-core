@@ -972,8 +972,8 @@ void Prg_MoveUpPrgItem (void)
    This.End   = Prg_GetLastChildIndex (Item.Index,Item.Level);
 
    /* Exchange items */
-   Prg_ExchangeItems (Prev.Begin,Prev.End,
-		      This.Begin,This.End);
+   Prg_ExchangeItems ((int) Prev.Begin,(int) Prev.End,
+		      (int) This.Begin,(int) This.End);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1006,6 +1006,12 @@ void Prg_MoveDownPrgItem (void)
    This.End   = Prg_GetLastChildIndex (Item.Index,Item.Level);
    Next.Begin = Prg_GetNextBrotherIndex (Item.Index,Item.Level);
    Next.End   = Prg_GetLastChildIndex (Next.Begin,Item.Level);
+
+   Ale_ShowAlert (Ale_INFO,"This.Begin = %u<br />"
+	                   "This.End   = %u<br />"
+	                   "Next.Begin = %u<br />"
+	                   "Next.End   = %u",
+		  This.Begin,This.End,Next.Begin,Next.End);
 
    /* Exchange items */
    Prg_ExchangeItems (This.Begin,This.End,
@@ -1129,28 +1135,30 @@ static unsigned Prg_GetPrevIndex (unsigned Index)
    MYSQL_ROW row;
    unsigned PrevIndex = 0;
 
-   /***** Get previous item index in a course from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get previous item index",
-			"SELECT MAX(ItmInd)"	// row[0]
-			" FROM prg_items"
-			" WHERE CrsCod=%ld"
-			" AND ItmInd<%u",
-			Gbl.Hierarchy.Crs.CrsCod,Index))
-      Lay_ShowErrorAndExit ("Error: previous item index not found.");
+   if (Index)
+     {
+      /***** Get previous item index in a course from database *****/
+      if (!DB_QuerySELECT (&mysql_res,"can not get previous item index",
+			   "SELECT MAX(ItmInd)"	// row[0]
+			   " FROM prg_items"
+			   " WHERE CrsCod=%ld"
+			   " AND ItmInd<%u",
+			   Gbl.Hierarchy.Crs.CrsCod,Index))
+	 Lay_ShowErrorAndExit ("Error: previous item index not found.");
 
-   /***** Get previous item index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&PrevIndex) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting previous item index.");
+      /***** Get previous item index (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if (row)
+	 if (row[0])
+	    if (sscanf (row[0],"%u",&PrevIndex) != 1)
+	       Lay_ShowErrorAndExit ("Error when getting previous item index.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return PrevIndex;
   }
-
 
 /*****************************************************************************/
 /************ Get parent index to a given index in current course ************/
@@ -1163,27 +1171,28 @@ static unsigned Prg_GetParentIndex (unsigned Index,unsigned Level)
    MYSQL_ROW row;
    unsigned ParentIndex = 0;
 
-   if (Level > 1)
-     {
-      /***** Get parent item index in a course from database *****/
-      if (!DB_QuerySELECT (&mysql_res,"can not get parent item index",
-			   "SELECT MAX(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd<%u AND Level=%u",
-			   Gbl.Hierarchy.Crs.CrsCod,Index,Level - 1))
-	 Lay_ShowErrorAndExit ("Error: parent item index not found.");
+   if (Index)
+      if (Level > 1)
+	{
+	 /***** Get parent item index in a course from database *****/
+	 if (!DB_QuerySELECT (&mysql_res,"can not get parent item index",
+			      "SELECT MAX(ItmInd)"	// row[0]
+			      " FROM prg_items"
+			      " WHERE CrsCod=%ld"
+			      " AND ItmInd<%u AND Level=%u",
+			      Gbl.Hierarchy.Crs.CrsCod,Index,Level - 1))
+	    Lay_ShowErrorAndExit ("Error: parent item index not found.");
 
-      /***** Get previous item index (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row)
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&ParentIndex) != 1)
-	       Lay_ShowErrorAndExit ("Error when getting parent item index.");
-     }
+	 /***** Get previous item index (row[0]) *****/
+	 row = mysql_fetch_row (mysql_res);
+	 if (row)
+	    if (row[0])
+	       if (sscanf (row[0],"%u",&ParentIndex) != 1)
+		  Lay_ShowErrorAndExit ("Error when getting parent item index.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
 
    return ParentIndex;
   }
@@ -1199,24 +1208,27 @@ static unsigned Prg_GetNextLowerIndex (unsigned Index,unsigned Level)
    MYSQL_ROW row;
    unsigned NextLowerIndex = 0;
 
-   /***** Get next item index in a course from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			"SELECT MIN(ItmInd)"	// row[0]
-			" FROM prg_items"
-			" WHERE CrsCod=%ld"
-			" AND ItmInd>%u AND Level>%u",
-			Gbl.Hierarchy.Crs.CrsCod,Index,Level))
-      Lay_ShowErrorAndExit ("Error: next brother item index not found.");
+   if (Index)
+     {
+      /***** Get next item index in a course from database *****/
+      if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
+			   "SELECT MIN(ItmInd)"	// row[0]
+			   " FROM prg_items"
+			   " WHERE CrsCod=%ld"
+			   " AND ItmInd>%u AND Level>%u",
+			   Gbl.Hierarchy.Crs.CrsCod,Index,Level))
+	 Lay_ShowErrorAndExit ("Error: next brother item index not found.");
 
-   /***** Get previous item index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NextLowerIndex) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting next brother item index.");
+      /***** Get previous item index (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if (row)
+	 if (row[0])
+	    if (sscanf (row[0],"%u",&NextLowerIndex) != 1)
+	       Lay_ShowErrorAndExit ("Error when getting next brother item index.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return NextLowerIndex;
   }
@@ -1230,28 +1242,33 @@ static unsigned Prg_GetPrevBrotherIndex (unsigned Index,unsigned Level)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned ParentIndex;
    unsigned PrevBrotherIndex = 0;
-   unsigned ParentIndex = Prg_GetParentIndex (Index,Level);
 
-   /***** Get previous brother item index in a course from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get previous brother item index",
-			"SELECT MAX(ItmInd)"	// row[0]
-			" FROM prg_items"
-			" WHERE CrsCod=%ld"
-			" AND ItmInd>%u AND ItmInd<%u AND Level=%u",
-			Gbl.Hierarchy.Crs.CrsCod,
-			ParentIndex,Index,Level))
-      Lay_ShowErrorAndExit ("Error: previous brother item index not found.");
+   if (Index)
+     {
+      ParentIndex = Prg_GetParentIndex (Index,Level);
 
-   /***** Get previous item index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&PrevBrotherIndex) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting previous brother item index.");
+      /***** Get previous brother item index in a course from database *****/
+      if (!DB_QuerySELECT (&mysql_res,"can not get previous brother item index",
+			   "SELECT MAX(ItmInd)"	// row[0]
+			   " FROM prg_items"
+			   " WHERE CrsCod=%ld"
+			   " AND ItmInd>%u AND ItmInd<%u AND Level=%u",
+			   Gbl.Hierarchy.Crs.CrsCod,
+			   ParentIndex,Index,Level))
+	 Lay_ShowErrorAndExit ("Error: previous brother item index not found.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Get previous item index (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if (row)
+	 if (row[0])
+	    if (sscanf (row[0],"%u",&PrevBrotherIndex) != 1)
+	       Lay_ShowErrorAndExit ("Error when getting previous brother item index.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return PrevBrotherIndex;
   }
@@ -1265,42 +1282,47 @@ static unsigned Prg_GetNextBrotherIndex (unsigned Index,unsigned Level)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NextLowerIndex;
    unsigned NextBrotherIndex = 0;
-   unsigned NextLowerIndex = Prg_GetNextLowerIndex (Index,Level);
 
-   /***** Get next brother item index in a course from database *****/
-   if (NextLowerIndex)
+   if (Index)
      {
-      if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			   "SELECT MIN(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd>%u AND Level=%u",
-			   Gbl.Hierarchy.Crs.CrsCod,
-			   Index,Level))
-	 Lay_ShowErrorAndExit ("Error: next brother item index not found.");
-     }
-   else
-     {
-      if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			   "SELECT MIN(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd>%u AND ItmInd<%u AND Level=%u",
-			   Gbl.Hierarchy.Crs.CrsCod,
-			   Index,NextLowerIndex,Level))
-	 Lay_ShowErrorAndExit ("Error: next brother item index not found.");
-     }
+      NextLowerIndex = Prg_GetNextLowerIndex (Index,Level);
 
-   /***** Get previous item index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NextBrotherIndex) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting next brother item index.");
+      /***** Get next brother item index in a course from database *****/
+      if (NextLowerIndex)
+	{
+	 if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
+			      "SELECT MIN(ItmInd)"	// row[0]
+			      " FROM prg_items"
+			      " WHERE CrsCod=%ld"
+			      " AND ItmInd>%u AND ItmInd<%u AND Level=%u",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Index,NextLowerIndex,Level))
+	    Lay_ShowErrorAndExit ("Error: next brother item index not found.");
+	}
+      else
+	{
+	 if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
+			      "SELECT MIN(ItmInd)"	// row[0]
+			      " FROM prg_items"
+			      " WHERE CrsCod=%ld"
+			      " AND ItmInd>%u AND Level=%u",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Index,Level))
+	    Lay_ShowErrorAndExit ("Error: next brother item index not found.");
+	}
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Get previous item index (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if (row)
+	 if (row[0])
+	    if (sscanf (row[0],"%u",&NextBrotherIndex) != 1)
+	       Lay_ShowErrorAndExit ("Error when getting next brother item index.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return NextBrotherIndex;
   }
@@ -1356,7 +1378,6 @@ static void Prg_MoveItemAndChildrenLeft (const struct ProgramItem *Item)
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
   }
-
 
 /*****************************************************************************/
 /**************** Move item and its children to left or right ****************/
