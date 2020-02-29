@@ -87,7 +87,6 @@ static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
-static void Prg_ParamsWhichGroupsToShow (void);
 static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView);
 
 static void Prg_CreateNumbers (unsigned MaxLevel);
@@ -141,7 +140,6 @@ void Prg_SeeCourseProgram (void)
   {
    /***** Get parameters *****/
    Grp_GetParamWhichGrps ();
-   Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Show all the program items *****/
    Prg_ShowAllItems ();
@@ -156,7 +154,6 @@ static void Prg_ShowAllItems (void)
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
    extern const char *Txt_No_items;
-   struct Pagination Pagination;
    unsigned NumItem;
 
    /***** Get list of program items *****/
@@ -169,12 +166,6 @@ static void Prg_ShowAllItems (void)
    else
       Prg_MaxLevel = 0;
 
-   /***** Compute variables related to pagination *****/
-   Pagination.NumItems = Gbl.Prg.Num;
-   Pagination.CurrentPage = (int) Gbl.Prg.CurrentPage;
-   Pag_CalculatePagination (&Pagination);
-   Gbl.Prg.CurrentPage = (unsigned) Pagination.CurrentPage;
-
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
@@ -183,14 +174,9 @@ static void Prg_ShowAllItems (void)
    if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeePrg,Prg_ParamsWhichGroupsToShow);
+      Grp_ShowFormToSelWhichGrps (ActSeePrg,NULL);
       Set_EndSettingsHead ();
      }
-
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_COURSE_PROGRAM,
-				  &Pagination,
-				  0);
 
    if (Gbl.Prg.Num)
      {
@@ -198,8 +184,8 @@ static void Prg_ShowAllItems (void)
       HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Write all the program items *****/
-      for (NumItem  = Pagination.FirstItemVisible;
-	   NumItem <= Pagination.LastItemVisible;
+      for (NumItem  = 1;
+	   NumItem <= Gbl.Prg.Num;
 	   NumItem++)
 	 Prg_ShowOneItem (Gbl.Prg.LstItmCods[NumItem - 1],
 			  Gbl.Prg.Num,
@@ -210,11 +196,6 @@ static void Prg_ShowAllItems (void)
      }
    else	// No program items created
       Ale_ShowAlert (Ale_INFO,Txt_No_items);
-
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_COURSE_PROGRAM,
-				  &Pagination,
-				  0);
 
    /***** Button to create a new program item *****/
    if (Prg_CheckIfICanCreateItems ())
@@ -283,15 +264,6 @@ static void Prg_PutButtonToCreateNewItem (void)
    Prg_PutParams ();
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/**************** Put params to select which groups to show ******************/
-/*****************************************************************************/
-
-static void Prg_ParamsWhichGroupsToShow (void)
-  {
-   Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -611,7 +583,6 @@ static void Prg_PutParams (void)
    if (CurrentItmInd > 0)
       Prg_PutParamItmInd (CurrentItmInd);
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_COURSE_PROGRAM,Gbl.Prg.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -919,7 +890,6 @@ void Prg_ReqRemPrgItem (void)
 
    /***** Get parameters *****/
    Grp_GetParamWhichGrps ();
-   Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Get program item code *****/
    if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -1525,7 +1495,6 @@ void Prg_RequestCreatOrEditPrgItem (void)
 
    /***** Get parameters *****/
    Grp_GetParamWhichGrps ();
-   Gbl.Prg.CurrentPage = Pag_GetParamPagNum (Pag_COURSE_PROGRAM);
 
    /***** Get the code of the program item *****/
    ItsANewItem = ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L);
