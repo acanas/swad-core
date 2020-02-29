@@ -61,6 +61,13 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+#define Prg_NUM_LEFT_RIGHT 2
+typedef enum
+  {
+   Prg_TO_LEFT  = 0,
+   Prg_TO_RIGHT = 1
+  } Prg_LeftRight;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -107,7 +114,8 @@ static unsigned Prg_GetNextItemIndex (unsigned Index);
 static unsigned Prg_GetItemLevelFromIndex (unsigned Index);
 static unsigned Prg_GetNextIndexNotChild (const struct ProgramItem *Item);
 static void Prg_ExchangeItems (unsigned TopIndex,unsigned BottomIndex);
-static void Prg_MoveItemAndChildrenToRight (unsigned Index,unsigned NextIndex);
+static void Prg_MoveItemAndChildrenLeftRight (Prg_LeftRight LeftRight,
+					      unsigned Index,unsigned NextIndex);
 
 static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
 static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
@@ -437,7 +445,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
    extern const char *Txt_Increase_level_of_X;
    extern const char *Txt_Decrease_level_of_X;
    extern const char *Txt_Movement_not_allowed;
-   static unsigned LastLevel = 0;
+   static unsigned PrevLevel = 0;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    Prg_SetCurrentItmCod (Item->ItmCod);	// Used as parameter in contextual links
@@ -492,7 +500,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 
 	 HTM_BR ();
 
-	 /***** Icon to increase the level of an item *****/
+	 /***** Icon to move left item (increase level) *****/
 	 if (Item->Level > 1)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
@@ -504,8 +512,8 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 else
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
 
-	 /***** Icon to decrease level item *****/
-	 if (Item->Level < LastLevel + 1)
+	 /***** Icon to move right item (indent, decrease level) *****/
+	 if (Item->Level <= PrevLevel)
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
 					   "arrow-right.svg",
@@ -516,7 +524,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
 
-	 LastLevel = Item->Level;
+	 PrevLevel = Item->Level;
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -1104,7 +1112,7 @@ void Prg_MoveRightPrgItem (void)
 	 NextIndex = Prg_GetNextIndexNotChild (&Item);
 
 	 /* Move item and its children to right */
-         Prg_MoveItemAndChildrenToRight (Item.Index,NextIndex);
+         Prg_MoveItemAndChildrenLeftRight (Prg_TO_RIGHT,Item.Index,NextIndex);
 
 	 /* Success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_to_the_right);
@@ -1125,7 +1133,10 @@ void Prg_MoveRightPrgItem (void)
 
 void Prg_MoveLeftPrgItem (void)
   {
+   extern const char *Txt_The_item_has_been_moved_to_the_left;
+   extern const char *Txt_Movement_not_allowed;
    struct ProgramItem Item;
+   unsigned NextIndex;
 
    /***** Get program item code *****/
    if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -1135,7 +1146,19 @@ void Prg_MoveLeftPrgItem (void)
    Prg_GetDataOfItemByCod (&Item);
 
    /***** Move left item (decrease level) *****/
-   // TODO: Implement
+   if (Item.Level >= 1)
+     {
+      /* Get index of next item not children */
+      NextIndex = Prg_GetNextIndexNotChild (&Item);
+
+      /* Move item and its children to left */
+      Prg_MoveItemAndChildrenLeftRight (Prg_TO_LEFT,Item.Index,NextIndex);
+
+      /* Success alert */
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_moved_to_the_left);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1340,23 +1363,32 @@ static unsigned Prg_GetNextIndexNotChild (const struct ProgramItem *Item)
   }
 
 /*****************************************************************************/
-/******************** Move item and its children to right ********************/
+/**************** Move item and its children to left or right ****************/
 /*****************************************************************************/
 
-static void Prg_MoveItemAndChildrenToRight (unsigned Index,unsigned NextIndex)
+static void Prg_MoveItemAndChildrenLeftRight (Prg_LeftRight LeftRight,
+					      unsigned Index,unsigned NextIndex)
   {
+   static const char *Update[Prg_NUM_LEFT_RIGHT] =
+     {
+      [Prg_TO_LEFT ] = "-1",
+      [Prg_TO_RIGHT] = "+1"
+     };
+
    if (NextIndex == 0)	// At the end, no more not-children items
-      DB_QueryUPDATE ("can not move to right (ident)",
-		      "UPDATE prg_items SET Level=Level+1"
+      DB_QueryUPDATE ("can not move items",
+		      "UPDATE prg_items SET Level=Level%s"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u",
+		      Update[LeftRight],
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Index);
    else
-      DB_QueryUPDATE ("can not move to right (ident)",
-		      "UPDATE prg_items SET Level=Level+1"
+      DB_QueryUPDATE ("can not move items",
+		      "UPDATE prg_items SET Level=Level%s"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<%u",
+		      Update[LeftRight],
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Index,NextIndex);
   }

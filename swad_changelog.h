@@ -523,8 +523,9 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.136.2: Feb 27, 2020	Move to left items in course program. (282330 lines)
 	Version 19.136.1: Feb 29, 2020	Fixed bugs in course program. (282301 lines)
-	Version 19.136:   Feb 27, 2020	Indent items in course program. (282292 lines)
+	Version 19.136:   Feb 27, 2020	Move to right (indent) items in course program. (282292 lines)
 					3 changes necessary in database:
 DROP INDEX CrsCod ON prg_items;
 ALTER TABLE prg_items CHANGE COLUMN CrsCod CrsCod INT NOT NULL DEFAULT -1 AFTER ItmCod;
