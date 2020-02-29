@@ -72,8 +72,11 @@ typedef enum
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-long Prg_CurrentItmCod;		// Used as parameter in contextual links
-unsigned Prg_CurrentIndex;	// Used as parameter in contextual links
+static long Prg_CurrentItmCod;		// Used as parameter in contextual links
+static unsigned Prg_CurrentIndex;	// Used as parameter in contextual links
+
+static unsigned Prg_MaxLevel;		// Maximum level of items
+static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum level
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -86,6 +89,9 @@ static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ParamsWhichGroupsToShow (void);
 static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView);
+
+static void Prg_CreateNumbers (unsigned MaxLevel);
+static void Prg_FreeNumbers (void);
 static void Prg_WriteNumItem (unsigned Level);
 
 static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
@@ -156,9 +162,12 @@ static void Prg_ShowAllItems (void)
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
    if (Gbl.Prg.Num)
-      Gbl.Prg.MaxLevel = Prg_GetMaxItemLevel ();
+     {
+      Prg_MaxLevel = Prg_GetMaxItemLevel ();
+      Prg_CreateNumbers (Prg_MaxLevel);
+     }
    else
-      Gbl.Prg.MaxLevel = 0;
+      Prg_MaxLevel = 0;
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Prg.Num;
@@ -215,6 +224,8 @@ static void Prg_ShowAllItems (void)
    Box_BoxEnd ();
 
    /***** Free list of program items *****/
+   if (Gbl.Prg.Num)
+      Prg_FreeNumbers ();
    Prg_FreeListItems ();
   }
 
@@ -336,7 +347,7 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
 
    /***** Title, groups and text *****/
    /* Begin title, groups and text */
-   ColSpan = Gbl.Prg.MaxLevel - Item.Level + 1;
+   ColSpan = Prg_MaxLevel - Item.Level + 1;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
 		    ColSpan);
@@ -411,25 +422,53 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
   }
 
 /*****************************************************************************/
+/********************* Allocate memory for item numbers **********************/
+/*****************************************************************************/
+
+static void Prg_CreateNumbers (unsigned MaxLevel)
+  {
+   /***** Allocate memory for item numbers and initialize to 0 *****/
+   if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel,sizeof (unsigned))) == NULL)
+      Lay_NotEnoughMemoryExit ();
+  }
+
+/*****************************************************************************/
+/*********************** Free memory for item numbers ************************/
+/*****************************************************************************/
+
+static void Prg_FreeNumbers (void)
+  {
+   /***** Free allocated memory for item numbers *****/
+   if (Prg_NumItem)
+     {
+      free (Prg_NumItem);
+      Prg_NumItem = NULL;
+     }
+  }
+
+/*****************************************************************************/
 /******************** Write number of item in legal style ********************/
 /*****************************************************************************/
 
 static void Prg_WriteNumItem (unsigned Level)
   {
-   static unsigned CodItem[100] = {0};	// TODO: Limit level?
-   unsigned N;
+   unsigned i;
 
-   CodItem[Level]++;
+   /***** Increase number for this level *****/
+   Prg_NumItem[Level]++;
 
-   for (N  = 1;
-	N <= Level;
-	N++)
+   /***** Write number *****/
+   HTM_Unsigned (Prg_NumItem[1]);
+   for (i  = 2;
+	i <= Level;
+	i++)
      {
-      if (N > 1)
-	 HTM_Txt (".");
-
-      HTM_Unsigned (CodItem[N]);
+      HTM_Txt (".");
+      HTM_Unsigned (Prg_NumItem[i]);
      }
+
+   /***** Reset number for next level (children) *****/
+   Prg_NumItem[Level + 1] = 0;
   }
 
 /*****************************************************************************/
