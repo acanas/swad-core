@@ -1345,12 +1345,20 @@ static unsigned Prg_GetNextIndexNotChild (const struct ProgramItem *Item)
 
 static void Prg_MoveItemAndChildrenToRight (unsigned Index,unsigned NextIndex)
   {
-   DB_QueryUPDATE ("can not update items",
-		   "UPDATE prg_items SET Level=Level+1"
-		   " WHERE CrsCod=%ld"
-		   " AND ItmInd>=%u AND ItmInd<%u",
-	           Gbl.Hierarchy.Crs.CrsCod,
-		   Index,NextIndex);
+   if (NextIndex == 0)	// At the end, no more not-children items
+      DB_QueryUPDATE ("can not move to right (ident)",
+		      "UPDATE prg_items SET Level=Level+1"
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=%u",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      Index);
+   else
+      DB_QueryUPDATE ("can not move to right (ident)",
+		      "UPDATE prg_items SET Level=Level+1"
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=%u AND ItmInd<%u",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      Index,NextIndex);
   }
 
 /*****************************************************************************/
