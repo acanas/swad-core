@@ -98,10 +98,12 @@ static long Prg_GetCurrentItmCod (void);
 static void Prg_PutParams (void);
 
 static void Prg_GetListPrgItems (void);
+static void Prg_GetDataOfItemByCod (struct ProgramItem *Item);
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned long NumRows);
 static void Prg_ResetItem (struct ProgramItem *Item);
+static void Prg_FreeListItems (void);
 static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prg_PutParamItmCod (long ItmCod);
 static long Prg_GetParamItmCod (void);
@@ -109,18 +111,24 @@ static long Prg_GetParamItmCod (void);
 static unsigned Prg_GetNumItemFromItmCod (unsigned ItmCod);
 
 static unsigned Prg_GetMaxItemLevel (void);
-static unsigned Prg_GetMaxItemIndex (void);
 static int Prg_GetPrevBrother (int NumItem);
 static int Prg_GetNextBrother (int NumItem);
-static int Prg_GetLastChild (int NumItem);
+static unsigned Prg_GetLastChild (int NumItem);
 
 static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom);
 static void Prg_MoveItemAndChildrenLeft (unsigned NumItem);
 static void Prg_MoveItemAndChildrenRight (unsigned NumItem);
 
 static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
+static void Prg_ShowFormToCreatePrgItem (void);
+static void Prg_ShowFormToChangePrgItem (void);
+static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
+			           const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
+				   const char *Txt);
 static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
-static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt);
+static void Prg_InsertPrgItem (struct ProgramItem *ParentItem,
+		               struct ProgramItem *Item,const char *Txt);
+static long Prg_InsertPrgItemIntoDB (struct ProgramItem *Item,const char *Txt);
 static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
 static bool Prg_CheckIfItemIsAssociatedToGrps (long ItmCod);
 static void Prg_RemoveAllTheGrpsAssociatedToAnItem (long ItmCod);
@@ -462,6 +470,7 @@ static void Prg_WriteNumItem (unsigned Level)
 
 static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor)
   {
+   extern const char *Txt_New_item;
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
    extern const char *Txt_Increase_level_of_X;
@@ -490,7 +499,10 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor
 	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActEdiOnePrgItm,Prg_PutParams);
+	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_PutParams);
+
+	 /***** Put form to add a new child item inside this item *****/
+	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Anchor,Prg_PutParams,Txt_New_item);
 
 	 HTM_BR ();
 
@@ -517,8 +529,6 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-
-	 HTM_BR ();
 
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
@@ -752,7 +762,7 @@ static void Prg_GetListPrgItems (void)
 /****************** Get program item data using its code *********************/
 /*****************************************************************************/
 
-void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
+static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -797,7 +807,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
    Prg_ResetItem (Item);
 
    /***** Get data of program item from database *****/
-   if (NumRows) // Schedule item found...
+   if (NumRows) // Item found...
      {
       /* Get row */
       row = mysql_fetch_row (*mysql_res);
@@ -857,7 +867,7 @@ static void Prg_ResetItem (struct ProgramItem *Item)
   {
    Item->Hierarchy.ItmCod = -1L;
    Item->Hierarchy.Index  = 0;
-   Item->Hierarchy.Level  = 1;
+   Item->Hierarchy.Level  = 0;
    Item->Hidden = false;
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_START_TIME] =
@@ -871,7 +881,7 @@ static void Prg_ResetItem (struct ProgramItem *Item)
 /************************ Free list of program items *************************/
 /*****************************************************************************/
 
-void Prg_FreeListItems (void)
+static void Prg_FreeListItems (void)
   {
    if (Gbl.Prg.LstIsRead && Gbl.Prg.LstItems)
      {
@@ -1210,35 +1220,6 @@ static unsigned Prg_GetMaxItemLevel (void)
   }
 
 /*****************************************************************************/
-/**************** Get maximum item index in a course program *****************/
-/*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no items
-
-static unsigned Prg_GetMaxItemIndex (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned MaxIndex = 0;
-
-   /***** Get maximum item index in a course program from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get last item index",
-		   "SELECT MAX(ItmInd)"
-		   " FROM prg_items"
-		   " WHERE CrsCod=%ld",
-                   Gbl.Hierarchy.Crs.CrsCod);
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are items
-      if (sscanf (row[0],"%u",&MaxIndex) != 1)
-         Lay_ShowErrorAndExit ("Error when getting last item index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MaxIndex;
-  }
-
-/*****************************************************************************/
 /******** Get previous brother item to a given item in current course ********/
 /*****************************************************************************/
 // Return -1 if no previous brother
@@ -1303,7 +1284,7 @@ static int Prg_GetNextBrother (int NumItem)
 /*****************************************************************************/
 // Return the same index if no children
 
-static int Prg_GetLastChild (int NumItem)
+static unsigned Prg_GetLastChild (int NumItem)
   {
    unsigned Level;
    int i;
@@ -1311,7 +1292,7 @@ static int Prg_GetLastChild (int NumItem)
    /***** Trivial check: if item is wrong, there are no children *****/
    if (NumItem < 0 ||
        NumItem >= (int) Gbl.Prg.Num)
-      return -1;
+      Lay_ShowErrorAndExit ("Wrong number of item.");
 
    /***** Get next brother after item *****/
    // 0 <= NumItem < Gbl.Prg.Num
@@ -1498,22 +1479,38 @@ static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value
   }
 
 /*****************************************************************************/
+/******* Put a form to create/edit program item and show current items *******/
+/*****************************************************************************/
+
+void Prg_RequestCreatePrgItem (void)
+  {
+   /***** Show form to create item *****/
+   Prg_ShowFormToCreatePrgItem ();
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems ();
+  }
+
+void Prg_RequestChangePrgItem (void)
+  {
+   /***** Show form to change item *****/
+   Prg_ShowFormToChangePrgItem ();
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems ();
+  }
+
+/*****************************************************************************/
 /***************** Put a form to create a new program item *******************/
 /*****************************************************************************/
 
-void Prg_RequestCreatOrEditPrgItem (void)
+static void Prg_ShowFormToCreatePrgItem (void)
   {
    extern const char *Hlp_COURSE_Program_new_item;
-   extern const char *Hlp_COURSE_Program_edit_item;
    extern const char *Txt_New_item;
-   extern const char *Txt_Edit_item;
-   extern const char *Txt_Title;
-   extern const char *Txt_Description;
    extern const char *Txt_Create_item;
-   extern const char *Txt_Save_changes;
+   struct ProgramItem ParentItem;	// Parent item
    struct ProgramItem Item;
-   bool ItsANewItem;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       Dat_HMS_TO_000000,
@@ -1523,53 +1520,99 @@ void Prg_RequestCreatOrEditPrgItem (void)
    /***** Get parameters *****/
    Grp_GetParamWhichGrps ();
 
-   /***** Get the code of the program item *****/
-   ItsANewItem = ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L);
+   /***** Get the code of the parent program item *****/
+   ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&ParentItem);
 
-   /***** Get from the database the data of the program item *****/
-   if (ItsANewItem)
-     {
-      /* Initialize to empty program item */
-      Prg_ResetItem (&Item);
-      Item.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      Item.Open = true;
-     }
-   else
-     {
-      /* Get data of the program item from database */
-      Prg_GetDataOfItemByCod (&Item);
-
-      /* Get text of the program item from database */
-      Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
-     }
+   /***** Initialize to empty program item *****/
+   Prg_ResetItem (&Item);
+   Item.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+   Item.Open = true;
 
    /***** Begin form *****/
-   if (ItsANewItem)
-     {
-      Frm_StartForm (ActNewPrgItm);
-      Prg_SetCurrentItmCod (-1L);
-     }
-   else
-     {
-      Frm_StartForm (ActChgPrgItm);
-      Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
-     }
+   Frm_StartForm (ActNewPrgItm);
+   Prg_SetCurrentItmCod (ParentItem.Hierarchy.ItmCod);
    Prg_PutParams ();
 
    /***** Begin box and table *****/
-   if (ItsANewItem)
-      Box_BoxTableBegin (NULL,Txt_New_item,NULL,
-			 Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-                         Item.Title[0] ? Item.Title :
-                	                 Txt_Edit_item,
-                         NULL,
-			 Hlp_COURSE_Program_edit_item,Box_NOT_CLOSABLE,2);
+   Box_BoxTableBegin (NULL,Txt_New_item,NULL,
+		      Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
 
+   /***** Show form *****/
+   Prg_ShowFormToPrgItem (&Item,SetHMS,NULL);
 
-   /***** Schedule item title *****/
+   /***** End table, send button and end box *****/
+   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_item);
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/***************** Put a form to create a new program item *******************/
+/*****************************************************************************/
+
+static void Prg_ShowFormToChangePrgItem (void)
+  {
+   extern const char *Hlp_COURSE_Program_edit_item;
+   extern const char *Txt_Edit_item;
+   extern const char *Txt_Save_changes;
+   struct ProgramItem Item;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      Dat_HMS_DO_NOT_SET,
+      Dat_HMS_DO_NOT_SET
+     };
+
+   /***** Get parameters *****/
+   Grp_GetParamWhichGrps ();
+
+   /***** Get the code of the program item *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+
+   /***** Get from the database the data of the program item *****/
+   /* Get data of the program item from database */
+   Prg_GetDataOfItemByCod (&Item);
+
+   /* Get text of the program item from database */
+   Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
+
+   /***** Begin form *****/
+   Frm_StartForm (ActChgPrgItm);
+   Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
+   Prg_PutParams ();
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,
+		      Item.Title[0] ? Item.Title :
+				      Txt_Edit_item,
+		      NULL,
+		      Hlp_COURSE_Program_edit_item,Box_NOT_CLOSABLE,2);
+
+   /***** Show form *****/
+   Prg_ShowFormToPrgItem (&Item,SetHMS,Txt);
+
+   /***** End table, send button and end box *****/
+   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/***************** Put a form to create a new program item *******************/
+/*****************************************************************************/
+
+static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
+				   const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
+				   const char *Txt)
+  {
+   extern const char *Txt_Title;
+   extern const char *Txt_Description;
+
+   /***** Item title *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -1577,7 +1620,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item.Title,false,
+   HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item->Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1585,7 +1628,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TR_End ();
 
    /***** Program item start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Item.TimeUTC,
+   Dat_PutFormStartEndClientLocalDateTimes (Item->TimeUTC,
 					    Dat_FORM_SECONDS_ON,
 					    SetHMS);
 
@@ -1599,27 +1642,16 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
 	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewItem)
-      HTM_Txt (Txt);
+   if (Txt)
+      if (Txt[0])
+         HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Groups *****/
-   Prg_ShowLstGrpsToEditPrgItem (Item.Hierarchy.ItmCod);
-
-   /***** End table, send button and end box *****/
-   if (ItsANewItem)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_item);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
-
-   /***** End form *****/
-   Frm_EndForm ();
-
-   /***** Show current program items, if any *****/
-   Prg_ShowAllItems ();
+   Prg_ShowLstGrpsToEditPrgItem (Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -1689,31 +1721,23 @@ static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod)
 /***************** Receive form to create a new program item *****************/
 /*****************************************************************************/
 
-void Prg_RecFormPrgItem (void)
+void Prg_RecFormNewPrgItem (void)
   {
    extern const char *Txt_Already_existed_an_item_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_item;
    extern const char *Txt_Created_new_item_X;
-   extern const char *Txt_The_item_has_been_modified;
-   struct ProgramItem OldItem;	// Current program item data in database
-   struct ProgramItem NewItem;	// Schedule item data received from form
-   bool ItsANewItem;
+   struct ProgramItem ParentItem;	// Parent item
+   struct ProgramItem NewItem;		// Item data received from form
    bool NewItemIsCorrect = true;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get the code of the program item *****/
-   NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   ItsANewItem = (NewItem.Hierarchy.ItmCod < 0);
+   /***** Get the code of the parent program item *****/
+   ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&ParentItem);
 
-   if (ItsANewItem)
-      /***** Reset old (current, not existing) program item data *****/
-      Prg_ResetItem (&OldItem);
-   else
-     {
-      /***** Get data of the old (current) program item from database *****/
-      OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
-      Prg_GetDataOfItemByCod (&OldItem);
-     }
+   /***** Set new item code *****/
+   NewItem.Hierarchy.ItmCod = -1L;
+   NewItem.Hierarchy.Level = ParentItem.Hierarchy.Level + 1;	// Create as child
 
    /***** Get start/end date-times *****/
    NewItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
@@ -1755,65 +1779,170 @@ void Prg_RecFormPrgItem (void)
       /* Get groups for this program items */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewItem)
-	{
-         Prg_CreatePrgItem (&NewItem,Description);	// Add new program item to database
-
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_item_X,
-		        NewItem.Title);
-	}
-      else
-        {
-	 Prg_UpdatePrgItem (&NewItem,Description);
-
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_modified);
-        }
+      /* Add new program item to database */
+      Prg_InsertPrgItem (&ParentItem,&NewItem,Description);
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
 
-      /***** Show program items again *****/
-      Prg_SeeCourseProgram ();
+      /* Write success message */
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_item_X,
+		     NewItem.Title);
      }
    else
+      /***** Show form to create item *****/
       // TODO: The form should be filled with partial data, now is always empty
-      Prg_RequestCreatOrEditPrgItem ();
+      Prg_ShowFormToCreatePrgItem ();
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
   }
 
 /*****************************************************************************/
-/************************ Create a new program item **************************/
+/************* Receive form to change an existing program item ***************/
 /*****************************************************************************/
 
-static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
+void Prg_RecFormChgPrgItem (void)
   {
-   unsigned MaxIndex;
+   extern const char *Txt_Already_existed_an_item_with_the_title_X;
+   extern const char *Txt_You_must_specify_the_title_of_the_item;
+   extern const char *Txt_Created_new_item_X;
+   extern const char *Txt_The_item_has_been_modified;
+   struct ProgramItem OldItem;	// Current program item data in database
+   struct ProgramItem NewItem;	// Item data received from form
+   bool NewItemIsCorrect = true;
+   char Description[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Get the code of the program item *****/
+   NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+
+   /***** Get data of the old (current) program item from database *****/
+   OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
+   Prg_GetDataOfItemByCod (&OldItem);
+
+   /***** Get start/end date-times *****/
+   NewItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewItem.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+
+   /***** Get program item title *****/
+   Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+
+   /***** Get program item text *****/
+   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+   /***** Adjust dates *****/
+   if (NewItem.TimeUTC[Dat_START_TIME] == 0)
+      NewItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewItem.TimeUTC[Dat_END_TIME] == 0)
+      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+
+   /***** Check if title is correct *****/
+   if (NewItem.Title[0])	// If there's a program item title
+     {
+      /* If title of program item was in database... */
+      if (Prg_CheckIfSimilarPrgItemExists ("Title",NewItem.Title,NewItem.Hierarchy.ItmCod))
+        {
+         NewItemIsCorrect = false;
+
+	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_item_with_the_title_X,
+                        NewItem.Title);
+        }
+     }
+   else	// If there is not a program item title
+     {
+      NewItemIsCorrect = false;
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_item);
+     }
+
+   /***** Update existing item *****/
+   if (NewItemIsCorrect)
+     {
+      /* Get groups for this program items */
+      Grp_GetParCodsSeveralGrps ();
+
+      /* Update program item */
+      Prg_UpdatePrgItem (&NewItem,Description);
+
+      /* Free memory for list of selected groups */
+      Grp_FreeListCodSelectedGrps ();
+
+      /* Write success message */
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_modified);
+     }
+   else
+      /***** Show form to change item *****/
+      // TODO: The form should be filled with partial data, now is always empty
+      Prg_ShowFormToChangePrgItem ();
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
+
+/*****************************************************************************/
+/*********** Insert a new program item as a child of a parent item ***********/
+/*****************************************************************************/
+
+static void Prg_InsertPrgItem (struct ProgramItem *ParentItem,
+		               struct ProgramItem *Item,const char *Txt)
+  {
+   unsigned NumItemParent;
+   unsigned NumItemLastChild;
 
    /***** Lock table to create program item *****/
    DB_Query ("can not lock tables to create program item",
 	     "LOCK TABLES prg_items WRITE");
    Gbl.DB.LockedTables = true;
 
-   /***** Get maximum item index *****/
-   MaxIndex = Prg_GetMaxItemIndex ();
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   if (Gbl.Prg.Num)	// There are items
+     {
+      if (ParentItem->Hierarchy.ItmCod > 0)	// Parent specified
+	{
+	 /***** Calculate where to insert *****/
+	 NumItemParent    = Prg_GetNumItemFromItmCod (ParentItem->Hierarchy.ItmCod);
+	 NumItemLastChild = Prg_GetLastChild (NumItemParent);
+	 if (NumItemLastChild < Gbl.Prg.Num - 1)
+	   {
+	    /***** New program item will be inserted after last child of parent *****/
+	    Item->Hierarchy.Index = Gbl.Prg.LstItems[NumItemLastChild + 1].Index;
 
-   /***** Create a new program item *****/
-   Item->Hierarchy.Index = MaxIndex + 1;
-   Item->Hierarchy.ItmCod =
-   DB_QueryINSERTandReturnCode ("can not create new program item",
-				"INSERT INTO prg_items"
-				" (ItmInd,CrsCod,UsrCod,StartTime,EndTime,Title,Txt)"
-				" VALUES"
-				" (%u,%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s')",
-				Item->Hierarchy.Index,
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Item->TimeUTC[Dat_START_TIME],
-				Item->TimeUTC[Dat_END_TIME  ],
-				Item->Title,
-				Txt);
+	    /***** Move down all indexes of after last child of parent *****/
+	    DB_QueryUPDATE ("can not move down items",
+			    "UPDATE prg_items SET ItmInd=ItmInd+1"
+			    " WHERE CrsCod=%ld"
+			    " AND ItmInd>=%u"
+			    " ORDER BY ItmInd DESC",	// Necessary to not create duplicate key (CrsCod,ItmInd)
+			    Gbl.Hierarchy.Crs.CrsCod,
+			    Item->Hierarchy.Index);
+	   }
+	 else
+	    /***** New program item will be inserted at the end *****/
+	    Item->Hierarchy.Index = Gbl.Prg.LstItems[Gbl.Prg.Num - 1].Index + 1;
+
+	 /***** Child ==> parent level + 1 *****/
+         Item->Hierarchy.Level = ParentItem->Hierarchy.Level + 1;
+	}
+      else	// No parent specified
+	{
+	 /***** New program item will be inserted at the end *****/
+	 Item->Hierarchy.Index = Gbl.Prg.LstItems[Gbl.Prg.Num - 1].Index + 1;
+
+	 /***** First level *****/
+         Item->Hierarchy.Level = 1;
+	}
+     }
+   else		// There are no items
+     {
+      /***** New program item will be inserted as the first one *****/
+      Item->Hierarchy.Index = 1;
+
+      /***** First level *****/
+      Item->Hierarchy.Level = 1;
+     }
+
+   /***** Insert new program item *****/
+   Item->Hierarchy.ItmCod = Prg_InsertPrgItemIntoDB (Item,Txt);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
@@ -1821,9 +1950,34 @@ static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
    DB_Query ("can not unlock tables after moving items",
 	     "UNLOCK TABLES");
 
+   /***** Free list items *****/
+   Prg_FreeListItems ();
+
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Prg_CreateGrps (Item->Hierarchy.ItmCod);
+  }
+
+/*****************************************************************************/
+/***************** Create a new program item into database *******************/
+/*****************************************************************************/
+
+static long Prg_InsertPrgItemIntoDB (struct ProgramItem *Item,const char *Txt)
+  {
+   return DB_QueryINSERTandReturnCode ("can not create new program item",
+				       "INSERT INTO prg_items"
+				       " (CrsCod,ItmInd,Level,UsrCod,StartTime,EndTime,Title,Txt)"
+				       " VALUES"
+				       " (%ld,%u,%u,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				       "'%s','%s')",
+				       Gbl.Hierarchy.Crs.CrsCod,
+				       Item->Hierarchy.Index,
+				       Item->Hierarchy.Level,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Item->TimeUTC[Dat_START_TIME],
+				       Item->TimeUTC[Dat_END_TIME  ],
+				       Item->Title,
+				       Txt);
   }
 
 /*****************************************************************************/
@@ -2049,10 +2203,10 @@ static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod)
 				" WHERE ItmCod=%ld"
 				" AND "
 				"("
-				// Schedule item is for the whole course
+				// Item is for the whole course
 				"ItmCod NOT IN (SELECT ItmCod FROM prg_grp)"
 				" OR "
-				// Schedule item is for specific groups
+				// Item is for specific groups
 				"ItmCod IN"
 				" (SELECT prg_grp.ItmCod FROM prg_grp,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld"

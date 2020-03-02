@@ -4808,7 +4808,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActEdiOnePrgItm] =
+	[ActFrmChgPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

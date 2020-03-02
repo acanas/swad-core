@@ -69,11 +69,10 @@ struct ProgramItem
 
 void Prg_SeeCourseProgram (void);
 
-void Prg_RequestCreatOrEditPrgItem (void);
-void Prg_GetDataOfItemByCod (struct ProgramItem *PrgItem);
-void Prg_FreeListItems (void);
-
-long Prg_GetParamItemCode (void);
+void Prg_RequestCreatePrgItem (void);
+void Prg_RequestChangePrgItem (void);
+void Prg_RecFormNewPrgItem (void);
+void Prg_RecFormChgPrgItem (void);
 
 void Prg_ReqRemPrgItem (void);
 void Prg_RemovePrgItem (void);

@@ -398,10 +398,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgCrsYeaCfg	] = {1573,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CrsCfg_ChangeCrsYear		,CrsCfg_ContEditAfterChgCrs	,NULL},
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
-   [ActFrmNewPrgItm	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
-   [ActEdiOnePrgItm	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatOrEditPrgItem	,NULL},
-   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
-   [ActChgPrgItm	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormPrgItem		,NULL},
+   [ActFrmNewPrgItm	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreatePrgItem	,NULL},
+   [ActFrmChgPrgItm	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangePrgItem	,NULL},
+   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormNewPrgItem		,NULL},
+   [ActChgPrgItm	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormChgPrgItem		,NULL},
    [ActReqRemPrgItm	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemPrgItem		,NULL},
    [ActRemPrgItm	] = {1828,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RemovePrgItem		,NULL},
    [ActHidPrgItm	] = {1829,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_HidePrgItem		,NULL},
@@ -3552,7 +3552,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActMtn,			// #1820
 	ActSeePrg,		// #1821
 	ActFrmNewPrgItm,	// #1822
-	ActEdiOnePrgItm,	// #1823
+	ActFrmChgPrgItm,	// #1823
 	-1,			// #1824
 	ActNewPrgItm,		// #1825
 	ActChgPrgItm,		// #1826

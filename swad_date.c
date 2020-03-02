@@ -480,7 +480,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
 /************* Show forms to enter initial and ending date-times *************/
 /*****************************************************************************/
 
-void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
+void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START_END_TIME],
                                               Dat_FormSeconds FormSeconds,
 					      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME])
   {
