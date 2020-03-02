@@ -79,40 +79,44 @@ static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
-static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView);
+static void Prg_ShowOneItem (unsigned NumItem,bool PrintView);
 
 static void Prg_CreateNumbers (unsigned MaxLevel);
 static void Prg_FreeNumbers (void);
+static void Prg_IncreaseNumItem (unsigned Level);
+static unsigned Prg_GetNumItem (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 
-static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned MaxIndex,
-                                             const char *Anchor);
+static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor);
+static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
+static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
+static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
+static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 
 static void Prg_SetCurrentItmCod (long ItmCod);
 static long Prg_GetCurrentItmCod (void);
 static void Prg_PutParams (void);
 
+static void Prg_GetListPrgItems (void);
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned long NumRows);
 static void Prg_ResetItem (struct ProgramItem *Item);
 static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prg_PutParamItmCod (long ItmCod);
+static long Prg_GetParamItmCod (void);
+
+static unsigned Prg_GetNumItemFromItmCod (unsigned ItmCod);
 
 static unsigned Prg_GetMaxItemLevel (void);
 static unsigned Prg_GetMaxItemIndex (void);
-static unsigned Prg_GetPrevIndex (unsigned Index);
-static unsigned Prg_GetParentIndex (unsigned Index,unsigned Level);
-static unsigned Prg_GetNextLowerIndex (unsigned Index,unsigned Level);
-static unsigned Prg_GetPrevBrotherIndex (unsigned Index,unsigned Level);
-static unsigned Prg_GetNextBrotherIndex (unsigned Index,unsigned Level);
-static unsigned Prg_GetLastChildIndex (unsigned Index,unsigned Level);
+static int Prg_GetPrevBrother (int NumItem);
+static int Prg_GetNextBrother (int NumItem);
+static int Prg_GetLastChild (int NumItem);
 
-static void Prg_ExchangeItems (int TopBegin,int TopEnd,
-			       int BottomBegin,int BottomEnd);
-static void Prg_MoveItemAndChildrenLeft (const struct ProgramItem *Item);
-static void Prg_MoveItemAndChildrenRight (const struct ProgramItem *Item);
+static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom);
+static void Prg_MoveItemAndChildrenLeft (unsigned NumItem);
+static void Prg_MoveItemAndChildrenRight (unsigned NumItem);
 
 static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
 static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
@@ -176,11 +180,10 @@ static void Prg_ShowAllItems (void)
       HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Write all the program items *****/
-      for (NumItem  = 1;
-	   NumItem <= Gbl.Prg.Num;
+      for (NumItem = 0;
+	   NumItem < Gbl.Prg.Num;
 	   NumItem++)
-	 Prg_ShowOneItem (Gbl.Prg.LstItmCods[NumItem - 1],
-			  Gbl.Prg.Num,
+	 Prg_ShowOneItem (NumItem,
 	                  false);	// Not print view
 
       /***** End table *****/
@@ -262,7 +265,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 #define Prg_WIDTH_NUM_ITEM 20
 
-static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
+static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -273,11 +276,12 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this program item *****/
-   Item.ItmCod = ItmCod;
+   Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
    Prg_GetDataOfItemByCod (&Item);
+   Prg_IncreaseNumItem (Item.Hierarchy.Level);
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Item.ItmCod,&Anchor);
+   Frm_SetAnchorStr (Item.Hierarchy.ItmCod,&Anchor);
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -286,15 +290,15 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
    if (!PrintView)
      {
       HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (&Item,MaxIndex,Anchor);
+      Prg_PutFormsToRemEditOnePrgItem (NumItem,Anchor);
       HTM_TD_End ();
      }
 
    /***** Indent depending on the level *****/
-   if (Item.Level > 1)
+   if (Item.Hierarchy.Level > 1)
      {
       HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
-		    Item.Level - 1,Gbl.RowEvenOdd);
+		    Item.Hierarchy.Level - 1,Gbl.RowEvenOdd);
       HTM_TD_End ();
      }
 
@@ -303,13 +307,13 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
 		 Item.Hidden ? "ASG_TITLE_LIGHT" :
 			       "ASG_TITLE",
 		 Gbl.RowEvenOdd,
-		 Item.Level * Prg_WIDTH_NUM_ITEM);
-   Prg_WriteNumItem (Item.Level);
+		 Item.Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
+   Prg_WriteNumItem (Item.Hierarchy.Level);
    HTM_TD_End ();
 
    /***** Title, groups and text *****/
    /* Begin title, groups and text */
-   ColSpan = Prg_MaxLevel - Item.Level + 1;
+   ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 1;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
 		    ColSpan);
@@ -330,7 +334,7 @@ static void Prg_ShowOneItem (long ItmCod,unsigned MaxIndex,bool PrintView)
       Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
 
    /* Text */
-   Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
+   Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -409,6 +413,31 @@ static void Prg_FreeNumbers (void)
   }
 
 /*****************************************************************************/
+/**************************** Increase number of item ************************/
+/*****************************************************************************/
+
+static void Prg_IncreaseNumItem (unsigned Level)
+  {
+   /***** Increase number for this level *****/
+   Prg_NumItem[Level]++;
+
+   /***** Reset number for next level (children) *****/
+   Prg_NumItem[Level + 1] = 0;
+  }
+
+/*****************************************************************************/
+/*********************** Get number of item in a level ***********************/
+/*****************************************************************************/
+
+static unsigned Prg_GetNumItem (unsigned Level)
+  {
+   if (Prg_NumItem)
+      return Prg_NumItem[Level];
+
+   return 0;
+  }
+
+/*****************************************************************************/
 /******************** Write number of item in legal style ********************/
 /*****************************************************************************/
 
@@ -416,45 +445,36 @@ static void Prg_WriteNumItem (unsigned Level)
   {
    unsigned i;
 
-   /***** Increase number for this level *****/
-   Prg_NumItem[Level]++;
-
-   /***** Write number *****/
-   HTM_Unsigned (Prg_NumItem[1]);
+   /***** Write number in legal style *****/
+   HTM_Unsigned (Prg_GetNumItem (1));
    for (i  = 2;
 	i <= Level;
 	i++)
      {
       HTM_Txt (".");
-      HTM_Unsigned (Prg_NumItem[i]);
+      HTM_Unsigned (Prg_GetNumItem (i));
      }
-
-   /***** Reset number for next level (children) *****/
-   Prg_NumItem[Level + 1] = 0;
   }
 
 /*****************************************************************************/
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
-static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
-					     unsigned MaxIndex,
-                                             const char *Anchor)
+static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor)
   {
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
    extern const char *Txt_Increase_level_of_X;
    extern const char *Txt_Decrease_level_of_X;
    extern const char *Txt_Movement_not_allowed;
-   static unsigned PrevLevel = 0;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   Prg_SetCurrentItmCod (Item->ItmCod);	// Used as parameter in contextual links
+   Prg_SetCurrentItmCod (Gbl.Prg.LstItems[NumItem].ItmCod);	// Used as parameter in contextual links
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),
 	     "%u",
-	     Item->Index);
+	     Gbl.Prg.LstItems[NumItem].Index);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -464,7 +484,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,Prg_PutParams);
 
 	 /***** Put form to hide/show program item *****/
-	 if (Item->Hidden)
+	 if (Gbl.Prg.LstItems[NumItem].Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoPrgItm,Anchor,Prg_PutParams);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
@@ -475,7 +495,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
-	 if (Item->Index > 1)
+	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,NULL,Prg_PutParams,
 					   "arrow-up.svg",
@@ -487,7 +507,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
-	 if (Item->Index < MaxIndex)
+	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,NULL,Prg_PutParams,
 					   "arrow-down.svg",
@@ -501,7 +521,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	 HTM_BR ();
 
 	 /***** Icon to move left item (increase level) *****/
-	 if (Item->Level > 1)
+	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
 					   "arrow-left.svg",
@@ -513,7 +533,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
 
 	 /***** Icon to move right item (indent, decrease level) *****/
-	 if (Item->Level <= PrevLevel)
+	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
 					   "arrow-right.svg",
@@ -523,8 +543,6 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
-
-	 PrevLevel = Item->Level;
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -532,6 +550,76 @@ static void Prg_PutFormsToRemEditOnePrgItem (const struct ProgramItem *Item,
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/*********************** Check if item can be moved up ***********************/
+/*****************************************************************************/
+
+static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem)
+  {
+   /***** Trivial check: if item is the first one, move up is not allowed *****/
+   if (NumItem == 0)
+      return false;
+
+   /***** Move up is allowed if the item has brothers before it *****/
+   // NumItem >= 2
+   return Gbl.Prg.LstItems[NumItem - 1].Level >=
+	  Gbl.Prg.LstItems[NumItem    ].Level;
+  }
+
+/*****************************************************************************/
+/********************** Check if item can be moved down **********************/
+/*****************************************************************************/
+
+static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem)
+  {
+   unsigned i;
+   unsigned Level;
+
+   /***** Trivial check: if item is the last one, move up is not allowed *****/
+   if (NumItem >= Gbl.Prg.Num - 1)
+      return false;
+
+   /***** Move down is allowed if the item has brothers after it *****/
+   // NumItem + 1 < Gbl.Prg.Num
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i = NumItem + 1;
+	i < Gbl.Prg.Num;
+	i++)
+     {
+      if (Gbl.Prg.LstItems[i].Level == Level)
+	 return true;	// Next brother found
+      if (Gbl.Prg.LstItems[i].Level < Level)
+	 return false;	// Next lower level found ==> there are no more brothers
+     }
+   return false;	// End reached ==> there are no more brothers
+  }
+
+/*****************************************************************************/
+/******************* Check if item can be moved to the left ******************/
+/*****************************************************************************/
+
+static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem)
+  {
+   /***** Move left is allowed if the item has parent *****/
+   return Gbl.Prg.LstItems[NumItem].Level > 1;
+  }
+
+/*****************************************************************************/
+/****************** Check if item can be moved to the right ******************/
+/*****************************************************************************/
+
+static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
+  {
+   /***** If item is the first, move right is not allowed *****/
+   if (NumItem == 0)
+      return false;
+
+   /***** Move right is allowed if the item has brothers before it *****/
+   // NumItem >= 2
+   return Gbl.Prg.LstItems[NumItem - 1].Level >=
+	  Gbl.Prg.LstItems[NumItem    ].Level;
   }
 
 /*****************************************************************************/
@@ -565,7 +653,7 @@ static void Prg_PutParams (void)
 /*********************** List all the program items **************************/
 /*****************************************************************************/
 
-void Prg_GetListPrgItems (void)
+static void Prg_GetListPrgItems (void)
   {
    static const char *HiddenSubQuery[Rol_NUM_ROLES] =
      {
@@ -591,7 +679,10 @@ void Prg_GetListPrgItems (void)
    /***** Get list of program items from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT ItmCod"
+	                        "SELECT ItmCod,"	// row[0]
+	                               "ItmInd,"	// row[1]
+	                               "Level,"		// row[2]
+	                               "Hidden"		// row[3]
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
 				" AND "
@@ -606,7 +697,10 @@ void Prg_GetListPrgItems (void)
 				Gbl.Usrs.Me.UsrDat.UsrCod);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT ItmCod"
+	                        "SELECT ItmCod,"	// row[0]
+	                               "ItmInd,"	// row[1]
+	                               "Level,"		// row[2]
+	                               "Hidden"		// row[3]
 				" FROM prg_items"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY ItmInd",
@@ -618,7 +712,9 @@ void Prg_GetListPrgItems (void)
       Gbl.Prg.Num = (unsigned) NumRows;
 
       /***** Create list of program items *****/
-      if ((Gbl.Prg.LstItmCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Gbl.Prg.LstItems =
+	   (struct ProgramItemHierarchy *) calloc (NumRows,
+						   sizeof (struct ProgramItemHierarchy))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the program items codes *****/
@@ -626,10 +722,21 @@ void Prg_GetListPrgItems (void)
 	   NumItem < Gbl.Prg.Num;
 	   NumItem++)
         {
-         /* Get next program item code */
+         /* Get row */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Prg.LstItmCods[NumItem] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+
+         /* Get code of the program item (row[0]) */
+         if ((Gbl.Prg.LstItems[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong program item code.");
+
+         /* Get index of the program item (row[1]) */
+         Gbl.Prg.LstItems[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
+
+         /* Get level of the program item (row[2]) */
+         Gbl.Prg.LstItems[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
+
+	 /* Get whether the program item is hidden or not (row[3]) */
+	 Gbl.Prg.LstItems[NumItem].Hidden = (row[3][0] == 'Y');
         }
      }
    else
@@ -650,7 +757,7 @@ void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   if (Item->ItmCod > 0)
+   if (Item->Hierarchy.ItmCod > 0)
      {
       /***** Build query *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get program item data",
@@ -666,7 +773,7 @@ void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
 				" FROM prg_items"
 				" WHERE ItmCod=%ld"
 				" AND CrsCod=%ld",	// Extra check
-				Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+				Item->Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of program item *****/
       Prg_GetDataOfItem (Item,&mysql_res,NumRows);
@@ -707,13 +814,13 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       */
 
       /* Get code of the program item (row[0]) */
-      Item->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
+      Item->Hierarchy.ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get index of the program item (row[1]) */
-      Item->Index = Str_ConvertStrToUnsigned (row[1]);
+      Item->Hierarchy.Index = Str_ConvertStrToUnsigned (row[1]);
 
       /* Get level of the program item (row[2]) */
-      Item->Level = Str_ConvertStrToUnsigned (row[2]);
+      Item->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the program item is hidden or not (row[3]) */
       Item->Hidden = (row[3][0] == 'Y');
@@ -735,7 +842,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
                 Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
       /* Can I do this program item? */
-      Item->IBelongToCrsOrGrps = Prg_CheckIfIBelongToCrsOrGrpsThisItem (Item->ItmCod);
+      Item->IBelongToCrsOrGrps = Prg_CheckIfIBelongToCrsOrGrpsThisItem (Item->Hierarchy.ItmCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -748,9 +855,9 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
 
 static void Prg_ResetItem (struct ProgramItem *Item)
   {
-   Item->ItmCod = -1L;
-   Item->Index = 0;
-   Item->Level  = 1;
+   Item->Hierarchy.ItmCod = -1L;
+   Item->Hierarchy.Index  = 0;
+   Item->Hierarchy.Level  = 1;
    Item->Hidden = false;
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_START_TIME] =
@@ -766,11 +873,11 @@ static void Prg_ResetItem (struct ProgramItem *Item)
 
 void Prg_FreeListItems (void)
   {
-   if (Gbl.Prg.LstIsRead && Gbl.Prg.LstItmCods)
+   if (Gbl.Prg.LstIsRead && Gbl.Prg.LstItems)
      {
       /***** Free memory used by the list of program items *****/
-      free (Gbl.Prg.LstItmCods);
-      Gbl.Prg.LstItmCods = NULL;
+      free (Gbl.Prg.LstItems);
+      Gbl.Prg.LstItems = NULL;
       Gbl.Prg.Num = 0;
       Gbl.Prg.LstIsRead = false;
      }
@@ -824,10 +931,28 @@ static void Prg_PutParamItmCod (long ItmCod)
 /***************** Get parameter with code of program item *******************/
 /*****************************************************************************/
 
-long Prg_GetParamItmCod (void)
+static long Prg_GetParamItmCod (void)
   {
    /***** Get code of program item *****/
    return Par_GetParToLong ("ItmCod");
+  }
+
+/*****************************************************************************/
+/**************** Get number of item in list from item code ******************/
+/*****************************************************************************/
+
+static unsigned Prg_GetNumItemFromItmCod (unsigned ItmCod)
+  {
+   unsigned NumItem;
+
+   for (NumItem = 0;
+	NumItem < Gbl.Prg.Num;
+	NumItem++)
+      if (Gbl.Prg.LstItems[NumItem].ItmCod == ItmCod)
+	 return NumItem;
+
+   Lay_ShowErrorAndExit ("Wrong item code.");
+   return 0;	// Not reached
   }
 
 /*****************************************************************************/
@@ -844,14 +969,14 @@ void Prg_ReqRemPrgItem (void)
    Grp_GetParamWhichGrps ();
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (&Item);
 
    /***** Show question and button to remove the program item *****/
-   Prg_SetCurrentItmCod (Item.ItmCod);
+   Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,Prg_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
@@ -871,19 +996,19 @@ void Prg_RemovePrgItem (void)
    struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (&Item);	// Inside this function, the course is checked to be the current one
 
    /***** Remove all the groups of this program item *****/
-   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item.ItmCod);
+   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item.Hierarchy.ItmCod);
 
    /***** Remove program item *****/
    DB_QueryDELETE ("can not remove program item",
 		   "DELETE FROM prg_items WHERE ItmCod=%ld AND CrsCod=%ld",
-                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
@@ -901,7 +1026,7 @@ void Prg_HidePrgItem (void)
    struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
@@ -912,7 +1037,7 @@ void Prg_HidePrgItem (void)
 		   "UPDATE prg_items SET Hidden='Y'"
 		   " WHERE ItmCod=%ld"
 		   " AND CrsCod=%ld",	// Extra check
-                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -927,7 +1052,7 @@ void Prg_ShowPrgItem (void)
    struct ProgramItem Item;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
    /***** Get data of the program item from database *****/
@@ -938,7 +1063,7 @@ void Prg_ShowPrgItem (void)
 		   "UPDATE prg_items SET Hidden='N'"
 		   " WHERE ItmCod=%ld"
 		   " AND CrsCod=%ld",	// Extra check
-                   Item.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -950,30 +1075,27 @@ void Prg_ShowPrgItem (void)
 
 void Prg_MoveUpPrgItem (void)
   {
-   struct ProgramItem Item;
-   struct
-     {
-      unsigned Begin;
-      unsigned End;
-     } Prev, This;
+   extern const char *Txt_Movement_not_allowed;
+   long ItmCod;
+   unsigned NumItem;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
 
-   /***** Move up item *****/
-   /* Indexes of items to be exchanged */
-   Prev.Begin = Prg_GetPrevBrotherIndex (Item.Index,Item.Level);
-   Prev.End   = Prg_GetPrevIndex (Item.Index);
-   This.Begin = Item.Index;
-   This.End   = Prg_GetLastChildIndex (Item.Index,Item.Level);
+   if (Prg_CheckIfMoveUpIsAllowed (NumItem))
+      /***** Move up item *****/
+      /* Exchange subtrees */
+      Prg_ExchangeItems (Prg_GetPrevBrother (NumItem),NumItem);
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
-   /* Exchange items */
-   Prg_ExchangeItems ((int) Prev.Begin,(int) Prev.End,
-		      (int) This.Begin,(int) This.End);
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -986,59 +1108,26 @@ void Prg_MoveUpPrgItem (void)
 void Prg_MoveDownPrgItem (void)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct ProgramItem Item;
-   struct
-     {
-      unsigned Begin;
-      unsigned End;
-     } This, Next;
+   long ItmCod;
+   unsigned NumItem;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
 
-   /***** Move down item *****/
-   /* Indexes of items to be exchanged */
-   This.Begin = Item.Index;
-   This.End   = Prg_GetLastChildIndex (Item.Index,Item.Level);
-   Next.Begin = Prg_GetNextBrotherIndex (Item.Index,Item.Level);
-   Next.End   = Prg_GetLastChildIndex (Next.Begin,Item.Level);
+   if (Prg_CheckIfMoveDownIsAllowed (NumItem))
+      /***** Move down item *****/
+      /* Exchange subtrees */
+      Prg_ExchangeItems (NumItem,Prg_GetNextBrother (NumItem));
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
-   Ale_ShowAlert (Ale_INFO,"This.Begin = %u<br />"
-	                   "This.End   = %u<br />"
-	                   "Next.Begin = %u<br />"
-	                   "Next.End   = %u",
-		  This.Begin,This.End,Next.Begin,Next.End);
-
-   /* Exchange items */
-   Prg_ExchangeItems (This.Begin,This.End,
-		      Next.Begin,Next.End);
-
-   /***** Show program items again *****/
-   Prg_SeeCourseProgram ();
-  }
-
-/*****************************************************************************/
-/**** Move right (increase level) position of an item in a course program ****/
-/*****************************************************************************/
-
-void Prg_MoveRightPrgItem (void)
-  {
-   struct ProgramItem Item;
-
-   /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);
-
-   /***** Move right item (increase level) *****/
-   /* Move item and its children to right */
-   Prg_MoveItemAndChildrenRight (&Item);
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1050,18 +1139,51 @@ void Prg_MoveRightPrgItem (void)
 
 void Prg_MoveLeftPrgItem (void)
   {
-   struct ProgramItem Item;
+   long ItmCod;
+   unsigned NumItem;
 
    /***** Get program item code *****/
-   if ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L)
+   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
 
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
 
    /***** Move left item (decrease level) *****/
    /* Move item and its children to left */
-   Prg_MoveItemAndChildrenLeft (&Item);
+   Prg_MoveItemAndChildrenLeft (NumItem);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+
+   /***** Show program items again *****/
+   Prg_SeeCourseProgram ();
+  }
+
+/*****************************************************************************/
+/**** Move right (increase level) position of an item in a course program ****/
+/*****************************************************************************/
+
+void Prg_MoveRightPrgItem (void)
+  {
+   long ItmCod;
+   unsigned NumItem;
+
+   /***** Get program item code *****/
+   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of program item is missing.");
+
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
+
+   /***** Move right item (increase level) *****/
+   /* Move item and its children to right */
+   Prg_MoveItemAndChildrenRight (NumItem);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1074,23 +1196,15 @@ void Prg_MoveLeftPrgItem (void)
 
 static unsigned Prg_GetMaxItemLevel (void)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   unsigned NumItem;
    unsigned MaxLevel = 0;
 
-   /***** Get maximum item index in a course program from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get last item index",
-		   "SELECT MAX(Level)"
-		   " FROM prg_items"
-		   " WHERE CrsCod=%ld",
-                   Gbl.Hierarchy.Crs.CrsCod);
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are items
-      if (sscanf (row[0],"%u",&MaxLevel) != 1)
-         Lay_ShowErrorAndExit ("Error when getting maximum item level.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Compute maximum level of all program items *****/
+   for (NumItem = 0;
+	NumItem < Gbl.Prg.Num;
+	NumItem++)
+      if (Gbl.Prg.LstItems[NumItem].Level > MaxLevel)
+	 MaxLevel = Gbl.Prg.LstItems[NumItem].Level;
 
    return MaxLevel;
   }
@@ -1125,206 +1239,63 @@ static unsigned Prg_GetMaxItemIndex (void)
   }
 
 /*****************************************************************************/
-/******** Get previous item index to a given index in current course *********/
+/******** Get previous brother item to a given item in current course ********/
 /*****************************************************************************/
-// Return 0 if no previous item
+// Return -1 if no previous brother
 
-static unsigned Prg_GetPrevIndex (unsigned Index)
+static int Prg_GetPrevBrother (int NumItem)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned PrevIndex = 0;
+   unsigned Level;
+   int i;
 
-   if (Index)
+   /***** Trivial check: if item is the first one, there is no previous brother *****/
+   if (NumItem <= 0 ||
+       NumItem >= (int) Gbl.Prg.Num)
+      return -1;
+
+   /***** Get previous brother before item *****/
+   // 1 <= NumItem < Gbl.Prg.Num
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i  = NumItem - 1;
+	i >= 0;
+	i--)
      {
-      /***** Get previous item index in a course from database *****/
-      if (!DB_QuerySELECT (&mysql_res,"can not get previous item index",
-			   "SELECT MAX(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd<%u",
-			   Gbl.Hierarchy.Crs.CrsCod,Index))
-	 Lay_ShowErrorAndExit ("Error: previous item index not found.");
-
-      /***** Get previous item index (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row)
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&PrevIndex) != 1)
-	       Lay_ShowErrorAndExit ("Error when getting previous item index.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      if (Gbl.Prg.LstItems[i].Level == Level)
+	 return i;	// Previous brother before item found
+      if (Gbl.Prg.LstItems[i].Level < Level)
+	 return -1;		// Previous lower level found ==> there are no brothers before item
      }
-
-   return PrevIndex;
+   return -1;	// Start reached ==> there are no brothers before item
   }
 
 /*****************************************************************************/
-/************ Get parent index to a given index in current course ************/
+/********** Get next brother item to a given item in current course **********/
 /*****************************************************************************/
-// Return 0 if no parent item
+// Return -1 if no next brother
 
-static unsigned Prg_GetParentIndex (unsigned Index,unsigned Level)
+static int Prg_GetNextBrother (int NumItem)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned ParentIndex = 0;
+   unsigned Level;
+   int i;
 
-   if (Index)
-      if (Level > 1)
-	{
-	 /***** Get parent item index in a course from database *****/
-	 if (!DB_QuerySELECT (&mysql_res,"can not get parent item index",
-			      "SELECT MAX(ItmInd)"	// row[0]
-			      " FROM prg_items"
-			      " WHERE CrsCod=%ld"
-			      " AND ItmInd<%u AND Level=%u",
-			      Gbl.Hierarchy.Crs.CrsCod,Index,Level - 1))
-	    Lay_ShowErrorAndExit ("Error: parent item index not found.");
+   /***** Trivial check: if item is the last one, there is no next brother *****/
+   if (NumItem < 0 ||
+       NumItem >= (int) Gbl.Prg.Num - 1)
+      return -1;
 
-	 /***** Get previous item index (row[0]) *****/
-	 row = mysql_fetch_row (mysql_res);
-	 if (row)
-	    if (row[0])
-	       if (sscanf (row[0],"%u",&ParentIndex) != 1)
-		  Lay_ShowErrorAndExit ("Error when getting parent item index.");
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
-
-   return ParentIndex;
-  }
-
-/*****************************************************************************/
-/**** Get next index with lower level than a given index in current course ***/
-/*****************************************************************************/
-// Return 0 if no next lower item
-
-static unsigned Prg_GetNextLowerIndex (unsigned Index,unsigned Level)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NextLowerIndex = 0;
-
-   if (Index)
+   /***** Get next brother after item *****/
+   // 0 <= NumItem < Gbl.Prg.Num - 1
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i = NumItem + 1;
+	i < (int) Gbl.Prg.Num;
+	i++)
      {
-      /***** Get next item index in a course from database *****/
-      if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			   "SELECT MIN(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd>%u AND Level>%u",
-			   Gbl.Hierarchy.Crs.CrsCod,Index,Level))
-	 Lay_ShowErrorAndExit ("Error: next brother item index not found.");
-
-      /***** Get previous item index (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row)
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&NextLowerIndex) != 1)
-	       Lay_ShowErrorAndExit ("Error when getting next brother item index.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      if (Gbl.Prg.LstItems[i].Level == Level)
+	 return i;	// Next brother found
+      if (Gbl.Prg.LstItems[i].Level < Level)
+	 return -1;	// Next lower level found ==> there are no brothers after item
      }
-
-   return NextLowerIndex;
-  }
-
-/*****************************************************************************/
-/******* Get previous brother index to a given index in current course *******/
-/*****************************************************************************/
-// Return 0 if no previous brother
-
-static unsigned Prg_GetPrevBrotherIndex (unsigned Index,unsigned Level)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned ParentIndex;
-   unsigned PrevBrotherIndex = 0;
-
-   if (Index)
-     {
-      ParentIndex = Prg_GetParentIndex (Index,Level);
-
-      /***** Get previous brother item index in a course from database *****/
-      if (!DB_QuerySELECT (&mysql_res,"can not get previous brother item index",
-			   "SELECT MAX(ItmInd)"	// row[0]
-			   " FROM prg_items"
-			   " WHERE CrsCod=%ld"
-			   " AND ItmInd>%u AND ItmInd<%u AND Level=%u",
-			   Gbl.Hierarchy.Crs.CrsCod,
-			   ParentIndex,Index,Level))
-	 Lay_ShowErrorAndExit ("Error: previous brother item index not found.");
-
-      /***** Get previous item index (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row)
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&PrevBrotherIndex) != 1)
-	       Lay_ShowErrorAndExit ("Error when getting previous brother item index.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return PrevBrotherIndex;
-  }
-
-/*****************************************************************************/
-/********* Get next brother index to a given index in current course *********/
-/*****************************************************************************/
-// Return 0 if no next brother
-
-static unsigned Prg_GetNextBrotherIndex (unsigned Index,unsigned Level)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NextLowerIndex;
-   unsigned NextBrotherIndex = 0;
-
-   if (Index)
-     {
-      NextLowerIndex = Prg_GetNextLowerIndex (Index,Level);
-
-      /***** Get next brother item index in a course from database *****/
-      if (NextLowerIndex)
-	{
-	 if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			      "SELECT MIN(ItmInd)"	// row[0]
-			      " FROM prg_items"
-			      " WHERE CrsCod=%ld"
-			      " AND ItmInd>%u AND ItmInd<%u AND Level=%u",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      Index,NextLowerIndex,Level))
-	    Lay_ShowErrorAndExit ("Error: next brother item index not found.");
-	}
-      else
-	{
-	 if (!DB_QuerySELECT (&mysql_res,"can not get next brother item index",
-			      "SELECT MIN(ItmInd)"	// row[0]
-			      " FROM prg_items"
-			      " WHERE CrsCod=%ld"
-			      " AND ItmInd>%u AND Level=%u",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      Index,Level))
-	    Lay_ShowErrorAndExit ("Error: next brother item index not found.");
-	}
-
-      /***** Get previous item index (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row)
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&NextBrotherIndex) != 1)
-	       Lay_ShowErrorAndExit ("Error when getting next brother item index.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return NextBrotherIndex;
+   return -1;	// End reached ==> there are no brothers after item
   }
 
 /*****************************************************************************/
@@ -1332,49 +1303,53 @@ static unsigned Prg_GetNextBrotherIndex (unsigned Index,unsigned Level)
 /*****************************************************************************/
 // Return the same index if no children
 
-static unsigned Prg_GetLastChildIndex (unsigned Index,unsigned Level)
+static int Prg_GetLastChild (int NumItem)
   {
-   unsigned NextBrother;
-   unsigned NextLower;
+   unsigned Level;
+   int i;
 
-   NextBrother = Prg_GetNextBrotherIndex (Index,Level);
-   if (NextBrother)
-      return Prg_GetPrevIndex (NextBrother);
+   /***** Trivial check: if item is wrong, there are no children *****/
+   if (NumItem < 0 ||
+       NumItem >= (int) Gbl.Prg.Num)
+      return -1;
 
-   // Last brother, no more brothers
-   NextLower = Prg_GetNextLowerIndex (Index,Level);
-   if (NextLower)
-      return Prg_GetPrevIndex (NextLower);
-
-   // Last item, no more items
-   return Index;
+   /***** Get next brother after item *****/
+   // 0 <= NumItem < Gbl.Prg.Num
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i = NumItem + 1;
+	i < (int) Gbl.Prg.Num;
+	i++)
+     {
+      if (Gbl.Prg.LstItems[i].Level <= Level)
+	 return i - 1;	// Last child found
+     }
+   return Gbl.Prg.Num - 1;	// End reached ==> all items after the given item are its children
   }
 
 /*****************************************************************************/
 /**************** Move item and its children to left or right ****************/
 /*****************************************************************************/
 
-static void Prg_MoveItemAndChildrenLeft (const struct ProgramItem *Item)
+static void Prg_MoveItemAndChildrenLeft (unsigned NumItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct
+   unsigned BeginIndex;
+   unsigned EndIndex;
+
+   if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
      {
-      unsigned Begin;
-      unsigned End;
-     } This;
+      /* Indexes of items */
+      BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
+      EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
 
-   /* Indexes of items */
-   This.Begin = Item->Index;
-   This.End   = Prg_GetLastChildIndex (Item->Index,Item->Level);
-
-   if (Item->Level)	// Only if no first level
       /* Move item and its children to left or right */
       DB_QueryUPDATE ("can not move items",
 		      "UPDATE prg_items SET Level=Level-1"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      This.Begin,This.End);
+		      BeginIndex,EndIndex);
+     }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
   }
@@ -1383,29 +1358,26 @@ static void Prg_MoveItemAndChildrenLeft (const struct ProgramItem *Item)
 /**************** Move item and its children to left or right ****************/
 /*****************************************************************************/
 
-static void Prg_MoveItemAndChildrenRight (const struct ProgramItem *Item)
+static void Prg_MoveItemAndChildrenRight (unsigned NumItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct
+   unsigned BeginIndex;
+   unsigned EndIndex;
+
+   if (Prg_CheckIfMoveRightIsAllowed (NumItem))
      {
-      unsigned Begin;
-      unsigned End;
-     } Prev, This;
+      /* Indexes of items */
+      BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
+      EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
 
-   /* Indexes of items */
-   Prev.Begin = Prg_GetPrevBrotherIndex (Item->Index,Item->Level);
-   Prev.End   = Prg_GetLastChildIndex (Prev.Begin,Item->Level);
-   This.Begin = Item->Index;
-   This.End   = Prg_GetLastChildIndex (Item->Index,Item->Level);
-
-   if (Prev.Begin)	// Only if previous brother exists
       /* Move item and its children to left or right */
       DB_QueryUPDATE ("can not move items",
 		      "UPDATE prg_items SET Level=Level+1"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      This.Begin,This.End);
+		      BeginIndex,EndIndex);
+     }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
   }
@@ -1414,15 +1386,35 @@ static void Prg_MoveItemAndChildrenRight (const struct ProgramItem *Item)
 /****** Exchange the order of two consecutive items in a course program ******/
 /*****************************************************************************/
 
-static void Prg_ExchangeItems (int TopBegin,int TopEnd,
-			       int BottomBegin,int BottomEnd)
+static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom)
   {
    extern const char *Txt_Movement_not_allowed;
-   int DiffBegin = BottomBegin - TopBegin;
-   int DiffEnd   = BottomEnd   - TopEnd;
-
-   if (TopBegin && BottomBegin)
+   struct
      {
+      unsigned Begin;
+      unsigned End;
+     } TopIndex, BottomIndex, Diff;
+
+   if (NumItemTop    >= 0 &&
+       NumItemBottom >= 0)
+     {
+      TopIndex.Begin    = Gbl.Prg.LstItems[NumItemTop                      ].Index;
+      TopIndex.End      = Gbl.Prg.LstItems[Prg_GetLastChild (NumItemTop   )].Index;
+      BottomIndex.Begin = Gbl.Prg.LstItems[NumItemBottom                   ].Index;
+      BottomIndex.End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItemBottom)].Index;
+      Diff.Begin        = BottomIndex.Begin - TopIndex.Begin;
+      Diff.End          = BottomIndex.End   - TopIndex.End;
+
+      Ale_ShowAlert (Ale_INFO,"TopIndex.Begin    = %u<br />"
+			      "TopIndex.End      = %u<br />"
+			      "BottomIndex.Begin = %u<br />"
+			      "BottomIndex.End   = %u",
+		     TopIndex.Begin,
+		     TopIndex.End,
+		     BottomIndex.Begin,
+		     BottomIndex.End);
+
+
       /***** Lock table to make the move atomic *****/
       DB_Query ("can not lock tables to move program item",
 		"LOCK TABLES prg_items WRITE");
@@ -1433,48 +1425,52 @@ static void Prg_ExchangeItems (int TopBegin,int TopEnd,
       // ...this implementation works even with non continuous indexes
       /*
       Example:
-      TopBegin    =  5
-		  = 10
-      TopEnd      = 17
-      BottomBegin = 28
-      BottomEnd   = 49
+      TopIndex.Begin    =  5
+		        = 10
+      TopIndex.End      = 17
+      BottomIndex.Begin = 28
+      BottomIndex.End   = 49
 
-      DiffBegin = 28 -  5 = 23;
-      DiffEnd   = 49 - 17 = 32;
+      Diff.Begin = 28 -  5 = 23;
+      Diff.End   = 49 - 17 = 32;
 
-			      Step 1            Step 2            Step 3          (Equivalent to)
-	   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
-	   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod| |ItmInd|ItmCod|
-	   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
-      TopBegin:  5|   218|-->|--> -5|   218|-->|--> 37|   218|   |    37|   218| |     5|   221|
-	   |    10|   219|-->|-->-10|   219|-->|--> 42|   219|   |    42|   219| |    26|   222|
-      TopEnd:   17|   220|-->|-->-17|   220|-->|--> 49|   220|   |    49|   220| |    37|   218|
-   BottomBegin: 28|   221|-->|-->-28|   221|   |   -28|   221|-->|-->  5|   221| |    42|   219|
-   BottomEnd:   49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   222| |    49|   220|
-	   +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+                                Step 1            Step 2            Step 3          (Equivalent to)
+              +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+              |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod| |ItmInd|ItmCod|
+              +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
+TopIndex.Begin:     5|   218|-->|--> -5|   218|-->|--> 37|   218|   |    37|   218| |     5|   221|
+              |    10|   219|-->|-->-10|   219|-->|--> 42|   219|   |    42|   219| |    26|   222|
+TopIndex.End: |    17|   220|-->|-->-17|   220|-->|--> 49|   220|   |    49|   220| |    37|   218|
+BottomIndex.Begin: 28|   221|-->|-->-28|   221|   |   -28|   221|-->|-->  5|   221| |    42|   219|
+BottomIndex.End:   49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   222| |    49|   220|
+              +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
       */
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,ItmInd) */
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items SET ItmInd=-ItmInd"
-		      " WHERE CrsCod=%ld AND ItmInd>=%d AND ItmInd<=%d",
-		      Gbl.Hierarchy.Crs.CrsCod,TopBegin,BottomEnd);
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=%u AND ItmInd<=%u",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      TopIndex.Begin,BottomIndex.End);
 
       /* Step 2: Increase top indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items SET ItmInd=-ItmInd+%d"
-		      " WHERE CrsCod=%ld AND ItmInd>=%d AND ItmInd<=%d",
-		      DiffEnd,
+		      "UPDATE prg_items SET ItmInd=-ItmInd+%u"
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=-%u AND ItmInd<=-%u",
+		      Diff.End,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      -TopEnd,-TopBegin);		// All indexes in top part
+		      TopIndex.End,TopIndex.Begin);		// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items SET ItmInd=-ItmInd-%d"
-		      " WHERE CrsCod=%ld AND ItmInd>=%d AND ItmInd<=%d",
-		      DiffBegin,
+		      "UPDATE prg_items SET ItmInd=-ItmInd-%u"
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=-%u AND ItmInd<=-%u",
+		      Diff.Begin,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      -BottomEnd,-BottomBegin);	// All indexes in bottom part
+		      BottomIndex.End,BottomIndex.Begin);	// All indexes in bottom part
 
       /***** Unlock table *****/
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
@@ -1528,7 +1524,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    Grp_GetParamWhichGrps ();
 
    /***** Get the code of the program item *****/
-   ItsANewItem = ((Item.ItmCod = Prg_GetParamItmCod ()) == -1L);
+   ItsANewItem = ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L);
 
    /***** Get from the database the data of the program item *****/
    if (ItsANewItem)
@@ -1545,7 +1541,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
       Prg_GetDataOfItemByCod (&Item);
 
       /* Get text of the program item from database */
-      Prg_GetPrgItemTxtFromDB (Item.ItmCod,Txt);
+      Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
      }
 
    /***** Begin form *****/
@@ -1557,7 +1553,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    else
      {
       Frm_StartForm (ActChgPrgItm);
-      Prg_SetCurrentItmCod (Item.ItmCod);
+      Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
      }
    Prg_PutParams ();
 
@@ -1611,7 +1607,7 @@ void Prg_RequestCreatOrEditPrgItem (void)
    HTM_TR_End ();
 
    /***** Groups *****/
-   Prg_ShowLstGrpsToEditPrgItem (Item.ItmCod);
+   Prg_ShowLstGrpsToEditPrgItem (Item.Hierarchy.ItmCod);
 
    /***** End table, send button and end box *****/
    if (ItsANewItem)
@@ -1706,8 +1702,8 @@ void Prg_RecFormPrgItem (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the program item *****/
-   NewItem.ItmCod = Prg_GetParamItmCod ();
-   ItsANewItem = (NewItem.ItmCod < 0);
+   NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   ItsANewItem = (NewItem.Hierarchy.ItmCod < 0);
 
    if (ItsANewItem)
       /***** Reset old (current, not existing) program item data *****/
@@ -1715,7 +1711,7 @@ void Prg_RecFormPrgItem (void)
    else
      {
       /***** Get data of the old (current) program item from database *****/
-      OldItem.ItmCod = NewItem.ItmCod;
+      OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
       Prg_GetDataOfItemByCod (&OldItem);
      }
 
@@ -1739,7 +1735,7 @@ void Prg_RecFormPrgItem (void)
    if (NewItem.Title[0])	// If there's a program item title
      {
       /* If title of program item was in database... */
-      if (Prg_CheckIfSimilarPrgItemExists ("Title",NewItem.Title,NewItem.ItmCod))
+      if (Prg_CheckIfSimilarPrgItemExists ("Title",NewItem.Title,NewItem.Hierarchy.ItmCod))
         {
          NewItemIsCorrect = false;
 
@@ -1803,15 +1799,15 @@ static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
    MaxIndex = Prg_GetMaxItemIndex ();
 
    /***** Create a new program item *****/
-   Item->Index = MaxIndex + 1;
-   Item->ItmCod =
+   Item->Hierarchy.Index = MaxIndex + 1;
+   Item->Hierarchy.ItmCod =
    DB_QueryINSERTandReturnCode ("can not create new program item",
 				"INSERT INTO prg_items"
 				" (ItmInd,CrsCod,UsrCod,StartTime,EndTime,Title,Txt)"
 				" VALUES"
 				" (%u,%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s')",
-				Item->Index,
+				Item->Hierarchy.Index,
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Item->TimeUTC[Dat_START_TIME],
@@ -1827,7 +1823,7 @@ static void Prg_CreatePrgItem (struct ProgramItem *Item,const char *Txt)
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (Item->ItmCod);
+      Prg_CreateGrps (Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -1848,15 +1844,15 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt)
                    Item->TimeUTC[Dat_END_TIME  ],
                    Item->Title,
                    Txt,
-                   Item->ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item->Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
-   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item->ItmCod);
+   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item->Hierarchy.ItmCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (Item->ItmCod);
+      Prg_CreateGrps (Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -1974,7 +1970,7 @@ static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item
 			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,"
 			               "crs_grp.GrpName",
-			     Item->ItmCod);
+			     Item->Hierarchy.ItmCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Item->Hidden ? "ASG_GRP_LIGHT" :

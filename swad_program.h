@@ -39,11 +39,17 @@
 #define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
 #define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct ProgramItem
+struct ProgramItemHierarchy
   {
    long ItmCod;
    unsigned Index;
    unsigned Level;
+   bool Hidden;
+  };
+
+struct ProgramItem
+  {
+   struct ProgramItemHierarchy Hierarchy;
    bool Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -64,7 +70,6 @@ struct ProgramItem
 void Prg_SeeCourseProgram (void);
 
 void Prg_RequestCreatOrEditPrgItem (void);
-void Prg_GetListPrgItems (void);
 void Prg_GetDataOfItemByCod (struct ProgramItem *PrgItem);
 void Prg_FreeListItems (void);
 
@@ -77,8 +82,8 @@ void Prg_ShowPrgItem (void);
 
 void Prg_MoveUpPrgItem (void);
 void Prg_MoveDownPrgItem (void);
-void Prg_MoveRightPrgItem (void);
 void Prg_MoveLeftPrgItem (void);
+void Prg_MoveRightPrgItem (void);
 
 void Prg_RecFormPrgItem (void);
 bool Prg_CheckIfItemIsAssociatedToGrp (long PrgItmCod,long GrpCod);

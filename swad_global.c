@@ -299,7 +299,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Prg.LstIsRead = false;	// List is not read
    Gbl.Prg.Num = 0;
-   Gbl.Prg.LstItmCods = NULL;
+   Gbl.Prg.LstItems = NULL;
 
    Gbl.Asgs.LstIsRead = false;	// List is not read
    Gbl.Asgs.Num = 0;

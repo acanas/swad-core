@@ -4997,15 +4997,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRgtPrgItm] =
+	[ActLftPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Move right program item"
+	"Move left program item"
 #elif L==4	// es
-	"Mover a la derecha &iacute;tem del programa"
+	"Mover a la izquierda &iacute;tem del programa"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -5018,15 +5018,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActLftPrgItm] =
+	[ActRgtPrgItm] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Move left program item"
+	"Move right program item"
 #elif L==4	// es
-	"Mover a la izquierda &iacute;tem del programa"
+	"Mover a la derecha &iacute;tem del programa"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
