@@ -81,14 +81,15 @@ static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ItmCod);
+			      long ItmCodBeforeForm,unsigned FormLevel);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
-static void Prg_ShowOneItem (unsigned NumItem,
-			     Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			     bool PrintView);
+static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,bool PrintView);
+static void Prg_ShowItemForm (const struct ProgramItem *Item,
+			      Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      unsigned FormLevel);
 
 static void Prg_CreateNumbers (unsigned MaxLevel);
 static void Prg_FreeNumbers (void);
@@ -96,7 +97,9 @@ static void Prg_IncreaseNumItem (unsigned Level);
 static unsigned Prg_GetNumItem (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 
-static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor);
+static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
+					     const struct ProgramItem *Item,
+					     const char *Anchor);
 static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
@@ -146,7 +149,7 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
 void Prg_SeeCourseProgram (void)
   {
    /***** Show all the program items *****/
-   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,-1L);
+   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,-1L,0);
   }
 
 /*****************************************************************************/
@@ -154,22 +157,18 @@ void Prg_SeeCourseProgram (void)
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ItmCod)
+			      long ItmCodBeforeForm,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
    extern const char *Txt_No_items;
    unsigned NumItem;
+   struct ProgramItem Item;
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
-   if (Gbl.Prg.Num)
-     {
-      Prg_MaxLevel = Prg_GetMaxItemLevel ();
-      Prg_CreateNumbers (Prg_MaxLevel);
-     }
-   else
-      Prg_MaxLevel = 0;
+   Prg_MaxLevel = Prg_GetMaxItemLevel ();
+   Prg_CreateNumbers (Prg_MaxLevel);
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
@@ -184,10 +183,21 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
       for (NumItem = 0;
 	   NumItem < Gbl.Prg.Num;
 	   NumItem++)
-	 Prg_ShowOneItem (NumItem,
-			  ItmCod == Gbl.Prg.LstItems[NumItem].ItmCod ? CreateOrChangeItem :
-				                                       Prg_DONT_PUT_FORM_ITEM,
+	{
+	 /* Get data of this program item */
+	 Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
+	 Prg_GetDataOfItemByCod (&Item);
+
+	 /* Show item */
+	 Prg_ShowOneItem (NumItem,&Item,
 	                  false);	// Not print view
+
+	 /* Show form to create/change item */
+	 if (ItmCodBeforeForm == Item.Hierarchy.ItmCod)
+	    Prg_ShowItemForm (&Item,CreateOrChangeItem,FormLevel);
+
+         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	}
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -203,8 +213,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    Box_BoxEnd ();
 
    /***** Free list of program items *****/
-   if (Gbl.Prg.Num)
-      Prg_FreeNumbers ();
+   Prg_FreeNumbers ();
    Prg_FreeListItems ();
   }
 
@@ -268,25 +277,20 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 #define Prg_WIDTH_NUM_ITEM 20
 
-static void Prg_ShowOneItem (unsigned NumItem,
-			     Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			     bool PrintView)
+static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
-   struct ProgramItem Item;
    unsigned ColSpan;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get data of this program item *****/
-   Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
-   Prg_GetDataOfItemByCod (&Item);
-   Prg_IncreaseNumItem (Item.Hierarchy.Level);
+   /***** Increase number of item *****/
+   Prg_IncreaseNumItem (Item->Hierarchy.Level);
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Item.Hierarchy.ItmCod,&Anchor);
+   Frm_SetAnchorStr (Item->Hierarchy.ItmCod,&Anchor);
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -295,30 +299,30 @@ static void Prg_ShowOneItem (unsigned NumItem,
    if (!PrintView)
      {
       HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (NumItem,Anchor);
+      Prg_PutFormsToRemEditOnePrgItem (NumItem,Item,Anchor);
       HTM_TD_End ();
      }
 
    /***** Indent depending on the level *****/
-   if (Item.Hierarchy.Level > 1)
+   if (Item->Hierarchy.Level > 1)
      {
       HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
-		    Item.Hierarchy.Level - 1,Gbl.RowEvenOdd);
+		    Item->Hierarchy.Level - 1,Gbl.RowEvenOdd);
       HTM_TD_End ();
      }
 
    /***** Item number *****/
    HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
-		 Item.Hidden ? "ASG_TITLE_LIGHT" :
-			       "ASG_TITLE",
+		 Item->Hierarchy.Hidden ? "ASG_TITLE_LIGHT" :
+			                  "ASG_TITLE",
 		 Gbl.RowEvenOdd,
-		 Item.Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
-   Prg_WriteNumItem (Item.Hierarchy.Level);
+		 Item->Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
+   Prg_WriteNumItem (Item->Hierarchy.Level);
    HTM_TD_End ();
 
    /***** Title and text *****/
    /* Begin title and text */
-   ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 1;
+   ColSpan = Prg_MaxLevel - Item->Hierarchy.Level + 1;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
 		    ColSpan);
@@ -329,19 +333,19 @@ static void Prg_ShowOneItem (unsigned NumItem,
 
    /* Title */
    HTM_DIV_Begin ("class=\"%s\"",
-		  Item.Hidden ? "ASG_TITLE_LIGHT" :
-				"ASG_TITLE");
-   HTM_Txt (Item.Title);
+		  Item->Hierarchy.Hidden ? "ASG_TITLE_LIGHT" :
+				           "ASG_TITLE");
+   HTM_Txt (Item->Title);
    HTM_DIV_End ();
 
    /* Text */
-   Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
+   Prg_GetPrgItemTxtFromDB (Item->Hierarchy.ItmCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
-   HTM_DIV_Begin ("class=\"PAR %s\"",Item.Hidden ? "DAT_LIGHT" :
-        	                                   "DAT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",Item->Hierarchy.Hidden ? "DAT_LIGHT" :
+        	                                              "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
 
@@ -361,19 +365,19 @@ static void Prg_ShowOneItem (unsigned NumItem,
       if (PrintView)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		       Id,
-		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
-					          "DATE_RED_LIGHT") :
-				     (Item.Open ? "DATE_GREEN" :
-					          "DATE_RED"));
+		       Item->Hierarchy.Hidden ? (Item->Open ? "DATE_GREEN_LIGHT" :
+					                      "DATE_RED_LIGHT") :
+				                (Item->Open ? "DATE_GREEN" :
+					                      "DATE_RED"));
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		       Id,
-		       Item.Hidden ? (Item.Open ? "DATE_GREEN_LIGHT" :
-					          "DATE_RED_LIGHT") :
-				     (Item.Open ? "DATE_GREEN" :
-					          "DATE_RED"),
+		       Item->Hierarchy.Hidden ? (Item->Open ? "DATE_GREEN_LIGHT" :
+					                      "DATE_RED_LIGHT") :
+				                (Item->Open ? "DATE_GREEN" :
+					                      "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Item.TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
@@ -383,62 +387,57 @@ static void Prg_ShowOneItem (unsigned NumItem,
    /***** End row *****/
    HTM_TR_End ();
 
-   /***** Form to create/change item *****/
-   switch (CreateOrChangeItem)
-     {
-      case Prg_DONT_PUT_FORM_ITEM:
-	 break;
-      case Prg_PUT_FORM_CREATE_ITEM:
-      case Prg_PUT_FORM_CHANGE_ITEM:
-	 /* Start row */
-	 HTM_TR_Begin (NULL);
-
-	 /* Column under icons */
-         HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
-         HTM_TD_End ();
-
-	 /* Indent depending on the level */
-	 if (Item.Hierarchy.Level > 1)
-	   {
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
-			  Item.Hierarchy.Level - 1,Gbl.RowEvenOdd);
-	    HTM_TD_End ();
-	   }
-
-	 if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-	   {
-	    /* Column under item number */
-	    HTM_TD_Begin ("class=\"COLOR%u\" style=\"width:%dpx;\"",
-			  Gbl.RowEvenOdd,
-			  Item.Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
-	    HTM_TD_End ();
-
-	    /* Show form to create new item as child */
-	    ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 3;
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
-			  ColSpan,Gbl.RowEvenOdd);
-            Prg_ShowFormToCreatePrgItem (Item.Hierarchy.ItmCod);
-	    HTM_TD_End ();
-	   }
-	 else
-	   {
-	    /* Show form to edit current item */
-	    ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 4;
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
-			  ColSpan,Gbl.RowEvenOdd);
-	    Prg_ShowFormToChangePrgItem (Item.Hierarchy.ItmCod);
-	    HTM_TD_End ();
-	   }
-
-	 /* End row */
-	 HTM_TR_End ();
-	 break;
-     }
-
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
+  }
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+/*****************************************************************************/
+/**************************** Show item form *********************************/
+/*****************************************************************************/
+
+static void Prg_ShowItemForm (const struct ProgramItem *Item,
+			      Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      unsigned FormLevel)
+  {
+   unsigned ColSpan;
+
+   /***** Trivial check *****/
+   if (CreateOrChangeItem == Prg_DONT_PUT_FORM_ITEM)
+      return;
+
+   /***** Change color row? *****/
+   if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+
+   /***** Start row *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Column under icons *****/
+   HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_End ();
+
+   /***** Indent depending on the level *****/
+   if (FormLevel > 1)
+     {
+      HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
+		    FormLevel - 1,Gbl.RowEvenOdd);
+      HTM_TD_End ();
+     }
+
+   /***** Show form to create new item as child *****/
+   ColSpan = Prg_MaxLevel - FormLevel + 4;
+   HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
+		 ColSpan,Gbl.RowEvenOdd);
+   HTM_ARTICLE_Begin ("item_form");
+   if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+      Prg_ShowFormToCreatePrgItem (Item->Hierarchy.ItmCod);
+   else
+      Prg_ShowFormToChangePrgItem (Item->Hierarchy.ItmCod);
+   HTM_ARTICLE_End ();
+   HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -447,9 +446,14 @@ static void Prg_ShowOneItem (unsigned NumItem,
 
 static void Prg_CreateNumbers (unsigned MaxLevel)
   {
-   /***** Allocate memory for item numbers and initialize to 0 *****/
-   if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel,sizeof (unsigned))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+   if (MaxLevel)
+     {
+      /***** Allocate memory for item numbers and initialize to 0 *****/
+      if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel,sizeof (unsigned))) == NULL)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+      Prg_NumItem = NULL;
   }
 
 /*****************************************************************************/
@@ -458,9 +462,9 @@ static void Prg_CreateNumbers (unsigned MaxLevel)
 
 static void Prg_FreeNumbers (void)
   {
-   /***** Free allocated memory for item numbers *****/
-   if (Prg_NumItem)
+   if (Prg_MaxLevel && Prg_NumItem)
      {
+      /***** Free allocated memory for item numbers *****/
       free (Prg_NumItem);
       Prg_NumItem = NULL;
      }
@@ -514,7 +518,9 @@ static void Prg_WriteNumItem (unsigned Level)
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
-static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor)
+static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
+					     const struct ProgramItem *Item,
+					     const char *Anchor)
   {
    extern const char *Txt_New_item;
    extern const char *Txt_Move_up_X;
@@ -524,12 +530,12 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor
    extern const char *Txt_Movement_not_allowed;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   Prg_SetCurrentItmCod (Gbl.Prg.LstItems[NumItem].ItmCod);	// Used as parameter in contextual links
+   Prg_SetCurrentItmCod (Item->Hierarchy.ItmCod);	// Used as parameter in contextual links
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),
 	     "%u",
-	     Gbl.Prg.LstItems[NumItem].Index);
+	     Item->Hierarchy.Index);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -539,16 +545,16 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,Prg_PutParams);
 
 	 /***** Put form to hide/show program item *****/
-	 if (Gbl.Prg.LstItems[NumItem].Hidden)
+	 if (Item->Hierarchy.Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoPrgItm,Anchor,Prg_PutParams);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Anchor,Prg_PutParams);
+	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",Prg_PutParams);
 
 	 /***** Put form to add a new child item inside this item *****/
-	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Anchor,Prg_PutParams,Txt_New_item);
+	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",Prg_PutParams,Txt_New_item);
 
 	 HTM_BR ();
 
@@ -859,7 +865,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       Item->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the program item is hidden or not (row[3]) */
-      Item->Hidden = (row[3][0] == 'Y');
+      Item->Hierarchy.Hidden = (row[3][0] == 'Y');
 
       /* Get author of the program item (row[4]) */
       Item->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -891,7 +897,7 @@ static void Prg_ResetItem (struct ProgramItem *Item)
    Item->Hierarchy.ItmCod = -1L;
    Item->Hierarchy.Index  = 0;
    Item->Hierarchy.Level  = 0;
-   Item->Hidden = false;
+   Item->Hierarchy.Hidden = false;
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_START_TIME] =
    Item->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
@@ -1501,23 +1507,57 @@ static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value
 void Prg_RequestCreatePrgItem (void)
   {
    long ParentItmCod;
+   unsigned NumItemParent;
+   unsigned NumItemLastChild;
+   long ItmCodBeforeForm;
+   unsigned FormLevel;
 
    /***** Get the code of the parent program item *****/
    ParentItmCod = Prg_GetParamItmCod ();
 
+   if (ParentItmCod > 0)
+     {
+      Prg_GetListPrgItems ();
+      NumItemParent    = Prg_GetNumItemFromItmCod (ParentItmCod);
+      NumItemLastChild = Prg_GetLastChild (NumItemParent);
+      ItmCodBeforeForm = Gbl.Prg.LstItems[NumItemLastChild].ItmCod;
+      FormLevel        = Gbl.Prg.LstItems[NumItemParent].Level + 1;
+      Prg_FreeListItems ();
+     }
+   else
+     {
+      ItmCodBeforeForm = -1L;
+      FormLevel        = 0;
+     }
+
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod);
+   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,ItmCodBeforeForm,FormLevel);
   }
 
 void Prg_RequestChangePrgItem (void)
   {
-   long ItmCod;
+   long ItmCodBeforeForm;
+   unsigned NumItem;
+   unsigned FormLevel;
 
    /***** Get the code of the program item *****/
-   ItmCod = Prg_GetParamItmCod ();
+   ItmCodBeforeForm = Prg_GetParamItmCod ();
+
+   if (ItmCodBeforeForm > 0)
+     {
+      Prg_GetListPrgItems ();
+      NumItem   = Prg_GetNumItemFromItmCod (ItmCodBeforeForm);
+      FormLevel = Gbl.Prg.LstItems[NumItem].Level;
+      Prg_FreeListItems ();
+     }
+   else
+     {
+      ItmCodBeforeForm  = -1L;
+      FormLevel         = 0;
+     }
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,ItmCod);
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
   }
 
 /*****************************************************************************/

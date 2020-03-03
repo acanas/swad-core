@@ -50,7 +50,6 @@ struct ProgramItemHierarchy
 struct ProgramItem
   {
    struct ProgramItemHierarchy Hierarchy;
-   bool Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
