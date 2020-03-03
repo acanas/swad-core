@@ -96,6 +96,7 @@ static void Prg_FreeNumbers (void);
 static void Prg_IncreaseNumItem (unsigned Level);
 static unsigned Prg_GetNumItem (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
+static void Prg_WriteNumNewItem (unsigned Level);
 
 static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
 					     const struct ProgramItem *Item,
@@ -283,6 +284,7 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,boo
    static unsigned UniqueId = 0;
    char *Id;
    unsigned ColSpan;
+   unsigned NumCol;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -304,10 +306,11 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,boo
      }
 
    /***** Indent depending on the level *****/
-   if (Item->Hierarchy.Level > 1)
+   for (NumCol = 1;
+	NumCol < Item->Hierarchy.Level;
+	NumCol++)
      {
-      HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
-		    Item->Hierarchy.Level - 1,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
       HTM_TD_End ();
      }
 
@@ -322,7 +325,7 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,boo
 
    /***** Title and text *****/
    /* Begin title and text */
-   ColSpan = Prg_MaxLevel - Item->Hierarchy.Level + 1;
+   ColSpan = (Prg_MaxLevel + 2) - Item->Hierarchy.Level;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
 		    ColSpan);
@@ -343,7 +346,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,boo
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
    HTM_DIV_Begin ("class=\"PAR %s\"",Item->Hierarchy.Hidden ? "DAT_LIGHT" :
         	                                              "DAT");
    HTM_Txt (Txt);
@@ -400,6 +402,7 @@ static void Prg_ShowItemForm (const struct ProgramItem *Item,
 			      unsigned FormLevel)
   {
    unsigned ColSpan;
+   unsigned NumCol;
 
    /***** Trivial check *****/
    if (CreateOrChangeItem == Prg_DONT_PUT_FORM_ITEM)
@@ -417,15 +420,26 @@ static void Prg_ShowItemForm (const struct ProgramItem *Item,
    HTM_TD_End ();
 
    /***** Indent depending on the level *****/
-   if (FormLevel > 1)
+   for (NumCol = 1;
+	NumCol < FormLevel;
+	NumCol++)
      {
-      HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
-		    FormLevel - 1,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
       HTM_TD_End ();
      }
 
+   /***** Item number *****/
+   HTM_TD_Begin ("class=\"ASG_TITLE RT COLOR%u\" style=\"width:%dpx;\"",
+		 Gbl.RowEvenOdd,
+		 FormLevel * Prg_WIDTH_NUM_ITEM);
+   if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+      Prg_WriteNumNewItem (FormLevel);
+   else
+      Prg_WriteNumItem (FormLevel);
+   HTM_TD_End ();
+
    /***** Show form to create new item as child *****/
-   ColSpan = Prg_MaxLevel - FormLevel + 4;
+   ColSpan = (Prg_MaxLevel + 4) - FormLevel;
    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
 		 ColSpan,Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin ("item_form");
@@ -449,7 +463,19 @@ static void Prg_CreateNumbers (unsigned MaxLevel)
    if (MaxLevel)
      {
       /***** Allocate memory for item numbers and initialize to 0 *****/
-      if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel,sizeof (unsigned))) == NULL)
+      /*
+      Example:  2.5.2.1
+                MaxLevel = 4
+      Level Number
+      ----- ------
+        0         <--- Not used
+        1     2
+        2     5
+        3     2
+        4     1
+        5     0	  <--- Used to create a new item
+      */
+      if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel + 1,sizeof (unsigned))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
@@ -504,13 +530,31 @@ static void Prg_WriteNumItem (unsigned Level)
    unsigned i;
 
    /***** Write number in legal style *****/
-   HTM_Unsigned (Prg_GetNumItem (1));
-   for (i  = 2;
+   for (i  = 1;
 	i <= Level;
 	i++)
      {
-      HTM_Txt (".");
+      if (i > 1)
+         HTM_Txt (".");
       HTM_Unsigned (Prg_GetNumItem (i));
+     }
+  }
+
+static void Prg_WriteNumNewItem (unsigned Level)
+  {
+   unsigned i;
+
+   /***** Write number in legal style *****/
+   for (i  = 1;
+	i <= Level;
+	i++)
+     {
+      if (i > 1)
+	 HTM_Txt (".");
+      if (i < Level)
+	 HTM_Unsigned (Prg_GetNumItem (i));
+      else
+	 HTM_Unsigned (Prg_GetNumItem (i) + 1);
      }
   }
 
