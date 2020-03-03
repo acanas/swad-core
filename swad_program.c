@@ -37,7 +37,6 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_group.h"
 #include "swad_HTML.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -125,16 +124,10 @@ static void Prg_ShowFormToChangePrgItem (void);
 static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
 			           const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 				   const char *Txt);
-static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod);
 static void Prg_InsertPrgItem (struct ProgramItem *ParentItem,
 		               struct ProgramItem *Item,const char *Txt);
 static long Prg_InsertPrgItemIntoDB (struct ProgramItem *Item,const char *Txt);
 static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
-static bool Prg_CheckIfItemIsAssociatedToGrps (long ItmCod);
-static void Prg_RemoveAllTheGrpsAssociatedToAnItem (long ItmCod);
-static void Prg_CreateGrps (long ItmCod);
-static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item);
-static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod);
 
 /*****************************************************************************/
 /************************ List all the program items *************************/
@@ -142,9 +135,6 @@ static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod);
 
 void Prg_SeeCourseProgram (void)
   {
-   /***** Get parameters *****/
-   Grp_GetParamWhichGrps ();
-
    /***** Show all the program items *****/
    Prg_ShowAllItems ();
   }
@@ -173,14 +163,6 @@ static void Prg_ShowAllItems (void)
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeePrg,NULL);
-      Set_EndSettingsHead ();
-     }
 
    if (Gbl.Prg.Num)
      {
@@ -319,8 +301,8 @@ static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
    Prg_WriteNumItem (Item.Hierarchy.Level);
    HTM_TD_End ();
 
-   /***** Title, groups and text *****/
-   /* Begin title, groups and text */
+   /***** Title and text *****/
+   /* Begin title and text */
    ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 1;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
@@ -337,10 +319,6 @@ static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
    HTM_Txt (Item.Title);
    HTM_DIV_End ();
 
-   /* Groups */
-   if (Gbl.Crs.Grps.NumGrps)
-      Prg_GetAndWriteNamesOfGrpsAssociatedToItem (&Item);
-
    /* Text */
    Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -352,7 +330,7 @@ static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
    HTM_Txt (Txt);
    HTM_DIV_End ();
 
-   /* End title, groups and text */
+   /* End title and text */
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -656,7 +634,6 @@ static void Prg_PutParams (void)
 
    if (CurrentItmCod > 0)
       Prg_PutParamItmCod (CurrentItmCod);
-   Grp_PutParamWhichGrps ();
   }
 
 /*****************************************************************************/
@@ -687,35 +664,16 @@ static void Prg_GetListPrgItems (void)
       Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT ItmCod,"	// row[0]
-	                               "ItmInd,"	// row[1]
-	                               "Level,"		// row[2]
-	                               "Hidden"		// row[3]
-				" FROM prg_items"
-				" WHERE CrsCod=%ld%s"
-				" AND "
-				"(ItmCod NOT IN (SELECT ItmCod FROM prg_grp) OR"
-				" ItmCod IN (SELECT prg_grp.ItmCod"
-				            " FROM prg_grp,crs_grp_usr"
-				            " WHERE crs_grp_usr.UsrCod=%ld"
-				            " AND prg_grp.GrpCod=crs_grp_usr.GrpCod))"
-				" ORDER BY ItmInd",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				Gbl.Usrs.Me.UsrDat.UsrCod);
-   else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-	                        "SELECT ItmCod,"	// row[0]
-	                               "ItmInd,"	// row[1]
-	                               "Level,"		// row[2]
-	                               "Hidden"		// row[3]
-				" FROM prg_items"
-				" WHERE CrsCod=%ld%s"
-				" ORDER BY ItmInd",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
+			     "SELECT ItmCod,"	// row[0]
+				    "ItmInd,"	// row[1]
+				    "Level,"		// row[2]
+				    "Hidden"		// row[3]
+			     " FROM prg_items"
+			     " WHERE CrsCod=%ld%s"
+			     " ORDER BY ItmInd",
+			     Gbl.Hierarchy.Crs.CrsCod,
+			     HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
 
    if (NumRows) // Items found...
      {
@@ -850,9 +808,6 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       /* Get the title of the program item (row[8]) */
       Str_Copy (Item->Title,row[8],
                 Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
-
-      /* Can I do this program item? */
-      Item->IBelongToCrsOrGrps = Prg_CheckIfIBelongToCrsOrGrpsThisItem (Item->Hierarchy.ItmCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -874,7 +829,6 @@ static void Prg_ResetItem (struct ProgramItem *Item)
    Item->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Item->Open = false;
    Item->Title[0] = '\0';
-   Item->IBelongToCrsOrGrps = false;
   }
 
 /*****************************************************************************/
@@ -975,9 +929,6 @@ void Prg_ReqRemPrgItem (void)
    extern const char *Txt_Remove_item;
    struct ProgramItem Item;
 
-   /***** Get parameters *****/
-   Grp_GetParamWhichGrps ();
-
    /***** Get program item code *****/
    if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of program item is missing.");
@@ -1011,9 +962,6 @@ void Prg_RemovePrgItem (void)
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (&Item);	// Inside this function, the course is checked to be the current one
-
-   /***** Remove all the groups of this program item *****/
-   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item.Hierarchy.ItmCod);
 
    /***** Remove program item *****/
    DB_QueryDELETE ("can not remove program item",
@@ -1517,9 +1465,6 @@ static void Prg_ShowFormToCreatePrgItem (void)
       Dat_HMS_TO_235959
      };
 
-   /***** Get parameters *****/
-   Grp_GetParamWhichGrps ();
-
    /***** Get the code of the parent program item *****/
    ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&ParentItem);
@@ -1565,9 +1510,6 @@ static void Prg_ShowFormToChangePrgItem (void)
       Dat_HMS_DO_NOT_SET,
       Dat_HMS_DO_NOT_SET
      };
-
-   /***** Get parameters *****/
-   Grp_GetParamWhichGrps ();
 
    /***** Get the code of the program item *****/
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
@@ -1649,72 +1591,6 @@ static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
    HTM_TD_End ();
 
    HTM_TR_End ();
-
-   /***** Groups *****/
-   Prg_ShowLstGrpsToEditPrgItem (Item->Hierarchy.ItmCod);
-  }
-
-/*****************************************************************************/
-/*************** Show list of groups to edit and program item ****************/
-/*****************************************************************************/
-
-static void Prg_ShowLstGrpsToEditPrgItem (long ItmCod)
-  {
-   extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
-   unsigned NumGrpTyp;
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   if (Gbl.Crs.Grps.GrpTypes.Num)
-     {
-      /***** Begin box and table *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Groups);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("100%",NULL,NULL,
-                         Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
-
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",false,
-		          "id=\"WholeCrs\" value=\"Y\"%s"
-		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Prg_CheckIfItemIsAssociatedToGrps (ItmCod) ? "" :
-				                                             " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                            ItmCod,Grp_PROGRAM_ITEM);
-
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
@@ -1776,14 +1652,8 @@ void Prg_RecFormNewPrgItem (void)
    /***** Create a new program item or update an existing one *****/
    if (NewItemIsCorrect)
      {
-      /* Get groups for this program items */
-      Grp_GetParCodsSeveralGrps ();
-
       /* Add new program item to database */
       Prg_InsertPrgItem (&ParentItem,&NewItem,Description);
-
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
 
       /* Write success message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_item_X,
@@ -1857,14 +1727,8 @@ void Prg_RecFormChgPrgItem (void)
    /***** Update existing item *****/
    if (NewItemIsCorrect)
      {
-      /* Get groups for this program items */
-      Grp_GetParCodsSeveralGrps ();
-
       /* Update program item */
       Prg_UpdatePrgItem (&NewItem,Description);
-
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
 
       /* Write success message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_item_has_been_modified);
@@ -1952,10 +1816,6 @@ static void Prg_InsertPrgItem (struct ProgramItem *ParentItem,
 
    /***** Free list items *****/
    Prg_FreeListItems ();
-
-   /***** Create groups *****/
-   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -1999,170 +1859,6 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt)
                    Item->Title,
                    Txt,
                    Item->Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Update groups *****/
-   /* Remove old groups */
-   Prg_RemoveAllTheGrpsAssociatedToAnItem (Item->Hierarchy.ItmCod);
-
-   /* Create new groups */
-   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Prg_CreateGrps (Item->Hierarchy.ItmCod);
-  }
-
-/*****************************************************************************/
-/*********** Check if a program item is associated to any group **************/
-/*****************************************************************************/
-
-static bool Prg_CheckIfItemIsAssociatedToGrps (long ItmCod)
-  {
-   /***** Get if a program item is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a program item"
-			  " is associated to groups",
-			  "SELECT COUNT(*) FROM prg_grp WHERE ItmCod=%ld",
-			  ItmCod) != 0);
-  }
-
-/*****************************************************************************/
-/************ Check if a program item is associated to a group ***************/
-/*****************************************************************************/
-
-bool Prg_CheckIfItemIsAssociatedToGrp (long ItmCod,long GrpCod)
-  {
-   /***** Get if a program item is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a program item"
-			  " is associated to a group",
-			  "SELECT COUNT(*) FROM prg_grp"
-			  " WHERE ItmCod=%ld AND GrpCod=%ld",
-		  	  ItmCod,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/********************* Remove groups of a program item ***********************/
-/*****************************************************************************/
-
-static void Prg_RemoveAllTheGrpsAssociatedToAnItem (long ItmCod)
-  {
-   /***** Remove groups of the program item *****/
-   DB_QueryDELETE ("can not remove the groups associated to a program item",
-		   "DELETE FROM prg_grp WHERE ItmCod=%ld",
-		   ItmCod);
-  }
-
-/*****************************************************************************/
-/*************** Remove one group from all the program items *****************/
-/*****************************************************************************/
-
-void Prg_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the program items *****/
-   DB_QueryDELETE ("can not remove group from the associations"
-	           " between program items and groups",
-		   "DELETE FROM prg_grp WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
-/********** Remove groups of one type from all the program items *************/
-/*****************************************************************************/
-
-void Prg_RemoveGroupsOfType (long GrpTypCod)
-  {
-   /***** Remove group from all the program items *****/
-   DB_QueryDELETE ("can not remove groups of a type from the associations"
-	           " between program items and groups",
-		   "DELETE FROM prg_grp USING crs_grp,prg_grp"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=prg_grp.GrpCod",
-                   GrpTypCod);
-  }
-
-/*****************************************************************************/
-/********************* Create groups of a program item ***********************/
-/*****************************************************************************/
-
-static void Prg_CreateGrps (long ItmCod)
-  {
-   unsigned NumGrpSel;
-
-   /***** Create groups of the program item *****/
-   for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
-	NumGrpSel++)
-      /* Create group */
-      DB_QueryINSERT ("can not associate a group to a program item",
-		      "INSERT INTO prg_grp"
-		      " (ItmCod,GrpCod)"
-		      " VALUES"
-		      " (%ld,%ld)",
-                      ItmCod,
-		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-  }
-
-/*****************************************************************************/
-/********* Get and write the names of the groups of a program item ***********/
-/*****************************************************************************/
-
-static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item)
-  {
-   extern const char *Txt_Group;
-   extern const char *Txt_Groups;
-   extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
-
-   /***** Get groups associated to a program item from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a program item",
-	                     "SELECT crs_grp_types.GrpTypName,"	// row[0]
-	                            "crs_grp.GrpName"		// row[1]
-			     " FROM prg_grp,crs_grp,"
-			           "crs_grp_types"
-			     " WHERE prg_grp.ItmCod=%ld"
-			       " AND prg_grp.GrpCod=crs_grp.GrpCod"
-			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,"
-			               "crs_grp.GrpName",
-			     Item->Hierarchy.ItmCod);
-
-   /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",Item->Hidden ? "ASG_GRP_LIGHT" :
-        	                                "ASG_GRP");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
-                                    Txt_Groups);
-
-   /***** Write groups *****/
-   if (NumRows) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Write group type name and group name */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
-
-         if (NumRows >= 2)
-           {
-            if (NumRow == NumRows-2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-
-   HTM_DIV_End ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -2171,53 +1867,10 @@ static void Prg_GetAndWriteNamesOfGrpsAssociatedToItem (struct ProgramItem *Item
 
 void Prg_RemoveCrsItems (long CrsCod)
   {
-   /***** Remove groups *****/
-   DB_QueryDELETE ("can not remove all the groups associated"
-		   " to program items of a course",
-		   "DELETE FROM prg_grp USING prg_items,prg_grp"
-		   " WHERE prg_items.CrsCod=%ld"
-		   " AND prg_items.ItmCod=prg_grp.ItmCod",
-                   CrsCod);
-
    /***** Remove program items *****/
    DB_QueryDELETE ("can not remove all the program items of a course",
 		   "DELETE FROM prg_items WHERE CrsCod=%ld",
 		   CrsCod);
-  }
-
-/*****************************************************************************/
-/******** Check if I belong to any of the groups of a program item ***********/
-/*****************************************************************************/
-
-static bool Prg_CheckIfIBelongToCrsOrGrpsThisItem (long ItmCod)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-      case Rol_TCH:
-	 // Students and teachers can do program items depending on groups
-	 /***** Get if I can do a program item from database *****/
-	 return (DB_QueryCOUNT ("can not check if I can do a program item",
-			        "SELECT COUNT(*) FROM prg_items"
-				" WHERE ItmCod=%ld"
-				" AND "
-				"("
-				// Item is for the whole course
-				"ItmCod NOT IN (SELECT ItmCod FROM prg_grp)"
-				" OR "
-				// Item is for specific groups
-				"ItmCod IN"
-				" (SELECT prg_grp.ItmCod FROM prg_grp,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND prg_grp.GrpCod=crs_grp_usr.GrpCod)"
-				")",
-				ItmCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
   }
 
 /*****************************************************************************/

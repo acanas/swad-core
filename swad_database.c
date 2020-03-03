@@ -2188,22 +2188,6 @@ mysql> DESCRIBE plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
-   /***** Table prg_grp *****/
-/*
-mysql> DESCRIBE prg_grp;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| ItmCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_grp ("
-			"ItmCod INT NOT NULL,"
-			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(ItmCod,GrpCod))");
-
    /***** Table prg_items *****/
 /*
 mysql> DESCRIBE prg_items;

@@ -1692,9 +1692,6 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey or match
          switch (Grp_AsgAttOrSvy)
            {
-            case Grp_PROGRAM_ITEM:
-               AssociatedToGrp = Prg_CheckIfItemIsAssociatedToGrp (Cod,Grp->GrpCod);
-               break;
             case Grp_ASSIGNMENT:
                AssociatedToGrp = Asg_CheckIfAsgIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;

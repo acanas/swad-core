@@ -55,10 +55,6 @@ struct ProgramItem
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
-   bool IBelongToCrsOrGrps;	// I can do this program item
-				// (it is associated to no groups
-				// or, if associated to groups,
-				// I belong to any of the groups)
   };
 
 #define Prg_ORDER_DEFAULT Dat_START_TIME
@@ -85,9 +81,6 @@ void Prg_MoveLeftPrgItem (void);
 void Prg_MoveRightPrgItem (void);
 
 void Prg_RecFormPrgItem (void);
-bool Prg_CheckIfItemIsAssociatedToGrp (long PrgItmCod,long GrpCod);
-void Prg_RemoveGroup (long GrpCod);
-void Prg_RemoveGroupsOfType (long GrpTypCod);
 void Prg_RemoveCrsItems (long CrsCod);
 unsigned Prg_GetNumItemsInCrsProgram(long CrsCod);
 
