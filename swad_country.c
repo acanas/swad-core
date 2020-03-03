@@ -482,7 +482,7 @@ bool Cty_CheckIfICanEditCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCty,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCty,NULL,NULL);
   }
 
 /*****************************************************************************/

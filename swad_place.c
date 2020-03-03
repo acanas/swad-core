@@ -253,7 +253,7 @@ static void Plc_PutIconsListingPlaces (void)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlc,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlc,NULL,NULL);
   }
 
 /*****************************************************************************/

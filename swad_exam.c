@@ -1505,7 +1505,7 @@ static void Exa_PutIconsExamAnnouncement (void)
         }
 
       /***** Link to edit this exam announcement *****/
-      Ico_PutContextualIconToEdit (ActEdiExaAnn,Exa_PutParamExaCodToEdit);
+      Ico_PutContextualIconToEdit (ActEdiExaAnn,NULL,Exa_PutParamExaCodToEdit);
      }
 
    /***** Link to print view *****/

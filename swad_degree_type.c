@@ -369,7 +369,7 @@ static void DT_PutIconToEditDegTypes (void)
   {
    if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
-      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL);
+      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL);
   }
 
 /*****************************************************************************/

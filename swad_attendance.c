@@ -554,7 +554,7 @@ static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
       Ico_PutContextualIconToHide (ActHidAtt,Anchor,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
-   Ico_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,Att_PutParams);
   }
 
 /*****************************************************************************/
@@ -3114,7 +3114,7 @@ static void Att_ListEventsToSelect (void)
 
 static void Att_PutIconToEditAttEvents (void)
   {
-   Ico_PutContextualIconToEdit (ActSeeAtt,NULL);
+   Ico_PutContextualIconToEdit (ActSeeAtt,NULL,NULL);
   }
 
 /*****************************************************************************/

@@ -169,7 +169,7 @@ void Plg_ListPlugins (void)
 
 static void Plg_PutIconToEditPlugins (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlg,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlg,NULL,NULL);
   }
 
 /*****************************************************************************/

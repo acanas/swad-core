@@ -648,7 +648,7 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
       Ico_PutContextualIconToHide (ActHidGam,Anchor,Gam_PutParams);
 
    /***** Put icon to edit game *****/
-   Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,Gam_PutParams);
   }
 
 /*****************************************************************************/
@@ -1933,7 +1933,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Put icon to edit the question */
       if (ICanEditQuestions)
-	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamQstCod);
 
       HTM_TD_End ();
 

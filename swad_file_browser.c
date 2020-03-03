@@ -3731,6 +3731,7 @@ static void Brw_PutIconsFileBrowser (void)
 	 break;
       case Brw_ICON_EDIT:
          Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
+				      NULL,
                                       Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
      }

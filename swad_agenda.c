@@ -646,7 +646,7 @@ static void Agd_PutIconToCreateNewEvent (void)
 
 static void Agd_PutIconToViewEditMyFullAgenda (void)
   {
-   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL);
+   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,NULL);
   }
 
 static void Agd_PutIconToShowQR (void)
@@ -845,7 +845,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
       Ico_PutContextualIconToHide (ActHidEvtMyAgd,Anchor,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to edit event *****/
-   Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+   Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)

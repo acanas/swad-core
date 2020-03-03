@@ -224,7 +224,7 @@ static void Cla_PutIconsListingClassrooms (void)
 
 static void Cla_PutIconToEditClassrooms (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCla,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCla,NULL,NULL);
   }
 
 /*****************************************************************************/

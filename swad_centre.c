@@ -340,7 +340,7 @@ static void Ctr_PutIconsListingCentres (void)
 
 static void Ctr_PutIconToEditCentres (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCtr,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCtr,NULL,NULL);
   }
 
 /*****************************************************************************/

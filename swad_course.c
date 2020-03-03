@@ -868,7 +868,7 @@ static void Crs_PutIconsListCourses (void)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCrs,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCrs,NULL,NULL);
   }
 
 /*****************************************************************************/

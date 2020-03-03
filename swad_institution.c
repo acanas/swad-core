@@ -365,7 +365,7 @@ static void Ins_PutIconsListingInstitutions (void)
 
 static void Ins_PutIconToEditInstitutions (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiIns,NULL);
+   Ico_PutContextualIconToEdit (ActEdiIns,NULL,NULL);
   }
 
 /*****************************************************************************/

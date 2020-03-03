@@ -1590,6 +1590,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	width:86px;
 	}
+	
+.PRG_TITLE_DESCRIPTION_WIDTH
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
 
 /********************************** Notice ***********************************/
 .NOTICE_HIGHLIGHT

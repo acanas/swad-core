@@ -401,15 +401,15 @@ void TT_ShowClassTimeTable (void)
 static void TT_PutContextualIcons (void)
   {
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
-      Ico_PutContextualIconToEdit (ActEdiCrsTT,Grp_PutParamWhichGrps);
+      Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,Grp_PutParamWhichGrps);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Ico_PutContextualIconToEdit (ActEdiTut,NULL);
+      Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
       Ico_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-								      ActPrnMyTT,
-			  Grp_PutParamWhichGrps);
+								                ActPrnMyTT,
+			            Grp_PutParamWhichGrps);
   }
 
 /*****************************************************************************/

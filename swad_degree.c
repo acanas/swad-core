@@ -833,7 +833,7 @@ static void Deg_PutIconsListingDegrees (void)
 
 static void Deg_PutIconToEditDegrees (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiDeg,NULL);
+   Ico_PutContextualIconToEdit (ActEdiDeg,NULL,NULL);
   }
 
 /*****************************************************************************/

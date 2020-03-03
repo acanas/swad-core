@@ -145,7 +145,7 @@ static void Lnk_PutIconsListingLinks (void)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiLnk,NULL);
+   Ico_PutContextualIconToEdit (ActEdiLnk,NULL,NULL);
   }
 
 /*****************************************************************************/

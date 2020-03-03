@@ -224,7 +224,7 @@ static void Hld_PutIconsSeeHolidays (void)
   {
    /***** Edit holidays calendar *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      Ico_PutContextualIconToEdit (ActEdiHld,NULL);
+      Ico_PutContextualIconToEdit (ActEdiHld,NULL,NULL);
 
    /***** View calendar *****/
    Cal_PutIconToSeeCalendar ();

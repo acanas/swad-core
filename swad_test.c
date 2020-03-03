@@ -1350,7 +1350,7 @@ static void Tst_PutIconsTests (void)
      {
       /***** Put form to edit existing test questions *****/
       if (Gbl.Action.Act != ActEdiTstQst)
-         Ico_PutContextualIconToEdit (ActEdiTstQst,NULL);
+         Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,NULL);
 
       /***** Put form to create a new test question *****/
       if (Gbl.Action.Act != ActEdiOneTstQst)
@@ -2817,7 +2817,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Frm_EndForm ();
 
       /* Write icon to edit the question */
-      Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
+      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamQstCod);
 
       HTM_TD_End ();
 

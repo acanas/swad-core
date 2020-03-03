@@ -60,6 +60,13 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Prg_DONT_PUT_FORM_ITEM,
+   Prg_PUT_FORM_CREATE_ITEM,
+   Prg_PUT_FORM_CHANGE_ITEM,
+  } Prg_CreateOrChangeItem_t;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -73,12 +80,15 @@ static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowAllItems (void);
+static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      long ItmCod);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
-static void Prg_ShowOneItem (unsigned NumItem,bool PrintView);
+static void Prg_ShowOneItem (unsigned NumItem,
+			     Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			     bool PrintView);
 
 static void Prg_CreateNumbers (unsigned MaxLevel);
 static void Prg_FreeNumbers (void);
@@ -119,8 +129,8 @@ static void Prg_MoveItemAndChildrenLeft (unsigned NumItem);
 static void Prg_MoveItemAndChildrenRight (unsigned NumItem);
 
 static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value,long ItmCod);
-static void Prg_ShowFormToCreatePrgItem (void);
-static void Prg_ShowFormToChangePrgItem (void);
+static void Prg_ShowFormToCreatePrgItem (long ParentItmCod);
+static void Prg_ShowFormToChangePrgItem (long ItmCod);
 static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
 			           const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 				   const char *Txt);
@@ -136,14 +146,15 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
 void Prg_SeeCourseProgram (void)
   {
    /***** Show all the program items *****/
-   Prg_ShowAllItems ();
+   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,-1L);
   }
 
 /*****************************************************************************/
 /*********************** Show all the program items **************************/
 /*****************************************************************************/
 
-static void Prg_ShowAllItems (void)
+static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      long ItmCod)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
@@ -174,6 +185,8 @@ static void Prg_ShowAllItems (void)
 	   NumItem < Gbl.Prg.Num;
 	   NumItem++)
 	 Prg_ShowOneItem (NumItem,
+			  ItmCod == Gbl.Prg.LstItems[NumItem].ItmCod ? CreateOrChangeItem :
+				                                       Prg_DONT_PUT_FORM_ITEM,
 	                  false);	// Not print view
 
       /***** End table *****/
@@ -255,7 +268,9 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 #define Prg_WIDTH_NUM_ITEM 20
 
-static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
+static void Prg_ShowOneItem (unsigned NumItem,
+			     Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			     bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -365,7 +380,60 @@ static void Prg_ShowOneItem (unsigned NumItem,bool PrintView)
       free (Id);
      }
 
+   /***** End row *****/
    HTM_TR_End ();
+
+   /***** Form to create/change item *****/
+   switch (CreateOrChangeItem)
+     {
+      case Prg_DONT_PUT_FORM_ITEM:
+	 break;
+      case Prg_PUT_FORM_CREATE_ITEM:
+      case Prg_PUT_FORM_CHANGE_ITEM:
+	 /* Start row */
+	 HTM_TR_Begin (NULL);
+
+	 /* Column under icons */
+         HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
+         HTM_TD_End ();
+
+	 /* Indent depending on the level */
+	 if (Item.Hierarchy.Level > 1)
+	   {
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
+			  Item.Hierarchy.Level - 1,Gbl.RowEvenOdd);
+	    HTM_TD_End ();
+	   }
+
+	 if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+	   {
+	    /* Column under item number */
+	    HTM_TD_Begin ("class=\"COLOR%u\" style=\"width:%dpx;\"",
+			  Gbl.RowEvenOdd,
+			  Item.Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
+	    HTM_TD_End ();
+
+	    /* Show form to create new item as child */
+	    ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 3;
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
+			  ColSpan,Gbl.RowEvenOdd);
+            Prg_ShowFormToCreatePrgItem (Item.Hierarchy.ItmCod);
+	    HTM_TD_End ();
+	   }
+	 else
+	   {
+	    /* Show form to edit current item */
+	    ColSpan = Prg_MaxLevel - Item.Hierarchy.Level + 4;
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
+			  ColSpan,Gbl.RowEvenOdd);
+	    Prg_ShowFormToChangePrgItem (Item.Hierarchy.ItmCod);
+	    HTM_TD_End ();
+	   }
+
+	 /* End row */
+	 HTM_TR_End ();
+	 break;
+     }
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -477,7 +545,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,const char *Anchor
 	    Ico_PutContextualIconToHide (ActHidPrgItm,Anchor,Prg_PutParams);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_PutParams);
+	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Anchor,Prg_PutParams);
 
 	 /***** Put form to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Anchor,Prg_PutParams,Txt_New_item);
@@ -1432,27 +1500,31 @@ static bool Prg_CheckIfSimilarPrgItemExists (const char *Field,const char *Value
 
 void Prg_RequestCreatePrgItem (void)
   {
-   /***** Show form to create item *****/
-   Prg_ShowFormToCreatePrgItem ();
+   long ParentItmCod;
+
+   /***** Get the code of the parent program item *****/
+   ParentItmCod = Prg_GetParamItmCod ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems ();
+   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod);
   }
 
 void Prg_RequestChangePrgItem (void)
   {
-   /***** Show form to change item *****/
-   Prg_ShowFormToChangePrgItem ();
+   long ItmCod;
+
+   /***** Get the code of the program item *****/
+   ItmCod = Prg_GetParamItmCod ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems ();
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,ItmCod);
   }
 
 /*****************************************************************************/
 /***************** Put a form to create a new program item *******************/
 /*****************************************************************************/
 
-static void Prg_ShowFormToCreatePrgItem (void)
+static void Prg_ShowFormToCreatePrgItem (long ParentItmCod)
   {
    extern const char *Hlp_COURSE_Program_new_item;
    extern const char *Txt_New_item;
@@ -1465,8 +1537,8 @@ static void Prg_ShowFormToCreatePrgItem (void)
       Dat_HMS_TO_235959
      };
 
-   /***** Get the code of the parent program item *****/
-   ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   /***** Get data of the parent program item from database *****/
+   ParentItem.Hierarchy.ItmCod = ParentItmCod;
    Prg_GetDataOfItemByCod (&ParentItem);
 
    /***** Initialize to empty program item *****/
@@ -1481,7 +1553,7 @@ static void Prg_ShowFormToCreatePrgItem (void)
    Prg_PutParams ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_item,NULL,
+   Box_BoxTableBegin ("100%",Txt_New_item,NULL,
 		      Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
 
    /***** Show form *****/
@@ -1498,7 +1570,7 @@ static void Prg_ShowFormToCreatePrgItem (void)
 /***************** Put a form to create a new program item *******************/
 /*****************************************************************************/
 
-static void Prg_ShowFormToChangePrgItem (void)
+static void Prg_ShowFormToChangePrgItem (long ItmCod)
   {
    extern const char *Hlp_COURSE_Program_edit_item;
    extern const char *Txt_Edit_item;
@@ -1511,14 +1583,9 @@ static void Prg_ShowFormToChangePrgItem (void)
       Dat_HMS_DO_NOT_SET
      };
 
-   /***** Get the code of the program item *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-
-   /***** Get from the database the data of the program item *****/
-   /* Get data of the program item from database */
+   /***** Get data of the program item from database *****/
+   Item.Hierarchy.ItmCod = ItmCod;
    Prg_GetDataOfItemByCod (&Item);
-
-   /* Get text of the program item from database */
    Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
 
    /***** Begin form *****/
@@ -1527,7 +1594,7 @@ static void Prg_ShowFormToChangePrgItem (void)
    Prg_PutParams ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,
+   Box_BoxTableBegin ("100%",
 		      Item.Title[0] ? Item.Title :
 				      Txt_Edit_item,
 		      NULL,
@@ -1564,7 +1631,7 @@ static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item->Title,false,
 		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
+		   " class=\"PRG_TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1583,7 +1650,7 @@ static void Prg_ShowFormToPrgItem (const struct ProgramItem *Item,
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	               " class=\"PRG_TITLE_DESCRIPTION_WIDTH\"");
    if (Txt)
       if (Txt[0])
          HTM_Txt (Txt);
@@ -1662,7 +1729,7 @@ void Prg_RecFormNewPrgItem (void)
    else
       /***** Show form to create item *****/
       // TODO: The form should be filled with partial data, now is always empty
-      Prg_ShowFormToCreatePrgItem ();
+      Prg_ShowFormToCreatePrgItem (ParentItem.Hierarchy.ItmCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
@@ -1736,7 +1803,7 @@ void Prg_RecFormChgPrgItem (void)
    else
       /***** Show form to change item *****/
       // TODO: The form should be filled with partial data, now is always empty
-      Prg_ShowFormToChangePrgItem ();
+      Prg_ShowFormToChangePrgItem (NewItem.Hierarchy.ItmCod);
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();

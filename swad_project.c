@@ -2606,7 +2606,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
         }
 
       /***** Put form to edit project *****/
-      Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutCurrentParams);
+      Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,Prj_PutCurrentParams);
      }
 
    /***** Put form to admin project documents *****/

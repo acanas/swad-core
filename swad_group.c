@@ -1834,7 +1834,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 static void Grp_PutIconToEditGroups (void)
   {
-   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL);
+   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL);
   }
 
 /*****************************************************************************/

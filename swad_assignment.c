@@ -584,7 +584,7 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
 	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,Asg_PutParams);
 
 	 /***** Put form to edit assignment *****/
-	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
+	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,Asg_PutParams);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:

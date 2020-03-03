@@ -447,7 +447,7 @@ static void Inf_PutIconToViewInfo (void)
 
 void Inf_PutIconToEditInfo (void)
   {
-   Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.Crs.Info.Type],NULL);
+   Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.Crs.Info.Type],NULL,NULL);
   }
 
 /*****************************************************************************/

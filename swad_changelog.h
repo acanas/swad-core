@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.141 (2020-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.141.1 (2020-03-03)"
 #define CSS_FILE		"swad19.136.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -521,8 +521,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
+// TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.141.1: Mar 03, 2020	Form to create new item inside course program. (282123 lines)
 	Version 19.141:   Mar 03, 2020	Remove groups in course program. (282052 lines)
 					1 change necessary in database:
 DROP TABLE IF EXISTS prg_grp;

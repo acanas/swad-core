@@ -186,7 +186,7 @@ static void Ban_PutIconsListingBanners (void)
 
 static void Ban_PutIconToEditBanners (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiBan,NULL);
+   Ico_PutContextualIconToEdit (ActEdiBan,NULL,NULL);
   }
 
 /*****************************************************************************/

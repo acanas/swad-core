@@ -235,11 +235,12 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) (
 				  Txt_Remove);
   }
 
-void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
+				  void (*FuncParams) (void))
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
 				  "pen.svg",
 				  Txt_Edit);
   }

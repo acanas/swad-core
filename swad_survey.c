@@ -851,7 +851,7 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
       Ico_PutContextualIconToUnhide (ActShoSvy,Anchor,Svy_PutParams);
 
    /***** Put form to edit survey *****/
-   Ico_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,Svy_PutParams);
   }
 
 /*****************************************************************************/
@@ -3247,7 +3247,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy)
             /* Write icon to edit the question */
             Svy_CurrentSvyCod = Svy->SvyCod;
             Svy_CurrentQstCod = SvyQst.QstCod;
-            Ico_PutContextualIconToEdit (ActEdiOneSvyQst,Svy_PutParamsToEditQuestion);
+            Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,Svy_PutParamsToEditQuestion);
 
             HTM_TD_End ();
            }
