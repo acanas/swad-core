@@ -81,15 +81,14 @@ static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ItmCodBeforeForm,unsigned FormLevel);
+			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,bool PrintView);
-static void Prg_ShowItemForm (const struct ProgramItem *Item,
-			      Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      unsigned FormLevel);
+static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      long ParamItmCod,unsigned FormLevel);
 
 static void Prg_CreateNumbers (unsigned MaxLevel);
 static void Prg_FreeNumbers (void);
@@ -150,7 +149,8 @@ static void Prg_UpdatePrgItem (struct ProgramItem *Item,const char *Txt);
 void Prg_SeeCourseProgram (void)
   {
    /***** Show all the program items *****/
-   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,-1L,0);
+   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,
+		     -1L,-1L,0);
   }
 
 /*****************************************************************************/
@@ -158,7 +158,7 @@ void Prg_SeeCourseProgram (void)
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ItmCodBeforeForm,unsigned FormLevel)
+			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
@@ -195,7 +195,17 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
 	 /* Show form to create/change item */
 	 if (ItmCodBeforeForm == Item.Hierarchy.ItmCod)
-	    Prg_ShowItemForm (&Item,CreateOrChangeItem,FormLevel);
+	    switch (CreateOrChangeItem)
+	      {
+	       case Prg_DONT_PUT_FORM_ITEM:
+		  break;
+	       case Prg_PUT_FORM_CREATE_ITEM:
+	          Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod,FormLevel);
+		  break;
+	       case Prg_PUT_FORM_CHANGE_ITEM:
+	          Prg_ShowItemForm (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
+	          break;
+	      }
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	}
@@ -397,9 +407,8 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,boo
 /**************************** Show item form *********************************/
 /*****************************************************************************/
 
-static void Prg_ShowItemForm (const struct ProgramItem *Item,
-			      Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      unsigned FormLevel)
+static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			      long ParamItmCod,unsigned FormLevel)
   {
    unsigned ColSpan;
    unsigned NumCol;
@@ -444,9 +453,9 @@ static void Prg_ShowItemForm (const struct ProgramItem *Item,
 		 ColSpan,Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin ("item_form");
    if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-      Prg_ShowFormToCreatePrgItem (Item->Hierarchy.ItmCod);
+      Prg_ShowFormToCreatePrgItem (ParamItmCod);
    else
-      Prg_ShowFormToChangePrgItem (Item->Hierarchy.ItmCod);
+      Prg_ShowFormToChangePrgItem (ParamItmCod);
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -629,7 +638,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,Anchor,Prg_PutParams,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemIndex));
@@ -641,7 +650,7 @@ static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,NULL,Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,Anchor,Prg_PutParams,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemIndex));
@@ -1592,7 +1601,8 @@ void Prg_RequestCreatePrgItem (void)
      }
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,
+		     ParentItmCod,ItmCodBeforeForm,FormLevel);
   }
 
 void Prg_RequestChangePrgItem (void)
@@ -1618,7 +1628,8 @@ void Prg_RequestChangePrgItem (void)
      }
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
+		     -1L,ItmCodBeforeForm,FormLevel);
   }
 
 /*****************************************************************************/
@@ -1650,8 +1661,7 @@ static void Prg_ShowFormToCreatePrgItem (long ParentItmCod)
 
    /***** Begin form *****/
    Frm_StartForm (ActNewPrgItm);
-   Prg_SetCurrentItmCod (ParentItem.Hierarchy.ItmCod);
-   Prg_PutParams ();
+   Prg_PutParamItmCod (ParentItem.Hierarchy.ItmCod);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin ("100%",Txt_New_item,NULL,
@@ -1691,8 +1701,7 @@ static void Prg_ShowFormToChangePrgItem (long ItmCod)
 
    /***** Begin form *****/
    Frm_StartForm (ActChgPrgItm);
-   Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
-   Prg_PutParams ();
+   Prg_PutParamItmCod (Item.Hierarchy.ItmCod);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin ("100%",

@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.141.4 (2020-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.141.5 (2020-03-03)"
 #define CSS_FILE		"swad19.136.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -524,6 +524,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.141.5: Mar 03, 2020	Fixed bug in edition of course program. (282224 lines)
 	Version 19.141.4: Mar 03, 2020	Remove subtree in course program. (282214 lines)
 	Version 19.141.3: Mar 03, 2020	Form to create new item inside course program. (282199 lines)
 	Version 19.141.2: Mar 03, 2020	Form to create new item inside course program. (282156 lines)
