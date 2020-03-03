@@ -46209,27 +46209,6 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 	"O editor integrado ainda n&atilde;o est&aacute; dispon&iacute;vel.";
 #endif
 
-const char *Txt_The_item_has_been_modified =
-#if   L==1	// ca
-	"El &iacute;tem ha estat modificat.";
-#elif L==2	// de
-	"Das Artikel wurde ge&auml;ndert.";
-#elif L==3	// en
-	"The item has been modified.";
-#elif L==4	// es
-	"El &iacute;tem ha sido modificado.";
-#elif L==5	// fr
-	"L'article a &eacute;t&eacute; modifi&eacute;.";
-#elif L==6	// gn
-	"El &iacute;tem ha sido modificado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il articolo &egrave; stato modificato.";
-#elif L==8	// pl
-	"Gra przedmiot zmodyfikowane.";
-#elif L==9	// pt
-	"O item foi modificado.";
-#endif
-
 const char *Txt_The_link_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El enlace <strong>%s</strong> ya existe.";	// Necessita traduccio

@@ -1597,6 +1597,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	}
 
+.PRG_HIGHLIGHTED_ITEM
+	{
+	animation:itemfadein 1s ease forwards;
+	}
+@keyframes itemfadein
+	{
+	/* from	{outline:thick solid #4d88a1;}
+	to	{outline:thick solid transparent;} */
+	/*
+	from	{text-shadow:0px 1px #008000;}
+	to	{text-shadow:0px 1px transparent;} */
+	from	{opacity:0;}
+	to	{opacity:1;}
+	}
+
 /********************************** Notice ***********************************/
 .NOTICE_HIGHLIGHT
 	{

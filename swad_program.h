@@ -62,7 +62,7 @@ struct ProgramItem
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Prg_SeeCourseProgram (void);
+void Prg_ShowCourseProgram (void);
 
 void Prg_RequestCreatePrgItem (void);
 void Prg_RequestChangePrgItem (void);
