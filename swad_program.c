@@ -1066,13 +1066,16 @@ void Prg_ReqRemPrgItem (void)
   }
 
 /*****************************************************************************/
-/*************************** Remove a program item ***************************/
+/******************* Remove a program item and its children ******************/
 /*****************************************************************************/
 
 void Prg_RemovePrgItem (void)
   {
    extern const char *Txt_Item_X_removed;
    struct ProgramItem Item;
+   unsigned NumItem;
+   unsigned BeginIndex;
+   unsigned EndIndex;
 
    /***** Get program item code *****/
    if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -1081,13 +1084,27 @@ void Prg_RemovePrgItem (void)
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (&Item);	// Inside this function, the course is checked to be the current one
 
-   /***** Remove program item *****/
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+   NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
+
+   /***** Indexes of items *****/
+   BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
+   EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+
+   /***** Remove program items *****/
    DB_QueryDELETE ("can not remove program item",
-		   "DELETE FROM prg_items WHERE ItmCod=%ld AND CrsCod=%ld",
-                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "DELETE FROM prg_items"
+		   " WHERE CrsCod=%ld AND"
+		   " ItmInd>=%u AND ItmInd<=%u",
+                   Gbl.Hierarchy.Crs.CrsCod,
+		   BeginIndex,EndIndex);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
 
    /***** Show program items again *****/
    Prg_SeeCourseProgram ();
