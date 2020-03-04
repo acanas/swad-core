@@ -84,6 +84,8 @@ static unsigned HTM_U_NestingLevel        = 0;
 
 static void HTM_TABLE_BeginWithoutAttr (void);
 
+static void HTM_TBODY_BeginWithoutAttr (void);
+
 static void HTM_TR_BeginWithoutAttr (void);
 
 static void HTM_TH_BeginWithoutAttr (void);
@@ -230,6 +232,48 @@ void HTM_TABLE_End (void)
    HTM_Txt ("</table>");
 
    HTM_TABLE_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/********************************* Table body ********************************/
+/*****************************************************************************/
+
+void HTM_TBODY_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 HTM_TxtF ("<tbody %s>",Attr);
+
+	 free (Attr);
+	}
+      else
+         HTM_TBODY_BeginWithoutAttr ();
+     }
+   else
+      HTM_TBODY_BeginWithoutAttr ();
+  }
+
+static void HTM_TBODY_BeginWithoutAttr (void)
+  {
+   HTM_Txt ("<tbody>");
+  }
+
+void HTM_TBODY_End (void)
+  {
+   HTM_Txt ("</tbody>");
   }
 
 /*****************************************************************************/

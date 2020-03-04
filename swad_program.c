@@ -67,6 +67,12 @@ typedef enum
    Prg_PUT_FORM_CHANGE_ITEM,
   } Prg_CreateOrChangeItem_t;
 
+struct Subtree
+  {
+   unsigned Begin;
+   unsigned End;
+  };
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -89,7 +95,7 @@ static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
-			     long HighlightItmCod,bool PrintView);
+			     const struct Subtree *ToHighlight,bool PrintView);
 static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			      long ParamItmCod,unsigned FormLevel);
 
@@ -122,8 +128,9 @@ static void Prg_GetPrgItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1
 static void Prg_PutParamItmCod (long ItmCod);
 static long Prg_GetParamItmCod (void);
 
-static unsigned Prg_GetNumItemFromItmCod (unsigned ItmCod);
+static unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 
+static void Prg_GetSubtree (unsigned NumItem,struct Subtree *Subtree);
 static unsigned Prg_GetMaxItemLevel (void);
 static int Prg_GetPrevBrother (int NumItem);
 static int Prg_GetNextBrother (int NumItem);
@@ -170,6 +177,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
+   struct Subtree ToHighlight;
    unsigned NumItem;
    struct ProgramItem Item;
 
@@ -177,6 +185,19 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    Prg_GetListPrgItems ();
    Prg_MaxLevel = Prg_GetMaxItemLevel ();
    Prg_CreateNumbers (Prg_MaxLevel);
+
+   /***** Calculate which items must be highlighted *****/
+   if (HighlightItmCod > 0)	// Item(s) must be highlighted
+     {
+      /* Highlight subtree */
+      NumItem = Prg_GetNumItemFromItmCod (HighlightItmCod);
+      Prg_GetSubtree (NumItem,&ToHighlight);
+     }
+   else
+     {
+      ToHighlight.Begin =
+      ToHighlight.End   = Gbl.Prg.Num;	// Don't highlight any item
+     }
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
@@ -196,7 +217,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
       /* Show item */
       Prg_ShowOneItem (NumItem,&Item,
-		       HighlightItmCod,
+		       &ToHighlight,
 		       false);	// Not print view
 
       /* Show form to create/change item */
@@ -296,9 +317,10 @@ static void Prg_PutButtonToCreateNewItem (void)
 #define Prg_WIDTH_NUM_ITEM 20
 
 static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
-			     long HighlightItmCod,bool PrintView)
+			     const struct Subtree *ToHighlight,bool PrintView)
   {
    static unsigned UniqueId = 0;
+   static bool FirstTBodyOpen = false;
    char *Id;
    unsigned ColSpan;
    unsigned NumCol;
@@ -308,11 +330,27 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    /***** Increase number of item *****/
    Prg_IncreaseNumItem (Item->Hierarchy.Level);
 
+   /***** In general, the table is divided into three bodys:
+   1. Rows before highlighted: <tbody></tbody>
+   2. Rows highlighted:        <tbody id="highlighted_item"></tbody>
+   3. Rows after highlighted:  <tbody></tbody> */
+   if (Item->Hierarchy.Index == ToHighlight->Begin)	// Begin of the highlighted subtree
+     {
+      if (FirstTBodyOpen)
+	{
+         HTM_TBODY_End ();			// 1st tbody end
+         FirstTBodyOpen = false;
+	}
+      HTM_TBODY_Begin ("id=\"highlighted_item\" class=\"PRG_HIGHLIGHTED_ITEM\"");	// Highlighted tbody start
+     }
+   else if (NumItem == 0)			// First item
+     {
+      HTM_TBODY_Begin (NULL);			// 1st tbody start
+      FirstTBodyOpen = true;
+     }
+
    /***** Start row *****/
-   if (Item->Hierarchy.ItmCod == HighlightItmCod)
-      HTM_TR_Begin ("class=\"PRG_HIGHLIGHTED_ITEM\"");
-   else
-      HTM_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Forms to remove/edit this program item *****/
    if (!PrintView)
@@ -349,8 +387,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    else
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
 		    ColSpan,Gbl.RowEvenOdd);
-   if (Item->Hierarchy.ItmCod == HighlightItmCod)
-      HTM_SECTION_Begin ("highlighted_item");
 
    /* Title */
    HTM_DIV_Begin ("class=\"%s\"",
@@ -370,8 +406,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    HTM_DIV_End ();
 
    /* End title and text */
-   if (Item->Hierarchy.ItmCod == HighlightItmCod)
-      HTM_SECTION_End ();
    HTM_TD_End ();
 
    /***** Start/end date/time *****/
@@ -407,6 +441,16 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /***** End row *****/
    HTM_TR_End ();
+
+   /***** End tbodies *****/
+   if (Item->Hierarchy.Index == ToHighlight->End)	// End of the highlighted subtree
+     {
+      HTM_TBODY_End ();			// Highlighted tbody end
+      if (NumItem < Gbl.Prg.Num - 1)	// Not the last item
+         HTM_TBODY_Begin (NULL);	// 3rd tbody begin
+     }
+   else if (NumItem == Gbl.Prg.Num - 1)	// Last item
+      HTM_TBODY_End ();			// 3rd tbody end
   }
 
 /*****************************************************************************/
@@ -1037,7 +1081,7 @@ static long Prg_GetParamItmCod (void)
 /**************** Get number of item in list from item code ******************/
 /*****************************************************************************/
 
-static unsigned Prg_GetNumItemFromItmCod (unsigned ItmCod)
+static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
   {
    unsigned NumItem;
 
@@ -1088,8 +1132,7 @@ void Prg_RemovePrgItem (void)
    extern const char *Txt_Item_X_removed;
    struct ProgramItem Item;
    unsigned NumItem;
-   unsigned BeginIndex;
-   unsigned EndIndex;
+   struct Subtree ToRemove;
 
    /***** Get program item code *****/
    if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
@@ -1103,8 +1146,7 @@ void Prg_RemovePrgItem (void)
    NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
 
    /***** Indexes of items *****/
-   BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
-   EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+   Prg_GetSubtree (NumItem,&ToRemove);
 
    /***** Remove program items *****/
    DB_QueryDELETE ("can not remove program item",
@@ -1112,7 +1154,7 @@ void Prg_RemovePrgItem (void)
 		   " WHERE CrsCod=%ld AND"
 		   " ItmInd>=%u AND ItmInd<=%u",
                    Gbl.Hierarchy.Crs.CrsCod,
-		   BeginIndex,EndIndex);
+		   ToRemove.Begin,ToRemove.End);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
@@ -1297,6 +1339,25 @@ void Prg_MoveRightPrgItem (void)
   }
 
 /*****************************************************************************/
+/****** Get subtree begin and end from number of item in course program ******/
+/*****************************************************************************/
+
+static void Prg_GetSubtree (unsigned NumItem,struct Subtree *Subtree)
+  {
+   /***** List of items must be filled *****/
+   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
+   /***** Number of item must be in the correct range *****/
+   if (NumItem >= Gbl.Prg.Num)
+      Lay_ShowErrorAndExit ("Wrong item number.");
+
+   /***** Compute range *****/
+   Subtree->Begin = Gbl.Prg.LstItems[NumItem                   ].Index;
+   Subtree->End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+  }
+
+/*****************************************************************************/
 /******************* Get maximum level in a course program *******************/
 /*****************************************************************************/
 // Return 0 if no items
@@ -1411,14 +1472,12 @@ static unsigned Prg_GetLastChild (int NumItem)
 static void Prg_MoveItemAndChildrenLeft (unsigned NumItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   unsigned BeginIndex;
-   unsigned EndIndex;
+   struct Subtree ToMoveLeft;
 
    if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
      {
       /* Indexes of items */
-      BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
-      EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+      Prg_GetSubtree (NumItem,&ToMoveLeft);
 
       /* Move item and its children to left or right */
       DB_QueryUPDATE ("can not move items",
@@ -1426,7 +1485,7 @@ static void Prg_MoveItemAndChildrenLeft (unsigned NumItem)
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      BeginIndex,EndIndex);
+		      ToMoveLeft.Begin,ToMoveLeft.End);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
@@ -1439,14 +1498,12 @@ static void Prg_MoveItemAndChildrenLeft (unsigned NumItem)
 static void Prg_MoveItemAndChildrenRight (unsigned NumItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   unsigned BeginIndex;
-   unsigned EndIndex;
+   struct Subtree ToMoveRight;
 
    if (Prg_CheckIfMoveRightIsAllowed (NumItem))
      {
       /* Indexes of items */
-      BeginIndex = Gbl.Prg.LstItems[NumItem].Index;
-      EndIndex   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+      Prg_GetSubtree (NumItem,&ToMoveRight);
 
       /* Move item and its children to left or right */
       DB_QueryUPDATE ("can not move items",
@@ -1454,7 +1511,7 @@ static void Prg_MoveItemAndChildrenRight (unsigned NumItem)
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      BeginIndex,EndIndex);
+		      ToMoveRight.Begin,ToMoveRight.End);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
@@ -1467,31 +1524,18 @@ static void Prg_MoveItemAndChildrenRight (unsigned NumItem)
 static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct
-     {
-      unsigned Begin;
-      unsigned End;
-     } TopIndex, BottomIndex, Diff;
+   struct Subtree Top;
+   struct Subtree Bottom;
+   unsigned DiffBegin;
+   unsigned DiffEnd;
 
    if (NumItemTop    >= 0 &&
        NumItemBottom >= 0)
      {
-      TopIndex.Begin    = Gbl.Prg.LstItems[NumItemTop                      ].Index;
-      TopIndex.End      = Gbl.Prg.LstItems[Prg_GetLastChild (NumItemTop   )].Index;
-      BottomIndex.Begin = Gbl.Prg.LstItems[NumItemBottom                   ].Index;
-      BottomIndex.End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItemBottom)].Index;
-      Diff.Begin        = BottomIndex.Begin - TopIndex.Begin;
-      Diff.End          = BottomIndex.End   - TopIndex.End;
-
-      Ale_ShowAlert (Ale_INFO,"TopIndex.Begin    = %u<br />"
-			      "TopIndex.End      = %u<br />"
-			      "BottomIndex.Begin = %u<br />"
-			      "BottomIndex.End   = %u",
-		     TopIndex.Begin,
-		     TopIndex.End,
-		     BottomIndex.Begin,
-		     BottomIndex.End);
-
+      Prg_GetSubtree (NumItemTop   ,&Top   );
+      Prg_GetSubtree (NumItemBottom,&Bottom);
+      DiffBegin = Bottom.Begin - Top.Begin;
+      DiffEnd   = Bottom.End   - Top.End;
 
       /***** Lock table to make the move atomic *****/
       DB_Query ("can not lock tables to move program item",
@@ -1503,24 +1547,24 @@ static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom)
       // ...this implementation works even with non continuous indexes
       /*
       Example:
-      TopIndex.Begin    =  5
-		        = 10
-      TopIndex.End      = 17
-      BottomIndex.Begin = 28
-      BottomIndex.End   = 49
+      Top.Begin    =  5
+		   = 10
+      Top.End      = 17
+      Bottom.Begin = 28
+      Bottom.End   = 49
 
-      Diff.Begin = 28 -  5 = 23;
-      Diff.End   = 49 - 17 = 32;
+      DiffBegin = 28 -  5 = 23;
+      DiffEnd   = 49 - 17 = 32;
 
                                 Step 1            Step 2            Step 3          (Equivalent to)
               +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
               |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod|   |ItmInd|ItmCod| |ItmInd|ItmCod|
               +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
-TopIndex.Begin:     5|   218|-->|--> -5|   218|-->|--> 37|   218|   |    37|   218| |     5|   221|
+Top.Begin:    |     5|   218|-->|--> -5|   218|-->|--> 37|   218|   |    37|   218| |     5|   221|
               |    10|   219|-->|-->-10|   219|-->|--> 42|   219|   |    42|   219| |    26|   222|
-TopIndex.End: |    17|   220|-->|-->-17|   220|-->|--> 49|   220|   |    49|   220| |    37|   218|
-BottomIndex.Begin: 28|   221|-->|-->-28|   221|   |   -28|   221|-->|-->  5|   221| |    42|   219|
-BottomIndex.End:   49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   222| |    49|   220|
+Top.End:      |    17|   220|-->|-->-17|   220|-->|--> 49|   220|   |    49|   220| |    37|   218|
+Bottom.Begin: |    28|   221|-->|-->-28|   221|   |   -28|   221|-->|-->  5|   221| |    42|   219|
+Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   222| |    49|   220|
               +------+------+   +------+------+   +------+------+   +------+------+ +------+------+
       */
       /* Step 1: Change all indexes involved to negative,
@@ -1530,25 +1574,25 @@ BottomIndex.End:   49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=%u AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      TopIndex.Begin,BottomIndex.End);
+		      Top.Begin,Bottom.End);		// All indexes in both parts
 
       /* Step 2: Increase top indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items SET ItmInd=-ItmInd+%u"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=-%u AND ItmInd<=-%u",
-		      Diff.End,
+		      DiffEnd,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      TopIndex.End,TopIndex.Begin);		// All indexes in top part
+		      Top.End,Top.Begin);		// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items SET ItmInd=-ItmInd-%u"
 		      " WHERE CrsCod=%ld"
 		      " AND ItmInd>=-%u AND ItmInd<=-%u",
-		      Diff.Begin,
+		      DiffBegin,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      BottomIndex.End,BottomIndex.Begin);	// All indexes in bottom part
+		      Bottom.End,Bottom.Begin);		// All indexes in bottom part
 
       /***** Unlock table *****/
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
