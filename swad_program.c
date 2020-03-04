@@ -101,8 +101,7 @@ static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
 
 static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
-					     const struct ProgramItem *Item,
-					     const char *Anchor);
+					     const struct ProgramItem *Item);
 static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
@@ -171,7 +170,6 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
-   extern const char *Txt_No_items;
    unsigned NumItem;
    struct ProgramItem Item;
 
@@ -184,47 +182,46 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
-   if (Gbl.Prg.Num)
+   /***** Table head *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+
+   /***** Write all the program items *****/
+   for (NumItem = 0;
+	NumItem < Gbl.Prg.Num;
+	NumItem++)
      {
-      /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      /* Get data of this program item */
+      Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
+      Prg_GetDataOfItemByCod (&Item);
 
-      /***** Write all the program items *****/
-      for (NumItem = 0;
-	   NumItem < Gbl.Prg.Num;
-	   NumItem++)
-	{
-	 /* Get data of this program item */
-	 Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
-	 Prg_GetDataOfItemByCod (&Item);
+      /* Show item */
+      Prg_ShowOneItem (NumItem,&Item,
+		       HighlightItmCod,
+		       false);	// Not print view
 
-	 /* Show item */
-	 Prg_ShowOneItem (NumItem,&Item,
-			  HighlightItmCod,
-	                  false);	// Not print view
+      /* Show form to create/change item */
+      if (ItmCodBeforeForm == Item.Hierarchy.ItmCod)
+	 switch (CreateOrChangeItem)
+	   {
+	    case Prg_DONT_PUT_FORM_ITEM:
+	       break;
+	    case Prg_PUT_FORM_CREATE_ITEM:
+	       Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod,FormLevel);
+	       break;
+	    case Prg_PUT_FORM_CHANGE_ITEM:
+	       Prg_ShowItemForm (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
+	       break;
+	   }
 
-	 /* Show form to create/change item */
-	 if (ItmCodBeforeForm == Item.Hierarchy.ItmCod)
-	    switch (CreateOrChangeItem)
-	      {
-	       case Prg_DONT_PUT_FORM_ITEM:
-		  break;
-	       case Prg_PUT_FORM_CREATE_ITEM:
-	          Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod,FormLevel);
-		  break;
-	       case Prg_PUT_FORM_CHANGE_ITEM:
-	          Prg_ShowItemForm (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
-	          break;
-	      }
-
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
-   else	// No program items created
-      Ale_ShowAlert (Ale_INFO,Txt_No_items);
+
+   /***** Create item at the end? *****/
+   if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+      Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
+
+   /***** End table *****/
+   HTM_TABLE_End ();
 
    /***** Button to create a new program item *****/
    if (Prg_CheckIfICanCreateItems ())
@@ -301,7 +298,6 @@ static void Prg_PutButtonToCreateNewItem (void)
 static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 			     long HighlightItmCod,bool PrintView)
   {
-   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
    unsigned ColSpan;
@@ -311,9 +307,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /***** Increase number of item *****/
    Prg_IncreaseNumItem (Item->Hierarchy.Level);
-
-   /***** Set anchor string *****/
-   Frm_SetAnchorStr (Item->Hierarchy.ItmCod,&Anchor);
 
    /***** Start row *****/
    if (Item->Hierarchy.ItmCod == HighlightItmCod)
@@ -325,7 +318,7 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    if (!PrintView)
      {
       HTM_TD_Begin ("class=\"PRG_COL1 LT COLOR%u\"",Gbl.RowEvenOdd);
-      Prg_PutFormsToRemEditOnePrgItem (NumItem,Item,Anchor);
+      Prg_PutFormsToRemEditOnePrgItem (NumItem,Item);
       HTM_TD_End ();
      }
 
@@ -358,7 +351,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 		    ColSpan,Gbl.RowEvenOdd);
    if (Item->Hierarchy.ItmCod == HighlightItmCod)
       HTM_SECTION_Begin ("highlighted_item");
-   HTM_ARTICLE_Begin (Anchor);
 
    /* Title */
    HTM_DIV_Begin ("class=\"%s\"",
@@ -378,7 +370,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    HTM_DIV_End ();
 
    /* End title and text */
-   HTM_ARTICLE_End ();
    if (Item->Hierarchy.ItmCod == HighlightItmCod)
       HTM_SECTION_End ();
    HTM_TD_End ();
@@ -416,9 +407,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /***** End row *****/
    HTM_TR_End ();
-
-   /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -590,8 +578,7 @@ static void Prg_WriteNumNewItem (unsigned Level)
 /*****************************************************************************/
 
 static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
-					     const struct ProgramItem *Item,
-					     const char *Anchor)
+					     const struct ProgramItem *Item)
   {
    extern const char *Txt_New_item;
    extern const char *Txt_Move_up_X;
@@ -1614,6 +1601,7 @@ void Prg_RequestCreatePrgItem (void)
      }
    else
      {
+      ParentItmCod     = -1L;
       ItmCodBeforeForm = -1L;
       FormLevel        = 0;
      }

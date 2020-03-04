@@ -25720,27 +25720,6 @@ const char *Txt_No_institutions =
 	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
 #endif
 
-const char *Txt_No_items =
-#if   L==1	// ca
-	"No hi ha items";
-#elif L==2	// de
-	"Keine Programmelement";
-#elif L==3	// en
-	"No items";
-#elif L==4	// es
-	"No hay items";
-#elif L==5	// fr
-	"Il n'y a pas d'&eacute;l&eacute;ments";
-#elif L==6	// gn
-	"No hay items";	// Okoteve traducción
-#elif L==7	// it
-	"Non ci sono elementi";
-#elif L==8	// pl
-	"Brak przedmiot&oacute;w";
-#elif L==9	// pt
-	"N&atilde;o h&aacute; itens";
-#endif
-
 const char *Txt_No_links =
 #if   L==1	// ca
 	"No hi ha enlla&ccedil;os.";

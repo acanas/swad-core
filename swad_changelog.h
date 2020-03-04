@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.141.6 (2020-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 19.141.7 (2020-03-04)"
 #define CSS_FILE		"swad19.141.6.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -523,7 +523,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
+// TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
+// TODO: Hide/show items should hide/show subtrees
 
+	Version 19.141.7: Mar 04, 2020	Create item at the end of course program. (282202 lines)
 	Version 19.141.6: Mar 04, 2020	Changes in edition of course program. (282230 lines)
 	Version 19.141.5: Mar 03, 2020	Fixed bug in edition of course program. (282224 lines)
 	Version 19.141.4: Mar 03, 2020	Remove subtree in course program. (282214 lines)
