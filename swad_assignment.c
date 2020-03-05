@@ -1728,20 +1728,6 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   }
 
 /*****************************************************************************/
-/****************** Get number of assignments in a course ********************/
-/*****************************************************************************/
-
-unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
-  {
-   /***** Get number of assignments in a course from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of assignments in course",
-			     "SELECT COUNT(*) FROM assignments"
-			     " WHERE CrsCod=%ld",
-			     CrsCod);
-  }
-
-/*****************************************************************************/
 /****************** Get number of courses with assignments *******************/
 /*****************************************************************************/
 // Returns the number of courses with assignments
@@ -1916,4 +1902,18 @@ unsigned Asg_GetNumAssignments (Hie_Level_t Scope,unsigned *NumNotif)
    DB_FreeMySQLResult (&mysql_res);
 
    return NumAssignments;
+  }
+
+/*****************************************************************************/
+/****************** Get number of assignments in a course ********************/
+/*****************************************************************************/
+
+unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
+  {
+   /***** Get number of assignments in a course from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of assignments in course",
+			     "SELECT COUNT(*) FROM assignments"
+			     " WHERE CrsCod=%ld",
+			     CrsCod);
   }

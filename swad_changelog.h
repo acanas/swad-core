@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.144 (2020-03-05)"
-#define CSS_FILE		"swad19.141.6.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.144.1 (2020-03-05)"
+#define CSS_FILE		"swad19.144.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
  *
@@ -525,6 +525,14 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 
+// TODO: URGENTE: Reportado por Eva Martínez Ortigosa
+                  Sea un juego tiene dos preguntas: 1 y 2
+		  Se elimina la pregunta 1 de los test ==> ahora no sale la pregunta 1 al editar el juego
+						       ==> DEBERÍA SALIR el número 1 indicando que la pregunta no existe
+		  Al intentar jugar una partida y pasar por la pregunta 1 ==> Ahora se cuelga
+									  ==> DEBERÍA SALIR un mensaje de que la pregunta no existe
+
+	Version 19.144.1: Mar 05, 2020	Changes in CSS for course program. (282291 lines)
 	Version 19.144:   Mar 05, 2020	Code refactoring in edition of course program.
 					Show hidden subtrees. (282248 lines)
 	Version 19.143.1: Mar 05, 2020	Code refactoring in edition of course program. (282190 lines)

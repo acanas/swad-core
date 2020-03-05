@@ -2951,15 +2951,15 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
    extern const char *Txt_Number_of_BR_program_items;
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
    extern const char *Txt_Average_number_BR_of_items_BR_per_course;
-   unsigned NumPrgItems;
-   unsigned NumCoursesWithPrgItems = 0;
-   double NumPrgItemsPerCourse = 0.0;
+   unsigned NumItems;
+   unsigned NumCoursesWithItems = 0;
+   double NumItemsPerCourse = 0.0;
 
    /***** Get the number of program items from this location *****/
-   if ((NumPrgItems = Prg_GetNumItems (Gbl.Scope.Current)))
-      if ((NumCoursesWithPrgItems = Prg_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
-         NumPrgItemsPerCourse = (double) NumPrgItems /
-	                        (double) NumCoursesWithPrgItems;
+   if ((NumItems = Prg_GetNumItems (Gbl.Scope.Current)))
+      if ((NumCoursesWithItems = Prg_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
+         NumItemsPerCourse = (double) NumItems /
+	                     (double) NumCoursesWithItems;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,
@@ -2978,15 +2978,15 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumPrgItems);
+   HTM_Unsigned (NumItems);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithPrgItems);
+   HTM_Unsigned (NumCoursesWithItems);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumPrgItemsPerCourse);
+   HTM_Double2Decimals (NumItemsPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();

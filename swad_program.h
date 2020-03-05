@@ -39,24 +39,23 @@
 
 void Prg_ShowCourseProgram (void);
 
-void Prg_RequestCreatePrgItem (void);
-void Prg_RequestChangePrgItem (void);
-void Prg_RecFormNewPrgItem (void);
-void Prg_RecFormChgPrgItem (void);
+void Prg_RequestCreateItem (void);
+void Prg_RequestChangeItem (void);
+void Prg_RecFormNewItem (void);
+void Prg_RecFormChgItem (void);
 
-void Prg_ReqRemPrgItem (void);
-void Prg_RemovePrgItem (void);
-void Prg_HidePrgItem (void);
-void Prg_UnhidePrgItem (void);
+void Prg_ReqRemItem (void);
+void Prg_RemoveItem (void);
+void Prg_HideItem (void);
+void Prg_UnhideItem (void);
 
-void Prg_MoveUpPrgItem (void);
-void Prg_MoveDownPrgItem (void);
-void Prg_MoveLeftPrgItem (void);
-void Prg_MoveRightPrgItem (void);
+void Prg_MoveUpItem (void);
+void Prg_MoveDownItem (void);
+void Prg_MoveLeftItem (void);
+void Prg_MoveRightItem (void);
 
-void Prg_RecFormPrgItem (void);
+void Prg_RecFormItem (void);
 void Prg_RemoveCrsItems (long CrsCod);
-unsigned Prg_GetNumItemsInCrsProgram(long CrsCod);
 
 unsigned Prg_GetNumCoursesWithItems (Hie_Level_t Scope);
 unsigned Prg_GetNumItems (Hie_Level_t Scope);

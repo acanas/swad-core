@@ -1597,7 +1597,39 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	}
 
-.PRG_HIGHLIGHTED_ITEM
+.PRG_NUM
+	{
+	width:30px;
+	text-align:left;
+	vertical-align:top;
+	}
+
+.PRG_MAIN
+	{
+	text-align:left;
+	vertical-align:top;
+	}
+
+.PRG_TIT_1	{color:#24292e; font-size:24pt; font-weight:bold;}
+.PRG_TIT_2	{color:#24292e; font-size:20pt; font-weight:bold;}
+.PRG_TIT_3	{color:#24292e; font-size:18pt; font-weight:bold;}
+.PRG_TIT_4	{color:#24292e; font-size:16pt; font-weight:bold;}
+.PRG_TIT_5	{color:#24292e; font-size:14pt; font-weight:bold;}
+
+.PRG_TXT	{color:#24292e; font-size:12pt; line-height:1.5;}
+
+.PRG_DATE
+	{
+	box-sizing:border-box;
+	width:70px;
+	}
+
+.PRG_HIDDEN
+	{
+	opacity:0.33;
+	}
+
+#prg_highlighted
 	{
 	animation:itemfadein 1s ease forwards;
 	}
@@ -2164,11 +2196,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /*****************************************************************************/
 .TITLE_WHITE	{color:#505050; font-size:18pt;}
-.TITLE_GREY		{color:#505050; font-size:18pt;}
+.TITLE_GREY	{color:#505050; font-size:18pt;}
 .TITLE_PURPLE	{color:#573c4d; font-size:18pt;}
-.TITLE_BLUE		{color:#4D88A1; font-size:18pt;}
+.TITLE_BLUE	{color:#4D88A1; font-size:18pt;}
 .TITLE_YELLOW	{color:#7c4d2a; font-size:18pt;}
-.TITLE_PINK		{color:#63474e; font-size:18pt;}
+.TITLE_PINK	{color:#63474e; font-size:18pt;}
 
 /*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
