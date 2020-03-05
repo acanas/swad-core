@@ -67,6 +67,20 @@ typedef enum
    Prg_PUT_FORM_CHANGE_ITEM,
   } Prg_CreateOrChangeItem_t;
 
+#define Prg_NUM_MOVEMENTS_UP_DOWN 2
+typedef enum
+  {
+   Prg_MOVE_UP,
+   Prg_MOVE_DOWN,
+  } Prg_MoveUpDown_t;
+
+#define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
+typedef enum
+  {
+   Prg_MOVE_LEFT,
+   Prg_MOVE_RIGHT,
+  } Prg_MoveLeftRight_t;
+
 struct Subtree
   {
    unsigned Begin;
@@ -86,9 +100,9 @@ static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowCourseProgramHighlightingItem (long HighlightItmCod);
+static void Prg_ShowCourseProgramHighlightingItem (const struct Subtree *ToHighlight);
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long HighlightItmCod,
+			      const struct Subtree *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (void);
@@ -99,6 +113,7 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			      long ParamItmCod,unsigned FormLevel);
 
+static unsigned Prg_GetMaxItemLevel (void);
 static void Prg_CreateNumbers (unsigned MaxLevel);
 static void Prg_FreeNumbers (void);
 static void Prg_IncreaseNumItem (unsigned Level);
@@ -130,17 +145,20 @@ static long Prg_GetParamItmCod (void);
 
 static unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 
-static void Prg_GetSubtree (unsigned NumItem,struct Subtree *Subtree);
-static unsigned Prg_GetMaxItemLevel (void);
+static void Prg_HideUnhidePrgItem (char YN);
+
+static void Prg_MoveUpDownPrgItem (Prg_MoveUpDown_t UpDown);
+static bool Prg_ExchangeSubtrees (int NumItemTop,int NumItemBottom);
 static int Prg_GetPrevBrother (int NumItem);
 static int Prg_GetNextBrother (int NumItem);
+
+static void Prg_MoveLeftRightPrgItem (Prg_MoveLeftRight_t LeftRight);
+
+static void Prg_SetSubtreeEmpty (struct Subtree *Subtree);
+static void Prg_SetSubtreeOnlyItem (unsigned NumItem,struct Subtree *Subtree);
+static void Prg_SetSubtreeWithAllChildren (unsigned NumItem,struct Subtree *Subtree);
 static unsigned Prg_GetLastChild (int NumItem);
 
-static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom);
-static void Prg_MoveItemAndChildrenLeft (unsigned NumItem);
-static void Prg_MoveItemAndChildrenRight (unsigned NumItem);
-
-static bool Prg_CheckIfSimilarItemExists (const char *Field,const char *Value,long ItmCod);
 static void Prg_ShowFormToCreateItem (long ParentItmCod);
 static void Prg_ShowFormToChangeItem (long ItmCod);
 static void Prg_ShowFormItem (const struct ProgramItem *Item,
@@ -157,14 +175,23 @@ static void Prg_UpdateItem (struct ProgramItem *Item,const char *Txt);
 
 void Prg_ShowCourseProgram (void)
   {
-   Prg_ShowCourseProgramHighlightingItem (-1L);
+   struct Subtree ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+
+   /***** Show course program without highlighting any item *****/
+   Prg_SetSubtreeEmpty (&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
-static void Prg_ShowCourseProgramHighlightingItem (long HighlightItmCod)
+static void Prg_ShowCourseProgramHighlightingItem (const struct Subtree *ToHighlight)
   {
    /***** Show all the program items *****/
-   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,
-		     HighlightItmCod,-1L,-1L,0);
+   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,ToHighlight,-1L,-1L,0);
   }
 
 /*****************************************************************************/
@@ -172,32 +199,17 @@ static void Prg_ShowCourseProgramHighlightingItem (long HighlightItmCod)
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long HighlightItmCod,
+			      const struct Subtree *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
-   struct Subtree ToHighlight;
    unsigned NumItem;
    struct ProgramItem Item;
 
-   /***** Get list of program items *****/
-   Prg_GetListPrgItems ();
+   /***** Create numbers *****/
    Prg_MaxLevel = Prg_GetMaxItemLevel ();
    Prg_CreateNumbers (Prg_MaxLevel);
-
-   /***** Calculate which items must be highlighted *****/
-   if (HighlightItmCod > 0)	// Item(s) must be highlighted
-     {
-      /* Highlight subtree */
-      NumItem = Prg_GetNumItemFromItmCod (HighlightItmCod);
-      Prg_GetSubtree (NumItem,&ToHighlight);
-     }
-   else
-     {
-      ToHighlight.Begin =
-      ToHighlight.End   = Gbl.Prg.Num;	// Don't highlight any item
-     }
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
@@ -216,8 +228,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
       Prg_GetDataOfItemByCod (&Item);
 
       /* Show item */
-      Prg_ShowOneItem (NumItem,&Item,
-		       &ToHighlight,
+      Prg_ShowOneItem (NumItem,&Item,ToHighlight,
 		       false);	// Not print view
 
       /* Show form to create/change item */
@@ -251,9 +262,8 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    /***** End box *****/
    Box_BoxEnd ();
 
-   /***** Free list of program items *****/
+   /***** Free numbers *****/
    Prg_FreeNumbers ();
-   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
@@ -511,6 +521,26 @@ static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
    /***** End row *****/
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******************* Get maximum level in a course program *******************/
+/*****************************************************************************/
+// Return 0 if no items
+
+static unsigned Prg_GetMaxItemLevel (void)
+  {
+   unsigned NumItem;
+   unsigned MaxLevel = 0;
+
+   /***** Compute maximum level of all program items *****/
+   for (NumItem = 0;
+	NumItem < Gbl.Prg.Num;
+	NumItem++)
+      if (Gbl.Prg.LstItems[NumItem].Level > MaxLevel)
+	 MaxLevel = Gbl.Prg.LstItems[NumItem].Level;
+
+   return MaxLevel;
   }
 
 /*****************************************************************************/
@@ -1085,12 +1115,18 @@ static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
   {
    unsigned NumItem;
 
+   /***** List of items must be filled *****/
+   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
+   /***** Find item code in list *****/
    for (NumItem = 0;
 	NumItem < Gbl.Prg.Num;
 	NumItem++)
-      if (Gbl.Prg.LstItems[NumItem].ItmCod == ItmCod)
+      if (Gbl.Prg.LstItems[NumItem].ItmCod == ItmCod)	// Found!
 	 return NumItem;
 
+   /***** Not found *****/
    Lay_ShowErrorAndExit ("Wrong item code.");
    return 0;	// Not reached
   }
@@ -1104,13 +1140,18 @@ void Prg_ReqRemPrgItem (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    extern const char *Txt_Remove_item;
    struct ProgramItem Item;
+   unsigned NumItem;
+   struct Subtree ToHighlight;
 
-   /***** Get program item code *****/
-   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
 
    /***** Get data of the program item from database *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
+   NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
 
    /***** Show question and button to remove the program item *****/
    Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
@@ -1119,8 +1160,12 @@ void Prg_ReqRemPrgItem (void)
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
 
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (Item.Hierarchy.ItmCod);
+   /***** Show program items highlighting subtree *****/
+   Prg_SetSubtreeWithAllChildren (NumItem,&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
@@ -1133,20 +1178,20 @@ void Prg_RemovePrgItem (void)
    struct ProgramItem Item;
    unsigned NumItem;
    struct Subtree ToRemove;
-
-   /***** Get program item code *****/
-   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);	// Inside this function, the course is checked to be the current one
+   struct Subtree ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
+
+   /***** Get data of the program item from database *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
    NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
 
    /***** Indexes of items *****/
-   Prg_GetSubtree (NumItem,&ToRemove);
+   Prg_SetSubtreeWithAllChildren (NumItem,&ToRemove);
 
    /***** Remove program items *****/
    DB_QueryDELETE ("can not remove program item",
@@ -1159,11 +1204,16 @@ void Prg_RemovePrgItem (void)
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
 
+   /***** Update list of program items *****/
+   Prg_FreeListItems ();
+   Prg_GetListPrgItems ();
+
+   /***** Show course program without highlighting any item *****/
+   Prg_SetSubtreeEmpty (&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgram ();
   }
 
 /*****************************************************************************/
@@ -1172,358 +1222,125 @@ void Prg_RemovePrgItem (void)
 
 void Prg_HidePrgItem (void)
   {
-   struct ProgramItem Item;
-
-   /***** Get program item code *****/
-   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (&Item);
-
-   /***** Hide program item *****/
-   DB_QueryUPDATE ("can not hide program item",
-		   "UPDATE prg_items SET Hidden='Y'"
-		   " WHERE ItmCod=%ld"
-		   " AND CrsCod=%ld",	// Extra check
-                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (Item.Hierarchy.ItmCod);
+   Prg_HideUnhidePrgItem ('Y');
   }
 
-/*****************************************************************************/
-/***************************** Show a program item ***************************/
-/*****************************************************************************/
+void Prg_UnhidePrgItem (void)
+  {
+   Prg_HideUnhidePrgItem ('N');
+  }
 
-void Prg_ShowPrgItem (void)
+static void Prg_HideUnhidePrgItem (char YN)
   {
    struct ProgramItem Item;
+   unsigned NumItem;
+   struct Subtree ToHighlight;
 
-   /***** Get program item code *****/
-   if ((Item.Hierarchy.ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
 
-   /***** Get data of the program item from database *****/
+   /***** Get data of the item from database *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
+   NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
 
-   /***** Hide program item *****/
-   DB_QueryUPDATE ("can not show program item",
-		   "UPDATE prg_items SET Hidden='N'"
+   /***** Hide/unhide program item *****/
+   DB_QueryUPDATE ("can not change program item",
+		   "UPDATE prg_items SET Hidden='%c'"
 		   " WHERE ItmCod=%ld"
 		   " AND CrsCod=%ld",	// Extra check
+		   YN,
                    Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (Item.Hierarchy.ItmCod);
+   /***** Show program items highlighting subtree *****/
+   Prg_SetSubtreeWithAllChildren (NumItem,&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
-/************** Move up position of an item in a course program **************/
+/********** Move up/down position of a subtree in a course program ***********/
 /*****************************************************************************/
 
 void Prg_MoveUpPrgItem (void)
   {
-   extern const char *Txt_Movement_not_allowed;
-   long ItmCod;
-   unsigned NumItem;
-
-   /***** Get program item code *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get list of program items *****/
-   Prg_GetListPrgItems ();
-   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
-
-   if (Prg_CheckIfMoveUpIsAllowed (NumItem))
-      /***** Move up item *****/
-      /* Exchange subtrees */
-      Prg_ExchangeItems (Prg_GetPrevBrother (NumItem),NumItem);
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-
-   /***** Free list of program items *****/
-   Prg_FreeListItems ();
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (ItmCod);
+   Prg_MoveUpDownPrgItem (Prg_MOVE_UP);
   }
-
-/*****************************************************************************/
-/************* Move down position of an item in a course program *************/
-/*****************************************************************************/
 
 void Prg_MoveDownPrgItem (void)
   {
-   extern const char *Txt_Movement_not_allowed;
-   long ItmCod;
-   unsigned NumItem;
+   Prg_MoveUpDownPrgItem (Prg_MOVE_DOWN);
+  }
 
-   /***** Get program item code *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
+static void Prg_MoveUpDownPrgItem (Prg_MoveUpDown_t UpDown)
+  {
+   extern const char *Txt_Movement_not_allowed;
+   struct ProgramItem Item;
+   unsigned NumItem;
+   bool Success = false;
+   struct Subtree ToHighlight;
+   static bool (*CheckIfAllowed[Prg_NUM_MOVEMENTS_UP_DOWN])(unsigned NumItem) =
+     {
+      [Prg_MOVE_UP  ] = Prg_CheckIfMoveUpIsAllowed,
+      [Prg_MOVE_DOWN] = Prg_CheckIfMoveDownIsAllowed,
+     };
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
-   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
 
-   if (Prg_CheckIfMoveDownIsAllowed (NumItem))
-      /***** Move down item *****/
+   /***** Get data of the item from database *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
+   NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
+
+   /***** Move up/down item *****/
+   if (CheckIfAllowed[UpDown](NumItem))
+     {
       /* Exchange subtrees */
-      Prg_ExchangeItems (NumItem,Prg_GetNextBrother (NumItem));
+      switch (UpDown)
+        {
+	 case Prg_MOVE_UP:
+            Success = Prg_ExchangeSubtrees (Prg_GetPrevBrother (NumItem),NumItem);
+            break;
+	 case Prg_MOVE_DOWN:
+            Success = Prg_ExchangeSubtrees (NumItem,Prg_GetNextBrother (NumItem));
+            break;
+        }
+     }
+    if (Success)
+     {
+      /* Update list of program items */
+      Prg_FreeListItems ();
+      Prg_GetListPrgItems ();
+      NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
+      Prg_SetSubtreeWithAllChildren (NumItem,&ToHighlight);
+     }
    else
+     {
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      Prg_SetSubtreeEmpty (&ToHighlight);
+     }
+
+   /***** Show program items highlighting subtree *****/
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (ItmCod);
   }
 
 /*****************************************************************************/
-/**** Move left (decrease level) position of an item in a course program *****/
+/**** Exchange the order of two consecutive subtrees in a course program *****/
 /*****************************************************************************/
+// Return true if success
 
-void Prg_MoveLeftPrgItem (void)
+static bool Prg_ExchangeSubtrees (int NumItemTop,int NumItemBottom)
   {
-   long ItmCod;
-   unsigned NumItem;
-
-   /***** Get program item code *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get list of program items *****/
-   Prg_GetListPrgItems ();
-   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
-
-   /***** Move left item (decrease level) *****/
-   /* Move item and its children to left */
-   Prg_MoveItemAndChildrenLeft (NumItem);
-
-   /***** Free list of program items *****/
-   Prg_FreeListItems ();
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (ItmCod);
-  }
-
-/*****************************************************************************/
-/**** Move right (increase level) position of an item in a course program ****/
-/*****************************************************************************/
-
-void Prg_MoveRightPrgItem (void)
-  {
-   long ItmCod;
-   unsigned NumItem;
-
-   /***** Get program item code *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of program item is missing.");
-
-   /***** Get list of program items *****/
-   Prg_GetListPrgItems ();
-   NumItem = Prg_GetNumItemFromItmCod (ItmCod);
-
-   /***** Move right item (increase level) *****/
-   /* Move item and its children to right */
-   Prg_MoveItemAndChildrenRight (NumItem);
-
-   /***** Free list of program items *****/
-   Prg_FreeListItems ();
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (ItmCod);
-  }
-
-/*****************************************************************************/
-/****** Get subtree begin and end from number of item in course program ******/
-/*****************************************************************************/
-
-static void Prg_GetSubtree (unsigned NumItem,struct Subtree *Subtree)
-  {
-   /***** List of items must be filled *****/
-   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
-      Lay_ShowErrorAndExit ("Wrong list of items.");
-
-   /***** Number of item must be in the correct range *****/
-   if (NumItem >= Gbl.Prg.Num)
-      Lay_ShowErrorAndExit ("Wrong item number.");
-
-   /***** Compute range *****/
-   Subtree->Begin = Gbl.Prg.LstItems[NumItem                   ].Index;
-   Subtree->End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
-  }
-
-/*****************************************************************************/
-/******************* Get maximum level in a course program *******************/
-/*****************************************************************************/
-// Return 0 if no items
-
-static unsigned Prg_GetMaxItemLevel (void)
-  {
-   unsigned NumItem;
-   unsigned MaxLevel = 0;
-
-   /***** Compute maximum level of all program items *****/
-   for (NumItem = 0;
-	NumItem < Gbl.Prg.Num;
-	NumItem++)
-      if (Gbl.Prg.LstItems[NumItem].Level > MaxLevel)
-	 MaxLevel = Gbl.Prg.LstItems[NumItem].Level;
-
-   return MaxLevel;
-  }
-
-/*****************************************************************************/
-/******** Get previous brother item to a given item in current course ********/
-/*****************************************************************************/
-// Return -1 if no previous brother
-
-static int Prg_GetPrevBrother (int NumItem)
-  {
-   unsigned Level;
-   int i;
-
-   /***** Trivial check: if item is the first one, there is no previous brother *****/
-   if (NumItem <= 0 ||
-       NumItem >= (int) Gbl.Prg.Num)
-      return -1;
-
-   /***** Get previous brother before item *****/
-   // 1 <= NumItem < Gbl.Prg.Num
-   Level = Gbl.Prg.LstItems[NumItem].Level;
-   for (i  = NumItem - 1;
-	i >= 0;
-	i--)
-     {
-      if (Gbl.Prg.LstItems[i].Level == Level)
-	 return i;	// Previous brother before item found
-      if (Gbl.Prg.LstItems[i].Level < Level)
-	 return -1;		// Previous lower level found ==> there are no brothers before item
-     }
-   return -1;	// Start reached ==> there are no brothers before item
-  }
-
-/*****************************************************************************/
-/********** Get next brother item to a given item in current course **********/
-/*****************************************************************************/
-// Return -1 if no next brother
-
-static int Prg_GetNextBrother (int NumItem)
-  {
-   unsigned Level;
-   int i;
-
-   /***** Trivial check: if item is the last one, there is no next brother *****/
-   if (NumItem < 0 ||
-       NumItem >= (int) Gbl.Prg.Num - 1)
-      return -1;
-
-   /***** Get next brother after item *****/
-   // 0 <= NumItem < Gbl.Prg.Num - 1
-   Level = Gbl.Prg.LstItems[NumItem].Level;
-   for (i = NumItem + 1;
-	i < (int) Gbl.Prg.Num;
-	i++)
-     {
-      if (Gbl.Prg.LstItems[i].Level == Level)
-	 return i;	// Next brother found
-      if (Gbl.Prg.LstItems[i].Level < Level)
-	 return -1;	// Next lower level found ==> there are no brothers after item
-     }
-   return -1;	// End reached ==> there are no brothers after item
-  }
-
-/*****************************************************************************/
-/********************** Get last child in current course *********************/
-/*****************************************************************************/
-// Return the same index if no children
-
-static unsigned Prg_GetLastChild (int NumItem)
-  {
-   unsigned Level;
-   int i;
-
-   /***** Trivial check: if item is wrong, there are no children *****/
-   if (NumItem < 0 ||
-       NumItem >= (int) Gbl.Prg.Num)
-      Lay_ShowErrorAndExit ("Wrong number of item.");
-
-   /***** Get next brother after item *****/
-   // 0 <= NumItem < Gbl.Prg.Num
-   Level = Gbl.Prg.LstItems[NumItem].Level;
-   for (i = NumItem + 1;
-	i < (int) Gbl.Prg.Num;
-	i++)
-     {
-      if (Gbl.Prg.LstItems[i].Level <= Level)
-	 return i - 1;	// Last child found
-     }
-   return Gbl.Prg.Num - 1;	// End reached ==> all items after the given item are its children
-  }
-
-/*****************************************************************************/
-/**************** Move item and its children to left or right ****************/
-/*****************************************************************************/
-
-static void Prg_MoveItemAndChildrenLeft (unsigned NumItem)
-  {
-   extern const char *Txt_Movement_not_allowed;
-   struct Subtree ToMoveLeft;
-
-   if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
-     {
-      /* Indexes of items */
-      Prg_GetSubtree (NumItem,&ToMoveLeft);
-
-      /* Move item and its children to left or right */
-      DB_QueryUPDATE ("can not move items",
-		      "UPDATE prg_items SET Level=Level-1"
-		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=%u AND ItmInd<=%u",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      ToMoveLeft.Begin,ToMoveLeft.End);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-  }
-
-/*****************************************************************************/
-/**************** Move item and its children to left or right ****************/
-/*****************************************************************************/
-
-static void Prg_MoveItemAndChildrenRight (unsigned NumItem)
-  {
-   extern const char *Txt_Movement_not_allowed;
-   struct Subtree ToMoveRight;
-
-   if (Prg_CheckIfMoveRightIsAllowed (NumItem))
-     {
-      /* Indexes of items */
-      Prg_GetSubtree (NumItem,&ToMoveRight);
-
-      /* Move item and its children to left or right */
-      DB_QueryUPDATE ("can not move items",
-		      "UPDATE prg_items SET Level=Level+1"
-		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=%u AND ItmInd<=%u",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      ToMoveRight.Begin,ToMoveRight.End);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-  }
-
-/*****************************************************************************/
-/****** Exchange the order of two consecutive items in a course program ******/
-/*****************************************************************************/
-
-static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom)
-  {
-   extern const char *Txt_Movement_not_allowed;
    struct Subtree Top;
    struct Subtree Bottom;
    unsigned DiffBegin;
@@ -1532,8 +1349,8 @@ static void Prg_ExchangeItems (int NumItemTop,int NumItemBottom)
    if (NumItemTop    >= 0 &&
        NumItemBottom >= 0)
      {
-      Prg_GetSubtree (NumItemTop   ,&Top   );
-      Prg_GetSubtree (NumItemBottom,&Bottom);
+      Prg_SetSubtreeWithAllChildren (NumItemTop   ,&Top   );
+      Prg_SetSubtreeWithAllChildren (NumItemBottom,&Bottom);
       DiffBegin = Bottom.Begin - Top.Begin;
       DiffEnd   = Bottom.End   - Top.End;
 
@@ -1599,24 +1416,219 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
 				   // ...to not retry the unlock if error in unlocking
       DB_Query ("can not unlock tables after moving items",
 		"UNLOCK TABLES");
+
+      return true;	// Success
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+   return false;	// No success
   }
 
 /*****************************************************************************/
-/*************** Check if the title of a program item exists *****************/
+/******** Get previous brother item to a given item in current course ********/
+/*****************************************************************************/
+// Return -1 if no previous brother
+
+static int Prg_GetPrevBrother (int NumItem)
+  {
+   unsigned Level;
+   int i;
+
+   /***** Trivial check: if item is the first one, there is no previous brother *****/
+   if (NumItem <= 0 ||
+       NumItem >= (int) Gbl.Prg.Num)
+      return -1;
+
+   /***** Get previous brother before item *****/
+   // 1 <= NumItem < Gbl.Prg.Num
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i  = NumItem - 1;
+	i >= 0;
+	i--)
+     {
+      if (Gbl.Prg.LstItems[i].Level == Level)
+	 return i;	// Previous brother before item found
+      if (Gbl.Prg.LstItems[i].Level < Level)
+	 return -1;		// Previous lower level found ==> there are no brothers before item
+     }
+   return -1;	// Start reached ==> there are no brothers before item
+  }
+
+/*****************************************************************************/
+/********** Get next brother item to a given item in current course **********/
+/*****************************************************************************/
+// Return -1 if no next brother
+
+static int Prg_GetNextBrother (int NumItem)
+  {
+   unsigned Level;
+   int i;
+
+   /***** Trivial check: if item is the last one, there is no next brother *****/
+   if (NumItem < 0 ||
+       NumItem >= (int) Gbl.Prg.Num - 1)
+      return -1;
+
+   /***** Get next brother after item *****/
+   // 0 <= NumItem < Gbl.Prg.Num - 1
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i = NumItem + 1;
+	i < (int) Gbl.Prg.Num;
+	i++)
+     {
+      if (Gbl.Prg.LstItems[i].Level == Level)
+	 return i;	// Next brother found
+      if (Gbl.Prg.LstItems[i].Level < Level)
+	 return -1;	// Next lower level found ==> there are no brothers after item
+     }
+   return -1;	// End reached ==> there are no brothers after item
+  }
+
+/*****************************************************************************/
+/************** Move a subtree to left/right in a course program *************/
 /*****************************************************************************/
 
-static bool Prg_CheckIfSimilarItemExists (const char *Field,const char *Value,long ItmCod)
+void Prg_MoveLeftPrgItem (void)
   {
-   /***** Get number of program items with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar program items",
-			  "SELECT COUNT(*) FROM prg_items"
-			  " WHERE CrsCod=%ld"
-			  " AND %s='%s' AND ItmCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,ItmCod) != 0);
+   Prg_MoveLeftRightPrgItem (Prg_MOVE_LEFT);
+  }
+
+void Prg_MoveRightPrgItem (void)
+  {
+   Prg_MoveLeftRightPrgItem (Prg_MOVE_RIGHT);
+  }
+
+static void Prg_MoveLeftRightPrgItem (Prg_MoveLeftRight_t LeftRight)
+  {
+   extern const char *Txt_Movement_not_allowed;
+   struct ProgramItem Item;
+   unsigned NumItem;
+   struct Subtree ToMove;
+   struct Subtree ToHighlight;
+   static bool (*CheckIfAllowed[Prg_NUM_MOVEMENTS_LEFT_RIGHT])(unsigned NumItem) =
+     {
+      [Prg_MOVE_LEFT ] = Prg_CheckIfMoveLeftIsAllowed,
+      [Prg_MOVE_RIGHT] = Prg_CheckIfMoveRightIsAllowed,
+     };
+   static const char IncDec[Prg_NUM_MOVEMENTS_LEFT_RIGHT] =
+     {
+      [Prg_MOVE_LEFT ] = '-',
+      [Prg_MOVE_RIGHT] = '+',
+     };
+
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+
+   /***** Get data of the item from database *****/
+   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
+   NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
+
+   /***** Move up/down item *****/
+   if (CheckIfAllowed[LeftRight](NumItem))
+     {
+      /* Indexes of items */
+      Prg_SetSubtreeWithAllChildren (NumItem,&ToMove);
+
+      /* Move item and its children to left or right */
+      DB_QueryUPDATE ("can not move items",
+		      "UPDATE prg_items SET Level=Level%c1"
+		      " WHERE CrsCod=%ld"
+		      " AND ItmInd>=%u AND ItmInd<=%u",
+		      IncDec[LeftRight],
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      ToMove.Begin,ToMove.End);
+
+      /* Update list of program items */
+      Prg_FreeListItems ();
+      Prg_GetListPrgItems ();
+      NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
+      Prg_SetSubtreeWithAllChildren (NumItem,&ToHighlight);
+     }
+   else
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      Prg_SetSubtreeEmpty (&ToHighlight);
+     }
+
+   /***** Show program items highlighting subtree *****/
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/****** Get subtree begin and end from number of item in course program ******/
+/*****************************************************************************/
+
+static void Prg_SetSubtreeEmpty (struct Subtree *Subtree)
+  {
+   /***** List of items must be filled *****/
+   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
+   /***** Range includes only this item *****/
+   Subtree->Begin =
+   Subtree->End   = Gbl.Prg.Num;
+  }
+
+static void Prg_SetSubtreeOnlyItem (unsigned NumItem,struct Subtree *Subtree)
+  {
+   /***** List of items must be filled *****/
+   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
+   /***** Number of item must be in the correct range *****/
+   if (NumItem >= Gbl.Prg.Num)
+      Lay_ShowErrorAndExit ("Wrong item number.");
+
+   /***** Range includes only this item *****/
+   Subtree->Begin =
+   Subtree->End   = Gbl.Prg.LstItems[NumItem].Index;
+  }
+
+static void Prg_SetSubtreeWithAllChildren (unsigned NumItem,struct Subtree *Subtree)
+  {
+   /***** List of items must be filled *****/
+   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
+   /***** Number of item must be in the correct range *****/
+   if (NumItem >= Gbl.Prg.Num)
+      Lay_ShowErrorAndExit ("Wrong item number.");
+
+   /***** Range includes this item and all its children *****/
+   Subtree->Begin = Gbl.Prg.LstItems[NumItem                   ].Index;
+   Subtree->End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+  }
+
+/*****************************************************************************/
+/********************** Get last child in current course *********************/
+/*****************************************************************************/
+
+static unsigned Prg_GetLastChild (int NumItem)
+  {
+   unsigned Level;
+   int i;
+
+   /***** Trivial check: if item is wrong, there are no children *****/
+   if (NumItem < 0 ||
+       NumItem >= (int) Gbl.Prg.Num)
+      Lay_ShowErrorAndExit ("Wrong number of item.");
+
+   /***** Get next brother after item *****/
+   // 0 <= NumItem < Gbl.Prg.Num
+   Level = Gbl.Prg.LstItems[NumItem].Level;
+   for (i = NumItem + 1;
+	i < (int) Gbl.Prg.Num;
+	i++)
+     {
+      if (Gbl.Prg.LstItems[i].Level <= Level)
+	 return i - 1;	// Last child found
+     }
+   return Gbl.Prg.Num - 1;	// End reached ==> all items after the given item are its children
   }
 
 /*****************************************************************************/
@@ -1627,21 +1639,21 @@ void Prg_RequestCreatePrgItem (void)
   {
    long ParentItmCod;
    unsigned NumItemParent;
-   unsigned NumItemLastChild;
    long ItmCodBeforeForm;
    unsigned FormLevel;
+   struct Subtree ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
 
    /***** Get the code of the parent program item *****/
    ParentItmCod = Prg_GetParamItmCod ();
 
    if (ParentItmCod > 0)
      {
-      Prg_GetListPrgItems ();
       NumItemParent    = Prg_GetNumItemFromItmCod (ParentItmCod);
-      NumItemLastChild = Prg_GetLastChild (NumItemParent);
-      ItmCodBeforeForm = Gbl.Prg.LstItems[NumItemLastChild].ItmCod;
+      ItmCodBeforeForm = Gbl.Prg.LstItems[Prg_GetLastChild (NumItemParent)].ItmCod;
       FormLevel        = Gbl.Prg.LstItems[NumItemParent].Level + 1;
-      Prg_FreeListItems ();
      }
    else
      {
@@ -1651,8 +1663,12 @@ void Prg_RequestCreatePrgItem (void)
      }
 
    /***** Show current program items, if any *****/
+   Prg_SetSubtreeEmpty (&ToHighlight);
    Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,
-		     -1L,ParentItmCod,ItmCodBeforeForm,FormLevel);
+		     &ToHighlight,ParentItmCod,ItmCodBeforeForm,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 void Prg_RequestChangePrgItem (void)
@@ -1660,16 +1676,18 @@ void Prg_RequestChangePrgItem (void)
    long ItmCodBeforeForm;
    unsigned NumItem;
    unsigned FormLevel;
+   struct Subtree ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
 
    /***** Get the code of the program item *****/
    ItmCodBeforeForm = Prg_GetParamItmCod ();
 
    if (ItmCodBeforeForm > 0)
      {
-      Prg_GetListPrgItems ();
       NumItem   = Prg_GetNumItemFromItmCod (ItmCodBeforeForm);
       FormLevel = Gbl.Prg.LstItems[NumItem].Level;
-      Prg_FreeListItems ();
      }
    else
      {
@@ -1678,8 +1696,12 @@ void Prg_RequestChangePrgItem (void)
      }
 
    /***** Show current program items, if any *****/
+   Prg_SetSubtreeEmpty (&ToHighlight);
    Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     -1L,-1L,ItmCodBeforeForm,FormLevel);
+		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
@@ -1709,6 +1731,9 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
    Item.Open = true;
 
+   /***** Show pending alerts */
+   Ale_ShowAlerts (NULL);
+
    /***** Begin form *****/
    Frm_StartFormAnchor (ActNewPrgItm,"highlighted_item");
    Prg_PutParamItmCod (ParentItem.Hierarchy.ItmCod);
@@ -1728,7 +1753,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
   }
 
 /*****************************************************************************/
-/***************** Put a form to create a new program item *******************/
+/***************** Put a form to change program item *******************/
 /*****************************************************************************/
 
 static void Prg_ShowFormToChangeItem (long ItmCod)
@@ -1748,6 +1773,9 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Item.Hierarchy.ItmCod = ItmCod;
    Prg_GetDataOfItemByCod (&Item);
    Prg_GetPrgItemTxtFromDB (Item.Hierarchy.ItmCod,Txt);
+
+   /***** Show pending alerts */
+   Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
    Frm_StartFormAnchor (ActChgPrgItm,"highlighted_item");
@@ -1826,17 +1854,20 @@ static void Prg_ShowFormItem (const struct ProgramItem *Item,
 
 void Prg_RecFormNewPrgItem (void)
   {
-   extern const char *Txt_Already_existed_an_item_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_item;
-   extern const char *Txt_Created_new_item_X;
    struct ProgramItem ParentItem;	// Parent item
    struct ProgramItem NewItem;		// Item data received from form
-   bool NewItemIsCorrect = true;
+   unsigned NumItem;
    char Description[Cns_MAX_BYTES_TEXT + 1];
+   struct Subtree ToHighlight;
 
-   /***** Get the code of the parent program item *****/
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+
+   /***** Get data of the program item from database *****/
    ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&ParentItem);
+   if (ParentItem.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
 
    /***** Set new item code *****/
    NewItem.Hierarchy.ItmCod = -1L;
@@ -1858,41 +1889,20 @@ void Prg_RecFormNewPrgItem (void)
    if (NewItem.TimeUTC[Dat_END_TIME] == 0)
       NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
-   /***** Check if title is correct *****/
-   if (NewItem.Title[0])	// If there's a program item title
-     {
-      /* If title of program item was in database... */
-      if (Prg_CheckIfSimilarItemExists ("Title",NewItem.Title,NewItem.Hierarchy.ItmCod))
-        {
-         NewItemIsCorrect = false;
+   /***** Create a new program item *****/
+   Prg_InsertItem (&ParentItem,&NewItem,Description);
+   NumItem = Prg_GetNumItemFromItmCod (NewItem.Hierarchy.ItmCod);
 
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_item_with_the_title_X,
-                        NewItem.Title);
-        }
-     }
-   else	// If there is not a program item title
-     {
-      NewItemIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_item);
-     }
+   /* Update list of program items */
+   Prg_FreeListItems ();
+   Prg_GetListPrgItems ();
 
-   /***** Create a new program item or update an existing one *****/
-   if (NewItemIsCorrect)
-     {
-      /* Add new program item to database */
-      Prg_InsertItem (&ParentItem,&NewItem,Description);
+   /***** Show program items highlighting subtree *****/
+   Prg_SetSubtreeOnlyItem (NumItem,&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
-      /* Write success message */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_item_X,
-		     NewItem.Title);
-     }
-   else
-      /***** Show form to create item *****/
-      // TODO: The form should be filled with partial data, now is always empty
-      Prg_ShowFormToCreateItem (ParentItem.Hierarchy.ItmCod);
-
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (NewItem.Hierarchy.ItmCod);
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/
@@ -1901,15 +1911,21 @@ void Prg_RecFormNewPrgItem (void)
 
 void Prg_RecFormChgPrgItem (void)
   {
-   extern const char *Txt_Already_existed_an_item_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_item;
    struct ProgramItem OldItem;	// Current program item data in database
    struct ProgramItem NewItem;	// Item data received from form
-   bool NewItemIsCorrect = true;
    char Description[Cns_MAX_BYTES_TEXT + 1];
+   unsigned NumItem;
+   struct Subtree ToHighlight;
 
-   /***** Get the code of the program item *****/
+   /***** Get list of program items *****/
+   Prg_GetListPrgItems ();
+
+   /***** Get data of the item from database *****/
    NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&NewItem);
+   if (NewItem.Hierarchy.ItmCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong item code.");
+   NumItem = Prg_GetNumItemFromItmCod (NewItem.Hierarchy.ItmCod);
 
    /***** Get data of the old (current) program item from database *****/
    OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
@@ -1931,35 +1947,15 @@ void Prg_RecFormChgPrgItem (void)
    if (NewItem.TimeUTC[Dat_END_TIME] == 0)
       NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
-   /***** Check if title is correct *****/
-   if (NewItem.Title[0])	// If there's a program item title
-     {
-      /* If title of program item was in database... */
-      if (Prg_CheckIfSimilarItemExists ("Title",NewItem.Title,NewItem.Hierarchy.ItmCod))
-        {
-         NewItemIsCorrect = false;
-
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_item_with_the_title_X,
-                        NewItem.Title);
-        }
-     }
-   else	// If there is not a program item title
-     {
-      NewItemIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_item);
-     }
-
    /***** Update existing item *****/
-   if (NewItemIsCorrect)
-      /* Update program item */
-      Prg_UpdateItem (&NewItem,Description);
-   else
-      /***** Show form to change item *****/
-      // TODO: The form should be filled with partial data, now is always empty
-      Prg_ShowFormToChangeItem (NewItem.Hierarchy.ItmCod);
+   Prg_UpdateItem (&NewItem,Description);
 
-   /***** Show program items again *****/
-   Prg_ShowCourseProgramHighlightingItem (NewItem.Hierarchy.ItmCod);
+   /***** Show program items highlighting subtree *****/
+   Prg_SetSubtreeOnlyItem (NumItem,&ToHighlight);
+   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/

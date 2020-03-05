@@ -1506,27 +1506,6 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
-const char *Txt_Already_existed_an_item_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Ja existia un &iacute;tem amb el t&iacute;tol <strong>%s</strong>.";
-#elif L==2	// de
-	"Es gibt bereits einen Artikel mit dem Namen <strong>%s</strong>.";
-#elif L==3	// en
-	"Already existed an item with the title <strong>%s</strong>.";
-#elif L==4	// es
-	"Ya exist&iacute;a un &iacute;tem con el t&iacute;tulo <strong>%s</strong>.";
-#elif L==5	// fr
-	"Il existe d&eacute;j&agrave; un article du titre <strong>%s</strong>.";
-#elif L==6	// gn
-	"Ya exist&iacute;a un &iacute;tem con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Esiste gi&agrave; un articolo con il titolo <strong>%s</strong>.";
-#elif L==8	// pl
-	"Istniala juz przedmiot z tytulu <strong>%s</strong>.";
-#elif L==9	// pt
-	"J&aacute; existe um item com o t&iacute;tulo <strong>%s</strong>.";
-#endif
-
 const char *Txt_Altitude =
 #if   L==1	// ca
 	"Altitud";
@@ -6611,27 +6590,6 @@ const char *Txt_Created_new_institution_X =	// Warning: it is very important to 
 	"Utworzono nowa instytucje <strong>%s</strong>.";
 #elif L==9	// pt
 	"Criada nova institu&ccedil;&atilde;o <strong>%s</strong>.";
-#endif
-
-const char *Txt_Created_new_item_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Creado nuevo &iacute;tem <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2	// de
-	"Neue Artikel <strong>%s</strong> eingegeben.";
-#elif L==3	// en
-	"Created new item <strong>%s</strong>.";
-#elif L==4	// es
-	"Creado nuevo &iacute;tem <strong>%s</strong>.";
-#elif L==5	// fr
-	"Cr&eacute;&eacute;e nouvel article <strong>%s</strong>.";
-#elif L==6	// gn
-	"Creado nuevo &iacute;tem <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Creato nuovo articolo <strong>%s</strong>.";
-#elif L==8	// pl
-	"Utworzono nowa przedmiot <strong>%s</strong>.";
-#elif L==9	// pt
-	"Criado novo item <strong>%s</strong>.";
 #endif
 
 const char *Txt_Created_new_link_X =	// Warning: it is very important to include %s in the following sentences
@@ -57113,27 +57071,6 @@ const char *Txt_You_must_specify_the_title_of_the_game =
 	"Musisz poda&cacute; tytu&lstrok; gra.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o t&iacute;tulo do jogo.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_item =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol del &iacute;tem.";
-#elif L==2	// de
-	"Die Artikel muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the item.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del &iacute;tem.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre du article.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del &iacute;tem.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo del articolo.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; przedmiot.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do item.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_project =

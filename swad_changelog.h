@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.142 (2020-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 19.143 (2020-03-05)"
 #define CSS_FILE		"swad19.141.6.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -525,8 +525,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Hide/show items should hide/show subtrees
-// TODO: When creating/changing a item ==> highlight only that item ==> pass subtree to Prg_ShowAllItems
 
+	Version 19.143:   Mar 05, 2020	Changes in edition of course program. (282214 lines)
 	Version 19.142:   Mar 04, 2020	Highlighted subtree of course program. (282277 lines)
 	Version 19.141.7: Mar 04, 2020	Create item at the end of course program. (282202 lines)
 	Version 19.141.6: Mar 04, 2020	Changes in edition of course program. (282230 lines)
