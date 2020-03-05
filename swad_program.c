@@ -56,9 +56,30 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
+#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
+
+struct ProgramItemHierarchy
+  {
+   long ItmCod;
+   unsigned Index;
+   unsigned Level;
+   bool Hidden;
+  };
+
+struct ProgramItem
+  {
+   struct ProgramItemHierarchy Hierarchy;
+   unsigned NumItem;
+   long UsrCod;
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Open;
+   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
+  };
 
 typedef enum
   {
@@ -87,14 +108,40 @@ struct Subtree
    unsigned End;
   };
 
+struct Level
+  {
+   unsigned Number;	// Numbers for each level from 1 to maximum level
+   bool Hidden;		// If each level from 1 to maximum level is hidden
+  };
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static long Prg_CurrentItmCod;		// Used as parameter in contextual links
-
-static unsigned Prg_MaxLevel;		// Maximum level of items
-static unsigned *Prg_NumItem = NULL;	// Numbers for each level from 1 to maximum level
+static struct
+  {
+   struct
+     {
+      bool IsRead;		// Is the list already read from database...
+			        // ...or it needs to be read?
+      unsigned NumItems;	// Number of items
+      struct ProgramItemHierarchy *Items;	// List of items
+     } List;
+   unsigned MaxLevel;		// Maximum level of items
+   struct Level *Levels;	// Numbers and hidden for each level from 1 to maximum level
+   long CurrentItmCod;		// Used as parameter in contextual links
+  } Prg_Gbl =
+  {
+   .List =
+     {
+      .IsRead     = false,
+      .NumItems   = 0,
+      .Items      = NULL,
+     },
+   .MaxLevel      = 0,
+   .Levels        = NULL,
+   .CurrentItmCod = -1L
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -113,13 +160,19 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			      long ParamItmCod,unsigned FormLevel);
 
+static void Prg_SetMaxItemLevel (unsigned Level);
 static unsigned Prg_GetMaxItemLevel (void);
-static void Prg_CreateNumbers (unsigned MaxLevel);
-static void Prg_FreeNumbers (void);
+static unsigned Prg_CalculateMaxItemLevel (void);
+static void Prg_CreateLevels (void);
+static void Prg_FreeLevels (void);
 static void Prg_IncreaseNumItem (unsigned Level);
-static unsigned Prg_GetNumItem (unsigned Level);
+static unsigned Prg_GetCurrentNumberInLevel (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
+
+static void Prg_SetHiddenLevel (unsigned Level,bool Hidden);
+static bool Prg_GetHiddenLevel (unsigned Level);
+static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Prg_PutFormsToRemEditOnePrgItem (unsigned NumItem,
 					     const struct ProgramItem *Item);
@@ -207,9 +260,9 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    unsigned NumItem;
    struct ProgramItem Item;
 
-   /***** Create numbers *****/
-   Prg_MaxLevel = Prg_GetMaxItemLevel ();
-   Prg_CreateNumbers (Prg_MaxLevel);
+   /***** Create numbers and hidden levels *****/
+   Prg_SetMaxItemLevel (Prg_CalculateMaxItemLevel ());
+   Prg_CreateLevels ();
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
@@ -220,11 +273,11 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
    /***** Write all the program items *****/
    for (NumItem = 0;
-	NumItem < Gbl.Prg.Num;
+	NumItem < Prg_Gbl.List.NumItems;
 	NumItem++)
      {
       /* Get data of this program item */
-      Item.Hierarchy.ItmCod = Gbl.Prg.LstItems[NumItem].ItmCod;
+      Item.Hierarchy.ItmCod = Prg_Gbl.List.Items[NumItem].ItmCod;
       Prg_GetDataOfItemByCod (&Item);
 
       /* Show item */
@@ -262,8 +315,8 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    /***** End box *****/
    Box_BoxEnd ();
 
-   /***** Free numbers *****/
-   Prg_FreeNumbers ();
+   /***** Free hidden levels and numbers *****/
+   Prg_FreeLevels ();
   }
 
 /*****************************************************************************/
@@ -331,11 +384,19 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
   {
    static unsigned UniqueId = 0;
    static bool FirstTBodyOpen = false;
+   bool LightStyle;
    char *Id;
    unsigned ColSpan;
    unsigned NumCol;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Check if this item should be shown as hidden *****/
+   Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.Hidden);
+   if (Item->Hierarchy.Hidden)	// this item is marked as hidden
+      LightStyle = true;
+   else				// this item is not marked as hidden
+      LightStyle = Prg_CheckIfAnyHigherLevelIsHidden (Item->Hierarchy.Level);
 
    /***** Increase number of item *****/
    Prg_IncreaseNumItem (Item->Hierarchy.Level);
@@ -381,8 +442,8 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /***** Item number *****/
    HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
-		 Item->Hierarchy.Hidden ? "ASG_TITLE_LIGHT" :
-			                  "ASG_TITLE",
+		 LightStyle ? "ASG_TITLE_LIGHT" :
+			      "ASG_TITLE",
 		 Gbl.RowEvenOdd,
 		 Item->Hierarchy.Level * Prg_WIDTH_NUM_ITEM);
    Prg_WriteNumItem (Item->Hierarchy.Level);
@@ -390,7 +451,7 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /***** Title and text *****/
    /* Begin title and text */
-   ColSpan = (Prg_MaxLevel + 2) - Item->Hierarchy.Level;
+   ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
    if (PrintView)
       HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
 		    ColSpan);
@@ -400,8 +461,8 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 
    /* Title */
    HTM_DIV_Begin ("class=\"%s\"",
-		  Item->Hierarchy.Hidden ? "ASG_TITLE_LIGHT" :
-				           "ASG_TITLE");
+		  LightStyle ? "ASG_TITLE_LIGHT" :
+			       "ASG_TITLE");
    HTM_Txt (Item->Title);
    HTM_DIV_End ();
 
@@ -410,8 +471,8 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR %s\"",Item->Hierarchy.Hidden ? "DAT_LIGHT" :
-        	                                              "DAT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",LightStyle ? "DAT_LIGHT" :
+        	                                  "DAT");
    HTM_Txt (Txt);
    HTM_DIV_End ();
 
@@ -430,17 +491,17 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
       if (PrintView)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		       Id,
-		       Item->Hierarchy.Hidden ? (Item->Open ? "DATE_GREEN_LIGHT" :
-					                      "DATE_RED_LIGHT") :
-				                (Item->Open ? "DATE_GREEN" :
-					                      "DATE_RED"));
+		       LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
+						  "DATE_RED_LIGHT") :
+				    (Item->Open ? "DATE_GREEN" :
+						  "DATE_RED"));
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		       Id,
-		       Item->Hierarchy.Hidden ? (Item->Open ? "DATE_GREEN_LIGHT" :
-					                      "DATE_RED_LIGHT") :
-				                (Item->Open ? "DATE_GREEN" :
-					                      "DATE_RED"),
+		       LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
+						  "DATE_RED_LIGHT") :
+				    (Item->Open ? "DATE_GREEN" :
+						  "DATE_RED"),
 		       Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -456,10 +517,10 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    if (Item->Hierarchy.Index == ToHighlight->End)	// End of the highlighted subtree
      {
       HTM_TBODY_End ();			// Highlighted tbody end
-      if (NumItem < Gbl.Prg.Num - 1)	// Not the last item
+      if (NumItem < Prg_Gbl.List.NumItems - 1)	// Not the last item
          HTM_TBODY_Begin (NULL);	// 3rd tbody begin
      }
-   else if (NumItem == Gbl.Prg.Num - 1)	// Last item
+   else if (NumItem == Prg_Gbl.List.NumItems - 1)	// Last item
       HTM_TBODY_End ();			// 3rd tbody end
   }
 
@@ -508,7 +569,7 @@ static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    HTM_TD_End ();
 
    /***** Show form to create new item as child *****/
-   ColSpan = (Prg_MaxLevel + 4) - FormLevel;
+   ColSpan = (Prg_GetMaxItemLevel () + 4) - FormLevel;
    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
 		 ColSpan,Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin ("item_form");
@@ -524,21 +585,34 @@ static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
   }
 
 /*****************************************************************************/
-/******************* Get maximum level in a course program *******************/
+/************** Set and get maximum level in a course program ****************/
 /*****************************************************************************/
-// Return 0 if no items
+
+static void Prg_SetMaxItemLevel (unsigned Level)
+  {
+   Prg_Gbl.MaxLevel = Level;
+  }
 
 static unsigned Prg_GetMaxItemLevel (void)
   {
+   return Prg_Gbl.MaxLevel;
+  }
+
+/*****************************************************************************/
+/******** Calculate maximum level of indentation in a course program *********/
+/*****************************************************************************/
+
+static unsigned Prg_CalculateMaxItemLevel (void)
+  {
    unsigned NumItem;
-   unsigned MaxLevel = 0;
+   unsigned MaxLevel = 0;	// Return 0 if no items
 
    /***** Compute maximum level of all program items *****/
    for (NumItem = 0;
-	NumItem < Gbl.Prg.Num;
+	NumItem < Prg_Gbl.List.NumItems;
 	NumItem++)
-      if (Gbl.Prg.LstItems[NumItem].Level > MaxLevel)
-	 MaxLevel = Gbl.Prg.LstItems[NumItem].Level;
+      if (Prg_Gbl.List.Items[NumItem].Level > MaxLevel)
+	 MaxLevel = Prg_Gbl.List.Items[NumItem].Level;
 
    return MaxLevel;
   }
@@ -547,8 +621,10 @@ static unsigned Prg_GetMaxItemLevel (void)
 /********************* Allocate memory for item numbers **********************/
 /*****************************************************************************/
 
-static void Prg_CreateNumbers (unsigned MaxLevel)
+static void Prg_CreateLevels (void)
   {
+   unsigned MaxLevel = Prg_GetMaxItemLevel ();
+
    if (MaxLevel)
      {
       /***** Allocate memory for item numbers and initialize to 0 *****/
@@ -564,24 +640,25 @@ static void Prg_CreateNumbers (unsigned MaxLevel)
         4     1
         5     0	  <--- Used to create a new item
       */
-      if ((Prg_NumItem = (unsigned *) calloc (1 + MaxLevel + 1,sizeof (unsigned))) == NULL)
+      if ((Prg_Gbl.Levels = (struct Level *) calloc (1 + MaxLevel + 1,
+					             sizeof (struct Level))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
-      Prg_NumItem = NULL;
+      Prg_Gbl.Levels = NULL;
   }
 
 /*****************************************************************************/
 /*********************** Free memory for item numbers ************************/
 /*****************************************************************************/
 
-static void Prg_FreeNumbers (void)
+static void Prg_FreeLevels (void)
   {
-   if (Prg_MaxLevel && Prg_NumItem)
+   if (Prg_GetMaxItemLevel () && Prg_Gbl.Levels)
      {
       /***** Free allocated memory for item numbers *****/
-      free (Prg_NumItem);
-      Prg_NumItem = NULL;
+      free (Prg_Gbl.Levels);
+      Prg_Gbl.Levels = NULL;
      }
   }
 
@@ -592,20 +669,20 @@ static void Prg_FreeNumbers (void)
 static void Prg_IncreaseNumItem (unsigned Level)
   {
    /***** Increase number for this level *****/
-   Prg_NumItem[Level]++;
+   Prg_Gbl.Levels[Level    ].Number++;
 
    /***** Reset number for next level (children) *****/
-   Prg_NumItem[Level + 1] = 0;
+   Prg_Gbl.Levels[Level + 1].Number = 0;
   }
 
 /*****************************************************************************/
-/*********************** Get number of item in a level ***********************/
+/****************** Get current number of item in a level ********************/
 /*****************************************************************************/
 
-static unsigned Prg_GetNumItem (unsigned Level)
+static unsigned Prg_GetCurrentNumberInLevel (unsigned Level)
   {
-   if (Prg_NumItem)
-      return Prg_NumItem[Level];
+   if (Prg_Gbl.Levels)
+      return Prg_Gbl.Levels[Level].Number;
 
    return 0;
   }
@@ -625,7 +702,7 @@ static void Prg_WriteNumItem (unsigned Level)
      {
       if (i > 1)
          HTM_Txt (".");
-      HTM_Unsigned (Prg_GetNumItem (i));
+      HTM_Unsigned (Prg_GetCurrentNumberInLevel (i));
      }
   }
 
@@ -641,10 +718,45 @@ static void Prg_WriteNumNewItem (unsigned Level)
       if (i > 1)
 	 HTM_Txt (".");
       if (i < Level)
-	 HTM_Unsigned (Prg_GetNumItem (i));
+	 HTM_Unsigned (Prg_GetCurrentNumberInLevel (i));
       else
-	 HTM_Unsigned (Prg_GetNumItem (i) + 1);
+	 HTM_Unsigned (Prg_GetCurrentNumberInLevel (i) + 1);
      }
+  }
+
+/*****************************************************************************/
+/********************** Set / Get if a level is hidden ***********************/
+/*****************************************************************************/
+
+static void Prg_SetHiddenLevel (unsigned Level,bool Hidden)
+  {
+   if (Prg_Gbl.Levels)
+      Prg_Gbl.Levels[Level].Hidden = Hidden;
+  }
+
+static bool Prg_GetHiddenLevel (unsigned Level)
+  {
+   if (Prg_Gbl.Levels)
+      return Prg_Gbl.Levels[Level].Hidden;
+
+   return false;
+  }
+
+/*****************************************************************************/
+/********* Check if any level higher than the current one is hidden **********/
+/*****************************************************************************/
+
+static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
+  {
+   unsigned Level;
+
+   for (Level = 1;
+	Level < CurrentLevel;
+	Level++)
+      if (Prg_GetHiddenLevel (Level))	// Hidden?
+         return true;
+
+   return false;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -758,8 +870,8 @@ static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem)
 
    /***** Move up is allowed if the item has brothers before it *****/
    // NumItem >= 2
-   return Gbl.Prg.LstItems[NumItem - 1].Level >=
-	  Gbl.Prg.LstItems[NumItem    ].Level;
+   return Prg_Gbl.List.Items[NumItem - 1].Level >=
+	  Prg_Gbl.List.Items[NumItem    ].Level;
   }
 
 /*****************************************************************************/
@@ -772,19 +884,19 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem)
    unsigned Level;
 
    /***** Trivial check: if item is the last one, move up is not allowed *****/
-   if (NumItem >= Gbl.Prg.Num - 1)
+   if (NumItem >= Prg_Gbl.List.NumItems - 1)
       return false;
 
    /***** Move down is allowed if the item has brothers after it *****/
-   // NumItem + 1 < Gbl.Prg.Num
-   Level = Gbl.Prg.LstItems[NumItem].Level;
+   // NumItem + 1 < Prg_Gbl.List.NumItems
+   Level = Prg_Gbl.List.Items[NumItem].Level;
    for (i = NumItem + 1;
-	i < Gbl.Prg.Num;
+	i < Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Gbl.Prg.LstItems[i].Level == Level)
+      if (Prg_Gbl.List.Items[i].Level == Level)
 	 return true;	// Next brother found
-      if (Gbl.Prg.LstItems[i].Level < Level)
+      if (Prg_Gbl.List.Items[i].Level < Level)
 	 return false;	// Next lower level found ==> there are no more brothers
      }
    return false;	// End reached ==> there are no more brothers
@@ -797,7 +909,7 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem)
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem)
   {
    /***** Move left is allowed if the item has parent *****/
-   return Gbl.Prg.LstItems[NumItem].Level > 1;
+   return Prg_Gbl.List.Items[NumItem].Level > 1;
   }
 
 /*****************************************************************************/
@@ -812,8 +924,8 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 
    /***** Move right is allowed if the item has brothers before it *****/
    // NumItem >= 2
-   return Gbl.Prg.LstItems[NumItem - 1].Level >=
-	  Gbl.Prg.LstItems[NumItem    ].Level;
+   return Prg_Gbl.List.Items[NumItem - 1].Level >=
+	  Prg_Gbl.List.Items[NumItem    ].Level;
   }
 
 /*****************************************************************************/
@@ -822,12 +934,12 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 
 static void Prg_SetCurrentItmCod (long ItmCod)
   {
-   Prg_CurrentItmCod = ItmCod;
+   Prg_Gbl.CurrentItmCod = ItmCod;
   }
 
 static long Prg_GetCurrentItmCod (void)
   {
-   return Prg_CurrentItmCod;
+   return Prg_Gbl.CurrentItmCod;
   }
 
 /*****************************************************************************/
@@ -866,7 +978,7 @@ static void Prg_GetListPrgItems (void)
    unsigned long NumRows;
    unsigned NumItem;
 
-   if (Gbl.Prg.LstIsRead)
+   if (Prg_Gbl.List.IsRead)
       Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
@@ -883,43 +995,43 @@ static void Prg_GetListPrgItems (void)
 
    if (NumRows) // Items found...
      {
-      Gbl.Prg.Num = (unsigned) NumRows;
+      Prg_Gbl.List.NumItems = (unsigned) NumRows;
 
       /***** Create list of program items *****/
-      if ((Gbl.Prg.LstItems =
+      if ((Prg_Gbl.List.Items =
 	   (struct ProgramItemHierarchy *) calloc (NumRows,
 						   sizeof (struct ProgramItemHierarchy))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the program items codes *****/
       for (NumItem = 0;
-	   NumItem < Gbl.Prg.Num;
+	   NumItem < Prg_Gbl.List.NumItems;
 	   NumItem++)
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
          /* Get code of the program item (row[0]) */
-         if ((Gbl.Prg.LstItems[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Prg_Gbl.List.Items[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong program item code.");
 
          /* Get index of the program item (row[1]) */
-         Gbl.Prg.LstItems[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
+         Prg_Gbl.List.Items[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
 
          /* Get level of the program item (row[2]) */
-         Gbl.Prg.LstItems[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
+         Prg_Gbl.List.Items[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
-	 Gbl.Prg.LstItems[NumItem].Hidden = (row[3][0] == 'Y');
+	 Prg_Gbl.List.Items[NumItem].Hidden = (row[3][0] == 'Y');
         }
      }
    else
-      Gbl.Prg.Num = 0;
+      Prg_Gbl.List.NumItems = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.Prg.LstIsRead = true;
+   Prg_Gbl.List.IsRead = true;
   }
 
 /*****************************************************************************/
@@ -1043,13 +1155,13 @@ static void Prg_ResetItem (struct ProgramItem *Item)
 
 static void Prg_FreeListItems (void)
   {
-   if (Gbl.Prg.LstIsRead && Gbl.Prg.LstItems)
+   if (Prg_Gbl.List.IsRead && Prg_Gbl.List.Items)
      {
       /***** Free memory used by the list of program items *****/
-      free (Gbl.Prg.LstItems);
-      Gbl.Prg.LstItems = NULL;
-      Gbl.Prg.Num = 0;
-      Gbl.Prg.LstIsRead = false;
+      free (Prg_Gbl.List.Items);
+      Prg_Gbl.List.Items = NULL;
+      Prg_Gbl.List.NumItems = 0;
+      Prg_Gbl.List.IsRead = false;
      }
   }
 
@@ -1116,14 +1228,14 @@ static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
    unsigned NumItem;
 
    /***** List of items must be filled *****/
-   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+   if (!Prg_Gbl.List.IsRead || Prg_Gbl.List.Items == NULL)
       Lay_ShowErrorAndExit ("Wrong list of items.");
 
    /***** Find item code in list *****/
    for (NumItem = 0;
-	NumItem < Gbl.Prg.Num;
+	NumItem < Prg_Gbl.List.NumItems;
 	NumItem++)
-      if (Gbl.Prg.LstItems[NumItem].ItmCod == ItmCod)	// Found!
+      if (Prg_Gbl.List.Items[NumItem].ItmCod == ItmCod)	// Found!
 	 return NumItem;
 
    /***** Not found *****/
@@ -1432,19 +1544,19 @@ static int Prg_GetPrevBrother (int NumItem)
 
    /***** Trivial check: if item is the first one, there is no previous brother *****/
    if (NumItem <= 0 ||
-       NumItem >= (int) Gbl.Prg.Num)
+       NumItem >= (int) Prg_Gbl.List.NumItems)
       return -1;
 
    /***** Get previous brother before item *****/
-   // 1 <= NumItem < Gbl.Prg.Num
-   Level = Gbl.Prg.LstItems[NumItem].Level;
+   // 1 <= NumItem < Prg_Gbl.List.NumItems
+   Level = Prg_Gbl.List.Items[NumItem].Level;
    for (i  = NumItem - 1;
 	i >= 0;
 	i--)
      {
-      if (Gbl.Prg.LstItems[i].Level == Level)
+      if (Prg_Gbl.List.Items[i].Level == Level)
 	 return i;	// Previous brother before item found
-      if (Gbl.Prg.LstItems[i].Level < Level)
+      if (Prg_Gbl.List.Items[i].Level < Level)
 	 return -1;		// Previous lower level found ==> there are no brothers before item
      }
    return -1;	// Start reached ==> there are no brothers before item
@@ -1462,19 +1574,19 @@ static int Prg_GetNextBrother (int NumItem)
 
    /***** Trivial check: if item is the last one, there is no next brother *****/
    if (NumItem < 0 ||
-       NumItem >= (int) Gbl.Prg.Num - 1)
+       NumItem >= (int) Prg_Gbl.List.NumItems - 1)
       return -1;
 
    /***** Get next brother after item *****/
-   // 0 <= NumItem < Gbl.Prg.Num - 1
-   Level = Gbl.Prg.LstItems[NumItem].Level;
+   // 0 <= NumItem < Prg_Gbl.List.NumItems - 1
+   Level = Prg_Gbl.List.Items[NumItem].Level;
    for (i = NumItem + 1;
-	i < (int) Gbl.Prg.Num;
+	i < (int) Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Gbl.Prg.LstItems[i].Level == Level)
+      if (Prg_Gbl.List.Items[i].Level == Level)
 	 return i;	// Next brother found
-      if (Gbl.Prg.LstItems[i].Level < Level)
+      if (Prg_Gbl.List.Items[i].Level < Level)
 	 return -1;	// Next lower level found ==> there are no brothers after item
      }
    return -1;	// End reached ==> there are no brothers after item
@@ -1564,7 +1676,7 @@ static void Prg_SetSubtreeEmpty (struct Subtree *Subtree)
   {
    /***** Range is empty *****/
    Subtree->Begin =
-   Subtree->End   = Gbl.Prg.Num;
+   Subtree->End   = Prg_Gbl.List.NumItems;
   }
 
 static void Prg_SetSubtreeOnlyItem (unsigned Index,struct Subtree *Subtree)
@@ -1577,16 +1689,16 @@ static void Prg_SetSubtreeOnlyItem (unsigned Index,struct Subtree *Subtree)
 static void Prg_SetSubtreeWithAllChildren (unsigned NumItem,struct Subtree *Subtree)
   {
    /***** List of items must be filled *****/
-   if (!Gbl.Prg.LstIsRead || Gbl.Prg.LstItems == NULL)
+   if (!Prg_Gbl.List.IsRead || Prg_Gbl.List.Items == NULL)
       Lay_ShowErrorAndExit ("Wrong list of items.");
 
    /***** Number of item must be in the correct range *****/
-   if (NumItem >= Gbl.Prg.Num)
+   if (NumItem >= Prg_Gbl.List.NumItems)
       Lay_ShowErrorAndExit ("Wrong item number.");
 
    /***** Range includes this item and all its children *****/
-   Subtree->Begin = Gbl.Prg.LstItems[NumItem                   ].Index;
-   Subtree->End   = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].Index;
+   Subtree->Begin = Prg_Gbl.List.Items[NumItem                   ].Index;
+   Subtree->End   = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].Index;
   }
 
 /*****************************************************************************/
@@ -1600,20 +1712,20 @@ static unsigned Prg_GetLastChild (int NumItem)
 
    /***** Trivial check: if item is wrong, there are no children *****/
    if (NumItem < 0 ||
-       NumItem >= (int) Gbl.Prg.Num)
+       NumItem >= (int) Prg_Gbl.List.NumItems)
       Lay_ShowErrorAndExit ("Wrong number of item.");
 
    /***** Get next brother after item *****/
-   // 0 <= NumItem < Gbl.Prg.Num
-   Level = Gbl.Prg.LstItems[NumItem].Level;
+   // 0 <= NumItem < Prg_Gbl.List.NumItems
+   Level = Prg_Gbl.List.Items[NumItem].Level;
    for (i = NumItem + 1;
-	i < (int) Gbl.Prg.Num;
+	i < (int) Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Gbl.Prg.LstItems[i].Level <= Level)
+      if (Prg_Gbl.List.Items[i].Level <= Level)
 	 return i - 1;	// Last child found
      }
-   return Gbl.Prg.Num - 1;	// End reached ==> all items after the given item are its children
+   return Prg_Gbl.List.NumItems - 1;	// End reached ==> all items after the given item are its children
   }
 
 /*****************************************************************************/
@@ -1636,8 +1748,8 @@ void Prg_RequestCreatePrgItem (void)
    if (ParentItmCod > 0)
      {
       NumItem          = Prg_GetNumItemFromItmCod (ParentItmCod);
-      ItmCodBeforeForm = Gbl.Prg.LstItems[Prg_GetLastChild (NumItem)].ItmCod;
-      FormLevel        = Gbl.Prg.LstItems[NumItem].Level + 1;
+      ItmCodBeforeForm = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
+      FormLevel        = Prg_Gbl.List.Items[NumItem].Level + 1;
      }
    else
      {
@@ -1668,7 +1780,7 @@ void Prg_RequestChangePrgItem (void)
    ItmCodBeforeForm = Prg_GetParamItmCod ();
 
    if (ItmCodBeforeForm > 0)
-      FormLevel = Gbl.Prg.LstItems[Prg_GetNumItemFromItmCod (ItmCodBeforeForm)].Level;
+      FormLevel = Prg_Gbl.List.Items[Prg_GetNumItemFromItmCod (ItmCodBeforeForm)].Level;
    else
       FormLevel = 0;
 
@@ -1947,16 +2059,16 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
 
    /***** Get list of program items *****/
    Prg_GetListPrgItems ();
-   if (Gbl.Prg.Num)	// There are items
+   if (Prg_Gbl.List.NumItems)	// There are items
      {
       if (ParentItem->Hierarchy.ItmCod > 0)	// Parent specified
 	{
 	 /***** Calculate where to insert *****/
 	 NumItemLastChild = Prg_GetLastChild (Prg_GetNumItemFromItmCod (ParentItem->Hierarchy.ItmCod));
-	 if (NumItemLastChild < Gbl.Prg.Num - 1)
+	 if (NumItemLastChild < Prg_Gbl.List.NumItems - 1)
 	   {
 	    /***** New program item will be inserted after last child of parent *****/
-	    Item->Hierarchy.Index = Gbl.Prg.LstItems[NumItemLastChild + 1].Index;
+	    Item->Hierarchy.Index = Prg_Gbl.List.Items[NumItemLastChild + 1].Index;
 
 	    /***** Move down all indexes of after last child of parent *****/
 	    DB_QueryUPDATE ("can not move down items",
@@ -1969,7 +2081,7 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
 	   }
 	 else
 	    /***** New program item will be inserted at the end *****/
-	    Item->Hierarchy.Index = Gbl.Prg.LstItems[Gbl.Prg.Num - 1].Index + 1;
+	    Item->Hierarchy.Index = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
 
 	 /***** Child ==> parent level + 1 *****/
          Item->Hierarchy.Level = ParentItem->Hierarchy.Level + 1;
@@ -1977,7 +2089,7 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
       else	// No parent specified
 	{
 	 /***** New program item will be inserted at the end *****/
-	 Item->Hierarchy.Index = Gbl.Prg.LstItems[Gbl.Prg.Num - 1].Index + 1;
+	 Item->Hierarchy.Index = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
 
 	 /***** First level *****/
          Item->Hierarchy.Level = 1;

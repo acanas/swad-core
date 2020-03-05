@@ -542,13 +542,6 @@ struct Globals
      {
       bool LstIsRead;		// Is the list already read from database...
 				// ...or it needs to be read?
-      unsigned Num;				// Number of items
-      struct ProgramItemHierarchy *LstItems;	// List of items
-     } Prg;
-   struct
-     {
-      bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
       unsigned Num;		// Number of assignments
       long *LstAsgCods;		// List of assigment codes
       Dat_StartEndTime_t SelectedOrder;

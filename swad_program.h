@@ -27,37 +27,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
-#include "swad_file_browser.h"
-#include "swad_notification.h"
-#include "swad_user.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
-#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-struct ProgramItemHierarchy
-  {
-   long ItmCod;
-   unsigned Index;
-   unsigned Level;
-   bool Hidden;
-  };
-
-struct ProgramItem
-  {
-   struct ProgramItemHierarchy Hierarchy;
-   unsigned NumItem;
-   long UsrCod;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
-   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
-  };
-
-#define Prg_ORDER_DEFAULT Dat_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

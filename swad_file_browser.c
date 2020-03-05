@@ -1330,7 +1330,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
 static void Brw_PutIconShow (const char *Anchor);
 static void Brw_PutIconHide (const char *Anchor);
-static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel);
+static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
@@ -4103,14 +4103,14 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
   }
 
 /*****************************************************************************/
-/************ Initialize hidden levels of download tree to false *************/
+/************ Initialize hidden levels of file browser to false **************/
 /*****************************************************************************/
 
 static void Brw_InitHiddenLevels (void)
   {
    unsigned Level;
 
-   for (Level = 0;
+   for (Level  = 0;
 	Level <= Brw_MAX_DIR_LEVELS;
 	Level++)
       Gbl.FileBrowser.HiddenLevels[Level] = false;
@@ -5508,18 +5508,12 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
          return false;
       if (AdminDocsZone || AdminMarks)
         {
+	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
+	    Gbl.FileBrowser.HiddenLevels[Level] = RowSetAsHidden;
          if (RowSetAsHidden)	// this row is marked as hidden
-           {
-            if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-               Gbl.FileBrowser.HiddenLevels[Level] = true;
             LightStyle = true;
-           }
          else			// this row is not marked as hidden
-           {
-            if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-               Gbl.FileBrowser.HiddenLevels[Level] = false;
-            LightStyle = Brw_CheckIfAnyUpperLevelIsHidden (Level);
-           }
+            LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level);
         }
      }
 
@@ -5992,20 +5986,20 @@ static void Brw_PutIconHide (const char *Anchor)
   }
 
 /*****************************************************************************/
-/**** Check if any level of folders superior to the current one is hidden ****/
+/********* Check if any level higher than the current one is hidden **********/
 /*****************************************************************************/
 
-static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel)
+static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
   {
-   unsigned N;
+   unsigned Level;
 
-   for (N = 0;
-	N < CurrentLevel;
-	N++)
-      if (Gbl.FileBrowser.HiddenLevels[N])
+   for (Level = 0;
+	Level < CurrentLevel;
+	Level++)
+      if (Gbl.FileBrowser.HiddenLevels[Level])	// Hidden
          return true;
 
-   return false;
+   return false;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
