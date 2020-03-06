@@ -2852,6 +2852,7 @@ static void Mch_ShowMatchTitle (const struct Match *Match)
 static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
   {
    extern const char *Txt_MATCH_Paused;
+   extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -2866,64 +2867,69 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
      }
 
    /***** Get data of question from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			"SELECT AnsType,"	// row[0]
-			       "Stem,"		// row[1]
-			       "MedCod"		// row[2]
-			" FROM tst_questions"
-			" WHERE QstCod=%ld",
-			Match->Status.QstCod))
-      Ale_ShowAlert (Ale_ERROR,"Question doesn't exist.");
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Show question *****/
-   /* Get answer type (row[0]) */
-   Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-   if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
-      Lay_ShowErrorAndExit ("Wrong answer type.");
-
-   HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
-
-   /* Write stem (row[1]) */
-   Tst_WriteQstStem (row[1],"MCH_TCH_STEM",
-		     true);	// Visible
-
-   /* Get media (row[2]) */
-   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
-   Med_GetMediaDataByCod (&Gbl.Test.Media);
-
-   /* Show media */
-   Med_ShowMedia (&Gbl.Test.Media,
-		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		  "TEST_MED_EDIT_LIST_STEM");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Write answers? *****/
-   switch (Match->Status.Showing)
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a question",
+		       "SELECT AnsType,"	// row[0]
+			      "Stem,"		// row[1]
+			      "MedCod"		// row[2]
+		       " FROM tst_questions"
+		       " WHERE QstCod=%ld",
+		       Match->Status.QstCod))
      {
-      case Mch_ANSWERS:
-	 if (Match->Status.Playing)			// Match is being played
-	    /* Write answers */
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Show question *****/
+      /* Get answer type (row[0]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+      if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
+	 Lay_ShowErrorAndExit ("Wrong answer type.");
+
+      /* Begin container */
+      HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
+
+      /* Write stem (row[1]) */
+      Tst_WriteQstStem (row[1],"MCH_TCH_STEM",
+			true);	// Visible
+
+      /* Get media (row[2]) */
+      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
+      Med_GetMediaDataByCod (&Gbl.Test.Media);
+
+      /* Show media */
+      Med_ShowMedia (&Gbl.Test.Media,
+		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		     "TEST_MED_EDIT_LIST_STEM");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Write answers? *****/
+      switch (Match->Status.Showing)
+	{
+	 case Mch_ANSWERS:
+	    if (Match->Status.Playing)			// Match is being played
+	       /* Write answers */
+	       Mch_WriteAnswersMatchResult (Match,
+					    "MCH_TCH_ANS",
+					    false);	// Don't show result
+	    else						// Match is paused, not being played
+	       Mch_ShowWaitImage (Txt_MATCH_Paused);
+	    break;
+	 case Mch_RESULTS:
+	    /* Write answers with results */
 	    Mch_WriteAnswersMatchResult (Match,
 					 "MCH_TCH_ANS",
-					 false);	// Don't show result
-	 else						// Match is paused, not being played
-	    Mch_ShowWaitImage (Txt_MATCH_Paused);
-	 break;
-      case Mch_RESULTS:
-	 /* Write answers with results */
-	 Mch_WriteAnswersMatchResult (Match,
-				      "MCH_TCH_ANS",
-				      true);		// Show result
-	 break;
-      default:
-	 /* Don't write anything */
-	 break;
-     }
+					 true);		// Show result
+	    break;
+	 default:
+	    /* Don't write anything */
+	    break;
+	}
 
-   HTM_DIV_End ();				// Bottom
+      /* End container */
+      HTM_DIV_End ();				// Bottom
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
   }
 
 /*****************************************************************************/

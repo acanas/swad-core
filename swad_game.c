@@ -151,6 +151,7 @@ static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
+static void Gam_ListQuestionForEdition (const char *StrQstInd);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -1746,7 +1747,7 @@ unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextQstInd = 0;
+   unsigned NextQstInd = Mch_AFTER_LAST_QUESTION;	// End of questions has been reached
 
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
@@ -1784,18 +1785,14 @@ static void Gam_ListGameQuestions (struct Game *Game)
    bool ICanEditQuestions = Gam_CheckIfEditable (Game);
 
    /***** Get data of questions from database *****/
-   NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
-				        "SELECT gam_questions.QstInd,"		// row[0]
-					       "gam_questions.QstCod,"		// row[1]
-					       "tst_questions.AnsType,"		// row[2]
-					       "tst_questions.Stem,"		// row[3]
-					       "tst_questions.Feedback,"	// row[4]
-					       "tst_questions.MedCod"		// row[5]
-					" FROM gam_questions,tst_questions"
-					" WHERE gam_questions.GamCod=%ld"
-					" AND gam_questions.QstCod=tst_questions.QstCod"
-					" ORDER BY gam_questions.QstInd",
-					Game->GamCod);
+   NumQsts = (unsigned)
+             DB_QuerySELECT (&mysql_res,"can not get game questions",
+			      "SELECT QstInd,"	// row[0]
+				     "QstCod"	// row[1]
+			      " FROM gam_questions"
+			      " WHERE GamCod=%ld"
+			      " ORDER BY QstInd",
+			      Game->GamCod);
 
    /***** Begin box *****/
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
@@ -1837,7 +1834,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    unsigned NumQst;
    MYSQL_ROW row;
    unsigned QstInd;
@@ -1871,10 +1867,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /*
       row[0] QstInd
       row[1] QstCod
-      row[2] AnsType
-      row[3] Stem
-      row[4] Feedback
-      row[5] MedCod
       */
       /***** Create test question *****/
       Tst_QstConstructor ();
@@ -1937,52 +1929,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+      /***** Question *****/
+      Gam_ListQuestionForEdition (StrQstInd);
 
-      /* Write number of question */
-      HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-      HTM_Txt (StrQstInd);
-      HTM_DIV_End ();
-
-      /* Write answer type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
-      HTM_DIV_End ();
-
-      HTM_TD_End ();
-
-      /* Write question code */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
-      HTM_TD_End ();
-
-      /* Write the question tags */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
-      HTM_TD_End ();
-
-      /* Write stem (row[3]) */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[3],"TEST_EDI",
-			true);	// Visible
-
-      /* Get media (row[5]) */
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
-
-      /* Show media */
-      Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-                     "TEST_MED_EDIT_LIST_STEM");
-
-      /* Show feedback (row[4]) */
-      Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
-
-      /* Show answers */
-      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
-
-      HTM_TD_End ();
       HTM_TR_End ();
 
       /***** Destroy test question *****/
@@ -1991,6 +1940,104 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********************** List game question for edition ***********************/
+/*****************************************************************************/
+
+static void Gam_ListQuestionForEdition (const char *StrQstInd)
+  {
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_Question_removed;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool QstExists;
+
+   /***** Get question from database *****/
+   QstExists = Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res);	// Question exists?
+
+   if (QstExists)
+     {
+      /***** Get row of the result of the query *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Feedback
+      row[6] MedCod
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
+      */
+     }
+
+   /***** Number of question and answer type *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Write number of question */
+   HTM_DIV_Begin ("class=\"BIG_INDEX\"");
+   HTM_Txt (StrQstInd);
+   HTM_DIV_End ();
+
+   /* Write answer type (row[2]) */
+   HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+   if (QstExists)
+     {
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+     }
+   HTM_DIV_End ();
+
+   HTM_TD_End ();
+
+   /***** Write question code *****/
+   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
+   HTM_TD_End ();
+
+   /***** Write the question tags *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   if (QstExists)
+      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
+   HTM_TD_End ();
+
+   /***** Write stem and media (row[4]) *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   if (QstExists)
+     {
+      /* Write stem */
+      Tst_WriteQstStem (row[4],"TEST_EDI",
+			true);	// Visible
+
+      /* Get media (row[6]) */
+      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
+      Med_GetMediaDataByCod (&Gbl.Test.Media);
+
+      /* Show media */
+      Med_ShowMedia (&Gbl.Test.Media,
+		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		     "TEST_MED_EDIT_LIST_STEM");
+
+      /* Show feedback (row[5]) */
+      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+
+      /* Show answers */
+      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
+     }
+   else
+     {
+      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+      HTM_Txt (Txt_Question_removed);
+      HTM_SPAN_End ();
+     }
+   HTM_TD_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

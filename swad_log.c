@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <string.h>	// For strlen
+
 #include "swad_action.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -71,6 +73,8 @@ void Log_LogAccess (const char *Comments)
   {
    long LogCod;
    long ActCod = Act_GetActCod (Gbl.Action.Act);
+   size_t MaxLength;
+   char *CommentsDB;
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
                                                             Gbl.Usrs.Me.Role.Logged;
 
@@ -118,12 +122,23 @@ void Log_LogAccess (const char *Comments)
 
    /* Log comments */
    if (Comments)
-      DB_QueryINSERT ("can not log access (comments)",
-		      "INSERT INTO log_comments"
-		      " (LogCod,Comments)"
-		      " VALUES"
-		      " (%ld,'%s')",
-		      LogCod,Comments);
+     {
+      MaxLength = strlen (Comments) * Str_MAX_BYTES_PER_CHAR;
+      if ((CommentsDB = (char *) malloc (MaxLength + 1)) != NULL)
+	{
+	 Str_Copy (CommentsDB,Comments,
+	           MaxLength);
+	 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
+			   CommentsDB,MaxLength,true);	// Avoid SQL injection
+	 DB_QueryINSERT ("can not log access (comments)",
+			 "INSERT INTO log_comments"
+			 " (LogCod,Comments)"
+			 " VALUES"
+			 " (%ld,'%s')",
+			 LogCod,CommentsDB);
+	 free (CommentsDB);
+	}
+     }
 
    /* Log search string */
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])

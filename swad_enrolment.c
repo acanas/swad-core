@@ -4140,7 +4140,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	}
       else	// Not me
        {
-         /* Now he/she doesn't belong to current course */
+         /* Now he/she does not belong to current course */
          UsrDat->Accepted                 = false;
 	 UsrDat->Roles.InCurrentCrs.Role  = Rol_USR;
 	 UsrDat->Roles.InCurrentCrs.Valid = false;

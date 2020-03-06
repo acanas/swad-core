@@ -1616,7 +1616,9 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
   {
    /***** Get available not hidden tags from database *****/
    return DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-			  "SELECT TagCod,TagTxt FROM tst_tags"
+			  "SELECT TagCod,"	// row[0]
+			         "TagTxt"	// row[1]
+			  " FROM tst_tags"
 			  " WHERE CrsCod=%ld AND TagHidden='N'"
 			  " ORDER BY TagTxt",
 			  Gbl.Hierarchy.Crs.CrsCod);
@@ -6552,7 +6554,7 @@ void Tst_RemoveQst (void)
 		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The question to be removed does not exist or belongs to another course.");
+      Lay_ShowErrorAndExit ("Wrong question.");
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);

@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.144.3 (2020-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.145 (2020-03-07)"
 #define CSS_FILE		"swad19.144.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -524,14 +524,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
+// TODO: Comprobar los resultados de partidas de juegos con preguntas eliminadas
 
-// TODO: URGENTE: Reportado por Eva Martínez Ortigosa
-                  Sea un juego tiene dos preguntas: 1 y 2
-		  Se elimina la pregunta 1 de los test ==> ahora no sale la pregunta 1 al editar el juego
-						       ==> DEBERÍA SALIR el número 1 indicando que la pregunta no existe
-		  Al intentar jugar una partida y pasar por la pregunta 1 ==> Ahora se cuelga
-									  ==> DEBERÍA SALIR un mensaje de que la pregunta no existe
-
+	Version 19.145:   Mar 07, 2020	Fixed bug in log.
+					Fixed bug in matches, reported by Eva Martínez Ortigosa. (282346 lines)
 	Version 19.144.3: Mar 06, 2020	New social network: twitch. (282286 lines)
 					2 changes necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitch', 'twitter', 'wikipedia', 'youtube') NOT NULL;
