@@ -46,7 +46,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 29
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 30
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -75,6 +75,7 @@ typedef enum
    Net_STACK_OVERFLOW,
    Net_STORIFY,
    Net_TUMBLR,
+   Net_TWITCH,
    Net_TWITTER,
    Net_WIKIPEDIA,
    Net_YOUTUBE,
@@ -111,6 +112,7 @@ static const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS]
    [Net_STACK_OVERFLOW] = "stackoverflow",
    [Net_STORIFY       ] = "storify",
    [Net_TUMBLR        ] = "tumblr",
+   [Net_TWITCH        ] = "twitch",
    [Net_TWITTER       ] = "twitter",
    [Net_WIKIPEDIA     ] = "wikipedia",
    [Net_YOUTUBE       ] = "youtube",
@@ -144,6 +146,7 @@ static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_STACK_OVERFLOW] = "stack-overflow-brands.svg",
    [Net_STORIFY       ] = "storify64x64.png",
    [Net_TUMBLR        ] = "tumblr-brands.svg",
+   [Net_TWITCH        ] = "twitch-brands.svg",
    [Net_TWITTER       ] = "twitter-brands.svg",
    [Net_WIKIPEDIA     ] = "wikipedia-w-brands.svg",
    [Net_YOUTUBE       ] = "youtube-brands.svg",
@@ -177,6 +180,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_STACK_OVERFLOW] = "Stack Overflow",
    [Net_STORIFY       ] = "Storify",
    [Net_TUMBLR        ] = "Tumblr",
+   [Net_TWITCH        ] = "Twitch",
    [Net_TWITTER       ] = "Twitter",
    [Net_WIKIPEDIA     ] = "Wikipedia",
    [Net_YOUTUBE       ] = "YouTube",

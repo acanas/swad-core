@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.144.2 (2020-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.144.3 (2020-03-06)"
 #define CSS_FILE		"swad19.144.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -531,6 +531,13 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 						       ==> DEBERÍA SALIR el número 1 indicando que la pregunta no existe
 		  Al intentar jugar una partida y pasar por la pregunta 1 ==> Ahora se cuelga
 									  ==> DEBERÍA SALIR un mensaje de que la pregunta no existe
+
+	Version 19.144.3: Mar 06, 2020	New social network: twitch. (282286 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitch', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+
+					Copy the following icon to icon public directory:
+sudo cp icon/twitch-brands.svg /var/www/html/swad/icon/
 
 	Version 19.144.2: Mar 06, 2020	Fixed bugs in course program. (282277 lines)
 	Version 19.144.1: Mar 06, 2020	Changes in CSS for course program. (282291 lines)
