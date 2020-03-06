@@ -81,6 +81,7 @@ struct ProgramItem
    char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
   };
 
+#define Prg_NUM_TYPES_FORMS 3
 typedef enum
   {
    Prg_DONT_PUT_FORM_ITEM,
@@ -156,10 +157,10 @@ static void Prg_PutIconsListItems (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
-static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
-			     const struct ItemRange *ToHighlight,bool PrintView);
-static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ParamItmCod,unsigned FormLevel);
+static void Prg_WriteRowItem (unsigned NumItem,const struct ProgramItem *Item,
+			      bool PrintView);
+static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			              long ItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
 static void Prg_FreeTitleClass (char *TitleClass);
 
@@ -168,7 +169,7 @@ static unsigned Prg_GetMaxItemLevel (void);
 static unsigned Prg_CalculateMaxItemLevel (void);
 static void Prg_CreateLevels (void);
 static void Prg_FreeLevels (void);
-static void Prg_IncreaseNumItem (unsigned Level);
+static void Prg_IncreaseNumberInLevel (unsigned Level);
 static unsigned Prg_GetCurrentNumberInLevel (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
@@ -262,6 +263,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    extern const char *Txt_Course_program;
    unsigned NumItem;
    struct ProgramItem Item;
+   static bool FirstTBodyOpen = false;
 
    /***** Create numbers and hidden levels *****/
    Prg_SetMaxItemLevel (Prg_CalculateMaxItemLevel ());
@@ -271,8 +273,15 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
-   /***** Table head *****/
+   /***** Table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
+
+   /* In general, the table is divided into three bodys:
+   1. Rows before highlighted: <tbody></tbody>
+   2. Rows highlighted:        <tbody id="prg_highlighted"></tbody>
+   3. Rows after highlighted:  <tbody></tbody> */
+   HTM_TBODY_Begin (NULL);		// 1st tbody start
+   FirstTBodyOpen = true;
 
    /***** Write all the program items *****/
    for (NumItem = 0;
@@ -283,32 +292,53 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
       Item.Hierarchy.ItmCod = Prg_Gbl.List.Items[NumItem].ItmCod;
       Prg_GetDataOfItemByCod (&Item);
 
+      /* Begin range to highlight? */
+      if (Item.Hierarchy.Index == ToHighlight->Begin)	// Begin of the highlighted range
+	{
+	 if (FirstTBodyOpen)
+	   {
+	    HTM_TBODY_End ();				// 1st tbody end
+	    FirstTBodyOpen = false;
+	   }
+	 HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
+	}
+
       /* Show item */
-      Prg_ShowOneItem (NumItem,&Item,ToHighlight,
-		       false);	// Not print view
+      Prg_WriteRowItem (NumItem,&Item,false);	// Not print view
 
       /* Show form to create/change item */
-      if (ItmCodBeforeForm == Item.Hierarchy.ItmCod)
+      if (Item.Hierarchy.ItmCod == ItmCodBeforeForm)
 	 switch (CreateOrChangeItem)
 	   {
 	    case Prg_DONT_PUT_FORM_ITEM:
 	       break;
 	    case Prg_PUT_FORM_CREATE_ITEM:
-	       Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,ParentItmCod,FormLevel);
+	       Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,
+					 ParentItmCod,FormLevel);
 	       break;
 	    case Prg_PUT_FORM_CHANGE_ITEM:
-	       Prg_ShowItemForm (Prg_PUT_FORM_CHANGE_ITEM,ItmCodBeforeForm,FormLevel);
+	       Prg_WriteRowWithItemForm (Prg_PUT_FORM_CHANGE_ITEM,
+					 ItmCodBeforeForm,FormLevel);
 	       break;
 	   }
+
+      /* End range to highlight? */
+      if (Item.Hierarchy.Index == ToHighlight->End)	// End of the highlighted range
+	{
+	 HTM_TBODY_End ();				// Highlighted tbody end
+	 if (NumItem < Prg_Gbl.List.NumItems - 1)	// Not the last item
+	    HTM_TBODY_Begin (NULL);			// 3rd tbody begin
+	}
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
    /***** Create item at the end? *****/
    if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-      Prg_ShowItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
+      Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
 
    /***** End table *****/
+   HTM_TBODY_End ();					// 3rd tbody end
    HTM_TABLE_End ();
 
    /***** Button to create a new program item *****/
@@ -357,7 +387,7 @@ static void Prg_PutIconToCreateNewItem (void)
 
    /***** Put form to create a new program item *****/
    Prg_SetCurrentItmCod (-1L);
-   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,NULL,Prg_PutParams,
+   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",Prg_PutParams,
 			       Txt_New_item);
   }
 
@@ -370,7 +400,7 @@ static void Prg_PutButtonToCreateNewItem (void)
    extern const char *Txt_New_item;
 
    Prg_SetCurrentItmCod (-1L);
-   Frm_StartForm (ActFrmNewPrgItm);
+   Frm_StartFormAnchor (ActFrmNewPrgItm,"item_form");
    Prg_PutParams ();
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
@@ -380,11 +410,10 @@ static void Prg_PutButtonToCreateNewItem (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
-			     const struct ItemRange *ToHighlight,bool PrintView)
+static void Prg_WriteRowItem (unsigned NumItem,const struct ProgramItem *Item,
+			      bool PrintView)
   {
    static unsigned UniqueId = 0;
-   static bool FirstTBodyOpen = false;
    bool LightStyle;
    char *Id;
    unsigned ColSpan;
@@ -403,27 +432,8 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    /***** Title CSS class *****/
    Prg_SetTitleClass (&TitleClass,Item->Hierarchy.Level,LightStyle);
 
-   /***** Increase number of item *****/
-   Prg_IncreaseNumItem (Item->Hierarchy.Level);
-
-   /***** In general, the table is divided into three bodys:
-   1. Rows before highlighted: <tbody></tbody>
-   2. Rows highlighted:        <tbody id="prg_highlighted"></tbody>
-   3. Rows after highlighted:  <tbody></tbody> */
-   if (Item->Hierarchy.Index == ToHighlight->Begin)	// Begin of the highlighted subtree
-     {
-      if (FirstTBodyOpen)
-	{
-         HTM_TBODY_End ();				// 1st tbody end
-         FirstTBodyOpen = false;
-	}
-      HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
-     }
-   else if (NumItem == 0)				// First item
-     {
-      HTM_TBODY_Begin (NULL);				// 1st tbody start
-      FirstTBodyOpen = true;
-     }
+   /***** Increase number in level *****/
+   Prg_IncreaseNumberInLevel (Item->Hierarchy.Level);
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -514,16 +524,6 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
    /***** End row *****/
    HTM_TR_End ();
 
-   /***** End tbodies *****/
-   if (Item->Hierarchy.Index == ToHighlight->End)	// End of the highlighted subtree
-     {
-      HTM_TBODY_End ();					// Highlighted tbody end
-      if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
-         HTM_TBODY_Begin (NULL);			// 3rd tbody begin
-     }
-   else if (NumItem == Prg_Gbl.List.NumItems - 1)	// Last item
-      HTM_TBODY_End ();					// 3rd tbody end
-
    /***** Free title CSS class *****/
    Prg_FreeTitleClass (TitleClass);
   }
@@ -532,12 +532,18 @@ static void Prg_ShowOneItem (unsigned NumItem,const struct ProgramItem *Item,
 /**************************** Show item form *********************************/
 /*****************************************************************************/
 
-static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      long ParamItmCod,unsigned FormLevel)
+static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+			              long ItmCod,unsigned FormLevel)
   {
    char *TitleClass;
    unsigned ColSpan;
    unsigned NumCol;
+   static void (*ShowForm[Prg_NUM_TYPES_FORMS])(long ItmCod) =
+     {
+      [Prg_DONT_PUT_FORM_ITEM  ] = NULL,
+      [Prg_PUT_FORM_CREATE_ITEM] = Prg_ShowFormToCreateItem,
+      [Prg_PUT_FORM_CHANGE_ITEM] = Prg_ShowFormToChangeItem,
+     };
 
    /***** Trivial check *****/
    if (CreateOrChangeItem == Prg_DONT_PUT_FORM_ITEM)
@@ -570,8 +576,6 @@ static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    HTM_TD_Begin ("class=\"PRG_NUM %s RT COLOR%u\"",TitleClass,Gbl.RowEvenOdd);
    if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
       Prg_WriteNumNewItem (FormLevel);
-   else
-      Prg_WriteNumItem (FormLevel);
    HTM_TD_End ();
 
    /***** Show form to create new item as child *****/
@@ -579,10 +583,7 @@ static void Prg_ShowItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN COLOR%u\"",
 		 ColSpan,Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin ("item_form");
-   if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-      Prg_ShowFormToCreateItem (ParamItmCod);
-   else
-      Prg_ShowFormToChangeItem (ParamItmCod);
+   ShowForm[CreateOrChangeItem] (ItmCod);
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
@@ -668,7 +669,7 @@ static void Prg_CreateLevels (void)
         4     1
         5     0	  <--- Used to create a new item
       */
-      if ((Prg_Gbl.Levels = (struct Level *) calloc (1 + MaxLevel + 1,
+      if ((Prg_Gbl.Levels = (struct Level *) calloc ((size_t) (1 + MaxLevel + 1),
 					             sizeof (struct Level))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
      }
@@ -694,7 +695,7 @@ static void Prg_FreeLevels (void)
 /**************************** Increase number of item ************************/
 /*****************************************************************************/
 
-static void Prg_IncreaseNumItem (unsigned Level)
+static void Prg_IncreaseNumberInLevel (unsigned Level)
   {
    /***** Increase number for this level *****/
    Prg_Gbl.Levels[Level    ].Number++;
@@ -721,35 +722,11 @@ static unsigned Prg_GetCurrentNumberInLevel (unsigned Level)
 
 static void Prg_WriteNumItem (unsigned Level)
   {
-   // unsigned i;
-
-   /***** Write number in legal style *****/
-   /*
-   for (i = 1;
-	i < Level;
-	i++)
-     {
-      HTM_Unsigned (Prg_GetCurrentNumberInLevel (i));
-      HTM_Txt (".");
-     }
-   */
    HTM_Unsigned (Prg_GetCurrentNumberInLevel (Level));
   }
 
 static void Prg_WriteNumNewItem (unsigned Level)
   {
-   // unsigned i;
-
-   /***** Write number in legal style *****/
-   /*
-   for (i = 1;
-	i < Level;
-	i++)
-     {
-      HTM_Unsigned (Prg_GetCurrentNumberInLevel (i));
-      HTM_Txt (".");
-     }
-   */
    HTM_Unsigned (Prg_GetCurrentNumberInLevel (Level) + 1);
   }
 
@@ -1004,31 +981,29 @@ static void Prg_GetListItems (void)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumItem;
 
    if (Prg_Gbl.List.IsRead)
       Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get program items",
-			     "SELECT ItmCod,"	// row[0]
-				    "ItmInd,"	// row[1]
-				    "Level,"		// row[2]
-				    "Hidden"		// row[3]
-			     " FROM prg_items"
-			     " WHERE CrsCod=%ld%s"
-			     " ORDER BY ItmInd",
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+   Prg_Gbl.List.NumItems =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get program items",
+			      "SELECT ItmCod,"	// row[0]
+				     "ItmInd,"	// row[1]
+				     "Level,"	// row[2]
+				     "Hidden"	// row[3]
+			      " FROM prg_items"
+			      " WHERE CrsCod=%ld%s"
+			      " ORDER BY ItmInd",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
 
-   if (NumRows) // Items found...
+   if (Prg_Gbl.List.NumItems) // Items found...
      {
-      Prg_Gbl.List.NumItems = (unsigned) NumRows;
-
       /***** Create list of program items *****/
       if ((Prg_Gbl.List.Items =
-	   (struct ProgramItemHierarchy *) calloc (NumRows,
+	   (struct ProgramItemHierarchy *) calloc ((size_t) Prg_Gbl.List.NumItems,
 						   sizeof (struct ProgramItemHierarchy))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -1054,8 +1029,6 @@ static void Prg_GetListItems (void)
 	 Prg_Gbl.List.Items[NumItem].Hidden = (row[3][0] == 'Y');
         }
      }
-   else
-      Prg_Gbl.List.NumItems = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1438,7 +1411,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
 
    /***** Move up/down item *****/
    NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
-   if (CheckIfAllowed[UpDown](NumItem))
+   if (CheckIfAllowed[UpDown] (NumItem))
      {
       /* Exchange subtrees */
       switch (UpDown)
@@ -1703,16 +1676,24 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
 static void Prg_SetItemRangeEmpty (struct ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
-   if (!Prg_Gbl.List.IsRead || Prg_Gbl.List.Items == NULL)
+   if (!Prg_Gbl.List.IsRead)
       Lay_ShowErrorAndExit ("Wrong list of items.");
 
    /***** Range is empty *****/
-   ItemRange->Begin =
-   ItemRange->End   = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
+   if (Prg_Gbl.List.NumItems)
+      ItemRange->Begin =
+      ItemRange->End   = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
+   else
+      ItemRange->Begin =
+      ItemRange->End   = 1;
   }
 
 static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange)
   {
+   /***** List of items must be filled *****/
+   if (!Prg_Gbl.List.IsRead)
+      Lay_ShowErrorAndExit ("Wrong list of items.");
+
    /***** Range includes only this item *****/
    ItemRange->Begin =
    ItemRange->End   = Index;
@@ -1721,7 +1702,7 @@ static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
-   if (!Prg_Gbl.List.IsRead || Prg_Gbl.List.Items == NULL)
+   if (!Prg_Gbl.List.IsRead)
       Lay_ShowErrorAndExit ("Wrong list of items.");
 
    /***** Number of item must be in the correct range *****/
@@ -1779,15 +1760,18 @@ void Prg_RequestCreateItem (void)
    ParentItmCod = Prg_GetParamItmCod ();
    if (ParentItmCod > 0)
      {
-      NumItem          = Prg_GetNumItemFromItmCod (ParentItmCod);
+      NumItem = Prg_GetNumItemFromItmCod (ParentItmCod);
       ItmCodBeforeForm = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
-      FormLevel        = Prg_Gbl.List.Items[NumItem].Level + 1;
+      FormLevel = Prg_Gbl.List.Items[NumItem].Level + 1;
      }
-   else
+   else	// No parent item (user clicked on button to add a new first-level item at the end)
      {
-      ParentItmCod     = -1L;
-      ItmCodBeforeForm = -1L;
-      FormLevel        = 0;
+      ParentItmCod = -1L;
+      if (Prg_Gbl.List.NumItems)	// There are items already
+         ItmCodBeforeForm = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmCod;
+      else				// No current items
+	 ItmCodBeforeForm = -1L;
+      FormLevel = 1;
      }
 
    /***** Show current program items, if any *****/
@@ -1958,7 +1942,7 @@ static void Prg_ShowFormItem (const struct ProgramItem *Item,
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"25\""
 	               " class=\"PRG_TITLE_DESCRIPTION_WIDTH\"");
    if (Txt)
       if (Txt[0])
