@@ -139,7 +139,12 @@ static void Gam_RemoveGameFromAllTables (long GamCod);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 
-static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame);
+static void Gam_PutFormsEditionGame (struct Game *Game,
+				     char Txt[Cns_MAX_BYTES_TEXT + 1],
+				     bool ItsANewGame);
+static bool Gam_ReceiveGameFieldsFromForm (struct Game *Game,
+				       char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static bool Gam_CheckGameFieldsReceivedFromForm (const struct Game *Game);
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Game *Game,const char *Txt);
@@ -1256,27 +1261,30 @@ void Gam_RequestCreatOrEditGame (void)
   {
    struct Game Game;
    bool ItsANewGame;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Check if I can create new games *****/
+   /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
       Lay_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Game.GamCod = Gam_GetParams ();
-   ItsANewGame = (Game.GamCod < 0);
+   ItsANewGame = ((Game.GamCod = Gam_GetParams ()) < 0);
 
    /***** Put forms to create/edit a game *****/
-   Gam_PutFormsEditionGame (&Game,ItsANewGame);
+   Gam_PutFormsEditionGame (&Game,Txt,ItsANewGame);
 
    /***** Show games again *****/
-   Gam_ListAllGames ();
+   if (ItsANewGame)
+      Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /********************* Put a form to create/edit a game **********************/
 /*****************************************************************************/
 
-static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
+static void Gam_PutFormsEditionGame (struct Game *Game,
+				     char Txt[Cns_MAX_BYTES_TEXT + 1],
+				     bool ItsANewGame)
   {
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
@@ -1289,7 +1297,6 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    extern const char *Txt_Description;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get game data *****/
    if (ItsANewGame)
@@ -1393,78 +1400,92 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
   }
 
 /*****************************************************************************/
-/********************* Receive form to create a new game *******************/
+/********************** Receive form to create a new game ********************/
 /*****************************************************************************/
 
 void Gam_RecFormGame (void)
   {
-   extern const char *Txt_Already_existed_a_game_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_game;
    struct Game Game;
    bool ItsANewGame;
-   bool NewGameIsCorrect = true;
-   char MaxGradeStr[64];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get parameters *****/
-   Game.GamCod = Gam_GetParams ();
+   /***** Check if I can edit games *****/
+   if (!Gam_CheckIfICanEditGames ())
+      Lay_NoPermissionExit ();
 
-   /***** Check if game has matches *****/
+   /***** Get parameters *****/
+   ItsANewGame = ((Game.GamCod = Gam_GetParams ()) < 0);
+
+   /***** If I can edit games ==> receive game from form *****/
    if (Gam_CheckIfICanEditGames ())
      {
-      ItsANewGame = (Game.GamCod < 0);
-
-      /***** Get game title *****/
-      Par_GetParToText ("Title",Game.Title,Gam_MAX_BYTES_TITLE);
-
-      /***** Get maximum grade *****/
-      Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
-      Game.MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
-      if (Game.MaxGrade < 0.0)	// Only positive values allowed
-	 Game.MaxGrade = 0.0;
-
-      /***** Get visibility from form *****/
-      Game.Visibility = TsV_GetVisibilityFromForm ();
-
-      /***** Get game text and insert links *****/
-      Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-      /***** Check if title is correct *****/
-      if (Game.Title[0])	// If there's a game title
+      Gam_ReceiveGameFieldsFromForm (&Game,Txt);
+      if (Gam_CheckGameFieldsReceivedFromForm (&Game))
 	{
-	 /* If title of game was in database... */
-	 if (Gam_CheckIfSimilarGameExists (&Game))
-	   {
-	    NewGameIsCorrect = false;
-	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
-			   Game.Title);
-	   }
-	}
-      else	// If there is not a game title
-	{
-	 NewGameIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
-	}
-
-      /***** Create a new game or update an existing one *****/
-      if (NewGameIsCorrect)
-	{
+         /***** Create a new game or update an existing one *****/
 	 if (ItsANewGame)
 	    Gam_CreateGame (&Game,Txt);	// Add new game to database
 	 else
 	    Gam_UpdateGame (&Game,Txt);
 	}
-      else
-	 Gam_RequestCreatOrEditGame ();
 
       /***** Put forms to create/edit a game *****/
-      Gam_PutFormsEditionGame (&Game,false);
+      Gam_PutFormsEditionGame (&Game,Txt,ItsANewGame);
      }
    else
       Lay_NoPermissionExit ();
 
    /***** Show games again *****/
-   Gam_ListAllGames ();
+   if (ItsANewGame)
+      Gam_ListAllGames ();
+  }
+
+static void Gam_ReceiveGameFieldsFromForm (struct Game *Game,
+				           char Txt[Cns_MAX_BYTES_TEXT + 1])
+  {
+   char MaxGradeStr[64];
+
+   /***** Get game title *****/
+   Par_GetParToText ("Title",Game->Title,Gam_MAX_BYTES_TITLE);
+
+   /***** Get maximum grade *****/
+   Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
+   Game->MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
+   if (Game->MaxGrade < 0.0)	// Only positive values allowed
+      Game->MaxGrade = 0.0;
+
+   /***** Get visibility *****/
+   Game->Visibility = TsV_GetVisibilityFromForm ();
+
+   /***** Get game text *****/
+   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+  }
+
+static bool Gam_CheckGameFieldsReceivedFromForm (const struct Game *Game)
+  {
+   extern const char *Txt_Already_existed_a_game_with_the_title_X;
+   extern const char *Txt_You_must_specify_the_title_of_the_game;
+   bool NewGameIsCorrect;
+
+   /***** Check if title is correct *****/
+   NewGameIsCorrect = true;
+   if (Game->Title[0])	// If there's a game title
+     {
+      /* If title of game was in database... */
+      if (Gam_CheckIfSimilarGameExists (Game))
+	{
+	 NewGameIsCorrect = false;
+	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
+			Game->Title);
+	}
+     }
+   else	// If there is not a game title
+     {
+      NewGameIsCorrect = false;
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
+     }
+
+   return NewGameIsCorrect;
   }
 
 /*****************************************************************************/
