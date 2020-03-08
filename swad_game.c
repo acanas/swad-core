@@ -137,13 +137,13 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
 
-static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
+static bool Gam_CheckIfSimilarGameExists (const struct Game *Game);
 
 static void Gam_PutFormsEditionGame (struct Game *Game,
 				     char Txt[Cns_MAX_BYTES_TEXT + 1],
 				     bool ItsANewGame);
-static bool Gam_ReceiveGameFieldsFromForm (struct Game *Game,
-				       char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Gam_ReceiveGameFieldsFromForm (struct Game *Game,
+				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Gam_CheckGameFieldsReceivedFromForm (const struct Game *Game);
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
@@ -1242,7 +1242,7 @@ void Gam_UnhideGame (void)
 /******************* Check if the title of a game exists *******************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
+static bool Gam_CheckIfSimilarGameExists (const struct Game *Game)
   {
    /***** Get number of games with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar games",
