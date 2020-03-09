@@ -3001,7 +3001,7 @@ mysql> DESCRIBE usr_data;
 			"FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
 			"FamilyPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
 			"OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
-			"Birthday DATE NOT NULL,"
+			"Birthday DATE,"
 			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
