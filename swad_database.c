@@ -2271,7 +2271,7 @@ mysql> DESCRIBE projects;
 | Proposal    | enum('new','modified','unmodified') | NO   |     | new     |                |
 | CreatTime   | datetime                            | NO   |     | NULL    |                |
 | ModifTime   | datetime                            | NO   |     | NULL    |                |
-| Title       | varchar(2047)                       | NO   |     | NULL    |                |
+| Title       | varchar(4095)                       | NO   |     | NULL    |                |
 | Description | text                                | NO   |     | NULL    |                |
 | Knowledge   | text                                | NO   |     | NULL    |                |
 | Materials   | text                                | NO   |     | NULL    |                |
@@ -2290,7 +2290,7 @@ mysql> DESCRIBE projects;
 			"Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',"
 			"CreatTime DATETIME NOT NULL,"
 			"ModifTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE
+			"Title VARCHAR(4095) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE
 			"Description TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Knowledge TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Materials TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT

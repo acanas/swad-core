@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.145.2 (2020-03-09)"
+#define Log_PLATFORM_VERSION	"SWAD 19.145.3 (2020-03-09)"
 #define CSS_FILE		"swad19.144.1.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -525,6 +525,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Comprobar los resultados de partidas de juegos con preguntas eliminadas
+
+	Version 19.145.3: Mar 09, 2020	Increased maximum size of title of projects. (282369 lines)
+					1 change necessary in database:
+ALTER TABLE projects CHANGE Title Title VARCHAR(4095) NOT NULL;
 
 	Version 19.145.2: Mar 09, 2020	Fixed bug in database table with users' data. (282366 lines)
 	Version 19.145.1: Mar 08, 2020	Changes in edition of games. (282365 lines)

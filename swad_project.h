@@ -108,8 +108,8 @@ typedef enum
 #define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
 
 /***** Project title *****/
-#define Prj_MAX_CHARS_PROJECT_TITLE	(128 - 1)	// 127
-#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Prj_MAX_CHARS_PROJECT_TITLE	(256 - 1)	// 255
+#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /***** Type of proposal ******/
 #define Prj_NUM_PROPOSAL_TYPES 3
