@@ -526,6 +526,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Comprobar los resultados de partidas de juegos con preguntas eliminadas
 
+	Version 19.145.4: Mar 09, 2020	Changes in edition of games. (282385 lines)
 	Version 19.145.3: Mar 09, 2020	Increased maximum size of title of projects. (282369 lines)
 					1 change necessary in database:
 ALTER TABLE projects CHANGE Title Title VARCHAR(4095) NOT NULL;

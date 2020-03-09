@@ -1270,12 +1270,31 @@ void Gam_RequestCreatOrEditGame (void)
    /***** Get parameters *****/
    ItsANewGame = ((Game.GamCod = Gam_GetParams ()) < 0);
 
+   /***** Get game data *****/
+   if (ItsANewGame)
+     {
+      /* Initialize to empty game */
+      Gam_ResetGame (&Game);
+      Txt[0] = '\0';
+     }
+   else
+     {
+      /* Get game data from database */
+      Gam_GetDataOfGameByCod (&Game);
+      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+     }
+
    /***** Put forms to create/edit a game *****/
    Gam_PutFormsEditionGame (&Game,Txt,ItsANewGame);
 
-   /***** Show games again *****/
+   /***** Show games or questions *****/
    if (ItsANewGame)
+      /* Show games again */
       Gam_ListAllGames ();
+   else
+      /* Show questions of the game ready to be edited */
+      Gam_ListGameQuestions (&Game);
+
   }
 
 /*****************************************************************************/
@@ -1297,17 +1316,6 @@ static void Gam_PutFormsEditionGame (struct Game *Game,
    extern const char *Txt_Description;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
-
-   /***** Get game data *****/
-   if (ItsANewGame)
-      /* Initialize to empty game */
-      Gam_ResetGame (Game);
-   else
-     {
-      /* Get game data from database */
-      Gam_GetDataOfGameByCod (Game);
-      Gam_GetGameTxtFromDB (Game->GamCod,Txt);
-     }
 
    /***** Begin form *****/
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
@@ -1378,8 +1386,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewGame)
-      HTM_Txt (Txt);
+   HTM_Txt (Txt);
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -1393,10 +1400,6 @@ static void Gam_PutFormsEditionGame (struct Game *Game,
 
    /***** End form *****/
    Frm_EndForm ();
-
-   /***** Show questions of the game ready to be edited *****/
-   if (!ItsANewGame)
-      Gam_ListGameQuestions (Game);
   }
 
 /*****************************************************************************/
@@ -1426,18 +1429,31 @@ void Gam_RecFormGame (void)
 	 if (ItsANewGame)
 	    Gam_CreateGame (&Game,Txt);	// Add new game to database
 	 else
-	    Gam_UpdateGame (&Game,Txt);
-	}
+	    Gam_UpdateGame (&Game,Txt);	// Update game data in database
 
-      /***** Put forms to create/edit a game *****/
-      Gam_PutFormsEditionGame (&Game,Txt,ItsANewGame);
+         /***** Put forms to edit the game created or updated *****/
+         Gam_PutFormsEditionGame (&Game,Txt,
+                                  false);	// No new game
+
+         /***** Show questions of the game ready to be edited ******/
+         Gam_ListGameQuestions (&Game);
+	}
+      else
+	{
+         /***** Put forms to create/edit the game *****/
+         Gam_PutFormsEditionGame (&Game,Txt,ItsANewGame);
+
+         /***** Show games or questions *****/
+         if (ItsANewGame)
+            /* Show games again */
+            Gam_ListAllGames ();
+         else
+            /* Show questions of the game ready to be edited */
+            Gam_ListGameQuestions (&Game);
+	}
      }
    else
       Lay_NoPermissionExit ();
-
-   /***** Show games again *****/
-   if (ItsANewGame)
-      Gam_ListAllGames ();
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Game *Game,
