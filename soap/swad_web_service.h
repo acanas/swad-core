@@ -1,7 +1,7 @@
 // File: swad_web_service.h
 //gsoap swad service name: swad
 //gsoap swad service namespace: urn:swad
-//gsoap swad service location: https://swad.ugr.es/
+//gsoap swad service location: https://localhost/
 
 /*****************************************************************************/
 /******* Data structures used to return data in web service functions ********/

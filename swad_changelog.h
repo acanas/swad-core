@@ -532,7 +532,6 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 	Version 19.144.3: Mar 06, 2020	New social network: twitch. (282286 lines)
 					2 changes necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitch', 'twitter', 'wikipedia', 'youtube') NOT NULL;
-
 					Copy the following icon to icon public directory:
 sudo cp icon/twitch-brands.svg /var/www/html/swad/icon/
 
