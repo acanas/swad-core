@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.145.3 (2020-03-09)"
-#define CSS_FILE		"swad19.144.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.145.5 (2020-03-10)"
+#define CSS_FILE		"swad19.145.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
  *
