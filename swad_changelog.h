@@ -526,10 +526,16 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Comprobar los resultados de partidas de juegos con preguntas eliminadas
 
+	Version 19.145.5: Mar 10, 2020	Changed icon to comment in timeline. (282390 lines)
+					1 change necessary in database:
+ALTER TABLE tl_posts CHANGE COLUMN Content Txt LONGTEXT NOT NULL;
+					Copy the following icon to icon public directory:
+sudo cp icon/comment-regular.svg /var/www/html/swad/icon/
+
 	Version 19.145.4: Mar 09, 2020	Changes in edition of games. (282385 lines)
 	Version 19.145.3: Mar 09, 2020	Increased maximum size of title of projects. (282369 lines)
 					1 change necessary in database:
-ALTER TABLE projects CHANGE Title Title VARCHAR(4095) NOT NULL;
+ALTER TABLE projects CHANGE COLUMN Title Title VARCHAR(4095) NOT NULL;
 
 	Version 19.145.2: Mar 09, 2020	Fixed bug in database table with users' data. (282366 lines)
 	Version 19.145.1: Mar 08, 2020	Changes in edition of games. (282365 lines)
@@ -537,7 +543,7 @@ ALTER TABLE projects CHANGE Title Title VARCHAR(4095) NOT NULL;
 					Fixed bug in matches, reported by Eva Martínez Ortigosa. (282346 lines)
 	Version 19.144.3: Mar 06, 2020	New social network: twitch. (282286 lines)
 					2 changes necessary in database:
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitch', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE COLUMN Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitch', 'twitter', 'wikipedia', 'youtube') NOT NULL;
 					Copy the following icon to icon public directory:
 sudo cp icon/twitch-brands.svg /var/www/html/swad/icon/
 

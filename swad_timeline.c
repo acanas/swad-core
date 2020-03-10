@@ -2521,7 +2521,7 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
    HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
    HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');return false;\"",
                 UniqueId);
-   Ico_PutIcon ("edit.svg",Txt_Comment,"CONTEXT_ICO_16x16");
+   Ico_PutIcon ("comment-regular.svg",Txt_Comment,"CONTEXT_ICO_16x16");
    HTM_A_End ();
    HTM_DIV_End ();
   }
