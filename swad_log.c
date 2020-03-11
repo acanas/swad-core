@@ -25,7 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <string.h>	// For strlen
+#include <stdlib.h>		// For free
+#include <string.h>		// For strlen
 
 #include "swad_action.h"
 #include "swad_config.h"

@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.145.5 (2020-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 19.145.6 (2020-03-11)"
 #define CSS_FILE		"swad19.145.5.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -520,12 +520,11 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
-// TODO: Miguel Damas: por defecto, marcar "Permitir que los profesores..." en los test (que ya esté marcado en lugar de desmarcado)
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
-// TODO: Comprobar los resultados de partidas de juegos con preguntas eliminadas
 
+	Version 19.145.6: Mar 11, 2020	By default, teachers are allowed to see test exams. Suggested by Miguel Damas Hermoso. (282391 lines)
 	Version 19.145.5: Mar 10, 2020	Changed icon to comment in timeline. (282390 lines)
 					1 change necessary in database:
 ALTER TABLE tl_posts CHANGE COLUMN Content Txt LONGTEXT NOT NULL;
@@ -589,9 +588,9 @@ ALTER TABLE prg_items ADD COLUMN Level INT NOT NULL DEFAULT 1 AFTER ItmInd;
 	Version 19.134.1: Feb 26, 2020	Order course program items by indexes. (282022 lines)
 	Version 19.134:   Feb 26, 2020	Move up and down a course program item. Not finished. (281991 lines)
 					5 changes necessary in database:
-ALTER TABLE prg_items CHANGE COLUMN PrgItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE prg_items CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE prg_items ADD COLUMN ItmInd INT NOT NULL DEFAULT 0 AFTER ItmCod;
-ALTER TABLE prg_grp CHANGE COLUMN PrgItmCod ItmCod INT NOT NULL;
+ALTER TABLE prg_grp CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL;
 Only if you use MyISAM:
 ALTER TABLE prg_items ENGINE=MyISAM;
 ALTER TABLE prg_grp ENGINE=MyISAM;

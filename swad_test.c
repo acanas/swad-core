@@ -398,9 +398,10 @@ void Tst_ShowNewTest (void)
 	    /***** Test result will be saved? *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_INPUT_CHECKBOX ("Save",false,
+	    HTM_INPUT_CHECKBOX ("AllowTchs",false,	// Don't submit on change
 				"value=\"Y\"%s",
-				Gbl.Test.AllowTeachers ? " checked=\"checked\"" : "");
+				Gbl.Test.AllowTeachers ? " checked=\"checked\"" :
+				                         "");
 	    HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
 	    HTM_LABEL_End ();
 	    HTM_DIV_End ();
@@ -463,8 +464,8 @@ void Tst_AssessTest (void)
          /* Get number of questions */
          Tst_GetParamNumQst ();
 
-         /***** Get if test must be saved *****/
-	 Gbl.Test.AllowTeachers = Par_GetParToBool ("Save");
+         /***** Get if test will be visible by teachers *****/
+	 Gbl.Test.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
 	 /***** Get questions and answers from form to assess a test *****/
 	 Tst_GetQuestionsAndAnswersFromForm ();
