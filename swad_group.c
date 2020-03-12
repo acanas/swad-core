@@ -453,7 +453,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllGroups",false,
+   HTM_INPUT_CHECKBOX ("AllGroups",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s",
 		       ICanSelUnselGroup ? (Gbl.Usrs.ClassPhoto.AllGroups ? " checked=\"checked\""
 			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
@@ -1713,7 +1713,7 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
 	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LM\"");
-      HTM_INPUT_CHECKBOX ("GrpCods",false,
+      HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"Grp%ld\" value=\"%ld\"%s%s"
 		          " onclick=\"uncheckParent(this,'WholeCrs')\"",
 			  Grp->GrpCod,Grp->GrpCod,
@@ -2029,7 +2029,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	}
       else
 	 /* Put a checkbox item */
-	 HTM_INPUT_CHECKBOX (StrGrpCod,false,
+	 HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Grp%ld\" value=\"%ld\"%s%s",
 			     Grp->GrpCod,Grp->GrpCod,
 			     IBelongToThisGroup ? " checked=\"checked\"" : "",
@@ -2129,7 +2129,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       snprintf (StrGrpCod,sizeof (StrGrpCod),
 		"GrpCod%ld",
 		GrpTyp->GrpTypCod);
-      HTM_INPUT_CHECKBOX (StrGrpCod,false,
+      HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"Grp%ld\" value=\"%ld\"%s",
 			  Grp->GrpCod,Grp->GrpCod,
 			  UsrBelongsToThisGroup ? " checked=\"checked\"" : "");	// I can not register
@@ -2227,7 +2227,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LM\"");
-      HTM_INPUT_CHECKBOX ("GrpCods",false,
+      HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"Grp%ld\" value=\"%ld\"%s%s",
 			  Grp->GrpCod,Grp->GrpCod,
 			  Checked ? " checked=\"checked\"" : "",
@@ -2267,12 +2267,12 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_CHECKBOX ("GrpCods",false,
+   HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "id=\"Grp%ld\" value=\"%ld\"%s"
 		       " onclick=\"checkParent(this,'AllGroups')\"",
 		       -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
 		       ICanSelUnselGroup ? (Checked ? " checked=\"checked\"" : "") :
-			                   " disabled=\"disabled\"");
+			                              " disabled=\"disabled\"");
    HTM_TD_End ();
 
    /* Column closed/open */

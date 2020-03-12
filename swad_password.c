@@ -852,7 +852,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
    /***** Checkbox *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("Consent",false,
+   HTM_INPUT_CHECKBOX ("Consent",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"");
    HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);
    HTM_LABEL_End ();

@@ -548,10 +548,11 @@ static void McR_ListGamesToSelect (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("GamCod",false,
+      HTM_INPUT_CHECKBOX ("GamCod",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"Gam%u\" value=\"%ld\"%s",
 			  NumGame,Gbl.Games.Lst[NumGame].GamCod,
-			  Gbl.Games.Lst[NumGame].Selected ? " checked=\"checked\"" : "");
+			  Gbl.Games.Lst[NumGame].Selected ? " checked=\"checked\"" :
+				                            "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);

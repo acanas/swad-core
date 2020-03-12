@@ -656,7 +656,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
       if (PutForm)
 	{
 	 HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_INPUT_CHECKBOX ("Indicators",true,
+	 HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
 			     "id=\"Indicators%u\" value=\"%u\"%s",
 			     Ind,Ind,
 			     Gbl.Stat.IndicatorsSelected[Ind] ? " checked=\"checked\"" : "");

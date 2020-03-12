@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.145.6 (2020-03-11)"
-#define CSS_FILE		"swad19.145.5.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.146 (2020-03-12)"
+#define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
  *
@@ -523,7 +523,15 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
+// TODO: Instalar la última versión de MathJax de https://www.jsdelivr.com/package/npm/mathjax y comprobar que funciona bien con pandoc
 
+	Version 19.146:   Mar 12, 2020	Background and changes in layout of matches. (282484 lines)
+					Copy the following background image to icon public directory:
+sudo cp icon/bg.jpg /var/www/html/swad/icon/
+					Copy the following icon to icon public directory:
+sudo cp icon/Spin-1s-200px.gif /var/www/html/swad/icon/
+
+	Version 19.145.7: Mar 11, 2020	Code refactoring related to HTML. (282418 lines)
 	Version 19.145.6: Mar 11, 2020	By default, teachers are allowed to see test exams. Suggested by Miguel Damas Hermoso. (282391 lines)
 	Version 19.145.5: Mar 10, 2020	Changed icon to comment in timeline. (282390 lines)
 					1 change necessary in database:

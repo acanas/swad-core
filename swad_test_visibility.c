@@ -129,7 +129,7 @@ void TsV_PutVisibilityCheckboxes (unsigned SelectedVisibility)
      {
       ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
       HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("Visibility",false,
+      HTM_INPUT_CHECKBOX ("Visibility",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "value=\"%u\"%s",
 		          (unsigned) Visibility,
 		          ItemVisible ? " checked=\"checked\"" :

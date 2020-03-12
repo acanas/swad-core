@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_HTML.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -56,7 +57,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect);
 void Rol_ChangeMyRole (void);
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool Disabled,bool SendOnChange);
+                             bool Disabled,HTM_SubmitOnChange_t SubmitOnChange);
 void Rol_PutHiddenParamRoles (unsigned Roles);
 unsigned Rol_GetSelectedRoles (void);
 

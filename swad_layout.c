@@ -274,8 +274,24 @@ void Lay_WriteStartOfPage (void)
 	 break;
       case Act_BRW_NEW_TAB:
       case Act_BRW_2ND_TAB:
-	 HTM_Txt ("<body onload=\"init();\">\n");
-	 Gbl.Layout.WritingHTMLStart = false;
+	 HTM_Txt ("<body onload=\"init();\"");
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActNewMch:
+	    case ActResMch:
+	    case ActBckMch:
+	    case ActPlyPauMch:
+	    case ActFwdMch:
+	    case ActChgNumColMch:
+	    case ActChgVisResMchQst:
+	    case ActMchCntDwn:
+	       HTM_Txt (" class=\"MCH_BG\"");
+	       break;
+	    default:
+	       break;
+           }
+	 HTM_Txt (">\n");
+         Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
 	 Gbl.Layout.DivsEndWritten   = true;
 	 return;
@@ -1258,10 +1274,12 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    HTM_LABEL_Begin (NULL);
 
    /****** Checkbox *****/
-   HTM_INPUT_CHECKBOX (CheckboxName,true,
+   HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s%s",
-		       Checked ? " checked=\"checked\"" : "",
-		       Disabled ? " disabled=\"disabled\"" : "");
+		       Checked ? " checked=\"checked\"" :
+			         "",
+		       Disabled ? " disabled=\"disabled\"" :
+			          "");
 
    /***** Text *****/
    if (Text)

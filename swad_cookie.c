@@ -81,7 +81,7 @@ void Coo_EditMyPrefsOnCookies (void)
 								       "DAT");
    /* Check box */
    HTM_LABEL_Begin (NULL);
-   HTM_INPUT_CHECKBOX ("cookies",true,
+   HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s",
 		       Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" : "");
    HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);

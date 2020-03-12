@@ -1178,7 +1178,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Att_CheckIfAttEventIsAssociatedToGrps (AttCod) ? "" : " checked=\"checked\"");
@@ -2049,7 +2049,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
    /***** Checkbox to select user *****/
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_INPUT_CHECKBOX ("UsrCodStd",false,
+   HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "id=\"Std%u\" value=\"%s\"%s%s",
 	               NumUsr,UsrDat->EncryptedUsrCod,
 		       Present ? " checked=\"checked\"" : "",
@@ -3045,7 +3045,7 @@ static void Att_ListEventsToSelect (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("AttCods",false,
+      HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"Att%u\" value=\"%ld\"%s",
 			  NumAttEvent,Gbl.AttEvents.Lst[NumAttEvent].AttCod,
 			  Gbl.AttEvents.Lst[NumAttEvent].Selected ? " checked=\"checked\"" : "");

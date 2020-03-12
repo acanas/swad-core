@@ -3917,9 +3917,10 @@ void Prj_ShowFormConfig (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_CHECKBOX ("Editable",false,
+   HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "id=\"Editable\" value=\"Y\"%s",
-		       Gbl.Prjs.Config.Editable ? " checked=\"checked\"" : "");
+		       Gbl.Prjs.Config.Editable ? " checked=\"checked\"" :
+			                          "");
    HTM_Txt (Txt_Editable_by_non_editing_teachers);
    HTM_TD_End ();
 

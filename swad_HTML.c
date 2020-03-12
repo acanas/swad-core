@@ -1336,7 +1336,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
+void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...)
   {
    va_list ap;
@@ -1362,7 +1362,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
 	}
      }
 
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
 

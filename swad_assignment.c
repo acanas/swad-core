@@ -1270,7 +1270,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
 			  Asg_CheckIfAsgIsAssociatedToGrps (AsgCod) ? "" : " checked=\"checked\"");

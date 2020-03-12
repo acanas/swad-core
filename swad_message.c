@@ -2705,9 +2705,10 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",false,
+   HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s",
-		       Gbl.Msg.ShowOnlyUnreadMsgs ? " checked=\"checked\"" : "");
+		       Gbl.Msg.ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
+			                            "");
    HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
   }

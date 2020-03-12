@@ -44,6 +44,12 @@ typedef enum
    HTM_Type_STRING,
   } HTM_Type_t;
 
+typedef enum
+  {
+   HTM_DONT_SUBMIT_ON_CHANGE,
+   HTM_SUBMIT_ON_CHANGE,
+  } HTM_SubmitOnChange_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -138,7 +144,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double 
 	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 		      const char *fmt,...);
-void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
+void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...);
 
 void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class);

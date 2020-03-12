@@ -2063,9 +2063,10 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" : " checked=\"checked\"");
+			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" :
+				                                      " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3429,7 +3430,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 				NumAns,
 			        (unsigned) SvyQst->QstCod,NumAnswers);
 	    else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
-	       HTM_INPUT_CHECKBOX (StrAns,false,
+	       HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 				   "id=\"Ans%010u_%010u\" value=\"%u\"",
 			           (unsigned) SvyQst->QstCod,NumAns,NumAns,
 				   NumAns);

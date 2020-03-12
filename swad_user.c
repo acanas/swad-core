@@ -6492,7 +6492,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
      {
       Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
-      HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],false,
+      HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
 			  ParamName);
       free (ParamName);
@@ -6569,10 +6569,11 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
       /***** Check box *****/
       Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
-      HTM_INPUT_CHECKBOX (ParamName,false,
+      HTM_INPUT_CHECKBOX (ParamName,HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,
-			  CheckboxChecked ? " checked=\"checked\"" : "",
+			  CheckboxChecked ? " checked=\"checked\"" :
+				            "",
 			  Usr_NameSelUnsel[Role]);
       free (ParamName);
      }
@@ -6593,9 +6594,10 @@ static void Usr_PutCheckboxListWithPhotos (void)
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("WithPhotos",true,
+   HTM_INPUT_CHECKBOX ("WithPhotos",HTM_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s",
-		       Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" : "");
+		       Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" :
+			                             "");
    HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
   }

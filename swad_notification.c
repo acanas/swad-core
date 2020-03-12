@@ -1928,17 +1928,19 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");
-      HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],false,
+      HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
-			   (1 << NotifyEvent)) ? " checked=\"checked\"" : "");
+			   (1 << NotifyEvent)) ? " checked=\"checked\"" :
+				                 "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");
-      HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],false,
+      HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
-			   (1 << NotifyEvent)) ? " checked=\"checked\"" : "");
+			   (1 << NotifyEvent)) ? " checked=\"checked\"" :
+				                 "");
       HTM_TD_End ();
 
       HTM_TR_End ();

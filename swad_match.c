@@ -184,7 +184,9 @@ static void Mch_PutMatchControlButtons (const struct Match *Match);
 static void Mch_ShowFormColumns (const struct Match *Match);
 static void Mch_PutParamNumCols (unsigned NumCols);
 
-static void Mch_ShowMatchTitle (const struct Match *Match);
+static void Mch_ShowMatchTitleTch (const struct Match *Match);
+static void Mch_ShowMatchTitleStd (const struct Match *Match);
+
 static void Mch_PutCheckboxResult (const struct Match *Match);
 static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match);
@@ -221,9 +223,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match);
 
 static double Mch_ComputeScore (unsigned NumQsts);
 
-static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
-static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
 
 static long Mch_GetCurrentMchCod (void);
 
@@ -1305,7 +1305,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",true,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
 			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1656,7 +1656,7 @@ static void Mch_UpdateMatchStatusInDB (const struct Match *Match)
    /***** Update end time only if match is currently being played *****/
    if (Match->Status.Playing)	// Match is being played
      {
-      if (asprintf (&MchSubQuery,"mch_matches.EndTime=NOW(),") < 0)	// Background
+      if (asprintf (&MchSubQuery,"mch_matches.EndTime=NOW(),") < 0)
          Lay_NotEnoughMemoryExit ();
      }
    else				// Match is paused, not being played
@@ -2189,7 +2189,7 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Match *Match)
 static void Mch_ShowLeftColumnTch (struct Match *Match)
   {
    /***** Start left container *****/
-   HTM_DIV_Begin ("class=\"MCH_LEFT\"");
+   HTM_DIV_Begin ("class=\"MCH_LEFT_TCH\"");
 
    /***** Refreshable part *****/
    HTM_DIV_Begin ("id=\"match_left\" class=\"MCH_REFRESHABLE_TEACHER\"");
@@ -2244,7 +2244,7 @@ static void Mch_WriteElapsedTimeInMch (struct Match *Match)
   {
    struct Time Time;
 
-   HTM_DIV_Begin ("class=\"MCH_TOP\"");
+   HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
 
    /***** Get elapsed time in match *****/
    Mch_GetElapsedTimeInMatch (Match,&Time);
@@ -2463,10 +2463,10 @@ static void Mch_PutFormCountdown (struct Match *Match,long Seconds,const char *C
 static void Mch_ShowRightColumnTch (const struct Match *Match)
   {
    /***** Start right container *****/
-   HTM_DIV_Begin ("class=\"MCH_RIGHT\"");
+   HTM_DIV_Begin ("class=\"MCH_RIGHT_TCH\"");
 
    /***** Top row: match title *****/
-   Mch_ShowMatchTitle (Match);
+   Mch_ShowMatchTitleTch (Match);
 
    /***** Bottom row: current question and possible answers *****/
    if (Match->Status.Showing == Mch_END)	// Match over
@@ -2488,10 +2488,10 @@ static void Mch_ShowLeftColumnStd (const struct Match *Match,
    bool Answered = UsrAnswer->NumOpt >= 0;
 
    /***** Start left container *****/
-   HTM_DIV_Begin ("class=\"MCH_LEFT\"");
+   HTM_DIV_Begin ("class=\"MCH_LEFT_STD\"");
 
    /***** Top *****/
-   HTM_DIV_Begin ("class=\"MCH_TOP\"");
+   HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
    HTM_DIV_End ();
 
    /***** Write number of question *****/
@@ -2529,10 +2529,10 @@ static void Mch_ShowRightColumnStd (struct Match *Match,
    extern const char *Txt_Please_wait_;
 
    /***** Start right container *****/
-   HTM_DIV_Begin ("class=\"MCH_RIGHT\"");
+   HTM_DIV_Begin ("class=\"MCH_RIGHT_STD\"");
 
    /***** Top row *****/
-   Mch_ShowMatchTitle (Match);
+   Mch_ShowMatchTitleStd (Match);
 
    /***** Bottom row *****/
    if (Match->Status.Playing)			// Match is being played
@@ -2690,8 +2690,8 @@ static void Mch_ShowFormColumns (const struct Match *Match)
      {
       /* Begin container for this option */
       HTM_DIV_Begin ("class=\"%s\"",
-		     (Match->Status.NumCols == NumCols) ? "PREF_ON" :
-							  "PREF_OFF");
+		     (Match->Status.NumCols == NumCols) ? "MCH_NUM_COL_ON" :
+							  "MCH_NUM_COL_OFF");
 
       /* Begin form */
       Frm_StartForm (ActChgNumColMch);
@@ -2837,10 +2837,18 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match)
 /***************************** Show match title ******************************/
 /*****************************************************************************/
 
-static void Mch_ShowMatchTitle (const struct Match *Match)
+static void Mch_ShowMatchTitleTch (const struct Match *Match)
   {
    /***** Match title *****/
-   HTM_DIV_Begin ("class=\"MCH_TOP\"");
+   HTM_DIV_Begin ("class=\"MCH_TOP LT\"");
+   HTM_Txt (Match->Title);
+   HTM_DIV_End ();
+  }
+
+static void Mch_ShowMatchTitleStd (const struct Match *Match)
+  {
+   /***** Match title *****/
+   HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
    HTM_Txt (Match->Title);
    HTM_DIV_End ();
   }
@@ -3327,7 +3335,7 @@ static void Mch_PutBigButtonClose (void)
 static void Mch_ShowWaitImage (const char *Txt)
   {
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
-   Ico_PutIcon ("wait.gif",Txt,"MCH_WAIT_IMG");
+   Ico_PutIcon ("Spin-1s-200px.gif",Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }
 
@@ -3807,22 +3815,6 @@ static double Mch_ComputeScore (unsigned NumQsts)
   }
 
 /*****************************************************************************/
-/*** Get number of users who selected this answer and draw proportional bar **/
-/*****************************************************************************/
-
-void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
-					       unsigned NumRespondersQst,bool Correct)
-  {
-   unsigned NumRespondersAns;
-
-   /***** Get number of users who selected this answer *****/
-   NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd);
-
-   /***** Show stats of this answer *****/
-   Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,Correct);
-  }
-
-/*****************************************************************************/
 /********** Get number of users who answered a question in a match ***********/
 /*****************************************************************************/
 
@@ -3841,7 +3833,7 @@ unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
 /*** Get number of users who have chosen a given answer of a game question ***/
 /*****************************************************************************/
 
-static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
+unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
   {
    /***** Get number of users who have chosen
           an answer of a question from database *****/
@@ -3871,10 +3863,9 @@ static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod)
 /***************** Draw a bar with the percentage of answers *****************/
 /*****************************************************************************/
 
-// #define Mch_MAX_BAR_WIDTH 400
 #define Mch_MAX_BAR_WIDTH 100
 
-static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct)
+void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned i;
@@ -3905,14 +3896,13 @@ static void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumResponders
    HTM_TABLE_End ();
 
    /***** Write the number of users *****/
-   if (NumRespondersQst)
+   if (NumRespondersAns && NumRespondersQst)
       HTM_TxtF ("%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-                NumRespondersAns,
-                (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
-                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
+		NumRespondersAns,
+		(unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
+		Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
    else
-      HTM_TxtF ("0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-                Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
+      HTM_NBSP ();
 
    /***** End container *****/
    HTM_DIV_End ();

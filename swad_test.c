@@ -398,7 +398,7 @@ void Tst_ShowNewTest (void)
 	    /***** Test result will be saved? *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_INPUT_CHECKBOX ("AllowTchs",false,	// Don't submit on change
+	    HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"Y\"%s",
 				Gbl.Test.AllowTeachers ? " checked=\"checked\"" :
 				                         "");
@@ -1665,9 +1665,10 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllTags",false,
+   HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
-		       Gbl.Test.Tags.All ? " checked=\"checked\"" : "");
+		       Gbl.Test.Tags.All ? " checked=\"checked\"" :
+			                   "");
    HTM_TxtF ("&nbsp;%s",Txt_All_tags);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1710,10 +1711,11 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
       HTM_TD_Begin ("class=\"LM\"");
       HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("ChkTag",false,
+      HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 			  row[1],
-			  Checked ? " checked=\"checked\"" : "");
+			  Checked ? " checked=\"checked\"" :
+				    "");
       HTM_TxtF ("&nbsp;%s",row[1]);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2256,9 +2258,10 @@ static void Tst_ShowFormAnswerTypes (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllAnsTypes",false,
+   HTM_INPUT_CHECKBOX ("AllAnsTypes",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
-		       Gbl.Test.AllAnsTypes ? " checked=\"checked\"" : "");
+		       Gbl.Test.AllAnsTypes ? " checked=\"checked\"" :
+			                      "");
    HTM_TxtF ("&nbsp;%s",Txt_All_types_of_answers);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2285,10 +2288,11 @@ static void Tst_ShowFormAnswerTypes (void)
         }
       HTM_TD_Begin ("class=\"LM\"");
       HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("AnswerType",false,
+      HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
 			  (unsigned) AnsType,
-			  Checked ? " checked=\"checked\"" : "");
+			  Checked ? " checked=\"checked\"" :
+				    "");
       HTM_TxtF ("&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2873,9 +2877,10 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
-         HTM_INPUT_CHECKBOX ("Shuffle",true,
+         HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 		             "value=\"Y\"%s",
-		             row[3][0] == 'Y' ? " checked=\"checked\"" : "");
+		             row[3][0] == 'Y' ? " checked=\"checked\"" :
+		        	                "");
          Frm_EndForm ();
         }
       HTM_TD_End ();
@@ -3038,7 +3043,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Write checkbox to select the question */
-      HTM_INPUT_CHECKBOX ("QstCods",false,
+      HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%ld\"",
 			  Gbl.Test.QstCod);
 
@@ -3077,9 +3082,10 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
       /* Write if shuffle is enabled (row[3]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("Shuffle",false,
+      HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s  disabled=\"disabled\"",
-			  row[3][0] == 'Y' ? " checked=\"checked\"" : "");
+			  row[3][0] == 'Y' ? " checked=\"checked\"" :
+				             "");
       HTM_TD_End ();
 
       /* Write stem (row[4]) */
@@ -3671,7 +3677,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 			  Index,
                           NumQst,Gbl.Test.Answer.NumOptions);
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
-	 HTM_INPUT_CHECKBOX (StrAns,false,
+	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Ans%06u_%u\" value=\"%u\"",
 			     NumQst,NumOpt,
 			     Index);
@@ -4059,11 +4065,12 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    bool RowIsOpen = false;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAnswerersQst;
+   unsigned NumRespondersQst;
+   unsigned NumRespondersAns;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
-   NumAnswerersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
+   NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
@@ -4109,7 +4116,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    Mch_GetIndexes (MchCod,QstInd,Indexes);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (10);
+   HTM_TABLE_BeginWidePadding (0);
 
    /***** Show options distributed in columns *****/
    for (NumOpt = 0;
@@ -4141,11 +4148,19 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
       /* Show result (number of users who answered? */
       if (ShowResult)
-	 /* Get number of users who selected this answer
-	    and draw proportional bar */
-	 Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (MchCod,QstInd,Indexes[NumOpt],
-						   NumAnswerersQst,
-						   Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct);
+	{
+	 /* Get number of users who selected this answer */
+	 NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (MchCod,QstInd,Indexes[NumOpt]);
+
+	 /* Draw proportional bar for this answer */
+	 Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
+	                     Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct);
+	}
+      else
+         /* Draw empty bar for this answer
+            in order to show the same layout that the one shown with results */
+         Mch_DrawBarNumUsrs (0,0,
+                             false);	// Not used when length of bar is 0
 
       HTM_TD_End ();
 
@@ -5246,11 +5261,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("Shuffle",false,
+   HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s%s",
 		       Gbl.Test.Shuffle ? " checked=\"checked\"" : "",
    		       Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
-                       Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" : "");
+                       Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" :
+                	                                                "");
    HTM_Txt (Txt_Shuffle);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -5294,11 +5310,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		       Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ? "" : " disabled=\"disabled\"");
 
       /* Checkbox for multiple choice answers */
-      HTM_INPUT_CHECKBOX ("AnsMulti",false,
+      HTM_INPUT_CHECKBOX ("AnsMulti",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%u\"%s%s",
 			  NumOpt,
 			  Gbl.Test.Answer.Options[NumOpt].Correct ? " checked=\"checked\"" : "",
-			  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE ? "" : " disabled=\"disabled\"");
+			  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE ? "" :
+				                                           " disabled=\"disabled\"");
 
       HTM_TD_End ();
 

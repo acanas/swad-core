@@ -541,7 +541,7 @@ void Rol_ChangeMyRole (void)
 /*****************************************************************************/
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool Disabled,bool SendOnChange)
+                             bool Disabled,HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
@@ -552,11 +552,13 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_CHECKBOX ("Role",SendOnChange,
+	 HTM_INPUT_CHECKBOX ("Role",SubmitOnChange,
 			     "id=\"Role\" value=\"%u\"%s%s",
 			     (unsigned) Role,
-			     (RolesSelected & (1 << Role)) ? " checked=\"checked\"" : "",
-		             Disabled ? " disabled=\"disabled\"" : "");
+			     (RolesSelected & (1 << Role)) ? " checked=\"checked\"" :
+				                             "",
+		             Disabled ? " disabled=\"disabled\"" :
+		        	        "");
 	 HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 HTM_BR ();
