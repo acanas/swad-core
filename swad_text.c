@@ -1658,7 +1658,7 @@ const char *Txt_Another_classroom =
 #if   L==1	// ca
 	"Una altra aula";
 #elif L==2	// de
-	"Eine weitere Klassenzimmer";
+	"Ein weiteres Klassenzimmer";
 #elif L==3	// en
 	"Another classroom";
 #elif L==4	// es
@@ -1679,7 +1679,7 @@ const char *Txt_Another_country =
 #if   L==1	// ca
 	"Un altre pa&iacute;s";
 #elif L==2	// de
-	"Ein weiterer Land";
+	"Ein weiteres Land";
 #elif L==3	// en
 	"Another country";
 #elif L==4	// es
@@ -2251,7 +2251,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
-	"Start"
+	"Anfang"
 #elif L==3	// en
 	"Start"
 #elif L==4	// es
@@ -2942,7 +2942,7 @@ const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is ver
 #if   L==1	// ca
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Aktenmappe <strong>%s</strong> wurde entfernt.";		// Need Übersetzung
+	"Aktenmappe <strong>%s</strong> wurde entfernt.";		
 #elif L==3	// en
 	"Briefcase of <strong>%s</strong> has been removed.";
 #elif L==4	// es
@@ -3005,7 +3005,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 #if   L==1	// ca
 	"Calcular fotografia mitjana de";
 #elif L==2	// de
-	"Durchschnitt der Fotoo berechnen";			// Need Übersetzung
+	"Durchschnitt der Foto berechnen";			
 #elif L==3	// en
 	"Calculate average photo of";
 #elif L==4	// es
@@ -3159,8 +3159,8 @@ const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a
 	"No s'ha creat l'enlla&ccedil; <strong>%s</strong>"
 	" perque ja existeix una carpeta o un enlla&ccedil; amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the link <strong>%s</strong>"
-	" because there is already a folder or a link with that name.";	// Need Übersetzung
+	"Der link <strong>%s</strong> kann nicht erstellt werden,"
+	" weil bereits ein Ordner oder ein Link diesen Namens besteht.";	
 #elif L==3	// en
 	"Cannot create the link <strong>%s</strong>"
 	" because there is already a folder or a link with that name.";
@@ -3806,7 +3806,7 @@ const char *Txt_CHAT_Room_code =
 #if   L==1	// ca
 	"Codi de sala";
 #elif L==2	// de
-	"Raum-code";
+	"Raumcode";
 #elif L==3	// en
 	"Room code";
 #elif L==4	// es
@@ -54776,7 +54776,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"N.A."
 #elif L==2	// de
-	"N.A."
+	"k.A."
 #elif L==3	// en
 	"N.A."
 #elif L==4	// es
@@ -54796,7 +54796,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"1&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"1st"		// Need Übersetzung
+	"1."		
 #elif L==3	// en
 	"1st"
 #elif L==4	// es
@@ -54816,7 +54816,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"2&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"2nd"		// Need Übersetzung
+	"2."		
 #elif L==3	// en
 	"2nd"
 #elif L==4	// es
@@ -54836,7 +54836,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"3&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"3rd"
+	"3."
 #elif L==3	// en
 	"3rd"
 #elif L==4	// es
@@ -54856,7 +54856,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"4&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"4th"		// Need Übersetzung
+	"4."		
 #elif L==3	// en
 	"4th"
 #elif L==4	// es
@@ -54876,7 +54876,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"5&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"5th"		// Need Übersetzung
+	"5."
 #elif L==3	// en
 	"5th"
 #elif L==4	// es
@@ -54896,7 +54896,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"6&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"6th"		// Need Übersetzung
+	"6."		
 #elif L==3	// en
 	"6th"
 #elif L==4	// es
@@ -54916,7 +54916,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"7&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"7th"		// Need Übersetzung
+	"7."	
 #elif L==3	// en
 	"7th"
 #elif L==4	// es
@@ -54936,7 +54936,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"8&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"8th"		// Need Übersetzung
+	"8."
 #elif L==3	// en
 	"8th"
 #elif L==4	// es
@@ -54956,7 +54956,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"9&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"9th"		// Need Übersetzung
+	"9."		
 #elif L==3	// en
 	"9th"
 #elif L==4	// es
@@ -54976,7 +54976,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"10&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"10th"		// Need Übersetzung
+	"10."		
 #elif L==3	// en
 	"10th"
 #elif L==4	// es
@@ -54996,7 +54996,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"11&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"11th"		// Need Übersetzung
+	"11."		
 #elif L==3	// en
 	"11th"
 #elif L==4	// es
@@ -55016,7 +55016,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"12&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"12th"		// Need Übersetzung
+	"12."		
 #elif L==3	// en
 	"12th"
 #elif L==4	// es
@@ -55302,7 +55302,7 @@ const char *Txt_You_can_not_create_folders_files_or_links_here =
 #if   L==1	// ca
 	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create folders, files or links here.";		// Need Übersetzung
+	"Sie können hier keine Ordner, Dokumente oder Links erstellen.";		
 #elif L==3	// en
 	"You can not create folders, files or links here.";
 #elif L==4	// es
@@ -55323,7 +55323,7 @@ const char *Txt_You_can_not_create_folders_here =
 #if   L==1	// ca
 	"No puede crear carpetas aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create folders here.";	// Need Übersetzung
+	"Sie können hier keine Ordner erstellen.";	
 #elif L==3	// en
 	"You can not create folders here.";
 #elif L==4	// es
@@ -55344,7 +55344,7 @@ const char *Txt_You_can_not_create_links_here =
 #if   L==1	// ca
 	"No puede crear enlaces aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create links here.";	// Need Übersetzung
+	"Sie können hier keine  Links erstellen.";	
 #elif L==3	// en
 	"You can not create links here.";
 #elif L==4	// es
@@ -55365,7 +55365,7 @@ const char *Txt_You_can_not_delete_your_current_nickname =
 #if   L==1	// ca
 	"No puede eliminar su apodo actual.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not delete your current nickname.";	// Need Übersetzung
+	"Sie können Ihren aktuellen Benutzernamen nicht löschen.";	
 #elif L==3	// en
 	"You can not delete your current nickname.";
 #elif L==4	// es
@@ -55386,7 +55386,7 @@ const char *Txt_You_can_not_delete_this_ID =
 #if   L==1	// ca
 	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Necessita traduccio
 #elif L==2	// de
-	"You can not delete this ID.";				// Need Übersetzung
+	"Sie können diese ID nicht löschen.";				
 #elif L==3	// en
 	"You can not delete this ID.";
 #elif L==4	// es
@@ -55437,7 +55437,7 @@ const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
 	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not leave empty intermediate answers.";	// Need Übersetzung
+	"Sie können keine leeren Zwischenantworten hinterlassen.";	
 #elif L==3	// en
 	"You can not leave empty intermediate answers.";
 #elif L==4	// es
@@ -55479,7 +55479,7 @@ const char *Txt_You_can_not_leave_the_image_empty =
 #if   L==1	// ca
 	"No puede dejar la imagen vac&iacute;a.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not leave the image empty.";		// Need Übersetzung
+	"Das Bild darf nicht leer bleiben.";	
 #elif L==3	// en
 	"You can not leave the image empty.";
 #elif L==4	// es
@@ -55500,7 +55500,7 @@ const char *Txt_You_can_not_paste_file_or_folder_here =
 #if   L==1	// ca
 	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not paste file or folder here.";			// Need Übersetzung
+	"Hier können keine Dokumente oder Ordner eingefügt werden.";			
 #elif L==3	// en
 	"You can not paste file or folder here.";
 #elif L==4	// es
@@ -55521,7 +55521,7 @@ const char *Txt_You_can_not_remove_this_file_or_link =
 #if   L==1	// ca
 	"No puede eliminar este archivo o enlace.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not remove this file or link.";		// Need Übersetzung
+	"Dieses Dokument oder dieser Link können nicht entfernt werden.";		
 #elif L==3	// en
 	"You can not remove this file or link.";
 #elif L==4	// es
@@ -55542,7 +55542,7 @@ const char *Txt_You_can_not_remove_this_folder =
 #if   L==1	// ca
 	"No puede eliminar esta carpeta.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not remove this folder.";		// Need Übersetzung
+	"Dieser Ordner kann nicht entfernt werden.";		
 #elif L==3	// en
 	"You can not remove this folder.";
 #elif L==4	// es
@@ -55563,7 +55563,7 @@ const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #if   L==1	// ca
 	"No puede eliminar un pa&iacute;s con instituciones o usuarios.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not remove a country with institutions or users.";		// Need Übersetzung
+	"Ein Land, in dem sich eine Institution oder ein Benutzer befinden, kann nicht gelöscht werden.";		
 #elif L==3	// en
 	"You can not remove a country with institutions or users.";
 #elif L==4	// es
@@ -55584,7 +55584,7 @@ const char *Txt_You_can_not_rename_this_folder =
 #if   L==1	// ca
 	"No puede cambiar el nombre de esta carpeta.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not rename this folder.";		// Need Übersetzung
+	"Dieser Ordner kann nicht umbenannt werden.";		
 #elif L==3	// en
 	"You can not rename this folder.";
 #elif L==4	// es
@@ -55606,8 +55606,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"No puede enviar un mensaje a tantísimos destinatarios."
 	" Es mejor usar los foros.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Need Übersetzung
+	"Sie dürfen eine Nachricht nicht an so viele Leute gleichzeitig schicken."
+	" Benutzen Sie besser die Foren.";	
 #elif L==3	// en
 	"You can not send a message to so many recipients."
 	" Better use the forums.";
@@ -55657,8 +55657,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Necessita traduccio
 #elif L==2	// de
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Need Übersetzung
+	"Sie können nur %u weitere Aktionen durchführen,"
+	" wenn Sie Ihre Foto nicht einsenden";			
 #elif L==3	// en
 	"You can only perform %u further actions"
 	" if you don't send your photo.";
@@ -55725,7 +55725,7 @@ const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning
 #if   L==1	// ca
 	"Puede apuntarse voluntariamente a un grupo de tipo %s.";	// Necessita traduccio
 #elif L==2	// de
-	"You can register voluntarily in one group of type %s.";	// Need Übersetzung
+	"Sie können sich freiwillig in eine Gruppe des Typs %s einschreiben.";	
 #elif L==3	// en
 	"You can register voluntarily in one group of type %s.";
 #elif L==4	// es
@@ -55747,8 +55747,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Puede apuntarse voluntariamente"
 	" a uno o a varios grupos de tipo %s.";		// Necessita traduccio
 #elif L==2	// de
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Need Übersetzung
+	"Sie können sich freiwillig"
+	" in eine oder mehrere Gruppen des Typs %s einschreiben.";	
 #elif L==3	// en
 	"You can register voluntarily"
 	" in one or more groups of type %s.";
