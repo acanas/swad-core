@@ -14,6 +14,7 @@
     German translation:
 	Antonio Cañas Vargas
 	Rafael Barranco-Droege
+        Etienne Ruedin
     English translation (finished):
 	Antonio Cañas Vargas
     Spanish translation (finished):
@@ -188,9 +189,9 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 	" i amb el fons prou clar.<br />"
 	"Premeu sobre ell per confirmar la actualizaci&oacute; de la fotografia.";
 #elif L==2	// de
-	"Ein Gesicht (gr&uuml;n markiert) wurde vor Position erfasst"
+	"Ein Gesicht (gr&uuml;n markiert) wurde  erkannt"
 	" und der Hintergrund ist genug hell.<br />"
-	"Klicken Sie darauf, um das Update des Bildes zu best&auml;tigen.";
+	"Klicken Sie darauf, um das neue Bild zu best&auml;tigen.";
 #elif L==3	// en
 	"A face (marked in green) has been detected in front position"
 	" and the background is light enough.<br />"
@@ -226,7 +227,7 @@ const char *Txt_A_face_marked_in_red_has_been_detected_ =
 	"S'ha detectat un rostre (senyalat en vermell) en posici&oacute; frontal,"
 	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2	// de
-	"Ein Gesicht (rot markiert) wurde vor Position erkannt,"
+	"Ein Gesicht (rot markiert) wurde  erkannt,"
 	" aber der Hintergrund ist zu dunkel.";
 #elif L==3	// en
 	"A face (marked in red) has been detected in front position,"
@@ -257,9 +258,9 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 	" a la direcci&oacute;n de correo <strong>%s</strong>"
 	" para confirmar dicha direcci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"A message has been sent"
-	" to email address <strong>%s</strong>"
-	" to confirm that address.";			// Need Übersetzung
+	"Eine Nachricht wurde an die"
+	"e-Mail-Adresse <strong>%s</strong>"
+	" gesandt, um die Adresse zu überprüfen.";
 #elif L==3	// en
 	"A message has been sent"
 	" to email address <strong>%s</strong>"
@@ -394,7 +395,7 @@ const char *Txt_A_user_can_not_have_more_than_X_IDs =
 #if   L==1	// ca
 	"Un usuari no pot tenir m&eacute;s de %u IDs (DNI/c&egrave;dulas)";
 #elif L==2	// de
-	"Ein Benutzer kann nicht mehr als %u Ausweis-Nr.";
+	"Ein Benutzer kann nicht mehr als %u Ausweis-Nr. haben.";
 #elif L==3	// en
 	"A user can not have more than %u IDs.";
 #elif L==4	// es
@@ -480,7 +481,7 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	" per veure contingut multim&iacute;dia de outros sites";
 #elif L==2	// de
 	"Akzeptieren Sie Cookies von Drittanbietern,"
-	" um Multimedia-Inhalte von anderen Websites anzuzeigen";
+	" um Multimedia-Inhalte von anderen Websites anzuzeigen?";
 #elif L==3	// en
 	"Accept third-party cookies"
 	" to view multimedia content from other websites";
@@ -508,7 +509,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_cent
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per administradors del centre";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Lehrinstitut";
+	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren des Lehrinstituts";
 #elif L==3	// en
 	"accessible for reading and writing by administrators of the centre";
 #elif L==4	// es
@@ -531,7 +532,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degr
 	" per administradors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich"
-	" f&uuml;r Administratoren der Studiengang";
+	" f&uuml;r Administratoren des Studiengangs";
 #elif L==3	// en
 	"accessible for reading and writing"
 	" by administrators of the degree";
@@ -580,7 +581,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per membres del projecte";
 #elif L==2	// de
-	"zug&auml;nglich zum Lesen und Schreiben von Projektmitgliedern";
+	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Projektmitglieder";
 #elif L==3	// en
 	"accessible for reading and writing by project members";
 #elif L==4	// es
@@ -601,7 +602,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluat
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per tutors i avaluadors del projecte";
 #elif L==2	// de
-	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Tutoren und Auswerter der Projekt";
+	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Tutoren und Auswerter des Projekts";
 #elif L==3	// en
 	"accessible for reading and writing by project tutors and evaluators";
 #elif L==4	// es
@@ -622,7 +623,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per estudiants i professors del centre";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Lehrinstituts";
 #elif L==3	// en
 	"accessible for reading and writing by students and teachers of the centre";
 #elif L==4	// es
@@ -643,7 +644,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by students and teachers of the course";
 #elif L==4	// es
@@ -666,7 +667,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 	" per estudiants i professors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich"
-	" f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+	" f&uuml;r Studenten und Lehrkr&auml;fte des Studiengangs";
 #elif L==3	// en
 	"accessible for reading and writing"
 	" by students and teachers of the degree";
@@ -715,7 +716,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_
 #if   L==1	// ca
 	"accesible per a lectura i escriptura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by students of the group and teachers of the course";
 #elif L==4	// es
@@ -736,7 +737,7 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by teachers of the course";
 #elif L==4	// es
@@ -757,7 +758,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 #if   L==1	// ca
 	"accessible per a lectura per vost&egrave; i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by you and the teachers of the course";
 #elif L==4	// es
@@ -778,7 +779,7 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #if   L==1	// ca
 	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by you and the teachers of the course";
 #elif L==4	// es
@@ -799,7 +800,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 #if   L==1	// ca
 	"accessible nom&eacute;s per a lectura per estudiants i professors del centre";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Lehrinstituts";
 #elif L==3	// en
 	"accessible only for reading by students and teachers of the centre";
 #elif L==4	// es
@@ -820,7 +821,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #if   L==1	// ca
 	"accessible nom&eacute;s per a lectura per estudiants i professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by students and teachers of the course";
 #elif L==4	// es
@@ -843,7 +844,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 	" per estudiants i professors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich"
-	" f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+	" f&uuml;r Studenten und Lehrkr&auml;fte des Studiengangs";
 #elif L==3	// en
 	"accessible only for reading"
 	" by students and teachers of the degree";
@@ -892,7 +893,7 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #if   L==1	// ca
 	"accesible nom&eacute;s per a lectura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by students of the group and teachers of the course";
 #elif L==4	// es
@@ -976,7 +977,7 @@ const char *Txt_Administer_multiple_non_editing_teachers =
 #if   L==1	// ca
 	"Administrar diversos professors no editors";
 #elif L==2	// de
-	"Verwalten Sie mehrere nicht bearbeiteter Lehrkr&auml;fte";
+	"Verwalten Sie mehrere nicht bearbeitende Lehrkr&auml;fte";
 #elif L==3	// en
 	"Administer multiple non-editing teachers";
 #elif L==4	// es
@@ -1018,7 +1019,7 @@ const char *Txt_Administer_one_user =
 #if   L==1	// ca
 	"Administrar un usuari";
 #elif L==2	// de
-	"Verwalten eines Benutzer";
+	"Verwalten eines Benutzers";
 #elif L==3	// en
 	"Administer one user";
 #elif L==4	// es
@@ -1039,7 +1040,7 @@ const char *Txt_Administer_user =
 #if   L==1	// ca
 	"Administrar usuari";
 #elif L==2	// de
-	"Verwalten Benutzer";
+	"Benutzer verwalten";
 #elif L==3	// en
 	"Administer user";
 #elif L==4	// es
@@ -1173,7 +1174,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de
-	"Sichtbar Ereignisse"
+	"Sichtbare Ereignisse"
 #elif L==3	// en
 	"Visible events"
 #elif L==4	// es
@@ -1216,7 +1217,7 @@ const char *Txt_all_degrees =
 #if   L==1	// ca
 	"Totes les titulacions";
 #elif L==2	// de
-	"all degrees";			// Need Übersetzung
+	"alle Studieng&auml;nge";	
 #elif L==3	// en
 	"all degrees";
 #elif L==4	// es
@@ -1300,7 +1301,7 @@ const char *Txt_All_tags =		// Tags used in test
 #if   L==1	// ca
 	"Tots els descriptors";
 #elif L==2	// de
-	"Alle Tags";
+	"Alle Schlagworte";
 #elif L==3	// en
 	"All tags";
 #elif L==4	// es
@@ -1342,7 +1343,7 @@ const char *Txt_Allow_teachers_to_consult_this_test =
 #if   L==1	// ca
 	"Permetre als professors consultar aquest test";
 #elif L==2	// de
-	"Erm&ouml;glichen es den Lehrern, diese Test zu konsultieren";
+	"Erm&ouml;glicht es den Lehrern, diesen Test zu konsultieren";
 #elif L==3	// en
 	"Allow teachers to consult this test";
 #elif L==4	// es
@@ -1384,7 +1385,7 @@ const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very
 #if   L==1	// ca
 	"Ja existia un joc amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Spiel mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits ein Spiel mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed a game with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1405,7 +1406,7 @@ const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is 
 #if   L==1	// ca
 	"Ja existia un projecte amb la carpeta <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Projekt im Verzeichnis <strong>%s</strong>.";
+	"Es gibt bereits ein Projekt im Verzeichnis <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already a project with folder <strong>%s</strong>.";
 #elif L==4	// es
@@ -1426,7 +1427,7 @@ const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is ve
 #if   L==1	// ca
 	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Umfrage mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits eine Umfrage mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed a survey with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1447,7 +1448,7 @@ const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it
 #if   L==1	// ca
 	"Ja existia una activitat amb la carpeta <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Aufgabe im Verzeichnis <strong>%s</strong>.";
+	"Es gibt bereits eine Aufgabe im Verzeichnis <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already an assignment with folder <strong>%s</strong>.";
 #elif L==4	// es
@@ -1468,7 +1469,7 @@ const char *Txt_Already_existed_an_assignment_with_the_title_X =	// Warning: it 
 #if   L==1	// ca
 	"Ja existia una activitat amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Aufgabe mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits eine Aufgabe mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed an assignment with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1489,7 +1490,7 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 #if   L==1	// ca
 	"Ja existia un esdeveniment amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Ereignis mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits ein Ereignis mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed an event with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1720,7 +1721,7 @@ const char *Txt_Another_ID =
 #if   L==1	// ca
 	"Un altre ID";
 #elif L==2	// de
-	"Ein anderer Ausweis-Nr.";
+	"Eine andere Ausweis-Nr.";
 #elif L==3	// en
 	"Another ID";
 #elif L==4	// es
@@ -1804,7 +1805,7 @@ const char *Txt_Add_questions =
 #if   L==1	// ca
 	"Afegir preguntes";
 #elif L==2	// de
-	"F&uuml;gen Fragen";
+	"Fragen hinzuf&uuml;gen";
 #elif L==3	// en
 	"Add questions";
 #elif L==4	// es
@@ -1825,7 +1826,7 @@ const char *Txt_Add_this_ID =
 #if   L==1	// ca
 	"Afegir aquest ID";
 #elif L==2	// de
-	"F&uuml;gen Sie diese Ausweis-Nr.";
+	"F&uuml;gen Sie diese Ausweis-Nr. hinzu";
 #elif L==3	// en
 	"Add this ID";
 #elif L==4	// es
@@ -1846,7 +1847,7 @@ const char *Txt_Add_USERS =	// Warning: it is very important to include %s in th
 #if   L==1	// ca
 	"Afegir %s";
 #elif L==2	// de
-	"F&uuml;gen %s";
+	"%s hinzuf&uuml;gen";
 #elif L==3	// en
 	"Add %s";
 #elif L==4	// es
@@ -1909,7 +1910,7 @@ const char *Txt_Answer_survey =
 #if   L==1	// ca
 	"Respondre enquesta";
 #elif L==2	// de
-	"Beantwortung Umfrage";
+	"Umfrage beantworten";
 #elif L==3	// en
 	"Answer survey";
 #elif L==4	// es
@@ -1951,7 +1952,7 @@ const char *Txt_Any_action =
 #if   L==1	// ca
 	"Qualsevol acci&oacute;";
 #elif L==2	// de
-	"Alle Handlung";
+	"Alle Handlungen";
 #elif L==3	// en
 	"Any action";
 #elif L==4	// es
@@ -1972,7 +1973,7 @@ const char *Txt_any_course =
 #if   L==1	// ca
 	"qualsevol assignatura";
 #elif L==2	// de
-	"alle Kursen";
+	"alle Kurse";
 #elif L==3	// en
 	"any course";
 #elif L==4	// es
@@ -1993,7 +1994,7 @@ const char *Txt_Any_department =
 #if   L==1	// ca
 	"Qualsevol departament";
 #elif L==2	// de
-	"Alle Abteilung";
+	"Alle Abteilungen";
 #elif L==3	// en
 	"Any department";
 #elif L==4	// es
@@ -2014,7 +2015,7 @@ const char *Txt_Any_type_of_degree =
 #if   L==1	// ca
 	"Qualsevol tipus de titulaci&oacute;";
 #elif L==2	// de
-	"Alle Abschlussart";
+	"Alle Abschlussarten";
 #elif L==3	// en
 	"grau";
 #elif L==4	// es
@@ -2056,7 +2057,7 @@ const char *Txt_Application_key =
 #if   L==1	// ca
 	"Clau de aplicaci&oacute;";
 #elif L==2	// de
-	"Application key";		// Need Übersetzung
+	"Anwendungsschlüssel";
 #elif L==3	// en
 	"Application key";
 #elif L==4	// es
@@ -2293,7 +2294,7 @@ const char *Txt_Assignments_area =
 #if   L==1	// ca
 	"Zona d'activitats";
 #elif L==2	// de
-	"Aufgaben-Bereich";
+	"Aufgabenbereich";
 #elif L==3	// en
 	"Assignments area";
 #elif L==4	// es
@@ -2314,7 +2315,7 @@ const char *Txt_assignments_area =
 #if   L==1	// ca
 	"zona d'activitats";	// Necessita traduccio
 #elif L==2	// de
-	"Aufgaben-Bereich";
+	"Aufgabenbereich";
 #elif L==3	// en
 	"assignments area";
 #elif L==4	// es
@@ -2419,7 +2420,7 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de jocs<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Spiele<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Spielen<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of games<br />per course";
 #elif L==4	// es
@@ -2440,7 +2441,7 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />d'items<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Programmelementen<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of items<br />per course";
 #elif L==4	// es
@@ -2461,7 +2462,7 @@ const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de projectes<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Projekte<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Projekten<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of projects<br />per course";
 #elif L==4	// es
@@ -2566,7 +2567,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_
 #if   L==1	// ca
 	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Need Übersetzung
+         "Durchschnittliche <br />Anzahl<br />Male, dass <br />eine Frage <br />beantwortet wurde";
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";
 #elif L==4	// es
@@ -2587,7 +2588,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_
 #if   L==1	// ca
 	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Need Übersetzung
+         "Durchschnittliche <br />Anzahl<br />Male, dass <br />eine Frage <br />pro Kurs<br/>beantwortet wurde";
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";
 #elif L==4	// es
@@ -2608,7 +2609,7 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #if   L==1	// ca
 	"Nombre mitj&agrave; de usuaris que pertanyen a cada assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl der Benutzer, die an einer Kurs teilnehmen";
+	"Durchschnittliche Anzahl der Benutzer, die an einem Kurs teilnehmen";
 #elif L==3	// en
 	"Average number of users belonging to a course";
 #elif L==4	// es
@@ -2674,7 +2675,7 @@ const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1 =
 #if   L==1	// ca
 	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(de 0 a 1)";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Need Übersetzung
+	"Durchschnitts-<br />punktzahl<br />pro Frage<br />(von 0 bis 1)";		
 #elif L==3	// en
 	"Average<br />score<br />per question<br />(from 0 to 1)";
 #elif L==4	// es
@@ -2716,7 +2717,7 @@ const char *Txt_Banned_users =
 #if   L==1	// ca
 	"Usuaris bloquejats";
 #elif L==2	// de
-	"Gebannt Benutzer";
+	"Gesperrte Benutzer";
 #elif L==3	// en
 	"Banned users";
 #elif L==4	// es
@@ -2779,7 +2780,7 @@ const char *Txt_Banners =
 #if   L==1	// ca
 	"Banners";
 #elif L==2	// de
-	"Werbebanners";
+	"Werbebanner";
 #elif L==3	// en
 	"Banners";
 #elif L==4	// es
@@ -2800,7 +2801,7 @@ const char *Txt_Basic_public_profile =
 #if   L==1	// ca
 	"Perfil p&uacute;blic b&agrave;sic";
 #elif L==2	// de
-	"Grundlegendes &ouml;ffentliches Profile";
+	"Grundlegendes &ouml;ffentliches Profil";
 #elif L==3	// en
 	"Basic public profile";
 #elif L==4	// es
@@ -2822,8 +2823,8 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	"Abans de crear un compte nou,"
 	" comprovi si ja li han inscrit";
 #elif L==2	// de
-	"Bevor ein neues Benutzerkonto erstellen,"
-	" wenn Sie bereits registriert worden sind";
+	"Bevor Sie ein neues Benutzerkonto erstellen,"
+	"prüfen Sie, ob Sie bereits registriert worden sind";
 #elif L==3	// en
 	"Before creating a new account,"
 	" check if you have been already registered";
@@ -2852,8 +2853,8 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear el seu sobrenom.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihr Benutzernamen erstellen.";
+	"Bevor Sie andere Optionen wählen können,"
+	" m&uuml;ssen Sie Ihren Benutzernamen erstellen.";
 #elif L==3	// en
 	"Before going to any other option"
 	" you must create your nickname.";
@@ -2882,7 +2883,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear la seva contrasenya.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
+	"Bevor Sie andere Optionen wählen können,"
 	" m&uuml;ssen Sie Ihr Passwort erstellen.";
 #elif L==3	// en
 	"Before going to any other option"
@@ -2912,7 +2913,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de omplir la seva adre&ccedil;a de correu.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
+	"Bevor Sie andere Optionen wählen können,"
 	" m&uuml;ssen Sie Ihr E-Mail-Adresse ausf&uuml;llen.";
 #elif L==3	// en
 	"Before going to any other option"
@@ -2941,7 +2942,7 @@ const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is ver
 #if   L==1	// ca
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Briefcase of <strong>%s</strong> has been removed.";		// Need Übersetzung
+	"Aktenmappe <strong>%s</strong> wurde entfernt.";		// Need Übersetzung
 #elif L==3	// en
 	"Briefcase of <strong>%s</strong> has been removed.";
 #elif L==4	// es
@@ -2962,7 +2963,7 @@ const char *Txt_Briefcases =
 #if   L==1	// ca
 	"Maletins";
 #elif L==2	// de
-	"Aktentasche";
+	"Aktenmappe";
 #elif L==3	// en
 	"Briefcases";
 #elif L==4	// es
@@ -3004,7 +3005,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 #if   L==1	// ca
 	"Calcular fotografia mitjana de";
 #elif L==2	// de
-	"Calculate average photo of";			// Need Übersetzung
+	"Durchschnitt der Fotoo berechnen";			// Need Übersetzung
 #elif L==3	// en
 	"Calculate average photo of";
 #elif L==4	// es
@@ -3068,7 +3069,7 @@ const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quo
 	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque s'excediria la quota de disc.";
 #elif L==2	// de
-	"Verzeichnis <strong>%s</strong> kann aus Platzgründen"
+	"Ordner <strong>%s</strong> kann aus Platzgründen"
 	" nicht erstellt werden.";
 #elif L==3	// en
 	"Cannot create the folder <strong>%s</strong>"
@@ -3098,8 +3099,8 @@ const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or
 	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque ja existeix una carpeta o un fitxer amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the folder <strong>%s</strong>"
-	" because there is already a folder or a file with that name.";	// Need Übersetzung
+	"Ordner <strong>%s</strong> kann nicht erstellt werden,"
+	"weil bereits ein Ordner mit gleichem Namen besteht.";	
 #elif L==3	// en
 	"Cannot create the folder <strong>%s</strong>"
 	" because there is already a folder or a file with that name.";
@@ -3400,7 +3401,7 @@ const char *Txt_Centres_ABBREVIATION =
 #if   L==1	// ca
 	"Cent.";
 #elif L==2	// de
-	"Lehrin.";
+	"Lehrinst.";
 #elif L==3	// en
 	"Cent.";
 #elif L==4	// es
@@ -3444,7 +3445,7 @@ const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
 #if   L==1	// ca
 	"Ordenar per centre"
 #elif L==2	// de
-	"Nach Lehrinstitut Sortieren"
+	"Nach Lehrinstitut sortieren"
 #elif L==3	// en
 	"Sort by centre"
 #elif L==4	// es
@@ -3531,7 +3532,7 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 #if   L==1	// ca
 	"Usuaris del centre"
 #elif L==2	// de
-	"Benutzer der Lehrinstitut"
+	"Benutzer des Lehrinstituts"
 #elif L==3	// en
 	"Users of the centre"
 #elif L==4	// es
