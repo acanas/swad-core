@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.146 (2020-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.147 (2020-03-14)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -523,7 +523,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
-// TODO: Instalar la última versión de MathJax de https://www.jsdelivr.com/package/npm/mathjax y comprobar que funciona bien con pandoc
+
+	Version 19.147:   Mar 14, 2020	Change MathJax to version 3.0.1. (282550 lines)
+					Copy the following JavaScript file to public directory:
+sudo cp js/mathjax-config.js /var/www/html/swad/
 
 	Version 19.146:   Mar 12, 2020	Background and changes in layout of matches. (282484 lines)
 					Copy the following background image to icon public directory:

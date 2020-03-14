@@ -1041,6 +1041,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 	 Lay_NotEnoughMemoryExit ();
       Str_Copy (StemRigorousHTML,Stem,
 		StemLength);
+
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			StemRigorousHTML,StemLength,false);
 

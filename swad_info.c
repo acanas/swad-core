@@ -1791,10 +1791,22 @@ static bool Inf_CheckAndShowRichTxt (void)
       fclose (FileMD);
 
       /***** Convert from Markdown to HTML *****/
+      /* MathJax 2.5.1
 #ifdef Cfg_MATHJAX_LOCAL
       // Use the local copy of MathJax
       snprintf (MathJaxURL,sizeof (MathJaxURL),
 	        "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
+	        Cfg_URL_SWAD_PUBLIC);
+#else
+      // Use the MathJax Content Delivery Network (CDN)
+      MathJaxURL[0] = '\0';
+#endif
+      */
+      /* MathJax 3.0.1 */
+#ifdef Cfg_MATHJAX_LOCAL
+      // Use the local copy of MathJax
+      snprintf (MathJaxURL,sizeof (MathJaxURL),
+	        "=%s/mathjax/tex-chtml.js",
 	        Cfg_URL_SWAD_PUBLIC);
 #else
       // Use the MathJax Content Delivery Network (CDN)
@@ -1806,7 +1818,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       snprintf (Command,sizeof (Command),
 	        "iconv -f WINDOWS-1252 -t UTF-8 %s"
 	        " | "
-	        "pandoc --ascii --mathjax%s -f markdown -t html5"
+	        "pandoc --ascii --mathjax%s -f markdown_github+tex_math_dollars -t html5"
 	        " | "
 	        "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
 	        PathFileMD,

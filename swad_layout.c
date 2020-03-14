@@ -646,17 +646,8 @@ static void Lay_WriteScripts (void)
 
 static void Lay_WriteScriptMathJax (void)
   {
-   // MathJax configuration
+   /* MathJax 2.5.1 (obsolete) */
    /*
-   HTM_SCRIPT_Begin (NULL,NULL);
-   fprintf (Gbl.F.Out," window.MathJax = {"
-	              "  tex2jax: {"
-	              "   inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
-	              "   processEscapes: true"
-	              "  }"
-	              " };");
-   HTM_SCRIPT_End ();
-   */
 #ifdef Cfg_MATHJAX_LOCAL
    // Use the local copy of MathJax
    HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",NULL);
@@ -665,6 +656,78 @@ static void Lay_WriteScriptMathJax (void)
    HTM_SCRIPT_Begin ("//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML",NULL);
 #endif
    HTM_SCRIPT_End ();
+   */
+
+   /* MathJax 3.0.1 (march 2020)
+   Source:
+   http://docs.mathjax.org/en/latest/web/configuration.html
+   */
+
+   /* Configuration Using an In-Line Script */
+   /*
+   HTM_Txt ("<script type=\"text/x-mathjax-config\">\n"
+	    "MathJax = {\n"
+	    "  tex: {\n"
+	    "   inlineMath: [['$','$'], ['\\\\(','\\\\)']]\n"
+	    "  }\n"
+	    "};\n"
+	    "</script>");
+   */
+
+   /* Using a Local File for Configuration
+
+   Using a Local File for Configuration
+
+   If you are using the same MathJax configuration over multiple pages,
+   you may find it convenient to store your configuration
+   in a separate JavaScript file that you load into the page.
+   For example, you could create a file called mathjax-config.js that contains
+
+   window.MathJax = {
+     tex: {
+       inlineMath: [['$', '$'], ['\\(', '\\)']],
+     },
+     svg: {
+       fontCache: 'global'
+     }
+   };
+
+   and then use
+
+   <script src="mathjax-config.js" defer></script>
+   <script type="text/javascript" id="MathJax-script" defer
+     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+   </script>
+
+   to first load your configuration file,
+   and then load the tex-svg component from the jsdelivr CDN.
+
+   Note that here we use the defer attribute on both scripts
+   so that they will execute in order,
+   but still not block the rest of the page
+   while the files are being downloaded to the browser.
+   If the async attribute were used,
+   there is no guarantee that the configuration would run first,
+   and so you could get instances
+   where MathJax doesn't get properly configured,
+   and they would seem to occur randomly.
+   */
+   HTM_TxtF ("<script src=\"%s/mathjax-config.js\" defer>\n"
+	     "</script>\n",
+	     Cfg_URL_SWAD_PUBLIC);
+
+#ifdef Cfg_MATHJAX_LOCAL
+   // Use the local copy of MathJax
+   HTM_TxtF ("<script type=\"text/javascript\" id=\"MathJax-script\" defer"
+	     " src=\"%s/mathjax/tex-chtml.js\">\n"
+	     "</script>\n",
+	     Cfg_URL_SWAD_PUBLIC);
+#else
+   // Use the MathJax Content Delivery Network (CDN)
+   HTM_TxtF ("<script type=\"text/javascript\" id=\"MathJax-script\" defer"
+             " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js\">\n"
+             "</script>\n");
+#endif
   }
 
 /*****************************************************************************/
