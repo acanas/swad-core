@@ -8639,12 +8639,12 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" sus fichas personalizadas para esta asignatura,"
 	" y su inscripci&oacute;n en grupos de esta asignatura.</strong>.";		// Necessita traduccio
 #elif L==2	// de
-	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
-	"Although students' data will not be removed in other courses,"
-	" they will no longer enroled in this course,"
-	" and also <strong>all the works submitted by them in this course,"
+	"Wollen Sie wirklich die %u Studenten des Kurses <strong>%s</strong> entfernen?<br />"
+	"Dabei gehen die Angaben des Studenten in anderen Kursen nicht verändert; "
+	" sie werden einfach aus diesem Kurs ausgetragen,"
+	" un auch <strong>alle Arbeiten, die sie in diesem Kurs abgegeben haben,"
 	" their record cards for this course,"
-	" and their enrolment in groups of this course will be removed.</strong>.";	// Need Übersetzung
+	" und die Mitgliedschaft in Gruppen dieses Kurses wird gelöscht.</strong>.";	// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
@@ -28634,7 +28634,7 @@ const char *Txt_Online_tutoring =
 #if   L==1	// ca
 	"Tutor&iacute;as virtuales";	// Necessita traduccio
 #elif L==2	// de
-	"Virtual Anleitungen";
+	"Virtueller Unterricht";
 #elif L==3	// en
 	"Online tutoring";
 #elif L==4	// es
@@ -30064,7 +30064,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_name =
 	"Si us plau, ompli la seva fitxa,"
 	" incloent el seu nom i cognom(s).";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
+	"Bitte geben beschriften Sie Ihre Karteikarte,"
 	" mit Ihrem Namen.";
 #elif L==3	// en
 	"Please fill in your record card,"
@@ -30094,8 +30094,8 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	"Si us plau, ompli la seva fitxa,"
 	" incloent el sexe.";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
-	" einschlie&szlig;lich Ihrer Sex.";
+	"Bitte geben f&uuml; Sie die Karteikarte aus,"
+	" einschlie&szlig;lich Ihrem Geschlecht.";
 #elif L==3	// en
 	"Please fill in your record card,"
 	" including your sex.";
@@ -32185,7 +32185,7 @@ const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is v
 #if   L==1	// ca
 	"Se ha eliminado la ficha de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Record card of <strong>%s</strong> has been removed.";	// Need Übersetzung
+	"Karteikarte von <strong>%s</strong> wurde entfernt.";
 #elif L==3	// en
 	"Record card of <strong>%s</strong> has been removed.";
 #elif L==4	// es
@@ -32206,7 +32206,7 @@ const char *Txt_record_cards_per_page =
 #if   L==1	// ca
 	"fichas por p&aacute;gina";		// Necessita traduccio
 #elif L==2	// de
-	"record cards per page";		// Need Übersetzung
+	"Kateikarten pro Seite";	
 #elif L==3	// en
 	"record cards per page";
 #elif L==4	// es
@@ -40260,7 +40260,7 @@ const char *Txt_Show_office_hours =
 #if   L==1	// ca
 	"Mostra horaris tutories";
 #elif L==2	// de
-	"Gesch&auml;ftszeiten anzeigen";
+	"Anwesenheitszeiten anzeigen";
 #elif L==3	// en
 	"Show office hours";
 #elif L==4	// es
@@ -42636,7 +42636,7 @@ const char *Txt_Student_record_card_in_this_course_has_been_updated =
 #if   L==1	// ca
 	"La ficha del estudiante en la asignatura se ha actualizado.";	// Necessita traduccio
 #elif L==2	// de
-	"Student record card in this course has been updated.";		// Need Übersetzung
+	"Studentenkarte dieses Kurses wurde aktualisiert.";	
 #elif L==3	// en
 	"Student record card in this course has been updated.";
 #elif L==4	// es
@@ -48876,13 +48876,13 @@ const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrol
 	" en la asignatura <strong>%s</strong>,"
 	" pero a&uacute;n no ha aceptado la inscripci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is enroled"
-	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrolment.";			// Übersetzung notwendig
+	"<strong>%s</strong> ist"
+	" im Kurs <strong>%s</strong>,"
+	" eingeschrieben, dies jedoch noch nicht best&auml;tigt.";
 #elif L==3	// en
 	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrolment.";
+	" but has not yet accepted the enrolment.";		
 #elif L==4	// es
 	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>,"
@@ -48914,8 +48914,8 @@ const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is enroled"
-	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
+	"<strong>%s</strong> ist"
+	" im Kurs <strong>%s</strong> eingeschrieben.";		
 #elif L==3	// en
 	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>.";
@@ -50812,7 +50812,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 #if   L==1	// ca
 	"Horari de tutories"
 #elif L==2	// de
-	"Gesch&auml;ftszeiten"
+	"Unterrichtszeiten"
 #elif L==3	// en
 	"Office hours"
 #elif L==4	// es
@@ -50899,7 +50899,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 #if   L==1	// ca
 	"Tutories"
 #elif L==2	// de
-	"Anleitungen"
+	"Unterricht"
 #elif L==3	// en
 	"Tutoring"
 #elif L==4	// es
@@ -53826,7 +53826,7 @@ const char *Txt_View_projects =
 #if   L==1	// ca
 	"Veure projectes";
 #elif L==2	// de
-	"Anzeigen Projekte";
+	"Projekte anzeigen";
 #elif L==3	// en
 	"View projects";
 #elif L==4	// es
@@ -53847,7 +53847,7 @@ const char *Txt_View_record_and_office_hours =
 #if   L==1	// ca
 	"Veure fitxa i horari de tutories";
 #elif L==2	// de
-	"Anzeigen profil und Gesch&auml;ftszeiten";
+	"Profil und Anwesenheitszeiten anzeigen";
 #elif L==3	// en
 	"View record and office hours";
 #elif L==4	// es
@@ -55928,7 +55928,7 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 #if   L==1	// ca
 	"Usted ha confirmado que ha leido esta informaci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"You have confirmed that you have read this information.";	// Need Übersetzung
+	"Sie haben bestätigt, dass Sie diese Informationen gelesen haben.";	
 #elif L==3	// en
 	"You have confirmed that you have read this information.";
 #elif L==4	// es
@@ -55950,8 +55950,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Need Übersetzung
+	"Sie haben Ihre Einschreibung"
+	" im Kurs <strong>%s</strong> bestätigt.";	
 #elif L==3	// en
 	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";
@@ -57591,7 +57591,7 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 #if   L==1	// ca
 	"Su ficha en la asignatura se ha actualizado:";		// Necessita traduccio
 #elif L==2	// de
-	"Your record card in this course has been updated:";	// Need Übersetzung
+	"Ihre Studentenkarte für diesen Kurs wurde aktualisiert:";
 #elif L==3	// en
 	"Your record card in this course has been updated:";
 #elif L==4	// es
