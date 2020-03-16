@@ -66,9 +66,12 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void TsI_PutParamsExportQsts (void);
+static void TsI_PutCreateXMLParam (void);
 
-static void TsI_GetAndWriteTagsXML (long QstCod);
-static void TsI_WriteAnswersOfAQstXML (long QstCod);
+static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
+
+static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
+static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
 static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
@@ -102,7 +105,21 @@ static void TsI_PutParamsExportQsts (void)
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
+   TsI_PutCreateXMLParam ();
+  }
+
+/*****************************************************************************/
+/************************ Parameter to create XML file ***********************/
+/*****************************************************************************/
+
+static void TsI_PutCreateXMLParam (void)
+  {
    Par_PutHiddenParamChar ("CreateXML",'Y');
+  }
+
+bool TsI_GetCreateXMLParamFromForm (void)
+  {
+   return Par_GetParToBool ("CreateXML");
   }
 
 /*****************************************************************************/
@@ -157,10 +174,10 @@ void TsI_ShowFormImportQstsFromXML (void)
 void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
    char PathPubFile[PATH_MAX + 1];
+   FILE *FileXML;
    unsigned long NumRow;
    MYSQL_ROW row;
    long QstCod;
@@ -175,77 +192,31 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir.L,
              Gbl.FileBrowser.TmpPubDir.R);
-   if ((Gbl.Test.XML.FileXML = fopen (PathPubFile,"wb")) == NULL)
+   if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open target file.");
 
    /***** Start XML file *****/
-   XML_WriteStartFile (Gbl.Test.XML.FileXML,"test",false);
-   fprintf (Gbl.Test.XML.FileXML,"%s",Txt_NEW_LINE);
+   XML_WriteStartFile (FileXML,"test",false);
+   fprintf (FileXML,"%s",Txt_NEW_LINE);
 
    /***** Write rows *****/
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)
      {
+      /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
-      */
-      /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /* Write the question type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.Test.XML.FileXML,"<question type=\"%s\">%s",
-               Tst_StrAnswerTypesXML[Gbl.Test.AnswerType],Txt_NEW_LINE);
-
-      /* Write the question tags */
-      fprintf (Gbl.Test.XML.FileXML,"<tags>%s",Txt_NEW_LINE);
-      TsI_GetAndWriteTagsXML (QstCod);
-      fprintf (Gbl.Test.XML.FileXML,"</tags>%s",Txt_NEW_LINE);
-
-      /* Write the stem (row[4]), that is in HTML format */
-      fprintf (Gbl.Test.XML.FileXML,"<stem>%s</stem>%s",
-               row[4],Txt_NEW_LINE);
-
-      /* Write the feedback (row[5]), that is in HTML format */
-      if (row[5])
-	 if (row[5][0])
-	    fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
-		     row[5],Txt_NEW_LINE);
-
-      /* Write the answers of this question.
-         Shuffle can be enabled or disabled (row[3]) */
-      fprintf (Gbl.Test.XML.FileXML,"<answer");
-      if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-          Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-         fprintf (Gbl.Test.XML.FileXML," shuffle=\"%s\"",
-                  (row[3][0] == 'Y') ? "yes" :
-                	               "no");
-      fprintf (Gbl.Test.XML.FileXML,">");
-      TsI_WriteAnswersOfAQstXML (QstCod);
-      fprintf (Gbl.Test.XML.FileXML,"</answer>%s",Txt_NEW_LINE);
-
-      /* End question */
-      fprintf (Gbl.Test.XML.FileXML,"</question>%s%s",
-               Txt_NEW_LINE,Txt_NEW_LINE);
+      TsI_ExportQuestion (QstCod,FileXML);
      }
 
    /***** End XML file *****/
-   XML_WriteEndFile (Gbl.Test.XML.FileXML,"test");
+   XML_WriteEndFile (FileXML,"test");
 
    /***** Close the XML file *****/
-   fclose (Gbl.Test.XML.FileXML);
+   fclose (FileXML);
 
    /***** Return to start of query result *****/
    mysql_data_seek (mysql_res,0);
@@ -262,10 +233,76 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
+/****************** Write one question into the XML file *********************/
+/*****************************************************************************/
+
+static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
+  {
+   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_NEW_LINE;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
+     {
+      /***** Get row *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Feedback
+      row[6] MedCod
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
+      */
+
+      /***** Write the question type (row[2]) *****/
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      fprintf (FileXML,"<question type=\"%s\">%s",
+               Tst_StrAnswerTypesXML[Gbl.Test.AnswerType],Txt_NEW_LINE);
+
+      /***** Write the question tags *****/
+      fprintf (FileXML,"<tags>%s",Txt_NEW_LINE);
+      TsI_GetAndWriteTagsXML (QstCod,FileXML);
+      fprintf (FileXML,"</tags>%s",Txt_NEW_LINE);
+
+      /***** Write the stem (row[4]), that is in HTML format *****/
+      fprintf (FileXML,"<stem>%s</stem>%s",
+               row[4],Txt_NEW_LINE);
+
+      /***** Write the feedback (row[5]), that is in HTML format *****/
+      if (row[5])
+	 if (row[5][0])
+	    fprintf (FileXML,"<feedback>%s</feedback>%s",
+		     row[5],Txt_NEW_LINE);
+
+      /***** Write the answers of this question.
+             Shuffle can be enabled or disabled (row[3]) *****/
+      fprintf (FileXML,"<answer");
+      if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+          Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+         fprintf (FileXML," shuffle=\"%s\"",
+                  (row[3][0] == 'Y') ? "yes" :
+                	               "no");
+      fprintf (FileXML,">");
+      TsI_WriteAnswersOfAQstXML (QstCod,FileXML);
+      fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
+
+      /***** End question *****/
+      fprintf (FileXML,"</question>%s%s",
+               Txt_NEW_LINE,Txt_NEW_LINE);
+     }
+  }
+
+/*****************************************************************************/
 /************* Get and write tags of a question into the XML file ************/
 /*****************************************************************************/
 
-static void TsI_GetAndWriteTagsXML (long QstCod)
+static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
    unsigned long NumRow;
@@ -280,7 +317,7 @@ static void TsI_GetAndWriteTagsXML (long QstCod)
 	   NumRow++)
         {
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.Test.XML.FileXML,"<tag>%s</tag>%s",
+         fprintf (FileXML,"<tag>%s</tag>%s",
                   row[0],Txt_NEW_LINE);
         }
 
@@ -292,7 +329,7 @@ static void TsI_GetAndWriteTagsXML (long QstCod)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void TsI_WriteAnswersOfAQstXML (long QstCod)
+static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
    unsigned NumOpt;
@@ -315,7 +352,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
       case Tst_ANS_INT:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.Test.XML.FileXML,"%ld",
+         fprintf (FileXML,"%ld",
                   Tst_GetIntAnsFromStr (row[1]));
          break;
       case Tst_ANS_FLOAT:
@@ -329,9 +366,9 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             row = mysql_fetch_row (mysql_res);
             FloatNum[i] = Str_GetDoubleFromStr (row[1]);
            }
-         fprintf (Gbl.Test.XML.FileXML,"%s"
-                                       "<lower>%.15lg</lower>%s"
-                                       "<upper>%.15lg</upper>%s",
+         fprintf (FileXML,"%s"
+                          "<lower>%.15lg</lower>%s"
+                          "<upper>%.15lg</upper>%s",
                   Txt_NEW_LINE,
                   FloatNum[0],Txt_NEW_LINE,
                   FloatNum[1],Txt_NEW_LINE);
@@ -339,14 +376,14 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
       case Tst_ANS_TRUE_FALSE:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.Test.XML.FileXML,"%s",
+         fprintf (FileXML,"%s",
                   row[1][0] == 'T' ? "true" :
                 	             "false");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         fprintf (Gbl.Test.XML.FileXML,"%s",Txt_NEW_LINE);
+         fprintf (FileXML,"%s",Txt_NEW_LINE);
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -354,28 +391,28 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             row = mysql_fetch_row (mysql_res);
 
             /* Start answer */
-            fprintf (Gbl.Test.XML.FileXML,"<option");
+            fprintf (FileXML,"<option");
 
             /* Write whether the answer is correct or not (row[4]) */
             if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
-               fprintf (Gbl.Test.XML.FileXML," correct=\"%s\"",
+               fprintf (FileXML," correct=\"%s\"",
                         (row[4][0] == 'Y') ? "yes" :
                                              "no");
 
-            fprintf (Gbl.Test.XML.FileXML,">%s",Txt_NEW_LINE);
+            fprintf (FileXML,">%s",Txt_NEW_LINE);
 
             /* Write the answer (row[1]), that is in HTML */
-            fprintf (Gbl.Test.XML.FileXML,"<text>%s</text>%s",
+            fprintf (FileXML,"<text>%s</text>%s",
                      row[1],Txt_NEW_LINE);
 
             /* Write the feedback (row[2]) */
             if (row[2])
 	       if (row[2][0])
-		  fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
+		  fprintf (FileXML,"<feedback>%s</feedback>%s",
 			   row[2],Txt_NEW_LINE);
 
             /* End answer */
-            fprintf (Gbl.Test.XML.FileXML,"</option>%s",
+            fprintf (FileXML,"</option>%s",
                      Txt_NEW_LINE);
            }
 	 break;
@@ -438,17 +475,18 @@ void TsI_ImportQstsFromXML (void)
 
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
   {
+   FILE *FileXML;
    char *XMLBuffer;
    unsigned long FileSize;
 
    /***** Open file *****/
-   if ((Gbl.Test.XML.FileXML = fopen (FileNameXML,"rb")) == NULL)
+   if ((FileXML = fopen (FileNameXML,"rb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open XML file.");
 
    /***** Compute file size *****/
-   fseek (Gbl.Test.XML.FileXML,0L,SEEK_END);
-   FileSize = (unsigned long) ftell (Gbl.Test.XML.FileXML);
-   fseek (Gbl.Test.XML.FileXML,0L,SEEK_SET);
+   fseek (FileXML,0L,SEEK_END);
+   FileSize = (unsigned long) ftell (FileXML);
+   fseek (FileXML,0L,SEEK_SET);
 
    /***** Allocate memory for XML buffer *****/
    if ((XMLBuffer = (char *) malloc (FileSize + 1)) == NULL)
@@ -456,7 +494,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
    else
      {
       /***** Read file contents into XML buffer *****/
-      if (fread (XMLBuffer,sizeof (char),(size_t) FileSize,Gbl.Test.XML.FileXML))
+      if (fread (XMLBuffer,sizeof (char),(size_t) FileSize,FileXML))
          XMLBuffer[FileSize] = '\0';
       else
          XMLBuffer[0] = '\0';
@@ -468,7 +506,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
      }
 
    /***** Close file *****/
-   fclose (Gbl.Test.XML.FileXML);
+   fclose (FileXML);
   }
 
 /*****************************************************************************/
@@ -647,10 +685,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
 	       /***** If a new question ==> insert question, tags and answer in the database *****/
 	       if (!QuestionExists)
-		 {
-		  Gbl.Test.QstCod = -1L;
-		  Tst_InsertOrUpdateQstTagsAnsIntoDB ();
-		 }
+		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L) <= 0)
+		     Lay_ShowErrorAndExit ("Can not create question.");
 	      }
 
 	    /***** Destroy test question *****/

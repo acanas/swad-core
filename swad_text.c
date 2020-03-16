@@ -1818,7 +1818,7 @@ const char *Txt_Add_questions =
 #elif L==8	// pl
 	"Dodaj pytania";
 #elif L==9	// pt
-	"Adicionar quest&otilde;es";
+	"Adicionar perguntas";
 #endif
 
 const char *Txt_Add_this_ID =
@@ -2496,7 +2496,7 @@ const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />pyta&nacute;<br />na ankiety";
 #elif L==9	// pt
-	"N&ordm; medio<br />de quest&otilde;es<br />por inqu&eacute;rito";
+	"N&ordm; medio<br />de perguntas<br />por inqu&eacute;rito";
 #endif
 
 const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
@@ -2517,7 +2517,7 @@ const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />pyta&nacute;<br />testowych<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de quest&otilde;es<br />de test por<br />disciplina";
+	"N&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_surveys_BR_per_course =
@@ -6169,7 +6169,7 @@ const char *Txt_Create_question =
 #elif L==8	// pl
 	"Utw&oacute;rz pytanie";
 #elif L==9	// pt
-	"Criar quest&atilde;o";
+	"Criar pergunta";
 #endif
 
 const char *Txt_Create_record_field =
@@ -9245,7 +9245,28 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac pytanie <strong>%ld</strong>?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%ld</strong>?";
+	"Voc&ecirc; realmente deseja remover a pergunta <strong>%ld</strong>?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
+#if   L==1	// ca
+       "Realment voleu eliminar les preguntes seleccionades?";
+#elif L==2	// de
+       "Wollen Sie die ausgew&auml;hlten Fragen wirklich entfernen?";
+#elif L==3	// en
+       "Do you really want to remove the selected questions?";
+#elif L==4	// es
+       "&iquest;Realmente desea eliminar las preguntas seleccionadas?";
+#elif L==5	// fr
+       "Voulez-vous vraiment supprimer les questions s&eacute;lectionn&eacute;es?";
+#elif L==6	// gn
+       "&iquest;Realmente desea eliminar las preguntas seleccionadas?";	// Okoteve traducción
+#elif L==7	// it
+       "Vuoi realmente rimuovere le domande selezionate?";
+#elif L==8	// pl
+       "Czy na pewno chcesz usun&aogon;&cacute; wybrane pytania?";
+#elif L==9	// pt
+       "Voc&ecirc; realmente deseja remover as perguntas selecionadas?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -11578,7 +11599,7 @@ const char *Txt_Existing_question =
 #elif L==8	// pl
 	"Istniej&aogon;ca pytanie";
 #elif L==9	// pt
-	"Quest&atilde;o existente";
+	"Pergunta existente";
 #endif
 
 const char *Txt_Expand =
@@ -11604,9 +11625,9 @@ const char *Txt_Expand =
 
 const char *Txt_Export_questions =
 #if   L==1	// ca
-	"Exportar preguntas";	// Necessita traduccio
+	"Exporta preguntes";
 #elif L==2	// de
-	"Export questions";	// Need Übersetzung
+	"Fragen exportieren";
 #elif L==3	// en
 	"Export questions";
 #elif L==4	// es
@@ -11616,9 +11637,9 @@ const char *Txt_Export_questions =
 #elif L==6	// gn
 	"Exportar preguntas";	// Okoteve traducción
 #elif L==7	// it
-	"Export questions";	// Bisogno di traduzione
+	"Esportare domande";
 #elif L==8	// pl
-	"Export questions";	// Potrzebujesz tlumaczenie
+	"Eksportuj pytania";
 #elif L==9	// pt
 	"Exportar perguntas";
 #endif
@@ -17775,7 +17796,7 @@ const char *Txt_List_edit_questions =
 #elif L==8	// pl
 	"Wy&sacute;wietli&cacute; / edytowa&cacute; pytania";
 #elif L==9	// pt
-	"Listar / editar quest&otilde;es";
+	"Listar / editar perguntas";
 #endif
 
 const char *Txt_List_of_detailed_clicks =
@@ -22903,7 +22924,7 @@ const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
 #elif L==8	// pl
 	"Minimalny czas (w sekundach)<br />na pytanie miedzy<br />dwoma badaniami";
 #elif L==9	// pt
-	"Tempo m&iacute;nimo (segundos)<br />por quest&atilde;o<br />entre dois testes";
+	"Tempo m&iacute;nimo (segundos)<br />por pergunta<br />entre dois testes";
 #endif
 
 const char *Txt_minute =
@@ -24880,7 +24901,7 @@ const char *Txt_New_question =
 #elif L==8	// pl
 	"Nowe pytanie";
 #elif L==9	// pt
-	"Nova quest&atilde;o";
+	"Nova pergunta";
 #endif
 
 const char *Txt_New_record_field =
@@ -26053,7 +26074,7 @@ const char *Txt_No_of_questions =
 #elif L==8	// pl
 	"Liczba pyta&nacute;";
 #elif L==9	// pt
-	"N&ordm; de quest&otilde;es";
+	"N&ordm; de perguntas";
 #endif
 
 const char *Txt_No_of_threads =
@@ -26200,7 +26221,7 @@ const char *Txt_No_questions_found_matching_your_search_criteria =
 #elif L==8	// pl
 	"Brak pyta&nacute; spelniajacych zadane kryteria wyszukiwania.";
 #elif L==9	// pt
-	"N&atilde;o quest&otilde;es com os seus crit&eacute;rios de pesquisa selecionados.";
+	"N&atilde;o perguntas com os seus crit&eacute;rios de pesquisa selecionados.";
 #endif
 
 const char *Txt_No_questions_have_been_added =
@@ -26347,7 +26368,7 @@ const char *Txt_No_test_questions =
 #elif L==8	// pl
 	"Brak pyta&nacute; testowych.";
 #elif L==9	// pt
-	"N&atilde;o existem quest&otilde;es de test.";
+	"N&atilde;o existem perguntas de test.";
 #endif
 
 const char *Txt_No_user_has_been_eliminated =
@@ -26716,7 +26737,7 @@ const char *Txt_Non_blank_BR_questions =
 #elif L==8	// pl
 	"Niepustych<br />pytania";
 #elif L==9	// pt
-	"Quest&otilde;es<br />respondidas";
+	"Perguntas<br />respondidas";
 #endif
 
 const char *Txt_Not_applicable =
@@ -28183,7 +28204,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z eksportowane<br />pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com<br />quest&otilde;es<br />de test<br />export&aacute;veis";
+	"N&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
@@ -28267,7 +28288,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com<br />quest&otilde;es<br />de test";
+	"N&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
@@ -28456,7 +28477,7 @@ const char *Txt_Number_BR_of_test_BR_questions =
 #elif L==8	// pl
 	"Liczba<br />pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />quest&otilde;es<br />de test";
+	"N&ordm; de<br />perguntas<br />de test";
 #endif
 
 const char *Txt_Number_of_users =
@@ -31944,7 +31965,7 @@ const char *Txt_Question =
 #elif L==8	// pl
 	"Pytanie";
 #elif L==9	// pt
-	"Quest&atilde;o";
+	"Pergunta";
 #endif
 
 const char *Txt_Question_code_X =	// Warning: it is very important to include %ld in the following sentences
@@ -31965,7 +31986,7 @@ const char *Txt_Question_code_X =	// Warning: it is very important to include %l
 #elif L==8	// pl
 	"Kodeks pytanie %ld";
 #elif L==9	// pt
-	"Quest&atilde;o com c&oacute;digo %ld";
+	"Pergunta com c&oacute;digo %ld";
 #endif
 
 const char *Txt_Question_modified =
@@ -31986,7 +32007,7 @@ const char *Txt_Question_modified =
 #elif L==8	// pl
 	"Pytanie zmodyfikowane.";
 #elif L==9	// pt
-	"Quest&atilde;o modificada.";
+	"Pergunta modificada.";
 #endif
 
 const char *Txt_Question_removed =
@@ -32007,7 +32028,7 @@ const char *Txt_Question_removed =
 #elif L==8	// pl
 	"Pytanie usuniete.";
 #elif L==9	// pt
-	"Quest&atilde;o removioda.";
+	"Pergunta removida.";
 #endif
 
 const char *Txt_Questions =
@@ -32028,7 +32049,7 @@ const char *Txt_Questions =
 #elif L==8	// pl
 	"Pyta&nacute;";
 #elif L==9	// pt
-	"Quest&otilde;es";
+	"Perguntas";
 #endif
 
 const char *Txt_Questions_and_problems =
@@ -32049,7 +32070,28 @@ const char *Txt_Questions_and_problems =
 #elif L==8	// pl
 	"Pytania i problemy";
 #elif L==9	// pt
-	"Quest&otilde;es e problemas";
+	"Perguntas e problemas";
+#endif
+
+const char *Txt_Questions_removed_X =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Preguntas eliminadas: %u.";
+#elif L==2	// de
+	"Fragen entfernt: %u.";
+#elif L==3	// en
+	"Questions removed: %u.";
+#elif L==4	// es
+	"Preguntas eliminadas: %u.";
+#elif L==5	// fr
+	"Questions supprim&eacute;es: %u.";
+#elif L==6	// gn
+	"Preguntas eliminadas: %u.";		// Okoteve traducción
+#elif L==7	// it
+	"Domande rimosse: %u.";
+#elif L==8	// pl
+	"Pytania usuniete: %u.";
+#elif L==9	// pt
+	"Perguntas removidas: %u.";
 #endif
 
 const char *Txt_Quota_exceeded =
@@ -33394,7 +33436,7 @@ const char *Txt_Remove_question =
 #if   L==1	// ca
 	"Eliminar pregunta";
 #elif L==2	// de
-	"Entfernen Frage";
+	"Frage entfernen";
 #elif L==3	// en
 	"Remove question";
 #elif L==4	// es
@@ -33408,7 +33450,28 @@ const char *Txt_Remove_question =
 #elif L==8	// pl
 	"Usu&nacute; pytanie";
 #elif L==9	// pt
-	"Remover quest&atilde;o";
+	"Remover pergunta";
+#endif
+
+const char *Txt_Remove_questions =
+#if   L==1	// ca
+	"Eliminar preguntas";
+#elif L==2	// de
+	"Fragen entfernen";
+#elif L==3	// en
+	"Remove questions";
+#elif L==4	// es
+	"Eliminar preguntas";
+#elif L==5	// fr
+	"Supprimer questions";
+#elif L==6	// gn
+	"Eliminar preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere domande";
+#elif L==8	// pl
+	"Usu&nacute; pytania";
+#elif L==9	// pt
+	"Remover perguntas";
 #endif
 
 const char *Txt_Remove_record_field =
@@ -39158,7 +39221,7 @@ const char *Txt_Select_questions =
 #elif L==8	// pl
 	"Wybierz pytania";
 #elif L==9	// pt
-	"Selecionar quest&otilde;es";
+	"Selecionar perguntas";
 #endif
 
 const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =
@@ -40313,7 +40376,7 @@ const char *Txt_Show_questions =
 #elif L==8	// pl
 	"Show questions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Mostrar quest&otilde;es";
+	"Mostrar perguntas";
 #endif
 
 const char *Txt_Show_statistic =
@@ -47712,7 +47775,7 @@ const char *Txt_The_question_has_been_moved_down =
 #elif L==8	// pl
 	"Pytanie zosta&lstrok;o przeniesione.";
 #elif L==9	// pt
-	"A quest&atilde;o foi movida para baixo.";
+	"A pergunta foi movida para baixo.";
 #endif
 
 const char *Txt_The_question_has_been_moved_up =
@@ -47733,7 +47796,7 @@ const char *Txt_The_question_has_been_moved_up =
 #elif L==8	// pl
 	"Pytanie zosta&lstrok;o poruszone.";
 #elif L==9	// pt
-	"A quest&atilde;o foi movida para cima.";
+	"A pergunta foi movida para cima.";
 #endif
 
 const char *Txt_The_record_field_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51578,7 +51641,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==8	// pl
 	"Sort by stem of the question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Classificar por formula&ccedil;&atilde;o da quest&atilde;o"
+	"Classificar por formula&ccedil;&atilde;o da pergunta"
 #endif
 	,
 	[Tst_ORDER_NUM_HITS] =
@@ -51599,7 +51662,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==8	// pl
 	"Sort by number of times the question has been answered"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Classificar por n&ordm; de vezes que a quest&atilde;o foi respondida"
+	"Classificar por n&ordm; de vezes que a pergunta foi respondida"
 #endif
 	,
 	[Tst_ORDER_AVERAGE_SCORE] =
@@ -51650,7 +51713,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	" has been answered (excluding blank answers)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Classificar por n&ordm; de vezes"
-	" que a quest&atilde;o foi respondida (n&atilde;o em branco)"
+	" que a pergunta foi respondida (n&atilde;o em branco)"
 #endif
 	,
 	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
@@ -51695,7 +51758,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==8	// pl
 	"Pytanie"
 #elif L==9	// pt
-	"Quest&atilde;o"
+	"Pergunta"
 #endif
 	,
 	[Tst_ORDER_NUM_HITS] =

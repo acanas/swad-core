@@ -124,6 +124,8 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
+static long Tst_ParamGblQstCod = -1L;	// Used to pass parameter to function
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -161,11 +163,16 @@ static void Tst_CheckAndCorrectNumbersQst (void);
 static void Tst_ShowFormAnswerTypes (void);
 static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
-static void Tst_ListOneQstToEdit (void);
+static void Tst_ListOneQstToEdit (long QstCod);
 static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                                                   MYSQL_RES *mysql_res);
+static void Tst_WriteHeadingRowQuestionsForEdition (unsigned long NumRows);
+static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
+                                            unsigned long NumRow,
+                                            long QstCod);
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
                                                     MYSQL_RES *mysql_res);
+static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod);
 
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
@@ -210,10 +217,10 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetAndCheckParamNumTst (void);
 static void Tst_GetParamNumQst (void);
-static bool Tst_GetCreateXMLFromForm (void);
 static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
-static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
+static void Tst_PutFormEditOneQst (long QstCod,
+	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value);
@@ -225,32 +232,36 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 static void Tst_ResetMediaOfQuestion (void);
 static void Tst_FreeMediaOfQuestion (void);
 
-static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
+static void Tst_GetQstDataFromDB (long QstCod,
+                                  char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
-static long Tst_GetMedCodFromDB (int NumOpt);
-static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media);
+static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
+static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
+                                struct Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
-static void Tst_GetQstFromForm (char *Stem,char *Feedback);
-static void Tst_MoveMediaToDefinitiveDirectories (void);
+static long Tst_GetQstFromForm (char *Stem,char *Feedback);
+static void Tst_MoveMediaToDefinitiveDirectories (long QstCod);
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
+static void Tst_PutParamsRemoveSelectedQsts (void);
 static void Tst_PutIconToRemoveOneQst (void);
-static void Tst_PutParamsRemoveOneQst (void);
-static void Tst_PutParamsRemoveQst (void);
+static void Tst_PutParamsRemoveOnlyThisQst (void);
+static void Tst_PutParamsRemoveOneQstWhileEditing (void);
+static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static long Tst_GetQstCod (void);
 
-static void Tst_InsertOrUpdateQstIntoDB (void);
-static void Tst_InsertTagsIntoDB (void);
-static void Tst_InsertAnswersIntoDB (void);
+static long Tst_InsertOrUpdateQstIntoDB (long QstCod);
+static void Tst_InsertTagsIntoDB (long QstCod);
+static void Tst_InsertAnswersIntoDB (long QstCod);
 
-static void Tst_RemAnsFromQst (void);
-static void Tst_RemTagsFromQst (void);
-static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
+static void Tst_RemAnsFromQst (long QstCod);
+static void Tst_RemTagsFromQst (long QstCod);
+static void Tst_RemoveUnusedTagsFromCrs (long CrsCod);
 
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
@@ -803,10 +814,8 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Get the row next of the result of the query in the database *****/
+      /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-
-      /***** Get the code of question (row[0]) *****/
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
@@ -963,7 +972,6 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 
    /***** Create test question *****/
    Tst_QstConstructor ();
-   Gbl.Test.QstCod = QstCod;
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -1350,12 +1358,27 @@ static void Tst_PutIconsTests (void)
 
    if (Tst_CheckIfICanEditTests ())
      {
-      /***** Put form to edit existing test questions *****/
+      switch (Gbl.Action.Act)
+        {
+	 case ActLstTstQst:		// List selected test questions for edition
+	 case ActReqRemSevTstQst:	// Request removal of selected questions
+	 case ActReqRemOneTstQst:	// Request removal of a question
+	 case ActRemOneTstQst:		// Remove a question
+	 case ActChgShfTstQst:		// Change shuffle of a question
+	    /***** Put form to remove selected test questions *****/
+	    Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
+	                                   Tst_PutParamsRemoveSelectedQsts);
+	    break;
+	 default:
+	    break;
+        }
+
       if (Gbl.Action.Act != ActEdiTstQst)
+         /***** Put form to edit existing test questions *****/
          Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,NULL);
 
-      /***** Put form to create a new test question *****/
       if (Gbl.Action.Act != ActEdiOneTstQst)
+         /***** Put form to create a new test question *****/
 	 Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,NULL,
 				     Txt_New_question);
 
@@ -2318,11 +2341,13 @@ void Tst_ListQuestionsToEdit (void)
    /***** Get parameters, query the database and list the questions *****/
    if (Tst_GetParamsTst (Tst_EDIT_TEST))	// Get parameters from the form
      {
+      /***** Get question codes from database *****/
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
         {
-	 /***** Contextual menu *****/
+	 /* Contextual menu */
          Mnu_ContextMenuBegin ();
-	 if (Gbl.Test.XML.CreateXML)
+
+	 if (TsI_GetCreateXMLParamFromForm ())
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file with exported questions...
 						// ...and put a link to download it
          else
@@ -2398,16 +2423,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    /***** Select questions *****/
    /* Start query */
    snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
-	     "SELECT tst_questions.QstCod,"			// row[0]
-	            "UNIX_TIMESTAMP(tst_questions.EditTime),"	// row[1]
-	            "tst_questions.AnsType,"			// row[2]
-	            "tst_questions.Shuffle,"			// row[3]
-	            "tst_questions.Stem,"			// row[4]
-	            "tst_questions.Feedback,"			// row[5]
-	            "tst_questions.MedCod,"			// row[6]
-	            "tst_questions.NumHits,"			// row[7]
-	            "tst_questions.NumHitsNotBlank,"		// row[8]
-	            "tst_questions.Score"			// row[9]
+	     "SELECT tst_questions.QstCod"	// row[0]
 	     " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
       Str_Concat (Query,",tst_question_tags,tst_tags",
@@ -2667,19 +2683,30 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
 /*********************** List a test question for edition ********************/
 /*****************************************************************************/
 
-static void Tst_ListOneQstToEdit (void)
+static void Tst_ListOneQstToEdit (long QstCod)
   {
-   MYSQL_RES *mysql_res;
+   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Txt_Questions;
 
-   /***** Query database *****/
-   if (Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res))
-      /***** Show the question ready to edit it *****/
-      Tst_ListOneOrMoreQuestionsForEdition (1,mysql_res);
-   else
-      Lay_ShowErrorAndExit ("Can not get question.");
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
+		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Write the heading *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+   Tst_WriteHeadingRowQuestionsForEdition (1);
+
+   /***** Write question row *****/
+   Tst_WriteQuestionRowForEdition (1,0,QstCod);
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** Button to add a new question *****/
+   Tst_PutButtonToAddQuestion ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -2715,23 +2742,9 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
-   extern const char *Txt_No_INDEX;
-   extern const char *Txt_Code;
-   extern const char *Txt_Date;
-   extern const char *Txt_Tags;
-   extern const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST];
-   extern const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST];
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
-   extern const char *Txt_Shuffle;
-   Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
    MYSQL_ROW row;
-   unsigned UniqueId;
-   char *Id;
-   time_t TimeUTC;
-   unsigned long NumHitsThisQst;
-   unsigned long NumHitsNotBlankThisQst;
-   double TotalScoreThisQst;
+   long QstCod;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
@@ -2739,16 +2752,61 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
+   Tst_WriteHeadingRowQuestionsForEdition (NumRows);
+
+   /***** Write rows *****/
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      Gbl.RowEvenOdd = NumRow % 2;
+
+      /***** Get question code (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         Lay_ShowErrorAndExit ("Wrong code of question.");
+
+      /***** Write question row *****/
+      Tst_WriteQuestionRowForEdition (NumRows,NumRow,QstCod);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** Button to add a new question *****/
+   Tst_PutButtonToAddQuestion ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/*********** Write heading row in listing of questions for edition ***********/
+/*****************************************************************************/
+
+static void Tst_WriteHeadingRowQuestionsForEdition (unsigned long NumRows)
+  {
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Date;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Shuffle;
+   extern const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST];
+   extern const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST];
+   Tst_QuestionsOrder_t Order;
+
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
+   /***** First columns *****/
    HTM_TH_Empty (1);
-
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Code);
    HTM_TH (1,1,"CT",Txt_Date);
    HTM_TH (1,1,"CT",Txt_Tags);
    HTM_TH (1,1,"CT",Txt_Shuffle);
 
+   /***** Columns which data can be ordered *****/
    /* Stem and answers of question */
    /* Number of times that the question has been answered */
    /* Average score */
@@ -2780,15 +2838,32 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       HTM_TH_End ();
      }
 
+   /***** End row *****/
    HTM_TR_End ();
+  }
 
-   /***** Write rows *****/
-   for (NumRow = 0, UniqueId = 1;
-	NumRow < NumRows;
-	NumRow++, UniqueId++)
+/*****************************************************************************/
+/********** Write question row in listing of questions for edition ***********/
+/*****************************************************************************/
+
+static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
+                                            unsigned long NumRow,
+                                            long QstCod)
+  {
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   static unsigned UniqueId = 0;
+   char *Id;
+   time_t TimeUTC;
+   unsigned long NumHitsThisQst;
+   unsigned long NumHitsNotBlankThisQst;
+   double TotalScoreThisQst;
+
+   /***** Get and show questvoidion data *****/
+   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
      {
-      Gbl.RowEvenOdd = NumRow % 2;
-
+      /***** Get row from database *****/
       row = mysql_fetch_row (mysql_res);
       /*
       row[0] QstCod
@@ -2802,30 +2877,29 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       row[8] NumHitsNotBlank
       row[9] Score
       */
+
       /***** Create test question *****/
       Tst_QstConstructor ();
 
-      /* row[0] holds the code of the question */
-      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
-
+      /***** Begin table row *****/
       HTM_TR_Begin (NULL);
 
       /***** Icons *****/
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Write icon to remove the question */
-      Frm_StartForm (ActReqRemTstQst);
-      Tst_PutParamQstCod ();
+      Frm_StartForm (ActReqRemOneTstQst);
+      Tst_PutParamQstCod (QstCod);
       if (NumRows == 1)
-         Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
+	 Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParamsIniEndDates ();
       Tst_WriteParamEditQst ();
       Ico_PutIconRemove ();
       Frm_EndForm ();
 
       /* Write icon to edit the question */
-      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamQstCod);
+      Tst_SetParamGblQstCod (QstCod);
+      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamGblQstCod);
 
       HTM_TD_End ();
 
@@ -2846,15 +2920,15 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
+      HTM_TxtF ("%ld&nbsp;",QstCod);
       HTM_TD_End ();
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
+      if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
-	            Id,Gbl.RowEvenOdd);
+		    Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x7);
@@ -2863,62 +2937,62 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
+      Tst_GetAndWriteTagsQst (QstCod);
       HTM_TD_End ();
 
       /* Write if shuffle is enabled (row[3]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-          Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-        {
-         Frm_StartForm (ActShfTstQst);
-         Tst_PutParamQstCod ();
-         Dat_WriteParamsIniEndDates ();
-         Tst_WriteParamEditQst ();
-         if (NumRows == 1)
+	  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+	{
+	 Frm_StartForm (ActChgShfTstQst);
+	 Tst_PutParamQstCod (QstCod);
+	 Dat_WriteParamsIniEndDates ();
+	 Tst_WriteParamEditQst ();
+	 if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
-         Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
-         HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
-		             "value=\"Y\"%s",
-		             row[3][0] == 'Y' ? " checked=\"checked\"" :
-		        	                "");
-         Frm_EndForm ();
-        }
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
+	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
+			     "value=\"Y\"%s",
+			     row[3][0] == 'Y' ? " checked=\"checked\"" :
+						"");
+	 Frm_EndForm ();
+	}
       HTM_TD_End ();
 
       /* Write stem (row[4]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI",
-		        true);	// Visible
+			true);	// Visible
 
       /***** Get and show media (row[6]) *****/
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
       Med_GetMediaDataByCod (&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_MED_EDIT_LIST_CONT",
-                     "TEST_MED_EDIT_LIST");
+		     "TEST_MED_EDIT_LIST_CONT",
+		     "TEST_MED_EDIT_LIST");
 
       /* Write feedback (row[5]) and answers */
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
+      Tst_WriteAnswersEdit (QstCod);
       HTM_TD_End ();
 
       /* Get number of hits
-         (number of times that the question has been answered,
-         including blank answers) (row[7]) */
+	 (number of times that the question has been answered,
+	 including blank answers) (row[7]) */
       if (sscanf (row[7],"%lu",&NumHitsThisQst) != 1)
-         Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
+	 Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
 
       /* Get number of hits not blank
-         (number of times that the question has been answered
-         with a not blank answer) (row[8]) */
+	 (number of times that the question has been answered
+	 with a not blank answer) (row[8]) */
       if (sscanf (row[8],"%lu",&NumHitsNotBlankThisQst) != 1)
-         Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
+	 Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
       /* Get the acumulated score of the question (row[9]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
       if (sscanf (row[9],"%lf",&TotalScoreThisQst) != 1)
-         Lay_ShowErrorAndExit ("Wrong score of a question.");
+	 Lay_ShowErrorAndExit ("Wrong score of a question.");
       Str_SetDecimalPointToLocal ();	// Return to local system
 
       /* Write number of times this question has been answered */
@@ -2931,7 +3005,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       if (NumHitsThisQst)
 	 HTM_Double2Decimals (TotalScoreThisQst / (double) NumHitsThisQst);
       else
-         HTM_Txt ("N.A.");
+	 HTM_Txt ("N.A.");
       HTM_TD_End ();
 
       /* Write number of times this question has been answered (not blank) */
@@ -2942,29 +3016,24 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       /* Write average score (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsNotBlankThisQst)
-         HTM_Double2Decimals (TotalScoreThisQst / (double) NumHitsNotBlankThisQst);
+	 HTM_Double2Decimals (TotalScoreThisQst / (double) NumHitsNotBlankThisQst);
       else
-         HTM_Txt ("N.A.");
+	 HTM_Txt ("N.A.");
       HTM_TD_End ();
 
+      /***** End table row *****/
       HTM_TR_End ();
 
       /***** Destroy test question *****/
       Tst_QstDestructor ();
      }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** Button to add a new question *****/
-   Tst_PutButtonToAddQuestion ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/****************** List for edition one or more test questions **************/
+/*************** List for selection one or more test questions ***************/
 /*****************************************************************************/
 
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
@@ -2983,9 +3052,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    extern const char *Txt_Add_questions;
    unsigned long NumRow;
    MYSQL_ROW row;
-   unsigned UniqueId;
-   char *Id;
-   time_t TimeUTC;
+   long QstCod;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,NULL,
@@ -3012,105 +3079,19 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumRow = 0, UniqueId = 1;
+   for (NumRow = 0;
 	NumRow < NumRows;
-	NumRow++, UniqueId++)
+	NumRow++)
      {
       Gbl.RowEvenOdd = NumRow % 2;
 
+      /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
-      */
-      /***** Create test question *****/
-      Tst_QstConstructor ();
-
-      /* row[0] holds the code of the question */
-      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      HTM_TR_Begin (NULL);
-
-      /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-
-      /* Write checkbox to select the question */
-      HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%ld\"",
-			  Gbl.Test.QstCod);
-
-      /* Write number of question */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%lu&nbsp;",NumRow + 1);
-      HTM_TD_End ();
-
-      /* Write question code */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
-      HTM_TD_End ();
-
-      /* Write the date (row[1] has the UTC date-time) */
-      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
-	            Id,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,false,0x7);
-      HTM_TD_End ();
-      free (Id);
-
-      /* Write the question tags */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
-      HTM_TD_End ();
-
-      /* Write the question type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
-      HTM_TD_End ();
-
-      /* Write if shuffle is enabled (row[3]) */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s  disabled=\"disabled\"",
-			  row[3][0] == 'Y' ? " checked=\"checked\"" :
-				             "");
-      HTM_TD_End ();
-
-      /* Write stem (row[4]) */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[4],"TEST_EDI",
-		        true);	// Visible
-
-      /***** Get and show media (row[6]) *****/
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
-      Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_MED_EDIT_LIST_CONT",
-                     "TEST_MED_EDIT_LIST");
-
-      /* Write feedback (row[5]) */
-      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
-
-      /* Write answers */
-      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
-      HTM_TD_End ();
-      HTM_TR_End ();
-
-      /***** Destroy test question *****/
-      Tst_QstDestructor ();
+      /***** Write question row *****/
+      Tst_WriteQuestionRowForSelection (NumRow,QstCod);
      }
 
    /***** End table *****/
@@ -3124,6 +3105,119 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********************** Write question row for selection *********************/
+/*****************************************************************************/
+
+static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
+  {
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   static unsigned UniqueId = 0;
+   char *Id;
+   time_t TimeUTC;
+
+   /***** Get and show questvoidion data *****/
+   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
+     {
+      /***** Get row of the result of the query *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Feedback
+      row[6] MedCod
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
+      */
+
+      /***** Create test question *****/
+      Tst_QstConstructor ();
+
+      /***** Begin table row *****/
+      HTM_TR_Begin (NULL);
+
+      /***** Icons *****/
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+      /* Write checkbox to select the question */
+      HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"%ld\"",
+			  QstCod);
+
+      /* Write number of question */
+      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TxtF ("%lu&nbsp;",NumRow + 1);
+      HTM_TD_End ();
+
+      /* Write question code */
+      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TxtF ("%ld&nbsp;",QstCod);
+      HTM_TD_End ();
+
+      /* Write the date (row[1] has the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
+		    Id,Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				    true,true,false,0x7);
+      HTM_TD_End ();
+      free (Id);
+
+      /* Write the question tags */
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Tst_GetAndWriteTagsQst (QstCod);
+      HTM_TD_End ();
+
+      /* Write the question type (row[2]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      HTM_TD_End ();
+
+      /* Write if shuffle is enabled (row[3]) */
+      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"Y\"%s  disabled=\"disabled\"",
+			  row[3][0] == 'Y' ? " checked=\"checked\"" :
+					     "");
+      HTM_TD_End ();
+
+      /* Write stem (row[4]) */
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Tst_WriteQstStem (row[4],"TEST_EDI",
+			true);	// Visible
+
+      /***** Get and show media (row[6]) *****/
+      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
+      Med_GetMediaDataByCod (&Gbl.Test.Media);
+      Med_ShowMedia (&Gbl.Test.Media,
+		     "TEST_MED_EDIT_LIST_CONT",
+		     "TEST_MED_EDIT_LIST");
+
+      /* Write feedback (row[5]) */
+      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+
+      /* Write answers */
+      Tst_WriteAnswersEdit (QstCod);
+      HTM_TD_End ();
+
+      /***** End table row *****/
+      HTM_TR_End ();
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor ();
+     }
   }
 
 /*****************************************************************************/
@@ -4869,7 +4963,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) 0;
 
 	 /* Get whether we must create the XML file or not */
-	 Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
+	 // Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* Get starting and ending dates */
@@ -4908,15 +5002,6 @@ static void Tst_GetParamNumQst (void)
 	                                        (unsigned long) Gbl.Test.Config.Min,
 	                                        (unsigned long) Gbl.Test.Config.Max,
 	                                        (unsigned long) Gbl.Test.Config.Def);
-  }
-
-/*****************************************************************************/
-/****************** Get whether to create XML file from form *****************/
-/*****************************************************************************/
-
-static bool Tst_GetCreateXMLFromForm (void)
-  {
-   return Par_GetParToBool ("CreateXML");
   }
 
 /*****************************************************************************/
@@ -4983,18 +5068,19 @@ void Tst_FreeTagsList (void)
 
 void Tst_ShowFormEditOneQst (void)
   {
+   long QstCod;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor ();
-   Gbl.Test.QstCod = Tst_GetQstCod ();
+   QstCod = Tst_GetQstCod ();
    Stem[0] = Feedback[0] = '\0';
-   if (Gbl.Test.QstCod > 0)	// If question already exists in the database
-      Tst_GetQstDataFromDB (Stem,Feedback);
+   if (QstCod > 0)	// If question already exists in the database
+      Tst_GetQstDataFromDB (QstCod,Stem,Feedback);
 
    /***** Put form to edit question *****/
-   Tst_PutFormEditOneQst (Stem,Feedback);
+   Tst_PutFormEditOneQst (QstCod,Stem,Feedback);
 
    /***** Destroy test question *****/
    Tst_QstDestructor ();
@@ -5009,7 +5095,8 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
+static void Tst_PutFormEditOneQst (long QstCod,
+	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
@@ -5050,9 +5137,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    char *Title;
 
    /***** Begin box *****/
-   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
+   if (QstCod > 0)	// The question already has assigned a code
      {
-      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Gbl.Test.QstCod),
+      Tst_SetParamGblQstCod (QstCod);
+      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,QstCod),
 		    Tst_PutIconToRemoveOneQst,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
@@ -5063,8 +5151,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
-   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Tst_PutParamQstCod ();
+   if (QstCod > 0)	// The question already has assigned a code
+      Tst_PutParamQstCod (QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -5400,7 +5488,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TABLE_End ();	// Table for this question
 
    /***** Send button *****/
-   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
+   if (QstCod > 0)	// The question already has assigned a code
       Btn_PutConfirmButton (Txt_Save_changes);
    else
       Btn_PutCreateButton (Txt_Create_question);
@@ -5460,7 +5548,6 @@ void Tst_QstConstructor (void)
   {
    unsigned NumOpt;
 
-   Gbl.Test.QstCod = -1L;
    Gbl.Test.Stem.Text = NULL;
    Gbl.Test.Stem.Length = 0;
    Gbl.Test.Feedback.Text = NULL;
@@ -5596,7 +5683,8 @@ static void Tst_FreeMediaOfQuestion (void)
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
+static void Tst_GetQstDataFromDB (long QstCod,
+                                  char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
@@ -5615,7 +5703,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                  "MedCod"		// row[4]
 		   " FROM tst_questions"
 		   " WHERE QstCod=%ld AND CrsCod=%ld",
-		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		   QstCod,Gbl.Hierarchy.Crs.CrsCod);
    row = mysql_fetch_row (mysql_res);
 
    /* Get the type of answer */
@@ -5643,7 +5731,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the tags from the database *****/
-   NumRows = Tst_GetTagsQst (Gbl.Test.QstCod,&mysql_res);
+   NumRows = Tst_GetTagsQst (QstCod,&mysql_res);
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)
@@ -5657,7 +5745,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the answers from the database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -5726,14 +5814,14 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to answer
 
-static long Tst_GetMedCodFromDB (int NumOpt)
+static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    long MedCod = -1L;
 
-   if (Gbl.Test.QstCod > 0)	// Existing question
+   if (QstCod > 0)	// Existing question
      {
       /***** Query depending on NumOpt *****/
       if (NumOpt < 0)
@@ -5742,14 +5830,14 @@ static long Tst_GetMedCodFromDB (int NumOpt)
 				   "SELECT MedCod"		// row[0]
 				   " FROM tst_questions"
 				   " WHERE QstCod=%ld AND CrsCod=%ld",
-				   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
+				   QstCod,CrsCod);
       else
 	 // Get media associated to answer
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
 				   "SELECT MedCod"		// row[0]
 				   " FROM tst_answers"
 				   " WHERE QstCod=%ld AND AnsInd=%u",
-				  Gbl.Test.QstCod,(unsigned) NumOpt);
+				   QstCod,(unsigned) NumOpt);
 
       if (NumRows)
 	{
@@ -5776,10 +5864,11 @@ static long Tst_GetMedCodFromDB (int NumOpt)
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to an answer option
 
-static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
+static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
+                                struct Media *Media)
   {
    /***** Get media *****/
-   Media->MedCod = Tst_GetMedCodFromDB (NumOpt);
+   Media->MedCod = Tst_GetMedCodFromDB (CrsCod,QstCod,NumOpt);
    Med_GetMediaDataByCod (Media);
   }
 
@@ -5823,6 +5912,7 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 
 void Tst_ReceiveQst (void)
   {
+   long QstCod;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
@@ -5831,19 +5921,19 @@ void Tst_ReceiveQst (void)
 
    /***** Get parameters of the question from form *****/
    Stem[0] = Feedback[0] = '\0';
-   Tst_GetQstFromForm (Stem,Feedback);
+   QstCod = Tst_GetQstFromForm (Stem,Feedback);
 
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
       /***** Move images to definitive directories *****/
-      Tst_MoveMediaToDefinitiveDirectories ();
+      Tst_MoveMediaToDefinitiveDirectories (QstCod);
 
       /***** Insert or update question, tags and answer in the database *****/
-      Tst_InsertOrUpdateQstTagsAnsIntoDB ();
+      QstCod = Tst_InsertOrUpdateQstTagsAnsIntoDB (QstCod);
 
       /***** Show the question just inserted in the database *****/
-      Tst_ListOneQstToEdit ();
+      Tst_ListOneQstToEdit (QstCod);
      }
    else	// Question is wrong
      {
@@ -5851,7 +5941,7 @@ void Tst_ReceiveQst (void)
       Tst_ResetMediaOfQuestion ();
 
       /***** Put form to edit question again *****/
-      Tst_PutFormEditOneQst (Stem,Feedback);
+      Tst_PutFormEditOneQst (QstCod,Stem,Feedback);
      }
 
    /***** Destroy test question *****/
@@ -5862,8 +5952,9 @@ void Tst_ReceiveQst (void)
 /**************** Get parameters of a test question from form ****************/
 /*****************************************************************************/
 
-static void Tst_GetQstFromForm (char *Stem,char *Feedback)
+static long Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
+   long QstCod;
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
@@ -5877,7 +5968,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   Gbl.Test.QstCod = Tst_GetQstCod ();
+   QstCod = Tst_GetQstCod ();
 
    /***** Get answer type *****/
    Gbl.Test.AnswerType = (Tst_AnswerType_t)
@@ -5924,8 +6015,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
    Gbl.Test.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
    Gbl.Test.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,	// < 0 ==> the image associated to the stem
-                         &Gbl.Test.Media,Tst_GetMediaFromDB,
+   Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+                         -1,	// < 0 ==> the image associated to the stem
+                         &Gbl.Test.Media,
+                         Tst_GetMediaFromDB,
 			 NULL);
    Ale_ShowAlerts (NULL);
 
@@ -6001,7 +6094,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       Gbl.Test.Answer.Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
 	       Gbl.Test.Answer.Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
 	       Gbl.Test.Answer.Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
-	       Med_GetMediaFromForm ((int) NumOpt,	// >= 0 ==> the image associated to an answer
+	       Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+	                             (int) NumOpt,	// >= 0 ==> the image associated to an answer
 	                             &Gbl.Test.Answer.Options[NumOpt].Media,
 				     Tst_GetMediaFromDB,
 				     NULL);
@@ -6053,6 +6147,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Stem.Length = strlen (Gbl.Test.Stem.Text);
    Gbl.Test.Feedback.Text = Feedback;
    Gbl.Test.Feedback.Length = strlen (Gbl.Test.Feedback.Text);
+
+   return QstCod;
   }
 
 /*****************************************************************************/
@@ -6277,6 +6373,7 @@ bool Tst_CheckIfQuestionExistsInDB (void)
            !IdenticalQuestionFound && NumQst < NumQstsWithThisStem;
            NumQst++)
         {
+	 /* Get question code */
          row = mysql_fetch_row (mysql_res_qst);
          if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of question.");
@@ -6349,13 +6446,14 @@ bool Tst_CheckIfQuestionExistsInDB (void)
 /* Move images associates to a test question to their definitive directories */
 /*****************************************************************************/
 
-static void Tst_MoveMediaToDefinitiveDirectories (void)
+static void Tst_MoveMediaToDefinitiveDirectories (long QstCod)
   {
    unsigned NumOpt;
    long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   CurrentMedCodInDB = Tst_GetMedCodFromDB (-1L);	// Get current media code associated to stem
+   CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+                                            -1L);	// Get current media code associated to stem
    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Media);
 
    /****** Move media associated to answers *****/
@@ -6365,7 +6463,8 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
 	{
-         CurrentMedCodInDB = Tst_GetMedCodFromDB (NumOpt);	// Get current media code associated to this option
+         CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+                                                  NumOpt);	// Get current media code associated to this option
          Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
   }
@@ -6461,28 +6560,106 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
   }
 
 /*****************************************************************************/
+/***************** Request the removal of selected questions *****************/
+/*****************************************************************************/
+
+void Tst_RequestRemoveSelectedQsts (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
+   extern const char *Txt_Remove_questions;
+
+   /***** Get parameters *****/
+   if (Tst_GetParamsTst (Tst_EDIT_TEST))	// Get parameters from the form
+      /***** Show question and button to remove question *****/
+      Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
+			     Tst_PutParamsRemoveSelectedQsts,
+			     Btn_REMOVE_BUTTON,Txt_Remove_questions,
+			     Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
+
+   /***** Free memory used by the list of tags *****/
+   Tst_FreeTagsList ();
+
+   /***** Continue editing questions *****/
+   Tst_ListQuestionsToEdit ();
+  }
+
+/*****************************************************************************/
+/**************** Put parameters to remove selected questions ****************/
+/*****************************************************************************/
+
+static void Tst_PutParamsRemoveSelectedQsts (void)
+  {
+   Dat_WriteParamsIniEndDates ();
+   Tst_WriteParamEditQst ();
+  }
+
+/*****************************************************************************/
+/************************** Remove several questions *************************/
+/*****************************************************************************/
+
+void Tst_RemoveSelectedQsts (void)
+  {
+   extern const char *Txt_Questions_removed_X;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumRow;
+   long QstCod;
+
+   /***** Get parameters *****/
+   if (Tst_GetParamsTst (Tst_EDIT_TEST))	// Get parameters
+     {
+      /***** Get question codes *****/
+      NumRows = (unsigned) Tst_GetQuestions (&mysql_res);	// Query database
+
+      /***** Remove questions one by one *****/
+      for (NumRow = 0;
+	   NumRow < NumRows;
+	   NumRow++)
+	{
+	 /* Get question code (row[0]) */
+	 row = mysql_fetch_row (mysql_res);
+	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of question.");
+
+	 /* Remove test question from database */
+	 Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Write message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Questions_removed_X,NumRows);
+     }
+  }
+
+/*****************************************************************************/
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
 static void Tst_PutIconToRemoveOneQst (void)
   {
-   Ico_PutContextualIconToRemove (ActReqRemTstQst,Tst_PutParamsRemoveOneQst);
+   Ico_PutContextualIconToRemove (ActReqRemOneTstQst,Tst_PutParamsRemoveOnlyThisQst);
   }
 
 /*****************************************************************************/
 /******************** Request the removal of a question **********************/
 /*****************************************************************************/
 
-void Tst_RequestRemoveQst (void)
+void Tst_RequestRemoveOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
+   long QstCod;
    bool EditingOnlyThisQst;
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   Gbl.Test.QstCod = Tst_GetQstCod ();
-   if (Gbl.Test.QstCod <= 0)
+   QstCod = Tst_GetQstCod ();
+   if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get a parameter that indicates whether it's necessary
@@ -6495,16 +6672,17 @@ void Tst_RequestRemoveQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   Ale_ShowAlertAndButton (ActRemTstQst,NULL,NULL,
-			   EditingOnlyThisQst ? Tst_PutParamsRemoveOneQst :
-						Tst_PutParamsRemoveQst,
+   Tst_SetParamGblQstCod (QstCod);
+   Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
+			   EditingOnlyThisQst ? Tst_PutParamsRemoveOnlyThisQst :
+						Tst_PutParamsRemoveOneQstWhileEditing,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   Gbl.Test.QstCod);
+			   QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
-      Tst_ListOneQstToEdit ();
+      Tst_ListOneQstToEdit (QstCod);
    else
      {
       Tst_FreeTagsList ();
@@ -6513,22 +6691,22 @@ void Tst_RequestRemoveQst (void)
   }
 
 /*****************************************************************************/
-/***** Put parameter to remove question when editing only one question *******/
+/***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOneQst (void)
+static void Tst_PutParamsRemoveOnlyThisQst (void)
   {
-   Tst_PutParamQstCod ();
+   Tst_PutParamGblQstCod ();
    Par_PutHiddenParamChar ("OnlyThisQst",'Y');
   }
 
 /*****************************************************************************/
-/***** Put parameter to remove question when editing several questions *******/
+/***** Put parameters to remove question when editing several questions ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveQst (void)
+static void Tst_PutParamsRemoveOneQstWhileEditing (void)
   {
-   Tst_PutParamQstCod ();
+   Tst_PutParamGblQstCod ();
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
   }
@@ -6537,43 +6715,23 @@ static void Tst_PutParamsRemoveQst (void)
 /***************************** Remove a question *****************************/
 /*****************************************************************************/
 
-void Tst_RemoveQst (void)
+void Tst_RemoveOneQst (void)
   {
    extern const char *Txt_Question_removed;
+   long QstCod;
    bool EditingOnlyThisQst;
-   long MedCod;
 
    /***** Get the question code *****/
-   Gbl.Test.QstCod = Tst_GetQstCod ();
-   if (Gbl.Test.QstCod <= 0)
+   QstCod = Tst_GetQstCod ();
+   if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
-   /***** Remove media associated to question *****/
-   /* Remove media associated to answers */
-   Tst_RemoveMediaFromAllAnsOfQst (Gbl.Hierarchy.Crs.CrsCod,Gbl.Test.QstCod);
-
-   /* Remove media associated to stem */
-   MedCod = Tst_GetMedCodFromDB (-1L);
-   Med_RemoveMedia (MedCod);
-
-   /***** Remove the question from all the tables *****/
-   /* Remove answers and tags from this test question */
-   Tst_RemAnsFromQst ();
-   Tst_RemTagsFromQst ();
-   Tst_RemoveUnusedTagsFromCurrentCrs ();
-
-   /* Remove the question itself */
-   DB_QueryDELETE ("can not remove a question",
-		   "DELETE FROM tst_questions"
-                   " WHERE QstCod=%ld AND CrsCod=%ld",
-		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("Wrong question.");
+   /***** Remove test question from database *****/
+   Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -6584,6 +6742,39 @@ void Tst_RemoveQst (void)
   }
 
 /*****************************************************************************/
+/********************** Remove a question from database **********************/
+/*****************************************************************************/
+
+static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
+  {
+   long MedCod;
+
+   /***** Remove media associated to question *****/
+   /* Remove media associated to answers */
+   Tst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
+
+   /* Remove media associated to stem */
+   MedCod = Tst_GetMedCodFromDB (CrsCod,QstCod,
+                                 -1L);	// Get current media code associated to stem
+   Med_RemoveMedia (MedCod);
+
+   /***** Remove the question from all the tables *****/
+   /* Remove answers and tags from this test question */
+   Tst_RemAnsFromQst (QstCod);
+   Tst_RemTagsFromQst (QstCod);
+   Tst_RemoveUnusedTagsFromCrs (CrsCod);
+
+   /* Remove the question itself */
+   DB_QueryDELETE ("can not remove a question",
+		   "DELETE FROM tst_questions"
+		   " WHERE QstCod=%ld AND CrsCod=%ld",
+		   QstCod,CrsCod);
+
+   if (!mysql_affected_rows (&Gbl.mysql))
+      Lay_ShowErrorAndExit ("Wrong question.");
+  }
+
+/*****************************************************************************/
 /*********************** Change the shuffle of a question ********************/
 /*****************************************************************************/
 
@@ -6591,12 +6782,13 @@ void Tst_ChangeShuffleQst (void)
   {
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
+   long QstCod;
    bool EditingOnlyThisQst;
    bool Shuffle;
 
    /***** Get the question code *****/
-   Gbl.Test.QstCod = Tst_GetQstCod ();
-   if (Gbl.Test.QstCod <= 0)
+   QstCod = Tst_GetQstCod ();
+   if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
@@ -6612,16 +6804,16 @@ void Tst_ChangeShuffleQst (void)
                    " WHERE QstCod=%ld AND CrsCod=%ld",
 		   Shuffle ? 'Y' :
 			     'N',
-		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		   QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
                                         Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
-                  Gbl.Test.QstCod);
+                  QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
-      Tst_ListOneQstToEdit ();
+      Tst_ListOneQstToEdit (QstCod);
    else
       Tst_ListQuestionsToEdit ();
   }
@@ -6640,40 +6832,59 @@ static long Tst_GetQstCod (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Tst_PutParamQstCod (void)
+void Tst_SetParamGblQstCod (long QstCod)
   {
-   Par_PutHiddenParamLong (NULL,"QstCod",Gbl.Test.QstCod);
+   Tst_ParamGblQstCod = QstCod;
+  }
+
+long Tst_GetParamGblQstCod (void)
+  {
+   return Tst_ParamGblQstCod;
+  }
+
+void Tst_PutParamGblQstCod (void)
+  {
+   Tst_PutParamQstCod (Tst_GetParamGblQstCod ());
+  }
+
+void Tst_PutParamQstCod (long QstCod)
+  {
+   Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
   }
 
 /*****************************************************************************/
 /******** Insert or update question, tags and anser in the database **********/
 /*****************************************************************************/
 
-void Tst_InsertOrUpdateQstTagsAnsIntoDB (void)
+long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod)
   {
    /***** Insert or update question in the table of questions *****/
-   Tst_InsertOrUpdateQstIntoDB ();
+   QstCod = Tst_InsertOrUpdateQstIntoDB (QstCod);
+   if (QstCod > 0)
+     {
+      /***** Insert tags in the tags table *****/
+      Tst_InsertTagsIntoDB (QstCod);
 
-   /***** Insert tags in the tags table *****/
-   Tst_InsertTagsIntoDB ();
+      /***** Remove unused tags in current course *****/
+      Tst_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Remove unused tags in current course *****/
-   Tst_RemoveUnusedTagsFromCurrentCrs ();
+      /***** Insert answers in the answers table *****/
+      Tst_InsertAnswersIntoDB (QstCod);
+     }
 
-   /***** Insert answers in the answers table *****/
-   Tst_InsertAnswersIntoDB ();
+   return QstCod;
   }
 
 /*****************************************************************************/
 /*********** Insert or update question in the table of questions *************/
 /*****************************************************************************/
 
-static void Tst_InsertOrUpdateQstIntoDB (void)
+static long Tst_InsertOrUpdateQstIntoDB (long QstCod)
   {
-   if (Gbl.Test.QstCod < 0)	// It's a new question
+   if (QstCod < 0)	// It's a new question
      {
       /***** Insert question in the table of questions *****/
-      Gbl.Test.QstCod =
+      QstCod =
       DB_QueryINSERTandReturnCode ("can not create question",
 				   "INSERT INTO tst_questions"
 				   " (CrsCod,EditTime,AnsType,Shuffle,"
@@ -6691,7 +6902,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 				   Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 				   Gbl.Test.Media.MedCod);
      }
-   else				// It's an existing question
+   else			// It's an existing question
      {
       /***** Update existing question *****/
       /* Update question in database */
@@ -6706,19 +6917,21 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		      Gbl.Test.Stem.Text,
 		      Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 		      Gbl.Test.Media.MedCod,
-		      Gbl.Test.QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		      QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
-      Tst_RemAnsFromQst ();
-      Tst_RemTagsFromQst ();
+      Tst_RemAnsFromQst (QstCod);
+      Tst_RemTagsFromQst (QstCod);
      }
+
+   return QstCod;
   }
 
 /*****************************************************************************/
 /*********************** Insert tags in the tags table ***********************/
 /*****************************************************************************/
 
-static void Tst_InsertTagsIntoDB (void)
+static void Tst_InsertTagsIntoDB (long QstCod)
   {
    unsigned NumTag;
    unsigned TagIdx;
@@ -6741,7 +6954,7 @@ static void Tst_InsertTagsIntoDB (void)
                          " (QstCod,TagCod,TagInd)"
                          " VALUES"
                          " (%ld,%ld,%u)",
-			 Gbl.Test.QstCod,TagCod,TagIdx);
+			 QstCod,TagCod,TagIdx);
 
          TagIdx++;
         }
@@ -6751,7 +6964,7 @@ static void Tst_InsertTagsIntoDB (void)
 /******************* Insert answers in the answers table *********************/
 /*****************************************************************************/
 
-static void Tst_InsertAnswersIntoDB (void)
+static void Tst_InsertAnswersIntoDB (long QstCod)
   {
    unsigned NumOpt;
    unsigned i;
@@ -6765,7 +6978,7 @@ static void Tst_InsertAnswersIntoDB (void)
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                          " VALUES"
                          " (%ld,0,%ld,'',-1,'Y')",
-			 Gbl.Test.QstCod,
+			 QstCod,
 			 Gbl.Test.Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
@@ -6778,7 +6991,7 @@ static void Tst_InsertAnswersIntoDB (void)
                             " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                             " VALUES"
                             " (%ld,%u,'%.15lg','',-1,'Y')",
-			    Gbl.Test.QstCod,i,
+			    QstCod,i,
 			    Gbl.Test.Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
@@ -6788,7 +7001,7 @@ static void Tst_InsertAnswersIntoDB (void)
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                          " VALUES"
                          " (%ld,0,'%c','',-1,'Y')",
-			 Gbl.Test.QstCod,
+			 QstCod,
 			 Gbl.Test.Answer.TF);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
@@ -6805,7 +7018,7 @@ static void Tst_InsertAnswersIntoDB (void)
                                " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                                " VALUES"
                                " (%ld,%u,'%s','%s',%ld,'%c')",
-			       Gbl.Test.QstCod,NumOpt,
+			       QstCod,NumOpt,
 			       Gbl.Test.Answer.Options[NumOpt].Text,
 			       Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
 			       Gbl.Test.Answer.Options[NumOpt].Media.MedCod,
@@ -6874,31 +7087,31 @@ void Tst_RemoveCrsTests (long CrsCod)
 /******************** Remove answers from a test question ********************/
 /*****************************************************************************/
 
-static void Tst_RemAnsFromQst (void)
+static void Tst_RemAnsFromQst (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM tst_answers WHERE QstCod=%ld",
-		   Gbl.Test.QstCod);
+		   QstCod);
   }
 
 /*****************************************************************************/
 /************************** Remove tags from a test question *****************/
 /*****************************************************************************/
 
-static void Tst_RemTagsFromQst (void)
+static void Tst_RemTagsFromQst (long QstCod)
   {
    /***** Remove tags *****/
    DB_QueryDELETE ("can not remove the tags of a question",
 		   "DELETE FROM tst_question_tags WHERE QstCod=%ld",
-		   Gbl.Test.QstCod);
+		   QstCod);
   }
 
 /*****************************************************************************/
-/******************** Remove unused tags in current course *******************/
+/********************** Remove unused tags in a course ***********************/
 /*****************************************************************************/
 
-static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
+static void Tst_RemoveUnusedTagsFromCrs (long CrsCod)
   {
    /***** Remove unused tags from tst_tags *****/
    DB_QueryDELETE ("can not remove unused tags",
@@ -6908,8 +7121,8 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
                    " FROM tst_questions,tst_question_tags"
                    " WHERE tst_questions.CrsCod=%ld"
                    " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   CrsCod,
+		   CrsCod);
   }
 
 /*****************************************************************************/

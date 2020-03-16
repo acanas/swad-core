@@ -3906,7 +3906,7 @@ void For_ReceiveForumPost (void)
    Media.Width   = For_IMAGE_SAVED_MAX_WIDTH;
    Media.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
    Media.Quality = For_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL,
+   Med_GetMediaFromForm (-1L,-1L,-1,&Media,NULL,
 	                 For_FORUM_POSTS_SECTION_ID);	// Alerts will be shown later in posts section
 
    /***** Create a new message *****/

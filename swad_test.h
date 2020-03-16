@@ -193,13 +193,20 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void);
 bool Tst_CheckIfQuestionExistsInDB (void);
 
 long Tst_GetIntAnsFromStr (char *Str);
-void Tst_RequestRemoveQst (void);
-void Tst_RemoveQst (void);
+
+void Tst_RequestRemoveSelectedQsts (void);
+void Tst_RemoveSelectedQsts (void);
+void Tst_RequestRemoveOneQst (void);
+void Tst_RemoveOneQst (void);
+
 void Tst_ChangeShuffleQst (void);
 
-void Tst_PutParamQstCod (void);
+void Tst_SetParamGblQstCod (long QstCod);
+long Tst_GetParamGblQstCod (void);
+void Tst_PutParamGblQstCod (void);
+void Tst_PutParamQstCod (long QstCod);
 
-void Tst_InsertOrUpdateQstTagsAnsIntoDB (void);
+long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod);
 
 void Tst_RemoveCrsTests (long CrsCod);
 

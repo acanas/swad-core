@@ -156,7 +156,7 @@ static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Gam_ListQuestionForEdition (const char *StrQstInd);
+static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -1873,6 +1873,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
+   long QstCod;
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1915,7 +1916,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 		QstInd);
 
       /* Get question code (row[1]) */
-      Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[1]);
+      QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /***** Icons *****/
       Gam_SetCurrentGamCod (GamCod);	// Used to pass parameter
@@ -1962,12 +1963,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Put icon to edit the question */
       if (ICanEditQuestions)
-	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamQstCod);
+	{
+	 Tst_SetParamGblQstCod (QstCod);
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamGblQstCod);
+	}
 
       HTM_TD_End ();
 
       /***** Question *****/
-      Gam_ListQuestionForEdition (StrQstInd);
+      Gam_ListQuestionForEdition (QstCod,StrQstInd);
 
       HTM_TR_End ();
 
@@ -1983,7 +1987,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 /********************** List game question for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListQuestionForEdition (const char *StrQstInd)
+static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Question_removed;
@@ -1992,7 +1996,7 @@ static void Gam_ListQuestionForEdition (const char *StrQstInd)
    bool QstExists;
 
    /***** Get question from database *****/
-   QstExists = Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res);	// Question exists?
+   QstExists = Tst_GetOneQuestionByCod (QstCod,&mysql_res);	// Question exists?
 
    if (QstExists)
      {
@@ -2033,13 +2037,13 @@ static void Gam_ListQuestionForEdition (const char *StrQstInd)
 
    /***** Write question code *****/
    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",Gbl.Test.QstCod);
+   HTM_TxtF ("%ld&nbsp;",QstCod);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (QstExists)
-      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
+      Tst_GetAndWriteTagsQst (QstCod);
    HTM_TD_End ();
 
    /***** Write stem and media (row[4]) *****/
@@ -2063,7 +2067,7 @@ static void Gam_ListQuestionForEdition (const char *StrQstInd)
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
+      Tst_WriteAnswersEdit (QstCod);
      }
    else
      {

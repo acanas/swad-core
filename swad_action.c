@@ -635,9 +635,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActImpTstQst	] = {1008,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TsI_ImportQstsFromXML		,NULL},
    [ActLstTstQst	] = { 132,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ListQuestionsToEdit	,NULL},
    [ActRcvTstQst	] = { 126,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Tst_ReceiveQst			,NULL},
-   [ActReqRemTstQst	] = {1523,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestRemoveQst		,NULL},
-   [ActRemTstQst	] = { 133,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RemoveQst			,NULL},
-   [ActShfTstQst	] = { 455,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ChangeShuffleQst		,NULL},
+   [ActReqRemSevTstQst	] = {1835,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestRemoveSelectedQsts	,NULL},
+   [ActRemSevTstQst	] = {1836,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RemoveSelectedQsts		,NULL},
+   [ActReqRemOneTstQst	] = {1523,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestRemoveOneQst	,NULL},
+   [ActRemOneTstQst	] = { 133,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RemoveOneQst		,NULL},
+   [ActChgShfTstQst	] = { 455,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ChangeShuffleQst		,NULL},
 
    [ActCfgTst		] = { 451,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormConfig		,NULL},
    [ActEnableTag	] = { 453,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_EnableTag			,NULL},
@@ -1862,7 +1864,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #130 (obsolete action)
 	-1,			// #131 (obsolete action)
 	ActLstTstQst,		// #132
-	ActRemTstQst,		// #133
+	ActRemOneTstQst,		// #133
 	-1,			// #134 (obsolete action)
 	-1,			// #135 (obsolete action)
 	-1,			// #136 (obsolete action)
@@ -2184,7 +2186,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDisableTag,		// #452
 	ActEnableTag,		// #453
 	ActRcvCfgTst,		// #454
-	ActShfTstQst,		// #455
+	ActChgShfTstQst,		// #455
 	-1,			// #456 (obsolete action)
 	-1,			// #457 (obsolete action)
 	-1,			// #458 (obsolete action)
@@ -3252,7 +3254,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeSocPrf,		// #1520
 	ActFrmLogIn,		// #1521
 	ActUpdSignUpReq,	// #1522
-	ActReqRemTstQst,	// #1523
+	ActReqRemOneTstQst,	// #1523
 	ActReqRemSvyQst,	// #1524
 	ActAdmTchCrsGrp,	// #1525
 	ActChgToAdmTch,		// #1526
@@ -3564,6 +3566,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDwnPrgItm,		// #1833
 	ActRgtPrgItm,		// #1833
 	ActLftPrgItm,		// #1834
+	ActReqRemSevTstQst,	// #1835
+	ActRemSevTstQst,	// #1836
 	};
 
 /*****************************************************************************/

@@ -2474,7 +2474,7 @@ static long TL_ReceivePost (void)
    Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
    Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
    Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Content.Media,NULL,NULL);
+   Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
    if (Content.Txt[0] ||		// Text not empty
@@ -3405,7 +3405,7 @@ static long TL_ReceiveComment (void)
       Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
       Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
       Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (-1,&Content.Media,NULL,NULL);
+      Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
       Ale_ShowAlerts (NULL);
 
       if (Content.Txt[0] ||			// Text not empty

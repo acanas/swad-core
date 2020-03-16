@@ -652,7 +652,6 @@ struct Globals
    struct
      {
       struct Tst_Config Config;
-      long QstCod;
       struct
         {
          unsigned Num;
@@ -690,11 +689,6 @@ struct Globals
         } Answer;
       char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
       Tst_QuestionsOrder_t SelectedOrder;
-      struct
-        {
-         bool CreateXML;					// Create an XML file and Export questions into it?
-         FILE *FileXML;
-        } XML;
      } Test;
    struct
      {

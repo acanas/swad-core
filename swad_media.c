@@ -504,11 +504,11 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 /******************** Get media (image/video) from form **********************/
 /*****************************************************************************/
 // Media constructor must be called before calling this function
-// If NumMediaInForm < 0, params have no suffix
+// If NumMediaInForm  < 0, params have no suffix
 // If NumMediaInForm >= 0, the number is a suffix of the params
 
-void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
-                           void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media),
+void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media,
+                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media),
 			   const char *SectionForAlerts)
   {
    extern const char *Txt_Error_sending_or_processing_image_video;
@@ -581,7 +581,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 
 	 /***** Get media name *****/
 	 if (GetMediaFromDB != NULL)
-	    GetMediaFromDB (NumMediaInForm,Media);
+	    GetMediaFromDB (CrsCod,QstCod,NumMediaInForm,Media);
 	 break;
       default:	// Unknown action
 	 Media->Action = Med_ACTION_NO_MEDIA;

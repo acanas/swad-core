@@ -755,7 +755,7 @@ void Msg_RecMsgFromUsr (void)
    Media.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
    Media.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
    Media.Quality = Msg_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+   Med_GetMediaFromForm (-1L,-1L,-1,&Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
    /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK], that holds the list of the

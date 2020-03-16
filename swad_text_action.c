@@ -9512,15 +9512,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqRemTstQst] =
+	[ActReqRemSevTstQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request removing a self-assesment test question"
+	"Request removing several test questions"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de varias preguntas de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9533,15 +9533,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRemTstQst] =
+	[ActRemSevTstQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a self-assesment test question"
+	"Remove several test questions"
 #elif L==4	// es
-	""
+	"Eliminar varias preguntas de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9554,7 +9554,49 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActShfTstQst] =
+	[ActReqRemOneTstQst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request removing one test question"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de una pregunta de test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRemOneTstQst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Remove a test question"
+#elif L==4	// es
+	"Eliminar una pregunta de test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActChgShfTstQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
