@@ -136,6 +136,7 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
 static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
+static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod);
 static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -792,20 +793,6 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
    unsigned NumQst;
    long QstCod;
    MYSQL_ROW row;
-   double ScoreThisQst;		// Not used here
-   bool AnswerIsNotBlank;	// Not used here
-   /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Feedback
-   row[6] MedCod
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
-   */
 
    /***** Write rows *****/
    for (NumQst = 0;
@@ -819,13 +806,47 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
+      /***** Show question *****/
+      Tst_ShowOneTestQuestionWhenSeeing (NumQst,QstCod);
+     }
+  }
+
+/*****************************************************************************/
+/*************************** Write one test question *************************/
+/*****************************************************************************/
+
+static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   double ScoreThisQst;		// Not used here
+   bool AnswerIsNotBlank;	// Not used here
+
+   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))	// Question exists
+     {
+      /***** Get row of the result of the query *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] UNIX_TIMESTAMP(EditTime)
+      row[1] AnsType
+      row[2] Shuffle
+      row[3] Stem
+      row[4] Feedback
+      row[5] MedCod
+      row[6] NumHits
+      row[7] NumHitsNotBlank
+      row[8] Score
+      */
+
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
 			      &Gbl.Usrs.Me.UsrDat,
-                              NumQst,QstCod,row,
+			      NumQst,QstCod,row,
 			      TsV_MAX_VISIBILITY,	// All visible here
-	                      &ScoreThisQst,		// Not used here
-	                      &AnswerIsNotBlank);	// Not used here
+			      &ScoreThisQst,		// Not used here
+			      &AnswerIsNotBlank);	// Not used here
      }
+   else
+      Lay_ShowErrorAndExit ("Wrong question.");
   }
 
 /*****************************************************************************/
@@ -867,7 +888,6 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
-   long QstCod;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
 
@@ -887,31 +907,26 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
 	 /*
-	 row[0] QstCod
-	 row[1] UNIX_TIMESTAMP(EditTime)
-	 row[2] AnsType
-	 row[3] Shuffle
-	 row[4] Stem
-	 row[5] Feedback
-	 row[6] MedCod
-	 row[7] NumHits
-	 row[8] NumHitsNotBlank
-	 row[9] Score
+	 row[0] UNIX_TIMESTAMP(EditTime)
+	 row[1] AnsType
+	 row[2] Shuffle
+	 row[3] Stem
+	 row[4] Feedback
+	 row[5] MedCod
+	 row[6] NumHits
+	 row[7] NumHitsNotBlank
+	 row[8] Score
 	 */
-
-	 /***** Get the code of question (row[0]) *****/
-	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
 	 /***** Write question and answers *****/
 	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                         &Gbl.Usrs.Me.UsrDat,
-				 NumQst,QstCod,row,
+				 NumQst,Gbl.Test.QstCodes[NumQst],row,
 				 Gbl.Test.Config.Visibility,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
-	 TsR_StoreOneTestResultQstInDB (TstCod,QstCod,
+	 TsR_StoreOneTestResultQstInDB (TstCod,Gbl.Test.QstCodes[NumQst],
 				        NumQst,	// 0, 1, 2, 3...
 				        ScoreThisQst);
 
@@ -922,7 +937,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 
 	 /***** Update the number of accesses and the score of this question *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	    Tst_UpdateScoreQst (QstCod,ScoreThisQst,AnswerIsNotBlank);
+	    Tst_UpdateScoreQst (Gbl.Test.QstCodes[NumQst],ScoreThisQst,AnswerIsNotBlank);
 	}
       else
 	{
@@ -958,16 +973,15 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    bool IsVisibleQstAndAnsTxt = TsV_IsVisibleQstAndAnsTxt (Visibility);
    /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Feedback
-   row[6] MedCod
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
+   row[0] UNIX_TIMESTAMP(EditTime)
+   row[1] AnsType
+   row[2] Shuffle
+   row[3] Stem
+   row[4] Feedback
+   row[5] MedCod
+   row[6] NumHits
+   row[7] NumHitsNotBlank
+   row[8] Score
    */
 
    /***** Create test question *****/
@@ -981,42 +995,42 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    HTM_Unsigned (NumQst + 1);
    HTM_DIV_End ();
 
-   /***** Write answer type (row[2]) *****/
-   Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+   /***** Write answer type (row[1]) *****/
+   Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
    HTM_DIV_Begin ("class=\"DAT_SMALL\"");
    HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    HTM_DIV_End ();
 
    HTM_TD_End ();
 
-   /***** Write stem (row[4]) *****/
+   /***** Write stem (row[3]) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteQstStem (row[4],"TEST_EXA",IsVisibleQstAndAnsTxt);
+   Tst_WriteQstStem (row[3],"TEST_EXA",IsVisibleQstAndAnsTxt);
 
-   /***** Get and show media (row[6]) *****/
+   /***** Get and show media (row[5]) *****/
    if (IsVisibleQstAndAnsTxt)
      {
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
-      Med_ShowMedia (&Gbl.Test.Media,
+      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
+      Med_ShowMedia (&Gbl.Test.Question.Media,
 		     "TEST_MED_SHOW_CONT",
 		     "TEST_MED_SHOW");
      }
 
-   /***** Write answers depending on shuffle (row[3]) and feedback (row[5])  *****/
+   /***** Write answers depending on shuffle (row[2]) and feedback (row[4])  *****/
    switch (ActionToDoWithQuestions)
      {
       case Tst_SHOW_TEST_TO_ANSWER:
-         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
+         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[2][0] == 'Y'));
 	 break;
       case Tst_SHOW_TEST_RESULT:
 	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,
 				     Visibility,
 				     ScoreThisQst,AnswerIsNotBlank);
 
-	 /* Write question feedback (row[5]) */
+	 /* Write question feedback (row[4]) */
 	 if (TsV_IsVisibleFeedbackTxt (Visibility))
-	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
+	    Tst_WriteQstFeedback (row[4],"TEST_EXA_LIGHT");
 	 break;
       default:
 	 break;
@@ -2584,16 +2598,7 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
    snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
-	     "SELECT DISTINCTROW tst_questions.QstCod,"				// row[0]
-	                        "UNIX_TIMESTAMP(tst_questions.EditTime),"	// row[1]
-	                        "tst_questions.AnsType,"			// row[2]
-	                        "tst_questions.Shuffle,"			// row[3]
-	                        "tst_questions.Stem,"				// row[4]
-	                        "tst_questions.Feedback,"			// row[5]
-	                        "tst_questions.MedCod,"				// row[6]
-	                        "tst_questions.NumHits,"			// row[7]
-	                        "tst_questions.NumHitsNotBlank,"		// row[8]
-	                        "tst_questions.Score"				// row[9]
+	     "SELECT DISTINCT tst_questions.QstCod"		// row[0]
 	     " FROM tst_questions,tst_question_tags,tst_tags"
 	     " WHERE tst_questions.CrsCod=%ld"
 	     " AND tst_questions.QstCod NOT IN"
@@ -2718,16 +2723,15 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
   {
    /***** Get data of a question from database *****/
    return (DB_QuerySELECT (mysql_res,"can not get data of a question",
-			   "SELECT QstCod,"			// row[0]
-			          "UNIX_TIMESTAMP(EditTime),"	// row[1]
-			          "AnsType,"			// row[2]
-			          "Shuffle,"			// row[3]
-			          "Stem,"			// row[4]
-			          "Feedback,"			// row[5]
-			          "MedCod,"			// row[6]
-			          "NumHits,"			// row[7]
-			          "NumHitsNotBlank,"		// row[8]
-			          "Score"			// row[9]
+			   "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
+			          "AnsType,"			// row[1]
+			          "Shuffle,"			// row[2]
+			          "Stem,"			// row[3]
+			          "Feedback,"			// row[4]
+			          "MedCod,"			// row[5]
+			          "NumHits,"			// row[6]
+			          "NumHitsNotBlank,"		// row[7]
+			          "Score"			// row[8]
 			   " FROM tst_questions"
 			   " WHERE QstCod=%ld",
 			   QstCod) == 1);
@@ -2866,16 +2870,15 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
       /***** Get row from database *****/
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[0] UNIX_TIMESTAMP(EditTime)
+      row[1] AnsType
+      row[2] Shuffle
+      row[3] Stem
+      row[4] Feedback
+      row[5] MedCod
+      row[6] NumHits
+      row[7] NumHitsNotBlank
+      row[8] Score
       */
 
       /***** Create test question *****/
@@ -2910,8 +2913,8 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
       HTM_UnsignedLong (NumRow + 1);
       HTM_DIV_End ();
 
-      /* Write answer type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      /* Write answer type (row[1]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       HTM_DIV_Begin ("class=\"DAT_SMALL\"");
       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_DIV_End ();
@@ -2923,8 +2926,8 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
       HTM_TxtF ("%ld&nbsp;",QstCod);
       HTM_TD_End ();
 
-      /* Write the date (row[1] has the UTC date-time) */
-      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      /* Write the date (row[0] has the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
       if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
@@ -2940,7 +2943,7 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
       Tst_GetAndWriteTagsQst (QstCod);
       HTM_TD_End ();
 
-      /* Write if shuffle is enabled (row[3]) */
+      /* Write if shuffle is enabled (row[2]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 	  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
@@ -2954,44 +2957,44 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
 	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
-			     row[3][0] == 'Y' ? " checked=\"checked\"" :
+			     row[2][0] == 'Y' ? " checked=\"checked\"" :
 						"");
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
 
-      /* Write stem (row[4]) */
+      /* Write stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[4],"TEST_EDI",
+      Tst_WriteQstStem (row[3],"TEST_EDI",
 			true);	// Visible
 
-      /***** Get and show media (row[6]) *****/
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
-      Med_ShowMedia (&Gbl.Test.Media,
+      /***** Get and show media (row[5]) *****/
+      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
+      Med_ShowMedia (&Gbl.Test.Question.Media,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
 
-      /* Write feedback (row[5]) and answers */
-      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+      /* Write feedback (row[4]) and answers */
+      Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
       Tst_WriteAnswersEdit (QstCod);
       HTM_TD_End ();
 
       /* Get number of hits
 	 (number of times that the question has been answered,
-	 including blank answers) (row[7]) */
-      if (sscanf (row[7],"%lu",&NumHitsThisQst) != 1)
+	 including blank answers) (row[6]) */
+      if (sscanf (row[6],"%lu",&NumHitsThisQst) != 1)
 	 Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
 
       /* Get number of hits not blank
 	 (number of times that the question has been answered
-	 with a not blank answer) (row[8]) */
-      if (sscanf (row[8],"%lu",&NumHitsNotBlankThisQst) != 1)
+	 with a not blank answer) (row[7]) */
+      if (sscanf (row[7],"%lu",&NumHitsNotBlankThisQst) != 1)
 	 Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
-      /* Get the acumulated score of the question (row[9]) */
+      /* Get the acumulated score of the question (row[8]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[9],"%lf",&TotalScoreThisQst) != 1)
+      if (sscanf (row[8],"%lf",&TotalScoreThisQst) != 1)
 	 Lay_ShowErrorAndExit ("Wrong score of a question.");
       Str_SetDecimalPointToLocal ();	// Return to local system
 
@@ -3126,16 +3129,15 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[0] UNIX_TIMESTAMP(EditTime)
+      row[1] AnsType
+      row[2] Shuffle
+      row[3] Stem
+      row[4] Feedback
+      row[5] MedCod
+      row[6] NumHits
+      row[7] NumHitsNotBlank
+      row[8] Score
       */
 
       /***** Create test question *****/
@@ -3162,8 +3164,8 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
       HTM_TxtF ("%ld&nbsp;",QstCod);
       HTM_TD_End ();
 
-      /* Write the date (row[1] has the UTC date-time) */
-      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      /* Write the date (row[0] has the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
       if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
@@ -3179,34 +3181,34 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
       Tst_GetAndWriteTagsQst (QstCod);
       HTM_TD_End ();
 
-      /* Write the question type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      /* Write the question type (row[1]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_TD_End ();
 
-      /* Write if shuffle is enabled (row[3]) */
+      /* Write if shuffle is enabled (row[2]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s  disabled=\"disabled\"",
-			  row[3][0] == 'Y' ? " checked=\"checked\"" :
+			  row[2][0] == 'Y' ? " checked=\"checked\"" :
 					     "");
       HTM_TD_End ();
 
-      /* Write stem (row[4]) */
+      /* Write stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (row[4],"TEST_EDI",
+      Tst_WriteQstStem (row[3],"TEST_EDI",
 			true);	// Visible
 
-      /***** Get and show media (row[6]) *****/
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
-      Med_ShowMedia (&Gbl.Test.Media,
+      /***** Get and show media (row[5]) *****/
+      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
+      Med_ShowMedia (&Gbl.Test.Question.Media,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
 
-      /* Write feedback (row[5]) */
-      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+      /* Write feedback (row[4]) */
+      Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Write answers */
       Tst_WriteAnswersEdit (QstCod);
@@ -5258,7 +5260,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_Txt (Stem);
    HTM_TEXTAREA_End ();
    HTM_BR ();
-   Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
+   Tst_PutFormToEditQstMedia (&Gbl.Test.Question.Media,-1,
                               false);
 
    /***** Feedback *****/
@@ -5352,7 +5354,8 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s%s",
-		       Gbl.Test.Shuffle ? " checked=\"checked\"" : "",
+		       Gbl.Test.Question.Shuffle ? " checked=\"checked\"" :
+				                   "",
    		       Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
                        Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" :
                 	                                                "");
@@ -5548,17 +5551,17 @@ void Tst_QstConstructor (void)
   {
    unsigned NumOpt;
 
-   Gbl.Test.Stem.Text = NULL;
-   Gbl.Test.Stem.Length = 0;
-   Gbl.Test.Feedback.Text = NULL;
-   Gbl.Test.Feedback.Length = 0;
-   Gbl.Test.Shuffle = false;
+   Gbl.Test.Question.Stem.Text = NULL;
+   Gbl.Test.Question.Stem.Length = 0;
+   Gbl.Test.Question.Feedback.Text = NULL;
+   Gbl.Test.Question.Feedback.Length = 0;
+   Gbl.Test.Question.Shuffle = false;
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
    Gbl.Test.Answer.TF = ' ';
 
    /***** Initialize image attached to stem *****/
-   Med_MediaConstructor (&Gbl.Test.Media);
+   Med_MediaConstructor (&Gbl.Test.Question.Media);
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
@@ -5655,7 +5658,7 @@ static void Tst_ResetMediaOfQuestion (void)
    unsigned NumOpt;
 
    /***** Reset media for stem *****/
-   Med_ResetMedia (&Gbl.Test.Media);
+   Med_ResetMedia (&Gbl.Test.Question.Media);
 
    /***** Reset media for every answer option *****/
    for (NumOpt = 0;
@@ -5672,7 +5675,7 @@ static void Tst_FreeMediaOfQuestion (void)
   {
    unsigned NumOpt;
 
-   Med_MediaDestructor (&Gbl.Test.Media);
+   Med_MediaDestructor (&Gbl.Test.Question.Media);
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
@@ -5710,7 +5713,7 @@ static void Tst_GetQstDataFromDB (long QstCod,
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
 
    /* Get shuffle (row[1]) */
-   Gbl.Test.Shuffle = (row[1][0] == 'Y');
+   Gbl.Test.Question.Shuffle = (row[1][0] == 'Y');
 
    /* Get the stem of the question from the database (row[2]) */
    Str_Copy (Stem,row[2],
@@ -5724,8 +5727,8 @@ static void Tst_GetQstDataFromDB (long QstCod,
 	           Cns_MAX_BYTES_TEXT);
 
    /* Get media (row[4]) */
-   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
-   Med_GetMediaDataByCod (&Gbl.Test.Media);
+   Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
+   Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -5887,7 +5890,7 @@ Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
          if (!strcmp (StrAnsTypeBD,Tst_StrAnswerTypesDB[AnsType]))
             return AnsType;
 
-   Lay_ShowErrorAndExit ("Wrong type of answer.");
+   Lay_ShowErrorAndExit ("Wrong type of answer. 1");
    return (Tst_AnswerType_t) 0;	// Not reached
   }
 
@@ -5900,9 +5903,9 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
    unsigned AnsType;
 
    if (sscanf (UnsignedStr,"%u",&AnsType) != 1)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
+      Lay_ShowErrorAndExit ("Wrong type of answer. 2");
    if (AnsType >= Tst_NUM_ANS_TYPES)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
+      Lay_ShowErrorAndExit ("Wrong type of answer. 3");
    return (Tst_AnswerType_t) AnsType;
   }
 
@@ -5977,7 +5980,7 @@ static long Tst_GetQstFromForm (char *Stem,char *Feedback)
                                                    Tst_NUM_ANS_TYPES - 1,
                                                    (unsigned long) Tst_ANS_ALL);
    if (Gbl.Test.AnswerType == Tst_ANS_ALL)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
+      Lay_ShowErrorAndExit ("Wrong type of answer. 4");
 
    /***** Get question tags *****/
    for (NumTag = 0;
@@ -6012,18 +6015,18 @@ static long Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get media associated to the stem (action, file and title) *****/
-   Gbl.Test.Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
-   Gbl.Test.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
-   Gbl.Test.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
+   Gbl.Test.Question.Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+   Gbl.Test.Question.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+   Gbl.Test.Question.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
                          -1,	// < 0 ==> the image associated to the stem
-                         &Gbl.Test.Media,
+                         &Gbl.Test.Question.Media,
                          Tst_GetMediaFromDB,
 			 NULL);
    Ale_ShowAlerts (NULL);
 
    /***** Get answers *****/
-   Gbl.Test.Shuffle = false;
+   Gbl.Test.Question.Shuffle = false;
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
@@ -6056,7 +6059,7 @@ static long Tst_GetQstFromForm (char *Stem,char *Feedback)
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Gbl.Test.Shuffle = Par_GetParToBool ("Shuffle");
+         Gbl.Test.Question.Shuffle = Par_GetParToBool ("Shuffle");
 	 /* falls through */
 	 /* no break */
       case Tst_ANS_TEXT:
@@ -6143,10 +6146,10 @@ static long Tst_GetQstFromForm (char *Stem,char *Feedback)
         NumTag++)
       if (Gbl.Test.Tags.Txt[NumTag][0])
          Gbl.Test.Tags.Num++;
-   Gbl.Test.Stem.Text = Stem;
-   Gbl.Test.Stem.Length = strlen (Gbl.Test.Stem.Text);
-   Gbl.Test.Feedback.Text = Feedback;
-   Gbl.Test.Feedback.Length = strlen (Gbl.Test.Feedback.Text);
+   Gbl.Test.Question.Stem.Text = Stem;
+   Gbl.Test.Question.Stem.Length = strlen (Gbl.Test.Question.Stem.Text);
+   Gbl.Test.Question.Feedback.Text = Feedback;
+   Gbl.Test.Question.Feedback.Length = strlen (Gbl.Test.Question.Feedback.Text);
 
    return QstCod;
   }
@@ -6186,7 +6189,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
      }
 
    /***** A question must have a stem*****/
-   if (!Gbl.Test.Stem.Length)
+   if (!Gbl.Test.Question.Stem.Length)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
       return false;
@@ -6363,7 +6366,7 @@ bool Tst_CheckIfQuestionExistsInDB (void)
 			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-			      Gbl.Test.Stem.Text);
+			      Gbl.Test.Question.Stem.Text);
 
    if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
      {
@@ -6454,7 +6457,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (long QstCod)
    /***** Media associated to question stem *****/
    CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
                                             -1L);	// Get current media code associated to stem
-   Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Media);
+   Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Question.Media);
 
    /****** Move media associated to answers *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
@@ -6896,11 +6899,12 @@ static long Tst_InsertOrUpdateQstIntoDB (long QstCod)
 				   "0,0)",
 				   Gbl.Hierarchy.Crs.CrsCod,
 				   Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-				   Gbl.Test.Shuffle ? 'Y' :
-						      'N',
-				   Gbl.Test.Stem.Text,
-				   Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-				   Gbl.Test.Media.MedCod);
+				   Gbl.Test.Question.Shuffle ? 'Y' :
+						               'N',
+				   Gbl.Test.Question.Stem.Text,
+				   Gbl.Test.Question.Feedback.Text ? Gbl.Test.Question.Feedback.Text :
+					                             "",
+				   Gbl.Test.Question.Media.MedCod);
      }
    else			// It's an existing question
      {
@@ -6912,11 +6916,12 @@ static long Tst_InsertOrUpdateQstIntoDB (long QstCod)
 		      "Stem='%s',Feedback='%s',MedCod=%ld"
 		      " WHERE QstCod=%ld AND CrsCod=%ld",
 		      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-		      Gbl.Test.Shuffle ? 'Y' :
-					 'N',
-		      Gbl.Test.Stem.Text,
-		      Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		      Gbl.Test.Media.MedCod,
+		      Gbl.Test.Question.Shuffle ? 'Y' :
+					          'N',
+		      Gbl.Test.Question.Stem.Text,
+		      Gbl.Test.Question.Feedback.Text ? Gbl.Test.Question.Feedback.Text :
+			                                "",
+		      Gbl.Test.Question.Media.MedCod,
 		      QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */

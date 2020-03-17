@@ -2899,11 +2899,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 			true);	// Visible
 
       /* Get media (row[2]) */
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
+      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
+      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
 
       /* Show media */
-      Med_ShowMedia (&Gbl.Test.Media,
+      Med_ShowMedia (&Gbl.Test.Question.Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 

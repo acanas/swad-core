@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.148 (2020-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.148.2 (2020-03-17)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -524,6 +524,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.148.2: Mar 17, 2020	Code refactoring in tests. (282868 lines)
+	Version 19.148.1: Mar 17, 2020	Code refactoring in tests. (282851 lines)
 	Version 19.148:   Mar 17, 2020	Code refactoring in tests.
 					New actions to remove several test questions. (282868 lines)
 	Version 19.147:   Mar 14, 2020	Change MathJax to version 3.0.1. (282550 lines)

@@ -248,20 +248,19 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[0] UNIX_TIMESTAMP(EditTime)
+      row[1] AnsType
+      row[2] Shuffle
+      row[3] Stem
+      row[4] Feedback
+      row[5] MedCod
+      row[6] NumHits
+      row[7] NumHitsNotBlank
+      row[8] Score
       */
 
-      /***** Write the question type (row[2]) *****/
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      /***** Write the answer type (row[1]) *****/
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       fprintf (FileXML,"<question type=\"%s\">%s",
                Tst_StrAnswerTypesXML[Gbl.Test.AnswerType],Txt_NEW_LINE);
 
@@ -270,23 +269,23 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       TsI_GetAndWriteTagsXML (QstCod,FileXML);
       fprintf (FileXML,"</tags>%s",Txt_NEW_LINE);
 
-      /***** Write the stem (row[4]), that is in HTML format *****/
+      /***** Write the stem (row[3]), that is in HTML format *****/
       fprintf (FileXML,"<stem>%s</stem>%s",
-               row[4],Txt_NEW_LINE);
+               row[3],Txt_NEW_LINE);
 
-      /***** Write the feedback (row[5]), that is in HTML format *****/
-      if (row[5])
-	 if (row[5][0])
+      /***** Write the feedback (row[4]), that is in HTML format *****/
+      if (row[4])
+	 if (row[4][0])
 	    fprintf (FileXML,"<feedback>%s</feedback>%s",
-		     row[5],Txt_NEW_LINE);
+		     row[4],Txt_NEW_LINE);
 
       /***** Write the answers of this question.
-             Shuffle can be enabled or disabled (row[3]) *****/
+             Shuffle can be enabled or disabled (row[2]) *****/
       fprintf (FileXML,"<answer");
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
-                  (row[3][0] == 'Y') ? "yes" :
+                  (row[2][0] == 'Y') ? "yes" :
                 	               "no");
       fprintf (FileXML,">");
       TsI_WriteAnswersOfAQstXML (QstCod,FileXML);
@@ -624,8 +623,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Stem,Cns_MAX_BYTES_TEXT,true);
 
-		     Gbl.Test.Stem.Text   = Stem;
-		     Gbl.Test.Stem.Length = strlen (Stem);
+		     Gbl.Test.Question.Stem.Text   = Stem;
+		     Gbl.Test.Question.Stem.Length = strlen (Stem);
 		    }
 		  break;	// Only first element "stem"
 		 }
@@ -644,14 +643,14 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Feedback,Cns_MAX_BYTES_TEXT,true);
 
-		     Gbl.Test.Feedback.Text   = Feedback;
-		     Gbl.Test.Feedback.Length = strlen (Feedback);
+		     Gbl.Test.Question.Feedback.Text   = Feedback;
+		     Gbl.Test.Question.Feedback.Length = strlen (Feedback);
 		    }
 		  break;	// Only first element "feedback"
 		 }
 
 	    /* Get shuffle. By default, shuffle is false. */
-	    Gbl.Test.Shuffle = false;
+	    Gbl.Test.Question.Shuffle = false;
 	    for (AnswerElem = QuestionElem->FirstChild;
 		 AnswerElem != NULL;
 		 AnswerElem = AnswerElem->NextBrother)
@@ -665,7 +664,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			  Attribute = Attribute->Next)
 			if (!strcmp (Attribute->AttributeName,"shuffle"))
 			  {
-			   Gbl.Test.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			   Gbl.Test.Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
 			   break;	// Only first attribute "shuffle"
 			  }
 		  break;	// Only first element "answer"
@@ -987,7 +986,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
-      if (Gbl.Test.Shuffle)
+      if (Gbl.Test.Question.Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
 		      QuestionExists ? "ICO_HIDDEN ICO16x16" :
                 	               "ICO16x16");

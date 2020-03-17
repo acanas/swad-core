@@ -847,7 +847,6 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
-   long QstCod;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
    bool ThisQuestionHasBeenEdited;
@@ -865,20 +864,20 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
 	 /*
-	 row[0] QstCod
-	 row[1] UNIX_TIMESTAMP(EditTime)
-	 row[2] AnsType
-	 row[3] Shuffle
-	 row[4] Stem
-	 row[5] Feedback
-	 row[6] MedCod
-	 row[7] NumHits
-	 row[8] NumHitsNotBlank
-	 row[9] Score
+	 row[0] UNIX_TIMESTAMP(EditTime)
+	 row[1] AnsType
+	 row[2] Shuffle
+	 row[3] Stem
+	 row[4] Feedback
+	 row[5] MedCod
+	 row[6] NumHits
+	 row[7] NumHitsNotBlank
+	 row[8] Score
 	 */
+
 	 /***** If this question has been edited later than test time
 	        ==> don't show question ****/
-	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
 	 ThisQuestionHasBeenEdited = false;
 	 if (EditTimeUTC > TstTimeUTC)
 	    ThisQuestionHasBeenEdited = true;
@@ -899,19 +898,13 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	    HTM_TR_End ();
 	   }
 	 else
-	   {
-	    /***** Get the code of question (row[0]) *****/
-	    if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong code of question.");
-
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            UsrDat,
-				    NumQst,QstCod,row,
+				    NumQst,Gbl.Test.QstCodes[NumQst],row,
 				    Visibility,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
-	   }
 	}
       else
 	{

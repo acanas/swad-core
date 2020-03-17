@@ -666,13 +666,7 @@ struct Globals
       char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
       bool AllowTeachers;	// Can teachers of this course see the test result?
       bool AllAnsTypes;
-      struct
-        {
-         char *Text;
-         size_t Length;
-        } Stem, Feedback;
-      struct Media Media;
-      bool Shuffle;
+      struct Tst_Question Question;
       struct
         {
          unsigned NumOptions;

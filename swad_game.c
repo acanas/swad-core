@@ -2003,16 +2003,15 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Feedback
-      row[6] MedCod
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[0] UNIX_TIMESTAMP(EditTime)
+      row[1] AnsType
+      row[2] Shuffle
+      row[3] Stem
+      row[4] Feedback
+      row[5] MedCod
+      row[6] NumHits
+      row[7] NumHitsNotBlank
+      row[8] Score
       */
      }
 
@@ -2024,11 +2023,11 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
    HTM_Txt (StrQstInd);
    HTM_DIV_End ();
 
-   /* Write answer type (row[2]) */
+   /* Write answer type (row[1]) */
    HTM_DIV_Begin ("class=\"DAT_SMALL\"");
    if (QstExists)
      {
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
      }
    HTM_DIV_End ();
@@ -2046,25 +2045,25 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
       Tst_GetAndWriteTagsQst (QstCod);
    HTM_TD_End ();
 
-   /***** Write stem and media (row[4]) *****/
+   /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (QstExists)
      {
       /* Write stem */
-      Tst_WriteQstStem (row[4],"TEST_EDI",
+      Tst_WriteQstStem (row[3],"TEST_EDI",
 			true);	// Visible
 
-      /* Get media (row[6]) */
-      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
-      Med_GetMediaDataByCod (&Gbl.Test.Media);
+      /* Get media (row[5]) */
+      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
 
       /* Show media */
-      Med_ShowMedia (&Gbl.Test.Media,
+      Med_ShowMedia (&Gbl.Test.Question.Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 
-      /* Show feedback (row[5]) */
-      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+      /* Show feedback (row[4]) */
+      Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
       Tst_WriteAnswersEdit (QstCod);
