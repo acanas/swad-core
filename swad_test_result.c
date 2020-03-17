@@ -901,7 +901,8 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            UsrDat,
-				    NumQst,Gbl.Test.QstCodes[NumQst],row,
+				    NumQst,Gbl.Test.QstCodes[NumQst],
+				    row,
 				    Visibility,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here

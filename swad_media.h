@@ -150,7 +150,7 @@ void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media);
 void Med_MoveMediaToDefinitiveDir (struct Media *Media);
 void Med_StoreMediaInDB (struct Media *Media);
 
-void Med_ShowMedia (struct Media *Media,
+void Med_ShowMedia (const struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);

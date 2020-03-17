@@ -2863,6 +2863,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   struct Media Media;
 
    /***** Trivial check: do not show anything on match start and end *****/
    switch (Match->Status.Showing)
@@ -2899,11 +2900,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 			true);	// Visible
 
       /* Get media (row[2]) */
-      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
-      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
+      Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
+      Med_GetMediaDataByCod (&Media);
 
       /* Show media */
-      Med_ShowMedia (&Gbl.Test.Question.Media,
+      Med_ShowMedia (&Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 

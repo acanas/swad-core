@@ -147,7 +147,9 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			     struct UsrData *UsrDat,
-                             unsigned NumQst,long QstCod,MYSQL_ROW row,
+                             unsigned NumQst,
+                             long QstCod,
+                             MYSQL_ROW row,
 			     unsigned Visibility,
                              double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
@@ -193,16 +195,16 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 void Tst_ReceiveConfigTst (void);
 void Tst_ShowFormEditOneQst (void);
 
-void Tst_QstConstructor (void);
-void Tst_QstDestructor (void);
+void Tst_QstConstructor (struct Tst_Question *Question);
+void Tst_QstDestructor (struct Tst_Question *Question);
 
 int Tst_AllocateTextChoiceAnswer (unsigned NumOpt);
 
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void);
+bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question *Question);
 
-bool Tst_CheckIfQuestionExistsInDB (void);
+bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question);
 
 long Tst_GetIntAnsFromStr (char *Str);
 
@@ -218,7 +220,8 @@ long Tst_GetParamGblQstCod (void);
 void Tst_PutParamGblQstCod (void);
 void Tst_PutParamQstCod (long QstCod);
 
-long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod);
+long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
+                                         const struct Tst_Question *Question);
 
 void Tst_RemoveCrsTests (long CrsCod);
 

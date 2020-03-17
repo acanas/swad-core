@@ -161,17 +161,17 @@ static bool Med_MoveTmpFileToDefDir (struct Media *Media,
 				     const char PathMedPriv[PATH_MAX + 1],
 				     const char *Extension);
 
-static void Med_ShowJPG (struct Media *Media,
+static void Med_ShowJPG (const struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
-static void Med_ShowGIF (struct Media *Media,
+static void Med_ShowGIF (const struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
-static void Med_ShowVideo (struct Media *Media,
+static void Med_ShowVideo (const struct Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia);
-static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia);
-static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia);
+static void Med_ShowYoutube (const struct Media *Media,const char *ClassMedia);
+static void Med_ShowEmbed (const struct Media *Media,const char *ClassMedia);
 static void Med_AlertThirdPartyCookies (void);
 
 static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
@@ -1426,7 +1426,7 @@ void Med_StoreMediaInDB (struct Media *Media)
 /****** Show a user uploaded media (in a test question, timeline, etc.) ******/
 /*****************************************************************************/
 
-void Med_ShowMedia (struct Media *Media,
+void Med_ShowMedia (const struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia)
   {
    bool PutLink;
@@ -1515,7 +1515,7 @@ void Med_ShowMedia (struct Media *Media,
 /************************** Show a user uploaded JPG *************************/
 /*****************************************************************************/
 
-static void Med_ShowJPG (struct Media *Media,
+static void Med_ShowJPG (const struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
@@ -1559,7 +1559,7 @@ static void Med_ShowJPG (struct Media *Media,
 /************************** Show a user uploaded GIF *************************/
 /*****************************************************************************/
 
-static void Med_ShowGIF (struct Media *Media,
+static void Med_ShowGIF (const struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
@@ -1650,7 +1650,7 @@ static void Med_ShowGIF (struct Media *Media,
 /************************ Show a user uploaded video *************************/
 /*****************************************************************************/
 
-static void Med_ShowVideo (struct Media *Media,
+static void Med_ShowVideo (const struct Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia)
   {
@@ -1704,7 +1704,7 @@ static void Med_ShowVideo (struct Media *Media,
 /*********************** Show an embed YouTube video *************************/
 /*****************************************************************************/
 
-static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
+static void Med_ShowYoutube (const struct Media *Media,const char *ClassMedia)
   {
    /***** Check if YouTube code exists *****/
    if (Media->Name[0])	// YouTube code
@@ -1744,7 +1744,7 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 /*************************** Show an embed media *****************************/
 /*****************************************************************************/
 
-static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
+static void Med_ShowEmbed (const struct Media *Media,const char *ClassMedia)
   {
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL

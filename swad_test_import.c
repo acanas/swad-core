@@ -79,6 +79,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
+                                     const struct Tst_Question *Question,
                                      bool QuestionExists);
 
 /*****************************************************************************/
@@ -528,6 +529,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLAttribute *Attribute;
    bool AnswerTypeFound;
    bool QuestionExists;
+   struct Tst_Question Question;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
@@ -571,7 +573,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	 if (!strcmp (QuestionElem->TagName,"question"))
 	   {
 	    /***** Create test question *****/
-	    Tst_QstConstructor ();
+	    Tst_QstConstructor (&Question);
 
 	    /* Get type of questions (in mandatory attribute "type") */
 	    AnswerTypeFound = false;
@@ -623,8 +625,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Stem,Cns_MAX_BYTES_TEXT,true);
 
-		     Gbl.Test.Question.Stem.Text   = Stem;
-		     Gbl.Test.Question.Stem.Length = strlen (Stem);
+		     Question.Stem.Text   = Stem;
+		     Question.Stem.Length = strlen (Stem);
 		    }
 		  break;	// Only first element "stem"
 		 }
@@ -643,14 +645,14 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Feedback,Cns_MAX_BYTES_TEXT,true);
 
-		     Gbl.Test.Question.Feedback.Text   = Feedback;
-		     Gbl.Test.Question.Feedback.Length = strlen (Feedback);
+		     Question.Feedback.Text   = Feedback;
+		     Question.Feedback.Length = strlen (Feedback);
 		    }
 		  break;	// Only first element "feedback"
 		 }
 
 	    /* Get shuffle. By default, shuffle is false. */
-	    Gbl.Test.Question.Shuffle = false;
+	    Question.Shuffle = false;
 	    for (AnswerElem = QuestionElem->FirstChild;
 		 AnswerElem != NULL;
 		 AnswerElem = AnswerElem->NextBrother)
@@ -664,7 +666,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			  Attribute = Attribute->Next)
 			if (!strcmp (Attribute->AttributeName,"shuffle"))
 			  {
-			   Gbl.Test.Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			   Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
 			   break;	// Only first attribute "shuffle"
 			  }
 		  break;	// Only first element "answer"
@@ -674,22 +676,22 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	    TsI_GetAnswerFromXML (AnswerElem);
 
 	    /* Make sure that tags, text and answer are not empty */
-	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
+	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
 	      {
 	       /* Check if question already exists in database */
-	       QuestionExists = Tst_CheckIfQuestionExistsInDB ();
+	       QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question);
 
 	       /* Write row with this imported question */
-	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,QuestionExists);
+	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,&Question,QuestionExists);
 
 	       /***** If a new question ==> insert question, tags and answer in the database *****/
 	       if (!QuestionExists)
-		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L) <= 0)
+		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question) <= 0)
 		     Lay_ShowErrorAndExit ("Can not create question.");
 	      }
 
 	    /***** Destroy test question *****/
-	    Tst_QstDestructor ();
+	    Tst_QstDestructor (&Question);
 	   }
 	}
 
@@ -899,6 +901,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
+                                     const struct Tst_Question *Question,
                                      bool QuestionExists)
   {
    extern const char *Txt_Existing_question;
@@ -986,7 +989,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
-      if (Gbl.Test.Question.Shuffle)
+      if (Question->Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
 		      QuestionExists ? "ICO_HIDDEN ICO16x16" :
                 	               "ICO16x16");

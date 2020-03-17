@@ -524,6 +524,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.148.3: Mar 17, 2020	Code refactoring in tests. (282916 lines)
 	Version 19.148.2: Mar 17, 2020	Code refactoring in tests. (282868 lines)
 	Version 19.148.1: Mar 17, 2020	Code refactoring in tests. (282851 lines)
 	Version 19.148:   Mar 17, 2020	Code refactoring in tests.

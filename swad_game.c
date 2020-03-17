@@ -1874,6 +1874,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    unsigned NumQst;
    MYSQL_ROW row;
    long QstCod;
+   struct Tst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1907,7 +1908,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       row[1] QstCod
       */
       /***** Create test question *****/
-      Tst_QstConstructor ();
+      Tst_QstConstructor (&Question);
 
       /* Get question index (row[0]) */
       QstInd = Str_ConvertStrToUnsigned (row[0]);
@@ -1976,7 +1977,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TR_End ();
 
       /***** Destroy test question *****/
-      Tst_QstDestructor ();
+      Tst_QstDestructor (&Question);
      }
 
    /***** End table *****/
@@ -1994,6 +1995,7 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool QstExists;
+   struct Media Media;
 
    /***** Get question from database *****/
    QstExists = Tst_GetOneQuestionByCod (QstCod,&mysql_res);	// Question exists?
@@ -2054,11 +2056,11 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
 			true);	// Visible
 
       /* Get media (row[5]) */
-      Gbl.Test.Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Gbl.Test.Question.Media);
+      Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Media);
 
       /* Show media */
-      Med_ShowMedia (&Gbl.Test.Question.Media,
+      Med_ShowMedia (&Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 
