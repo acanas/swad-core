@@ -1875,6 +1875,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MYSQL_ROW row;
    long QstCod;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1908,7 +1909,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       row[1] QstCod
       */
       /***** Create test question *****/
-      Tst_QstConstructor (&Question);
+      Tst_QstConstructor (&Question,&Answer);
 
       /* Get question index (row[0]) */
       QstInd = Str_ConvertStrToUnsigned (row[0]);
@@ -1977,7 +1978,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TR_End ();
 
       /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
+      Tst_QstDestructor (&Question,&Answer);
      }
 
    /***** End table *****/

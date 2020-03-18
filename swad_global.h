@@ -666,20 +666,6 @@ struct Globals
       char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
       bool AllowTeachers;	// Can teachers of this course see the test result?
       bool AllAnsTypes;
-      struct
-        {
-         unsigned NumOptions;
-         char TF;
-         struct
-           {
-            bool Correct;
-            char *Text;
-            char *Feedback;
-            struct Media Media;
-           } Options[Tst_MAX_OPTIONS_PER_QUESTION];
-         long Integer;
-         double FloatingPoint[2];
-        } Answer;
       char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
       Tst_QuestionsOrder_t SelectedOrder;
      } Test;

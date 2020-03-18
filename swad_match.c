@@ -3786,6 +3786,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 static double Mch_ComputeScore (unsigned NumQsts)
   {
    unsigned NumQst;
+   struct Tst_Answer Answer;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -3803,10 +3804,11 @@ static double Mch_ComputeScore (unsigned NumQsts)
       Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst]);
+      Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst],&Answer);
 
       /***** Compute the total score of this question *****/
-      Tst_ComputeScoreQst (Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
+      Tst_ComputeScoreQst (&Answer,
+                           Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Compute total score *****/
       TotalScore += ScoreThisQst;

@@ -183,33 +183,48 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 
 static void Tst_WriteTFAnsViewTest (unsigned NumQst);
 static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
-				      unsigned NumQst,MYSQL_RES *mysql_res,
+				      unsigned NumQst,
+				      const struct Tst_Answer *Answer,
+				      MYSQL_RES *mysql_res,
 				      unsigned Visibility,
-                                      double *ScoreThisQst,bool *AnswerIsNotBlank);
+                                      double *ScoreThisQst,
+                                      bool *AnswerIsNotBlank);
 
 static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
-				          unsigned NumQst,MYSQL_RES *mysql_res,
+				          unsigned NumQst,
+				          struct Tst_Answer *Answer,
+				          MYSQL_RES *mysql_res,
 				          unsigned Visibility,
-                                          double *ScoreThisQst,bool *AnswerIsNotBlank);
+                                          double *ScoreThisQst,
+                                          bool *AnswerIsNotBlank);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
-				        unsigned NumQst,MYSQL_RES *mysql_res,
+				        unsigned NumQst,
+				        struct Tst_Answer *Answer,
+				        MYSQL_RES *mysql_res,
 				        unsigned Visibility,
-                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
+                                        double *ScoreThisQst,
+                                        bool *AnswerIsNotBlank);
 
 static void Tst_WriteIntAnsViewTest (unsigned NumQst);
 static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
-				       unsigned NumQst,MYSQL_RES *mysql_res,
+				       unsigned NumQst,
+				       const struct Tst_Answer *Answer,
+				       MYSQL_RES *mysql_res,
 				       unsigned Visibility,
-                                       double *ScoreThisQst,bool *AnswerIsNotBlank);
+                                       double *ScoreThisQst,
+                                       bool *AnswerIsNotBlank);
 
 static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
 static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
-				         unsigned NumQst,MYSQL_RES *mysql_res,
+				         unsigned NumQst,
+				         const struct Tst_Answer *Answer,
+				         MYSQL_RES *mysql_res,
 				         unsigned Visibility,
-                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
+                                         double *ScoreThisQst,
+                                         bool *AnswerIsNotBlank);
 
 static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat);
 static void Tst_WriteScoreStart (unsigned ColSpan);
@@ -222,20 +237,25 @@ static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (long QstCod,
                                    const struct Tst_Question *Question,
+                                   const struct Tst_Answer *Answer,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value);
-static void Tst_PutTFInputField (const char *Label,char Value);
+static void Tst_PutTFInputField (const struct Tst_Answer *Answer,
+                                 const char *Label,char Value);
 
-static void Tst_FreeTextChoiceAnswers (void);
-static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
+static void Tst_FreeTextChoiceAnswers (struct Tst_Answer *Answer);
+static void Tst_FreeTextChoiceAnswer (struct Tst_Answer *Answer,unsigned NumOpt);
 
-static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question);
-static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question);
+static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question,
+                                      struct Tst_Answer *Answer);
+static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question,
+                                     struct Tst_Answer *Answer);
 
 static void Tst_GetQstDataFromDB (long QstCod,
                                   struct Tst_Question *Question,
+                                  struct Tst_Answer *Answer,
                                   char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
@@ -244,9 +264,11 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static long Tst_GetQstFromForm (struct Tst_Question *Question,
+                                struct Tst_Answer *Answer,
                                 char *Stem,char *Feedback);
 static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
-                                                  struct Tst_Question *Question);
+                                                  struct Tst_Question *Question,
+                                                  struct Tst_Answer *Answer);
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
@@ -263,7 +285,7 @@ static long Tst_GetQstCod (void);
 static long Tst_InsertOrUpdateQstIntoDB (long QstCod,
                                          const struct Tst_Question *Question);
 static void Tst_InsertTagsIntoDB (long QstCod);
-static void Tst_InsertAnswersIntoDB (long QstCod);
+static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Answer *Answer);
 
 static void Tst_RemAnsFromQst (long QstCod);
 static void Tst_RemTagsFromQst (long QstCod);
@@ -842,7 +864,6 @@ static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod)
       row[7] NumHitsNotBlank
       row[8] Score
       */
-
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
 			      &Gbl.Usrs.Me.UsrDat,
 			      NumQst,
@@ -983,6 +1004,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    bool IsVisibleQstAndAnsTxt = TsV_IsVisibleQstAndAnsTxt (Visibility);
    /*
    row[0] UNIX_TIMESTAMP(EditTime)
@@ -995,9 +1017,8 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    row[7] NumHitsNotBlank
    row[8] Score
    */
-
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Tst_QstConstructor (&Question,&Answer);
 
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -1051,7 +1072,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    HTM_TR_End ();
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -2870,12 +2891,16 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    static unsigned UniqueId = 0;
    char *Id;
    time_t TimeUTC;
    unsigned long NumHitsThisQst;
    unsigned long NumHitsNotBlankThisQst;
    double TotalScoreThisQst;
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
 
    /***** Get and show questvoidion data *****/
    if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
@@ -2893,9 +2918,6 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
       row[7] NumHitsNotBlank
       row[8] Score
       */
-
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
 
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -3039,13 +3061,13 @@ static void Tst_WriteQuestionRowForEdition (unsigned long NumRows,
 
       /***** End table row *****/
       HTM_TR_End ();
-
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -3133,9 +3155,13 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    static unsigned UniqueId = 0;
    char *Id;
    time_t TimeUTC;
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
 
    /***** Get and show questvoidion data *****/
    if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
@@ -3153,9 +3179,6 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
       row[7] NumHitsNotBlank
       row[8] Score
       */
-
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
 
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -3230,10 +3253,10 @@ static void Tst_WriteQuestionRowForSelection (unsigned long NumRow,long QstCod)
 
       /***** End table row *****/
       HTM_TR_End ();
-
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
      }
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -3290,29 +3313,29 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
    return (unsigned) NumRows;
   }
 
-void Tst_GetCorrectAnswersFromDB (long QstCod)
+void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Answer *Answer)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumOpt;
 
    /***** Query database *****/
-   Gbl.Test.Answer.NumOptions = (unsigned)
-				DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-						"SELECT Correct"		// row[0]
-						" FROM tst_answers"
-						" WHERE QstCod=%ld"
-						" ORDER BY AnsInd",
-						QstCod);
+   Answer->NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Correct"		// row[0]
+			      " FROM tst_answers"
+			      " WHERE QstCod=%ld"
+			      " ORDER BY AnsInd",
+			      QstCod);
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       /* Get next answer */
       row = mysql_fetch_row (mysql_res);
 
       /* Assign correctness (row[0]) of this answer (this option) */
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[0][0] == 'Y');
+      Answer->Options[NumOpt].Correct = (row[0][0] == 'Y');
      }
 
    /* Free structure that stores the query result */
@@ -3326,17 +3349,23 @@ void Tst_GetCorrectAnswersFromDB (long QstCod)
 void Tst_WriteAnswersEdit (long QstCod)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
+   struct Tst_Question Question;
+   struct Tst_Answer Answer;
    unsigned NumOpt;
    unsigned i;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char *Answer;
+   char *AnswerTxt;
    char *Feedback;
-   size_t LengthAnswer;
+   size_t LengthAnswerTxt;
    size_t LengthFeedback;
    double FloatNum[2];
 
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
+
+   /***** Get answers *****/
+   Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3344,18 +3373,19 @@ void Tst_WriteAnswersEdit (long QstCod)
    row[3] MedCod
    row[4] Correct
    */
-   /***** Write the answers *****/
+
+   /***** Write answers *****/
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne ();
+         Tst_CheckIfNumberOfAnswersIsOne (&Answer);
          row = mysql_fetch_row (mysql_res);
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
          HTM_TxtF ("(%ld)",Tst_GetIntAnsFromStr (row[1]));
          HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
-	 if (Gbl.Test.Answer.NumOptions != 2)
+	 if (Answer.NumOptions != 2)
             Lay_ShowErrorAndExit ("Wrong float range.");
 
          for (i = 0;
@@ -3374,7 +3404,7 @@ void Tst_WriteAnswersEdit (long QstCod)
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne ();
+         Tst_CheckIfNumberOfAnswersIsOne (&Answer);
          row = mysql_fetch_row (mysql_res);
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
          HTM_Txt ("(");
@@ -3387,19 +3417,19 @@ void Tst_WriteAnswersEdit (long QstCod)
       case Tst_ANS_TEXT:
          HTM_TABLE_BeginPadding (2);
          for (NumOpt = 0;
-              NumOpt < Gbl.Test.Answer.NumOptions;
+              NumOpt < Answer.NumOptions;
               NumOpt++)
            {
             row = mysql_fetch_row (mysql_res);
 
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
-            LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
-            if ((Answer = (char *) malloc (LengthAnswer + 1)) == NULL)
+            LengthAnswerTxt = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
+            if ((AnswerTxt = (char *) malloc (LengthAnswerTxt + 1)) == NULL)
                Lay_NotEnoughMemoryExit ();
-            Str_Copy (Answer,row[1],
-                      LengthAnswer);
+            Str_Copy (AnswerTxt,row[1],
+                      LengthAnswerTxt);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                              Answer,LengthAnswer,false);
+                              AnswerTxt,LengthAnswerTxt,false);
 
             /* Convert the feedback (row[2]), that is in HTML, to rigorous HTML */
             LengthFeedback = 0;
@@ -3417,8 +3447,8 @@ void Tst_WriteAnswersEdit (long QstCod)
         	 }
 
 	    /* Get media (row[3]) */
-	    Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
+	    Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	    Med_GetMediaDataByCod (&Answer.Options[NumOpt].Media);
 
             HTM_TR_Begin (NULL);
 
@@ -3438,8 +3468,8 @@ void Tst_WriteAnswersEdit (long QstCod)
 
             /* Write the text of the answer and the media */
             HTM_DIV_Begin ("class=\"TEST_EDI\"");
-            HTM_Txt (Answer);
-	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
+            HTM_Txt (AnswerTxt);
+	    Med_ShowMedia (&Answer.Options[NumOpt].Media,
 	                   "TEST_MED_EDIT_LIST_CONT",
 	                   "TEST_MED_EDIT_LIST");
             HTM_DIV_End ();
@@ -3455,7 +3485,7 @@ void Tst_WriteAnswersEdit (long QstCod)
             HTM_TR_End ();
 
 	    /* Free memory allocated for the answer and the feedback */
-	    free (Answer);
+	    free (AnswerTxt);
 	    if (LengthFeedback)
 	       free (Feedback);
            }
@@ -3467,6 +3497,9 @@ void Tst_WriteAnswersEdit (long QstCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -3512,9 +3545,14 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
+   struct Tst_Question Question;
+   struct Tst_Answer Answer;
 
-   /***** Get answers of a question from database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
+
+   /***** Get answer of a question from database *****/
+   Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3522,32 +3560,33 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
    row[3] MedCod
    row[4] Correct
    */
+
    /***** Write answer depending on type *****/
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsAssessTest    (UsrDat,NumQst,mysql_res,
+         Tst_WriteIntAnsAssessTest    (UsrDat,NumQst,&Answer,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
-	 Tst_WriteFloatAnsAssessTest  (UsrDat,NumQst,mysql_res,
+	 Tst_WriteFloatAnsAssessTest  (UsrDat,NumQst,&Answer,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsAssessTest     (UsrDat,NumQst,mysql_res,
+         Tst_WriteTFAnsAssessTest     (UsrDat,NumQst,&Answer,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsAssessTest (UsrDat,NumQst,mysql_res,
+         Tst_WriteChoiceAnsAssessTest (UsrDat,NumQst,&Answer,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsAssessTest   (UsrDat,NumQst,mysql_res,
+         Tst_WriteTextAnsAssessTest   (UsrDat,NumQst,&Answer,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
@@ -3557,6 +3596,9 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -3617,9 +3659,12 @@ void Tst_WriteAnsTF (char AnsTF)
 /*****************************************************************************/
 
 static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
-				      unsigned NumQst,MYSQL_RES *mysql_res,
+				      unsigned NumQst,
+				      const struct Tst_Answer *Answer,
+				      MYSQL_RES *mysql_res,
 				      unsigned Visibility,
-                                      double *ScoreThisQst,bool *AnswerIsNotBlank)
+                                      double *ScoreThisQst,
+                                      bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    char AnsTF;
@@ -3631,7 +3676,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    row[4] Correct
    */
    /***** Check if number of rows is correct *****/
-   Tst_CheckIfNumberOfAnswersIsOne ();
+   Tst_CheckIfNumberOfAnswersIsOne (Answer);
 
    /***** Get answer true or false *****/
    row = mysql_fetch_row (mysql_res);
@@ -3715,13 +3760,18 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   struct Tst_Question Question;
+   struct Tst_Answer Answer;
    unsigned Index;
    bool ErrorInIndex = false;
    char ParamName[3 + 6 + 1];
    char StrAns[32];
 
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
+
    /***** Get answers of a question from database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);
+   Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3734,14 +3784,14 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    HTM_TABLE_BeginPadding (2);
 
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer.NumOptions;
 	NumOpt++)
      {
       /***** Get next answer *****/
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice answer *****/
-      if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (&Answer,NumOpt))
          /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
@@ -3759,15 +3809,15 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
          Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
 
       /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Answer.Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Answer.Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Get media (row[3]) *****/
-      Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Answer.Options[NumOpt].Media);
 
       HTM_TR_Begin (NULL);
 
@@ -3786,7 +3836,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 			  " onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
 			  NumQst,NumOpt,
 			  Index,
-                          NumQst,Gbl.Test.Answer.NumOptions);
+                          NumQst,Answer.NumOptions);
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
 	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Ans%06u_%u\" value=\"%u\"",
@@ -3803,9 +3853,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
-      HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
+      HTM_Txt (Answer.Options[NumOpt].Text);
       HTM_LABEL_End ();
-      Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
+      Med_ShowMedia (&Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
       HTM_TD_End ();
@@ -3818,6 +3868,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -3825,9 +3878,12 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 /*****************************************************************************/
 
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
-				          unsigned NumQst,MYSQL_RES *mysql_res,
+				          unsigned NumQst,
+				          struct Tst_Answer *Answer,
+				          MYSQL_RES *mysql_res,
 				          unsigned Visibility,
-                                          double *ScoreThisQst,bool *AnswerIsNotBlank)
+                                          double *ScoreThisQst,
+                                          bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -3842,7 +3898,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Get text and correctness of answers for this question
           from database (one row per answer) *****/
-   Tst_GetChoiceAns (mysql_res);
+   Tst_GetChoiceAns (mysql_res,Answer);
 
    /***** Get indexes for this question from string *****/
    Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
@@ -3851,7 +3907,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
    /***** Compute the total score of this question *****/
-   Tst_ComputeScoreQst (Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
+   Tst_ComputeScoreQst (Answer,
+                        Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -3862,7 +3919,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Write answers (one row per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       HTM_TR_Begin (NULL);
@@ -3872,7 +3929,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
         {
          if (TsV_IsVisibleCorrectAns (Visibility))
            {
-            if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+            if (Answer->Options[Indexes[NumOpt]].Correct)
               {
                Ans.Class = "ANS_OK";
                Ans.Str   = "&check;";
@@ -3900,7 +3957,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       /* Draw icon that indicates whether the answer is correct */
       if (TsV_IsVisibleCorrectAns (Visibility))
         {
-         if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+         if (Answer->Options[Indexes[NumOpt]].Correct)
            {
 	    HTM_TD_Begin ("class=\"ANS_0 CT\" title=\"%s\"",
 		          Txt_TST_Answer_given_by_the_teachers);
@@ -3928,8 +3985,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       HTM_DIV_Begin ("class=\"ANS_TXT\"");
       if (TsV_IsVisibleQstAndAnsTxt (Visibility))
 	{
-	 HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
-	 Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
+	 HTM_Txt (Answer->Options[Indexes[NumOpt]].Text);
+	 Med_ShowMedia (&Answer->Options[Indexes[NumOpt]].Media,
 			"TEST_MED_SHOW_CONT",
 			"TEST_MED_SHOW");
 	}
@@ -3938,11 +3995,11 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       HTM_DIV_End ();
 
       if (TsV_IsVisibleCorrectAns (Visibility))
-	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
-	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
+	 if (Answer->Options[Indexes[NumOpt]].Feedback)
+	    if (Answer->Options[Indexes[NumOpt]].Feedback[0])
 	      {
 	       HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
-	       HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
+	       HTM_Txt (Answer->Options[Indexes[NumOpt]].Feedback);
 	       HTM_DIV_End ();
 	      }
 
@@ -3974,7 +4031,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 /************************ Get choice answer from row *************************/
 /*****************************************************************************/
 
-void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
+void Tst_GetChoiceAns (MYSQL_RES *mysql_res,struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
    MYSQL_ROW row;
@@ -3989,23 +4046,23 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
    row[4] Correct
    */
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       /***** Get next answer *****/
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice option *****/
-      if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (Answer,NumOpt))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
       /***** Copy answer text (row[1]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Answer->Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Answer->Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it,
@@ -4014,19 +4071,19 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
 	 if (row[2])
 	    if (row[2][0])
 	      {
-	       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+	       Str_Copy (Answer->Options[NumOpt].Feedback,row[2],
 	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Gbl.Test.Answer.Options[NumOpt].Feedback,
+	                         Answer->Options[NumOpt].Feedback,
 	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
 
       /***** Get media (row[3]) *****/
-      Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Answer->Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Answer->Options[NumOpt].Media);
 
       /***** Assign correctness (row[4]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+      Answer->Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
   }
 
@@ -4101,7 +4158,8 @@ void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ON
 /********************* Compute the score of this question ********************/
 /*****************************************************************************/
 
-void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Indexes of all answers of this question
+void Tst_ComputeScoreQst (const struct Tst_Answer *Answer,
+                          unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Indexes of all answers of this question
                           bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
 			  double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
@@ -4113,16 +4171,16 @@ void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Ind
 
    /***** Compute the total score of this question *****/
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       NumOptTotInQst++;
-      if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+      if (Answer->Options[Indexes[NumOpt]].Correct)
          NumOptCorrInQst++;
 
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
-         if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+         if (Answer->Options[Indexes[NumOpt]].Correct)
             NumAnsGood++;
          else
             NumAnsBad++;
@@ -4172,6 +4230,8 @@ void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Ind
 void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 				  unsigned NumCols,const char *Class,bool ShowResult)
   {
+   struct Tst_Question Question;
+   struct Tst_Answer Answer;
    unsigned NumOpt;
    bool RowIsOpen = false;
    MYSQL_RES *mysql_res;
@@ -4180,11 +4240,14 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    unsigned NumRespondersAns;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question,&Answer);
+
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -4194,30 +4257,30 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    */
 
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer.NumOptions;
 	NumOpt++)
      {
       /* Get next answer */
       row = mysql_fetch_row (mysql_res);
 
       /* Allocate memory for text in this choice answer */
-      if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (&Answer,NumOpt))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
       /* Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML */
-      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Answer.Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Answer.Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /* Get media (row[3]) */
-      Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Answer.Options[NumOpt].Media);
 
       /* Get if correct (row[4]) */
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+      Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
 
    /* Free structure that stores the query result */
@@ -4231,7 +4294,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
    /***** Show options distributed in columns *****/
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer.NumOptions;
 	NumOpt++)
      {
       /***** Start row? *****/
@@ -4251,9 +4314,9 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",QstInd,NumOpt,Class);
-      HTM_Txt (Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      HTM_Txt (Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
-      Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
+      Med_ShowMedia (&Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
 
@@ -4265,7 +4328,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
 	 /* Draw proportional bar for this answer */
 	 Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
-	                     Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct);
+	                     Answer.Options[Indexes[NumOpt]].Correct);
 	}
       else
          /* Draw empty bar for this answer
@@ -4289,6 +4352,9 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -4312,9 +4378,12 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
-				        unsigned NumQst,MYSQL_RES *mysql_res,
+				        unsigned NumQst,
+				        struct Tst_Answer *Answer,
+				        MYSQL_RES *mysql_res,
 				        unsigned Visibility,
-                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
+                                        double *ScoreThisQst,
+                                        bool *AnswerIsNotBlank)
   {
    unsigned NumOpt;
    MYSQL_ROW row;
@@ -4330,22 +4399,22 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    */
    /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       /***** Get next answer *****/
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice answer *****/
-      if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (Answer,NumOpt))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
       /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Answer->Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Answer->Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
@@ -4353,15 +4422,15 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 	 if (row[2])
 	    if (row[2][0])
 	      {
-	       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+	       Str_Copy (Answer->Options[NumOpt].Feedback,row[2],
 	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Gbl.Test.Answer.Options[NumOpt].Feedback,
+	                         Answer->Options[NumOpt].Feedback,
 	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
 
       /***** Assign correctness (row[4]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+      Answer->Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
 
    /***** Header with the title of each column *****/
@@ -4386,11 +4455,11 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
       Str_ConvertToComparable (TextAnsUsr);
 
       for (NumOpt = 0;
-	   NumOpt < Gbl.Test.Answer.NumOptions;
+	   NumOpt < Answer->NumOptions;
 	   NumOpt++)
         {
          /* Filter this correct answer */
-         Str_Copy (TextAnsOK,Gbl.Test.Answer.Options[NumOpt].Text,
+         Str_Copy (TextAnsOK,Answer->Options[NumOpt].Text,
                    Tst_MAX_BYTES_ANSWERS_ONE_QST);
          Str_ConvertToComparable (TextAnsOK);
 
@@ -4420,7 +4489,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
       HTM_TABLE_BeginPadding (2);
 
       for (NumOpt = 0;
-	   NumOpt < Gbl.Test.Answer.NumOptions;
+	   NumOpt < Answer->NumOptions;
 	   NumOpt++)
         {
 	 HTM_TR_Begin (NULL);
@@ -4434,15 +4503,15 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          HTM_TD_Begin ("class=\"LT\"");
 
          HTM_DIV_Begin ("class=\"ANS_0\"");
-         HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
+         HTM_Txt (Answer->Options[NumOpt].Text);
          HTM_DIV_End ();
 
          if (TsV_IsVisibleFeedbackTxt (Visibility))
-	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
-	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
+	    if (Answer->Options[NumOpt].Feedback)
+	       if (Answer->Options[NumOpt].Feedback[0])
 		 {
 		  HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
-		  HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Feedback);
+		  HTM_Txt (Answer->Options[NumOpt].Feedback);
 		  HTM_DIV_End ();
 		 }
 
@@ -4524,9 +4593,12 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
-				       unsigned NumQst,MYSQL_RES *mysql_res,
+				       unsigned NumQst,
+				       const struct Tst_Answer *Answer,
+				       MYSQL_RES *mysql_res,
 				       unsigned Visibility,
-                                       double *ScoreThisQst,bool *AnswerIsNotBlank)
+                                       double *ScoreThisQst,
+                                       bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    long IntAnswerUsr;
@@ -4539,7 +4611,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    row[4] Correct
    */
    /***** Check if number of rows is correct *****/
-   Tst_CheckIfNumberOfAnswersIsOne ();
+   Tst_CheckIfNumberOfAnswersIsOne (Answer);
 
    /***** Get the numerical value of the correct answer *****/
    row = mysql_fetch_row (mysql_res);
@@ -4651,9 +4723,12 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
-				         unsigned NumQst,MYSQL_RES *mysql_res,
+				         unsigned NumQst,
+				         const struct Tst_Answer *Answer,
+				         MYSQL_RES *mysql_res,
 				         unsigned Visibility,
-                                         double *ScoreThisQst,bool *AnswerIsNotBlank)
+                                         double *ScoreThisQst,
+                                         bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    unsigned i;
@@ -4667,7 +4742,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    row[4] Correct
    */
    /***** Check if number of rows is correct *****/
-   if (Gbl.Test.Answer.NumOptions != 2)
+   if (Answer->NumOptions != 2)
       Lay_ShowErrorAndExit ("Wrong float range.");
 
    /***** Get the numerical value of the minimum and maximum correct answers *****/
@@ -4834,9 +4909,9 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
 /********************* Check if number of answers is one *********************/
 /*****************************************************************************/
 
-void Tst_CheckIfNumberOfAnswersIsOne (void)
+void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Answer *Answer)
   {
-   if (Gbl.Test.Answer.NumOptions != 1)
+   if (Answer->NumOptions != 1)
       Lay_ShowErrorAndExit ("Wrong answer.");
   }
 
@@ -5086,21 +5161,24 @@ void Tst_ShowFormEditOneQst (void)
   {
    long QstCod;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Tst_QstConstructor (&Question,&Answer);
+
+   /***** Get question data *****/
    QstCod = Tst_GetQstCod ();
    Stem[0] = Feedback[0] = '\0';
    if (QstCod > 0)	// If question already exists in the database
-      Tst_GetQstDataFromDB (QstCod,&Question,Stem,Feedback);
+      Tst_GetQstDataFromDB (QstCod,&Question,&Answer,Stem,Feedback);
 
    /***** Put form to edit question *****/
-   Tst_PutFormEditOneQst (QstCod,&Question,Stem,Feedback);
+   Tst_PutFormEditOneQst (QstCod,&Question,&Answer,Stem,Feedback);
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -5114,6 +5192,7 @@ void Tst_ShowFormEditOneQst (void)
 
 static void Tst_PutFormEditOneQst (long QstCod,
                                    const struct Tst_Question *Question,
+                                   const struct Tst_Answer *Answer,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
@@ -5331,7 +5410,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_TxtColonNBSP (Txt_Integer_number);
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
-	     Gbl.Test.Answer.Integer);
+	     Answer->Integer);
    HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,false,
 		   "size=\"11\" required=\"required\"%s",
                    Gbl.Test.AnswerType == Tst_ANS_INT ? "" :
@@ -5346,9 +5425,9 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_TD_Empty (1);
    HTM_TD_Begin ("class=\"LT\"");
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
-                           Gbl.Test.Answer.FloatingPoint[0]);
+                           Answer->FloatingPoint[0]);
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
-                           Gbl.Test.Answer.FloatingPoint[1]);
+                           Answer->FloatingPoint[1]);
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -5356,8 +5435,8 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_TR_Begin (NULL);
    HTM_TD_Empty (1);
    HTM_TD_Begin ("class=\"LT\"");
-   Tst_PutTFInputField (Txt_TF_QST[0],'T');
-   Tst_PutTFInputField (Txt_TF_QST[1],'F');
+   Tst_PutTFInputField (Answer,Txt_TF_QST[0],'T');
+   Tst_PutTFInputField (Answer,Txt_TF_QST[1],'F');
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -5397,9 +5476,9 @@ static void Tst_PutFormEditOneQst (long QstCod,
       Gbl.RowEvenOdd = NumOpt % 2;
 
       AnswerHasContent = false;
-      if (Gbl.Test.Answer.Options[NumOpt].Text)
-	 if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||				// Text
-	     Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+      if (Answer->Options[NumOpt].Text)
+	 if (Answer->Options[NumOpt].Text[0] ||				// Text
+	     Answer->Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
 	    AnswerHasContent = true;
       DisplayRightColumn = NumOpt < 2 ||	// Display at least the two first options
 	                   AnswerHasContent;
@@ -5413,7 +5492,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
       HTM_INPUT_RADIO ("AnsUni",false,
 		       "value=\"%u\"%s%s%s onclick=\"enableDisableAns(this.form);\"",
 		       NumOpt,
-		       Gbl.Test.Answer.Options[NumOpt].Correct ? " checked=\"checked\"" : "",
+		       Answer->Options[NumOpt].Correct ? " checked=\"checked\"" : "",
 		       NumOpt < 2 ? " required=\"required\"" : "",	// First or second options required
 		       Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ? "" : " disabled=\"disabled\"");
 
@@ -5421,7 +5500,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
       HTM_INPUT_CHECKBOX ("AnsMulti",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%u\"%s%s",
 			  NumOpt,
-			  Gbl.Test.Answer.Options[NumOpt].Correct ? " checked=\"checked\"" : "",
+			  Answer->Options[NumOpt].Correct ? " checked=\"checked\"" : "",
 			  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE ? "" :
 				                                           " disabled=\"disabled\"");
 
@@ -5472,11 +5551,11 @@ static void Tst_PutFormEditOneQst (long QstCod,
 	                  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 	                	                   "");
       if (AnswerHasContent)
-         HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Text);
+         HTM_Txt (Answer->Options[NumOpt].Text);
       HTM_TEXTAREA_End ();
 
       /* Media */
-      Tst_PutFormToEditQstMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
+      Tst_PutFormToEditQstMedia (&Answer->Options[NumOpt].Media,
                                  (int) NumOpt,
                                  OptionsDisabled);
 
@@ -5487,9 +5566,9 @@ static void Tst_PutFormEditOneQst (long QstCod,
       HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
 			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 				                   "");
-      if (Gbl.Test.Answer.Options[NumOpt].Feedback)
-         if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
-            HTM_Txt (Gbl.Test.Answer.Options[NumOpt].Feedback);
+      if (Answer->Options[NumOpt].Feedback)
+         if (Answer->Options[NumOpt].Feedback[0])
+            HTM_Txt (Answer->Options[NumOpt].Feedback);
       HTM_TEXTAREA_End ();
       HTM_LABEL_End ();
 
@@ -5545,7 +5624,8 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
 /*********************** Put input field for T/F answer **********************/
 /*****************************************************************************/
 
-static void Tst_PutTFInputField (const char *Label,char Value)
+static void Tst_PutTFInputField (const struct Tst_Answer *Answer,
+                                 const char *Label,char Value)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
@@ -5553,8 +5633,10 @@ static void Tst_PutTFInputField (const char *Label,char Value)
    HTM_INPUT_RADIO ("AnsTF",false,
 		    "value=\"%c\"%s%s required=\"required\"",
 		    Value,
-		    Gbl.Test.Answer.TF == Value ? " checked=\"checked\"" : "",
-		    Gbl.Test.AnswerType == Tst_ANS_TRUE_FALSE ? "" : " disabled=\"disabled\"");
+		    Answer->TF == Value ? " checked=\"checked\"" :
+			                  "",
+		    Gbl.Test.AnswerType == Tst_ANS_TRUE_FALSE ? "" :
+			                                        " disabled=\"disabled\"");
    HTM_Txt (Label);
    HTM_LABEL_End ();
   }
@@ -5563,7 +5645,8 @@ static void Tst_PutTFInputField (const char *Label,char Value)
 /********************* Initialize a new question to zero *********************/
 /*****************************************************************************/
 
-void Tst_QstConstructor (struct Tst_Question *Question)
+void Tst_QstConstructor (struct Tst_Question *Question,
+                         struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
 
@@ -5574,8 +5657,8 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->Shuffle = false;
 
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
-   Gbl.Test.Answer.NumOptions = 0;
-   Gbl.Test.Answer.TF = ' ';
+   Answer->NumOptions = 0;
+   Answer->TF = ' ';
 
    /***** Initialize image attached to stem *****/
    Med_MediaConstructor (&Question->Media);
@@ -5584,44 +5667,45 @@ void Tst_QstConstructor (struct Tst_Question *Question)
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
-      Gbl.Test.Answer.Options[NumOpt].Correct  = false;
-      Gbl.Test.Answer.Options[NumOpt].Text     = NULL;
-      Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
+      Answer->Options[NumOpt].Correct  = false;
+      Answer->Options[NumOpt].Text     = NULL;
+      Answer->Options[NumOpt].Feedback = NULL;
 
       /***** Initialize image attached to option *****/
-      Med_MediaConstructor (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Med_MediaConstructor (&Answer->Options[NumOpt].Media);
      }
-   Gbl.Test.Answer.Integer = 0;
-   Gbl.Test.Answer.FloatingPoint[0] =
-   Gbl.Test.Answer.FloatingPoint[1] = 0.0;
+   Answer->Integer = 0;
+   Answer->FloatingPoint[0] =
+   Answer->FloatingPoint[1] = 0.0;
   }
 
 /*****************************************************************************/
 /***************** Free memory allocated for test question *******************/
 /*****************************************************************************/
 
-void Tst_QstDestructor (struct Tst_Question *Question)
+void Tst_QstDestructor (struct Tst_Question *Question,
+                        struct Tst_Answer *Answer)
   {
-   Tst_FreeTextChoiceAnswers ();
-   Tst_FreeMediaOfQuestion (Question);
+   Tst_FreeTextChoiceAnswers (Answer);
+   Tst_FreeMediaOfQuestion (Question,Answer);
   }
 
 /*****************************************************************************/
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
 
-int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
+int Tst_AllocateTextChoiceAnswer (struct Tst_Answer *Answer,unsigned NumOpt)
   {
-   Tst_FreeTextChoiceAnswer (NumOpt);
+   Tst_FreeTextChoiceAnswer (Answer,NumOpt);
 
-   if ((Gbl.Test.Answer.Options[NumOpt].Text =
+   if ((Answer->Options[NumOpt].Text =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store answer.");
       return 0;
      }
-   if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
+   if ((Answer->Options[NumOpt].Feedback =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
@@ -5629,8 +5713,8 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
       return 0;
      }
 
-   Gbl.Test.Answer.Options[NumOpt].Text[0] =
-   Gbl.Test.Answer.Options[NumOpt].Feedback[0] = '\0';
+   Answer->Options[NumOpt].Text[0] =
+   Answer->Options[NumOpt].Feedback[0] = '\0';
    return 1;
   }
 
@@ -5638,31 +5722,31 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
 /******************** Free memory of all choice answers **********************/
 /*****************************************************************************/
 
-static void Tst_FreeTextChoiceAnswers (void)
+static void Tst_FreeTextChoiceAnswers (struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Tst_FreeTextChoiceAnswer (NumOpt);
+      Tst_FreeTextChoiceAnswer (Answer,NumOpt);
   }
 
 /*****************************************************************************/
 /********************** Free memory of a choice answer ***********************/
 /*****************************************************************************/
 
-static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
+static void Tst_FreeTextChoiceAnswer (struct Tst_Answer *Answer,unsigned NumOpt)
   {
-   if (Gbl.Test.Answer.Options[NumOpt].Text)
+   if (Answer->Options[NumOpt].Text)
      {
-      free (Gbl.Test.Answer.Options[NumOpt].Text);
-      Gbl.Test.Answer.Options[NumOpt].Text = NULL;
+      free (Answer->Options[NumOpt].Text);
+      Answer->Options[NumOpt].Text = NULL;
      }
-   if (Gbl.Test.Answer.Options[NumOpt].Feedback)
+   if (Answer->Options[NumOpt].Feedback)
      {
-      free (Gbl.Test.Answer.Options[NumOpt].Feedback);
-      Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
+      free (Answer->Options[NumOpt].Feedback);
+      Answer->Options[NumOpt].Feedback = NULL;
      }
   }
 
@@ -5670,7 +5754,8 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
 
-static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question)
+static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question,
+                                      struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
 
@@ -5681,14 +5766,15 @@ static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question)
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Med_ResetMedia (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Med_ResetMedia (&Answer->Options[NumOpt].Media);
   }
 
 /*****************************************************************************/
 /*********************** Free images of a question ***************************/
 /*****************************************************************************/
 
-static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
+static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question,
+                                     struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
 
@@ -5696,7 +5782,7 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Med_MediaDestructor (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Med_MediaDestructor (&Answer->Options[NumOpt].Media);
   }
 
 /*****************************************************************************/
@@ -5705,6 +5791,7 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
 
 static void Tst_GetQstDataFromDB (long QstCod,
                                   struct Tst_Question *Question,
+                                  struct Tst_Answer *Answer,
                                   char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
@@ -5766,7 +5853,7 @@ static void Tst_GetQstDataFromDB (long QstCod,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the answers from the database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Answer->NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -5775,51 +5862,51 @@ static void Tst_GetQstDataFromDB (long QstCod,
    row[4] Correct
    */
    for (NumOpt = 0;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Answer->NumOptions;
 	NumOpt++)
      {
       row = mysql_fetch_row (mysql_res);
       switch (Gbl.Test.AnswerType)
 	{
 	 case Tst_ANS_INT:
-	    if (Gbl.Test.Answer.NumOptions != 1)
+	    if (Answer->NumOptions != 1)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
+	    Answer->Integer = Tst_GetIntAnsFromStr (row[1]);
 	    break;
 	 case Tst_ANS_FLOAT:
-	    if (Gbl.Test.Answer.NumOptions != 2)
+	    if (Answer->NumOptions != 2)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Gbl.Test.Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
+	    Answer->FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	    break;
 	 case Tst_ANS_TRUE_FALSE:
-	    if (Gbl.Test.Answer.NumOptions != 1)
+	    if (Answer->NumOptions != 1)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Gbl.Test.Answer.TF = row[1][0];
+	    Answer->TF = row[1][0];
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
 	 case Tst_ANS_TEXT:
-	    if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
+	    if (Answer->NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+	    if (!Tst_AllocateTextChoiceAnswer (Answer,NumOpt))
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 
-	    Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+	    Str_Copy (Answer->Options[NumOpt].Text,row[1],
 	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    // Feedback (row[2]) is initialized to empty string
 	    if (row[2])
 	       if (row[2][0])
-		  Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+		  Str_Copy (Answer->Options[NumOpt].Feedback,row[2],
 		            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
             /* Get media (row[3]) */
-	    Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
+	    Answer->Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	    Med_GetMediaDataByCod (&Answer->Options[NumOpt].Media);
 
             /* Get if this option is correct (row[4]) */
-	    Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+	    Answer->Options[NumOpt].Correct = (row[4][0] == 'Y');
 	    break;
 	 default:
 	    break;
@@ -5935,24 +6022,25 @@ void Tst_ReceiveQst (void)
   {
    long QstCod;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Tst_QstConstructor (&Question,&Answer);
 
    /***** Get parameters of the question from form *****/
    Stem[0] = Feedback[0] = '\0';
-   QstCod = Tst_GetQstFromForm (&Question,Stem,Feedback);
+   QstCod = Tst_GetQstFromForm (&Question,&Answer,Stem,Feedback);
 
    /***** Make sure that tags, text and answer are not empty *****/
-   if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
+   if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Answer))
      {
       /***** Move images to definitive directories *****/
-      Tst_MoveMediaToDefinitiveDirectories (QstCod,&Question);
+      Tst_MoveMediaToDefinitiveDirectories (QstCod,&Question,&Answer);
 
       /***** Insert or update question, tags and answer in the database *****/
-      QstCod = Tst_InsertOrUpdateQstTagsAnsIntoDB (QstCod,&Question);
+      QstCod = Tst_InsertOrUpdateQstTagsAnsIntoDB (QstCod,&Question,&Answer);
 
       /***** Show the question just inserted in the database *****/
       Tst_ListOneQstToEdit (QstCod);
@@ -5960,14 +6048,14 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      Tst_ResetMediaOfQuestion (&Question);
+      Tst_ResetMediaOfQuestion (&Question,&Answer);
 
       /***** Put form to edit question again *****/
-      Tst_PutFormEditOneQst (QstCod,&Question,Stem,Feedback);
+      Tst_PutFormEditOneQst (QstCod,&Question,&Answer,Stem,Feedback);
      }
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Tst_QstDestructor (&Question,&Answer);
   }
 
 /*****************************************************************************/
@@ -5975,6 +6063,7 @@ void Tst_ReceiveQst (void)
 /*****************************************************************************/
 
 static long Tst_GetQstFromForm (struct Tst_Question *Question,
+                                struct Tst_Answer *Answer,
                                 char *Stem,char *Feedback)
   {
    long QstCod;
@@ -6050,31 +6139,31 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         if (!Tst_AllocateTextChoiceAnswer (0))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,
+	 Par_GetParToText ("AnsInt",Answer->Options[0].Text,
 			   Cns_MAX_DECIMAL_DIGITS_LONG);
 	 break;
       case Tst_ANS_FLOAT:
-         if (!Tst_AllocateTextChoiceAnswer (0))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,
+	 Par_GetParToText ("AnsFloatMin",Answer->Options[0].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 
-         if (!Tst_AllocateTextChoiceAnswer (1))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,
+	 Par_GetParToText ("AnsFloatMax",Answer->Options[1].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Tst_ANS_TRUE_FALSE:
 	 Par_GetParToText ("AnsTF",TF,1);
-	 Gbl.Test.Answer.TF = TF[0];
+	 Answer->TF = TF[0];
 	 break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6088,7 +6177,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
               NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
            {
-            if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+            if (!Tst_AllocateTextChoiceAnswer (Answer,NumOpt))
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 
@@ -6096,30 +6185,30 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
             snprintf (AnsStr,sizeof (AnsStr),
         	      "AnsStr%u",
 		      NumOpt);
-	    Par_GetParToHTML (AnsStr,Gbl.Test.Answer.Options[NumOpt].Text,
+	    Par_GetParToHTML (AnsStr,Answer->Options[NumOpt].Text,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
 	       /* In order to compare student answer to stored answer,
 	          the text answers are stored avoiding two or more consecurive spaces */
-               Str_ReplaceSeveralSpacesForOne (Gbl.Test.Answer.Options[NumOpt].Text);
+               Str_ReplaceSeveralSpacesForOne (Answer->Options[NumOpt].Text);
 
             /* Get feedback */
             snprintf (FbStr,sizeof (FbStr),
         	      "FbStr%u",
 		      NumOpt);
-	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,
+	    Par_GetParToHTML (FbStr,Answer->Options[NumOpt].Feedback,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get media associated to the answer (action, file and title) */
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
-	       Gbl.Test.Answer.Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
-	       Gbl.Test.Answer.Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
-	       Gbl.Test.Answer.Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
+	       Answer->Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+	       Answer->Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+	       Answer->Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
 	       Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
 	                             (int) NumOpt,	// >= 0 ==> the image associated to an answer
-	                             &Gbl.Test.Answer.Options[NumOpt].Media,
+	                             &Answer->Options[NumOpt].Media,
 				     Tst_GetMediaFromDB,
 				     NULL);
 	       Ale_ShowAlerts (NULL);
@@ -6133,7 +6222,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
 	                                                         0,
 	                                                         Tst_MAX_OPTIONS_PER_QUESTION - 1,
 	                                                         0);
-            Gbl.Test.Answer.Options[NumCorrectAns].Correct = true;
+            Answer->Options[NumCorrectAns].Correct = true;
            }
       	 else if (Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
            {
@@ -6146,15 +6235,15 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
 	          Lay_ShowErrorAndExit ("Wrong selected answer.");
                if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)
 	          Lay_ShowErrorAndExit ("Wrong selected answer.");
-               Gbl.Test.Answer.Options[NumCorrectAns].Correct = true;
+               Answer->Options[NumCorrectAns].Correct = true;
               }
            }
          else // Tst_ANS_TEXT
             for (NumOpt = 0;
         	 NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
         	 NumOpt++)
-               if (Gbl.Test.Answer.Options[NumOpt].Text[0])
-                  Gbl.Test.Answer.Options[NumOpt].Correct = true;	// All the answers are correct
+               if (Answer->Options[NumOpt].Text[0])
+                  Answer->Options[NumOpt].Correct = true;	// All the answers are correct
 	 break;
       default:
          break;
@@ -6178,10 +6267,11 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
 /*********************** Check if a question is correct **********************/
 /*****************************************************************************/
 // Returns false if question format is wrong
-// Counts Gbl.Test.Answer.NumOptions
-// Computes Gbl.Test.Answer.Integer and Gbl.Test.Answer.FloatingPoint[0..1]
+// Counts Answer->NumOptions
+// Computes Answer->Integer and Answer->FloatingPoint[0..1]
 
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question *Question)
+bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question *Question,
+                                                      struct Tst_Answer *Answer)
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_stem_of_the_question;
@@ -6199,7 +6289,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
    unsigned i;
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
-   Gbl.Test.Answer.NumOptions = 0;
+   Answer->NumOptions = 0;
 
    /***** A question must have at least one tag *****/
    if (!Gbl.Test.Tags.Num) // There are no tags with text
@@ -6220,30 +6310,30 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
      {
       case Tst_ANS_INT:
 	 /* First option should be filled */
-         if (!Gbl.Test.Answer.Options[0].Text)
+         if (!Answer->Options[0].Text)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
             return false;
            }
-         if (!Gbl.Test.Answer.Options[0].Text[0])
+         if (!Answer->Options[0].Text[0])
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
             return false;
            }
 
-         Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (Gbl.Test.Answer.Options[0].Text);
-         Gbl.Test.Answer.NumOptions = 1;
+         Answer->Integer = Tst_GetIntAnsFromStr (Answer->Options[0].Text);
+         Answer->NumOptions = 1;
          break;
       case Tst_ANS_FLOAT:
 	 /* First two options should be filled */
-         if (!Gbl.Test.Answer.Options[0].Text ||
-             !Gbl.Test.Answer.Options[1].Text)
+         if (!Answer->Options[0].Text ||
+             !Answer->Options[1].Text)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
            }
-         if (!Gbl.Test.Answer.Options[0].Text[0] ||
-             !Gbl.Test.Answer.Options[1].Text[0])
+         if (!Answer->Options[0].Text[0] ||
+             !Answer->Options[1].Text[0])
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
@@ -6253,26 +6343,26 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
          for (i = 0;
               i < 2;
               i++)
-            Gbl.Test.Answer.FloatingPoint[i] = Str_GetDoubleFromStr (Gbl.Test.Answer.Options[i].Text);
-         if (Gbl.Test.Answer.FloatingPoint[0] >
-             Gbl.Test.Answer.FloatingPoint[1])
+            Answer->FloatingPoint[i] = Str_GetDoubleFromStr (Answer->Options[i].Text);
+         if (Answer->FloatingPoint[0] >
+             Answer->FloatingPoint[1])
            {
             Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
             return false;
            }
 
-         Gbl.Test.Answer.NumOptions = 2;
+         Answer->NumOptions = 2;
          break;
       case Tst_ANS_TRUE_FALSE:
 	 /* Answer should be 'T' or 'F' */
-         if (Gbl.Test.Answer.TF != 'T' &&
-             Gbl.Test.Answer.TF != 'F')
+         if (Answer->TF != 'T' &&
+             Answer->TF != 'F')
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
             return false;
            }
 
-         Gbl.Test.Answer.NumOptions = 1;
+         Answer->NumOptions = 1;
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6280,10 +6370,10 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
          for (NumOpt = 0, NumLastOpt = 0, ThereIsEndOfAnswers = false;
               NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
-            if (Gbl.Test.Answer.Options[NumOpt].Text)
+            if (Answer->Options[NumOpt].Text)
               {
-               if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||			// Text
-        	   Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+               if (Answer->Options[NumOpt].Text[0] ||			// Text
+        	   Answer->Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
                  {
                   if (ThereIsEndOfAnswers)
                     {
@@ -6291,7 +6381,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
                      return false;
                     }
                   NumLastOpt = NumOpt;
-                  Gbl.Test.Answer.NumOptions++;
+                  Answer->NumOptions++;
                  }
                else
                   ThereIsEndOfAnswers = true;
@@ -6310,7 +6400,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
          for (NumOpt = 0;
               NumOpt <= NumLastOpt;
               NumOpt++)
-            if (Gbl.Test.Answer.Options[NumOpt].Correct)
+            if (Answer->Options[NumOpt].Correct)
                break;
          if (NumOpt > NumLastOpt)
            {
@@ -6320,12 +6410,12 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
          break;
       case Tst_ANS_TEXT:
 	 /* First option should be filled */
-         if (!Gbl.Test.Answer.Options[0].Text)		// If the first answer is empty
+         if (!Answer->Options[0].Text)		// If the first answer is empty
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
             return false;
            }
-         if (!Gbl.Test.Answer.Options[0].Text[0])	// If the first answer is empty
+         if (!Answer->Options[0].Text[0])	// If the first answer is empty
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
             return false;
@@ -6335,16 +6425,16 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
          for (NumOpt=0, ThereIsEndOfAnswers=false;
               NumOpt<Tst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
-            if (Gbl.Test.Answer.Options[NumOpt].Text)
+            if (Answer->Options[NumOpt].Text)
               {
-               if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+               if (Answer->Options[NumOpt].Text[0])
                  {
                   if (ThereIsEndOfAnswers)
                     {
                      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
                      return false;
                     }
-                  Gbl.Test.Answer.NumOptions++;
+                  Answer->NumOptions++;
                  }
                else
                   ThereIsEndOfAnswers = true;
@@ -6363,7 +6453,8 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question 
 /*********** Check if a test question already exists in database *************/
 /*****************************************************************************/
 
-bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
+bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question,
+                                    const struct Tst_Answer *Answer)
   {
    extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res_qst;
@@ -6413,7 +6504,7 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
            {
             case Tst_ANS_INT:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Tst_GetIntAnsFromStr (row[0]) == Gbl.Test.Answer.Integer);
+               IdenticalQuestionFound = (Tst_GetIntAnsFromStr (row[0]) == Answer->Integer);
                break;
             case Tst_ANS_FLOAT:
                for (IdenticalAnswers = true, i = 0;
@@ -6421,18 +6512,18 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
                     i++)
                  {
                   row = mysql_fetch_row (mysql_res_ans);
-                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Gbl.Test.Answer.FloatingPoint[i]);
+                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Answer->FloatingPoint[i]);
                  }
                IdenticalQuestionFound = IdenticalAnswers;
                break;
             case Tst_ANS_TRUE_FALSE:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Gbl.Test.Answer.TF);
+               IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Answer->TF);
                break;
             case Tst_ANS_UNIQUE_CHOICE:
             case Tst_ANS_MULTIPLE_CHOICE:
             case Tst_ANS_TEXT:
-               if (NumOptsExistingQstInDB == Gbl.Test.Answer.NumOptions)
+               if (NumOptsExistingQstInDB == Answer->NumOptions)
                  {
                   for (IdenticalAnswers = true, NumOpt = 0;
                        IdenticalAnswers && NumOpt < NumOptsExistingQstInDB;
@@ -6440,7 +6531,7 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
                     {
                      row = mysql_fetch_row (mysql_res_ans);
 
-                     if (strcasecmp (row[0],Gbl.Test.Answer.Options[NumOpt].Text))
+                     if (strcasecmp (row[0],Answer->Options[NumOpt].Text))
                         IdenticalAnswers = false;
                     }
                  }
@@ -6470,7 +6561,8 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
 /*****************************************************************************/
 
 static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
-                                                  struct Tst_Question *Question)
+                                                  struct Tst_Question *Question,
+                                                  struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
    long CurrentMedCodInDB;
@@ -6484,12 +6576,12 @@ static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       for (NumOpt = 0;
-	   NumOpt < Gbl.Test.Answer.NumOptions;
+	   NumOpt < Answer->NumOptions;
 	   NumOpt++)
 	{
          CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
                                                   NumOpt);	// Get current media code associated to this option
-         Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Answer.Options[NumOpt].Media);
+         Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Answer->Options[NumOpt].Media);
 	}
   }
 
@@ -6881,7 +6973,8 @@ void Tst_PutParamQstCod (long QstCod)
 /*****************************************************************************/
 
 long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
-                                         const struct Tst_Question *Question)
+                                         const struct Tst_Question *Question,
+                                         struct Tst_Answer *Answer)
   {
    /***** Insert or update question in the table of questions *****/
    QstCod = Tst_InsertOrUpdateQstIntoDB (QstCod,Question);
@@ -6894,7 +6987,7 @@ long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
       Tst_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Insert answers in the answers table *****/
-      Tst_InsertAnswersIntoDB (QstCod);
+      Tst_InsertAnswersIntoDB (QstCod,Answer);
      }
 
    return QstCod;
@@ -7008,7 +7101,7 @@ static void Tst_InsertTagsIntoDB (long QstCod)
 /******************* Insert answers in the answers table *********************/
 /*****************************************************************************/
 
-static void Tst_InsertAnswersIntoDB (long QstCod)
+static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Answer *Answer)
   {
    unsigned NumOpt;
    unsigned i;
@@ -7023,7 +7116,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod)
                          " VALUES"
                          " (%ld,0,%ld,'',-1,'Y')",
 			 QstCod,
-			 Gbl.Test.Answer.Integer);
+			 Answer->Integer);
          break;
       case Tst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -7036,7 +7129,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod)
                             " VALUES"
                             " (%ld,%u,'%.15lg','',-1,'Y')",
 			    QstCod,i,
-			    Gbl.Test.Answer.FloatingPoint[i]);
+			    Answer->FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Tst_ANS_TRUE_FALSE:
@@ -7046,16 +7139,16 @@ static void Tst_InsertAnswersIntoDB (long QstCod)
                          " VALUES"
                          " (%ld,0,'%c','',-1,'Y')",
 			 QstCod,
-			 Gbl.Test.Answer.TF);
+			 Answer->TF);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
          for (NumOpt = 0;
-              NumOpt < Gbl.Test.Answer.NumOptions;
+              NumOpt < Answer->NumOptions;
               NumOpt++)
-            if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||			// Text
-        	Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+            if (Answer->Options[NumOpt].Text[0] ||			// Text
+        	Answer->Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
               {
                DB_QueryINSERT ("can not create answer",
         		       "INSERT INTO tst_answers"
@@ -7063,15 +7156,16 @@ static void Tst_InsertAnswersIntoDB (long QstCod)
                                " VALUES"
                                " (%ld,%u,'%s','%s',%ld,'%c')",
 			       QstCod,NumOpt,
-			       Gbl.Test.Answer.Options[NumOpt].Text,
-			       Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
-			       Gbl.Test.Answer.Options[NumOpt].Media.MedCod,
-			       Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
-									 'N');
+			       Answer->Options[NumOpt].Text,
+			       Answer->Options[NumOpt].Feedback ? Answer->Options[NumOpt].Feedback :
+					                          "",
+			       Answer->Options[NumOpt].Media.MedCod,
+			       Answer->Options[NumOpt].Correct ? 'Y' :
+								 'N');
 
                /* Update image status */
-	       if (Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
-		  Gbl.Test.Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
+	       if (Answer->Options[NumOpt].Media.Type != Med_TYPE_NONE)
+		  Answer->Options[NumOpt].Media.Status = Med_STORED_IN_DB;
               }
 	 break;
       default:

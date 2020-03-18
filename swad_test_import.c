@@ -75,11 +75,13 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
 static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
-static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem);
+static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
+                                  struct Tst_Answer *Answer);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
+                                     const struct Tst_Answer *Answer,
                                      bool QuestionExists);
 
 /*****************************************************************************/
@@ -332,13 +334,15 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
 static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
+   struct Tst_Answer Answer;
    unsigned NumOpt;
    unsigned i;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    double FloatNum[2];
 
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
+   /***** Get answers *****/
+   Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
    /*
    row[0] AnsInd
    row[1] Answer
@@ -346,17 +350,18 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
    row[3] MedCod
    row[4] Correct
    */
-   /***** Write the answers *****/
+
+   /***** Write answers *****/
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne ();
+         Tst_CheckIfNumberOfAnswersIsOne (&Answer);
          row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"%ld",
                   Tst_GetIntAnsFromStr (row[1]));
          break;
       case Tst_ANS_FLOAT:
-	 if (Gbl.Test.Answer.NumOptions != 2)
+	 if (Answer.NumOptions != 2)
             Lay_ShowErrorAndExit ("Wrong float range.");
 
          for (i = 0;
@@ -374,7 +379,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
                   FloatNum[1],Txt_NEW_LINE);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne ();
+         Tst_CheckIfNumberOfAnswersIsOne (&Answer);
          row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"%s",
                   row[1][0] == 'T' ? "true" :
@@ -385,7 +390,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
       case Tst_ANS_TEXT:
          fprintf (FileXML,"%s",Txt_NEW_LINE);
          for (NumOpt = 0;
-              NumOpt < Gbl.Test.Answer.NumOptions;
+              NumOpt < Answer.NumOptions;
               NumOpt++)
            {
             row = mysql_fetch_row (mysql_res);
@@ -530,6 +535,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    bool AnswerTypeFound;
    bool QuestionExists;
    struct Tst_Question Question;
+   struct Tst_Answer Answer;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
@@ -573,7 +579,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	 if (!strcmp (QuestionElem->TagName,"question"))
 	   {
 	    /***** Create test question *****/
-	    Tst_QstConstructor (&Question);
+	    Tst_QstConstructor (&Question,&Answer);
 
 	    /* Get type of questions (in mandatory attribute "type") */
 	    AnswerTypeFound = false;
@@ -673,25 +679,27 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		 }
 
 	    /* Get answer (mandatory) */
-	    TsI_GetAnswerFromXML (AnswerElem);
+	    TsI_GetAnswerFromXML (AnswerElem,&Answer);
 
 	    /* Make sure that tags, text and answer are not empty */
-	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
+	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Answer))
 	      {
 	       /* Check if question already exists in database */
-	       QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question);
+	       QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question,&Answer);
 
 	       /* Write row with this imported question */
-	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,&Question,QuestionExists);
+	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,
+	                                &Question,&Answer,
+	                                QuestionExists);
 
 	       /***** If a new question ==> insert question, tags and answer in the database *****/
 	       if (!QuestionExists)
-		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question) <= 0)
+		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,&Answer) <= 0)
 		     Lay_ShowErrorAndExit ("Can not create question.");
 	      }
 
 	    /***** Destroy test question *****/
-	    Tst_QstDestructor (&Question);
+	    Tst_QstDestructor (&Question,&Answer);
 	   }
 	}
 
@@ -733,7 +741,8 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 /*****************************************************************************/
 // Answer is mandatory
 
-static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
+static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
+                                  struct Tst_Answer *Answer)
   {
    struct XMLElement *OptionElem;
    struct XMLElement *TextElem;
@@ -745,19 +754,19 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         if (!Tst_AllocateTextChoiceAnswer (0))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
          if (AnswerElem->Content)
-            Str_Copy (Gbl.Test.Answer.Options[0].Text,AnswerElem->Content,
+            Str_Copy (Answer->Options[0].Text,AnswerElem->Content,
                       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
          break;
       case Tst_ANS_FLOAT:
-         if (!Tst_AllocateTextChoiceAnswer (0))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
-         if (!Tst_AllocateTextChoiceAnswer (1))
+         if (!Tst_AllocateTextChoiceAnswer (Answer,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -767,7 +776,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"lower"))
               {
                if (LowerUpperElem->Content)
-                  Str_Copy (Gbl.Test.Answer.Options[0].Text,
+                  Str_Copy (Answer->Options[0].Text,
                             LowerUpperElem->Content,
                             Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "lower"
@@ -778,7 +787,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"upper"))
               {
                if (LowerUpperElem->Content)
-                  Str_Copy (Gbl.Test.Answer.Options[1].Text,
+                  Str_Copy (Answer->Options[1].Text,
                             LowerUpperElem->Content,
                             Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "upper"
@@ -787,19 +796,19 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
       case Tst_ANS_TRUE_FALSE:
 	 // Comparisons must be case insensitive, because users can edit XML
          if (!AnswerElem->Content)
-            Gbl.Test.Answer.TF = ' ';
+            Answer->TF = ' ';
          else if (!strcasecmp (AnswerElem->Content,"true")  ||
                   !strcasecmp (AnswerElem->Content,"T")     ||
                   !strcasecmp (AnswerElem->Content,"yes")   ||
                   !strcasecmp (AnswerElem->Content,"Y"))
-            Gbl.Test.Answer.TF = 'T';
+            Answer->TF = 'T';
          else if (!strcasecmp (AnswerElem->Content,"false") ||
                   !strcasecmp (AnswerElem->Content,"F")     ||
                   !strcasecmp (AnswerElem->Content,"no")    ||
                   !strcasecmp (AnswerElem->Content,"N"))
-            Gbl.Test.Answer.TF = 'F';
+            Answer->TF = 'F';
          else
-            Gbl.Test.Answer.TF = ' ';
+            Answer->TF = ' ';
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -810,7 +819,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
               OptionElem = OptionElem->NextBrother, NumOpt++)
             if (!strcmp (OptionElem->TagName,"option"))
               {
-               if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+               if (!Tst_AllocateTextChoiceAnswer (Answer,NumOpt))
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
@@ -821,13 +830,13 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
 		    {
 		     if (TextElem->Content)
 		       {
-			Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,
+			Str_Copy (Answer->Options[NumOpt].Text,
 			          TextElem->Content,
 			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert answer from text to HTML (in database answer text is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-			                  Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Answer->Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
 		       }
 		     break;	// Only first element "text"
 		    }
@@ -839,19 +848,19 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
 		    {
 		     if (FeedbackElem->Content)
 		       {
-			Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,
+			Str_Copy (Answer->Options[NumOpt].Feedback,
 			          FeedbackElem->Content,
 			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert feedback from text to HTML (in database answer feedback is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-			                  Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Answer->Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
 		       }
 		     break;	// Only first element "feedback"
 		    }
 
 	       if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
-		  Gbl.Test.Answer.Options[NumOpt].Correct = true;
+		  Answer->Options[NumOpt].Correct = true;
 	       else
 		  /* Check if option is correct or wrong */
 		  for (Attribute = OptionElem->FirstAttribute;
@@ -859,7 +868,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
 		       Attribute = Attribute->Next)
 		     if (!strcmp (Attribute->AttributeName,"correct"))
 		       {
-			Gbl.Test.Answer.Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			Answer->Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute);
 			break;	// Only first attribute "correct"
 		       }
                }
@@ -902,6 +911,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
+                                     const struct Tst_Answer *Answer,
                                      bool QuestionExists)
   {
    extern const char *Txt_Existing_question;
@@ -1004,22 +1014,22 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
      {
       case Tst_ANS_INT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-         HTM_TxtF ("(%ld)",Gbl.Test.Answer.Integer);
+         HTM_TxtF ("(%ld)",Answer->Integer);
          HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
          HTM_Txt ("([");
-         HTM_Double (Gbl.Test.Answer.FloatingPoint[0]);
+         HTM_Double (Answer->FloatingPoint[0]);
          HTM_Txt ("; ");
-         HTM_Double (Gbl.Test.Answer.FloatingPoint[1]);
+         HTM_Double (Answer->FloatingPoint[1]);
          HTM_Txt ("])");
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
          HTM_Txt ("(");
-         Tst_WriteAnsTF (Gbl.Test.Answer.TF);
+         Tst_WriteAnsTF (Answer->TF);
          HTM_Txt (")");
          HTM_SPAN_End ();
          break;
@@ -1028,15 +1038,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       case Tst_ANS_TEXT:
          HTM_TABLE_Begin (NULL);
          for (NumOpt = 0;
-              NumOpt < Gbl.Test.Answer.NumOptions;
+              NumOpt < Answer->NumOptions;
               NumOpt++)
            {
             /* Convert the answer, that is in HTML, to rigorous HTML */
-            AnswerTextLength = strlen (Gbl.Test.Answer.Options[NumOpt].Text) *
+            AnswerTextLength = strlen (Answer->Options[NumOpt].Text) *
         	               Str_MAX_BYTES_PER_CHAR;
             if ((AnswerText = (char *) malloc (AnswerTextLength + 1)) == NULL)
                Lay_NotEnoughMemoryExit ();
-            Str_Copy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,
+            Str_Copy (AnswerText,Answer->Options[NumOpt].Text,
                       AnswerTextLength);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               AnswerText,AnswerTextLength,false);
@@ -1044,15 +1054,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Convert the feedback, that is in HTML, to rigorous HTML */
             AnswerFeedbackLength = 0;
             AnswerFeedback = NULL;
-            if (Gbl.Test.Answer.Options[NumOpt].Feedback)
-               if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
+            if (Answer->Options[NumOpt].Feedback)
+               if (Answer->Options[NumOpt].Feedback[0])
 		 {
-	          AnswerFeedbackLength = strlen (Gbl.Test.Answer.Options[NumOpt].Feedback) *
+	          AnswerFeedbackLength = strlen (Answer->Options[NumOpt].Feedback) *
 					 Str_MAX_BYTES_PER_CHAR;
 	          if ((AnswerFeedback = (char *) malloc (AnswerFeedbackLength + 1)) == NULL)
 		     Lay_NotEnoughMemoryExit ();
 		  Str_Copy (AnswerFeedback,
-		            Gbl.Test.Answer.Options[NumOpt].Feedback,
+		            Answer->Options[NumOpt].Feedback,
 		            AnswerFeedbackLength);
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		                    AnswerFeedback,AnswerFeedbackLength,false);
@@ -1062,7 +1072,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-            if (Gbl.Test.Answer.Options[NumOpt].Correct)
+            if (Answer->Options[NumOpt].Correct)
                Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
 		            QuestionExists ? "ICO_HIDDEN CONTEXT_ICO_16x16" :
                 	                     "CONTEXT_ICO_16x16");
