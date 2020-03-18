@@ -1875,6 +1875,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MYSQL_ROW row;
    long QstCod;
    struct Tst_Question Question;
+   Tst_AnswerType_t AnswerType;
    struct Tst_Answer Answer;
    unsigned QstInd;
    unsigned MaxQstInd;
@@ -1909,7 +1910,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       row[1] QstCod
       */
       /***** Create test question *****/
-      Tst_QstConstructor (&Question,&Answer);
+      Tst_QstConstructor (&Question,&AnswerType,&Answer);
 
       /* Get question index (row[0]) */
       QstInd = Str_ConvertStrToUnsigned (row[0]);
@@ -1996,6 +1997,7 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool QstExists;
+   Tst_AnswerType_t AnswerType;
    struct Media Media;
 
    /***** Get question from database *****/
@@ -2030,8 +2032,8 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
    HTM_DIV_Begin ("class=\"DAT_SMALL\"");
    if (QstExists)
      {
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
      }
    HTM_DIV_End ();
 
@@ -2069,7 +2071,7 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersEdit (QstCod);
+      Tst_WriteAnswersEdit (QstCod,AnswerType);
      }
    else
      {

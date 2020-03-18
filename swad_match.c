@@ -192,7 +192,8 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         const char *Class,bool ShowResult);
+                                         const char *Class,bool ShowResult,
+                                         Tst_AnswerType_t AnswerType);
 static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
@@ -2863,6 +2864,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   Tst_AnswerType_t AnswerType;
    struct Media Media;
 
    /***** Trivial check: do not show anything on match start and end *****/
@@ -2888,8 +2890,8 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 
       /***** Show question *****/
       /* Get answer type (row[0]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-      if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+      if (AnswerType != Tst_ANS_UNIQUE_CHOICE)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
       /* Begin container */
@@ -2919,15 +2921,17 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 	       /* Write answers */
 	       Mch_WriteAnswersMatchResult (Match,
 					    "MCH_TCH_ANS",
-					    false);	// Don't show result
-	    else						// Match is paused, not being played
+					    false,	// Don't show result
+					    AnswerType);
+	    else					// Match is paused, not being played
 	       Mch_ShowWaitImage (Txt_MATCH_Paused);
 	    break;
 	 case Mch_RESULTS:
 	    /* Write answers with results */
 	    Mch_WriteAnswersMatchResult (Match,
 					 "MCH_TCH_ANS",
-					 true);		// Show result
+					 true,		// Show result
+					 AnswerType);
 	    break;
 	 default:
 	    /* Don't write anything */
@@ -2946,10 +2950,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         const char *Class,bool ShowResult)
+                                         const char *Class,bool ShowResult,
+                                         Tst_AnswerType_t AnswerType)
   {
    /***** Write answer depending on type *****/
-   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
+   if (AnswerType == Tst_ANS_UNIQUE_CHOICE)
       Tst_WriteChoiceAnsViewMatch (Match->MchCod,Match->Status.QstInd,Match->Status.QstCod,
 				   Match->Status.NumCols,Class,ShowResult);
    else
@@ -3786,6 +3791,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 static double Mch_ComputeScore (unsigned NumQsts)
   {
    unsigned NumQst;
+   Tst_AnswerType_t AnswerType = Tst_ANS_UNIQUE_CHOICE;
    struct Tst_Answer Answer;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
@@ -3807,7 +3813,7 @@ static double Mch_ComputeScore (unsigned NumQsts)
       Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst],&Answer);
 
       /***** Compute the total score of this question *****/
-      Tst_ComputeScoreQst (&Answer,
+      Tst_ComputeScoreQst (AnswerType,&Answer,
                            Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Compute total score *****/

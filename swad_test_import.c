@@ -71,16 +71,19 @@ static void TsI_PutCreateXMLParam (void);
 static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
 
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
-static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML);
+static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
+                                       FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
 static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
+				  Tst_AnswerType_t AnswerType,
                                   struct Tst_Answer *Answer);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
+                                     Tst_AnswerType_t AnswerType,
                                      const struct Tst_Answer *Answer,
                                      bool QuestionExists);
 
@@ -245,6 +248,7 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
    extern const char *Txt_NEW_LINE;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   Tst_AnswerType_t AnswerType;
 
    if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
      {
@@ -263,9 +267,9 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       */
 
       /***** Write the answer type (row[1]) *****/
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       fprintf (FileXML,"<question type=\"%s\">%s",
-               Tst_StrAnswerTypesXML[Gbl.Test.AnswerType],Txt_NEW_LINE);
+               Tst_StrAnswerTypesXML[AnswerType],Txt_NEW_LINE);
 
       /***** Write the question tags *****/
       fprintf (FileXML,"<tags>%s",Txt_NEW_LINE);
@@ -285,13 +289,13 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       /***** Write the answers of this question.
              Shuffle can be enabled or disabled (row[2]) *****/
       fprintf (FileXML,"<answer");
-      if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-          Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+      if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+          AnswerType == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
                   (row[2][0] == 'Y') ? "yes" :
                 	               "no");
       fprintf (FileXML,">");
-      TsI_WriteAnswersOfAQstXML (QstCod,FileXML);
+      TsI_WriteAnswersOfAQstXML (QstCod,AnswerType,FileXML);
       fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
 
       /***** End question *****/
@@ -331,7 +335,8 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
+static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
+                                       FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
    struct Tst_Answer Answer;
@@ -352,7 +357,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
    */
 
    /***** Write answers *****/
-   switch (Gbl.Test.AnswerType)
+   switch (AnswerType)
      {
       case Tst_ANS_INT:
          Tst_CheckIfNumberOfAnswersIsOne (&Answer);
@@ -399,7 +404,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,FILE *FileXML)
             fprintf (FileXML,"<option");
 
             /* Write whether the answer is correct or not (row[4]) */
-            if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
+            if (AnswerType != Tst_ANS_TEXT)
                fprintf (FileXML," correct=\"%s\"",
                         (row[4][0] == 'Y') ? "yes" :
                                              "no");
@@ -535,6 +540,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    bool AnswerTypeFound;
    bool QuestionExists;
    struct Tst_Question Question;
+   Tst_AnswerType_t AnswerType;
    struct Tst_Answer Answer;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
@@ -579,124 +585,127 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	 if (!strcmp (QuestionElem->TagName,"question"))
 	   {
 	    /***** Create test question *****/
-	    Tst_QstConstructor (&Question,&Answer);
+	    Tst_QstConstructor (&Question,&AnswerType,&Answer);
 
-	    /* Get type of questions (in mandatory attribute "type") */
+	    /* Get answer type (in mandatory attribute "type") */
 	    AnswerTypeFound = false;
 	    for (Attribute = QuestionElem->FirstAttribute;
 		 Attribute != NULL;
 		 Attribute = Attribute->Next)
 	       if (!strcmp (Attribute->AttributeName,"type"))
 		 {
-		  Gbl.Test.AnswerType = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
+		  AnswerType = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
 		  AnswerTypeFound = true;
 		  break;	// Only first attribute "type"
 		 }
-	    if (!AnswerTypeFound)
-	       Lay_ShowErrorAndExit ("Wrong type of answer.");
 
-	    /* Get tags */
-	    for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
-		 TagsElem != NULL;
-		 TagsElem = TagsElem->NextBrother)
-	       if (!strcmp (TagsElem->TagName,"tags"))
-		 {
-		  for (TagElem = TagsElem->FirstChild;
-		       TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
-		       TagElem = TagElem->NextBrother)
-		     if (!strcmp (TagElem->TagName,"tag"))
-		       {
-			if (TagElem->Content)
-			  {
-			   Str_Copy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],
-			             TagElem->Content,
-			             Tst_MAX_BYTES_TAG);
-			   Gbl.Test.Tags.Num++;
-			  }
-		       }
-		  break;	// Only first element "tags"
-		 }
-
-	    /* Get stem (mandatory) */
-	    for (StemElem = QuestionElem->FirstChild;
-		 StemElem != NULL;
-		 StemElem = StemElem->NextBrother)
-	       if (!strcmp (StemElem->TagName,"stem"))
-		 {
-		  if (StemElem->Content)
-		    {
-		     /* Convert stem from text to HTML (in database stem is stored in HTML) */
-		     Str_Copy (Stem,StemElem->Content,
-		               Cns_MAX_BYTES_TEXT);
-		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-				       Stem,Cns_MAX_BYTES_TEXT,true);
-
-		     Question.Stem.Text   = Stem;
-		     Question.Stem.Length = strlen (Stem);
-		    }
-		  break;	// Only first element "stem"
-		 }
-
-	    /* Get feedback (optional) */
-	    for (FeedbackElem = QuestionElem->FirstChild;
-		 FeedbackElem != NULL;
-		 FeedbackElem = FeedbackElem->NextBrother)
-	       if (!strcmp (FeedbackElem->TagName,"feedback"))
-		 {
-		  if (FeedbackElem->Content)
-		    {
-		     /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-		     Str_Copy (Feedback,FeedbackElem->Content,
-		               Cns_MAX_BYTES_TEXT);
-		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-				       Feedback,Cns_MAX_BYTES_TEXT,true);
-
-		     Question.Feedback.Text   = Feedback;
-		     Question.Feedback.Length = strlen (Feedback);
-		    }
-		  break;	// Only first element "feedback"
-		 }
-
-	    /* Get shuffle. By default, shuffle is false. */
-	    Question.Shuffle = false;
-	    for (AnswerElem = QuestionElem->FirstChild;
-		 AnswerElem != NULL;
-		 AnswerElem = AnswerElem->NextBrother)
-	       if (!strcmp (AnswerElem->TagName,"answer"))
-		 {
-		  if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-		      Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-		     /* Get whether shuffle answers (in attribute "shuffle") */
-		     for (Attribute = AnswerElem->FirstAttribute;
-			  Attribute != NULL;
-			  Attribute = Attribute->Next)
-			if (!strcmp (Attribute->AttributeName,"shuffle"))
-			  {
-			   Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
-			   break;	// Only first attribute "shuffle"
-			  }
-		  break;	// Only first element "answer"
-		 }
-
-	    /* Get answer (mandatory) */
-	    TsI_GetAnswerFromXML (AnswerElem,&Answer);
-
-	    /* Make sure that tags, text and answer are not empty */
-	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Answer))
+	    if (AnswerTypeFound)
 	      {
-	       /* Check if question already exists in database */
-	       QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question,&Answer);
+	       /* Get tags */
+	       for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
+		    TagsElem != NULL;
+		    TagsElem = TagsElem->NextBrother)
+		  if (!strcmp (TagsElem->TagName,"tags"))
+		    {
+		     for (TagElem = TagsElem->FirstChild;
+			  TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
+			  TagElem = TagElem->NextBrother)
+			if (!strcmp (TagElem->TagName,"tag"))
+			  {
+			   if (TagElem->Content)
+			     {
+			      Str_Copy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],
+					TagElem->Content,
+					Tst_MAX_BYTES_TAG);
+			      Gbl.Test.Tags.Num++;
+			     }
+			  }
+		     break;	// Only first element "tags"
+		    }
 
-	       /* Write row with this imported question */
-	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,
-	                                &Question,&Answer,
-	                                QuestionExists);
+	       /* Get stem (mandatory) */
+	       for (StemElem = QuestionElem->FirstChild;
+		    StemElem != NULL;
+		    StemElem = StemElem->NextBrother)
+		  if (!strcmp (StemElem->TagName,"stem"))
+		    {
+		     if (StemElem->Content)
+		       {
+			/* Convert stem from text to HTML (in database stem is stored in HTML) */
+			Str_Copy (Stem,StemElem->Content,
+				  Cns_MAX_BYTES_TEXT);
+			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+					  Stem,Cns_MAX_BYTES_TEXT,true);
 
-	       /***** If a new question ==> insert question, tags and answer in the database *****/
-	       if (!QuestionExists)
-		  if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,&Answer) <= 0)
-		     Lay_ShowErrorAndExit ("Can not create question.");
+			Question.Stem.Text   = Stem;
+			Question.Stem.Length = strlen (Stem);
+		       }
+		     break;	// Only first element "stem"
+		    }
+
+	       /* Get feedback (optional) */
+	       for (FeedbackElem = QuestionElem->FirstChild;
+		    FeedbackElem != NULL;
+		    FeedbackElem = FeedbackElem->NextBrother)
+		  if (!strcmp (FeedbackElem->TagName,"feedback"))
+		    {
+		     if (FeedbackElem->Content)
+		       {
+			/* Convert feedback from text to HTML (in database feedback is stored in HTML) */
+			Str_Copy (Feedback,FeedbackElem->Content,
+				  Cns_MAX_BYTES_TEXT);
+			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+					  Feedback,Cns_MAX_BYTES_TEXT,true);
+
+			Question.Feedback.Text   = Feedback;
+			Question.Feedback.Length = strlen (Feedback);
+		       }
+		     break;	// Only first element "feedback"
+		    }
+
+	       /* Get shuffle. By default, shuffle is false. */
+	       Question.Shuffle = false;
+	       for (AnswerElem = QuestionElem->FirstChild;
+		    AnswerElem != NULL;
+		    AnswerElem = AnswerElem->NextBrother)
+		  if (!strcmp (AnswerElem->TagName,"answer"))
+		    {
+		     if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+			 AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+			/* Get whether shuffle answers (in attribute "shuffle") */
+			for (Attribute = AnswerElem->FirstAttribute;
+			     Attribute != NULL;
+			     Attribute = Attribute->Next)
+			   if (!strcmp (Attribute->AttributeName,"shuffle"))
+			     {
+			      Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			      break;	// Only first attribute "shuffle"
+			     }
+		     break;	// Only first element "answer"
+		    }
+
+	       /* Get answer (mandatory) */
+	       TsI_GetAnswerFromXML (AnswerElem,AnswerType,&Answer);
+
+	       /* Make sure that tags, text and answer are not empty */
+	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,AnswerType,&Answer))
+		 {
+		  /* Check if question already exists in database */
+		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question,AnswerType,&Answer);
+
+		  /* Write row with this imported question */
+		  TsI_WriteRowImportedQst (StemElem,FeedbackElem,
+					   &Question,AnswerType,&Answer,
+					   QuestionExists);
+
+		  /***** If a new question ==> insert question, tags and answer in the database *****/
+		  if (!QuestionExists)
+		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,AnswerType,&Answer) <= 0)
+			Lay_ShowErrorAndExit ("Can not create question.");
+		 }
 	      }
+	    else	// Answer type not found
+	       Lay_ShowErrorAndExit ("Wrong type of answer.");
 
 	    /***** Destroy test question *****/
 	    Tst_QstDestructor (&Question,&Answer);
@@ -742,6 +751,7 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 // Answer is mandatory
 
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
+				  Tst_AnswerType_t AnswerType,
                                   struct Tst_Answer *Answer)
   {
    struct XMLElement *OptionElem;
@@ -751,7 +761,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
    struct XMLAttribute *Attribute;
    unsigned NumOpt;
 
-   switch (Gbl.Test.AnswerType)
+   switch (AnswerType)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (Answer,0))
@@ -859,7 +869,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		     break;	// Only first element "feedback"
 		    }
 
-	       if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
+	       if (AnswerType == Tst_ANS_TEXT)
 		  Answer->Options[NumOpt].Correct = true;
 	       else
 		  /* Check if option is correct or wrong */
@@ -911,6 +921,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
+                                     Tst_AnswerType_t AnswerType,
                                      const struct Tst_Answer *Answer,
                                      bool QuestionExists)
   {
@@ -991,13 +1002,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question type *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnswerType]);
    HTM_TD_End ();
 
    /***** Write if shuffle is enabled *****/
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-       Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+   if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+       AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Question->Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
@@ -1010,7 +1021,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tst_WriteQstStem (Stem,ClassStem,
 		     true);	// Visible
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
-   switch (Gbl.Test.AnswerType)
+   switch (AnswerType)
      {
       case Tst_ANS_INT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
