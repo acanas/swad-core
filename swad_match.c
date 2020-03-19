@@ -3791,14 +3791,16 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 static double Mch_ComputeScore (unsigned NumQsts)
   {
    unsigned NumQst;
-   struct Tst_Answer Answer;
+   struct Tst_Question Question;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
    double TotalScore = 0.0;
 
-   Answer.Type = Tst_ANS_UNIQUE_CHOICE;
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+   Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
    for (NumQst = 0;
 	NumQst < NumQsts;
@@ -3811,15 +3813,17 @@ static double Mch_ComputeScore (unsigned NumQsts)
       Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst],&Answer);
+      Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst],&Question);
 
       /***** Compute the total score of this question *****/
-      Tst_ComputeScoreQst (&Answer,
-                           Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
+      Tst_ComputeScoreQst (&Question,Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Compute total score *****/
       TotalScore += ScoreThisQst;
      }
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
 
    return TotalScore;
   }

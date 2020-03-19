@@ -80,22 +80,21 @@ struct Tst_Question
      } Stem, Feedback;
    struct Media Media;
    bool Shuffle;
-  };
-
-struct Tst_Answer
-  {
-   Tst_AnswerType_t Type;
-   unsigned NumOptions;
-   char TF;
    struct
      {
-      bool Correct;
-      char *Text;
-      char *Feedback;
-      struct Media Media;
-     } Options[Tst_MAX_OPTIONS_PER_QUESTION];
-   long Integer;
-   double FloatingPoint[2];
+      Tst_AnswerType_t Type;
+      unsigned NumOptions;
+      char TF;
+      struct
+	{
+	 bool Correct;
+	 char *Text;
+	 char *Feedback;
+	 struct Media Media;
+	} Options[Tst_MAX_OPTIONS_PER_QUESTION];
+      long Integer;
+      double FloatingPoint[2];
+     } Answer;
   };
 
 #define Tst_NUM_OPTIONS_PLUGGABLE	3
@@ -179,22 +178,21 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
-void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Answer *Answer);
+void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Question *Question);
 void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
-void Tst_GetChoiceAns (MYSQL_RES *mysql_res,struct Tst_Answer *Answer);
 void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
 			    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION]);
-void Tst_ComputeScoreQst (const struct Tst_Answer *Answer,
+void Tst_ComputeScoreQst (const struct Tst_Question *Question,
                           unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],
                           bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
 			  double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 				  unsigned NumCols,const char *Class,bool ShowResult);
-void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Answer *Answer);
+void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
 void Tst_GetAndWriteTagsQst (long QstCod);
@@ -212,20 +210,16 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 void Tst_ReceiveConfigTst (void);
 void Tst_ShowFormEditOneQst (void);
 
-void Tst_QstConstructor (struct Tst_Question *Question,
-                         struct Tst_Answer *Answer);
-void Tst_QstDestructor (struct Tst_Question *Question,
-                        struct Tst_Answer *Answer);
+void Tst_QstConstructor (struct Tst_Question *Question);
+void Tst_QstDestructor (struct Tst_Question *Question);
 
-int Tst_AllocateTextChoiceAnswer (struct Tst_Answer *Answer,unsigned NumOpt);
+int Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question *Question,
-                                                      struct Tst_Answer *Answer);
+bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);
 
-bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question,
-                                    const struct Tst_Answer *Answer);
+bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question);
 
 long Tst_GetIntAnsFromStr (char *Str);
 
@@ -242,8 +236,7 @@ void Tst_PutParamGblQstCod (void);
 void Tst_PutParamQstCod (long QstCod);
 
 long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
-                                         const struct Tst_Question *Question,
-                                         struct Tst_Answer *Answer);
+                                         struct Tst_Question *Question);
 
 void Tst_RemoveCrsTests (long CrsCod);
 
