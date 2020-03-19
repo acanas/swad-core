@@ -659,7 +659,6 @@ struct Globals
          char *List;
          char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG + 1];
         } Tags;
-      Tst_AnswerType_t AnswerType;
       unsigned NumQsts;
       long QstCodes[Tst_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
       char StrIndexesOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.

@@ -77,13 +77,11 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
 static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
-				  Tst_AnswerType_t AnswerType,
                                   struct Tst_Answer *Answer);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
-                                     Tst_AnswerType_t AnswerType,
                                      const struct Tst_Answer *Answer,
                                      bool QuestionExists);
 
@@ -540,7 +538,6 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    bool AnswerTypeFound;
    bool QuestionExists;
    struct Tst_Question Question;
-   Tst_AnswerType_t AnswerType;
    struct Tst_Answer Answer;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
@@ -585,7 +582,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	 if (!strcmp (QuestionElem->TagName,"question"))
 	   {
 	    /***** Create test question *****/
-	    Tst_QstConstructor (&Question,&AnswerType,&Answer);
+	    Tst_QstConstructor (&Question,&Answer);
 
 	    /* Get answer type (in mandatory attribute "type") */
 	    AnswerTypeFound = false;
@@ -594,7 +591,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		 Attribute = Attribute->Next)
 	       if (!strcmp (Attribute->AttributeName,"type"))
 		 {
-		  AnswerType = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
+		  Answer.Type = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
 		  AnswerTypeFound = true;
 		  break;	// Only first attribute "type"
 		 }
@@ -670,8 +667,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		    AnswerElem = AnswerElem->NextBrother)
 		  if (!strcmp (AnswerElem->TagName,"answer"))
 		    {
-		     if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-			 AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+		     if (Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
+			 Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 			/* Get whether shuffle answers (in attribute "shuffle") */
 			for (Attribute = AnswerElem->FirstAttribute;
 			     Attribute != NULL;
@@ -685,22 +682,22 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		    }
 
 	       /* Get answer (mandatory) */
-	       TsI_GetAnswerFromXML (AnswerElem,AnswerType,&Answer);
+	       TsI_GetAnswerFromXML (AnswerElem,&Answer);
 
 	       /* Make sure that tags, text and answer are not empty */
-	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,AnswerType,&Answer))
+	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Answer))
 		 {
 		  /* Check if question already exists in database */
-		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question,AnswerType,&Answer);
+		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question,&Answer);
 
 		  /* Write row with this imported question */
 		  TsI_WriteRowImportedQst (StemElem,FeedbackElem,
-					   &Question,AnswerType,&Answer,
+					   &Question,&Answer,
 					   QuestionExists);
 
 		  /***** If a new question ==> insert question, tags and answer in the database *****/
 		  if (!QuestionExists)
-		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,AnswerType,&Answer) <= 0)
+		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,&Answer) <= 0)
 			Lay_ShowErrorAndExit ("Can not create question.");
 		 }
 	      }
@@ -751,7 +748,6 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 // Answer is mandatory
 
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
-				  Tst_AnswerType_t AnswerType,
                                   struct Tst_Answer *Answer)
   {
    struct XMLElement *OptionElem;
@@ -761,7 +757,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
    struct XMLAttribute *Attribute;
    unsigned NumOpt;
 
-   switch (AnswerType)
+   switch (Answer->Type)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (Answer,0))
@@ -869,7 +865,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		     break;	// Only first element "feedback"
 		    }
 
-	       if (AnswerType == Tst_ANS_TEXT)
+	       if (Answer->Type == Tst_ANS_TEXT)
 		  Answer->Options[NumOpt].Correct = true;
 	       else
 		  /* Check if option is correct or wrong */
@@ -921,7 +917,6 @@ static void TsI_WriteHeadingListImportedQst (void)
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      const struct Tst_Question *Question,
-                                     Tst_AnswerType_t AnswerType,
                                      const struct Tst_Answer *Answer,
                                      bool QuestionExists)
   {
@@ -1002,13 +997,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question type *****/
    HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnswerType]);
+   HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Answer->Type]);
    HTM_TD_End ();
 
    /***** Write if shuffle is enabled *****/
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-       AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+   if (Answer->Type == Tst_ANS_UNIQUE_CHOICE ||
+       Answer->Type == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Question->Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
@@ -1021,7 +1016,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tst_WriteQstStem (Stem,ClassStem,
 		     true);	// Visible
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
-   switch (AnswerType)
+   switch (Answer->Type)
      {
       case Tst_ANS_INT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);

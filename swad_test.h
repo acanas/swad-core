@@ -58,6 +58,19 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Tst_NUM_ANS_TYPES	6
+#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+typedef enum
+  {
+   Tst_ANS_INT             = 0,
+   Tst_ANS_FLOAT           = 1,
+   Tst_ANS_TRUE_FALSE      = 2,
+   Tst_ANS_UNIQUE_CHOICE   = 3,
+   Tst_ANS_MULTIPLE_CHOICE = 4,
+   Tst_ANS_TEXT            = 5,
+   Tst_ANS_ALL             = 6,	// All/any type of answer
+  } Tst_AnswerType_t;
+
 struct Tst_Question
   {
    struct
@@ -71,6 +84,7 @@ struct Tst_Question
 
 struct Tst_Answer
   {
+   Tst_AnswerType_t Type;
    unsigned NumOptions;
    char TF;
    struct
@@ -109,19 +123,6 @@ struct Tst_Config
    unsigned long MinTimeNxtTstPerQst;
    unsigned Visibility;	// One bit for each visibility item
   };
-
-#define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-typedef enum
-  {
-   Tst_ANS_INT             = 0,
-   Tst_ANS_FLOAT           = 1,
-   Tst_ANS_TRUE_FALSE      = 2,
-   Tst_ANS_UNIQUE_CHOICE   = 3,
-   Tst_ANS_MULTIPLE_CHOICE = 4,
-   Tst_ANS_TEXT            = 5,
-   Tst_ANS_ALL             = 6,	// All/any type of answer
-  } Tst_AnswerType_t;
 
 #define Tst_NUM_TYPES_ORDER_QST	5
 typedef enum
@@ -187,8 +188,7 @@ void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ON
 			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
 			    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION]);
-void Tst_ComputeScoreQst (Tst_AnswerType_t AnswerType,
-                          const struct Tst_Answer *Answer,
+void Tst_ComputeScoreQst (const struct Tst_Answer *Answer,
                           unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],
                           bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
 			  double *ScoreThisQst,bool *AnswerIsNotBlank);
@@ -213,7 +213,6 @@ void Tst_ReceiveConfigTst (void);
 void Tst_ShowFormEditOneQst (void);
 
 void Tst_QstConstructor (struct Tst_Question *Question,
-                         Tst_AnswerType_t *AnswerType,
                          struct Tst_Answer *Answer);
 void Tst_QstDestructor (struct Tst_Question *Question,
                         struct Tst_Answer *Answer);
@@ -223,11 +222,9 @@ int Tst_AllocateTextChoiceAnswer (struct Tst_Answer *Answer,unsigned NumOpt);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (const struct Tst_Question *Question,
-                                                      Tst_AnswerType_t AnswerType,
                                                       struct Tst_Answer *Answer);
 
 bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question,
-                                    Tst_AnswerType_t AnswerType,
                                     const struct Tst_Answer *Answer);
 
 long Tst_GetIntAnsFromStr (char *Str);
@@ -246,7 +243,6 @@ void Tst_PutParamQstCod (long QstCod);
 
 long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
                                          const struct Tst_Question *Question,
-                                         Tst_AnswerType_t AnswerType,
                                          struct Tst_Answer *Answer);
 
 void Tst_RemoveCrsTests (long CrsCod);
