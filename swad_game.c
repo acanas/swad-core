@@ -1608,7 +1608,7 @@ void Gam_RequestNewQuestion (void)
      {
       /***** Show form to create a new question in this game *****/
       Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
-      Tst_ShowFormAskSelectTstsForGame ();
+      Tst_RequestSelectTestsForGame ();
      }
    else
       Lay_NoPermissionExit ();

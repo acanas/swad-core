@@ -51445,11 +51445,11 @@ const char *Txt_TST_HIDDEN_VISIBLE[2] =
 #endif
 	};
 
-const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
+const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 	{
-	[Tst_PLUGGABLE_UNKNOWN] =
+	[TstCfg_PLUGGABLE_UNKNOWN] =
 	"",
-	[Tst_PLUGGABLE_NO] =
+	[TstCfg_PLUGGABLE_NO] =
 #if   L==1	// ca
 	"Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
 #elif L==2	// de
@@ -51470,7 +51470,7 @@ const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	"Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
 #endif
 	,
-	[Tst_PLUGGABLE_YES] =
+	[TstCfg_PLUGGABLE_YES] =
 #if   L==1	// ca
 	"Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
 #elif L==2	// de

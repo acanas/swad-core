@@ -151,7 +151,7 @@ static void McR_ListMyMchResultsInCrs (void)
    McR_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in the current course *****/
-   Tst_GetConfigTstFromDB ();	// Get feedback type
+   TstCfg_GetConfigFromDB ();	// Get feedback type
    McR_BuildGamesSelectedCommas (&GamesSelectedCommas);
    McR_ShowMchResults (Usr_ME,-1L,-1L,GamesSelectedCommas);
    free (GamesSelectedCommas);
@@ -193,7 +193,7 @@ static void McR_ListMyMchResultsInGam (long GamCod)
    McR_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
-   Tst_GetConfigTstFromDB ();	// Get feedback type
+   TstCfg_GetConfigFromDB ();	// Get feedback type
    McR_ShowMchResults (Usr_ME,-1L,GamCod,NULL);
   }
 
@@ -237,7 +237,7 @@ static void McR_ListMyMchResultsInMch (long MchCod)
    McR_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
-   Tst_GetConfigTstFromDB ();	// Get feedback type
+   TstCfg_GetConfigFromDB ();	// Get feedback type
    McR_ShowMchResults (Usr_ME,MchCod,-1L,NULL);
   }
 

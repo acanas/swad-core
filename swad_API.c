@@ -113,6 +113,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notification.h"
 #include "swad_password.h"
 #include "swad_search.h"
+#include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 #include "swad_xml.h"
@@ -4009,28 +4010,28 @@ int swad__getTestConfig (struct soap *soap,
    /***** Get test configuration *****/
    if ((ReturnCode = API_GetTstConfig ((long) courseCode)) != SOAP_OK)
       return ReturnCode;
-   getTestConfigOut->pluggable = (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES) ? 1 :
-	                                                                            0;
-   getTestConfigOut->minQuestions = (int) Gbl.Test.Config.Min;
-   getTestConfigOut->defQuestions = (int) Gbl.Test.Config.Def;
-   getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
-   getTestConfigOut->visibility   = (int) Gbl.Test.Config.Visibility;
+   getTestConfigOut->pluggable = (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES) ? 1 :
+	                                                                               0;
+   getTestConfigOut->minQuestions = (int) TstCfg_GetConfigMin ();
+   getTestConfigOut->defQuestions = (int) TstCfg_GetConfigDef ();
+   getTestConfigOut->maxQuestions = (int) TstCfg_GetConfigMax ();
+   getTestConfigOut->visibility   = (int) TstCfg_GetConfigVisibility ();
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */
-   if (!TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility))
+   if (!TsV_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"nothing",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleEachQstScore (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleEachQstScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"totalResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleCorrectAns (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleCorrectAns (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachResult",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleFeedbackTxt (Gbl.Test.Config.Visibility))
+   else if (!TsV_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachGoodBad",
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
@@ -4040,8 +4041,8 @@ int swad__getTestConfig (struct soap *soap,
 		TsR_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
-   if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES &&
-       Gbl.Test.Config.Max > 0)
+   if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
+       TstCfg_GetConfigMax () > 0)
       getTestConfigOut->numQuestions = API_GetNumTestQuestionsInCrs ((long) courseCode);
 
    return SOAP_OK;
@@ -4064,13 +4065,15 @@ static int API_GetTstConfig (long CrsCod)
      {
       /***** Get minimun, default and maximum *****/
       row = mysql_fetch_row (mysql_res);
-      Tst_GetConfigFromRow (row);
+      TstCfg_GetConfigFromRow (row);
      }
    else // NumRows == 0
      {
-      Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
-      Gbl.Test.Config.Min = Gbl.Test.Config.Def = Gbl.Test.Config.Max = 0;
-      Gbl.Test.Config.Visibility = TsV_VISIBILITY_DEFAULT;
+      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+      TstCfg_SetConfigMin (0);
+      TstCfg_SetConfigDef (0);
+      TstCfg_SetConfigMax (0);
+      TstCfg_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
      }
 
    /***** Free structure that stores the query result *****/
@@ -4170,7 +4173,7 @@ int swad__getTests (struct soap *soap,
    if ((ReturnCode = API_GetTstConfig ((long) courseCode)) != SOAP_OK)
       return ReturnCode;
 
-   if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES)
+   if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES)
      {
       /***** Get tags *****/
       if ((ReturnCode = API_GetTstTags (soap,

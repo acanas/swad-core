@@ -81,6 +81,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
+                                     const struct Tst_Tags *Tags,
                                      const struct Tst_Question *Question,
                                      bool QuestionExists);
 
@@ -88,11 +89,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 /**************** Put a link (form) to export test questions *****************/
 /*****************************************************************************/
 
-void TsI_PutFormToExportQuestions (void)
+void TsI_PutFormToExportQuestions (const struct Tst_Tags *Tags)
   {
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
+   Tst_SetParamGblTags (Tags);
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
 				  "file-import.svg",
 				  Txt_Export_questions);
@@ -536,6 +538,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLElement *FeedbackElem;
    struct XMLElement *AnswerElem;
    struct XMLAttribute *Attribute;
+   struct Tst_Tags Tags;
    bool AnswerTypeFound;
    bool QuestionExists;
    struct Tst_Question Question;
@@ -599,22 +602,22 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	    if (AnswerTypeFound)
 	      {
 	       /* Get tags */
-	       for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
+	       for (TagsElem = QuestionElem->FirstChild, Tags.Num = 0;
 		    TagsElem != NULL;
 		    TagsElem = TagsElem->NextBrother)
 		  if (!strcmp (TagsElem->TagName,"tags"))
 		    {
 		     for (TagElem = TagsElem->FirstChild;
-			  TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
+			  TagElem != NULL && Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
 			  TagElem = TagElem->NextBrother)
 			if (!strcmp (TagElem->TagName,"tag"))
 			  {
 			   if (TagElem->Content)
 			     {
-			      Str_Copy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],
+			      Str_Copy (Tags.Txt[Tags.Num],
 					TagElem->Content,
 					Tst_MAX_BYTES_TAG);
-			      Gbl.Test.Tags.Num++;
+			      Tags.Num++;
 			     }
 			  }
 		     break;	// Only first element "tags"
@@ -685,18 +688,18 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	       TsI_GetAnswerFromXML (AnswerElem,&Question);
 
 	       /* Make sure that tags, text and answer are not empty */
-	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
+	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Tags))
 		 {
 		  /* Check if question already exists in database */
 		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question);
 
 		  /* Write row with this imported question */
 		  TsI_WriteRowImportedQst (StemElem,FeedbackElem,
-					   &Question,QuestionExists);
+		                           &Tags,&Question,QuestionExists);
 
 		  /***** If a new question ==> insert question, tags and answer in the database *****/
 		  if (!QuestionExists)
-		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question) <= 0)
+		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,&Tags) <= 0)
 			Lay_ShowErrorAndExit ("Can not create question.");
 		 }
 	      }
@@ -917,6 +920,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
+                                     const struct Tst_Tags *Tags,
                                      const struct Tst_Question *Question,
                                      bool QuestionExists)
   {
@@ -964,12 +968,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Gbl.Test.Tags.Num)
+   if (Tags->Num)
      {
       /***** Write the tags *****/
       HTM_TABLE_Begin (NULL);
       for (NumTag = 0;
-	   NumTag < Gbl.Test.Tags.Num;
+	   NumTag < Tags->Num;
 	   NumTag++)
 	{
          HTM_TR_Begin (NULL);
@@ -979,7 +983,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	 HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-         HTM_Txt (Gbl.Test.Tags.Txt[NumTag]);
+         HTM_Txt (Tags->Txt[NumTag]);
          HTM_TD_End ();
 
 	 HTM_TR_End ();

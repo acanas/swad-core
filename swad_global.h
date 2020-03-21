@@ -651,18 +651,10 @@ struct Globals
      } TimeTable;
    struct
      {
-      struct Tst_Config Config;
-      struct
-        {
-         unsigned Num;
-         bool All;
-         char *List;
-         char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG + 1];
-        } Tags;
       unsigned NumQsts;
-      long QstCodes[Tst_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
-      char StrIndexesOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-      char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+      long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
+      char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+      char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
       bool AllowTeachers;	// Can teachers of this course see the test result?
       bool AllAnsTypes;
       char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];

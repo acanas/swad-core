@@ -158,7 +158,7 @@ void TsR_ShowMyTstResults (void)
    TsR_ShowHeaderTestResults ();
 
    /***** List my test results *****/
-   Tst_GetConfigTstFromDB ();	// To get feedback type
+   TstCfg_GetConfigFromDB ();	// To get feedback type
    TsR_ShowTstResults (&Gbl.Usrs.Me.UsrDat);
 
    /***** End table and box *****/
@@ -355,7 +355,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
-		               TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+		               TsV_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
@@ -514,7 +514,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
      {
       case Rol_STD:
 	 ICanViewTotalScore = ItsMe &&
-		              TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+		              TsV_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -613,7 +613,7 @@ void TsR_ShowOneTstResult (void)
    /***** Get test result data *****/
    TsR_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
 				  &NumQstsNotBlank,&TotalScore);
-   Gbl.Test.Config.Visibility = TsV_MAX_VISIBILITY;
+   TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
 
    /***** Check if I can view this test result *****/
    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -623,8 +623,8 @@ void TsR_ShowOneTstResult (void)
 	 ICanViewTest = ItsMe;
 	 if (ItsMe)
 	   {
-	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = TsV_IsVisibleTotalScore (Gbl.Test.Config.Visibility);
+	    TstCfg_GetConfigFromDB ();	// To get feedback type
+	    ICanViewScore = TsV_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
 	   }
 	 else
 	    ICanViewScore = false;
@@ -781,7 +781,7 @@ void TsR_ShowOneTstResult (void)
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
 			  Gbl.Test.NumQsts,TstTimeUTC,
-			  Gbl.Test.Config.Visibility);
+			  TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
       HTM_TABLE_End ();

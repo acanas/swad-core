@@ -48,6 +48,7 @@
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_setting.h"
+#include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_theme.h"
 
@@ -357,16 +358,12 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
    /* Tests */
-   Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
-   Gbl.Test.Config.Visibility = TsV_VISIBILITY_DEFAULT;
-   Gbl.Test.NumQsts = Tst_CONFIG_DEFAULT_DEF_QUESTIONS;
+   // Tst_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+   // Tst_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
+   Gbl.Test.NumQsts = TstCfg_DEFAULT_DEF_QUESTIONS;
    Gbl.Test.AllowTeachers = true;	// Test result will be visible by teachers?
    Gbl.Test.AllAnsTypes = false;
    Gbl.Test.ListAnsTypes[0] = '\0';
-
-   Gbl.Test.Tags.Num  = 0;
-   Gbl.Test.Tags.All  = false;
-   Gbl.Test.Tags.List = NULL;
 
    /* Games for remote control */
    Gbl.Games.ListQuestions = NULL;
@@ -491,7 +488,6 @@ void Gbl_Cleanup (void)
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
-   Tst_FreeTagsList ();
    Exa_FreeMemExamAnnouncement ();
    Exa_FreeListExamAnnouncements ();
    if (Gbl.F.Tmp)
