@@ -75,6 +75,12 @@ typedef enum
    Tst_ANS_ALL             = 6,	// All/any type of answer
   } Tst_AnswerType_t;
 
+struct Tst_AnswerTypes
+  {
+   bool All;
+   char List[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
+  };
+
 #define Tst_NUM_TYPES_ORDER_QST	5
 typedef enum
   {
@@ -88,14 +94,13 @@ typedef enum
 struct Tst_Test
   {
    struct Tst_Tags Tags;
+   struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
    long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
    char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
                         [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
                         [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   bool AllAnsTypes;
-   char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
    Tst_QuestionsOrder_t SelectedOrder;
   };
 
@@ -178,9 +183,8 @@ void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 
-void Tst_ResetGblTags (void);
 void Tst_SetParamGblTags (const struct Tst_Tags *TagsSrc);
-void Tst_GetParamGblTags (struct Tst_Tags *TagsDst);
+void Tst_SetParamGblAnswerTypes (const struct Tst_AnswerTypes *AnswerTypesSrc);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);

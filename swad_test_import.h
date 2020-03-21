@@ -39,7 +39,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TsI_PutFormToExportQuestions (const struct Tst_Tags *Tags);
+void TsI_PutFormToExportQuestions (const struct Tst_Tags *Tags,
+                                   const struct Tst_AnswerTypes *AnswerTypes);
 bool TsI_GetCreateXMLParamFromForm (void);
 void TsI_PutFormToImportQuestions (void);
 void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);

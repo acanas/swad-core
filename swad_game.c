@@ -2216,7 +2216,7 @@ static unsigned Gam_CountNumQuestionsInList (void)
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
 
-   /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
+   /***** Go over list of questions counting the number of questions *****/
    Ptr = Gbl.Games.ListQuestions;
    while (*Ptr)
      {

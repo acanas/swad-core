@@ -84,8 +84,8 @@ struct Globals Gbl;	// All the global parameters and variables must be in this s
 
 void Gbl_InitializeGlobals (void)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
 
@@ -361,8 +361,6 @@ void Gbl_InitializeGlobals (void)
    // Tst_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
    // Tst_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
    Gbl.Test.NumQsts = TstCfg_DEFAULT_DEF_QUESTIONS;
-   Gbl.Test.AllAnsTypes = false;
-   Gbl.Test.ListAnsTypes[0] = '\0';
 
    /* Games for remote control */
    Gbl.Games.ListQuestions = NULL;
