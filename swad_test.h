@@ -42,8 +42,8 @@
 #define Tst_MAX_BYTES_TAG			((Tst_MAX_CHARS_TAG + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Tst_MAX_OPTIONS_PER_QUESTION		  10
-#define Tst_MAX_BYTES_INDEXES_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (10 + 1))
-#define Tst_MAX_BYTES_ANSWERS_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (10 + 1))
+#define Tst_MAX_BYTES_INDEXES_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+#define Tst_MAX_BYTES_ANSWERS_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
 
 #define Tst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
@@ -90,9 +90,10 @@ struct Tst_Test
    struct Tst_Tags Tags;
    unsigned NumQsts;
    long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
-   char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST][Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   bool AllowTeachers;	// Can teachers of this course see the test result?
+   char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
+                        [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+   char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
+                        [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
    bool AllAnsTypes;
    char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
    Tst_QuestionsOrder_t SelectedOrder;

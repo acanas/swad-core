@@ -86,8 +86,11 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
                                            unsigned NumTotalQstsNotBlank,
                                            double TotalScoreOfAllTests);
 static void TsR_ShowTstTagsPresentInATestResult (long TstCod);
-static void TsR_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQstsNotBlank,double *Score);
+static void TsR_GetTestResultDataByTstCod (long TstCod,
+                                           bool *AllowTeachers,
+                                           time_t *TstTimeUTC,
+                                           unsigned *NumQstsNotBlank,
+                                           double *Score);
 static void TsR_GetTestResultQuestionsFromDB (long TstCod);
 
 /*****************************************************************************/
@@ -169,7 +172,7 @@ void TsR_ShowMyTstResults (void)
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-long TsR_CreateTestResultInDB (void)
+long TsR_CreateTestResultInDB (bool AllowTeachers)
   {
    /***** Insert new test result into table *****/
    return
@@ -180,8 +183,8 @@ long TsR_CreateTestResultInDB (void)
 				" (%ld,%ld,'%c',NOW(),%u)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Test.AllowTeachers ? 'Y' :
-							 'N',
+				AllowTeachers ? 'Y' :
+						'N',
 				Gbl.Test.NumQsts);
   }
 
@@ -303,6 +306,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
    double ScoreInThisTest;
    double TotalScoreOfAllTests = 0.0;
    unsigned NumExamsVisibleByTchs = 0;
+   bool AllowTeachers;	// Can teachers of this course see the test result?
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ICanViewTest;
    bool ICanViewScore;
@@ -346,9 +350,9 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    Lay_ShowErrorAndExit ("Wrong code of test result.");
 
 	 /* Get if teachers are allowed to see this test result (row[1]) */
-	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
-	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
-	                                     "DAT_LIGHT";
+	 AllowTeachers = (row[1][0] == 'Y');
+	 ClassDat = AllowTeachers ? "DAT" :
+	                            "DAT_LIGHT";
 
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
@@ -364,7 +368,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_INS_ADM:
 	       ICanViewTest  =
 	       ICanViewScore = ItsMe ||
-	                       Gbl.Test.AllowTeachers;
+	                       AllowTeachers;
 	       break;
 	    case Rol_SYS_ADM:
 	       ICanViewTest  =
@@ -395,13 +399,13 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
             NumQstsInThisTest = 0;
-	 if (Gbl.Test.AllowTeachers)
+	 if (AllowTeachers)
 	    NumTotalQsts += NumQstsInThisTest;
 
          /* Get number of questions not blank (row[4]) */
          if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
             NumQstsNotBlankInThisTest = 0;
-	 if (Gbl.Test.AllowTeachers)
+	 if (AllowTeachers)
 	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
 
          /* Get score (row[5]) */
@@ -409,7 +413,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
          if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
             ScoreInThisTest = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
-	 if (Gbl.Test.AllowTeachers)
+	 if (AllowTeachers)
 	    TotalScoreOfAllTests += ScoreInThisTest;
 
          /* Write number of questions */
@@ -457,7 +461,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	 HTM_TD_End ();
 	 HTM_TR_End ();
 
-	 if (Gbl.Test.AllowTeachers)
+	 if (AllowTeachers)
             NumExamsVisibleByTchs++;
         }
 
@@ -597,6 +601,7 @@ void TsR_ShowOneTstResult (void)
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
    long TstCod;
+   bool AllowTeachers = false;	// Initialized to avoid warning
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -611,8 +616,11 @@ void TsR_ShowOneTstResult (void)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
    /***** Get test result data *****/
-   TsR_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
-				  &NumQstsNotBlank,&TotalScore);
+   TsR_GetTestResultDataByTstCod (TstCod,
+                                  &AllowTeachers,
+                                  &TstTimeUTC,
+				  &NumQstsNotBlank,
+				  &TotalScore);
    TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
 
    /***** Check if I can view this test result *****/
@@ -642,7 +650,7 @@ void TsR_ShowOneTstResult (void)
 	    case ActSeeOneTstResOth:
 	       ICanViewTest  =
 	       ICanViewScore = ItsMe ||
-			       Gbl.Test.AllowTeachers;
+			       AllowTeachers;
 	       break;
 	    default:
 	       ICanViewTest  =
@@ -932,8 +940,11 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 /********* Get data of a test result using its test result code **************/
 /*****************************************************************************/
 
-static void TsR_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQstsNotBlank,double *Score)
+static void TsR_GetTestResultDataByTstCod (long TstCod,
+                                           bool *AllowTeachers,
+                                           time_t *TstTimeUTC,
+                                           unsigned *NumQstsNotBlank,
+                                           double *Score)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -958,7 +969,7 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get if teachers are allowed to see this test result (row[1]) */
-      Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
+      *AllowTeachers = (row[1][0] == 'Y');
 
       /* Get date-time (row[2] holds UTC date-time) */
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);

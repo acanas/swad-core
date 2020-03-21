@@ -46,7 +46,7 @@
 void TsR_SelUsrsToViewUsrsTstResults (void);
 void TsR_SelDatesToSeeMyTstResults (void);
 void TsR_ShowMyTstResults (void);
-long TsR_CreateTestResultInDB (void);
+long TsR_CreateTestResultInDB (bool AllowTeachers);
 void TsR_StoreScoreOfTestResultInDB (long TstCod,
                                      unsigned NumQstsNotBlank,double Score);
 void TsR_GetUsrsAndShowTstResults (void);

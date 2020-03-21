@@ -481,9 +481,8 @@ void Tst_ShowNewTest (void)
 	    HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
-				"value=\"Y\"%s",
-				Gbl.Test.AllowTeachers ? " checked=\"checked\"" :
-				                         "");
+				"value=\"Y\""
+				" checked=\"checked\"");	// By default, teachers can see test result
 	    HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
 	    HTM_LABEL_End ();
 	    HTM_DIV_End ();
@@ -528,6 +527,7 @@ void Tst_AssessTest (void)
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
+   bool AllowTeachers;	// Can teachers of this course see the test result?
    long TstCod = -1L;	// Initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -547,13 +547,13 @@ void Tst_AssessTest (void)
          Tst_GetParamNumQst ();
 
          /***** Get if test will be visible by teachers *****/
-	 Gbl.Test.AllowTeachers = Par_GetParToBool ("AllowTchs");
+	 AllowTeachers = Par_GetParToBool ("AllowTchs");
 
 	 /***** Get questions and answers from form to assess a test *****/
 	 Tst_GetQuestionsAndAnswersFromForm ();
 
 	 /***** Create new test in database to store the result *****/
-	 TstCod = TsR_CreateTestResultInDB ();
+	 TstCod = TsR_CreateTestResultInDB (AllowTeachers);
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -625,21 +625,21 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
      {
       /* Get question code */
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
-	        "Qst%06u",
+	        "Qst%03u",
 		NumQst);
       if ((Gbl.Test.QstCodes[NumQst] = Par_GetParToLong (StrQstIndOrAns)) <= 0)
 	 Lay_ShowErrorAndExit ("Code of question is missing.");
 
       /* Get indexes for this question */
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
-	        "Ind%06u",
+	        "Ind%03u",
 		NumQst);
       Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrIndexesOneQst[NumQst],
                              Tst_MAX_BYTES_INDEXES_ONE_QST);  /* If choice ==> "0", "1", "2",... */
 
       /* Get answers selected by user for this question */
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
-	        "Ans%06u",
+	        "Ans%03u",
 		NumQst);
       Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrAnswersOneQst[NumQst],
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
@@ -3545,7 +3545,7 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
 
    /***** Write selector for the answer *****/
    HTM_SELECT_Begin (false,
-		     "name=\"Ans%06u\"",NumQst);
+		     "name=\"Ans%03u\"",NumQst);
    HTM_OPTION (HTM_Type_STRING,"" ,true ,false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",false,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",false,false,"%s",Txt_TF_QST[1]);
@@ -3746,16 +3746,16 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
       /***** Write selectors and letter of this option *****/
       HTM_TD_Begin ("class=\"LT\"");
       snprintf (ParamName,sizeof (ParamName),
-	        "Ind%06u",
+	        "Ind%03u",
 		NumQst);
       Par_PutHiddenParamUnsigned (NULL,ParamName,Index);
       snprintf (StrAns,sizeof (StrAns),
-		"Ans%06u",
+		"Ans%03u",
 		NumQst);
       if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE)
 	 HTM_INPUT_RADIO (StrAns,false,
 			  "id=\"Ans%06u_%u\" value=\"%u\""
-			  " onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
+			  " onclick=\"selectUnselectRadio(this,this.form.Ans%03u,%u);\"",
 			  NumQst,NumOpt,
 			  Index,
                           NumQst,Question.Answer.NumOptions);
@@ -4287,7 +4287,7 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),
-	     "Ans%06u",
+	     "Ans%03u",
 	     NumQst);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_ANSWERS_ONE_QST,"",false,
 		   "size=\"40\"");
@@ -4502,7 +4502,7 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),
-	     "Ans%06u",
+	     "Ans%03u",
 	     NumQst);
    HTM_INPUT_TEXT (StrAns,11,"",false,
 		   "size=\"11\"");
@@ -4632,7 +4632,7 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),
-	     "Ans%06u",
+	     "Ans%03u",
 	     NumQst);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,"",false,
 		   "size=\"11\"");
@@ -4820,7 +4820,7 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
    char ParamName[3 + 6 + 1];
 
    snprintf (ParamName,sizeof (ParamName),
-	     "Qst%06u",
+	     "Qst%03u",
 	     NumQst);
    Par_PutHiddenParamLong (NULL,ParamName,QstCod);
   }

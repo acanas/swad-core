@@ -361,7 +361,6 @@ void Gbl_InitializeGlobals (void)
    // Tst_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
    // Tst_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
    Gbl.Test.NumQsts = TstCfg_DEFAULT_DEF_QUESTIONS;
-   Gbl.Test.AllowTeachers = true;	// Test result will be visible by teachers?
    Gbl.Test.AllAnsTypes = false;
    Gbl.Test.ListAnsTypes[0] = '\0';
 
