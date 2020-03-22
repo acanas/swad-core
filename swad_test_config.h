@@ -30,10 +30,6 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
 
-// #include "swad_game.h"
-// #include "swad_media.h"
-// #include "swad_test_result.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/

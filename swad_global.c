@@ -48,8 +48,6 @@
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_setting.h"
-#include "swad_test_config.h"
-#include "swad_test_visibility.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -356,11 +354,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Scope.Current = Hie_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
-
-   /* Tests */
-   // Tst_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-   // Tst_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
-   Gbl.Test.NumQsts = TstCfg_DEFAULT_DEF_QUESTIONS;
 
    /* Games for remote control */
    Gbl.Games.ListQuestions = NULL;

@@ -89,9 +89,10 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod);
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
+                                           unsigned *NumQsts,
                                            unsigned *NumQstsNotBlank,
                                            double *Score);
-static void TsR_GetTestResultQuestionsFromDB (long TstCod);
+static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod);
 
 /*****************************************************************************/
 /************ Select users and dates to show their test results **************/
@@ -172,7 +173,7 @@ void TsR_ShowMyTstResults (void)
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-long TsR_CreateTestResultInDB (bool AllowTeachers)
+long TsR_CreateTestResultInDB (bool AllowTeachers,unsigned NumQsts)
   {
    /***** Insert new test result into table *****/
    return
@@ -185,7 +186,7 @@ long TsR_CreateTestResultInDB (bool AllowTeachers)
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				AllowTeachers ? 'Y' :
 						'N',
-				Gbl.Test.NumQsts);
+				NumQsts);
   }
 
 /*****************************************************************************/
@@ -603,6 +604,7 @@ void TsR_ShowOneTstResult (void)
    long TstCod;
    bool AllowTeachers = false;	// Initialized to avoid warning
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
+   unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
@@ -619,6 +621,7 @@ void TsR_ShowOneTstResult (void)
    TsR_GetTestResultDataByTstCod (TstCod,
                                   &AllowTeachers,
                                   &TstTimeUTC,
+                                  &NumQsts,
 				  &NumQstsNotBlank,
 				  &TotalScore);
    TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
@@ -671,7 +674,7 @@ void TsR_ShowOneTstResult (void)
    if (ICanViewTest)	// I am allowed to view this test result
      {
       /***** Get questions and user's answers of the test result from database *****/
-      TsR_GetTestResultQuestionsFromDB (TstCod);
+      NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -738,7 +741,7 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-	        Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+	        NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -766,7 +769,7 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -788,7 +791,7 @@ void TsR_ShowOneTstResult (void)
 
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  Gbl.Test.NumQsts,TstTimeUTC,
+			  NumQsts,TstTimeUTC,
 			  TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
@@ -802,7 +805,7 @@ void TsR_ShowOneTstResult (void)
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -943,6 +946,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
+                                           unsigned *NumQsts,
                                            unsigned *NumQstsNotBlank,
                                            double *Score)
   {
@@ -975,8 +979,8 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Gbl.Test.NumQsts) != 1)
-	 Gbl.Test.NumQsts = 0;
+      if (sscanf (row[3],"%u",NumQsts) != 1)
+	 *NumQsts = 0;
 
       /* Get number of questions not blank (row[4]) */
       if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
@@ -1026,14 +1030,15 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,doub
 /************ Get the questions of a test result from database ***************/
 /*****************************************************************************/
 
-static void TsR_GetTestResultQuestionsFromDB (long TstCod)
+static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumQsts;
    unsigned NumQst;
 
    /***** Get questions of a test result from database *****/
-   Gbl.Test.NumQsts =
+   NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test result",
 			      "SELECT QstCod,"	// row[0]
@@ -1045,7 +1050,7 @@ static void TsR_GetTestResultQuestionsFromDB (long TstCod)
 
    /***** Get questions codes *****/
    for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
+	NumQst < NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
@@ -1070,6 +1075,8 @@ static void TsR_GetTestResultQuestionsFromDB (long TstCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return NumQsts;
   }
 
 /*****************************************************************************/

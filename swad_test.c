@@ -131,19 +131,21 @@ static void Tst_ResetAnswerTypes (struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_ShowFormRequestTest (const struct Tst_Tags *Tags,
                                      const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_GetQuestionsAndAnswersFromForm (void);
+static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
-static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
+static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,MYSQL_RES *mysql_res);
 static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod);
-static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
+static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
+                                           unsigned *NumQstsNotBlank,
+                                           double *TotalScore);
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,double ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
-static void Tst_UpdateLastAccTst (void);
+static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_ShowFormRequestEditTests (const struct Tst_Tags *Tags,
                                           const struct Tst_AnswerTypes *AnswerTypes);
@@ -173,6 +175,7 @@ static unsigned long Tst_GetQuestions (const struct Tst_Tags *Tags,
                                        MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
                                               const struct Tst_AnswerTypes *AnswerTypes,
+                                              unsigned NumQsts,
                                               MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (long QstCod,
                                   const struct Tst_Tags *Tags,
@@ -260,9 +263,10 @@ static void Tst_WriteScoreEnd (void);
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
                               struct Tst_AnswerTypes *AnswerTypes,
+                              unsigned *NumQsts,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetAndCheckParamNumTst (void);
-static void Tst_GetParamNumQst (void);
+static unsigned Tst_GetParamNumQsts (void);
 static unsigned Tst_CountNumTagsInList (const struct Tst_Tags *Tags);
 static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTypes);
 
@@ -466,6 +470,7 @@ void Tst_ShowNewTest (void)
    extern const char *Txt_Done_assess_test;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   unsigned NumQsts;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
    unsigned NumAccessesTst;
@@ -476,10 +481,11 @@ void Tst_ShowNewTest (void)
    if (Tst_CheckIfNextTstAllowed ())
      {
       /***** Check that all parameters used to generate a test are valid *****/
-      if (Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
+      if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
-         if ((NumRows = Tst_GetQuestionsForTest (&Tags,&AnswerTypes,&mysql_res)) == 0)	// Query database
+         if ((NumRows = Tst_GetQuestionsForTest (&Tags,&AnswerTypes,NumQsts,
+                                                 &mysql_res)) == 0)	// Query database
            {
             Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
             Tst_ShowFormRequestTest (&Tags,&AnswerTypes);	// Show the form again
@@ -501,13 +507,13 @@ void Tst_ShowNewTest (void)
 
             /***** Begin form *****/
             Frm_StartForm (ActAssTst);
-  	    Gbl.Test.NumQsts = (unsigned) NumRows;
+  	    NumQsts = (unsigned) NumRows;
             Par_PutHiddenParamUnsigned (NULL,"NumTst",NumAccessesTst);
-            Par_PutHiddenParamUnsigned (NULL,"NumQst",Gbl.Test.NumQsts);
+            Par_PutHiddenParamUnsigned (NULL,"NumQst",NumQsts);
 
             /***** List the questions *****/
             HTM_TABLE_BeginWideMarginPadding (10);
-            Tst_ShowTestQuestionsWhenSeeing (mysql_res);
+            Tst_ShowTestQuestionsWhenSeeing (NumQsts,mysql_res);
 	    HTM_TABLE_End ();
 
 	    /***** Test result will be saved? *****/
@@ -532,7 +538,7 @@ void Tst_ShowNewTest (void)
 
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-               Tst_UpdateLastAccTst ();
+               Tst_UpdateLastAccTst (NumQsts);
            }
 
          /***** Free structure that stores the query result *****/
@@ -560,6 +566,7 @@ void Tst_AssessTest (void)
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
+   unsigned NumQsts;
    bool AllowTeachers;	// Can teachers of this course see the test result?
    long TstCod = -1L;	// Initialized to avoid warning
    unsigned NumQstsNotBlank;
@@ -577,16 +584,16 @@ void Tst_AssessTest (void)
       case Tst_STATUS_SHOWN_BUT_NOT_ASSESSED:
          /***** Get the parameters of the form *****/
          /* Get number of questions */
-         Tst_GetParamNumQst ();
+         NumQsts = Tst_GetParamNumQsts ();
 
          /***** Get if test will be visible by teachers *****/
 	 AllowTeachers = Par_GetParToBool ("AllowTchs");
 
 	 /***** Get questions and answers from form to assess a test *****/
-	 Tst_GetQuestionsAndAnswersFromForm ();
+	 Tst_GetQuestionsAndAnswersFromForm (NumQsts);
 
 	 /***** Create new test in database to store the result *****/
-	 TstCod = TsR_CreateTestResultInDB (AllowTeachers);
+	 TstCod = TsR_CreateTestResultInDB (AllowTeachers,NumQsts);
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -606,7 +613,7 @@ void Tst_AssessTest (void)
 
 	 /***** Write answers and solutions *****/
          HTM_TABLE_BeginWideMarginPadding (10);
-	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
+	 Tst_ShowTestResultAfterAssess (TstCod,NumQsts,&NumQstsNotBlank,&TotalScore);
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
@@ -617,7 +624,7 @@ void Tst_AssessTest (void)
 	    HTM_Double2Decimals (TotalScore);
 	    HTM_BR ();
 	    HTM_TxtColonNBSP (Txt_Grade);
-	    Tst_ComputeAndShowGrade (Gbl.Test.NumQsts,TotalScore,TsR_SCORE_MAX);
+	    Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
 
@@ -646,14 +653,14 @@ void Tst_AssessTest (void)
 /*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
-static void Tst_GetQuestionsAndAnswersFromForm (void)
+static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts)
   {
    unsigned NumQst;
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
    /***** Get questions and answers *****/
    for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
+	NumQst < NumQsts;
 	NumQst++)
      {
       /* Get question code */
@@ -891,7 +898,7 @@ static unsigned Tst_GetNumAccessesTst (void)
 // NumRows must hold the number of rows of a MySQL query
 // In each row mysql_res holds: in the column 0 the code of a question, in the column 1 the type of answer, and in the column 2 the stem
 
-static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
+static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,MYSQL_RES *mysql_res)
   {
    unsigned NumQst;
    long QstCod;
@@ -899,7 +906,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
 
    /***** Write rows *****/
    for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
+	NumQst < NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -986,7 +993,9 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /******************* Show the result of assessing a test *********************/
 /*****************************************************************************/
 
-static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore)
+static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
+                                           unsigned *NumQstsNotBlank,
+                                           double *TotalScore)
   {
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
@@ -1000,7 +1009,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
    *NumQstsNotBlank = 0;
 
    for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
+	NumQst < NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -1325,13 +1334,13 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
 /************ Update date-time of my next allowed access to test *************/
 /*****************************************************************************/
 
-static void Tst_UpdateLastAccTst (void)
+static void Tst_UpdateLastAccTst (unsigned NumQsts)
   {
    /***** Update date-time and number of questions of this test *****/
    DB_QueryUPDATE ("can not update time and number of questions of this test",
 		   "UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
                    " WHERE CrsCod=%ld AND UsrCod=%ld",
-		   Gbl.Test.NumQsts,
+		   NumQsts,
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -2301,11 +2310,12 @@ void Tst_ListQuestionsToEdit (void)
   {
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   unsigned NumQsts;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_EDIT_TEST))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Get question codes from database *****/
       if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res)) != 0)	// Query database
@@ -2343,11 +2353,12 @@ void Tst_ListQuestionsToSelect (void)
   {
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   unsigned NumQsts;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
      {
       if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res)) != 0)	// Query database
 	 /* Show the table with the questions */
@@ -2535,6 +2546,7 @@ static unsigned long Tst_GetQuestions (const struct Tst_Tags *Tags,
 
 static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
                                               const struct Tst_AnswerTypes *AnswerTypes,
+                                              unsigned NumQsts,
                                               MYSQL_RES **mysql_res)
   {
    char *Query = NULL;
@@ -2629,7 +2641,7 @@ static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (StrNumQsts,sizeof (StrNumQsts),
 	     "%u",
-	     Gbl.Test.NumQsts);
+	     NumQsts);
    Str_Concat (Query,StrNumQsts,
                Tst_MAX_BYTES_QUERY_TEST);
 /*
@@ -4975,6 +4987,7 @@ void Tst_GetAndWriteTagsQst (long QstCod)
 
 static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
                               struct Tst_AnswerTypes *AnswerTypes,
+                              unsigned *NumQsts,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
@@ -5033,9 +5046,9 @@ static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
    switch (ActionToDoWithQuestions)
      {
       case Tst_SHOW_TEST_TO_ANSWER:
-	 Tst_GetParamNumQst ();
-	 if (Gbl.Test.NumQsts < TstCfg_GetConfigMin () ||
-	     Gbl.Test.NumQsts > TstCfg_GetConfigMax ())
+	 *NumQsts = Tst_GetParamNumQsts ();
+	 if (*NumQsts < TstCfg_GetConfigMin () ||
+	     *NumQsts > TstCfg_GetConfigMax ())
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_number_of_questions_must_be_in_the_interval_X,
 		           TstCfg_GetConfigMin (),TstCfg_GetConfigMax ());
@@ -5087,13 +5100,12 @@ static unsigned Tst_GetAndCheckParamNumTst (void)
 /***** Get parameter with the number of questions to generate in an test *****/
 /*****************************************************************************/
 
-static void Tst_GetParamNumQst (void)
+static unsigned Tst_GetParamNumQsts (void)
   {
-   Gbl.Test.NumQsts = (unsigned)
-	              Par_GetParToUnsignedLong ("NumQst",
-	                                        (unsigned long) TstCfg_GetConfigMin (),
-	                                        (unsigned long) TstCfg_GetConfigMax (),
-	                                        (unsigned long) TstCfg_GetConfigDef ());
+   return (unsigned) Par_GetParToUnsignedLong ("NumQst",
+	                                       (unsigned long) TstCfg_GetConfigMin (),
+	                                       (unsigned long) TstCfg_GetConfigMax (),
+	                                       (unsigned long) TstCfg_GetConfigDef ());
   }
 
 /*****************************************************************************/
@@ -6696,11 +6708,12 @@ void Tst_RequestRemoveSelectedQsts (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
    extern const char *Txt_Remove_questions;
+   unsigned NumQsts;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_EDIT_TEST))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Show question and button to remove question *****/
       Tst_SetParamGblTags (&Tags);
@@ -6739,6 +6752,7 @@ void Tst_RemoveSelectedQsts (void)
    extern const char *Txt_Questions_removed_X;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   unsigned NumQsts;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -6746,7 +6760,7 @@ void Tst_RemoveSelectedQsts (void)
    long QstCod;
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_EDIT_TEST))	// Get parameters
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters
      {
       /***** Get question codes *****/
       NumRows = (unsigned) Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res);	// Query database
@@ -6794,6 +6808,7 @@ void Tst_RequestRemoveOneQst (void)
    bool EditingOnlyThisQst;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   unsigned NumQsts;
 
    /***** Get main parameters from form *****/
    /* Get the question code */
@@ -6807,7 +6822,7 @@ void Tst_RequestRemoveOneQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParamsTst (&Tags,&AnswerTypes,Tst_EDIT_TEST))
+      if (!Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
