@@ -90,17 +90,18 @@ typedef enum
    Tst_ORDER_NUM_HITS_NOT_BLANK      = 3,
    Tst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
   } Tst_QuestionsOrder_t;
+#define Tst_DEFAULT_ORDER Tst_ORDER_STEM
 
 struct Tst_Test
   {
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   Tst_QuestionsOrder_t SelectedOrder;
    long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
    char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
                         [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
                         [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   Tst_QuestionsOrder_t SelectedOrder;
   };
 
 struct Tst_Question
@@ -184,6 +185,8 @@ void Tst_WriteParamEditQst (void);
 
 void Tst_SetParamGblTags (const struct Tst_Tags *TagsSrc);
 void Tst_SetParamGblAnswerTypes (const struct Tst_AnswerTypes *AnswerTypesSrc);
+void Tst_SetParamGblSelectedOrder (Tst_QuestionsOrder_t SelectedOrder);
+Tst_QuestionsOrder_t Tst_GetParamGblSelectedOrder (void);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);

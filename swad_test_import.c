@@ -90,13 +90,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 /*****************************************************************************/
 
 void TsI_PutFormToExportQuestions (const struct Tst_Tags *Tags,
-                                   const struct Tst_AnswerTypes *AnswerTypes)
+                                   const struct Tst_AnswerTypes *AnswerTypes,
+                                   Tst_QuestionsOrder_t SelectedOrder)
   {
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
    Tst_SetParamGblTags (Tags);
    Tst_SetParamGblAnswerTypes (AnswerTypes);
+   Tst_SetParamGblSelectedOrder (SelectedOrder);
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
 				  "file-import.svg",
 				  Txt_Export_questions);
@@ -111,7 +113,8 @@ static void TsI_PutParamsExportQsts (void)
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",
+                               (unsigned) Tst_GetParamGblSelectedOrder ());
    TsI_PutCreateXMLParam ();
   }
 

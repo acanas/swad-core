@@ -13117,5 +13117,44 @@ SELECT EXISTS (SELECT * FROM centres WHERE InsCod=1 AND Latitude<>0 AND Longitud
 
 
 
+-----------------------
+
+Restaurar una tabla desde la copia de seguridad:
+
+awk '/Table structure for table `log_full`/,/Table structure for table `log_recent`/{print}' swad_backup_20200322.sql > swad_backup_20200322_log_full.sql
+                                     ^                                          ^
+                                tabla a buscar                           tabla siguiente
+
+En el nuevo fichero sql cambiar crs_grp_usr por crs_grp_usr_borrame
+
+sed -i 's/log_full/log_full_new/g' swad_backup_20200322_log_full.sql
+
+mysql -u swad -p swad < swad_backup_20200322_log_full.sql
+
+Importante para que REPAIR TABLE vaya rápido:
+https://dev.mysql.com/doc/refman/5.7/en/repair-table-optimization.html
+
+SET SESSION myisam_sort_buffer_size = 256*1024*1024;
+SET SESSION read_buffer_size = 64*1024*1024;
+SET GLOBAL myisam_max_sort_file_size = 100*1024*1024*1024;
+SET GLOBAL repair_cache.key_buffer_size = 128*1024*1024;
+CACHE INDEX log_full_new IN repair_cache;
+LOAD INDEX INTO CACHE log_full_new;
+REPAIR TABLE log_full_new;
+
+RENAME TABLE log_full TO log_full_old;
+RENAME TABLE log_full_new TO log_full;
+
+-------------------------------
+
+
+
+
+
+
+
+SELECT LogCod,ActCod,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime),Role,CtyCod,InsCod,CtrCod,DegCod FROM log_recent ORDER BY LogCod DESC LIMIT 20;
+
+
 
  

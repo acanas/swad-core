@@ -172,6 +172,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes);
 static unsigned long Tst_GetQuestions (const struct Tst_Tags *Tags,
                                        const struct Tst_AnswerTypes *AnswerTypes,
+                                       Tst_QuestionsOrder_t SelectedOrder,
                                        MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
                                               const struct Tst_AnswerTypes *AnswerTypes,
@@ -179,16 +180,20 @@ static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
                                               MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (long QstCod,
                                   const struct Tst_Tags *Tags,
-                                  const struct Tst_AnswerTypes *AnswerTypes);
+                                  const struct Tst_AnswerTypes *AnswerTypes,
+                                  Tst_QuestionsOrder_t SelectedOrder);
 static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Tags *Tags,
                                                   const struct Tst_AnswerTypes *AnswerTypes,
+						  Tst_QuestionsOrder_t SelectedOrder,
                                                   unsigned long NumRows,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Tags *Tags,
                                                     const struct Tst_AnswerTypes *AnswerTypes,
+                                                    Tst_QuestionsOrder_t SelectedOrder,
                                                     unsigned long NumRows);
 static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
                                             const struct Tst_AnswerTypes *AnswerTypes,
+                                            Tst_QuestionsOrder_t SelectedOrder,
                                             unsigned long NumRows,
                                             unsigned long NumRow,
                                             long QstCod);
@@ -264,6 +269,7 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
                               struct Tst_AnswerTypes *AnswerTypes,
                               unsigned *NumQsts,
+                              Tst_QuestionsOrder_t *SelectedOrder,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetAndCheckParamNumTst (void);
 static unsigned Tst_GetParamNumQsts (void);
@@ -471,6 +477,7 @@ void Tst_ShowNewTest (void)
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
    unsigned NumAccessesTst;
@@ -481,7 +488,7 @@ void Tst_ShowNewTest (void)
    if (Tst_CheckIfNextTstAllowed ())
      {
       /***** Check that all parameters used to generate a test are valid *****/
-      if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
+      if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
          if ((NumRows = Tst_GetQuestionsForTest (&Tags,&AnswerTypes,NumQsts,
@@ -1398,7 +1405,7 @@ static void Tst_ShowFormRequestEditTests (const struct Tst_Tags *Tags,
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActLstTstQst);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_ORDER_STEM);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
 
       HTM_TABLE_BeginPadding (2);
 
@@ -2311,14 +2318,15 @@ void Tst_ListQuestionsToEdit (void)
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Get question codes from database *****/
-      if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res)) != 0)	// Query database
+      if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,SelectedOrder,&mysql_res)) != 0)	// Query database
         {
 	 /* Contextual menu */
          Mnu_ContextMenuBegin ();
@@ -2327,11 +2335,11 @@ void Tst_ListQuestionsToEdit (void)
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file with exported questions...
 						// ...and put a link to download it
          else
-            TsI_PutFormToExportQuestions (&Tags,&AnswerTypes);	// Export questions
+            TsI_PutFormToExportQuestions (&Tags,&AnswerTypes,SelectedOrder);	// Export questions
 	 Mnu_ContextMenuEnd ();
 
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForEdition (&Tags,&AnswerTypes,NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestionsForEdition (&Tags,&AnswerTypes,SelectedOrder,NumRows,mysql_res);
         }
 
       /***** Free structure that stores the query result *****/
@@ -2354,13 +2362,14 @@ void Tst_ListQuestionsToSelect (void)
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
      {
-      if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res)) != 0)	// Query database
+      if ((NumRows = Tst_GetQuestions (&Tags,&AnswerTypes,SelectedOrder,&mysql_res)) != 0)	// Query database
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForSelection (NumRows,mysql_res);
 
@@ -2383,6 +2392,7 @@ void Tst_ListQuestionsToSelect (void)
 
 static unsigned long Tst_GetQuestions (const struct Tst_Tags *Tags,
                                        const struct Tst_AnswerTypes *AnswerTypes,
+                                       Tst_QuestionsOrder_t SelectedOrder,
                                        MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
@@ -2499,7 +2509,7 @@ static unsigned long Tst_GetQuestions (const struct Tst_Tags *Tags,
    Str_Concat (Query," GROUP BY tst_questions.QstCod",
                Tst_MAX_BYTES_QUERY_TEST);
 
-   switch (Gbl.Test.SelectedOrder)
+   switch (SelectedOrder)
      {
       case Tst_ORDER_STEM:
          Str_Concat (Query," ORDER BY tst_questions.Stem",
@@ -2660,7 +2670,8 @@ static unsigned long Tst_GetQuestionsForTest (const struct Tst_Tags *Tags,
 
 static void Tst_ListOneQstToEdit (long QstCod,
                                   const struct Tst_Tags *Tags,
-                                  const struct Tst_AnswerTypes *AnswerTypes)
+                                  const struct Tst_AnswerTypes *AnswerTypes,
+                                  Tst_QuestionsOrder_t SelectedOrder)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -2673,10 +2684,10 @@ static void Tst_ListOneQstToEdit (long QstCod,
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
-   Tst_WriteHeadingRowQuestionsForEdition (Tags,AnswerTypes,1);
+   Tst_WriteHeadingRowQuestionsForEdition (Tags,AnswerTypes,SelectedOrder,1);
 
    /***** Write question row *****/
-   Tst_WriteQuestionRowForEdition (Tags,AnswerTypes,1,0,QstCod);
+   Tst_WriteQuestionRowForEdition (Tags,AnswerTypes,SelectedOrder,1,0,QstCod);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -2717,6 +2728,7 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 
 static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Tags *Tags,
                                                   const struct Tst_AnswerTypes *AnswerTypes,
+						  Tst_QuestionsOrder_t SelectedOrder,
                                                   unsigned long NumRows,
                                                   MYSQL_RES *mysql_res)
   {
@@ -2734,7 +2746,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Tags *Tags,
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
-   Tst_WriteHeadingRowQuestionsForEdition (Tags,AnswerTypes,NumRows);
+   Tst_WriteHeadingRowQuestionsForEdition (Tags,AnswerTypes,SelectedOrder,NumRows);
 
    /***** Write rows *****/
    for (NumRow = 0;
@@ -2749,7 +2761,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Tags *Tags,
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /***** Write question row *****/
-      Tst_WriteQuestionRowForEdition (Tags,AnswerTypes,NumRows,NumRow,QstCod);
+      Tst_WriteQuestionRowForEdition (Tags,AnswerTypes,SelectedOrder,NumRows,NumRow,QstCod);
      }
 
    /***** End table *****/
@@ -2768,6 +2780,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Tags *Tags,
 
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Tags *Tags,
                                                     const struct Tst_AnswerTypes *AnswerTypes,
+                                                    Tst_QuestionsOrder_t SelectedOrder,
                                                     unsigned long NumRows)
   {
    extern const char *Txt_No_INDEX;
@@ -2809,13 +2822,13 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Tags *Tags,
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
-         if (Order == Gbl.Test.SelectedOrder)
+         if (Order == SelectedOrder)
             HTM_U_Begin ();
         }
       HTM_Txt (Txt_TST_STR_ORDER_SHORT[Order]);
       if (NumRows > 1)
         {
-         if (Order == Gbl.Test.SelectedOrder)
+         if (Order == SelectedOrder)
             HTM_U_End ();
          HTM_BUTTON_End ();
          Frm_EndForm ();
@@ -2834,6 +2847,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Tags *Tags,
 
 static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
                                             const struct Tst_AnswerTypes *AnswerTypes,
+                                            Tst_QuestionsOrder_t SelectedOrder,
                                             unsigned long NumRows,
                                             unsigned long NumRow,
                                             long QstCod)
@@ -2943,7 +2957,7 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 	 Tst_WriteParamEditQst ();
 	 if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
 	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
 			     row[2][0] == 'Y' ? " checked=\"checked\"" :
@@ -3284,6 +3298,20 @@ static void Tst_GetParamGblAnswerTypes (struct Tst_AnswerTypes *AnswerTypesDst)
    AnswerTypesDst->All  = Tst_Test.AnswerTypes.All;
    Str_Copy (AnswerTypesDst->List,Tst_Test.AnswerTypes.List,
              Tst_MAX_BYTES_LIST_ANSWER_TYPES);
+  }
+
+/*****************************************************************************/
+/********************* Function parameter with answer types ******************/
+/*****************************************************************************/
+
+void Tst_SetParamGblSelectedOrder (Tst_QuestionsOrder_t SelectedOrder)
+  {
+   Tst_Test.SelectedOrder = SelectedOrder;
+  }
+
+Tst_QuestionsOrder_t Tst_GetParamGblSelectedOrder (void)
+  {
+   return Tst_Test.SelectedOrder;
   }
 
 /*****************************************************************************/
@@ -4988,6 +5016,7 @@ void Tst_GetAndWriteTagsQst (long QstCod)
 static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
                               struct Tst_AnswerTypes *AnswerTypes,
                               unsigned *NumQsts,
+                              Tst_QuestionsOrder_t *SelectedOrder,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
@@ -5062,20 +5091,17 @@ static bool Tst_GetParamsTst (struct Tst_Tags *Tags,
 	 /* Get ordering criteria */
 	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
-												       0);
+	    *SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
+											       0);
 	 else
-	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) 0;
-
-	 /* Get whether we must create the XML file or not */
-	 // Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
+	    *SelectedOrder = (Tst_QuestionsOrder_t) 0;
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* Get starting and ending dates */
 	 Dat_GetIniEndDatesFromForm ();
 
 	 /* Order question by stem */
-	 Gbl.Test.SelectedOrder = Tst_ORDER_STEM;
+	 *SelectedOrder = Tst_ORDER_STEM;
 	 break;
       default:
 	 break;
@@ -6038,6 +6064,7 @@ void Tst_ReceiveQst (void)
    struct Tst_Question Question;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   Tst_QuestionsOrder_t SelectedOrder;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
@@ -6045,6 +6072,7 @@ void Tst_ReceiveQst (void)
    Tst_QstConstructor (&Question);
    Tst_ResetTags (&Tags);
    Tst_ResetAnswerTypes (&AnswerTypes);
+   SelectedOrder = Tst_DEFAULT_ORDER;
 
    /***** Get parameters of the question from form *****/
    Stem[0] = Feedback[0] = '\0';
@@ -6063,7 +6091,7 @@ void Tst_ReceiveQst (void)
       QstCod = Tst_InsertOrUpdateQstTagsAnsIntoDB (QstCod,&Question,&Tags);
 
       /***** Show the question just inserted in the database *****/
-      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes);
+      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes,SelectedOrder);
      }
    else	// Question is wrong
      {
@@ -6709,11 +6737,12 @@ void Tst_RequestRemoveSelectedQsts (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
    extern const char *Txt_Remove_questions;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Show question and button to remove question *****/
       Tst_SetParamGblTags (&Tags);
@@ -6753,6 +6782,7 @@ void Tst_RemoveSelectedQsts (void)
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -6760,10 +6790,10 @@ void Tst_RemoveSelectedQsts (void)
    long QstCod;
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))	// Get parameters
+   if (Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_EDIT_TEST))	// Get parameters
      {
       /***** Get question codes *****/
-      NumRows = (unsigned) Tst_GetQuestions (&Tags,&AnswerTypes,&mysql_res);	// Query database
+      NumRows = (unsigned) Tst_GetQuestions (&Tags,&AnswerTypes,SelectedOrder,&mysql_res);	// Query database
 
       /***** Remove questions one by one *****/
       for (NumRow = 0;
@@ -6809,6 +6839,7 @@ void Tst_RequestRemoveOneQst (void)
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    unsigned NumQsts;
+   Tst_QuestionsOrder_t SelectedOrder;
 
    /***** Get main parameters from form *****/
    /* Get the question code */
@@ -6822,7 +6853,7 @@ void Tst_RequestRemoveOneQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,Tst_EDIT_TEST))
+      if (!Tst_GetParamsTst (&Tags,&AnswerTypes,&NumQsts,&SelectedOrder,Tst_EDIT_TEST))
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
@@ -6838,7 +6869,7 @@ void Tst_RequestRemoveOneQst (void)
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
-      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes);
+      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes,SelectedOrder);
    else
      {
       Tst_FreeTagsList (&Tags);
@@ -6943,6 +6974,7 @@ void Tst_ChangeShuffleQst (void)
    bool Shuffle;
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
+   Tst_QuestionsOrder_t SelectedOrder;
 
    /***** Get the question code *****/
    QstCod = Tst_GetQstCod ();
@@ -6974,7 +7006,8 @@ void Tst_ChangeShuffleQst (void)
      {
       Tst_ResetTags (&Tags);
       Tst_ResetAnswerTypes (&AnswerTypes);
-      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes);
+      SelectedOrder = Tst_DEFAULT_ORDER;
+      Tst_ListOneQstToEdit (QstCod,&Tags,&AnswerTypes,SelectedOrder);
      }
    else
       Tst_ListQuestionsToEdit ();

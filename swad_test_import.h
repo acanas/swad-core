@@ -40,7 +40,8 @@
 /*****************************************************************************/
 
 void TsI_PutFormToExportQuestions (const struct Tst_Tags *Tags,
-                                   const struct Tst_AnswerTypes *AnswerTypes);
+                                   const struct Tst_AnswerTypes *AnswerTypes,
+                                   Tst_QuestionsOrder_t SelectedOrder);
 bool TsI_GetCreateXMLParamFromForm (void);
 void TsI_PutFormToImportQuestions (void);
 void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);
