@@ -156,7 +156,7 @@ static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd);
+static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -1972,7 +1972,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TD_End ();
 
       /***** Question *****/
-      Gam_ListQuestionForEdition (QstCod,StrQstInd);
+      Gam_ListQuestionForEdition (QstCod,QstInd);
 
       HTM_TR_End ();
 
@@ -1988,9 +1988,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 /********************** List game question for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
+static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd)
   {
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2018,23 +2017,14 @@ static void Gam_ListQuestionForEdition (long QstCod,const char *StrQstInd)
       */
      }
 
-   /***** Number of question and answer type *****/
+   /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /* Write number of question */
-   HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-   HTM_Txt (StrQstInd);
-   HTM_DIV_End ();
-
-   /* Write answer type (row[1]) */
-   HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+   Tst_WriteNumQst (QstInd);
    if (QstExists)
      {
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
+      Tst_WriteAnswerType (AnswerType);
      }
-   HTM_DIV_End ();
-
    HTM_TD_End ();
 
    /***** Write question code *****/

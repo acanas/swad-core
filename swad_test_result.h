@@ -33,11 +33,24 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+#define Tst_MAX_OPTIONS_PER_QUESTION		  10
+#define Tst_MAX_BYTES_INDEXES_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+#define Tst_MAX_BYTES_ANSWERS_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+
 #define TsR_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
+
+struct Tst_UsrAnswers
+  {
+   long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
+   char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
+                        [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+   char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
+                        [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -52,9 +65,13 @@ void TsR_StoreScoreOfTestResultInDB (long TstCod,
 void TsR_GetUsrsAndShowTstResults (void);
 void TsR_ShowOneTstResult (void);
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC,
+			 unsigned NumQsts,
+			 const struct Tst_UsrAnswers *UsrAnswers,
+			 time_t TstTimeUTC,
 			 unsigned Visibility);
-void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
+void TsR_StoreOneTestResultQstInDB (long TstCod,
+                                    const struct Tst_UsrAnswers *UsrAnswers,
+                                    unsigned NumQst,double Score);
 void TsR_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TsR_RemoveCrsTestResults (long CrsCod);

@@ -222,7 +222,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match);
 
-static double Mch_ComputeScore (unsigned NumQsts);
+static double Mch_ComputeScore (unsigned NumQsts,const struct Tst_UsrAnswers *UsrAnswers);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -3674,6 +3674,7 @@ void Mch_ReceiveQuestionAnswer (void)
    struct Mch_UsrAnswer UsrAnswer;
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
+   struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
 
    /***** Get data of the match from database *****/
@@ -3730,8 +3731,9 @@ void Mch_ReceiveQuestionAnswer (void)
 
       /***** Update student's match result *****/
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					 &NumQsts,&NumQstsNotBlank);
-      TotalScore = Mch_ComputeScore (NumQsts);
+					 &NumQsts,&NumQstsNotBlank,
+					 &UsrAnswers);
+      TotalScore = Mch_ComputeScore (NumQsts,&UsrAnswers);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
@@ -3788,7 +3790,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static double Mch_ComputeScore (unsigned NumQsts)
+static double Mch_ComputeScore (unsigned NumQsts,const struct Tst_UsrAnswers *UsrAnswers)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3807,16 +3809,17 @@ static double Mch_ComputeScore (unsigned NumQsts)
 	NumQst++)
      {
       /***** Get indexes for this question from string *****/
-      Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
+      Tst_GetIndexesFromStr (UsrAnswers->StrIndexesOneQst[NumQst],Indexes);
 
       /***** Get the user's answers for this question from string *****/
-      Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
+      Tst_GetAnswersFromStr (UsrAnswers->StrAnswersOneQst[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (Gbl.Test.QstCodes[NumQst],&Question);
+      Tst_GetCorrectAnswersFromDB (UsrAnswers->QstCodes[NumQst],&Question);
 
       /***** Compute the total score of this question *****/
-      Tst_ComputeScoreQst (&Question,Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
+      Tst_ComputeScoreQst (&Question,
+                           Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Compute total score *****/
       TotalScore += ScoreThisQst;

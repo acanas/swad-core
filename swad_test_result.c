@@ -92,7 +92,7 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            unsigned *NumQsts,
                                            unsigned *NumQstsNotBlank,
                                            double *Score);
-static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod);
+static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnswers *UsrAnswers);
 
 /*****************************************************************************/
 /************ Select users and dates to show their test results **************/
@@ -606,6 +606,7 @@ void TsR_ShowOneTstResult (void)
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
+   struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -674,7 +675,7 @@ void TsR_ShowOneTstResult (void)
    if (ICanViewTest)	// I am allowed to view this test result
      {
       /***** Get questions and user's answers of the test result from database *****/
-      NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod);
+      NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod,&UsrAnswers);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -791,7 +792,9 @@ void TsR_ShowOneTstResult (void)
 
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  NumQsts,TstTimeUTC,
+			  NumQsts,
+			  &UsrAnswers,
+			  TstTimeUTC,
 			  TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
@@ -850,7 +853,9 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 /*****************************************************************************/
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,time_t TstTimeUTC,
+			 unsigned NumQsts,
+			 const struct Tst_UsrAnswers *UsrAnswers,
+			 time_t TstTimeUTC,
 			 unsigned Visibility)
   {
    extern const char *Txt_Question_modified;
@@ -870,21 +875,10 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
       Gbl.RowEvenOdd = NumQst % 2;
 
       /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Gbl.Test.QstCodes[NumQst],&mysql_res))	// Question exists
+      if (Tst_GetOneQuestionByCod (UsrAnswers->QstCodes[NumQst],&mysql_res))	// Question exists
 	{
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] UNIX_TIMESTAMP(EditTime)
-	 row[1] AnsType
-	 row[2] Shuffle
-	 row[3] Stem
-	 row[4] Feedback
-	 row[5] MedCod
-	 row[6] NumHits
-	 row[7] NumHitsNotBlank
-	 row[8] Score
-	 */
 
 	 /***** If this question has been edited later than test time
 	        ==> don't show question ****/
@@ -910,13 +904,13 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	   }
 	 else
 	    /***** Write questions and answers *****/
-	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                            UsrDat,
-				    NumQst,Gbl.Test.QstCodes[NumQst],
-				    row,
-				    Visibility,
-				    &ScoreThisQst,	// Not used here
-				    &AnswerIsNotBlank);	// Not used here
+	    Tst_WriteQstAndAnsTestResult (UsrDat,
+					  UsrAnswers,
+					  NumQst,
+					  row,
+					  Visibility,
+					  &ScoreThisQst,	// Not used here
+					  &AnswerIsNotBlank);	// Not used here
 	}
       else
 	{
@@ -1001,15 +995,17 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
 /************ Store user's answers of an test result into database ***********/
 /*****************************************************************************/
 
-void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
+void TsR_StoreOneTestResultQstInDB (long TstCod,
+                                    const struct Tst_UsrAnswers *UsrAnswers,
+                                    unsigned NumQst,double Score)
   {
    char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
    char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Replace each separator of multiple parameters by a comma *****/
    /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
-   Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrAnswersOneQst[NumQst],Answers);
+   Par_ReplaceSeparatorMultipleByComma (UsrAnswers->StrIndexesOneQst[NumQst],Indexes);
+   Par_ReplaceSeparatorMultipleByComma (UsrAnswers->StrAnswersOneQst[NumQst],Answers);
 
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -1018,7 +1014,7 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,doub
 		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		   TstCod,QstCod,
+		   TstCod,UsrAnswers->QstCodes[NumQst],
 		   NumQst,	// 0, 1, 2, 3...
 		   Score,
 		   Indexes,
@@ -1030,7 +1026,7 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,doub
 /************ Get the questions of a test result from database ***************/
 /*****************************************************************************/
 
-static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod)
+static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnswers *UsrAnswers)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1056,21 +1052,21 @@ static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod)
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code */
-      if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((UsrAnswers->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get indexes for this question (row[1]) */
-      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],
+      Str_Copy (UsrAnswers->StrIndexesOneQst[NumQst],row[1],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question (row[2]) */
-      Str_Copy (Gbl.Test.StrAnswersOneQst[NumQst],row[2],
+      Str_Copy (UsrAnswers->StrAnswersOneQst[NumQst],row[2],
                 Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrIndexesOneQst[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrAnswersOneQst[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrIndexesOneQst[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrAnswersOneQst[NumQst]);
      }
 
    /***** Free structure that stores the query result *****/

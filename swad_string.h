@@ -94,7 +94,7 @@ char Str_ConvertToLowerLetter (char Ch);
 void Str_DoubleNumToStr (char **Str,double Number);
 void Str_DoubleNumToStrFewDigits (char **Str,double Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
-double Str_GetDoubleFromStr (char *Str);
+double Str_GetDoubleFromStr (const char *Str);
 void Str_SetDecimalPointToUS (void);
 void Str_SetDecimalPointToLocal (void);
 

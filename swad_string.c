@@ -927,24 +927,29 @@ void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str)
 /*****************************************************************************/
 // This function may change Str on wrong double
 
-double Str_GetDoubleFromStr (char *Str)
+double Str_GetDoubleFromStr (const char *Str)
   {
+   char *StrPoint;
    double DoubleNum;
 
    /***** Trivial check *****/
    if (Str == NULL)	// If no string...
       return 0.0;	// ...the number is reset to 0
 
+   /***** Copy source string to temporary string to convert to point *****/
+   if (asprintf (&StrPoint,"%s",Str) < 0)
+      Lay_NotEnoughMemoryExit ();
+
    /***** The string is "scanned" in floating point
           (it must have a point, not a comma as decimal separator) *****/
-   Str_ConvertStrFloatCommaToStrFloatPoint (Str);
+   Str_ConvertStrFloatCommaToStrFloatPoint (StrPoint);
    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-   if (sscanf (Str,"%lf",&DoubleNum) != 1)
-     {			// If the string does not hold a valid number...
-      DoubleNum = 0.0;	// ...the number is reset to 0
-      Str[0] = '\0';	// ...and the string is reset to ""
-     }
+   if (sscanf (StrPoint,"%lf",&DoubleNum) != 1)	// If the string does not hold a valid number...
+      DoubleNum = 0.0;				// ...the number is reset to 0
    Str_SetDecimalPointToLocal ();	// Return to local system
+
+   /***** Free temporary string *****/
+   free (StrPoint);
 
    return DoubleNum;
   }

@@ -41,10 +41,6 @@
 #define Tst_MAX_CHARS_TAG			(128 - 1)	// 127
 #define Tst_MAX_BYTES_TAG			((Tst_MAX_CHARS_TAG + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Tst_MAX_OPTIONS_PER_QUESTION		  10
-#define Tst_MAX_BYTES_INDEXES_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-#define Tst_MAX_BYTES_ANSWERS_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-
 #define Tst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
@@ -97,11 +93,7 @@ struct Tst_Test
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    Tst_QuestionsOrder_t SelectedOrder;
-   long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
-   char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
-                        [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswersOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
-                        [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+   // struct Tst_UsrAnswers UsrAnswers;
   };
 
 struct Tst_Question
@@ -165,13 +157,14 @@ void Tst_ShowGrade (double Grade,double MaxGrade);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
-void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-			     struct UsrData *UsrDat,
-                             unsigned NumQst,
-                             long QstCod,
-                             MYSQL_ROW row,
-			     unsigned Visibility,
-                             double *ScoreThisQst,bool *AnswerIsNotBlank);
+void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
+				   const struct Tst_UsrAnswers *UsrAnswers,
+				   unsigned NumQst,
+				   MYSQL_ROW row,
+				   unsigned Visibility,
+				   double *ScoreThisQst,bool *AnswerIsNotBlank);
+void Tst_WriteNumQst (unsigned NumQst);
+void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 

@@ -50,6 +50,7 @@ void McR_ShowAllMchResultsInMch (void);
 
 void McR_ShowOneMchResult (void);
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-					unsigned *NumQsts,unsigned *NumQstsNotBlank);
+					unsigned *NumQsts,unsigned *NumQstsNotBlank,
+				        struct Tst_UsrAnswers *UsrAnswers);
 
 #endif

@@ -1007,6 +1007,7 @@ void McR_ShowOneMchResult (void)
    char *Id;
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
+   struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -1067,7 +1068,8 @@ void McR_ShowOneMchResult (void)
      {
       /***** Get questions and user's answers of the match result from database *****/
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
-					 &NumQsts,&NumQstsNotBlank);
+					 &NumQsts,&NumQstsNotBlank,
+					 &UsrAnswers);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Match.Title,NULL,
@@ -1192,7 +1194,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TsR_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME],
+      TsR_ShowTestResult (UsrDat,NumQsts,&UsrAnswers,TimeUTC[Dat_START_TIME],
 			  Game.Visibility);
 
       /***** End table *****/
@@ -1222,7 +1224,8 @@ void McR_ShowOneMchResult (void)
 /*****************************************************************************/
 
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-					unsigned *NumQsts,unsigned *NumQstsNotBlank)
+					unsigned *NumQsts,unsigned *NumQstsNotBlank,
+				        struct Tst_UsrAnswers *UsrAnswers)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1252,7 +1255,7 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((UsrAnswers->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1261,24 +1264,24 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[2],
+      Str_Copy (UsrAnswers->StrIndexesOneQst[NumQst],row[2],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (UsrAnswers->StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
          (*NumQstsNotBlank)++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
+	 UsrAnswers->StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrIndexesOneQst[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrAnswersOneQst[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrIndexesOneQst[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrAnswersOneQst[NumQst]);
      }
 
    /***** Free structure that stores the query result *****/

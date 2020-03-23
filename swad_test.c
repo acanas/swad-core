@@ -131,16 +131,24 @@ static void Tst_ResetAnswerTypes (struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_ShowFormRequestTest (const struct Tst_Tags *Tags,
                                      const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts);
+static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts,
+                                                struct Tst_UsrAnswers *UsrAnswers);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
-static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,MYSQL_RES *mysql_res);
+static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
+                                             MYSQL_RES *mysql_res);
 static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod);
-static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
+static void Tst_ShowTestResultAfterAssess (long TstCod,
+                                           unsigned NumQsts,
                                            unsigned *NumQstsNotBlank,
+                                           const struct Tst_UsrAnswers *UsrAnswers,
                                            double *TotalScore);
+static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
+					    long QstCod,
+					    MYSQL_ROW row);
+
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,double ScoreThisQst,bool AnswerIsNotBlank);
@@ -209,6 +217,7 @@ static void Tst_GetParamGblAnswerTypes (struct Tst_AnswerTypes *AnswerTypesDst);
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
                                           Tst_AnswerType_t AnswerType,bool Shuffle);
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
+                                        const struct Tst_UsrAnswers *UsrAnswers,
                                         unsigned NumQst,long QstCod,
                                         Tst_AnswerType_t AnswerType,
 					unsigned Visibility,
@@ -216,6 +225,7 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 
 static void Tst_WriteTFAnsViewTest (unsigned NumQst);
 static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
+                                      const struct Tst_UsrAnswers *UsrAnswers,
 				      unsigned NumQst,
 				      const struct Tst_Question *Question,
 				      MYSQL_RES *mysql_res,
@@ -227,6 +237,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
                                         Tst_AnswerType_t AnswerType,
                                         bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
+                                          const struct Tst_UsrAnswers *UsrAnswers,
 				          unsigned NumQst,
 				          struct Tst_Question *Question,
 				          MYSQL_RES *mysql_res,
@@ -237,6 +248,7 @@ static void Tst_GetChoiceAns (MYSQL_RES *mysql_res,struct Tst_Question *Question
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
+                                        const struct Tst_UsrAnswers *UsrAnswers,
 				        unsigned NumQst,
 				        struct Tst_Question *Question,
 				        MYSQL_RES *mysql_res,
@@ -246,6 +258,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
 static void Tst_WriteIntAnsViewTest (unsigned NumQst);
 static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
+                                       const struct Tst_UsrAnswers *UsrAnswers,
 				       unsigned NumQst,
 				       const struct Tst_Question *Question,
 				       MYSQL_RES *mysql_res,
@@ -255,6 +268,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
 static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
 static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
+                                         const struct Tst_UsrAnswers *UsrAnswers,
 				         unsigned NumQst,
 				         const struct Tst_Question *Question,
 				         MYSQL_RES *mysql_res,
@@ -577,6 +591,7 @@ void Tst_AssessTest (void)
    bool AllowTeachers;	// Can teachers of this course see the test result?
    long TstCod = -1L;	// Initialized to avoid warning
    unsigned NumQstsNotBlank;
+   struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
 
    /***** Read test configuration from database *****/
@@ -597,7 +612,7 @@ void Tst_AssessTest (void)
 	 AllowTeachers = Par_GetParToBool ("AllowTchs");
 
 	 /***** Get questions and answers from form to assess a test *****/
-	 Tst_GetQuestionsAndAnswersFromForm (NumQsts);
+	 Tst_GetQuestionsAndAnswersFromForm (NumQsts,&UsrAnswers);
 
 	 /***** Create new test in database to store the result *****/
 	 TstCod = TsR_CreateTestResultInDB (AllowTeachers,NumQsts);
@@ -620,7 +635,8 @@ void Tst_AssessTest (void)
 
 	 /***** Write answers and solutions *****/
          HTM_TABLE_BeginWideMarginPadding (10);
-	 Tst_ShowTestResultAfterAssess (TstCod,NumQsts,&NumQstsNotBlank,&TotalScore);
+	 Tst_ShowTestResultAfterAssess (TstCod,NumQsts,&NumQstsNotBlank,
+	                                &UsrAnswers,&TotalScore);
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
@@ -660,7 +676,8 @@ void Tst_AssessTest (void)
 /*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
-static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts)
+static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts,
+                                                struct Tst_UsrAnswers *UsrAnswers)
   {
    unsigned NumQst;
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
@@ -674,21 +691,21 @@ static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts)
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
 	        "Qst%03u",
 		NumQst);
-      if ((Gbl.Test.QstCodes[NumQst] = Par_GetParToLong (StrQstIndOrAns)) <= 0)
+      if ((UsrAnswers->QstCodes[NumQst] = Par_GetParToLong (StrQstIndOrAns)) <= 0)
 	 Lay_ShowErrorAndExit ("Code of question is missing.");
 
       /* Get indexes for this question */
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
 	        "Ind%03u",
 		NumQst);
-      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrIndexesOneQst[NumQst],
+      Par_GetParMultiToText (StrQstIndOrAns,UsrAnswers->StrIndexesOneQst[NumQst],
                              Tst_MAX_BYTES_INDEXES_ONE_QST);  /* If choice ==> "0", "1", "2",... */
 
       /* Get answers selected by user for this question */
       snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
 	        "Ans%03u",
 		NumQst);
-      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrAnswersOneQst[NumQst],
+      Par_GetParMultiToText (StrQstIndOrAns,UsrAnswers->StrAnswersOneQst[NumQst],
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
   }
@@ -905,7 +922,8 @@ static unsigned Tst_GetNumAccessesTst (void)
 // NumRows must hold the number of rows of a MySQL query
 // In each row mysql_res holds: in the column 0 the code of a question, in the column 1 the type of answer, and in the column 2 the stem
 
-static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,MYSQL_RES *mysql_res)
+static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
+                                             MYSQL_RES *mysql_res)
   {
    unsigned NumQst;
    long QstCod;
@@ -936,32 +954,12 @@ static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   double ScoreThisQst;		// Not used here
-   bool AnswerIsNotBlank;	// Not used here
 
    if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))	// Question exists
      {
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] UNIX_TIMESTAMP(EditTime)
-      row[1] AnsType
-      row[2] Shuffle
-      row[3] Stem
-      row[4] Feedback
-      row[5] MedCod
-      row[6] NumHits
-      row[7] NumHitsNotBlank
-      row[8] Score
-      */
-      Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
-			      &Gbl.Usrs.Me.UsrDat,
-			      NumQst,
-			      QstCod,
-			      row,
-			      TsV_MAX_VISIBILITY,	// All visible here
-			      &ScoreThisQst,		// Not used here
-			      &AnswerIsNotBlank);	// Not used here
+      Tst_WriteQstAndAnsTestToAnswer (NumQst,QstCod,row);
      }
    else
       Lay_ShowErrorAndExit ("Wrong question.");
@@ -1000,8 +998,10 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /******************* Show the result of assessing a test *********************/
 /*****************************************************************************/
 
-static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
+static void Tst_ShowTestResultAfterAssess (long TstCod,
+                                           unsigned NumQsts,
                                            unsigned *NumQstsNotBlank,
+                                           const struct Tst_UsrAnswers *UsrAnswers,
                                            double *TotalScore)
   {
    extern const char *Txt_Question_removed;
@@ -1022,33 +1022,19 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
       Gbl.RowEvenOdd = NumQst % 2;
 
       /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Gbl.Test.QstCodes[NumQst],&mysql_res))	// Question exists
+      if (Tst_GetOneQuestionByCod (UsrAnswers->QstCodes[NumQst],&mysql_res))	// Question exists
 	{
-	 /***** Get row of the result of the query *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] UNIX_TIMESTAMP(EditTime)
-	 row[1] AnsType
-	 row[2] Shuffle
-	 row[3] Stem
-	 row[4] Feedback
-	 row[5] MedCod
-	 row[6] NumHits
-	 row[7] NumHitsNotBlank
-	 row[8] Score
-	 */
-
 	 /***** Write question and answers *****/
-	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                         &Gbl.Usrs.Me.UsrDat,
-				 NumQst,
-				 Gbl.Test.QstCodes[NumQst],
-				 row,
-				 TstCfg_GetConfigVisibility (),
-				 &ScoreThisQst,&AnswerIsNotBlank);
+	 row = mysql_fetch_row (mysql_res);
+	 Tst_WriteQstAndAnsTestResult (&Gbl.Usrs.Me.UsrDat,
+				       UsrAnswers,
+				       NumQst,
+				       row,
+				       TstCfg_GetConfigVisibility (),
+				       &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
-	 TsR_StoreOneTestResultQstInDB (TstCod,Gbl.Test.QstCodes[NumQst],
+	 TsR_StoreOneTestResultQstInDB (TstCod,UsrAnswers,
 				        NumQst,	// 0, 1, 2, 3...
 				        ScoreThisQst);
 
@@ -1059,15 +1045,15 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
 
 	 /***** Update the number of accesses and the score of this question *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	    Tst_UpdateScoreQst (Gbl.Test.QstCodes[NumQst],ScoreThisQst,AnswerIsNotBlank);
+	    Tst_UpdateScoreQst (UsrAnswers->QstCodes[NumQst],ScoreThisQst,AnswerIsNotBlank);
 	}
       else
 	{
 	 /***** Question does not exists *****/
          HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumQst + 1);
+	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+         Tst_WriteNumQst (NumQst + 1);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -1086,15 +1072,72 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned NumQsts,
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-			     struct UsrData *UsrDat,
-                             unsigned NumQst,
-                             long QstCod,
-                             MYSQL_ROW row,
-			     unsigned Visibility,
-                             double *ScoreThisQst,bool *AnswerIsNotBlank)
+static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
+					    long QstCod,
+					    MYSQL_ROW row)
   {
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   struct Tst_Question Question;
+   /*
+   row[0] UNIX_TIMESTAMP(EditTime)
+   row[1] AnsType
+   row[2] Shuffle
+   row[3] Stem
+   row[4] Feedback
+   row[5] MedCod
+   row[6] NumHits
+   row[7] NumHitsNotBlank
+   row[8] Score
+   */
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Number of question and answer type (row[1]) *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (NumQst + 1);
+   Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+   Tst_WriteAnswerType (Question.Answer.Type);
+   HTM_TD_End ();
+
+   /***** Stem, media and answers *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Stem (row[3]) */
+   Tst_WriteQstStem (row[3],"TEST_EXA",true);
+
+   /* Media (row[5]) */
+   Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&Question.Media);
+   Med_ShowMedia (&Question.Media,
+		  "TEST_MED_SHOW_CONT",
+		  "TEST_MED_SHOW");
+
+   /* Answers depending on shuffle (row[2]) */
+   Tst_WriteAnswersTestToAnswer (NumQst,QstCod,Question.Answer.Type,(row[2][0] == 'Y'));
+
+   HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
+  }
+
+/*****************************************************************************/
+/********** Write a row of a test, with one question and its answer **********/
+/*****************************************************************************/
+
+void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
+				   const struct Tst_UsrAnswers *UsrAnswers,
+				   unsigned NumQst,
+				   MYSQL_ROW row,
+				   unsigned Visibility,
+				   double *ScoreThisQst,bool *AnswerIsNotBlank)
+  {
    struct Tst_Question Question;
    bool IsVisibleQstAndAnsTxt = TsV_IsVisibleQstAndAnsTxt (Visibility);
    /*
@@ -1108,30 +1151,27 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    row[7] NumHitsNotBlank
    row[8] Score
    */
+
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
 
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
+
+   /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /***** Write number of question *****/
-   HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-   HTM_Unsigned (NumQst + 1);
-   HTM_DIV_End ();
-
-   /***** Write answer type (row[1]) *****/
+   Tst_WriteNumQst (NumQst + 1);
    Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-   HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-   HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question.Answer.Type]);
-   HTM_DIV_End ();
-
+   Tst_WriteAnswerType (Question.Answer.Type);
    HTM_TD_End ();
 
-   /***** Write stem (row[3]) *****/
+   /***** Stem, media and answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Stem (row[3]) */
    Tst_WriteQstStem (row[3],"TEST_EXA",IsVisibleQstAndAnsTxt);
 
-   /***** Get and show media (row[5]) *****/
+   /* Media (row[5]) */
    if (IsVisibleQstAndAnsTxt)
      {
       Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -1141,29 +1181,48 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 		     "TEST_MED_SHOW");
      }
 
-   /***** Write answers depending on shuffle (row[2]) and feedback (row[4])  *****/
-   switch (ActionToDoWithQuestions)
-     {
-      case Tst_SHOW_TEST_TO_ANSWER:
-         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,Question.Answer.Type,(row[2][0] == 'Y'));
-	 break;
-      case Tst_SHOW_TEST_RESULT:
-	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,Question.Answer.Type,
-				     Visibility,
-				     ScoreThisQst,AnswerIsNotBlank);
+   /* Answers */
+   Tst_WriteAnswersTestResult (UsrDat,UsrAnswers,
+			       NumQst,UsrAnswers->QstCodes[NumQst],Question.Answer.Type,
+			       Visibility,
+			       ScoreThisQst,AnswerIsNotBlank);
 
-	 /* Write question feedback (row[4]) */
-	 if (TsV_IsVisibleFeedbackTxt (Visibility))
-	    Tst_WriteQstFeedback (row[4],"TEST_EXA_LIGHT");
-	 break;
-      default:
-	 break;
-     }
+   /* Question feedback (row[4]) */
+   if (TsV_IsVisibleFeedbackTxt (Visibility))
+      Tst_WriteQstFeedback (row[4],"TEST_EXA_LIGHT");
+
    HTM_TD_End ();
+
+   /***** End row *****/
    HTM_TR_End ();
 
    /***** Destroy test question *****/
    Tst_QstDestructor (&Question);
+  }
+
+/*****************************************************************************/
+/********************* Write the number of a test question *******************/
+/*****************************************************************************/
+// Number of question should be 1, 2, 3...
+
+void Tst_WriteNumQst (unsigned NumQst)
+  {
+   HTM_DIV_Begin ("class=\"BIG_INDEX\"");
+   HTM_Unsigned (NumQst);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/************************** Write the type of answer *************************/
+/*****************************************************************************/
+
+void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType)
+  {
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+
+   HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+   HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2852,7 +2911,6 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
                                             unsigned long NumRow,
                                             long QstCod)
   {
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Tst_Question Question;
@@ -2907,27 +2965,19 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 
       HTM_TD_End ();
 
+      /* Number of question and answer type (row[1]) */
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-
-      /* Write number of question */
-      HTM_DIV_Begin ("class=\"BIG_INDEX\"");
-      HTM_UnsignedLong (NumRow + 1);
-      HTM_DIV_End ();
-
-      /* Write answer type (row[1]) */
+      Tst_WriteNumQst ((unsigned) NumRow + 1);
       Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      HTM_DIV_Begin ("class=\"DAT_SMALL\"");
-      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question.Answer.Type]);
-      HTM_DIV_End ();
-
+      Tst_WriteAnswerType (Question.Answer.Type);
       HTM_TD_End ();
 
-      /* Write question code */
+      /* Question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_TxtF ("%ld&nbsp;",QstCod);
       HTM_TD_End ();
 
-      /* Write the date (row[0] has the UTC date-time) */
+      /* Date (row[0] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
       if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
@@ -2939,12 +2989,12 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
       HTM_TD_End ();
       free (Id);
 
-      /* Write the question tags */
+      /* Question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (QstCod);
       HTM_TD_End ();
 
-      /* Write if shuffle is enabled (row[2]) */
+      /* Shuffle (row[2]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
 	  Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
@@ -2966,7 +3016,7 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 	}
       HTM_TD_End ();
 
-      /* Write stem (row[3]) */
+      /* Stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[3],"TEST_EDI",
 			true);	// Visible
@@ -2978,7 +3028,7 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
 
-      /* Write feedback (row[4]) and answers */
+      /* Feedback (row[4]) and answers */
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
       Tst_WriteAnswersEdit (QstCod,Question.Answer.Type);
       HTM_TD_End ();
@@ -3001,12 +3051,12 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 	 Lay_ShowErrorAndExit ("Wrong score of a question.");
       Str_SetDecimalPointToLocal ();	// Return to local system
 
-      /* Write number of times this question has been answered */
+      /* Number of times this question has been answered */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_UnsignedLong (NumHitsThisQst);
       HTM_TD_End ();
 
-      /* Write average score */
+      /* Average score */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsThisQst)
 	 HTM_Double2Decimals (TotalScoreThisQst /
@@ -3015,12 +3065,12 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Tags *Tags,
 	 HTM_Txt ("N.A.");
       HTM_TD_End ();
 
-      /* Write number of times this question has been answered (not blank) */
+      /* Number of times this question has been answered (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_UnsignedLong (NumHitsNotBlankThisQst);
       HTM_TD_End ();
 
-      /* Write average score (not blank) */
+      /* Average score (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsNotBlankThisQst)
 	 HTM_Double2Decimals (TotalScoreThisQst /
@@ -3054,7 +3104,6 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    extern const char *Txt_Date;
    extern const char *Txt_Tags;
    extern const char *Txt_Type;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
@@ -3578,6 +3627,7 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
 /*****************************************************************************/
 
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
+                                        const struct Tst_UsrAnswers *UsrAnswers,
                                         unsigned NumQst,long QstCod,
                                         Tst_AnswerType_t AnswerType,
 					unsigned Visibility,
@@ -3604,28 +3654,33 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
    switch (Question.Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsAssessTest    (UsrDat,NumQst,&Question,mysql_res,
+         Tst_WriteIntAnsAssessTest    (UsrDat,UsrAnswers,
+                                       NumQst,&Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
-	 Tst_WriteFloatAnsAssessTest  (UsrDat,NumQst,&Question,mysql_res,
+	 Tst_WriteFloatAnsAssessTest  (UsrDat,UsrAnswers,
+	                               NumQst,&Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsAssessTest     (UsrDat,NumQst,&Question,mysql_res,
+         Tst_WriteTFAnsAssessTest     (UsrDat,UsrAnswers,
+                                       NumQst,&Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsAssessTest (UsrDat,NumQst,&Question,mysql_res,
+         Tst_WriteChoiceAnsAssessTest (UsrDat,UsrAnswers,
+                                       NumQst,&Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsAssessTest   (UsrDat,NumQst,&Question,mysql_res,
+         Tst_WriteTextAnsAssessTest   (UsrDat,UsrAnswers,
+                                       NumQst,&Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
@@ -3698,6 +3753,7 @@ void Tst_WriteAnsTF (char AnsTF)
 /*****************************************************************************/
 
 static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
+                                      const struct Tst_UsrAnswers *UsrAnswers,
 				      unsigned NumQst,
 				      const struct Tst_Question *Question,
 				      MYSQL_RES *mysql_res,
@@ -3721,7 +3777,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    row = mysql_fetch_row (mysql_res);
 
    /***** Compute the mark for this question *****/
-   AnsTF = Gbl.Test.StrAnswersOneQst[NumQst][0];
+   AnsTF = UsrAnswers->StrAnswersOneQst[NumQst][0];
    if (AnsTF == '\0')			// User has omitted the answer (the answer is blank)
      {
       *AnswerIsNotBlank = false;
@@ -3919,6 +3975,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
 /*****************************************************************************/
 
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
+                                          const struct Tst_UsrAnswers *UsrAnswers,
 				          unsigned NumQst,
 				          struct Tst_Question *Question,
 				          MYSQL_RES *mysql_res,
@@ -3942,10 +3999,10 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    Tst_GetChoiceAns (mysql_res,Question);
 
    /***** Get indexes for this question from string *****/
-   Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
+   Tst_GetIndexesFromStr (UsrAnswers->StrIndexesOneQst[NumQst],Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
+   Tst_GetAnswersFromStr (UsrAnswers->StrAnswersOneQst[NumQst],AnswersUsr);
 
    /***** Compute the total score of this question *****/
    Tst_ComputeScoreQst (Question,Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
@@ -4417,6 +4474,7 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
+                                        const struct Tst_UsrAnswers *UsrAnswers,
 				        unsigned NumQst,
 				        struct Tst_Question *Question,
 				        MYSQL_RES *mysql_res,
@@ -4481,10 +4539,10 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
+   if (UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst],
+      Str_Copy (TextAnsUsr,UsrAnswers->StrAnswersOneQst[NumQst],
                 Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* In order to compare student answer to stored answer,
@@ -4514,7 +4572,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 		       (Correct ? "ANS_OK" :
 				  "ANS_BAD") :
 		       "ANS_0");
-      HTM_Txt (Gbl.Test.StrAnswersOneQst[NumQst]);
+      HTM_Txt (UsrAnswers->StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
       HTM_TD_Begin (NULL);
@@ -4571,7 +4629,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_End ();
 
    /***** Compute the mark *****/
-   if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+   if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
      {
       *AnswerIsNotBlank = false;
       *ScoreThisQst = 0.0;
@@ -4589,7 +4647,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    if (TsV_IsVisibleEachQstScore (Visibility))
      {
       Tst_WriteScoreStart (4);
-      if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+      if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
@@ -4632,6 +4690,7 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
+                                       const struct Tst_UsrAnswers *UsrAnswers,
 				       unsigned NumQst,
 				       const struct Tst_Question *Question,
 				       MYSQL_RES *mysql_res,
@@ -4666,9 +4725,9 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Gbl.Test.StrAnswersOneQst[NumQst][0])		// If user has answered the question
+   if (UsrAnswers->StrAnswersOneQst[NumQst][0])		// If user has answered the question
      {
-      if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
+      if (sscanf (UsrAnswers->StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
 		       TsV_IsVisibleCorrectAns (Visibility) ?
@@ -4680,7 +4739,6 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 	}
       else
         {
-         Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
          HTM_TD_Begin ("class=\"ANS_0 CM\"");
          HTM_Txt ("?");
          HTM_TD_End ();
@@ -4701,7 +4759,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_End ();
 
    /***** Compute the score *****/
-   if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+   if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
      {
       *AnswerIsNotBlank = false;
       *ScoreThisQst = 0.0;
@@ -4719,7 +4777,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    if (TsV_IsVisibleEachQstScore (Visibility))
      {
       Tst_WriteScoreStart (2);
-      if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+      if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
@@ -4762,6 +4820,7 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
 /*****************************************************************************/
 
 static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
+                                         const struct Tst_UsrAnswers *UsrAnswers,
 				         unsigned NumQst,
 				         const struct Tst_Question *Question,
 				         MYSQL_RES *mysql_res,
@@ -4809,10 +4868,10 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
+   if (UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
-      FloatAnsUsr = Str_GetDoubleFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
-      if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
+      FloatAnsUsr = Str_GetDoubleFromStr (UsrAnswers->StrAnswersOneQst[NumQst]);
+      if (UsrAnswers->StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
          HTM_TD_Begin ("class=\"%s CM\"",
 		       TsV_IsVisibleCorrectAns (Visibility) ?
@@ -4850,7 +4909,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    HTM_TR_End ();
 
    /***** Compute mark *****/
-   if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+   if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
      {
       *AnswerIsNotBlank = false;
       *ScoreThisQst = 0.0;
@@ -4869,7 +4928,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    if (TsV_IsVisibleEachQstScore (Visibility))
      {
       Tst_WriteScoreStart (2);
-      if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
+      if (!UsrAnswers->StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
