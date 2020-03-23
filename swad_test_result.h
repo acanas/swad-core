@@ -45,6 +45,8 @@
 
 struct Tst_UsrAnswers
   {
+   unsigned NumQsts;
+   unsigned NumQstsNotBlank;
    long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
    char StrIndexesOneQst[TstCfg_MAX_QUESTIONS_PER_TEST]
                         [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
@@ -61,11 +63,10 @@ void TsR_SelDatesToSeeMyTstResults (void);
 void TsR_ShowMyTstResults (void);
 long TsR_CreateTestResultInDB (bool AllowTeachers,unsigned NumQsts);
 void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     unsigned NumQstsNotBlank,double Score);
+                                     const struct Tst_UsrAnswers *UsrAnswers,double Score);
 void TsR_GetUsrsAndShowTstResults (void);
 void TsR_ShowOneTstResult (void);
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,
 			 const struct Tst_UsrAnswers *UsrAnswers,
 			 time_t TstTimeUTC,
 			 unsigned Visibility);

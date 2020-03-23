@@ -89,8 +89,7 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod);
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
-                                           unsigned *NumQsts,
-                                           unsigned *NumQstsNotBlank,
+                                           struct Tst_UsrAnswers *UsrAnswers,
                                            double *Score);
 static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnswers *UsrAnswers);
 
@@ -194,7 +193,7 @@ long TsR_CreateTestResultInDB (bool AllowTeachers,unsigned NumQsts)
 /*****************************************************************************/
 
 void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     unsigned NumQstsNotBlank,double Score)
+                                     const struct Tst_UsrAnswers *UsrAnswers,double Score)
   {
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -202,7 +201,7 @@ void TsR_StoreScoreOfTestResultInDB (long TstCod,
 		   "UPDATE tst_exams"
 	           " SET NumQstsNotBlank=%u,Score='%.15lg'"
 	           " WHERE TstCod=%ld",
-		   NumQstsNotBlank,Score,
+		   UsrAnswers->NumQstsNotBlank,Score,
 		   TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -604,8 +603,6 @@ void TsR_ShowOneTstResult (void)
    long TstCod;
    bool AllowTeachers = false;	// Initialized to avoid warning
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
-   unsigned NumQsts;
-   unsigned NumQstsNotBlank;
    struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
    bool ShowPhoto;
@@ -622,8 +619,7 @@ void TsR_ShowOneTstResult (void)
    TsR_GetTestResultDataByTstCod (TstCod,
                                   &AllowTeachers,
                                   &TstTimeUTC,
-                                  &NumQsts,
-				  &NumQstsNotBlank,
+                                  &UsrAnswers,
 				  &TotalScore);
    TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
 
@@ -675,7 +671,7 @@ void TsR_ShowOneTstResult (void)
    if (ICanViewTest)	// I am allowed to view this test result
      {
       /***** Get questions and user's answers of the test result from database *****/
-      NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod,&UsrAnswers);
+      UsrAnswers.NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod,&UsrAnswers);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -742,7 +738,8 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-	        NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+	        UsrAnswers.NumQsts,
+	        UsrAnswers.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -770,7 +767,7 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,TsR_SCORE_MAX);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -792,7 +789,6 @@ void TsR_ShowOneTstResult (void)
 
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  NumQsts,
 			  &UsrAnswers,
 			  TstTimeUTC,
 			  TstCfg_GetConfigVisibility ());
@@ -808,7 +804,7 @@ void TsR_ShowOneTstResult (void)
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,TsR_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -853,7 +849,6 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 /*****************************************************************************/
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 unsigned NumQsts,
 			 const struct Tst_UsrAnswers *UsrAnswers,
 			 time_t TstTimeUTC,
 			 unsigned Visibility)
@@ -869,7 +864,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
    time_t EditTimeUTC;
 
    for (NumQst = 0;
-	NumQst < NumQsts;
+	NumQst < UsrAnswers->NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -940,8 +935,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
-                                           unsigned *NumQsts,
-                                           unsigned *NumQstsNotBlank,
+                                           struct Tst_UsrAnswers *UsrAnswers,
                                            double *Score)
   {
    MYSQL_RES *mysql_res;
@@ -973,12 +967,12 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",NumQsts) != 1)
-	 *NumQsts = 0;
+      if (sscanf (row[3],"%u",&UsrAnswers->NumQsts) != 1)
+	 UsrAnswers->NumQsts = 0;
 
       /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
-	 *NumQstsNotBlank = 0;
+      if (sscanf (row[4],"%u",&UsrAnswers->NumQstsNotBlank) != 1)
+	 UsrAnswers->NumQstsNotBlank = 0;
 
       /* Get score (row[5]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot

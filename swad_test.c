@@ -131,8 +131,7 @@ static void Tst_ResetAnswerTypes (struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_ShowFormRequestTest (const struct Tst_Tags *Tags,
                                      const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts,
-                                                struct Tst_UsrAnswers *UsrAnswers);
+static void Tst_GetQuestionsAndAnswersFromForm (struct Tst_UsrAnswers *UsrAnswers);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
@@ -141,9 +140,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
                                              MYSQL_RES *mysql_res);
 static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod);
 static void Tst_ShowTestResultAfterAssess (long TstCod,
-                                           unsigned NumQsts,
-                                           unsigned *NumQstsNotBlank,
-                                           const struct Tst_UsrAnswers *UsrAnswers,
+                                           struct Tst_UsrAnswers *UsrAnswers,
                                            double *TotalScore);
 static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
 					    long QstCod,
@@ -587,10 +584,8 @@ void Tst_AssessTest (void)
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
-   unsigned NumQsts;
    bool AllowTeachers;	// Can teachers of this course see the test result?
    long TstCod = -1L;	// Initialized to avoid warning
-   unsigned NumQstsNotBlank;
    struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
 
@@ -606,16 +601,16 @@ void Tst_AssessTest (void)
       case Tst_STATUS_SHOWN_BUT_NOT_ASSESSED:
          /***** Get the parameters of the form *****/
          /* Get number of questions */
-         NumQsts = Tst_GetParamNumQsts ();
+         UsrAnswers.NumQsts = Tst_GetParamNumQsts ();
 
          /***** Get if test will be visible by teachers *****/
 	 AllowTeachers = Par_GetParToBool ("AllowTchs");
 
 	 /***** Get questions and answers from form to assess a test *****/
-	 Tst_GetQuestionsAndAnswersFromForm (NumQsts,&UsrAnswers);
+	 Tst_GetQuestionsAndAnswersFromForm (&UsrAnswers);
 
 	 /***** Create new test in database to store the result *****/
-	 TstCod = TsR_CreateTestResultInDB (AllowTeachers,NumQsts);
+	 TstCod = TsR_CreateTestResultInDB (AllowTeachers,UsrAnswers.NumQsts);
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -635,8 +630,7 @@ void Tst_AssessTest (void)
 
 	 /***** Write answers and solutions *****/
          HTM_TABLE_BeginWideMarginPadding (10);
-	 Tst_ShowTestResultAfterAssess (TstCod,NumQsts,&NumQstsNotBlank,
-	                                &UsrAnswers,&TotalScore);
+	 Tst_ShowTestResultAfterAssess (TstCod,&UsrAnswers,&TotalScore);
 	 HTM_TABLE_End ();
 
 	 /***** Write total score and grade *****/
@@ -647,7 +641,7 @@ void Tst_AssessTest (void)
 	    HTM_Double2Decimals (TotalScore);
 	    HTM_BR ();
 	    HTM_TxtColonNBSP (Txt_Grade);
-	    Tst_ComputeAndShowGrade (NumQsts,TotalScore,TsR_SCORE_MAX);
+	    Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,TsR_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
 
@@ -656,7 +650,7 @@ void Tst_AssessTest (void)
 
 	 /***** Store test result in database *****/
 	 TsR_StoreScoreOfTestResultInDB (TstCod,
-				         NumQstsNotBlank,TotalScore);
+				         &UsrAnswers,TotalScore);
 
          /***** Set test status *****/
          Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
@@ -676,15 +670,14 @@ void Tst_AssessTest (void)
 /*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
-static void Tst_GetQuestionsAndAnswersFromForm (unsigned NumQsts,
-                                                struct Tst_UsrAnswers *UsrAnswers)
+static void Tst_GetQuestionsAndAnswersFromForm (struct Tst_UsrAnswers *UsrAnswers)
   {
    unsigned NumQst;
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
    /***** Get questions and answers *****/
    for (NumQst = 0;
-	NumQst < NumQsts;
+	NumQst < UsrAnswers->NumQsts;
 	NumQst++)
      {
       /* Get question code */
@@ -999,9 +992,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /*****************************************************************************/
 
 static void Tst_ShowTestResultAfterAssess (long TstCod,
-                                           unsigned NumQsts,
-                                           unsigned *NumQstsNotBlank,
-                                           const struct Tst_UsrAnswers *UsrAnswers,
+                                           struct Tst_UsrAnswers *UsrAnswers,
                                            double *TotalScore)
   {
    extern const char *Txt_Question_removed;
@@ -1013,10 +1004,10 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,
 
    /***** Initialize score and number of questions not blank *****/
    *TotalScore = 0.0;
-   *NumQstsNotBlank = 0;
+   UsrAnswers->NumQstsNotBlank = 0;
 
    for (NumQst = 0;
-	NumQst < NumQsts;
+	NumQst < UsrAnswers->NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -1041,7 +1032,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,
 	 /***** Compute total score *****/
 	 *TotalScore += ScoreThisQst;
 	 if (AnswerIsNotBlank)
-	    (*NumQstsNotBlank)++;
+	    UsrAnswers->NumQstsNotBlank++;
 
 	 /***** Update the number of accesses and the score of this question *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)

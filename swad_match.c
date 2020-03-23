@@ -222,7 +222,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match);
 
-static double Mch_ComputeScore (unsigned NumQsts,const struct Tst_UsrAnswers *UsrAnswers);
+static double Mch_ComputeScore (const struct Tst_UsrAnswers *UsrAnswers);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -3672,8 +3672,6 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   unsigned NumQsts;
-   unsigned NumQstsNotBlank;
    struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
 
@@ -3731,9 +3729,8 @@ void Mch_ReceiveQuestionAnswer (void)
 
       /***** Update student's match result *****/
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					 &NumQsts,&NumQstsNotBlank,
 					 &UsrAnswers);
-      TotalScore = Mch_ComputeScore (NumQsts,&UsrAnswers);
+      TotalScore = Mch_ComputeScore (&UsrAnswers);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
@@ -3748,7 +3745,9 @@ void Mch_ReceiveQuestionAnswer (void)
 			       "NumQstsNotBlank=%u,"
 			       "Score='%.15lg'"
 			  " WHERE MchCod=%ld AND UsrCod=%ld",
-			  NumQsts,NumQstsNotBlank,TotalScore,
+			  UsrAnswers.NumQsts,
+			  UsrAnswers.NumQstsNotBlank,
+			  TotalScore,
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       else								// Result doesn't exist
 	 /* Create result */
@@ -3764,7 +3763,9 @@ void Mch_ReceiveQuestionAnswer (void)
 			  "%u,"		// NumQstsNotBlank
 			  "'%.15lg')",	// Score
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			  NumQsts,NumQstsNotBlank,TotalScore);
+			  UsrAnswers.NumQsts,
+			  UsrAnswers.NumQstsNotBlank,
+			  TotalScore);
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
 
@@ -3790,7 +3791,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static double Mch_ComputeScore (unsigned NumQsts,const struct Tst_UsrAnswers *UsrAnswers)
+static double Mch_ComputeScore (const struct Tst_UsrAnswers *UsrAnswers)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3805,7 +3806,7 @@ static double Mch_ComputeScore (unsigned NumQsts,const struct Tst_UsrAnswers *Us
    Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
    for (NumQst = 0;
-	NumQst < NumQsts;
+	NumQst < UsrAnswers->NumQsts;
 	NumQst++)
      {
       /***** Get indexes for this question from string *****/

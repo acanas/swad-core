@@ -96,8 +96,7 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
 					  double TotalGrade);
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
-                                            unsigned *NumQsts,
-					    unsigned *NumQstsNotBlank,
+                                            struct Tst_UsrAnswers *UsrAnswers,
 					    double *Score);
 
 static bool McR_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod);
@@ -1005,8 +1004,6 @@ void McR_ShowOneMchResult (void)
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   unsigned NumQsts;
-   unsigned NumQstsNotBlank;
    struct Tst_UsrAnswers UsrAnswers;
    double TotalScore;
    bool ShowPhoto;
@@ -1035,8 +1032,7 @@ void McR_ShowOneMchResult (void)
    /***** Get match result data *****/
    McR_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
 				   TimeUTC,
-				   &NumQsts,
-				   &NumQstsNotBlank,
+				   &UsrAnswers,
 				   &TotalScore);
 
    /***** Check if I can view this match result *****/
@@ -1068,7 +1064,6 @@ void McR_ShowOneMchResult (void)
      {
       /***** Get questions and user's answers of the match result from database *****/
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
-					 &NumQsts,&NumQstsNotBlank,
 					 &UsrAnswers);
 
       /***** Begin box *****/
@@ -1143,7 +1138,9 @@ void McR_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_TxtF ("%u (%u %s)",NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+      HTM_TxtF ("%u (%u %s)",
+                UsrAnswers.NumQsts,
+                UsrAnswers.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1173,7 +1170,7 @@ void McR_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
+         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,Game.MaxGrade);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1194,7 +1191,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TsR_ShowTestResult (UsrDat,NumQsts,&UsrAnswers,TimeUTC[Dat_START_TIME],
+      TsR_ShowTestResult (UsrDat,&UsrAnswers,TimeUTC[Dat_START_TIME],
 			  Game.Visibility);
 
       /***** End table *****/
@@ -1208,7 +1205,7 @@ void McR_ShowOneMchResult (void)
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         Tst_ComputeAndShowGrade (NumQsts,TotalScore,Game.MaxGrade);
+         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,Game.MaxGrade);
          HTM_DIV_End ();
 	}
 
@@ -1224,7 +1221,6 @@ void McR_ShowOneMchResult (void)
 /*****************************************************************************/
 
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-					unsigned *NumQsts,unsigned *NumQstsNotBlank,
 				        struct Tst_UsrAnswers *UsrAnswers)
   {
    MYSQL_RES *mysql_res;
@@ -1235,21 +1231,21 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
-   *NumQsts = (unsigned)
-	      DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-		                         " of a match result",
-			      "SELECT gam_questions.QstCod,"	// row[0]
-				     "gam_questions.QstInd,"	// row[1]
-				     "mch_indexes.Indexes"	// row[2]
-			      " FROM mch_matches,gam_questions,mch_indexes"
-			      " WHERE mch_matches.MchCod=%ld"
-			      " AND mch_matches.GamCod=gam_questions.GamCod"
-			      " AND mch_matches.MchCod=mch_indexes.MchCod"
-			      " AND gam_questions.QstInd=mch_indexes.QstInd"
-			      " ORDER BY gam_questions.QstInd",
-			      MchCod);
-   for (NumQst = 0, *NumQstsNotBlank = 0;
-	NumQst < *NumQsts;
+   UsrAnswers->NumQsts = (unsigned)
+			 DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+						    " of a match result",
+				         "SELECT gam_questions.QstCod,"	// row[0]
+					        "gam_questions.QstInd,"	// row[1]
+					        "mch_indexes.Indexes"	// row[2]
+				         " FROM mch_matches,gam_questions,mch_indexes"
+				         " WHERE mch_matches.MchCod=%ld"
+				         " AND mch_matches.GamCod=gam_questions.GamCod"
+				         " AND mch_matches.MchCod=mch_indexes.MchCod"
+				         " AND gam_questions.QstInd=mch_indexes.QstInd"
+				         " ORDER BY gam_questions.QstInd",
+				         MchCod);
+   for (NumQst = 0, UsrAnswers->NumQstsNotBlank = 0;
+	NumQst < UsrAnswers->NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
@@ -1273,7 +1269,7 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 	{
          snprintf (UsrAnswers->StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
-         (*NumQstsNotBlank)++;
+         UsrAnswers->NumQstsNotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
 	 UsrAnswers->StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
@@ -1294,8 +1290,7 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
-                                            unsigned *NumQsts,
-					    unsigned *NumQstsNotBlank,
+                                            struct Tst_UsrAnswers *UsrAnswers,
 					    double *Score)
   {
    MYSQL_RES *mysql_res;
@@ -1328,12 +1323,12 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
          TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",NumQsts) != 1)
-	 *NumQsts = 0;
+      if (sscanf (row[2],"%u",&UsrAnswers->NumQsts) != 1)
+	 UsrAnswers->NumQsts = 0;
 
       /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",NumQstsNotBlank) != 1)
-	 *NumQstsNotBlank = 0;
+      if (sscanf (row[3],"%u",&UsrAnswers->NumQstsNotBlank) != 1)
+	 UsrAnswers->NumQstsNotBlank = 0;
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
