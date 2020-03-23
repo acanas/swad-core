@@ -93,7 +93,7 @@ struct Tst_Test
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    Tst_QuestionsOrder_t SelectedOrder;
-   // struct Tst_UsrAnswers UsrAnswers;
+   // struct Tst_Result Result;
   };
 
 struct Tst_Question
@@ -158,7 +158,7 @@ void Tst_ShowGrade (double Grade,double MaxGrade);
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
 void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
-				   const struct Tst_UsrAnswers *UsrAnswers,
+				   const struct TsR_Result *Result,
 				   unsigned NumQst,
 				   MYSQL_ROW row,
 				   unsigned Visibility,

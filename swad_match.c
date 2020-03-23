@@ -222,7 +222,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match);
 
-static double Mch_ComputeScore (const struct Tst_UsrAnswers *UsrAnswers);
+static void Mch_ComputeScore (struct TsR_Result *Result);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -3672,8 +3672,7 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   struct Tst_UsrAnswers UsrAnswers;
-   double TotalScore;
+   struct TsR_Result Result;
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -3729,8 +3728,8 @@ void Mch_ReceiveQuestionAnswer (void)
 
       /***** Update student's match result *****/
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					 &UsrAnswers);
-      TotalScore = Mch_ComputeScore (&UsrAnswers);
+					 &Result);
+      Mch_ComputeScore (&Result);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
@@ -3745,9 +3744,9 @@ void Mch_ReceiveQuestionAnswer (void)
 			       "NumQstsNotBlank=%u,"
 			       "Score='%.15lg'"
 			  " WHERE MchCod=%ld AND UsrCod=%ld",
-			  UsrAnswers.NumQsts,
-			  UsrAnswers.NumQstsNotBlank,
-			  TotalScore,
+			  Result.NumQsts,
+			  Result.NumQstsNotBlank,
+			  Result.Score,
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       else								// Result doesn't exist
 	 /* Create result */
@@ -3763,9 +3762,9 @@ void Mch_ReceiveQuestionAnswer (void)
 			  "%u,"		// NumQstsNotBlank
 			  "'%.15lg')",	// Score
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			  UsrAnswers.NumQsts,
-			  UsrAnswers.NumQstsNotBlank,
-			  TotalScore);
+			  Result.NumQsts,
+			  Result.NumQstsNotBlank,
+			  Result.Score);
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
 
@@ -3791,7 +3790,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static double Mch_ComputeScore (const struct Tst_UsrAnswers *UsrAnswers)
+static void Mch_ComputeScore (struct TsR_Result *Result)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3799,37 +3798,35 @@ static double Mch_ComputeScore (const struct Tst_UsrAnswers *UsrAnswers)
    bool AnswerIsNotBlank;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
-   double TotalScore = 0.0;
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
    Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
+   Result->Score = 0.0;
 
    for (NumQst = 0;
-	NumQst < UsrAnswers->NumQsts;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       /***** Get indexes for this question from string *****/
-      Tst_GetIndexesFromStr (UsrAnswers->StrIndexesOneQst[NumQst],Indexes);
+      Tst_GetIndexesFromStr (Result->StrIndexes[NumQst],Indexes);
 
       /***** Get the user's answers for this question from string *****/
-      Tst_GetAnswersFromStr (UsrAnswers->StrAnswersOneQst[NumQst],AnswersUsr);
+      Tst_GetAnswersFromStr (Result->StrAnswers[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (UsrAnswers->QstCodes[NumQst],&Question);
+      Tst_GetCorrectAnswersFromDB (Result->QstCodes[NumQst],&Question);
 
       /***** Compute the total score of this question *****/
       Tst_ComputeScoreQst (&Question,
                            Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
-      /***** Compute total score *****/
-      TotalScore += ScoreThisQst;
+      /***** Update total score *****/
+      Result->Score += ScoreThisQst;
      }
 
    /***** Destroy test question *****/
    Tst_QstDestructor (&Question);
-
-   return TotalScore;
   }
 
 /*****************************************************************************/

@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.152.1 (2020-03-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.152.3 (2020-03-23)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.91.1.js"
 /*
@@ -524,6 +524,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
 
+	Version 19.152.3: Mar 23, 2020	Code refactoring in tests. (283512 lines)
+	Version 19.152.2: Mar 23, 2020	Code refactoring in tests. (283513 lines)
 	Version 19.152.1: Mar 23, 2020	Code refactoring in tests. (283499 lines)
 	Version 19.152:   Mar 23, 2020	Code refactoring in tests. (283525 lines)
 	Version 19.151.4: Mar 22, 2020	Code refactoring in tests. (283471 lines)

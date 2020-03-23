@@ -50,6 +50,6 @@ void McR_ShowAllMchResultsInMch (void);
 
 void McR_ShowOneMchResult (void);
 void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				        struct Tst_UsrAnswers *UsrAnswers);
+				        struct TsR_Result *Result);
 
 #endif

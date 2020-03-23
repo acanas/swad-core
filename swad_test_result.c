@@ -89,9 +89,8 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod);
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
-                                           struct Tst_UsrAnswers *UsrAnswers,
-                                           double *Score);
-static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnswers *UsrAnswers);
+                                           struct TsR_Result *Result);
+static void TsR_GetTestResultQuestionsFromDB (long TstCod,struct TsR_Result *Result);
 
 /*****************************************************************************/
 /************ Select users and dates to show their test results **************/
@@ -193,15 +192,17 @@ long TsR_CreateTestResultInDB (bool AllowTeachers,unsigned NumQsts)
 /*****************************************************************************/
 
 void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     const struct Tst_UsrAnswers *UsrAnswers,double Score)
+                                     const struct TsR_Result *Result)
   {
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryUPDATE ("can not update result of test result",
 		   "UPDATE tst_exams"
-	           " SET NumQstsNotBlank=%u,Score='%.15lg'"
+	           " SET NumQstsNotBlank=%u,"
+	                "Score='%.15lg'"
 	           " WHERE TstCod=%ld",
-		   UsrAnswers->NumQstsNotBlank,Score,
+		   Result->NumQstsNotBlank,
+		   Result->Score,
 		   TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -445,7 +446,9 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
          /* Write grade */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-            Tst_ComputeAndShowGrade (NumQstsInThisTest,ScoreInThisTest,TsR_SCORE_MAX);
+            Tst_ComputeAndShowGrade (NumQstsInThisTest,
+                                     ScoreInThisTest,
+                                     TsR_SCORE_MAX);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
@@ -573,7 +576,9 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
    /***** Write score over Tst_SCORE_MAX *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      Tst_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,TsR_SCORE_MAX);
+      Tst_ComputeAndShowGrade (NumTotalQsts,
+                               TotalScoreOfAllTests,
+                               TsR_SCORE_MAX);
    HTM_TD_End ();
 
    /***** Last cell *****/
@@ -603,8 +608,7 @@ void TsR_ShowOneTstResult (void)
    long TstCod;
    bool AllowTeachers = false;	// Initialized to avoid warning
    time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
-   struct Tst_UsrAnswers UsrAnswers;
-   double TotalScore;
+   struct TsR_Result Result;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ItsMe;
@@ -619,8 +623,7 @@ void TsR_ShowOneTstResult (void)
    TsR_GetTestResultDataByTstCod (TstCod,
                                   &AllowTeachers,
                                   &TstTimeUTC,
-                                  &UsrAnswers,
-				  &TotalScore);
+                                  &Result);
    TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
 
    /***** Check if I can view this test result *****/
@@ -671,7 +674,7 @@ void TsR_ShowOneTstResult (void)
    if (ICanViewTest)	// I am allowed to view this test result
      {
       /***** Get questions and user's answers of the test result from database *****/
-      UsrAnswers.NumQsts = TsR_GetTestResultQuestionsFromDB (TstCod,&UsrAnswers);
+      TsR_GetTestResultQuestionsFromDB (TstCod,&Result);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,NULL,
@@ -738,8 +741,8 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-	        UsrAnswers.NumQsts,
-	        UsrAnswers.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+	        Result.NumQsts,
+	        Result.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -753,7 +756,7 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-	 HTM_Double2Decimals (TotalScore);
+	 HTM_Double2Decimals (Result.Score);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -767,7 +770,9 @@ void TsR_ShowOneTstResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (Result.NumQsts,
+                                  Result.Score,
+                                  TsR_SCORE_MAX);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -789,7 +794,7 @@ void TsR_ShowOneTstResult (void)
 
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
-			  &UsrAnswers,
+			  &Result,
 			  TstTimeUTC,
 			  TstCfg_GetConfigVisibility ());
 
@@ -801,10 +806,12 @@ void TsR_ShowOneTstResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (TotalScore);
+	 HTM_Double2Decimals (Result.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         Tst_ComputeAndShowGrade (UsrAnswers.NumQsts,TotalScore,TsR_SCORE_MAX);
+         Tst_ComputeAndShowGrade (Result.NumQsts,
+                                  Result.Score,
+                                  TsR_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -849,7 +856,7 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 /*****************************************************************************/
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 const struct Tst_UsrAnswers *UsrAnswers,
+			 const struct TsR_Result *Result,
 			 time_t TstTimeUTC,
 			 unsigned Visibility)
   {
@@ -864,13 +871,13 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
    time_t EditTimeUTC;
 
    for (NumQst = 0;
-	NumQst < UsrAnswers->NumQsts;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
       /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (UsrAnswers->QstCodes[NumQst],&mysql_res))	// Question exists
+      if (Tst_GetOneQuestionByCod (Result->QstCodes[NumQst],&mysql_res))	// Question exists
 	{
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -900,7 +907,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	 else
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTestResult (UsrDat,
-					  UsrAnswers,
+					  Result,
 					  NumQst,
 					  row,
 					  Visibility,
@@ -935,8 +942,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 static void TsR_GetTestResultDataByTstCod (long TstCod,
                                            bool *AllowTeachers,
                                            time_t *TstTimeUTC,
-                                           struct Tst_UsrAnswers *UsrAnswers,
-                                           double *Score)
+                                           struct TsR_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -967,18 +973,24 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&UsrAnswers->NumQsts) != 1)
-	 UsrAnswers->NumQsts = 0;
+      if (sscanf (row[3],"%u",&Result->NumQsts) != 1)
+	 Result->NumQsts = 0;
 
       /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",&UsrAnswers->NumQstsNotBlank) != 1)
-	 UsrAnswers->NumQstsNotBlank = 0;
+      if (sscanf (row[4],"%u",&Result->NumQstsNotBlank) != 1)
+	 Result->NumQstsNotBlank = 0;
 
       /* Get score (row[5]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[5],"%lf",Score) != 1)
-	 *Score = 0.0;
+      if (sscanf (row[5],"%lf",&Result->Score) != 1)
+	 Result->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
+     }
+   else
+     {
+      Result->NumQsts = 0;
+      Result->NumQstsNotBlank = 0;
+      Result->Score = 0.0;
      }
 
    /***** Free structure that stores the query result *****/
@@ -990,16 +1002,16 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
 /*****************************************************************************/
 
 void TsR_StoreOneTestResultQstInDB (long TstCod,
-                                    const struct Tst_UsrAnswers *UsrAnswers,
-                                    unsigned NumQst,double Score)
+                                    const struct TsR_Result *Result,
+                                    unsigned NumQst,double ScoreThisQst)
   {
    char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
    char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Replace each separator of multiple parameters by a comma *****/
    /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (UsrAnswers->StrIndexesOneQst[NumQst],Indexes);
-   Par_ReplaceSeparatorMultipleByComma (UsrAnswers->StrAnswersOneQst[NumQst],Answers);
+   Par_ReplaceSeparatorMultipleByComma (Result->StrIndexes[NumQst],Indexes);
+   Par_ReplaceSeparatorMultipleByComma (Result->StrAnswers[NumQst],Answers);
 
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -1008,9 +1020,9 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,
 		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		   TstCod,UsrAnswers->QstCodes[NumQst],
+		   TstCod,Result->QstCodes[NumQst],
 		   NumQst,	// 0, 1, 2, 3...
-		   Score,
+		   ScoreThisQst,
 		   Indexes,
 		   Answers);
    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -1020,15 +1032,14 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,
 /************ Get the questions of a test result from database ***************/
 /*****************************************************************************/
 
-static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnswers *UsrAnswers)
+static void TsR_GetTestResultQuestionsFromDB (long TstCod,struct TsR_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumQsts;
    unsigned NumQst;
 
    /***** Get questions of a test result from database *****/
-   NumQsts =
+   Result->NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test result",
 			      "SELECT QstCod,"	// row[0]
@@ -1040,33 +1051,31 @@ static unsigned TsR_GetTestResultQuestionsFromDB (long TstCod,struct Tst_UsrAnsw
 
    /***** Get questions codes *****/
    for (NumQst = 0;
-	NumQst < NumQsts;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code */
-      if ((UsrAnswers->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get indexes for this question (row[1]) */
-      Str_Copy (UsrAnswers->StrIndexesOneQst[NumQst],row[1],
+      Str_Copy (Result->StrIndexes[NumQst],row[1],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question (row[2]) */
-      Str_Copy (UsrAnswers->StrAnswersOneQst[NumQst],row[2],
+      Str_Copy (Result->StrAnswers[NumQst],row[2],
                 Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrIndexesOneQst[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (UsrAnswers->StrAnswersOneQst[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (Result->StrIndexes[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (Result->StrAnswers[NumQst]);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   return NumQsts;
   }
 
 /*****************************************************************************/
