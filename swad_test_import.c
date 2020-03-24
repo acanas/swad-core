@@ -179,14 +179,14 @@ void TsI_ShowFormImportQstsFromXML (void)
 /*** Create the XML file with test questions and put a link to download it ***/
 /*****************************************************************************/
 
-void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
+void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
   {
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
    char PathPubFile[PATH_MAX + 1];
    FILE *FileXML;
-   unsigned long NumRow;
+   unsigned NumQst;
    MYSQL_ROW row;
    long QstCod;
 
@@ -208,9 +208,9 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    fprintf (FileXML,"%s",Txt_NEW_LINE);
 
    /***** Write rows *****/
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
      {
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);

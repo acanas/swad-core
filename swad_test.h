@@ -93,7 +93,7 @@ struct Tst_Test
    struct Tst_Tags Tags;
    struct Tst_AnswerTypes AnswerTypes;
    Tst_QuestionsOrder_t SelectedOrder;
-   // struct Tst_Result Result;
+   unsigned NumQsts;
   };
 
 struct Tst_Question

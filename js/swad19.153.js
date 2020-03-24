@@ -1320,14 +1320,14 @@ function uncheckChildren (MainCheckbox, GroupCheckboxes) {
 
 // Change text of a test tag
 function changeTxtTag (NumTag) {
-	var Sel = document.getElementById('SelDesc' + NumTag);
+	var Sel = document.getElementById('SelTag' + NumTag);
 
 	document.getElementById('TagTxt' + NumTag).value = Sel.options[Sel.selectedIndex].value;
 }
 
 // Change selectors of test tags
 function changeSelTag (NumTag) {
-	var Sel = document.getElementById('SelDesc'+NumTag);
+	var Sel = document.getElementById('SelTag'+NumTag);
 	var Txt = document.getElementById('TagTxt' +NumTag);
 
 	for (var i=0; i<Sel.options.length - 1; i++)
