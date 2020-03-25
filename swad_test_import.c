@@ -71,7 +71,7 @@ static void TsI_PutCreateXMLParam (void);
 static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
 
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
-static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
+static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
                                        FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
@@ -81,7 +81,6 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
-                                     const struct Tst_Tags *Tags,
                                      const struct Tst_Question *Question,
                                      bool QuestionExists);
 
@@ -94,9 +93,7 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
-   Tst_SetParamGblTags (&Test->Tags);
-   Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
-   Tst_SetParamGblSelectedOrder (Test->SelectedOrder);
+   Tst_SetParamGblTest (Test);
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
 				  "file-import.svg",
 				  Txt_Export_questions);
@@ -108,11 +105,13 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
 
 static void TsI_PutParamsExportQsts (void)
   {
+   struct Tst_Test Test;
+
+   Tst_GetParamGblTest (&Test);
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
-   Par_PutHiddenParamUnsigned (NULL,"Order",
-                               (unsigned) Tst_GetParamGblSelectedOrder ());
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test.SelectedOrder);
    TsI_PutCreateXMLParam ();
   }
 
@@ -250,7 +249,10 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
    extern const char *Txt_NEW_LINE;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Tst_AnswerType_t AnswerType;
+   struct Tst_Question Question;
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
 
    if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
      {
@@ -269,9 +271,9 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       */
 
       /***** Write the answer type (row[1]) *****/
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       fprintf (FileXML,"<question type=\"%s\">%s",
-               Tst_StrAnswerTypesXML[AnswerType],Txt_NEW_LINE);
+               Tst_StrAnswerTypesXML[Question.Answer.Type],Txt_NEW_LINE);
 
       /***** Write the question tags *****/
       fprintf (FileXML,"<tags>%s",Txt_NEW_LINE);
@@ -291,19 +293,22 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       /***** Write the answers of this question.
              Shuffle can be enabled or disabled (row[2]) *****/
       fprintf (FileXML,"<answer");
-      if (AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-          AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+      if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
+          Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
                   (row[2][0] == 'Y') ? "yes" :
                 	               "no");
       fprintf (FileXML,">");
-      TsI_WriteAnswersOfAQstXML (QstCod,AnswerType,FileXML);
+      TsI_WriteAnswersOfAQstXML (&Question,FileXML);
       fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
 
       /***** End question *****/
       fprintf (FileXML,"</question>%s%s",
                Txt_NEW_LINE,Txt_NEW_LINE);
      }
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -337,21 +342,19 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
+static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
                                        FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
-   struct Tst_Question Question;
    unsigned NumOpt;
    unsigned i;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    double FloatNum[2];
 
-   Question.Answer.Type = AnswerType;
-
    /***** Get answers *****/
-   Question.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
+   Tst_GetAnswersQst (Question,&mysql_res,
+                      false);	// Don't shuffle
    /*
    row[0] AnsInd
    row[1] Answer
@@ -361,16 +364,16 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
    */
 
    /***** Write answers *****/
-   switch (Question.Answer.Type)
+   switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne (&Question);
+         Tst_CheckIfNumberOfAnswersIsOne (Question);
          row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"%ld",
                   Tst_GetIntAnsFromStr (row[1]));
          break;
       case Tst_ANS_FLOAT:
-	 if (Question.Answer.NumOptions != 2)
+	 if (Question->Answer.NumOptions != 2)
             Lay_ShowErrorAndExit ("Wrong float range.");
 
          for (i = 0;
@@ -388,7 +391,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
                   FloatNum[1],Txt_NEW_LINE);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne (&Question);
+         Tst_CheckIfNumberOfAnswersIsOne (Question);
          row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"%s",
                   row[1][0] == 'T' ? "true" :
@@ -399,7 +402,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
       case Tst_ANS_TEXT:
          fprintf (FileXML,"%s",Txt_NEW_LINE);
          for (NumOpt = 0;
-              NumOpt < Question.Answer.NumOptions;
+              NumOpt < Question->Answer.NumOptions;
               NumOpt++)
            {
             row = mysql_fetch_row (mysql_res);
@@ -408,7 +411,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod,Tst_AnswerType_t AnswerType,
             fprintf (FileXML,"<option");
 
             /* Write whether the answer is correct or not (row[4]) */
-            if (Question.Answer.Type != Tst_ANS_TEXT)
+            if (Question->Answer.Type != Tst_ANS_TEXT)
                fprintf (FileXML," correct=\"%s\"",
                         (row[4][0] == 'Y') ? "yes" :
                                              "no");
@@ -541,10 +544,9 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLElement *FeedbackElem;
    struct XMLElement *AnswerElem;
    struct XMLAttribute *Attribute;
-   struct Tst_Tags Tags;
-   bool AnswerTypeFound;
-   bool QuestionExists;
    struct Tst_Question Question;
+   bool QuestionExists;
+   bool AnswerTypeFound;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
@@ -605,22 +607,22 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	    if (AnswerTypeFound)
 	      {
 	       /* Get tags */
-	       for (TagsElem = QuestionElem->FirstChild, Tags.Num = 0;
+	       for (TagsElem = QuestionElem->FirstChild, Question.Tags.Num = 0;
 		    TagsElem != NULL;
 		    TagsElem = TagsElem->NextBrother)
 		  if (!strcmp (TagsElem->TagName,"tags"))
 		    {
 		     for (TagElem = TagsElem->FirstChild;
-			  TagElem != NULL && Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
+			  TagElem != NULL && Question.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
 			  TagElem = TagElem->NextBrother)
 			if (!strcmp (TagElem->TagName,"tag"))
 			  {
 			   if (TagElem->Content)
 			     {
-			      Str_Copy (Tags.Txt[Tags.Num],
+			      Str_Copy (Question.Tags.Txt[Question.Tags.Num],
 					TagElem->Content,
 					Tst_MAX_BYTES_TAG);
-			      Tags.Num++;
+			      Question.Tags.Num++;
 			     }
 			  }
 		     break;	// Only first element "tags"
@@ -691,19 +693,23 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	       TsI_GetAnswerFromXML (AnswerElem,&Question);
 
 	       /* Make sure that tags, text and answer are not empty */
-	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Tags))
+	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
 		 {
 		  /* Check if question already exists in database */
 		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question);
 
 		  /* Write row with this imported question */
 		  TsI_WriteRowImportedQst (StemElem,FeedbackElem,
-		                           &Tags,&Question,QuestionExists);
+		                           &Question,QuestionExists);
 
 		  /***** If a new question ==> insert question, tags and answer in the database *****/
 		  if (!QuestionExists)
-		     if (Tst_InsertOrUpdateQstTagsAnsIntoDB (-1L,&Question,&Tags) <= 0)
+		    {
+		     Question.QstCod = -1L;
+		     Tst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
+		     if (Question.QstCod <= 0)
 			Lay_ShowErrorAndExit ("Can not create question.");
+		    }
 		 }
 	      }
 	    else	// Answer type not found
@@ -923,7 +929,6 @@ static void TsI_WriteHeadingListImportedQst (void)
 
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
-                                     const struct Tst_Tags *Tags,
                                      const struct Tst_Question *Question,
                                      bool QuestionExists)
   {
@@ -971,12 +976,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Tags->Num)
+   if (Question->Tags.Num)
      {
       /***** Write the tags *****/
       HTM_TABLE_Begin (NULL);
       for (NumTag = 0;
-	   NumTag < Tags->Num;
+	   NumTag < Question->Tags.Num;
 	   NumTag++)
 	{
          HTM_TR_Begin (NULL);
@@ -986,7 +991,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	 HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-         HTM_Txt (Tags->Txt[NumTag]);
+         HTM_Txt (Question->Tags.Txt[NumTag]);
          HTM_TD_End ();
 
 	 HTM_TR_End ();

@@ -119,14 +119,14 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static long Tst_ParamGblQstCod = -1L;	// Used to pass parameter to function
-struct Tst_Test Tst_Test;		// Used to pass parameters to functions
+struct Tst_Test Tst_ParamGblTest;	// Used to pass parameters to functions
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Tst_ResetTest (struct Tst_Test *Test);
 static void Tst_ResetTags (struct Tst_Tags *Tags);
-static void Tst_ResetAnswerTypes (struct Tst_AnswerTypes *AnswerTypes);
 
 static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
@@ -151,7 +151,7 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
-static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Tags *Tags);
+static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
 static void Tst_PutIconsTests (void);
 static void Tst_PutButtonToAddQuestion (void);
@@ -174,28 +174,27 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res);
 static void Tst_GetQuestionsForTest (struct Tst_Test *Test,MYSQL_RES **mysql_res);
-static void Tst_ListOneQstToEdit (struct Tst_Test *Test,long QstCod);
+static void Tst_ListOneQstToEdit (struct Tst_Test *Test,
+                                  struct Tst_Question *Question);
 static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
 static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
                                             unsigned NumQst,
-                                            long QstCod);
+                                            struct Tst_Question *Question);
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
                                                     MYSQL_RES *mysql_res);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod);
 
-static void Tst_ResetGblTags (void);
-static void Tst_GetParamGblTags (struct Tst_Tags *TagsDst);
-static void Tst_ResetGblAnswerTypes (void);
-static void Tst_GetParamGblAnswerTypes (struct Tst_AnswerTypes *AnswerTypesDst);
+static void Tst_ResetParamGblTest (void);
 
-static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
-                                          Tst_AnswerType_t AnswerType,bool Shuffle);
+static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
+                                          struct Tst_Question *Question,
+                                          bool Shuffle);
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
                                         const struct TsR_Result *Result,
-                                        unsigned NumQst,long QstCod,
-                                        Tst_AnswerType_t AnswerType,
+                                        unsigned NumQst,
+					struct Tst_Question *Question,
 					unsigned Visibility,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
 
@@ -209,8 +208,8 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
                                       double *ScoreThisQst,
                                       bool *AnswerIsNotBlank);
 
-static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
-                                        Tst_AnswerType_t AnswerType,
+static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,
+                                        struct Tst_Question *Question,
                                         bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
                                           const struct TsR_Result *Result,
@@ -220,7 +219,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 				          unsigned Visibility,
                                           double *ScoreThisQst,
                                           bool *AnswerIsNotBlank);
-static void Tst_GetChoiceAns (MYSQL_RES *mysql_res,struct Tst_Question *Question);
+static void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
@@ -265,9 +264,7 @@ static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTy
 
 static void Tst_FreeTagsList (struct Tst_Tags *Tags);
 
-static void Tst_PutFormEditOneQst (long QstCod,
-                                   const struct Tst_Question *Question,
-                                   const struct Tst_Tags *Tags,
+static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
@@ -282,9 +279,7 @@ static void Tst_FreeTextChoiceAnswer (struct Tst_Question *Question,unsigned Num
 static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question);
 static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question);
 
-static void Tst_GetQstDataFromDB (long QstCod,
-                                  struct Tst_Question *Question,
-                                  struct Tst_Tags *Tags,
+static void Tst_GetQstDataFromDB (struct Tst_Question *Question,
                                   char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
@@ -292,11 +287,9 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                                 struct Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
-static long Tst_GetQstFromForm (struct Tst_Question *Question,
-                                struct Tst_Tags *Tags,
+static void Tst_GetQstFromForm (struct Tst_Question *Question,
                                 char *Stem,char *Feedback);
-static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
-                                                  struct Tst_Question *Question);
+static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question);
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
@@ -310,10 +303,9 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static long Tst_GetQstCod (void);
 
-static long Tst_InsertOrUpdateQstIntoDB (long QstCod,
-                                         const struct Tst_Question *Question);
-static void Tst_InsertTagsIntoDB (long QstCod,const struct Tst_Tags *Tags);
-static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question);
+static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question);
+static void Tst_InsertTagsIntoDB (const struct Tst_Question *Question);
+static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question);
 
 static void Tst_RemAnsFromQst (long QstCod);
 static void Tst_RemTagsFromQst (long QstCod);
@@ -335,14 +327,28 @@ void Tst_RequestTest (void)
   {
    struct Tst_Test Test;
 
-   /***** Reset tags *****/
-   Tst_ResetTags (&Test.Tags);
-
-   /***** Reset answer types *****/
-   Tst_ResetAnswerTypes (&Test.AnswerTypes);
+   /***** Reset test *****/
+   Tst_ResetTest (&Test);
 
    /***** Show form to generate a self-assessment test *****/
    Tst_ShowFormRequestTest (&Test);
+  }
+
+/*****************************************************************************/
+/***************************** Reset answer types ****************************/
+/*****************************************************************************/
+
+static void Tst_ResetTest (struct Tst_Test *Test)
+  {
+   /***** Reset tags *****/
+   Tst_ResetTags (&Test->Tags);
+
+   /***** Reset answer types *****/
+   Test->AnswerTypes.All = false;
+   Test->AnswerTypes.List[0] = '\0';
+
+   /***** Reset selected order *****/
+   Test->SelectedOrder = Tst_DEFAULT_ORDER;
   }
 
 /*****************************************************************************/
@@ -354,16 +360,6 @@ static void Tst_ResetTags (struct Tst_Tags *Tags)
    Tags->Num  = 0;
    Tags->All  = false;
    Tags->List = NULL;
-  }
-
-/*****************************************************************************/
-/***************************** Reset answer types ****************************/
-/*****************************************************************************/
-
-static void Tst_ResetAnswerTypes (struct Tst_AnswerTypes *AnswerTypes)
-  {
-   AnswerTypes->All = false;
-   AnswerTypes->List[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -383,8 +379,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
    TstCfg_GetConfigFromDB ();
 
    /***** Begin box *****/
-   Tst_SetParamGblTags (&Test->Tags);
-   Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+   Tst_SetParamGblTest (Test);
    Box_BoxBegin (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -1046,6 +1041,7 @@ static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
+   Question.QstCod = QstCod;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1071,7 +1067,7 @@ static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
 		  "TEST_MED_SHOW");
 
    /* Answers depending on shuffle (row[2]) */
-   Tst_WriteAnswersTestToAnswer (NumQst,QstCod,Question.Answer.Type,(row[2][0] == 'Y'));
+   Tst_WriteAnswersTestToAnswer (NumQst,&Question,(row[2][0] == 'Y'));
 
    HTM_TD_End ();
 
@@ -1109,6 +1105,7 @@ void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
+   Question.QstCod = Result->QstCodes[NumQst];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1138,7 +1135,7 @@ void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
 
    /* Answers */
    Tst_WriteAnswersTestResult (UsrDat,Result,
-			       NumQst,Result->QstCodes[NumQst],Question.Answer.Type,
+			       NumQst,&Question,
 			       Visibility,
 			       ScoreThisQst,AnswerIsNotBlank);
 
@@ -1374,11 +1371,8 @@ void Tst_RequestEditTests (void)
   {
    struct Tst_Test Test;
 
-   /***** Reset tags *****/
-   Tst_ResetTags (&Test.Tags);
-
-   /***** Reset answer types *****/
-   Tst_ResetAnswerTypes (&Test.AnswerTypes);
+   /***** Reset test *****/
+   Tst_ResetTest (&Test);
 
    /***** Show form to generate a self-assessment test *****/
    Tst_ShowFormRequestEditTests (&Test);
@@ -1407,8 +1401,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
-   Tst_SetParamGblTags (&Test->Tags);
-   Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+   Tst_SetParamGblTest (Test);
    Box_BoxBegin (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
@@ -1457,20 +1450,20 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 
 void Tst_RequestSelectTestsForGame (void)
   {
-   struct Tst_Tags Tags;
+   struct Tst_Test Test;
 
-   /***** Reset tags *****/
-   Tst_ResetTags (&Tags);
+   /***** Reset test *****/
+   Tst_ResetTest (&Test);
 
    /***** Show form to select test for game *****/
-   Tst_ShowFormRequestSelectTestsForGame (&Tags);
+   Tst_ShowFormRequestSelectTestsForGame (&Test);	// No tags selected
   }
 
 /*****************************************************************************/
 /************** Show form to select test questions for a game ****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Tags *Tags)
+static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_No_test_questions;
@@ -1488,7 +1481,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Tags *Tags)
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Tags->Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
       Gam_PutParams ();
@@ -1496,7 +1489,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Tags *Tags)
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (Tags,mysql_res,false);
+      Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -2116,8 +2109,7 @@ static void Tst_ShowFormConfigTst (void)
    TstCfg_GetConfigFromDB ();
 
    /***** Begin box *****/
-   Tst_ResetGblTags ();
-   Tst_ResetGblAnswerTypes ();
+   Tst_ResetParamGblTest ();
    Box_BoxBegin (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -2382,7 +2374,7 @@ void Tst_ListQuestionsToSelect (void)
      }
    else
       /* Show the form again */
-      Tst_ShowFormRequestSelectTestsForGame (&Test.Tags);
+      Tst_ShowFormRequestSelectTestsForGame (&Test);
 
    /***** Free memory used by the list of tags *****/
    Tst_FreeTagsList (&Test.Tags);
@@ -2662,7 +2654,8 @@ static void Tst_GetQuestionsForTest (struct Tst_Test *Test,MYSQL_RES **mysql_res
 /*********************** List a test question for edition ********************/
 /*****************************************************************************/
 
-static void Tst_ListOneQstToEdit (struct Tst_Test *Test,long QstCod)
+static void Tst_ListOneQstToEdit (struct Tst_Test *Test,
+                                  struct Tst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -2671,8 +2664,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test,long QstCod)
    Test->NumQsts = 1;
 
    /***** Begin box *****/
-   Tst_SetParamGblTags (&Test->Tags);
-   Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+   Tst_SetParamGblTest (Test);
    Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -2681,7 +2673,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test,long QstCod)
    Tst_WriteHeadingRowQuestionsForEdition (Test);
 
    /***** Write question row *****/
-   Tst_WriteQuestionRowForEdition (Test,0,QstCod);
+   Tst_WriteQuestionRowForEdition (Test,0,Question);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -2727,11 +2719,10 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Test *Test,
    extern const char *Txt_Questions;
    unsigned NumQst;
    MYSQL_ROW row;
-   long QstCod;
+   struct Tst_Question Question;
 
    /***** Begin box *****/
-   Tst_SetParamGblTags (&Test->Tags);
-   Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+   Tst_SetParamGblTest (Test);
    Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -2746,13 +2737,19 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Test *Test,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+
       /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /***** Write question row *****/
-      Tst_WriteQuestionRowForEdition (Test,NumQst,QstCod);
+      Tst_WriteQuestionRowForEdition (Test,NumQst,&Question);
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
      }
 
    /***** End table *****/
@@ -2805,8 +2802,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test)
         {
          Frm_StartForm (ActLstTstQst);
          Dat_WriteParamsIniEndDates ();
-         Tst_SetParamGblTags (&Test->Tags);
-         Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+         Tst_SetParamGblTest (Test);
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
@@ -2835,11 +2831,10 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test)
 
 static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
                                             unsigned NumQst,
-                                            long QstCod)
+                                            struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Tst_Question Question;
    static unsigned UniqueId = 0;
    char *Id;
    time_t TimeUTC;
@@ -2847,11 +2842,8 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
    unsigned long NumHitsNotBlankThisQst;
    double TotalScoreThisQst;
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-
-   /***** Get and show questvoidion data *****/
-   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
+   /***** Get and show question data *****/
+   if (Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res))
      {
       /***** Get row from database *****/
       row = mysql_fetch_row (mysql_res);
@@ -2875,18 +2867,17 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 
       /* Write icon to remove the question */
       Frm_StartForm (ActReqRemOneTstQst);
-      Tst_PutParamQstCod (QstCod);
+      Tst_PutParamQstCod (Question->QstCod);
       if (Test->NumQsts == 1)
 	 Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParamsIniEndDates ();
-      Tst_SetParamGblTags (&Test->Tags);
-      Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+      Tst_SetParamGblTest (Test);
       Tst_WriteParamEditQst ();
       Ico_PutIconRemove ();
       Frm_EndForm ();
 
       /* Write icon to edit the question */
-      Tst_SetParamGblQstCod (QstCod);
+      Tst_SetParamGblQstCod (Question->QstCod);
       Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamGblQstCod);
 
       HTM_TD_End ();
@@ -2894,13 +2885,13 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
       /* Number of question and answer type (row[1]) */
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteNumQst (NumQst + 1);
-      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      Tst_WriteAnswerType (Question.Answer.Type);
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Tst_WriteAnswerType (Question->Answer.Type);
       HTM_TD_End ();
 
       /* Question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",QstCod);
+      HTM_TxtF ("%ld&nbsp;",Question->QstCod);
       HTM_TD_End ();
 
       /* Date (row[0] has the UTC date-time) */
@@ -2917,19 +2908,18 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 
       /* Question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (QstCod);
+      Tst_GetAndWriteTagsQst (Question->QstCod);
       HTM_TD_End ();
 
       /* Shuffle (row[2]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-	  Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
+	  Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 	{
 	 Frm_StartForm (ActChgShfTstQst);
-	 Tst_PutParamQstCod (QstCod);
+	 Tst_PutParamQstCod (Question->QstCod);
 	 Dat_WriteParamsIniEndDates ();
-         Tst_SetParamGblTags (&Test->Tags);
-         Tst_SetParamGblAnswerTypes (&Test->AnswerTypes);
+         Tst_SetParamGblTest (Test);
 	 Tst_WriteParamEditQst ();
 	 if (Test->NumQsts == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
@@ -2948,15 +2938,15 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 			true);	// Visible
 
       /***** Get and show media (row[5]) *****/
-      Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Question.Media);
-      Med_ShowMedia (&Question.Media,
+      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Question->Media);
+      Med_ShowMedia (&Question->Media,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
 
       /* Feedback (row[4]) and answers */
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersEdit (QstCod,Question.Answer.Type);
+      Tst_WriteAnswersEdit (Question);
       HTM_TD_End ();
 
       /* Get number of hits
@@ -3011,9 +3001,6 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -3106,9 +3093,10 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
+   Question.QstCod = QstCod;
 
    /***** Get and show questvoidion data *****/
-   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
+   if (Tst_GetOneQuestionByCod (Question.QstCod,&mysql_res))
      {
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
@@ -3133,7 +3121,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
       /* Write checkbox to select the question */
       HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%ld\"",
-			  QstCod);
+			  Question.QstCod);
 
       /* Write number of question */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3142,7 +3130,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 
       /* Write question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",QstCod);
+      HTM_TxtF ("%ld&nbsp;",Question.QstCod);
       HTM_TD_End ();
 
       /* Write the date (row[0] has the UTC date-time) */
@@ -3159,7 +3147,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (QstCod);
+      Tst_GetAndWriteTagsQst (Question.QstCod);
       HTM_TD_End ();
 
       /* Write the question type (row[1]) */
@@ -3192,7 +3180,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Write answers */
-      Tst_WriteAnswersEdit (QstCod,Question.Answer.Type);
+      Tst_WriteAnswersEdit (&Question);
       HTM_TD_End ();
 
       /***** End table row *****/
@@ -3211,18 +3199,14 @@ void Tst_WriteParamEditQst (void)
   {
    struct Tst_Test Test;
 
-   Tst_GetParamGblTags (&Test.Tags);
-   Par_PutHiddenParamChar   ("AllTags",
-                             Test.Tags.All ? 'Y' :
-                        	             'N');
-   Par_PutHiddenParamString (NULL,"ChkTag",
-                             Test.Tags.List ? Test.Tags.List :
-                        	              "");
+   Tst_GetParamGblTest (&Test);
 
-   Tst_GetParamGblAnswerTypes (&Test.AnswerTypes);
-   Par_PutHiddenParamChar   ("AllAnsTypes",
-                             Test.AnswerTypes.All ? 'Y' :
-                        	                    'N');
+   Par_PutHiddenParamChar   ("AllTags",Test.Tags.All ? 'Y' :
+                        	                       'N');
+   Par_PutHiddenParamString (NULL,"ChkTag",Test.Tags.List ? Test.Tags.List :
+                        	                            "");
+   Par_PutHiddenParamChar   ("AllAnsTypes",Test.AnswerTypes.All ? 'Y' :
+                        	                                  'N');
    Par_PutHiddenParamString (NULL,"AnswerType",Test.AnswerTypes.List);
   }
 
@@ -3230,62 +3214,43 @@ void Tst_WriteParamEditQst (void)
 /************************* Function parameter with tags **********************/
 /*****************************************************************************/
 
-static void Tst_ResetGblTags (void)
+static void Tst_ResetParamGblTest (void)
   {
-   Tst_ResetTags (&Tst_Test.Tags);
+   Tst_ResetTest (&Tst_ParamGblTest);
   }
 
-void Tst_SetParamGblTags (const struct Tst_Tags *TagsSrc)
+void Tst_SetParamGblTest (const struct Tst_Test *TestSrc)
   {
-   Tst_Test.Tags.Num  = TagsSrc->Num;
-   Tst_Test.Tags.All  = TagsSrc->All;
-   Tst_Test.Tags.List = TagsSrc->List;
+   /***** Copy tags *****/
+   Tst_ParamGblTest.Tags.Num  = TestSrc->Tags.Num;
+   Tst_ParamGblTest.Tags.All  = TestSrc->Tags.All;
+   Tst_ParamGblTest.Tags.List = TestSrc->Tags.List;
    /* It's not necessary to copy the Txt field */
+
+   /***** Copy answer types *****/
+   Tst_ParamGblTest.AnswerTypes.All = TestSrc->AnswerTypes.All;
+   Str_Copy (Tst_ParamGblTest.AnswerTypes.List,TestSrc->AnswerTypes.List,
+             Tst_MAX_BYTES_LIST_ANSWER_TYPES);
+
+   /***** Copy selected order *****/
+   Tst_ParamGblTest.SelectedOrder = TestSrc->SelectedOrder;
   }
 
-static void Tst_GetParamGblTags (struct Tst_Tags *TagsDst)
+void Tst_GetParamGblTest (struct Tst_Test *TestDst)
   {
-   TagsDst->Num  = Tst_Test.Tags.Num;
-   TagsDst->All  = Tst_Test.Tags.All;
-   TagsDst->List = Tst_Test.Tags.List;
+   /***** Copy tags *****/
+   TestDst->Tags.Num  = Tst_ParamGblTest.Tags.Num;
+   TestDst->Tags.All  = Tst_ParamGblTest.Tags.All;
+   TestDst->Tags.List = Tst_ParamGblTest.Tags.List;
    /* It's not necessary to copy the Txt field */
-  }
 
-/*****************************************************************************/
-/********************* Function parameter with answer types ******************/
-/*****************************************************************************/
-
-static void Tst_ResetGblAnswerTypes (void)
-  {
-   Tst_ResetAnswerTypes (&Tst_Test.AnswerTypes);
-  }
-
-void Tst_SetParamGblAnswerTypes (const struct Tst_AnswerTypes *AnswerTypesSrc)
-  {
-   Tst_Test.AnswerTypes.All  = AnswerTypesSrc->All;
-   Str_Copy (Tst_Test.AnswerTypes.List,AnswerTypesSrc->List,
+   /***** Copy answer types *****/
+   TestDst->AnswerTypes.All = Tst_ParamGblTest.AnswerTypes.All;
+   Str_Copy (TestDst->AnswerTypes.List,Tst_ParamGblTest.AnswerTypes.List,
              Tst_MAX_BYTES_LIST_ANSWER_TYPES);
-  }
 
-static void Tst_GetParamGblAnswerTypes (struct Tst_AnswerTypes *AnswerTypesDst)
-  {
-   AnswerTypesDst->All  = Tst_Test.AnswerTypes.All;
-   Str_Copy (AnswerTypesDst->List,Tst_Test.AnswerTypes.List,
-             Tst_MAX_BYTES_LIST_ANSWER_TYPES);
-  }
-
-/*****************************************************************************/
-/********************* Function parameter with answer types ******************/
-/*****************************************************************************/
-
-void Tst_SetParamGblSelectedOrder (Tst_QuestionsOrder_t SelectedOrder)
-  {
-   Tst_Test.SelectedOrder = SelectedOrder;
-  }
-
-Tst_QuestionsOrder_t Tst_GetParamGblSelectedOrder (void)
-  {
-   return Tst_Test.SelectedOrder;
+   /***** Copy selected order *****/
+   TestDst->SelectedOrder = Tst_ParamGblTest.SelectedOrder;
   }
 
 /*****************************************************************************/
@@ -3301,30 +3266,28 @@ unsigned Tst_GetNumAnswersQst (long QstCod)
 			            QstCod);
   }
 
-unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
+void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+                        bool Shuffle)
   {
-   unsigned long NumRows;
-
    /***** Get answers of a question from database *****/
-   NumRows = DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			     "SELECT AnsInd,"		// row[0]
-			            "Answer,"		// row[1]
-			            "Feedback,"		// row[2]
-			            "MedCod,"		// row[3]
-			            "Correct"		// row[4]
-			     " FROM tst_answers"
-			     " WHERE QstCod=%ld"
-			     " ORDER BY %s",
-			     QstCod,
-			     Shuffle ? "RAND(NOW())" :
-				       "AnsInd");
-   if (!NumRows)
+   Question->Answer.NumOptions =(unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"		// row[0]
+			  "Answer,"		// row[1]
+			  "Feedback,"		// row[2]
+			  "MedCod,"		// row[3]
+			  "Correct"		// row[4]
+		   " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   Question->QstCod,
+		   Shuffle ? "RAND(NOW())" :
+		             "AnsInd");
+   if (!Question->Answer.NumOptions)
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
-
-   return (unsigned) NumRows;
   }
 
-void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Question *Question)
+void Tst_GetCorrectAnswersFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3337,7 +3300,7 @@ void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Question *Question)
 			      " FROM tst_answers"
 			      " WHERE QstCod=%ld"
 			      " ORDER BY AnsInd",
-			      QstCod);
+			      Question->QstCod);
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -3357,10 +3320,9 @@ void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Question *Question)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
+void Tst_WriteAnswersEdit (struct Tst_Question *Question)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
-   struct Tst_Question Question;
    unsigned NumOpt;
    unsigned i;
    MYSQL_RES *mysql_res;
@@ -3371,12 +3333,9 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
    size_t LengthFeedback;
    double FloatNum[2];
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.Answer.Type = AnswerType;
-
    /***** Get answers *****/
-   Question.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Tst_GetAnswersQst (Question,&mysql_res,
+                      false);	// Don't shuffle
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3386,17 +3345,17 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
    */
 
    /***** Write answers *****/
-   switch (Question.Answer.Type)
+   switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne (&Question);
+         Tst_CheckIfNumberOfAnswersIsOne (Question);
          row = mysql_fetch_row (mysql_res);
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
          HTM_TxtF ("(%ld)",Tst_GetIntAnsFromStr (row[1]));
          HTM_SPAN_End ();
          break;
       case Tst_ANS_FLOAT:
-	 if (Question.Answer.NumOptions != 2)
+	 if (Question->Answer.NumOptions != 2)
             Lay_ShowErrorAndExit ("Wrong float range.");
 
          for (i = 0;
@@ -3415,7 +3374,7 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
          HTM_SPAN_End ();
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne (&Question);
+         Tst_CheckIfNumberOfAnswersIsOne (Question);
          row = mysql_fetch_row (mysql_res);
          HTM_SPAN_Begin ("class=\"TEST_EDI\"");
          HTM_Txt ("(");
@@ -3428,7 +3387,7 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
       case Tst_ANS_TEXT:
          HTM_TABLE_BeginPadding (2);
          for (NumOpt = 0;
-              NumOpt < Question.Answer.NumOptions;
+              NumOpt < Question->Answer.NumOptions;
               NumOpt++)
            {
             row = mysql_fetch_row (mysql_res);
@@ -3458,8 +3417,8 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
         	 }
 
 	    /* Get media (row[3]) */
-	    Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+	    Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	    Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
             HTM_TR_Begin (NULL);
 
@@ -3480,7 +3439,7 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
             /* Write the text of the answer and the media */
             HTM_DIV_Begin ("class=\"TEST_EDI\"");
             HTM_Txt (AnswerTxt);
-	    Med_ShowMedia (&Question.Answer.Options[NumOpt].Media,
+	    Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
 	                   "TEST_MED_EDIT_LIST_CONT",
 	                   "TEST_MED_EDIT_LIST");
             HTM_DIV_End ();
@@ -3508,23 +3467,21 @@ void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
 /************** Write answers of a question when viewing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
-                                          Tst_AnswerType_t AnswerType,bool Shuffle)
+static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
+                                          struct Tst_Question *Question,
+                                          bool Shuffle)
   {
    /***** Write parameter with question code *****/
-   Tst_WriteParamQstCod (NumQst,QstCod);
+   Tst_WriteParamQstCod (NumQst,Question->QstCod);
 
    /***** Write answer depending on type *****/
-   switch (AnswerType)
+   switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
          Tst_WriteIntAnsViewTest (NumQst);
@@ -3537,7 +3494,7 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsViewTest (NumQst,QstCod,AnswerType,Shuffle);
+         Tst_WriteChoiceAnsViewTest (NumQst,Question,Shuffle);
          break;
       case Tst_ANS_TEXT:
          Tst_WriteTextAnsViewTest (NumQst);
@@ -3553,20 +3510,16 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,
 
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
                                         const struct TsR_Result *Result,
-                                        unsigned NumQst,long QstCod,
-                                        Tst_AnswerType_t AnswerType,
+                                        unsigned NumQst,
+					struct Tst_Question *Question,
 					unsigned Visibility,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
-   struct Tst_Question Question;
-
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.Answer.Type = AnswerType;
 
    /***** Get answer of a question from database *****/
-   Question.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Tst_GetAnswersQst (Question,&mysql_res,
+                      false);	// Don't shuffle
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3576,36 +3529,36 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
    */
 
    /***** Write answer depending on type *****/
-   switch (Question.Answer.Type)
+   switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
          Tst_WriteIntAnsAssessTest    (UsrDat,Result,
-                                       NumQst,&Question,mysql_res,
+                                       NumQst,Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
 	 Tst_WriteFloatAnsAssessTest  (UsrDat,Result,
-	                               NumQst,&Question,mysql_res,
+	                               NumQst,Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
          Tst_WriteTFAnsAssessTest     (UsrDat,Result,
-                                       NumQst,&Question,mysql_res,
+                                       NumQst,Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
          Tst_WriteChoiceAnsAssessTest (UsrDat,Result,
-                                       NumQst,&Question,mysql_res,
+                                       NumQst,Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
          Tst_WriteTextAnsAssessTest   (UsrDat,Result,
-                                       NumQst,&Question,mysql_res,
+                                       NumQst,Question,mysql_res,
 				       Visibility,
 				       ScoreThisQst,AnswerIsNotBlank);
          break;
@@ -3615,9 +3568,6 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -3775,25 +3725,20 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 /******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
-                                        Tst_AnswerType_t AnswerType,
+static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,
+                                        struct Tst_Question *Question,
                                         bool Shuffle)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Tst_Question Question;
    unsigned Index;
    bool ErrorInIndex = false;
    char ParamName[3 + 6 + 1];
    char StrAns[32];
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.Answer.Type = AnswerType;
-
    /***** Get answers of a question from database *****/
-   Question.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);
+   Tst_GetAnswersQst (Question,&mysql_res,Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -3806,14 +3751,14 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
    HTM_TABLE_BeginPadding (2);
 
    for (NumOpt = 0;
-	NumOpt < Question.Answer.NumOptions;
+	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
       /***** Get next answer *****/
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice answer *****/
-      if (!Tst_AllocateTextChoiceAnswer (&Question,NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
          /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
@@ -3831,15 +3776,15 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
          Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
 
       /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Question.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question.Answer.Options[NumOpt].Text,
+                        Question->Answer.Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Get media (row[3]) *****/
-      Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
       HTM_TR_Begin (NULL);
 
@@ -3852,13 +3797,13 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
       snprintf (StrAns,sizeof (StrAns),
 		"Ans%03u",
 		NumQst);
-      if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
 	 HTM_INPUT_RADIO (StrAns,false,
 			  "id=\"Ans%06u_%u\" value=\"%u\""
 			  " onclick=\"selectUnselectRadio(this,this.form.Ans%03u,%u);\"",
 			  NumQst,NumOpt,
 			  Index,
-                          NumQst,Question.Answer.NumOptions);
+                          NumQst,Question->Answer.NumOptions);
       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
 	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Ans%06u_%u\" value=\"%u\"",
@@ -3875,9 +3820,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
-      HTM_Txt (Question.Answer.Options[NumOpt].Text);
+      HTM_Txt (Question->Answer.Options[NumOpt].Text);
       HTM_LABEL_End ();
-      Med_ShowMedia (&Question.Answer.Options[NumOpt].Media,
+      Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
       HTM_TD_End ();
@@ -3890,9 +3835,6 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -3921,7 +3863,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Get text and correctness of answers for this question
           from database (one row per answer) *****/
-   Tst_GetChoiceAns (mysql_res,Question);
+   Tst_GetChoiceAns (Question,mysql_res);
 
    /***** Get indexes for this question from string *****/
    Tst_GetIndexesFromStr (Result->StrIndexes[NumQst],Indexes);
@@ -4053,7 +3995,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 /************************ Get choice answer from row *************************/
 /*****************************************************************************/
 
-static void Tst_GetChoiceAns (MYSQL_RES *mysql_res,struct Tst_Question *Question)
+static void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
   {
    unsigned NumOpt;
    MYSQL_ROW row;
@@ -4263,12 +4205,14 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
+   Question.QstCod = QstCod;
 
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
-   Question.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Tst_GetAnswersQst (&Question,&mysql_res,
+                      false);	// Don't shuffle
    /*
    row[0] AnsInd
    row[1] Answer
@@ -5177,27 +5121,23 @@ static void Tst_FreeTagsList (struct Tst_Tags *Tags)
 
 void Tst_ShowFormEditOneQst (void)
   {
-   long QstCod;
    struct Tst_Question Question;
-   struct Tst_Tags Tags;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
-   Tst_ResetTags (&Tags);
 
    /***** Get question data *****/
-   QstCod = Tst_GetQstCod ();
+   Question.QstCod = Tst_GetQstCod ();
    Stem[0] = Feedback[0] = '\0';
-   if (QstCod > 0)	// If question already exists in the database
-      Tst_GetQstDataFromDB (QstCod,&Question,&Tags,Stem,Feedback);
+   if (Question.QstCod > 0)	// If question already exists in the database
+      Tst_GetQstDataFromDB (&Question,Stem,Feedback);
 
    /***** Put form to edit question *****/
-   Tst_PutFormEditOneQst (QstCod,&Question,&Tags,Stem,Feedback);
+   Tst_PutFormEditOneQst (&Question,Stem,Feedback);
 
    /***** Destroy test question *****/
-   Tst_FreeTagsList (&Tags);
    Tst_QstDestructor (&Question);
   }
 
@@ -5210,9 +5150,7 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (long QstCod,
-                                   const struct Tst_Question *Question,
-                                   const struct Tst_Tags *Tags,
+static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
@@ -5254,10 +5192,10 @@ static void Tst_PutFormEditOneQst (long QstCod,
    char *Title;
 
    /***** Begin box *****/
-   if (QstCod > 0)	// The question already has assigned a code
+   if (Question->QstCod > 0)	// The question already has assigned a code
      {
-      Tst_SetParamGblQstCod (QstCod);
-      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,QstCod),
+      Tst_SetParamGblQstCod (Question->QstCod);
+      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
 		    Tst_PutIconToRemoveOneQst,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
@@ -5268,8 +5206,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
-   if (QstCod > 0)	// The question already has assigned a code
-      Tst_PutParamQstCod (QstCod);
+   Tst_PutParamQstCod (Question->QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -5320,7 +5257,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
 	 row[2] TagHidden
 	 */
          IsThisTag = false;
-         if (!strcasecmp (Tags->Txt[IndTag],row[1]))
+         if (!strcasecmp (Question->Tags.Txt[IndTag],row[1]))
            {
   	    HTM_Txt (" selected=\"selected\"");
   	    IsThisTag = true;
@@ -5331,10 +5268,10 @@ static void Tst_PutFormEditOneQst (long QstCod,
 		     "%s",row[1]);
         }
       /* If it's a new tag received from the form */
-      if (!TagFound && Tags->Txt[IndTag][0])
-         HTM_OPTION (HTM_Type_STRING,Tags->Txt[IndTag],
+      if (!TagFound && Question->Tags.Txt[IndTag][0])
+         HTM_OPTION (HTM_Type_STRING,Question->Tags.Txt[IndTag],
 		     true,false,
-		     "%s",Tags->Txt[IndTag]);
+		     "%s",Question->Tags.Txt[IndTag]);
       HTM_OPTION (HTM_Type_STRING,"",
 		  false,false,
 		  "[%s]",Txt_new_tag);
@@ -5346,7 +5283,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
       snprintf (StrTagTxt,sizeof (StrTagTxt),
 		"TagTxt%u",
 		IndTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Tags->Txt[IndTag],false,
+      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],false,
 		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
 	              StrTagTxt,IndTag);
       HTM_TD_End ();
@@ -5611,7 +5548,7 @@ static void Tst_PutFormEditOneQst (long QstCod,
    HTM_TABLE_End ();	// Table for this question
 
    /***** Send button *****/
-   if (QstCod > 0)	// The question already has assigned a code
+   if (Question->QstCod > 0)	// The question already has assigned a code
       Btn_PutConfirmButton (Txt_Save_changes);
    else
       Btn_PutCreateButton (Txt_Create_question);
@@ -5675,6 +5612,8 @@ void Tst_QstConstructor (struct Tst_Question *Question)
   {
    unsigned NumOpt;
 
+   Tst_ResetTags (&Question->Tags);
+
    Question->Stem.Text = NULL;
    Question->Stem.Length = 0;
    Question->Feedback.Text = NULL;
@@ -5717,9 +5656,12 @@ void Tst_QstDestructor (struct Tst_Question *Question)
 /*****************************************************************************/
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
+// Return false on error
 
-int Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
+bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
   {
+   Tst_FreeTagsList (&Question->Tags);
+
    Tst_FreeTextChoiceAnswer (Question,NumOpt);
 
    if ((Question->Answer.Options[NumOpt].Text =
@@ -5727,19 +5669,19 @@ int Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store answer.");
-      return 0;
+      return false;
      }
    if ((Question->Answer.Options[NumOpt].Feedback =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store feedback.");
-      return 0;
+      return false;
      }
 
    Question->Answer.Options[NumOpt].Text[0] =
    Question->Answer.Options[NumOpt].Feedback[0] = '\0';
-   return 1;
+   return true;
   }
 
 /*****************************************************************************/
@@ -5811,9 +5753,7 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-static void Tst_GetQstDataFromDB (long QstCod,
-                                  struct Tst_Question *Question,
-                                  struct Tst_Tags *Tags,
+static void Tst_GetQstDataFromDB (struct Tst_Question *Question,
                                   char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
@@ -5833,7 +5773,7 @@ static void Tst_GetQstDataFromDB (long QstCod,
 	                  "MedCod"		// row[4]
 		   " FROM tst_questions"
 		   " WHERE QstCod=%ld AND CrsCod=%ld",
-		   QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		   Question->QstCod,Gbl.Hierarchy.Crs.CrsCod);
    row = mysql_fetch_row (mysql_res);
 
    /* Get the type of answer */
@@ -5861,13 +5801,13 @@ static void Tst_GetQstDataFromDB (long QstCod,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the tags from the database *****/
-   NumRows = Tst_GetTagsQst (QstCod,&mysql_res);
+   NumRows = Tst_GetTagsQst (Question->QstCod,&mysql_res);
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Tags->Txt[NumRow],row[0],
+      Str_Copy (Question->Tags.Txt[NumRow],row[0],
                 Tst_MAX_BYTES_TAG);
      }
 
@@ -5875,7 +5815,8 @@ static void Tst_GetQstDataFromDB (long QstCod,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the answers from the database *****/
-   Question->Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   Tst_GetAnswersQst (Question,&mysql_res,
+                      false);	// Don't shuffle
    /*
    row[0] AnsInd
    row[1] Answer
@@ -6042,7 +5983,6 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 
 void Tst_ReceiveQst (void)
   {
-   long QstCod;
    struct Tst_Question Question;
    struct Tst_Test Test;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
@@ -6050,28 +5990,27 @@ void Tst_ReceiveQst (void)
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
-   Tst_ResetTags (&Test.Tags);
-   Tst_ResetAnswerTypes (&Test.AnswerTypes);
-   Test.SelectedOrder = Tst_DEFAULT_ORDER;
 
    /***** Get parameters of the question from form *****/
    Stem[0] = Feedback[0] = '\0';
-   QstCod = Tst_GetQstFromForm (&Question,&Test.Tags,Stem,Feedback);
-   snprintf (Test.AnswerTypes.List,sizeof (Test.AnswerTypes.List),
-	     "%u",
-	     (unsigned) Question.Answer.Type);
+   Tst_GetQstFromForm (&Question,Stem,Feedback);
 
    /***** Make sure that tags, text and answer are not empty *****/
-   if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question,&Test.Tags))
+   if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
      {
       /***** Move images to definitive directories *****/
-      Tst_MoveMediaToDefinitiveDirectories (QstCod,&Question);
+      Tst_MoveMediaToDefinitiveDirectories (&Question);
 
       /***** Insert or update question, tags and answer in the database *****/
-      QstCod = Tst_InsertOrUpdateQstTagsAnsIntoDB (QstCod,&Question,&Test.Tags);
+      Tst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
 
       /***** Show the question just inserted in the database *****/
-      Tst_ListOneQstToEdit (&Test,QstCod);
+      Tst_ResetTest (&Test);
+      snprintf (Test.AnswerTypes.List,sizeof (Test.AnswerTypes.List),
+		"%u",
+		(unsigned) Question.Answer.Type);
+      Tst_ListOneQstToEdit (&Test,&Question);
+      Tst_FreeTagsList (&Test.Tags);
      }
    else	// Question is wrong
      {
@@ -6079,11 +6018,10 @@ void Tst_ReceiveQst (void)
       Tst_ResetMediaOfQuestion (&Question);
 
       /***** Put form to edit question again *****/
-      Tst_PutFormEditOneQst (QstCod,&Question,&Test.Tags,Stem,Feedback);
+      Tst_PutFormEditOneQst (&Question,Stem,Feedback);
      }
 
    /***** Destroy test question *****/
-   Tst_FreeTagsList (&Test.Tags);
    Tst_QstDestructor (&Question);
   }
 
@@ -6091,11 +6029,9 @@ void Tst_ReceiveQst (void)
 /**************** Get parameters of a test question from form ****************/
 /*****************************************************************************/
 
-static long Tst_GetQstFromForm (struct Tst_Question *Question,
-                                struct Tst_Tags *Tags,
+static void Tst_GetQstFromForm (struct Tst_Question *Question,
                                 char *Stem,char *Feedback)
   {
-   long QstCod;
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
@@ -6109,7 +6045,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   QstCod = Tst_GetQstCod ();
+   Question->QstCod = Tst_GetQstCod ();
 
    /***** Get answer type *****/
    Question->Answer.Type = (Tst_AnswerType_t)
@@ -6128,19 +6064,19 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
       snprintf (TagStr,sizeof (TagStr),
 	        "TagTxt%u",
 		NumTag);
-      Par_GetParToText (TagStr,Tags->Txt[NumTag],Tst_MAX_BYTES_TAG);
+      Par_GetParToText (TagStr,Question->Tags.Txt[NumTag],Tst_MAX_BYTES_TAG);
 
-      if (Tags->Txt[NumTag][0])
+      if (Question->Tags.Txt[NumTag][0])
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           Tags->Txt[NumTag],Tst_MAX_BYTES_TAG,true);
+                           Question->Tags.Txt[NumTag],Tst_MAX_BYTES_TAG,true);
          /* Check if not repeated */
          for (NumTagRead = 0;
               NumTagRead < NumTag;
               NumTagRead++)
-            if (!strcmp (Tags->Txt[NumTagRead],Tags->Txt[NumTag]))
+            if (!strcmp (Question->Tags.Txt[NumTagRead],Question->Tags.Txt[NumTag]))
               {
-               Tags->Txt[NumTag][0] = '\0';
+               Question->Tags.Txt[NumTag][0] = '\0';
                break;
               }
         }
@@ -6156,7 +6092,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
    Question->Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
    Question->Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
    Question->Media.Quality = Tst_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+   Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
                          -1,	// < 0 ==> the image associated to the stem
                          &Question->Media,
                          Tst_GetMediaFromDB,
@@ -6235,7 +6171,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
 	       Question->Answer.Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
 	       Question->Answer.Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
 	       Question->Answer.Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
-	       Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+	       Med_GetMediaFromForm (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
 	                             (int) NumOpt,	// >= 0 ==> the image associated to an answer
 	                             &Question->Answer.Options[NumOpt].Media,
 				     Tst_GetMediaFromDB,
@@ -6279,17 +6215,15 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
      }
 
    /***** Adjust variables related to this test question *****/
-   for (NumTag = 0, Tags->Num = 0;
+   for (NumTag = 0, Question->Tags.Num = 0;
         NumTag < Tst_MAX_TAGS_PER_QUESTION;
         NumTag++)
-      if (Tags->Txt[NumTag][0])
-         Tags->Num++;
+      if (Question->Tags.Txt[NumTag][0])
+         Question->Tags.Num++;
    Question->Stem.Text = Stem;
    Question->Stem.Length = strlen (Question->Stem.Text);
    Question->Feedback.Text = Feedback;
    Question->Feedback.Length = strlen (Question->Feedback.Text);
-
-   return QstCod;
   }
 
 /*****************************************************************************/
@@ -6299,8 +6233,7 @@ static long Tst_GetQstFromForm (struct Tst_Question *Question,
 // Counts Question->Answer.NumOptions
 // Computes Question->Answer.Integer and Question->Answer.FloatingPoint[0..1]
 
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question,
-                                                      const struct Tst_Tags *Tags)
+bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question)
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_stem_of_the_question;
@@ -6321,7 +6254,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
    Question->Answer.NumOptions = 0;
 
    /***** A question must have at least one tag *****/
-   if (!Tags->Num) // There are no tags with text
+   if (!Question->Tags.Num) // There are no tags with text
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_one_tag_for_the_question);
       return false;
@@ -6482,7 +6415,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
 /*********** Check if a test question already exists in database *************/
 /*****************************************************************************/
 
-bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
+bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
   {
    extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res_qst;
@@ -6494,7 +6427,6 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
    unsigned NumQstsWithThisStem;
    unsigned NumOpt;
    unsigned NumOptsExistingQstInDB;
-   long QstCod;
    unsigned i;
 
    /***** Check if stem exists *****/
@@ -6517,7 +6449,7 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
         {
 	 /* Get question code */
          row = mysql_fetch_row (mysql_res_qst);
-         if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Question->QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of question.");
 
          /* Get answers from this question */
@@ -6526,7 +6458,7 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
 						   " of a question",
 				    "SELECT Answer FROM tst_answers"
 				    " WHERE QstCod=%ld ORDER BY AnsInd",
-				    QstCod);
+				    Question->QstCod);
 
          switch (Question->Answer.Type)
            {
@@ -6588,14 +6520,13 @@ bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question)
 /* Move images associates to a test question to their definitive directories */
 /*****************************************************************************/
 
-static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
-                                                  struct Tst_Question *Question)
+static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question)
   {
    unsigned NumOpt;
    long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+   CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
                                             -1L);	// Get current media code associated to stem
    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Media);
 
@@ -6608,7 +6539,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (long QstCod,
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
-	    CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod,
+	    CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
 						     NumOpt);	// Get current media code associated to this option
 	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Answer.Options[NumOpt].Media);
 	   }
@@ -6722,8 +6653,7 @@ void Tst_RequestRemoveSelectedQsts (void)
    if (Tst_GetParamsTst (&Test,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Show question and button to remove question *****/
-      Tst_SetParamGblTags (&Test.Tags);
-      Tst_SetParamGblAnswerTypes (&Test.AnswerTypes);
+      Tst_SetParamGblTest (&Test);
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
 			     Tst_PutParamsRemoveSelectedQsts,
 			     Btn_REMOVE_BUTTON,Txt_Remove_questions,
@@ -6807,14 +6737,17 @@ void Tst_RequestRemoveOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
-   long QstCod;
+   struct Tst_Question Question;
    bool EditingOnlyThisQst;
    struct Tst_Test Test;
 
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+
    /***** Get main parameters from form *****/
    /* Get the question code */
-   QstCod = Tst_GetQstCod ();
-   if (QstCod <= 0)
+   Question.QstCod = Tst_GetQstCod ();
+   if (Question.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get a parameter that indicates whether it's necessary
@@ -6827,24 +6760,27 @@ void Tst_RequestRemoveOneQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   Tst_SetParamGblQstCod (QstCod);
-   Tst_SetParamGblTags (&Test.Tags);
-   Tst_SetParamGblAnswerTypes (&Test.AnswerTypes);
+   Tst_SetParamGblQstCod (Question.QstCod);
+   Tst_ResetParamGblTest ();
    Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
 			   EditingOnlyThisQst ? Tst_PutParamsRemoveOnlyThisQst :
 						Tst_PutParamsRemoveOneQstWhileEditing,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   QstCod);
+			   Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
-      Tst_ListOneQstToEdit (&Test,QstCod);
-   else
      {
+      Tst_ResetTest (&Test);
+      Tst_ListOneQstToEdit (&Test,&Question);
       Tst_FreeTagsList (&Test.Tags);
-      Tst_ListQuestionsToEdit ();
      }
+   else
+      Tst_ListQuestionsToEdit ();
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -6939,14 +6875,17 @@ void Tst_ChangeShuffleQst (void)
   {
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
-   long QstCod;
+   struct Tst_Question Question;
    bool EditingOnlyThisQst;
    bool Shuffle;
    struct Tst_Test Test;
 
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+
    /***** Get the question code *****/
-   QstCod = Tst_GetQstCod ();
-   if (QstCod <= 0)
+   Question.QstCod = Tst_GetQstCod ();
+   if (Question.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
@@ -6962,23 +6901,25 @@ void Tst_ChangeShuffleQst (void)
                    " WHERE QstCod=%ld AND CrsCod=%ld",
 		   Shuffle ? 'Y' :
 			     'N',
-		   QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		   Question.QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
                                         Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
-                  QstCod);
+                  Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
      {
-      Tst_ResetTags (&Test.Tags);
-      Tst_ResetAnswerTypes (&Test.AnswerTypes);
-      Test.SelectedOrder = Tst_DEFAULT_ORDER;
-      Tst_ListOneQstToEdit (&Test,QstCod);
+      Tst_ResetTest (&Test);
+      Tst_ListOneQstToEdit (&Test,&Question);
+      Tst_FreeTagsList (&Test.Tags);
      }
    else
       Tst_ListQuestionsToEdit ();
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -7012,45 +6953,41 @@ void Tst_PutParamGblQstCod (void)
 
 void Tst_PutParamQstCod (long QstCod)
   {
-   Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
+   if (QstCod > 0)	// If question exists
+      Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
   }
 
 /*****************************************************************************/
 /******** Insert or update question, tags and anser in the database **********/
 /*****************************************************************************/
 
-long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
-                                         struct Tst_Question *Question,
-                                         const struct Tst_Tags *Tags)
+void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
   {
    /***** Insert or update question in the table of questions *****/
-   QstCod = Tst_InsertOrUpdateQstIntoDB (QstCod,Question);
-   if (QstCod > 0)
+   Tst_InsertOrUpdateQstIntoDB (Question);
+   if (Question->QstCod > 0)
      {
       /***** Insert tags in the tags table *****/
-      Tst_InsertTagsIntoDB (QstCod,Tags);
+      Tst_InsertTagsIntoDB (Question);
 
       /***** Remove unused tags in current course *****/
       Tst_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Insert answers in the answers table *****/
-      Tst_InsertAnswersIntoDB (QstCod,Question);
+      Tst_InsertAnswersIntoDB (Question);
      }
-
-   return QstCod;
   }
 
 /*****************************************************************************/
 /*********** Insert or update question in the table of questions *************/
 /*****************************************************************************/
 
-static long Tst_InsertOrUpdateQstIntoDB (long QstCod,
-                                         const struct Tst_Question *Question)
+static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
   {
-   if (QstCod < 0)	// It's a new question
+   if (Question->QstCod < 0)	// It's a new question
      {
       /***** Insert question in the table of questions *****/
-      QstCod =
+      Question->QstCod =
       DB_QueryINSERTandReturnCode ("can not create question",
 				   "INSERT INTO tst_questions"
 				   " (CrsCod,"
@@ -7101,21 +7038,19 @@ static long Tst_InsertOrUpdateQstIntoDB (long QstCod,
 		      Question->Feedback.Text ? Question->Feedback.Text :
 			                        "",
 		      Question->Media.MedCod,
-		      QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		      Question->QstCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
-      Tst_RemAnsFromQst (QstCod);
-      Tst_RemTagsFromQst (QstCod);
+      Tst_RemAnsFromQst (Question->QstCod);
+      Tst_RemTagsFromQst (Question->QstCod);
      }
-
-   return QstCod;
   }
 
 /*****************************************************************************/
 /*********************** Insert tags in the tags table ***********************/
 /*****************************************************************************/
 
-static void Tst_InsertTagsIntoDB (long QstCod,const struct Tst_Tags *Tags)
+static void Tst_InsertTagsIntoDB (const struct Tst_Question *Question)
   {
    unsigned NumTag;
    unsigned TagIdx;
@@ -7123,14 +7058,14 @@ static void Tst_InsertTagsIntoDB (long QstCod,const struct Tst_Tags *Tags)
 
    /***** For each tag... *****/
    for (NumTag = 0, TagIdx = 0;
-        TagIdx < Tags->Num;
+        TagIdx < Question->Tags.Num;
         NumTag++)
-      if (Tags->Txt[NumTag][0])
+      if (Question->Tags.Txt[NumTag][0])
         {
          /***** Check if this tag exists for current course *****/
-         if ((TagCod = Tst_GetTagCodFromTagTxt (Tags->Txt[NumTag])) < 0)
+         if ((TagCod = Tst_GetTagCodFromTagTxt (Question->Tags.Txt[NumTag])) < 0)
             /* This tag is new for current course. Add it to tags table */
-            TagCod = Tst_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Tags->Txt[NumTag]);
+            TagCod = Tst_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Question->Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
          DB_QueryINSERT ("can not create tag",
@@ -7138,7 +7073,7 @@ static void Tst_InsertTagsIntoDB (long QstCod,const struct Tst_Tags *Tags)
                          " (QstCod,TagCod,TagInd)"
                          " VALUES"
                          " (%ld,%ld,%u)",
-			 QstCod,TagCod,TagIdx);
+			 Question->QstCod,TagCod,TagIdx);
 
          TagIdx++;
         }
@@ -7148,7 +7083,7 @@ static void Tst_InsertTagsIntoDB (long QstCod,const struct Tst_Tags *Tags)
 /******************* Insert answers in the answers table *********************/
 /*****************************************************************************/
 
-static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question)
+static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
   {
    unsigned NumOpt;
    unsigned i;
@@ -7162,7 +7097,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question)
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                          " VALUES"
                          " (%ld,0,%ld,'',-1,'Y')",
-			 QstCod,
+			 Question->QstCod,
 			 Question->Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
@@ -7175,7 +7110,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question)
                             " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                             " VALUES"
                             " (%ld,%u,'%.15lg','',-1,'Y')",
-			    QstCod,i,
+			    Question->QstCod,i,
 			    Question->Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
@@ -7185,7 +7120,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question)
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                          " VALUES"
                          " (%ld,0,'%c','',-1,'Y')",
-			 QstCod,
+			 Question->QstCod,
 			 Question->Answer.TF);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
@@ -7202,7 +7137,7 @@ static void Tst_InsertAnswersIntoDB (long QstCod,struct Tst_Question *Question)
                                " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                                " VALUES"
                                " (%ld,%u,'%s','%s',%ld,'%c')",
-			       QstCod,NumOpt,
+			       Question->QstCod,NumOpt,
 			       Question->Answer.Options[NumOpt].Text,
 			       Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
 					                                   "",

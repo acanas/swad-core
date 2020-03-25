@@ -156,7 +156,8 @@ static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd);
+static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
+                                        unsigned QstInd);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -1873,7 +1874,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
-   long QstCod;
    struct Tst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
@@ -1902,13 +1902,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+
+      /***** Get question data *****/
       row = mysql_fetch_row (mysql_res);
       /*
       row[0] QstInd
       row[1] QstCod
       */
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
 
       /* Get question index (row[0]) */
       QstInd = Str_ConvertStrToUnsigned (row[0]);
@@ -1917,7 +1919,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 		QstInd);
 
       /* Get question code (row[1]) */
-      QstCod = Str_ConvertStrCodToLongCod (row[1]);
+      Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /***** Icons *****/
       Gam_SetCurrentGamCod (GamCod);	// Used to pass parameter
@@ -1965,14 +1967,14 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Put icon to edit the question */
       if (ICanEditQuestions)
 	{
-	 Tst_SetParamGblQstCod (QstCod);
+	 Tst_SetParamGblQstCod (Question.QstCod);
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamGblQstCod);
 	}
 
       HTM_TD_End ();
 
       /***** Question *****/
-      Gam_ListQuestionForEdition (QstCod,QstInd);
+      Gam_ListQuestionForEdition (&Question,QstInd);
 
       HTM_TR_End ();
 
@@ -1988,7 +1990,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 /********************** List game question for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd)
+static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
+                                        unsigned QstInd)
   {
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
@@ -1998,7 +2001,7 @@ static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd)
    struct Media Media;
 
    /***** Get question from database *****/
-   QstExists = Tst_GetOneQuestionByCod (QstCod,&mysql_res);	// Question exists?
+   QstExists = Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res);	// Question exists?
 
    if (QstExists)
      {
@@ -2029,13 +2032,13 @@ static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd)
 
    /***** Write question code *****/
    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",QstCod);
+   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (QstExists)
-      Tst_GetAndWriteTagsQst (QstCod);
+      Tst_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -2059,7 +2062,7 @@ static void Gam_ListQuestionForEdition (long QstCod,unsigned QstInd)
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersEdit (QstCod,AnswerType);
+      Tst_WriteAnswersEdit (Question);
      }
    else
      {

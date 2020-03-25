@@ -98,6 +98,8 @@ struct Tst_Test
 
 struct Tst_Question
   {
+   long QstCod;
+   struct Tst_Tags Tags;
    struct
      {
       char *Text;
@@ -176,15 +178,14 @@ void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 
-void Tst_SetParamGblTags (const struct Tst_Tags *TagsSrc);
-void Tst_SetParamGblAnswerTypes (const struct Tst_AnswerTypes *AnswerTypesSrc);
-void Tst_SetParamGblSelectedOrder (Tst_QuestionsOrder_t SelectedOrder);
-Tst_QuestionsOrder_t Tst_GetParamGblSelectedOrder (void);
+void Tst_SetParamGblTest (const struct Tst_Test *TestSrc);
+void Tst_GetParamGblTest (struct Tst_Test *TestDst);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
-unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
-void Tst_GetCorrectAnswersFromDB (long QstCod,struct Tst_Question *Question);
-void Tst_WriteAnswersEdit (long QstCod,Tst_AnswerType_t AnswerType);
+void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+                        bool Shuffle);
+void Tst_GetCorrectAnswersFromDB (struct Tst_Question *Question);
+void Tst_WriteAnswersEdit (struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
@@ -214,14 +215,13 @@ void Tst_ShowFormEditOneQst (void);
 void Tst_QstConstructor (struct Tst_Question *Question);
 void Tst_QstDestructor (struct Tst_Question *Question);
 
-int Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
+bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question,
-                                                      const struct Tst_Tags *Tags);
+bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);
 
-bool Tst_CheckIfQuestionExistsInDB (const struct Tst_Question *Question);
+bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question);
 
 long Tst_GetIntAnsFromStr (char *Str);
 
@@ -237,9 +237,7 @@ long Tst_GetParamGblQstCod (void);
 void Tst_PutParamGblQstCod (void);
 void Tst_PutParamQstCod (long QstCod);
 
-long Tst_InsertOrUpdateQstTagsAnsIntoDB (long QstCod,
-                                         struct Tst_Question *Question,
-                                         const struct Tst_Tags *Tags);
+void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question);
 
 void Tst_RemoveCrsTests (long CrsCod);
 

@@ -140,7 +140,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void);
 static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
 static void Mch_CreateIndexes (long GamCod,long MchCod);
 static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
-			       long QstCod,bool Shuffle);
+			       const struct Tst_Question *Question);
 static void Mch_CreateGrps (long MchCod);
 static void Mch_UpdateMatchStatusInDB (const struct Match *Match);
 
@@ -1448,11 +1448,9 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   long QstCod;
+   struct Tst_Question Question;
    long LongNum;
    unsigned QstInd;
-   Tst_AnswerType_t AnswerType;
-   bool Shuffle;
 
    /***** Get questions of the game *****/
    NumQsts = (unsigned)
@@ -1472,11 +1470,20 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	NumQst < NumQsts;
 	NumQst++)
      {
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+
       /***** Get question data *****/
       row = mysql_fetch_row (mysql_res);
+      /*
+      gam_questions.QstCod	row[0]
+      gam_questions.QstInd	row[1]
+      tst_questions.AnsType	row[2]
+      tst_questions.Shuffle	row[3]
+      */
 
       /* Get question code (row[0]) */
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1485,15 +1492,18 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
       QstInd = (unsigned) LongNum;
 
       /* Get answer type (row[2]) */
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      if (AnswerType != Tst_ANS_UNIQUE_CHOICE)
+      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
       /* Get shuffle (row[3]) */
-      Shuffle = (row[3][0] == 'Y');
+      Question.Shuffle = (row[3][0] == 'Y');
 
       /***** Reorder answer *****/
-      Mch_ReorderAnswer (MchCod,QstInd,QstCod,Shuffle);
+      Mch_ReorderAnswer (MchCod,QstInd,&Question);
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1505,7 +1515,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 /*****************************************************************************/
 
 static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
-			       long QstCod,bool Shuffle)
+			       const struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1526,9 +1536,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 			     " FROM tst_answers"
 			     " WHERE QstCod=%ld"
 			     " ORDER BY %s",
-			     QstCod,
-			     Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
-				       "AnsInd");
+			     Question->QstCod,
+			     Question->Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
+				                 "AnsInd");
 
    /***** For each answer in question... *****/
    for (NumAns = 0;
@@ -3799,34 +3809,30 @@ static void Mch_ComputeScore (struct TsR_Result *Result)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
-   Result->Score = 0.0;
-
-   for (NumQst = 0;
+   for (NumQst = 0, Result->Score = 0.0;
 	NumQst < Result->NumQsts;
 	NumQst++)
      {
-      /***** Get indexes for this question from string *****/
-      Tst_GetIndexesFromStr (Result->StrIndexes[NumQst],Indexes);
-
-      /***** Get the user's answers for this question from string *****/
-      Tst_GetAnswersFromStr (Result->StrAnswers[NumQst],AnswersUsr);
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Result->QstCodes[NumQst];
+      Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (Result->QstCodes[NumQst],&Question);
+      Tst_GetCorrectAnswersFromDB (&Question);
 
-      /***** Compute the total score of this question *****/
+      /***** Compute the score of this question *****/
+      Tst_GetIndexesFromStr (Result->StrIndexes[NumQst],Indexes);
+      Tst_GetAnswersFromStr (Result->StrAnswers[NumQst],AnswersUsr);
       Tst_ComputeScoreQst (&Question,
                            Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Update total score *****/
       Result->Score += ScoreThisQst;
-     }
 
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
+     }
   }
 
 /*****************************************************************************/
