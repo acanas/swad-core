@@ -118,7 +118,6 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static long Tst_ParamGblQstCod = -1L;	// Used to pass parameter to function
 struct Tst_Test Tst_ParamGblTest;	// Used to pass parameters to functions
 
 /*****************************************************************************/
@@ -296,9 +295,9 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
 static void Tst_PutParamsRemoveSelectedQsts (void *Args);
-static void Tst_PutIconToRemoveOneQst (void *QstCod);
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCod);
+static void Tst_PutIconToRemoveOneQst (void *QstCodPtr);
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCodPtr);
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCodPtr);
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static long Tst_GetQstCod (void);
@@ -2884,7 +2883,7 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 
       /* Write icon to remove the question */
       Frm_StartForm (ActReqRemOneTstQst);
-      Tst_PutParamQstCod (Question->QstCod);
+      Tst_PutParamQstCod ((void *) Question->QstCod);
       if (Test->NumQsts == 1)
 	 Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParamsIniEndDates ();
@@ -2894,9 +2893,8 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
       Frm_EndForm ();
 
       /* Write icon to edit the question */
-      Tst_SetParamGblQstCod (Question->QstCod);
       Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-                                   Tst_PutParamGblQstCod,(void *) &Question->QstCod);
+                                   Tst_PutParamQstCod,(void *) &Question->QstCod);
 
       HTM_TD_End ();
 
@@ -2935,7 +2933,7 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 	  Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 	{
 	 Frm_StartForm (ActChgShfTstQst);
-	 Tst_PutParamQstCod (Question->QstCod);
+	 Tst_PutParamQstCod ((void *) Question->QstCod);
 	 Dat_WriteParamsIniEndDates ();
          Tst_SetParamGblTest (Test);
 	 Tst_WriteParamEditQst ();
@@ -5213,7 +5211,6 @@ static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
    /***** Begin box *****/
    if (Question->QstCod > 0)	// The question already has assigned a code
      {
-      Tst_SetParamGblQstCod (Question->QstCod);
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
 		    Tst_PutIconToRemoveOneQst,NULL,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
@@ -5226,7 +5223,7 @@ static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
-   Tst_PutParamQstCod (Question->QstCod);
+   Tst_PutParamQstCod ((void *) Question->QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -6747,10 +6744,10 @@ void Tst_RemoveSelectedQsts (void)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToRemoveOneQst (void *QstCod)
+static void Tst_PutIconToRemoveOneQst (void *QstCodPtr)
   {
    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,
-                                  Tst_PutParamsRemoveOnlyThisQst,QstCod);
+                                  Tst_PutParamsRemoveOnlyThisQst,QstCodPtr);
   }
 
 /*****************************************************************************/
@@ -6784,7 +6781,6 @@ void Tst_RequestRemoveOneQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   Tst_SetParamGblQstCod (Question.QstCod);
    Tst_ResetParamGblTest ();
    Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
 			   EditingOnlyThisQst ? Tst_PutParamsRemoveOnlyThisQst :
@@ -6811,9 +6807,9 @@ void Tst_RequestRemoveOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCodPtr)
   {
-   Tst_PutParamGblQstCod (QstCod);
+   Tst_PutParamQstCod (QstCodPtr);
    Par_PutHiddenParamChar ("OnlyThisQst",'Y');
   }
 
@@ -6821,9 +6817,9 @@ static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
 /***** Put parameters to remove question when editing several questions ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCod)
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCodPtr)
   {
-   Tst_PutParamGblQstCod (QstCod);
+   Tst_PutParamQstCod (QstCodPtr);
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
   }
@@ -6960,25 +6956,16 @@ static long Tst_GetQstCod (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Tst_SetParamGblQstCod (long QstCod)
+void Tst_PutParamQstCod (void *QstCodPtr)	// Should be a pointer to long
   {
-   Tst_ParamGblQstCod = QstCod;
-  }
+   long QstCod;
 
-long Tst_GetParamGblQstCod (void)
-  {
-   return Tst_ParamGblQstCod;
-  }
-
-void Tst_PutParamGblQstCod (void *QstCod)
-  {
-   Tst_PutParamQstCod (*((long *) QstCod));
-  }
-
-void Tst_PutParamQstCod (long QstCod)
-  {
-   if (QstCod > 0)	// If question exists
-      Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
+   if (QstCodPtr)
+     {
+      QstCod = *((long *) QstCodPtr);
+      if (QstCod > 0)	// If question exists
+	 Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
+     }
   }
 
 /*****************************************************************************/

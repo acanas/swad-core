@@ -232,10 +232,7 @@ void Tst_RemoveOneQst (void);
 
 void Tst_ChangeShuffleQst (void);
 
-void Tst_SetParamGblQstCod (long QstCod);
-long Tst_GetParamGblQstCod (void);
-void Tst_PutParamGblQstCod (void *QstCod);
-void Tst_PutParamQstCod (long QstCod);
+void Tst_PutParamQstCod (void *QstCodPtr);
 
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question);
 

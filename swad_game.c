@@ -2001,11 +2001,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Put icon to edit the question */
       if (ICanEditQuestions)
-	{
-	 Tst_SetParamGblQstCod (Question.QstCod);
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-	                              Tst_PutParamGblQstCod,(void *) &Question.QstCod);
-	}
+	                              Tst_PutParamQstCod,(void *) &Question.QstCod);
 
       HTM_TD_End ();
 
