@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void *Args);
+static void TsI_PutParamsExportQsts (void *TestPtr);
 static void TsI_PutCreateXMLParam (void);
 
 static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
@@ -93,9 +93,8 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
-   Tst_SetParamGblTest (Test);
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,
-                                  TsI_PutParamsExportQsts,(void *) &Gbl,
+                                  TsI_PutParamsExportQsts,(void *) &Test,
 				  "file-import.svg",
 				  Txt_Export_questions);
   }
@@ -104,17 +103,18 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void *Args)
+static void TsI_PutParamsExportQsts (void *TestPtr)
   {
-   struct Tst_Test Test;
+   struct Tst_Test *Test;
 
-   if (Args)
+   if (TestPtr)
      {
-      Tst_GetParamGblTest (&Test);
+      Test = (struct Tst_Test *) TestPtr;
+
       Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst ();
+      Tst_WriteParamEditQst (Test);
       Par_PutHiddenParamChar ("OnlyThisQst",'N');
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test.SelectedOrder);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
       TsI_PutCreateXMLParam ();
      }
   }

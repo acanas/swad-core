@@ -93,6 +93,7 @@ void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned V
 void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
 void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value);
 void Par_PutHiddenParamChar (const char *ParamName,char Value);
-void Par_PutHiddenParamString (const char *Id,const char *ParamName,const char *Value);
+void Par_PutHiddenParamString (const char *Id,const char *ParamName,
+                               const char *Value);
 
 #endif

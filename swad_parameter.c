@@ -1088,11 +1088,14 @@ void Par_PutHiddenParamChar (const char *ParamName,char Value)
 /************************ Put a string hidden parameter **********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamString (const char *Id,const char *ParamName,const char *Value)
+void Par_PutHiddenParamString (const char *Id,const char *ParamName,
+                               const char *Value)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%s\" />",ParamName,Value);
+   HTM_TxtF (" name=\"%s\" value=\"%s\" />",
+             ParamName,Value ? Value :
+	                       "");
   }

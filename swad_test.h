@@ -88,14 +88,6 @@ typedef enum
   } Tst_QuestionsOrder_t;
 #define Tst_DEFAULT_ORDER Tst_ORDER_STEM
 
-struct Tst_Test
-  {
-   struct Tst_Tags Tags;
-   struct Tst_AnswerTypes AnswerTypes;
-   Tst_QuestionsOrder_t SelectedOrder;
-   unsigned NumQsts;
-  };
-
 struct Tst_Question
   {
    long QstCod;
@@ -122,6 +114,15 @@ struct Tst_Question
       long Integer;
       double FloatingPoint[2];
      } Answer;
+  };
+
+struct Tst_Test
+  {
+   struct Tst_Tags Tags;		// Selected tags
+   struct Tst_AnswerTypes AnswerTypes;	// Selected answer types
+   Tst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
+   unsigned NumQsts;			// Number of questions
+   struct Tst_Question Question;	// Selected / editing question
   };
 
 typedef enum
@@ -176,10 +177,7 @@ void Tst_RequestSelectTestsForGame (void);
 void Tst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
-void Tst_WriteParamEditQst (void);
-
-void Tst_SetParamGblTest (const struct Tst_Test *TestSrc);
-void Tst_GetParamGblTest (struct Tst_Test *TestDst);
+void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
