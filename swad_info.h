@@ -68,7 +68,7 @@ typedef enum
 /*****************************************************************************/
 
 void Inf_ShowInfo (void);
-void Inf_PutIconToEditInfo (void);
+void Inf_PutIconToEditInfo (void *Args);
 void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);

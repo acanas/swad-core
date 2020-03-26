@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ZIP_PutLinkToCreateZIPAsgWrkParams (void);
+static void ZIP_PutLinkToCreateZIPAsgWrkParams (void *Args);
 
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat);
@@ -93,16 +93,19 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
    extern const char *Txt_Create_ZIP_file;
 
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
-				  ZIP_PutLinkToCreateZIPAsgWrkParams,
+				  ZIP_PutLinkToCreateZIPAsgWrkParams,(void *) &Gbl,
 				  "download.svg",
 				  Txt_Create_ZIP_file);
   }
 
-static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
+static void ZIP_PutLinkToCreateZIPAsgWrkParams (void *Args)
   {
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Brw_PutHiddenParamFullTreeIfSelected ();
-   Par_PutHiddenParamChar ("CreateZIP",'Y');
+   if (Args)
+     {
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
+      Par_PutHiddenParamChar ("CreateZIP",'Y');
+     }
   }
 
 /*****************************************************************************/
@@ -564,7 +567,9 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Begin box and table *****/
-   Box_BoxTableShadowBegin (NULL,NULL,NULL,NULL,2);
+   Box_BoxTableShadowBegin (NULL,NULL,
+                            NULL,NULL,
+                            NULL,2);
 
    /***** Link to download the file *****/
    HTM_TR_Begin (NULL);

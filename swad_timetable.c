@@ -129,11 +129,11 @@ static void TT_FreeTimeTable (void);
 
 static void TT_ShowTimeTableGrpsSelected (void);
 static void TT_GetParamsTimeTable (void);
-static void TT_PutContextualIcons (void);
+static void TT_PutContextualIcons (void *Args);
 static void TT_PutFormToSelectWhichGroupsToShow (void);
 
-static void TT_PutIconToViewCrsTT (void);
-static void TT_PutIconToViewMyTT (void);
+static void TT_PutIconToViewCrsTT (void *Args);
+static void TT_PutIconToViewMyTT (void *Args);
 
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod);
 static void TT_WriteTutTimeTableIntoDB (long UsrCod);
@@ -354,12 +354,16 @@ void TT_ShowClassTimeTable (void)
    Grp_GetParamWhichGrps ();
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                 (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
-                  Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
-                  Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
-                                                                NULL,
-                 Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
+   if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
+       Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
+       Gbl.TimeTable.ContextualIcons.PutIconPrint)
+      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+		    TT_PutContextualIcons,(void *) &Gbl,
+		    Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+		    NULL,NULL,
+		    Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
 
    /***** Start time table drawing *****/
    if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
@@ -382,7 +386,7 @@ void TT_ShowClassTimeTable (void)
 
       /* Show form to change first day of week */
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
-                                       Grp_PutParamWhichGrps);
+                                       Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
 
       Set_EndSettingsHead ();
      }
@@ -398,18 +402,23 @@ void TT_ShowClassTimeTable (void)
 /***************** Put contextual icons above the time table *****************/
 /*****************************************************************************/
 
-static void TT_PutContextualIcons (void)
+static void TT_PutContextualIcons (void *Args)
   {
-   if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
-      Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,Grp_PutParamWhichGrps);
+   if (Args)
+     {
+      if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
+	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
+				      Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
 
-   if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL);
+      if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
+	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,
+				      NULL,NULL);
 
-   if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
-      Ico_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-								                ActPrnMyTT,
-			            Grp_PutParamWhichGrps);
+      if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
+	 Ico_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+										   ActPrnMyTT,
+				       Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
+     }
   }
 
 /*****************************************************************************/
@@ -425,7 +434,8 @@ static void TT_PutFormToSelectWhichGroupsToShow (void)
       [TT_TUTORING_TIMETABLE] = ActUnk,
      };
 
-   Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.TimeTable.Type],NULL);
+   Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.TimeTable.Type],
+                               NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -439,7 +449,8 @@ void TT_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewCrsTT,
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                 TT_PutIconToViewCrsTT,(void *) &Gbl,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
@@ -456,7 +467,8 @@ void TT_EditMyTutTimeTable (void)
 
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewMyTT,
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                 TT_PutIconToViewMyTT,(void *) &Gbl,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
@@ -466,18 +478,22 @@ void TT_EditMyTutTimeTable (void)
 /********************** Put icon to view course timetable ********************/
 /*****************************************************************************/
 
-static void TT_PutIconToViewCrsTT (void)
+static void TT_PutIconToViewCrsTT (void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeCrsTT,NULL);
+   if (Args)
+      Ico_PutContextualIconToView (ActSeeCrsTT,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/
 /************************ Put icon to view my timetable **********************/
 /*****************************************************************************/
 
-static void TT_PutIconToViewMyTT (void)
+static void TT_PutIconToViewMyTT (void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeMyTT,NULL);
+   if (Args)
+      Ico_PutContextualIconToView (ActSeeMyTT,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/

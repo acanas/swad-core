@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CtrCfg_Configuration (bool PrintView);
-static void CtrCfg_PutIconsCtrConfig (void);
+static void CtrCfg_PutIconsCtrConfig (void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Title (bool PutLink);
 static void CtrCfg_Map (void);
@@ -155,10 +155,12 @@ static void CtrCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,CtrCfg_PutIconsCtrConfig,
+      Box_BoxBegin (NULL,NULL,
+                    CtrCfg_PutIconsCtrConfig,(void *) &Gbl,
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -255,23 +257,27 @@ static void CtrCfg_Configuration (bool PrintView)
 /************ Put contextual icons in configuration of a centre **************/
 /*****************************************************************************/
 
-static void CtrCfg_PutIconsCtrConfig (void)
+static void CtrCfg_PutIconsCtrConfig (void *Args)
   {
-   /***** Put icon to print info about centre *****/
-   Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL);
-
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
-
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // have permission to upload logo and photo of the centre
+   if (Args)
      {
-      /***** Put icon to upload logo of centre *****/
-      Lgo_PutIconToChangeLogo (Hie_CTR);
+      /***** Put icon to print info about centre *****/
+      Ico_PutContextualIconToPrint (ActPrnCtrInf,
+				    NULL,NULL);
 
-      /***** Put icon to upload photo of centre *****/
-      CtrCfg_PutIconToChangePhoto ();
+      /***** Put icon to view places *****/
+      Plc_PutIconToViewPlaces ();
+
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins
+	 // have permission to upload logo and photo of the centre
+	{
+	 /***** Put icon to upload logo of centre *****/
+	 Lgo_PutIconToChangeLogo (Hie_CTR);
+
+	 /***** Put icon to upload photo of centre *****/
+	 CtrCfg_PutIconToChangePhoto ();
+	}
      }
   }
 
@@ -294,7 +300,8 @@ static void CtrCfg_PutIconToChangePhoto (void)
 	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
 	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
-   Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,
+                                  NULL,NULL,
 			          "camera.svg",
 			          PhotoExists ? Txt_Change_photo :
 				                Txt_Upload_photo);
@@ -868,7 +875,8 @@ void CtrCfg_RequestPhoto (void)
    Frm_StartForm (ActRecCtrPho);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Photo,NULL,
+   Box_BoxBegin (NULL,Txt_Photo,
+                 NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/

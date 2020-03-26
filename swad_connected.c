@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Con_PutIconToUpdateConnected (void);
+static void Con_PutIconToUpdateConnected (void *Args);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
@@ -105,7 +105,8 @@ void Con_ShowConnectedUsrs (void)
 	                "<div id=\"connected_current_time\"></div>",
 	         Txt_Connected_users) < 0)
       Lay_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Con_PutIconToUpdateConnected,
+   Box_BoxBegin (NULL,Title,
+                 Con_PutIconToUpdateConnected,(void *) &Gbl,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    free (Title);
    Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
@@ -127,16 +128,19 @@ void Con_ShowConnectedUsrs (void)
 /******************** Put icon to update connected users *********************/
 /*****************************************************************************/
 
-static void Con_PutIconToUpdateConnected (void)
+static void Con_PutIconToUpdateConnected (void *Args)
   {
    extern const char *Txt_Update;
 
-   Frm_StartForm (ActLstCon);
-   Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
-   Ico_PutCalculateIcon (Txt_Update);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+   if (Args)
+     {
+      Frm_StartForm (ActLstCon);
+      Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
+      HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
+      Ico_PutCalculateIcon (Txt_Update);
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+     }
   }
 
 /*****************************************************************************/

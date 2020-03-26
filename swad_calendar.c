@@ -62,15 +62,15 @@ const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (void);
+static void Cal_PutIconsFirstDayOfWeek (void *Args);
 
 static unsigned Cal_GetParamFirstDayOfWeek (void);
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (void),
+                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                               bool PrintView);
-static void Cal_PutIconsCalendar (void);
+static void Cal_PutIconsCalendar (void *Args);
 
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
@@ -81,10 +81,12 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Hlp_PROFILE_Settings_calendar;
    extern const char *Txt_Calendar;
 
-   Box_BoxBegin (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
+   Box_BoxBegin (NULL,Txt_Calendar,
+                 Cal_PutIconsFirstDayOfWeek,(void *) &Gbl,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL);
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
+                                    NULL,NULL);
    Set_EndSettingsHead ();
    Box_BoxEnd ();
   }
@@ -93,18 +95,22 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 /************ Put contextual icons in first-day-of-week setting **************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (void)
+static void Cal_PutIconsFirstDayOfWeek (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_FIRST_DAY_OF_WEEK;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_FIRST_DAY_OF_WEEK;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
 /************** Show form to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (void))
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
+                                      void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
@@ -123,7 +129,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (vo
 	 Frm_StartForm (Action);
 	 Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
-	    FuncParams ();
+	    FuncParams (Args);
 	 snprintf (Icon,sizeof (Icon),
 	           "first-day-of-week-%u.png",
 	           FirstDayOfWeek);
@@ -235,17 +241,21 @@ void Cal_DrawCurrentMonth (void)
 
 void Cal_ShowCalendar (void)
   {
-   Cal_DrawCalendar (ActSeeCal,ActChgCal1stDay,Cal_PutIconsCalendar,false);
+   Cal_DrawCalendar (ActSeeCal,ActChgCal1stDay,
+                     Cal_PutIconsCalendar,(void *) &Gbl,
+                     false);
   }
 
 void Cal_PrintCalendar (void)
   {
-   Cal_DrawCalendar (ActUnk,ActUnk,NULL,true);
+   Cal_DrawCalendar (ActUnk,ActUnk,
+                     NULL,NULL,
+                     true);
   }
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (void),
+                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                               bool PrintView)
   {
    extern const char *Hlp_START_Calendar;
@@ -260,7 +270,8 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,FunctionToDrawContextualIcons,
+   Box_BoxBegin (NULL,NULL,
+                 FunctionToDrawContextualIcons,Args,
 	         PrintView ? NULL :
 	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (PrintView,false,
@@ -272,7 +283,8 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    if (!PrintView)
      {
       Set_StartSettingsHead ();
-      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL);
+      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,
+                                       NULL,NULL);
       Set_EndSettingsHead ();
      }
 
@@ -306,27 +318,33 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Cal_PutIconsCalendar (void)
+static void Cal_PutIconsCalendar (void *Args)
   {
-   /***** Print calendar *****/
-   Ico_PutContextualIconToPrint (ActPrnCal,NULL);
+   if (Args)
+     {
+      /***** Print calendar *****/
+      Ico_PutContextualIconToPrint (ActPrnCal,
+				    NULL,NULL);
 
-   /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
-       (Gbl.Hlds.Num ||					// There are holidays
-        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
-      Hld_PutIconToSeeHlds ();
+      /***** View holidays *****/
+      if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
+	  (Gbl.Hlds.Num ||					// There are holidays
+	   Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
+	 Hld_PutIconToSeeHlds ();
+     }
   }
 
 /*****************************************************************************/
 /************************** Put icon to see calendar *************************/
 /*****************************************************************************/
 
-void Cal_PutIconToSeeCalendar (void)
+void Cal_PutIconToSeeCalendar (void *Args)
   {
    extern const char *Txt_Calendar;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,NULL,
-				  "calendar.svg",
-				  Txt_Calendar);
+   if (Args)
+      Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
+				     NULL,NULL,
+				     "calendar.svg",
+				     Txt_Calendar);
   }

@@ -71,7 +71,7 @@ static struct Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plug
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (void);
+static void Plg_PutIconToEditPlugins (void *Args);
 static void Plg_EditPluginsInternal (void);
 static void Plg_ListPluginsForEdition (void);
 static void Plg_PutParamPlgCod (long PlgCod);
@@ -107,10 +107,14 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Plugins,
-                      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
-                                                               NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Box_BoxTableBegin (NULL,Txt_Plugins,
+			 Plg_PutIconToEditPlugins,(void *) &Gbl,
+			 NULL,Box_NOT_CLOSABLE,2);
+   else
+      Box_BoxTableBegin (NULL,Txt_Plugins,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    HTM_TR_Begin (NULL);
@@ -167,9 +171,11 @@ void Plg_ListPlugins (void)
 /*************************** Put icon to edit plugins ************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (void)
+static void Plg_PutIconToEditPlugins (void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlg,NULL,NULL);
+   if (Args)
+      Ico_PutContextualIconToEdit (ActEdiPlg,NULL,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -196,7 +202,8 @@ static void Plg_EditPluginsInternal (void)
    Plg_GetListPlugins ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Plugins,NULL,
+   Box_BoxBegin (NULL,Txt_Plugins,
+                 NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new plugin *****/
@@ -859,7 +866,8 @@ static void Plg_PutFormToCreatePlugin (void)
    Frm_StartForm (ActNewPlg);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_plugin,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_plugin,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

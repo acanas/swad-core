@@ -77,7 +77,7 @@ static long Exa_GetParamsExamAnnouncement (void);
 static void Exa_AllocMemExamAnnouncement (void);
 static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
-static void Exa_PutIconToCreateNewExamAnnouncement (void);
+static void Exa_PutIconToCreateNewExamAnnouncement (void *Args);
 static void Exa_PutButtonToCreateNewExamAnnouncement (void);
 
 static long Exa_AddExamAnnouncementToDB (void);
@@ -86,8 +86,8 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
 static void Exa_ShowExamAnnouncement (long ExaCod,
 				      Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
 				      bool HighLight);
-static void Exa_PutIconsExamAnnouncement (void);
-static void Exa_PutParamExaCodToEdit (void);
+static void Exa_PutIconsExamAnnouncement (void *Args);
+static void Exa_PutParamExaCodToEdit (void *Args);
 static long Exa_GetParamExaCod (void);
 
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
@@ -394,7 +394,8 @@ void Exa_ReqRemoveExamAnnouncement (void)
 
    /* End alert */
 
-   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,NULL,Exa_PutParamExaCodToEdit,
+   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,NULL,
+                            Exa_PutParamExaCodToEdit,NULL,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
   }
 
@@ -574,10 +575,14 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 				Gbl.Hierarchy.Crs.CrsCod,SubQueryStatus);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Announcements_of_exams,
-		 ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
-			    NULL,
-		 Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
+   if (ICanEdit)
+      Box_BoxBegin (NULL,Txt_Announcements_of_exams,
+		    Exa_PutIconToCreateNewExamAnnouncement,(void *) &Gbl,
+		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_Announcements_of_exams,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
 
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
@@ -633,12 +638,14 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 /***************** Put icon to create a new exam announcement ****************/
 /*****************************************************************************/
 
-static void Exa_PutIconToCreateNewExamAnnouncement (void)
+static void Exa_PutIconToCreateNewExamAnnouncement (void *Args)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Ico_PutContextualIconToAdd (ActEdiExaAnn,NULL,NULL,
-			       Txt_New_announcement_OF_EXAM);
+   if (Args)
+      Ico_PutContextualIconToAdd (ActEdiExaAnn,NULL,
+				  NULL,NULL,
+				  Txt_New_announcement_OF_EXAM);
   }
 
 /*****************************************************************************/
@@ -959,7 +966,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    unsigned Minute;
    char *Anchor = NULL;
    const char *Width;
-   void (*FunctionToDrawContextualIcons) (void);
+   void (*FunctionToDrawContextualIcons) (void *Args);
    const char *HelpLink;
    static const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
@@ -1002,12 +1009,15 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Ale_ShowAlerts (Anchor);
 
       /* Start highlighted box */
-      Box_BoxShadowBegin (Width,NULL,FunctionToDrawContextualIcons,HelpLink);
+      Box_BoxShadowBegin (Width,NULL,
+                          FunctionToDrawContextualIcons,(void *) &Gbl,
+                          HelpLink);
      }
    else	// Don't highlight
       /* Start normal box */
-      Box_BoxBegin (Width,NULL,FunctionToDrawContextualIcons,HelpLink,
-		    Box_NOT_CLOSABLE);
+      Box_BoxBegin (Width,NULL,
+                    FunctionToDrawContextualIcons,NULL,
+                    HelpLink,Box_NOT_CLOSABLE);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1483,42 +1493,51 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 /********* Put icons to remove / edit / print an exam announcement ***********/
 /*****************************************************************************/
 
-static void Exa_PutIconsExamAnnouncement (void)
+static void Exa_PutIconsExamAnnouncement (void *Args)
   {
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+   if (Args)
      {
-      /***** Link to remove this exam announcement *****/
-      Ico_PutContextualIconToRemove (ActReqRemExaAnn,Exa_PutParamExaCodToEdit);
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	{
+	 /***** Link to remove this exam announcement *****/
+	 Ico_PutContextualIconToRemove (ActReqRemExaAnn,
+					Exa_PutParamExaCodToEdit,NULL);
 
-      /***** Put form to hide/show exam announement *****/
-      switch (Gbl.ExamAnns.ExaDat.Status)
-        {
-	 case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
-            Ico_PutContextualIconToHide (ActHidExaAnn,Gbl.ExamAnns.Anchor,Exa_PutParamExaCodToEdit);
-	    break;
-	 case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
-            Ico_PutContextualIconToUnhide (ActShoExaAnn,Gbl.ExamAnns.Anchor,Exa_PutParamExaCodToEdit);
-	    break;
-	 case Exa_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here
-	    break;
-        }
+	 /***** Put form to hide/show exam announement *****/
+	 switch (Gbl.ExamAnns.ExaDat.Status)
+	   {
+	    case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
+	       Ico_PutContextualIconToHide (ActHidExaAnn,Gbl.ExamAnns.Anchor,
+					    Exa_PutParamExaCodToEdit,NULL);
+	       break;
+	    case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
+	       Ico_PutContextualIconToUnhide (ActShoExaAnn,Gbl.ExamAnns.Anchor,
+					      Exa_PutParamExaCodToEdit,NULL);
+	       break;
+	    case Exa_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here
+	       break;
+	   }
 
-      /***** Link to edit this exam announcement *****/
-      Ico_PutContextualIconToEdit (ActEdiExaAnn,NULL,Exa_PutParamExaCodToEdit);
+	 /***** Link to edit this exam announcement *****/
+	 Ico_PutContextualIconToEdit (ActEdiExaAnn,NULL,
+				      Exa_PutParamExaCodToEdit,NULL);
+	}
+
+      /***** Link to print view *****/
+      Ico_PutContextualIconToPrint (ActPrnExaAnn,
+				    Exa_PutParamExaCodToEdit,NULL);
      }
-
-   /***** Link to print view *****/
-   Ico_PutContextualIconToPrint (ActPrnExaAnn,Exa_PutParamExaCodToEdit);
   }
 
 /*****************************************************************************/
 /*************** Param with the code of an exam announcement *****************/
 /*****************************************************************************/
 
-static void Exa_PutParamExaCodToEdit (void)
+static void Exa_PutParamExaCodToEdit (void *Args)
   {
-   Exa_PutHiddenParamExaCod (Gbl.ExamAnns.ExaCod);
+   if (Args)
+      Exa_PutHiddenParamExaCod (Gbl.ExamAnns.ExaCod);
   }
 
 void Exa_PutHiddenParamExaCod (long ExaCod)

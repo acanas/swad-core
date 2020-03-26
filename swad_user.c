@@ -179,7 +179,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
 static void Usr_SetMyPrefsAndRoles (void);
 
-static void Usr_PutLinkToLogOut (void);
+static void Usr_PutLinkToLogOut (void *Args);
 
 static void Usr_InsertMyLastData (void);
 
@@ -202,9 +202,9 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Sc
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncParams) (void),
+                                                     void (*FuncParams) (void *Args),void *Args,
                                                      const char *OnSubmit);
-static void Usr_PutParamsConfirmIWantToSeeBigList (void);
+static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args);
 
 static void Usr_BuildParamName (char **ParamName,
 				const char *ParamRoot,
@@ -214,7 +214,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
+static void Usr_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
                                          Usr_ShowUsrsType_t ListType);
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
 			                     struct SelectedUsrs *SelectedUsrs);
@@ -257,9 +257,9 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
 
-static void Usr_PutIconsListGsts (void);
-static void Usr_PutIconsListStds (void);
-static void Usr_PutIconsListTchs (void);
+static void Usr_PutIconsListGsts (void *Args);
+static void Usr_PutIconsListStds (void *Args);
+static void Usr_PutIconsListTchs (void *Args);
 
 static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
@@ -267,9 +267,9 @@ static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
-static void Usr_ShowGstsAllDataParams (void);
-static void Usr_ShowStdsAllDataParams (void);
-static void Usr_ShowTchsAllDataParams (void);
+static void Usr_ShowGstsAllDataParams (void *Args);
+static void Usr_ShowStdsAllDataParams (void *Args);
+static void Usr_ShowTchsAllDataParams (void *Args);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
@@ -291,7 +291,8 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-         Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,NULL,
+         Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
+                                 NULL,NULL,
                                  Btn_CONFIRM_BUTTON,Txt_Upload_photo,
 				 Ale_WARNING,Txt_You_can_only_perform_X_further_actions_,
                                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
@@ -2582,7 +2583,8 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,
+                                  NULL,NULL,
 				  "sign-in-alt-green.svg",
 				  Txt_Log_in);
   }
@@ -2615,7 +2617,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
       FuncParams ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Log_in,NULL,
+   Box_BoxTableBegin (NULL,Txt_Log_in,
+                      NULL,NULL,
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
@@ -2689,13 +2692,16 @@ void Usr_WelcomeUsr (void)
 			   "class=\"ICO160x160\"");
 
 		  /* End alert */
-		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+		                           NULL,NULL,
+		                           Btn_NO_BUTTON,NULL);
                  }
 
 	    /***** Alert with button to check email address *****/
 	    if ( Gbl.Usrs.Me.UsrDat.Email[0] &&
 		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
-	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,NULL,
+	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,
+	                               NULL,NULL,
 				       Btn_CONFIRM_BUTTON,Txt_Check,
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
@@ -2976,14 +2982,14 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_PutParamMyUsrCodEncrypted (void)
+void Usr_PutParamMyUsrCodEncrypted (void *EncryptedUsrCod)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted ((const char *) EncryptedUsrCod);
   }
 
-void Usr_PutParamOtherUsrCodEncrypted (void)
+void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted ((const char *) EncryptedUsrCod);
   }
 
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
@@ -3520,7 +3526,8 @@ void Usr_ShowFormsLogoutAndRole (void)
 	             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Session,Usr_PutLinkToLogOut,
+   Box_BoxBegin (NULL,Txt_Session,
+                 Usr_PutLinkToLogOut,(void *) &Gbl,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
@@ -3550,14 +3557,16 @@ void Usr_ShowFormsLogoutAndRole (void)
 /************** Put an icon (form) to close the current session **************/
 /*****************************************************************************/
 
-static void Usr_PutLinkToLogOut (void)
+static void Usr_PutLinkToLogOut (void *Args)
   {
    extern const char *Txt_Log_out;
 
-   /***** Put form to log out *****/
-   Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,NULL,
-				  "sign-out-alt-red.svg",
-				  Txt_Log_out);
+   if (Args)
+      /***** Put form to log out *****/
+      Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
+				     NULL,NULL,
+				     "sign-out-alt-red.svg",
+				     Txt_Log_out);
   }
 
 /*****************************************************************************/
@@ -5629,7 +5638,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /*****************************************************************************/
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncParams) (void),
+                           void (*FuncParams) (void *Args),void *Args,
                            const char *OnSubmit)
   {
    bool ShowBigList;
@@ -5640,7 +5649,9 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
       /***** Get parameter with user's confirmation
              to see a big list of users *****/
       if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
-	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,FuncParams,OnSubmit);
+	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,
+	                                          FuncParams,Args,
+	                                          OnSubmit);
 
       return ShowBigList;
      }
@@ -5653,7 +5664,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
 /*****************************************************************************/
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncParams) (void),
+                                                     void (*FuncParams) (void *Args),void *Args,
                                                      const char *OnSubmit)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
@@ -5662,19 +5673,22 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
    /***** Show alert and button to confirm that I want to see the big list *****/
    Usr_FuncParamsBigList = FuncParams;	// Used to pass pointer to function
    Ale_ShowAlertAndButton (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
-                           Usr_PutParamsConfirmIWantToSeeBigList,
+                           Usr_PutParamsConfirmIWantToSeeBigList,Args,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
                            NumUsrs);
   }
 
-static void Usr_PutParamsConfirmIWantToSeeBigList (void)
+static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
   {
-   Grp_PutParamsCodGrps ();
-   Usr_PutParamsPrefsAboutUsrList ();
-   if (Usr_FuncParamsBigList)
-      Usr_FuncParamsBigList ();
-   Par_PutHiddenParamChar ("ShowBigList",'Y');
+   if (Args)
+     {
+      Grp_PutParamsCodGrps ();
+      Usr_PutParamsPrefsAboutUsrList ();
+      if (Usr_FuncParamsBigList)
+	 Usr_FuncParamsBigList ();
+      Par_PutHiddenParamChar ("ShowBigList",'Y');
+     }
   }
 
 /*****************************************************************************/
@@ -6220,7 +6234,7 @@ void Usr_FreeListOtherRecipients (void)
 /*************************** Selection of list type **************************/
 /*****************************************************************************/
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
+void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
   {
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -6229,7 +6243,8 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
 								    "PREF_OFF");
-   Usr_FormToSelectUsrListType (FuncParams,Usr_LIST_AS_CLASS_PHOTO);
+   Usr_FormToSelectUsrListType (FuncParams,Args,
+                                Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
    Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
@@ -6239,7 +6254,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    Usr_PutParamListWithPhotos ();
    Usr_PutSelectorNumColsClassPhoto ();
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
    Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -6247,7 +6262,8 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
 								"PREF_OFF");
-   Usr_FormToSelectUsrListType (FuncParams,Usr_LIST_AS_LISTING);
+   Usr_FormToSelectUsrListType (FuncParams,Args,
+                                Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
    Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
@@ -6255,7 +6271,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
    Usr_PutCheckboxListWithPhotos ();
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -6268,7 +6284,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
+static void Usr_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
                                          Usr_ShowUsrsType_t ListType)
   {
    extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
@@ -6281,7 +6297,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
    Usr_PutParamUsrListType (ListType);
    Usr_PutParamListWithPhotos ();
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
 
    /***** Link and image *****/
    HTM_BUTTON_SUBMIT_Begin (Txt_USR_LIST_TYPES[ListType],
@@ -6301,7 +6317,8 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
 /*****************************************************************************/
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
-				       Act_Action_t NextAction,void (*FuncParams) (),
+				       Act_Action_t NextAction,
+				       void (*FuncParams) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
@@ -6318,7 +6335,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Title,
+                 NULL,NULL,
+                 HelpLink,Box_NOT_CLOSABLE);
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6337,20 +6356,25 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Draw class photos to select users *****/
-   Box_BoxBegin (NULL,Txt_Select_users,NULL,HelpLink,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Select_users,
+                 NULL,NULL,
+                 HelpLink,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (FuncParams,Grp_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (FuncParams,Args,
+                                      Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,FuncParams,NULL))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,
+                                FuncParams,Args,
+                                NULL))
         {
 	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (FuncParams);
+	 Usr_ShowFormsToSelectUsrListType (FuncParams,Args);
 
 	 /***** Link to register students *****/
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -6364,10 +6388,10 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          if (NextAction == ActAdmAsgWrkCrs)
            {
             Gbl.FileBrowser.FullTree = true;	// By default, show all files
-            Brw_PutHiddenParamFullTreeIfSelected ();
+            Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
            }
          if (FuncParams)
-            FuncParams ();
+            FuncParams (Args);
 
          HTM_TABLE_BeginCenterPadding (2);
 
@@ -7377,7 +7401,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 											    Txt_users[Sex]) :
 								          ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 											    Txt_ROLES_PLURAL_abc[Role][Sex])),
-			 NULL,NULL,Box_NOT_CLOSABLE,2);
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
       /***** Heading row with column names *****/
@@ -7522,7 +7547,8 @@ void Usr_ListDataAdms (void)
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Begin box with list of administrators *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+                 NULL,NULL,
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -7542,7 +7568,7 @@ void Usr_ListDataAdms (void)
       HTM_DIV_Begin ("class=\"PREF_CONT\"");
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_StartForm (ActLstOth);
-      Sco_PutParamCurrentScope ();
+      Sco_PutParamCurrentScope ((void *) &Gbl);
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -7934,7 +7960,8 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
-   Lay_PutContextualLinkIconText (ActLstOth,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActLstOth,NULL,
+                                  NULL,NULL,
 				  Rol_Icons[Rol_DEG_ADM],
 				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
@@ -7948,7 +7975,8 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLinkIconText (ActLstGst,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActLstGst,NULL,
+                                  NULL,NULL,
 				  "users.svg",
 				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
   }
@@ -7987,7 +8015,8 @@ void Usr_SeeGuests (void)
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+                 Usr_PutIconsListGsts,(void *) &Gbl,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8010,10 +8039,11 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-	                        Sco_PutParamCurrentScope,NULL))
+	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
 
          /***** Draw a class photo with guests *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8128,7 +8158,8 @@ void Usr_SeeStudents (void)
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+                 Usr_PutIconsListStds,(void *) &Gbl,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8154,7 +8185,8 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,(void *) &Gbl,
+                                         Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -8162,10 +8194,11 @@ void Usr_SeeStudents (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-	                        Sco_PutParamCurrentScope,NULL))
+	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
 
          /***** Draw a class photo with students of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8312,7 +8345,8 @@ void Usr_SeeTeachers (void)
 				      1 << Rol_TCH);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+                 Usr_PutIconsListTchs,(void *) &Gbl,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8328,7 +8362,8 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,(void *) &Gbl,
+                                         Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -8336,10 +8371,11 @@ void Usr_SeeTeachers (void)
    if (NumUsrs)
      {
       if (Usr_GetIfShowBigList (NumUsrs,
-	                        Sco_PutParamCurrentScope,NULL))
+	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
 
          /***** Draw a class photo with teachers of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8348,12 +8384,12 @@ void Usr_SeeTeachers (void)
 					Gbl.Scope.Current == Hie_DEG ||
 					Gbl.Scope.Current == Hie_CTR ||
 					Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Ins.InsCod :
-									      -1L,
+									-1L,
 				       (Gbl.Scope.Current == Hie_CRS ||
 					Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
-									      -1L,
+									-1L,
 					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
-									      -1L);
+									-1L);
 
          /* Set options allowed */
          PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
@@ -8727,78 +8763,87 @@ static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultA
 /***************** Put contextual icons in list of guests ********************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListGsts (void)
+static void Usr_PutIconsListGsts (void *Args)
   {
-   switch (Gbl.Usrs.Me.ListType)
+   if (Args)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
-	    /***** Put icon to print guests *****/
-	    Usr_PutIconToPrintGsts ();
-	 break;
-      case Usr_LIST_AS_LISTING:
-	 /***** Put icon to show all data of guests *****/
-	 Usr_PutIconToShowGstsAllData ();
-	 break;
-      default:
-	 break;
-     }
+      switch (Gbl.Usrs.Me.ListType)
+	{
+	 case Usr_LIST_AS_CLASS_PHOTO:
+	    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
+	       /***** Put icon to print guests *****/
+	       Usr_PutIconToPrintGsts ();
+	    break;
+	 case Usr_LIST_AS_LISTING:
+	    /***** Put icon to show all data of guests *****/
+	    Usr_PutIconToShowGstsAllData ();
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_USERS;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_USERS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
 /**************** Put contextual icons in list of students *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListStds (void)
+static void Usr_PutIconsListStds (void *Args)
   {
-   switch (Gbl.Usrs.Me.ListType)
+   if (Args)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
-	    /***** Put icon to print students *****/
-	    Usr_PutIconToPrintStds ();
-	 break;
-      case Usr_LIST_AS_LISTING:
-	 /***** Put icon to show all data of students *****/
-	 Usr_PutIconToShowStdsAllData ();
-	 break;
-      default:
-	 break;
-     }
+      switch (Gbl.Usrs.Me.ListType)
+	{
+	 case Usr_LIST_AS_CLASS_PHOTO:
+	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+	       /***** Put icon to print students *****/
+	       Usr_PutIconToPrintStds ();
+	    break;
+	 case Usr_LIST_AS_LISTING:
+	    /***** Put icon to show all data of students *****/
+	    Usr_PutIconToShowStdsAllData ();
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_USERS;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_USERS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
 /**************** Put contextual icons in list of teachers *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListTchs (void)
+static void Usr_PutIconsListTchs (void *Args)
   {
-   switch (Gbl.Usrs.Me.ListType)
+   if (Args)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
-	    /***** Put icon to print teachers *****/
-	    Usr_PutIconToPrintTchs ();
-	 break;
-      case Usr_LIST_AS_LISTING:
-	 /***** Put icon to show all data of teachers *****/
-	 Usr_PutIconToShowTchsAllData ();
-	 break;
-      default:
-	 break;
-     }
+      switch (Gbl.Usrs.Me.ListType)
+	{
+	 case Usr_LIST_AS_CLASS_PHOTO:
+	    if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
+	       /***** Put icon to print teachers *****/
+	       Usr_PutIconToPrintTchs ();
+	    break;
+	 case Usr_LIST_AS_LISTING:
+	    /***** Put icon to show all data of teachers *****/
+	    Usr_PutIconToShowTchsAllData ();
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_USERS;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_USERS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -8807,17 +8852,20 @@ static void Usr_PutIconsListTchs (void)
 
 static void Usr_PutIconToPrintGsts (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnGstPho,
+                                 Usr_ShowGstsAllDataParams,(void *) &Gbl);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnStdPho,
+                                 Usr_ShowStdsAllDataParams,(void *) &Gbl);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnTchPho,
+                                 Usr_ShowTchsAllDataParams,(void *) &Gbl);
   }
 
 /*****************************************************************************/
@@ -8828,7 +8876,8 @@ static void Usr_PutIconToShowGstsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
+   Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
+                                  Usr_ShowGstsAllDataParams,(void *) &Gbl,
 				  "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8837,7 +8886,8 @@ static void Usr_PutIconToShowStdsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
+   Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
+                                  Usr_ShowStdsAllDataParams,(void *) &Gbl,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8846,26 +8896,34 @@ static void Usr_PutIconToShowTchsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
+   Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
+                                  Usr_ShowTchsAllDataParams,(void *) &Gbl,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
 
-static void Usr_ShowGstsAllDataParams (void)
+static void Usr_ShowGstsAllDataParams (void *Args)
   {
-   Usr_PutParamListWithPhotos ();
+   if (Args)
+      Usr_PutParamListWithPhotos ();
   }
 
-static void Usr_ShowStdsAllDataParams (void)
+static void Usr_ShowStdsAllDataParams (void *Args)
   {
-   Grp_PutParamsCodGrps ();
-   Usr_PutParamListWithPhotos ();
+   if (Args)
+     {
+      Grp_PutParamsCodGrps ();
+      Usr_PutParamListWithPhotos ();
+     }
   }
 
-static void Usr_ShowTchsAllDataParams (void)
+static void Usr_ShowTchsAllDataParams (void *Args)
   {
-   Sco_PutParamCurrentScope ();
-   Usr_PutParamListWithPhotos ();
+   if (Args)
+     {
+      Sco_PutParamCurrentScope ((void *) &Gbl);
+      Usr_PutParamListWithPhotos ();
+     }
   }
 
 /*****************************************************************************/
@@ -9238,7 +9296,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
        Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
-      Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,NULL,
+      Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
+                              NULL,NULL,
                               Btn_CREATE_BUTTON,Txt_Register_students,
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
@@ -9247,7 +9306,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
             Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
-      Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,NULL,
+      Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,
+                              NULL,NULL,
                               Btn_CREATE_BUTTON,Txt_Register_teacher,
 			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
@@ -9822,7 +9882,8 @@ void Usr_PrintUsrQRCode (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
+      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,
+                    NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Show QR code *****/

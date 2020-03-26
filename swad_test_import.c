@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void);
+static void TsI_PutParamsExportQsts (void *Args);
 static void TsI_PutCreateXMLParam (void);
 
 static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
@@ -94,7 +94,8 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
 
    /***** Put a link to create a file with questions *****/
    Tst_SetParamGblTest (Test);
-   Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
+   Lay_PutContextualLinkIconText (ActLstTstQst,NULL,
+                                  TsI_PutParamsExportQsts,(void *) &Gbl,
 				  "file-import.svg",
 				  Txt_Export_questions);
   }
@@ -103,16 +104,19 @@ void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void)
+static void TsI_PutParamsExportQsts (void *Args)
   {
    struct Tst_Test Test;
 
-   Tst_GetParamGblTest (&Test);
-   Dat_WriteParamsIniEndDates ();
-   Tst_WriteParamEditQst ();
-   Par_PutHiddenParamChar ("OnlyThisQst",'N');
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test.SelectedOrder);
-   TsI_PutCreateXMLParam ();
+   if (Args)
+     {
+      Tst_GetParamGblTest (&Test);
+      Dat_WriteParamsIniEndDates ();
+      Tst_WriteParamEditQst ();
+      Par_PutHiddenParamChar ("OnlyThisQst",'N');
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test.SelectedOrder);
+      TsI_PutCreateXMLParam ();
+     }
   }
 
 /*****************************************************************************/
@@ -138,7 +142,8 @@ void TsI_PutFormToImportQuestions (void)
    extern const char *Txt_Import_questions;
 
    /***** Put a link to create a file with questions *****/
-   Lay_PutContextualLinkIconText (ActReqImpTstQst,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqImpTstQst,NULL,
+                                  NULL,NULL,
 				  "file-export.svg",
 				  Txt_Import_questions);
   }
@@ -156,7 +161,8 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Import_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Import_questions,
+                 NULL,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
@@ -554,7 +560,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    XML_GetTree (XMLBuffer,&RootElem);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Imported_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Imported_questions,
+                 NULL,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Print XML tree *****/

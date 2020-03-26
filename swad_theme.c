@@ -304,7 +304,7 @@ const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void The_PutIconsTheme (void);
+static void The_PutIconsTheme (void *Args);
 
 /*****************************************************************************/
 /************************ Put icons to select a theme ***********************/
@@ -317,7 +317,8 @@ void The_PutIconsToSelectTheme (void)
    The_Theme_t Theme;
    char Icon[PATH_MAX + 1];
 
-   Box_BoxBegin (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
+   Box_BoxBegin (NULL,Txt_Theme_SKIN,
+                 The_PutIconsTheme,(void *) &Gbl,
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -346,11 +347,14 @@ void The_PutIconsToSelectTheme (void)
 /****************** Put contextual icons in theme setting ********************/
 /*****************************************************************************/
 
-static void The_PutIconsTheme (void)
+static void The_PutIconsTheme (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_THEMES;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_THEMES;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/

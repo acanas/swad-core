@@ -94,7 +94,7 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
 void Mch_RemoveMatchInCourseFromAllTables (long CrsCod);
 void Mch_RemoveUsrFromMatchTablesInCrs (long UsrCod,long CrsCod);
 
-void Mch_PutParamsEdit (void);
+void Mch_PutParamsEdit (void *Args);
 void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match);
 long Mch_GetParamMchCod (void);
 

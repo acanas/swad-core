@@ -124,7 +124,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Chat_rooms,NULL,
+   Box_BoxBegin (NULL,Txt_Chat_rooms,
+                 NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
    HTM_UL_Begin ("class=\"LIST_TREE\"");
 
@@ -257,7 +258,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Rooms_with_users,NULL,
+      Box_BoxTableBegin (NULL,Txt_Rooms_with_users,
+                         NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/

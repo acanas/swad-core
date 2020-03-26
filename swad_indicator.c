@@ -68,7 +68,7 @@ static void Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
-static void Ind_PutParamsConfirmIWantToSeeBigList (void);
+static void Ind_PutParamsConfirmIWantToSeeBigList (void *Args);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -109,7 +109,8 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParamsIndicators ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Indicators_of_courses,NULL,
+   Box_BoxBegin (NULL,Txt_Indicators_of_courses,
+                 NULL,NULL,
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 
    /***** Form to update indicators *****/
@@ -565,20 +566,23 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
-                           Ind_PutParamsConfirmIWantToSeeBigList,
+                           Ind_PutParamsConfirmIWantToSeeBigList,(void *) &Gbl,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
   }
 
-static void Ind_PutParamsConfirmIWantToSeeBigList (void)
+static void Ind_PutParamsConfirmIWantToSeeBigList (void *Args)
   {
-   Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-   Par_PutHiddenParamLong (NULL,"OthDegTypCod",Gbl.Stat.DegTypCod);
-   Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
-   if (Gbl.Stat.StrIndicatorsSelected[0])
-      Par_PutHiddenParamString (NULL,"Indicators",Gbl.Stat.StrIndicatorsSelected);
-   Par_PutHiddenParamChar ("ShowBigList",'Y');
+   if (Args)
+     {
+      Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
+      Par_PutHiddenParamLong (NULL,"OthDegTypCod",Gbl.Stat.DegTypCod);
+      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
+      if (Gbl.Stat.StrIndicatorsSelected[0])
+	 Par_PutHiddenParamString (NULL,"Indicators",Gbl.Stat.StrIndicatorsSelected);
+      Par_PutHiddenParamChar ("ShowBigList",'Y');
+     }
   }
 
 /*****************************************************************************/

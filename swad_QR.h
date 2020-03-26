@@ -39,8 +39,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) (void));
-void QR_PutParamQRString (void);
+void QR_PutLinkToPrintQRCode (Act_Action_t Action,
+                              void (*FuncParams) (void *Args),void *Args);
+void QR_PutParamQRString (void *QRString);
 
 void QR_PrintQRCode (void);
 void QR_ImageQRCode (const char *QRString);

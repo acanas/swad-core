@@ -73,11 +73,11 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
 
 static void DT_EditDegreeTypesInternal (void);
-static void DT_PutIconsEditingDegreeTypes (void);
+static void DT_PutIconsEditingDegreeTypes (void *Args);
 
 static void DT_ListDegreeTypesForSeeing (void);
-static void DT_PutIconsListingDegTypes (void);
-static void DT_PutIconToEditDegTypes (void);
+static void DT_PutIconsListingDegTypes (void *Args);
+static void DT_PutIconToEditDegTypes (void *Args);
 static void DT_ListDegreeTypesForEdition (void);
 
 static void DT_PutFormToCreateDegreeType (void);
@@ -192,11 +192,13 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    switch (NextAction)
      {
       case ActSeeDegTyp:
-	 Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconsListingDegTypes,
+	 Box_BoxBegin (NULL,Txt_Types_of_degree,
+	               DT_PutIconsListingDegTypes,(void *) &Gbl,
 		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
-	 Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
+	 Box_BoxBegin (NULL,Txt_Types_of_degree,
+	               DT_PutIconToEditDegTypes,(void *) &Gbl,
 		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
       default:	// Bad call
@@ -256,7 +258,8 @@ static void DT_EditDegreeTypesInternal (void)
    DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
+   Box_BoxBegin (NULL,Txt_Types_of_degree,
+                 DT_PutIconsEditingDegreeTypes,(void *) &Gbl,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
@@ -277,17 +280,20 @@ static void DT_EditDegreeTypesInternal (void)
 /************ Put contextual icons when editing degree types *****************/
 /*****************************************************************************/
 
-static void DT_PutIconsEditingDegreeTypes (void)
+static void DT_PutIconsEditingDegreeTypes (void *Args)
   {
-   /***** Put icon to viee degree types *****/
-   DT_PutIconToViewDegreeTypes ();
+   if (Args)
+     {
+      /***** Put icon to view degree types *****/
+      DT_PutIconToViewDegreeTypes ();
 
-   /***** Put icon to view degrees *****/
-   Deg_PutIconToViewDegrees ();
+      /***** Put icon to view degrees *****/
+      Deg_PutIconToViewDegrees ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -298,7 +304,8 @@ void DT_PutIconToViewDegreeTypes (void)
   {
    extern const char *Txt_Types_of_degree;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,
+                                  NULL,NULL,
 				  "sitemap.svg",
 				  Txt_Types_of_degree);
   }
@@ -348,28 +355,33 @@ static void DT_ListDegreeTypesForSeeing (void)
 /************** Put contextual icons in list of degree types *****************/
 /*****************************************************************************/
 
-static void DT_PutIconsListingDegTypes (void)
+static void DT_PutIconsListingDegTypes (void *Args)
   {
-   /***** Put icon to edit degree types *****/
-   DT_PutIconToEditDegTypes ();
+   if (Args)
+     {
+      /***** Put icon to edit degree types *****/
+      DT_PutIconToEditDegTypes ((void *) &Gbl);
 
-   /***** Put icon to view degrees *****/
-   Deg_PutIconToViewDegrees ();
+      /***** Put icon to view degrees *****/
+      Deg_PutIconToViewDegrees ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
-static void DT_PutIconToEditDegTypes (void)
+static void DT_PutIconToEditDegTypes (void *Args)
   {
-   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
-       DT_CheckIfICanCreateDegreeTypes ())
-      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL);
+   if (Args)
+      if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
+	  DT_CheckIfICanCreateDegreeTypes ())
+	 Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
+				      NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -453,7 +465,8 @@ static void DT_PutFormToCreateDegreeType (void)
    Frm_StartForm (ActNewDegTyp);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_type_of_degree,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_type_of_degree,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -511,7 +524,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* Begin form to change order */
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
-         Fig_PutHiddenParamFigures ();
+         Fig_PutHiddenParamFigures ((void *) &Gbl);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       /* Link with the head of this column */

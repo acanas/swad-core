@@ -412,18 +412,7 @@ struct Globals
       struct UsrData *UsrDat;
       Rec_SharedRecordViewType_t TypeOfView;
      } Record;
-   struct
-     {
-      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of events
-      long *LstAgdCods;	// List of agenda codes
-      unsigned Past__FutureEvents;
-      unsigned PrivatPublicEvents;
-      unsigned HiddenVisiblEvents;
-      Agd_Order_t SelectedOrder;
-      long AgdCodToEdit;	// Used as parameter in contextual links
-      unsigned CurrentPage;
-     } Agenda;
+   struct Agd_Agenda Agenda;
    struct
      {
       Hie_Level_t Current;
@@ -538,16 +527,7 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct
-     {
-      bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-      unsigned Num;		// Number of assignments
-      long *LstAsgCods;		// List of assigment codes
-      Dat_StartEndTime_t SelectedOrder;
-      long AsgCodToEdit;	// Used as parameter in contextual links
-      unsigned CurrentPage;
-     } Asgs;
+   struct Asg_Assignments Asgs;
    struct
      {
       struct
@@ -588,10 +568,6 @@ struct Globals
       struct Forum ForumSelected;	// Forum type, location, thread and post
       long ThreadToMove;
      } Forum;
-   struct
-     {
-      long AnnCod;
-     } Announcements;
    struct
      {
       Msg_TypeOfMessages_t TypeOfMessages;

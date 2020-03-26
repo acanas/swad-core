@@ -101,7 +101,7 @@ long Mch_CurrentMchCod = -1L;	// Used as parameter in contextual links
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mch_PutIconsInListOfMatches (void);
+static void Mch_PutIconsInListOfMatches (void *Args);
 static void Mch_PutIconToCreateNewMatch (void);
 
 static void Mch_ListOneOrMoreMatches (const struct Game *Game,
@@ -131,7 +131,7 @@ static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
 static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName);
 static void Mch_RemoveUsrMchResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
-static void Mch_PutParamsPlay (void);
+static void Mch_PutParamsPlay (void *Args);
 static void Mch_PutParamMchCod (long MchCod);
 
 static void Mch_PutFormNewMatch (const struct Game *Game);
@@ -286,14 +286,16 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /***** Begin box *****/
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_BoxBegin ("100%",Txt_Matches,Mch_PutIconsInListOfMatches,
+   Box_BoxBegin ("100%",Txt_Matches,
+                 Mch_PutIconsInListOfMatches,(void *) &Gbl,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeGam,Gam_PutParams);
+      Grp_ShowFormToSelWhichGrps (ActSeeGam,
+                                  Gam_PutParams,(void *) &Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -389,13 +391,17 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
 /****************** Put icons in list of matches of a game *******************/
 /*****************************************************************************/
 
-static void Mch_PutIconsInListOfMatches (void)
+static void Mch_PutIconsInListOfMatches (void *Args)
   {
-   bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
+   bool ICanEditMatches;
 
-   /***** Put icon to create a new match in current game *****/
-   if (ICanEditMatches)
-      Mch_PutIconToCreateNewMatch ();
+   if (Args)
+     {
+      /***** Put icon to create a new match in current game *****/
+      ICanEditMatches = Mch_CheckIfICanEditMatches ();
+      if (ICanEditMatches)
+	 Mch_PutIconToCreateNewMatch ();
+     }
   }
 
 /*****************************************************************************/
@@ -407,7 +413,8 @@ static void Mch_PutIconToCreateNewMatch (void)
    extern const char *Txt_New_match;
 
    /***** Put form to create a new match *****/
-   Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,Gam_PutParams,
+   Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,
+                               Gam_PutParams,(void *) &Gbl,
 			       Txt_New_match);
   }
 
@@ -553,7 +560,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Frm_StartForm (ActReqRemMch);
-      Mch_PutParamsEdit ();
+      Mch_PutParamsEdit ((void *) &Gbl);
       Ico_PutIconRemove ();
       Frm_EndForm ();
      }
@@ -618,7 +625,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
    Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 						       ActResMch);
-   Mch_PutParamsPlay ();
+   Mch_PutParamsPlay ((void *) &Gbl);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								 Txt_Resume,
 			    "BT_LINK LT ASG_TITLE",NULL);
@@ -732,7 +739,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 								       ActResMch,
 				  NULL,
-				  Mch_PutParamsPlay,
+				  Mch_PutParamsPlay,(void *) &Gbl,
 				  Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
 					                             "play.svg",
 				  Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
@@ -778,7 +785,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,
+				     Mch_PutParamsEdit,(void *) &Gbl,
 				     "trophy.svg",
 				     Txt_Results);
      }
@@ -801,13 +808,13 @@ static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
 
       /* Show match results */
       Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,
+				     Mch_PutParamsEdit,(void *) &Gbl,
 				     "trophy.svg",
 				     Txt_Results);
 
       /* I can edit visibility */
       Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-				     Mch_PutParamsEdit,
+				     Mch_PutParamsEdit,(void *) &Gbl,
 				     Match->Status.ShowUsrResults ? "eye-green.svg" :
 								    "eye-slash-red.svg",
 				     Match->Status.ShowUsrResults ? Txt_Visible_results :
@@ -974,7 +981,8 @@ void Mch_RequestRemoveMatch (void)
    /***** Show question and button to remove question *****/
    Gam_SetCurrentGamCod (Match.GamCod);	// Used to pass parameter
    Mch_SetCurrentMchCod (Match.MchCod);	// Used to pass parameter
-   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Mch_PutParamsEdit,
+   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,
+                           Mch_PutParamsEdit,(void *) &Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -1155,22 +1163,29 @@ static void Mch_RemoveUsrMchResultsInCrs (long UsrCod,long CrsCod,const char *Ta
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-void Mch_PutParamsEdit (void)
+void Mch_PutParamsEdit (void *Args)
   {
-   Gam_PutParams ();
-   Mch_PutParamsPlay ();
+   if (Args)
+     {
+      Gam_PutParams ((void *) &Gbl);
+      Mch_PutParamsPlay ((void *) &Gbl);
+     }
   }
 
 /*****************************************************************************/
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-static void Mch_PutParamsPlay (void)
+static void Mch_PutParamsPlay (void *Args)
   {
-   long CurrentMchCod = Mch_GetCurrentMchCod ();
+   long CurrentMchCod;
 
-   if (CurrentMchCod > 0)
-      Mch_PutParamMchCod (CurrentMchCod);
+   if (Args)
+     {
+      CurrentMchCod = Mch_GetCurrentMchCod ();
+      if (CurrentMchCod > 0)
+	 Mch_PutParamMchCod (CurrentMchCod);
+     }
   }
 
 /*****************************************************************************/
@@ -1237,7 +1252,8 @@ static void Mch_PutFormNewMatch (const struct Game *Game)
    Gam_PutParamQstInd (0);	// Start by first question in game
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_match,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_match,
+                      NULL,NULL,
 		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
    /***** Match title *****/
@@ -1298,7 +1314,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("95%",NULL,NULL,
+      Box_BoxTableBegin ("95%",NULL,
+                         NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/

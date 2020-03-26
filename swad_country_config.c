@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CtyCfg_Configuration (bool PrintView);
-static void CtyCfg_PutIconToPrint (void);
+static void CtyCfg_PutIconToPrint (void *Args);
 static void CtyCfg_Title (bool PutLink);
 static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void CtyCfg_Map (void);
@@ -122,10 +122,12 @@ static void CtyCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,CtyCfg_PutIconToPrint,
+      Box_BoxBegin (NULL,NULL,
+                    CtyCfg_PutIconToPrint,(void *) &Gbl,
 		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -207,9 +209,11 @@ static void CtyCfg_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
-static void CtyCfg_PutIconToPrint (void)
+static void CtyCfg_PutIconToPrint (void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnCtyInf,NULL);
+   if (Args)
+      Ico_PutContextualIconToPrint (ActPrnCtyInf,
+				    NULL,NULL);
   }
 
 /*****************************************************************************/

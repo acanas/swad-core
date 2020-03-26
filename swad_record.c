@@ -78,7 +78,7 @@ extern struct Globals Gbl;
 
 static void Rec_WriteHeadingRecordFields (void);
 
-static void Rec_PutParamFielCod (void);
+static void Rec_PutParamFielCod (void *Args);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
@@ -103,12 +103,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
-static void Rec_PutIconsCommands (void);
-static void Rec_PutParamsMyTsts (void);
-static void Rec_PutParamsStdTsts (void);
-static void Rec_PutParamsWorks (void);
-static void Rec_PutParamsStudent (void);
-static void Rec_PutParamsMsgUsr (void);
+static void Rec_PutIconsCommands (void *Args);
+static void Rec_PutParamsMyTsts (void *Args);
+static void Rec_PutParamsStdTsts (void *Args);
+static void Rec_PutParamsWorks (void *Args);
+static void Rec_PutParamsStudent (void *Args);
+static void Rec_PutParamsMsgUsr (void *Args);
 static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
@@ -163,7 +163,8 @@ void Rec_ReqEditRecordFields (void)
    if (Gbl.Crs.Records.LstFields.Num)	// Fields found...
      {
       /* Begin box and table */
-      Box_BoxTableBegin (NULL,Txt_Record_fields,NULL,
+      Box_BoxTableBegin (NULL,Txt_Record_fields,
+                         NULL,NULL,
                          Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
       Rec_ListFieldsRecordsForEdition ();
@@ -337,7 +338,8 @@ void Rec_ShowFormCreateRecordField (void)
    Frm_StartForm (ActNewFie);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_record_field,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_record_field,
+                      NULL,NULL,
                       Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -605,7 +607,8 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.Crs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
-   Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,Rec_PutParamFielCod,
+   Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,
+                           Rec_PutParamFielCod,(void *) &Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
 		           Gbl.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.FullName,
@@ -651,9 +654,10 @@ void Rec_RemoveFieldFromDB (void)
 /********************** Put parameter with field code ************************/
 /*****************************************************************************/
 
-static void Rec_PutParamFielCod (void)
+static void Rec_PutParamFielCod (void *Args)
   {
-   Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.Field.FieldCod);
+   if (Args)
+      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.Field.FieldCod);
   }
 
 /*****************************************************************************/
@@ -900,7 +904,8 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,
+                                  NULL,NULL,
 				  "pen.svg",
 				  Txt_Edit_record_fields);
   }
@@ -1300,7 +1305,8 @@ static void Rec_ShowRecordOneTchCrs (void)
      {
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                    NULL,NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
       Box_BoxEnd ();
@@ -1421,7 +1427,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
               {
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+	                     NULL,NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Box_BoxEnd ();
@@ -1515,7 +1522,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
 
 static void Rec_PutParamsShowOfficeHoursOneTch (void)
   {
-   Usr_PutParamOtherUsrCodEncrypted ();
+   Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1705,7 +1712,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxTableBegin (StrRecordWidth,NULL,NULL,
+   Box_BoxTableBegin (StrRecordWidth,NULL,
+                      NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2205,10 +2213,14 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Box_BoxTableBegin (StrRecordWidth,NULL,
-                      TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
-                        	                                 Rec_PutIconsCommands,
-                      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
+   if (TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM)
+      Box_BoxTableBegin (StrRecordWidth,NULL,
+			 NULL,NULL,	// New user ==> don't put icons
+			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
+   else
+      Box_BoxTableBegin (StrRecordWidth,NULL,
+			 Rec_PutIconsCommands,(void *) &Gbl,
+			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Institution and user's photo *****/
    HTM_TR_Begin (NULL);
@@ -2406,7 +2418,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 /*********** Show commands (icon to make actions) in record card *************/
 /*****************************************************************************/
 
-static void Rec_PutIconsCommands (void)
+static void Rec_PutIconsCommands (void *Args)
   {
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_My_public_profile;
@@ -2426,207 +2438,232 @@ static void Rec_PutIconsCommands (void)
    bool RecipientHasBannedMe;
    Act_Action_t NextAction;
 
-   if (!Gbl.Form.Inside &&					// Only if not inside another form
-       Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
-       Gbl.Usrs.Me.Logged)					// Only if I am logged
+   if (Args)
      {
-      ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->BaPrfVisibility,
-				                 Gbl.Record.UsrDat);
-
-      /***** Start container *****/
-      HTM_DIV_Begin ("class=\"FRAME_ICO\"");
-
-      if (ItsMe)
-         /***** Button to edit my record card *****/
-	 Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,NULL,
-					"pen.svg",
-					Txt_Edit_my_personal_data);
-      if (ICanViewUsrProfile)
-         /***** Button to view user's profile *****/
-         Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
-				        Rec_PutParamUsrCodEncrypted,
-					"user.svg",
-					ItsMe ? Txt_My_public_profile :
-					        Txt_Another_user_s_profile);
-
-      /***** Button to view user's record card *****/
-      if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
-	 /* View student's records: common record card and course record card */
-         Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
-				        Rec_PutParamUsrCodEncrypted,
-					"card.svg",
-					Txt_View_record_for_this_course);
-      else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
-				        Rec_PutParamUsrCodEncrypted,
-					"card.svg",
-					Txt_View_record_and_office_hours);
-
-      /***** Button to view user's agenda *****/
-      if (ItsMe)
-	 Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,NULL,
-				        "calendar.svg",
-					Txt_Show_agenda);
-      else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
-				        Rec_PutParamUsrCodEncrypted,
-				        "calendar.svg",
-				        Txt_Show_agenda);
-
-      /***** Button to admin user *****/
-      if (ItsMe ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      if (!Gbl.Form.Inside &&					// Only if not inside another form
+	  Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
+	  Gbl.Usrs.Me.Logged)					// Only if I am logged
 	{
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
+	 ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->BaPrfVisibility,
+						    Gbl.Record.UsrDat);
+
+	 /***** Start container *****/
+	 HTM_DIV_Begin ("class=\"FRAME_ICO\"");
+
+	 if (ItsMe)
+	    /***** Button to edit my record card *****/
+	    Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,
+					   NULL,NULL,
+					   "pen.svg",
+					   Txt_Edit_my_personal_data);
+	 if (ICanViewUsrProfile)
+	    /***** Button to view user's profile *****/
+	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "user.svg",
+					   ItsMe ? Txt_My_public_profile :
+						   Txt_Another_user_s_profile);
+
+	 /***** Button to view user's record card *****/
+	 if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
+	    /* View student's records: common record card and course record card */
+	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "card.svg",
+					   Txt_View_record_for_this_course);
+	 else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "card.svg",
+					   Txt_View_record_and_office_hours);
+
+	 /***** Button to view user's agenda *****/
+	 if (ItsMe)
+	    Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
+					   NULL,NULL,
+					   "calendar.svg",
+					   Txt_Show_agenda);
+	 else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "calendar.svg",
+					   Txt_Show_agenda);
+
+	 /***** Button to admin user *****/
+	 if (ItsMe ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    case Rol_STD:
-	       NextAction = ActReqMdfStd;
-	       break;
-	    case Rol_NET:
-	       NextAction = ActReqMdfNET;
-	       break;
-	    case Rol_TCH:
-	       NextAction = ActReqMdfTch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActReqMdfOth;
-	       break;
+	    switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
+	      {
+	       case Rol_STD:
+		  NextAction = ActReqMdfStd;
+		  break;
+	       case Rol_NET:
+		  NextAction = ActReqMdfNET;
+		  break;
+	       case Rol_TCH:
+		  NextAction = ActReqMdfTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActReqMdfOth;
+		  break;
+	      }
+	    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "user-cog.svg",
+					   Txt_Administer_user);
 	   }
-	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-				        Rec_PutParamUsrCodEncrypted,
-					"user-cog.svg",
-					Txt_Administer_user);
-	}
 
-      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
-	{
-         if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
-           {
-	    /***** Button to view student's test exams *****/
-	    if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
+	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	   {
+	    if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
 	      {
-	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,
-						 Rec_PutParamsMyTsts,
-					         "check.svg",
-						 Txt_View_test_results);
-	       else	// Not me
-		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
-						 Rec_PutParamsStdTsts,
-					         "check.svg",
-						 Txt_View_test_results);
-	      }
+	       /***** Button to view student's test exams *****/
+	       if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,
+						    Rec_PutParamsMyTsts,(void *) &Gbl,
+						    "check.svg",
+						    Txt_View_test_results);
+		  else	// Not me
+		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
+						    Rec_PutParamsStdTsts,(void *) &Gbl,
+						    "check.svg",
+						    Txt_View_test_results);
+		 }
 
-	    /***** Button to view student's assignments and works *****/
-	    if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
-	      {
-	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,NULL,
-						 "folder-open.svg",
-						 Txt_View_homework);
-	       else	// Not me, I am not a student in current course
-		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
-						 Rec_PutParamsWorks,
-					         "folder-open.svg",
-						 Txt_View_homework);
-	      }
+	       /***** Button to view student's assignments and works *****/
+	       if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
+						    NULL,NULL,
+						    "folder-open.svg",
+						    Txt_View_homework);
+		  else	// Not me, I am not a student in current course
+		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
+						    Rec_PutParamsWorks,(void *) &Gbl,
+						    "folder-open.svg",
+						    Txt_View_homework);
+		 }
 
-	    /***** Button to view student's attendance *****/
-	    if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
-	      {
-	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,NULL,
-						 "calendar-check.svg",
-						 Txt_View_attendance);
-	       else	// Not me
-		  Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
-						 Rec_PutParamsStudent,
-						 "calendar-check.svg",
-						 Txt_View_attendance);
+	       /***** Button to view student's attendance *****/
+	       if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		     Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
+						    NULL,NULL,
+						    "calendar-check.svg",
+						    Txt_View_attendance);
+		  else	// Not me
+		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
+						    Rec_PutParamsStudent,(void *) &Gbl,
+						    "calendar-check.svg",
+						    Txt_View_attendance);
+		 }
 	      }
-           }
+	   }
+
+	 /***** Button to print QR code *****/
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,
+				  Rec_PutParamUsrCodEncrypted,NULL);
+
+	 /***** Button to send a message *****/
+	 RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
+							Gbl.Record.UsrDat->UsrCod);	// To:
+	 if (!RecipientHasBannedMe)
+	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
+					   Rec_PutParamsMsgUsr,(void *) &Gbl,
+					   "envelope.svg",
+					   Txt_Write_a_message);
+
+	 /***** Button to follow / unfollow *****/
+	 if (!ItsMe)	// Not me
+	   {
+	    if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					  Gbl.Record.UsrDat->UsrCod))
+	       // I follow user
+	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
+					      Rec_PutParamUsrCodEncrypted,NULL,
+					      "user-check.svg",
+					      Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
+	    else if (ICanViewUsrProfile)
+	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
+					      Rec_PutParamUsrCodEncrypted,NULL,
+					      "user-plus.svg",
+					      Txt_Follow);			// Put button to follow
+	   }
+
+	 /***** Button to change user's photo *****/
+	 Pho_PutIconToChangeUsrPhoto ();
+
+	 /***** Button to change user's account *****/
+	 Acc_PutIconToChangeUsrAccount ();
+
+	 /***** End container *****/
+	 HTM_DIV_End ();
 	}
-
-      /***** Button to print QR code *****/
-      QR_PutLinkToPrintQRCode (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted);
-
-      /***** Button to send a message *****/
-      RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
-	                                             Gbl.Record.UsrDat->UsrCod);	// To:
-      if (!RecipientHasBannedMe)
-	 Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
-					"envelope.svg",
-					Txt_Write_a_message);
-
-      /***** Button to follow / unfollow *****/
-      if (!ItsMe)	// Not me
-	{
-	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Record.UsrDat->UsrCod))
-	    // I follow user
-	    Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
-					   Rec_PutParamUsrCodEncrypted,
-					   "user-check.svg",
-					   Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
-	 else if (ICanViewUsrProfile)
-	    Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
-					   Rec_PutParamUsrCodEncrypted,
-					   "user-plus.svg",
-					   Txt_Follow);			// Put button to follow
-	}
-
-      /***** Button to change user's photo *****/
-      Pho_PutIconToChangeUsrPhoto ();
-
-      /***** Button to change user's account *****/
-      Acc_PutIconToChangeUsrAccount ();
-
-      /***** End container *****/
-      HTM_DIV_End ();
      }
   }
 
-void Rec_PutParamUsrCodEncrypted (void)
+void Rec_PutParamUsrCodEncrypted (void *Args)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
+   if (Args)
+      Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
   }
 
-static void Rec_PutParamsMyTsts (void)
+static void Rec_PutParamsMyTsts (void *Args)
   {
-   Dat_SetIniEndDates ();
-   Dat_WriteParamsIniEndDates ();
+   if (Args)
+     {
+      Dat_SetIniEndDates ();
+      Dat_WriteParamsIniEndDates ();
+     }
   }
 
-static void Rec_PutParamsStdTsts (void)
+static void Rec_PutParamsStdTsts (void *Args)
   {
-   Rec_PutParamsStudent ();
-   Dat_SetIniEndDates ();
-   Dat_WriteParamsIniEndDates ();
+   if (Args)
+     {
+      Rec_PutParamsStudent ((void *) &Gbl);
+      Dat_SetIniEndDates ();
+      Dat_WriteParamsIniEndDates ();
+     }
   }
 
-static void Rec_PutParamsWorks (void)
+static void Rec_PutParamsWorks (void *Args)
   {
-   Rec_PutParamsStudent ();
-   Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
-   Gbl.FileBrowser.FullTree = true;
-   Brw_PutHiddenParamFullTreeIfSelected ();
+   if (Args)
+     {
+      Rec_PutParamsStudent ((void *) &Gbl);
+      Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+      Gbl.FileBrowser.FullTree = true;
+      Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
+     }
   }
 
-static void Rec_PutParamsStudent (void)
+static void Rec_PutParamsStudent (void *Args)
   {
-   Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
-   Grp_PutParamAllGroups ();
+   if (Args)
+     {
+      Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
+      Grp_PutParamAllGroups ();
+     }
   }
 
-static void Rec_PutParamsMsgUsr (void)
+static void Rec_PutParamsMsgUsr (void *Args)
   {
-   Rec_PutParamUsrCodEncrypted ();
-   Grp_PutParamAllGroups ();
-   Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+   if (Args)
+     {
+      Rec_PutParamUsrCodEncrypted (Args);
+      Grp_PutParamAllGroups ();
+      Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+     }
   }
 
 /*****************************************************************************/
@@ -3936,7 +3973,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Box_BoxTableBegin (StrRecordWidth,
                       IAmATeacher ? Txt_Institution_centre_and_department :
 	                            Txt_Institution,
-	              NULL,
+	              NULL,NULL,
 	              Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
    /***** Country *****/

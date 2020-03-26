@@ -103,7 +103,8 @@ void TsR_SelUsrsToViewUsrsTstResults (void)
    extern const char *Txt_View_test_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeUsrTstRes,NULL,
+				     ActSeeUsrTstRes,
+				     NULL,NULL,
 				     Txt_Results,
                                      Hlp_ASSESSMENT_Tests_results,
                                      Txt_View_test_results,
@@ -129,7 +130,8 @@ void TsR_SelDatesToSeeMyTstResults (void)
    Frm_StartForm (ActSeeMyTstRes);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,
+                      NULL,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
@@ -153,7 +155,8 @@ void TsR_ShowMyTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,
+                      NULL,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
@@ -232,7 +235,8 @@ static void TsR_ShowUsrsTstResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,NULL,
+   Box_BoxTableBegin (NULL,Txt_Results,
+                      NULL,NULL,
 		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
@@ -677,7 +681,8 @@ void TsR_ShowOneTstResult (void)
       TsR_GetTestResultQuestionsFromDB (TstCod,&Result);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Test_result,NULL,
+      Box_BoxBegin (NULL,Txt_Test_result,
+                    NULL,NULL,
                     Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,

@@ -51,11 +51,11 @@ void Lay_WriteStartOfPage (void);
 void Lay_WriteHTTPStatus204NoContent (void);
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void),
+				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,
 				    const char *Title);
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void),
+				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,
 				    const char *Text);
 void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,

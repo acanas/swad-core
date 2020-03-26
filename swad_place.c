@@ -65,10 +65,10 @@ static struct Place *Plc_EditingPlc = NULL;	// Static variable to keep the place
 
 static void Plc_GetParamPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
-static void Plc_PutIconsListingPlaces (void);
+static void Plc_PutIconsListingPlaces (void *Args);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_EditPlacesInternal (void);
-static void Plc_PutIconsEditingPlaces (void);
+static void Plc_PutIconsEditingPlaces (void *Args);
 
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
@@ -111,7 +111,8 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Box_BoxBegin (NULL,Txt_Places,Plc_PutIconsListingPlaces,
+      Box_BoxBegin (NULL,Txt_Places,
+                    Plc_PutIconsListingPlaces,(void *) &Gbl,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
       HTM_TR_Begin (NULL);
@@ -237,14 +238,17 @@ static bool Plc_CheckIfICanCreatePlaces (void)
 /****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
-static void Plc_PutIconsListingPlaces (void)
+static void Plc_PutIconsListingPlaces (void *Args)
   {
-   /***** Put icon to edit places *****/
-   if (Plc_CheckIfICanCreatePlaces ())
-      Plc_PutIconToEditPlaces ();
+   if (Args)
+     {
+      /***** Put icon to edit places *****/
+      if (Plc_CheckIfICanCreatePlaces ())
+	 Plc_PutIconToEditPlaces ();
 
-   /***** Put icon to view centres *****/
-   Ctr_PutIconToViewCentres ();
+      /***** Put icon to view centres *****/
+      Ctr_PutIconToViewCentres ();
+     }
   }
 
 /*****************************************************************************/
@@ -253,7 +257,8 @@ static void Plc_PutIconsListingPlaces (void)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlc,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlc,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -281,7 +286,8 @@ static void Plc_EditPlacesInternal (void)
    Plc_GetListPlaces ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Places,Plc_PutIconsEditingPlaces,
+   Box_BoxBegin (NULL,Txt_Places,
+                 Plc_PutIconsEditingPlaces,(void *) &Gbl,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
@@ -303,13 +309,16 @@ static void Plc_EditPlacesInternal (void)
 /**************** Put contextual icons in edition of places *****************/
 /*****************************************************************************/
 
-static void Plc_PutIconsEditingPlaces (void)
+static void Plc_PutIconsEditingPlaces (void *Args)
   {
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+   if (Args)
+     {
+      /***** Put icon to view places *****/
+      Plc_PutIconToViewPlaces ();
 
-   /***** Put icon to view centres *****/
-   Ctr_PutIconToViewCentres ();
+      /***** Put icon to view centres *****/
+      Ctr_PutIconToViewCentres ();
+     }
   }
 
 /*****************************************************************************/
@@ -320,7 +329,8 @@ void Plc_PutIconToViewPlaces (void)
   {
    extern const char *Txt_Places;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,Ins_PutParamCurrentInsCod,
+   Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
+                                  Ins_PutParamCurrentInsCod,(void *) &Gbl,
 				  "map-marker-alt.svg",
 				  Txt_Places);
   }
@@ -795,7 +805,8 @@ static void Plc_PutFormToCreatePlace (void)
    Frm_StartForm (ActNewPlc);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_place,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_place,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

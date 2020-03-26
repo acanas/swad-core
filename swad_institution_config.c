@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void InsCfg_Configuration (bool PrintView);
-static void InsCfg_PutIconsToPrintAndUpload (void);
+static void InsCfg_PutIconsToPrintAndUpload (void *Args);
 static void InsCfg_Title (bool PutLink);
 static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
@@ -127,10 +127,12 @@ static void InsCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,InsCfg_PutIconsToPrintAndUpload,
+      Box_BoxBegin (NULL,NULL,
+                    InsCfg_PutIconsToPrintAndUpload,(void *) &Gbl,
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
 
@@ -209,17 +211,21 @@ static void InsCfg_Configuration (bool PrintView)
 /********* Put contextual icons in configuration of an institution ***********/
 /*****************************************************************************/
 
-static void InsCfg_PutIconsToPrintAndUpload (void)
+static void InsCfg_PutIconsToPrintAndUpload (void *Args)
   {
-   /***** Icon to print info about institution *****/
-   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
+   if (Args)
+     {
+      /***** Icon to print info about institution *****/
+      Ico_PutContextualIconToPrint (ActPrnInsInf,
+				    NULL,NULL);
 
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      /***** Icon to upload logo of institution *****/
-      Lgo_PutIconToChangeLogo (Hie_INS);
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	 /***** Icon to upload logo of institution *****/
+	 Lgo_PutIconToChangeLogo (Hie_INS);
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+      /***** Put icon to view places *****/
+      Plc_PutIconToViewPlaces ();
+     }
   }
 
 /*****************************************************************************/

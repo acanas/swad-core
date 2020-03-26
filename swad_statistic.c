@@ -232,22 +232,26 @@ void Sta_AskShowCrsHits (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Statistics_of_visits_to_the_course_X,
-				          Gbl.Hierarchy.Crs.ShrtName),NULL,
+				          Gbl.Hierarchy.Crs.ShrtName),
+                 NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NULL,Grp_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
+                                      Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL,NULL))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,
+                                NULL,NULL,
+                                NULL))
         {
 	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (NULL);
+	 Usr_ShowFormsToSelectUsrListType (NULL,NULL);
 
 	 /***** Put link to register students *****/
          Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -429,7 +433,8 @@ void Sta_AskShowGblHits (void)
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,NULL,
+   Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,
+                      NULL,NULL,
                       Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
@@ -555,7 +560,8 @@ void Sta_PutLinkToCourseHits (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,NULL,
+	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
+	                                   NULL,NULL,
 					   "chart-line.svg",
 					   Txt_Visits_to_course);
 	    break;
@@ -572,7 +578,8 @@ void Sta_PutLinkToGlobalHits (void)
   {
    extern const char *Txt_Global_visits;
 
-   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
+                                  NULL,NULL,
 				  "chart-line.svg",
 				  Txt_Global_visits);
   }
@@ -1311,10 +1318,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Box_BoxBegin ("100%",Txt_List_of_detailed_clicks,NULL,
+	 Box_BoxBegin ("100%",Txt_List_of_detailed_clicks,
+	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
       else
-	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
+	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],
+	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
       HTM_TABLE_BeginPadding (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);

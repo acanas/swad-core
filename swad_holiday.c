@@ -64,7 +64,7 @@ static struct Holiday *Hld_EditingHld = NULL;	// Static variable to keep the hol
 /*****************************************************************************/
 
 static void Hld_GetParamHldOrder (void);
-static void Hld_PutIconsSeeHolidays (void);
+static void Hld_PutIconsSeeHolidays (void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
@@ -110,7 +110,8 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Box_BoxBegin (NULL,Txt_Holidays,Hld_PutIconsSeeHolidays,
+      Box_BoxBegin (NULL,Txt_Holidays,
+                    Hld_PutIconsSeeHolidays,(void *) &Gbl,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
@@ -220,14 +221,18 @@ static void Hld_GetParamHldOrder (void)
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Hld_PutIconsSeeHolidays (void)
+static void Hld_PutIconsSeeHolidays (void *Args)
   {
-   /***** Edit holidays calendar *****/
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      Ico_PutContextualIconToEdit (ActEdiHld,NULL,NULL);
+   if (Args)
+     {
+      /***** Edit holidays calendar *****/
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	 Ico_PutContextualIconToEdit (ActEdiHld,NULL,
+				      NULL,NULL);
 
-   /***** View calendar *****/
-   Cal_PutIconToSeeCalendar ();
+      /***** View calendar *****/
+      Cal_PutIconToSeeCalendar ((void *) &Gbl);
+     }
   }
 
 /*****************************************************************************/
@@ -238,7 +243,8 @@ void Hld_PutIconToSeeHlds (void)
   {
    extern const char *Txt_Holidays;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,
+                                  NULL,NULL,
 				  "calendar-day.svg",
 				  Txt_Holidays);
   }
@@ -553,7 +559,8 @@ static void Hld_ListHolidaysForEdition (void)
    unsigned HolidayTypeUnsigned;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
+   Box_BoxTableBegin (NULL,Txt_Holidays,
+                      Cal_PutIconToSeeCalendar,(void *) &Gbl,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -961,7 +968,8 @@ static void Hld_PutFormToCreateHoliday (void)
    Frm_StartForm (ActNewHld);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_holiday,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_holiday,
+                      NULL,NULL,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

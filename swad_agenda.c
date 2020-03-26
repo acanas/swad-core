@@ -98,12 +98,12 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType);
 static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType);
 
-static void Agd_PutIconsMyFullAgenda (void);
-static void Agd_PutIconsMyPublicAgenda (void);
-static void Agd_PutIconToCreateNewEvent (void);
-static void Agd_PutIconToViewEditMyFullAgenda (void);
+static void Agd_PutIconsMyFullAgenda (void *Agenda);
+static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod);
+static void Agd_PutIconToCreateNewEvent (void *Agenda);
+static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod);
 static void Agd_PutIconToShowQR (void);
-static void Agd_PutIconsOtherPublicAgenda (void);
+static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod);
 
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
@@ -111,7 +111,7 @@ static void Agd_GetParamEventOrder (void);
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
                                            const char *Anchor);
 
-static void Agd_PutCurrentParamsMyAgenda (void);
+static void Agd_PutCurrentParamsMyAgenda (void *Agenda);
 static void Agd_GetParams (Agd_AgendaType_t AgendaType);
 
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
@@ -154,7 +154,8 @@ void Agd_ShowMyAgenda (void)
    Agd_GetParams (Agd_MY_AGENDA);
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
+   Box_BoxBegin ("100%",Txt_My_agenda,
+                 Agd_PutIconsMyFullAgenda,(void *) &Gbl.Agenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
@@ -357,11 +358,16 @@ void Agd_ShowUsrAgenda (void)
 
 	 /***** Begin box *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
-		                                  Gbl.Usrs.Other.UsrDat.FullName),
-		       ItsMe ? Agd_PutIconsMyPublicAgenda :
-			       Agd_PutIconsOtherPublicAgenda,
-		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	 if (ItsMe)
+	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+						     Gbl.Usrs.Me.UsrDat.FullName),
+			  Agd_PutIconsMyPublicAgenda,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	 else
+	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+						     Gbl.Usrs.Other.UsrDat.FullName),
+			  Agd_PutIconsOtherPublicAgenda,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          Str_FreeString ();
 
 	 /***** Show the current events in the user's agenda *****/
@@ -400,11 +406,16 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	   {
 	    /***** Begin box *****/
 	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
-		                                     Gbl.Usrs.Other.UsrDat.FullName),
-			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-				  Agd_PutIconsOtherPublicAgenda,
-			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	    if (ItsMe)
+	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+							Gbl.Usrs.Me.UsrDat.FullName),
+			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	    else
+	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+							Gbl.Usrs.Other.UsrDat.FullName),
+			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             Str_FreeString ();
 
 	    /***** Show the current events in the user's agenda *****/
@@ -522,12 +533,14 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (NULL,Txt_Today,NULL,
+	    Box_BoxTableShadowBegin (NULL,Txt_Today,
+	                             NULL,NULL,
 				     Hlp_PROFILE_Agenda,
 				     2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (NULL,Txt_Today,NULL,
+	    Box_BoxTableShadowBegin (NULL,Txt_Today,
+	                             NULL,NULL,
 			             Hlp_PROFILE_Agenda_public_agenda,
 				     2);
             break;
@@ -582,7 +595,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	 case Agd_ANOTHER_AGENDA:
 	    Frm_StartForm (ActSeeUsrAgd);
-	    Usr_PutParamOtherUsrCodEncrypted ();
+	    Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Gbl.Agenda.CurrentPage);
 	    break;
 	}
@@ -615,38 +628,40 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 /********************** Put contextual icons in agenda ***********************/
 /*****************************************************************************/
 
-static void Agd_PutIconsMyFullAgenda (void)
+static void Agd_PutIconsMyFullAgenda (void *Agenda)
   {
    /***** Put icon to create a new event *****/
-   Agd_PutIconToCreateNewEvent ();
+   Agd_PutIconToCreateNewEvent (Agenda);
 
    /***** Put icon to show QR code *****/
    Agd_PutIconToShowQR ();
   }
 
-static void Agd_PutIconsMyPublicAgenda (void)
+static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod)
   {
    /***** Put icon to view/edit my full agenda *****/
-   Agd_PutIconToViewEditMyFullAgenda ();
+   Agd_PutIconToViewEditMyFullAgenda (EncryptedUsrCod);
 
    /***** Put icon to show QR code *****/
    Agd_PutIconToShowQR ();
   }
 
-static void Agd_PutIconToCreateNewEvent (void)
+static void Agd_PutIconToCreateNewEvent (void *Agenda)
   {
    extern const char *Txt_New_event;
+   struct Agd_Agenda *Agd = (struct Agd_Agenda *) Agenda;
 
    /***** Put form to create a new event *****/
-   Gbl.Agenda.AgdCodToEdit = -1L;
+   Agd->AgdCodToEdit = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
-			       Agd_PutCurrentParamsMyAgenda,
+			       Agd_PutCurrentParamsMyAgenda,(void *) Agd,
 			       Txt_New_event);
   }
 
-static void Agd_PutIconToViewEditMyFullAgenda (void)
+static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
   {
-   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,
+                                NULL,EncryptedUsrCod);
   }
 
 static void Agd_PutIconToShowQR (void)
@@ -660,10 +675,11 @@ static void Agd_PutIconToShowQR (void)
              Lan_STR_LANG_ID[Gbl.Prefs.Language],
              Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
-   QR_PutLinkToPrintQRCode (ActPrnAgdQR,QR_PutParamQRString);
+   QR_PutLinkToPrintQRCode (ActPrnAgdQR,
+                            QR_PutParamQRString,(void *) URL);
   }
 
-static void Agd_PutIconsOtherPublicAgenda (void)
+static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
   {
    extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_View_record_for_this_course;
@@ -673,7 +689,7 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
-                                     Usr_PutParamOtherUsrCodEncrypted,
+                                     Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "user.svg",
 			             Txt_Another_user_s_profile);
 
@@ -681,12 +697,12 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
       /* View student's records: common record card and course record card */
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
-                                     Usr_PutParamOtherUsrCodEncrypted,
+                                     Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "card.svg",
 			             Txt_View_record_for_this_course);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
-			             Usr_PutParamOtherUsrCodEncrypted,
+			             Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "card.svg",
 			             Txt_View_record_and_office_hours);
   }
@@ -836,26 +852,30 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
    Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
-   Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+   Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,
+                                  Agd_PutCurrentParamsMyAgenda,NULL);
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,Anchor,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,Anchor,
+                                     Agd_PutCurrentParamsMyAgenda,NULL);
    else
-      Ico_PutContextualIconToHide (ActHidEvtMyAgd,Anchor,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToHide (ActHidEvtMyAgd,Anchor,
+                                   Agd_PutCurrentParamsMyAgenda,NULL);
 
    /***** Put form to edit event *****/
-   Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
+   Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,
+                                Agd_PutCurrentParamsMyAgenda,NULL);
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)
       Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
-				     Agd_PutCurrentParamsMyAgenda,
+				     Agd_PutCurrentParamsMyAgenda,NULL,
 			             "unlock.svg",
 			             Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private);
    else
       Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,
-	                             Agd_PutCurrentParamsMyAgenda,
+	                             Agd_PutCurrentParamsMyAgenda,NULL,
 			             "lock.svg",
 			             Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses);
   }
@@ -864,14 +884,15 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
 /****************** Parameters passed in my agenda forms *********************/
 /*****************************************************************************/
 
-static void Agd_PutCurrentParamsMyAgenda (void)
+static void Agd_PutCurrentParamsMyAgenda (void *Agenda)
   {
-   Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
-                          Gbl.Agenda.PrivatPublicEvents,
-                          Gbl.Agenda.HiddenVisiblEvents,
-			  Gbl.Agenda.SelectedOrder,
-		          Gbl.Agenda.CurrentPage,
-                          Gbl.Agenda.AgdCodToEdit);
+   if (Agenda)
+      Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Agenda)->Past__FutureEvents,
+			     ((struct Agd_Agenda *) Agenda)->PrivatPublicEvents,
+			     ((struct Agd_Agenda *) Agenda)->HiddenVisiblEvents,
+			     ((struct Agd_Agenda *) Agenda)->SelectedOrder,
+			     ((struct Agd_Agenda *) Agenda)->CurrentPage,
+			     ((struct Agd_Agenda *) Agenda)->AgdCodToEdit);
   }
 
 /* The following function is called
@@ -1282,7 +1303,7 @@ void Agd_AskRemEvent (void)
    /***** Show question and button to remove event *****/
    Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
    Ale_ShowAlertAndButton (ActRemEvtMyAgd,NULL,NULL,
-                           Agd_PutCurrentParamsMyAgenda,
+                           Agd_PutCurrentParamsMyAgenda,NULL,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
 	                   AgdEvent.Event);
@@ -1497,14 +1518,16 @@ void Agd_RequestCreatOrEditEvent (void)
       Frm_StartForm (ActChgEvtMyAgd);
       Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
      }
-   Agd_PutCurrentParamsMyAgenda ();
+   Agd_PutCurrentParamsMyAgenda ((void *) &Gbl.Agenda);
 
    /***** Begin box and table *****/
    if (ItsANewEvent)
-      Box_BoxTableBegin (NULL,Txt_New_event,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_event,
+                         NULL,NULL,
 			 Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
    else
-      Box_BoxTableBegin (NULL,Txt_Edit_event,NULL,
+      Box_BoxTableBegin (NULL,Txt_Edit_event,
+                         NULL,NULL,
 			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
    /***** Event *****/
@@ -1907,7 +1930,8 @@ void Agd_PrintAgdQRCode (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Where_s_USER,
-	                                  Gbl.Usrs.Me.UsrDat.FullName),NULL,
+	                                  Gbl.Usrs.Me.UsrDat.FullName),
+                 NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
    Str_FreeString ();
 

@@ -82,7 +82,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 
-static void Acc_PutParamsToRemoveMyAccount (void);
+static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod);
 
 static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
@@ -98,7 +98,8 @@ void Acc_PutLinkToCreateAccount (void)
   {
    extern const char *Txt_Create_account;
 
-   Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
+                                  NULL,NULL,
 				  "at.svg",
 				  Txt_Create_account);
   }
@@ -141,7 +142,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Skip_this_step;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,NULL,
+   Box_BoxBegin (NULL,Title,
+                 NULL,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Help alert *****/
@@ -214,7 +216,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Box_BoxTableBegin (NULL,
 	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					     Txt_Do_you_think_you_are_one_of_these_users,
-			    NULL,
+			    NULL,NULL,
 			    NULL,Box_CLOSABLE,5);
 
 	 /***** Initialize structure with user's data *****/
@@ -359,7 +361,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
    Frm_StartForm (ActCreUsrAcc);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Create_account,NULL,
+   Box_BoxTableBegin (NULL,Txt_Create_account,
+                      NULL,NULL,
                       Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
@@ -421,7 +424,8 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_New_on_PLATFORM_Sign_up,
-				          Cfg_PLATFORM_SHORT_NAME),NULL,
+				          Cfg_PLATFORM_SHORT_NAME),
+                 NULL,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -545,20 +549,21 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 /************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
-void Acc_PutLinkToRemoveMyAccount (void)
+void Acc_PutLinkToRemoveMyAccount (void *Args)
   {
    extern const char *Txt_Remove_account;
 
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
-      Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
-	                             Acc_PutParamsToRemoveMyAccount,
-			             "trash.svg",
-			             Txt_Remove_account);
+   if (Args)
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
+	 Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
+					Acc_PutParamsToRemoveMyAccount,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+					"trash.svg",
+					Txt_Remove_account);
   }
 
-static void Acc_PutParamsToRemoveMyAccount (void)
+static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
   {
-   Usr_PutParamMyUsrCodEncrypted ();
+   Usr_PutParamMyUsrCodEncrypted (EncryptedUsrCod);
    Par_PutHiddenParamUnsigned (NULL,"RegRemAction",
                                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
@@ -951,7 +956,9 @@ void Acc_AskIfRemoveMyAccount (void)
    Frm_EndForm ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                            NULL,NULL,
+                            Btn_NO_BUTTON,NULL);
 
    /***** Show forms to change my account *****/
    Acc_ShowFormChgMyAccount ();
@@ -973,13 +980,15 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
       /* Show form to request confirmation */
       Frm_StartForm (ActRemUsrGbl);
-      Usr_PutParamOtherUsrCodEncrypted ();
+      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                               NULL,NULL,
+                               Btn_NO_BUTTON,NULL);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -1196,7 +1205,8 @@ void Acc_PutIconToChangeUsrAccount (void)
 
    /***** Link for changing the account *****/
    if (ItsMe)
-      Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,NULL,
+      Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
+                                     NULL,NULL,
 			             "at.svg",
 			             Txt_Change_account);
    else	// Not me
@@ -1216,7 +1226,7 @@ void Acc_PutIconToChangeUsrAccount (void)
 	       break;
 	   }
 	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-	                                Rec_PutParamUsrCodEncrypted,
+	                                Rec_PutParamUsrCodEncrypted,NULL,
 	                                "at.svg",
 				        Txt_Change_account);
 	}

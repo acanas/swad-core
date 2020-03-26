@@ -91,8 +91,8 @@ static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveMyPhoto (void);
-static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void);
+static void Pho_PutIconToRequestRemoveMyPhoto (void *Args);
+static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void *Args);
 static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct UsrData *UsrDat);
@@ -116,8 +116,8 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
 static void Pho_PutSelectorForHowOrderDegrees (void);
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
 
-static void Pho_PutIconToPrintDegreeStats (void);
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void);
+static void Pho_PutIconToPrintDegreeStats (void *Args);
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *Args);
 
 static void Pho_PutLinkToCalculateDegreeStats (void);
 static void Pho_GetMaxStdsPerDegree (void);
@@ -183,7 +183,8 @@ void Pho_PutIconToChangeUsrPhoto (void)
      {
       TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 			                      Txt_Upload_photo;
-      Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,NULL,
+      Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
+                                     NULL,NULL,
 				     "camera.svg",
 				     TitleText);
      }
@@ -207,7 +208,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 	       break;
 	   }
 	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-				        Rec_PutParamUsrCodEncrypted,
+				        Rec_PutParamUsrCodEncrypted,NULL,
 	                                "camera.svg",
 				        TitleText);
 	}
@@ -217,49 +218,54 @@ void Pho_PutIconToChangeUsrPhoto (void)
 /************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveMyPhoto (void)
+static void Pho_PutIconToRequestRemoveMyPhoto (void *Args)
   {
    extern const char *Txt_Remove_photo;
 
-   /***** Link to request the removal of my photo *****/
-   if (Gbl.Usrs.Me.MyPhotoExists)
-      Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,NULL,
-				     "trash.svg",
-				     Txt_Remove_photo);
+   if (Args)
+      /***** Link to request the removal of my photo *****/
+      if (Gbl.Usrs.Me.MyPhotoExists)
+	 Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
+					NULL,NULL,
+					"trash.svg",
+					Txt_Remove_photo);
   }
 
 /*****************************************************************************/
 /********** Put a link to request the removal of a user's photo **************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
+static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void *Args)
   {
    extern const char *Txt_Remove_photo;
    char PhotoURL[PATH_MAX + 1];
    bool PhotoExists;
    Act_Action_t NextAction;
 
-   /***** Link to request the removal of another user's photo *****/
-   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-   if (PhotoExists)
+   if (Args)
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+      /***** Link to request the removal of another user's photo *****/
+      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+      if (PhotoExists)
 	{
-	 case Rol_STD:
-	    NextAction = ActReqRemStdPho;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActReqRemTchPho;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActReqRemOthPho;
-	    break;
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+	   {
+	    case Rol_STD:
+	       NextAction = ActReqRemStdPho;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActReqRemTchPho;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActReqRemOthPho;
+	       break;
+	   }
+	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+					Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					"trash.svg",
+					Txt_Remove_photo);
 	}
-      Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-				     Usr_PutParamOtherUsrCodEncrypted,
-				     "trash.svg",
-				     Txt_Remove_photo);
      }
   }
 
@@ -305,8 +311,9 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    Act_Action_t NextAction;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Photo,ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-	                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
+   Box_BoxBegin (NULL,Txt_Photo,
+                 ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
+	                 Pho_PutIconToRequestRemoveOtherUsrPhoto,(void *) &Gbl,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -435,7 +442,8 @@ void Pho_ReqRemoveMyPhoto (void)
 			"PHOTO186x248",Pho_NO_ZOOM,false);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,NULL,
+      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
+                               NULL,NULL,
                                Btn_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
@@ -515,7 +523,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 		  break;
 	      }
 	    Ale_ShowAlertAndButton2 (NextAction,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,
+	                             Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
@@ -791,7 +799,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    HTM_DIV_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                            NULL,NULL,
+                            Btn_NO_BUTTON,NULL);
 
    /***** Button to send another photo *****/
    return (NumFacesGreen != 0);
@@ -910,7 +920,9 @@ static void Pho_UpdatePhoto2 (void)
    HTM_TABLE_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                            NULL,NULL,
+                            Btn_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1718,7 +1730,8 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      {
       case Pho_DEGREES_SEE:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
+	 Box_BoxBegin (NULL,Txt_Degrees,
+	               Pho_PutIconToPrintDegreeStats,(void *) &Gbl,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 	 HTM_TABLE_BeginCenterPadding (2);
 
@@ -1739,7 +1752,8 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Degrees,NULL,
+	 Box_BoxBegin (NULL,Txt_Degrees,
+	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 	 break;
      }
@@ -1770,11 +1784,14 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /**************** Put parameter for degree average photos ********************/
 /*****************************************************************************/
 
-void Pho_PutParamsDegPhoto ()
+void Pho_PutParamsDegPhoto (void *Args)
   {
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamPhotoSize ();
-   Pho_PutHiddenParamOrderDegrees ();
+   if (Args)
+     {
+      Pho_PutHiddenParamTypeOfAvg ();
+      Pho_PutHiddenParamPhotoSize ();
+      Pho_PutHiddenParamOrderDegrees ();
+     }
   }
 
 /*****************************************************************************/
@@ -1973,17 +1990,22 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 /*************** Put icon to print view the stats of degrees ***************/
 /*****************************************************************************/
 
-static void Pho_PutIconToPrintDegreeStats (void)
+static void Pho_PutIconToPrintDegreeStats (void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams);
+   if (Args)
+      Ico_PutContextualIconToPrint (ActPrnPhoDeg,
+				    Pho_PutLinkToPrintViewOfDegreeStatsParams,(void *) &Gbl);
   }
 
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *Args)
   {
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamPhotoSize ();
-   Pho_PutHiddenParamOrderDegrees ();
-   Usr_PutParamsPrefsAboutUsrList ();
+   if (Args)
+     {
+      Pho_PutHiddenParamTypeOfAvg ();
+      Pho_PutHiddenParamPhotoSize ();
+      Pho_PutHiddenParamOrderDegrees ();
+      Usr_PutParamsPrefsAboutUsrList ();
+     }
   }
 
 /*****************************************************************************/
@@ -2137,7 +2159,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,(void *) &Gbl);
       HTM_TABLE_BeginCenter ();
 
       /***** Get and print degrees *****/
@@ -2218,7 +2240,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,(void *) &Gbl);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);

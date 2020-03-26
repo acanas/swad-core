@@ -195,7 +195,7 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod);
 void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveUsrFilesFromDB (long UsrCod);
 
-void Brw_PutHiddenParamFullTreeIfSelected (void);
+void Brw_PutHiddenParamFullTreeIfSelected (void *Args);
 
 void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void);
@@ -252,7 +252,7 @@ void Brw_SetFullPathInTree (void);
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_PutImplicitParamsFileBrowser (void);
+void Brw_PutImplicitParamsFileBrowser (void *Args);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);

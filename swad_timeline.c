@@ -220,7 +220,7 @@ static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
 
 static void TL_ShowTimeline (char *Query,
                              const char *Title,long NotCodToHighlight);
-static void TL_PutIconsTimeline (void);
+static void TL_PutIconsTimeline (void *Args);
 
 static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
 static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
@@ -332,7 +332,7 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                     Ntf_NotifyEvent_t NotifyEvent);
 
 static void TL_RequestRemovalNote (void);
-static void TL_PutParamsRemoveNote (void);
+static void TL_PutParamsRemoveNote (void *Args);
 static void TL_RemoveNote (void);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
@@ -340,7 +340,7 @@ static long TL_GetNotCodOfPublication (long PubCod);
 static long TL_GetPubCodOfOriginalNote (long NotCod);
 
 static void TL_RequestRemovalComment (void);
-static void TL_PutParamsRemoveCommment (void);
+static void TL_PutParamsRemoveCommment (void *Args);
 static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
@@ -1086,7 +1086,8 @@ static void TL_ShowTimeline (char *Query,
 				"%s",
 				Query);
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,TL_PutIconsTimeline,
+   Box_BoxBegin (NULL,Title,
+                 TL_PutIconsTimeline,(void *) &Gbl,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
@@ -1159,11 +1160,14 @@ static void TL_ShowTimeline (char *Query,
 /********************* Put contextual icons in timeline **********************/
 /*****************************************************************************/
 
-static void TL_PutIconsTimeline (void)
+static void TL_PutIconsTimeline (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_TIMELINE;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_TIMELINE;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -1175,7 +1179,7 @@ static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       Frm_StartFormAnchor (ActionUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
+      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
      }
    else
      {
@@ -1546,7 +1550,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    /***** Begin box ****/
    if (ShowNoteAlone)
      {
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
                     NULL,Box_CLOSABLE);
       HTM_UL_Begin ("class=\"TL_LIST\"");
      }
@@ -2980,7 +2985,8 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 
    if (ShowCommentAlone)
      {
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Write sharer/commenter if distinct to author *****/
@@ -4060,11 +4066,11 @@ static void TL_RequestRemovalNote (void)
 	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveNote,
+	                             TL_PutParamsRemoveNote,(void *) &Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
-	                             TL_PutParamsRemoveNote,
+	                             TL_PutParamsRemoveNote,(void *) &Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4076,13 +4082,16 @@ static void TL_RequestRemovalNote (void)
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void TL_PutParamsRemoveNote (void)
+static void TL_PutParamsRemoveNote (void *Args)
   {
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted ();
-   else
-      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
-   TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
+   if (Args)
+     {
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	 Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      else
+	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
+      TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
+     }
   }
 
 /*****************************************************************************/
@@ -4370,11 +4379,11 @@ static void TL_RequestRemovalComment (void)
 	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveCommment,
+	                             TL_PutParamsRemoveCommment,(void *) &Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
-	                             TL_PutParamsRemoveCommment,
+	                             TL_PutParamsRemoveCommment,(void *) &Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4389,13 +4398,16 @@ static void TL_RequestRemovalComment (void)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TL_PutParamsRemoveCommment (void)
+static void TL_PutParamsRemoveCommment (void *Args)
   {
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted ();
-   else
-      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
-   TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);
+   if (Args)
+     {
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	 Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      else
+	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
+      TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);
+     }
   }
 
 /*****************************************************************************/

@@ -63,14 +63,12 @@ static struct Link *Lnk_EditingLnk = NULL;	// Static variable to keep the link b
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lnk_PutIconsEditingLinks (void);
-
-static void Lnk_PutIconsListingLinks (void);
+static void Lnk_PutIconsListingLinks (void *Args);
 static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (void);
 
 static void Lnk_EditLinksInternal (void);
-static void Lnk_PutIconsEditingLinks (void);
+static void Lnk_PutIconsEditingLinks (void *Args);
 
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
@@ -101,7 +99,8 @@ void Lnk_SeeLinks (void)
    Lnk_GetListLinks ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsListingLinks,
+   Box_BoxBegin (NULL,Txt_Links,
+                 Lnk_PutIconsListingLinks,(void *) &Gbl,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
    /***** Write all links *****/
@@ -129,14 +128,17 @@ void Lnk_SeeLinks (void)
 /***************** Put contextual icons in list of links *********************/
 /*****************************************************************************/
 
-static void Lnk_PutIconsListingLinks (void)
+static void Lnk_PutIconsListingLinks (void *Args)
   {
-   /***** Put icon to edit links *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Lnk_PutIconToEditLinks ();
+   if (Args)
+     {
+      /***** Put icon to edit links *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	 Lnk_PutIconToEditLinks ();
 
-   /***** Put icon to view banners *****/
-   Ban_PutIconToViewBanners ();
+      /***** Put icon to view banners *****/
+      Ban_PutIconToViewBanners ();
+     }
   }
 
 /*****************************************************************************/
@@ -145,7 +147,8 @@ static void Lnk_PutIconsListingLinks (void)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiLnk,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiLnk,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -233,7 +236,8 @@ static void Lnk_EditLinksInternal (void)
    Lnk_GetListLinks ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsEditingLinks,
+   Box_BoxBegin (NULL,Txt_Links,
+                 Lnk_PutIconsEditingLinks,(void *) &Gbl,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new link *****/
@@ -254,13 +258,16 @@ static void Lnk_EditLinksInternal (void)
 /******************** Put contextual icons to view links *********************/
 /*****************************************************************************/
 
-static void Lnk_PutIconsEditingLinks (void)
+static void Lnk_PutIconsEditingLinks (void *Args)
   {
-   /***** Put icon to view links *****/
-   Lnk_PutIconToViewLinks ();
+   if (Args)
+     {
+      /***** Put icon to view links *****/
+      Lnk_PutIconToViewLinks ();
 
-   /***** Put icon to view banners *****/
-   Ban_PutIconToViewBanners ();
+      /***** Put icon to view banners *****/
+      Ban_PutIconToViewBanners ();
+     }
   }
 
 /*****************************************************************************/
@@ -271,7 +278,8 @@ void Lnk_PutIconToViewLinks (void)
   {
    extern const char *Txt_Links;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,
+                                  NULL,NULL,
 				  "link.svg",
 				  Txt_Links);
   }
@@ -722,7 +730,8 @@ static void Lnk_PutFormToCreateLink (void)
    Frm_StartForm (ActNewLnk);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_link,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_link,
+                      NULL,NULL,
                       Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

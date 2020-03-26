@@ -217,7 +217,8 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLinkIconText (ActReqSignUp,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqSignUp,NULL,
+                                  NULL,NULL,
 				  "hand-point-up.svg",
 				  Txt_Sign_up);
   }
@@ -406,7 +407,8 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Enrolment,NULL,
+   Box_BoxBegin (NULL,Txt_Enrolment,
+                 NULL,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
    /***** Show message *****/
@@ -722,7 +724,8 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Frm_StartForm (NextAction);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,NULL,
+   Box_BoxBegin (NULL,Title,
+                 NULL,NULL,
 	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
    /***** Step 1: List of students to be enroled / removed *****/
@@ -778,7 +781,8 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,
+                                  NULL,NULL,
 				  "trash.svg",
 				  Txt_Eliminate_old_users);
   }
@@ -800,7 +804,8 @@ void Enr_AskRemoveOldUsrs (void)
    Frm_StartForm (ActRemOldUsr);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Eliminate_old_users,NULL,
+   Box_BoxBegin (NULL,Txt_Eliminate_old_users,
+                 NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
@@ -1809,7 +1814,8 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
-   Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,
+                                  NULL,NULL,
 				  "trash.svg",
 				  Txt_Remove_all_students);
   }
@@ -1827,7 +1833,8 @@ void Enr_AskRemAllStdsThisCrs (void)
 				            1 << Rol_STD);	// This course has students
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Remove_all_students,NULL,
+   Box_BoxBegin (NULL,Txt_Remove_all_students,
+                 NULL,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
    if (NumStds)
@@ -1846,7 +1853,9 @@ void Enr_AskRemAllStdsThisCrs (void)
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                               NULL,NULL,
+                               Btn_NO_BUTTON,NULL);
      }
    else	// Gbl.Hierarchy.Crs.NumUsrs[Rol_STD] == 0
       /***** Show warning indicating no students found *****/
@@ -2117,7 +2126,7 @@ void Enr_AskIfRejectSignUp (void)
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,
+	                             Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
@@ -2255,7 +2264,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Enrolment_requests,NULL,
+   Box_BoxBegin (NULL,Txt_Enrolment_requests,
+                 NULL,NULL,
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
    /***** Selection of scope and roles *****/
@@ -3000,7 +3010,8 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    const char *TitleText = Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
                         	                                             Txt_Administer_me;
 
-   Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
+   Lay_PutContextualLinkIconText (NextAction,NULL,
+                                  NULL,NULL,
 				  "user-cog.svg",
 				  TitleText);
   }
@@ -3036,7 +3047,8 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 TitleText = NULL;
 	 Rol_WrongRoleExit ();
      }
-   Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
+   Lay_PutContextualLinkIconText (NextAction,NULL,
+                                  NULL,NULL,
 				  "users-cog.svg",
 				  TitleText);
   }
@@ -3092,7 +3104,8 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Act_Action_t NextAction;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Administer_one_user,NULL,
+   Box_BoxBegin (NULL,Txt_Administer_one_user,
+                 NULL,NULL,
                  Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
@@ -3626,7 +3639,7 @@ static void Enr_ReqAddAdm (Hie_Level_t Scope,long Cod,const char *InsCtrDegName)
 
 	       /* End alert */
 	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
-	                                Usr_PutParamOtherUsrCodEncrypted,
+	                                Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
@@ -4051,7 +4064,9 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                               NULL,NULL,
+                               Btn_NO_BUTTON,NULL);
      }
    else	      // User does not belong to current course
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -4191,7 +4206,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Level_t Scope,
 
       /* End alert */
       Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
-                               Usr_PutParamOtherUsrCodEncrypted,
+                               Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
                                Btn_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);

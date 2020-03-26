@@ -65,9 +65,9 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (void);
+static void Lan_PutIconsLanguage (void *Args);
 
-static void Lan_PutParamLanguage (void);
+static void Lan_PutParamLanguage (void *Args);
 
 /*****************************************************************************/
 /*************** Put link to change language (edit settings) *****************/
@@ -75,7 +75,8 @@ static void Lan_PutParamLanguage (void);
 
 void Lan_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLinkIconText (ActReqEdiSet,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiSet,NULL,
+                                  NULL,NULL,
 			          "globe.svg",
 				  "Change language");
   }
@@ -89,7 +90,8 @@ void Lan_PutBoxToSelectLanguage (void)
    extern const char *Hlp_PROFILE_Settings_language;
    extern const char *Txt_Language;
 
-   Box_BoxBegin (NULL,Txt_Language,Lan_PutIconsLanguage,
+   Box_BoxBegin (NULL,Txt_Language,
+                 Lan_PutIconsLanguage,(void *) &Gbl,
                  Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
    Lan_PutSelectorToSelectLanguage ();
    Box_BoxEnd ();
@@ -99,11 +101,14 @@ void Lan_PutBoxToSelectLanguage (void)
 /**************** Put contextual icons in language setting *******************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (void)
+static void Lan_PutIconsLanguage (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_LANGUAGES;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_LANGUAGES;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -147,7 +152,8 @@ void Lan_AskChangeLanguage (void)
    Gbl.Prefs.Language = Lan_GetParamLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
-   Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,Lan_PutParamLanguage,
+   Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
+                           Lan_PutParamLanguage,(void *) &Gbl,
                            Btn_CONFIRM_BUTTON,
                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
@@ -163,9 +169,10 @@ void Lan_AskChangeLanguage (void)
 /******************************* Change language *****************************/
 /*****************************************************************************/
 
-static void Lan_PutParamLanguage (void)
+static void Lan_PutParamLanguage (void *Args)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Gbl.Prefs.Language);
+   if (Args)
+      Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Gbl.Prefs.Language);
   }
 
 /*****************************************************************************/

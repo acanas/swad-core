@@ -110,7 +110,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
-void Ins_PutParamCurrentInsCod (void);
+void Ins_PutParamCurrentInsCod (void *Args);
 void Ins_PutParamInsCod (long InsCod);
 long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed);
 void Ins_RemoveInstitution (void);

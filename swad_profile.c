@@ -157,7 +157,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
-				  Usr_PutParamMyUsrCodEncrypted,
+				  Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 				  "user.svg",
 				  Txt_My_public_profile);
   }
@@ -170,7 +170,8 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
   {
    extern const char *Txt_Another_user_s_profile;
 
-   Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,
+                                  NULL,NULL,
 				  "user.svg",
 				  Txt_Another_user_s_profile);
   }
@@ -201,7 +202,8 @@ void Prf_RequestUserProfile (void)
    Frm_StartForm (ActSeeOthPubPrf);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Another_user_s_profile,NULL,
+   Box_BoxBegin (NULL,Txt_Another_user_s_profile,
+                 NULL,NULL,
                  Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
 
    /***** Form to request user's @nickname *****/

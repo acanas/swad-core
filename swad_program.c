@@ -153,7 +153,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			      const struct ItemRange *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 static bool Prg_CheckIfICanCreateItems (void);
-static void Prg_PutIconsListItems (void);
+static void Prg_PutIconsListItems (void *Args);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
@@ -187,7 +187,7 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 
 static void Prg_SetCurrentItmCod (long ItmCod);
 static long Prg_GetCurrentItmCod (void);
-static void Prg_PutParams (void);
+static void Prg_PutParams (void *Args);
 
 static void Prg_GetListItems (void);
 static void Prg_GetDataOfItemByCod (struct ProgramItem *Item);
@@ -270,7 +270,8 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
    Prg_CreateLevels ();
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Course_program,Prg_PutIconsListItems,
+   Box_BoxBegin ("100%",Txt_Course_program,
+                 Prg_PutIconsListItems,(void *) &Gbl,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
    /***** Table *****/
@@ -366,15 +367,18 @@ static bool Prg_CheckIfICanCreateItems (void)
 /************** Put contextual icons in list of program items ****************/
 /*****************************************************************************/
 
-static void Prg_PutIconsListItems (void)
+static void Prg_PutIconsListItems (void *Args)
   {
-   /***** Put icon to create a new program item *****/
-   if (Prg_CheckIfICanCreateItems ())
-      Prg_PutIconToCreateNewItem ();
+   if (Args)
+     {
+      /***** Put icon to create a new program item *****/
+      if (Prg_CheckIfICanCreateItems ())
+	 Prg_PutIconToCreateNewItem ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_COURSE_PROGRAMS;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_COURSE_PROGRAMS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -387,7 +391,8 @@ static void Prg_PutIconToCreateNewItem (void)
 
    /***** Put form to create a new program item *****/
    Prg_SetCurrentItmCod (-1L);
-   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",Prg_PutParams,
+   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
+                               Prg_PutParams,(void *) &Gbl,
 			       Txt_New_item);
   }
 
@@ -401,7 +406,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 
    Prg_SetCurrentItmCod (-1L);
    Frm_StartFormAnchor (ActFrmNewPrgItm,"item_form");
-   Prg_PutParams ();
+   Prg_PutParams ((void *) &Gbl);
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
   }
@@ -792,26 +797,33 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,Prg_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,
+	                                Prg_PutParams,(void *) &Gbl);
 
 	 /***** Put form to hide/show program item *****/
 	 if (Item->Hierarchy.Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoPrgItm,"prg_highlighted",Prg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrgItm,"prg_highlighted",
+	                                   Prg_PutParams,(void *) &Gbl);
 	 else
-	    Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",Prg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",
+	                                 Prg_PutParams,(void *) &Gbl);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",Prg_PutParams);
+	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
+	                              Prg_PutParams,(void *) &Gbl);
 
 	 /***** Put form to add a new child item inside this item *****/
-	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",Prg_PutParams,Txt_New_item);
+	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
+	                             Prg_PutParams,(void *) &Gbl,
+	                             Txt_New_item);
 
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
+	                                   Prg_PutParams,(void *) &Gbl,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Txt_Move_up_X,
 							       StrItemIndex));
@@ -823,7 +835,8 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Put icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
+	                                   Prg_PutParams,(void *) &Gbl,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Txt_Move_down_X,
 							       StrItemIndex));
@@ -835,7 +848,8 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
+	                                   Prg_PutParams,(void *) &Gbl,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemIndex));
@@ -847,7 +861,8 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
-	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",Prg_PutParams,
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
+	                                   Prg_PutParams,(void *) &Gbl,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemIndex));
@@ -952,12 +967,16 @@ static long Prg_GetCurrentItmCod (void)
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
-static void Prg_PutParams (void)
+static void Prg_PutParams (void *Args)
   {
-   long CurrentItmCod = Prg_GetCurrentItmCod ();
+   long CurrentItmCod;
 
-   if (CurrentItmCod > 0)
-      Prg_PutParamItmCod (CurrentItmCod);
+   if (Args)
+     {
+      CurrentItmCod = Prg_GetCurrentItmCod ();
+      if (CurrentItmCod > 0)
+	 Prg_PutParamItmCod (CurrentItmCod);
+     }
   }
 
 /*****************************************************************************/
@@ -1267,7 +1286,8 @@ void Prg_ReqRemItem (void)
 
    /***** Show question and button to remove the program item *****/
    Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
-   Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,Prg_PutParams,
+   Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
+                           Prg_PutParams,(void *) &Gbl,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
@@ -1844,7 +1864,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Prg_PutParamItmCod (ParentItem.Hierarchy.ItmCod);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_New_item,NULL,
+   Box_BoxTableBegin ("100%",Txt_New_item,
+                      NULL,NULL,
 		      Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
 
    /***** Show form *****/
@@ -1890,7 +1911,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Box_BoxTableBegin ("100%",
 		      Item.Title[0] ? Item.Title :
 				      Txt_Edit_item,
-		      NULL,
+		      NULL,NULL,
 		      Hlp_COURSE_Program_edit_item,Box_NOT_CLOSABLE,2);
 
    /***** Show form *****/

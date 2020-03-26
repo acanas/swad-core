@@ -74,7 +74,7 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 
 static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat);
 
-static void Pwd_PutLinkToSendNewPasswdParams (void);
+static void Pwd_PutLinkToSendNewPasswdParams (void *Args);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
@@ -248,14 +248,15 @@ void Pwd_PutLinkToSendNewPasswd (void)
    extern const char *Txt_Forgotten_password;
 
    Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
-				  Pwd_PutLinkToSendNewPasswdParams,
+				  Pwd_PutLinkToSendNewPasswdParams,(void *) &Gbl,
 				  "key.svg",
 				  Txt_Forgotten_password);
   }
 
-static void Pwd_PutLinkToSendNewPasswdParams (void)
+static void Pwd_PutLinkToSendNewPasswdParams (void *Args)
   {
-   Par_PutHiddenParamString (NULL,"UsrId",Gbl.Usrs.Me.UsrIdLogin);
+   if (Args)
+      Par_PutHiddenParamString (NULL,"UsrId",Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/
@@ -275,7 +276,8 @@ void Pwd_ShowFormSendNewPwd (void)
    Frm_StartForm (ActSndNewPwd);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Forgotten_password,NULL,
+   Box_BoxBegin (NULL,Txt_Forgotten_password,
+                 NULL,NULL,
                  Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Help text *****/
@@ -661,7 +663,8 @@ void Pwd_ShowFormChgMyPwd (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Password,NULL,
+   Box_BoxBegin (StrRecordWidth,Txt_Password,
+                 NULL,NULL,
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Show possible alerts *****/
@@ -795,7 +798,8 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Act_Action_t NextAction;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Password,NULL,
+   Box_BoxBegin (NULL,Txt_Password,
+                 NULL,NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
    /***** Start section *****/
@@ -820,7 +824,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 break;
      }
    Frm_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
-   Usr_PutParamOtherUsrCodEncrypted ();
+   Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
    /* New password */
    HTM_TABLE_BeginWidePadding (2);

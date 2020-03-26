@@ -126,7 +126,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	             Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,NULL,
+   Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,
+                      NULL,NULL,
                       NULL,Box_CLOSABLE,2);
 
    if (Gbl.Usrs.Me.Logged)		// I am logged

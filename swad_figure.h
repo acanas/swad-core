@@ -74,7 +74,7 @@ typedef enum
 
 void Fig_ReqShowFigures (void);
 void Fig_PutIconToShowFigure (void);
-void Fig_PutHiddenParamFigures (void);
+void Fig_PutHiddenParamFigures (void *Args);
 void Fig_ShowFigures (void);
 
 #endif

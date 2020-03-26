@@ -105,7 +105,7 @@ static void Syl_ShowSyllabus (bool PutIconToEdit);
 static void Syl_ShowRowSyllabus (unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
-static void Syl_PutParamNumItem (void);
+static void Syl_PutParamNumItem (void *Args);
 
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
@@ -510,12 +510,18 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		      PutIconToEdit ? Inf_PutIconToEditInfo :
-				      NULL,
-		      Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
-						     Hlp_COURSE_Syllabus,
-		      Box_NOT_CLOSABLE,0);
+   if (PutIconToEdit)
+      Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+			 Inf_PutIconToEditInfo,(void *) &Gbl,
+			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
+							Hlp_COURSE_Syllabus,
+			 Box_NOT_CLOSABLE,0);
+   else
+      Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+			 NULL,NULL,
+			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
+							Hlp_COURSE_Syllabus,
+			 Box_NOT_CLOSABLE,0);
 
    /***** Set width of columns of the table *****/
    HTM_Txt ("<colgroup>");
@@ -602,7 +608,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Frm_StartForm (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                               ActDelItmSylPra);
-	    Syl_PutParamNumItem ();
+	    Syl_PutParamNumItem ((void *) &Gbl);
             Ico_PutIconRemove ();
             Frm_EndForm ();
 	   }
@@ -615,7 +621,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 									       ActUp_IteSylPra,
-					   NULL,Syl_PutParamNumItem,
+					   NULL,
+					   Syl_PutParamNumItem,(void *) &Gbl,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
 													   Txt_Move_up_X,
@@ -633,7 +640,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 									       ActDwnIteSylPra,
-					   NULL,Syl_PutParamNumItem,
+					   NULL,
+					   Syl_PutParamNumItem,(void *) &Gbl,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
 													   Txt_Move_down_X,
@@ -650,7 +658,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 									       ActRgtIteSylPra,
-					   NULL,Syl_PutParamNumItem,
+					   NULL,
+					   Syl_PutParamNumItem,(void *) &Gbl,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemCod));
@@ -667,7 +676,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 									       ActLftIteSylPra,
-					   NULL,Syl_PutParamNumItem,
+					   NULL,
+					   Syl_PutParamNumItem,(void *) &Gbl,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemCod));
@@ -827,7 +837,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
                             (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                 ActModIteSylPra));
    Gbl.Syllabus.ParamNumItem = NumItem;
-   Syl_PutParamNumItem ();
+   Syl_PutParamNumItem ((void *) &Gbl);
    HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,true,
 		   "size=\"60\" placeholder=\"%s\"%s",
 	           Txt_Enter_a_new_item_here,
@@ -841,9 +851,10 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 /***** Write parameter with the number of an item in a syllabus form *********/
 /*****************************************************************************/
 
-static void Syl_PutParamNumItem (void)
+static void Syl_PutParamNumItem (void *Args)
   {
-   Par_PutHiddenParamUnsigned (NULL,"NumI",Gbl.Syllabus.ParamNumItem);
+   if (Args)
+      Par_PutHiddenParamUnsigned (NULL,"NumI",Gbl.Syllabus.ParamNumItem);
   }
 
 /*****************************************************************************/

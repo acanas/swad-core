@@ -518,7 +518,8 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_ID,Acc_PutLinkToRemoveMyAccount,
+   Box_BoxBegin (StrRecordWidth,Txt_ID,
+                 Acc_PutLinkToRemoveMyAccount,(void *) &Gbl,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/
@@ -550,7 +551,8 @@ void ID_ShowFormChangeOtherUsrID (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_ID,NULL,
+   Box_BoxBegin (StrRecordWidth,Txt_ID,
+                 NULL,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/

@@ -64,13 +64,13 @@ static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the cent
 
 static void Ctr_ListCentres (void);
 static bool Ctr_CheckIfICanCreateCentres (void);
-static void Ctr_PutIconsListingCentres (void);
+static void Ctr_PutIconsListingCentres (void *Args);
 static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
 
 static void Ctr_EditCentresInternal (void);
-static void Ctr_PutIconsEditingCentres (void);
+static void Ctr_PutIconsEditingCentres (void *Args);
 
 static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row);
 
@@ -84,7 +84,7 @@ static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
-static void Ctr_PutParamGoToCtr (void);
+static void Ctr_PutParamGoToCtr (void *Args);
 
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
@@ -147,7 +147,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if (NumCtrs)
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Centres_with_pending_degrees,NULL,
+      Box_BoxTableBegin (NULL,Txt_Centres_with_pending_degrees,
+                         NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Wrtie heading *****/
@@ -272,7 +273,7 @@ static void Ctr_ListCentres (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsListingCentres,
+		 Ctr_PutIconsListingCentres,(void *) &Gbl,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -320,18 +321,21 @@ static bool Ctr_CheckIfICanCreateCentres (void)
 /***************** Put contextual icons in list of centres *******************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsListingCentres (void)
+static void Ctr_PutIconsListingCentres (void *Args)
   {
-   /***** Put icon to edit centres *****/
-   if (Ctr_CheckIfICanCreateCentres ())
-      Ctr_PutIconToEditCentres ();
+   if (Args)
+     {
+      /***** Put icon to edit centres *****/
+      if (Ctr_CheckIfICanCreateCentres ())
+	 Ctr_PutIconToEditCentres ();
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+      /***** Put icon to view places *****/
+      Plc_PutIconToViewPlaces ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -340,7 +344,8 @@ static void Ctr_PutIconsListingCentres (void)
 
 static void Ctr_PutIconToEditCentres (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCtr,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCtr,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -474,7 +479,7 @@ static void Ctr_EditCentresInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsEditingCentres,
+		 Ctr_PutIconsEditingCentres,(void *) &Gbl,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -499,24 +504,28 @@ static void Ctr_EditCentresInternal (void)
 /**************** Put contextual icons in edition of centres *****************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsEditingCentres (void)
+static void Ctr_PutIconsEditingCentres (void *Args)
   {
-   /***** Put icon to view centres *****/
-   Ctr_PutIconToViewCentres ();
+   if (Args)
+     {
+      /***** Put icon to view centres *****/
+      Ctr_PutIconToViewCentres ();
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+      /***** Put icon to view places *****/
+      Plc_PutIconToViewPlaces ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 void Ctr_PutIconToViewCentres (void)
   {
    extern const char *Txt_Centres;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeCtr,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeCtr,NULL,
+                                  NULL,NULL,
                                   "building.svg",
                                   Txt_Centres);
   }
@@ -1566,9 +1575,10 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
    if (Ctr_EditingCtr->CtrCod != Gbl.Hierarchy.Ctr.CtrCod)
      {
       /***** Alert with button to go to centre *****/
-      Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
+      Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
+                                  Ctr_PutParamGoToCtr,(void *) &Gbl,
                                   Btn_CONFIRM_BUTTON,
-				  Hie_BuildGoToMsg (Ctr_EditingCtr->ShrtName));
+                                  Hie_BuildGoToMsg (Ctr_EditingCtr->ShrtName));
       Hie_FreeGoToMsg ();
      }
    else
@@ -1576,9 +1586,10 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Ctr_PutParamGoToCtr (void)
+static void Ctr_PutParamGoToCtr (void *Args)
   {
-   Ctr_PutParamCtrCod (Ctr_EditingCtr->CtrCod);
+   if (Args)
+      Ctr_PutParamCtrCod (Ctr_EditingCtr->CtrCod);
   }
 
 /*****************************************************************************/
@@ -1601,7 +1612,8 @@ static void Ctr_PutFormToCreateCentre (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_centre,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_centre,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2097,7 +2109,8 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
       Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtrs,
 						      (NumCtrs == 1) ? Txt_centre :
 	                                                               Txt_centres),
-			 NULL,NULL,Box_NOT_CLOSABLE,2);
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
       /***** Write heading *****/
@@ -2175,7 +2188,8 @@ static void Ctr_FormToGoToMap (struct Centre *Ctr)
    if (Ctr_GetIfMapIsAvailable (Ctr))
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
-      Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,Ctr_PutParamGoToCtr,
+      Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,
+                                     Ctr_PutParamGoToCtr,(void *) &Gbl,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

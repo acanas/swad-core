@@ -127,7 +127,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
                                                ActChgNumRowHeaCrs);	// Course zone
-      Brw_PutImplicitParamsFileBrowser ();
+      Brw_PutImplicitParamsFileBrowser ((void *) &Gbl);
       HTM_LABEL_Begin (NULL);
       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
@@ -146,7 +146,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 	                                       ActChgNumRowFooCrs);	// Course zone
-      Brw_PutImplicitParamsFileBrowser ();
+      Brw_PutImplicitParamsFileBrowser ((void *) &Gbl);
       HTM_LABEL_Begin (NULL);
       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),

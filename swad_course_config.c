@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void CrsCfg_PutIconToPrint (void);
+static void CrsCfg_PutIconToPrint (void *Args);
 static void CrsCfg_Title (bool PutLink);
 static void CrsCfg_Degree (bool PrintView,bool PutForm);
 static void CrsCfg_FullName (bool PutForm);
@@ -113,10 +113,12 @@ void CrsCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,CrsCfg_PutIconToPrint,
+      Box_BoxBegin (NULL,NULL,
+                    CrsCfg_PutIconToPrint,(void *) &Gbl,
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -178,9 +180,11 @@ void CrsCfg_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a course ***************/
 /*****************************************************************************/
 
-static void CrsCfg_PutIconToPrint (void)
+static void CrsCfg_PutIconToPrint (void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL);
+   if (Args)
+      Ico_PutContextualIconToPrint (ActPrnCrsInf,
+				    NULL,NULL);
   }
 
 /*****************************************************************************/

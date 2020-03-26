@@ -1223,14 +1223,14 @@ static void Lay_ShowRightColumn (void)
 /*****************************************************************************/
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void),
+				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,
 				    const char *Title)
   {
    /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
 
    /***** Put icon with link *****/
    Ico_PutIconLink (Icon,Title);
@@ -1244,7 +1244,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void),
+				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,
 				    const char *Text)
   {
@@ -1257,7 +1257,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
 
    /***** Put icon and text with link *****/
    HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
@@ -1736,7 +1736,8 @@ void Lay_AdvertisementMobile (void)
       HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,NULL,
+      Box_BoxTableBegin (NULL,NULL,
+                         NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/

@@ -116,7 +116,8 @@ void Dup_PutLinkToListDupUsrs (void)
    extern const char *Txt_Duplicate_USERS;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,
+                                  NULL,NULL,
 				  "user-friends.svg",
 				  Txt_Duplicate_USERS);
   }
@@ -138,7 +139,8 @@ void Dup_ListDuplicateUsrs (void)
    unsigned NumInformants;
 
    /***** Begin box with list of possible duplicate users *****/
-   Box_BoxBegin (NULL,Txt_Possibly_duplicate_users,NULL,
+   Box_BoxBegin (NULL,Txt_Possibly_duplicate_users,
+                 NULL,NULL,
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
    /***** Make query *****/
@@ -263,7 +265,8 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Begin box with list of possible duplicate users *****/
-   Box_BoxBegin (NULL,Txt_Similar_users,NULL,
+   Box_BoxBegin (NULL,Txt_Similar_users,
+                 NULL,NULL,
                  Hlp_USERS_Duplicates_similar_users,Box_NOT_CLOSABLE);
 
    /***** Make query *****/

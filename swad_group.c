@@ -97,7 +97,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
-static void Grp_PutIconsEditingGroups (void);
+static void Grp_PutIconsEditingGroups (void *Args);
 static void Grp_PutIconToCreateNewGroup (void);
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
@@ -111,14 +111,14 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod);
 
 static void Grp_ListGroupTypesForEdition (void);
-static void Grp_PutIconsEditingGroupTypes (void);
+static void Grp_PutIconsEditingGroupTypes (void *Args);
 static void Grp_PutIconToViewGroups (void);
 static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (void);
 static void Grp_WriteHeadingGroups (void);
-static void Grp_PutIconToEditGroups (void);
+static void Grp_PutIconToEditGroups (void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
@@ -146,9 +146,9 @@ static void Grp_CreateGroupType (void);
 static void Grp_CreateGroup (void);
 
 static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
-static void Grp_PutParamRemGrpTyp (void);
+static void Grp_PutParamRemGrpTyp (void *Args);
 static void Grp_AskConfirmRemGrp (void);
-static void Grp_PutParamRemGrp (void);
+static void Grp_PutParamRemGrp (void *Args);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
@@ -286,7 +286,8 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
+   Box_BoxBegin (NULL,Txt_Types_of_group,
+                 Grp_PutIconsEditingGroupTypes,(void *) &Gbl,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group type *****/
@@ -314,7 +315,8 @@ static void Grp_EditGroups (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
+   Box_BoxBegin (NULL,Txt_Groups,
+                 Grp_PutIconsEditingGroups,(void *) &Gbl,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
@@ -335,13 +337,16 @@ static void Grp_EditGroups (void)
 /**************** Put contextual icons in edition of groups ******************/
 /*****************************************************************************/
 
-static void Grp_PutIconsEditingGroups (void)
+static void Grp_PutIconsEditingGroups (void *Args)
   {
-   /***** Put icon to view groups *****/
-   Grp_PutIconToViewGroups ();
+   if (Args)
+     {
+      /***** Put icon to view groups *****/
+      Grp_PutIconToViewGroups ();
 
-   /***** Put icon to create a new group *****/
-   Grp_PutIconToCreateNewGroup ();
+      /***** Put icon to create a new group *****/
+      Grp_PutIconToCreateNewGroup ();
+     }
   }
 
 static void Grp_PutIconToCreateNewGroup (void)
@@ -349,7 +354,8 @@ static void Grp_PutIconToCreateNewGroup (void)
    extern const char *Txt_New_group;
 
    /***** Put form to create a new group *****/
-   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,
+   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,
+                               NULL,NULL,
 			       Txt_New_group);
   }
 
@@ -357,7 +363,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Args,
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
@@ -375,9 +381,14 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    ICanEdit = !Gbl.Form.Inside &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   Box_BoxBegin (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
-					    NULL,
-		 Hlp_USERS_Groups,Box_CLOSABLE);
+   if (ICanEdit)
+      Box_BoxBegin (NULL,Txt_Groups,
+		    Grp_PutIconToEditGroups,(void *) &Gbl,
+		    Hlp_USERS_Groups,Box_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_Groups,
+		    NULL,NULL,
+		    Hlp_USERS_Groups,Box_CLOSABLE);
 
    /***** Begin form to update the students listed
 	  depending on the groups selected *****/
@@ -385,7 +396,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
 			Usr_USER_LIST_SECTION_ID);
    Usr_PutParamsPrefsAboutUsrList ();
    if (FuncParams)
-      FuncParams ();
+      FuncParams (Args);
 
    /***** Select all groups *****/
    Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
@@ -1402,18 +1413,22 @@ static void Grp_ListGroupTypesForEdition (void)
 /************ Put contextual icons in edition of types of group **************/
 /*****************************************************************************/
 
-static void Grp_PutIconsEditingGroupTypes (void)
+static void Grp_PutIconsEditingGroupTypes (void *Args)
   {
-   /***** Put icon to view groups *****/
-   Grp_PutIconToViewGroups ();
+   if (Args)
+     {
+      /***** Put icon to view groups *****/
+      Grp_PutIconToViewGroups ();
 
-   /***** Put icon to create a new type of group *****/
-   Grp_PutIconToCreateNewGroupType ();
+      /***** Put icon to create a new type of group *****/
+      Grp_PutIconToCreateNewGroupType ();
+     }
   }
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Ico_PutContextualIconToView (ActReqSelGrp,NULL);
+   Ico_PutContextualIconToView (ActReqSelGrp,
+                                NULL,NULL);
   }
 
 static void Grp_PutIconToCreateNewGroupType (void)
@@ -1421,7 +1436,8 @@ static void Grp_PutIconToCreateNewGroupType (void)
    extern const char *Txt_New_type_of_group;
 
    /***** Put form to create a new type of group *****/
-   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,NULL,
+   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,
+                               NULL,NULL,
 			       Txt_New_type_of_group);
   }
 
@@ -1774,9 +1790,14 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
-                                               NULL,
-                 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
+   if (ICanEdit)
+      Box_BoxBegin (NULL,Txt_My_groups,
+		    Grp_PutIconToEditGroups,(void *) &Gbl,
+		    Hlp_USERS_Groups,Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_My_groups,
+		    NULL,NULL,
+		    Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
@@ -1832,9 +1853,11 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 /*************************** Put icon to edit groups *************************/
 /*****************************************************************************/
 
-static void Grp_PutIconToEditGroups (void)
+static void Grp_PutIconToEditGroups (void *Args)
   {
-   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL);
+   if (Args)
+      Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,
+                                   NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -2066,7 +2089,8 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Groups,NULL,
+   Box_BoxTableBegin (NULL,Txt_Groups,
+                      NULL,NULL,
                       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
    /***** List to select the groups the user belongs to *****/
@@ -2459,7 +2483,8 @@ static void Grp_PutFormToCreateGroupType (void)
    Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Begin box *****/
-   Box_BoxTableBegin (NULL,Txt_New_type_of_group,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_type_of_group,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2569,7 +2594,8 @@ static void Grp_PutFormToCreateGroup (void)
    Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_group,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_group,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -3932,13 +3958,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Show question and button to remove type of group *****/
    if (NumGrps == 1)
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,
+			      Grp_PutParamRemGrpTyp,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,
+			      Grp_PutParamRemGrpTyp,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
@@ -3952,9 +3978,10 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
 /**************** Put parameter to remove a type of group ********************/
 /*****************************************************************************/
 
-static void Grp_PutParamRemGrpTyp (void)
+static void Grp_PutParamRemGrpTyp (void *Args)
   {
-   Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   if (Args)
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -3984,19 +4011,19 @@ static void Grp_AskConfirmRemGrp (void)
    /***** Show question and button to remove group *****/
    if (NumStds == 0)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,
+			      Grp_PutParamRemGrp,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
                               GrpDat.GrpName);
    else if (NumStds == 1)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,
+			      Grp_PutParamRemGrp,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
                               GrpDat.GrpName);
    else
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,
+			      Grp_PutParamRemGrp,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                               GrpDat.GrpName,NumStds);
@@ -4009,9 +4036,10 @@ static void Grp_AskConfirmRemGrp (void)
 /*********************** Put parameter to remove a group *********************/
 /*****************************************************************************/
 
-static void Grp_PutParamRemGrp (void)
+static void Grp_PutParamRemGrp (void *Args)
   {
-   Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
+   if (Args)
+      Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
   }
 
 /*****************************************************************************/
@@ -4928,12 +4956,12 @@ void Grp_PutParamAllGroups (void)
 /************* Parameter to show only my groups or all groups ****************/
 /*****************************************************************************/
 
-void Grp_PutParamWhichGrps (void)
+void Grp_PutParamWhichGrps (void *WhichGrps)
   {
-   Grp_GetParamWhichGrps ();
-
-   if (Gbl.Crs.Grps.WhichGrps != Grp_WHICH_GROUPS_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
+   if (WhichGrps)
+      if (*(Grp_WhichGroups_t *) WhichGrps != Grp_WHICH_GROUPS_DEFAULT)
+	 Par_PutHiddenParamUnsigned (NULL,"WhichGrps",
+	                             (unsigned) *(Grp_WhichGroups_t *) WhichGrps);
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
@@ -4950,42 +4978,46 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 /***** Show form to choice whether to show only my groups or all groups ******/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
+void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
+                                 void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
-   /***** Start setting selector *****/
-   Set_StartOneSettingSelector ();
-
-   /***** Put icons to select which groups *****/
-   for (WhichGrps  = Grp_MY_GROUPS;
-	WhichGrps <= Grp_ALL_GROUPS;
-	WhichGrps++)
+   if (Args)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-	              WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
-						            "PREF_OFF");
-      Frm_StartForm (Action);
-      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-      if (FuncParams)	// Extra parameters depending on the action
-	 FuncParams ();
-      Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-		                                           "sitemap.svg",
-			      Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
+      /***** Start setting selector *****/
+      Set_StartOneSettingSelector ();
 
-   /***** End setting selector *****/
-   Set_EndOneSettingSelector ();
+      /***** Put icons to select which groups *****/
+      for (WhichGrps  = Grp_MY_GROUPS;
+	   WhichGrps <= Grp_ALL_GROUPS;
+	   WhichGrps++)
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",
+			 WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
+							       "PREF_OFF");
+	 Frm_StartForm (Action);
+	 Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	 if (FuncParams)	// Extra parameters depending on the action
+	    FuncParams (Args);
+	 Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+							      "sitemap.svg",
+				 Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	 Frm_EndForm ();
+	 HTM_DIV_End ();
+	}
+
+      /***** End setting selector *****/
+      Set_EndOneSettingSelector ();
+     }
   }
 
 /*****************************************************************************/
 /************* Get whether to show only my groups or all groups **************/
 /*****************************************************************************/
 
-void Grp_GetParamWhichGrps (void)
+Grp_WhichGroups_t Grp_GetParamWhichGrps (void)
   {
    static bool AlreadyGot = false;
    Grp_WhichGroups_t WhichGroupsDefault;
@@ -5030,4 +5062,6 @@ void Grp_GetParamWhichGrps (void)
 
       AlreadyGot = true;
      }
+
+   return Gbl.Crs.Grps.WhichGrps;
   }

@@ -247,7 +247,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
+   Box_BoxBegin (StrRecordWidth,Txt_Nickname,
+                 Acc_PutLinkToRemoveMyAccount,(void *) &Gbl,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show possible alerts *****/
@@ -323,7 +324,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
       /* Link to QR code */
       if (NumNick == 1 && UsrDat->Nickname[0])
-	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted);
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,
+	                          Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
 
       /* Form to change the nickname */
       if (NumNick > 1)

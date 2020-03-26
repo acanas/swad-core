@@ -67,7 +67,7 @@ static struct Department *Dpt_EditingDpt = NULL;	// Static variable to keep the 
 /*****************************************************************************/
 
 static void Dpt_GetParamDptOrder (void);
-static void Dpt_PutIconToEditDpts (void);
+static void Dpt_PutIconToEditDpts (void *Args);
 static void Dpt_EditDepartmentsInternal (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
@@ -111,11 +111,16 @@ void Dpt_SeeDepts (void)
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
-					       Gbl.Hierarchy.Ins.FullName),
-		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-							       NULL,
-		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
+						  Gbl.Hierarchy.Ins.FullName),
+			 Dpt_PutIconToEditDpts,(void *) &Gbl,
+			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
+   else
+      Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
+						  Gbl.Hierarchy.Ins.FullName),
+			 NULL,NULL,
+			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    Str_FreeString ();
 
    /***** Write heading *****/
@@ -225,9 +230,11 @@ static void Dpt_GetParamDptOrder (void)
 /************************ Put icon to edit departments ***********************/
 /*****************************************************************************/
 
-static void Dpt_PutIconToEditDpts (void)
+static void Dpt_PutIconToEditDpts (void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiDpt,NULL,NULL);
+   if (Args)
+      Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -263,7 +270,8 @@ static void Dpt_EditDepartmentsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
-				          Gbl.Hierarchy.Ins.FullName),NULL,
+				          Gbl.Hierarchy.Ins.FullName),
+                 NULL,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -884,7 +892,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Frm_StartForm (ActNewDpt);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_department,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_department,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

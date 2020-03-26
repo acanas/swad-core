@@ -90,7 +90,7 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod);
 unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 
-void Msg_PutHiddenParamsMsgsFilters (void);
+void Msg_PutHiddenParamsMsgsFilters (void *Args);
 void Msg_GetDistinctCoursesInMyMessages (void);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
 void Msg_ShowFormToFilterMsgs (void);

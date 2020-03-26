@@ -64,9 +64,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (void);
-static void Lgo_PutIconToRemoveLogoCtr (void);
-static void Lgo_PutIconToRemoveLogoDeg (void);
+static void Lgo_PutIconToRemoveLogoIns (void *Args);
+static void Lgo_PutIconToRemoveLogoCtr (void *Args);
+static void Lgo_PutIconToRemoveLogoDeg (void *Args);
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 
 /*****************************************************************************/
@@ -242,7 +242,8 @@ void Lgo_PutIconToChangeLogo (Hie_Level_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Lay_PutContextualLinkOnlyIcon (Action,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (Action,NULL,
+                                  NULL,NULL,
 				  "shield-alt.svg",
 				  LogoExists ? Txt_Change_logo :
 					       Txt_Upload_logo);
@@ -261,7 +262,7 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
    long Cod;
    const char *Folder;
    Act_Action_t ActionRec;
-   void (*FunctionToDrawContextualIcons) (void);
+   void (*FunctionToDrawContextualIcons) (void *Args);
    char PathLogo[PATH_MAX + 1];
 
    /***** Set action depending on scope *****/
@@ -300,7 +301,8 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
       FunctionToDrawContextualIcons = NULL;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Logo,FunctionToDrawContextualIcons,
+   Box_BoxBegin (NULL,Txt_Logo,
+                 FunctionToDrawContextualIcons,(void *) &Gbl,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Begin form to upload logo *****/
@@ -327,19 +329,22 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 /************** Put a link to request the removal of the logo ****************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (void)
+static void Lgo_PutIconToRemoveLogoIns (void *Args)
   {
-   Lgo_PutIconToRemoveLogo (ActRemInsLog);
+   if (Args)
+      Lgo_PutIconToRemoveLogo (ActRemInsLog);
   }
 
-static void Lgo_PutIconToRemoveLogoCtr (void)
+static void Lgo_PutIconToRemoveLogoCtr (void *Args)
   {
-   Lgo_PutIconToRemoveLogo (ActRemCtrLog);
+   if (Args)
+      Lgo_PutIconToRemoveLogo (ActRemCtrLog);
   }
 
-static void Lgo_PutIconToRemoveLogoDeg (void)
+static void Lgo_PutIconToRemoveLogoDeg (void *Args)
   {
-   Lgo_PutIconToRemoveLogo (ActRemDegLog);
+   if (Args)
+      Lgo_PutIconToRemoveLogo (ActRemDegLog);
   }
 
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
@@ -347,7 +352,8 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
    extern const char *Txt_Remove_logo;
 
    /***** Link to request the removal of the logo *****/
-   Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,
+                                  NULL,NULL,
 				  "trash.svg",
 				  Txt_Remove_logo);
   }

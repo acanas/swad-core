@@ -153,7 +153,7 @@ static void Tst_UpdateLastAccTst (unsigned NumQsts);
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
 static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
-static void Tst_PutIconsTests (void);
+static void Tst_PutIconsTests (void *Args);
 static void Tst_PutButtonToAddQuestion (void);
 
 static long Tst_GetParamTagCode (void);
@@ -295,10 +295,10 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
-static void Tst_PutParamsRemoveSelectedQsts (void);
-static void Tst_PutIconToRemoveOneQst (void);
-static void Tst_PutParamsRemoveOnlyThisQst (void);
-static void Tst_PutParamsRemoveOneQstWhileEditing (void);
+static void Tst_PutParamsRemoveSelectedQsts (void *Args);
+static void Tst_PutIconToRemoveOneQst (void *QstCod);
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCod);
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static long Tst_GetQstCod (void);
@@ -380,7 +380,8 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Tst_SetParamGblTest (Test);
-   Box_BoxBegin (NULL,Txt_Take_a_test,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Take_a_test,
+                 Tst_PutIconsTests,(void *) &Gbl,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
@@ -480,7 +481,8 @@ void Tst_ShowNewTest (void)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
 	    /***** Begin box *****/
-	    Box_BoxBegin (NULL,Txt_Test,NULL,
+	    Box_BoxBegin (NULL,Txt_Test,
+	                  NULL,NULL,
 	                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	    Lay_WriteHeaderClassPhoto (false,false,
 				       Gbl.Hierarchy.Ins.InsCod,
@@ -575,7 +577,8 @@ void Tst_AssessTest (void)
 	 TstCod = TsR_CreateTestResultInDB (AllowTeachers,Result.NumQsts);
 
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
+	 Box_BoxBegin (NULL,Txt_Test_result,
+	               NULL,NULL,
 	               Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (false,false,
 				    Gbl.Hierarchy.Ins.InsCod,
@@ -1402,7 +1405,8 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Tst_SetParamGblTest (Test);
-   Box_BoxBegin (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_List_edit_questions,
+                 Tst_PutIconsTests,(void *) &Gbl,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1477,14 +1481,15 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test)
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Select_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Select_questions,
+                 NULL,NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
-      Gam_PutParams ();
+      Gam_PutParams ((void *) &Gbl);
 
       HTM_TABLE_BeginPadding (2);
 
@@ -1530,58 +1535,66 @@ static bool Tst_CheckIfICanEditTests (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsTests (void)
+static void Tst_PutIconsTests (void *Args)
   {
    extern const char *Txt_New_question;
 
-   if (Tst_CheckIfICanEditTests ())
+   if (Args)
      {
-      switch (Gbl.Action.Act)
-        {
-	 case ActLstTstQst:		// List selected test questions for edition
-	 case ActReqRemSevTstQst:	// Request removal of selected questions
-	 case ActReqRemOneTstQst:	// Request removal of a question
-	 case ActRemOneTstQst:		// Remove a question
-	 case ActChgShfTstQst:		// Change shuffle of a question
-	    /***** Put form to remove selected test questions *****/
-	    Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
-	                                   Tst_PutParamsRemoveSelectedQsts);
+      if (Tst_CheckIfICanEditTests ())
+	{
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActLstTstQst:		// List selected test questions for edition
+	    case ActReqRemSevTstQst:	// Request removal of selected questions
+	    case ActReqRemOneTstQst:	// Request removal of a question
+	    case ActRemOneTstQst:		// Remove a question
+	    case ActChgShfTstQst:		// Change shuffle of a question
+	       /***** Put form to remove selected test questions *****/
+	       Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
+					      Tst_PutParamsRemoveSelectedQsts,(void *) &Gbl);
+	       break;
+	    default:
+	       break;
+	   }
+
+	 if (Gbl.Action.Act != ActEdiTstQst)
+	    /***** Put form to edit existing test questions *****/
+	    Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,
+					 NULL,NULL);
+
+	 if (Gbl.Action.Act != ActEdiOneTstQst)
+	    /***** Put form to create a new test question *****/
+	    Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
+					NULL,NULL,
+					Txt_New_question);
+
+	 /***** Put form to go to test configuration *****/
+	 Ico_PutContextualIconToConfigure (ActCfgTst,
+					   NULL,NULL);
+	}
+
+      /***** Put icon to view tests results *****/
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,
+						NULL,NULL);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,
+						NULL,NULL);
 	    break;
 	 default:
 	    break;
-        }
+	}
 
-      if (Gbl.Action.Act != ActEdiTstQst)
-         /***** Put form to edit existing test questions *****/
-         Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,NULL);
-
-      if (Gbl.Action.Act != ActEdiOneTstQst)
-         /***** Put form to create a new test question *****/
-	 Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,NULL,
-				     Txt_New_question);
-
-      /***** Put form to go to test configuration *****/
-      Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_TESTS;
+      Fig_PutIconToShowFigure ();
      }
-
-   /***** Put icon to view tests results *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,NULL);
-         break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,NULL);
-	 break;
-      default:
-	 break;
-     }
-
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_TESTS;
-   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1999,7 +2012,8 @@ static void Tst_ShowFormEditTags (void)
    if ((NumTags = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Tags,NULL,
+      Box_BoxTableBegin (NULL,Txt_Tags,
+                         NULL,NULL,
                          Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE,2);
 
       /***** Show tags *****/
@@ -2110,7 +2124,8 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Begin box *****/
    Tst_ResetParamGblTest ();
-   Box_BoxBegin (NULL,Txt_Configure_tests,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Configure_tests,
+                 Tst_PutIconsTests,(void *) &Gbl,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -2665,7 +2680,8 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test,
 
    /***** Begin box *****/
    Tst_SetParamGblTest (Test);
-   Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Questions,
+                 Tst_PutIconsTests,(void *) &Gbl,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2723,7 +2739,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (const struct Tst_Test *Test,
 
    /***** Begin box *****/
    Tst_SetParamGblTest (Test);
-   Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Questions,
+                 Tst_PutIconsTests,(void *) &Gbl,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2878,7 +2895,8 @@ static void Tst_WriteQuestionRowForEdition (const struct Tst_Test *Test,
 
       /* Write icon to edit the question */
       Tst_SetParamGblQstCod (Question->QstCod);
-      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,Tst_PutParamGblQstCod);
+      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+                                   Tst_PutParamGblQstCod,(void *) &Question->QstCod);
 
       HTM_TD_End ();
 
@@ -3025,12 +3043,13 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
    long QstCod;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,NULL,
+   Box_BoxBegin (NULL,Txt_Questions,
+                 NULL,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    Frm_StartForm (ActAddTstQstToGam);
-   Gam_PutParams ();
+   Gam_PutParams ((void *) &Gbl);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -5196,12 +5215,13 @@ static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
      {
       Tst_SetParamGblQstCod (Question->QstCod);
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
-		    Tst_PutIconToRemoveOneQst,
+		    Tst_PutIconToRemoveOneQst,NULL,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
      }
    else
-      Box_BoxBegin (NULL,Txt_New_question,NULL,
+      Box_BoxBegin (NULL,Txt_New_question,
+                    NULL,NULL,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -6655,7 +6675,7 @@ void Tst_RequestRemoveSelectedQsts (void)
       /***** Show question and button to remove question *****/
       Tst_SetParamGblTest (&Test);
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			     Tst_PutParamsRemoveSelectedQsts,
+			     Tst_PutParamsRemoveSelectedQsts,(void *) &Gbl,
 			     Btn_REMOVE_BUTTON,Txt_Remove_questions,
 			     Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
@@ -6673,10 +6693,13 @@ void Tst_RequestRemoveSelectedQsts (void)
 /**************** Put parameters to remove selected questions ****************/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveSelectedQsts (void)
+static void Tst_PutParamsRemoveSelectedQsts (void *Args)
   {
-   Dat_WriteParamsIniEndDates ();
-   Tst_WriteParamEditQst ();
+   if (Args)
+     {
+      Dat_WriteParamsIniEndDates ();
+      Tst_WriteParamEditQst ();
+     }
   }
 
 /*****************************************************************************/
@@ -6724,9 +6747,10 @@ void Tst_RemoveSelectedQsts (void)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToRemoveOneQst (void)
+static void Tst_PutIconToRemoveOneQst (void *QstCod)
   {
-   Ico_PutContextualIconToRemove (ActReqRemOneTstQst,Tst_PutParamsRemoveOnlyThisQst);
+   Ico_PutContextualIconToRemove (ActReqRemOneTstQst,
+                                  Tst_PutParamsRemoveOnlyThisQst,QstCod);
   }
 
 /*****************************************************************************/
@@ -6764,7 +6788,7 @@ void Tst_RequestRemoveOneQst (void)
    Tst_ResetParamGblTest ();
    Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
 			   EditingOnlyThisQst ? Tst_PutParamsRemoveOnlyThisQst :
-						Tst_PutParamsRemoveOneQstWhileEditing,
+						Tst_PutParamsRemoveOneQstWhileEditing,(void *) &Question.QstCod,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			   Question.QstCod);
@@ -6787,9 +6811,9 @@ void Tst_RequestRemoveOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOnlyThisQst (void)
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
   {
-   Tst_PutParamGblQstCod ();
+   Tst_PutParamGblQstCod (QstCod);
    Par_PutHiddenParamChar ("OnlyThisQst",'Y');
   }
 
@@ -6797,9 +6821,9 @@ static void Tst_PutParamsRemoveOnlyThisQst (void)
 /***** Put parameters to remove question when editing several questions ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOneQstWhileEditing (void)
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *QstCod)
   {
-   Tst_PutParamGblQstCod ();
+   Tst_PutParamGblQstCod (QstCod);
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
   }
@@ -6946,9 +6970,9 @@ long Tst_GetParamGblQstCod (void)
    return Tst_ParamGblQstCod;
   }
 
-void Tst_PutParamGblQstCod (void)
+void Tst_PutParamGblQstCod (void *QstCod)
   {
-   Tst_PutParamQstCod (Tst_GetParamGblQstCod ());
+   Tst_PutParamQstCod (*((long *) QstCod));
   }
 
 void Tst_PutParamQstCod (long QstCod)

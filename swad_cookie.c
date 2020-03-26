@@ -52,7 +52,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Coo_PutIconsCookies (void);
+static void Coo_PutIconsCookies (void *Args);
 
 /*****************************************************************************/
 /********************* Edit my preferences on cookies ************************/
@@ -68,7 +68,8 @@ void Coo_EditMyPrefsOnCookies (void)
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Cookies,Coo_PutIconsCookies,
+   Box_BoxTableBegin (NULL,Txt_Cookies,
+                      Coo_PutIconsCookies,(void *) &Gbl,
                       Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Edit my preference about cookies *****/
@@ -101,11 +102,14 @@ void Coo_EditMyPrefsOnCookies (void)
 /***************** Put contextual icons in cookies preference ****************/
 /*****************************************************************************/
 
-static void Coo_PutIconsCookies (void)
+static void Coo_PutIconsCookies (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_COOKIES;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_COOKIES;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/

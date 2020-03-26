@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Set_PutIconsToSelectSideCols (void);
-static void Set_PutIconsSideColumns (void);
+static void Set_PutIconsSideColumns (void *Args);
 static void Set_UpdateSideColsOnUsrDataTable (void);
 
 /*****************************************************************************/
@@ -76,7 +76,8 @@ void Set_EditSettings (void)
    extern const char *Txt_Design;
 
    /***** Internationalization: language, first day of week, date format *****/
-   Box_BoxBegin (NULL,Txt_Internationalization,NULL,
+   Box_BoxBegin (NULL,Txt_Internationalization,
+                 NULL,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
 
    HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -94,7 +95,8 @@ void Set_EditSettings (void)
    Box_BoxEnd ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Box_BoxBegin (NULL,Txt_Design,NULL,
+   Box_BoxBegin (NULL,Txt_Design,
+                 NULL,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
 
    HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -246,7 +248,8 @@ static void Set_PutIconsToSelectSideCols (void)
    unsigned SideCols;
    char Icon[32 + 1];
 
-   Box_BoxBegin (NULL,Txt_Columns,Set_PutIconsSideColumns,
+   Box_BoxBegin (NULL,Txt_Columns,
+                 Set_PutIconsSideColumns,(void *) &Gbl,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -274,11 +277,14 @@ static void Set_PutIconsToSelectSideCols (void)
 /************** Put contextual icons in side-columns setting *****************/
 /*****************************************************************************/
 
-static void Set_PutIconsSideColumns (void)
+static void Set_PutIconsSideColumns (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_SIDE_COLUMNS;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_SIDE_COLUMNS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/

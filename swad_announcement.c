@@ -60,14 +60,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (void);
+static void Ann_PutIconToAddNewAnnouncement (void *Args);
 static void Ann_PutButtonToAddNewAnnouncement (void);
 static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
                                     unsigned Roles,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit);
-static void Ann_PutParams (void);
+static void Ann_PutParams (void *AnnCod);
 static long Ann_GetParamAnnCod (void);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
@@ -129,7 +129,7 @@ void Ann_ShowAllAnnouncements (void)
    /***** Begin box *****/
    Box_BoxBegin ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
-			    NULL,
+			    NULL,NULL,
 		 Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE);
    if (!NumAnnouncements)
       Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
@@ -184,11 +184,12 @@ void Ann_ShowAllAnnouncements (void)
 /******************** Put icon to add a new announcement *********************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (void)
+static void Ann_PutIconToAddNewAnnouncement (void *Args)
   {
    extern const char *Txt_New_announcement;
 
-   Ico_PutContextualIconToAdd (ActWriAnn,NULL,NULL,
+   Ico_PutContextualIconToAdd (ActWriAnn,NULL,
+                               NULL,Args,
 			       Txt_New_announcement);
   }
 
@@ -300,24 +301,25 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
 
-   Gbl.Announcements.AnnCod = AnnCod;	// Parameter for forms
-
    /***** Start yellow note *****/
    HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Status]);
 
    if (ICanEdit)
      {
       /***** Put form to remove announcement *****/
-      Ico_PutContextualIconToRemove (ActRemAnn,Ann_PutParams);
+      Ico_PutContextualIconToRemove (ActRemAnn,
+                                     Ann_PutParams,(void *) &AnnCod);
 
       /***** Put form to change the status of the announcement *****/
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:
-	    Ico_PutContextualIconToHide (ActHidAnn,NULL,Ann_PutParams);
+	    Ico_PutContextualIconToHide (ActHidAnn,NULL,
+	                                 Ann_PutParams,(void *) &AnnCod);
 	    break;
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
-	    Ico_PutContextualIconToUnhide (ActRevAnn,NULL,Ann_PutParams);
+	    Ico_PutContextualIconToUnhide (ActRevAnn,NULL,
+	                                   Ann_PutParams,(void *) &AnnCod);
 	    break;
 	}
      }
@@ -352,7 +354,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
    else
       /***** Put form to mark announcement as seen *****/
-      Lay_PutContextualLinkIconText (ActAnnSee,NULL,Ann_PutParams,
+      Lay_PutContextualLinkIconText (ActAnnSee,NULL,
+                                     Ann_PutParams,(void *) &AnnCod,
 				     "close.svg",
 				     Txt_Do_not_show_again);
 
@@ -366,9 +369,9 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Ann_PutParams (void)
+static void Ann_PutParams (void *AnnCod)
   {
-   Par_PutHiddenParamLong (NULL,"AnnCod",Gbl.Announcements.AnnCod);
+   Par_PutHiddenParamLong (NULL,"AnnCod",*((long *) AnnCod));
   }
 
 /*****************************************************************************/
@@ -404,7 +407,8 @@ void Ann_ShowFormAnnouncement (void)
    Frm_StartForm (ActRcvAnn);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_announcement,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_announcement,
+                      NULL,NULL,
                       Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE,2);
 
    /***** Announcement subject and body *****/

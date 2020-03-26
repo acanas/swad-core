@@ -318,8 +318,8 @@ static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_DeleteThrFromReadThrs (long ThrCod);
 static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Message);
-static void For_PutIconNewPost (void);
-static void For_PutAllHiddenParamsNewPost (void);
+static void For_PutIconNewPost (void *Args);
+static void For_PutAllHiddenParamsNewPost (void *Args);
 
 static void For_ShowAForumPost (unsigned PstNum,long PstCod,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
@@ -337,7 +337,7 @@ static void For_PutHiddenParamThrCod (long ThrCod);
 static void For_PutHiddenParamPstCod (long PstCod);
 
 static void For_ShowForumList (void);
-static void For_PutIconsForums (void);
+static void For_PutIconsForums (void *Args);
 static void For_PutFormWhichForums (void);
 
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
@@ -365,8 +365,8 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 static void For_WriteNumberOfThrs (unsigned NumThrs);
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                                        Ale_AlertType_t AlertType,const char *Message);
-static void For_PutIconNewThread (void);
-static void For_PutAllHiddenParamsNewThread (void);
+static void For_PutIconNewThread (void *Args);
+static void For_PutAllHiddenParamsNewThread (void *Args);
 static unsigned For_GetNumThrsInForum (struct Forum *Forum);
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
@@ -381,7 +381,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 
-static void For_PutAllHiddenParamsRemThread (void);
+static void For_PutAllHiddenParamsRemThread (void *Args);
 
 static bool For_CheckIfICanMoveThreads (void);
 static long For_GetThrInMyClipboard (void);
@@ -985,7 +985,8 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
-   Box_BoxBegin (NULL,FrameTitle,For_PutIconNewPost,
+   Box_BoxBegin (NULL,FrameTitle,
+                 For_PutIconNewPost,(void *) &Gbl,
                  Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
@@ -1119,25 +1120,27 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
 /*********************** Put icon to write a new post ************************/
 /*****************************************************************************/
 
-static void For_PutIconNewPost (void)
+static void For_PutIconNewPost (void *Args)
   {
    extern const char *Txt_New_post;
 
-   Ico_PutContextualIconToAdd (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
-			       For_NEW_POST_SECTION_ID,
-			       For_PutAllHiddenParamsNewPost,
-			       Txt_New_post);
+   if (Args)
+      Ico_PutContextualIconToAdd (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+				  For_NEW_POST_SECTION_ID,
+				  For_PutAllHiddenParamsNewPost,(void *) &Gbl,
+				  Txt_New_post);
   }
 
-static void For_PutAllHiddenParamsNewPost (void)
+static void For_PutAllHiddenParamsNewPost (void *Args)
   {
-   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
-                                UINT_MAX,			// Page of posts   = last
-                                Gbl.Forum.ForumSet,
-                                Gbl.Forum.ThreadsOrder,
-                                Gbl.Forum.ForumSelected.Location,
-                                Gbl.Forum.ForumSelected.ThrCod,
-                                -1L);
+   if (Args)
+      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+				   UINT_MAX,			// Page of posts   = last
+				   Gbl.Forum.ForumSet,
+				   Gbl.Forum.ThreadsOrder,
+				   Gbl.Forum.ForumSelected.Location,
+				   Gbl.Forum.ForumSelected.ThrCod,
+				   -1L);
   }
 
 /*****************************************************************************/
@@ -1557,7 +1560,8 @@ static void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Forums,For_PutIconsForums,
+   Box_BoxBegin (NULL,Txt_Forums,
+                 For_PutIconsForums,(void *) &Gbl,
                  Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
@@ -1717,11 +1721,14 @@ static void For_ShowForumList (void)
 /********************** Put contextual icons in forums ***********************/
 /*****************************************************************************/
 
-static void For_PutIconsForums (void)
+static void For_PutIconsForums (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_FORUMS;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_FORUMS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -2459,7 +2466,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Forum,ForumName);
-   Box_BoxBegin (NULL,FrameTitle,For_PutIconNewThread,
+   Box_BoxBegin (NULL,FrameTitle,
+                 For_PutIconNewThread,(void *) &Gbl,
 		 Hlp_MESSAGES_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
@@ -2538,25 +2546,27 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 /********************** Put icon to write a new thread ***********************/
 /*****************************************************************************/
 
-static void For_PutIconNewThread (void)
+static void For_PutIconNewThread (void *Args)
   {
    extern const char *Txt_New_thread;
 
-   Ico_PutContextualIconToAdd (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
-                               For_NEW_THREAD_SECTION_ID,
-			       For_PutAllHiddenParamsNewThread,
-			       Txt_New_thread);
+   if (Args)
+      Ico_PutContextualIconToAdd (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+				  For_NEW_THREAD_SECTION_ID,
+				  For_PutAllHiddenParamsNewThread,(void *) &Gbl,
+				  Txt_New_thread);
   }
 
-static void For_PutAllHiddenParamsNewThread (void)
+static void For_PutAllHiddenParamsNewThread (void *Args)
   {
-   For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                1,	// Page of posts = first
-                                Gbl.Forum.ForumSet,
-                                Gbl.Forum.ThreadsOrder,
-                                Gbl.Forum.ForumSelected.Location,
-                                -1L,
-                                -1L);
+   if (Args)
+      For_PutAllHiddenParamsForum (1,	// Page of threads = first
+				   1,	// Page of posts = first
+				   Gbl.Forum.ForumSet,
+				   Gbl.Forum.ThreadsOrder,
+				   Gbl.Forum.ForumSelected.Location,
+				   -1L,
+				   -1L);
   }
 
 /*****************************************************************************/
@@ -3794,10 +3804,12 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    /***** Begin box *****/
    if (IsReply)
-      Box_BoxBegin (NULL,Txt_New_post,NULL,
+      Box_BoxBegin (NULL,Txt_New_post,
+                    NULL,NULL,
 		    Hlp_MESSAGES_Forums_new_post,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,Txt_New_thread,NULL,
+      Box_BoxBegin (NULL,Txt_New_thread,
+                    NULL,NULL,
 		    Hlp_MESSAGES_Forums_new_thread,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -3805,13 +3817,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      {
       Frm_StartFormAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewPost ();
+      For_PutAllHiddenParamsNewPost ((void *) &Gbl);
      }
    else		// Form to write the first post of a new thread
      {
       Frm_StartFormAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewThread ();
+      For_PutAllHiddenParamsNewThread ((void *) &Gbl);
      }
 
    /***** Subject and content *****/
@@ -4095,14 +4107,14 @@ void For_RequestRemoveThread (void)
    if (Subject[0])
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,
+			      For_PutAllHiddenParamsRemThread,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                               Subject);
    else
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,
+			      For_PutAllHiddenParamsRemThread,(void *) &Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();
@@ -4112,15 +4124,16 @@ void For_RequestRemoveThread (void)
 					      Ale_SUCCESS,NULL);
   }
 
-static void For_PutAllHiddenParamsRemThread (void)
+static void For_PutAllHiddenParamsRemThread (void *Args)
   {
-   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
-                                1,				// Page of posts   = first
-                                Gbl.Forum.ForumSet,
-				Gbl.Forum.ThreadsOrder,
-				Gbl.Forum.ForumSelected.Location,
-				Gbl.Forum.ForumSelected.ThrCod,
-				-1L);
+   if (Args)
+      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+				   1,				// Page of posts   = first
+				   Gbl.Forum.ForumSet,
+				   Gbl.Forum.ThreadsOrder,
+				   Gbl.Forum.ForumSelected.Location,
+				   Gbl.Forum.ForumSelected.ThrCod,
+				   -1L);
   }
 
 /*****************************************************************************/

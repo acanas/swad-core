@@ -112,7 +112,8 @@ void McR_SelUsrsToViewMchResults (void)
    extern const char *Txt_View_matches_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeAllMchResCrs,NULL,
+				     ActSeeAllMchResCrs,
+				     NULL,NULL,
 				     Txt_Results,
                                      Hlp_ASSESSMENT_Games_results,
                                      Txt_View_matches_results,
@@ -475,7 +476,8 @@ static void McR_ShowResultsBegin (const char *Title,bool ListGamesToSelect)
 
    /***** Begin box *****/
    HTM_SECTION_Begin (McR_RESULTS_BOX_ID);
-   Box_BoxBegin ("100%",Title,NULL,
+   Box_BoxBegin ("100%",Title,
+                 NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** List games to select *****/
@@ -514,7 +516,9 @@ static void McR_ListGamesToSelect (void)
    struct Game Game;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Games,NULL,Hlp_ASSESSMENT_Games_results,Box_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Games,
+                 NULL,NULL,
+                 Hlp_ASSESSMENT_Games_results,Box_CLOSABLE);
 
    /***** Begin form to update the results
 	  depending on the games selected *****/
@@ -887,12 +891,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	      {
 	       case Usr_ME:
 		  Frm_StartForm (ActSeeOneMchResMe);
-		  Mch_PutParamsEdit ();
+		  Mch_PutParamsEdit ((void *) &Gbl);
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
-		  Mch_PutParamsEdit ();
-		  Usr_PutParamOtherUsrCodEncrypted ();
+		  Mch_PutParamsEdit ((void *) &Gbl);
+		  Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
 	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
@@ -1064,7 +1068,8 @@ void McR_ShowOneMchResult (void)
 					 &Result);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Match.Title,NULL,
+      Box_BoxBegin (NULL,Match.Title,
+                    NULL,NULL,
                     Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,

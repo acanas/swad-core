@@ -401,7 +401,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		  Id);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Multimedia,NULL,
+   Box_BoxBegin (NULL,Txt_Multimedia,
+                 NULL,NULL,
                  Hlp_Multimedia,Box_NOT_CLOSABLE);
 
    /***** Action to perform on media *****/
@@ -1794,12 +1795,15 @@ static void Med_AlertThirdPartyCookies (void)
 
    /* Put form to change cookies preferences */
    if (!Gbl.Form.Inside)
-      Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,NULL,
+      Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
+                                     NULL,NULL,
 				     "cog.svg",
 				     Txt_Settings);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                            NULL,NULL,
+                            Btn_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

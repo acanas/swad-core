@@ -167,7 +167,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
 void Rec_ShowPublicSharedRecordOtherUsr (void);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat,const char *Anchor);
-void Rec_PutParamUsrCodEncrypted (void);
+void Rec_PutParamUsrCodEncrypted (void *Args);
 
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);

@@ -64,6 +64,17 @@ struct Assignment
 
 #define Asg_ORDER_DEFAULT Dat_START_TIME
 
+struct Asg_Assignments
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Number of assignments
+   long *LstAsgCods;		// List of assigment codes
+   Dat_StartEndTime_t SelectedOrder;
+   long AsgCodToEdit;	// Used as parameter in contextual links
+   unsigned CurrentPage;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

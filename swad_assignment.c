@@ -73,10 +73,10 @@ extern struct Globals Gbl;
 static void Asg_ShowAllAssignments (void);
 static void Asg_PutHeadForSeeing (bool PrintView);
 static bool Asg_CheckIfICanCreateAssignments (void);
-static void Asg_PutIconsListAssignments (void);
-static void Asg_PutIconToCreateNewAsg (void);
-static void Asg_PutButtonToCreateNewAsg (void);
-static void Asg_ParamsWhichGroupsToShow (void);
+static void Asg_PutIconsListAssignments (void *Args);
+static void Asg_PutIconToCreateNewAsg (void *Assignments);
+static void Asg_PutButtonToCreateNewAsg (void *Assignments);
+static void Asg_ParamsWhichGroupsToShow (void *Args);
 static void Asg_ShowOneAssignment (long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView);
@@ -84,7 +84,7 @@ static void Asg_GetParamAsgOrder (void);
 
 static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
                                          const char *Anchor);
-static void Asg_PutParams (void);
+static void Asg_PutParams (void *Assignments);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,
                                      MYSQL_RES **mysql_res,
 				     unsigned long NumRows);
@@ -139,14 +139,16 @@ static void Asg_ShowAllAssignments (void)
    Gbl.Asgs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
+   Box_BoxBegin ("100%",Txt_Assignments,
+                 Asg_PutIconsListAssignments,(void *) &Gbl.Asgs,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
+      Grp_ShowFormToSelWhichGrps (ActSeeAsg,
+                                  Asg_ParamsWhichGroupsToShow,(void *) &Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -181,7 +183,7 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
-      Asg_PutButtonToCreateNewAsg ();
+      Asg_PutButtonToCreateNewAsg ((void *) &Gbl.Asgs);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -214,7 +216,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
       if (!PrintView)
 	{
 	 Frm_StartForm (ActSeeAsg);
-	 Grp_PutParamWhichGrps ();
+	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -252,11 +254,12 @@ static bool Asg_CheckIfICanCreateAssignments (void)
 /*************** Put contextual icons in list of assignments *****************/
 /*****************************************************************************/
 
-static void Asg_PutIconsListAssignments (void)
+static void Asg_PutIconsListAssignments (void *Assignments)
   {
    /***** Put icon to create a new assignment *****/
-   if (Asg_CheckIfICanCreateAssignments ())
-      Asg_PutIconToCreateNewAsg ();
+   if (Assignments)
+      if (Asg_CheckIfICanCreateAssignments ())
+	 Asg_PutIconToCreateNewAsg (Assignments);
 
    /***** Put icon to show a figure *****/
    Gbl.Figures.FigureType = Fig_ASSIGNMENTS;
@@ -267,39 +270,50 @@ static void Asg_PutIconsListAssignments (void)
 /******************* Put icon to create a new assignment *********************/
 /*****************************************************************************/
 
-static void Asg_PutIconToCreateNewAsg (void)
+static void Asg_PutIconToCreateNewAsg (void *Assignments)
   {
    extern const char *Txt_New_assignment;
 
-   /***** Put form to create a new assignment *****/
-   Gbl.Asgs.AsgCodToEdit = -1L;
-   Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutParams,
-			       Txt_New_assignment);
+   if (Assignments)
+     {
+      /***** Put form to create a new assignment *****/
+      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
+      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,
+				  Asg_PutParams,Assignments,
+				  Txt_New_assignment);
+     }
   }
 
 /*****************************************************************************/
 /****************** Put button to create a new assignment ********************/
 /*****************************************************************************/
 
-static void Asg_PutButtonToCreateNewAsg (void)
+static void Asg_PutButtonToCreateNewAsg (void *Assignments)
   {
    extern const char *Txt_New_assignment;
 
-   Gbl.Asgs.AsgCodToEdit = -1L;
-   Frm_StartForm (ActFrmNewAsg);
-   Asg_PutParams ();
-   Btn_PutConfirmButton (Txt_New_assignment);
-   Frm_EndForm ();
+   if (Assignments)
+     {
+      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
+
+      Frm_StartForm (ActFrmNewAsg);
+      Asg_PutParams (Assignments);
+      Btn_PutConfirmButton (Txt_New_assignment);
+      Frm_EndForm ();
+     }
   }
 
 /*****************************************************************************/
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Asg_ParamsWhichGroupsToShow (void)
+static void Asg_ParamsWhichGroupsToShow (void *Args)
   {
-   Asg_PutHiddenParamAsgOrder ();
-   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+   if (Args)
+     {
+      Asg_PutHiddenParamAsgOrder ();
+      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+     }
   }
 
 /*****************************************************************************/
@@ -513,7 +527,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
    	        NAME_MAX);
       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-      Brw_PutImplicitParamsFileBrowser ();
+      Brw_PutImplicitParamsFileBrowser ((void *) &Gbl);
       Ico_PutIconLink ("folder-open-yellow-plus.png",
 		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
@@ -575,22 +589,27 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
-	 Ico_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemAsg,
+	                                Asg_PutParams,(void *) &Gbl.Asgs);
 
 	 /***** Put form to hide/show assignment *****/
 	 if (Asg->Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,Asg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,
+	                                   Asg_PutParams,(void *) &Gbl.Asgs);
 	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,Asg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,
+	                                 Asg_PutParams,(void *) &Gbl.Asgs);
 
 	 /***** Put form to edit assignment *****/
-	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,Asg_PutParams);
+	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
+	                              Asg_PutParams,(void *) &Gbl.Asgs);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print assignment *****/
-	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
+	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
+	                               Asg_PutParams,(void *) &Gbl.Asgs);
 	 break;
       default:
          break;
@@ -601,13 +620,16 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Asg_PutParams (void)
+static void Asg_PutParams (void *Assignments)
   {
-   if (Gbl.Asgs.AsgCodToEdit > 0)
-      Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
-   Asg_PutHiddenParamAsgOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+   if (Assignments)
+     {
+      if (((struct Asg_Assignments *) Assignments)->AsgCodToEdit > 0)
+	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->AsgCodToEdit);
+      Asg_PutHiddenParamAsgOrder ();
+      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
+     }
   }
 
 /*****************************************************************************/
@@ -974,7 +996,8 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
-   Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,Asg_PutParams,
+   Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
+                           Asg_PutParams,(void *) &Gbl.Asgs,
                            Btn_REMOVE_BUTTON,Txt_Remove_assignment,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_assignment_X,
                            Asg.Title);
@@ -1153,17 +1176,18 @@ void Asg_RequestCreatOrEditAsg (void)
       Frm_StartForm (ActChgAsg);
       Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
      }
-   Asg_PutParams ();
+   Asg_PutParams ((void *) &Gbl.Asgs);
 
    /***** Begin box and table *****/
    if (ItsANewAssignment)
-      Box_BoxTableBegin (NULL,Txt_New_assignment,NULL,
+      Box_BoxTableBegin (NULL,Txt_New_assignment,
+                         NULL,NULL,
 			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,
                          Asg.Title[0] ? Asg.Title :
                 	                Txt_Edit_assignment,
-                         NULL,
+                         NULL,NULL,
 			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
 
 
@@ -1262,7 +1286,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("100%",NULL,NULL,
+      Box_BoxTableBegin ("100%",NULL,
+                         NULL,NULL,
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/

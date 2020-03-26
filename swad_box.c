@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Box_BoxInternalBegin (const char *Width,const char *Title,
-				  void (*FunctionToDrawContextualIcons) (void),
+				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame);
 
@@ -72,49 +72,50 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 // CellPadding must be 0, 1, 2, 4 or 8
 
 void Box_BoxTableBegin (const char *Width,const char *Title,
-                        void (*FunctionToDrawContextualIcons) (void),
+                        void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxBegin (Width,Title,FunctionToDrawContextualIcons,
+   Box_BoxBegin (Width,Title,
+                 FunctionToDrawContextualIcons,Args,
                  HelpLink,Closable);
    HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_BoxTableShadowBegin (const char *Width,const char *Title,
-                              void (*FunctionToDrawContextualIcons) (void),
+                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                               const char *HelpLink,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
    Box_BoxShadowBegin (Width,Title,
-                       FunctionToDrawContextualIcons,
+                       FunctionToDrawContextualIcons,Args,
                        HelpLink);
    HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_BoxBegin (const char *Width,const char *Title,
-                   void (*FunctionToDrawContextualIcons) (void),
+                   void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
    Box_BoxInternalBegin (Width,Title,
-			 FunctionToDrawContextualIcons,
+			 FunctionToDrawContextualIcons,Args,
 			 HelpLink,Closable,
 			 "FRAME");
   }
 
 void Box_BoxShadowBegin (const char *Width,const char *Title,
-                         void (*FunctionToDrawContextualIcons) (void),
+                         void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                          const char *HelpLink)
   {
    Box_BoxInternalBegin (Width,Title,
-                         FunctionToDrawContextualIcons,
+                         FunctionToDrawContextualIcons,Args,
 			 HelpLink,Box_NOT_CLOSABLE,
 			 "FRAME_SHADOW");
   }
 
 // Return pointer to box id string
 static void Box_BoxInternalBegin (const char *Width,const char *Title,
-				  void (*FunctionToDrawContextualIcons) (void),
+				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
   {
@@ -161,7 +162,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    if (FunctionToDrawContextualIcons)
      {
       HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
-      FunctionToDrawContextualIcons ();
+      FunctionToDrawContextualIcons (Args);
       HTM_DIV_End ();
      }
 

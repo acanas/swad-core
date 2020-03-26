@@ -94,7 +94,7 @@ static const unsigned Dat_NumDaysMonth[1 + 12] =
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (void);
+static void Dat_PutIconsDateFormat (void *Args);
 static unsigned Dat_GetParamDateFormat (void);
 
 /*****************************************************************************/
@@ -108,7 +108,8 @@ void Dat_PutBoxToSelectDateFormat (void)
    Dat_Format_t Format;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Dates,Dat_PutIconsDateFormat,
+   Box_BoxBegin (NULL,Txt_Dates,
+                 Dat_PutIconsDateFormat,(void *) &Gbl,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
@@ -146,11 +147,14 @@ void Dat_PutBoxToSelectDateFormat (void)
 /*************** Put contextual icons in date-format setting *****************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (void)
+static void Dat_PutIconsDateFormat (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_DATE_FORMAT;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_DATE_FORMAT;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/

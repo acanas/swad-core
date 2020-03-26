@@ -66,7 +66,7 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (void);
+static void Ico_PutIconsIconSet (void *Args);
 
 /*****************************************************************************/
 /*********** Get icon with extension from icon without extension *************/
@@ -116,7 +116,8 @@ void Ico_PutIconsToSelectIconSet (void)
    Ico_IconSet_t IconSet;
    char Icon[PATH_MAX + 1];
 
-   Box_BoxBegin (NULL,Txt_Icons,Ico_PutIconsIconSet,
+   Box_BoxBegin (NULL,Txt_Icons,
+                 Ico_PutIconsIconSet,(void *) &Gbl,
                  Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -146,11 +147,14 @@ void Ico_PutIconsToSelectIconSet (void)
 /***************** Put contextual icons in icon-set setting *******************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (void)
+static void Ico_PutIconsIconSet (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_ICON_SETS;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_ICON_SETS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -218,138 +222,167 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
 /*****************************************************************************/
 
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
-				 void (*FuncParams) (void),
+				 void (*FuncParams) (void *Args),void *Args,
 				 const char *Txt)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
 				  "plus.svg",
 				  Txt);
   }
 
-void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,
+                                    void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Remove;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "trash.svg",
 				  Txt_Remove);
   }
 
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
-				  void (*FuncParams) (void))
+				  void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
 				  "pen.svg",
 				  Txt_Edit);
   }
 
-void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
+                                       void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Files;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "folder-open.svg",
 				  Txt_Files);
   }
 
-void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToView (Act_Action_t NextAction,
+                                  void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_View;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "eye.svg",
 				  Txt_View);
   }
 
-void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
+                                       void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Configure;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "cog.svg",
 				  Txt_Configure);
   }
 
-void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
+void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
+                                  void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Hide;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
 				  "eye-green.svg",
 				  Txt_Hide);
   }
 
-void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
+void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
+                                    void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Show;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
 				  "eye-slash-red.svg",
 				  Txt_Show);
   }
 
-void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
+                                   void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "print.svg",
 				  Txt_Print);
   }
 
-void Ico_PutContextualIconToCopy (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
+                                  void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Copy;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "copy.svg",
 				  Txt_Copy);
   }
 
-void Ico_PutContextualIconToPaste (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
+                                   void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Paste;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "paste.svg",
 				  Txt_Paste);
   }
 
-void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncParams) (void),bool Open)
+void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
+                                            void (*FuncParams) (void *Args),void *Args,
+                                            bool Open)
   {
    extern const char *Txt_Upload_file_or_create_folder;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  Open ? "folder-open-yellow-plus.png" :
 				  	 "folder-yellow-plus.png",
 				  Txt_Upload_file_or_create_folder);
   }
 
-void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
+void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
+                                         void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Results;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
 				  "trophy.svg",
 				  Txt_Results);
   }
 
-void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
+                                                void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Attendance_list;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "tasks.svg",
 				  Txt_Attendance_list);
   }
 
-void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (void))
+void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
+                                 void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Create_ZIP_file;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
 				  "download.svg",
 				  Txt_Create_ZIP_file);
   }

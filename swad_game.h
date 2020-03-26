@@ -94,7 +94,7 @@ void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 
 void Gam_SetCurrentGamCod (long GamCod);
-void Gam_PutParams (void);
+void Gam_PutParams (void *Args);
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
 long Gam_GetParams (void);

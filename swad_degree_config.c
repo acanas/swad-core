@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void DegCfg_Configuration (bool PrintView);
-static void DegCfg_PutIconsToPrintAndUpload (void);
+static void DegCfg_PutIconsToPrintAndUpload (void *Args);
 static void DegCfg_Title (bool PutLink);
 static void DegCfg_Centre (bool PrintView,bool PutForm);
 static void DegCfg_FullName (bool PutForm);
@@ -117,10 +117,12 @@ static void DegCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,NULL,DegCfg_PutIconsToPrintAndUpload,
+      Box_BoxBegin (NULL,NULL,
+                    DegCfg_PutIconsToPrintAndUpload,(void *) &Gbl,
 		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -174,16 +176,20 @@ static void DegCfg_Configuration (bool PrintView)
 /************ Put contextual icons in configuration of a degree **************/
 /*****************************************************************************/
 
-static void DegCfg_PutIconsToPrintAndUpload (void)
+static void DegCfg_PutIconsToPrintAndUpload (void *Args)
   {
-   /***** Link to print info about degree *****/
-   Ico_PutContextualIconToPrint (ActPrnDegInf,NULL);
+   if (Args)
+     {
+      /***** Link to print info about degree *****/
+      Ico_PutContextualIconToPrint (ActPrnDegInf,
+				    NULL,NULL);
 
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins
-      // have permission to upload logo of the degree
-      /***** Link to upload logo of degree *****/
-      Lgo_PutIconToChangeLogo (Hie_DEG);
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+	 // Only degree admins, centre admins, institution admins and system admins
+	 // have permission to upload logo of the degree
+	 /***** Link to upload logo of degree *****/
+	 Lgo_PutIconToChangeLogo (Hie_DEG);
+     }
   }
 
 /*****************************************************************************/

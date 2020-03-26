@@ -62,9 +62,9 @@ static struct Classroom *Cla_EditingCla = NULL;	// Static variable to keep the c
 
 static void Cla_GetParamClaOrder (void);
 static bool Cla_CheckIfICanCreateClassrooms (void);
-static void Cla_PutIconsListingClassrooms (void);
+static void Cla_PutIconsListingClassrooms (void *Args);
 static void Cla_PutIconToEditClassrooms (void);
-static void Cla_PutIconsEditingClassrooms (void);
+static void Cla_PutIconsEditingClassrooms (void *Args);
 
 static void Cla_EditClassroomsInternal (void);
 
@@ -113,7 +113,8 @@ void Cla_SeeClassrooms (void)
    Cla_GetListClassrooms (Cla_ALL_DATA);
 
    /***** Table head *****/
-   Box_BoxBegin (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
+   Box_BoxBegin (NULL,Txt_Classrooms,
+                 Cla_PutIconsListingClassrooms,(void *) &Gbl,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
@@ -211,11 +212,12 @@ static bool Cla_CheckIfICanCreateClassrooms (void)
 /**************** Put contextual icons in list of classrooms *****************/
 /*****************************************************************************/
 
-static void Cla_PutIconsListingClassrooms (void)
+static void Cla_PutIconsListingClassrooms (void *Args)
   {
-   /***** Put icon to edit classrooms *****/
-   if (Cla_CheckIfICanCreateClassrooms ())
-      Cla_PutIconToEditClassrooms ();
+   if (Args)
+      /***** Put icon to edit classrooms *****/
+      if (Cla_CheckIfICanCreateClassrooms ())
+	 Cla_PutIconToEditClassrooms ();
   }
 
 /*****************************************************************************/
@@ -224,7 +226,8 @@ static void Cla_PutIconsListingClassrooms (void)
 
 static void Cla_PutIconToEditClassrooms (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCla,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCla,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -252,7 +255,8 @@ static void Cla_EditClassroomsInternal (void)
    Cla_GetListClassrooms (Cla_ALL_DATA);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Classrooms,Cla_PutIconsEditingClassrooms,
+   Box_BoxBegin (NULL,Txt_Classrooms,
+                 Cla_PutIconsEditingClassrooms,(void *) &Gbl,
                  Hlp_CENTRE_Classrooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new classroom *****/
@@ -273,10 +277,11 @@ static void Cla_EditClassroomsInternal (void)
 /*************** Put contextual icons in edition of classrooms ***************/
 /*****************************************************************************/
 
-static void Cla_PutIconsEditingClassrooms (void)
+static void Cla_PutIconsEditingClassrooms (void *Args)
   {
-   /***** Put icon to view classrooms *****/
-   Cla_PutIconToViewClassrooms ();
+   if (Args)
+      /***** Put icon to view classrooms *****/
+      Cla_PutIconToViewClassrooms ();
   }
 
 /*****************************************************************************/
@@ -287,7 +292,8 @@ void Cla_PutIconToViewClassrooms (void)
   {
    extern const char *Txt_Classrooms;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeCla,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeCla,NULL,
+                                  NULL,NULL,
                                   "classroom.svg",
                                   Txt_Classrooms);
   }
@@ -884,7 +890,8 @@ static void Cla_PutFormToCreateClassroom (void)
    Frm_StartForm (ActNewCla);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_classroom,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_classroom,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

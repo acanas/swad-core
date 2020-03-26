@@ -195,7 +195,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
 static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title);
 
-static void Net_PutIconsWebsSocialNetworks (void);
+static void Net_PutIconsWebsSocialNetworks (void *Args);
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
@@ -287,7 +287,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
-	         Net_PutIconsWebsSocialNetworks,
+	         Net_PutIconsWebsSocialNetworks,(void *) &Gbl,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
    /***** Begin table *****/
@@ -364,11 +364,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 /************** Put contextual icons in my web / social networks *************/
 /*****************************************************************************/
 
-static void Net_PutIconsWebsSocialNetworks (void)
+static void Net_PutIconsWebsSocialNetworks (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_SOCIAL_NETWORKS;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_SOCIAL_NETWORKS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -551,7 +554,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
      }
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],NULL,
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],
+                      NULL,NULL,
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

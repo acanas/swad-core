@@ -79,7 +79,7 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 					  Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
 					  MYSQL_RES **mysql_res);
 
-static void Fol_PutIconsWhoToFollow (void);
+static void Fol_PutIconsWhoToFollow (void *Args);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
@@ -98,7 +98,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
-static void Fol_PutHiddenParSelectedUsrsCods (void);
+static void Fol_PutHiddenParSelectedUsrsCods (void *Args);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
@@ -113,7 +113,8 @@ void Fol_PutLinkWhoToFollow (void)
   {
    extern const char *Txt_Who_to_follow;
 
-   Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,
+                                  NULL,NULL,
 				  "user-plus.svg",
 				  Txt_Who_to_follow);
   }
@@ -147,7 +148,8 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                                        &mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
+      Box_BoxTableBegin ("560px",Txt_Who_to_follow,
+                         Fol_PutIconsWhoToFollow,(void *) &Gbl,
                          Hlp_START_Profiles_who_to_follow,Box_NOT_CLOSABLE,2);
 
       /***** Initialize structure with user's data *****/
@@ -417,14 +419,17 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 /****************** Put contextual icons in "who to follow" ******************/
 /*****************************************************************************/
 
-static void Fol_PutIconsWhoToFollow (void)
+static void Fol_PutIconsWhoToFollow (void *Args)
   {
-   /***** Put icon to update who to follow *****/
-   Fol_PutIconToUpdateWhoToFollow ();
+   if (Args)
+     {
+      /***** Put icon to update who to follow *****/
+      Fol_PutIconToUpdateWhoToFollow ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_FOLLOW;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_FOLLOW;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -684,7 +689,8 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
          /***** Begin box and table *****/
-	 Box_BoxTableBegin ("560px",Txt_Following,NULL,
+	 Box_BoxTableBegin ("560px",Txt_Following,
+	                    NULL,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
 	 for (NumUsr = 0;
@@ -767,7 +773,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
          /***** Begin box and table *****/
-	 Box_BoxTableBegin ("560px",Txt_Followers,NULL,
+	 Box_BoxTableBegin ("560px",Txt_Followers,
+	                    NULL,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
 	 for (NumUsr = 0;
@@ -1077,12 +1084,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,(void *) &Gbl,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,(void *) &Gbl,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
@@ -1121,12 +1128,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,(void *) &Gbl,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,
+				 Fol_PutHiddenParSelectedUsrsCods,(void *) &Gbl,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
@@ -1136,9 +1143,10 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
-static void Fol_PutHiddenParSelectedUsrsCods (void)
+static void Fol_PutHiddenParSelectedUsrsCods (void *Args)
   {
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+   if (Args)
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/

@@ -71,7 +71,7 @@ static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail d
 /*****************************************************************************/
 
 static void Mai_GetParamMaiOrder (void);
-static void Mai_PutIconToEditMailDomains (void);
+static void Mai_PutIconToEditMailDomains (void *Args);
 static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -122,10 +122,14 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-                      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
-                                                               NULL,
-                      Hlp_START_Domains,Box_NOT_CLOSABLE,2);
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
+			 Mai_PutIconToEditMailDomains,(void *) &Gbl,
+			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
+   else
+      Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
+			 NULL,NULL,
+			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -197,9 +201,11 @@ static void Mai_GetParamMaiOrder (void)
 /************************ Put icon to edit mail domains **********************/
 /*****************************************************************************/
 
-static void Mai_PutIconToEditMailDomains (void)
+static void Mai_PutIconToEditMailDomains (void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiMai,NULL,NULL);
+   if (Args)
+      Ico_PutContextualIconToEdit (ActEdiMai,NULL,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -474,7 +480,8 @@ static void Mai_ListMailDomainsForEdition (void)
    struct Mail *Mai;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
+   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
+                      NULL,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -741,7 +748,8 @@ static void Mai_PutFormToCreateMailDomain (void)
    Frm_StartForm (ActNewMai);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_email_domain,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_email_domain,
+                      NULL,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -868,7 +876,8 @@ void Mai_ReqUsrsToListEmails (void)
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActMaiUsr,NULL,
+				     ActMaiUsr,
+				     NULL,NULL,
 				     Txt_Email,
 	                             Hlp_MESSAGES_Email,
 	                             Txt_View_email_addresses,
@@ -908,7 +917,8 @@ static void Mai_ListEmails (void)
    const char *Ptr;
 
    /***** Start the box used to list the emails *****/
-   Box_BoxBegin (NULL,Txt_Email_addresses,NULL,
+   Box_BoxBegin (NULL,Txt_Email_addresses,
+                 NULL,NULL,
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Start list with users' email addresses *****/
@@ -1151,7 +1161,8 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Email,Acc_PutLinkToRemoveMyAccount,
+   Box_BoxBegin (StrRecordWidth,Txt_Email,
+                 Acc_PutLinkToRemoveMyAccount,(void *) &Gbl,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
@@ -1183,7 +1194,8 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Email,NULL,
+   Box_BoxBegin (StrRecordWidth,Txt_Email,
+                 NULL,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/

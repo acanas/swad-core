@@ -261,7 +261,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ntf_PutIconsNotif (void);
+static void Ntf_PutIconsNotif (void *Args);
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
@@ -353,19 +353,23 @@ void Ntf_ShowMyNotifications (void)
    Mnu_ContextMenuBegin ();
    Ntf_WriteFormAllNotifications (AllNotifications);	// Show all notifications
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
-      Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,
+      Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
+                                     NULL,NULL,
 				     "eye.svg",
 				     Txt_Mark_all_NOTIFICATIONS_as_read);	// Mark notifications as read
-   Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
+                                  NULL,NULL,
 				  "cog.svg",
 				  Txt_Settings);	// Change notification settings
-   Lay_PutContextualLinkIconText (ActSeeMai,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActSeeMai,NULL,
+                                  NULL,NULL,
 				  "envelope.svg",
 				  Txt_Domains);		// View allowed mail domains
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_BoxBegin (NULL,Txt_Notifications,
+                 Ntf_PutIconsNotif,(void *) &Gbl,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
    /***** List my notifications *****/
@@ -611,11 +615,14 @@ void Ntf_ShowMyNotifications (void)
 /****************** Put contextual icons in notifications ********************/
 /*****************************************************************************/
 
-static void Ntf_PutIconsNotif (void)
+static void Ntf_PutIconsNotif (void *Args)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_NOTIFY_EVENTS;
-   Fig_PutIconToShowFigure ();
+   if (Args)
+     {
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_NOTIFY_EVENTS;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -1894,7 +1901,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_BoxBegin (NULL,Txt_Notifications,
+                 Ntf_PutIconsNotif,(void *) &Gbl,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/

@@ -389,8 +389,8 @@ void Usr_PutFormLogOut (void);
 void Usr_GetParamUsrIdLogin (void);
 unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods);
 
-void Usr_PutParamMyUsrCodEncrypted (void);
-void Usr_PutParamOtherUsrCodEncrypted (void);
+void Usr_PutParamMyUsrCodEncrypted (void *EncryptedUsrCod);
+void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod);
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat);
 void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
@@ -436,7 +436,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncParams) (void),
+                           void (*FuncParams) (void *Args),void *Args,
                            const char *OnSubmit);
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *SelectedUsrs);
@@ -463,13 +463,14 @@ void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void));
+void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
-				       Act_Action_t NextAction,void (*FuncParams) (),
+				       Act_Action_t NextAction,
+				       void (*FuncParams) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,

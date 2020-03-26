@@ -70,12 +70,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static bool Crs_CheckIfICanCreateCourses (void);
-static void Crs_PutIconsListCourses (void);
+static void Crs_PutIconsListCourses (void *Args);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCoursesInternal (void);
-static void Crs_PutIconsEditingCourses (void);
+static void Crs_PutIconsEditingCourses (void *Args);
 static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
@@ -102,8 +102,8 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
-static void Crs_PutIconToSearchCourses (void);
-static void Sch_PutLinkToSearchCoursesParams (void);
+static void Crs_PutIconToSearchCourses (void *Args);
+static void Sch_PutLinkToSearchCoursesParams (void *Args);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
@@ -176,7 +176,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
+   Box_BoxBegin (NULL,Txt_My_courses,
+                 Crs_PutIconToSearchCourses,(void *) &Gbl,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    HTM_UL_Begin ("class=\"LIST_TREE\"");
 
@@ -801,7 +802,7 @@ static void Crs_ListCourses (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsListCourses,
+		 Crs_PutIconsListCourses,(void *) &Gbl,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -851,15 +852,18 @@ static bool Crs_CheckIfICanCreateCourses (void)
 /***************** Put contextual icons in list of courses *******************/
 /*****************************************************************************/
 
-static void Crs_PutIconsListCourses (void)
+static void Crs_PutIconsListCourses (void *Args)
   {
-   /***** Put icon to edit courses *****/
-   if (Crs_CheckIfICanCreateCourses ())
-      Crs_PutIconToEditCourses ();
+   if (Args)
+     {
+      /***** Put icon to edit courses *****/
+      if (Crs_CheckIfICanCreateCourses ())
+	 Crs_PutIconToEditCourses ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -868,7 +872,8 @@ static void Crs_PutIconsListCourses (void)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCrs,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCrs,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1014,7 +1019,7 @@ static void Crs_EditCoursesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsEditingCourses,
+		 Crs_PutIconsEditingCourses,(void *) &Gbl,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1039,14 +1044,17 @@ static void Crs_EditCoursesInternal (void)
 /**************** Put contextual icons in edition of courses *****************/
 /*****************************************************************************/
 
-static void Crs_PutIconsEditingCourses (void)
+static void Crs_PutIconsEditingCourses (void *Args)
   {
-   /***** Put icon to view degrees *****/
-   Crs_PutIconToViewCourses ();
+   if (Args)
+     {
+      /***** Put icon to view degrees *****/
+      Crs_PutIconToViewCourses ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -1057,7 +1065,8 @@ static void Crs_PutIconToViewCourses (void)
   {
    extern const char *Txt_Courses;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,
+                                  NULL,NULL,
                                   "chalkboard-teacher.svg",
                                   Txt_Courses);
   }
@@ -1333,7 +1342,8 @@ static void Crs_PutFormToCreateCourse (void)
       Lay_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_course,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_course,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2288,7 +2298,9 @@ void Crs_ContEditAfterChgCrs (void)
 	 Crs_PutButtonToRegisterInCrs ();
 
       /***** End alert *****/
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+                               NULL,NULL,
+                               Btn_NO_BUTTON,NULL);
      }
 
    /***** Show possible delayed alerts *****/
@@ -2358,21 +2370,25 @@ void Crs_ReqSelectOneOfMyCourses (void)
 /******************* Put an icon (form) to search courses ********************/
 /*****************************************************************************/
 
-static void Crs_PutIconToSearchCourses (void)
+static void Crs_PutIconToSearchCourses (void *Args)
   {
    extern const char *Txt_Search_courses;
 
-   /***** Put form to search / select courses *****/
-   Lay_PutContextualLinkOnlyIcon (ActReqSch,
-				  NULL,Sch_PutLinkToSearchCoursesParams,
-			          "search.svg",
-			          Txt_Search_courses);
+   if (Args)
+      /***** Put form to search / select courses *****/
+      Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
+				     Sch_PutLinkToSearchCoursesParams,(void *) &Gbl,
+				     "search.svg",
+				     Txt_Search_courses);
   }
 
-static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
+static void Sch_PutLinkToSearchCoursesParams (void *Args)	// TODO: Move to search module
   {
-   Sco_PutParamScope ("ScopeSch",Hie_SYS);
-   Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+   if (Args)
+     {
+      Sco_PutParamScope ("ScopeSch",Hie_SYS);
+      Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+     }
   }
 
 /*****************************************************************************/
@@ -2407,15 +2423,17 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 /****************** Put an icon (form) to select my courses ******************/
 /*****************************************************************************/
 
-void Crs_PutIconToSelectMyCourses (void)
+void Crs_PutIconToSelectMyCourses (void *Args)
   {
    extern const char *Txt_My_courses;
 
-   if (Gbl.Usrs.Me.Logged)		// I am logged
-      /***** Put icon with link *****/
-      Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,NULL,
-				     "sitemap.svg",
-				     Txt_My_courses);
+   if (Args)
+      if (Gbl.Usrs.Me.Logged)		// I am logged
+	 /***** Put icon with link *****/
+	 Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
+					NULL,NULL,
+					"sitemap.svg",
+					Txt_My_courses);
   }
 
 /*****************************************************************************/
@@ -2499,7 +2517,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if (NumCrss)
      {
       /* Begin box and table */
-      Box_BoxTableBegin ("100%",NULL,NULL,
+      Box_BoxTableBegin ("100%",NULL,
+                         NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /* Heading row */
@@ -2569,7 +2588,8 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
       Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCrss,
 						      (NumCrss == 1) ? Txt_course :
 								       Txt_courses),
-			 NULL,NULL,Box_NOT_CLOSABLE,2);
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
       /***** Heading row *****/
@@ -2752,7 +2772,8 @@ void Crs_PutLinkToRemoveOldCrss (void)
    extern const char *Txt_Eliminate_old_courses;
 
    /***** Put form to remove old courses *****/
-   Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,
+                                  NULL,NULL,
 				  "trash.svg",
 				  Txt_Eliminate_old_courses);
   }
@@ -2776,7 +2797,8 @@ void Crs_AskRemoveOldCrss (void)
    Frm_StartForm (ActRemOldCrs);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Eliminate_old_courses,NULL,
+   Box_BoxBegin (NULL,Txt_Eliminate_old_courses,
+                 NULL,NULL,
                  Hlp_SYSTEM_Maintenance_eliminate_old_courses,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/

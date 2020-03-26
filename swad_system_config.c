@@ -48,6 +48,8 @@
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
+extern struct Globals Gbl;	// All the global parameters and variables must be in this structure
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -65,7 +67,7 @@
 /*****************************************************************************/
 
 static void SysCfg_Configuration (bool PrintView);
-static void SysCfg_PutIconToPrint (void);
+static void SysCfg_PutIconToPrint (void *Args);
 static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
@@ -110,10 +112,12 @@ static void SysCfg_Configuration (bool PrintView)
 
    /***** Begin box *****/
    if (PrintView)
-      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,NULL,
+      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
+                    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,SysCfg_PutIconToPrint,
+      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
+                    SysCfg_PutIconToPrint,(void *) &Gbl,
 		    Hlp_SYSTEM_Information,Box_NOT_CLOSABLE);
 
    /**************************** Left part ***********************************/
@@ -181,9 +185,11 @@ static void SysCfg_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
-static void SysCfg_PutIconToPrint (void)
+static void SysCfg_PutIconToPrint (void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnSysInf,NULL);
+   if (Args)
+      Ico_PutContextualIconToPrint (ActPrnSysInf,
+				    NULL,NULL);
   }
 
 /*****************************************************************************/

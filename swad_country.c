@@ -66,13 +66,13 @@ long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
 
-static void Cty_PutIconsListingCountries (void);
+static void Cty_PutIconsListingCountries (void *Args);
 static void Cty_PutIconToEditCountries (void);
 
 static void Cty_GetParamCtyOrder (void);
 
 static void Cty_EditCountriesInternal (void);
-static void Cty_PutIconsEditingCountries (void);
+static void Cty_PutIconsEditingCountries (void *Args);
 static void Cty_PutIconToViewCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
@@ -85,7 +85,7 @@ static bool Cty_CheckIfCountryNameExists (Lan_Language_t Language,const char *Na
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName);
 
 static void Cty_ShowAlertAndButtonToGoToCty (void);
-static void Cty_PutParamGoToCty (void);
+static void Cty_PutParamGoToCty (void *Args);
 
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
@@ -138,7 +138,8 @@ void Cty_SeeCtyWithPendingInss (void)
    if (NumCtys)
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,NULL,
+      Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,
+                         NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -229,7 +230,8 @@ void Cty_ListCountries2 (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Countries,Cty_PutIconsListingCountries,
+   Box_BoxTableBegin (NULL,Txt_Countries,
+                      Cty_PutIconsListingCountries,(void *) &Gbl,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -456,15 +458,18 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsListingCountries (void)
+static void Cty_PutIconsListingCountries (void *Args)
   {
-   /***** Put icon to edit countries *****/
-   if (Cty_CheckIfICanEditCountries ())
-      Cty_PutIconToEditCountries ();
+   if (Args)
+     {
+      /***** Put icon to edit countries *****/
+      if (Cty_CheckIfICanEditCountries ())
+	 Cty_PutIconToEditCountries ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -482,7 +487,8 @@ bool Cty_CheckIfICanEditCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCty,NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCty,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -675,7 +681,8 @@ static void Cty_EditCountriesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
+   Box_BoxBegin (NULL,Txt_Countries,
+                 Cty_PutIconsEditingCountries,(void *) &Gbl,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new country *****/
@@ -696,14 +703,17 @@ static void Cty_EditCountriesInternal (void)
 /*************** Put contextual icons in edition of countries ****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsEditingCountries (void)
+static void Cty_PutIconsEditingCountries (void *Args)
   {
-   /***** Put icon to view countries *****/
-   Cty_PutIconToViewCountries ();
+   if (Args)
+     {
+      /***** Put icon to view countries *****/
+      Cty_PutIconToViewCountries ();
 
-   /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_HIERARCHY;
-   Fig_PutIconToShowFigure ();
+      /***** Put icon to show a figure *****/
+      Gbl.Figures.FigureType = Fig_HIERARCHY;
+      Fig_PutIconToShowFigure ();
+     }
   }
 
 /*****************************************************************************/
@@ -714,7 +724,8 @@ static void Cty_PutIconToViewCountries (void)
   {
    extern const char *Txt_Countries;
 
-   Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,
+                                  NULL,NULL,
                                   "globe.svg",
                                   Txt_Countries);
   }
@@ -1570,7 +1581,8 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
    if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
      {
       /***** Alert with button to go to couuntry *****/
-      Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,Cty_PutParamGoToCty,
+      Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
+                                  Cty_PutParamGoToCty,(void *) &Gbl,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
       Hie_FreeGoToMsg ();
@@ -1580,10 +1592,11 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Cty_PutParamGoToCty (void)
+static void Cty_PutParamGoToCty (void *Args)
   {
-   /***** Put parameter *****/
-   Cty_PutParamCtyCod (Cty_EditingCty->CtyCod);
+   if (Args)
+      /***** Put parameter *****/
+      Cty_PutParamCtyCod (Cty_EditingCty->CtyCod);
   }
 
 /*****************************************************************************/
@@ -1604,7 +1617,8 @@ static void Cty_PutFormToCreateCountry (void)
    Frm_StartForm (ActNewCty);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_country,NULL,
+   Box_BoxTableBegin (NULL,Txt_New_country,
+                      NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -2005,7 +2019,8 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
       Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtys,
 						      NumCtys == 1 ? Txt_country :
 								     Txt_countries),
-			 NULL,NULL,Box_NOT_CLOSABLE,2);
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
       /***** Write heading *****/
@@ -2087,7 +2102,8 @@ static void Cty_FormToGoToMap (struct Country *Cty)
    if (Cty_GetIfMapIsAvailable (Cty->CtyCod))
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
-      Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,Cty_PutParamGoToCty,
+      Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
+                                     Cty_PutParamGoToCty,(void *) &Gbl,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

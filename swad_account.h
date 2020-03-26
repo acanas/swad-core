@@ -58,7 +58,7 @@ void Acc_ShowFormCreateMyAccount (void);
 void Acc_ShowFormGoToRequestNewAccount (void);
 void Acc_ShowFormChgMyAccount (void);
 void Acc_ShowFormChgOtherUsrAccount (void);
-void Acc_PutLinkToRemoveMyAccount (void);
+void Acc_PutLinkToRemoveMyAccount (void *Args);
 bool Acc_CreateMyNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount);
 void Acc_AfterCreationNewAccount (void);
