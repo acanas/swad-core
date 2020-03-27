@@ -136,12 +136,13 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
 static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
                                              MYSQL_RES *mysql_res);
-static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod);
+static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,
+                                               struct Tst_Question *Question);
 static void Tst_ShowTestResultAfterAssess (long TstCod,
                                            struct TsR_Result *Result);
 static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
-					    long QstCod,
-					    MYSQL_ROW row);
+                                            struct Tst_Question *Question,
+                                            MYSQL_ROW row);
 
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -909,7 +910,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
                                              MYSQL_RES *mysql_res)
   {
    unsigned NumQst;
-   long QstCod;
+   struct Tst_Question Question;
    MYSQL_ROW row;
 
    /***** Write rows *****/
@@ -919,13 +920,19 @@ static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Get question code (row[0]) *****/
+      /* Create test question */
+      Tst_QstConstructor (&Question);
+
+      /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /***** Show question *****/
-      Tst_ShowOneTestQuestionWhenSeeing (NumQst,QstCod);
+      /* Show question */
+      Tst_ShowOneTestQuestionWhenSeeing (NumQst,&Question);
+
+      /* Destroy test question */
+      Tst_QstDestructor (&Question);
      }
   }
 
@@ -933,16 +940,17 @@ static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
 /*************************** Write one test question *************************/
 /*****************************************************************************/
 
-static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,long QstCod)
+static void Tst_ShowOneTestQuestionWhenSeeing (unsigned NumQst,
+                                               struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))	// Question exists
+   if (Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res))	// Question exists
      {
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
-      Tst_WriteQstAndAnsTestToAnswer (NumQst,QstCod,row);
+      Tst_WriteQstAndAnsTestToAnswer (NumQst,Question,row);
      }
    else
       Lay_ShowErrorAndExit ("Wrong question.");
@@ -1053,10 +1061,9 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,
 /*****************************************************************************/
 
 static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
-					    long QstCod,
-					    MYSQL_ROW row)
+                                            struct Tst_Question *Question,
+                                            MYSQL_ROW row)
   {
-   struct Tst_Question Question;
    /*
    row[0] UNIX_TIMESTAMP(EditTime)
    row[1] AnsType
@@ -1069,18 +1076,14 @@ static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
    row[8] Score
    */
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.QstCod = QstCod;
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteNumQst (NumQst + 1);
-   Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-   Tst_WriteAnswerType (Question.Answer.Type);
+   Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+   Tst_WriteAnswerType (Question->Answer.Type);
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
@@ -1090,22 +1093,19 @@ static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
    Tst_WriteQstStem (row[3],"TEST_EXA",true);
 
    /* Media (row[5]) */
-   Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-   Med_GetMediaDataByCod (&Question.Media);
-   Med_ShowMedia (&Question.Media,
+   Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&Question->Media);
+   Med_ShowMedia (&Question->Media,
 		  "TEST_MED_SHOW_CONT",
 		  "TEST_MED_SHOW");
 
    /* Answers depending on shuffle (row[2]) */
-   Tst_WriteAnswersTestToAnswer (NumQst,&Question,(row[2][0] == 'Y'));
+   Tst_WriteAnswersTestToAnswer (NumQst,Question,(row[2][0] == 'Y'));
 
    HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
