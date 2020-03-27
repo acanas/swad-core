@@ -2988,13 +2988,139 @@ static void Mch_WriteAnswersMatchResult (const struct Match *Match,
   {
    /***** Write answer depending on type *****/
    if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewMatch (Match->MchCod,
-                                   Match->Status.QstInd,
-				   Match->Status.NumCols,
+      Mch_WriteChoiceAnsViewMatch (Match,
 				   Question,
 				   Class,ShowResult);
    else
       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+  }
+
+/*****************************************************************************/
+/******** Write single or multiple choice answer when viewing a match ********/
+/*****************************************************************************/
+
+void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,
+                                  struct Tst_Question *Question,
+                                  const char *Class,bool ShowResult)
+  {
+   unsigned NumOpt;
+   bool RowIsOpen = false;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRespondersQst;
+   unsigned NumRespondersAns;
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+
+   /***** Get number of users who have answered this question from database *****/
+   NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
+
+   /***** Get answers of a question from database *****/
+   Tst_GetAnswersQst (Question,&mysql_res,
+                      false);	// Don't shuffle
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Get next answer */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Allocate memory for text in this choice answer */
+      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /* Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML */
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Question->Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+
+      /* Get media (row[3]) */
+      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+
+      /* Get if correct (row[4]) */
+      Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get indexes for this question in match *****/
+   Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWidePadding (0);
+
+   /***** Show options distributed in columns *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Start row? *****/
+      if (NumOpt % Match->Status.NumCols == 0)
+	{
+	 HTM_TR_Begin (NULL);
+	 RowIsOpen = true;
+	}
+
+      /***** Write letter for this option *****/
+      HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
+      HTM_DIV_Begin ("class=\"MCH_TCH_BUTTON BT_%c\"",'A' + (char) NumOpt);
+      HTM_TxtF ("%c",'a' + (char) NumOpt);
+      HTM_DIV_End ();
+      HTM_TD_End ();
+
+      /***** Write the option text and the result *****/
+      HTM_TD_Begin ("class=\"LT\"");
+      HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",Match->Status.QstInd,NumOpt,Class);
+      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+      HTM_LABEL_End ();
+      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+                     "TEST_MED_SHOW_CONT",
+                     "TEST_MED_SHOW");
+
+      /* Show result (number of users who answered? */
+      if (ShowResult)
+	{
+	 /* Get number of users who selected this answer */
+	 NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
+
+	 /* Draw proportional bar for this answer */
+	 Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
+	                     Question->Answer.Options[Indexes[NumOpt]].Correct);
+	}
+      else
+         /* Draw empty bar for this answer
+            in order to show the same layout that the one shown with results */
+         Mch_DrawBarNumUsrs (0,0,
+                             false);	// Not used when length of bar is 0
+
+      HTM_TD_End ();
+
+      /***** End row? *****/
+      if (NumOpt % Match->Status.NumCols == Match->Status.NumCols - 1)
+	{
+         HTM_TR_End ();
+	 RowIsOpen = false;
+	}
+     }
+
+   /***** End row? *****/
+   if (RowIsOpen)
+      HTM_TR_End ();
+
+   /***** End table *****/
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

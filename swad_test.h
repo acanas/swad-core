@@ -194,9 +194,6 @@ void Tst_ComputeScoreQst (const struct Tst_Question *Question,
                           unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],
                           bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
 			  double *ScoreThisQst,bool *AnswerIsNotBlank);
-void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,unsigned NumCols,
-                                  struct Tst_Question *Question,
-                                  const char *Class,bool ShowResult);
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
