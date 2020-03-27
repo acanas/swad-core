@@ -192,8 +192,8 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         const char *Class,bool ShowResult,
-                                         Tst_AnswerType_t AnswerType);
+                                         struct Tst_Question *Question,
+                                         const char *Class,bool ShowResult);
 static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
@@ -2891,8 +2891,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Tst_AnswerType_t AnswerType;
-   struct Media Media;
+   struct Tst_Question Question;
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+   Question.QstCod = Match->Status.QstCod;
 
    /***** Trivial check: do not show anything on match start and end *****/
    switch (Match->Status.Showing)
@@ -2911,14 +2914,14 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 			      "MedCod"		// row[2]
 		       " FROM tst_questions"
 		       " WHERE QstCod=%ld",
-		       Match->Status.QstCod))
+		       Question.QstCod))
      {
       row = mysql_fetch_row (mysql_res);
 
       /***** Show question *****/
       /* Get answer type (row[0]) */
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-      if (AnswerType != Tst_ANS_UNIQUE_CHOICE)
+      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+      if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
       /* Begin container */
@@ -2929,11 +2932,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 			true);	// Visible
 
       /* Get media (row[2]) */
-      Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
-      Med_GetMediaDataByCod (&Media);
+      Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
+      Med_GetMediaDataByCod (&Question.Media);
 
       /* Show media */
-      Med_ShowMedia (&Media,
+      Med_ShowMedia (&Question.Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 
@@ -2947,18 +2950,18 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 	    if (Match->Status.Playing)			// Match is being played
 	       /* Write answers */
 	       Mch_WriteAnswersMatchResult (Match,
+	                                    &Question,
 					    "MCH_TCH_ANS",
-					    false,	// Don't show result
-					    AnswerType);
+					    false);	// Don't show result
 	    else					// Match is paused, not being played
 	       Mch_ShowWaitImage (Txt_MATCH_Paused);
 	    break;
 	 case Mch_RESULTS:
 	    /* Write answers with results */
 	    Mch_WriteAnswersMatchResult (Match,
+	                                 &Question,
 					 "MCH_TCH_ANS",
-					 true,		// Show result
-					 AnswerType);
+					 true);		// Show result
 	    break;
 	 default:
 	    /* Don't write anything */
@@ -2970,6 +2973,9 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -2977,13 +2983,16 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         const char *Class,bool ShowResult,
-                                         Tst_AnswerType_t AnswerType)
+                                         struct Tst_Question *Question,
+                                         const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
-   if (AnswerType == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewMatch (Match->MchCod,Match->Status.QstInd,Match->Status.QstCod,
-				   Match->Status.NumCols,Class,ShowResult);
+   if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+      Tst_WriteChoiceAnsViewMatch (Match->MchCod,
+                                   Match->Status.QstInd,
+				   Match->Status.NumCols,
+				   Question,
+				   Class,ShowResult);
    else
       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
   }

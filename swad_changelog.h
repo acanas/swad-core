@@ -526,7 +526,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 
 // TODO: URGENT: Fix bug while playing match.
 
-	Version 19.155.5: Mar 26, 2020	Code refactoring in tests. (? lines)
+	Version 19.155.5: Mar 26, 2020	Code refactoring in tests. (284480 lines)
 	Version 19.155.4: Mar 26, 2020	Code refactoring in tests. (284476 lines)
 	Version 19.155.3: Mar 27, 2020	Code refactoring in pass to parameters of functions. (284476 lines)
 	Version 19.155.2: Mar 26, 2020	Code refactoring in tests. (284414 lines)

@@ -182,7 +182,8 @@ static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
                                             unsigned NumQst);
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
                                                     MYSQL_RES *mysql_res);
-static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod);
+static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
+                                              struct Tst_Question *Question);
 
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
                                           struct Tst_Question *Question,
@@ -3074,8 +3075,8 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
    unsigned NumQst;
+   struct Tst_Question Question;
    MYSQL_ROW row;
-   long QstCod;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
@@ -3109,13 +3110,19 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Get question code (row[0]) *****/
+      /* Create test question */
+      Tst_QstConstructor (&Question);
+
+      /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /***** Write question row *****/
-      Tst_WriteQuestionRowForSelection (NumQst,QstCod);
+      /* Write question row */
+      Tst_WriteQuestionRowForSelection (NumQst,&Question);
+
+      /* Destroy test question */
+      Tst_QstDestructor (&Question);
      }
 
    /***** End table *****/
@@ -3135,22 +3142,18 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
 /********************** Write question row for selection *********************/
 /*****************************************************************************/
 
-static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
+static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
+                                              struct Tst_Question *Question)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Tst_Question Question;
    static unsigned UniqueId = 0;
    char *Id;
    time_t TimeUTC;
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.QstCod = QstCod;
-
    /***** Get and show questvoidion data *****/
-   if (Tst_GetOneQuestionByCod (Question.QstCod,&mysql_res))
+   if (Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res))
      {
       /***** Get row of the result of the query *****/
       row = mysql_fetch_row (mysql_res);
@@ -3175,7 +3178,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
       /* Write checkbox to select the question */
       HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%ld\"",
-			  Question.QstCod);
+			  Question->QstCod);
 
       /* Write number of question */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3184,7 +3187,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 
       /* Write question code */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Question.QstCod);
+      HTM_TxtF ("%ld&nbsp;",Question->QstCod);
       HTM_TD_End ();
 
       /* Write the date (row[0] has the UTC date-time) */
@@ -3201,13 +3204,13 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Question.QstCod);
+      Tst_GetAndWriteTagsQst (Question->QstCod);
       HTM_TD_End ();
 
       /* Write the question type (row[1]) */
-      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question.Answer.Type]);
+      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
       HTM_TD_End ();
 
       /* Write if shuffle is enabled (row[2]) */
@@ -3224,9 +3227,9 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
 			true);	// Visible
 
       /***** Get and show media (row[5]) *****/
-      Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Question.Media);
-      Med_ShowMedia (&Question.Media,
+      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Question->Media);
+      Med_ShowMedia (&Question->Media,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
 
@@ -3234,15 +3237,12 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,long QstCod)
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Write answers */
-      Tst_WriteAnswersEdit (&Question);
+      Tst_WriteAnswersEdit (Question);
       HTM_TD_End ();
 
       /***** End table row *****/
       HTM_TR_End ();
      }
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -4198,10 +4198,10 @@ void Tst_ComputeScoreQst (const struct Tst_Question *Question,
 /******** Write single or multiple choice answer when viewing a match ********/
 /*****************************************************************************/
 
-void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
-				  unsigned NumCols,const char *Class,bool ShowResult)
+void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,unsigned NumCols,
+                                  struct Tst_Question *Question,
+                                  const char *Class,bool ShowResult)
   {
-   struct Tst_Question Question;
    unsigned NumOpt;
    bool RowIsOpen = false;
    MYSQL_RES *mysql_res;
@@ -4210,15 +4210,11 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    unsigned NumRespondersAns;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.QstCod = QstCod;
-
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
-   Tst_GetAnswersQst (&Question,&mysql_res,
+   Tst_GetAnswersQst (Question,&mysql_res,
                       false);	// Don't shuffle
    /*
    row[0] AnsInd
@@ -4229,30 +4225,30 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
    */
 
    for (NumOpt = 0;
-	NumOpt < Question.Answer.NumOptions;
+	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
       /* Get next answer */
       row = mysql_fetch_row (mysql_res);
 
       /* Allocate memory for text in this choice answer */
-      if (!Tst_AllocateTextChoiceAnswer (&Question,NumOpt))
+      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
       /* Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML */
-      Str_Copy (Question.Answer.Options[NumOpt].Text,row[1],
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question.Answer.Options[NumOpt].Text,
+                        Question->Answer.Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /* Get media (row[3]) */
-      Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
       /* Get if correct (row[4]) */
-      Question.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+      Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
 
    /* Free structure that stores the query result */
@@ -4266,7 +4262,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
    /***** Show options distributed in columns *****/
    for (NumOpt = 0;
-	NumOpt < Question.Answer.NumOptions;
+	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
       /***** Start row? *****/
@@ -4286,9 +4282,9 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",QstInd,NumOpt,Class);
-      HTM_Txt (Question.Answer.Options[Indexes[NumOpt]].Text);
+      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
-      Med_ShowMedia (&Question.Answer.Options[Indexes[NumOpt]].Media,
+      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONT",
                      "TEST_MED_SHOW");
 
@@ -4300,7 +4296,7 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
 	 /* Draw proportional bar for this answer */
 	 Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
-	                     Question.Answer.Options[Indexes[NumOpt]].Correct);
+	                     Question->Answer.Options[Indexes[NumOpt]].Correct);
 	}
       else
          /* Draw empty bar for this answer
@@ -4324,9 +4320,6 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
    /***** End table *****/
    HTM_TABLE_End ();
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
