@@ -3277,7 +3277,7 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle)
   {
    /***** Get answers of a question from database *****/
-   Question->Answer.NumOptions =(unsigned)
+   Question->Answer.NumOptions = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get answers of a question",
 		   "SELECT AnsInd,"		// row[0]
 			  "Answer,"		// row[1]

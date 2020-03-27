@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 static void TsI_PutParamsExportQsts (void *TestPtr);
 static void TsI_PutCreateXMLParam (void);
 
-static void TsI_ExportQuestion (long QstCod,FILE *FileXML);
+static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML);
 
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
 static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
@@ -192,8 +192,8 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    char PathPubFile[PATH_MAX + 1];
    FILE *FileXML;
    unsigned NumQst;
+   struct Tst_Question Question;
    MYSQL_ROW row;
-   long QstCod;
 
    /***** Create a temporary public directory
 	  used to download the XML file *****/
@@ -217,12 +217,18 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	NumQst < NumQsts;
 	NumQst++)
      {
+      /* Create test question */
+      Tst_QstConstructor (&Question);
+
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      TsI_ExportQuestion (QstCod,FileXML);
+      TsI_ExportQuestion (&Question,FileXML);
+
+      /* Destroy test question */
+      Tst_QstDestructor (&Question);
      }
 
    /***** End XML file *****/
@@ -249,18 +255,14 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 /****************** Write one question into the XML file *********************/
 /*****************************************************************************/
 
-static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
+static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Tst_Question Question;
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-
-   if (Tst_GetOneQuestionByCod (QstCod,&mysql_res))
+   if (Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res))
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -277,13 +279,13 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       */
 
       /***** Write the answer type (row[1]) *****/
-      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       fprintf (FileXML,"<question type=\"%s\">%s",
-               Tst_StrAnswerTypesXML[Question.Answer.Type],Txt_NEW_LINE);
+               Tst_StrAnswerTypesXML[Question->Answer.Type],Txt_NEW_LINE);
 
       /***** Write the question tags *****/
       fprintf (FileXML,"<tags>%s",Txt_NEW_LINE);
-      TsI_GetAndWriteTagsXML (QstCod,FileXML);
+      TsI_GetAndWriteTagsXML (Question->QstCod,FileXML);
       fprintf (FileXML,"</tags>%s",Txt_NEW_LINE);
 
       /***** Write the stem (row[3]), that is in HTML format *****/
@@ -299,22 +301,19 @@ static void TsI_ExportQuestion (long QstCod,FILE *FileXML)
       /***** Write the answers of this question.
              Shuffle can be enabled or disabled (row[2]) *****/
       fprintf (FileXML,"<answer");
-      if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-          Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
+          Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
                   (row[2][0] == 'Y') ? "yes" :
                 	               "no");
       fprintf (FileXML,">");
-      TsI_WriteAnswersOfAQstXML (&Question,FileXML);
+      TsI_WriteAnswersOfAQstXML (Question,FileXML);
       fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
 
       /***** End question *****/
       fprintf (FileXML,"</question>%s%s",
                Txt_NEW_LINE,Txt_NEW_LINE);
      }
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
