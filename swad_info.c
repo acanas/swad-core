@@ -414,7 +414,7 @@ void Inf_ShowInfo (void)
      {
       if (ICanEdit)
 	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,(void *) &Gbl,
+		       Inf_PutIconToEditInfo,&Gbl,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -942,7 +942,7 @@ static void Inf_ShowPage (const char *URL)
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		    Inf_PutIconToEditInfo,(void *) &Gbl,
+		    Inf_PutIconToEditInfo,&Gbl,
 		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -1030,7 +1030,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Begin box and table */
    Box_BoxTableBegin (NULL,Txt_Source_of_information,
-                      Inf_PutIconToViewInfo,(void *) &Gbl,
+                      Inf_PutIconToViewInfo,&Gbl,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
@@ -1691,7 +1691,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       /***** Begin box *****/
       if (ICanEdit)
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,(void *) &Gbl,
+		       Inf_PutIconToEditInfo,&Gbl,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -1779,7 +1779,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Begin box *****/
       if (ICanEdit)
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,(void *) &Gbl,
+		       Inf_PutIconToEditInfo,&Gbl,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],

@@ -111,7 +111,7 @@ void Hld_SeeHolidays (void)
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Holidays,
-                    Hld_PutIconsSeeHolidays,(void *) &Gbl,
+                    Hld_PutIconsSeeHolidays,&Gbl,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
@@ -231,7 +231,7 @@ static void Hld_PutIconsSeeHolidays (void *Args)
 				      NULL,NULL);
 
       /***** View calendar *****/
-      Cal_PutIconToSeeCalendar ((void *) &Gbl);
+      Cal_PutIconToSeeCalendar (&Gbl);
      }
   }
 
@@ -560,7 +560,7 @@ static void Hld_ListHolidaysForEdition (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Holidays,
-                      Cal_PutIconToSeeCalendar,(void *) &Gbl,
+                      Cal_PutIconToSeeCalendar,&Gbl,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

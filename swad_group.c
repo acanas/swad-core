@@ -287,7 +287,7 @@ static void Grp_EditGroupTypes (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_group,
-                 Grp_PutIconsEditingGroupTypes,(void *) &Gbl,
+                 Grp_PutIconsEditingGroupTypes,&Gbl,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group type *****/
@@ -316,7 +316,7 @@ static void Grp_EditGroups (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Groups,
-                 Grp_PutIconsEditingGroups,(void *) &Gbl,
+                 Grp_PutIconsEditingGroups,&Gbl,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
@@ -383,7 +383,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_Groups,
-		    Grp_PutIconToEditGroups,(void *) &Gbl,
+		    Grp_PutIconToEditGroups,&Gbl,
 		    Hlp_USERS_Groups,Box_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Groups,
@@ -1792,7 +1792,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_My_groups,
-		    Grp_PutIconToEditGroups,(void *) &Gbl,
+		    Grp_PutIconToEditGroups,&Gbl,
 		    Hlp_USERS_Groups,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_My_groups,
@@ -3958,13 +3958,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Show question and button to remove type of group *****/
    if (NumGrps == 1)
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,(void *) &Gbl,
+			      Grp_PutParamRemGrpTyp,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,(void *) &Gbl,
+			      Grp_PutParamRemGrpTyp,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
@@ -4011,19 +4011,19 @@ static void Grp_AskConfirmRemGrp (void)
    /***** Show question and button to remove group *****/
    if (NumStds == 0)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,(void *) &Gbl,
+			      Grp_PutParamRemGrp,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
                               GrpDat.GrpName);
    else if (NumStds == 1)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,(void *) &Gbl,
+			      Grp_PutParamRemGrp,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
                               GrpDat.GrpName);
    else
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,(void *) &Gbl,
+			      Grp_PutParamRemGrp,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                               GrpDat.GrpName,NumStds);
@@ -4956,7 +4956,7 @@ void Grp_PutParamAllGroups (void)
 /************* Parameter to show only my groups or all groups ****************/
 /*****************************************************************************/
 
-void Grp_PutParamWhichGrps (void *WhichGrps)
+void Grp_PutParamWhichGroups (void *WhichGrps)
   {
    if (WhichGrps)
       if (*(Grp_WhichGroups_t *) WhichGrps != Grp_WHICH_GROUPS_DEFAULT)
@@ -5017,7 +5017,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 /************* Get whether to show only my groups or all groups **************/
 /*****************************************************************************/
 
-Grp_WhichGroups_t Grp_GetParamWhichGrps (void)
+Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
   {
    static bool AlreadyGot = false;
    Grp_WhichGroups_t WhichGroupsDefault;

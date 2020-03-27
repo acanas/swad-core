@@ -577,7 +577,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_Announcements_of_exams,
-		    Exa_PutIconToCreateNewExamAnnouncement,(void *) &Gbl,
+		    Exa_PutIconToCreateNewExamAnnouncement,&Gbl,
 		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Announcements_of_exams,
@@ -1010,7 +1010,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
       /* Start highlighted box */
       Box_BoxShadowBegin (Width,NULL,
-                          FunctionToDrawContextualIcons,(void *) &Gbl,
+                          FunctionToDrawContextualIcons,&Gbl,
                           HelpLink);
      }
    else	// Don't highlight

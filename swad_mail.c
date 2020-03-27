@@ -124,7 +124,7 @@ void Mai_SeeMailDomains (void)
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-			 Mai_PutIconToEditMailDomains,(void *) &Gbl,
+			 Mai_PutIconToEditMailDomains,&Gbl,
 			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
@@ -1162,7 +1162,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Email,
-                 Acc_PutLinkToRemoveMyAccount,(void *) &Gbl,
+                 Acc_PutLinkToRemoveMyAccount,&Gbl,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/

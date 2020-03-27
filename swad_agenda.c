@@ -155,7 +155,7 @@ void Agd_ShowMyAgenda (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_My_agenda,
-                 Agd_PutIconsMyFullAgenda,(void *) &Gbl.Agenda,
+                 Agd_PutIconsMyFullAgenda,&Gbl.Agenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
@@ -361,12 +361,12 @@ void Agd_ShowUsrAgenda (void)
 	 if (ItsMe)
 	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Me.UsrDat.FullName),
-			  Agd_PutIconsMyPublicAgenda,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	 else
 	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Other.UsrDat.FullName),
-			  Agd_PutIconsOtherPublicAgenda,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          Str_FreeString ();
 
@@ -595,7 +595,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	 case Agd_ANOTHER_AGENDA:
 	    Frm_StartForm (ActSeeUsrAgd);
-	    Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Gbl.Agenda.CurrentPage);
 	    break;
 	}
@@ -654,7 +654,7 @@ static void Agd_PutIconToCreateNewEvent (void *Agenda)
    /***** Put form to create a new event *****/
    Agd->AgdCodToEdit = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
-			       Agd_PutCurrentParamsMyAgenda,(void *) Agd,
+			       Agd_PutCurrentParamsMyAgenda,Agd,
 			       Txt_New_event);
   }
 
@@ -676,7 +676,7 @@ static void Agd_PutIconToShowQR (void)
              Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,
-                            QR_PutParamQRString,(void *) URL);
+                            QR_PutParamQRString,URL);
   }
 
 static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
@@ -1518,7 +1518,7 @@ void Agd_RequestCreatOrEditEvent (void)
       Frm_StartForm (ActChgEvtMyAgd);
       Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
      }
-   Agd_PutCurrentParamsMyAgenda ((void *) &Gbl.Agenda);
+   Agd_PutCurrentParamsMyAgenda (&Gbl.Agenda);
 
    /***** Begin box and table *****/
    if (ItsANewEvent)

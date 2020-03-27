@@ -164,7 +164,7 @@ void Att_SeeAttEvents (void)
   {
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
@@ -187,8 +187,9 @@ static void Att_ShowAllAttEvents (void)
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_No_events;
-   Dat_StartEndTime_t Order;
    struct Pagination Pagination;
+   Dat_StartEndTime_t Order;
+   Grp_WhichGroups_t WhichGroups;
    unsigned NumAttEvent;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -201,7 +202,7 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Events,
-                 Att_PutIconsInListOfAttEvents,(void *) &Gbl,
+                 Att_PutIconsInListOfAttEvents,&Gbl,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -209,7 +210,7 @@ static void Att_ShowAllAttEvents (void)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,
-                                  Att_ParamsWhichGroupsToShow,(void *) &Gbl);
+                                  Att_ParamsWhichGroupsToShow,&Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -232,7 +233,8 @@ static void Att_ShowAllAttEvents (void)
 	 HTM_TH_Begin (1,1,"LM");
 
 	 Frm_StartForm (ActSeeAtt);
-	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+         WhichGroups = Grp_GetParamWhichGroups ();
+	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -320,7 +322,7 @@ static void Att_PutIconsInListOfAttEvents (void *Args)
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Ico_PutContextualIconToShowAttendanceList (ActReqLstUsrAtt,
-							  Att_PutParamsToListUsrsAttendance,(void *) &Gbl);
+							  Att_PutParamsToListUsrsAttendance,&Gbl);
 	       break;
 	    default:
 	       break;
@@ -328,7 +330,7 @@ static void Att_PutIconsInListOfAttEvents (void *Args)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
      }
   }
 
@@ -342,7 +344,7 @@ static void Att_PutIconToCreateNewAttEvent (void)
 
    /***** Put icon to create a new attendance event *****/
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
-			       Att_PutParamsToCreateNewAttEvent,(void *) &Gbl,
+			       Att_PutParamsToCreateNewAttEvent,&Gbl,
 			       Txt_New_event);
   }
 
@@ -355,7 +357,7 @@ static void Att_PutButtonToCreateNewAttEvent (void)
    extern const char *Txt_New_event;
 
    Frm_StartForm (ActFrmNewAtt);
-   Att_PutParamsToCreateNewAttEvent ((void *) &Gbl);
+   Att_PutParamsToCreateNewAttEvent (&Gbl);
    Btn_PutConfirmButton (Txt_New_event);
    Frm_EndForm ();
   }
@@ -366,10 +368,13 @@ static void Att_PutButtonToCreateNewAttEvent (void)
 
 static void Att_PutParamsToCreateNewAttEvent (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       Att_PutHiddenParamAttOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
      }
   }
@@ -380,10 +385,13 @@ static void Att_PutParamsToCreateNewAttEvent (void *Args)
 
 static void Att_PutParamsToListUsrsAttendance (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       Att_PutHiddenParamAttOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
      }
   }
@@ -563,19 +571,19 @@ static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
 
    /***** Put form to remove attendance event *****/
    Ico_PutContextualIconToRemove (ActReqRemAtt,
-                                  Att_PutParams,(void *) &Gbl);
+                                  Att_PutParams,&Gbl);
 
    /***** Put form to hide/show attendance event *****/
    if (Att->Hidden)
       Ico_PutContextualIconToUnhide (ActShoAtt,Anchor,
-                                     Att_PutParams,(void *) &Gbl);
+                                     Att_PutParams,&Gbl);
    else
       Ico_PutContextualIconToHide (ActHidAtt,Anchor,
-                                   Att_PutParams,(void *) &Gbl);
+                                   Att_PutParams,&Gbl);
 
    /***** Put form to edit attendance event *****/
    Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,
-                                Att_PutParams,(void *) &Gbl);
+                                Att_PutParams,&Gbl);
   }
 
 /*****************************************************************************/
@@ -584,11 +592,14 @@ static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
 
 static void Att_PutParams (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       Att_PutParamAttCod (Gbl.AttEvents.AttCod);
       Att_PutHiddenParamAttOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
      }
   }
@@ -877,10 +888,11 @@ void Att_AskRemAttEvent (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
    struct AttendanceEvent Att;
+   Grp_WhichGroups_t WhichGroups;
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
@@ -894,7 +906,8 @@ void Att_AskRemAttEvent (void)
    Frm_StartForm (ActRemAtt);
    Att_PutParamAttCod (Att.AttCod);
    Att_PutHiddenParamAttOrder ();
-   Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+   WhichGroups = Grp_GetParamWhichGroups ();
+   Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /* Ask for confirmation of removing */
@@ -1037,6 +1050,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Save_changes;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
+   Grp_WhichGroups_t WhichGroups;
    char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -1046,7 +1060,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
@@ -1085,7 +1099,8 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_PutParamAttCod (Att.AttCod);
      }
    Att_PutHiddenParamAttOrder ();
-   Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+   WhichGroups = Grp_GetParamWhichGroups ();
+   Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Begin box and table *****/
@@ -1822,7 +1837,7 @@ void Att_SeeOneAttEvent (void)
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Begin box and table *****/
@@ -1942,7 +1957,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,(void *) &Gbl,
+   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,&Gbl,
                                       Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -2711,7 +2726,7 @@ static void Att_ListOrPrintMyAttendanceCrs (void)
    /***** Begin box *****/
    if (Att_TypeOfView == Att_VIEW_ONLY_ME)
       Box_BoxBegin (NULL,Txt_Attendance,
-		    Att_PutIconsMyAttList,(void *) &Gbl,
+		    Att_PutIconsMyAttList,&Gbl,
 		    Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Attendance,
@@ -2808,7 +2823,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void)
       /***** Begin box *****/
       if (Att_TypeOfView == Att_VIEW_SEL_USR)
          Box_BoxBegin (NULL,Txt_Attendance_list,
-		       Att_PutIconsStdsAttList,(void *) &Gbl,
+		       Att_PutIconsStdsAttList,&Gbl,
 		       Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin (NULL,Txt_Attendance_list,
@@ -2967,11 +2982,11 @@ static void Att_PutIconsMyAttList (void *Args)
      {
       /***** Put icon to print my assistance (as student) to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstMyAtt,
-				    Att_PutFormToPrintMyListParams,(void *) &Gbl);
+				    Att_PutFormToPrintMyListParams,&Gbl);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
      }
   }
 
@@ -2997,11 +3012,11 @@ static void Att_PutIconsStdsAttList (void *Args)
      {
       /***** Put icon to print assistance of students to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstUsrAtt,
-				    Att_PutParamsToPrintStdsList,(void *) &Gbl);
+				    Att_PutParamsToPrintStdsList,&Gbl);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
      }
   }
 
@@ -3061,12 +3076,12 @@ static void Att_ListEventsToSelect (void)
      {
       case Att_VIEW_ONLY_ME:
 	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToViewAttEvents,(void *) &Gbl,
+		       Att_PutIconToViewAttEvents,&Gbl,
 		       NULL,Box_NOT_CLOSABLE);
 	 break;
       case Att_VIEW_SEL_USR:
 	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToEditAttEvents,(void *) &Gbl,
+		       Att_PutIconToEditAttEvents,&Gbl,
 		       NULL,Box_NOT_CLOSABLE);
 	 break;
       case Att_PRNT_ONLY_ME:

@@ -132,7 +132,7 @@ static void InsCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    InsCfg_PutIconsToPrintAndUpload,(void *) &Gbl,
+                    InsCfg_PutIconsToPrintAndUpload,&Gbl,
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
 

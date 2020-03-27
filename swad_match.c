@@ -287,7 +287,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    /***** Begin box *****/
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_BoxBegin ("100%",Txt_Matches,
-                 Mch_PutIconsInListOfMatches,(void *) &Gbl,
+                 Mch_PutIconsInListOfMatches,&Gbl,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -295,7 +295,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeGam,
-                                  Gam_PutParams,(void *) &Gbl);
+                                  Gam_PutParams,&Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -414,7 +414,7 @@ static void Mch_PutIconToCreateNewMatch (void)
 
    /***** Put form to create a new match *****/
    Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,
-                               Gam_PutParams,(void *) &Gbl,
+                               Gam_PutParams,&Gbl,
 			       Txt_New_match);
   }
 
@@ -560,7 +560,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Frm_StartForm (ActReqRemMch);
-      Mch_PutParamsEdit ((void *) &Gbl);
+      Mch_PutParamsEdit (&Gbl);
       Ico_PutIconRemove ();
       Frm_EndForm ();
      }
@@ -625,7 +625,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
    Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 						       ActResMch);
-   Mch_PutParamsPlay ((void *) &Gbl);
+   Mch_PutParamsPlay (&Gbl);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								 Txt_Resume,
 			    "BT_LINK LT ASG_TITLE",NULL);
@@ -739,7 +739,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 								       ActResMch,
 				  NULL,
-				  Mch_PutParamsPlay,(void *) &Gbl,
+				  Mch_PutParamsPlay,&Gbl,
 				  Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
 					                             "play.svg",
 				  Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
@@ -785,7 +785,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,(void *) &Gbl,
+				     Mch_PutParamsEdit,&Gbl,
 				     "trophy.svg",
 				     Txt_Results);
      }
@@ -808,13 +808,13 @@ static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
 
       /* Show match results */
       Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,(void *) &Gbl,
+				     Mch_PutParamsEdit,&Gbl,
 				     "trophy.svg",
 				     Txt_Results);
 
       /* I can edit visibility */
       Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-				     Mch_PutParamsEdit,(void *) &Gbl,
+				     Mch_PutParamsEdit,&Gbl,
 				     Match->Status.ShowUsrResults ? "eye-green.svg" :
 								    "eye-slash-red.svg",
 				     Match->Status.ShowUsrResults ? Txt_Visible_results :
@@ -982,7 +982,7 @@ void Mch_RequestRemoveMatch (void)
    Gam_SetCurrentGamCod (Match.GamCod);	// Used to pass parameter
    Mch_SetCurrentMchCod (Match.MchCod);	// Used to pass parameter
    Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,
-                           Mch_PutParamsEdit,(void *) &Gbl,
+                           Mch_PutParamsEdit,&Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -1167,8 +1167,8 @@ void Mch_PutParamsEdit (void *Args)
   {
    if (Args)
      {
-      Gam_PutParams ((void *) &Gbl);
-      Mch_PutParamsPlay ((void *) &Gbl);
+      Gam_PutParams (&Gbl);
+      Mch_PutParamsPlay (&Gbl);
      }
   }
 
@@ -1207,7 +1207,7 @@ void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match)
    /* Get parameters of game */
    if ((Game->GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gam_GetDataOfGameByCod (Game);
 
    /* Get match code */

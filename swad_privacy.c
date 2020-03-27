@@ -98,7 +98,7 @@ void Pri_EditMyPrivacy (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Privacy,
-                      Pri_PutIconsPrivacy,(void *) &Gbl,
+                      Pri_PutIconsPrivacy,&Gbl,
                       Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Edit photo visibility *****/

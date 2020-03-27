@@ -114,7 +114,7 @@ void Cla_SeeClassrooms (void)
 
    /***** Table head *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
-                 Cla_PutIconsListingClassrooms,(void *) &Gbl,
+                 Cla_PutIconsListingClassrooms,&Gbl,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
@@ -256,7 +256,7 @@ static void Cla_EditClassroomsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
-                 Cla_PutIconsEditingClassrooms,(void *) &Gbl,
+                 Cla_PutIconsEditingClassrooms,&Gbl,
                  Hlp_CENTRE_Classrooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new classroom *****/

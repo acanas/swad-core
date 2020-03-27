@@ -1087,7 +1087,7 @@ static void TL_ShowTimeline (char *Query,
 				Query);
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
-                 TL_PutIconsTimeline,(void *) &Gbl,
+                 TL_PutIconsTimeline,&Gbl,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
@@ -1179,7 +1179,7 @@ static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       Frm_StartFormAnchor (ActionUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
      }
    else
      {
@@ -4066,11 +4066,11 @@ static void TL_RequestRemovalNote (void)
 	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveNote,(void *) &Gbl,
+	                             TL_PutParamsRemoveNote,&Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
-	                             TL_PutParamsRemoveNote,(void *) &Gbl,
+	                             TL_PutParamsRemoveNote,&Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4087,7 +4087,7 @@ static void TL_PutParamsRemoveNote (void *Args)
    if (Args)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       else
 	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
       TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
@@ -4379,11 +4379,11 @@ static void TL_RequestRemovalComment (void)
 	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveCommment,(void *) &Gbl,
+	                             TL_PutParamsRemoveCommment,&Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
-	                             TL_PutParamsRemoveCommment,(void *) &Gbl,
+	                             TL_PutParamsRemoveCommment,&Gbl,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4403,7 +4403,7 @@ static void TL_PutParamsRemoveCommment (void *Args)
    if (Args)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       else
 	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
       TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);

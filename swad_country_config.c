@@ -127,7 +127,7 @@ static void CtyCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    CtyCfg_PutIconToPrint,(void *) &Gbl,
+                    CtyCfg_PutIconToPrint,&Gbl,
 		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/

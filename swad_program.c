@@ -271,7 +271,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,
-                 Prg_PutIconsListItems,(void *) &Gbl,
+                 Prg_PutIconsListItems,&Gbl,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
    /***** Table *****/
@@ -392,7 +392,7 @@ static void Prg_PutIconToCreateNewItem (void)
    /***** Put form to create a new program item *****/
    Prg_SetCurrentItmCod (-1L);
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
-                               Prg_PutParams,(void *) &Gbl,
+                               Prg_PutParams,&Gbl,
 			       Txt_New_item);
   }
 
@@ -406,7 +406,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 
    Prg_SetCurrentItmCod (-1L);
    Frm_StartFormAnchor (ActFrmNewPrgItm,"item_form");
-   Prg_PutParams ((void *) &Gbl);
+   Prg_PutParams (&Gbl);
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
   }
@@ -798,23 +798,23 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,
-	                                Prg_PutParams,(void *) &Gbl);
+	                                Prg_PutParams,&Gbl);
 
 	 /***** Put form to hide/show program item *****/
 	 if (Item->Hierarchy.Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,(void *) &Gbl);
+	                                   Prg_PutParams,&Gbl);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",
-	                                 Prg_PutParams,(void *) &Gbl);
+	                                 Prg_PutParams,&Gbl);
 
 	 /***** Put form to edit program item *****/
 	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
-	                              Prg_PutParams,(void *) &Gbl);
+	                              Prg_PutParams,&Gbl);
 
 	 /***** Put form to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
-	                             Prg_PutParams,(void *) &Gbl,
+	                             Prg_PutParams,&Gbl,
 	                             Txt_New_item);
 
 	 HTM_BR ();
@@ -823,7 +823,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
-	                                   Prg_PutParams,(void *) &Gbl,
+	                                   Prg_PutParams,&Gbl,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Txt_Move_up_X,
 							       StrItemIndex));
@@ -836,7 +836,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,(void *) &Gbl,
+	                                   Prg_PutParams,&Gbl,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Txt_Move_down_X,
 							       StrItemIndex));
@@ -849,7 +849,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,(void *) &Gbl,
+	                                   Prg_PutParams,&Gbl,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemIndex));
@@ -862,7 +862,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,(void *) &Gbl,
+	                                   Prg_PutParams,&Gbl,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemIndex));
@@ -1287,7 +1287,7 @@ void Prg_ReqRemItem (void)
    /***** Show question and button to remove the program item *****/
    Prg_SetCurrentItmCod (Item.Hierarchy.ItmCod);
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
-                           Prg_PutParams,(void *) &Gbl,
+                           Prg_PutParams,&Gbl,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);

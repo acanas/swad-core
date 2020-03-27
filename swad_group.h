@@ -216,11 +216,11 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted);
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
 void Grp_PutParamAllGroups (void);
 
-void Grp_PutParamWhichGrps (void *WhichGrps);
+void Grp_PutParamWhichGroups (void *WhichGrps);
 void Grp_PutParamWhichGrpsOnlyMyGrps (void);
 void Grp_PutParamWhichGrpsAllGrps (void);
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
                                  void (*FuncParams) (void *Args),void *Args);
-Grp_WhichGroups_t Grp_GetParamWhichGrps (void);
+Grp_WhichGroups_t Grp_GetParamWhichGroups (void);
 
 #endif

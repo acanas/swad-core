@@ -193,12 +193,12 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
      {
       case ActSeeDegTyp:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
-	               DT_PutIconsListingDegTypes,(void *) &Gbl,
+	               DT_PutIconsListingDegTypes,&Gbl,
 		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
-	               DT_PutIconToEditDegTypes,(void *) &Gbl,
+	               DT_PutIconToEditDegTypes,&Gbl,
 		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
       default:	// Bad call
@@ -259,7 +259,7 @@ static void DT_EditDegreeTypesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,
-                 DT_PutIconsEditingDegreeTypes,(void *) &Gbl,
+                 DT_PutIconsEditingDegreeTypes,&Gbl,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
@@ -360,7 +360,7 @@ static void DT_PutIconsListingDegTypes (void *Args)
    if (Args)
      {
       /***** Put icon to edit degree types *****/
-      DT_PutIconToEditDegTypes ((void *) &Gbl);
+      DT_PutIconToEditDegTypes (&Gbl);
 
       /***** Put icon to view degrees *****/
       Deg_PutIconToViewDegrees ();
@@ -524,7 +524,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* Begin form to change order */
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
-         Fig_PutHiddenParamFigures ((void *) &Gbl);
+         Fig_PutHiddenParamFigures (&Gbl);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       /* Link with the head of this column */

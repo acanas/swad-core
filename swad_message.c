@@ -242,7 +242,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,(void *) &Gbl,
+	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,&Gbl,
 	                                    Grp_MY_GROUPS);
 
 	 /***** Start section with user list *****/
@@ -251,14 +251,14 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,(void *) &Gbl);
+	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,&Gbl);
 
 	    /***** Put link to register students *****/
 	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** Check if it's a big list *****/
 	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-	                                          Msg_PutParamsWriteMsg,(void *) &Gbl,
+	                                          Msg_PutParamsWriteMsg,&Gbl,
 		                                  "CopyMessageToHiddenFields();");
 
 	    if (ShowUsrsInCrs)
@@ -283,7 +283,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       if (Gbl.Msg.ShowOnlyOneRecipient)
 	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
      }
@@ -388,7 +388,7 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
       Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
    /***** Hidden params to send subject and content *****/
    Msg_PutHiddenParamsSubjectAndContent ();
@@ -412,7 +412,7 @@ static void Msg_PutParamsWriteMsg (void *Args)
 	}
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	{
-	 Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 if (Gbl.Msg.ShowOnlyOneRecipient)
 	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 	}
@@ -921,7 +921,7 @@ void Msg_ReqDelAllRecMsgs (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
-                            Msg_PutHiddenParamsMsgsFilters,(void *) &Gbl,
+                            Msg_PutHiddenParamsMsgsFilters,&Gbl,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
@@ -960,7 +960,7 @@ void Msg_ReqDelAllSntMsgs (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
-                            Msg_PutHiddenParamsMsgsFilters,(void *) &Gbl,
+                            Msg_PutHiddenParamsMsgsFilters,&Gbl,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
 
@@ -1764,7 +1764,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    /***** Begin box with messages *****/
    Msg_SetNumMsgsStr (&NumMsgsStr,NumUnreadMsgs);
    Box_BoxBegin ("97%",NumMsgsStr,
-                 Msg_PutIconsListMsgs,(void *) &Gbl,
+                 Msg_PutIconsListMsgs,&Gbl,
                  Help[Gbl.Msg.TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
@@ -2523,7 +2523,7 @@ static void Msg_PutIconsListMsgs (void *Args)
      {
       /***** Put icon to remove messages *****/
       Ico_PutContextualIconToRemove (ActionReqDelAllMsg[Gbl.Msg.TypeOfMessages],
-				     Msg_PutHiddenParamsMsgsFilters,(void *) &Gbl);
+				     Msg_PutHiddenParamsMsgsFilters,&Gbl);
 
       /***** Put icon to show a figure *****/
       Gbl.Figures.FigureType = Fig_MESSAGES;
@@ -2542,7 +2542,7 @@ static void Msg_PutHiddenParamsOneMsg (void *Args)
       Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
 				Gbl.Msg.CurrentPage);
       Msg_PutHiddenParamMsgCod (Gbl.Msg.MsgCod);
-      Msg_PutHiddenParamsMsgsFilters ((void *) &Gbl);
+      Msg_PutHiddenParamsMsgsFilters (&Gbl);
      }
   }
 
@@ -3002,7 +3002,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    HTM_BR ();
    Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
    Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
-                                  Msg_PutHiddenParamsOneMsg,(void *) &Gbl);
+                                  Msg_PutHiddenParamsOneMsg,&Gbl);
    HTM_TD_End ();
 
    /***** Write message number *****/
@@ -3189,7 +3189,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
                                                                     (Expanded ? ActConSntMsg :
                                                         	                ActExpSntMsg));
    Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
-   Msg_PutHiddenParamsOneMsg ((void *) &Gbl);
+   Msg_PutHiddenParamsOneMsg (&Gbl);
    HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
 				       Txt_See_message,
 			    Open ? "BT_LINK LT MSG_TIT" :
@@ -3597,7 +3597,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
          Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
-         Msg_PutHiddenParamsOneMsg ((void *) &Gbl);
+         Msg_PutHiddenParamsOneMsg (&Gbl);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
          HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
          HTM_TxtF (Txt_and_X_other_recipients,
@@ -3697,7 +3697,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Msg_PutHiddenParamsMsgsFilters ((void *) &Gbl);
+   Msg_PutHiddenParamsMsgsFilters (&Gbl);
    Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
@@ -3714,7 +3714,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Msg_PutHiddenParamsMsgsFilters ((void *) &Gbl);
+   Msg_PutHiddenParamsMsgsFilters (&Gbl);
    Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }

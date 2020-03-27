@@ -109,7 +109,7 @@ void Plg_ListPlugins (void)
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Txt_Plugins,
-			 Plg_PutIconToEditPlugins,(void *) &Gbl,
+			 Plg_PutIconToEditPlugins,&Gbl,
 			 NULL,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Txt_Plugins,

@@ -305,7 +305,7 @@ void Not_RequestRemNotice (void)
    /* End alert */
    Not_SetNotCodToEdit (NotCod);	// To be used as parameter
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,
-                            Not_PutParams,(void *) &Gbl,
+                            Not_PutParams,&Gbl,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
@@ -414,7 +414,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 		"%upx",
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
       Box_BoxBegin (StrWidth,Txt_Notices,
-		    Not_PutIconsListNotices,(void *) &Gbl,
+		    Not_PutIconsListNotices,&Gbl,
 		    Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
       if (!NumNotices)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_notices);
@@ -672,18 +672,18 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
 	 /***** Put form to remove announcement *****/
          Ico_PutContextualIconToRemove (ActReqRemNot,
-                                        Not_PutParams,(void *) &Gbl);
+                                        Not_PutParams,&Gbl);
 
 	 /***** Put form to change the status of the notice *****/
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
 	       Ico_PutContextualIconToHide (ActHidNot,NULL,
-	                                    Not_PutParams,(void *) &Gbl);
+	                                    Not_PutParams,&Gbl);
                break;
             case Not_OBSOLETE_NOTICE:
 	       Ico_PutContextualIconToUnhide (ActRevNot,NULL,
-	                                      Not_PutParams,(void *) &Gbl);
+	                                      Not_PutParams,&Gbl);
                break;
            }
          Frm_EndForm ();
@@ -725,7 +725,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       HTM_DIV_Begin ("class=\"CM\"");
       Not_SetNotCodToEdit (NotCod);	// To be used as parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
-                                     Not_PutParams,(void *) &Gbl,
+                                     Not_PutParams,&Gbl,
 				     "ellipsis-h.svg",
 				     Txt_See_full_notice);
       HTM_DIV_End ();

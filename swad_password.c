@@ -248,7 +248,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
    extern const char *Txt_Forgotten_password;
 
    Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
-				  Pwd_PutLinkToSendNewPasswdParams,(void *) &Gbl,
+				  Pwd_PutLinkToSendNewPasswdParams,&Gbl,
 				  "key.svg",
 				  Txt_Forgotten_password);
   }
@@ -824,7 +824,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 break;
      }
    Frm_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
-   Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
    /* New password */
    HTM_TABLE_BeginWidePadding (2);

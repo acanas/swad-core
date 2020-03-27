@@ -308,18 +308,18 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      {
       /***** Put form to remove announcement *****/
       Ico_PutContextualIconToRemove (ActRemAnn,
-                                     Ann_PutParams,(void *) &AnnCod);
+                                     Ann_PutParams,&AnnCod);
 
       /***** Put form to change the status of the announcement *****/
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:
 	    Ico_PutContextualIconToHide (ActHidAnn,NULL,
-	                                 Ann_PutParams,(void *) &AnnCod);
+	                                 Ann_PutParams,&AnnCod);
 	    break;
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
 	    Ico_PutContextualIconToUnhide (ActRevAnn,NULL,
-	                                   Ann_PutParams,(void *) &AnnCod);
+	                                   Ann_PutParams,&AnnCod);
 	    break;
 	}
      }
@@ -355,7 +355,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    else
       /***** Put form to mark announcement as seen *****/
       Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-                                     Ann_PutParams,(void *) &AnnCod,
+                                     Ann_PutParams,&AnnCod,
 				     "close.svg",
 				     Txt_Do_not_show_again);
 

@@ -110,7 +110,7 @@ void Asg_SeeAssignments (void)
   {
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all the assignments *****/
@@ -140,7 +140,7 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Assignments,
-                 Asg_PutIconsListAssignments,(void *) &Gbl.Asgs,
+                 Asg_PutIconsListAssignments,&Gbl.Asgs,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -148,7 +148,7 @@ static void Asg_ShowAllAssignments (void)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAsg,
-                                  Asg_ParamsWhichGroupsToShow,(void *) &Gbl);
+                                  Asg_ParamsWhichGroupsToShow,&Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -183,7 +183,7 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
-      Asg_PutButtonToCreateNewAsg ((void *) &Gbl.Asgs);
+      Asg_PutButtonToCreateNewAsg (&Gbl.Asgs);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -203,6 +203,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_Assignment;
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
+   Grp_WhichGroups_t WhichGroups;
 
    HTM_TR_Begin (NULL);
 
@@ -216,7 +217,8 @@ static void Asg_PutHeadForSeeing (bool PrintView)
       if (!PrintView)
 	{
 	 Frm_StartForm (ActSeeAsg);
-	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+	 WhichGroups = Grp_GetParamWhichGroups ();
+	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -527,7 +529,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
    	        NAME_MAX);
       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-      Brw_PutImplicitParamsFileBrowser ((void *) &Gbl);
+      Brw_PutImplicitParamsFileBrowser (&Gbl);
       Ico_PutIconLink ("folder-open-yellow-plus.png",
 		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
@@ -590,26 +592,26 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,
-	                                Asg_PutParams,(void *) &Gbl.Asgs);
+	                                Asg_PutParams,&Gbl.Asgs);
 
 	 /***** Put form to hide/show assignment *****/
 	 if (Asg->Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,
-	                                   Asg_PutParams,(void *) &Gbl.Asgs);
+	                                   Asg_PutParams,&Gbl.Asgs);
 	 else
 	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,
-	                                 Asg_PutParams,(void *) &Gbl.Asgs);
+	                                 Asg_PutParams,&Gbl.Asgs);
 
 	 /***** Put form to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
-	                              Asg_PutParams,(void *) &Gbl.Asgs);
+	                              Asg_PutParams,&Gbl.Asgs);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print assignment *****/
 	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
-	                               Asg_PutParams,(void *) &Gbl.Asgs);
+	                               Asg_PutParams,&Gbl.Asgs);
 	 break;
       default:
          break;
@@ -622,12 +624,15 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
 
 static void Asg_PutParams (void *Assignments)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Assignments)
      {
       if (((struct Asg_Assignments *) Assignments)->AsgCodToEdit > 0)
 	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->AsgCodToEdit);
       Asg_PutHiddenParamAsgOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
@@ -984,7 +989,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
@@ -997,7 +1002,7 @@ void Asg_ReqRemAssignment (void)
    /***** Show question and button to remove the assignment *****/
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
-                           Asg_PutParams,(void *) &Gbl.Asgs,
+                           Asg_PutParams,&Gbl.Asgs,
                            Btn_REMOVE_BUTTON,Txt_Remove_assignment,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_assignment_X,
                            Asg.Title);
@@ -1137,7 +1142,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
@@ -1176,7 +1181,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Frm_StartForm (ActChgAsg);
       Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
      }
-   Asg_PutParams ((void *) &Gbl.Asgs);
+   Asg_PutParams (&Gbl.Asgs);
 
    /***** Begin box and table *****/
    if (ItsANewAssignment)

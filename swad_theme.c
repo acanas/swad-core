@@ -318,7 +318,7 @@ void The_PutIconsToSelectTheme (void)
    char Icon[PATH_MAX + 1];
 
    Box_BoxBegin (NULL,Txt_Theme_SKIN,
-                 The_PutIconsTheme,(void *) &Gbl,
+                 The_PutIconsTheme,&Gbl,
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();

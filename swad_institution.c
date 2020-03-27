@@ -302,7 +302,7 @@ static void Ins_ListInstitutions (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsListingInstitutions,(void *) &Gbl,
+		 Ins_PutIconsListingInstitutions,&Gbl,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -565,7 +565,7 @@ static void Ins_EditInstitutionsInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsEditingInstitutions,(void *) &Gbl,
+		 Ins_PutIconsEditingInstitutions,&Gbl,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1680,7 +1680,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
      {
       /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
-                                  Ins_PutParamGoToIns,(void *) &Gbl,
+                                  Ins_PutParamGoToIns,&Gbl,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Ins_EditingIns->ShrtName));
       Hie_FreeGoToMsg ();
@@ -2130,7 +2130,7 @@ static void Ins_FormToGoToMap (struct Instit *Ins)
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
-                                     Ins_PutParamGoToIns,(void *) &Gbl,
+                                     Ins_PutParamGoToIns,&Gbl,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

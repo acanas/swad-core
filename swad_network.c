@@ -287,7 +287,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
-	         Net_PutIconsWebsSocialNetworks,(void *) &Gbl,
+	         Net_PutIconsWebsSocialNetworks,&Gbl,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
    /***** Begin table *****/

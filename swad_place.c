@@ -112,7 +112,7 @@ void Plc_SeePlaces (void)
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Places,
-                    Plc_PutIconsListingPlaces,(void *) &Gbl,
+                    Plc_PutIconsListingPlaces,&Gbl,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
       HTM_TR_Begin (NULL);
@@ -287,7 +287,7 @@ static void Plc_EditPlacesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Places,
-                 Plc_PutIconsEditingPlaces,(void *) &Gbl,
+                 Plc_PutIconsEditingPlaces,&Gbl,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
@@ -330,7 +330,7 @@ void Plc_PutIconToViewPlaces (void)
    extern const char *Txt_Places;
 
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
-                                  Ins_PutParamCurrentInsCod,(void *) &Gbl,
+                                  Ins_PutParamCurrentInsCod,&Gbl,
 				  "map-marker-alt.svg",
 				  Txt_Places);
   }

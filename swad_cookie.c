@@ -69,7 +69,7 @@ void Coo_EditMyPrefsOnCookies (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Cookies,
-                      Coo_PutIconsCookies,(void *) &Gbl,
+                      Coo_PutIconsCookies,&Gbl,
                       Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Edit my preference about cookies *****/

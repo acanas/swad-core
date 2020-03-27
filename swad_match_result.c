@@ -891,12 +891,12 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	      {
 	       case Usr_ME:
 		  Frm_StartForm (ActSeeOneMchResMe);
-		  Mch_PutParamsEdit ((void *) &Gbl);
+		  Mch_PutParamsEdit (&Gbl);
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
-		  Mch_PutParamsEdit ((void *) &Gbl);
-		  Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+		  Mch_PutParamsEdit (&Gbl);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
 	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);

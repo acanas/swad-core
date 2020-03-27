@@ -986,7 +986,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
    Box_BoxBegin (NULL,FrameTitle,
-                 For_PutIconNewPost,(void *) &Gbl,
+                 For_PutIconNewPost,&Gbl,
                  Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
@@ -1127,7 +1127,7 @@ static void For_PutIconNewPost (void *Args)
    if (Args)
       Ico_PutContextualIconToAdd (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
 				  For_NEW_POST_SECTION_ID,
-				  For_PutAllHiddenParamsNewPost,(void *) &Gbl,
+				  For_PutAllHiddenParamsNewPost,&Gbl,
 				  Txt_New_post);
   }
 
@@ -1561,7 +1561,7 @@ static void For_ShowForumList (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,
-                 For_PutIconsForums,(void *) &Gbl,
+                 For_PutIconsForums,&Gbl,
                  Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
@@ -2467,7 +2467,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	     "%s: %s",
 	     Txt_Forum,ForumName);
    Box_BoxBegin (NULL,FrameTitle,
-                 For_PutIconNewThread,(void *) &Gbl,
+                 For_PutIconNewThread,&Gbl,
 		 Hlp_MESSAGES_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
@@ -2553,7 +2553,7 @@ static void For_PutIconNewThread (void *Args)
    if (Args)
       Ico_PutContextualIconToAdd (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
 				  For_NEW_THREAD_SECTION_ID,
-				  For_PutAllHiddenParamsNewThread,(void *) &Gbl,
+				  For_PutAllHiddenParamsNewThread,&Gbl,
 				  Txt_New_thread);
   }
 
@@ -3817,13 +3817,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      {
       Frm_StartFormAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewPost ((void *) &Gbl);
+      For_PutAllHiddenParamsNewPost (&Gbl);
      }
    else		// Form to write the first post of a new thread
      {
       Frm_StartFormAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewThread ((void *) &Gbl);
+      For_PutAllHiddenParamsNewThread (&Gbl);
      }
 
    /***** Subject and content *****/
@@ -4107,14 +4107,14 @@ void For_RequestRemoveThread (void)
    if (Subject[0])
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,(void *) &Gbl,
+			      For_PutAllHiddenParamsRemThread,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                               Subject);
    else
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,(void *) &Gbl,
+			      For_PutAllHiddenParamsRemThread,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();

@@ -231,7 +231,7 @@ void Cty_ListCountries2 (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Countries,
-                      Cty_PutIconsListingCountries,(void *) &Gbl,
+                      Cty_PutIconsListingCountries,&Gbl,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -682,7 +682,7 @@ static void Cty_EditCountriesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Countries,
-                 Cty_PutIconsEditingCountries,(void *) &Gbl,
+                 Cty_PutIconsEditingCountries,&Gbl,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new country *****/
@@ -1582,7 +1582,7 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
      {
       /***** Alert with button to go to couuntry *****/
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
-                                  Cty_PutParamGoToCty,(void *) &Gbl,
+                                  Cty_PutParamGoToCty,&Gbl,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
       Hie_FreeGoToMsg ();
@@ -2103,7 +2103,7 @@ static void Cty_FormToGoToMap (struct Country *Cty)
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
-                                     Cty_PutParamGoToCty,(void *) &Gbl,
+                                     Cty_PutParamGoToCty,&Gbl,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

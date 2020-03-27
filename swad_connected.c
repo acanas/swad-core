@@ -106,7 +106,7 @@ void Con_ShowConnectedUsrs (void)
 	         Txt_Connected_users) < 0)
       Lay_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,
-                 Con_PutIconToUpdateConnected,(void *) &Gbl,
+                 Con_PutIconToUpdateConnected,&Gbl,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    free (Title);
    Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,

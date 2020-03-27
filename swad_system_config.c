@@ -117,7 +117,7 @@ static void SysCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
-                    SysCfg_PutIconToPrint,(void *) &Gbl,
+                    SysCfg_PutIconToPrint,&Gbl,
 		    Hlp_SYSTEM_Information,Box_NOT_CLOSABLE);
 
    /**************************** Left part ***********************************/

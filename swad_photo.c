@@ -262,7 +262,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void *Args)
 	       break;
 	   }
 	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-					Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 					"trash.svg",
 					Txt_Remove_photo);
 	}
@@ -313,7 +313,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,
                  ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-	                 Pho_PutIconToRequestRemoveOtherUsrPhoto,(void *) &Gbl,
+	                 Pho_PutIconToRequestRemoveOtherUsrPhoto,&Gbl,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -523,7 +523,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 		  break;
 	      }
 	    Ale_ShowAlertAndButton2 (NextAction,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
@@ -1731,7 +1731,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       case Pho_DEGREES_SEE:
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Degrees,
-	               Pho_PutIconToPrintDegreeStats,(void *) &Gbl,
+	               Pho_PutIconToPrintDegreeStats,&Gbl,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 	 HTM_TABLE_BeginCenterPadding (2);
 
@@ -1994,7 +1994,7 @@ static void Pho_PutIconToPrintDegreeStats (void *Args)
   {
    if (Args)
       Ico_PutContextualIconToPrint (ActPrnPhoDeg,
-				    Pho_PutLinkToPrintViewOfDegreeStatsParams,(void *) &Gbl);
+				    Pho_PutLinkToPrintViewOfDegreeStatsParams,&Gbl);
   }
 
 static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *Args)
@@ -2159,7 +2159,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,(void *) &Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,&Gbl);
       HTM_TABLE_BeginCenter ();
 
       /***** Get and print degrees *****/
@@ -2240,7 +2240,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,(void *) &Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,&Gbl);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);

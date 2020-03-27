@@ -556,7 +556,7 @@ void Acc_PutLinkToRemoveMyAccount (void *Args)
    if (Args)
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
 	 Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
-					Acc_PutParamsToRemoveMyAccount,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+					Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 					"trash.svg",
 					Txt_Remove_account);
   }
@@ -980,7 +980,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
       /* Show form to request confirmation */
       Frm_StartForm (ActRemUsrGbl);
-      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Frm_EndForm ();

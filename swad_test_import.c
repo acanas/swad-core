@@ -88,13 +88,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 /**************** Put a link (form) to export test questions *****************/
 /*****************************************************************************/
 
-void TsI_PutFormToExportQuestions (const struct Tst_Test *Test)
+void TsI_PutFormToExportQuestions (struct Tst_Test *Test)
   {
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,
-                                  TsI_PutParamsExportQsts,(void *) &Test,
+                                  TsI_PutParamsExportQsts,Test,
 				  "file-import.svg",
 				  Txt_Export_questions);
   }

@@ -566,7 +566,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
-                           Ind_PutParamsConfirmIWantToSeeBigList,(void *) &Gbl,
+                           Ind_PutParamsConfirmIWantToSeeBigList,&Gbl,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);

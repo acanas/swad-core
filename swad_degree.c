@@ -767,7 +767,7 @@ static void Deg_ListDegrees (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsListingDegrees,(void *) &Gbl,
+		 Deg_PutIconsListingDegrees,&Gbl,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -954,7 +954,7 @@ static void Deg_EditDegreesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsEditingDegrees,(void *) &Gbl,
+		 Deg_PutIconsEditingDegrees,&Gbl,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1811,7 +1811,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
      {
       /***** Alert with button to go to degree *****/
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
-                                  Deg_PutParamGoToDeg,(void *) &Gbl,
+                                  Deg_PutParamGoToDeg,&Gbl,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Deg_EditingDeg->ShrtName));
       Hie_FreeGoToMsg ();

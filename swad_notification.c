@@ -369,7 +369,7 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,(void *) &Gbl,
+                 Ntf_PutIconsNotif,&Gbl,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
    /***** List my notifications *****/
@@ -1902,7 +1902,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,(void *) &Gbl,
+                 Ntf_PutIconsNotif,&Gbl,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/

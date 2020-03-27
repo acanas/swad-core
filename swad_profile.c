@@ -157,7 +157,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
-				  Usr_PutParamMyUsrCodEncrypted,(void *) Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+				  Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
 				  "user.svg",
 				  Txt_My_public_profile);
   }

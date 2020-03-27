@@ -177,7 +177,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
-                 Crs_PutIconToSearchCourses,(void *) &Gbl,
+                 Crs_PutIconToSearchCourses,&Gbl,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    HTM_UL_Begin ("class=\"LIST_TREE\"");
 
@@ -802,7 +802,7 @@ static void Crs_ListCourses (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsListCourses,(void *) &Gbl,
+		 Crs_PutIconsListCourses,&Gbl,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1019,7 +1019,7 @@ static void Crs_EditCoursesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsEditingCourses,(void *) &Gbl,
+		 Crs_PutIconsEditingCourses,&Gbl,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -2377,7 +2377,7 @@ static void Crs_PutIconToSearchCourses (void *Args)
    if (Args)
       /***** Put form to search / select courses *****/
       Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
-				     Sch_PutLinkToSearchCoursesParams,(void *) &Gbl,
+				     Sch_PutLinkToSearchCoursesParams,&Gbl,
 				     "search.svg",
 				     Txt_Search_courses);
   }

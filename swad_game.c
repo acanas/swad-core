@@ -215,7 +215,7 @@ static void Gam_ListAllGames (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Games,
-                 Gam_PutIconsListGames,(void *) &Gbl,
+                 Gam_PutIconsListGames,&Gbl,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Write links to pages *****/
@@ -354,7 +354,7 @@ static void Gam_PutIconToCreateNewGame (void)
    extern const char *Txt_New_game;
 
    Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,
-                               Gam_PutParamsToCreateNewGame,(void *) &Gbl,
+                               Gam_PutParamsToCreateNewGame,&Gbl,
 			       Txt_New_game);
   }
 
@@ -367,7 +367,7 @@ static void Gam_PutButtonToCreateNewGame (void)
    extern const char *Txt_New_game;
 
    Frm_StartForm (ActFrmNewGam);
-   Gam_PutParamsToCreateNewGame ((void *) &Gbl);
+   Gam_PutParamsToCreateNewGame (&Gbl);
    Btn_PutConfirmButton (Txt_New_game);
    Frm_EndForm ();
   }
@@ -426,7 +426,7 @@ void Gam_ShowOnlyOneGameBegin (struct Game *Game,
    /***** Begin box *****/
    Gam_SetCurrentGamCod (Game->GamCod);
    Box_BoxBegin (NULL,Txt_Game,
-                 Gam_PutIconToShowResultsOfGame,(void *) &Gbl,
+                 Gam_PutIconToShowResultsOfGame,&Gbl,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Show game *****/
@@ -521,7 +521,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
 			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
 					   "BT_LINK LT ASG_TITLE",
@@ -552,7 +552,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
 
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
 			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
 				           "BT_LINK LT ASG_TITLE",
@@ -620,13 +620,13 @@ static void Gam_PutIconToShowResultsOfGame (void *Args)
 	{
 	 case Rol_STD:
 	    Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,McR_RESULTS_BOX_ID,
-						Gam_PutParams,(void *) &Gbl);
+						Gam_PutParams,&Gbl);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,McR_RESULTS_BOX_ID,
-						Gam_PutParams,(void *) &Gbl);
+						Gam_PutParams,&Gbl);
 	    break;
 	 default:
 	    break;
@@ -663,19 +663,19 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,
-                                  Gam_PutParams,(void *) &Gbl);
+                                  Gam_PutParams,&Gbl);
 
    /***** Put icon to unhide/hide game *****/
    if (Game->Hidden)
       Ico_PutContextualIconToUnhide (ActShoGam,Anchor,
-                                     Gam_PutParams,(void *) &Gbl);
+                                     Gam_PutParams,&Gbl);
    else
       Ico_PutContextualIconToHide (ActHidGam,Anchor,
-                                   Gam_PutParams,(void *) &Gbl);
+                                   Gam_PutParams,&Gbl);
 
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
-                                Gam_PutParams,(void *) &Gbl);
+                                Gam_PutParams,&Gbl);
   }
 
 /*****************************************************************************/
@@ -700,7 +700,7 @@ static void Gam_PutParamsOneQst (void *Args)
   {
    if (Args)
      {
-      Gam_PutParams ((void *) &Gbl);
+      Gam_PutParams (&Gbl);
       Gam_PutParamQstInd (Gam_CurrentQstInd);
      }
   }
@@ -711,11 +711,14 @@ static void Gam_PutParamsOneQst (void *Args)
 
 void Gam_PutParams (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       Gam_PutParamCurrentGamCod ();
       Gam_PutHiddenParamOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
      }
   }
@@ -1132,7 +1135,7 @@ void Gam_AskRemGame (void)
    /***** Show question and button to remove game *****/
    Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,
-                           Gam_PutParams,(void *) &Gbl,
+                           Gam_PutParams,&Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
                            Game.Title);
@@ -1349,7 +1352,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
 
    /***** Begin box and table *****/
    if (ItsANewGame)
@@ -1864,7 +1867,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    Gam_SetCurrentGamCod (Game->GamCod);	// Used to pass parameter
    if (ICanEditQuestions)
       Box_BoxBegin (NULL,Txt_Questions,
-		    Gam_PutIconToAddNewQuestions,(void *) &Gbl,
+		    Gam_PutIconToAddNewQuestions,&Gbl,
 		    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Questions,
@@ -1965,7 +1968,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       if (ICanEditQuestions)
 	{
 	 Frm_StartForm (ActReqRemGamQst);
-	 Gam_PutParams ((void *) &Gbl);
+	 Gam_PutParams (&Gbl);
 	 Gam_PutParamQstInd (QstInd);
 	 Ico_PutIconRemove ();
 	 Frm_EndForm ();
@@ -1977,7 +1980,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       if (ICanEditQuestions && QstInd > 1)
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,
-	                                Gam_PutParamsOneQst,(void *) &Gbl,
+	                                Gam_PutParamsOneQst,&Gbl,
 				        "arrow-up.svg",
 					Str_BuildStringStr (Txt_Move_up_X,
 							    StrQstInd));
@@ -1990,7 +1993,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       if (ICanEditQuestions && QstInd < MaxQstInd)
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,
-	                                Gam_PutParamsOneQst,(void *) &Gbl,
+	                                Gam_PutParamsOneQst,&Gbl,
 				        "arrow-down.svg",
 					Str_BuildStringStr (Txt_Move_down_X,
 							    StrQstInd));
@@ -2002,7 +2005,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Put icon to edit the question */
       if (ICanEditQuestions)
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-	                              Tst_PutParamQstCod,(void *) &Question.QstCod);
+	                              Tst_PutParamQstCod,&Question.QstCod);
 
       HTM_TD_End ();
 
@@ -2120,7 +2123,7 @@ static void Gam_PutIconToAddNewQuestions (void *Args)
    if (Args)
       /***** Put form to create a new question *****/
       Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,
-				  Gam_PutParams,(void *) &Gbl,
+				  Gam_PutParams,&Gbl,
 				  Txt_Add_questions);
   }
 
@@ -2133,7 +2136,7 @@ static void Gam_PutButtonToAddNewQuestions (void)
    extern const char *Txt_Add_questions;
 
    Frm_StartForm (ActAddOneGamQst);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
    Btn_PutConfirmButton (Txt_Add_questions);
    Frm_EndForm ();
   }
@@ -2282,7 +2285,7 @@ void Gam_RequestRemoveQst (void)
       Gam_SetCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
       Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
-                              Gam_PutParamsOneQst,(void *) &Gbl,
+                              Gam_PutParamsOneQst,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      QstInd);
@@ -2537,7 +2540,7 @@ void Gam_PutButtonNewMatch (long GamCod)
 
    Gam_SetCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
    Btn_PutConfirmButton (Txt_New_match);
    Frm_EndForm ();
   }

@@ -512,7 +512,7 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
    /***** Begin box and table *****/
    if (PutIconToEdit)
       Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-			 Inf_PutIconToEditInfo,(void *) &Gbl,
+			 Inf_PutIconToEditInfo,&Gbl,
 			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
 							Hlp_COURSE_Syllabus,
 			 Box_NOT_CLOSABLE,0);
@@ -608,7 +608,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Frm_StartForm (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                               ActDelItmSylPra);
-	    Syl_PutParamNumItem ((void *) &Gbl);
+	    Syl_PutParamNumItem (&Gbl);
             Ico_PutIconRemove ();
             Frm_EndForm ();
 	   }
@@ -622,7 +622,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 									       ActUp_IteSylPra,
 					   NULL,
-					   Syl_PutParamNumItem,(void *) &Gbl,
+					   Syl_PutParamNumItem,&Gbl,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
 													   Txt_Move_up_X,
@@ -641,7 +641,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 									       ActDwnIteSylPra,
 					   NULL,
-					   Syl_PutParamNumItem,(void *) &Gbl,
+					   Syl_PutParamNumItem,&Gbl,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
 													   Txt_Move_down_X,
@@ -659,7 +659,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 									       ActRgtIteSylPra,
 					   NULL,
-					   Syl_PutParamNumItem,(void *) &Gbl,
+					   Syl_PutParamNumItem,&Gbl,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemCod));
@@ -677,7 +677,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 									       ActLftIteSylPra,
 					   NULL,
-					   Syl_PutParamNumItem,(void *) &Gbl,
+					   Syl_PutParamNumItem,&Gbl,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemCod));
@@ -837,7 +837,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
                             (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                 ActModIteSylPra));
    Gbl.Syllabus.ParamNumItem = NumItem;
-   Syl_PutParamNumItem ((void *) &Gbl);
+   Syl_PutParamNumItem (&Gbl);
    HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,true,
 		   "size=\"60\" placeholder=\"%s\"%s",
 	           Txt_Enter_a_new_item_here,

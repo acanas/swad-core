@@ -179,7 +179,7 @@ void Svy_SeeAllSurveys (void)
   {
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show all surveys *****/
@@ -200,6 +200,7 @@ static void Svy_ListAllSurveys (void)
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
    Svy_Order_t Order;
+   Grp_WhichGroups_t WhichGroups;
    struct Pagination Pagination;
    unsigned NumSvy;
 
@@ -218,7 +219,7 @@ static void Svy_ListAllSurveys (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Surveys,
-                 Svy_PutIconsListSurveys,(void *) &Gbl,
+                 Svy_PutIconsListSurveys,&Gbl,
                  Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -226,7 +227,7 @@ static void Svy_ListAllSurveys (void)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,
-                                  Svy_ParamsWhichGroupsToShow,(void *) &Gbl);
+                                  Svy_ParamsWhichGroupsToShow,&Gbl);
       Set_EndSettingsHead ();
      }
 
@@ -251,7 +252,8 @@ static void Svy_ListAllSurveys (void)
 
 	 /* Form to change order */
 	 Frm_StartForm (ActSeeAllSvy);
-	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+         WhichGroups = Grp_GetParamWhichGroups ();
+	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
@@ -347,7 +349,7 @@ static void Svy_PutIconToCreateNewSvy (void)
    extern const char *Txt_New_survey;
 
    Ico_PutContextualIconToAdd (ActFrmNewSvy,NULL,
-                               Svy_PutParamsToCreateNewSvy,(void *) &Gbl,
+                               Svy_PutParamsToCreateNewSvy,&Gbl,
 			       Txt_New_survey);
   }
 
@@ -360,7 +362,7 @@ static void Svy_PutButtonToCreateNewSvy (void)
    extern const char *Txt_New_survey;
 
    Frm_StartForm (ActFrmNewSvy);
-   Svy_PutParamsToCreateNewSvy ((void *) &Gbl);
+   Svy_PutParamsToCreateNewSvy (&Gbl);
    Btn_PutConfirmButton (Txt_New_survey);
    Frm_EndForm ();
   }
@@ -371,10 +373,13 @@ static void Svy_PutButtonToCreateNewSvy (void)
 
 static void Svy_PutParamsToCreateNewSvy (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       Svy_PutHiddenParamSvyOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
      }
   }
@@ -402,7 +407,7 @@ void Svy_SeeOneSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -436,6 +441,7 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
+   Grp_WhichGroups_t WhichGroups;
    struct Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -526,7 +532,8 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
    Frm_StartForm (ActSeeSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
-   Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+   WhichGroups = Grp_GetParamWhichGroups ();
+   Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
    HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
 			    Svy.Status.Visible ? "BT_LINK LT ASG_TITLE" :
@@ -567,7 +574,8 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
 	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
-	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+         WhichGroups = Grp_GetParamWhichGroups ();
+	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Answer_survey);
 	 Frm_EndForm ();
@@ -582,7 +590,8 @@ static void Svy_ShowOneSurvey (long SvyCod,bool ShowOnlyThisSvyComplete)
 	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
-	 Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+         WhichGroups = Grp_GetParamWhichGroups ();
+	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_survey_results);
 	 Frm_EndForm ();
@@ -851,25 +860,25 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
 
    /***** Put form to remove survey *****/
    Ico_PutContextualIconToRemove (ActReqRemSvy,
-                                  Svy_PutParams,(void *) &Gbl);
+                                  Svy_PutParams,&Gbl);
 
    /***** Put form to reset survey *****/
    Lay_PutContextualLinkOnlyIcon (ActReqRstSvy,NULL,
-                                  Svy_PutParams,(void *) &Gbl,
+                                  Svy_PutParams,&Gbl,
 				  "recycle.svg",
 				  Txt_Reset);
 
    /***** Put form to hide/show survey *****/
    if (Svy->Status.Visible)
       Ico_PutContextualIconToHide (ActHidSvy,Anchor,
-                                   Svy_PutParams,(void *) &Gbl);
+                                   Svy_PutParams,&Gbl);
    else
       Ico_PutContextualIconToUnhide (ActShoSvy,Anchor,
-                                     Svy_PutParams,(void *) &Gbl);
+                                     Svy_PutParams,&Gbl);
 
    /***** Put form to edit survey *****/
    Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,
-                                Svy_PutParams,(void *) &Gbl);
+                                Svy_PutParams,&Gbl);
   }
 
 /*****************************************************************************/
@@ -878,12 +887,15 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
 
 static void Svy_PutParams (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
       if (Svy_CurrentSvyCod > 0)
 	 Svy_PutParamSvyCod (Svy_CurrentSvyCod);
       Att_PutHiddenParamAttOrder ();
-      Grp_PutParamWhichGrps ((void *) Grp_GetParamWhichGrps ());
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
      }
   }
@@ -1545,7 +1557,7 @@ void Svy_AskRemSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1560,7 +1572,7 @@ void Svy_AskRemSurvey (void)
    /***** Show question and button to remove survey *****/
    Svy_CurrentSvyCod = Svy.SvyCod;
    Ale_ShowAlertAndButton (ActRemSvy,NULL,NULL,
-                           Svy_PutParams,(void *) &Gbl,
+                           Svy_PutParams,&Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_survey,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_survey_X,
 			   Svy.Title);
@@ -1580,7 +1592,7 @@ void Svy_RemoveSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1640,7 +1652,7 @@ void Svy_AskResetSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1673,7 +1685,7 @@ static void Svy_PutButtonToResetSurvey (void)
    extern const char *Txt_Reset_survey;
 
    Frm_StartForm (ActRstSvy);
-   Svy_PutParams ((void *) &Gbl);
+   Svy_PutParams (&Gbl);
    Btn_PutRemoveButton (Txt_Reset_survey);
    Frm_EndForm ();
   }
@@ -1689,7 +1701,7 @@ void Svy_ResetSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1731,7 +1743,7 @@ void Svy_HideSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1762,7 +1774,7 @@ void Svy_UnhideSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1826,7 +1838,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
@@ -1872,7 +1884,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Svy_CurrentSvyCod = Svy.SvyCod;
    Frm_StartForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
-   Svy_PutParams ((void *) &Gbl);
+   Svy_PutParams (&Gbl);
 
    /***** Begin box and table *****/
    if (ItsANewSurvey)
@@ -2132,7 +2144,7 @@ void Svy_RecFormSurvey (void)
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
@@ -2606,7 +2618,7 @@ void Svy_RequestEditQuestion (void)
 
    /***** Get other parameters *****/
    Svy_GetParamSvyOrder ();
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show form to create a new question in this survey *****/
@@ -2698,7 +2710,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
 	 Lay_NotEnoughMemoryExit ();
       Box_BoxBegin (NULL,Title,
-                    Svy_PutIconToRemoveOneQst,(void *) &Gbl,
+                    Svy_PutIconToRemoveOneQst,&Gbl,
                     NULL,Box_NOT_CLOSABLE);
       free (Title);
      }
@@ -3219,7 +3231,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy)
    Svy_CurrentSvyCod = Svy->SvyCod;
    if (Svy->Status.ICanEdit)
       Box_BoxBegin (NULL,Txt_Questions,
-		    Svy_PutIconToAddNewQuestion,(void *) &Gbl,
+		    Svy_PutIconToAddNewQuestion,&Gbl,
 		    Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Questions,
@@ -3280,7 +3292,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy)
             Svy_CurrentSvyCod = Svy->SvyCod;
             Svy_CurrentQstCod = SvyQst.QstCod;
             Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
-                                         Svy_PutParamsToEditQuestion,(void *) &Gbl);
+                                         Svy_PutParamsToEditQuestion,&Gbl);
 
             HTM_TD_End ();
            }
@@ -3358,7 +3370,7 @@ static void Svy_PutIconToAddNewQuestion (void *Args)
    if (Args)
       /***** Put form to create a new question *****/
       Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,
-				  Svy_PutParams,(void *) &Gbl,
+				  Svy_PutParams,&Gbl,
 				  Txt_New_question);
   }
 
@@ -3371,7 +3383,7 @@ static void Svy_PutButtonToCreateNewQuestion (void)
    extern const char *Txt_New_question;
 
    Frm_StartForm (ActEdiOneSvyQst);
-   Svy_PutParams ((void *) &Gbl);
+   Svy_PutParams (&Gbl);
    Btn_PutConfirmButton (Txt_New_question);
    Frm_EndForm ();
   }
@@ -3609,7 +3621,7 @@ void Svy_RequestRemoveQst (void)
    Svy_CurrentSvyCod = SvyCod;
    Svy_CurrentQstCod = SvyQst.QstCod;
    Ale_ShowAlertAndButton (ActRemSvyQst,NULL,NULL,
-                           Svy_PutParamsRemoveOneQst,(void *) &Gbl,
+                           Svy_PutParamsRemoveOneQst,&Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 	                   (long) SvyQst.QstInd + 1);

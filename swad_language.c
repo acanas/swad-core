@@ -91,7 +91,7 @@ void Lan_PutBoxToSelectLanguage (void)
    extern const char *Txt_Language;
 
    Box_BoxBegin (NULL,Txt_Language,
-                 Lan_PutIconsLanguage,(void *) &Gbl,
+                 Lan_PutIconsLanguage,&Gbl,
                  Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
    Lan_PutSelectorToSelectLanguage ();
    Box_BoxEnd ();
@@ -153,7 +153,7 @@ void Lan_AskChangeLanguage (void)
 
    /***** Request confirmation *****/
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
-                           Lan_PutParamLanguage,(void *) &Gbl,
+                           Lan_PutParamLanguage,&Gbl,
                            Btn_CONFIRM_BUTTON,
                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :

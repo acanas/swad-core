@@ -257,7 +257,7 @@ static unsigned Tst_GetParamNumQsts (void);
 static unsigned Tst_CountNumTagsInList (const struct Tst_Tags *Tags);
 static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
+static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
@@ -405,7 +405,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Take_a_test,
-                 Tst_PutIconsTests,(void *) Test,
+                 Tst_PutIconsTests,Test,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
@@ -1435,7 +1435,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_List_edit_questions,
-                 Tst_PutIconsTests,(void *) Test,
+                 Tst_PutIconsTests,Test,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1521,7 +1521,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test)
    if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
-      Gam_PutParams ((void *) &Gbl);
+      Gam_PutParams (&Gbl);
 
       HTM_TABLE_BeginPadding (2);
 
@@ -2160,7 +2160,7 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_tests,
-                 Tst_PutIconsTests,(void *) &Test,
+                 Tst_PutIconsTests,&Test,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -2723,7 +2723,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsTests,(void *) Test,
+                 Tst_PutIconsTests,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2780,7 +2780,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsTests,(void *) Test,
+                 Tst_PutIconsTests,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2922,7 +2922,7 @@ static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
 
       /* Write icon to remove the question */
       Frm_StartForm (ActReqRemOneTstQst);
-      Tst_PutParamQstCod ((void *) &Test->Question.QstCod);
+      Tst_PutParamQstCod (&Test->Question.QstCod);
       if (Test->NumQsts == 1)
 	 Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParamsIniEndDates ();
@@ -2932,7 +2932,7 @@ static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
 
       /* Write icon to edit the question */
       Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-                                   Tst_PutParamQstCod,(void *) &Test->Question.QstCod);
+                                   Tst_PutParamQstCod,&Test->Question.QstCod);
 
       HTM_TD_End ();
 
@@ -2971,7 +2971,7 @@ static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
 	  Test->Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 	{
 	 Frm_StartForm (ActChgShfTstQst);
-	 Tst_PutParamQstCod ((void *) &Test->Question.QstCod);
+	 Tst_PutParamQstCod (&Test->Question.QstCod);
 	 Dat_WriteParamsIniEndDates ();
 	 Tst_WriteParamEditQst (Test);
 	 if (Test->NumQsts == 1)
@@ -3084,7 +3084,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
 
    /***** Begin form *****/
    Frm_StartForm (ActAddTstQstToGam);
-   Gam_PutParams ((void *) &Gbl);
+   Gam_PutParams (&Gbl);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -5144,7 +5144,7 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
+static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
 	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
@@ -5189,7 +5189,7 @@ static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
    if (Question->QstCod > 0)	// The question already has assigned a code
      {
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
-		    Tst_PutIconToRemoveOneQst,(void *) Question->QstCod,
+		    Tst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
      }
@@ -5200,7 +5200,7 @@ static void Tst_PutFormEditOneQst (const struct Tst_Question *Question,
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
-   Tst_PutParamQstCod ((void *) &Question->QstCod);
+   Tst_PutParamQstCod (&Question->QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -6648,7 +6648,7 @@ void Tst_RequestRemoveSelectedQsts (void)
      {
       /***** Show question and button to remove question *****/
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			     Tst_PutParamsRemoveSelectedQsts,(void *) &Test,
+			     Tst_PutParamsRemoveSelectedQsts,&Test,
 			     Btn_REMOVE_BUTTON,Txt_Remove_questions,
 			     Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
@@ -6766,14 +6766,18 @@ void Tst_RequestRemoveOneQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			   EditingOnlyThisQst ? Tst_PutParamsRemoveOnlyThisQst :
-						Tst_PutParamsRemoveOneQstWhileEditing,
-			   EditingOnlyThisQst ? (void *) &Test.Question.QstCod :
-				                (void *) &Test,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   Test.Question.QstCod);
+   if (EditingOnlyThisQst)
+      Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
+			      Tst_PutParamsRemoveOnlyThisQst,&Test.Question.QstCod,
+			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			      Test.Question.QstCod);
+   else
+      Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
+			      Tst_PutParamsRemoveOneQstWhileEditing,&Test,
+			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			      Test.Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
@@ -6810,7 +6814,7 @@ static void Tst_PutParamsRemoveOneQstWhileEditing (void *TestPtr)
      {
       Test = (struct Tst_Test *) TestPtr;
 
-      Tst_PutParamQstCod ((void *) &Test->Question.QstCod);
+      Tst_PutParamQstCod (&Test->Question.QstCod);
       Dat_WriteParamsIniEndDates ();
       Tst_WriteParamEditQst (Test);
      }

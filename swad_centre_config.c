@@ -160,7 +160,7 @@ static void CtrCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    CtrCfg_PutIconsCtrConfig,(void *) &Gbl,
+                    CtrCfg_PutIconsCtrConfig,&Gbl,
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/

@@ -249,7 +249,7 @@ static void Set_PutIconsToSelectSideCols (void)
    char Icon[32 + 1];
 
    Box_BoxBegin (NULL,Txt_Columns,
-                 Set_PutIconsSideColumns,(void *) &Gbl,
+                 Set_PutIconsSideColumns,&Gbl,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();

@@ -3527,7 +3527,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Session,
-                 Usr_PutLinkToLogOut,(void *) &Gbl,
+                 Usr_PutLinkToLogOut,&Gbl,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
@@ -6388,7 +6388,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          if (NextAction == ActAdmAsgWrkCrs)
            {
             Gbl.FileBrowser.FullTree = true;	// By default, show all files
-            Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
+            Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
            }
          if (FuncParams)
             FuncParams (Args);
@@ -7568,7 +7568,7 @@ void Usr_ListDataAdms (void)
       HTM_DIV_Begin ("class=\"PREF_CONT\"");
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_StartForm (ActLstOth);
-      Sco_PutParamCurrentScope ((void *) &Gbl);
+      Sco_PutParamCurrentScope (&Gbl);
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -8016,7 +8016,7 @@ void Usr_SeeGuests (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListGsts,(void *) &Gbl,
+                 Usr_PutIconsListGsts,&Gbl,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8039,11 +8039,11 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
 
          /***** Draw a class photo with guests *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8159,7 +8159,7 @@ void Usr_SeeStudents (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListStds,(void *) &Gbl,
+                 Usr_PutIconsListStds,&Gbl,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8185,7 +8185,7 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,(void *) &Gbl,
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl,
                                          Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -8194,11 +8194,11 @@ void Usr_SeeStudents (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
 
          /***** Draw a class photo with students of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8346,7 +8346,7 @@ void Usr_SeeTeachers (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListTchs,(void *) &Gbl,
+                 Usr_PutIconsListTchs,&Gbl,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8362,7 +8362,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,(void *) &Gbl,
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl,
                                          Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -8371,11 +8371,11 @@ void Usr_SeeTeachers (void)
    if (NumUsrs)
      {
       if (Usr_GetIfShowBigList (NumUsrs,
-	                        Sco_PutParamCurrentScope,(void *) &Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,(void *) &Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
 
          /***** Draw a class photo with teachers of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8853,19 +8853,19 @@ static void Usr_PutIconsListTchs (void *Args)
 static void Usr_PutIconToPrintGsts (void)
   {
    Ico_PutContextualIconToPrint (ActPrnGstPho,
-                                 Usr_ShowGstsAllDataParams,(void *) &Gbl);
+                                 Usr_ShowGstsAllDataParams,&Gbl);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
    Ico_PutContextualIconToPrint (ActPrnStdPho,
-                                 Usr_ShowStdsAllDataParams,(void *) &Gbl);
+                                 Usr_ShowStdsAllDataParams,&Gbl);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
    Ico_PutContextualIconToPrint (ActPrnTchPho,
-                                 Usr_ShowTchsAllDataParams,(void *) &Gbl);
+                                 Usr_ShowTchsAllDataParams,&Gbl);
   }
 
 /*****************************************************************************/
@@ -8877,7 +8877,7 @@ static void Usr_PutIconToShowGstsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
-                                  Usr_ShowGstsAllDataParams,(void *) &Gbl,
+                                  Usr_ShowGstsAllDataParams,&Gbl,
 				  "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8887,7 +8887,7 @@ static void Usr_PutIconToShowStdsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
-                                  Usr_ShowStdsAllDataParams,(void *) &Gbl,
+                                  Usr_ShowStdsAllDataParams,&Gbl,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8897,7 +8897,7 @@ static void Usr_PutIconToShowTchsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
-                                  Usr_ShowTchsAllDataParams,(void *) &Gbl,
+                                  Usr_ShowTchsAllDataParams,&Gbl,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8921,7 +8921,7 @@ static void Usr_ShowTchsAllDataParams (void *Args)
   {
    if (Args)
      {
-      Sco_PutParamCurrentScope ((void *) &Gbl);
+      Sco_PutParamCurrentScope (&Gbl);
       Usr_PutParamListWithPhotos ();
      }
   }

@@ -122,7 +122,7 @@ static void DegCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    DegCfg_PutIconsToPrintAndUpload,(void *) &Gbl,
+                    DegCfg_PutIconsToPrintAndUpload,&Gbl,
 		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/

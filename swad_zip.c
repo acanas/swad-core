@@ -93,7 +93,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
    extern const char *Txt_Create_ZIP_file;
 
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
-				  ZIP_PutLinkToCreateZIPAsgWrkParams,(void *) &Gbl,
+				  ZIP_PutLinkToCreateZIPAsgWrkParams,&Gbl,
 				  "download.svg",
 				  Txt_Create_ZIP_file);
   }
@@ -103,7 +103,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (void *Args)
    if (Args)
      {
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
+      Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
       Par_PutHiddenParamChar ("CreateZIP",'Y');
      }
   }

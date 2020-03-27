@@ -114,7 +114,7 @@ void Dpt_SeeDepts (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
 						  Gbl.Hierarchy.Ins.FullName),
-			 Dpt_PutIconToEditDpts,(void *) &Gbl,
+			 Dpt_PutIconToEditDpts,&Gbl,
 			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,

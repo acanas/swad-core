@@ -258,7 +258,7 @@ void Fig_PutIconToShowFigure (void)
    extern const char *Txt_Show_statistic;
 
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
-                                  Fig_PutParamsToShowFigure,(void *) &Gbl,
+                                  Fig_PutParamsToShowFigure,&Gbl,
 				  "chart-pie.svg",
 				  Txt_Show_statistic);
   }
@@ -276,7 +276,7 @@ static void Fig_PutParamsToShowFigure (void *Args)
       Gbl.Scope.Default = Hie_CRS;
       Sco_AdjustScope ();
 
-      Fig_PutHiddenParamFigures ((void *) &Gbl);
+      Fig_PutHiddenParamFigures (&Gbl);
      }
   }
 
@@ -1040,7 +1040,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
 
    /***** Form to select type of list used to display degree photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
-   Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,(void *) &Gbl);
+   Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Gbl);
 
    /***** Institutions ordered by number of centres *****/
    Fig_GetAndShowInssOrderedByNumCtrs ();

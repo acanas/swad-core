@@ -302,7 +302,7 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Logo,
-                 FunctionToDrawContextualIcons,(void *) &Gbl,
+                 FunctionToDrawContextualIcons,&Gbl,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Begin form to upload logo *****/

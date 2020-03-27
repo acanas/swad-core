@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.155.2 (2020-03-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.155.3 (2020-03-27)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -526,8 +526,9 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 
 // TODO: URGENT: Fix bug while playing match.
 
-	Version 19.155.2  Mar 25, 2020	Code refactoring in tests. (284414 lines)
-	Version 19.155.1  Mar 25, 2020	Code refactoring in tests. (284430 lines)
+	Version 19.155.3: Mar 27, 2020	Code refactoring in pass to parameters of functions. (284476 lines)
+	Version 19.155.2  Mar 26, 2020	Code refactoring in tests. (284414 lines)
+	Version 19.155.1  Mar 26, 2020	Code refactoring in tests. (284430 lines)
 	Version 19.155:   Mar 25, 2020	Big code refactoring in pass to parameters of functions. (284446 lines)
 	Version 19.154:   Mar 25, 2020	Code refactoring in tests. (283385 lines)
 	Version 19.153:   Mar 24, 2020	Code refactoring in tests. (283432 lines)

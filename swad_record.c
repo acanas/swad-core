@@ -608,7 +608,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 
    /***** Show question and button to remove my photo *****/
    Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,
-                           Rec_PutParamFielCod,(void *) &Gbl,
+                           Rec_PutParamFielCod,&Gbl,
 			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
 		           Gbl.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.FullName,
@@ -1522,7 +1522,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
 
 static void Rec_PutParamsShowOfficeHoursOneTch (void)
   {
-   Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -2219,7 +2219,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (StrRecordWidth,NULL,
-			 Rec_PutIconsCommands,(void *) &Gbl,
+			 Rec_PutIconsCommands,&Gbl,
 			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Institution and user's photo *****/
@@ -2527,12 +2527,12 @@ static void Rec_PutIconsCommands (void *Args)
 		 {
 		  if (ItsMe)
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,
-						    Rec_PutParamsMyTsts,(void *) &Gbl,
+						    Rec_PutParamsMyTsts,&Gbl,
 						    "check.svg",
 						    Txt_View_test_results);
 		  else	// Not me
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
-						    Rec_PutParamsStdTsts,(void *) &Gbl,
+						    Rec_PutParamsStdTsts,&Gbl,
 						    "check.svg",
 						    Txt_View_test_results);
 		 }
@@ -2547,7 +2547,7 @@ static void Rec_PutIconsCommands (void *Args)
 						    Txt_View_homework);
 		  else	// Not me, I am not a student in current course
 		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
-						    Rec_PutParamsWorks,(void *) &Gbl,
+						    Rec_PutParamsWorks,&Gbl,
 						    "folder-open.svg",
 						    Txt_View_homework);
 		 }
@@ -2562,7 +2562,7 @@ static void Rec_PutIconsCommands (void *Args)
 						    Txt_View_attendance);
 		  else	// Not me
 		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
-						    Rec_PutParamsStudent,(void *) &Gbl,
+						    Rec_PutParamsStudent,&Gbl,
 						    "calendar-check.svg",
 						    Txt_View_attendance);
 		 }
@@ -2578,7 +2578,7 @@ static void Rec_PutIconsCommands (void *Args)
 							Gbl.Record.UsrDat->UsrCod);	// To:
 	 if (!RecipientHasBannedMe)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
-					   Rec_PutParamsMsgUsr,(void *) &Gbl,
+					   Rec_PutParamsMsgUsr,&Gbl,
 					   "envelope.svg",
 					   Txt_Write_a_message);
 
@@ -2630,7 +2630,7 @@ static void Rec_PutParamsStdTsts (void *Args)
   {
    if (Args)
      {
-      Rec_PutParamsStudent ((void *) &Gbl);
+      Rec_PutParamsStudent (&Gbl);
       Dat_SetIniEndDates ();
       Dat_WriteParamsIniEndDates ();
      }
@@ -2640,10 +2640,10 @@ static void Rec_PutParamsWorks (void *Args)
   {
    if (Args)
      {
-      Rec_PutParamsStudent ((void *) &Gbl);
+      Rec_PutParamsStudent (&Gbl);
       Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
       Gbl.FileBrowser.FullTree = true;
-      Brw_PutHiddenParamFullTreeIfSelected ((void *) &Gbl);
+      Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
      }
   }
 

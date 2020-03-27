@@ -273,7 +273,7 @@ static void Ctr_ListCentres (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsListingCentres,(void *) &Gbl,
+		 Ctr_PutIconsListingCentres,&Gbl,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -479,7 +479,7 @@ static void Ctr_EditCentresInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsEditingCentres,(void *) &Gbl,
+		 Ctr_PutIconsEditingCentres,&Gbl,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1576,7 +1576,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
      {
       /***** Alert with button to go to centre *****/
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
-                                  Ctr_PutParamGoToCtr,(void *) &Gbl,
+                                  Ctr_PutParamGoToCtr,&Gbl,
                                   Btn_CONFIRM_BUTTON,
                                   Hie_BuildGoToMsg (Ctr_EditingCtr->ShrtName));
       Hie_FreeGoToMsg ();
@@ -2189,7 +2189,7 @@ static void Ctr_FormToGoToMap (struct Centre *Ctr)
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the centre
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,
-                                     Ctr_PutParamGoToCtr,(void *) &Gbl,
+                                     Ctr_PutParamGoToCtr,&Gbl,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

@@ -112,7 +112,7 @@ void Ban_SeeBanners (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsListingBanners,(void *) &Gbl,
+                 Ban_PutIconsListingBanners,&Gbl,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
    /***** Write all banners *****/
@@ -225,7 +225,7 @@ static void Ban_EditBannersInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsEditingBanners,(void *) &Gbl,
+                 Ban_PutIconsEditingBanners,&Gbl,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new banner *****/
@@ -432,17 +432,17 @@ static void Ban_ListBannersForEdition (void)
 
       HTM_TD_Begin ("class=\"BM\"");
       Ico_PutContextualIconToRemove (ActRemBan,
-                                     Ban_PutParamBanCodToEdit,(void *) &Gbl);
+                                     Ban_PutParamBanCodToEdit,&Gbl);
       HTM_TD_End ();
 
       /* Put icon to hide/show banner */
       HTM_TD_Begin ("class=\"BM\"");
       if (Ban->Hidden)
          Ico_PutContextualIconToUnhide (ActShoBan,Anchor,
-                                        Ban_PutParamBanCodToEdit,(void *) &Gbl);
+                                        Ban_PutParamBanCodToEdit,&Gbl);
       else
          Ico_PutContextualIconToHide (ActHidBan,Anchor,
-                                      Ban_PutParamBanCodToEdit,(void *) &Gbl);
+                                      Ban_PutParamBanCodToEdit,&Gbl);
       HTM_TD_End ();
 
       /* Banner code */
@@ -457,7 +457,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner short name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanSho);
-      Ban_PutParamBanCodToEdit ((void *) &Gbl);
+      Ban_PutParamBanCodToEdit (&Gbl);
       HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,true,
 		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
@@ -466,7 +466,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner full name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanFul);
-      Ban_PutParamBanCodToEdit ((void *) &Gbl);
+      Ban_PutParamBanCodToEdit (&Gbl);
       HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,true,
 		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
@@ -475,7 +475,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner image */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanImg);
-      Ban_PutParamBanCodToEdit ((void *) &Gbl);
+      Ban_PutParamBanCodToEdit (&Gbl);
       HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,true,
 		      "size=\"12\"");
       Frm_EndForm ();
@@ -484,7 +484,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner WWW */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanWWW);
-      Ban_PutParamBanCodToEdit ((void *) &Gbl);
+      Ban_PutParamBanCodToEdit (&Gbl);
       HTM_INPUT_URL ("WWW",Ban->WWW,true,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();

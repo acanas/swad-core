@@ -118,7 +118,7 @@ void CrsCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    CrsCfg_PutIconToPrint,(void *) &Gbl,
+                    CrsCfg_PutIconToPrint,&Gbl,
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/

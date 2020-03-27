@@ -275,7 +275,7 @@ static void Prj_ReqUsrsToSelect (void)
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeePrj,
-				     Prj_PutCurrentParams,(void *) &Gbl,
+				     Prj_PutCurrentParams,&Gbl,
 				     Txt_Projects,
 	                             Hlp_ASSESSMENT_Projects,
 	                             Txt_View_projects,
@@ -400,7 +400,7 @@ static void Prj_ShowPrjsInCurrentPage (void)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Projects,
-                 Prj_PutIconsListProjects,(void *) &Gbl,
+                 Prj_PutIconsListProjects,&Gbl,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which projects to show *****/
@@ -737,7 +737,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put another user's code *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted ((void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
    /***** Put selected users' codes *****/
    if (Filter->Who == Usr_WHO_SELECTED)
@@ -1031,7 +1031,7 @@ static void Prj_PutIconToCreateNewPrj (void)
    /***** Put form to create a new project *****/
    Gbl.Prjs.PrjCod = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,
-                               Prj_PutCurrentParams,(void *) &Gbl,
+                               Prj_PutCurrentParams,&Gbl,
 			       Txt_New_project);
   }
 
@@ -1045,7 +1045,7 @@ static void Prj_PutButtonToCreateNewPrj (void)
 
    Gbl.Prjs.PrjCod = -1L;
    Frm_StartForm (ActFrmNewPrj);
-   Prj_PutCurrentParams ((void *) &Gbl);
+   Prj_PutCurrentParams (&Gbl);
    Btn_PutConfirmButton (Txt_New_project);
    Frm_EndForm ();
   }
@@ -1059,7 +1059,7 @@ static void Prj_PutIconToShowAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
-                                  Prj_PutCurrentParams,(void *) &Gbl,
+                                  Prj_PutCurrentParams,&Gbl,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -1266,7 +1266,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
       if (ICanViewProjectFiles)
 	{
 	 Frm_StartForm (ActAdmDocPrj);
-	 Prj_PutCurrentParams ((void *) &Gbl);
+	 Prj_PutCurrentParams (&Gbl);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
 	 HTM_Txt (Prj->Title);
 	 HTM_BUTTON_End ();
@@ -2039,7 +2039,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	      {
 	       HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
-					      Prj_PutCurrentParams,(void *) &Gbl,
+					      Prj_PutCurrentParams,&Gbl,
 					      "trash.svg",
 					      Txt_Remove);
 	       HTM_TD_End ();
@@ -2071,7 +2071,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
-				        Prj_PutCurrentParams,(void *) &Gbl,
+				        Prj_PutCurrentParams,&Gbl,
 				        Str_BuildStringStr (Txt_Add_USERS,
 							    Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]));
 	    Str_FreeString ();
@@ -2299,7 +2299,7 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
       Lay_NotEnoughMemoryExit ();
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
 				     ActionAddUsr[RoleInProject],
-				     Prj_PutCurrentParams,(void *) &Gbl,
+				     Prj_PutCurrentParams,&Gbl,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton,
@@ -2472,7 +2472,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 /* Show form to request confirmation */
 	 Frm_StartForm (ActionRemUsr[RoleInProject]);
 	 Gbl.Prjs.PrjCod = Prj.PrjCod;
-	 Prj_PutCurrentParams ((void *) &Gbl);
+	 Prj_PutCurrentParams (&Gbl);
 	 Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
 					          Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]));
 	 Str_FreeString ();
@@ -2607,34 +2607,34 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
      {
       /***** Put form to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,
-                                     Prj_PutCurrentParams,(void *) &Gbl);
+                                     Prj_PutCurrentParams,&Gbl);
 
       /***** Put form to hide/show project *****/
       switch (Prj->Hidden)
         {
 	 case Prj_HIDDEN:
 	    Ico_PutContextualIconToUnhide (ActShoPrj,Anchor,
-	                                   Prj_PutCurrentParams,(void *) &Gbl);
+	                                   Prj_PutCurrentParams,&Gbl);
 	    break;
 	 case Prj_VISIBL:
 	    Ico_PutContextualIconToHide (ActHidPrj,Anchor,
-	                                 Prj_PutCurrentParams,(void *) &Gbl);
+	                                 Prj_PutCurrentParams,&Gbl);
 	    break;
         }
 
       /***** Put form to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
-                                   Prj_PutCurrentParams,(void *) &Gbl);
+                                   Prj_PutCurrentParams,&Gbl);
      }
 
    /***** Put form to admin project documents *****/
    if (ICanViewProjectFiles)
       Ico_PutContextualIconToViewFiles (ActAdmDocPrj,
-                                        Prj_PutCurrentParams,(void *) &Gbl);
+                                        Prj_PutCurrentParams,&Gbl);
 
    /***** Put form to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,
-                                 Prj_PutCurrentParams,(void *) &Gbl);
+                                 Prj_PutCurrentParams,&Gbl);
 
    /***** Locked/unlocked project edition *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -3215,7 +3215,7 @@ void Prj_ReqRemProject (void)
       /***** Show question and button to remove the project *****/
       Gbl.Prjs.PrjCod = Prj.PrjCod;
       Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,
-                              Prj_PutCurrentParams,(void *) &Gbl,
+                              Prj_PutCurrentParams,&Gbl,
 			      Btn_REMOVE_BUTTON,Txt_Remove_project,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
 	                      Prj.Title);
@@ -3483,7 +3483,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Start data form */
    Frm_StartForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
-   Prj_PutCurrentParams ((void *) &Gbl);
+   Prj_PutCurrentParams (&Gbl);
 
    /* Begin box and table */
    Box_BoxTableBegin (NULL,Txt_Data,
@@ -3926,7 +3926,7 @@ void Prj_ShowFormConfig (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_projects,
-                 Prj_PutIconsListProjects,(void *) &Gbl,
+                 Prj_PutIconsListProjects,&Gbl,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -4049,13 +4049,13 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
 
    /***** Put icon to lock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,
-                                  Prj_PutCurrentParams,(void *) &Gbl,
+                                  Prj_PutCurrentParams,&Gbl,
 			          "lock.svg",
 				  Txt_Lock_editing);
 
    /***** Put icon to unlock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,
-                                  Prj_PutCurrentParams,(void *) &Gbl,
+                                  Prj_PutCurrentParams,&Gbl,
 			          "unlock.svg",
 				  Txt_Unlock_editing);
   }
@@ -4082,7 +4082,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
       /* Show question and button */
       if (Gbl.Prjs.Num)
 	 Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
-	                         Prj_PutCurrentParams,(void *) &Gbl,
+	                         Prj_PutCurrentParams,&Gbl,
 				 Btn_REMOVE_BUTTON,Txt_Lock_editing,
 				 Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
 				 Gbl.Prjs.Num);
@@ -4117,7 +4117,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
       /* Show question and button */
       if (Gbl.Prjs.Num)
 	 Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
-	                         Prj_PutCurrentParams,(void *) &Gbl,
+	                         Prj_PutCurrentParams,&Gbl,
 				 Btn_CREATE_BUTTON,Txt_Unlock_editing,
 				 Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
 				 Gbl.Prjs.Num);

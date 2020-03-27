@@ -324,6 +324,7 @@ void TT_ShowClassTimeTable (void)
      };
    bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
 	             Gbl.Action.Act == ActPrnMyTT);;
+   Grp_WhichGroups_t WhichGroups;
 
    /***** Initializations *****/
    switch (Gbl.Action.Act)
@@ -351,14 +352,14 @@ void TT_ShowClassTimeTable (void)
    Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/
-   Grp_GetParamWhichGrps ();
+   Grp_GetParamWhichGroups ();
 
    /***** Begin box *****/
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
        Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
        Gbl.TimeTable.ContextualIcons.PutIconPrint)
       Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-		    TT_PutContextualIcons,(void *) &Gbl,
+		    TT_PutContextualIcons,&Gbl,
 		    Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
    else
       Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
@@ -385,8 +386,9 @@ void TT_ShowClassTimeTable (void)
          TT_PutFormToSelectWhichGroupsToShow ();
 
       /* Show form to change first day of week */
+      WhichGroups = Grp_GetParamWhichGroups ();
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
-                                       Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
+                                       Grp_PutParamWhichGroups,&WhichGroups);
 
       Set_EndSettingsHead ();
      }
@@ -404,11 +406,14 @@ void TT_ShowClassTimeTable (void)
 
 static void TT_PutContextualIcons (void *Args)
   {
+   Grp_WhichGroups_t WhichGroups;
+
    if (Args)
      {
+      WhichGroups = Grp_GetParamWhichGroups ();
       if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
 	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
-				      Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
+				      Grp_PutParamWhichGroups,&WhichGroups);
 
       if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,
@@ -417,7 +422,7 @@ static void TT_PutContextualIcons (void *Args)
       if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
 										   ActPrnMyTT,
-				       Grp_PutParamWhichGrps,(void *) Grp_GetParamWhichGrps ());
+				       Grp_PutParamWhichGroups,&WhichGroups);
      }
   }
 
@@ -450,7 +455,7 @@ void TT_EditCrsTimeTable (void)
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
    Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                 TT_PutIconToViewCrsTT,(void *) &Gbl,
+                 TT_PutIconToViewCrsTT,&Gbl,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
@@ -468,7 +473,7 @@ void TT_EditMyTutTimeTable (void)
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
    Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                 TT_PutIconToViewMyTT,(void *) &Gbl,
+                 TT_PutIconToViewMyTT,&Gbl,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();

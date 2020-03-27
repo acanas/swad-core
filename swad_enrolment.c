@@ -2126,7 +2126,7 @@ void Enr_AskIfRejectSignUp (void)
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
@@ -3639,7 +3639,7 @@ static void Enr_ReqAddAdm (Hie_Level_t Scope,long Cod,const char *InsCtrDegName)
 
 	       /* End alert */
 	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
-	                                Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                                Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
@@ -4206,7 +4206,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Level_t Scope,
 
       /* End alert */
       Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
-                               Usr_PutParamOtherUsrCodEncrypted,(void *) Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+                               Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
                                Btn_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);
