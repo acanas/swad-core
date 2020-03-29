@@ -95,7 +95,6 @@ static void McR_ShowMchResultsSummaryRow (unsigned NumResults,
                                           double TotalScoreOfAllResults,
 					  double TotalGrade);
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             struct TsR_Result *Result);
 
 static bool McR_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod);
@@ -1004,7 +1003,6 @@ void McR_ShowOneMchResult (void)
    struct Match Match;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    Dat_StartEndTime_t StartEndTime;
    char *Id;
    struct TsR_Result Result;
@@ -1033,7 +1031,6 @@ void McR_ShowOneMchResult (void)
 
    /***** Get match result data *****/
    McR_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
-				   TimeUTC,
 				   &Result);
 
    /***** Check if I can view this match result *****/
@@ -1123,7 +1120,7 @@ void McR_ShowOneMchResult (void)
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
-	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
+	 Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
@@ -1195,8 +1192,7 @@ void McR_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TsR_ShowTestResult (UsrDat,&Result,TimeUTC[Dat_START_TIME],
-			  Game.Visibility);
+      TsR_ShowTestResult (UsrDat,&Result,Game.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1293,7 +1289,6 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 /*****************************************************************************/
 
 static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             struct TsR_Result *Result)
   {
    MYSQL_RES *mysql_res;
@@ -1323,7 +1318,7 @@ static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-         TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
+         Result->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
       if (sscanf (row[2],"%u",&Result->NumQsts) != 1)

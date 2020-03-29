@@ -2795,22 +2795,24 @@ mysql> DESCRIBE tst_exams;
 | TstCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod          | int(11)       | NO   | MUL | NULL    |                |
 | UsrCod          | int(11)       | NO   |     | NULL    |                |
-| AllowTeachers   | enum('N','Y') | NO   |     | N       |                |
-| TstTime         | datetime      | NO   |     | NULL    |                |
+| StartTime       | datetime      | NO   |     | NULL    |                |
+| EndTime         | datetime      | NO   |     | NULL    |                |
 | NumQsts         | int(11)       | NO   |     | 0       |                |
 | NumQstsNotBlank | int(11)       | NO   |     | 0       |                |
+| AllowTeachers   | enum('N','Y') | NO   |     | N       |                |
 | Score           | double        | NO   |     | 0       |                |
 +-----------------+---------------+------+-----+---------+----------------+
-8 rows in set (0.05 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exams ("
 			"TstCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
-			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"TstTime DATETIME NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
+			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(TstCod),"
 		   "INDEX(CrsCod,UsrCod))");

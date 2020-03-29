@@ -9350,9 +9350,30 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the seft-assessment test"
+	"See a test"
 #elif L==4	// es
-	""
+	"Ver un test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqAssTst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request assessment of a test"
+#elif L==4	// es
+	"Solicitar evaluaci&oacute;n de un test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9371,9 +9392,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Assess a self-assessment test"
+	"Assess a test"
 #elif L==4	// es
-	""
+	"Evaluar un test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9392,9 +9413,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the edition of self-assessment questions"
+	"Request the edition of test questions"
 #elif L==4	// es
-	""
+	"Solicitar la edici&oacute;n de preguntas de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9413,9 +9434,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit one self-assesment test question"
+	"Edit a test question"
 #elif L==4	// es
-	""
+	"Editar una pregunta de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9434,9 +9455,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Put form to ask for an XML with test questions to import"
+	"Request an XML file with test questions to import"
 #elif L==4	// es
-	""
+	"Solicitar un archivo XML con preguntas de test para importar"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9457,7 +9478,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Import test questions from XML file"
 #elif L==4	// es
-	""
+	"Importar preguntas de test de un archivo XML"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9476,9 +9497,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List for edition several self-assessment test questions"
+	"List test questions for edition"
 #elif L==4	// es
-	""
+	"Listar preguntas de test para edici&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9497,9 +9518,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a question of self-assessment"
+	"Create/Modify a test question"
 #elif L==4	// es
-	""
+	"Crear/Modificar una pregunta de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9602,9 +9623,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change shuffle of of a question of self-assessment"
+	"Change shuffle of a test question"
 #elif L==4	// es
-	""
+	"Cambiar baraje de una pregunta de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9623,9 +9644,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request renaming of tags of questions of self-assesment"
+	"See test configuration"
 #elif L==4	// es
-	""
+	"Ver configuraci&oacute;n de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9644,9 +9665,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Enable a tag"
+	"Enable a test tag"
 #elif L==4	// es
-	""
+	"Habilitar un descriptor de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9665,9 +9686,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Disable a tag"
+	"Disable a test tag"
 #elif L==4	// es
-	""
+	"Inhabilitar un descriptor de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9686,9 +9707,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Rename a tag"
+	"Rename a test tag"
 #elif L==4	// es
-	""
+	"Renombrar un descriptor de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9707,9 +9728,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive configuration of test"
+	"Modify test configuration"
 #elif L==4	// es
-	""
+	"Modificar configuraci&oacute;n de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9728,9 +9749,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Select range of dates to see my test results"
+	"Request to see my test results"
 #elif L==4	// es
-	""
+	"Solicitar ver mis resultados de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9749,9 +9770,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show my test results"
+	"See my test results"
 #elif L==4	// es
-	""
+	"Ver mis resultados de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9770,9 +9791,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Select users and range of dates to see test results"
+	"See one of my test results"
 #elif L==4	// es
-	""
+	"Ver uno de mis resultados de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9791,9 +9812,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show test results of several users"
+	"Request test results of several users"
 #elif L==4	// es
-	""
+	"Solicitar resultados de test de varios usuarios"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9812,9 +9833,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one test result of me as student"
+	"See test results of several users"
 #elif L==4	// es
-	""
+	"Ver resultados de test de varios usuarios"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9833,9 +9854,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one test result of other user"
+	"See one test result of another user"
 #elif L==4	// es
-	""
+	"Ver un resultado de test de otro usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9854,9 +9875,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one game"
+	"See a game"
 #elif L==4	// es
-	""
+	"Ver un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9877,7 +9898,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the removal of a match"
 #elif L==4	// es
-	""
+	"Solicitar eliminaci&oacute;n de una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9898,7 +9919,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Confirm the removal of a match"
 #elif L==4	// es
-	""
+	"Confirmar la eliminaci&oacute;n de una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9917,9 +9938,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Put form to create a new match"
+	"Request the creation of a new match"
 #elif L==4	// es
-	""
+	"Solicitar la creaci&oacute;n de una nueva partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9938,9 +9959,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new match showing first question in a new browser tab"
+	"Create a new match show it in a new tab"
 #elif L==4	// es
-	""
+	"Crear una nueva partida y mostrarla en una nueva pesta&ntilde;a"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9959,9 +9980,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Resume an unfinished match showing current question in a new browser tab"
+	"Resume a match showing current question in a new tab"
 #elif L==4	// es
-	""
+	"Reanudar una partida mostrando la pregunta actual en una nueva pesta&ntilde;a"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9982,7 +10003,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Go back when playing a match"
 #elif L==4	// es
-	""
+	"Ir atr&aacute;s mientras se juega una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10003,7 +10024,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Play/pause current match"
 #elif L==4	// es
-	""
+	"Jugar/pausar partida actual"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10024,7 +10045,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Go forward when playing a match"
 #elif L==4	// es
-	""
+	"Ir adelante mientras se juega una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10045,7 +10066,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Change number of columns when playing a match"
 #elif L==4	// es
-	""
+	"Cambiar n&uacute;mero de columnas mientras se juega una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10066,7 +10087,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Change visibility of question results when playing a match"
 #elif L==4	// es
-	""
+	"Cambiar visibilidad de los resultados de una pregunta mientras se juega una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10087,7 +10108,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Start match countdown"
 #elif L==4	// es
-	""
+	"Comenzar la cuenta atr&aacute;s en una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10108,7 +10129,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Refresh current question when playing a match (as teacher)"
 #elif L==4	// es
-	""
+	"Refrescar pregunta actual mientras se juega una partida (como profesor)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10129,7 +10150,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show current question when playing a game (as student)"
 #elif L==4	// es
-	""
+	"Refrescar pregunta actual mientras se juega una partida (como estudiante)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10148,9 +10169,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"View my answer to a match question (as student)"
+	"View my answer to a match question"
 #elif L==4	// es
-	""
+	"Ver mi respuesta a una pregunta en una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10169,9 +10190,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove my answer to a match question (as student)"
+	"Remove my answer to a match question"
 #elif L==4	// es
-	""
+	"Eliminar mi respuesta a una pregunta de una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10190,9 +10211,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Answer a match question (as student)"
+	"Answer a match question"
 #elif L==4	// es
-	""
+	"Responder una pregunta de una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

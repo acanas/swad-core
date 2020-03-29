@@ -1318,12 +1318,14 @@ CREATE TABLE IF NOT EXISTS tst_exams (
 	TstCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL,
 	UsrCod INT NOT NULL,
-	AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',
-	TstTime DATETIME NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
 	NumQsts INT NOT NULL DEFAULT 0,
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(TstCod),INDEX(CrsCod,UsrCod));
+	UNIQUE INDEX(TstCod),
+	INDEX(CrsCod,UsrCod));
 --
 -- Table tst_question_tags: stores the tags associated to each test question
 --

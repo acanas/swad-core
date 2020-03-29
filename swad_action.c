@@ -627,6 +627,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDowAssPrj	] = {1734,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    [ActSeeTst		] = {  29,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowNewTest		,NULL},
+   [ActReqAssTst	] = {1837,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestAssessTest		,NULL},
    [ActAssTst		] = {  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
 
    [ActEdiTstQst	] = { 104,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_RequestEditTests		,NULL},
@@ -3568,6 +3569,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActLftPrgItm,		// #1834
 	ActReqRemSevTstQst,	// #1835
 	ActRemSevTstQst,	// #1836
+	ActReqAssTst,		// #1837
 	};
 
 /*****************************************************************************/

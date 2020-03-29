@@ -523,8 +523,19 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
+// TODO: Tener en cuenta en los resultados de test (exámenes) el tiempo de inicio y el tiempo de fin
+         Cuando el alumno ve un test, se crea un examen (en la base de datos), aunque no se conteste, a partir de los datos del formulario.
+         El examen se muestra en pantalla tomándolo del examen en la base de datos, no del formulario.
+         Cuando el alumno pulsa en "He terminado" se le pregunta si está seguro y se vuelve a mostrar el examen cogiéndolo de la base de datos.
 
-// TODO: URGENT: Fix bug while playing match.
+	Version 19.156:   Mar 28, 2020	New action to confirm assessment of test exam.
+					Code refactoring in test and matches. (284544 lines)
+					5 changes necessary in database:
+ALTER TABLE tst_exams CHANGE COLUMN AllowTeachers AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER NumQstsNotBlank;
+ALTER TABLE tst_exams CHANGE COLUMN TstTime StartTime DATETIME NOT NULL;
+ALTER TABLE tst_exams ADD COLUMN EndTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00' AFTER StartTime;
+UPDATE tst_exams SET EndTime=StartTime;
+ALTER TABLE tst_exams CHANGE COLUMN EndTime EndTime DATETIME NOT NULL;
 
 	Version 19.155.6: Mar 26, 2020	Code refactoring in matches. (284479 lines)
 	Version 19.155.5: Mar 26, 2020	Code refactoring in tests. (284480 lines)

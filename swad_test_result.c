@@ -86,10 +86,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
                                            unsigned NumTotalQstsNotBlank,
                                            double TotalScoreOfAllTests);
 static void TsR_ShowTstTagsPresentInATestResult (long TstCod);
-static void TsR_GetTestResultDataByTstCod (long TstCod,
-                                           bool *AllowTeachers,
-                                           time_t *TstTimeUTC,
-                                           struct TsR_Result *Result);
+static void TsR_GetTestResultDataByTstCod (long TstCod,struct TsR_Result *Result);
 static void TsR_GetTestResultQuestionsFromDB (long TstCod,struct TsR_Result *Result);
 
 /*****************************************************************************/
@@ -174,20 +171,20 @@ void TsR_ShowMyTstResults (void)
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-long TsR_CreateTestResultInDB (bool AllowTeachers,unsigned NumQsts)
+long TsR_CreateTestResultInDB (const struct TsR_Result *Result)
   {
    /***** Insert new test result into table *****/
    return
    DB_QueryINSERTandReturnCode ("can not create new test result",
 				"INSERT INTO tst_exams"
-				" (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
+				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,AllowTeachers)"
 				" VALUES"
-				" (%ld,%ld,'%c',NOW(),%u)",
+				" (%ld,%ld,NOW(),NOW(),%u,'%c')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				AllowTeachers ? 'Y' :
-						'N',
-				NumQsts);
+				Result->NumQsts,
+				Result->AllowTeachers ? 'Y' :
+						        'N');
   }
 
 /*****************************************************************************/
@@ -199,7 +196,7 @@ void TsR_StoreScoreOfTestResultInDB (long TstCod,
   {
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update result of test result",
+   DB_QueryUPDATE ("can not update test result",
 		   "UPDATE tst_exams"
 	           " SET NumQstsNotBlank=%u,"
 	                "Score='%.15lg'"
@@ -304,29 +301,26 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
    static unsigned UniqueId = 0;
    char *Id;
    long TstCod;
-   unsigned NumQstsInThisTest;
-   unsigned NumQstsNotBlankInThisTest;
+   struct TsR_Result Result;
    unsigned NumTotalQsts = 0;
    unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisTest;
    double TotalScoreOfAllTests = 0.0;
    unsigned NumExamsVisibleByTchs = 0;
-   bool AllowTeachers;	// Can teachers of this course see the test result?
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ICanViewTest;
    bool ICanViewScore;
-   time_t TimeUTC;
    char *ClassDat;
 
    /***** Make database query *****/
    NumExams =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
-			      "SELECT TstCod,"			// row[0]
-			             "AllowTeachers,"		// row[1]
-			             "UNIX_TIMESTAMP(TstTime),"	// row[2]
-			             "NumQsts,"			// row[3]
-			             "NumQstsNotBlank,"		// row[4]
-			             "Score"			// row[5]
+			      "SELECT TstCod,"				// row[0]
+			             "UNIX_TIMESTAMP(StartTime),"	// row[1]
+			             "UNIX_TIMESTAMP(EndTime),"		// row[2]
+			             "NumQsts,"				// row[3]
+			             "NumQstsNotBlank,"			// row[4]
+			             "AllowTeachers,"			// row[5]
+			             "Score"				// row[6]
 			      " FROM tst_exams"
 			      " WHERE CrsCod=%ld AND UsrCod=%ld"
 			      " AND TstTime>=FROM_UNIXTIME(%ld)"
@@ -354,10 +348,10 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	 if ((TstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of test result.");
 
-	 /* Get if teachers are allowed to see this test result (row[1]) */
-	 AllowTeachers = (row[1][0] == 'Y');
-	 ClassDat = AllowTeachers ? "DAT" :
-	                            "DAT_LIGHT";
+	 /* Get if teachers are allowed to see this test result (row[5]) */
+	 Result.AllowTeachers = (row[5][0] == 'Y');
+	 ClassDat = Result.AllowTeachers ? "DAT" :
+	                                   "DAT_LIGHT";
 
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
@@ -373,7 +367,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	    case Rol_INS_ADM:
 	       ICanViewTest  =
 	       ICanViewScore = ItsMe ||
-	                       AllowTeachers;
+	                       Result.AllowTeachers;
 	       break;
 	    case Rol_SYS_ADM:
 	       ICanViewTest  =
@@ -388,70 +382,71 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
          if (NumTest)
             HTM_TR_Begin (NULL);
 
-         /* Write date and time (row[2] holds UTC date-time) */
-         TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+         /* Write date and time (row[1] and row[2] hold UTC date-times) */
+         Result.TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+         Result.TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
          UniqueId++;
 	 if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
 		       Id,ClassDat,Gbl.RowEvenOdd);
-	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+	 Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[Dat_END_TIME],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,false,0x7);
 	 HTM_TD_End ();
          free (Id);
 
          /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
-            NumQstsInThisTest = 0;
-	 if (AllowTeachers)
-	    NumTotalQsts += NumQstsInThisTest;
+         if (sscanf (row[3],"%u",&Result.NumQsts) != 1)
+            Result.NumQsts = 0;
+	 if (Result.AllowTeachers)
+	    NumTotalQsts += Result.NumQsts;
 
          /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
-            NumQstsNotBlankInThisTest = 0;
-	 if (AllowTeachers)
-	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
+         if (sscanf (row[4],"%u",&Result.NumQstsNotBlank) != 1)
+            Result.NumQstsNotBlank = 0;
+	 if (Result.AllowTeachers)
+	    NumTotalQstsNotBlank += Result.NumQstsNotBlank;
 
-         /* Get score (row[5]) */
-	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
-            ScoreInThisTest = 0.0;
+         /* Get score (row[6]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+         if (sscanf (row[6],"%lf",&Result.Score) != 1)
+            Result.Score = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
-	 if (AllowTeachers)
-	    TotalScoreOfAllTests += ScoreInThisTest;
+	 if (Result.AllowTeachers)
+	    TotalScoreOfAllTests += Result.Score;
 
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
-	    HTM_Unsigned (NumQstsInThisTest);
+	    HTM_Unsigned (Result.NumQsts);
 	 HTM_TD_End ();
 
          /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
-	    HTM_Unsigned (NumQstsNotBlankInThisTest);
+	    HTM_Unsigned (Result.NumQstsNotBlank);
 	 HTM_TD_End ();
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double2Decimals (ScoreInThisTest);
+	    HTM_Double2Decimals (Result.Score);
 	 HTM_TD_End ();
 
          /* Write average score per question */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double2Decimals (NumQstsInThisTest ? ScoreInThisTest /
-		                            (double) NumQstsInThisTest :
-			                    0.0);
+	    HTM_Double2Decimals (Result.NumQsts ? Result.Score /
+		                                  (double) Result.NumQsts :
+			                          0.0);
 	 HTM_TD_End ();
 
          /* Write grade */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-            Tst_ComputeAndShowGrade (NumQstsInThisTest,
-                                     ScoreInThisTest,
+            Tst_ComputeAndShowGrade (Result.NumQsts,
+                                     Result.Score,
                                      TsR_SCORE_MAX);
 	 HTM_TD_End ();
 
@@ -468,7 +463,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 	 HTM_TD_End ();
 	 HTM_TR_End ();
 
-	 if (AllowTeachers)
+	 if (Result.AllowTeachers)
             NumExamsVisibleByTchs++;
         }
 
@@ -610,8 +605,6 @@ void TsR_ShowOneTstResult (void)
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
    long TstCod;
-   bool AllowTeachers = false;	// Initialized to avoid warning
-   time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
    struct TsR_Result Result;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -624,10 +617,7 @@ void TsR_ShowOneTstResult (void)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
    /***** Get test result data *****/
-   TsR_GetTestResultDataByTstCod (TstCod,
-                                  &AllowTeachers,
-                                  &TstTimeUTC,
-                                  &Result);
+   TsR_GetTestResultDataByTstCod (TstCod,&Result);
    TstCfg_SetConfigVisibility (TsV_MAX_VISIBILITY);
 
    /***** Check if I can view this test result *****/
@@ -657,7 +647,7 @@ void TsR_ShowOneTstResult (void)
 	    case ActSeeOneTstResOth:
 	       ICanViewTest  =
 	       ICanViewScore = ItsMe ||
-			       AllowTeachers;
+			       Result.AllowTeachers;
 	       break;
 	    default:
 	       ICanViewTest  =
@@ -730,7 +720,7 @@ void TsR_ShowOneTstResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
-      Dat_WriteLocalDateHMSFromUTC ("test",TstTimeUTC,
+      Dat_WriteLocalDateHMSFromUTC ("test",Result.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
@@ -800,7 +790,6 @@ void TsR_ShowOneTstResult (void)
       /***** Write answers and solutions *****/
       TsR_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
 			  &Result,
-			  TstTimeUTC,
 			  TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
@@ -862,7 +851,6 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
 			 const struct TsR_Result *Result,
-			 time_t TstTimeUTC,
 			 unsigned Visibility)
   {
    extern const char *Txt_Question_modified;
@@ -891,7 +879,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 	        ==> don't show question ****/
 	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
 	 ThisQuestionHasBeenEdited = false;
-	 if (EditTimeUTC > TstTimeUTC)
+	 if (EditTimeUTC > Result->TimeUTC[Dat_START_TIME])
 	    ThisQuestionHasBeenEdited = true;
 
 	 if (ThisQuestionHasBeenEdited)
@@ -944,10 +932,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 /********* Get data of a test result using its test result code **************/
 /*****************************************************************************/
 
-static void TsR_GetTestResultDataByTstCod (long TstCod,
-                                           bool *AllowTeachers,
-                                           time_t *TstTimeUTC,
-                                           struct TsR_Result *Result)
+static void TsR_GetTestResultDataByTstCod (long TstCod,struct TsR_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -956,11 +941,12 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
    if (DB_QuerySELECT (&mysql_res,"can not get data"
 				  " of a test result of a user",
 		       "SELECT UsrCod,"				// row[0]
-		              "AllowTeachers,"			// row[1]
-			      "UNIX_TIMESTAMP(TstTime),"	// row[2]
+			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
+			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
 		              "NumQsts,"			// row[3]
 		              "NumQstsNotBlank,"		// row[4]
-		              "Score"				// row[5]
+		              "AllowTeachers,"			// row[5]
+		              "Score"				// row[6]
 		       " FROM tst_exams"
 		       " WHERE TstCod=%ld AND CrsCod=%ld",
 		       TstCod,
@@ -971,11 +957,9 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
       /* Get user code (row[0]) */
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get if teachers are allowed to see this test result (row[1]) */
-      *AllowTeachers = (row[1][0] == 'Y');
-
-      /* Get date-time (row[2] holds UTC date-time) */
-      *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+      /* Get date-time (row[1] and row[2] hold UTC date-time) */
+      Result->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+      Result->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
       if (sscanf (row[3],"%u",&Result->NumQsts) != 1)
@@ -985,17 +969,23 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,
       if (sscanf (row[4],"%u",&Result->NumQstsNotBlank) != 1)
 	 Result->NumQstsNotBlank = 0;
 
-      /* Get score (row[5]) */
+      /* Get if teachers are allowed to see this test result (row[5]) */
+      Result->AllowTeachers = (row[5][0] == 'Y');
+
+      /* Get score (row[6]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[5],"%lf",&Result->Score) != 1)
+      if (sscanf (row[6],"%lf",&Result->Score) != 1)
 	 Result->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
      {
-      Result->NumQsts = 0;
-      Result->NumQstsNotBlank = 0;
-      Result->Score = 0.0;
+      Result->TimeUTC[Dat_START_TIME] =
+      Result->TimeUTC[Dat_END_TIME  ] = 0;
+      Result->NumQsts                 = 0;
+      Result->NumQstsNotBlank         = 0;
+      Result->AllowTeachers           = false;
+      Result->Score                   = 0.0;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1051,7 +1041,8 @@ static void TsR_GetTestResultQuestionsFromDB (long TstCod,struct TsR_Result *Res
 			             "Indexes,"	// row[1]
 			             "Answers"	// row[2]
 			      " FROM tst_exam_questions"
-			      " WHERE TstCod=%ld ORDER BY QstInd",
+			      " WHERE TstCod=%ld"
+			      " ORDER BY QstInd",
 			      TstCod);
 
    /***** Get questions codes *****/
