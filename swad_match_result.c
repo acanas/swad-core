@@ -1074,7 +1074,7 @@ void McR_ShowOneMchResult (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+      HTM_TABLE_BeginWideMarginPadding (5);
 
       /***** Header row *****/
       /* Get data of the user who answer the match */

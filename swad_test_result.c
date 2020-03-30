@@ -610,7 +610,7 @@ void TsR_ShowOneTstResult (void)
    extern const char *Txt_Test_result;
    extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
@@ -620,6 +620,8 @@ void TsR_ShowOneTstResult (void)
    struct TsR_Result Result;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
+   Dat_StartEndTime_t StartEndTime;
+   char *Id;
    bool ItsMe;
    bool ICanViewTest;
    bool ICanViewScore;
@@ -692,7 +694,7 @@ void TsR_ShowOneTstResult (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+      HTM_TABLE_BeginWideMarginPadding (5);
 
       /***** Header row *****/
       /* Get data of the user who made the test */
@@ -725,19 +727,29 @@ void TsR_ShowOneTstResult (void)
       HTM_TR_End ();
 
       /* Test date */
-      HTM_TR_Begin (NULL);
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"tst_date_%u",(unsigned) StartEndTime) < 0)
+	    Lay_NotEnoughMemoryExit ();
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Date);
-      HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
-      Dat_WriteLocalDateHMSFromUTC ("test",Result.TimeUTC[Dat_END_TIME],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,true,0x7);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
+	 HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				       true,true,true,0x7);
+	 HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 free (Id);
+	}
 
       /* Number of questions */
       HTM_TR_Begin (NULL);
