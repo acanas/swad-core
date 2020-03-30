@@ -40,7 +40,7 @@
 struct GameSelected
   {
    long GamCod;		// Game code
-   bool Selected;	// Is this game selected when viewing match results?
+   bool Selected;	// Is this game selected when seeing match results?
   };
 
 struct Game

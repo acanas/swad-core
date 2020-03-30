@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.156.3 (2020-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.156.4 (2020-03-29)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -528,7 +528,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
          El examen se muestra en pantalla tomándolo del examen en la base de datos, no del formulario.
          Cuando el alumno pulsa en "He terminado" se le pregunta si está seguro y se vuelve a mostrar el examen cogiéndolo de la base de datos.
 
-	Version 19.156.4: Mar 29, 2020	Test exam is stored in database when it's generated. (? lines)
+	Version 19.156.5: Mar 29, 2020	Test exam is stored in database when it's generated. (? lines)
+	Version 19.156.4: Mar 29, 2020	Code refactoring in tests. (284657 lines)
 	Version 19.156.3: Mar 29, 2020	Code refactoring in tests. (284585 lines)
 	Version 19.156.2: Mar 29, 2020	Test exam with start date and end date. (284568 lines)
 	Version 19.156.1: Mar 29, 2020	List of test exams with start date and end date. (284557 lines)

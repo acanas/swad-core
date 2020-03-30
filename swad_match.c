@@ -2979,7 +2979,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
   }
 
 /*****************************************************************************/
-/************* Write answers of a question when viewing a match **************/
+/************* Write answers of a question when seeing a match ***************/
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
@@ -2996,7 +2996,7 @@ static void Mch_WriteAnswersMatchResult (const struct Match *Match,
   }
 
 /*****************************************************************************/
-/******** Write single or multiple choice answer when viewing a match ********/
+/******** Write single or multiple choice answer when seeing a match *********/
 /*****************************************************************************/
 
 void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,

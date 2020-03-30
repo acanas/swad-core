@@ -184,7 +184,7 @@ unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
 void Tst_GetCorrectAnswersFromDB (struct Tst_Question *Question);
-void Tst_WriteAnswersEdit (struct Tst_Question *Question);
+void Tst_WriteAnswersListing (struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.

@@ -2098,7 +2098,7 @@ static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersEdit (Question);
+      Tst_WriteAnswersListing (Question);
      }
    else
      {

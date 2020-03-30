@@ -180,75 +180,82 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test);
 static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
-static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
-                                            unsigned NumQst);
+static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
                                                     MYSQL_RES *mysql_res);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
-static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
-                                          struct Tst_Question *Question,
-                                          bool Shuffle);
-static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
-                                        const struct TsR_Result *Result,
-                                        unsigned NumQst,
-					struct Tst_Question *Question,
-					unsigned Visibility,
-                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
+static void Tst_WriteAnswersSeeing (unsigned NumQst,
+                                    struct Tst_Question *Question,
+                                    bool Shuffle);
+static void Tst_WriteAnswersResult (struct UsrData *UsrDat,
+                                    const struct TsR_Result *Result,
+                                    unsigned NumQst,
+				    struct Tst_Question *Question,
+				    unsigned Visibility,
+                                    double *ScoreThisQst,bool *AnswerIsNotBlank);
 
-static void Tst_WriteTFAnsViewTest (unsigned NumQst);
-static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
+static void Tst_WriteTFAnsListing (const struct Tst_Question *Question,
+                                   MYSQL_RES *mysql_res);
+static void Tst_WriteTFAnsSeeing (unsigned NumQst);
+static void Tst_WriteTFAnsResult (struct UsrData *UsrDat,
+                                  const struct TsR_Result *Result,
+				  unsigned NumQst,
+				  const struct Tst_Question *Question,
+				  MYSQL_RES *mysql_res,
+				  unsigned Visibility,
+                                  double *ScoreThisQst,
+                                  bool *AnswerIsNotBlank);
+
+static void Tst_WriteChoiceAnsListing (struct Tst_Question *Question,
+                                       MYSQL_RES *mysql_res);
+static void Tst_WriteChoiceAnsSeeing (unsigned NumQst,
+                                      struct Tst_Question *Question,
+                                      bool Shuffle);
+static void Tst_WriteChoiceAnsResult (struct UsrData *UsrDat,
                                       const struct TsR_Result *Result,
 				      unsigned NumQst,
-				      const struct Tst_Question *Question,
+				      struct Tst_Question *Question,
 				      MYSQL_RES *mysql_res,
 				      unsigned Visibility,
                                       double *ScoreThisQst,
                                       bool *AnswerIsNotBlank);
-
-static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,
-                                        struct Tst_Question *Question,
-                                        bool Shuffle);
-static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
-                                          const struct TsR_Result *Result,
-				          unsigned NumQst,
-				          struct Tst_Question *Question,
-				          MYSQL_RES *mysql_res,
-				          unsigned Visibility,
-                                          double *ScoreThisQst,
-                                          bool *AnswerIsNotBlank);
 static void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
 
-static void Tst_WriteTextAnsViewTest (unsigned NumQst);
-static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
-                                        const struct TsR_Result *Result,
-				        unsigned NumQst,
-				        struct Tst_Question *Question,
-				        MYSQL_RES *mysql_res,
-				        unsigned Visibility,
-                                        double *ScoreThisQst,
-                                        bool *AnswerIsNotBlank);
+static void Tst_WriteTextAnsSeeing (unsigned NumQst);
+static void Tst_WriteTextAnsResult (struct UsrData *UsrDat,
+                                    const struct TsR_Result *Result,
+				    unsigned NumQst,
+				    struct Tst_Question *Question,
+				    MYSQL_RES *mysql_res,
+				    unsigned Visibility,
+                                    double *ScoreThisQst,
+                                    bool *AnswerIsNotBlank);
 
-static void Tst_WriteIntAnsViewTest (unsigned NumQst);
-static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
-                                       const struct TsR_Result *Result,
-				       unsigned NumQst,
-				       const struct Tst_Question *Question,
-				       MYSQL_RES *mysql_res,
-				       unsigned Visibility,
-                                       double *ScoreThisQst,
-                                       bool *AnswerIsNotBlank);
+static void Tst_WriteIntAnsListing (const struct Tst_Question *Question,
+                                 MYSQL_RES *mysql_res);
+static void Tst_WriteIntAnsSeeing (unsigned NumQst);
+static void Tst_WriteIntAnsResult (struct UsrData *UsrDat,
+                                   const struct TsR_Result *Result,
+				   unsigned NumQst,
+				   const struct Tst_Question *Question,
+				   MYSQL_RES *mysql_res,
+				   unsigned Visibility,
+                                   double *ScoreThisQst,
+                                   bool *AnswerIsNotBlank);
 
-static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
-static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
-                                         const struct TsR_Result *Result,
-				         unsigned NumQst,
-				         const struct Tst_Question *Question,
-				         MYSQL_RES *mysql_res,
-				         unsigned Visibility,
-                                         double *ScoreThisQst,
-                                         bool *AnswerIsNotBlank);
+static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question,
+                                   MYSQL_RES *mysql_res);
+static void Tst_WriteFloatAnsSeeing (unsigned NumQst);
+static void Tst_WriteFloatAnsResult (struct UsrData *UsrDat,
+                                     const struct TsR_Result *Result,
+				     unsigned NumQst,
+				     const struct Tst_Question *Question,
+				     MYSQL_RES *mysql_res,
+				     unsigned Visibility,
+                                     double *ScoreThisQst,
+                                     bool *AnswerIsNotBlank);
 
 static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat);
 static void Tst_WriteScoreStart (unsigned ColSpan);
@@ -1170,7 +1177,7 @@ static void Tst_WriteQstAndAnsTestToAnswer (unsigned NumQst,
 		  "TEST_MED_SHOW");
 
    /* Answers depending on shuffle (row[2]) */
-   Tst_WriteAnswersTestToAnswer (NumQst,Question,(row[2][0] == 'Y'));
+   Tst_WriteAnswersSeeing (NumQst,Question,(row[2][0] == 'Y'));
 
    HTM_TD_End ();
 
@@ -1234,7 +1241,7 @@ void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
      }
 
    /* Answers */
-   Tst_WriteAnswersTestResult (UsrDat,Result,
+   Tst_WriteAnswersResult (UsrDat,Result,
 			       NumQst,&Question,
 			       Visibility,
 			       ScoreThisQst,AnswerIsNotBlank);
@@ -2801,7 +2808,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
    Tst_WriteHeadingRowQuestionsForEdition (Test);
 
    /***** Write question row *****/
-   Tst_WriteQuestionRowForEdition (Test,0);
+   Tst_WriteQuestionListing (Test,0);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -2873,7 +2880,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /***** Write question row *****/
-      Tst_WriteQuestionRowForEdition (Test,NumQst);
+      Tst_WriteQuestionListing (Test,NumQst);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Test->Question);
@@ -2955,8 +2962,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test)
 /********** Write question row in listing of questions for edition ***********/
 /*****************************************************************************/
 
-static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
-                                            unsigned NumQst)
+static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3069,7 +3075,7 @@ static void Tst_WriteQuestionRowForEdition (struct Tst_Test *Test,
 
       /* Feedback (row[4]) and answers */
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersEdit (&Test->Question);
+      Tst_WriteAnswersListing (&Test->Question);
       HTM_TD_End ();
 
       /* Get number of hits
@@ -3306,7 +3312,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Write answers */
-      Tst_WriteAnswersEdit (Question);
+      Tst_WriteAnswersListing (Question);
       HTM_TD_End ();
 
       /***** End table row *****/
@@ -3396,18 +3402,9 @@ void Tst_GetCorrectAnswersFromDB (struct Tst_Question *Question)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersEdit (struct Tst_Question *Question)
+void Tst_WriteAnswersListing (struct Tst_Question *Question)
   {
-   extern const char *Txt_TST_Answer_given_by_the_teachers;
-   unsigned NumOpt;
-   unsigned i;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   char *AnswerTxt;
-   char *Feedback;
-   size_t LengthAnswerTxt;
-   size_t LengthFeedback;
-   double FloatNum[2];
 
    /***** Get answers *****/
    Tst_GetAnswersQst (Question,&mysql_res,
@@ -3423,120 +3420,20 @@ void Tst_WriteAnswersEdit (struct Tst_Question *Question)
    /***** Write answers *****/
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne (Question);
-         row = mysql_fetch_row (mysql_res);
-         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
-         HTM_TxtF ("(%ld)",Tst_GetIntAnsFromStr (row[1]));
-         HTM_SPAN_End ();
-         break;
-      case Tst_ANS_FLOAT:
-	 if (Question->Answer.NumOptions != 2)
-            Lay_ShowErrorAndExit ("Wrong float range.");
-
-         for (i = 0;
-              i < 2;
-              i++)
-           {
-            row = mysql_fetch_row (mysql_res);
-            FloatNum[i] = Str_GetDoubleFromStr (row[1]);
-           }
-         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
-         HTM_Txt ("([");
-         HTM_Double (FloatNum[0]);
-         HTM_Txt ("; ");
-         HTM_Double (FloatNum[1]);
-         HTM_Txt ("])");
-         HTM_SPAN_End ();
-         break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne (Question);
-         row = mysql_fetch_row (mysql_res);
-         HTM_SPAN_Begin ("class=\"TEST_EDI\"");
-         HTM_Txt ("(");
-         Tst_WriteAnsTF (row[1][0]);
-         HTM_Txt (")");
-         HTM_SPAN_End ();
+         Tst_WriteTFAnsListing (Question,mysql_res);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         HTM_TABLE_BeginPadding (2);
-         for (NumOpt = 0;
-              NumOpt < Question->Answer.NumOptions;
-              NumOpt++)
-           {
-            row = mysql_fetch_row (mysql_res);
-
-            /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
-            LengthAnswerTxt = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
-            if ((AnswerTxt = (char *) malloc (LengthAnswerTxt + 1)) == NULL)
-               Lay_NotEnoughMemoryExit ();
-            Str_Copy (AnswerTxt,row[1],
-                      LengthAnswerTxt);
-            Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                              AnswerTxt,LengthAnswerTxt,false);
-
-            /* Convert the feedback (row[2]), that is in HTML, to rigorous HTML */
-            LengthFeedback = 0;
-            Feedback = NULL;
-            if (row[2])
-               if (row[2][0])
-        	 {
-		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_PER_CHAR;
-		  if ((Feedback = (char *) malloc (LengthFeedback + 1)) == NULL)
-		     Lay_NotEnoughMemoryExit ();
-		  Str_Copy (Feedback,row[2],
-		            LengthFeedback);
-                  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                                    Feedback,LengthFeedback,false);
-        	 }
-
-	    /* Get media (row[3]) */
-	    Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
-
-            HTM_TR_Begin (NULL);
-
-            /* Put an icon that indicates whether the answer
-               is correct or wrong (row[4]) */
-            HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-            if (row[4][0] == 'Y')
-               Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
-            HTM_TD_End ();
-
-            /* Write the number of option */
-            HTM_TD_Begin ("class=\"DAT_SMALL LT\"");
-            HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-            HTM_TD_End ();
-
-            HTM_TD_Begin ("class=\"LT\"");
-
-            /* Write the text of the answer and the media */
-            HTM_DIV_Begin ("class=\"TEST_EDI\"");
-            HTM_Txt (AnswerTxt);
-	    Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
-	                   "TEST_MED_EDIT_LIST_CONT",
-	                   "TEST_MED_EDIT_LIST");
-            HTM_DIV_End ();
-
-            /* Write the text of the feedback */
-            HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
-            if (LengthFeedback)
-	       HTM_Txt (Feedback);
-            HTM_DIV_End ();
-
-            HTM_TD_End ();
-
-            HTM_TR_End ();
-
-	    /* Free memory allocated for the answer and the feedback */
-	    free (AnswerTxt);
-	    if (LengthFeedback)
-	       free (Feedback);
-           }
-         HTM_TABLE_End ();
+         Tst_WriteChoiceAnsListing (Question,mysql_res);
 	 break;
+      case Tst_ANS_INT:
+         Tst_WriteIntAnsListing (Question,mysql_res);
+         break;
+      case Tst_ANS_FLOAT:
+         Tst_WriteFloatAnsEdit (Question,mysql_res);
+         break;
       default:
          break;
      }
@@ -3546,12 +3443,12 @@ void Tst_WriteAnswersEdit (struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/************** Write answers of a question when viewing a test **************/
+/************** Write answers of a question when seeing a test ***************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
-                                          struct Tst_Question *Question,
-                                          bool Shuffle)
+static void Tst_WriteAnswersSeeing (unsigned NumQst,
+                                    struct Tst_Question *Question,
+                                    bool Shuffle)
   {
    /***** Write parameter with question code *****/
    Tst_WriteParamQstCod (NumQst,Question->QstCod);
@@ -3560,20 +3457,20 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsViewTest (NumQst);
+         Tst_WriteIntAnsSeeing (NumQst);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsViewTest (NumQst);
+         Tst_WriteFloatAnsSeeing (NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsViewTest (NumQst);
+         Tst_WriteTFAnsSeeing (NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsViewTest (NumQst,Question,Shuffle);
+         Tst_WriteChoiceAnsSeeing (NumQst,Question,Shuffle);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsViewTest (NumQst);
+         Tst_WriteTextAnsSeeing (NumQst);
          break;
       default:
          break;
@@ -3584,12 +3481,12 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
-                                        const struct TsR_Result *Result,
-                                        unsigned NumQst,
-					struct Tst_Question *Question,
-					unsigned Visibility,
-                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
+static void Tst_WriteAnswersResult (struct UsrData *UsrDat,
+                                    const struct TsR_Result *Result,
+                                    unsigned NumQst,
+				    struct Tst_Question *Question,
+				    unsigned Visibility,
+                                    double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
 
@@ -3608,35 +3505,35 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsAssessTest    (UsrDat,Result,
-                                       NumQst,Question,mysql_res,
-				       Visibility,
-				       ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteIntAnsResult    (UsrDat,Result,
+                                   NumQst,Question,mysql_res,
+				   Visibility,
+				   ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
-	 Tst_WriteFloatAnsAssessTest  (UsrDat,Result,
-	                               NumQst,Question,mysql_res,
-				       Visibility,
-				       ScoreThisQst,AnswerIsNotBlank);
+	 Tst_WriteFloatAnsResult  (UsrDat,Result,
+	                           NumQst,Question,mysql_res,
+				   Visibility,
+				   ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsAssessTest     (UsrDat,Result,
-                                       NumQst,Question,mysql_res,
-				       Visibility,
-				       ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTFAnsResult     (UsrDat,Result,
+                                   NumQst,Question,mysql_res,
+				   Visibility,
+				   ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsAssessTest (UsrDat,Result,
-                                       NumQst,Question,mysql_res,
-				       Visibility,
-				       ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteChoiceAnsResult (UsrDat,Result,
+                                   NumQst,Question,mysql_res,
+				   Visibility,
+				   ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsAssessTest   (UsrDat,Result,
-                                       NumQst,Question,mysql_res,
-				       Visibility,
-				       ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTextAnsResult   (UsrDat,Result,
+                                   NumQst,Question,mysql_res,
+				   Visibility,
+				   ScoreThisQst,AnswerIsNotBlank);
          break;
       default:
          break;
@@ -3661,10 +3558,39 @@ bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when viewing a test ****************/
+/*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsViewTest (unsigned NumQst)
+static void Tst_WriteTFAnsListing (const struct Tst_Question *Question,
+                                   MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   Tst_CheckIfNumberOfAnswersIsOne (Question);
+
+   /***** Get answer true or false *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Write answer *****/
+   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_Txt ("(");
+   Tst_WriteAnsTF (row[1][0]);
+   HTM_Txt (")");
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
+/************** Write false / true answer when seeing a test ****************/
+/*****************************************************************************/
+
+static void Tst_WriteTFAnsSeeing (unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
 
@@ -3678,7 +3604,7 @@ static void Tst_WriteTFAnsViewTest (unsigned NumQst)
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when viewing a test ****************/
+/************** Write false / true answer when seeing a test *****************/
 /*****************************************************************************/
 
 void Tst_WriteAnsTF (char AnsTF)
@@ -3703,14 +3629,14 @@ void Tst_WriteAnsTF (char AnsTF)
 /************** Write false / true answer when assessing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
-                                      const struct TsR_Result *Result,
-				      unsigned NumQst,
-				      const struct Tst_Question *Question,
-				      MYSQL_RES *mysql_res,
-				      unsigned Visibility,
-                                      double *ScoreThisQst,
-                                      bool *AnswerIsNotBlank)
+static void Tst_WriteTFAnsResult (struct UsrData *UsrDat,
+                                  const struct TsR_Result *Result,
+				  unsigned NumQst,
+				  const struct Tst_Question *Question,
+				  MYSQL_RES *mysql_res,
+				  unsigned Visibility,
+                                  double *ScoreThisQst,
+                                  bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    char AnsTF;
@@ -3797,13 +3723,113 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    HTM_TABLE_End ();
   }
 
+
 /*****************************************************************************/
-/******** Write single or multiple choice answer when viewing a test *********/
+/**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,
-                                        struct Tst_Question *Question,
-                                        bool Shuffle)
+static void Tst_WriteChoiceAnsListing (struct Tst_Question *Question,
+                                       MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+   char *AnswerTxt;
+   char *Feedback;
+   size_t LengthAnswerTxt;
+   size_t LengthFeedback;
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   HTM_TABLE_BeginPadding (2);
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
+      LengthAnswerTxt = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
+      if ((AnswerTxt = (char *) malloc (LengthAnswerTxt + 1)) == NULL)
+	 Lay_NotEnoughMemoryExit ();
+      Str_Copy (AnswerTxt,row[1],
+		LengthAnswerTxt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			AnswerTxt,LengthAnswerTxt,false);
+
+      /* Convert the feedback (row[2]), that is in HTML, to rigorous HTML */
+      LengthFeedback = 0;
+      Feedback = NULL;
+      if (row[2])
+	 if (row[2][0])
+	   {
+	    LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_PER_CHAR;
+	    if ((Feedback = (char *) malloc (LengthFeedback + 1)) == NULL)
+	       Lay_NotEnoughMemoryExit ();
+	    Str_Copy (Feedback,row[2],
+		      LengthFeedback);
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Feedback,LengthFeedback,false);
+	   }
+
+      /* Get media (row[3]) */
+      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+
+      HTM_TR_Begin (NULL);
+
+      /* Put an icon that indicates whether the answer
+	 is correct or wrong (row[4]) */
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+      if (row[4][0] == 'Y')
+	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
+      HTM_TD_End ();
+
+      /* Write the number of option */
+      HTM_TD_Begin ("class=\"DAT_SMALL LT\"");
+      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"LT\"");
+
+      /* Write the text of the answer and the media */
+      HTM_DIV_Begin ("class=\"TEST_EDI\"");
+      HTM_Txt (AnswerTxt);
+      Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
+		     "TEST_MED_EDIT_LIST_CONT",
+		     "TEST_MED_EDIT_LIST");
+      HTM_DIV_End ();
+
+      /* Write the text of the feedback */
+      HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
+      if (LengthFeedback)
+	 HTM_Txt (Feedback);
+      HTM_DIV_End ();
+
+      HTM_TD_End ();
+
+      HTM_TR_End ();
+
+      /* Free memory allocated for the answer and the feedback */
+      free (AnswerTxt);
+      if (LengthFeedback)
+	 free (Feedback);
+     }
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/******** Write single or multiple choice answer when seeing a test **********/
+/*****************************************************************************/
+
+static void Tst_WriteChoiceAnsSeeing (unsigned NumQst,
+                                      struct Tst_Question *Question,
+                                      bool Shuffle)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
@@ -3916,14 +3942,14 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,
 /******* Write single or multiple choice answer when assessing a test ********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
-                                          const struct TsR_Result *Result,
-				          unsigned NumQst,
-				          struct Tst_Question *Question,
-				          MYSQL_RES *mysql_res,
-				          unsigned Visibility,
-                                          double *ScoreThisQst,
-                                          bool *AnswerIsNotBlank)
+static void Tst_WriteChoiceAnsResult (struct UsrData *UsrDat,
+                                      const struct TsR_Result *Result,
+				      unsigned NumQst,
+				      struct Tst_Question *Question,
+				      MYSQL_RES *mysql_res,
+				      unsigned Visibility,
+                                      double *ScoreThisQst,
+                                      bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -4263,10 +4289,10 @@ void Tst_ComputeScoreQst (const struct Tst_Question *Question,
   }
 
 /*****************************************************************************/
-/******************** Write text answer when viewing a test ******************/
+/******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsViewTest (unsigned NumQst)
+static void Tst_WriteTextAnsSeeing (unsigned NumQst)
   {
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
@@ -4282,14 +4308,14 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
 /***************** Write text answer when assessing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
-                                        const struct TsR_Result *Result,
-				        unsigned NumQst,
-				        struct Tst_Question *Question,
-				        MYSQL_RES *mysql_res,
-				        unsigned Visibility,
-                                        double *ScoreThisQst,
-                                        bool *AnswerIsNotBlank)
+static void Tst_WriteTextAnsResult (struct UsrData *UsrDat,
+                                    const struct TsR_Result *Result,
+				    unsigned NumQst,
+				    struct Tst_Question *Question,
+				    MYSQL_RES *mysql_res,
+				    unsigned Visibility,
+                                    double *ScoreThisQst,
+                                    bool *AnswerIsNotBlank)
   {
    unsigned NumOpt;
    MYSQL_ROW row;
@@ -4479,10 +4505,33 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/****************** Write integer answer when viewing a test *****************/
+/****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsViewTest (unsigned NumQst)
+static void Tst_WriteIntAnsListing (const struct Tst_Question *Question,
+                                    MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   Tst_CheckIfNumberOfAnswersIsOne (Question);
+   row = mysql_fetch_row (mysql_res);
+   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_TxtF ("(%ld)",Tst_GetIntAnsFromStr (row[1]));
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
+/****************** Write integer answer when seeing a test ******************/
+/*****************************************************************************/
+
+static void Tst_WriteIntAnsSeeing (unsigned NumQst)
   {
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
@@ -4498,14 +4547,14 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
 /**************** Write integer answer when assessing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
-                                       const struct TsR_Result *Result,
-				       unsigned NumQst,
-				       const struct Tst_Question *Question,
-				       MYSQL_RES *mysql_res,
-				       unsigned Visibility,
-                                       double *ScoreThisQst,
-                                       bool *AnswerIsNotBlank)
+static void Tst_WriteIntAnsResult (struct UsrData *UsrDat,
+                                   const struct TsR_Result *Result,
+				   unsigned NumQst,
+				   const struct Tst_Question *Question,
+				   MYSQL_RES *mysql_res,
+				   unsigned Visibility,
+                                   double *ScoreThisQst,
+                                   bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    long IntAnswerUsr;
@@ -4608,11 +4657,49 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    HTM_TABLE_End ();
   }
 
+
 /*****************************************************************************/
-/****************** Write float answer when viewing a test *******************/
+/****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
+static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question,
+                                   MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   unsigned i;
+   double FloatNum[2];
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   if (Question->Answer.NumOptions != 2)
+      Lay_ShowErrorAndExit ("Wrong float range.");
+
+   for (i = 0;
+	i < 2;
+	i++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      FloatNum[i] = Str_GetDoubleFromStr (row[1]);
+     }
+   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_Txt ("([");
+   HTM_Double (FloatNum[0]);
+   HTM_Txt ("; ");
+   HTM_Double (FloatNum[1]);
+   HTM_Txt ("])");
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
+/****************** Write float answer when seeing a test ********************/
+/*****************************************************************************/
+
+static void Tst_WriteFloatAnsSeeing (unsigned NumQst)
   {
    char StrQstIndOrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
 
@@ -4628,14 +4715,14 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
 /***************** Write float answer when assessing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
-                                         const struct TsR_Result *Result,
-				         unsigned NumQst,
-				         const struct Tst_Question *Question,
-				         MYSQL_RES *mysql_res,
-				         unsigned Visibility,
-                                         double *ScoreThisQst,
-                                         bool *AnswerIsNotBlank)
+static void Tst_WriteFloatAnsResult (struct UsrData *UsrDat,
+                                     const struct TsR_Result *Result,
+				     unsigned NumQst,
+				     const struct Tst_Question *Question,
+				     MYSQL_RES *mysql_res,
+				     unsigned Visibility,
+                                     double *ScoreThisQst,
+                                     bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
    unsigned i;
