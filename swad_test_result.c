@@ -266,7 +266,7 @@ static void TsR_ShowUsrsTstResults (void)
 static void TsR_ShowHeaderTestResults (void)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Score;
@@ -276,7 +276,8 @@ static void TsR_ShowHeaderTestResults (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"RT",Txt_Date);
+   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
@@ -299,6 +300,7 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
    unsigned NumExams;
    unsigned NumTest;
    static unsigned UniqueId = 0;
+   Dat_StartEndTime_t StartEndTime;
    char *Id;
    long TstCod;
    struct TsR_Result Result;
@@ -312,6 +314,11 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
    char *ClassDat;
 
    /***** Make database query *****/
+   /*           From here...                 ...to here
+         ___________|_____                   _____|___________
+   -----|______Exam_|_____|-----------------|_____|_Exam______|-----> time
+      Start         |    End              Start   |          End
+   */
    NumExams =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
 			      "SELECT TstCod,"				// row[0]
@@ -323,8 +330,8 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
 			             "Score"				// row[6]
 			      " FROM tst_exams"
 			      " WHERE CrsCod=%ld AND UsrCod=%ld"
-			      " AND TstTime>=FROM_UNIXTIME(%ld)"
-			      " AND TstTime<=FROM_UNIXTIME(%ld)"
+			      " AND EndTime>=FROM_UNIXTIME(%ld)"
+			      " AND StartTime<=FROM_UNIXTIME(%ld)"
 			      " ORDER BY TstCod",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      UsrDat->UsrCod,
@@ -386,15 +393,20 @@ static void TsR_ShowTstResults (struct UsrData *UsrDat)
          Result.TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
          Result.TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
          UniqueId++;
-	 if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
-		       Id,ClassDat,Gbl.RowEvenOdd);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[Dat_END_TIME],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,false,0x7);
-	 HTM_TD_End ();
-         free (Id);
+	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	      StartEndTime++)
+	   {
+	    if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		          Id,ClassDat,Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,false,0x7);
+	    HTM_TD_End ();
+	    free (Id);
+	   }
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&Result.NumQsts) != 1)
@@ -542,7 +554,7 @@ static void TsR_ShowTestResultsSummaryRow (bool ItsMe,
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtColonNBSP (Txt_Visible_tests);
    HTM_Unsigned (NumExams);
    HTM_TD_End ();

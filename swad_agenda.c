@@ -580,7 +580,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
    /***** Table head *****/
    HTM_TR_Begin (NULL);
 
-   for (Order = Agd_ORDER_BY_START_DATE;
+   for (Order  = Agd_ORDER_BY_START_DATE;
 	Order <= Agd_ORDER_BY_END_DATE;
 	Order++)
      {

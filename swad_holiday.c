@@ -978,7 +978,7 @@ static void Hld_PutFormToCreateHoliday (void)
    HTM_TH (1,1,"LM",Txt_Place);
    HTM_TH (1,1,"LM",Txt_Type);
    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
+   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"LM",Txt_Holiday);
 
    HTM_TR_End ();
@@ -1070,7 +1070,7 @@ static void Hld_PutHeadHolidays (void)
    HTM_TH (1,1,"LM",Txt_Place);
    HTM_TH (1,1,"LM",Txt_Type);
    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
+   HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"LM",Txt_Holiday);
 
    HTM_TR_End ();

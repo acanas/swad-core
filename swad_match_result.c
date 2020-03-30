@@ -612,7 +612,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,2,"CT",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                           Usr_SEX_UNKNOWN]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME]);
+   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"LT",Txt_Match);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);

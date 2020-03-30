@@ -13249,7 +13249,7 @@ INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2009; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2010; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2011; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2012; Hecho
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2013; 
+INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2013; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2014; 
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2015; 
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2016; 
@@ -13261,6 +13261,9 @@ INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2019;
 # Actualizar los últimos antes de dar el cambiazo:
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2020; 
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) > 2020;
+
+Si se quieren eliminar todos los datos de una partición:
+ALTER TABLE log TRUNCATE PARTITION p2014;
 
 
  

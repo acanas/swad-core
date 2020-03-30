@@ -120,7 +120,7 @@ void Dat_PutBoxToSelectDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
-      HTM_LI_Begin ("class=\%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
+      HTM_LI_Begin ("class=\"%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
 						                     "DAT");
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_RADIO ("DateFormat",true,

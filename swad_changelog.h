@@ -528,6 +528,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
          El examen se muestra en pantalla tomándolo del examen en la base de datos, no del formulario.
          Cuando el alumno pulsa en "He terminado" se le pregunta si está seguro y se vuelve a mostrar el examen cogiéndolo de la base de datos.
 
+	Version 19.156.1: Mar 29, 2020	List of test exams with start date and end date. (284557 lines)
 	Version 19.156:   Mar 28, 2020	New action to confirm assessment of test exam.
 					Code refactoring in test and matches. (284544 lines)
 					5 changes necessary in database:

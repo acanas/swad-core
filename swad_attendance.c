@@ -226,7 +226,7 @@ static void Att_ShowAllAttEvents (void)
       HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-      for (Order = Dat_START_TIME;
+      for (Order  = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
