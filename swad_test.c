@@ -129,6 +129,8 @@ static void Tst_FreeTagsList (struct Tst_Tags *Tags);
 
 static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
+static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
+
 static void Tst_GetQuestionsAndAnswersFromForm (struct TsR_Result *Result);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
@@ -475,10 +477,8 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
 void Tst_ShowNewTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    extern const char *Txt_Test;
-   extern const char *Txt_Allow_teachers_to_consult_this_test;
    extern const char *Txt_Done_assess_test;
    struct Tst_Test Test;
    MYSQL_RES *mysql_res;
@@ -497,12 +497,7 @@ void Tst_ShowNewTest (void)
         {
          /***** Get questions *****/
 	 Tst_GetQuestionsForTest (&Test,&mysql_res);
-         if (Test.NumQsts == 0)	// Query database
-           {
-            Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
-            Tst_ShowFormRequestTest (&Test);	// Show the form again
-           }
-         else
+         if (Test.NumQsts)
            {
             /***** Get and update number of hits *****/
             NumAccessesTst = Tst_GetNumAccessesTst () + 1;
@@ -524,19 +519,10 @@ void Tst_ShowNewTest (void)
             Par_PutHiddenParamUnsigned (NULL,"NumQst",Test.NumQsts);
 
             /***** List the questions *****/
-            HTM_TABLE_BeginWideMarginPadding (10);
             Tst_ShowTestQuestionsWhenSeeing (Test.NumQsts,mysql_res);
-	    HTM_TABLE_End ();
 
 	    /***** Test result will be saved? *****/
-	    HTM_DIV_Begin ("class=\"CM\"");
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
-				"value=\"Y\""
-				" checked=\"checked\"");	// By default, teachers can see test result
-	    HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
-	    HTM_LABEL_End ();
-	    HTM_DIV_End ();
+	    Tst_PutCheckBoxAllowTeachers (true);
 
             /***** End form *****/
             Btn_PutConfirmButton (Txt_Done_assess_test);
@@ -552,6 +538,11 @@ void Tst_ShowNewTest (void)
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
                Tst_UpdateLastAccTst (Test.NumQsts);
            }
+         else	// No questions found
+           {
+            Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+            Tst_ShowFormRequestTest (&Test);	// Show the form again
+           }
 
          /***** Free structure that stores the query result *****/
          DB_FreeMySQLResult (&mysql_res);
@@ -562,6 +553,27 @@ void Tst_ShowNewTest (void)
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
+  }
+
+/*****************************************************************************/
+/************ Put checkbox to allow teachers to see test result **************/
+/*****************************************************************************/
+
+static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Allow_teachers_to_consult_this_test;
+
+   /***** Test result will be available for teachers? *****/
+   HTM_DIV_Begin ("class=\"CM\"");
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
+		       "value=\"Y\"%s",
+                       AllowTeachers ? " checked=\"checked\"" :	// Teachers can see test result
+                		       "");
+   HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
+   HTM_LABEL_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -962,26 +974,35 @@ static void Tst_ShowTestQuestionsWhenSeeing (unsigned NumQsts,
    struct Tst_Question Question;
    MYSQL_ROW row;
 
-   /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   if (NumQsts)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (10);
 
-      /* Create test question */
-      Tst_QstConstructor (&Question);
+      /***** Write one row for each question *****/
+      for (NumQst = 0;
+	   NumQst < NumQsts;
+	   NumQst++)
+	{
+	 Gbl.RowEvenOdd = NumQst % 2;
 
-      /* Get question code (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
+	 /* Create test question */
+	 Tst_QstConstructor (&Question);
 
-      /* Show question */
-      Tst_ShowOneTestQuestionWhenSeeing (NumQst,&Question);
+	 /* Get question code (row[0]) */
+	 row = mysql_fetch_row (mysql_res);
+	 if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /* Destroy test question */
-      Tst_QstDestructor (&Question);
+	 /* Show question */
+	 Tst_ShowOneTestQuestionWhenSeeing (NumQst,&Question);
+
+	 /* Destroy test question */
+	 Tst_QstDestructor (&Question);
+	}
+
+      /***** End table *****/
+      HTM_TABLE_End ();
      }
   }
 
