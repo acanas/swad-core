@@ -155,6 +155,12 @@ void Tst_ShowNewTest (void);
 void Tst_RequestAssessTest (void);
 void Tst_AssessTest (void);
 
+void Tst_ComputeChoiceAnsScore (struct TsR_Result *Result,
+				unsigned NumQst,
+				struct Tst_Question *Question);
+void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
+
 void Tst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 void Tst_ShowGrade (double Grade,double MaxGrade);
@@ -162,11 +168,10 @@ void Tst_ShowGrade (double Grade,double MaxGrade);
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
 void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
-				   const struct TsR_Result *Result,
+				   struct TsR_Result *Result,
 				   unsigned NumQst,
 				   MYSQL_ROW row,
-				   unsigned Visibility,
-				   double *ScoreThisQst,bool *AnswerIsNotBlank);
+				   unsigned Visibility);
 void Tst_WriteNumQst (unsigned NumQst);
 void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
@@ -183,18 +188,9 @@ void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
-void Tst_GetCorrectAnswersFromDB (struct Tst_Question *Question);
 void Tst_WriteAnswersListing (struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
-void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
-void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION]);
-void Tst_ComputeScoreQst (const struct Tst_Question *Question,
-                          unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],
-                          bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
-			  double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);

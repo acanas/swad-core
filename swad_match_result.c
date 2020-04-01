@@ -1251,7 +1251,7 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Result->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1260,24 +1260,24 @@ void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Result->StrIndexes[NumQst],row[2],
+      Str_Copy (Result->Questions[NumQst].StrIndexes,row[2],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Result->StrAnswers[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Result->Questions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
          Result->NumQstsNotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Result->StrAnswers[NumQst][0] = '\0';	// Empty answer
+	 Result->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Result->StrIndexes[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (Result->StrAnswers[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/

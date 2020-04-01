@@ -267,7 +267,7 @@ void Med_GetMediaDataByCod (struct Media *Media)
    size_t Length;
 
    /***** Get data of a media from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a post",
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
 			     "SELECT Type,"	// row[0]
 			            "Name,"	// row[1]
 			            "URL,"	// row[2]

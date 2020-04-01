@@ -45,16 +45,20 @@
 
 struct TsR_Result
   {
+   long TstCod;			// Exam code
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   unsigned NumQsts;
-   unsigned NumQstsNotBlank;
-   long QstCodes[TstCfg_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
-   char StrIndexes[TstCfg_MAX_QUESTIONS_PER_TEST]
-                  [Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswers[TstCfg_MAX_QUESTIONS_PER_TEST]
-                  [Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   bool AllowTeachers;	// Are teachers allowed to see this test result?
-   double Score;	// Total score of the test result
+   unsigned NumQsts;		// Number of questions
+   unsigned NumQstsNotBlank;	// Number of questions not blank
+   bool AllowTeachers;		// Are teachers allowed to see this test result?
+   double Score;		// Total score of the test result
+   struct
+     {
+      long QstCod;		// Question code
+      char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+      char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+      double Score;		// Question score
+      bool AnswerIsNotBlank;	// Answer not blank?
+     } Questions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 
 /*****************************************************************************/
@@ -64,17 +68,15 @@ struct TsR_Result
 void TsR_SelUsrsToViewUsrsTstResults (void);
 void TsR_SelDatesToSeeMyTstResults (void);
 void TsR_ShowMyTstResults (void);
-long TsR_CreateTestResultInDB (const struct TsR_Result *Result);
-void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     const struct TsR_Result *Result);
+void TsR_CreateTestResultInDB (struct TsR_Result *Result);
+void TsR_UpdateScoreOfTestResultInDB (const struct TsR_Result *Result);
 void TsR_GetUsrsAndShowTstResults (void);
 void TsR_ShowOneTstResult (void);
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 const struct TsR_Result *Result,
+			 struct TsR_Result *Result,
 			 unsigned Visibility);
-void TsR_StoreOneTestResultQstInDB (long TstCod,
-                                    const struct TsR_Result *Result,
-                                    unsigned NumQst,double ScoreThisQst);
+void TsR_StoreOneTestResultQstInDB (const struct TsR_Result *Result,
+                                    unsigned NumQst);
 void TsR_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void TsR_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TsR_RemoveCrsTestResults (long CrsCod);

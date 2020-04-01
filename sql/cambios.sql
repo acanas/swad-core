@@ -13250,6 +13250,7 @@ INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2010; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2011; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2012; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2013; Hecho
+
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140101' AND ClickTime<'20140201'; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140201' AND ClickTime<'20140301'; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140301' AND ClickTime<'20140401'; Hecho
@@ -13259,13 +13260,38 @@ INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140601' AND ClickTime
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140701' AND ClickTime<'20140801'; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140801' AND ClickTime<'20140901'; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20140901' AND ClickTime<'20141001'; Hecho
-INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141001' AND ClickTime<'20141101'; 
-INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141101' AND ClickTime<'20141201'; 
-INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141201' AND ClickTime<'20150101'; 
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2015; 
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2016; 
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2017; 
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2018; 
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141001' AND ClickTime<'20141101'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141101' AND ClickTime<'20141201'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20141201' AND ClickTime<'20150101'; Hecho
+
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150101' AND ClickTime<'20150201'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150201' AND ClickTime<'20150301'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150301' AND ClickTime<'20150401'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150401' AND ClickTime<'20150501'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150501' AND ClickTime<'20150601'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150601' AND ClickTime<'20150701'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150701' AND ClickTime<'20150801'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150801' AND ClickTime<'20150901'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20150901' AND ClickTime<'20151001'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20151001' AND ClickTime<'20151101'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20151101' AND ClickTime<'20151201'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20151201' AND ClickTime<'20160101'; Hecho
+
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160101' AND ClickTime<'20160201'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160201' AND ClickTime<'20160301'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160301' AND ClickTime<'20160401'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160401' AND ClickTime<'20160501'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160501' AND ClickTime<'20160601'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160601' AND ClickTime<'20160701'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160701' AND ClickTime<'20160801'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160801' AND ClickTime<'20160901'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20160901' AND ClickTime<'20161001'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20161001' AND ClickTime<'20161101'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20161101' AND ClickTime<'20161201'; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20161201' AND ClickTime<'20170101'; Hecho
+
+INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2017; Hecho
+INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2018; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2019; 
 # hasta aquí ya hecho en openswad.org, aún no en swad.ugr.es
 

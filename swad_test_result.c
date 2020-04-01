@@ -168,13 +168,13 @@ void TsR_ShowMyTstResults (void)
   }
 
 /*****************************************************************************/
-/********************* Store test result in database *************************/
+/**************** Create new blank test result in database *******************/
 /*****************************************************************************/
 
-long TsR_CreateTestResultInDB (const struct TsR_Result *Result)
+void TsR_CreateTestResultInDB (struct TsR_Result *Result)
   {
    /***** Insert new test result into table *****/
-   return
+   Result->TstCod =
    DB_QueryINSERTandReturnCode ("can not create new test result",
 				"INSERT INTO tst_exams"
 				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,AllowTeachers)"
@@ -191,19 +191,22 @@ long TsR_CreateTestResultInDB (const struct TsR_Result *Result)
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-void TsR_StoreScoreOfTestResultInDB (long TstCod,
-                                     const struct TsR_Result *Result)
+void TsR_UpdateScoreOfTestResultInDB (const struct TsR_Result *Result)
   {
    /***** Update score in test result *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    DB_QueryUPDATE ("can not update test result",
 		   "UPDATE tst_exams"
-	           " SET NumQstsNotBlank=%u,"
+	           " SET EndTime=NOW(),"
+	                "NumQstsNotBlank=%u,"
 	                "Score='%.15lg'"
-	           " WHERE TstCod=%ld",
+	           " WHERE TstCod=%ld"
+	           " AND CrsCod=%ld AND UsrCod=%ld",	// Extra checks
 		   Result->NumQstsNotBlank,
 		   Result->Score,
-		   TstCod);
+		   Result->TstCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -847,7 +850,7 @@ void TsR_ShowOneTstResult (void)
 static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumTags;
+   unsigned NumTags;
 
    /***** Get all tags of questions in this test *****/
    NumTags = (unsigned)
@@ -874,7 +877,7 @@ static void TsR_ShowTstTagsPresentInATestResult (long TstCod)
 /*****************************************************************************/
 
 void TsR_ShowTestResult (struct UsrData *UsrDat,
-			 const struct TsR_Result *Result,
+			 struct TsR_Result *Result,
 			 unsigned Visibility)
   {
    extern const char *Txt_Question_modified;
@@ -882,8 +885,6 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
-   double ScoreThisQst;
-   bool AnswerIsNotBlank;
    bool ThisQuestionHasBeenEdited;
    time_t EditTimeUTC;
 
@@ -894,7 +895,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
       Gbl.RowEvenOdd = NumQst % 2;
 
       /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Result->QstCodes[NumQst],&mysql_res))	// Question exists
+      if (Tst_GetOneQuestionByCod (Result->Questions[NumQst].QstCod,&mysql_res))	// Question exists
 	{
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -927,9 +928,7 @@ void TsR_ShowTestResult (struct UsrData *UsrDat,
 					  Result,
 					  NumQst,
 					  row,
-					  Visibility,
-					  &ScoreThisQst,	// Not used here
-					  &AnswerIsNotBlank);	// Not used here
+					  Visibility);
 	}
       else
 	{
@@ -1020,17 +1019,16 @@ static void TsR_GetTestResultDataByTstCod (long TstCod,struct TsR_Result *Result
 /************ Store user's answers of an test result into database ***********/
 /*****************************************************************************/
 
-void TsR_StoreOneTestResultQstInDB (long TstCod,
-                                    const struct TsR_Result *Result,
-                                    unsigned NumQst,double ScoreThisQst)
+void TsR_StoreOneTestResultQstInDB (const struct TsR_Result *Result,
+                                    unsigned NumQst)
   {
-   char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
-   char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Replace each separator of multiple parameters by a comma *****/
    /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Result->StrIndexes[NumQst],Indexes);
-   Par_ReplaceSeparatorMultipleByComma (Result->StrAnswers[NumQst],Answers);
+   Par_ReplaceSeparatorMultipleByComma (Result->Questions[NumQst].StrIndexes,StrIndexes);
+   Par_ReplaceSeparatorMultipleByComma (Result->Questions[NumQst].StrAnswers,StrAnswers);
 
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -1039,11 +1037,11 @@ void TsR_StoreOneTestResultQstInDB (long TstCod,
 		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		   TstCod,Result->QstCodes[NumQst],
+		   Result->TstCod,Result->Questions[NumQst].QstCod,
 		   NumQst,	// 0, 1, 2, 3...
-		   ScoreThisQst,
-		   Indexes,
-		   Answers);
+		   Result->Questions[NumQst].Score,
+		   StrIndexes,
+		   StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -1077,21 +1075,21 @@ static void TsR_GetTestResultQuestionsFromDB (long TstCod,struct TsR_Result *Res
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code */
-      if ((Result->QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get indexes for this question (row[1]) */
-      Str_Copy (Result->StrIndexes[NumQst],row[1],
+      Str_Copy (Result->Questions[NumQst].StrIndexes,row[1],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question (row[2]) */
-      Str_Copy (Result->StrAnswers[NumQst],row[2],
+      Str_Copy (Result->Questions[NumQst].StrAnswers,row[2],
                 Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Result->StrIndexes[NumQst]);
-      Par_ReplaceCommaBySeparatorMultiple (Result->StrAnswers[NumQst]);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/

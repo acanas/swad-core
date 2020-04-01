@@ -3956,10 +3956,6 @@ static void Mch_ComputeScore (struct TsR_Result *Result)
   {
    unsigned NumQst;
    struct Tst_Question Question;
-   double ScoreThisQst;
-   bool AnswerIsNotBlank;
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
 
    for (NumQst = 0, Result->Score = 0.0;
 	NumQst < Result->NumQsts;
@@ -3967,20 +3963,14 @@ static void Mch_ComputeScore (struct TsR_Result *Result)
      {
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
-      Question.QstCod = Result->QstCodes[NumQst];
+      Question.QstCod = Result->Questions[NumQst].QstCod;
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
-      /***** Get correct answers of test question from database *****/
-      Tst_GetCorrectAnswersFromDB (&Question);
-
-      /***** Compute the score of this question *****/
-      Tst_GetIndexesFromStr (Result->StrIndexes[NumQst],Indexes);
-      Tst_GetAnswersFromStr (Result->StrAnswers[NumQst],AnswersUsr);
-      Tst_ComputeScoreQst (&Question,
-                           Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
+      /***** Compute score for this answer ******/
+      Tst_ComputeChoiceAnsScore (Result,NumQst,&Question);
 
       /***** Update total score *****/
-      Result->Score += ScoreThisQst;
+      Result->Score += Result->Questions[NumQst].Score;
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
