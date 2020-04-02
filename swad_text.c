@@ -14,6 +14,7 @@
     German translation:
 	Antonio Cañas Vargas
 	Rafael Barranco-Droege
+        Etienne Ruedin
     English translation (finished):
 	Antonio Cañas Vargas
     Spanish translation (finished):
@@ -188,9 +189,9 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 	" i amb el fons prou clar.<br />"
 	"Premeu sobre ell per confirmar la actualizaci&oacute; de la fotografia.";
 #elif L==2	// de
-	"Ein Gesicht (gr&uuml;n markiert) wurde vor Position erfasst"
+	"Ein Gesicht (gr&uuml;n markiert) wurde  erkannt"
 	" und der Hintergrund ist genug hell.<br />"
-	"Klicken Sie darauf, um das Update des Bildes zu best&auml;tigen.";
+	"Klicken Sie darauf, um das neue Bild zu best&auml;tigen.";
 #elif L==3	// en
 	"A face (marked in green) has been detected in front position"
 	" and the background is light enough.<br />"
@@ -226,7 +227,7 @@ const char *Txt_A_face_marked_in_red_has_been_detected_ =
 	"S'ha detectat un rostre (senyalat en vermell) en posici&oacute; frontal,"
 	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2	// de
-	"Ein Gesicht (rot markiert) wurde vor Position erkannt,"
+	"Ein Gesicht (rot markiert) wurde  erkannt,"
 	" aber der Hintergrund ist zu dunkel.";
 #elif L==3	// en
 	"A face (marked in red) has been detected in front position,"
@@ -257,9 +258,9 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 	" a la direcci&oacute;n de correo <strong>%s</strong>"
 	" para confirmar dicha direcci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"A message has been sent"
-	" to email address <strong>%s</strong>"
-	" to confirm that address.";			// Need Übersetzung
+	"Eine Nachricht wurde an die"
+	"e-Mail-Adresse <strong>%s</strong>"
+	" gesandt, um die Adresse zu überprüfen.";
 #elif L==3	// en
 	"A message has been sent"
 	" to email address <strong>%s</strong>"
@@ -394,7 +395,7 @@ const char *Txt_A_user_can_not_have_more_than_X_IDs =
 #if   L==1	// ca
 	"Un usuari no pot tenir m&eacute;s de %u IDs (DNI/c&egrave;dulas)";
 #elif L==2	// de
-	"Ein Benutzer kann nicht mehr als %u Ausweis-Nr.";
+	"Ein Benutzer kann nicht mehr als %u Ausweis-Nr. haben.";
 #elif L==3	// en
 	"A user can not have more than %u IDs.";
 #elif L==4	// es
@@ -480,7 +481,7 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	" per veure contingut multim&iacute;dia de outros sites";
 #elif L==2	// de
 	"Akzeptieren Sie Cookies von Drittanbietern,"
-	" um Multimedia-Inhalte von anderen Websites anzuzeigen";
+	" um Multimedia-Inhalte von anderen Websites anzuzeigen?";
 #elif L==3	// en
 	"Accept third-party cookies"
 	" to view multimedia content from other websites";
@@ -508,7 +509,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_cent
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per administradors del centre";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Lehrinstitut";
+	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren des Lehrinstituts";
 #elif L==3	// en
 	"accessible for reading and writing by administrators of the centre";
 #elif L==4	// es
@@ -531,7 +532,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degr
 	" per administradors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich"
-	" f&uuml;r Administratoren der Studiengang";
+	" f&uuml;r Administratoren des Studiengangs";
 #elif L==3	// en
 	"accessible for reading and writing"
 	" by administrators of the degree";
@@ -580,7 +581,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per membres del projecte";
 #elif L==2	// de
-	"zug&auml;nglich zum Lesen und Schreiben von Projektmitgliedern";
+	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Projektmitglieder";
 #elif L==3	// en
 	"accessible for reading and writing by project members";
 #elif L==4	// es
@@ -601,7 +602,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluat
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per tutors i avaluadors del projecte";
 #elif L==2	// de
-	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Tutoren und Auswerter der Projekt";
+	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Tutoren und Auswerter des Projekts";
 #elif L==3	// en
 	"accessible for reading and writing by project tutors and evaluators";
 #elif L==4	// es
@@ -622,7 +623,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per estudiants i professors del centre";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Lehrinstituts";
 #elif L==3	// en
 	"accessible for reading and writing by students and teachers of the centre";
 #elif L==4	// es
@@ -643,7 +644,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by students and teachers of the course";
 #elif L==4	// es
@@ -666,7 +667,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 	" per estudiants i professors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich"
-	" f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+	" f&uuml;r Studenten und Lehrkr&auml;fte des Studiengangs";
 #elif L==3	// en
 	"accessible for reading and writing"
 	" by students and teachers of the degree";
@@ -715,7 +716,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_
 #if   L==1	// ca
 	"accesible per a lectura i escriptura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by students of the group and teachers of the course";
 #elif L==4	// es
@@ -736,7 +737,7 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by teachers of the course";
 #elif L==4	// es
@@ -757,7 +758,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 #if   L==1	// ca
 	"accessible per a lectura per vost&egrave; i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible for reading and writing by you and the teachers of the course";
 #elif L==4	// es
@@ -778,7 +779,7 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #if   L==1	// ca
 	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by you and the teachers of the course";
 #elif L==4	// es
@@ -799,7 +800,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 #if   L==1	// ca
 	"accessible nom&eacute;s per a lectura per estudiants i professors del centre";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Lehrinstituts";
 #elif L==3	// en
 	"accessible only for reading by students and teachers of the centre";
 #elif L==4	// es
@@ -820,7 +821,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #if   L==1	// ca
 	"accessible nom&eacute;s per a lectura per estudiants i professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by students and teachers of the course";
 #elif L==4	// es
@@ -843,7 +844,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 	" per estudiants i professors de la titulaci&oacute;";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich"
-	" f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+	" f&uuml;r Studenten und Lehrkr&auml;fte des Studiengangs";
 #elif L==3	// en
 	"accessible only for reading"
 	" by students and teachers of the degree";
@@ -892,7 +893,7 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #if   L==1	// ca
 	"accesible nom&eacute;s per a lectura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte des Kurses";
 #elif L==3	// en
 	"accessible only for reading by students of the group and teachers of the course";
 #elif L==4	// es
@@ -976,7 +977,7 @@ const char *Txt_Administer_multiple_non_editing_teachers =
 #if   L==1	// ca
 	"Administrar diversos professors no editors";
 #elif L==2	// de
-	"Verwalten Sie mehrere nicht bearbeiteter Lehrkr&auml;fte";
+	"Verwalten Sie mehrere nicht bearbeitende Lehrkr&auml;fte";
 #elif L==3	// en
 	"Administer multiple non-editing teachers";
 #elif L==4	// es
@@ -1018,7 +1019,7 @@ const char *Txt_Administer_one_user =
 #if   L==1	// ca
 	"Administrar un usuari";
 #elif L==2	// de
-	"Verwalten eines Benutzer";
+	"Verwalten eines Benutzers";
 #elif L==3	// en
 	"Administer one user";
 #elif L==4	// es
@@ -1039,7 +1040,7 @@ const char *Txt_Administer_user =
 #if   L==1	// ca
 	"Administrar usuari";
 #elif L==2	// de
-	"Verwalten Benutzer";
+	"Benutzer verwalten";
 #elif L==3	// en
 	"Administer user";
 #elif L==4	// es
@@ -1173,7 +1174,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de
-	"Sichtbar Ereignisse"
+	"Sichtbare Ereignisse"
 #elif L==3	// en
 	"Visible events"
 #elif L==4	// es
@@ -1216,7 +1217,7 @@ const char *Txt_all_degrees =
 #if   L==1	// ca
 	"Totes les titulacions";
 #elif L==2	// de
-	"all degrees";			// Need Übersetzung
+	"alle Studieng&auml;nge";	
 #elif L==3	// en
 	"all degrees";
 #elif L==4	// es
@@ -1300,7 +1301,7 @@ const char *Txt_All_tags =		// Tags used in test
 #if   L==1	// ca
 	"Tots els descriptors";
 #elif L==2	// de
-	"Alle Tags";
+	"Alle Schlagworte";
 #elif L==3	// en
 	"All tags";
 #elif L==4	// es
@@ -1342,7 +1343,7 @@ const char *Txt_Allow_teachers_to_consult_this_test =
 #if   L==1	// ca
 	"Permetre als professors consultar aquest test";
 #elif L==2	// de
-	"Erm&ouml;glichen es den Lehrern, diese Test zu konsultieren";
+	"Erm&ouml;glicht es den Lehrern, diesen Test zu konsultieren";
 #elif L==3	// en
 	"Allow teachers to consult this test";
 #elif L==4	// es
@@ -1384,7 +1385,7 @@ const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very
 #if   L==1	// ca
 	"Ja existia un joc amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Spiel mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits ein Spiel mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed a game with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1405,7 +1406,7 @@ const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is 
 #if   L==1	// ca
 	"Ja existia un projecte amb la carpeta <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Projekt im Verzeichnis <strong>%s</strong>.";
+	"Es gibt bereits ein Projekt im Verzeichnis <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already a project with folder <strong>%s</strong>.";
 #elif L==4	// es
@@ -1426,7 +1427,7 @@ const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is ve
 #if   L==1	// ca
 	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Umfrage mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits eine Umfrage mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed a survey with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1447,7 +1448,7 @@ const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it
 #if   L==1	// ca
 	"Ja existia una activitat amb la carpeta <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Aufgabe im Verzeichnis <strong>%s</strong>.";
+	"Es gibt bereits eine Aufgabe im Verzeichnis <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already an assignment with folder <strong>%s</strong>.";
 #elif L==4	// es
@@ -1468,7 +1469,7 @@ const char *Txt_Already_existed_an_assignment_with_the_title_X =	// Warning: it 
 #if   L==1	// ca
 	"Ja existia una activitat amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Aufgabe mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits eine Aufgabe mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed an assignment with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1489,7 +1490,7 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 #if   L==1	// ca
 	"Ja existia un esdeveniment amb el t&iacute;tol <strong>%s</strong>.";
 #elif L==2	// de
-	"Es gibt bereits einen Ereignis mit dem Namen <strong>%s</strong>.";
+	"Es gibt bereits ein Ereignis mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"Already existed an event with the title <strong>%s</strong>.";
 #elif L==4	// es
@@ -1657,7 +1658,7 @@ const char *Txt_Another_classroom =
 #if   L==1	// ca
 	"Una altra aula";
 #elif L==2	// de
-	"Eine weitere Klassenzimmer";
+	"Ein weiteres Klassenzimmer";
 #elif L==3	// en
 	"Another classroom";
 #elif L==4	// es
@@ -1678,7 +1679,7 @@ const char *Txt_Another_country =
 #if   L==1	// ca
 	"Un altre pa&iacute;s";
 #elif L==2	// de
-	"Ein weiterer Land";
+	"Ein weiteres Land";
 #elif L==3	// en
 	"Another country";
 #elif L==4	// es
@@ -1720,7 +1721,7 @@ const char *Txt_Another_ID =
 #if   L==1	// ca
 	"Un altre ID";
 #elif L==2	// de
-	"Ein anderer Ausweis-Nr.";
+	"Eine andere Ausweis-Nr.";
 #elif L==3	// en
 	"Another ID";
 #elif L==4	// es
@@ -1804,7 +1805,7 @@ const char *Txt_Add_questions =
 #if   L==1	// ca
 	"Afegir preguntes";
 #elif L==2	// de
-	"F&uuml;gen Fragen";
+	"Fragen hinzuf&uuml;gen";
 #elif L==3	// en
 	"Add questions";
 #elif L==4	// es
@@ -1825,7 +1826,7 @@ const char *Txt_Add_this_ID =
 #if   L==1	// ca
 	"Afegir aquest ID";
 #elif L==2	// de
-	"F&uuml;gen Sie diese Ausweis-Nr.";
+	"F&uuml;gen Sie diese Ausweis-Nr. hinzu";
 #elif L==3	// en
 	"Add this ID";
 #elif L==4	// es
@@ -1846,7 +1847,7 @@ const char *Txt_Add_USERS =	// Warning: it is very important to include %s in th
 #if   L==1	// ca
 	"Afegir %s";
 #elif L==2	// de
-	"F&uuml;gen %s";
+	"%s hinzuf&uuml;gen";
 #elif L==3	// en
 	"Add %s";
 #elif L==4	// es
@@ -1909,7 +1910,7 @@ const char *Txt_Answer_survey =
 #if   L==1	// ca
 	"Respondre enquesta";
 #elif L==2	// de
-	"Beantwortung Umfrage";
+	"Umfrage beantworten";
 #elif L==3	// en
 	"Answer survey";
 #elif L==4	// es
@@ -1951,7 +1952,7 @@ const char *Txt_Any_action =
 #if   L==1	// ca
 	"Qualsevol acci&oacute;";
 #elif L==2	// de
-	"Alle Handlung";
+	"Alle Handlungen";
 #elif L==3	// en
 	"Any action";
 #elif L==4	// es
@@ -1972,7 +1973,7 @@ const char *Txt_any_course =
 #if   L==1	// ca
 	"qualsevol assignatura";
 #elif L==2	// de
-	"alle Kursen";
+	"allen Kursen";
 #elif L==3	// en
 	"any course";
 #elif L==4	// es
@@ -1993,7 +1994,7 @@ const char *Txt_Any_department =
 #if   L==1	// ca
 	"Qualsevol departament";
 #elif L==2	// de
-	"Alle Abteilung";
+	"Alle Abteilungen";
 #elif L==3	// en
 	"Any department";
 #elif L==4	// es
@@ -2014,7 +2015,7 @@ const char *Txt_Any_type_of_degree =
 #if   L==1	// ca
 	"Qualsevol tipus de titulaci&oacute;";
 #elif L==2	// de
-	"Alle Abschlussart";
+	"Alle Abschlussarten";
 #elif L==3	// en
 	"grau";
 #elif L==4	// es
@@ -2056,7 +2057,7 @@ const char *Txt_Application_key =
 #if   L==1	// ca
 	"Clau de aplicaci&oacute;";
 #elif L==2	// de
-	"Application key";		// Need Übersetzung
+	"Anwendungsschlüssel";
 #elif L==3	// en
 	"Application key";
 #elif L==4	// es
@@ -2250,7 +2251,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
-	"Start"
+	"Anfang"
 #elif L==3	// en
 	"Start"
 #elif L==4	// es
@@ -2293,7 +2294,7 @@ const char *Txt_Assignments_area =
 #if   L==1	// ca
 	"Zona d'activitats";
 #elif L==2	// de
-	"Aufgaben-Bereich";
+	"Aufgabenbereich";
 #elif L==3	// en
 	"Assignments area";
 #elif L==4	// es
@@ -2314,7 +2315,7 @@ const char *Txt_assignments_area =
 #if   L==1	// ca
 	"zona d'activitats";	// Necessita traduccio
 #elif L==2	// de
-	"Aufgaben-Bereich";
+	"Aufgabenbereich";
 #elif L==3	// en
 	"assignments area";
 #elif L==4	// es
@@ -2419,7 +2420,7 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de jocs<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Spiele<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Spielen<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of games<br />per course";
 #elif L==4	// es
@@ -2440,7 +2441,7 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />d'items<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Programmelementen<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of items<br />per course";
 #elif L==4	// es
@@ -2461,7 +2462,7 @@ const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de projectes<br />per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Projekte<br />pro Kurs";
+	"Durchschnittliche Anzahl<br />von Projekten<br />pro Kurs";
 #elif L==3	// en
 	"Average number<br />of projects<br />per course";
 #elif L==4	// es
@@ -2566,7 +2567,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_
 #if   L==1	// ca
 	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Need Übersetzung
+         "Durchschnittliche <br />Anzahl<br />Male, dass <br />eine Frage <br />beantwortet wurde";
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";
 #elif L==4	// es
@@ -2587,7 +2588,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_
 #if   L==1	// ca
 	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Need Übersetzung
+         "Durchschnittliche <br />Anzahl<br />Male, dass <br />eine Frage <br />pro Kurs<br/>beantwortet wurde";
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";
 #elif L==4	// es
@@ -2608,7 +2609,7 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #if   L==1	// ca
 	"Nombre mitj&agrave; de usuaris que pertanyen a cada assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl der Benutzer, die an einer Kurs teilnehmen";
+	"Durchschnittliche Anzahl der Benutzer, die an einem Kurs teilnehmen";
 #elif L==3	// en
 	"Average number of users belonging to a course";
 #elif L==4	// es
@@ -2674,7 +2675,7 @@ const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1 =
 #if   L==1	// ca
 	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(de 0 a 1)";	// Necessita traduccio
 #elif L==2	// de
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Need Übersetzung
+	"Durchschnitts-<br />punktzahl<br />pro Frage<br />(von 0 bis 1)";		
 #elif L==3	// en
 	"Average<br />score<br />per question<br />(from 0 to 1)";
 #elif L==4	// es
@@ -2716,7 +2717,7 @@ const char *Txt_Banned_users =
 #if   L==1	// ca
 	"Usuaris bloquejats";
 #elif L==2	// de
-	"Gebannt Benutzer";
+	"Gesperrte Benutzer";
 #elif L==3	// en
 	"Banned users";
 #elif L==4	// es
@@ -2779,7 +2780,7 @@ const char *Txt_Banners =
 #if   L==1	// ca
 	"Banners";
 #elif L==2	// de
-	"Werbebanners";
+	"Werbebanner";
 #elif L==3	// en
 	"Banners";
 #elif L==4	// es
@@ -2800,7 +2801,7 @@ const char *Txt_Basic_public_profile =
 #if   L==1	// ca
 	"Perfil p&uacute;blic b&agrave;sic";
 #elif L==2	// de
-	"Grundlegendes &ouml;ffentliches Profile";
+	"Grundlegendes &ouml;ffentliches Profil";
 #elif L==3	// en
 	"Basic public profile";
 #elif L==4	// es
@@ -2822,8 +2823,8 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	"Abans de crear un compte nou,"
 	" comprovi si ja li han inscrit";
 #elif L==2	// de
-	"Bevor ein neues Benutzerkonto erstellen,"
-	" wenn Sie bereits registriert worden sind";
+	"Bevor Sie ein neues Benutzerkonto erstellen,"
+	"prüfen Sie, ob Sie bereits registriert worden sind";
 #elif L==3	// en
 	"Before creating a new account,"
 	" check if you have been already registered";
@@ -2852,8 +2853,8 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear el seu sobrenom.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihr Benutzernamen erstellen.";
+	"Bevor Sie andere Optionen wählen können,"
+	" m&uuml;ssen Sie Ihren Benutzernamen erstellen.";
 #elif L==3	// en
 	"Before going to any other option"
 	" you must create your nickname.";
@@ -2882,7 +2883,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear la seva contrasenya.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
+	"Bevor Sie andere Optionen wählen können,"
 	" m&uuml;ssen Sie Ihr Passwort erstellen.";
 #elif L==3	// en
 	"Before going to any other option"
@@ -2912,7 +2913,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de omplir la seva adre&ccedil;a de correu.";
 #elif L==2	// de
-	"Bevor ich auf jede andere Option"
+	"Bevor Sie andere Optionen wählen können,"
 	" m&uuml;ssen Sie Ihr E-Mail-Adresse ausf&uuml;llen.";
 #elif L==3	// en
 	"Before going to any other option"
@@ -2941,7 +2942,7 @@ const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is ver
 #if   L==1	// ca
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Briefcase of <strong>%s</strong> has been removed.";		// Need Übersetzung
+	"Aktenmappe <strong>%s</strong> wurde entfernt.";		
 #elif L==3	// en
 	"Briefcase of <strong>%s</strong> has been removed.";
 #elif L==4	// es
@@ -2962,7 +2963,7 @@ const char *Txt_Briefcases =
 #if   L==1	// ca
 	"Maletins";
 #elif L==2	// de
-	"Aktentasche";
+	"Aktenmappe";
 #elif L==3	// en
 	"Briefcases";
 #elif L==4	// es
@@ -3004,7 +3005,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 #if   L==1	// ca
 	"Calcular fotografia mitjana de";
 #elif L==2	// de
-	"Calculate average photo of";			// Need Übersetzung
+	"Durchschnitt der Foto berechnen";			
 #elif L==3	// en
 	"Calculate average photo of";
 #elif L==4	// es
@@ -3068,7 +3069,7 @@ const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quo
 	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque s'excediria la quota de disc.";
 #elif L==2	// de
-	"Verzeichnis <strong>%s</strong> kann aus Platzgründen"
+	"Ordner <strong>%s</strong> kann aus Platzgründen"
 	" nicht erstellt werden.";
 #elif L==3	// en
 	"Cannot create the folder <strong>%s</strong>"
@@ -3098,8 +3099,8 @@ const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or
 	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque ja existeix una carpeta o un fitxer amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the folder <strong>%s</strong>"
-	" because there is already a folder or a file with that name.";	// Need Übersetzung
+	"Ordner <strong>%s</strong> kann nicht erstellt werden,"
+	"weil bereits ein Ordner mit gleichem Namen besteht.";	
 #elif L==3	// en
 	"Cannot create the folder <strong>%s</strong>"
 	" because there is already a folder or a file with that name.";
@@ -3158,8 +3159,8 @@ const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a
 	"No s'ha creat l'enlla&ccedil; <strong>%s</strong>"
 	" perque ja existeix una carpeta o un enlla&ccedil; amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the link <strong>%s</strong>"
-	" because there is already a folder or a link with that name.";	// Need Übersetzung
+	"Der link <strong>%s</strong> kann nicht erstellt werden,"
+	" weil bereits ein Ordner oder ein Link diesen Namens besteht.";	
 #elif L==3	// en
 	"Cannot create the link <strong>%s</strong>"
 	" because there is already a folder or a link with that name.";
@@ -3400,7 +3401,7 @@ const char *Txt_Centres_ABBREVIATION =
 #if   L==1	// ca
 	"Cent.";
 #elif L==2	// de
-	"Lehrin.";
+	"Lehrinst.";
 #elif L==3	// en
 	"Cent.";
 #elif L==4	// es
@@ -3444,7 +3445,7 @@ const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
 #if   L==1	// ca
 	"Ordenar per centre"
 #elif L==2	// de
-	"Nach Lehrinstitut Sortieren"
+	"Nach Lehrinstitut sortieren"
 #elif L==3	// en
 	"Sort by centre"
 #elif L==4	// es
@@ -3531,7 +3532,7 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 #if   L==1	// ca
 	"Usuaris del centre"
 #elif L==2	// de
-	"Benutzer der Lehrinstitut"
+	"Benutzer des Lehrinstituts"
 #elif L==3	// en
 	"Users of the centre"
 #elif L==4	// es
@@ -3805,7 +3806,7 @@ const char *Txt_CHAT_Room_code =
 #if   L==1	// ca
 	"Codi de sala";
 #elif L==2	// de
-	"Raum-code";
+	"Raumcode";
 #elif L==3	// en
 	"Room code";
 #elif L==4	// es
@@ -5378,7 +5379,7 @@ const char *Txt_Courses =
 #if   L==1	// ca
 	"Assignatures";
 #elif L==2	// de
-	"Kursen";
+	"Kurse";
 #elif L==3	// en
 	"Courses";
 #elif L==4	// es
@@ -5420,7 +5421,7 @@ const char *Txt_courses =
 #if   L==1	// ca
 	"assignatures";
 #elif L==2	// de
-	"Kursen";
+	"Kurse";
 #elif L==3	// en
 	"courses";
 #elif L==4	// es
@@ -5483,7 +5484,7 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 #if   L==1	// ca
 	"Assignatures de %s";
 #elif L==2	// de
-	"Kursen der %s";
+	"Kurse der %s";
 #elif L==3	// en
 	"Courses of %s";
 #elif L==4	// es
@@ -6407,7 +6408,7 @@ const char *Txt_Created_new_course_X =	// Warning: it is very important to inclu
 #if   L==1	// ca
 	"Creada nueva asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Neue Kurs <strong>%s</strong> eingegeben.";
+	"Neuen Kurs <strong>%s</strong> eingegeben.";
 #elif L==3	// en
 	"Created new course <strong>%s</strong>.";
 #elif L==4	// es
@@ -7668,7 +7669,7 @@ const char *Txt_DEGREE_Without_courses =
 #if   L==1	// ca
 	"Sense assignatures";
 #elif L==2	// de
-	"Ohne Kursen";
+	"Ohne Kurse";
 #elif L==3	// en
 	"Without courses";
 #elif L==4	// es
@@ -7794,7 +7795,7 @@ const char *Txt_Degrees_with_pending_courses =
 #if   L==1	// ca
 	"Titulacions amb assignatures pendents d'activar";
 #elif L==2	// de
-	"Studiengang mit anh&auml;ngig Kursen";
+	"Studiengang mit anh&auml;ngigen Kursen";
 #elif L==3	// en
 	"Degrees with pending courses";
 #elif L==4	// es
@@ -8163,13 +8164,15 @@ const char *Txt_Disclaimer_the_files_hosted_here_ =	// Warning: it is very impor
 	" Si usted cree conveniente retirar cualquier archivo cuyo contenido le pertenezca"
 	" o que infrinja la ley, puede comunicarlo a %s.";	// Necessita traduccio
 #elif L==2	// de
-	"Disclaimer: the files hosted here,"
-	" unless otherwise noted,"
-	" are subject to intellectual property rights"
-	" and their ownership belongs to the users who have uploaded them."
-	" %s is not responsible for the information contained in those files."
-	" If you think convenient to remove any file whose contents belongs to you"
-	" or that violates the law, you can contact %s.";	// Need Übersetzung
+	"Haftungsausschluss: Die hier bereitgestellten Dateien unterliegen,"
+	" sofern nicht anders angegeben,"
+	" den Rechten an geistigem Eigentum"
+	" und sind Eigentum der Benutzer, die sie hochgeladen haben."
+	" %s ist nicht verantwortlich für die in diesen Dateien enthaltenen Informationen."
+	" Wenn Sie es für angebracht halten, Dateien zu entfernen, deren Inhalt Ihnen gehört"
+	" oder die gegen das Gesetz verstoßen, können Sie sich an %s wenden."
+        " Bedenken Sie jedoch, dass die Urheberrechte der verschiedenen Länder"
+        " unter bestimmten Bedingungen den Einsatz im Unterricht gestatten.";
 #elif L==3	// en
 	"Disclaimer: the files hosted here,"
 	" unless otherwise noted,"
@@ -8636,12 +8639,12 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" sus fichas personalizadas para esta asignatura,"
 	" y su inscripci&oacute;n en grupos de esta asignatura.</strong>.";		// Necessita traduccio
 #elif L==2	// de
-	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
-	"Although students' data will not be removed in other courses,"
-	" they will no longer enroled in this course,"
-	" and also <strong>all the works submitted by them in this course,"
+	"Wollen Sie wirklich die %u Studenten des Kurses <strong>%s</strong> entfernen?<br />"
+	"Dabei gehen die Angaben des Studenten in anderen Kursen nicht verändert; "
+	" sie werden einfach aus diesem Kurs ausgetragen,"
+	" un auch <strong>alle Arbeiten, die sie in diesem Kurs abgegeben haben,"
 	" their record cards for this course,"
-	" and their enrolment in groups of this course will be removed.</strong>.";	// Need Übersetzung
+	" und die Mitgliedschaft in Gruppen dieses Kurses wird gelöscht.</strong>.";	// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
@@ -9585,7 +9588,7 @@ const char *Txt_document_in_my_courses =
 #if   L==1	// ca
 	"document en les meves assignatures";
 #elif L==2	// de
-	"Dokument in meinen Kursen";
+	"Dokumente in meinen Kursen";
 #elif L==3	// en
 	"document in my courses";
 #elif L==4	// es
@@ -13462,7 +13465,7 @@ const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
 #if   L==1	// ca
 	"&Uacute;ltim comentari"
 #elif L==2	// de
-	"Letzte Post"
+	"Letzter Beitrag"
 #elif L==3	// en
 	"Last post"
 #elif L==4	// es
@@ -13757,7 +13760,7 @@ const char *Txt_Full_name_of_the_degree =
 #if   L==1	// ca
 	"Nom complet de la titulaci&oacute;";
 #elif L==2	// de
-	"Vollst&auml;ndiger Name der Studiengang";
+	"Vollst&auml;ndiger Name des Studiengangs";
 #elif L==3	// en
 	"Full name of the degree";
 #elif L==4	// es
@@ -13778,7 +13781,7 @@ const char *Txt_Full_name_of_the_centre =
 #if   L==1	// ca
 	"Nom complet del centre";
 #elif L==2	// de
-	"Vollst&auml;ndiger Name der Lehrinstitut";
+	"Vollst&auml;ndiger Name des Lehrinstituts";
 #elif L==3	// en
 	"Full name of the centre";
 #elif L==4	// es
@@ -13799,7 +13802,7 @@ const char *Txt_Full_name_of_the_course =
 #if   L==1	// ca
 	"Nom complet de l'assignatura";
 #elif L==2	// de
-	"Vollst&auml;ndiger Name der Kurs";
+	"Vollst&auml;ndiger Name des Kurses";
 #elif L==3	// en
 	"Full name of the course";
 #elif L==4	// es
@@ -16015,7 +16018,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #if   L==1	// ca
 	"Guia docent"
 #elif L==2	// de
-	"Hinweise zur Kurs"
+	"Hinweise zum Kurs"
 #elif L==3	// en
 	"Teaching guide"
 #elif L==4	// es
@@ -16745,7 +16748,7 @@ const char *Txt_Institutional_code =
 #if   L==1	// ca
 	"Codi institucional";
 #elif L==2	// de
-	"Institutionelle Code";
+	"Institutioneller Code";
 #elif L==3	// en
 	"Institutional code";
 #elif L==4	// es
@@ -16937,7 +16940,7 @@ const char *Txt_Institutions_by_number_of_courses =
 #if   L==1	// ca
 	"Institucions segons nombre de assignatures";
 #elif L==2	// de
-	"Hochschulen nach der Anzahl der Kursen";
+	"Hochschulen nach Anzahl Kursen";
 #elif L==3	// en
 	"Institutions by number of courses";
 #elif L==4	// es
@@ -21272,7 +21275,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==1	// ca
 	"Guia docent de l'assignatura"
 #elif L==2	// de
-	"Hinweise zur Kurs"
+	"Hinweise zum Kurs"
 #elif L==3	// en
 	"Teaching guide"
 #elif L==4	// es
@@ -21907,7 +21910,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==1	// ca
 	"Llistat i fitxes de professors"
 #elif L==2	// de
-	"Lehrkr&auml;fteverzeichnis und profile"
+	"Lehrkr&auml;fteverzeichnis und -profile"
 #elif L==3	// en
 	"Teachers' list and records"
 #elif L==4	// es
@@ -22847,7 +22850,7 @@ const char *Txt_Messages_sent_by_teachers =
 #if   L==1	// ca
 	"Missatges enviats per professors";
 #elif L==2	// de
-	"Gesendete Nachrichten, die von Lehrkr&auml;ften";
+	"Gesendete Nachrichten von Lehrkr&auml;ften";
 #elif L==3	// en
 	"Messages sent by teachers";
 #elif L==4	// es
@@ -22973,7 +22976,7 @@ const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to 
 #if   L==1	// ca
 	"Modificarme en l'assignatura <strong>%s</strong>";
 #elif L==2	// de
-	"&Auml;ndern Sie mir im Kurs <strong>%s</strong>";
+	"&Auml;ndern Sie mich im Kurs <strong>%s</strong>";
 #elif L==3	// en
 	"Modify me in the course <strong>%s</strong>";
 #elif L==4	// es
@@ -23119,7 +23122,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #if   L==1	// ca
 	"mar&ccedil;"
 #elif L==2	// de
-	"M;&auml;rz"
+	"M&auml;rz"
 #elif L==3	// en
 	"March"
 #elif L==4	// es
@@ -24404,7 +24407,7 @@ const char *Txt_New_course =
 #if   L==1	// ca
 	"Nova assignatura (assignatura, curs, mat&egrave;ria, disciplina...)";
 #elif L==2	// de
-	"Neue Kurs (Kurs, Thema, Disziplin...)";
+	"Neuer Kurs (Kurs, Thema, Disziplin...)";
 #elif L==3	// en
 	"New course (course, subject, discipline...)";
 #elif L==4	// es
@@ -24845,7 +24848,7 @@ const char *Txt_New_post =
 #if   L==1	// ca
 	"Nou comentari";
 #elif L==2	// de
-	"Neue Post";
+	"Neue Beitrag";
 #elif L==3	// en
 	"New post";
 #elif L==4	// es
@@ -24887,7 +24890,7 @@ const char *Txt_New_question =
 #if   L==1	// ca
 	"Nova pregunta";
 #elif L==2	// de
-	"Neuer Frage";
+	"Neue Frage";
 #elif L==3	// en
 	"New question";
 #elif L==4	// es
@@ -24929,7 +24932,7 @@ const char *Txt_New_TIMELINE_comment =
 #if   L==1	// ca
 	"Nou comentari";
 #elif L==2	// de
-	"Neue Kommentar";
+	"Neuer Kommentar";
 #elif L==3	// en
 	"New comment";
 #elif L==4	// es
@@ -24950,7 +24953,7 @@ const char *Txt_New_TIMELINE_post =
 #if   L==1	// ca
 	"Nova publicaci&oacute;";
 #elif L==2	// de
-	"Neue Beitrag";
+	"Neuer Beitrag";
 #elif L==3	// en
 	"New post";
 #elif L==4	// es
@@ -24971,7 +24974,7 @@ const char *Txt_New_survey =
 #if   L==1	// ca
 	"Nova enquesta";
 #elif L==2	// de
-	"Neuer Umfrage";
+	"Neue Umfrage";
 #elif L==3	// en
 	"New survey";
 #elif L==4	// es
@@ -24992,7 +24995,7 @@ const char *Txt_new_tag =		// Tag used in test
 #if   L==1	// ca
 	"nuevo descriptor";	// Necessita traduccio
 #elif L==2	// de
-	"neuen Tag";
+	"neuer Tag";
 #elif L==3	// en
 	"new tag";
 #elif L==4	// es
@@ -25013,7 +25016,7 @@ const char *Txt_New_thread =
 #if   L==1	// ca
 	"Nueva discusi&oacute;n";	// Necessita traduccio
 #elif L==2	// de
-	"Neuen Thread";
+	"Neue Diskussion";
 #elif L==3	// en
 	"New thread";
 #elif L==4	// es
@@ -25076,7 +25079,7 @@ const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include 
 #if   L==1	// ca
 	"&iexcl;Feliz %u!";	// Necessita traduccio
 #elif L==2	// de
-	"Happy %u!";
+	"Alles Gute für %u!";
 #elif L==3	// en
 	"Happy %u!";
 #elif L==4	// es
@@ -25097,7 +25100,7 @@ const char *Txt_nick_email_or_ID =
 #if   L==1	// ca
 	"@sobrenom, correu o ID (DNI/c&egrave;dula)";
 #elif L==2	// de
-	"@Benutzername, Email oder Ausweis-Nr.";
+	"@Benutzername, e-Mail oder Ausweis-Nr.";
 #elif L==3	// en
 	"@nick, email or ID";
 #elif L==4	// es
@@ -25118,7 +25121,7 @@ const char *Txt_nicks_emails_or_IDs_separated_by_commas =
 #if   L==1	// ca
 	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";	// Necessita traduccio
 #elif L==2	// de
-	"@Benutzernamen, Emails oder Ausweis-Nr. durch Kommas getrennt";
+	"@Benutzernamen, e-Mails oder Ausweis-Nr. durch Kommas getrennt";
 #elif L==3	// en
 	"@nicks, emails or IDs separated by commas";
 #elif L==4	// es
@@ -25391,7 +25394,7 @@ const char *Txt_No_courses =
 #if   L==1	// ca
 	"No hi ha assignatures.";
 #elif L==2	// de
-	"Keine Kursen.";
+	"Keine Kurse.";
 #elif L==3	// en
 	"No courses.";
 #elif L==4	// es
@@ -26554,7 +26557,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #if   L==1	// ca
 	"No hi ha professors no editors."
 #elif L==2	// de
-	"Keine nicht bearbeiteter Lehrkr&auml;ften gefunden."
+	"Keine nicht bearbeitende Lehrkr&auml;fte gefunden."
 #elif L==3	// en
 	"No non-editing teachers found."
 #elif L==4	// es
@@ -26575,7 +26578,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #if   L==1	// ca
 	"No hi ha professors."
 #elif L==2	// de
-	"Keine Lehrkr&auml;ften gefunden."
+	"Keine Lehrkr&auml;fte gefunden."
 #elif L==3	// en
 	"No teachers found."
 #elif L==4	// es
@@ -26681,7 +26684,7 @@ const char *Txt_nobody_else_can_access_this_content =
 #if   L==1	// ca
 	"ning&uacute; m&eacute;s pot accedir a aquest contingut";
 #elif L==2	// de
-	"Niemand sonst kann auf diese Inhalte";
+	"Niemand sonst kann auf diese Inhalte zugreifen.";
 #elif L==3	// en
 	"nobody else can access this content";
 #elif L==4	// es
@@ -27619,7 +27622,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #if   L==1	// ca
 	"Novas inscripci&oacute;s com a professor/a no editor/a"
 #elif L==2	// de
-	"New Einschreibungen als nicht bearbeiteter Lehrkraft"
+	"New Einschreibungen als nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"New enrolments as a non-editing teacher"
 #elif L==4	// es
@@ -28063,7 +28066,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #if   L==1	// ca
 	"Inscripci&oacute; com a professor/a no editor/a"
 #elif L==2	// de
-	"Einschreibung als nicht bearbeiteter Lehrkraft"
+	"Einschreibung als nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Enrolment as a non-editing teacher"
 #elif L==4	// es
@@ -28169,7 +28172,7 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb activitats";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Aufgaben";
+	"Anzahl der<br />Kurse<br />mit Aufgaben";
 #elif L==3	// en
 	"Number of<br />courses with<br />assignments";
 #elif L==4	// es
@@ -28190,7 +28193,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test<br />exportables";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit exportierbar<br />Testfragen";
+	"Anzahl der<br />Kurse<br />mit exportierbaren<br />Testfragen";
 #elif L==3	// en
 	"Number of<br />courses with<br />exportable<br />test<br />questions";
 #elif L==4	// es
@@ -28211,7 +28214,7 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb jocs";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Spiele";
+	"Anzahl der<br />Kurse<br />mit Spielen";
 #elif L==3	// en
 	"Number of<br />courses with<br />games";
 #elif L==4	// es
@@ -28232,7 +28235,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures amb<br />elements de programes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen mit<br />Programmelemente";
+	"Anzahl der<br />Kurse mit<br />Programmelementen";
 #elif L==3	// en
 	"Number of<br />courses with<br />program items";
 #elif L==4	// es
@@ -28253,7 +28256,7 @@ const char *Txt_Number_of_BR_courses_with_BR_projects =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb projectes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Projekte";
+	"Anzahl der<br />Kurse<br />mit Projekten";
 #elif L==3	// en
 	"Number of<br />courses with<br />projects";
 #elif L==4	// es
@@ -28274,7 +28277,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Testfragen";
+	"Anzahl der<br />Kurse<br />mit Testfragen";
 #elif L==3	// en
 	"Number of<br />courses<br />with test<br />questions";
 #elif L==4	// es
@@ -28295,7 +28298,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb enquestes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Umfragen";
+	"Anzahl der<br />Kurse<br />mit Umfragen";
 #elif L==3	// en
 	"Number of<br />courses with<br />surveys";
 #elif L==4	// es
@@ -28652,7 +28655,7 @@ const char *Txt_Online_tutoring =
 #if   L==1	// ca
 	"Tutor&iacute;as virtuales";	// Necessita traduccio
 #elif L==2	// de
-	"Virtual Anleitungen";
+	"Virtueller Unterricht";
 #elif L==3	// en
 	"Online tutoring";
 #elif L==4	// es
@@ -30000,9 +30003,9 @@ const char *Txt_Please_fill_in_your_ID =
         " perqu&egrave; facilita el proc&eacute;s d'inscripci&oacute;"
         " dels usuaris en les assignatures.";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder."
-	" Es ist eine optionale Daten,"
-	" aber es wird empfohlen, sie zu f&uuml;llen,"
+	"Bitte geben Sie Ihre Ausweis-Nr. ein."
+	" Es ist eine optionale Angabe,"
+	" aber es wird empfohlen, sie einzugeben,"
 	" weil sie die Registrierung"
 	" der Benutzer in den Kursen erleichtert.";
 #elif L==3	// en
@@ -30082,7 +30085,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_name =
 	"Si us plau, ompli la seva fitxa,"
 	" incloent el seu nom i cognom(s).";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
+	"Bitte geben beschriften Sie Ihre Karteikarte,"
 	" mit Ihrem Namen.";
 #elif L==3	// en
 	"Please fill in your record card,"
@@ -30112,8 +30115,8 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	"Si us plau, ompli la seva fitxa,"
 	" incloent el sexe.";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
-	" einschlie&szlig;lich Ihrer Sex.";
+	"Bitte geben f&uuml; Sie die Karteikarte aus,"
+	" einschlie&szlig;lich Ihrem Geschlecht.";
 #elif L==3	// en
 	"Please fill in your record card,"
 	" including your sex.";
@@ -30852,7 +30855,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #if   L==1	// ca
 	"Ordenar per data de l'&uacute;ltima edici&oacute;"
 #elif L==2	// de
-	"Sortieren nach letzten Ausgabe"
+	"Sortieren nach letzter Ausgabe"
 #elif L==3	// en
 	"Sort by date of last edition"
 #elif L==4	// es
@@ -32224,7 +32227,7 @@ const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is v
 #if   L==1	// ca
 	"Se ha eliminado la ficha de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"Record card of <strong>%s</strong> has been removed.";	// Need Übersetzung
+	"Karteikarte von <strong>%s</strong> wurde entfernt.";
 #elif L==3	// en
 	"Record card of <strong>%s</strong> has been removed.";
 #elif L==4	// es
@@ -32245,7 +32248,7 @@ const char *Txt_record_cards_per_page =
 #if   L==1	// ca
 	"fichas por p&aacute;gina";		// Necessita traduccio
 #elif L==2	// de
-	"record cards per page";		// Need Übersetzung
+	"Kateikarten pro Seite";	
 #elif L==3	// en
 	"record cards per page";
 #elif L==4	// es
@@ -32357,7 +32360,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2	// de
 	"Von nun an k&ouml;nnen die Studenten"
-	" nicht das Feld <strong>%s</strong> der Profile."
+	" das Feld <strong>%s</strong> der Profile nicht mehr sehen."
 #elif L==3	// en
 	"From now on students"
 	" can not see the field <strong>%s</strong> of the records."
@@ -32386,8 +32389,8 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	"A partir de ahora los estudiantes"
 	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2	// de
-	"Von nun an k&ouml;nnen sich Studenten,"
-	" aber nicht bearbeiten das Feld <strong>%s</strong> der Profile."
+	"Von nun an k&ouml;nnen Studenten,"
+	" das Feld <strong>%s</strong> der Profile nicht mehr bearbeiten."
 #elif L==3	// en
 	"From now on students"
 	" can view but not edit the field <strong>%s</strong> of the records."
@@ -32417,7 +32420,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2	// de
 	"Von nun an k&ouml;nnen die Studenten"
-	" anzuzeigen und zu bearbeiten das Feld <strong>%s</strong> der Profile."
+	" das Feld <strong>%s</strong> der Profile anzeigen und bearbeiten."
 #elif L==3	// en
 	"From now on students"
 	" can view and edit the field <strong>%s</strong> of the records."
@@ -32617,7 +32620,7 @@ const char *Txt_Register_the_users_indicated_in_step_1 =
 #if   L==1	// ca
 	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Necessita traduccio
 #elif L==2	// de
-	"Anmeldung Sie die Benutzer, die auf der Liste";
+	"Melden Sie die Benutzer an, die auf der Liste sind";
 #elif L==3	// en
 	"Add (register the users indicated in step 1)";
 #elif L==4	// es
@@ -32639,8 +32642,8 @@ const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_
 	"Actualizar (inscribir los usuarios indicados en el paso 1"
 	" y eliminar los <strong>no</strong> indicados)";	// Necessita traduccio
 #elif L==2	// de
-	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste,"
-	" und Anmeldung Sie die Benutzer, die auf der Liste";
+	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste sind,"
+	" und melden Sie die Benutzer an, die auf der Liste sind";
 #elif L==3	// en
 	"Update (register the users indicated in step 1"
 	" and remove the users <strong>not</strong> indicated)";
@@ -32710,7 +32713,7 @@ const char *Txt_Register_me_in_X =	// Warning: it is very important to include %
 #if   L==1	// ca
 	"Inscriureme en <strong>%s</strong>";
 #elif L==2	// de
-	"Anmeldung Sie mir im <strong>%s</strong>";
+	"Mich in <strong>%s</strong> anmelden";
 #elif L==3	// en
 	"Register me in <strong>%s</strong>";
 #elif L==4	// es
@@ -32968,7 +32971,7 @@ const char *Txt_Remove_event =
 #if   L==1	// ca
 	"Eliminar evento";	// Necessita traduccio
 #elif L==2	// de
-	"Ereignis Entfernen";
+	"Ereignis entfernen";
 #elif L==3	// en
 	"Remove event";
 #elif L==4	// es
@@ -32989,7 +32992,7 @@ const char *Txt_Remove_file =
 #if   L==1	// ca
 	"Eliminar fitxer";
 #elif L==2	// de
-	"Datei Entfernen";
+	"Datei entfernen";
 #elif L==3	// en
 	"Remove file";
 #elif L==4	// es
@@ -33010,7 +33013,7 @@ const char *Txt_Remove_files_older_than_PART_1_OF_2 =
 #if   L==1	// ca
 	"Eliminar els arxius amb m&eacute;s de";
 #elif L==2	// de
-	"Dateien zu entfernen, die &auml;lter als";
+	"Dateien entfernen, die &auml;lter als";
 #elif L==3	// en
 	"Remove files older than";
 #elif L==4	// es
@@ -33073,7 +33076,7 @@ const char *Txt_Remove_game =
 #if   L==1	// ca
 	"Eliminar joc";
 #elif L==2	// de
-	"Entfernen Spiel";
+	"Entferne Spiel";
 #elif L==3	// en
 	"Remove game";
 #elif L==4	// es
@@ -33094,7 +33097,7 @@ const char *Txt_Remove_group =
 #if   L==1	// ca
 	"Eliminar grupo";	// Necessita traduccio
 #elif L==2	// de
-	"Entfernen Gruppe";
+	"Entferne Gruppe";
 #elif L==3	// en
 	"Remove group";
 #elif L==4	// es
@@ -33115,7 +33118,7 @@ const char *Txt_Remove_item =
 #if   L==1	// ca
 	"Eliminar &iacute;tem";
 #elif L==2	// de
-	"Entfernen Artikel";
+	"Entferne Artikel";
 #elif L==3	// en
 	"Remove item";
 #elif L==4	// es
@@ -33136,7 +33139,7 @@ const char *Txt_Remove_link =
 #if   L==1	// ca
 	"Eliminar enlla&ccedil;";
 #elif L==2	// de
-	"Entfernen Link";
+	"Entferne Link";
 #elif L==3	// en
 	"Remove link";
 #elif L==4	// es
@@ -33178,7 +33181,7 @@ const char *Txt_Remove_match =	// of a game
 #if   L==1	// ca
 	"Eliminar partida";
 #elif L==2	// de
-	"Entfernen Spiel";
+	"Entferne Spiel";
 #elif L==3	// en
 	"Remove match";
 #elif L==4	// es
@@ -33220,7 +33223,7 @@ const char *Txt_Remove_me_as_an_administrator =
 #if   L==1	// ca
 	"Eliminarme com a administrador/a";
 #elif L==2	// de
-	"Entfernen Sie mir als Administrator";
+	"Entfernen Sie mich als Administrator";
 #elif L==3	// en
 	"Remove me as an administrator";
 #elif L==4	// es
@@ -33242,8 +33245,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_centre_X =	// Warning: it i
 	"Eliminarme com a administrador/a"
 	" del centre <strong>%s</strong>";
 #elif L==2	// de
-	"Entfernen Sie mir als Administrator"
-	" des Lehrinstitute <strong>%s</strong>";
+	"Entfernen Sie mich als Administrator"
+	" des Lehrinstituts <strong>%s</strong>";
 #elif L==3	// en
 	"Remove me as an administrator"
 	" of the centre <strong>%s</strong>";
@@ -33272,8 +33275,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_degree_X =	// Warning: it i
 	"Eliminarme com a administrador/a"
 	" de la titulaci&oacute; <strong>%s</strong>";
 #elif L==2	// de
-	"Entfernen Sie mir als Administrator"
-	" des Studiengang <strong>%s</strong>";
+	"Entfernen Sie mich als Administrator"
+	" des Studiengangs <strong>%s</strong>";
 #elif L==3	// en
 	"Remove me as an administrator"
 	" of the degree <strong>%s</strong>";
@@ -33302,8 +33305,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	"Eliminarme com a administrador/a"
 	" de la instituci&oacute; <strong>%s</strong>";
 #elif L==2	// de
-	"Entfernen Sie mir als Administrator"
-	" des Hochschule <strong>%s</strong>";
+	"Entfernen Sie mich als Administrator"
+	" der Hochschule <strong>%s</strong>";
 #elif L==3	// en
 	"Remove me as an administrator"
 	" of the institution <strong>%s</strong>";
@@ -33352,7 +33355,7 @@ const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important t
 #if   L==1	// ca
 	"Eliminarme de <strong>%s</strong>";
 #elif L==2	// de
-	"Entfernen Sie mir aus <strong>%s</strong>";
+	"Entfernen Sie mich aus <strong>%s</strong>";
 #elif L==3	// en
 	"Remove me from <strong>%s</strong>";
 #elif L==4	// es
@@ -33904,7 +33907,7 @@ const char *Txt_Requester =
 #if   L==1	// ca
 	"Sol&middot;licitant";
 #elif L==2	// de
-	"Requester";
+	"Antragsteller";
 #elif L==3	// en
 	"Requester";
 #elif L==4	// es
@@ -34305,7 +34308,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teachers"
 #elif L==4	// es
@@ -34368,7 +34371,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #if   L==1	// ca
 	"convidats (sense assignatures)"
 #elif L==2	// de
-	"Eingeladen (ohne Kursen)"
+	"Eingeladen (ohne Kurse)"
 #elif L==3	// en
 	"guests (without courses)"
 #elif L==4	// es
@@ -34770,7 +34773,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professor/a no editor/a"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teacher"
 #elif L==4	// es
@@ -34791,7 +34794,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professora no editora"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teacher"
 #elif L==4	// es
@@ -34812,7 +34815,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professor no editor"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teacher"
 #elif L==4	// es
@@ -34833,7 +34836,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professor/a no editor/a"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teacher"
 #elif L==4	// es
@@ -34875,7 +34878,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professora"
 #elif L==2	// de
-	"Lehrkraft"
+	"Lehrerin"
 #elif L==3	// en
 	"Teacher"
 #elif L==4	// es
@@ -34896,7 +34899,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professor"
 #elif L==2	// de
-	"Lehrkraft"
+	"Lehrer"
 #elif L==3	// en
 	"Teacher"
 #elif L==4	// es
@@ -34959,7 +34962,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
-	"Admin. Studiengang"
+	"Administratorin Studiengang"
 #elif L==3	// en
 	"Admin. degree"
 #elif L==4	// es
@@ -34980,7 +34983,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Admin. titulaci&oacute;"
 #elif L==2	// de
-	"Admin. Studiengang"
+	"Administrator Studiengang"
 #elif L==3	// en
 	"Admin. degree"
 #elif L==4	// es
@@ -35613,7 +35616,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professor/a no editor/a"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teacher"
 #elif L==4	// es
@@ -35634,7 +35637,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professora no editora"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teacher"
 #elif L==4	// es
@@ -35655,7 +35658,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professor no editor"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teacher"
 #elif L==4	// es
@@ -35676,7 +35679,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professor/a no editor/a"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teacher"
 #elif L==4	// es
@@ -35718,7 +35721,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professora"
 #elif L==2	// de
-	"Lehrkraft"
+	"Lehrerin"
 #elif L==3	// en
 	"teacher"
 #elif L==4	// es
@@ -35739,7 +35742,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professor"
 #elif L==2	// de
-	"Lehrkraft"
+	"Lehrer"
 #elif L==3	// en
 	"teacher"
 #elif L==4	// es
@@ -36456,7 +36459,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teachers"
 #elif L==4	// es
@@ -36477,7 +36480,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professores no editores"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teachers"
 #elif L==4	// es
@@ -36498,7 +36501,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teachers"
 #elif L==4	// es
@@ -36519,7 +36522,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"Professors no editors"
 #elif L==2	// de
-	"Nicht bearbeiteter Lehrkraft"
+	"Nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"Non-editing teachers"
 #elif L==4	// es
@@ -37512,7 +37515,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teachers"
 #elif L==4	// es
@@ -37533,7 +37536,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professores no editores"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teachers"
 #elif L==4	// es
@@ -37554,7 +37557,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teachers"
 #elif L==4	// es
@@ -37575,7 +37578,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professors no editors"
 #elif L==2	// de
-	"nicht bearbeiteter Lehrkraft"
+	"nicht bearbeitende Lehrkraft"
 #elif L==3	// en
 	"non-editing teachers"
 #elif L==4	// es
@@ -37617,7 +37620,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professores"
 #elif L==2	// de
-	"Lehrkr&auml;fte"
+	"Lehrerinnen"
 #elif L==3	// en
 	"teachers"
 #elif L==4	// es
@@ -37638,7 +37641,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"professors"
 #elif L==2	// de
-	"Lehrkr&auml;fte"
+	"Lehrer"
 #elif L==3	// en
 	"teachers"
 #elif L==4	// es
@@ -38757,7 +38760,7 @@ const char *Txt_Search_courses =
 #if   L==1	// ca
 	"Cercar assignatures";
 #elif L==2	// de
-	"Suchen Kursen";
+	"Suche Kurse";
 #elif L==3	// en
 	"Search courses";
 #elif L==4	// es
@@ -39366,7 +39369,7 @@ const char *Txt_Send_message =
 #if   L==1	// ca
 	"Enviar missatge";
 #elif L==2	// de
-	"Senden Nachricht";
+	"Nachricht senden";
 #elif L==3	// en
 	"Send message";
 #elif L==4	// es
@@ -39963,7 +39966,7 @@ const char *Txt_Short_name_of_the_degree =
 #if   L==1	// ca
 	"Nom breu de la titulaci&oacute;";
 #elif L==2	// de
-	"Kurzname der Studiengang";
+	"Kurzname des Studiengangs";
 #elif L==3	// en
 	"Short name of the degree";
 #elif L==4	// es
@@ -39984,7 +39987,7 @@ const char *Txt_Short_name_of_the_centre =
 #if   L==1	// ca
 	"Nom breu del centre";
 #elif L==2	// de
-	"Kurzname der Lehrinstitut";
+	"Kurzname des Lehrinstituts";
 #elif L==3	// en
 	"Short name of the centre";
 #elif L==4	// es
@@ -40005,7 +40008,7 @@ const char *Txt_Short_name_of_the_course =
 #if   L==1	// ca
 	"Nom breu de l'assignatura";
 #elif L==2	// de
-	"Kurzname der Kurs";
+	"Kurzname des Kurses";
 #elif L==3	// en
 	"Short name of the course";
 #elif L==4	// es
@@ -40320,7 +40323,7 @@ const char *Txt_Show_office_hours =
 #if   L==1	// ca
 	"Mostra horaris tutories";
 #elif L==2	// de
-	"Gesch&auml;ftszeiten anzeigen";
+	"Anwesenheitszeiten anzeigen";
 #elif L==3	// en
 	"Show office hours";
 #elif L==4	// es
@@ -42696,7 +42699,7 @@ const char *Txt_Student_record_card_in_this_course_has_been_updated =
 #if   L==1	// ca
 	"La ficha del estudiante en la asignatura se ha actualizado.";	// Necessita traduccio
 #elif L==2	// de
-	"Student record card in this course has been updated.";		// Need Übersetzung
+	"Studentenkarte dieses Kurses wurde aktualisiert.";	
 #elif L==3	// en
 	"Student record card in this course has been updated.";
 #elif L==4	// es
@@ -43077,7 +43080,7 @@ const char *Txt_Syllabus_of_the_course =
 #if   L==1	// ca
 	"Programa de la asignatura";	// Necessita traduccio
 #elif L==2	// de
-	"Studienplan der Kurs";
+	"Studienplan des Kurses";
 #elif L==3	// en
 	"Syllabus of the course";
 #elif L==4	// es
@@ -48238,7 +48241,7 @@ const char *Txt_The_timetable_is_empty =
 #if   L==1	// ca
 	"L'horari est&agrave; buit.";
 #elif L==2	// de
-	"Der Fahrplan ist leer.";
+	"Der Stundenplan ist leer.";
 #elif L==3	// en
 	"The timetable is empty.";
 #elif L==4	// es
@@ -48936,13 +48939,13 @@ const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrol
 	" en la asignatura <strong>%s</strong>,"
 	" pero a&uacute;n no ha aceptado la inscripci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is enroled"
-	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrolment.";			// Übersetzung notwendig
+	"<strong>%s</strong> ist"
+	" im Kurs <strong>%s</strong>,"
+	" eingeschrieben, dies jedoch noch nicht best&auml;tigt.";
 #elif L==3	// en
 	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrolment.";
+	" but has not yet accepted the enrolment.";		
 #elif L==4	// es
 	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>,"
@@ -48974,8 +48977,8 @@ const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is enroled"
-	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
+	"<strong>%s</strong> ist"
+	" im Kurs <strong>%s</strong> eingeschrieben.";		
 #elif L==3	// en
 	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>.";
@@ -50872,7 +50875,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 #if   L==1	// ca
 	"Horari de tutories"
 #elif L==2	// de
-	"Gesch&auml;ftszeiten"
+	"Unterrichtszeiten"
 #elif L==3	// en
 	"Office hours"
 #elif L==4	// es
@@ -50959,7 +50962,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 #if   L==1	// ca
 	"Tutories"
 #elif L==2	// de
-	"Anleitungen"
+	"Unterricht"
 #elif L==3	// en
 	"Tutoring"
 #elif L==4	// es
@@ -52617,7 +52620,7 @@ const char *Txt_Update_attendance =
 #if   L==1	// ca
 	"Actualitzar assist&egrave;ncia";
 #elif L==2	// de
-	"Update Anwesenheit";
+	"Anwesenheitsliste aktualisieren";
 #elif L==3	// en
 	"Update attendance";
 #elif L==4	// es
@@ -52638,7 +52641,7 @@ const char *Txt_Update_messages =
 #if   L==1	// ca
 	"Actualitzar missatges";
 #elif L==2	// de
-	"Update Nachrichten";
+	"Nachrichten aktualisieren";
 #elif L==3	// en
 	"Update messages";
 #elif L==4	// es
@@ -53886,7 +53889,7 @@ const char *Txt_View_projects =
 #if   L==1	// ca
 	"Veure projectes";
 #elif L==2	// de
-	"Anzeigen Projekte";
+	"Projekte anzeigen";
 #elif L==3	// en
 	"View projects";
 #elif L==4	// es
@@ -53907,7 +53910,7 @@ const char *Txt_View_record_and_office_hours =
 #if   L==1	// ca
 	"Veure fitxa i horari de tutories";
 #elif L==2	// de
-	"Anzeigen profil und Gesch&auml;ftszeiten";
+	"Profil und Anwesenheitszeiten anzeigen";
 #elif L==3	// en
 	"View record and office hours";
 #elif L==4	// es
@@ -54285,7 +54288,7 @@ const char *Txt_Web_page_of_the_course =
 #if   L==1	// ca
 	"P&aacute;gina web de la asignatura";	// Necessita traduccio
 #elif L==2	// de
-	"Webseite der Kurs";
+	"Webseite des Kurses";
 #elif L==3	// en
 	"Web page of the course";
 #elif L==4	// es
@@ -54838,7 +54841,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"N.A."
 #elif L==2	// de
-	"N.A."
+	"k.A."
 #elif L==3	// en
 	"N.A."
 #elif L==4	// es
@@ -54858,7 +54861,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"1&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"1st"		// Need Übersetzung
+	"1."		
 #elif L==3	// en
 	"1st"
 #elif L==4	// es
@@ -54878,7 +54881,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"2&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"2nd"		// Need Übersetzung
+	"2."		
 #elif L==3	// en
 	"2nd"
 #elif L==4	// es
@@ -54898,7 +54901,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"3&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"3rd"
+	"3."
 #elif L==3	// en
 	"3rd"
 #elif L==4	// es
@@ -54918,7 +54921,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"4&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"4th"		// Need Übersetzung
+	"4."		
 #elif L==3	// en
 	"4th"
 #elif L==4	// es
@@ -54938,7 +54941,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"5&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"5th"		// Need Übersetzung
+	"5."
 #elif L==3	// en
 	"5th"
 #elif L==4	// es
@@ -54958,7 +54961,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"6&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"6th"		// Need Übersetzung
+	"6."		
 #elif L==3	// en
 	"6th"
 #elif L==4	// es
@@ -54978,7 +54981,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"7&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"7th"		// Need Übersetzung
+	"7."	
 #elif L==3	// en
 	"7th"
 #elif L==4	// es
@@ -54998,7 +55001,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"8&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"8th"		// Need Übersetzung
+	"8."
 #elif L==3	// en
 	"8th"
 #elif L==4	// es
@@ -55018,7 +55021,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"9&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"9th"		// Need Übersetzung
+	"9."		
 #elif L==3	// en
 	"9th"
 #elif L==4	// es
@@ -55038,7 +55041,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"10&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"10th"		// Need Übersetzung
+	"10."		
 #elif L==3	// en
 	"10th"
 #elif L==4	// es
@@ -55058,7 +55061,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"11&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"11th"		// Need Übersetzung
+	"11."		
 #elif L==3	// en
 	"11th"
 #elif L==4	// es
@@ -55078,7 +55081,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #if   L==1	// ca
 	"12&ordm;"	// Necessita traduccio
 #elif L==2	// de
-	"12th"		// Need Übersetzung
+	"12."		
 #elif L==3	// en
 	"12th"
 #elif L==4	// es
@@ -55249,7 +55252,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2	// de
-	"Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keinem Kurs eingeschrieben."
 #elif L==3	// en
 	"You are not enroled in any course."
 #elif L==4	// es
@@ -55270,7 +55273,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"No est&agrave; inscrita en cap assignatura."
 #elif L==2	// de
-	"Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keinem Kurs eingeschrieben."
 #elif L==3	// en
 	"You are not enroled in any course."
 #elif L==4	// es
@@ -55291,7 +55294,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"No est&agrave; inscrit en cap assignatura."
 #elif L==2	// de
-	"Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keinem Kurs eingeschrieben."
 #elif L==3	// en
 	"You are not enroled in any course."
 #elif L==4	// es
@@ -55312,7 +55315,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #if   L==1	// ca
 	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2	// de
-	"Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keinem Kurs eingeschrieben."
 #elif L==3	// en
 	"You are not enroled in any course."
 #elif L==4	// es
@@ -55364,7 +55367,7 @@ const char *Txt_You_can_not_create_folders_files_or_links_here =
 #if   L==1	// ca
 	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create folders, files or links here.";		// Need Übersetzung
+	"Sie können hier keine Ordner, Dokumente oder Links erstellen.";		
 #elif L==3	// en
 	"You can not create folders, files or links here.";
 #elif L==4	// es
@@ -55385,7 +55388,7 @@ const char *Txt_You_can_not_create_folders_here =
 #if   L==1	// ca
 	"No puede crear carpetas aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create folders here.";	// Need Übersetzung
+	"Sie können hier keine Ordner erstellen.";	
 #elif L==3	// en
 	"You can not create folders here.";
 #elif L==4	// es
@@ -55406,7 +55409,7 @@ const char *Txt_You_can_not_create_links_here =
 #if   L==1	// ca
 	"No puede crear enlaces aqu&iacute;.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not create links here.";	// Need Übersetzung
+	"Sie können hier keine  Links erstellen.";	
 #elif L==3	// en
 	"You can not create links here.";
 #elif L==4	// es
@@ -55427,7 +55430,7 @@ const char *Txt_You_can_not_delete_your_current_nickname =
 #if   L==1	// ca
 	"No puede eliminar su apodo actual.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not delete your current nickname.";	// Need Übersetzung
+	"Sie können Ihren aktuellen Benutzernamen nicht löschen.";	
 #elif L==3	// en
 	"You can not delete your current nickname.";
 #elif L==4	// es
@@ -55448,7 +55451,7 @@ const char *Txt_You_can_not_delete_this_ID =
 #if   L==1	// ca
 	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Necessita traduccio
 #elif L==2	// de
-	"You can not delete this ID.";				// Need Übersetzung
+	"Sie können diese ID nicht löschen.";				
 #elif L==3	// en
 	"You can not delete this ID.";
 #elif L==4	// es
@@ -55499,7 +55502,7 @@ const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
 	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not leave empty intermediate answers.";	// Need Übersetzung
+	"Sie können keine leeren Zwischenantworten hinterlassen.";	
 #elif L==3	// en
 	"You can not leave empty intermediate answers.";
 #elif L==4	// es
@@ -55541,7 +55544,7 @@ const char *Txt_You_can_not_leave_the_image_empty =
 #if   L==1	// ca
 	"No puede dejar la imagen vac&iacute;a.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not leave the image empty.";		// Need Übersetzung
+	"Das Bild darf nicht leer bleiben.";	
 #elif L==3	// en
 	"You can not leave the image empty.";
 #elif L==4	// es
@@ -55562,7 +55565,7 @@ const char *Txt_You_can_not_paste_file_or_folder_here =
 #if   L==1	// ca
 	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not paste file or folder here.";			// Need Übersetzung
+	"Hier können keine Dokumente oder Ordner eingefügt werden.";			
 #elif L==3	// en
 	"You can not paste file or folder here.";
 #elif L==4	// es
@@ -55583,7 +55586,7 @@ const char *Txt_You_can_not_remove_this_file_or_link =
 #if   L==1	// ca
 	"No puede eliminar este archivo o enlace.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not remove this file or link.";		// Need Übersetzung
+	"Dieses Dokument oder dieser Link können nicht entfernt werden.";		
 #elif L==3	// en
 	"You can not remove this file or link.";
 #elif L==4	// es
@@ -55604,7 +55607,7 @@ const char *Txt_You_can_not_remove_this_folder =
 #if   L==1	// ca
 	"No puede eliminar esta carpeta.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not remove this folder.";		// Need Übersetzung
+	"Dieser Ordner kann nicht entfernt werden.";		
 #elif L==3	// en
 	"You can not remove this folder.";
 #elif L==4	// es
@@ -55625,7 +55628,7 @@ const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #if   L==1	// ca
 	"No puede eliminar un pa&iacute;s con instituciones o usuarios.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not remove a country with institutions or users.";		// Need Übersetzung
+	"Ein Land, in dem sich eine Institution oder ein Benutzer befinden, kann nicht gelöscht werden.";		
 #elif L==3	// en
 	"You can not remove a country with institutions or users.";
 #elif L==4	// es
@@ -55646,7 +55649,7 @@ const char *Txt_You_can_not_rename_this_folder =
 #if   L==1	// ca
 	"No puede cambiar el nombre de esta carpeta.";	// Necessita traduccio
 #elif L==2	// de
-	"You can not rename this folder.";		// Need Übersetzung
+	"Dieser Ordner kann nicht umbenannt werden.";		
 #elif L==3	// en
 	"You can not rename this folder.";
 #elif L==4	// es
@@ -55668,8 +55671,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"No puede enviar un mensaje a tantísimos destinatarios."
 	" Es mejor usar los foros.";		// Necessita traduccio
 #elif L==2	// de
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Need Übersetzung
+	"Sie dürfen eine Nachricht nicht an so viele Leute gleichzeitig schicken."
+	" Benutzen Sie besser die Foren.";	
 #elif L==3	// en
 	"You can not send a message to so many recipients."
 	" Better use the forums.";
@@ -55719,8 +55722,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Necessita traduccio
 #elif L==2	// de
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Need Übersetzung
+	"Sie können nur %u weitere Aktionen durchführen,"
+	" wenn Sie Ihre Foto nicht einsenden";			
 #elif L==3	// en
 	"You can only perform %u further actions"
 	" if you don't send your photo.";
@@ -55787,7 +55790,7 @@ const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning
 #if   L==1	// ca
 	"Puede apuntarse voluntariamente a un grupo de tipo %s.";	// Necessita traduccio
 #elif L==2	// de
-	"You can register voluntarily in one group of type %s.";	// Need Übersetzung
+	"Sie können sich freiwillig in eine Gruppe des Typs %s einschreiben.";	
 #elif L==3	// en
 	"You can register voluntarily in one group of type %s.";
 #elif L==4	// es
@@ -55809,8 +55812,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Puede apuntarse voluntariamente"
 	" a uno o a varios grupos de tipo %s.";		// Necessita traduccio
 #elif L==2	// de
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Need Übersetzung
+	"Sie können sich freiwillig"
+	" in eine oder mehrere Gruppen des Typs %s einschreiben.";	
 #elif L==3	// en
 	"You can register voluntarily"
 	" in one or more groups of type %s.";
@@ -55988,7 +55991,7 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 #if   L==1	// ca
 	"Usted ha confirmado que ha leido esta informaci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"You have confirmed that you have read this information.";	// Need Übersetzung
+	"Sie haben bestätigt, dass Sie diese Informationen gelesen haben.";	
 #elif L==3	// en
 	"You have confirmed that you have read this information.";
 #elif L==4	// es
@@ -56010,8 +56013,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Need Übersetzung
+	"Sie haben Ihre Einschreibung"
+	" im Kurs <strong>%s</strong> bestätigt.";	
 #elif L==3	// en
 	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";
@@ -57651,7 +57654,7 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 #if   L==1	// ca
 	"Su ficha en la asignatura se ha actualizado:";		// Necessita traduccio
 #elif L==2	// de
-	"Your record card in this course has been updated:";	// Need Übersetzung
+	"Ihre Studentenkarte für diesen Kurs wurde aktualisiert:";
 #elif L==3	// en
 	"Your record card in this course has been updated:";
 #elif L==4	// es
