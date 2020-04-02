@@ -1304,18 +1304,18 @@ CREATE TABLE IF NOT EXISTS tst_config (
 -- Table tst_exam_questions: stores the questions and answers in test exams made by users
 --
 CREATE TABLE IF NOT EXISTS tst_exam_questions (
-	TstCod INT NOT NULL,
+	ExaCod INT NOT NULL,
 	QstCod INT NOT NULL,
 	QstInd INT NOT NULL,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	Indexes TEXT NOT NULL,
 	Answers TEXT NOT NULL,
-	INDEX(TstCod,QstCod));
+	UNIQUE INDEX(ExaCod,QstCod));
 --
 -- Table tst_exams: stores the test exams made by users
 --
 CREATE TABLE IF NOT EXISTS tst_exams (
-	TstCod INT NOT NULL AUTO_INCREMENT,
+	ExaCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	StartTime DATETIME NOT NULL,
@@ -1324,7 +1324,7 @@ CREATE TABLE IF NOT EXISTS tst_exams (
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
 	AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(TstCod),
+	UNIQUE INDEX(ExaCod),
 	INDEX(CrsCod,UsrCod));
 --
 -- Table tst_question_tags: stores the tags associated to each test question

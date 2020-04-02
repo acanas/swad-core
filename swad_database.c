@@ -1465,7 +1465,7 @@ mysql> DESCRIBE mch_indexes;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_indexes ("
 			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
-			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
+			"Indexes TEXT NOT NULL,"	// TstExa_MAX_BYTES_INDEXES_ONE_QST
 		   "UNIQUE INDEX(MchCod,QstInd))");
 
    /***** Table mch_results *****/
@@ -2768,8 +2768,8 @@ mysql> DESCRIBE tst_exam_questions;
 +---------+---------+------+-----+---------+-------+
 | Field   | Type    | Null | Key | Default | Extra |
 +---------+---------+------+-----+---------+-------+
-| TstCod  | int(11) | NO   | MUL | NULL    |       |
-| QstCod  | int(11) | NO   |     | NULL    |       |
+| ExaCod  | int(11) | NO   | PRI | NULL    |       |
+| QstCod  | int(11) | NO   | PRI | NULL    |       |
 | QstInd  | int(11) | NO   |     | NULL    |       |
 | Score   | double  | NO   |     | 0       |       |
 | Indexes | text    | NO   |     | NULL    |       |
@@ -2778,13 +2778,13 @@ mysql> DESCRIBE tst_exam_questions;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exam_questions ("
-			"TstCod INT NOT NULL,"
+			"ExaCod INT NOT NULL,"
 			"QstCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
-			"Answers TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWERS_ONE_QST
-		   "INDEX(TstCod,QstCod))");
+			"Indexes TEXT NOT NULL,"	// TstExa_MAX_BYTES_INDEXES_ONE_QST
+			"Answers TEXT NOT NULL,"	// TstExa_MAX_BYTES_ANSWERS_ONE_QST
+		   "UNIQUE INDEX(ExaCod,QstCod))");
 
    /***** Table tst_exams *****/
 /*
@@ -2792,7 +2792,7 @@ mysql> DESCRIBE tst_exams;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
-| TstCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ExaCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod          | int(11)       | NO   | MUL | NULL    |                |
 | UsrCod          | int(11)       | NO   |     | NULL    |                |
 | StartTime       | datetime      | NO   |     | NULL    |                |
@@ -2805,7 +2805,7 @@ mysql> DESCRIBE tst_exams;
 9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exams ("
-			"TstCod INT NOT NULL AUTO_INCREMENT,"
+			"ExaCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
@@ -2814,7 +2814,7 @@ mysql> DESCRIBE tst_exams;
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(TstCod),"
+		   "UNIQUE INDEX(ExaCod),"
 		   "INDEX(CrsCod,UsrCod))");
 
    /***** Table tst_question_tags *****/

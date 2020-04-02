@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_info.h"
 #include "swad_logo.h"
+#include "swad_test_exam.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1891,7 +1892,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Svy_RemoveSurveys (Hie_CRS,CrsCod);
 
       /***** Remove all test exams made in the course *****/
-      TsR_RemoveCrsTestResults (CrsCod);
+      TstExa_RemoveCrsExams (CrsCod);
 
       /***** Remove all tests questions in the course *****/
       Tst_RemoveCrsTests (CrsCod);

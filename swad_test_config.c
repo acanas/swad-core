@@ -103,7 +103,7 @@ void TstCfg_GetConfigFromDB (void)
 			     Gbl.Hierarchy.Crs.CrsCod);
 
    TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
-   TstCfg_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
+   TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
    if (NumRows == 0)
      {
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
@@ -173,7 +173,7 @@ void TstCfg_GetConfigFromRow (MYSQL_ROW row)
       TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
 
    /***** Get visibility (row[5]) *****/
-   TstCfg_SetConfigVisibility (TsV_GetVisibilityFromStr (row[5]));
+   TstCfg_SetConfigVisibility (TstVis_GetVisibilityFromStr (row[5]));
   }
 
 /*****************************************************************************/
@@ -219,7 +219,7 @@ void TstCfg_ReceiveConfigTst (void)
                                                                0));
 
    /***** Get visibility from form *****/
-   TstCfg_SetConfigVisibility (TsV_GetVisibilityFromForm ());
+   TstCfg_SetConfigVisibility (TstVis_GetVisibilityFromForm ());
 
    /***** Update database *****/
    DB_QueryREPLACE ("can not save configuration of tests",

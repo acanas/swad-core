@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.157 (2020-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.158 (2020-04-02)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -522,11 +522,19 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
-// TODO: Si el alumno ha marcado "Permitir que los profesores...", entonces pedir confirmación al pulsar el botón azul, para evitar que se envíe por error antes de tiempo
-// TODO: Tener en cuenta en los resultados de test (exámenes) el tiempo de inicio y el tiempo de fin
-         Cuando el alumno ve un test, se crea un examen (en la base de datos), aunque no se conteste, a partir de los datos del formulario.
-         El examen se muestra en pantalla tomándolo del examen en la base de datos, no del formulario.
-         Cuando el alumno pulsa en "He terminado" se le pregunta si está seguro y se vuelve a mostrar el examen cogiéndolo de la base de datos.
+// TODO: Los exámenes de test que no se han confirmado
+         deben aparecer en la base de datos con un código especial,
+         no contando en la nota y no mostrándose la fecha de finalización.
+         El botón de confirmar envío de examen debería ser verde.
+
+	Version 19.158:   Apr 02, 2020	Lot of code refactoring in tests. (285031 lines)
+					5 changes necessary in database:
+ALTER TABLE tst_exams RENAME INDEX TstCod TO ExaCod;
+ALTER TABLE tst_exams CHANGE COLUMN TstCod ExaCod INT NOT NULL AUTO_INCREMENT;
+
+DROP INDEX TstCod ON tst_exam_questions;
+ALTER TABLE tst_exam_questions CHANGE COLUMN TstCod ExaCod INT NOT NULL;
+ALTER TABLE tst_exam_questions ADD UNIQUE INDEX(ExaCod,QstCod);
 
 	Version 19.157:   Apr 01, 2020	Code refactoring in tests.
 					Test exam is stored in database when it's generated. Not tested. (285023 lines)

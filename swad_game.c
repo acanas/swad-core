@@ -541,7 +541,7 @@ static void Gam_ShowOneGame (struct Game *Game,bool ShowOnlyThisGame)
    HTM_Double (Game->MaxGrade);
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Result_visibility);
-   TsV_ShowVisibilityIcons (Game->Visibility,Game->Hidden);
+   TstVis_ShowVisibilityIcons (Game->Visibility,Game->Hidden);
    HTM_DIV_End ();
 
    /***** Number of matches in game *****/
@@ -619,13 +619,13 @@ static void Gam_PutIconToShowResultsOfGame (void *Args)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,McR_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,MchRes_RESULTS_BOX_ID,
 						Gam_PutParams,&Gbl);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,McR_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,MchRes_RESULTS_BOX_ID,
 						Gam_PutParams,&Gbl);
 	    break;
 	 default:
@@ -990,7 +990,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 	 Game->MaxGrade = 0.0;
 
       /* Get visibility (row[5]) */
-      Game->Visibility = TsV_GetVisibilityFromStr (row[5]);
+      Game->Visibility = TstVis_GetVisibilityFromStr (row[5]);
 
       /* Get the title of the game (row[6]) */
       Str_Copy (Game->Title,row[6],
@@ -1054,7 +1054,7 @@ static void Gam_ResetGame (struct Game *Game)
    Game->CrsCod                  = -1L;
    Game->UsrCod                  = -1L;
    Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
-   Game->Visibility              = TsV_VISIBILITY_DEFAULT;
+   Game->Visibility              = TstVis_VISIBILITY_DEFAULT;
    Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Game->Title[0]                = '\0';
@@ -1403,7 +1403,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
-   TsV_PutVisibilityCheckboxes (Game->Visibility);
+   TstVis_PutVisibilityCheckboxes (Game->Visibility);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1503,7 +1503,7 @@ static void Gam_ReceiveGameFieldsFromForm (struct Game *Game,
       Game->MaxGrade = 0.0;
 
    /***** Get visibility *****/
-   Game->Visibility = TsV_GetVisibilityFromForm ();
+   Game->Visibility = TstVis_GetVisibilityFromForm ();
 
    /***** Get game text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)

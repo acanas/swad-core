@@ -57,9 +57,9 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_scope.o swad_search.o swad_session.o swad_setting.o \
        swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_system_config.o \
-       swad_tab.o swad_test.o swad_test_config.o swad_test_import.o \
-       swad_test_result.o \
-       swad_test_visibility.o swad_theme.o swad_timeline.o swad_timetable.o \
+       swad_tab.o swad_test.o swad_test_config.o swad_test_exam.o \
+       swad_test_import.o swad_test_visibility.o swad_theme.o swad_timeline.o \
+       swad_timetable.o \
        swad_user.o \
        swad_xml.o \
        swad_zip.o

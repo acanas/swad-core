@@ -45,6 +45,7 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_report.h"
+#include "swad_test_exam.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -1076,7 +1077,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove test results made by user in all courses *****/
-   TsR_RemoveTestResultsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   TstExa_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);

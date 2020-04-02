@@ -3949,7 +3949,7 @@ int swad__sendNotice (struct soap *soap,
 /****************** Return test configuration in a course ********************/
 /*****************************************************************************/
 
-#define TsR_MAX_BYTES_FEEDBACK_TYPE		  32
+#define TstExa_MAX_BYTES_FEEDBACK_TYPE		  32
 
 int swad__getTestConfig (struct soap *soap,
                          char *wsKey,int courseCode,				// input
@@ -4001,10 +4001,10 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->minQuestions =
    getTestConfigOut->defQuestions =
    getTestConfigOut->maxQuestions = 0;
-   getTestConfigOut->visibility   = TsV_MIN_VISIBILITY;
+   getTestConfigOut->visibility   = TstVis_MIN_VISIBILITY;
 
    /* TODO: Remove these lines in 2021 */
-   getTestConfigOut->feedback = (char *) soap_malloc (soap,TsR_MAX_BYTES_FEEDBACK_TYPE + 1);
+   getTestConfigOut->feedback = (char *) soap_malloc (soap,TstExa_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
@@ -4019,26 +4019,26 @@ int swad__getTestConfig (struct soap *soap,
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */
-   if (!TsV_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
+   if (!TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"nothing",
-		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleEachQstScore (TstCfg_GetConfigVisibility ()))
+		TstExa_MAX_BYTES_FEEDBACK_TYPE);
+   else if (!TstVis_IsVisibleEachQstScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"totalResult",
-		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleCorrectAns (TstCfg_GetConfigVisibility ()))
+		TstExa_MAX_BYTES_FEEDBACK_TYPE);
+   else if (!TstVis_IsVisibleCorrectAns (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachResult",
-		TsR_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TsV_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
+		TstExa_MAX_BYTES_FEEDBACK_TYPE);
+   else if (!TstVis_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachGoodBad",
-		TsR_MAX_BYTES_FEEDBACK_TYPE);
+		TstExa_MAX_BYTES_FEEDBACK_TYPE);
    else
       Str_Copy (getTestConfigOut->feedback,
 		"fullFeedback",
-		TsR_MAX_BYTES_FEEDBACK_TYPE);
+		TstExa_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
@@ -4073,7 +4073,7 @@ static int API_GetTstConfig (long CrsCod)
       TstCfg_SetConfigMin (0);
       TstCfg_SetConfigDef (0);
       TstCfg_SetConfigMax (0);
-      TstCfg_SetConfigVisibility (TsV_VISIBILITY_DEFAULT);
+      TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
      }
 
    /***** Free structure that stores the query result *****/
@@ -4906,7 +4906,7 @@ int swad__getGames (struct soap *soap,
 	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
 	 /* Get visibility (row[5]) */
-         getGamesOut->gamesArray.__ptr[NumGame].visibility = TsV_GetVisibilityFromStr (row[5]);
+         getGamesOut->gamesArray.__ptr[NumGame].visibility = TstVis_GetVisibilityFromStr (row[5]);
 
 	 /* Get title of the game (row[6]) */
          Length = strlen (row[6]);

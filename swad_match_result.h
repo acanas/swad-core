@@ -1,7 +1,7 @@
 // swad_match_result.h: matches results in games using remote control
 
-#ifndef _SWAD_MCR
-#define _SWAD_MCR
+#ifndef _SWAD_MCH_RES
+#define _SWAD_MCH_RES
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,29 +27,31 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_test_exam.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define McR_RESULTS_BOX_ID		"mcr_box"
-#define McR_RESULTS_TABLE_ID		"mcr_table"
+#define MchRes_RESULTS_BOX_ID		"mcr_box"
+#define MchRes_RESULTS_TABLE_ID		"mcr_table"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void McR_SelUsrsToViewMchResults (void);
+void MchRes_SelUsrsToViewMchResults (void);
 
-void McR_ShowMyMchResultsInCrs (void);
-void McR_ShowMyMchResultsInGam (void);
-void McR_ShowMyMchResultsInMch (void);
+void MchRes_ShowMyMchResultsInCrs (void);
+void MchRes_ShowMyMchResultsInGam (void);
+void MchRes_ShowMyMchResultsInMch (void);
 
-void McR_ShowAllMchResultsInCrs (void);
-void McR_ShowAllMchResultsInGam (void);
-void McR_ShowAllMchResultsInMch (void);
+void MchRes_ShowAllMchResultsInCrs (void);
+void MchRes_ShowAllMchResultsInGam (void);
+void MchRes_ShowAllMchResultsInMch (void);
 
-void McR_ShowOneMchResult (void);
-void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				        struct TsR_Result *Result);
+void MchRes_ShowOneMchResult (void);
+void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
+				           struct TstExa_Exam *Exam);
 
 #endif

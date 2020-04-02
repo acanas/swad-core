@@ -222,7 +222,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match);
 
-static void Mch_ComputeScore (struct TsR_Result *Result);
+static void Mch_ComputeScore (struct TstExa_Exam *Result);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -784,7 +784,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (const struct Match *Match)
       /* Result is visible by me */
       Gam_SetCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
-      Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,McR_RESULTS_BOX_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,&Gbl,
 				     "trophy.svg",
 				     Txt_Results);
@@ -807,7 +807,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (const struct Match *Match)
       Mch_SetCurrentMchCod (Match->MchCod);	// Used to pass parameter
 
       /* Show match results */
-      Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,McR_RESULTS_BOX_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeAllMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,&Gbl,
 				     "trophy.svg",
 				     Txt_Results);
@@ -1541,7 +1541,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
@@ -1574,9 +1574,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       /* Concatenate answer index to list of answers */
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     Tst_MAX_BYTES_ANSWERS_ONE_QST);
+		     TstExa_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  Tst_MAX_BYTES_ANSWERS_ONE_QST);
+		  TstExa_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1600,7 +1600,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[TstExa_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1613,14 +1613,14 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     Tst_MAX_BYTES_INDEXES_ONE_QST);
+	     TstExa_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
-   Tst_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   TstExa_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -3834,7 +3834,7 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   struct TsR_Result Result;
+   struct TstExa_Exam Result;
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -3889,7 +3889,7 @@ void Mch_ReceiveQuestionAnswer (void)
 			  UsrAnswer.AnsInd);
 
       /***** Update student's match result *****/
-      McR_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      MchRes_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 					 &Result);
       Mch_ComputeScore (&Result);
 
@@ -3952,7 +3952,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static void Mch_ComputeScore (struct TsR_Result *Result)
+static void Mch_ComputeScore (struct TstExa_Exam *Result)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3967,7 +3967,7 @@ static void Mch_ComputeScore (struct TsR_Result *Result)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      Tst_ComputeChoiceAnsScore (Result,NumQst,&Question);
+      TstExa_ComputeChoiceAnsScore (Result,NumQst,&Question);
 
       /***** Update total score *****/
       Result->Score += Result->Questions[NumQst].Score;

@@ -30,7 +30,7 @@
 #include "swad_game.h"
 #include "swad_media.h"
 #include "swad_test_config.h"
-#include "swad_test_result.h"
+// #include "swad_test_exam.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -45,6 +45,8 @@
 #define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Tst_MAX_BYTES_ANSWER_TYPE		  32
+
+#define Tst_MAX_OPTIONS_PER_QUESTION		  10
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -155,23 +157,8 @@ void Tst_ShowNewTest (void);
 void Tst_RequestAssessTest (void);
 void Tst_AssessTest (void);
 
-void Tst_ComputeChoiceAnsScore (struct TsR_Result *Result,
-				unsigned NumQst,
-				struct Tst_Question *Question);
-void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
-
-void Tst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
-double Tst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
-void Tst_ShowGrade (double Grade,double MaxGrade);
-
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
-void Tst_WriteQstAndAnsTestResult (struct UsrData *UsrDat,
-				   struct TsR_Result *Result,
-				   unsigned NumQst,
-				   MYSQL_ROW row,
-				   unsigned Visibility);
 void Tst_WriteNumQst (unsigned NumQst);
 void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
@@ -191,6 +178,7 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 void Tst_WriteAnswersListing (struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
+void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
@@ -210,6 +198,7 @@ void Tst_QstDestructor (struct Tst_Question *Question);
 
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
+Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);

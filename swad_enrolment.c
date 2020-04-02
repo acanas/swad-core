@@ -44,6 +44,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
+#include "swad_test_exam.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -4112,7 +4113,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove test results made by user in course *****/
-      TsR_RemoveTestResultsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+      TstExa_RemoveExamsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/
