@@ -467,6 +467,7 @@ void Tst_ShowNewTest (void)
       if (Tst_GetParamsTst (&Test,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
+	 TstExa_ResetExam (&Exam);
 	 Tst_GetQuestionsForNewTestFromDB (&Test,&Exam);
          if (Exam.NumQsts)
            {
@@ -540,6 +541,7 @@ void Tst_RequestAssessTest (void)
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
+   TstExa_ResetExam (&Exam);
    if ((Exam.ExaCod = TstExa_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
@@ -559,11 +561,12 @@ void Tst_RequestAssessTest (void)
 
 	 /***** Update test exam in database *****/
 	 TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
-	                                           false);	// Don't update question score
+	                                            false);	// Don't update question score
+	 TstExa_UpdateExamInDB (&Exam);
 
 	 /***** Show question and button to send the test *****/
 	 /* Start alert */
-	 Ale_ShowAlert (Ale_INFO,"Por favor, revise el test antes de enviarlo.");	// TODO: Need translation!!!
+	 Ale_ShowAlert (Ale_WARNING,"Por favor, revise sus respuestas antes de enviar el examen:");	// TODO: Need translation!!!
 
 	 /* Show the same test exam to be answered */
 	 Tst_ShowTestExamToFillIt (&Exam,NumTst,Tst_CONFIRM);
@@ -600,6 +603,7 @@ void Tst_AssessTest (void)
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
+   TstExa_ResetExam (&Exam);
    if ((Exam.ExaCod = TstExa_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
@@ -617,9 +621,13 @@ void Tst_AssessTest (void)
 	 /***** Get answers from form to assess a test *****/
 	 Tst_GetAnswersFromForm (&Exam);
 
+	 /***** Get if test exam will be visible by teachers *****/
+	 Exam.AllowTeachers = Par_GetParToBool ("AllowTchs");
+
 	 /***** Update test exam in database *****/
 	 TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
-	                                           Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
+	                                            Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
+	 TstExa_UpdateExamInDB (&Exam);
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,
@@ -693,9 +701,6 @@ static void Tst_GetAnswersFromForm (struct TstExa_Exam *Exam)
       Par_GetParMultiToText (StrAns,Exam->Questions[NumQst].StrAnswers,
                              TstExa_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
-
-   /***** Get if test exam will be visible by teachers *****/
-   Exam->AllowTeachers = Par_GetParToBool ("AllowTchs");
   }
 
 /*****************************************************************************/
@@ -878,11 +883,6 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
       [Tst_REQUEST] = ActReqAssTst,
       [Tst_CONFIRM] = ActAssTst,
      };
-   static char *TxtButton[Tst_NUM_REQUEST_OR_CONFIRM] =
-     {
-      [Tst_REQUEST] = "He terminado",	// TODO: Need translation!!!
-      [Tst_CONFIRM] = "Enviar",		// TODO: Need translation!!!
-     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Test,
@@ -933,11 +933,21 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Test exam will be visible by teachers *****/
-      Tst_PutCheckBoxAllowTeachers (true);
-
       /***** End form *****/
-      Btn_PutConfirmButton (TxtButton[RequestOrConfirm]);
+      switch (RequestOrConfirm)
+        {
+	 case Tst_REQUEST:
+            /* Send button */
+            Btn_PutConfirmButton ("He terminado");	// TODO: Need translation!!!
+	    break;
+	 case Tst_CONFIRM:
+	    /* Will the test exam be visible by teachers? */
+            Tst_PutCheckBoxAllowTeachers (true);
+
+            /* Send button */
+            Btn_PutCreateButton ("Enviar");		// TODO: Need translation!!!
+	    break;
+        }
       Frm_EndForm ();
      }
 
@@ -3779,7 +3789,7 @@ static void Tst_WriteTextAnsSeeing (const struct TstExa_Exam *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,TstExa_MAX_BYTES_ANSWERS_ONE_QST,Exam->Questions[NumQst].StrAnswers,false,
+   HTM_INPUT_TEXT (StrAns,TstExa_MAX_CHARS_ANSWERS_ONE_QST,Exam->Questions[NumQst].StrAnswers,false,
 		   "size=\"40\"");
   }
 
@@ -4573,10 +4583,6 @@ void Tst_QstDestructor (struct Tst_Question *Question)
 
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
   {
-   // Tst_FreeTagsList (&Question->Tags);	// TODO: Necessary?
-
-   // Tst_FreeTextChoiceAnswer (Question,NumOpt);// TODO: Necessary?
-
    if ((Question->Answer.Options[NumOpt].Text =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {

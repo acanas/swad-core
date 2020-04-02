@@ -1030,8 +1030,8 @@ void MchRes_ShowOneMchResult (void)
      }
 
    /***** Get match result data *****/
-   MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
-				   &Exam);
+   TstExa_ResetExam (&Exam);
+   MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Exam);
 
    /***** Check if I can view this match result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1289,7 +1289,7 @@ void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 /*****************************************************************************/
 
 static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-                                            struct TstExa_Exam *Exam)
+                                               struct TstExa_Exam *Exam)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

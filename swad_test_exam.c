@@ -158,6 +158,21 @@ static void TstExa_ShowExamsSummaryRow (bool ItsMe,
 static void TstExa_ShowTagsPresentInAnExam (long ExaCod);
 
 /*****************************************************************************/
+/******************************** Reset exam *********************************/
+/*****************************************************************************/
+
+void TstExa_ResetExam (struct TstExa_Exam *Exam)
+  {
+   Exam->ExaCod                  = -1L;
+   Exam->TimeUTC[Dat_START_TIME] =
+   Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Exam->NumQsts                 =
+   Exam->NumQstsNotBlank         = 0;
+   Exam->AllowTeachers           = false;
+   Exam->Score                   = 0.0;
+  }
+
+/*****************************************************************************/
 /***************** Create new blank test exam in database ********************/
 /*****************************************************************************/
 
@@ -167,14 +182,12 @@ void TstExa_CreateExamInDB (struct TstExa_Exam *Exam)
    Exam->ExaCod =
    DB_QueryINSERTandReturnCode ("can not create new test exam",
 				"INSERT INTO tst_exams"
-				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,AllowTeachers)"
+				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,AllowTeachers,Score)"
 				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),%u,'%c')",
+				" (%ld,%ld,NOW(),NOW(),%u,'N',0)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Exam->NumQsts,
-				Exam->AllowTeachers ? 'Y' :
-						      'N');
+				Exam->NumQsts);
   }
 
 /*****************************************************************************/
@@ -189,10 +202,13 @@ void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam)
 		   "UPDATE tst_exams"
 	           " SET EndTime=NOW(),"
 	                "NumQstsNotBlank=%u,"
+		        "AllowTeachers='%c',"
 	                "Score='%.15lg'"
 	           " WHERE ExaCod=%ld"
 	           " AND CrsCod=%ld AND UsrCod=%ld",	// Extra checks
 		   Exam->NumQstsNotBlank,
+		   Exam->AllowTeachers ? 'Y' :
+			                 'N',
 		   Exam->Score,
 		   Exam->ExaCod,
 		   Gbl.Hierarchy.Crs.CrsCod,
@@ -385,9 +401,6 @@ void TstExa_ComputeScoresAndStoreExamQuestions (struct TstExa_Exam *Exam,
       if (UpdateQstScore)
 	 Tst_UpdateQstScoreInDB (Exam,NumQst);
      }
-
-   /***** Store test exam in database *****/
-   TstExa_UpdateExamInDB (Exam);
   }
 
 /*****************************************************************************/
@@ -780,7 +793,6 @@ static void TstExa_ComputeTextAnsScore (struct TstExa_Exam *Exam,
    unsigned NumOpt;
    char TextAnsUsr[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   bool Correct = false;
 
    /***** Get correct answers for this question from database *****/
    TstExa_GetCorrectTextAnswerFromDB (Question);
@@ -797,7 +809,6 @@ static void TstExa_ComputeTextAnsScore (struct TstExa_Exam *Exam,
       /* In order to compare student answer to stored answer,
 	 the text answers are stored avoiding two or more consecurive spaces */
       Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
-
       Str_ConvertToComparable (TextAnsUsr);
 
       for (NumOpt = 0;
@@ -811,14 +822,8 @@ static void TstExa_ComputeTextAnsScore (struct TstExa_Exam *Exam,
 
          /* Check is user answer is correct */
          if (!strcoll (TextAnsUsr,TextAnsOK))
-           {
-            Correct = true;
-            break;
-           }
+	    Exam->Questions[NumQst].Score = 1.0;	// Correct answer
         }
-
-      if (Correct)
-	 Exam->Questions[NumQst].Score = 1.0;	// Correct answer
      }
   }
 
@@ -849,8 +854,8 @@ static void TstExa_GetCorrectTextAnswerFromDB (struct Tst_Question *Question)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
-      /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
+      /***** Copy answer text (row[0]) and convert it, that is in HTML, to rigorous HTML ******/
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Question->Answer.Options[NumOpt].Text,
@@ -1906,6 +1911,7 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
          row = mysql_fetch_row (mysql_res);
 
          /* Get test code (row[0]) */
+         TstExa_ResetExam (&Exam);
 	 if ((Exam.ExaCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
 
@@ -2180,6 +2186,7 @@ void TstExa_ShowOneExam (void)
    bool ICanViewScore;
 
    /***** Get the code of the test *****/
+   TstExa_ResetExam (&Exam);
    if ((Exam.ExaCod = TstExa_GetParamExaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 

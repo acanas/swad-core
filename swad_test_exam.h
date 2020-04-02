@@ -34,7 +34,9 @@
 /*****************************************************************************/
 
 #define TstExa_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-#define TstExa_MAX_BYTES_ANSWERS_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+
+#define TstExa_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
+#define TstExa_MAX_BYTES_ANSWERS_ONE_QST	((TstExa_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define TstExa_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
@@ -64,6 +66,7 @@ struct TstExa_Exam
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void TstExa_ResetExam (struct TstExa_Exam *Exam);
 void TstExa_CreateExamInDB (struct TstExa_Exam *Exam);
 void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam);
 

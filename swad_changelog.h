@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.158 (2020-04-02)"
+#define Log_PLATFORM_VERSION	"SWAD 19.159 (2020-04-03)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -522,11 +522,11 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: En la lista de conectados central, poner el logo de la institución a la que pertenece el usuario
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
-// TODO: Los exámenes de test que no se han confirmado
-         deben aparecer en la base de datos con un código especial,
-         no contando en la nota y no mostrándose la fecha de finalización.
-         El botón de confirmar envío de examen debería ser verde.
+// TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
+// TODO: Comprobar si la puntuación de cada pregunta de un examen se recalcula al mostrarlo o se saca de la base de datos
+y qué pasa cuando se edita una pregunta
 
+	Version 19.159:   Apr 03, 2020	Code refactoring and bug fixing in tests. (285052 lines)
 	Version 19.158:   Apr 02, 2020	Lot of code refactoring in tests. (285031 lines)
 					5 changes necessary in database:
 ALTER TABLE tst_exams RENAME INDEX TstCod TO ExaCod;
