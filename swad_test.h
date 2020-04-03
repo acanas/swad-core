@@ -94,17 +94,18 @@ struct Tst_Question
   {
    long QstCod;
    struct Tst_Tags Tags;
+   time_t EditTime;
    struct
      {
       char *Text;
       size_t Length;
      } Stem, Feedback;
    struct Media Media;
-   bool Shuffle;
    struct
      {
       Tst_AnswerType_t Type;
       unsigned NumOptions;
+      bool Shuffle;
       char TF;
       struct
 	{
@@ -199,6 +200,9 @@ void Tst_QstDestructor (struct Tst_Question *Question);
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
 Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod);
+void Tst_GetQstDataFromDB (struct Tst_Question *Question,
+                           char Stem[Cns_MAX_BYTES_TEXT + 1],
+                           char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);

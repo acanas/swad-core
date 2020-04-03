@@ -250,9 +250,6 @@ static void Tst_FreeTextChoiceAnswer (struct Tst_Question *Question,unsigned Num
 static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question);
 static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question);
 
-static void Tst_GetQstDataFromDB (struct Tst_Question *Question,
-                                  char Stem[Cns_MAX_BYTES_TEXT + 1],
-                                  char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                                 struct Media *Media);
@@ -4330,8 +4327,8 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s%s",
-		       Question->Shuffle ? " checked=\"checked\"" :
-				           "",
+		       Question->Answer.Shuffle ? " checked=\"checked\"" :
+				                  "",
    		       Question->Answer.Type != Tst_ANS_UNIQUE_CHOICE &&
                        Question->Answer.Type != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" :
                 	                                                  "");
@@ -4537,19 +4534,23 @@ void Tst_QstConstructor (struct Tst_Question *Question)
 
    Tst_ResetTags (&Question->Tags);
 
-   Question->Stem.Text = NULL;
-   Question->Stem.Length = 0;
-   Question->Feedback.Text = NULL;
+   Question->EditTime = (time_t) 0;
+
+   Question->Stem.Text       = NULL;
+   Question->Stem.Length     = 0;
+   Question->Feedback.Text   = NULL;
    Question->Feedback.Length = 0;
-   Question->Shuffle = false;
 
-   Question->Answer.Type = Tst_ANS_UNIQUE_CHOICE;
+   /***** Initialize answers *****/
+   Question->Answer.Type       = Tst_ANS_UNIQUE_CHOICE;
    Question->Answer.NumOptions = 0;
-   Question->Answer.TF = ' ';
+   Question->Answer.Shuffle    = false;
+   Question->Answer.TF         = ' ';
 
-   /***** Initialize image attached to stem *****/
+   /* Initialize image attached to stem */
    Med_MediaConstructor (&Question->Media);
 
+   /* Initialize options */
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
@@ -4558,7 +4559,7 @@ void Tst_QstConstructor (struct Tst_Question *Question)
       Question->Answer.Options[NumOpt].Text     = NULL;
       Question->Answer.Options[NumOpt].Feedback = NULL;
 
-      /***** Initialize image attached to option *****/
+      /* Initialize image attached to option */
       Med_MediaConstructor (&Question->Answer.Options[NumOpt].Media);
      }
    Question->Answer.Integer = 0;
@@ -4700,132 +4701,152 @@ Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod)
 /*****************************************************************************/
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
+// If question does not exist ==> set question code to -1
 
-static void Tst_GetQstDataFromDB (struct Tst_Question *Question,
-                                  char Stem[Cns_MAX_BYTES_TEXT + 1],
-                                  char Feedback[Cns_MAX_BYTES_TEXT + 1])
+void Tst_GetQstDataFromDB (struct Tst_Question *Question,
+                           char Stem[Cns_MAX_BYTES_TEXT + 1],
+                           char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   bool QuestionExists;
    unsigned long NumRows;
    unsigned long NumRow;
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get a question",
-			"SELECT AnsType,"	// row[0]
-			       "Shuffle,"	// row[1]
-			       "Stem,"		// row[2]
-			       "Feedback,"	// row[3]
-			       "MedCod"		// row[4]
-			" FROM tst_questions"
-			" WHERE QstCod=%ld"
-			" AND CrsCod=%ld",	// Extra check
-			Question->QstCod,
-			Gbl.Hierarchy.Crs.CrsCod))
-      Lay_ShowErrorAndExit ("Question does not exist.");
+   QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
+				     "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
+					    "AnsType,"			// row[1]
+					    "Shuffle,"			// row[2]
+					    "Stem,"			// row[3]
+					    "Feedback,"			// row[4]
+					    "MedCod"			// row[5]
+				     " FROM tst_questions"
+				     " WHERE QstCod=%ld"
+				     " AND CrsCod=%ld",	// Extra check
+				     Question->QstCod,
+				     Gbl.Hierarchy.Crs.CrsCod) != 0);
 
-   row = mysql_fetch_row (mysql_res);
-
-   /* Get the type of answer */
-   Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-
-   /* Get shuffle (row[1]) */
-   Question->Shuffle = (row[1][0] == 'Y');
-
-   /* Get the stem of the question from the database (row[2]) */
-   Str_Copy (Stem,row[2],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Get the feedback of the question from the database (row[3]) */
-   Feedback[0] = '\0';
-   if (row[3])
-      if (row[3][0])
-	 Str_Copy (Feedback,row[3],
-	           Cns_MAX_BYTES_TEXT);
-
-   /* Get media (row[4]) */
-   Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
-   Med_GetMediaDataByCod (&Question->Media);
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Get the tags from the database *****/
-   NumRows = Tst_GetTagsQst (Question->QstCod,&mysql_res);
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   if (QuestionExists)
      {
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Question->Tags.Txt[NumRow],row[0],
-                Tst_MAX_BYTES_TAG);
-     }
 
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+      /* Get edition time (row[0] holds the start UTC time) */
+      Question->EditTime = Dat_GetUNIXTimeFromStr (row[3]);
 
-   /***** Get the answers from the database *****/
-   Tst_GetAnswersQst (Question,&mysql_res,
-                      false);	// Don't shuffle
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      row = mysql_fetch_row (mysql_res);
-      switch (Question->Answer.Type)
+      /* Get the type of answer (row[1]) */
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+      /* Get shuffle (row[2]) */
+      Question->Answer.Shuffle = (row[2][0] == 'Y');
+
+      /* Get the stem (row[3]) */
+      Stem[0] = '\0';
+      if (row[3])
+	 if (row[3][0])
+	    Str_Copy (Stem,row[3],
+		      Cns_MAX_BYTES_TEXT);
+
+      /* Get the feedback (row[4]) */
+      Feedback[0] = '\0';
+      if (row[4])
+	 if (row[4][0])
+	    Str_Copy (Feedback,row[4],
+		      Cns_MAX_BYTES_TEXT);
+
+      /* Get media (row[5]) */
+      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Question->Media);
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Get the tags from the database *****/
+      NumRows = Tst_GetTagsQst (Question->QstCod,&mysql_res);
+      for (NumRow = 0;
+	   NumRow < NumRows;
+	   NumRow++)
 	{
-	 case Tst_ANS_INT:
-	    if (Question->Answer.NumOptions != 1)
-	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Question->Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
-	    break;
-	 case Tst_ANS_FLOAT:
-	    if (Question->Answer.NumOptions != 2)
-	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
-	    break;
-	 case Tst_ANS_TRUE_FALSE:
-	    if (Question->Answer.NumOptions != 1)
-	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    Question->Answer.TF = row[1][0];
-	    break;
-	 case Tst_ANS_UNIQUE_CHOICE:
-	 case Tst_ANS_MULTIPLE_CHOICE:
-	 case Tst_ANS_TEXT:
-	    if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-	       Lay_ShowErrorAndExit ("Wrong answer.");
-	    if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
-	       /* Abort on error */
-	       Ale_ShowAlertsAndExit ();
+	 row = mysql_fetch_row (mysql_res);
+	 Str_Copy (Question->Tags.Txt[NumRow],row[0],
+		   Tst_MAX_BYTES_TAG);
+	}
 
-	    Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
 
-	    // Feedback (row[2]) is initialized to empty string
-	    if (row[2])
-	       if (row[2][0])
-		  Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-		            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      /***** Get the answers from the database *****/
+      Tst_GetAnswersQst (Question,&mysql_res,
+			 false);	// Don't shuffle
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
+      for (NumOpt = 0;
+	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+	 switch (Question->Answer.Type)
+	   {
+	    case Tst_ANS_INT:
+	       Tst_CheckIfNumberOfAnswersIsOne (Question);
+	       Question->Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
+	       break;
+	    case Tst_ANS_FLOAT:
+	       if (Question->Answer.NumOptions != 2)
+		  Lay_ShowErrorAndExit ("Wrong answer.");
+	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
+	       break;
+	    case Tst_ANS_TRUE_FALSE:
+	       Tst_CheckIfNumberOfAnswersIsOne (Question);
+	       Question->Answer.TF = row[1][0];
+	       break;
+	    case Tst_ANS_UNIQUE_CHOICE:
+	    case Tst_ANS_MULTIPLE_CHOICE:
+	    case Tst_ANS_TEXT:
+	       /* Check number of options */
+	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
+		  Lay_ShowErrorAndExit ("Wrong answer.");
 
-            /* Get media (row[3]) */
-	    Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+	       /*  Allocate space for text and feedback */
+	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+		  /* Abort on error */
+		  Ale_ShowAlertsAndExit ();
 
-            /* Get if this option is correct (row[4]) */
-	    Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
-	    break;
-	 default:
-	    break;
+	       /* Get text (row[1]) */
+	       Question->Answer.Options[NumOpt].Text[0] = '\0';
+	       if (row[1])
+		  if (row[1][0])
+		     Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+	       /* Get feedback (row[2]) */
+	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
+	       if (row[2])
+		  if (row[2][0])
+		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+	       /* Get media (row[3]) */
+	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+
+	       /* Get if this option is correct (row[4]) */
+	       Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+	       break;
+	    default:
+	       break;
+	   }
 	}
      }
+   else
+      Question->QstCod = -1L;
+
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
   }
@@ -5048,7 +5069,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question,
    Ale_ShowAlerts (NULL);
 
    /***** Get answers *****/
-   Question->Shuffle = false;
+   Question->Answer.Shuffle = false;
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
@@ -5081,7 +5102,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question,
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Question->Shuffle = Par_GetParToBool ("Shuffle");
+         Question->Answer.Shuffle = Par_GetParToBool ("Shuffle");
 	 /* falls through */
 	 /* no break */
       case Tst_ANS_TEXT:
@@ -5970,8 +5991,8 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 				     "0)",	// Score
 				   Gbl.Hierarchy.Crs.CrsCod,
 				   Tst_StrAnswerTypesDB[Question->Answer.Type],
-				   Question->Shuffle ? 'Y' :
-						       'N',
+				   Question->Answer.Shuffle ? 'Y' :
+						              'N',
 				   Question->Stem.Text,
 				   Question->Feedback.Text ? Question->Feedback.Text :
 					                     "",
@@ -5991,8 +6012,8 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 		           "MedCod=%ld"
 		      " WHERE QstCod=%ld AND CrsCod=%ld",
 		      Tst_StrAnswerTypesDB[Question->Answer.Type],
-		      Question->Shuffle ? 'Y' :
-					  'N',
+		      Question->Answer.Shuffle ? 'Y' :
+					         'N',
 		      Question->Stem.Text,
 		      Question->Feedback.Text ? Question->Feedback.Text :
 			                        "",

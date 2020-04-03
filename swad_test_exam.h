@@ -71,11 +71,6 @@ void TstExa_CreateExamInDB (struct TstExa_Exam *Exam);
 void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam);
 
 void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam);
-void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
-				struct TstExa_Exam *Result,
-				unsigned NumQst,
-				MYSQL_ROW row,
-				unsigned Visibility);
 
 void TstExa_ComputeScoresAndStoreExamQuestions (struct TstExa_Exam *Exam,
                                                 bool UpdateQstScore);

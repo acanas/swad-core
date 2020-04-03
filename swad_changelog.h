@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.159 (2020-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.160 (2020-04-03)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -523,8 +523,14 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
-// TODO: Comprobar si la puntuación de cada pregunta de un examen se recalcula al mostrarlo o se saca de la base de datos
-y qué pasa cuando se edita una pregunta
+// TODO: Integrar Stem y Feedback en question, creando espacio con malloc como en las respuestas
+// TODO: Intentar cambiar Tst_WriteChoiceAnsSeeing usando Tst_GetQstDataFromDB y quitar Tst_GetChoiceAns
+// TODO: Intentar quitar Tst_GetOneQuestionByCod usando Tst_GetQstDataFromDB
+
+	Version 19.160:   Apr 03, 2020	The score for each test question displayed in an exam is the one stored in the database instead of being calculated.
+					New file extension, suggested by Rosa Medina Doménech. (284933 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/filext32x32/m4a32x32.gif /var/www/html/swad/icon/filext32x32/
 
 	Version 19.159:   Apr 03, 2020	Code refactoring and bug fixing in tests. (285052 lines)
 	Version 19.158:   Apr 02, 2020	Lot of code refactoring in tests. (285031 lines)

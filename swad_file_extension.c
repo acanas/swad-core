@@ -75,6 +75,7 @@ const char *Ext_FileExtensionsAllowed[] =
    "jpeg" ,
    "latex",
    "m"    ,
+   "m4a"  ,	// MPEG-4 de audio
    "mdb"  ,
    "mht"  ,
    "mhtml",

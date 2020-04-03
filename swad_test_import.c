@@ -675,7 +675,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		    }
 
 	       /* Get shuffle. By default, shuffle is false. */
-	       Question.Shuffle = false;
+	       Question.Answer.Shuffle = false;
 	       for (AnswerElem = QuestionElem->FirstChild;
 		    AnswerElem != NULL;
 		    AnswerElem = AnswerElem->NextBrother)
@@ -689,7 +689,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			     Attribute = Attribute->Next)
 			   if (!strcmp (Attribute->AttributeName,"shuffle"))
 			     {
-			      Question.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			      Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
 			      break;	// Only first attribute "shuffle"
 			     }
 		     break;	// Only first element "answer"
@@ -1023,7 +1023,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
        Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
-      if (Question->Shuffle)
+      if (Question->Answer.Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
 		      QuestionExists ? "ICO_HIDDEN ICO16x16" :
                 	               "ICO16x16");

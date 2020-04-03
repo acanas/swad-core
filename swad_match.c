@@ -1514,7 +1514,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
       /* Get shuffle (row[3]) */
-      Question.Shuffle = (row[3][0] == 'Y');
+      Question.Answer.Shuffle = (row[3][0] == 'Y');
 
       /***** Reorder answer *****/
       Mch_ReorderAnswer (MchCod,QstInd,&Question);
@@ -1554,8 +1554,8 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 			     " WHERE QstCod=%ld"
 			     " ORDER BY %s",
 			     Question->QstCod,
-			     Question->Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
-				                 "AnsInd");
+			     Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
+				                        "AnsInd");
 
    /***** For each answer in question... *****/
    for (NumAns = 0;

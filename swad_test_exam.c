@@ -77,6 +77,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
+				       struct TstExa_Exam *Exam,
+				       unsigned NumQst,
+				       struct Tst_Question *Question,
+				       const char *Stem,
+				       const char *Feedback,
+				       unsigned Visibility);
 static void TstExa_ComputeAnswerScore (struct TstExa_Exam *Exam,
 				       unsigned NumQst,
 				       struct Tst_Question *Question);
@@ -113,31 +120,26 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
                                     const struct TstExa_Exam *Exam,
 				    unsigned NumQst,
 				    const struct Tst_Question *Question,
-				    MYSQL_RES *mysql_res,
 				    unsigned Visibility);
 static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
                                       const struct TstExa_Exam *Exam,
 				      unsigned NumQst,
 				      const struct Tst_Question *Question,
-				      MYSQL_RES *mysql_res,
 				      unsigned Visibility);
 static void TstExa_WriteTFAnsExam (struct UsrData *UsrDat,
                                    const struct TstExa_Exam *Exam,
 				   unsigned NumQst,
 				   const struct Tst_Question *Question,
-				   MYSQL_RES *mysql_res,
 				   unsigned Visibility);
 static void TstExa_WriteChoiceAnsExam (struct UsrData *UsrDat,
                                        const struct TstExa_Exam *Exam,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
-				       MYSQL_RES *mysql_res,
 				       unsigned Visibility);
 static void TstExa_WriteTextAnsExam (struct UsrData *UsrDat,
                                      const struct TstExa_Exam *Exam,
 				     unsigned NumQst,
 				     struct Tst_Question *Question,
-				     MYSQL_RES *mysql_res,
 				     unsigned Visibility);
 static void TstExa_WriteHeadUserCorrect (struct UsrData *UsrDat);
 static void TstExa_WriteScoreStart (unsigned ColSpan);
@@ -222,10 +224,10 @@ void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam)
 
 void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
   {
-   extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumQst;
+   struct Tst_Question Question;
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -240,20 +242,22 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Exam->Questions[NumQst].QstCod,&mysql_res))	// Question exists
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Exam->Questions[NumQst].QstCod;
+
+      /***** Get question data *****/
+      Tst_GetQstDataFromDB (&Question,Stem,Feedback);
+      if (Question.QstCod > 0)	// Question exists
 	{
 	 /***** Write question and answers *****/
-	 row = mysql_fetch_row (mysql_res);
 	 TstExa_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
-				    Exam,
-				    NumQst,
-				    row,
+				    Exam,NumQst,
+				    &Question,Stem,Feedback,
 				    TstCfg_GetConfigVisibility ());
 
 	 /***** Store test exam question in database *****/
-	 TstExa_StoreOneExamQstInDB (Exam,
-				     NumQst);	// 0, 1, 2, 3...
+	 TstExa_StoreOneExamQstInDB (Exam,NumQst);
 
 	 /***** Compute total score *****/
 	 Exam->Score += Exam->Questions[NumQst].Score;
@@ -264,24 +268,9 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	    Tst_UpdateQstScoreInDB (Exam,NumQst);
 	}
-      else
-	{
-	 /***** Question does not exists *****/
-         HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-         Tst_WriteNumQst (NumQst + 1);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Txt (Txt_Question_removed);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
      }
 
    /***** End table *****/
@@ -292,29 +281,30 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
-				struct TstExa_Exam *Exam,
-				unsigned NumQst,
-				MYSQL_ROW row,
-				unsigned Visibility)
+static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
+				       struct TstExa_Exam *Exam,
+				       unsigned NumQst,
+				       struct Tst_Question *Question,
+				       const char *Stem,
+				       const char *Feedback,
+				       unsigned Visibility)
   {
-   struct Tst_Question Question;
+   extern const char *Txt_Score;
+   extern const char *Txt_Question_removed;
+   extern const char *Txt_Question_modified;
+   bool QuestionExists;
+   bool QuestionUneditedAfterExam = false;
    bool IsVisibleQstAndAnsTxt = TstVis_IsVisibleQstAndAnsTxt (Visibility);
-   /*
-   row[0] UNIX_TIMESTAMP(EditTime)
-   row[1] AnsType
-   row[2] Shuffle
-   row[3] Stem
-   row[4] Feedback
-   row[5] MedCod
-   row[6] NumHits
-   row[7] NumHitsNotBlank
-   row[8] Score
-   */
 
-   /***** Create test question *****/
-   Tst_QstConstructor (&Question);
-   Question.QstCod = Exam->Questions[NumQst].QstCod;
+   /***** Does question exist? *****/
+   QuestionExists = (Question->QstCod > 0);
+
+   /***** If this question has been edited later than test time
+	  ==> don't show question ****/
+   if (QuestionExists)
+      QuestionUneditedAfterExam = (Question->EditTime < Exam->TimeUTC[Dat_START_TIME]);
+   else
+      QuestionUneditedAfterExam = false;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -322,43 +312,56 @@ void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteNumQst (NumQst + 1);
-   Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-   Tst_WriteAnswerType (Question.Answer.Type);
+   if (QuestionUneditedAfterExam)
+      Tst_WriteAnswerType (Question->Answer.Type);
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /* Stem (row[3]) */
-   Tst_WriteQstStem (row[3],"TEST_EXA",IsVisibleQstAndAnsTxt);
-
-   /* Media (row[5]) */
-   if (IsVisibleQstAndAnsTxt)
+   if (QuestionExists)
      {
-      Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Question.Media);
-      Med_ShowMedia (&Question.Media,
-		     "TEST_MED_SHOW_CONT",
-		     "TEST_MED_SHOW");
+      if (QuestionUneditedAfterExam)
+	{
+	 /* Stem */
+	 Tst_WriteQstStem (Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
+
+	 /* Media */
+	 if (IsVisibleQstAndAnsTxt)
+	    Med_ShowMedia (&Question->Media,
+			   "TEST_MED_SHOW_CONT",
+			   "TEST_MED_SHOW");
+
+	 /* Answers */
+	 TstExa_ComputeAnswerScore (Exam,NumQst,Question);
+	 TstExa_WriteAnswersExam (UsrDat,Exam,NumQst,Question,Visibility);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
      }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
-   /* Answers */
-   TstExa_ComputeAnswerScore (Exam,NumQst,&Question);
-   TstExa_WriteAnswersExam (UsrDat,
-                            Exam,NumQst,&Question,
-			    Visibility);
+   /* Write score retrieved from database */
+   HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+   HTM_TxtColonNBSP (Txt_Score);
+   HTM_SPAN_Begin ("class=\"%s\"",
+		   Exam->Questions[NumQst].StrAnswers[0] ?
+		   (Exam->Questions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+							"ANS_BAD") :	// Wrong
+							"ANS_0");	// Blank answer
+   HTM_Double2Decimals (Exam->Questions[NumQst].Score);
+   HTM_SPAN_End ();
+   HTM_DIV_End ();
 
-   /* Question feedback (row[4]) */
-   if (TstVis_IsVisibleFeedbackTxt (Visibility))
-      Tst_WriteQstFeedback (row[4],"TEST_EXA_LIGHT");
+   /* Question feedback */
+   if (QuestionUneditedAfterExam)
+      if (TstVis_IsVisibleFeedbackTxt (Visibility))
+	 Tst_WriteQstFeedback (Feedback,"TEST_EXA_LIGHT");
 
    HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -918,54 +921,28 @@ static void TstExa_WriteAnswersExam (struct UsrData *UsrDat,
 				     struct Tst_Question *Question,
 				     unsigned Visibility)
   {
-   MYSQL_RES *mysql_res;
-
-   /***** Get answer of a question from database *****/
-   Tst_GetAnswersQst (Question,&mysql_res,
-                      false);	// Don't shuffle
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-
    /***** Write answer depending on type *****/
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         TstExa_WriteIntAnsExam    (UsrDat,Exam,
-                                    NumQst,Question,mysql_res,
-				    Visibility);
+         TstExa_WriteIntAnsExam    (UsrDat,Exam,NumQst,Question,Visibility);
          break;
       case Tst_ANS_FLOAT:
-	 TstExa_WriteFloatAnsExam  (UsrDat,Exam,
-	                            NumQst,Question,mysql_res,
-				    Visibility);
+	 TstExa_WriteFloatAnsExam  (UsrDat,Exam,NumQst,Question,Visibility);
          break;
       case Tst_ANS_TRUE_FALSE:
-         TstExa_WriteTFAnsExam     (UsrDat,Exam,
-                                    NumQst,Question,mysql_res,
-				    Visibility);
+         TstExa_WriteTFAnsExam     (UsrDat,Exam,NumQst,Question,Visibility);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         TstExa_WriteChoiceAnsExam (UsrDat,Exam,
-                                    NumQst,Question,mysql_res,
-				    Visibility);
+         TstExa_WriteChoiceAnsExam (UsrDat,Exam,NumQst,Question,Visibility);
          break;
       case Tst_ANS_TEXT:
-         TstExa_WriteTextAnsExam   (UsrDat,Exam,
-                                    NumQst,Question,mysql_res,
-				    Visibility);
+         TstExa_WriteTextAnsExam   (UsrDat,Exam,NumQst,Question,Visibility);
          break;
       default:
          break;
      }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -976,26 +953,12 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
                                     const struct TstExa_Exam *Exam,
 				    unsigned NumQst,
 				    const struct Tst_Question *Question,
-				    MYSQL_RES *mysql_res,
 				    unsigned Visibility)
   {
-   MYSQL_ROW row;
    long IntAnswerUsr;
-   long IntAnswerCorr;
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
+
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
-
-   /***** Get the numerical value of the correct answer *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[1],"%ld",&IntAnswerCorr) != 1)
-      Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -1012,8 +975,8 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
 		       TstVis_IsVisibleCorrectAns (Visibility) ?
-			  (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
-							   "ANS_BAD") :
+			  (IntAnswerUsr == Question->Answer.Integer ? "ANS_OK" :
+							              "ANS_BAD") :
 			  "ANS_0");
          HTM_Long (IntAnswerUsr);
          HTM_TD_End ();
@@ -1032,7 +995,7 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
    if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
        TstVis_IsVisibleCorrectAns   (Visibility))
-      HTM_Long (IntAnswerCorr);
+      HTM_Long (Question->Answer.Integer);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1043,17 +1006,17 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
    if (TstVis_IsVisibleEachQstScore (Visibility))
      {
       TstExa_WriteScoreStart (2);
-      if (!Exam->Questions[NumQst].StrAnswers[0])	// If user has omitted the answer
+      if (!Exam->Questions[NumQst].StrAnswers[0])		// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
 	}
-      else if (IntAnswerUsr == IntAnswerCorr)	// If correct
+      else if (IntAnswerUsr == Question->Answer.Integer)	// If correct
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
          HTM_Double2Decimals (1.0);
 	}
-      else					// If wrong
+      else							// If wrong
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
          HTM_Double2Decimals (0.0);
@@ -1073,39 +1036,13 @@ static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
                                       const struct TstExa_Exam *Exam,
 				      unsigned NumQst,
 				      const struct Tst_Question *Question,
-				      MYSQL_RES *mysql_res,
 				      unsigned Visibility)
   {
-   MYSQL_ROW row;
-   unsigned i;
-   double FloatAnsUsr = 0.0,Tmp;
-   double FloatAnsCorr[2];
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
+   double FloatAnsUsr = 0.0;
+
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
       Lay_ShowErrorAndExit ("Wrong float range.");
-
-   /***** Get the numerical value of the minimum and maximum correct answers *****/
-   for (i = 0;
-	i < 2;
-	i++)
-     {
-      row = mysql_fetch_row (mysql_res);
-      FloatAnsCorr[i] = Str_GetDoubleFromStr (row[1]);
-     }
-   if (FloatAnsCorr[0] > FloatAnsCorr[1]) 	// The maximum and the minimum are swapped
-    {
-      /* Swap maximum and minimum */
-      Tmp = FloatAnsCorr[0];
-      FloatAnsCorr[0] = FloatAnsCorr[1];
-      FloatAnsCorr[1] = Tmp;
-     }
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -1122,9 +1059,9 @@ static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"%s CM\"",
 		    TstVis_IsVisibleCorrectAns (Visibility) ?
-		       ((FloatAnsUsr >= FloatAnsCorr[0] &&
-			 FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
-							   "ANS_BAD") :
+		       ((FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
+			 FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "ANS_OK" :
+							                     "ANS_BAD") :
 		       "ANS_0");
       HTM_Double (FloatAnsUsr);
      }
@@ -1138,9 +1075,9 @@ static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
        TstVis_IsVisibleCorrectAns   (Visibility))
      {
       HTM_Txt ("[");
-      HTM_Double (FloatAnsCorr[0]);
+      HTM_Double (Question->Answer.FloatingPoint[0]);
       HTM_Txt ("; ");
-      HTM_Double (FloatAnsCorr[1]);
+      HTM_Double (Question->Answer.FloatingPoint[1]);
       HTM_Txt ("]");
      }
    else
@@ -1153,18 +1090,18 @@ static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
    if (TstVis_IsVisibleEachQstScore (Visibility))
      {
       TstExa_WriteScoreStart (2);
-      if (!Exam->Questions[NumQst].StrAnswers[0])	// If user has omitted the answer
+      if (!Exam->Questions[NumQst].StrAnswers[0])			// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
 	}
-      else if (FloatAnsUsr >= FloatAnsCorr[0] &&
-               FloatAnsUsr <= FloatAnsCorr[1])		// If correct (inside the interval)
+      else if (FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
+               FloatAnsUsr <= Question->Answer.FloatingPoint[1])	// If correct (inside the interval)
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
          HTM_Double2Decimals (1.0);
 	}
-      else						// If wrong (outside the interval)
+      else								// If wrong (outside the interval)
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
          HTM_Double2Decimals (0.0);
@@ -1184,24 +1121,15 @@ static void TstExa_WriteTFAnsExam (struct UsrData *UsrDat,
                                    const struct TstExa_Exam *Exam,
 				   unsigned NumQst,
 				   const struct Tst_Question *Question,
-				   MYSQL_RES *mysql_res,
 				   unsigned Visibility)
   {
-   MYSQL_ROW row;
-   char AnsTF;
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
+   char AnsTFUsr;
+
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   row = mysql_fetch_row (mysql_res);
-   AnsTF = Exam->Questions[NumQst].StrAnswers[0];
+   AnsTFUsr = Exam->Questions[NumQst].StrAnswers[0];
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -1214,17 +1142,17 @@ static void TstExa_WriteTFAnsExam (struct UsrData *UsrDat,
    /***** Write the user answer *****/
    HTM_TD_Begin ("class=\"%s CM\"",
 		 TstVis_IsVisibleCorrectAns (Visibility) ?
-		    (AnsTF == row[1][0] ? "ANS_OK" :
-					  "ANS_BAD") :
+		    (AnsTFUsr == Question->Answer.TF ? "ANS_OK" :
+					               "ANS_BAD") :
 		    "ANS_0");
-   Tst_WriteAnsTF (AnsTF);
+   Tst_WriteAnsTF (AnsTFUsr);
    HTM_TD_End ();
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
    if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
        TstVis_IsVisibleCorrectAns   (Visibility))
-      Tst_WriteAnsTF (row[1][0]);
+      Tst_WriteAnsTF (Question->Answer.TF);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1235,17 +1163,17 @@ static void TstExa_WriteTFAnsExam (struct UsrData *UsrDat,
    if (TstVis_IsVisibleEachQstScore (Visibility))
      {
       TstExa_WriteScoreStart (2);
-      if (AnsTF == '\0')		// If user has omitted the answer
+      if (AnsTFUsr == '\0')			// If user has omitted the answer
 	{
          HTM_SPAN_Begin ("class=\"ANS_0\"");
          HTM_Double2Decimals (0.0);
 	}
-      else if (AnsTF == row[1][0])	// If correct
+      else if (AnsTFUsr == Question->Answer.TF)	// If correct
 	{
          HTM_SPAN_Begin ("class=\"ANS_OK\"");
          HTM_Double2Decimals (1.0);
 	}
-      else				// If wrong
+      else					// If wrong
 	{
          HTM_SPAN_Begin ("class=\"ANS_BAD\"");
          HTM_Double2Decimals (-1.0);
@@ -1265,7 +1193,6 @@ static void TstExa_WriteChoiceAnsExam (struct UsrData *UsrDat,
                                        const struct TstExa_Exam *Exam,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
-				       MYSQL_RES *mysql_res,
 				       unsigned Visibility)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
@@ -1278,17 +1205,6 @@ static void TstExa_WriteChoiceAnsExam (struct UsrData *UsrDat,
       char *Class;
       char *Str;
      } Ans;
-
-   /***** Get text and correctness of answers for this question
-          from database (one row per answer) *****/
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-   Tst_GetChoiceAns (Question,mysql_res);
 
    /***** Get indexes for this question from string *****/
    TstExa_GetIndexesFromStr (Exam->Questions[NumQst].StrIndexes,Indexes);
@@ -1421,55 +1337,30 @@ static void TstExa_WriteTextAnsExam (struct UsrData *UsrDat,
                                      const struct TstExa_Exam *Exam,
 				     unsigned NumQst,
 				     struct Tst_Question *Question,
-				     MYSQL_RES *mysql_res,
 				     unsigned Visibility)
   {
    unsigned NumOpt;
-   MYSQL_ROW row;
    char TextAnsUsr[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
    bool Correct = false;
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
+
    /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      /***** Get next answer *****/
-      row = mysql_fetch_row (mysql_res);
+      /***** Convert answer text, that is in HTML, to rigorous HTML ******/
+      if (Question->Answer.Options[NumOpt].Text[0])
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Question->Answer.Options[NumOpt].Text,
+			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
-      /***** Allocate memory for text in this choice answer *****/
-      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
-	 /* Abort on error */
-	 Ale_ShowAlertsAndExit ();
-
-      /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-
-      /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
+      /***** Convert answer feedback, that is in HTML, to rigorous HTML ******/
       if (TstVis_IsVisibleFeedbackTxt (Visibility))
-	 if (row[2])
-	    if (row[2][0])
-	      {
-	       Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Question->Answer.Options[NumOpt].Feedback,
-	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-	      }
-
-      /***** Assign correctness (row[4]) of this answer (this option) *****/
-      Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+	 if (Question->Answer.Options[NumOpt].Feedback[0])
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Question->Answer.Options[NumOpt].Feedback,
+			      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
      }
 
    /***** Header with the title of each column *****/
@@ -2437,13 +2328,10 @@ void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
 			     struct TstExa_Exam *Exam,
 			     unsigned Visibility)
   {
-   extern const char *Txt_Question_modified;
-   extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumQst;
-   bool ThisQuestionHasBeenEdited;
-   time_t EditTimeUTC;
+   struct Tst_Question Question;
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    for (NumQst = 0;
 	NumQst < Exam->NumQsts;
@@ -2451,60 +2339,21 @@ void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Query database *****/
-      if (Tst_GetOneQuestionByCod (Exam->Questions[NumQst].QstCod,&mysql_res))	// Question exists
-	{
-	 /***** Get row of the result of the query *****/
-	 row = mysql_fetch_row (mysql_res);
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Exam->Questions[NumQst].QstCod;
 
-	 /***** If this question has been edited later than test time
-	        ==> don't show question ****/
-	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
-	 ThisQuestionHasBeenEdited = false;
-	 if (EditTimeUTC > Exam->TimeUTC[Dat_START_TIME])
-	    ThisQuestionHasBeenEdited = true;
+      /***** Get question data *****/
+      Tst_GetQstDataFromDB (&Question,Stem,Feedback);
 
-	 if (ThisQuestionHasBeenEdited)
-	   {
-	    /***** Question has been edited *****/
-	    HTM_TR_Begin (NULL);
+      /***** Write questions and answers *****/
+      TstExa_WriteQstAndAnsExam (UsrDat,
+				 Exam,NumQst,
+				 &Question,Stem,Feedback,
+				 Visibility);
 
-	    HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	    HTM_Unsigned (NumQst + 1);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	    HTM_Txt (Txt_Question_modified);
-	    HTM_TD_End ();
-
-	    HTM_TR_End ();
-	   }
-	 else
-	    /***** Write questions and answers *****/
-	    TstExa_WriteQstAndAnsExam (UsrDat,
-				       Exam,
-				       NumQst,
-				       row,
-				       Visibility);
-	}
-      else
-	{
-	 /***** Question does not exists *****/
-         HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumQst + 1);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Txt (Txt_Question_removed);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
      }
   }
 
