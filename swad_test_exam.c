@@ -142,8 +142,6 @@ static void TstExa_WriteTextAnsExam (struct UsrData *UsrDat,
 				     struct Tst_Question *Question,
 				     unsigned Visibility);
 static void TstExa_WriteHeadUserCorrect (struct UsrData *UsrDat);
-static void TstExa_WriteScoreStart (unsigned ColSpan);
-static void TstExa_WriteScoreEnd (void);
 
 static void TstExa_StoreOneExamQstInDB (const struct TstExa_Exam *Exam,
                                         unsigned NumQst);
@@ -342,16 +340,19 @@ static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
    /* Write score retrieved from database */
-   HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
-   HTM_TxtColonNBSP (Txt_Score);
-   HTM_SPAN_Begin ("class=\"%s\"",
-		   Exam->Questions[NumQst].StrAnswers[0] ?
-		   (Exam->Questions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
-							"ANS_BAD") :	// Wrong
-							"ANS_0");	// Blank answer
-   HTM_Double2Decimals (Exam->Questions[NumQst].Score);
-   HTM_SPAN_End ();
-   HTM_DIV_End ();
+   if (TstVis_IsVisibleEachQstScore (Visibility))
+     {
+      HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+      HTM_TxtColonNBSP (Txt_Score);
+      HTM_SPAN_Begin ("class=\"%s\"",
+		      Exam->Questions[NumQst].StrAnswers[0] ?
+		      (Exam->Questions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+							   "ANS_BAD") :	// Wrong
+							   "ANS_0");	// Blank answer
+      HTM_Double2Decimals (Exam->Questions[NumQst].Score);
+      HTM_SPAN_End ();
+      HTM_DIV_End ();
+     }
 
    /* Question feedback */
    if (QuestionUneditedAfterExam)
@@ -1002,29 +1003,6 @@ static void TstExa_WriteIntAnsExam (struct UsrData *UsrDat,
 
    HTM_TR_End ();
 
-   /***** Write the score of this question *****/
-   if (TstVis_IsVisibleEachQstScore (Visibility))
-     {
-      TstExa_WriteScoreStart (2);
-      if (!Exam->Questions[NumQst].StrAnswers[0])		// If user has omitted the answer
-	{
-         HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double2Decimals (0.0);
-	}
-      else if (IntAnswerUsr == Question->Answer.Integer)	// If correct
-	{
-         HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double2Decimals (1.0);
-	}
-      else							// If wrong
-	{
-         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double2Decimals (0.0);
-	}
-      HTM_SPAN_End ();
-      TstExa_WriteScoreEnd ();
-     }
-
    HTM_TABLE_End ();
   }
 
@@ -1086,30 +1064,6 @@ static void TstExa_WriteFloatAnsExam (struct UsrData *UsrDat,
 
    HTM_TR_End ();
 
-   /***** Write the score of this question *****/
-   if (TstVis_IsVisibleEachQstScore (Visibility))
-     {
-      TstExa_WriteScoreStart (2);
-      if (!Exam->Questions[NumQst].StrAnswers[0])			// If user has omitted the answer
-	{
-         HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double2Decimals (0.0);
-	}
-      else if (FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
-               FloatAnsUsr <= Question->Answer.FloatingPoint[1])	// If correct (inside the interval)
-	{
-         HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double2Decimals (1.0);
-	}
-      else								// If wrong (outside the interval)
-	{
-         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double2Decimals (0.0);
-	}
-      HTM_SPAN_End ();
-      TstExa_WriteScoreEnd ();
-     }
-
    HTM_TABLE_End ();
   }
 
@@ -1158,29 +1112,6 @@ static void TstExa_WriteTFAnsExam (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    HTM_TR_End ();
-
-   /***** Write the score of this question *****/
-   if (TstVis_IsVisibleEachQstScore (Visibility))
-     {
-      TstExa_WriteScoreStart (2);
-      if (AnsTFUsr == '\0')			// If user has omitted the answer
-	{
-         HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double2Decimals (0.0);
-	}
-      else if (AnsTFUsr == Question->Answer.TF)	// If correct
-	{
-         HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double2Decimals (1.0);
-	}
-      else					// If wrong
-	{
-         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double2Decimals (-1.0);
-	}
-      HTM_SPAN_End ();
-      TstExa_WriteScoreEnd ();
-     }
 
    HTM_TABLE_End ();
   }
@@ -1308,21 +1239,6 @@ static void TstExa_WriteChoiceAnsExam (struct UsrData *UsrDat,
       HTM_TD_End ();
 
       HTM_TR_End ();
-     }
-
-   /***** Write the score of this question *****/
-   if (TstVis_IsVisibleEachQstScore (Visibility))
-     {
-      TstExa_WriteScoreStart (4);
-      if (Exam->Questions[NumQst].Score == 0.0)
-         HTM_SPAN_Begin ("class=\"ANS_0\"");
-      else if (Exam->Questions[NumQst].Score > 0.0)
-         HTM_SPAN_Begin ("class=\"ANS_OK\"");
-      else
-         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-      HTM_Double2Decimals (Exam->Questions[NumQst].Score);
-      HTM_SPAN_End ();
-      TstExa_WriteScoreEnd ();
      }
 
    /***** End table *****/
@@ -1461,29 +1377,6 @@ static void TstExa_WriteTextAnsExam (struct UsrData *UsrDat,
      }
    HTM_TR_End ();
 
-   /***** Write the score of this question *****/
-   if (TstVis_IsVisibleEachQstScore (Visibility))
-     {
-      TstExa_WriteScoreStart (4);
-      if (!Exam->Questions[NumQst].StrAnswers[0])	// If user has omitted the answer
-	{
-         HTM_SPAN_Begin ("class=\"ANS_0\"");
-         HTM_Double2Decimals (0.0);
-	}
-      else if (Correct)					// If correct
-	{
-         HTM_SPAN_Begin ("class=\"ANS_OK\"");
-         HTM_Double2Decimals (1.0);
-	}
-      else						// If wrong
-	{
-         HTM_SPAN_Begin ("class=\"ANS_BAD\"");
-         HTM_Double2Decimals (0.0);
-	}
-      HTM_SPAN_End ();
-      TstExa_WriteScoreEnd ();
-     }
-
    HTM_TABLE_End ();
   }
 
@@ -1504,25 +1397,6 @@ static void TstExa_WriteHeadUserCorrect (struct UsrData *UsrDat)
    HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
    HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/*********** Write the start ans the end of the score of an answer ***********/
-/*****************************************************************************/
-
-static void TstExa_WriteScoreStart (unsigned ColSpan)
-  {
-   extern const char *Txt_Score;
-
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LM\"",ColSpan);
-   HTM_TxtColonNBSP (Txt_Score);
-  }
-
-static void TstExa_WriteScoreEnd (void)
-  {
-   HTM_TD_End ();
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/

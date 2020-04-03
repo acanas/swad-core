@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.160 (2020-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.160.1 (2020-04-03)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -527,6 +527,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Intentar cambiar Tst_WriteChoiceAnsSeeing usando Tst_GetQstDataFromDB y quitar Tst_GetChoiceAns
 // TODO: Intentar quitar Tst_GetOneQuestionByCod usando Tst_GetQstDataFromDB
 
+	Version 19.160.1: Apr 03, 2020	Score calculated is removed from each test question. (284817 lines)
 	Version 19.160:   Apr 03, 2020	The score for each test question displayed in an exam is the one stored in the database instead of being calculated.
 					New file extension, suggested by Rosa Medina Doménech. (284933 lines)
 					Copy the following icon to icon public directory:
