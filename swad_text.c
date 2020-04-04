@@ -9791,27 +9791,6 @@ const char *Txt_Done =
 	"Feito";
 #endif
 
-const char *Txt_Done_assess_test =
-#if   L==1	// ca
-	"He acabat; corregir test";
-#elif L==2	// de
-	"Geschehen; beurteilen Test";
-#elif L==3	// en
-	"Done; assess test";
-#elif L==4	// es
-	"He terminado; corregir test";
-#elif L==5	// fr
-	"Fait; corriger test";
-#elif L==6	// gn
-	"He terminado; corregir test";	// Okoteve traducción
-#elif L==7	// it
-	"Finito; correggere test";
-#elif L==8	// pl
-	"Sporz&aogon;dzono; oceny test";
-#elif L==9	// pt
-	"Feito; corrigir teste";
-#endif
-
 const char *Txt_Download =	// As a verb
 #if   L==1	// ca
 	"Descarregar";

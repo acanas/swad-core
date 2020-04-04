@@ -192,7 +192,7 @@ static void Mch_PutIfAnswered (const struct Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         struct Tst_Question *Question,
+                                         const struct Tst_Question *Question,
                                          const char *Class,bool ShowResult);
 static bool Mch_ShowQuestionAndAnswersStd (const struct Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
@@ -2889,9 +2889,9 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
   {
    extern const char *Txt_MATCH_Paused;
    extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct Tst_Question Question;
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
@@ -2908,40 +2908,24 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
      }
 
    /***** Get data of question from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a question",
-		       "SELECT AnsType,"	// row[0]
-			      "Stem,"		// row[1]
-			      "MedCod"		// row[2]
-		       " FROM tst_questions"
-		       " WHERE QstCod=%ld",
-		       Question.QstCod))
+   if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))
      {
-      row = mysql_fetch_row (mysql_res);
-
       /***** Show question *****/
-      /* Get answer type (row[0]) */
-      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+      /* Check answer type */
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
       /* Begin container */
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
-      /* Write stem (row[1]) */
-      Tst_WriteQstStem (row[1],"MCH_TCH_STEM",
+      /* Write stem */
+      Tst_WriteQstStem (Stem,"MCH_TCH_STEM",
 			true);	// Visible
-
-      /* Get media (row[2]) */
-      Question.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
-      Med_GetMediaDataByCod (&Question.Media);
 
       /* Show media */
       Med_ShowMedia (&Question.Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
 
       /***** Write answers? *****/
       switch (Match->Status.Showing)
@@ -2983,7 +2967,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Match *Match,
-                                         struct Tst_Question *Question,
+                                         const struct Tst_Question *Question,
                                          const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
@@ -3000,60 +2984,17 @@ static void Mch_WriteAnswersMatchResult (const struct Match *Match,
 /*****************************************************************************/
 
 void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,
-                                  struct Tst_Question *Question,
+                                  const struct Tst_Question *Question,
                                   const char *Class,bool ShowResult)
   {
    unsigned NumOpt;
    bool RowIsOpen = false;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumRespondersQst;
    unsigned NumRespondersAns;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
-
-   /***** Get answers of a question from database *****/
-   Tst_GetAnswersQst (Question,&mysql_res,
-                      false);	// Don't shuffle
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      /* Get next answer */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Allocate memory for text in this choice answer */
-      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
-	 /* Abort on error */
-	 Ale_ShowAlertsAndExit ();
-
-      /* Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML */
-      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-
-      /* Get media (row[3]) */
-      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
-
-      /* Get if correct (row[4]) */
-      Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes for this question in match *****/
    Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);
@@ -3083,7 +3024,13 @@ void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",Match->Status.QstInd,NumOpt,Class);
+
+      /* Convert text, that is in HTML, to rigorous HTML */
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Question->Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONT",

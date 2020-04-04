@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.160.1 (2020-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.161 (2020-04-04)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -516,6 +516,10 @@ Si es así, se llamaría a la función:
 Función API newLocation...
 Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 
+// TODO: Laura García: "Ahora estoy utilizando la plataforma SWAD más que nunca, evidentemente, debido a las circunstancias, e incluso les he hecho un examencillo a los alumnos utilizando los test de autoevaluación.
+                        Pero quería preguntarte un par de cosas:
+                        - lo primero es si se pueden borrar los test realizados por cualquier usuario, incluido profesores. Yo misma he hecho un montón para simular el examen, y ya me están sobrando.
+                        - por otra parte, he buscado pero no he encontrado, la posibilidad de cambiar la manera de corregir los tes, quitar la penalización por respuesta negativa,, o cambiarla, etc.. La verdad es que si se puede hacer me facilitaría un montón el trabajo próximo que nos espera con los alumnos."
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
@@ -524,9 +528,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Integrar Stem y Feedback en question, creando espacio con malloc como en las respuestas
-// TODO: Intentar cambiar Tst_WriteChoiceAnsSeeing usando Tst_GetQstDataFromDB y quitar Tst_GetChoiceAns
-// TODO: Intentar quitar Tst_GetOneQuestionByCod usando Tst_GetQstDataFromDB
 
+	Version 19.161:   Apr 04, 2020	Code refactoring in tests. (284529 lines)
 	Version 19.160.1: Apr 03, 2020	Score calculated is removed from each test question. (284817 lines)
 	Version 19.160:   Apr 03, 2020	The score for each test question displayed in an exam is the one stored in the database instead of being calculated.
 					New file extension, suggested by Rosa Medina Doménech. (284933 lines)

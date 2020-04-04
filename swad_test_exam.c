@@ -245,8 +245,7 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
       Question.QstCod = Exam->Questions[NumQst].QstCod;
 
       /***** Get question data *****/
-      Tst_GetQstDataFromDB (&Question,Stem,Feedback);
-      if (Question.QstCod > 0)	// Question exists
+      if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))	// Question exists
 	{
 	 /***** Write question and answers *****/
 	 TstExa_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
@@ -2218,13 +2217,12 @@ void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
       Question.QstCod = Exam->Questions[NumQst].QstCod;
 
       /***** Get question data *****/
-      Tst_GetQstDataFromDB (&Question,Stem,Feedback);
-
-      /***** Write questions and answers *****/
-      TstExa_WriteQstAndAnsExam (UsrDat,
-				 Exam,NumQst,
-				 &Question,Stem,Feedback,
-				 Visibility);
+      if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))	// Question exists?
+	 /***** Write questions and answers *****/
+	 TstExa_WriteQstAndAnsExam (UsrDat,
+				    Exam,NumQst,
+				    &Question,Stem,Feedback,
+				    Visibility);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);

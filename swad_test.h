@@ -117,6 +117,9 @@ struct Tst_Question
       long Integer;
       double FloatingPoint[2];
      } Answer;
+  unsigned long NumHits;
+  unsigned long NumHitsNotBlank;
+  double Score;
   };
 
 struct Tst_Test
@@ -170,13 +173,12 @@ void Tst_RequestSelectTestsForGame (void);
 
 void Tst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelect (void);
-bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
-void Tst_WriteAnswersListing (struct Tst_Question *Question);
+void Tst_WriteAnswersListing (const struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
@@ -200,7 +202,7 @@ void Tst_QstDestructor (struct Tst_Question *Question);
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
 Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod);
-void Tst_GetQstDataFromDB (struct Tst_Question *Question,
+bool Tst_GetQstDataFromDB (struct Tst_Question *Question,
                            char Stem[Cns_MAX_BYTES_TEXT + 1],
                            char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);

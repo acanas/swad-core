@@ -118,7 +118,7 @@ unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod);
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Match *Match);
 
 void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,
-                                  struct Tst_Question *Question,
+                                  const struct Tst_Question *Question,
                                   const char *Class,bool ShowResult);
 
 bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);

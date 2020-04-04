@@ -71,7 +71,7 @@ static void TsI_PutCreateXMLParam (void);
 static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML);
 
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
-static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
+static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
                                        FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
@@ -259,27 +259,12 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
-   if (Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res))
+   if (Tst_GetQstDataFromDB (Question,Stem,Feedback))
      {
-      /***** Get row *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] UNIX_TIMESTAMP(EditTime)
-      row[1] AnsType
-      row[2] Shuffle
-      row[3] Stem
-      row[4] Feedback
-      row[5] MedCod
-      row[6] NumHits
-      row[7] NumHitsNotBlank
-      row[8] Score
-      */
-
-      /***** Write the answer type (row[1]) *****/
-      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",
                Tst_StrAnswerTypesXML[Question->Answer.Type],Txt_NEW_LINE);
 
@@ -288,24 +273,23 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
       TsI_GetAndWriteTagsXML (Question->QstCod,FileXML);
       fprintf (FileXML,"</tags>%s",Txt_NEW_LINE);
 
-      /***** Write the stem (row[3]), that is in HTML format *****/
+      /***** Write the stem, that is in HTML format *****/
       fprintf (FileXML,"<stem>%s</stem>%s",
-               row[3],Txt_NEW_LINE);
+               Stem,Txt_NEW_LINE);
 
-      /***** Write the feedback (row[4]), that is in HTML format *****/
-      if (row[4])
-	 if (row[4][0])
-	    fprintf (FileXML,"<feedback>%s</feedback>%s",
-		     row[4],Txt_NEW_LINE);
+      /***** Write the feedback, that is in HTML format *****/
+      if (Feedback[0])
+	 fprintf (FileXML,"<feedback>%s</feedback>%s",
+		  Feedback,Txt_NEW_LINE);
 
       /***** Write the answers of this question.
-             Shuffle can be enabled or disabled (row[2]) *****/
+             Shuffle can be enabled or disabled *****/
       fprintf (FileXML,"<answer");
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
           Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
-                  (row[2][0] == 'Y') ? "yes" :
-                	               "no");
+                  Question->Answer.Shuffle ? "yes" :
+                	                     "no");
       fprintf (FileXML,">");
       TsI_WriteAnswersOfAQstXML (Question,FileXML);
       fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
@@ -347,60 +331,30 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
+static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
                                        FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
    unsigned NumOpt;
-   unsigned i;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   double FloatNum[2];
-
-   /***** Get answers *****/
-   Tst_GetAnswersQst (Question,&mysql_res,
-                      false);	// Don't shuffle
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
 
    /***** Write answers *****/
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_CheckIfNumberOfAnswersIsOne (Question);
-         row = mysql_fetch_row (mysql_res);
-         fprintf (FileXML,"%ld",
-                  Tst_GetIntAnsFromStr (row[1]));
+         fprintf (FileXML,"%ld",Question->Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
-	 if (Question->Answer.NumOptions != 2)
-            Lay_ShowErrorAndExit ("Wrong float range.");
-
-         for (i = 0;
-              i < 2;
-              i++)
-           {
-            row = mysql_fetch_row (mysql_res);
-            FloatNum[i] = Str_GetDoubleFromStr (row[1]);
-           }
          fprintf (FileXML,"%s"
                           "<lower>%.15lg</lower>%s"
                           "<upper>%.15lg</upper>%s",
                   Txt_NEW_LINE,
-                  FloatNum[0],Txt_NEW_LINE,
-                  FloatNum[1],Txt_NEW_LINE);
+                  Question->Answer.FloatingPoint[0],Txt_NEW_LINE,
+                  Question->Answer.FloatingPoint[1],Txt_NEW_LINE);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_CheckIfNumberOfAnswersIsOne (Question);
-         row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"%s",
-                  row[1][0] == 'T' ? "true" :
-                	             "false");
+                  Question->Answer.TF == 'T' ? "true" :
+                	                       "false");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -410,28 +364,26 @@ static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
               NumOpt < Question->Answer.NumOptions;
               NumOpt++)
            {
-            row = mysql_fetch_row (mysql_res);
-
             /* Start answer */
             fprintf (FileXML,"<option");
 
-            /* Write whether the answer is correct or not (row[4]) */
+            /* Write whether the answer is correct or not */
             if (Question->Answer.Type != Tst_ANS_TEXT)
                fprintf (FileXML," correct=\"%s\"",
-                        (row[4][0] == 'Y') ? "yes" :
-                                             "no");
+                        Question->Answer.Options[NumOpt].Correct ? "yes" :
+                                                                   "no");
 
             fprintf (FileXML,">%s",Txt_NEW_LINE);
 
-            /* Write the answer (row[1]), that is in HTML */
+            /* Write the answer, that is in HTML */
             fprintf (FileXML,"<text>%s</text>%s",
-                     row[1],Txt_NEW_LINE);
+                     Question->Answer.Options[NumOpt].Text,Txt_NEW_LINE);
 
-            /* Write the feedback (row[2]) */
-            if (row[2])
-	       if (row[2][0])
+            /* Write the feedback */
+            if (Question->Answer.Options[NumOpt].Feedback)
+	       if (Question->Answer.Options[NumOpt].Feedback[0])
 		  fprintf (FileXML,"<feedback>%s</feedback>%s",
-			   row[2],Txt_NEW_LINE);
+			   Question->Answer.Options[NumOpt].Feedback,Txt_NEW_LINE);
 
             /* End answer */
             fprintf (FileXML,"</option>%s",
@@ -441,9 +393,6 @@ static void TsI_WriteAnswersOfAQstXML (struct Tst_Question *Question,
       default:
          break;
      }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

@@ -156,8 +156,9 @@ static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
-                                        unsigned QstInd);
+static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
+                                        const char *Stem,const char *Feedback,
+                                        unsigned QstInd,bool QuestionExists);
 static void Gam_PutIconToAddNewQuestions (void *Args);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -1911,9 +1912,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    unsigned NumQst;
    MYSQL_ROW row;
    struct Tst_Question Question;
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   bool QuestionExists;
 
    /***** Get maximum question index *****/
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);
@@ -2010,7 +2014,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TD_End ();
 
       /***** Question *****/
-      Gam_ListQuestionForEdition (&Question,QstInd);
+      QuestionExists = Tst_GetQstDataFromDB (&Question,Stem,Feedback);
+      Gam_ListQuestionForEdition (&Question,Stem,Feedback,QstInd,QuestionExists);
 
       HTM_TR_End ();
 
@@ -2026,44 +2031,17 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 /********************** List game question for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
-                                        unsigned QstInd)
+static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
+                                        const char *Stem,const char *Feedback,
+                                        unsigned QstInd,bool QuestionExists)
   {
    extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool QstExists;
-   Tst_AnswerType_t AnswerType;
-   struct Media Media;
-
-   /***** Get question from database *****/
-   QstExists = Tst_GetOneQuestionByCod (Question->QstCod,&mysql_res);	// Question exists?
-
-   if (QstExists)
-     {
-      /***** Get row of the result of the query *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] UNIX_TIMESTAMP(EditTime)
-      row[1] AnsType
-      row[2] Shuffle
-      row[3] Stem
-      row[4] Feedback
-      row[5] MedCod
-      row[6] NumHits
-      row[7] NumHitsNotBlank
-      row[8] Score
-      */
-     }
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteNumQst (QstInd);
-   if (QstExists)
-     {
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      Tst_WriteAnswerType (AnswerType);
-     }
+   if (QuestionExists)
+      Tst_WriteAnswerType (Question->Answer.Type);
    HTM_TD_End ();
 
    /***** Write question code *****/
@@ -2073,29 +2051,25 @@ static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QstExists)
+   if (QuestionExists)
       Tst_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QstExists)
+   if (QuestionExists)
      {
       /* Write stem */
-      Tst_WriteQstStem (row[3],"TEST_EDI",
+      Tst_WriteQstStem (Stem,"TEST_EDI",
 			true);	// Visible
 
-      /* Get media (row[5]) */
-      Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Media);
-
       /* Show media */
-      Med_ShowMedia (&Media,
+      Med_ShowMedia (&Question->Media,
 		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		     "TEST_MED_EDIT_LIST_STEM");
 
-      /* Show feedback (row[4]) */
-      Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
+      /* Show feedback */
+      Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
 
       /* Show answers */
       Tst_WriteAnswersListing (Question);
@@ -2107,9 +2081,6 @@ static void Gam_ListQuestionForEdition (struct Tst_Question *Question,
       HTM_SPAN_End ();
      }
    HTM_TD_End ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
