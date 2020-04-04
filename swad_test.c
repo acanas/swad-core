@@ -151,8 +151,7 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
 
 static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
                                       unsigned NumQst,
-                                      const struct Tst_Question *Question,
-                                      const char *Stem);
+                                      const struct Tst_Question *Question);
 
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -230,9 +229,7 @@ static unsigned Tst_GetParamNumQsts (void);
 static unsigned Tst_CountNumTagsInList (const struct Tst_Tags *Tags);
 static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
-	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
-                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
+static void Tst_PutFormEditOneQst (struct Tst_Question *Question);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     const struct Tst_Question *Question,
                                     unsigned Index);
@@ -250,8 +247,7 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                                 struct Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
-static void Tst_GetQstFromForm (struct Tst_Question *Question,
-                                char *Stem,char *Feedback);
+static void Tst_GetQstFromForm (struct Tst_Question *Question);
 static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question);
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
@@ -867,8 +863,6 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
    extern const char *Txt_Test;
    unsigned NumQst;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
    static const Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
      {
       [Tst_REQUEST] = ActReqAssTst,
@@ -906,11 +900,11 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
 	 Question.QstCod = Exam->Questions[NumQst].QstCod;
 
 	 /* Show question */
-	 if (!Tst_GetQstDataFromDB (&Question,Stem,Feedback))	// Question exists
+	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
 	    Lay_ShowErrorAndExit ("Wrong question.");
 
 	 /* Write question and answers */
-	 Tst_WriteQstAndAnsSeeing (Exam,NumQst,&Question,Stem);
+	 Tst_WriteQstAndAnsSeeing (Exam,NumQst,&Question);
 
 	 /* Destroy test question */
 	 Tst_QstDestructor (&Question);
@@ -976,8 +970,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 
 static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
                                       unsigned NumQst,
-                                      const struct Tst_Question *Question,
-                                      const char *Stem)
+                                      const struct Tst_Question *Question)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -995,7 +988,7 @@ static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
    Tst_WriteParamQstCod (NumQst,Question->QstCod);
 
    /* Stem */
-   Tst_WriteQstStem (Stem,"TEST_EXA",true);
+   Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
 
    /* Media */
    Med_ShowMedia (&Question->Media,
@@ -1049,23 +1042,26 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
    HTM_DIV_Begin ("class=\"%s\"",ClassStem);
 
    /***** Write stem *****/
-   if (Visible)
+   if (Stem && Visible)
      {
-      /* Convert the stem, that is in HTML, to rigorous HTML */
-      StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-      if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
-	 Lay_NotEnoughMemoryExit ();
-      Str_Copy (StemRigorousHTML,Stem,
-		StemLength);
+      if (Stem[0])
+	{
+	 /* Convert the stem, that is in HTML, to rigorous HTML */
+	 StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
+	 if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
+	    Lay_NotEnoughMemoryExit ();
+	 Str_Copy (StemRigorousHTML,Stem,
+		   StemLength);
 
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			StemRigorousHTML,StemLength,false);
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   StemRigorousHTML,StemLength,false);
 
-      /* Write stem text */
-      HTM_Txt (StemRigorousHTML);
+	 /* Write stem text */
+	 HTM_Txt (StemRigorousHTML);
 
-      /* Free memory allocated for the stem */
-      free (StemRigorousHTML);
+	 /* Free memory allocated for the stem */
+	 free (StemRigorousHTML);
+	}
      }
    else
       Ico_PutIconNotVisible ();
@@ -2806,11 +2802,9 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
   {
    static unsigned UniqueId = 0;
    char *Id;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get and show question data *****/
-   if (Tst_GetQstDataFromDB (&Test->Question,Stem,Feedback))
+   if (Tst_GetQstDataFromDB (&Test->Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -2883,7 +2877,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Stem,"TEST_EDI",
+      Tst_WriteQstStem (Test->Question.Stem,"TEST_EDI",
 			true);	// Visible
 
       /***** Get and show media (row[5]) *****/
@@ -2892,7 +2886,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 		     "TEST_MED_EDIT_LIST");
 
       /* Feedback (row[4]) and answers */
-      Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (Test->Question.Feedback,"TEST_EDI_LIGHT");
       Tst_WriteAnswersListing (&Test->Question);
       HTM_TD_End ();
 
@@ -2904,7 +2898,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
       /* Average score */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Test->Question.NumHits)
-	 HTM_Double2Decimals (Test->Question.Score / (double) Test->Question.NumHits);
+	 HTM_Double2Decimals (Test->Question.Score /
+	                      (double) Test->Question.NumHits);
       else
 	 HTM_Txt ("N.A.");
       HTM_TD_End ();
@@ -2917,7 +2912,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
       /* Average score (not blank) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Test->Question.NumHitsNotBlank)
-	 HTM_Double2Decimals (Test->Question.Score / (double) Test->Question.NumHitsNotBlank);
+	 HTM_Double2Decimals (Test->Question.Score /
+	                      (double) Test->Question.NumHitsNotBlank);
       else
 	 HTM_Txt ("N.A.");
       HTM_TD_End ();
@@ -3016,13 +3012,11 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
    static unsigned UniqueId = 0;
    char *Id;
 
    /***** Get and show questvoidion data *****/
-   if (Tst_GetQstDataFromDB (Question,Stem,Feedback))
+   if (Tst_GetQstDataFromDB (Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -3076,7 +3070,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 
       /* Write stem */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Stem,"TEST_EDI",
+      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
 			true);	// Visible
 
       /***** Get and show media *****/
@@ -3085,7 +3079,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 		     "TEST_MED_EDIT_LIST");
 
       /* Write feedback */
-      Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
 
       /* Write answers */
       Tst_WriteAnswersListing (Question);
@@ -3837,8 +3831,6 @@ void Tst_ShowFormEditOneQst (void)
   {
    extern const char *Txt_Question_removed;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
    bool PutFormToEditQuestion;
 
    /***** Create test question *****/
@@ -3846,15 +3838,14 @@ void Tst_ShowFormEditOneQst (void)
 
    /***** Get question data *****/
    Question.QstCod = Tst_GetQstCod ();
-   Stem[0] = Feedback[0] = '\0';
    if (Question.QstCod > 0)	// Question already exists in the database
-      PutFormToEditQuestion = Tst_GetQstDataFromDB (&Question,Stem,Feedback);
+      PutFormToEditQuestion = Tst_GetQstDataFromDB (&Question);
    else				// New question
       PutFormToEditQuestion = true;
 
    /***** Put form to edit question *****/
    if (PutFormToEditQuestion)
-      Tst_PutFormEditOneQst (&Question,Stem,Feedback);
+      Tst_PutFormEditOneQst (&Question);
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
@@ -3871,9 +3862,7 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
-	                           char Stem[Cns_MAX_BYTES_TEXT + 1],
-                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
+static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -4030,7 +4019,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
    HTM_TD_Begin ("class=\"LT\"");
    HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
 	               " rows=\"5\" required=\"required\"");
-   HTM_Txt (Stem);
+   HTM_Txt (Question->Stem);
    HTM_TEXTAREA_End ();
    HTM_BR ();
    Tst_PutFormToEditQstMedia (&Question->Media,-1,
@@ -4041,9 +4030,8 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question,
    HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
    HTM_BR ();
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
-   if (Feedback)
-      if (Feedback[0])
-	 HTM_Txt (Feedback);
+   if (Question->Feedback[0])
+      HTM_Txt (Question->Feedback);
    HTM_TEXTAREA_End ();
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -4333,14 +4321,20 @@ void Tst_QstConstructor (struct Tst_Question *Question)
   {
    unsigned NumOpt;
 
+   /***** Reset question tags *****/
    Tst_ResetTags (&Question->Tags);
 
+   /***** Reset edition time *****/
    Question->EditTime = (time_t) 0;
 
-   Question->Stem.Text       = NULL;
-   Question->Stem.Length     = 0;
-   Question->Feedback.Text   = NULL;
-   Question->Feedback.Length = 0;
+   /***** Allocate memory for stem and feedback *****/
+   if ((Question->Stem = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+   Question->Stem[0] = '\0';
+
+   if ((Question->Feedback = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+   Question->Feedback[0] = '\0';
 
    /***** Initialize answers *****/
    Question->Answer.Type       = Tst_ANS_UNIQUE_CHOICE;
@@ -4367,7 +4361,7 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->Answer.FloatingPoint[0] =
    Question->Answer.FloatingPoint[1] = 0.0;
 
-   /* Initialize stats */
+   /***** Initialize stats *****/
    Question->NumHits =
    Question->NumHitsNotBlank = 0;
    Question->Score = 0.0;
@@ -4381,6 +4375,16 @@ void Tst_QstDestructor (struct Tst_Question *Question)
   {
    Tst_FreeTextChoiceAnswers (Question);
    Tst_FreeMediaOfQuestion (Question);
+   if (Question->Feedback)
+     {
+      free (Question->Feedback);
+      Question->Feedback = NULL;
+     }
+   if (Question->Stem)
+     {
+      free (Question->Stem);
+      Question->Stem = NULL;
+     }
   }
 
 /*****************************************************************************/
@@ -4508,9 +4512,7 @@ Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod)
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-bool Tst_GetQstDataFromDB (struct Tst_Question *Question,
-                           char Stem[Cns_MAX_BYTES_TEXT + 1],
-                           char Feedback[Cns_MAX_BYTES_TEXT + 1])
+bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4550,17 +4552,17 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question,
       Question->Answer.Shuffle = (row[2][0] == 'Y');
 
       /* Get the stem (row[3]) */
-      Stem[0] = '\0';
+      Question->Stem[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Stem,row[3],
+	    Str_Copy (Question->Stem,row[3],
 		      Cns_MAX_BYTES_TEXT);
 
       /* Get the feedback (row[4]) */
-      Feedback[0] = '\0';
+      Question->Feedback[0] = '\0';
       if (row[4])
 	 if (row[4][0])
-	    Str_Copy (Feedback,row[4],
+	    Str_Copy (Question->Feedback,row[4],
 		      Cns_MAX_BYTES_TEXT);
 
       /* Get media (row[5]) */
@@ -4782,15 +4784,12 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 void Tst_ReceiveQst (void)
   {
    struct Tst_Test Test;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test *****/
    Tst_TstConstructor (&Test);
 
    /***** Get parameters of the question from form *****/
-   Stem[0] = Feedback[0] = '\0';
-   Tst_GetQstFromForm (&Test.Question,Stem,Feedback);
+   Tst_GetQstFromForm (&Test.Question);
 
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Test.Question))
@@ -4813,7 +4812,7 @@ void Tst_ReceiveQst (void)
       Tst_ResetMediaOfQuestion (&Test.Question);
 
       /***** Put form to edit question again *****/
-      Tst_PutFormEditOneQst (&Test.Question,Stem,Feedback);
+      Tst_PutFormEditOneQst (&Test.Question);
      }
 
    /***** Destroy test *****/
@@ -4824,8 +4823,7 @@ void Tst_ReceiveQst (void)
 /**************** Get parameters of a test question from form ****************/
 /*****************************************************************************/
 
-static void Tst_GetQstFromForm (struct Tst_Question *Question,
-                                char *Stem,char *Feedback)
+static void Tst_GetQstFromForm (struct Tst_Question *Question)
   {
    unsigned NumTag;
    unsigned NumTagRead;
@@ -4878,10 +4876,10 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question,
      }
 
    /***** Get question stem *****/
-   Par_GetParToHTML ("Stem",Stem,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("Stem",Question->Stem,Cns_MAX_BYTES_TEXT);
 
    /***** Get question feedback *****/
-   Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("Feedback",Question->Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get media associated to the stem (action, file and title) *****/
    Question->Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
@@ -5015,10 +5013,6 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question,
         NumTag++)
       if (Question->Tags.Txt[NumTag][0])
          Question->Tags.Num++;
-   Question->Stem.Text = Stem;
-   Question->Stem.Length = strlen (Question->Stem.Text);
-   Question->Feedback.Text = Feedback;
-   Question->Feedback.Length = strlen (Question->Feedback.Text);
   }
 
 /*****************************************************************************/
@@ -5055,8 +5049,8 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
       return false;
      }
 
-   /***** A question must have a stem*****/
-   if (!Question->Stem.Length)
+   /***** A question must have a stem *****/
+   if (!Question->Stem[0])
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
       return false;
@@ -5232,7 +5226,7 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
 			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      Tst_StrAnswerTypesDB[Question->Answer.Type],
-			      Question->Stem.Text);
+			      Question->Stem);
 
    if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
      {
@@ -5819,8 +5813,8 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 				   Tst_StrAnswerTypesDB[Question->Answer.Type],
 				   Question->Answer.Shuffle ? 'Y' :
 						              'N',
-				   Question->Stem.Text,
-				   Question->Feedback.Text ? Question->Feedback.Text :
+				   Question->Stem,
+				   Question->Feedback ? Question->Feedback :
 					                     "",
 				   Question->Media.MedCod);
      }
@@ -5840,8 +5834,8 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 		      Tst_StrAnswerTypesDB[Question->Answer.Type],
 		      Question->Answer.Shuffle ? 'Y' :
 					         'N',
-		      Question->Stem.Text,
-		      Question->Feedback.Text ? Question->Feedback.Text :
+		      Question->Stem,
+		      Question->Feedback ? Question->Feedback :
 			                        "",
 		      Question->Media.MedCod,
 		      Question->QstCod,Gbl.Hierarchy.Crs.CrsCod);

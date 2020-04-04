@@ -2890,8 +2890,6 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
    extern const char *Txt_MATCH_Paused;
    extern const char *Txt_Question_removed;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
@@ -2908,7 +2906,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
      }
 
    /***** Get data of question from database *****/
-   if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))
+   if (Tst_GetQstDataFromDB (&Question))
      {
       /***** Show question *****/
       /* Check answer type */
@@ -2919,7 +2917,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Match *Match)
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
       /* Write stem */
-      Tst_WriteQstStem (Stem,"MCH_TCH_STEM",
+      Tst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
 			true);	// Visible
 
       /* Show media */

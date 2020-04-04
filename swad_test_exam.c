@@ -81,8 +81,6 @@ static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstExa_Exam *Exam,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
-				       const char *Stem,
-				       const char *Feedback,
 				       unsigned Visibility);
 static void TstExa_ComputeAnswerScore (struct TstExa_Exam *Exam,
 				       unsigned NumQst,
@@ -224,8 +222,6 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
   {
    unsigned NumQst;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -245,12 +241,12 @@ void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam)
       Question.QstCod = Exam->Questions[NumQst].QstCod;
 
       /***** Get question data *****/
-      if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))	// Question exists
+      if (Tst_GetQstDataFromDB (&Question))	// Question exists
 	{
 	 /***** Write question and answers *****/
 	 TstExa_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
 				    Exam,NumQst,
-				    &Question,Stem,Feedback,
+				    &Question,
 				    TstCfg_GetConfigVisibility ());
 
 	 /***** Store test exam question in database *****/
@@ -282,8 +278,6 @@ static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstExa_Exam *Exam,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
-				       const char *Stem,
-				       const char *Feedback,
 				       unsigned Visibility)
   {
    extern const char *Txt_Score;
@@ -320,7 +314,7 @@ static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
       if (QuestionUneditedAfterExam)
 	{
 	 /* Stem */
-	 Tst_WriteQstStem (Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
+	 Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
 
 	 /* Media */
 	 if (IsVisibleQstAndAnsTxt)
@@ -356,7 +350,7 @@ static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /* Question feedback */
    if (QuestionUneditedAfterExam)
       if (TstVis_IsVisibleFeedbackTxt (Visibility))
-	 Tst_WriteQstFeedback (Feedback,"TEST_EXA_LIGHT");
+	 Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
 
    HTM_TD_End ();
 
@@ -2203,8 +2197,6 @@ void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
   {
    unsigned NumQst;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    for (NumQst = 0;
 	NumQst < Exam->NumQsts;
@@ -2217,12 +2209,9 @@ void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
       Question.QstCod = Exam->Questions[NumQst].QstCod;
 
       /***** Get question data *****/
-      if (Tst_GetQstDataFromDB (&Question,Stem,Feedback))	// Question exists?
+      if (Tst_GetQstDataFromDB (&Question))	// Question exists?
 	 /***** Write questions and answers *****/
-	 TstExa_WriteQstAndAnsExam (UsrDat,
-				    Exam,NumQst,
-				    &Question,Stem,Feedback,
-				    Visibility);
+	 TstExa_WriteQstAndAnsExam (UsrDat,Exam,NumQst,&Question,Visibility);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);

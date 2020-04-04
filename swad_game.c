@@ -157,7 +157,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
 static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        const char *Stem,const char *Feedback,
                                         unsigned QstInd,bool QuestionExists);
 static void Gam_PutIconToAddNewQuestions (void *Args);
 static void Gam_PutButtonToAddNewQuestions (void);
@@ -1912,8 +1911,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    unsigned NumQst;
    MYSQL_ROW row;
    struct Tst_Question Question;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -2014,8 +2011,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TD_End ();
 
       /***** Question *****/
-      QuestionExists = Tst_GetQstDataFromDB (&Question,Stem,Feedback);
-      Gam_ListQuestionForEdition (&Question,Stem,Feedback,QstInd,QuestionExists);
+      QuestionExists = Tst_GetQstDataFromDB (&Question);
+      Gam_ListQuestionForEdition (&Question,QstInd,QuestionExists);
 
       HTM_TR_End ();
 
@@ -2032,7 +2029,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 /*****************************************************************************/
 
 static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        const char *Stem,const char *Feedback,
                                         unsigned QstInd,bool QuestionExists)
   {
    extern const char *Txt_Question_removed;
@@ -2060,7 +2056,7 @@ static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
    if (QuestionExists)
      {
       /* Write stem */
-      Tst_WriteQstStem (Stem,"TEST_EDI",
+      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
 			true);	// Visible
 
       /* Show media */
@@ -2069,7 +2065,7 @@ static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
 		     "TEST_MED_EDIT_LIST_STEM");
 
       /* Show feedback */
-      Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
 
       /* Show answers */
       Tst_WriteAnswersListing (Question);

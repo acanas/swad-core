@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.161 (2020-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 19.162 (2020-04-04)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -527,8 +527,8 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
-// TODO: Integrar Stem y Feedback en question, creando espacio con malloc como en las respuestas
 
+	Version 19.162:   Apr 04, 2020	Code refactoring in tests. (284492 lines)
 	Version 19.161:   Apr 04, 2020	Code refactoring in tests. (284529 lines)
 	Version 19.160.1: Apr 03, 2020	Score calculated is removed from each test question. (284817 lines)
 	Version 19.160:   Apr 03, 2020	The score for each test question displayed in an exam is the one stored in the database instead of being calculated.

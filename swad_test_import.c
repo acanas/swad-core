@@ -259,10 +259,8 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
-   if (Tst_GetQstDataFromDB (Question,Stem,Feedback))
+   if (Tst_GetQstDataFromDB (Question))
      {
       /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",
@@ -275,12 +273,12 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
 
       /***** Write the stem, that is in HTML format *****/
       fprintf (FileXML,"<stem>%s</stem>%s",
-               Stem,Txt_NEW_LINE);
+               Question->Stem,Txt_NEW_LINE);
 
       /***** Write the feedback, that is in HTML format *****/
-      if (Feedback[0])
+      if (Question->Feedback[0])
 	 fprintf (FileXML,"<feedback>%s</feedback>%s",
-		  Feedback,Txt_NEW_LINE);
+		  Question->Feedback,Txt_NEW_LINE);
 
       /***** Write the answers of this question.
              Shuffle can be enabled or disabled *****/
@@ -501,8 +499,6 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct Tst_Question Question;
    bool QuestionExists;
    bool AnswerTypeFound;
-   char Stem[Cns_MAX_BYTES_TEXT + 1];
-   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Allocate and get XML tree *****/
    XML_GetTree (XMLBuffer,&RootElem);
@@ -592,13 +588,10 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     if (StemElem->Content)
 		       {
 			/* Convert stem from text to HTML (in database stem is stored in HTML) */
-			Str_Copy (Stem,StemElem->Content,
+			Str_Copy (Question.Stem,StemElem->Content,
 				  Cns_MAX_BYTES_TEXT);
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-					  Stem,Cns_MAX_BYTES_TEXT,true);
-
-			Question.Stem.Text   = Stem;
-			Question.Stem.Length = strlen (Stem);
+					  Question.Stem,Cns_MAX_BYTES_TEXT,true);
 		       }
 		     break;	// Only first element "stem"
 		    }
@@ -612,13 +605,10 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     if (FeedbackElem->Content)
 		       {
 			/* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-			Str_Copy (Feedback,FeedbackElem->Content,
+			Str_Copy (Question.Feedback,FeedbackElem->Content,
 				  Cns_MAX_BYTES_TEXT);
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-					  Feedback,Cns_MAX_BYTES_TEXT,true);
-
-			Question.Feedback.Text   = Feedback;
-			Question.Feedback.Length = strlen (Feedback);
+					  Question.Feedback,Cns_MAX_BYTES_TEXT,true);
 		       }
 		     break;	// Only first element "feedback"
 		    }
