@@ -13189,8 +13189,8 @@ CREATE TABLE IF NOT EXISTS log (
 	INDEX(UsrCod),
 	INDEX(ClickTime,Role)
 ) ENGINE=InnoDB
-PARTITION BY RANGE (YEAR(ClickTime))
-(
+ PARTITION BY RANGE (YEAR(ClickTime))
+ (
 	PARTITION p2004 VALUES LESS THAN (2005),
 	PARTITION p2005 VALUES LESS THAN (2006),
 	PARTITION p2006 VALUES LESS THAN (2007),
@@ -13292,8 +13292,8 @@ INSERT INTO log SELECT * FROM log_full WHERE ClickTime>='20161201' AND ClickTime
 
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2017; Hecho
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2018; Hecho
-INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2019; 
-# hasta aquí ya hecho en openswad.org, aún no en swad.ugr.es
+INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2019; Hecho
+# hasta aquí ya hecho
 
 # Actualizar los últimos antes de dar el cambiazo:
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2020; 

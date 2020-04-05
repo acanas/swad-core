@@ -1048,7 +1048,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       /***** Get first click from log table *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's first click",
 			  "SELECT UNIX_TIMESTAMP("
-			  "(SELECT MIN(ClickTime) FROM log_full"
+			  "(SELECT MIN(ClickTime) FROM log"
 			  " WHERE UsrCod=%ld)"
 			  ")",
 			  UsrCod))
@@ -1091,7 +1091,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       /***** Get number of clicks from database *****/
       UsrFigures.NumClicks =
       (long) DB_QueryCOUNT ("can not get number of clicks",
-			    "SELECT COUNT(*) FROM log_full"
+			    "SELECT COUNT(*) FROM log"
 			    " WHERE UsrCod=%ld",
 			    UsrCod);
 

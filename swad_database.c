@@ -1625,6 +1625,104 @@ mysql> DESCRIBE links;
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(LnkCod))");
 
+   /***** Table log *****/
+/*
+mysql> DESCRIBE log;
++----------------+------------+------+-----+---------+----------------+
+| Field          | Type       | Null | Key | Default | Extra          |
++----------------+------------+------+-----+---------+----------------+
+| LogCod         | int(11)    | NO   | PRI | NULL    | auto_increment |
+| ActCod         | int(11)    | NO   | MUL | -1      |                |
+| CtyCod         | int(11)    | NO   | MUL | -1      |                |
+| InsCod         | int(11)    | NO   | MUL | -1      |                |
+| CtrCod         | int(11)    | NO   | MUL | -1      |                |
+| DegCod         | int(11)    | NO   | MUL | -1      |                |
+| CrsCod         | int(11)    | NO   | MUL | -1      |                |
+| UsrCod         | int(11)    | NO   | MUL | -1      |                |
+| Role           | tinyint(4) | NO   |     | NULL    |                |
+| ClickTime      | datetime   | NO   | PRI | NULL    |                |
+| TimeToGenerate | int(11)    | NO   |     | NULL    |                |
+| TimeToSend     | int(11)    | NO   |     | NULL    |                |
+| IP             | char(15)   | NO   |     | NULL    |                |
++----------------+------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log ("
+			"LogCod INT NOT NULL AUTO_INCREMENT,"
+			"ActCod INT NOT NULL DEFAULT -1,"
+			"CtyCod INT NOT NULL DEFAULT -1,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"Role TINYINT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+			"TimeToGenerate INT NOT NULL,"
+			"TimeToSend INT NOT NULL,"
+			"IP CHAR(15) NOT NULL,"
+			"PRIMARY KEY(LogCod,ClickTime),"
+			"INDEX(ActCod),"
+			"INDEX(CtyCod),"
+			"INDEX(InsCod),"
+			"INDEX(CtrCod),"
+			"INDEX(DegCod),"
+			"INDEX(CrsCod),"
+			"INDEX(UsrCod),"
+			"INDEX(ClickTime,Role)"
+			") ENGINE=InnoDB"
+			" PARTITION BY RANGE (YEAR(ClickTime))"
+			" ("
+			"PARTITION p2004 VALUES LESS THAN (2005),"
+			"PARTITION p2005 VALUES LESS THAN (2006),"
+			"PARTITION p2006 VALUES LESS THAN (2007),"
+			"PARTITION p2007 VALUES LESS THAN (2008),"
+			"PARTITION p2008 VALUES LESS THAN (2009),"
+			"PARTITION p2009 VALUES LESS THAN (2010),"
+			"PARTITION p2010 VALUES LESS THAN (2011),"
+			"PARTITION p2011 VALUES LESS THAN (2012),"
+			"PARTITION p2012 VALUES LESS THAN (2013),"
+			"PARTITION p2013 VALUES LESS THAN (2014),"
+			"PARTITION p2014 VALUES LESS THAN (2015),"
+			"PARTITION p2015 VALUES LESS THAN (2016),"
+			"PARTITION p2016 VALUES LESS THAN (2017),"
+			"PARTITION p2017 VALUES LESS THAN (2018),"
+			"PARTITION p2018 VALUES LESS THAN (2019),"
+			"PARTITION p2019 VALUES LESS THAN (2020),"
+			"PARTITION p2020 VALUES LESS THAN (2021),"
+			"PARTITION p2021 VALUES LESS THAN (2022),"
+			"PARTITION p2022 VALUES LESS THAN (2023),"
+			"PARTITION p2023 VALUES LESS THAN (2024),"
+			"PARTITION p2024 VALUES LESS THAN (2025),"
+			"PARTITION p2025 VALUES LESS THAN (2026),"
+			"PARTITION p2026 VALUES LESS THAN (2027),"
+			"PARTITION p2027 VALUES LESS THAN (2028),"
+			"PARTITION p2028 VALUES LESS THAN (2029),"
+			"PARTITION p2029 VALUES LESS THAN (2030),"
+			"PARTITION p2030 VALUES LESS THAN (2031),"
+			"PARTITION p2031 VALUES LESS THAN (2032),"
+			"PARTITION p2032 VALUES LESS THAN (2033),"
+			"PARTITION p2033 VALUES LESS THAN (2034),"
+			"PARTITION p2034 VALUES LESS THAN (2035),"
+			"PARTITION p2035 VALUES LESS THAN (2036),"
+			"PARTITION p2036 VALUES LESS THAN (2037),"
+			"PARTITION p2037 VALUES LESS THAN (2038),"
+			"PARTITION p2038 VALUES LESS THAN (2039),"
+			"PARTITION p2039 VALUES LESS THAN (2040),"
+			"PARTITION p2040 VALUES LESS THAN (2041),"
+			"PARTITION p2041 VALUES LESS THAN (2042),"
+			"PARTITION p2042 VALUES LESS THAN (2043),"
+			"PARTITION p2043 VALUES LESS THAN (2044),"
+			"PARTITION p2044 VALUES LESS THAN (2045),"
+			"PARTITION p2045 VALUES LESS THAN (2046),"
+			"PARTITION p2046 VALUES LESS THAN (2047),"
+			"PARTITION p2047 VALUES LESS THAN (2048),"
+			"PARTITION p2048 VALUES LESS THAN (2049),"
+			"PARTITION p2049 VALUES LESS THAN (2050),"
+			"PARTITION p2050 VALUES LESS THAN MAXVALUE"
+			")");
+
    /***** Table log_banners *****/
 /*
 mysql> DESCRIBE log_banners;
@@ -1654,57 +1752,11 @@ mysql> DESCRIBE log_comments;
 +----------+---------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
 */
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
 			"LogCod INT NOT NULL,"
 			"Comments TEXT NOT NULL,"
 		   "UNIQUE INDEX(LogCod))");
-
-   /***** Table log_full *****/
-/*
-mysql> DESCRIBE log_full;
-+----------------+------------+------+-----+---------+----------------+
-| Field          | Type       | Null | Key | Default | Extra          |
-+----------------+------------+------+-----+---------+----------------+
-| LogCod         | int(11)    | NO   | PRI | NULL    | auto_increment |
-| ActCod         | int(11)    | NO   | MUL | -1      |                |
-| CtyCod         | int(11)    | NO   | MUL | -1      |                |
-| InsCod         | int(11)    | NO   | MUL | -1      |                |
-| CtrCod         | int(11)    | NO   | MUL | -1      |                |
-| DegCod         | int(11)    | NO   | MUL | -1      |                |
-| CrsCod         | int(11)    | NO   | MUL | -1      |                |
-| UsrCod         | int(11)    | NO   | MUL | -1      |                |
-| Role           | tinyint(4) | NO   |     | NULL    |                |
-| ClickTime      | datetime   | NO   | MUL | NULL    |                |
-| TimeToGenerate | int(11)    | NO   |     | NULL    |                |
-| TimeToSend     | int(11)    | NO   |     | NULL    |                |
-| IP             | char(15)   | NO   |     | NULL    |                |
-+----------------+------------+------+-----+---------+----------------+
-13 rows in set (0.01 sec)
-*/
-// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log ("
-			"LogCod INT NOT NULL AUTO_INCREMENT,"
-			"ActCod INT NOT NULL DEFAULT -1,"
-			"CtyCod INT NOT NULL DEFAULT -1,"
-			"InsCod INT NOT NULL DEFAULT -1,"
-			"CtrCod INT NOT NULL DEFAULT -1,"
-			"DegCod INT NOT NULL DEFAULT -1,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"UsrCod INT NOT NULL DEFAULT -1,"
-			"Role TINYINT NOT NULL,"
-			"ClickTime DATETIME NOT NULL,"
-			"TimeToGenerate INT NOT NULL,"
-			"TimeToSend INT NOT NULL,"
-			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
-		   "UNIQUE INDEX(LogCod),"
-		   "INDEX(ActCod),"
-		   "INDEX(CtyCod),"
-		   "INDEX(InsCod),"
-		   "INDEX(CtrCod),"
-		   "INDEX(DegCod),"
-		   "INDEX(CrsCod),"
-		   "INDEX(UsrCod),"
-		   "INDEX(ClickTime,Role))");
 
    /***** Table log_recent *****/
 /*

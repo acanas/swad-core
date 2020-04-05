@@ -720,7 +720,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       then use recent log table, else use historic log table */
    LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.Now.Date)
 	       <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
-	                                    "log_full";
+	                                    "log";
 
    /***** Get the type of stat of clicks ******/
    DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)

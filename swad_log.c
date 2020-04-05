@@ -80,10 +80,10 @@ void Log_LogAccess (const char *Comments)
                                                             Gbl.Usrs.Me.Role.Logged;
 
    /***** Insert access into database *****/
-   /* Log access in historical log (log_full) */
+   /* Log access in historical log */
    LogCod =
-   DB_QueryINSERTandReturnCode ("can not log access (full)",
-				"INSERT INTO log_full "
+   DB_QueryINSERTandReturnCode ("can not log access",
+				"INSERT INTO log "
 				"(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 				"Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
 				" VALUES "
