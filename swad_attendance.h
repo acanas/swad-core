@@ -76,7 +76,6 @@ typedef enum
 /*****************************************************************************/
 
 void Att_SeeAttEvents (void);
-void Att_PutHiddenParamAttOrder (void);
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att);
 void Att_FreeListAttEvents (void);

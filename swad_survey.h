@@ -67,13 +67,7 @@ struct Survey
      } Status;
   };
 
-#define Svy_NUM_ORDERS 2
-typedef enum
-  {
-   Svy_ORDER_BY_START_DATE = 0,
-   Svy_ORDER_BY_END_DATE   = 1,
-  } Svy_Order_t;
-#define Svy_ORDER_DEFAULT Svy_ORDER_BY_START_DATE
+#define Svy_ORDER_DEFAULT Dat_START_TIME
 
 #define Svy_NUM_ANS_TYPES	2
 typedef enum

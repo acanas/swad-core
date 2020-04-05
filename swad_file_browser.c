@@ -2315,12 +2315,12 @@ long Brw_GetParamFilCod (void)
 /**************** Write parameters related with file browser *****************/
 /*****************************************************************************/
 
-void Brw_PutImplicitParamsFileBrowser (void *Args)
+void Brw_PutImplicitParamsFileBrowser (void *FilFolLnk)
   {
-   if (Args)
-      Brw_PutParamsFileBrowser (Gbl.FileBrowser.FilFolLnk.Path,
-				Gbl.FileBrowser.FilFolLnk.Name,
-				Gbl.FileBrowser.FilFolLnk.Type,
+   if (FilFolLnk)
+      Brw_PutParamsFileBrowser (((struct FilFolLnk *) FilFolLnk)->Path,
+				((struct FilFolLnk *) FilFolLnk)->Name,
+				((struct FilFolLnk *) FilFolLnk)->Type,
 				-1L);	// Not used
   }
 
@@ -5785,12 +5785,12 @@ static void Brw_PutIconRemove (void)
 	 case Brw_IS_LINK:
 	    /***** Form to remove a file or link *****/
 	    Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
-					   Brw_PutImplicitParamsFileBrowser,&Gbl);
+					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 	    break;
 	 case Brw_IS_FOLDER:
 	    /***** Form to remove a folder *****/
 	    Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
-					   Brw_PutImplicitParamsFileBrowser,&Gbl);
+					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 	    break;
 	 default:
 	    break;
@@ -5811,7 +5811,7 @@ static void Brw_PutIconCopy (void)
 
    /***** Form to copy into the clipboard *****/
    Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
-				Brw_PutImplicitParamsFileBrowser,&Gbl);
+				Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 
    HTM_TD_End ();
   }
@@ -5833,7 +5833,7 @@ static void Brw_PutIconPaste (unsigned Level)
 	{
 	 /***** Form to paste the content of the clipboard *****/
 	 Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
-				       Brw_PutImplicitParamsFileBrowser,&Gbl);
+				       Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 	}
       else
 	 /* Icon to paste inactive */
@@ -5930,7 +5930,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    Frm_StartFormAnchorOnSubmit (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
    Ico_PutIconLink ("caret-right.svg",Txt_Expand);
    Frm_EndForm ();
 
@@ -5961,7 +5961,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    Frm_StartFormAnchorOnSubmit (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
    Ico_PutIconLink ("caret-down.svg",Txt_Contract);
    Frm_EndForm ();
 
@@ -5977,7 +5977,7 @@ static void Brw_PutIconShow (const char *Anchor)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
-	                          Brw_PutImplicitParamsFileBrowser,&Gbl);
+	                          Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
   }
 
@@ -5989,7 +5989,7 @@ static void Brw_PutIconHide (const char *Anchor)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
-	                        Brw_PutImplicitParamsFileBrowser,&Gbl);
+	                        Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
   }
 
@@ -6134,7 +6134,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 
    /***** Form and icon *****/
    Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
-					  Brw_PutImplicitParamsFileBrowser,&Gbl,
+					  Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
 					  Open);
 
    /***** End container *****/
@@ -6253,7 +6253,7 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (void)
   {
    /***** Form to zip and download folder *****/
    Ico_PutContextualIconToZIP (Brw_ActZIPFolder[Gbl.FileBrowser.Type],
-			       Brw_PutImplicitParamsFileBrowser,&Gbl);
+			       Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
   }
 
 /*****************************************************************************/
@@ -6292,7 +6292,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
          Frm_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
-         Brw_PutImplicitParamsFileBrowser (&Gbl);
+         Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	}
 
       /***** Write name of the folder *****/
@@ -6339,7 +6339,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       HTM_NBSP ();
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
-      Brw_PutImplicitParamsFileBrowser (&Gbl);
+      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /* Link to the form and to the file */
       if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
@@ -6566,7 +6566,7 @@ void Brw_AskRemFileFromTree (void)
                                              Gbl.FileBrowser.FilFolLnk.Name,
                                              FileNameToShow);
       Ale_ShowAlertAndButton (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
-			      Brw_PutImplicitParamsFileBrowser,&Gbl,
+			      Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
                               Btn_REMOVE_BUTTON,
                               Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ? Txt_Remove_file :
         	                                                        Txt_Remove_link,
@@ -6700,7 +6700,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 
    /***** Show question and button to remove not empty folder *****/
    Ale_ShowAlertAndButton (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
-			   Brw_PutImplicitParamsFileBrowser,&Gbl,
+			   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
 			   Btn_REMOVE_BUTTON,Txt_Remove_folder,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_folder_X,
                            Gbl.FileBrowser.FilFolLnk.Name);
@@ -8367,7 +8367,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Create_folder,
@@ -8426,7 +8426,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
              Cfg_URL_ICON_PUBLIC);
    Par_PutHiddenParamLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
    Par_PutHiddenParamString (NULL,"ses",Gbl.Session.Id);
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
    HTM_DIV_Begin ("class=\"dz-message\"");
    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
@@ -8475,7 +8475,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Form to upload one files using the classic way *****/
    Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",false,NULL);
 
    /* Button to send */
@@ -8498,7 +8498,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Paste,
@@ -8532,7 +8532,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
-   Brw_PutImplicitParamsFileBrowser (&Gbl);
+   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Create_link,
@@ -9523,7 +9523,7 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    Frm_StartForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
-	    Brw_PutImplicitParamsFileBrowser (&Gbl);
+	    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	   }
 
          /***** Begin box and table *****/
@@ -10052,7 +10052,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
    	     NAME_MAX);
       Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
-      Brw_PutImplicitParamsFileBrowser (&Gbl);
+      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /* Link begin */
       HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK FILENAME_TXT",NULL);
@@ -10103,7 +10103,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
    	     NAME_MAX);
       Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
-      Brw_PutImplicitParamsFileBrowser (&Gbl);
+      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /* Link begin */
       HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK DAT",NULL);
@@ -12099,7 +12099,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       /* Parameters to go to file / folder */
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
-	 Brw_PutImplicitParamsFileBrowser (&Gbl);
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       else
 	 Brw_PutParamsFileBrowser (NULL,		// Not used
 				   NULL,		// Not used

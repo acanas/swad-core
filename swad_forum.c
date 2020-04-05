@@ -331,7 +331,6 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 static void For_WriteNumberOfPosts (long UsrCod);
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet);
-static void For_PutParamForumOrder (For_Order_t Order);
 static void For_PutParamForumLocation (long Location);
 static void For_PutHiddenParamThrCod (long ThrCod);
 static void For_PutHiddenParamPstCod (long PstCod);
@@ -1040,6 +1039,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       /***** Write links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
 				     &PaginationPsts,
+				     (unsigned) Gbl.Forum.ThreadsOrder,
 				     Gbl.Forum.ForumSelected.ThrCod);
 
       /***** Begin table *****/
@@ -1100,6 +1100,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       /***** Write again links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
 				     &PaginationPsts,
+				     (unsigned) Gbl.Forum.ThreadsOrder,
 				     Gbl.Forum.ForumSelected.ThrCod);
      }
 
@@ -1459,7 +1460,7 @@ static void For_WriteNumberOfPosts (long UsrCod)
 void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   unsigned NumPagePosts,
                                   For_ForumSet_t ForumSet,
-                                  For_Order_t Order,
+                                  Dat_StartEndTime_t Order,
                                   long Location,
                                   long ThrCod,
                                   long PstCod)
@@ -1467,7 +1468,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
    Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,NumPageThreads);
    Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,NumPagePosts);
    For_PutParamForumSet (ForumSet);
-   For_PutParamForumOrder (Order);
+   Dat_PutHiddenParamOrder (Order);
    For_PutParamForumLocation (Location);
    For_PutHiddenParamThrCod (ThrCod);
    For_PutHiddenParamPstCod (PstCod);
@@ -1480,15 +1481,6 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
 static void For_PutParamForumSet (For_ForumSet_t ForumSet)
   {
    Par_PutHiddenParamUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
-  }
-
-/*****************************************************************************/
-/******** Put a hidden parameter with the order criterium for forums *********/
-/*****************************************************************************/
-
-static void For_PutParamForumOrder (For_Order_t Order)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
   }
 
 /*****************************************************************************/
@@ -1744,7 +1736,7 @@ static void For_PutFormWhichForums (void)
           - all my forums
           - only the forums of current institution/degree/course *****/
    Frm_StartForm (ActSeeFor);
-   For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
+   Dat_PutHiddenParamOrder (Gbl.Forum.ThreadsOrder);
    HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
    HTM_UL_Begin (NULL);
 
@@ -2381,8 +2373,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    extern const char *Hlp_MESSAGES_Forums_threads;
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
-   extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
-   extern const char *Txt_FORUM_THREAD_ORDER[2];
+   extern const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME];
+   extern const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME];
    extern const char *Txt_No_BR_msgs;
    extern const char *Txt_Unread_BR_msgs;
    extern const char *Txt_WriBRters;
@@ -2395,7 +2387,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    unsigned NumThr;
    unsigned NumThrs;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
-   For_Order_t Order;
+   Dat_StartEndTime_t Order;
    long ThrCods[Pag_ITEMS_PER_PAGE];
    struct Pagination PaginationThrs;
 
@@ -2411,7 +2403,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       SubQuery[0] = '\0';
    switch (Gbl.Forum.ThreadsOrder)
      {
-      case For_FIRST_MSG:
+      case Dat_START_TIME:	// First post time
          NumThrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
 					      "SELECT forum_thread.ThrCod"
 					      " FROM forum_thread,forum_post"
@@ -2420,7 +2412,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 					      " ORDER BY forum_post.CreatTime DESC",
 					      (unsigned) Gbl.Forum.ForumSelected.Type,SubQuery);
          break;
-      case For_LAST_MSG:
+      case Dat_END_TIME:	// Last post time
          NumThrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
 					      "SELECT forum_thread.ThrCod"
 					      " FROM forum_thread,forum_post"
@@ -2476,6 +2468,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       /***** Write links to all the pages in the listing of threads *****/
       Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
 				     &PaginationThrs,
+				     (unsigned) Gbl.Forum.ThreadsOrder,
 				     0);
 
       /***** Heading row *****/
@@ -2486,8 +2479,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
       HTM_TH (1,1,"LM",Txt_MSG_Subject);
 
-      for (Order = For_FIRST_MSG;
-	   Order <= For_LAST_MSG;
+      for (Order  = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
 	   Order++)
 	{
 	 HTM_TH_Begin (1,2,"CM");
@@ -2529,6 +2522,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       /***** Write links to all the pages in the listing of threads *****/
       Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
 				     &PaginationThrs,
+				     (unsigned) Gbl.Forum.ThreadsOrder,
 				     0);
      }
 
@@ -3264,7 +3258,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
    char *Id;
    struct ForumThread Thr;
    struct UsrData UsrDat;
-   For_Order_t Order;
+   Dat_StartEndTime_t Order;
    time_t TimeUTC;
    struct Pagination PaginationPsts;
    const char *Style;
@@ -3359,8 +3353,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,
                              &PaginationPsts,
+                             (unsigned) Gbl.Forum.ThreadsOrder,
                              Thr.ThrCod,
-                             Thr.Enabled[For_FIRST_MSG],
+                             Thr.Enabled[Dat_START_TIME],
                              Thr.Subject,
                              Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
                                                   The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -3368,11 +3363,11 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       HTM_TD_End ();
 
       /***** Write the authors and date-times of first and last posts *****/
-      for (Order = For_FIRST_MSG;
-	   Order <= For_LAST_MSG;
+      for (Order  = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
 	   Order++)
         {
-         if (Order == For_FIRST_MSG || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
+         if (Order == Dat_START_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
            {
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
@@ -3440,7 +3435,7 @@ static void For_GetThrData (struct ForumThread *Thr)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   For_Order_t Order;
+   Dat_StartEndTime_t Order;
 
    /***** Get data of a thread from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
@@ -3461,30 +3456,30 @@ static void For_GetThrData (struct ForumThread *Thr)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the code of the first post in this thread (row[0]) *****/
-   Thr->PstCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[0]);
+   Thr->PstCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get the code of the last  post in this thread (row[1]) *****/
-   Thr->PstCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[1]);
+   Thr->PstCod[Dat_END_TIME ] = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get the code of the first message in this thread (row[0]) *****/
-   if (sscanf (row[0],"%ld",&(Thr->PstCod[For_FIRST_MSG])) != 1)
+   if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_START_TIME])) != 1)
       Lay_ShowErrorAndExit ("Wrong code of post.");
 
    /***** Get the code of the last message in this thread (row[1]) *****/
-   if (sscanf (row[1],"%ld",&(Thr->PstCod[For_LAST_MSG])) != 1)
+   if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME])) != 1)
       Lay_ShowErrorAndExit ("Wrong code of post.");
 
    /***** Get the author of the first post in this thread (row[2]) *****/
-   Thr->UsrCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[2]);
+   Thr->UsrCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get the author of the last  post in this thread (row[3]) *****/
-   Thr->UsrCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[3]);
+   Thr->UsrCod[Dat_END_TIME  ] = Str_ConvertStrCodToLongCod (row[3]);
 
    /***** Get the date of the first post in this thread (row[4]) *****/
-   Thr->WriteTime[For_FIRST_MSG] = Dat_GetUNIXTimeFromStr (row[4]);
+   Thr->WriteTime[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
    /***** Get the date of the last  post in this thread (row[5]) *****/
-   Thr->WriteTime[For_LAST_MSG ] = Dat_GetUNIXTimeFromStr (row[5]);
+   Thr->WriteTime[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
    Str_Copy (Thr->Subject,row[6],
@@ -3498,8 +3493,8 @@ static void For_GetThrData (struct ForumThread *Thr)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get if first or last message are enabled *****/
-   for (Order = For_FIRST_MSG;
-	Order <= For_LAST_MSG;
+   for (Order = Dat_START_TIME;
+	Order <= Dat_END_TIME;
 	Order++)
       Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
       // Thr->Enabled[Order] = true;
@@ -3581,10 +3576,10 @@ static void For_GetParamsForum (void)
 						  (unsigned long) For_DEFAULT_FORUM_SET);
 
    /***** Get order type *****/
-   Gbl.Forum.ThreadsOrder = (For_Order_t)
+   Gbl.Forum.ThreadsOrder = (Dat_StartEndTime_t)
 			     Par_GetParToUnsignedLong ("Order",
 						       0,
-						       For_NUM_ORDERS - 1,
+						       Dat_NUM_START_END_TIME - 1,
 						       (unsigned long) For_DEFAULT_ORDER);
 
    /***** Get optional page numbers for threads and posts *****/

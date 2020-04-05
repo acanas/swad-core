@@ -296,11 +296,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Search.Str[0] = '\0';
    Gbl.Search.LogSearch = false;
 
-   Gbl.Asgs.LstIsRead = false;	// List is not read
-   Gbl.Asgs.Num = 0;
-   Gbl.Asgs.LstAsgCods = NULL;
-   Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
-
    /* Projects */
    Gbl.Prjs.Config.Editable = Prj_EDITABLE_DEFAULT;
    Gbl.Prjs.Filter.Who    = Prj_FILTER_WHO_DEFAULT;

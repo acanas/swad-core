@@ -429,6 +429,7 @@ static void Prj_ShowPrjsInCurrentPage (void)
       /***** Write links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
 				     &Pagination,
+				     (unsigned) Gbl.Prjs.SelectedOrder,
 				     0);
 
       /***** Allocate memory for the project *****/
@@ -474,6 +475,7 @@ static void Prj_ShowPrjsInCurrentPage (void)
       /***** Write again links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
 				     &Pagination,
+				     (unsigned) Gbl.Prjs.SelectedOrder,
 				     0);
      }
    else	// No projects created

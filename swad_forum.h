@@ -88,13 +88,7 @@ struct ForumThread
    unsigned NumReaders;
   };
 
-#define For_NUM_ORDERS 2
-typedef enum
-  {
-   For_FIRST_MSG = 0,
-   For_LAST_MSG  = 1,
-  } For_Order_t;
-#define For_DEFAULT_ORDER For_LAST_MSG
+#define For_DEFAULT_ORDER Dat_END_TIME
 
 #define For_MAX_BYTES_FORUM_NAME (512 - 1)
 
@@ -117,7 +111,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   unsigned NumPagePosts,
                                   For_ForumSet_t ForumSet,
-                                  For_Order_t Order,
+                                  Dat_StartEndTime_t Order,
                                   long Location,
                                   long ThrCod,
                                   long PstCod);

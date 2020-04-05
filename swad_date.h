@@ -206,4 +206,6 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   bool WriteToday,bool WriteDateOnSameDay,
 				   bool WriteWeekDay,unsigned WriteHMS);
 
+void Dat_PutHiddenParamOrder (Dat_StartEndTime_t SelectedOrder);
+
 #endif

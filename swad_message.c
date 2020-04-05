@@ -1834,6 +1834,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
       /***** Write links to pages *****/
       Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
 				     &Pagination,
+				     (unsigned) Dat_START_TIME,	// Not used
 				     0);
 
       /***** Show received / sent messages in this page *****/
@@ -1857,6 +1858,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
       /***** Write again links to pages *****/
       Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
 				     &Pagination,
+				     (unsigned) Dat_START_TIME,	// Not used
 				     0);
      }
 

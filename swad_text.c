@@ -13369,9 +13369,9 @@ const char *Txt_Forum_threads =
 	"Discuss&otilde;es de f&oacute;rum";
 #endif
 
-const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
+const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 	{
-	[For_FIRST_MSG] =
+	[Dat_START_TIME] =
 #if   L==1	// ca
 	"Ordenar por fecha del primer mensaje"	// Necessita traduccio
 #elif L==2	// de
@@ -13392,7 +13392,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
 	"Classificar por data da primeira mensagem"
 #endif
 	,
-	[For_LAST_MSG] =
+	[Dat_END_TIME] =
 #if   L==1	// ca
 	"Ordenar por fecha del &uacute;ltimo mensaje"	// Necessita traduccio
 #elif L==2	// de
@@ -13414,9 +13414,9 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
+const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 	{
-	[For_FIRST_MSG] =
+	[Dat_START_TIME] =
 #if   L==1	// ca
 	"Primer comentari"
 #elif L==2	// de
@@ -13437,7 +13437,7 @@ const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
 	"Primeira post"
 #endif
 	,
-	[For_LAST_MSG] =
+	[Dat_END_TIME] =
 #if   L==1	// ca
 	"&Uacute;ltim comentari"
 #elif L==2	// de

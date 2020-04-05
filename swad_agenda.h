@@ -83,13 +83,7 @@ typedef enum
 #define Agd_DEFAULT_HIDDEN_EVENTS	(0 << Agd_HIDDEN_EVENTS)	// off
 #define Agd_DEFAULT_VISIBL_EVENTS	(1 << Agd_VISIBL_EVENTS)	// on
 
-#define Agd_NUM_ORDERS 2
-typedef enum
-  {
-   Agd_ORDER_BY_START_DATE = 0,
-   Agd_ORDER_BY_END_DATE   = 1,
-  } Agd_Order_t;
-#define Agd_ORDER_DEFAULT Agd_ORDER_BY_START_DATE
+#define Agd_ORDER_DEFAULT Dat_START_TIME
 
 struct Agd_Agenda
   {
@@ -99,7 +93,7 @@ struct Agd_Agenda
    unsigned Past__FutureEvents;
    unsigned PrivatPublicEvents;
    unsigned HiddenVisiblEvents;
-   Agd_Order_t SelectedOrder;
+   Dat_StartEndTime_t SelectedOrder;
    long AgdCodToEdit;	// Used as parameter in contextual links
    unsigned CurrentPage;
   };
@@ -120,10 +114,10 @@ void Agd_RequestCreatOrEditEvent (void);
 void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
                             unsigned PrivatPublicEvents,
                             unsigned HiddenVisiblEvents,
-			    Agd_Order_t Order,
+			    Dat_StartEndTime_t Order,
                             unsigned NumPage,
                             long AgdCodToEdit);
-void Agd_PutHiddenParamEventsOrder (void);
+void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder);
 
 void Agd_FreeListEvents (void);
 

@@ -217,6 +217,7 @@ static void Att_ShowAllAttEvents (void)
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
+				  (unsigned) Gbl.AttEvents.SelectedOrder,
 				  0);
 
    if (Gbl.AttEvents.Num)
@@ -236,7 +237,7 @@ static void Att_ShowAllAttEvents (void)
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	 Dat_PutHiddenParamOrder (Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    HTM_U_Begin ();
@@ -268,6 +269,7 @@ static void Att_ShowAllAttEvents (void)
    /***** Write again links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
+				  (unsigned) Gbl.AttEvents.SelectedOrder,
 				  0);
 
    /***** Button to create a new attendance event *****/
@@ -289,7 +291,7 @@ static void Att_ParamsWhichGroupsToShow (void *Args)
   {
    if (Args)
      {
-      Att_PutHiddenParamAttOrder ();
+      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
      }
   }
@@ -372,7 +374,7 @@ static void Att_PutParamsToCreateNewAttEvent (void *Args)
 
    if (Args)
      {
-      Att_PutHiddenParamAttOrder ();
+      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -389,7 +391,7 @@ static void Att_PutParamsToListUsrsAttendance (void *Args)
 
    if (Args)
      {
-      Att_PutHiddenParamAttOrder ();
+      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -552,15 +554,6 @@ static void Att_GetParamAttOrder (void)
   }
 
 /*****************************************************************************/
-/*** Put a hidden parameter with the type of order in list of att. events ****/
-/*****************************************************************************/
-
-void Att_PutHiddenParamAttOrder (void)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.AttEvents.SelectedOrder);
-  }
-
-/*****************************************************************************/
 /************** Put a link (form) to edit one attendance event ***************/
 /*****************************************************************************/
 
@@ -597,7 +590,7 @@ static void Att_PutParams (void *Args)
    if (Args)
      {
       Att_PutParamAttCod (Gbl.AttEvents.AttCod);
-      Att_PutHiddenParamAttOrder ();
+      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -905,7 +898,7 @@ void Att_AskRemAttEvent (void)
    /***** Button of confirmation of removing *****/
    Frm_StartForm (ActRemAtt);
    Att_PutParamAttCod (Att.AttCod);
-   Att_PutHiddenParamAttOrder ();
+   Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -1098,7 +1091,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Frm_StartForm (ActChgAtt);
       Att_PutParamAttCod (Att.AttCod);
      }
-   Att_PutHiddenParamAttOrder ();
+   Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);

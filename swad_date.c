@@ -1655,3 +1655,12 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 	     WriteHMS);
    HTM_SCRIPT_End ();
   }
+
+/*****************************************************************************/
+/********* Put a hidden parameter with the type of order in listing **********/
+/*****************************************************************************/
+
+void Dat_PutHiddenParamOrder (Dat_StartEndTime_t SelectedOrder)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+  }

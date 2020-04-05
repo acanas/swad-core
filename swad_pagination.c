@@ -130,12 +130,13 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
                                     struct Pagination *Pagination,
+                                    unsigned SelectedOrder,
                                     long ThrCod)
   {
    if (Pagination->MoreThanOnePage)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Pag_WriteLinksToPages (WhatPaginate,Pagination,ThrCod,
+      Pag_WriteLinksToPages (WhatPaginate,Pagination,SelectedOrder,ThrCod,
 			     true,NULL,"PAG_TXT",false);
       HTM_DIV_End ();
      }
@@ -147,6 +148,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pagination *Pagination,
+                            unsigned SelectedOrder,
                             long ThrCod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
@@ -170,35 +172,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
                Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
                Prj_PutParams (&Gbl.Prjs.Filter,
-                              Gbl.Prjs.SelectedOrder,
+                              (Prj_Order_t) SelectedOrder,
                               1,
                               -1L);
                break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Att_PutHiddenParamAttOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -208,7 +210,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                             1,	// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -219,7 +221,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                             1,				// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -239,13 +241,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
-			              Gbl.Agenda.SelectedOrder,
+			              (Dat_StartEndTime_t) SelectedOrder,
                                       1,
                                       -1L);
                break;
             case Pag_ANOTHER_AGENDA:
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                break;
@@ -288,35 +290,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
                Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
                Prj_PutParams (&Gbl.Prjs.Filter,
-                              Gbl.Prjs.SelectedOrder,
+                              (Prj_Order_t) SelectedOrder,
                               1,
                               -1L);
                break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Att_PutHiddenParamAttOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -326,7 +328,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                             1,	// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -337,7 +339,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                             1,				// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -357,13 +359,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
-			              Gbl.Agenda.SelectedOrder,
+			              (Dat_StartEndTime_t) SelectedOrder,
                                       1,
                                       -1L);
                break;
             case Pag_ANOTHER_AGENDA:
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                break;
@@ -392,35 +394,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
                Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
                Prj_PutParams (&Gbl.Prjs.Filter,
-                              Gbl.Prjs.SelectedOrder,
+                              (Prj_Order_t) SelectedOrder,
                               Pagination->LeftPage,
                               -1L);
                break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Att_PutHiddenParamAttOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -430,7 +432,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Pagination->LeftPage,	// Page of threads = left
                                             1,				// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -441,7 +443,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                             Pagination->LeftPage,	// Page of posts   = left
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -461,13 +463,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                       Gbl.Agenda.PrivatPublicEvents,
                                       Gbl.Agenda.HiddenVisiblEvents,
-			              Gbl.Agenda.SelectedOrder,
+			              (Dat_StartEndTime_t) SelectedOrder,
                                       Pagination->LeftPage,
                                       -1L);
                break;
             case Pag_ANOTHER_AGENDA:
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                break;
@@ -508,35 +510,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_ASSIGNMENTS:
                   Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Asg_PutHiddenParamAsgOrder ();
+                  Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                   WhichGroups = Grp_GetParamWhichGroups ();
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
 	       case Pag_PROJECTS:
 		  Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
 		  Prj_PutParams (&Gbl.Prjs.Filter,
-                                 Gbl.Prjs.SelectedOrder,
+                                 (Prj_Order_t) SelectedOrder,
                                  NumPage,
                                  -1L);
 		  break;
                case Pag_GAMES:
                   Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Asg_PutHiddenParamAsgOrder ();
+                  Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                   WhichGroups = Grp_GetParamWhichGroups ();
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_SURVEYS:
                   Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Asg_PutHiddenParamAsgOrder ();
+                  Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                   WhichGroups = Grp_GetParamWhichGroups ();
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_ATT_EVENTS:
                   Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Att_PutHiddenParamAttOrder ();
+                  Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                   WhichGroups = Grp_GetParamWhichGroups ();
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
@@ -546,7 +548,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  For_PutAllHiddenParamsForum (NumPage,	// Page of threads = number of page
                                                1,	// Page of posts   = first
                                                Gbl.Forum.ForumSet,
-					       Gbl.Forum.ThreadsOrder,
+					       (Dat_StartEndTime_t) SelectedOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       -1L,
 					       -1L);
@@ -557,7 +559,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                                NumPage,				// Page of posts   = number of page
                                                Gbl.Forum.ForumSet,
-					       Gbl.Forum.ThreadsOrder,
+					       (Dat_StartEndTime_t) SelectedOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       ThrCod,
 					       -1L);
@@ -577,13 +579,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
                                          Gbl.Agenda.PrivatPublicEvents,
                                          Gbl.Agenda.HiddenVisiblEvents,
-			                 Gbl.Agenda.SelectedOrder,
+			                 (Dat_StartEndTime_t) SelectedOrder,
                                          NumPage,
                                          -1L);
                   break;
                case Pag_ANOTHER_AGENDA:
                   Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-                  Agd_PutHiddenParamEventsOrder ();
+                  Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                   break;
@@ -611,35 +613,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
 	       Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
 	       Prj_PutParams (&Gbl.Prjs.Filter,
-                              Gbl.Prjs.SelectedOrder,
+                              (Prj_Order_t) SelectedOrder,
 			      Pagination->RightPage,
 			      -1L);
 	       break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Att_PutHiddenParamAttOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -649,7 +651,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Pagination->RightPage,	// Page of threads = right
                                             1,				// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -660,7 +662,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                             Pagination->RightPage,	// Page of posts   = right
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -680,13 +682,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 	                              Gbl.Agenda.PrivatPublicEvents,
 	                              Gbl.Agenda.HiddenVisiblEvents,
-			              Gbl.Agenda.SelectedOrder,
+			              (Dat_StartEndTime_t) SelectedOrder,
 	                              Pagination->RightPage,
 	                              -1L);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
 	       Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
 	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	       break;
@@ -715,35 +717,35 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_StartFormAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
 	       Frm_StartFormAnchor (ActSeePrj,Pagination->Anchor);
 	       Prj_PutParams (&Gbl.Prjs.Filter,
-                              Gbl.Prjs.SelectedOrder,
+                              (Prj_Order_t) Gbl.Prjs.SelectedOrder,
 			      Pagination->NumPags,
 			      -1L);
 	       break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_StartFormAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Att_PutHiddenParamAttOrder ();
+               Dat_PutHiddenParamOrder ((Dat_StartEndTime_t) SelectedOrder);
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -753,7 +755,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Pagination->NumPags,	// Page of threads = last
                                             1,				// Page of posts   = first
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -764,7 +766,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                             Pagination->NumPags,	// Page of posts   = last
                                             Gbl.Forum.ForumSet,
-					    Gbl.Forum.ThreadsOrder,
+					    (Dat_StartEndTime_t) SelectedOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -784,13 +786,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 	                              Gbl.Agenda.PrivatPublicEvents,
 	                              Gbl.Agenda.HiddenVisiblEvents,
-			              Gbl.Agenda.SelectedOrder,
+			              (Dat_StartEndTime_t) SelectedOrder,
 	                              Pagination->NumPags,
 	                              -1L);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
 	       Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutHiddenParamEventsOrder ((Dat_StartEndTime_t) SelectedOrder);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
 	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	       break;

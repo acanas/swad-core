@@ -199,7 +199,7 @@ static void Svy_ListAllSurveys (void)
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
-   Svy_Order_t Order;
+   Dat_StartEndTime_t Order;
    Grp_WhichGroups_t WhichGroups;
    struct Pagination Pagination;
    unsigned NumSvy;
@@ -234,6 +234,7 @@ static void Svy_ListAllSurveys (void)
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
 				  &Pagination,
+				  (unsigned) Gbl.Svys.SelectedOrder,
 				  0);
 
    if (Gbl.Svys.Num)
@@ -244,8 +245,8 @@ static void Svy_ListAllSurveys (void)
 
       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 
-      for (Order = Svy_ORDER_BY_START_DATE;
-	   Order <= Svy_ORDER_BY_END_DATE;
+      for (Order  = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
 	   Order++)
 	{
 	 HTM_TH_Begin (1,1,"LM");
@@ -255,7 +256,7 @@ static void Svy_ListAllSurveys (void)
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	 Dat_PutHiddenParamOrder (Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
 				  "BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
@@ -289,6 +290,7 @@ static void Svy_ListAllSurveys (void)
    /***** Write again links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
 				  &Pagination,
+				  (unsigned) Gbl.Svys.SelectedOrder,
 				  0);
 
    /***** Button to create a new survey *****/
@@ -831,10 +833,10 @@ static void Svy_WriteStatus (struct Survey *Svy)
 
 static void Svy_GetParamSvyOrder (void)
   {
-   Gbl.Svys.SelectedOrder = (Svy_Order_t)
+   Gbl.Svys.SelectedOrder = (Dat_StartEndTime_t)
 	                    Par_GetParToUnsignedLong ("Order",
 	                                              0,
-	                                              Svy_NUM_ORDERS - 1,
+	                                              Dat_NUM_START_END_TIME - 1,
 	                                              (unsigned long) Svy_ORDER_DEFAULT);
   }
 
@@ -844,7 +846,7 @@ static void Svy_GetParamSvyOrder (void)
 
 void Svy_PutHiddenParamSvyOrder (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Svys.SelectedOrder);
+   Dat_PutHiddenParamOrder (Gbl.Svys.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -893,7 +895,7 @@ static void Svy_PutParams (void *Args)
      {
       if (Svy_CurrentSvyCod > 0)
 	 Svy_PutParamSvyCod (Svy_CurrentSvyCod);
-      Att_PutHiddenParamAttOrder ();
+      Dat_PutHiddenParamOrder (Gbl.Svys.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
@@ -907,10 +909,10 @@ static void Svy_PutParams (void *Args)
 static void Svy_GetListSurveys (void)
   {
    char *SubQuery[Hie_NUM_LEVELS];
-   static const char *OrderBySubQuery[Svy_NUM_ORDERS] =
+   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
      {
-      [Svy_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,Title DESC",
-      [Svy_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,Title DESC",
+      [Dat_START_TIME] = "StartTime DESC,EndTime DESC,Title DESC",
+      [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

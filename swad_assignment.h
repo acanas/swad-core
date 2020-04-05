@@ -64,17 +64,6 @@ struct Assignment
 
 #define Asg_ORDER_DEFAULT Dat_START_TIME
 
-struct Asg_Assignments
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Number of assignments
-   long *LstAsgCods;		// List of assigment codes
-   Dat_StartEndTime_t SelectedOrder;
-   long AsgCodToEdit;	// Used as parameter in contextual links
-   unsigned CurrentPage;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -82,12 +71,9 @@ struct Asg_Assignments
 void Asg_SeeAssignments (void);
 void Asg_PrintOneAssignment (void);
 
-void Asg_PutHiddenParamAsgOrder (void);
 void Asg_RequestCreatOrEditAsg (void);
-void Asg_GetListAssignments (void);
 void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg);
-void Asg_FreeListAssignments (void);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,

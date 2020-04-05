@@ -472,6 +472,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
 				  &Pagination,
+				  (unsigned) Gbl.Agenda.SelectedOrder,
 				  0);
 
    if (Gbl.Agenda.Num)
@@ -497,6 +498,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    /***** Write again links to pages *****/
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
 				  &Pagination,
+				  (unsigned) Gbl.Agenda.SelectedOrder,
 				  0);
 
    /***** Button to create a new event *****/
@@ -575,13 +577,13 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
    extern const char *Txt_Location;
-   Agd_Order_t Order;
+   Dat_StartEndTime_t Order;
 
    /***** Table head *****/
    HTM_TR_Begin (NULL);
 
-   for (Order  = Agd_ORDER_BY_START_DATE;
-	Order <= Agd_ORDER_BY_END_DATE;
+   for (Order  = Dat_START_TIME;
+	Order <= Dat_END_TIME;
 	Order++)
      {
       HTM_TH_Begin (1,1,"LM");
@@ -902,7 +904,7 @@ static void Agd_PutCurrentParamsMyAgenda (void *Agenda)
 void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
                             unsigned PrivatPublicEvents,
                             unsigned HiddenVisiblEvents,
-			    Agd_Order_t Order,
+			    Dat_StartEndTime_t Order,
                             unsigned NumPage,
                             long AgdCodToEdit)
   {
@@ -919,7 +921,7 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
       Agd_PutHiddenParamHiddenVisiblEvents (HiddenVisiblEvents);
 
    if (Order != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+      Dat_PutHiddenParamOrder (Order);
 
    if (NumPage > 1)
       Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,NumPage);
@@ -956,10 +958,10 @@ static void Agd_GetParams (Agd_AgendaType_t AgendaType)
 /****** Put a hidden parameter with the type of order in list of events ******/
 /*****************************************************************************/
 
-void Agd_PutHiddenParamEventsOrder (void)
+void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder)
   {
    if (Gbl.Agenda.SelectedOrder != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Agenda.SelectedOrder);
+      Dat_PutHiddenParamOrder (SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -972,10 +974,10 @@ static void Agd_GetParamEventOrder (void)
 
    if (!AlreadyGot)
      {
-      Gbl.Agenda.SelectedOrder = (Agd_Order_t)
+      Gbl.Agenda.SelectedOrder = (Dat_StartEndTime_t)
 	                         Par_GetParToUnsignedLong ("Order",
                                                            0,
-                                                           Agd_NUM_ORDERS - 1,
+                                                           Dat_NUM_START_END_TIME - 1,
                                                            (unsigned long) Agd_ORDER_DEFAULT);
       AlreadyGot = true;
      }
@@ -993,10 +995,10 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
-   static const char *OrderBySubQuery[Agd_NUM_ORDERS] =
+   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
      {
-      [Agd_ORDER_BY_START_DATE] = "StartTime,EndTime,Event,Location",
-      [Agd_ORDER_BY_END_DATE  ] = "EndTime,StartTime,Event,Location",
+      [Dat_START_TIME] = "StartTime,EndTime,Event,Location",
+      [Dat_END_TIME  ] = "EndTime,StartTime,Event,Location",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

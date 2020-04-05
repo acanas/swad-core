@@ -221,6 +221,7 @@ static void Gam_ListAllGames (void)
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_GAMES,
 				  &Pagination,
+				  (unsigned) Gbl.Games.SelectedOrder,
 				  0);
 
    if (Gbl.Games.Num)
@@ -280,6 +281,7 @@ static void Gam_ListAllGames (void)
    /***** Write again links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_GAMES,
 				  &Pagination,
+				  (unsigned) Gbl.Games.SelectedOrder,
 				  0);
 
    /***** Button to create a new game *****/

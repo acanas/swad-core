@@ -527,7 +527,6 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct Asg_Assignments Asgs;
    struct
      {
       struct
@@ -562,7 +561,7 @@ struct Globals
    struct
      {
       For_ForumSet_t ForumSet;
-      For_Order_t ThreadsOrder;
+      Dat_StartEndTime_t ThreadsOrder;
       unsigned CurrentPageThrs;
       unsigned CurrentPagePsts;
       struct Forum ForumSelected;	// Forum type, location, thread and post
@@ -649,7 +648,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of surveys
       long *LstSvyCods;	// List of survey codes
-      Svy_Order_t SelectedOrder;
+      Dat_StartEndTime_t SelectedOrder;
       unsigned CurrentPage;
      } Svys;
    struct
