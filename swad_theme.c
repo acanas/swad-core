@@ -350,11 +350,8 @@ void The_PutIconsToSelectTheme (void)
 static void The_PutIconsTheme (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_THEMES;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_THEMES);
   }
 
 /*****************************************************************************/

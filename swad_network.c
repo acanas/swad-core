@@ -367,11 +367,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 static void Net_PutIconsWebsSocialNetworks (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_SOCIAL_NETWORKS;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_SOCIAL_NETWORKS);
   }
 
 /*****************************************************************************/

@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_hierarchy.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
@@ -68,13 +70,19 @@ typedef enum
 
 #define Fig_NUM_STAT_CRS_FILE_ZONES 12
 
+struct Fig_Figures
+  {
+   Hie_Level_t Scope;
+   Fig_FigureType_t FigureType;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Fig_ReqShowFigures (void);
-void Fig_PutIconToShowFigure (void);
-void Fig_PutHiddenParamFigures (void *Args);
+void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType);
+void Fig_PutHiddenParamFigures (void *Figures);
 void Fig_ShowFigures (void);
 
 #endif

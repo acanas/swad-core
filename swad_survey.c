@@ -337,8 +337,7 @@ static void Svy_PutIconsListSurveys (void *Args)
 	 Svy_PutIconToCreateNewSvy ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_SURVEYS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_SURVEYS);
      }
   }
 

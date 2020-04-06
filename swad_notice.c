@@ -520,8 +520,7 @@ static void Not_PutIconsListNotices (void *Args)
 	 Not_PutIconToAddNewNotice ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_NOTICES;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_NOTICES);
      }
   }
 

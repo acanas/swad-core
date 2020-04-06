@@ -84,12 +84,17 @@ struct Fig_FiguresForum
   };
 
 /*****************************************************************************/
+/***************************** Private variables *****************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Fig_PutParamsToShowFigure (void *Args);
-static void Fig_PutHiddenParamFigureType (void);
-static void Fig_PutHiddenParamScopeFig (void);
+static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
+
+static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType);
+static void Fig_PutHiddenParamScopeFig (Hie_Level_t ScopeFig);
 
 static void Fig_GetAndShowHierarchyStats (void);
 static void Fig_WriteHeadHierarchy (void);
@@ -191,6 +196,11 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 
 void Fig_ReqShowFigures (void)
   {
+   Fig_ReqShowFigure (Fig_FIGURE_TYPE_DEF);
+  }
+
+static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
+  {
    extern const char *Hlp_ANALYTICS_Figures;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Figures;
@@ -198,7 +208,7 @@ void Fig_ReqShowFigures (void)
    extern const char *Txt_Statistic;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
-   Fig_FigureType_t FigureType;
+   Fig_FigureType_t FigType;
    unsigned FigureTypeUnsigned;
 
    /***** Form to show statistic *****/
@@ -229,14 +239,14 @@ void Fig_ReqShowFigures (void)
    HTM_TxtColonNBSP (Txt_Statistic);
    HTM_SELECT_Begin (false,
 		     "name=\"FigureType\"");
-   for (FigureType  = (Fig_FigureType_t) 0;
-	FigureType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
-	FigureType++)
+   for (FigType  = (Fig_FigureType_t) 0;
+	FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
+	FigType++)
      {
-      FigureTypeUnsigned = (unsigned) FigureType;
+      FigureTypeUnsigned = (unsigned) FigType;
       HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-		  FigureType == Gbl.Figures.FigureType,false,
-		  "%s",Txt_FIGURE_TYPES[FigureType]);
+		  FigType == SelectedFigureType,false,
+		  "%s",Txt_FIGURE_TYPES[FigType]);
      }
    HTM_SELECT_End ();
    HTM_LABEL_End ();
@@ -251,14 +261,21 @@ void Fig_ReqShowFigures (void)
 /*****************************************************************************/
 /************************* Put icon to show a figure *************************/
 /*****************************************************************************/
-// Gbl.Figures.FigureType must be set to the desired figure before calling this function
 
-void Fig_PutIconToShowFigure (void)
+void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
   {
    extern const char *Txt_Show_statistic;
+   struct Fig_Figures Figures;
 
+   /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
+   Gbl.Scope.Default = Hie_CRS;
+   Sco_AdjustScope ();
+
+   /***** Put icon to show figure *****/
+   Figures.Scope      = Gbl.Scope.Current;
+   Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
-                                  Fig_PutParamsToShowFigure,&Gbl,
+                                  Fig_PutHiddenParamFigures,&Figures,
 				  "chart-pie.svg",
 				  Txt_Show_statistic);
   }
@@ -266,30 +283,13 @@ void Fig_PutIconToShowFigure (void)
 /*****************************************************************************/
 /************* Put hidden parameters for figures (statistics) ****************/
 /*****************************************************************************/
-// Gbl.Figures.FigureType must be set to the desired figure before calling this function
 
-static void Fig_PutParamsToShowFigure (void *Args)
+void Fig_PutHiddenParamFigures (void *Figures)
   {
-   if (Args)
+   if (Figures)
      {
-      /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
-      Gbl.Scope.Default = Hie_CRS;
-      Sco_AdjustScope ();
-
-      Fig_PutHiddenParamFigures (&Gbl);
-     }
-  }
-
-/*****************************************************************************/
-/************* Put hidden parameters for figures (statistics) ****************/
-/*****************************************************************************/
-
-void Fig_PutHiddenParamFigures (void *Args)
-  {
-   if (Args)
-     {
-      Fig_PutHiddenParamScopeFig ();
-      Fig_PutHiddenParamFigureType ();
+      Fig_PutHiddenParamScopeFig (((struct Fig_Figures *) Figures)->Scope);
+      Fig_PutHiddenParamFigureType (((struct Fig_Figures *) Figures)->FigureType);
      }
   }
 
@@ -297,18 +297,18 @@ void Fig_PutHiddenParamFigures (void *Args)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutHiddenParamFigureType (void)
+static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType)
   {
-   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Gbl.Figures.FigureType);
+   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) FigureType);
   }
 
 /*****************************************************************************/
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutHiddenParamScopeFig (void)
+static void Fig_PutHiddenParamScopeFig (Hie_Level_t ScopeFig)
   {
-   Sco_PutParamScope ("ScopeFig",Gbl.Scope.Current);
+   Sco_PutParamScope ("ScopeFig",ScopeFig);
   }
 
 /*****************************************************************************/
@@ -326,7 +326,7 @@ void Fig_ShowFigures (void)
       [Fig_DEGREE_TYPES     ] = Fig_GetAndShowDegreeTypesStats,
       [Fig_FOLDERS_AND_FILES] = Fig_GetAndShowFileBrowsersStats,
       [Fig_OER              ] = Fig_GetAndShowOERsStats,
-      [Fig_COURSE_PROGRAMS   ] = Fig_GetAndShowCourseProgramStats,
+      [Fig_COURSE_PROGRAMS  ] = Fig_GetAndShowCourseProgramStats,
       [Fig_ASSIGNMENTS      ] = Fig_GetAndShowAssignmentsStats,
       [Fig_PROJECTS         ] = Fig_GetAndShowProjectsStats,
       [Fig_TESTS            ] = Fig_GetAndShowTestsStats,
@@ -349,19 +349,20 @@ void Fig_ShowFigures (void)
       [Fig_PRIVACY          ] = Fig_GetAndShowNumUsrsPerPrivacy,
       [Fig_COOKIES          ] = Fig_GetAndShowNumUsrsPerCookies,
      };
+   Fig_FigureType_t SelectedFigureType;
 
    /***** Get the type of figure ******/
-   Gbl.Figures.FigureType = (Fig_FigureType_t)
-	                 Par_GetParToUnsignedLong ("FigureType",
-	                                           0,
-	                                           Fig_NUM_FIGURES - 1,
-	                                           (unsigned long) Fig_FIGURE_TYPE_DEF);
+   SelectedFigureType = (Fig_FigureType_t)
+		        Par_GetParToUnsignedLong ("FigureType",
+						  0,
+						  Fig_NUM_FIGURES - 1,
+						  (unsigned long) Fig_FIGURE_TYPE_DEF);
 
    /***** Show again the form to see use of the platform *****/
-   Fig_ReqShowFigures ();
+   Fig_ReqShowFigure (SelectedFigureType);
 
    /***** Show the stat of use selected by user *****/
-   Fig_Function[Gbl.Figures.FigureType] ();
+   Fig_Function[SelectedFigureType] ();
   }
 
 /*****************************************************************************/
@@ -1032,6 +1033,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_institutions;
    extern const char *Txt_Institutions;
+   struct Fig_Figures Figures;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Institutions,
@@ -1040,7 +1042,9 @@ static void Fig_GetAndShowInstitutionsStats (void)
 
    /***** Form to select type of list used to display degree photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
-   Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Gbl);
+   Figures.Scope      = Gbl.Scope.Current;
+   Figures.FigureType = Fig_INSTITS;
+   Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
 
    /***** Institutions ordered by number of centres *****/
    Fig_GetAndShowInssOrderedByNumCtrs ();

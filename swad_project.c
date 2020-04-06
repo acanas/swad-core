@@ -1021,8 +1021,7 @@ static void Prj_PutIconsListProjects (void *Args)
 	                                   NULL,NULL);
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_PROJECTS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_PROJECTS);
      }
   }
 

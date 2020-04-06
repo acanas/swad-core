@@ -911,7 +911,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 				 " AND usr_data.Password='%s'",
 				 UsrIDNickOrEmail,userPassword);
      }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
+   else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))		// 2: It's an email
      {
       /* User has typed an email */
       // TODO: Get only if email confirmed?

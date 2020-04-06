@@ -1428,8 +1428,7 @@ static void Tst_PutIconsTests (void *TestPtr)
 	}
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_TESTS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_TESTS);
      }
   }
 

@@ -280,11 +280,8 @@ static void Set_PutIconsToSelectSideCols (void)
 static void Set_PutIconsSideColumns (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_SIDE_COLUMNS;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_SIDE_COLUMNS);
   }
 
 /*****************************************************************************/

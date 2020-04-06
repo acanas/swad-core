@@ -8783,8 +8783,7 @@ static void Usr_PutIconsListGsts (void *Args)
 	}
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_USERS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_USERS);
      }
   }
 
@@ -8812,8 +8811,7 @@ static void Usr_PutIconsListStds (void *Args)
 	}
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_USERS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_USERS);
      }
   }
 
@@ -8841,8 +8839,7 @@ static void Usr_PutIconsListTchs (void *Args)
 	}
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_USERS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_USERS);
      }
   }
 

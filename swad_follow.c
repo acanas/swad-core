@@ -427,8 +427,7 @@ static void Fol_PutIconsWhoToFollow (void *Args)
       Fol_PutIconToUpdateWhoToFollow ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_FOLLOW;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_FOLLOW);
      }
   }
 

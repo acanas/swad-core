@@ -467,8 +467,7 @@ static void Cty_PutIconsListingCountries (void *Args)
 	 Cty_PutIconToEditCountries ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 
@@ -711,8 +710,7 @@ static void Cty_PutIconsEditingCountries (void *Args)
       Cty_PutIconToViewCountries ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 

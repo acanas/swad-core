@@ -2528,8 +2528,7 @@ static void Msg_PutIconsListMsgs (void *Args)
 				     Msg_PutHiddenParamsMsgsFilters,&Gbl);
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_MESSAGES;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_MESSAGES);
      }
   }
 

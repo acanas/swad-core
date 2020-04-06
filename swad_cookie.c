@@ -105,11 +105,8 @@ void Coo_EditMyPrefsOnCookies (void)
 static void Coo_PutIconsCookies (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_COOKIES;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_COOKIES);
   }
 
 /*****************************************************************************/

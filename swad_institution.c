@@ -358,8 +358,7 @@ static void Ins_PutIconsListingInstitutions (void *Args)
 	 Ins_PutIconToEditInstitutions ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_INSTITS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_INSTITS);
      }
   }
 
@@ -595,8 +594,7 @@ static void Ins_PutIconsEditingInstitutions (void *Args)
       Ins_PutIconToViewInstitutions ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_INSTITS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_INSTITS);
      }
   }
 

@@ -333,8 +333,7 @@ static void Ctr_PutIconsListingCentres (void *Args)
       Plc_PutIconToViewPlaces ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 
@@ -515,8 +514,7 @@ static void Ctr_PutIconsEditingCentres (void *Args)
       Plc_PutIconToViewPlaces ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 

@@ -1163,11 +1163,8 @@ static void TL_ShowTimeline (char *Query,
 static void TL_PutIconsTimeline (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_TIMELINE;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_TIMELINE);
   }
 
 /*****************************************************************************/

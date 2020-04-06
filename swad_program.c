@@ -376,8 +376,7 @@ static void Prg_PutIconsListItems (void *Args)
 	 Prg_PutIconToCreateNewItem ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_COURSE_PROGRAMS;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_COURSE_PROGRAMS);
      }
   }
 

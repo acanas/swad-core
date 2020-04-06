@@ -139,11 +139,8 @@ void Pri_EditMyPrivacy (void)
 static void Pri_PutIconsPrivacy (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_PRIVACY;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_PRIVACY);
   }
 
 /*****************************************************************************/

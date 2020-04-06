@@ -827,8 +827,7 @@ static void Deg_PutIconsListingDegrees (void *Args)
       DT_PutIconToViewDegreeTypes ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 
@@ -1002,8 +1001,7 @@ static void Deg_PutIconsEditingDegrees (void *Args)
       DT_PutIconToViewDegreeTypes ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_HIERARCHY;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_HIERARCHY);
      }
   }
 

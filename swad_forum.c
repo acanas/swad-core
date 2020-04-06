@@ -1716,11 +1716,8 @@ static void For_ShowForumList (void)
 static void For_PutIconsForums (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_FORUMS;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_FORUMS);
   }
 
 /*****************************************************************************/

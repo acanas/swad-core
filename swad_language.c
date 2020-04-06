@@ -104,11 +104,8 @@ void Lan_PutBoxToSelectLanguage (void)
 static void Lan_PutIconsLanguage (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_LANGUAGES;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_LANGUAGES);
   }
 
 /*****************************************************************************/

@@ -298,8 +298,7 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
    /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_ASSIGNMENTS;
-   Fig_PutIconToShowFigure ();
+   Fig_PutIconToShowFigure (Fig_ASSIGNMENTS);
   }
 
 /*****************************************************************************/

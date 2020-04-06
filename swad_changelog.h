@@ -497,14 +497,25 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.166 (2020-04-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.167 (2020-04-06)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
  *
+    Call parameters:
+        userID: string (DNI/passport, @nickname or email of the user).
 // TODO: Geolocalización:
+
+
 Función API sendCurrentLocation...
-Parámetros: string con ubicación (ej. "Aula 0.1")
+Parámetros a enviar a la función:
+   1. Código único de ubicación (número)
+Almacenaría esa ubicación en una tabla
+- Código usuario
+- Código de ubicación (sacado de la tabla de ubicaciones)
+- Fecha-hora
+
+Haría falta una función API que envíe el histórico reciente de ubicaciones de un usuario
 
 Poblar base de datos:
 En Usuarios > Ubicación aparecería un botón pequeño de "Añadir ubicación".
@@ -515,6 +526,15 @@ Función API checkPermission...
 Si es así, se llamaría a la función:
 Función API newLocation...
 Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
+
+
+Función API getLocations
+1. Añadir tipo de ubicación
+2. Añadir lista desplegable de MAC asociadas a una ubicación
+3. API: getLocations (como parámetro se pasa la MAC)
+    - que devolveria las filas de la tabla de ubicaciones asociadas a esa MAC
+
+
 
 // TODO: Laura García: "Ahora estoy utilizando la plataforma SWAD más que nunca, evidentemente, debido a las circunstancias, e incluso les he hecho un examencillo a los alumnos utilizando los test de autoevaluación.
                         Pero quería preguntarte un par de cosas:
@@ -528,6 +548,10 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+// TODO: Bug en SWADroid: loginByUserPasswordKey falla cuando se le pasa como parámetro un DNI
+
+	Version 19.167:   Apr 06, 2020	Code refactoring in figures. (284772 lines)
+	Version 19.166.1: Apr 06, 2020	Fixed bug in API function loginByUserPasswordKey, reported by Javier Bueno López. (? lines)
 	Version 19.166:   Apr 06, 2020	Code refactoring in banners. (284805 lines)
 	Version 19.165:   Apr 06, 2020	Code refactoring in attendance events. (284743 lines)
 	Version 19.164:   Apr 05, 2020	Code refactoring in assignments and pagination. (284644 lines)

@@ -618,11 +618,8 @@ void Ntf_ShowMyNotifications (void)
 static void Ntf_PutIconsNotif (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_NOTIFY_EVENTS;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_NOTIFY_EVENTS);
   }
 
 /*****************************************************************************/

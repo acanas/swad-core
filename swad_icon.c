@@ -150,11 +150,8 @@ void Ico_PutIconsToSelectIconSet (void)
 static void Ico_PutIconsIconSet (void *Args)
   {
    if (Args)
-     {
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_ICON_SETS;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_ICON_SETS);
   }
 
 /*****************************************************************************/

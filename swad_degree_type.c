@@ -70,7 +70,9 @@ static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
                                DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
-static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
+static void DT_ListDegreeTypes (Act_Action_t NextAction,
+                                Hie_Level_t Scope,
+                                DT_Order_t SelectedOrder);
 
 static void DT_EditDegreeTypesInternal (void);
 static void DT_PutIconsEditingDegreeTypes (void *Args);
@@ -82,7 +84,9 @@ static void DT_ListDegreeTypesForEdition (void);
 
 static void DT_PutFormToCreateDegreeType (void);
 
-static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t SelectedOrder);
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
+                                            Hie_Level_t Scope,
+                                            DT_Order_t SelectedOrder);
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
 
@@ -154,7 +158,7 @@ static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
    DT_GetListDegreeTypes (Scope,SelectedOrder);
 
    /***** List degree types *****/
-   DT_ListDegreeTypes (NextAction,SelectedOrder);
+   DT_ListDegreeTypes (NextAction,Scope,SelectedOrder);
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
@@ -179,7 +183,9 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
 // - centre tab		=> NextAction = ActSeeDegTyp
 // - statistic tab	=> NextAction = ActSeeUseGbl
 
-static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder)
+static void DT_ListDegreeTypes (Act_Action_t NextAction,
+                                Hie_Level_t Scope,
+                                DT_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTRE_DegreeTypes;
    extern const char *Hlp_ANALYTICS_Figures_types_of_degree;
@@ -209,7 +215,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
      {
       /***** Write heading *****/
       HTM_TABLE_BeginWideMarginPadding (2);
-      DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
+      DT_PutHeadDegreeTypesForSeeing (NextAction,Scope,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
@@ -291,8 +297,7 @@ static void DT_PutIconsEditingDegreeTypes (void *Args)
       Deg_PutIconToViewDegrees ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
      }
   }
 
@@ -366,8 +371,7 @@ static void DT_PutIconsListingDegTypes (void *Args)
       Deg_PutIconToViewDegrees ();
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
      }
   }
 
@@ -506,11 +510,14 @@ static void DT_PutFormToCreateDegreeType (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t SelectedOrder)
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
+                                            Hie_Level_t Scope,
+                                            DT_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
    DT_Order_t Order;
+   struct Fig_Figures Figures;
 
    HTM_TR_Begin (NULL);
    HTM_TH_Empty (1);
@@ -524,7 +531,11 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* Begin form to change order */
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
-         Fig_PutHiddenParamFigures (&Gbl);
+	{
+	 Figures.Scope      = Scope;
+	 Figures.FigureType = Fig_DEGREE_TYPES;
+         Fig_PutHiddenParamFigures (&Figures);
+	}
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       /* Link with the head of this column */

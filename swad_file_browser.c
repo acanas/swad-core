@@ -3762,10 +3762,7 @@ static void Brw_PutIconsFileBrowser (void *Args)
 static void Brw_PutIconShowFigure (void *Args)
   {
    if (Args)
-     {
-      Gbl.Figures.FigureType = Fig_FOLDERS_AND_FILES;
-      Fig_PutIconToShowFigure ();
-     }
+      Fig_PutIconToShowFigure (Fig_FOLDERS_AND_FILES);
   }
 
 /*****************************************************************************/

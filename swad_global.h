@@ -635,10 +635,6 @@ struct Globals
      } Svys;
    struct
      {
-      Fig_FigureType_t FigureType;
-     } Figures;
-   struct
-     {
       Sta_ClicksGroupedBy_t ClicksGroupedBy;
       Sta_Role_t Role;
       Sta_CountType_t CountType;

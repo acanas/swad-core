@@ -342,8 +342,7 @@ static void Gam_PutIconsListGames (void *Args)
 	}
 
       /***** Put icon to show a figure *****/
-      Gbl.Figures.FigureType = Fig_GAMES;
-      Fig_PutIconToShowFigure ();
+      Fig_PutIconToShowFigure (Fig_GAMES);
      }
   }
 
