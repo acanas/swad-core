@@ -476,8 +476,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
                                        const char *TxtButton,
 				       bool PutFormDateRange);
 void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
-				    void (*FuncWhenUsrsSelected) (),
-                                    void (*FuncWhenNoUsrsSelected) ());
+				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
+                                    void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
 void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs);
 
 void Usr_ListAllDataGsts (void);

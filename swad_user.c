@@ -6448,8 +6448,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
   }
 
 void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
-				    void (*FuncWhenUsrsSelected) (),
-                                    void (*FuncWhenNoUsrsSelected) ())
+				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
+                                    void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
 
@@ -6458,13 +6458,13 @@ void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
 
    /***** Check number of users *****/
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
-      FuncWhenUsrsSelected ();
+      FuncWhenUsrsSelected (ArgsSelected);
    else	// If no users are selected...
      {
       // ...write warning alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      FuncWhenNoUsrsSelected ();
+      FuncWhenNoUsrsSelected (ArgsNoSelected);
      }
 
    /***** Free memory used by list of selected users' codes *****/

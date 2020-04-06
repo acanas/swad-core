@@ -543,17 +543,6 @@ struct Globals
      } Prjs;
    struct
      {
-      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of attendance events
-      struct AttendanceEvent *Lst;	// List of attendance events
-      Dat_StartEndTime_t SelectedOrder;
-      long AttCod;
-      bool ShowDetails;
-      char *StrAttCodsSelected;
-      unsigned CurrentPage;
-     } AttEvents;
-   struct
-     {
       Usr_Who_t Who;
       long NotCod;		// Used as parameter about social note to be edited, removed...
       long PubCod;		// Used as parameter about social publishing to be edited, removed...

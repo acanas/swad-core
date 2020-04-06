@@ -2686,7 +2686,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
                                struct swad__sendAttendanceEventOutput *sendAttendanceEventOut)	// output
   {
    int ReturnCode;
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
    bool ItsANewAttEvent;
 
    /***** Initializations *****/
@@ -2724,13 +2724,13 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /**** Get data of attendance event *****/
    /* Event code */
-   Att.AttCod = (long) attendanceEventCode;
+   Event.AttCod = (long) attendanceEventCode;
 
    /* Course code */
-   if (Att.AttCod > 0)	// The event already exists
+   if (Event.AttCod > 0)	// The event already exists
      {
-      Att_GetDataOfAttEventByCod (&Att);
-      if (Att.CrsCod != (long) courseCode)
+      Att_GetDataOfAttEventByCod (&Event);
+      if (Event.CrsCod != (long) courseCode)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Attendance event does not belong to course");
@@ -2739,24 +2739,24 @@ int swad__sendAttendanceEvent (struct soap *soap,
    else
      {
       ItsANewAttEvent = true;
-      Att.CrsCod = (long) courseCode;
+      Event.CrsCod = (long) courseCode;
      }
 
    /* Is event hidden? */
-   Att.Hidden = (hidden ? true :
+   Event.Hidden = (hidden ? true :
 	                  false);
 
    /* User's code (really not used) */
-   Att.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /* startTime */
-   Att.TimeUTC[Att_START_TIME] = (time_t) startTime;
+   Event.TimeUTC[Att_START_TIME] = (time_t) startTime;
 
    /* endTime */
-   Att.TimeUTC[Att_END_TIME  ] = (time_t) endTime;
+   Event.TimeUTC[Att_END_TIME  ] = (time_t) endTime;
 
    /* Are teacher's comments visible? */
-   Att.CommentTchVisible = (commentsTeachersVisible ? true :
+   Event.CommentTchVisible = (commentsTeachersVisible ? true :
 	                                              false);
 
    /* Title */
@@ -2764,7 +2764,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
       return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Title of attendance event is empty");
-   Str_Copy (Att.Title,title,
+   Str_Copy (Event.Title,title,
              Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
 
    /* Create a list of groups selected */
@@ -2772,14 +2772,14 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /***** Create or update attendance event *****/
    if (ItsANewAttEvent)
-      Att_CreateAttEvent (&Att,text);	// Add new attendance event to database
+      Att_CreateAttEvent (&Event,text);	// Add new attendance event to database
    else
-      Att_UpdateAttEvent (&Att,text);	// Modify existing attendance event
+      Att_UpdateAttEvent (&Event,text);	// Modify existing attendance event
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
 
-   sendAttendanceEventOut->attendanceEventCode = Att.AttCod;
+   sendAttendanceEventOut->attendanceEventCode = Event.AttCod;
 
    return SOAP_OK;
   }
@@ -2793,7 +2793,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
                                  struct swad__removeAttendanceEventOutput *removeAttendanceEventOut)	// output
   {
    int ReturnCode;
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2810,13 +2810,13 @@ int swad__removeAttendanceEvent (struct soap *soap,
 
    /**** Get data of attendance event *****/
    /* Event code */
-   Att.AttCod = (long) attendanceEventCode;
+   Event.AttCod = (long) attendanceEventCode;
 
    /* Course code */
-   if (Att.AttCod > 0)	// The event already exists
+   if (Event.AttCod > 0)	// The event already exists
      {
-      Att_GetDataOfAttEventByCod (&Att);
-      Gbl.Hierarchy.Crs.CrsCod = Att.CrsCod;
+      Att_GetDataOfAttEventByCod (&Event);
+      Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
      }
    else
       return soap_receiver_fault (soap,
@@ -2844,9 +2844,9 @@ int swad__removeAttendanceEvent (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Remove the attendance event from database *****/
-   Att_RemoveAttEventFromDB (Att.AttCod);
+   Att_RemoveAttEventFromDB (Event.AttCod);
 
-   removeAttendanceEventOut->attendanceEventCode = Att.AttCod;
+   removeAttendanceEventOut->attendanceEventCode = Event.AttCod;
 
    return SOAP_OK;
   }
@@ -2899,7 +2899,7 @@ int swad__getAttendanceUsers (struct soap *soap,
                               struct swad__getAttendanceUsersOutput *getAttendanceUsersOut)	// output
   {
    int ReturnCode;
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
    char SubQuery[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2920,9 +2920,9 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get course of this attendance event *****/
-   Att.AttCod = (long) attendanceEventCode;
-   Att_GetDataOfAttEventByCod (&Att);
-   Gbl.Hierarchy.Crs.CrsCod = Att.CrsCod;
+   Event.AttCod = (long) attendanceEventCode;
+   Att_GetDataOfAttEventByCod (&Event);
+   Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -2939,7 +2939,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   if (Att_CheckIfAttEventIsAssociatedToGrps (Att.AttCod))
+   if (Att_CheckIfAttEventIsAssociatedToGrps (Event.AttCod))
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users
@@ -2954,9 +2954,9 @@ int swad__getAttendanceUsers (struct soap *soap,
 		        " AND crs_grp_usr.GrpCod=att_grp.GrpCod"
 		        " AND crs_grp_usr.UsrCod NOT IN"
 		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
-	       Att.AttCod,
+	       Event.AttCod,
 	       (unsigned) Rol_STD,
-	       Att.AttCod);
+	       Event.AttCod);
    else
       // Event for the whole course
       // Subquery: list of users in the course of this attendance event...
@@ -2968,9 +2968,9 @@ int swad__getAttendanceUsers (struct soap *soap,
 		        " AND crs_usr.Role=%u"
 		        " AND crs_usr.UsrCod NOT IN"
 		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
-	       Att.AttCod,
+	       Event.AttCod,
 	       (unsigned) Rol_STD,
-	       Att.AttCod);
+	       Event.AttCod);
    // Query: list of users in attendance list + rest of users (subquery)
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
@@ -3094,7 +3094,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
                                struct swad__sendAttendanceUsersOutput *sendAttendanceUsersOut)	// output
   {
    int ReturnCode;
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    struct UsrData UsrDat;
@@ -3120,10 +3120,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get course of this attendance event *****/
-   Att.AttCod = (long) attendanceEventCode;
-   if (!Att_GetDataOfAttEventByCod (&Att))
+   Event.AttCod = (long) attendanceEventCode;
+   if (!Att_GetDataOfAttEventByCod (&Event))
       return SOAP_OK;	// return with success = 0
-   Gbl.Hierarchy.Crs.CrsCod = Att.CrsCod;
+   Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -3173,7 +3173,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	      {
 	       /* Mark user as present */
-	       Att_RegUsrInAttEventNotChangingComments (Att.AttCod,UsrDat.UsrCod);
+	       Att_RegUsrInAttEventNotChangingComments (Event.AttCod,UsrDat.UsrCod);
 
 	       /* Add this user to query used to mark not present users as absent */
 	       if (setOthersAsAbsent)
@@ -3205,13 +3205,13 @@ int swad__sendAttendanceUsers (struct soap *soap,
       DB_QueryUPDATE ("can not set other users as absent",
       		     "UPDATE att_usr SET Present='N'"
 		     " WHERE AttCod=%ld%s",
-		     Att.AttCod,SubQueryAllUsrs);
+		     Event.AttCod,SubQueryAllUsrs);
 
       /* Free memory for subquery string */
       free (SubQueryAllUsrs);
 
       /* Clean table att_usr */
-      Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
+      Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
      }
 
    /***** Free memory used for user's data *****/

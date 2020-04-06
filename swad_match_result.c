@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 static void MchRes_ListMyMchResultsInCrs (void);
 static void MchRes_ListMyMchResultsInGam (long GamCod);
 static void MchRes_ListMyMchResultsInMch (long MchCod);
-static void MchRes_ShowAllMchResultsInSelectedGames (void);
+static void MchRes_ShowAllMchResultsInSelectedGames (void *Args);
 static void MchRes_ListAllMchResultsInSelectedGames (void);
 static void MchRes_ListAllMchResultsInGam (long GamCod);
 static void MchRes_ListAllMchResultsInMch (long MchCod);
@@ -104,19 +104,20 @@ static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
 /*********** Select users and dates to show their matches results ************/
 /*****************************************************************************/
 
-void MchRes_SelUsrsToViewMchResults (void)
+void MchRes_SelUsrsToViewMchResults (void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_matches_results;
 
-   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeAllMchResCrs,
-				     NULL,NULL,
-				     Txt_Results,
-                                     Hlp_ASSESSMENT_Games_results,
-                                     Txt_View_matches_results,
-				     false);	// Do not put form with date range
+   if (Args)
+      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+					ActSeeAllMchResCrs,
+					NULL,NULL,
+					Txt_Results,
+					Hlp_ASSESSMENT_Games_results,
+					Txt_View_matches_results,
+					false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -246,17 +247,20 @@ static void MchRes_ListMyMchResultsInMch (long MchCod)
 void MchRes_ShowAllMchResultsInCrs (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  MchRes_ShowAllMchResultsInSelectedGames,
-                                  MchRes_SelUsrsToViewMchResults);
+				  MchRes_ShowAllMchResultsInSelectedGames,&Gbl,
+                                  MchRes_SelUsrsToViewMchResults,&Gbl);
   }
 
 /*****************************************************************************/
 /****************** Show matches results for several users *******************/
 /*****************************************************************************/
 
-static void MchRes_ShowAllMchResultsInSelectedGames (void)
+static void MchRes_ShowAllMchResultsInSelectedGames (void *Args)
   {
    extern const char *Txt_Results;
+
+   if (!Args)
+      return;
 
    /***** Get list of games *****/
    Gam_GetListGames (Gam_ORDER_BY_TITLE);

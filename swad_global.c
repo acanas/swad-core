@@ -312,13 +312,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prjs.SelectedOrder = Prj_ORDER_DEFAULT;
    Gbl.Prjs.PrjCod = -1L;
 
-   Gbl.AttEvents.LstIsRead = false;	// List is not read
-   Gbl.AttEvents.Num = 0;
-   Gbl.AttEvents.Lst = NULL;
-   Gbl.AttEvents.SelectedOrder = Att_ORDER_DEFAULT;
-   Gbl.AttEvents.AttCod = -1L;
-   Gbl.AttEvents.StrAttCodsSelected = NULL;
-
    Gbl.Mails.Num = 0;
    Gbl.Mails.Lst = NULL;
    Gbl.Mails.SelectedOrder = Mai_ORDER_DEFAULT;

@@ -40,7 +40,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void MchRes_SelUsrsToViewMchResults (void);
+void MchRes_SelUsrsToViewMchResults (void *Args);
 
 void MchRes_ShowMyMchResultsInCrs (void);
 void MchRes_ShowMyMchResultsInGam (void);

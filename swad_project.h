@@ -172,9 +172,9 @@ void Prj_PrintOneProject (void);
 void Prj_FlushCacheMyRolesInProject (void);
 Prj_RoleInProject_t Prj_GetMyRolesInProject (long PrjCod);
 
-void Prj_ReqAddStds (void);
-void Prj_ReqAddTuts (void);
-void Prj_ReqAddEvls (void);
+void Prj_ReqAddStds (void *Args);
+void Prj_ReqAddTuts (void *Args);
+void Prj_ReqAddEvls (void *Args);
 
 void Prj_GetSelectedUsrsAndAddStds (void);
 void Prj_GetSelectedUsrsAndAddTuts (void);

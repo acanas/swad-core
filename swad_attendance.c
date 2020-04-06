@@ -72,54 +72,79 @@ typedef enum
    Att_PRNT_SEL_USR,	// Print selected users
   } Att_TypeOfView_t;
 
+struct Att_Events
+  {
+   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+   unsigned Num;	// Number of attendance events
+   struct Att_Event *Lst;	// List of attendance events
+   Dat_StartEndTime_t SelectedOrder;
+   long AttCod;
+   bool ShowDetails;
+   char *StrAttCodsSelected;
+   unsigned CurrentPage;
+  };
+
 /*****************************************************************************/
 /****************************** Private variables ****************************/
 /*****************************************************************************/
-
-Att_TypeOfView_t Att_TypeOfView;
 
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Att_ShowAllAttEvents (void);
-static void Att_ParamsWhichGroupsToShow (void *Args);
-static void Att_PutIconsInListOfAttEvents (void *Args);
-static void Att_PutIconToCreateNewAttEvent (void);
+static void Att_ResetEvents (struct Att_Events *Events);
+
+static void Att_ShowAllAttEvents (struct Att_Events *Events);
+static void Att_ParamsWhichGroupsToShow (void *Events);
+static void Att_PutIconsInListOfAttEvents (void *Events);
+static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events);
 static void Att_PutButtonToCreateNewAttEvent (void);
-static void Att_PutParamsToCreateNewAttEvent (void *Args);
-static void Att_PutParamsToListUsrsAttendance (void *Args);
+static void Att_PutParamsToCreateNewAttEvent (void *Events);
+static void Att_PutParamsToListUsrsAttendance (void *Events);
 
-static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete);
-static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
-static void Att_GetParamAttOrder (void);
+static void Att_ShowOneAttEvent (struct Att_Events *Events,
+                                 struct Att_Event *Event,
+                                 bool ShowOnlyThisAttEventComplete);
+static void Att_WriteAttEventAuthor (struct Att_Event *Event);
+static Dat_StartEndTime_t Att_GetParamAttOrder (void);
 
-static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
+static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
+					      const struct Att_Event *Event,
                                               const char *Anchor);
-static void Att_PutParams (void *Args);
-static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest);
-static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
-static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att);
+static void Att_PutParams (void *Events);
+static void Att_GetListAttEvents (struct Att_Events *Events,
+                                  Att_OrderNewestOldest_t OrderNewestOldest);
+static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event);
+static void Att_ResetAttendanceEvent (struct Att_Event *Event);
+static void Att_FreeListAttEvents (struct Att_Events *Events);
 static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
+
+static void Att_PutParamSelectedAttCod (void *Events);
+static void Att_PutParamAttCod (long AttCod);
+static long Att_GetParamAttCod (void);
+
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod);
 static void Att_CreateGrps (long AttCod);
-static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEvent *Att);
+static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Event);
 
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod);
 static void Att_RemoveAttEventFromCurrentCrs (long AttCod);
 
-static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att);
-static void Att_ListAttStudents (struct AttendanceEvent *Att);
+static void Att_ShowEvent (struct Att_Events *Events);
+
+static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event);
+static void Att_ListAttStudents (struct Att_Events *Events,
+	                         struct Att_Event *Event);
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
-                                          struct AttendanceEvent *Att);
-static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
+                                          struct Att_Event *Event);
+static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Title,const char *Txt,
 				 const char *Class);
 static void Att_PutParamsCodGrps (long AttCod);
-static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
+static void Att_GetNumStdsTotalWhoAreInAttEvent (struct Att_Event *Event);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 							 long LstSelectedUsrCods[],
 							 unsigned NumUsrsInList);
@@ -132,29 +157,51 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
-static void Att_ListOrPrintMyAttendanceCrs (void);
-static void Att_GetUsrsAndListOrPrintAttendanceCrs (void);
-static void Att_ListOrPrintUsrsAttendanceCrs (void);
+static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView);
+static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView);
 
-static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
+static void Att_GetListSelectedAttCods (struct Att_Events *Events);
 
-static void Att_PutIconsMyAttList (void *Args);
-static void Att_PutFormToPrintMyListParams (void *Args);
-static void Att_PutIconsStdsAttList (void *Args);
-static void Att_PutParamsToPrintStdsList (void *Args);
+static void Att_PutIconsMyAttList (void *Events);
+static void Att_PutFormToPrintMyListParams (void *Events);
+static void Att_PutIconsStdsAttList (void *Events);
+static void Att_PutParamsToPrintStdsList (void *Events);
 
-static void Att_PutButtonToShowDetails (void);
-static void Att_ListEventsToSelect (void);
+static void Att_PutButtonToShowDetails (const struct Att_Events *Events);
+static void Att_ListEventsToSelect (const struct Att_Events *Events,
+                                    Att_TypeOfView_t TypeOfView);
 static void Att_PutIconToViewAttEvents (void *Args);
 static void Att_PutIconToEditAttEvents (void *Args);
-static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
+static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
+                                         Att_TypeOfView_t TypeOfView,
+	                                 unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods);
-static void Att_WriteTableHeadSeveralAttEvents (void);
-static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *UsrDat);
+static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events);
+static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
+                                             unsigned NumUsr,struct UsrData *UsrDat);
 static void Att_PutCheckOrCross (bool Present);
-static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
+static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
+                                              unsigned NumUsrsInList,
                                               long *LstSelectedUsrCods);
-static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat);
+static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
+                                      unsigned NumUsr,struct UsrData *UsrDat);
+
+/*****************************************************************************/
+/************************** Reset attendance events **************************/
+/*****************************************************************************/
+
+static void Att_ResetEvents (struct Att_Events *Events)
+  {
+   Events->LstIsRead          = false;		// List is not read from database
+   Events->Num                = 0;		// Number of attendance events
+   Events->Lst                = NULL;		// List of attendance events
+   Events->SelectedOrder      = Att_ORDER_DEFAULT;
+   Events->AttCod             = -1L;
+   Events->ShowDetails        = false;
+   Events->StrAttCodsSelected = NULL;
+   Events->CurrentPage        = 0;
+  }
 
 /*****************************************************************************/
 /********************** List all the attendance events ***********************/
@@ -162,23 +209,28 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
+   struct Att_Events Events;
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get parameters *****/
-   Att_GetParamAttOrder ();
+   Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
-   Att_GetListAttEvents (Att_NEWEST_FIRST);
+   Att_GetListAttEvents (&Events,Att_NEWEST_FIRST);
 
    /***** Show all the attendance events *****/
-   Att_ShowAllAttEvents ();
+   Att_ShowAllAttEvents (&Events);
   }
 
 /*****************************************************************************/
 /********************** Show all the attendance events ***********************/
 /*****************************************************************************/
 
-static void Att_ShowAllAttEvents (void)
+static void Att_ShowAllAttEvents (struct Att_Events *Events)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Events;
@@ -195,10 +247,10 @@ static void Att_ShowAllAttEvents (void)
 		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** Compute variables related to pagination *****/
-   Pagination.NumItems = Gbl.AttEvents.Num;
-   Pagination.CurrentPage = (int) Gbl.AttEvents.CurrentPage;
+   Pagination.NumItems = Events->Num;
+   Pagination.CurrentPage = (int) Events->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Gbl.AttEvents.CurrentPage = (unsigned) Pagination.CurrentPage;
+   Events->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Events,
@@ -210,17 +262,17 @@ static void Att_ShowAllAttEvents (void)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,
-                                  Att_ParamsWhichGroupsToShow,&Gbl);
+                                  Att_ParamsWhichGroupsToShow,&Events);
       Set_EndSettingsHead ();
      }
 
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
-				  (unsigned) Gbl.AttEvents.SelectedOrder,
+				  (unsigned) Events->SelectedOrder,
 				  0);
 
-   if (Gbl.AttEvents.Num)
+   if (Events->Num)
      {
       /***** Table head *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -236,13 +288,13 @@ static void Att_ShowAllAttEvents (void)
 	 Frm_StartForm (ActSeeAtt);
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 	 Dat_PutHiddenParamOrder (Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Gbl.AttEvents.SelectedOrder)
+	 if (Order == Events->SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_START_END_TIME[Order]);
-	 if (Order == Gbl.AttEvents.SelectedOrder)
+	 if (Order == Events->SelectedOrder)
 	    HTM_U_End ();
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -255,10 +307,12 @@ static void Att_ShowAllAttEvents (void)
       HTM_TR_End ();
 
       /***** Write all the attendance events *****/
-      for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
+      for (NumAttEvent  = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
 	   NumAttEvent <= Pagination.LastItemVisible;
 	   NumAttEvent++)
-	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent - 1],false);
+	 Att_ShowOneAttEvent (Events,
+	                      &Events->Lst[NumAttEvent - 1],
+	                      false);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -269,7 +323,7 @@ static void Att_ShowAllAttEvents (void)
    /***** Write again links to pages *****/
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
-				  (unsigned) Gbl.AttEvents.SelectedOrder,
+				  (unsigned) Events->SelectedOrder,
 				  0);
 
    /***** Button to create a new attendance event *****/
@@ -280,19 +334,19 @@ static void Att_ShowAllAttEvents (void)
    Box_BoxEnd ();
 
    /***** Free list of attendance events *****/
-   Att_FreeListAttEvents ();
+   Att_FreeListAttEvents (Events);
   }
 
 /*****************************************************************************/
 /***************** Put params to select which groups to show *****************/
 /*****************************************************************************/
 
-static void Att_ParamsWhichGroupsToShow (void *Args)
+static void Att_ParamsWhichGroupsToShow (void *Events)
   {
-   if (Args)
+   if (Events)
      {
-      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -300,20 +354,20 @@ static void Att_ParamsWhichGroupsToShow (void *Args)
 /************* Put contextual icons in list of attendance events *************/
 /*****************************************************************************/
 
-static void Att_PutIconsInListOfAttEvents (void *Args)
+static void Att_PutIconsInListOfAttEvents (void *Events)
   {
    bool ICanEdit;
 
-   if (Args)
+   if (Events)
      {
       /***** Put icon to create a new attendance event *****/
       ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
       if (ICanEdit)
-	 Att_PutIconToCreateNewAttEvent ();
+	 Att_PutIconToCreateNewAttEvent ((struct Att_Events *) Events);
 
       /***** Put icon to show attendance list *****/
-      if (Gbl.AttEvents.Num)
+      if (((struct Att_Events *) Events)->Num)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
@@ -324,7 +378,7 @@ static void Att_PutIconsInListOfAttEvents (void *Args)
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Ico_PutContextualIconToShowAttendanceList (ActReqLstUsrAtt,
-							  Att_PutParamsToListUsrsAttendance,&Gbl);
+							  Att_PutParamsToListUsrsAttendance,Events);
 	       break;
 	    default:
 	       break;
@@ -340,13 +394,13 @@ static void Att_PutIconsInListOfAttEvents (void *Args)
 /**************** Put icon to create a new attendance event ******************/
 /*****************************************************************************/
 
-static void Att_PutIconToCreateNewAttEvent (void)
+static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events)
   {
    extern const char *Txt_New_event;
 
    /***** Put icon to create a new attendance event *****/
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
-			       Att_PutParamsToCreateNewAttEvent,&Gbl,
+			       Att_PutParamsToCreateNewAttEvent,Events,
 			       Txt_New_event);
   }
 
@@ -368,16 +422,16 @@ static void Att_PutButtonToCreateNewAttEvent (void)
 /************** Put parameters to create a new attendance event **************/
 /*****************************************************************************/
 
-static void Att_PutParamsToCreateNewAttEvent (void *Args)
+static void Att_PutParamsToCreateNewAttEvent (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
-   if (Args)
+   if (Events)
      {
-      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
+      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -385,25 +439,27 @@ static void Att_PutParamsToCreateNewAttEvent (void *Args)
 /***************** Put parameters to list users attendance *******************/
 /*****************************************************************************/
 
-static void Att_PutParamsToListUsrsAttendance (void *Args)
+static void Att_PutParamsToListUsrsAttendance (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
-   if (Args)
+   if (Events)
      {
-      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
+      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
 /*****************************************************************************/
 /************************* Show one attendance event *************************/
 /*****************************************************************************/
-// Only Att->AttCod must be filled
+// Only Event->AttCod must be filled
 
-static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete)
+static void Att_ShowOneAttEvent (struct Att_Events *Events,
+                                 struct Att_Event *Event,
+                                 bool ShowOnlyThisAttEventComplete)
   {
    extern const char *Txt_View_event;
    char *Anchor = NULL;
@@ -413,11 +469,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this attendance event *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (Att);
-   Att_GetNumStdsTotalWhoAreInAttEvent (Att);
+   Att_GetDataOfAttEventByCodAndCheckCrs (Event);
+   Att_GetNumStdsTotalWhoAreInAttEvent (Event);
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Att->AttCod,&Anchor);
+   Frm_SetAnchorStr (Event->AttCod,&Anchor);
 
    /***** Write first row of data of this attendance event *****/
    /* Forms to remove/edit this attendance event */
@@ -431,7 +487,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Att_PutFormsToRemEditOneAttEvent (Att,Anchor);
+         Att_PutFormsToRemEditOneAttEvent (Events,Event,Anchor);
 	 break;
       default:
          break;
@@ -449,19 +505,19 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
 		       Id,
-		       Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
-						  "DATE_RED_LIGHT") :
-				     (Att->Open ? "DATE_GREEN" :
-						  "DATE_RED"));
+		       Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
+						      "DATE_RED_LIGHT") :
+				       (Event->Open ? "DATE_GREEN" :
+						      "DATE_RED"));
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
 		       Id,
-		       Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
-						  "DATE_RED_LIGHT") :
-				     (Att->Open ? "DATE_GREEN" :
-						  "DATE_RED"),
+		       Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
+						      "DATE_RED_LIGHT") :
+				       (Event->Open ? "DATE_GREEN" :
+						      "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Att->TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
@@ -474,23 +530,23 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
-   Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
-	                Att->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-	                              "BT_LINK LT ASG_TITLE");
+   Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title,
+	                Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+	                                "BT_LINK LT ASG_TITLE");
    HTM_ARTICLE_End ();
    HTM_TD_End ();
 
    /* Number of students in this event */
    if (ShowOnlyThisAttEventComplete)
       HTM_TD_Begin ("class=\"%s RT\"",
-		    Att->Hidden ? "ASG_TITLE_LIGHT" :
-				  "ASG_TITLE");
+		    Event->Hidden ? "ASG_TITLE_LIGHT" :
+				    "ASG_TITLE");
    else
       HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
-		    Att->Hidden ? "ASG_TITLE_LIGHT" :
-				  "ASG_TITLE",
+		    Event->Hidden ? "ASG_TITLE_LIGHT" :
+				    "ASG_TITLE",
 		    Gbl.RowEvenOdd);
-   HTM_Unsigned (Att->NumStdsTotal);
+   HTM_Unsigned (Event->NumStdsTotal);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -503,11 +559,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Att_WriteAttEventAuthor (Att);
+   Att_WriteAttEventAuthor (Event);
    HTM_TD_End ();
 
    /* Text of the attendance event */
-   Att_GetAttEventDescriptionFromDB (Att->AttCod,Description);
+   Att_GetAttEventDescriptionFromDB (Event->AttCod,Description);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -516,9 +572,9 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    else
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
-      Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
-   HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "DAT_LIGHT" :
-        	                               "DAT");
+      Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Event);
+   HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "DAT_LIGHT" :
+        	                                 "DAT");
    HTM_Txt (Description);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -535,65 +591,66 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 /****************** Write the author of an attendance event ******************/
 /*****************************************************************************/
 
-static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
+static void Att_WriteAttEventAuthor (struct Att_Event *Event)
   {
-   Usr_WriteAuthor1Line (Att->UsrCod,Att->Hidden);
+   Usr_WriteAuthor1Line (Event->UsrCod,Event->Hidden);
   }
 
 /*****************************************************************************/
 /**** Get parameter with the type or order in list of attendance events ******/
 /*****************************************************************************/
 
-static void Att_GetParamAttOrder (void)
+static Dat_StartEndTime_t Att_GetParamAttOrder (void)
   {
-   Gbl.AttEvents.SelectedOrder = (Dat_StartEndTime_t)
-	                         Par_GetParToUnsignedLong ("Order",
-                                                           0,
-                                                           Dat_NUM_START_END_TIME - 1,
-                                                           (unsigned long) Att_ORDER_DEFAULT);
+   return (Dat_StartEndTime_t)
+	  Par_GetParToUnsignedLong ("Order",
+				    0,
+				    Dat_NUM_START_END_TIME - 1,
+				    (unsigned long) Att_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
 /************** Put a link (form) to edit one attendance event ***************/
 /*****************************************************************************/
 
-static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
+static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
+					      const struct Att_Event *Event,
                                               const char *Anchor)
   {
-   Gbl.AttEvents.AttCod = Att->AttCod;	// Used as parameters in contextual links
+   Events->AttCod = Event->AttCod;
 
    /***** Put form to remove attendance event *****/
    Ico_PutContextualIconToRemove (ActReqRemAtt,
-                                  Att_PutParams,&Gbl);
+                                  Att_PutParams,Events);
 
    /***** Put form to hide/show attendance event *****/
-   if (Att->Hidden)
+   if (Event->Hidden)
       Ico_PutContextualIconToUnhide (ActShoAtt,Anchor,
-                                     Att_PutParams,&Gbl);
+                                     Att_PutParams,Events);
    else
       Ico_PutContextualIconToHide (ActHidAtt,Anchor,
-                                   Att_PutParams,&Gbl);
+                                   Att_PutParams,Events);
 
    /***** Put form to edit attendance event *****/
    Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,
-                                Att_PutParams,&Gbl);
+                                Att_PutParams,Events);
   }
 
 /*****************************************************************************/
 /***************** Params used to edit an attendance event *******************/
 /*****************************************************************************/
 
-static void Att_PutParams (void *Args)
+static void Att_PutParams (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
-   if (Args)
+   if (Events)
      {
-      Att_PutParamAttCod (Gbl.AttEvents.AttCod);
-      Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
+      Att_PutParamAttCod (((struct Att_Events *) Events)->AttCod);
+      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -601,7 +658,8 @@ static void Att_PutParams (void *Args)
 /********************* List all the attendance events ************************/
 /*****************************************************************************/
 
-static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
+static void Att_GetListAttEvents (struct Att_Events *Events,
+                                  Att_OrderNewestOldest_t OrderNewestOldest)
   {
    static const char *HiddenSubQuery[Rol_NUM_ROLES] =
      {
@@ -629,8 +687,8 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
    unsigned long NumRows;
    unsigned NumAttEvent;
 
-   if (Gbl.AttEvents.LstIsRead)
-      Att_FreeListAttEvents ();
+   if (Events->LstIsRead)
+      Att_FreeListAttEvents (Events);
 
    /***** Get list of attendance events from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
@@ -646,7 +704,7 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
+				OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
@@ -655,45 +713,45 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
+				OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
 
    if (NumRows) // Attendance events found...
      {
-      Gbl.AttEvents.Num = (unsigned) NumRows;
+      Events->Num = (unsigned) NumRows;
 
       /***** Create list of attendance events *****/
-      if ((Gbl.AttEvents.Lst = (struct AttendanceEvent *) calloc (NumRows,sizeof (struct AttendanceEvent))) == NULL)
+      if ((Events->Lst = (struct Att_Event *) calloc (NumRows,sizeof (struct Att_Event))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
       for (NumAttEvent = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
         {
          /* Get next attendance event code */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.AttEvents.Lst[NumAttEvent].AttCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Events->Lst[NumAttEvent].AttCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong attendance event code.");
         }
      }
    else
-      Gbl.AttEvents.Num = 0;
+      Events->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.AttEvents.LstIsRead = true;
+   Events->LstIsRead = true;
   }
 
 /*****************************************************************************/
 /********* Get attendance event data using its code and check course *********/
 /*****************************************************************************/
 
-static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att)
+static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event)
   {
-   if (Att_GetDataOfAttEventByCod (Att))
+   if (Att_GetDataOfAttEventByCod (Event))
      {
-      if (Att->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      if (Event->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
          Lay_ShowErrorAndExit ("Attendance event does not belong to current course.");
      }
    else	// Attendance event not found
@@ -706,7 +764,7 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att)
 // Returns true if attendance event exists
 // This function can be called from web service, so do not display messages
 
-bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
+bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -714,9 +772,9 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    bool Found = false;
 
    /***** Reset attendance event data *****/
-   Att_ResetAttendanceEvent (Att);
+   Att_ResetAttendanceEvent (Event);
 
-   if (Att->AttCod > 0)
+   if (Event->AttCod > 0)
      {
       /***** Build query *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance event data",
@@ -728,7 +786,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 				"Title"
 				" FROM att_events"
 				" WHERE AttCod=%ld",
-				Att->AttCod);
+				Event->AttCod);
 
       /***** Get data of attendance event from database *****/
       if ((Found = (NumRows != 0))) // Attendance event found...
@@ -737,31 +795,31 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get code of the attendance event (row[0]) */
-	 Att->AttCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Event->AttCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get code of the course (row[1]) */
-	 Att->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	 /* Get whether the attendance event is hidden or not (row[2]) */
-	 Att->Hidden = (row[2][0] == 'Y');
+	 Event->Hidden = (row[2][0] == 'Y');
 
 	 /* Get author of the attendance event (row[3]) */
-	 Att->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+	 Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
 	 /* Get start date (row[4] holds the start UTC time) */
-	 Att->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+	 Event->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
 	 /* Get end   date (row[5] holds the end   UTC time) */
-	 Att->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+	 Event->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
 	 /* Get whether the attendance event is open or closed (row(6)) */
-	 Att->Open = (row[6][0] == '1');
+	 Event->Open = (row[6][0] == '1');
 
 	 /* Get whether the attendance event is visible or not (row[7]) */
-	 Att->CommentTchVisible = (row[7][0] == 'Y');
+	 Event->CommentTchVisible = (row[7][0] == 'Y');
 
 	 /* Get the title of the attendance event (row[8]) */
-	 Str_Copy (Att->Title,row[8],
+	 Str_Copy (Event->Title,row[8],
 	           Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
 	}
 
@@ -776,38 +834,38 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 /********************** Clear all attendance event data **********************/
 /*****************************************************************************/
 
-static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
+static void Att_ResetAttendanceEvent (struct Att_Event *Event)
   {
-   if (Att->AttCod <= 0)	// If > 0 ==> keep values of AttCod and Selected
+   if (Event->AttCod <= 0)	// If > 0 ==> keep values of AttCod and Selected
      {
-      Att->AttCod = -1L;
-      Att->NumStdsTotal = 0;
-      Att->NumStdsFromList = 0;
-      Att->Selected = false;
+      Event->AttCod = -1L;
+      Event->NumStdsTotal = 0;
+      Event->NumStdsFromList = 0;
+      Event->Selected = false;
      }
-   Att->CrsCod = -1L;
-   Att->Hidden = false;
-   Att->UsrCod = -1L;
-   Att->TimeUTC[Att_START_TIME] =
-   Att->TimeUTC[Att_END_TIME  ] = (time_t) 0;
-   Att->Open = false;
-   Att->Title[0] = '\0';
-   Att->CommentTchVisible = false;
+   Event->CrsCod = -1L;
+   Event->Hidden = false;
+   Event->UsrCod = -1L;
+   Event->TimeUTC[Att_START_TIME] =
+   Event->TimeUTC[Att_END_TIME  ] = (time_t) 0;
+   Event->Open = false;
+   Event->Title[0] = '\0';
+   Event->CommentTchVisible = false;
   }
 
 /*****************************************************************************/
 /********************** Free list of attendance events ***********************/
 /*****************************************************************************/
 
-void Att_FreeListAttEvents (void)
+static void Att_FreeListAttEvents (struct Att_Events *Events)
   {
-   if (Gbl.AttEvents.LstIsRead && Gbl.AttEvents.Lst)
+   if (Events->LstIsRead && Events->Lst)
      {
       /***** Free memory used by the list of attendance events *****/
-      free (Gbl.AttEvents.Lst);
-      Gbl.AttEvents.Lst = NULL;
-      Gbl.AttEvents.Num = 0;
-      Gbl.AttEvents.LstIsRead = false;
+      free (Events->Lst);
+      Events->Lst       = NULL;
+      Events->Num       = 0;
+      Events->LstIsRead = false;
      }
   }
 
@@ -851,13 +909,13 @@ static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_M
 /************** Write parameter with code of attendance event ****************/
 /*****************************************************************************/
 
-void Att_PutParamSelectedAttCod (void *Args)
+static void Att_PutParamSelectedAttCod (void *Events)
   {
-   if (Args)
-      Att_PutParamAttCod (Gbl.AttEvents.AttCod);
+   if (Events)
+      Att_PutParamAttCod (((struct Att_Events *) Events)->AttCod);
   }
 
-void Att_PutParamAttCod (long AttCod)
+static void Att_PutParamAttCod (long AttCod)
   {
    Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
   }
@@ -866,7 +924,7 @@ void Att_PutParamAttCod (long AttCod)
 /*************** Get parameter with code of attendance event *****************/
 /*****************************************************************************/
 
-long Att_GetParamAttCod (void)
+static long Att_GetParamAttCod (void)
   {
    /***** Get code of attendance event *****/
    return Par_GetParToLong ("AttCod");
@@ -880,32 +938,36 @@ void Att_AskRemAttEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
-   struct AttendanceEvent Att;
+   struct Att_Events Events;
+   struct Att_Event Event;
    Grp_WhichGroups_t WhichGroups;
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get parameters *****/
-   Att_GetParamAttOrder ();
+   Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get data of the attendance event from database *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Button of confirmation of removing *****/
    Frm_StartForm (ActRemAtt);
-   Att_PutParamAttCod (Att.AttCod);
-   Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
+   Att_PutParamAttCod (Event.AttCod);
+   Dat_PutHiddenParamOrder (Events.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
    /* Ask for confirmation of removing */
    Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
-                  Att.Title);
+                  Event.Title);
 
    Btn_PutRemoveButton (Txt_Remove_event);
    Frm_EndForm ();
@@ -921,22 +983,22 @@ void Att_AskRemAttEvent (void)
 void Att_GetAndRemAttEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Remove the attendance event from database *****/
-   Att_RemoveAttEventFromDB (Att.AttCod);
+   Att_RemoveAttEventFromDB (Event.AttCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
-	          Att.Title);
+	          Event.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -964,20 +1026,20 @@ void Att_RemoveAttEventFromDB (long AttCod)
 
 void Att_HideAttEvent (void)
   {
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get data of the attendance event from database *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Hide attendance event *****/
    DB_QueryUPDATE ("can not hide attendance event",
 		   "UPDATE att_events SET Hidden='Y'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Event.AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -989,20 +1051,20 @@ void Att_HideAttEvent (void)
 
 void Att_ShowAttEvent (void)
   {
-   struct AttendanceEvent Att;
+   struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get data of the attendance event from database *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Hide attendance event *****/
    DB_QueryUPDATE ("can not show attendance event",
 		   "UPDATE att_events SET Hidden='N'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Event.AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1041,7 +1103,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
    extern const char *Txt_Save_changes;
-   struct AttendanceEvent Att;
+   struct Att_Events Events;
+   struct Att_Event Event;
    bool ItsANewAttEvent;
    Grp_WhichGroups_t WhichGroups;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -1052,35 +1115,35 @@ void Att_RequestCreatOrEditAttEvent (void)
      };
 
    /***** Get parameters *****/
-   Att_GetParamAttOrder ();
+   Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   Att.AttCod = Att_GetParamAttCod ();
-   ItsANewAttEvent = (Att.AttCod <= 0);
+   Event.AttCod = Att_GetParamAttCod ();
+   ItsANewAttEvent = (Event.AttCod <= 0);
 
    /***** Get from the database the data of the attendance event *****/
    if (ItsANewAttEvent)
      {
       /* Reset attendance event data */
-      Att.AttCod = -1L;
-      Att_ResetAttendanceEvent (&Att);
+      Event.AttCod = -1L;
+      Att_ResetAttendanceEvent (&Event);
 
       /* Initialize some fields */
-      Att.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
-      Att.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Att.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Att.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      Att.Open = true;
+      Event.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
+      Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Event.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Event.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Event.Open = true;
      }
    else
      {
       /* Get data of the attendance event from database */
-      Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
+      Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
       /* Get text of the attendance event from database */
-      Att_GetAttEventDescriptionFromDB (Att.AttCod,Description);
+      Att_GetAttEventDescriptionFromDB (Event.AttCod,Description);
      }
 
    /***** Begin form *****/
@@ -1089,12 +1152,12 @@ void Att_RequestCreatOrEditAttEvent (void)
    else
      {
       Frm_StartForm (ActChgAtt);
-      Att_PutParamAttCod (Att.AttCod);
+      Att_PutParamAttCod (Event.AttCod);
      }
-   Dat_PutHiddenParamOrder (Gbl.AttEvents.SelectedOrder);
+   Dat_PutHiddenParamOrder (Events.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
    /***** Begin box and table *****/
    if (ItsANewAttEvent)
@@ -1103,8 +1166,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 			 Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,
-                         Att.Title[0] ? Att.Title :
-                	                Txt_Edit_event,
+                         Event.Title[0] ? Event.Title :
+                	                  Txt_Edit_event,
                 	 NULL,NULL,
 			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
 
@@ -1116,7 +1179,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,false,
+   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,false,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1124,7 +1187,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_End ();
 
    /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC,
+   Dat_PutFormStartEndClientLocalDateTimes (Event.TimeUTC,
 					    Dat_FORM_SECONDS_ON,
 					    SetHMS);
 
@@ -1137,9 +1200,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,"id=\"ComTchVisible\" name=\"ComTchVisible\"");
-   HTM_OPTION (HTM_Type_STRING,"N",!Att.CommentTchVisible,false,
+   HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
 	       "%s",Txt_Hidden_MALE_PLURAL);
-   HTM_OPTION (HTM_Type_STRING,"Y",Att.CommentTchVisible,false,
+   HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,
 	       "%s",Txt_Visible_MALE_PLURAL);
    HTM_SELECT_End ();
    HTM_TD_End ();
@@ -1164,7 +1227,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_End ();
 
    /***** Groups *****/
-   Att_ShowLstGrpsToEditAttEvent (Att.AttCod);
+   Att_ShowLstGrpsToEditAttEvent (Event.AttCod);
 
    /***** End table, send button and end box *****/
    if (ItsANewAttEvent)
@@ -1176,8 +1239,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    Frm_EndForm ();
 
    /***** Show current attendance events *****/
-   Att_GetListAttEvents (Att_NEWEST_FIRST);
-   Att_ShowAllAttEvents ();
+   Att_GetListAttEvents (&Events,Att_NEWEST_FIRST);
+   Att_ShowAllAttEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -1251,8 +1314,8 @@ void Att_RecFormAttEvent (void)
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct AttendanceEvent OldAtt;
-   struct AttendanceEvent ReceivedAtt;
+   struct Att_Event OldAtt;
+   struct Att_Event ReceivedAtt;
    bool ItsANewAttEvent;
    bool ReceivedAttEventIsCorrect = true;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -1342,10 +1405,10 @@ void Att_RecFormAttEvent (void)
 /********************* Create a new attendance event *************************/
 /*****************************************************************************/
 
-void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description)
+void Att_CreateAttEvent (struct Att_Event *Event,const char *Description)
   {
    /***** Create a new attendance event *****/
-   Att->AttCod =
+   Event->AttCod =
    DB_QueryINSERTandReturnCode ("can not create new attendance event",
 				"INSERT INTO att_events"
 				" (CrsCod,Hidden,UsrCod,"
@@ -1354,26 +1417,26 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description)
 				" (%ld,'%c',%ld,"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
-				Att->Hidden ? 'Y' :
+				Event->Hidden ? 'Y' :
 					      'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Att->TimeUTC[Att_START_TIME],
-				Att->TimeUTC[Att_END_TIME  ],
-				Att->CommentTchVisible ? 'Y' :
+				Event->TimeUTC[Att_START_TIME],
+				Event->TimeUTC[Att_END_TIME  ],
+				Event->CommentTchVisible ? 'Y' :
 							 'N',
-				Att->Title,
+				Event->Title,
 				Description);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Att_CreateGrps (Att->AttCod);
+      Att_CreateGrps (Event->AttCod);
   }
 
 /*****************************************************************************/
 /****************** Update an existing attendance event **********************/
 /*****************************************************************************/
 
-void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Description)
+void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description)
   {
    /***** Update the data of the attendance event *****/
    DB_QueryUPDATE ("can not update attendance event",
@@ -1383,23 +1446,23 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Description)
 		   "EndTime=FROM_UNIXTIME(%ld),"
 		   "CommentTchVisible='%c',Title='%s',Txt='%s'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Att->Hidden ? 'Y' :
+                   Event->Hidden ? 'Y' :
         	                 'N',
-                   Att->TimeUTC[Att_START_TIME],
-                   Att->TimeUTC[Att_END_TIME  ],
-                   Att->CommentTchVisible ? 'Y' :
+                   Event->TimeUTC[Att_START_TIME],
+                   Event->TimeUTC[Att_END_TIME  ],
+                   Event->CommentTchVisible ? 'Y' :
         	                            'N',
-                   Att->Title,
+                   Event->Title,
                    Description,
-                   Att->AttCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Event->AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
-   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (Att->AttCod);
+   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (Event->AttCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Att_CreateGrps (Att->AttCod);
+      Att_CreateGrps (Event->AttCod);
   }
 
 /*****************************************************************************/
@@ -1496,7 +1559,7 @@ static void Att_CreateGrps (long AttCod)
 /****** Get and write the names of the groups of an attendance event *********/
 /*****************************************************************************/
 
-static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEvent *Att)
+static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Event)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -1519,10 +1582,10 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 					" AND att_grp.GrpCod=crs_grp.GrpCod"
 					" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 					" ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-					Att->AttCod);
+					Event->AttCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "ASG_GRP_LIGHT" :
+   HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
    HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
                                     Txt_Groups);
@@ -1819,27 +1882,37 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
 
 void Att_SeeOneAttEvent (void)
   {
-   extern const char *Hlp_USERS_Attendance;
-   extern const char *Txt_Event;
-   struct AttendanceEvent Att;
+   struct Att_Events Events;
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if (Gbl.AttEvents.AttCod <= 0)
-      if ((Gbl.AttEvents.AttCod = Att_GetParamAttCod ()) == -1L)
-         Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Events.AttCod = Att_GetParamAttCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+
+   /***** Show event *****/
+   Att_ShowEvent (&Events);
+  }
+
+static void Att_ShowEvent (struct Att_Events *Events)
+  {
+   extern const char *Hlp_USERS_Attendance;
+   extern const char *Txt_Event;
+   struct Att_Event Event;
 
    /***** Get parameters *****/
-   Att_GetParamAttOrder ();
+   Events->SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events->CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Event,
                       NULL,NULL,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
 
-   Att.AttCod = Gbl.AttEvents.AttCod;
-   Att_ShowOneAttEvent (&Att,true);
+   Event.AttCod = Events->AttCod;
+   Att_ShowOneAttEvent (Events,&Event,true);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1847,13 +1920,13 @@ void Att_SeeOneAttEvent (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 Att_ListAttOnlyMeAsStudent (&Att);
+	 Att_ListAttOnlyMeAsStudent (&Event);
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Show list of students *****/
-         Att_ListAttStudents (&Att);
+         Att_ListAttStudents (Events,&Event);
          break;
       default:
          break;
@@ -1863,9 +1936,9 @@ void Att_SeeOneAttEvent (void)
 /*****************************************************************************/
 /*********************** List me as student in one event *********************/
 /*****************************************************************************/
-// Att must be filled before calling this function
+// Event must be filled before calling this function
 
-static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
+static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Attendance;
@@ -1878,10 +1951,10 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** Begin form *****/
-   if (Att->Open)
+   if (Event->Open)
      {
       Frm_StartForm (ActRecAttMe);
-      Att_PutParamAttCod (Att->AttCod);
+      Att_PutParamAttCod (Event->AttCod);
      }
 
    /***** List students (only me) *****/
@@ -1906,13 +1979,13 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    HTM_TR_End ();
 
    /* List of students (only me) */
-   Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
+   Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event);
 
    /* End table */
    HTM_TABLE_End ();
 
    /* Send button */
-   if (Att->Open)
+   if (Event->Open)
      {
       Btn_PutConfirmButton (Txt_Save_changes);
       Frm_EndForm ();
@@ -1925,9 +1998,10 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 /*****************************************************************************/
 /*************** List students who attended to one event *********************/
 /*****************************************************************************/
-// Att must be filled before calling this function
+// Event must be filled before calling this function
 
-static void Att_ListAttStudents (struct AttendanceEvent *Att)
+static void Att_ListAttStudents (struct Att_Events *Events,
+	                         struct Att_Event *Event)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Attendance;
@@ -1950,7 +2024,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,&Gbl,
+   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Events,
                                       Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -1966,7 +2040,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /* Begin form */
       Frm_StartForm (ActRecAttStd);
-      Att_PutParamAttCod (Att->AttCod);
+      Att_PutParamAttCod (Event->AttCod);
       Grp_PutParamsCodGrps ();
 
       /* Begin table */
@@ -1995,7 +2069,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
-         Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,Att);
+         Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,Event);
         }
 
       /* End table */
@@ -2033,7 +2107,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
-                                          struct AttendanceEvent *Att)
+                                          struct Att_Event *Event)
   {
    bool Present;
    char PhotoURL[PATH_MAX + 1];
@@ -2054,7 +2128,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (!ItsMe)
 	    Lay_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = false;
-	 ICanEditStdComment = Att->Open;	// Attendance event is open
+	 ICanEditStdComment = Event->Open;	// Attendance event is open
 	 ICanEditTchComment = false;
 	 break;
       case Rol_TCH:
@@ -2075,7 +2149,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      }
 
    /***** Check if this student is already present in the current event *****/
-   Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
+   Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
 
    /***** Icon to show if the user is already present *****/
    HTM_TR_Begin (NULL);
@@ -2159,7 +2233,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_Txt (CommentTch);
       HTM_TEXTAREA_End ();
      }
-   else	if (Att->CommentTchVisible)	// Show without form
+   else	if (Event->CommentTchVisible)	// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         CommentTch,Cns_MAX_BYTES_TEXT,false);
@@ -2175,7 +2249,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 /**************** Put link to view one attendance event **********************/
 /*****************************************************************************/
 
-static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
+static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Title,const char *Txt,
 				 const char *Class)
   {
@@ -2252,20 +2326,24 @@ static void Att_PutParamsCodGrps (long AttCod)
 void Att_RegisterMeAsStdInAttEvent (void)
   {
    extern const char *Txt_Your_comment_has_been_updated;
-   struct AttendanceEvent Att;
+   struct Att_Events Events;
+   struct Att_Event Event;
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);	// This checks that event belong to current course
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
 
-   if (Att.Open)
+   /***** Get attendance event code *****/
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
+
+   if (Event.Open)
      {
       /***** Get comments for this student *****/
-      Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
       Par_GetParToHTML (Str_BuildStringStr ("CommentStd%s",
 					    Gbl.Usrs.Me.UsrDat.EncryptedUsrCod),
@@ -2276,19 +2354,19 @@ void Att_RegisterMeAsStdInAttEvent (void)
 	  CommentStd[0] ||
 	  CommentTch[0])
 	 /***** Register student *****/
-	 Att_RegUsrInAttEventChangingComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	 Att_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                       Present,CommentStd,CommentTch);
       else
 	 /***** Remove student *****/
-	 Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Att_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Write final message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
      }
 
    /***** Show the attendance event again *****/
-   Gbl.AttEvents.AttCod = Att.AttCod;
-   Att_SeeOneAttEvent ();
+   Events.AttCod = Event.AttCod;
+   Att_ShowEvent (&Events);
   }
 
 /*****************************************************************************/
@@ -2308,7 +2386,8 @@ void Att_RegisterStudentsInAttEvent (void)
   {
    extern const char *Txt_Presents;
    extern const char *Txt_Absents;
-   struct AttendanceEvent Att;
+   struct Att_Events Events;
+   struct Att_Event Event;
    unsigned NumUsr;
    const char *Ptr;
    bool Present;
@@ -2318,10 +2397,13 @@ void Att_RegisterStudentsInAttEvent (void)
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get attendance event code *****/
-   if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
+   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);	// This checks that event belong to current course
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
 
    /***** Get groups selected *****/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2379,7 +2461,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	   NumUsr++)
 	{
 	 /***** Get comments for this student *****/
-	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
+	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
 	 Par_GetParToHTML (Str_BuildStringStr ("CommentTch%s",
 					       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EncryptedUsrCod),
 			   CommentTch,Cns_MAX_BYTES_TEXT);
@@ -2391,11 +2473,11 @@ void Att_RegisterStudentsInAttEvent (void)
 	     CommentStd[0] ||
 	     CommentTch[0])
 	    /***** Register student *****/
-	    Att_RegUsrInAttEventChangingComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
+	    Att_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
 					          Present,CommentStd,CommentTch);
 	 else
 	    /***** Remove student *****/
-	    Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod);
+	    Att_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod);
 
 	 if (Present)
             NumStdsPresent++;
@@ -2417,8 +2499,8 @@ void Att_RegisterStudentsInAttEvent (void)
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Show the attendance event again *****/
-   Gbl.AttEvents.AttCod = Att.AttCod;
-   Att_SeeOneAttEvent ();
+   Events.AttCod = Event.AttCod;
+   Att_ShowEvent (&Events);
 
    /***** Free memory for list of groups selected *****/
    Grp_FreeListCodSelectedGrps ();
@@ -2428,15 +2510,15 @@ void Att_RegisterStudentsInAttEvent (void)
 /******* Get number of students from a list who attended to an event *********/
 /*****************************************************************************/
 
-static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
+static void Att_GetNumStdsTotalWhoAreInAttEvent (struct Att_Event *Event)
   {
    /***** Count number of students registered in an event in database *****/
-   Att->NumStdsTotal =
+   Event->NumStdsTotal =
    (unsigned) DB_QueryCOUNT ("can not get number of students"
 			     " who are registered in an event",
 			     "SELECT COUNT(*) FROM att_usr"
 			     " WHERE AttCod=%ld AND Present='Y'",
-			     Att->AttCod);
+			     Event->AttCod);
   }
 
 /*****************************************************************************/
@@ -2651,14 +2733,21 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 /********** Request listing attendance of users to several events ************/
 /*****************************************************************************/
 
-void Att_ReqListUsrsAttendanceCrs (void)
+void Att_ReqListUsrsAttendanceCrs (void *Args)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
    extern const char *Txt_View_attendance;
+   struct Att_Events Events;
+
+   if (!Args)
+      return;
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
 
    /***** Get list of attendance events *****/
-   Att_GetListAttEvents (Att_OLDEST_FIRST);
+   Att_GetListAttEvents (&Events,Att_OLDEST_FIRST);
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
@@ -2670,7 +2759,7 @@ void Att_ReqListUsrsAttendanceCrs (void)
 				     false);	// Do not put form with date range
 
    /***** Free list of attendance events *****/
-   Att_FreeListAttEvents ();
+   Att_FreeListAttEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -2679,77 +2768,87 @@ void Att_ReqListUsrsAttendanceCrs (void)
 
 void Att_ListMyAttendanceCrs (void)
   {
-   Att_TypeOfView = Att_VIEW_ONLY_ME;
-   Att_ListOrPrintMyAttendanceCrs ();
+   Att_ListOrPrintMyAttendanceCrs (Att_VIEW_ONLY_ME);
   }
 
 void Att_PrintMyAttendanceCrs (void)
   {
-   Att_TypeOfView = Att_PRNT_ONLY_ME;
-   Att_ListOrPrintMyAttendanceCrs ();
+   Att_ListOrPrintMyAttendanceCrs (Att_PRNT_ONLY_ME);
   }
 
-static void Att_ListOrPrintMyAttendanceCrs (void)
+static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
+   struct Att_Events Events;
    unsigned NumAttEvent;
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get list of attendance events *****/
-   Att_GetListAttEvents (Att_OLDEST_FIRST);
+   Att_GetListAttEvents (&Events,Att_OLDEST_FIRST);
 
    /***** Get boolean parameter that indicates if details must be shown *****/
-   Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
+   Events.ShowDetails = Par_GetParToBool ("ShowDetails");
 
    /***** Get list of groups selected ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get number of students in each event *****/
    for (NumAttEvent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent < Events.Num;
 	NumAttEvent++)
       /* Get number of students in this event */
-      Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList =
-      Att_GetNumUsrsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+      Events.Lst[NumAttEvent].NumStdsFromList =
+      Att_GetNumUsrsFromAListWhoAreInAttEvent (Events.Lst[NumAttEvent].AttCod,
 					       &Gbl.Usrs.Me.UsrDat.UsrCod,1);
 
    /***** Get list of attendance events selected *****/
-   Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
+   Att_GetListSelectedAttCods (&Events);
 
    /***** Begin box *****/
-   if (Att_TypeOfView == Att_VIEW_ONLY_ME)
-      Box_BoxBegin (NULL,Txt_Attendance,
-		    Att_PutIconsMyAttList,&Gbl,
-		    Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Attendance,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+   switch (TypeOfView)
+     {
+      case Att_VIEW_ONLY_ME:
+	 Box_BoxBegin (NULL,Txt_Attendance,
+		       Att_PutIconsMyAttList,&Gbl,
+		       Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
+	 break;
+      case Att_PRNT_ONLY_ME:
+	 Box_BoxBegin (NULL,Txt_Attendance,
+		       NULL,NULL,
+		       NULL,Box_NOT_CLOSABLE);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong type of view.");
+	 break;
+     }
 
    /***** List events to select *****/
-   Att_ListEventsToSelect ();
+   Att_ListEventsToSelect (&Events,TypeOfView);
 
    /***** Get my preference about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** Show table with attendances for every student in list *****/
-   Att_ListUsrsAttendanceTable (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+   Att_ListUsrsAttendanceTable (&Events,TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show details or put button to show details *****/
-   if (Gbl.AttEvents.ShowDetails)
-      Att_ListStdsWithAttEventsDetails (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (Events.ShowDetails)
+      Att_ListStdsWithAttEventsDetails (&Events,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free memory for list of attendance events selected *****/
-   free (Gbl.AttEvents.StrAttCodsSelected);
+   free (Events.StrAttCodsSelected);
 
    /***** Free list of groups selected *****/
    Grp_FreeListCodSelectedGrps ();
 
    /***** Free list of attendance events *****/
-   Att_FreeListAttEvents ();
+   Att_FreeListAttEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -2758,34 +2857,36 @@ static void Att_ListOrPrintMyAttendanceCrs (void)
 
 void Att_ListUsrsAttendanceCrs (void)
   {
-   Att_TypeOfView = Att_VIEW_SEL_USR;
-   Att_GetUsrsAndListOrPrintAttendanceCrs ();
+   Att_GetUsrsAndListOrPrintAttendanceCrs (Att_VIEW_SEL_USR);
   }
 
 void Att_PrintUsrsAttendanceCrs (void)
   {
-   Att_TypeOfView = Att_PRNT_SEL_USR;
-   Att_GetUsrsAndListOrPrintAttendanceCrs ();
+   Att_GetUsrsAndListOrPrintAttendanceCrs (Att_PRNT_SEL_USR);
   }
 
-static void Att_GetUsrsAndListOrPrintAttendanceCrs (void)
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Att_ListOrPrintUsrsAttendanceCrs,
-                                  Att_ReqListUsrsAttendanceCrs);
+				  Att_ListOrPrintUsrsAttendanceCrs,&TypeOfView,
+                                  Att_ReqListUsrsAttendanceCrs,&Gbl);
   }
 
-static void Att_ListOrPrintUsrsAttendanceCrs (void)
+static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
+   struct Att_Events Events;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get parameters *****/
    /* Get boolean parameter that indicates if details must be shown */
-   Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
+   Events.ShowDetails = Par_GetParToBool ("ShowDetails");
 
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2799,51 +2900,58 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void)
       Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
 
       /***** Get list of attendance events *****/
-      Att_GetListAttEvents (Att_OLDEST_FIRST);
+      Att_GetListAttEvents (&Events,Att_OLDEST_FIRST);
 
       /***** Get number of students in each event *****/
       for (NumAttEvent = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent < Events.Num;
 	   NumAttEvent++)
 	 /* Get number of students in this event */
-	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList =
-	 Att_GetNumUsrsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+	 Events.Lst[NumAttEvent].NumStdsFromList =
+	 Att_GetNumUsrsFromAListWhoAreInAttEvent (Events.Lst[NumAttEvent].AttCod,
 						  LstSelectedUsrCods,NumUsrsInList);
 
       /***** Get list of attendance events selected *****/
-      Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
+      Att_GetListSelectedAttCods (&Events);
 
       /***** Begin box *****/
-      if (Att_TypeOfView == Att_VIEW_SEL_USR)
-         Box_BoxBegin (NULL,Txt_Attendance_list,
-		       Att_PutIconsStdsAttList,&Gbl,
-		       Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
-      else
-	 Box_BoxBegin (NULL,Txt_Attendance_list,
-		       NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
+      switch (*(Att_TypeOfView_t *) TypeOfView)
+        {
+	 case Att_VIEW_SEL_USR:
+	    Box_BoxBegin (NULL,Txt_Attendance_list,
+			  Att_PutIconsStdsAttList,&Events,
+			  Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
+	    break;
+	 case Att_PRNT_SEL_USR:
+	    Box_BoxBegin (NULL,Txt_Attendance_list,
+			  NULL,NULL,
+			  NULL,Box_NOT_CLOSABLE);
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong type of view.");
+        }
 
       /***** List events to select *****/
-      Att_ListEventsToSelect ();
+      Att_ListEventsToSelect (&Events,*(Att_TypeOfView_t *) TypeOfView);
 
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
       /***** Show table with attendances for every student in list *****/
-      Att_ListUsrsAttendanceTable (NumUsrsInList,LstSelectedUsrCods);
+      Att_ListUsrsAttendanceTable (&Events,*(Att_TypeOfView_t *) TypeOfView,NumUsrsInList,LstSelectedUsrCods);
 
       /***** Show details or put button to show details *****/
-      if (Gbl.AttEvents.ShowDetails)
-	 Att_ListStdsWithAttEventsDetails (NumUsrsInList,LstSelectedUsrCods);
+      if (Events.ShowDetails)
+	 Att_ListStdsWithAttEventsDetails (&Events,NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box *****/
       Box_BoxEnd ();
 
       /***** Free memory for list of attendance events selected *****/
-      free (Gbl.AttEvents.StrAttCodsSelected);
+      free (Events.StrAttCodsSelected);
 
       /***** Free list of attendance events *****/
-      Att_FreeListAttEvents ();
+      Att_FreeListAttEvents (&Events);
 
       /***** Free list of user codes *****/
       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
@@ -2857,7 +2965,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void)
 /****************** Get list of attendance events selected *******************/
 /*****************************************************************************/
 
-static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
+static void Att_GetListSelectedAttCods (struct Att_Events *Events)
   {
    size_t MaxSizeListAttCodsSelected;
    unsigned NumAttEvent;
@@ -2872,24 +2980,24 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListAttCodsSelected = (size_t) Gbl.AttEvents.Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
+   MaxSizeListAttCodsSelected = (size_t) Events->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   if ((Events->StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of attendance events selected *****/
-   Par_GetParMultiToText ("AttCods",*StrAttCodsSelected,MaxSizeListAttCodsSelected);
+   Par_GetParMultiToText ("AttCods",Events->StrAttCodsSelected,MaxSizeListAttCodsSelected);
 
    /***** Set which attendance events will be shown as selected (checkboxes on) *****/
-   if ((*StrAttCodsSelected)[0])	// There are events selected
+   if (Events->StrAttCodsSelected[0])	// There are events selected
      {
       /* Reset selection */
       for (NumAttEvent = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
+	 Events->Lst[NumAttEvent].Selected = false;
 
       /* Set some events as selected */
-      for (Ptr = *StrAttCodsSelected;
+      for (Ptr = Events->StrAttCodsSelected;
 	   *Ptr;
 	  )
 	{
@@ -2899,11 +3007,11 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 	 /* Set each event in *StrAttCodsSelected as selected */
 	 for (NumAttEvent = 0;
-	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent < Events->Num;
 	      NumAttEvent++)
-	    if (Gbl.AttEvents.Lst[NumAttEvent].AttCod == AttCod)
+	    if (Events->Lst[NumAttEvent].AttCod == AttCod)
 	      {
-	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	       Events->Lst[NumAttEvent].Selected = true;
 	       break;
 	      }
 	}
@@ -2915,20 +3023,20 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
           Gbl.Usrs.ClassPhoto.AllGroups)	// All groups selected
 	 /* Set all events as selected */
 	 for (NumAttEvent = 0;
-	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent < Events->Num;
 	      NumAttEvent++)
-	    Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	    Events->Lst[NumAttEvent].Selected = true;
       else					// Course has groups and not all of them are selected
 	 for (NumAttEvent = 0;
-	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent < Events->Num;
 	      NumAttEvent++)
 	   {
 	    /* Reset selection */
-	    Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
+	    Events->Lst[NumAttEvent].Selected = false;
 
 	    /* Set this event as selected? */
-	    if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)	// Some students attended to this event
-	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	    if (Events->Lst[NumAttEvent].NumStdsFromList)	// Some students attended to this event
+	       Events->Lst[NumAttEvent].Selected = true;
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
@@ -2936,12 +3044,12 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 									  " of an attendance event",
 							       "SELECT GrpCod FROM att_grp"
 							       " WHERE att_grp.AttCod=%ld",
-							       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
+							       Events->Lst[NumAttEvent].AttCod);
 	       if (NumGrpsInThisEvent)	// This event is associated to groups
 		  /* Get groups associated to this event */
 		  for (NumGrpInThisEvent = 0;
 		       NumGrpInThisEvent < NumGrpsInThisEvent &&
-		       !Gbl.AttEvents.Lst[NumAttEvent].Selected;
+		       !Events->Lst[NumAttEvent].Selected;
 		       NumGrpInThisEvent++)
 		    {
 		     /* Get next group associated to this event */
@@ -2950,13 +3058,13 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 			/* Check if this group is selected */
 			for (NumGrpSel = 0;
 			     NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps &&
-			     !Gbl.AttEvents.Lst[NumAttEvent].Selected;
+			     !Events->Lst[NumAttEvent].Selected;
 			     NumGrpSel++)
 			   if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
-			      Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+			      Events->Lst[NumAttEvent].Selected = true;
 		    }
 	       else			// This event is not associated to groups
-		  Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+		  Events->Lst[NumAttEvent].Selected = true;
 
 	       /***** Free structure that stores the query result *****/
 	       DB_FreeMySQLResult (&mysql_res);
@@ -2969,13 +3077,13 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 /******* Put contextual icons when listing my assistance (as student) ********/
 /*****************************************************************************/
 
-static void Att_PutIconsMyAttList (void *Args)
+static void Att_PutIconsMyAttList (void *Events)
   {
-   if (Args)
+   if (Events)
      {
       /***** Put icon to print my assistance (as student) to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstMyAtt,
-				    Att_PutFormToPrintMyListParams,&Gbl);
+				    Att_PutFormToPrintMyListParams,Events);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
@@ -2983,15 +3091,15 @@ static void Att_PutIconsMyAttList (void *Args)
      }
   }
 
-static void Att_PutFormToPrintMyListParams (void *Args)
+static void Att_PutFormToPrintMyListParams (void *Events)
   {
-   if (Args)
+   if (Events)
      {
-      if (Gbl.AttEvents.ShowDetails)
+      if (((struct Att_Events *) Events)->ShowDetails)
 	 Par_PutHiddenParamChar ("ShowDetails",'Y');
-      if (Gbl.AttEvents.StrAttCodsSelected)
-	 if (Gbl.AttEvents.StrAttCodsSelected[0])
-	    Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
+      if (((struct Att_Events *) Events)->StrAttCodsSelected)
+	 if (((struct Att_Events *) Events)->StrAttCodsSelected[0])
+	    Par_PutHiddenParamString (NULL,"AttCods",((struct Att_Events *) Events)->StrAttCodsSelected);
      }
   }
 
@@ -2999,13 +3107,13 @@ static void Att_PutFormToPrintMyListParams (void *Args)
 /******** Put icon to print assistance of students to several events *********/
 /*****************************************************************************/
 
-static void Att_PutIconsStdsAttList (void *Args)
+static void Att_PutIconsStdsAttList (void *Events)
   {
-   if (Args)
+   if (Events)
      {
       /***** Put icon to print assistance of students to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstUsrAtt,
-				    Att_PutParamsToPrintStdsList,&Gbl);
+				    Att_PutParamsToPrintStdsList,Events);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
@@ -3013,17 +3121,17 @@ static void Att_PutIconsStdsAttList (void *Args)
      }
   }
 
-static void Att_PutParamsToPrintStdsList (void *Args)
+static void Att_PutParamsToPrintStdsList (void *Events)
   {
-   if (Args)
+   if (Events)
      {
-      if (Gbl.AttEvents.ShowDetails)
+      if (((struct Att_Events *) Events)->ShowDetails)
 	 Par_PutHiddenParamChar ("ShowDetails",'Y');
       Grp_PutParamsCodGrps ();
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      if (Gbl.AttEvents.StrAttCodsSelected)
-	 if (Gbl.AttEvents.StrAttCodsSelected[0])
-	    Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
+      if (((struct Att_Events *) Events)->StrAttCodsSelected)
+	 if (((struct Att_Events *) Events)->StrAttCodsSelected[0])
+	    Par_PutHiddenParamString (NULL,"AttCods",((struct Att_Events *) Events)->StrAttCodsSelected);
      }
   }
 
@@ -3031,7 +3139,7 @@ static void Att_PutParamsToPrintStdsList (void *Args)
 /**** Put a link (form) to list assistance of students to several events *****/
 /*****************************************************************************/
 
-static void Att_PutButtonToShowDetails (void)
+static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
   {
    extern const char *Txt_Show_more_details;
 
@@ -3040,9 +3148,9 @@ static void Att_PutButtonToShowDetails (void)
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   if (Gbl.AttEvents.StrAttCodsSelected)
-      if (Gbl.AttEvents.StrAttCodsSelected[0])
-	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
+   if (Events->StrAttCodsSelected)
+      if (Events->StrAttCodsSelected[0])
+	 Par_PutHiddenParamString (NULL,"AttCods",Events->StrAttCodsSelected);
    Btn_PutConfirmButton (Txt_Show_more_details);
    Frm_EndForm ();
   }
@@ -3051,7 +3159,8 @@ static void Att_PutButtonToShowDetails (void)
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
 
-static void Att_ListEventsToSelect (void)
+static void Att_ListEventsToSelect (const struct Att_Events *Events,
+                                    Att_TypeOfView_t TypeOfView)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Events;
@@ -3061,11 +3170,11 @@ static void Att_ListEventsToSelect (void)
    unsigned UniqueId;
    char *Id;
    unsigned NumAttEvent;
-   bool NormalView = (Att_TypeOfView == Att_VIEW_ONLY_ME ||
-                      Att_TypeOfView == Att_VIEW_SEL_USR);
+   bool NormalView = (TypeOfView == Att_VIEW_ONLY_ME ||
+                      TypeOfView == Att_VIEW_SEL_USR);
 
    /***** Begin box *****/
-   switch (Att_TypeOfView)
+   switch (TypeOfView)
      {
       case Att_VIEW_ONLY_ME:
 	 Box_BoxBegin (NULL,Txt_Events,
@@ -3107,25 +3216,26 @@ static void Att_ListEventsToSelect (void)
 
    /***** List the events *****/
    for (NumAttEvent = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent < Events->Num;
 	NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       /* Get data of the attendance event from database */
-      Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
-      Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
+      Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
+      Att_GetNumStdsTotalWhoAreInAttEvent (&Events->Lst[NumAttEvent]);
 
       /* Write a row for this event */
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "id=\"Att%u\" value=\"%ld\"%s",
-			  NumAttEvent,Gbl.AttEvents.Lst[NumAttEvent].AttCod,
-			  Gbl.AttEvents.Lst[NumAttEvent].Selected ? " checked=\"checked\"" : "");
+			  "id=\"Event%u\" value=\"%ld\"%s",
+			  NumAttEvent,Events->Lst[NumAttEvent].AttCod,
+			  Events->Lst[NumAttEvent].Selected ? " checked=\"checked\"" :
+				                              "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
+      HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
       HTM_TxtF ("%u:",NumAttEvent + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3133,22 +3243,22 @@ static void Att_ListEventsToSelect (void)
       if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
+      HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       HTM_SPAN_End ();
       HTM_LABEL_End ();
-      Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+      Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
       free (Id);
 
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Txt (Gbl.AttEvents.Lst[NumAttEvent].Title);
+      HTM_Txt (Events->Lst[NumAttEvent].Title);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Unsigned (Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
+      HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsTotal);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3207,7 +3317,9 @@ static void Att_PutIconToEditAttEvents (void *Args)
 /************ Show table with attendances for every user in list *************/
 /*****************************************************************************/
 
-static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
+static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
+                                         Att_TypeOfView_t TypeOfView,
+	                                 unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods)
   {
    extern const char *Txt_Number_of_users;
@@ -3215,9 +3327,9 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
    unsigned NumUsr;
    unsigned NumAttEvent;
    unsigned Total;
-   bool PutButtonShowDetails = (Att_TypeOfView == Att_VIEW_ONLY_ME ||
-	                        Att_TypeOfView == Att_VIEW_SEL_USR) &&
-	                        !Gbl.AttEvents.ShowDetails;
+   bool PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
+	                        TypeOfView == Att_VIEW_SEL_USR) &&
+	                        !Events->ShowDetails;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -3229,7 +3341,7 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
    HTM_TABLE_BeginCenterPadding (2);
 
    /***** Heading row *****/
-   Att_WriteTableHeadSeveralAttEvents ();
+   Att_WriteTableHeadSeveralAttEvents (Events);
 
    /***** List the users *****/
    for (NumUsr = 0, Gbl.RowEvenOdd = 0;
@@ -3241,7 +3353,7 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
 	 if (Usr_CheckIfICanViewAtt (&UsrDat))
 	   {
 	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-	    Att_WriteRowUsrSeveralAttEvents (NumUsr,&UsrDat);
+	    Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
 	   }
      }
 
@@ -3257,15 +3369,15 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
       HTM_TD_End ();
 
       for (NumAttEvent = 0, Total = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
+	 if (Events->Lst[NumAttEvent].Selected)
 	   {
 	    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
-	    HTM_Unsigned (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
+	    HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
 	    HTM_TD_End ();
 
-	    Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
+	    Total += Events->Lst[NumAttEvent].NumStdsFromList;
 	   }
 
       HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
@@ -3280,7 +3392,7 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
 
    /***** Button to show more details *****/
    if (PutButtonShowDetails)
-      Att_PutButtonToShowDetails ();
+      Att_PutButtonToShowDetails (Events);
 
    /***** End section with attendance table *****/
    HTM_SECTION_End ();
@@ -3293,7 +3405,7 @@ static void Att_ListUsrsAttendanceTable (unsigned NumUsrsInList,
 /* Write table heading for listing of students in several attendance events **/
 /*****************************************************************************/
 
-static void Att_WriteTableHeadSeveralAttEvents (void)
+static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
@@ -3307,20 +3419,20 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
            "LM",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
 
    for (NumAttEvent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent < Events->Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
+      if (Events->Lst[NumAttEvent].Selected)
 	{
 	 /***** Get data of this attendance event *****/
-	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
+	 Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
 
 	 /***** Put link to this attendance event *****/
 	 HTM_TH_Begin (1,1,"CM");
 	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),
 		   "%u",
 		   NumAttEvent + 1);
-	 Att_PutLinkAttEvent (&Gbl.AttEvents.Lst[NumAttEvent],
-			      Gbl.AttEvents.Lst[NumAttEvent].Title,
+	 Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
+			      Events->Lst[NumAttEvent].Title,
 			      StrNumAttEvent,
 			      "BT_LINK TIT_TBL");
 	 HTM_TH_End ();
@@ -3335,7 +3447,8 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 /************** Write a row of a table with the data of a user ***************/
 /*****************************************************************************/
 
-static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *UsrDat)
+static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
+                                             unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
@@ -3385,13 +3498,13 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
 
    /***** Check/cross to show if the user is present/absent *****/
    for (NumAttEvent = 0, NumTimesPresent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent < Events->Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
+      if (Events->Lst[NumAttEvent].Selected)
 	{
 	 /* Check if this student is already registered in the current event */
 	 // Here it is not necessary to get comments
-	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+	 Present = Att_CheckIfUsrIsPresentInAttEvent (Events->Lst[NumAttEvent].AttCod,
 	                                              UsrDat->UsrCod);
 
 	 /* Write check or cross */
@@ -3439,7 +3552,8 @@ static void Att_PutCheckOrCross (bool Present)
 /**************** List the students with details and comments ****************/
 /*****************************************************************************/
 
-static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
+static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
+                                              unsigned NumUsrsInList,
                                               long *LstSelectedUsrCods)
   {
    extern const char *Txt_Details;
@@ -3467,7 +3581,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
 	 if (Usr_CheckIfICanViewAtt (&UsrDat))
 	   {
 	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-	    Att_ListAttEventsForAStd (NumUsr,&UsrDat);
+	    Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
 	   }
      }
 
@@ -3485,7 +3599,8 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
 /*************** Write list of attendance events for a student ***************/
 /*****************************************************************************/
 
-static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
+static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
+                                      unsigned NumUsr,struct UsrData *UsrDat)
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
@@ -3547,20 +3662,20 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** List the events with students *****/
    for (NumAttEvent = 0, UniqueId = 1;
-	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent < Events->Num;
 	NumAttEvent++, UniqueId++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
+      if (Events->Lst[NumAttEvent].Selected)
 	{
 	 /***** Get data of the attendance event from database *****/
-	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
-         Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
+	 Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
+         Att_GetNumStdsTotalWhoAreInAttEvent (&Events->Lst[NumAttEvent]);
 
 	 /***** Get comments for this student *****/
-	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
+	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Events->Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
          ShowCommentStd = CommentStd[0];
 	 ShowCommentTch = CommentTch[0] &&
 	                  (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                   Gbl.AttEvents.Lst[NumAttEvent].CommentTchVisible);
+	                   Events->Lst[NumAttEvent].CommentTchVisible);
 
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin (NULL);
@@ -3584,8 +3699,8 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	 HTM_SPAN_End ();
          HTM_BR ();
-	 HTM_Txt (Gbl.AttEvents.Lst[NumAttEvent].Title);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+	 HTM_Txt (Events->Lst[NumAttEvent].Title);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();

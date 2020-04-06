@@ -146,10 +146,10 @@ struct Prj_Faults
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prj_ReqUsrsToSelect (void);
+static void Prj_ReqUsrsToSelect (void *Args);
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (void);
 static void Prj_ShowProjects (void);
-static void Prj_ShowPrjsInCurrentPage (void);
+static void Prj_ShowPrjsInCurrentPage (void *Args);
 
 static void Prj_ShowFormToFilterByMy_All (void);
 static void Prj_ShowFormToFilterByAssign (void);
@@ -213,9 +213,9 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
 static Prj_RoleInProject_t Prj_ConvertUnsignedStrToRoleInProject (const char *UnsignedStr);
 
 static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject);
-static void Prj_AddStds (void);
-static void Prj_AddTuts (void);
-static void Prj_AddEvls (void);
+static void Prj_AddStds (void *Args);
+static void Prj_AddTuts (void *Args);
+static void Prj_AddEvls (void *Args);
 static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
@@ -263,23 +263,24 @@ void Prj_ListUsrsToSelect (void)
    Prj_GetParams ();
 
    /***** Show list of users to select some of them *****/
-   Prj_ReqUsrsToSelect ();
+   Prj_ReqUsrsToSelect (&Gbl);
   }
 
-static void Prj_ReqUsrsToSelect (void)
+static void Prj_ReqUsrsToSelect (void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
    extern const char *Txt_View_projects;
 
-   /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeePrj,
-				     Prj_PutCurrentParams,&Gbl,
-				     Txt_Projects,
-	                             Hlp_ASSESSMENT_Projects,
-	                             Txt_View_projects,
-				     false);	// Do not put form with date range
+   if (Args)
+      /***** List users to select some of them *****/
+      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+					ActSeePrj,
+					Prj_PutCurrentParams,&Gbl,
+					Txt_Projects,
+					Hlp_ASSESSMENT_Projects,
+					Txt_View_projects,
+					false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -306,7 +307,7 @@ static void Prj_ShowProjects (void)
       case Usr_WHO_ME:
       case Usr_WHO_ALL:
 	 /* Show my projects / all projects */
-         Prj_ShowPrjsInCurrentPage ();
+         Prj_ShowPrjsInCurrentPage (&Gbl);
 	 break;
       case Usr_WHO_SELECTED:
 	 /* Get selected users and show their projects */
@@ -324,8 +325,8 @@ static void Prj_ShowProjects (void)
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Prj_ShowPrjsInCurrentPage,	// when user(s) selected
-                                  Prj_ReqUsrsToSelect);		// when no user selected
+				  Prj_ShowPrjsInCurrentPage,&Gbl,	// when user(s) selected
+                                  Prj_ReqUsrsToSelect,&Gbl);		// when no user selected
   }
 
 /*****************************************************************************/
@@ -379,7 +380,7 @@ void Prj_ShowTableSelectedPrjs (void)
 /****************** Show the projects in current page ************************/
 /*****************************************************************************/
 
-static void Prj_ShowPrjsInCurrentPage (void)
+static void Prj_ShowPrjsInCurrentPage (void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
@@ -388,6 +389,9 @@ static void Prj_ShowPrjsInCurrentPage (void)
    unsigned NumPrj;
    unsigned NumIndex;
    struct Project Prj;
+
+   if (!Args)
+      return;
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
@@ -2261,19 +2265,22 @@ static Prj_RoleInProject_t Prj_ConvertUnsignedStrToRoleInProject (const char *Un
 /******************* Request users to be added to project ********************/
 /*****************************************************************************/
 
-void Prj_ReqAddStds (void)
+void Prj_ReqAddStds (void *Args)
   {
-   Prj_ReqAddUsrs (Prj_ROLE_STD);
+   if (Args)
+      Prj_ReqAddUsrs (Prj_ROLE_STD);
   }
 
-void Prj_ReqAddTuts (void)
+void Prj_ReqAddTuts (void *Args)
   {
-   Prj_ReqAddUsrs (Prj_ROLE_TUT);
+   if (Args)
+      Prj_ReqAddUsrs (Prj_ROLE_TUT);
   }
 
-void Prj_ReqAddEvls (void)
+void Prj_ReqAddEvls (void *Args)
   {
-   Prj_ReqAddUsrs (Prj_ROLE_EVL);
+   if (Args)
+      Prj_ReqAddUsrs (Prj_ROLE_EVL);
   }
 
 static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
@@ -2319,41 +2326,44 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
 void Prj_GetSelectedUsrsAndAddStds (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddStds,		// when user(s) selected
-                                  Prj_ReqAddStds);	// when no user selected
+				  Prj_AddStds,&Gbl,	// when user(s) selected
+                                  Prj_ReqAddStds,&Gbl);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddTuts (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddTuts,		// when user(s) selected
-                                  Prj_ReqAddTuts);	// when no user selected
+				  Prj_AddTuts,&Gbl,	// when user(s) selected
+                                  Prj_ReqAddTuts,&Gbl);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddEvls (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddEvls,		// when user(s) selected
-                                  Prj_ReqAddEvls);	// when no user selected
+				  Prj_AddEvls,&Gbl,	// when user(s) selected
+                                  Prj_ReqAddEvls,&Gbl);	// when no user selected
   }
 
 /*****************************************************************************/
 /**************************** Add users to project ***************************/
 /*****************************************************************************/
 
-static void Prj_AddStds (void)
+static void Prj_AddStds (void *Args)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_STD);
+   if (Args)
+      Prj_AddUsrsToProject (Prj_ROLE_STD);
   }
 
-static void Prj_AddTuts (void)
+static void Prj_AddTuts (void *Args)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_TUT);
+   if (Args)
+      Prj_AddUsrsToProject (Prj_ROLE_TUT);
   }
 
-static void Prj_AddEvls (void)
+static void Prj_AddEvls (void *Args)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_EVL);
+   if (Args)
+      Prj_AddUsrsToProject (Prj_ROLE_EVL);
   }
 
 static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)

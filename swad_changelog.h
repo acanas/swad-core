@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.164 (2020-04-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.165 (2020-04-06)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -528,6 +528,7 @@ Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.165:   Apr 06, 2020	Code refactoring in attendance events. (284743 lines)
 	Version 19.164:   Apr 05, 2020	Code refactoring in assignments and pagination. (284644 lines)
 	Version 19.163:   Apr 05, 2020	Log table is now partitioned by years. (284617 lines)
 					20 changes necessary in database:

@@ -3099,20 +3099,21 @@ static bool Brw_CheckIfQuotaExceded (void)
 /************** Request edition of works of users of the course **************/
 /*****************************************************************************/
 
-void Brw_AskEditWorksCrs (void)
+void Brw_AskEditWorksCrs (void *Args)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_View_homework;
 
-   /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActAdmAsgWrkCrs,
-				     NULL,NULL,
-				     Txt_Assignments_and_other_works,
-	                             Hlp_FILES_Homework_for_teachers,
-	                             Txt_View_homework,
-				     false);	// Do not put form with date range
+   if (Args)
+      /***** List users to select some of them *****/
+      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+					ActAdmAsgWrkCrs,
+					NULL,NULL,
+					Txt_Assignments_and_other_works,
+					Hlp_FILES_Homework_for_teachers,
+					Txt_View_homework,
+					false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -3459,21 +3460,24 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Brw_ShowFileBrowserOrWorks,	// when user(s) selected
-                                  Brw_AskEditWorksCrs);		// when no user selected
+				  Brw_ShowFileBrowserOrWorks,&Gbl,	// when user(s) selected
+                                  Brw_AskEditWorksCrs,&Gbl);		// when no user selected
   }
 
 /*****************************************************************************/
 /******************** Show a file browser or users' works  *******************/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserOrWorks (void)
+void Brw_ShowFileBrowserOrWorks (void *Args)
   {
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
+   if (Args)
+     {
+      /***** Get parameters related to file browser *****/
+      Brw_GetParAndInitFileBrowser ();
 
-   /***** Show the file browser or works *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+      /***** Show the file browser or works *****/
+      Brw_ShowAgainFileBrowserOrWorks ();
+     }
   }
 
 /*****************************************************************************/

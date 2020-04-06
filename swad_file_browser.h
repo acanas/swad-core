@@ -182,7 +182,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
 
 void Brw_GetSelectedUsrsAndShowWorks (void);
-void Brw_ShowFileBrowserOrWorks (void);
+void Brw_ShowFileBrowserOrWorks (void *Args);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
 void Brw_RemoveInsFilesFromDB (long InsCod);
@@ -198,7 +198,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod);
 void Brw_PutHiddenParamFullTreeIfSelected (void *Args);
 
 void Brw_CreateDirDownloadTmp (void);
-void Brw_AskEditWorksCrs (void);
+void Brw_AskEditWorksCrs (void *Args);
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);
 void Brw_RemFolderFromTree (void);

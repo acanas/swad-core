@@ -44,7 +44,7 @@ typedef enum
    Att_END_TIME   = 1,
   } Att_StartOrEndTime_t;
 
-struct AttendanceEvent
+struct Att_Event
   {
    /* Fields stored in database */
    long AttCod;
@@ -77,12 +77,7 @@ typedef enum
 
 void Att_SeeAttEvents (void);
 void Att_RequestCreatOrEditAttEvent (void);
-bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att);
-void Att_FreeListAttEvents (void);
-
-void Att_PutParamSelectedAttCod (void *Args);
-void Att_PutParamAttCod (long AttCod);
-long Att_GetParamAttCod (void);
+bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);
@@ -91,8 +86,8 @@ void Att_RemoveAttEventFromDB (long AttCod);
 void Att_HideAttEvent (void);
 void Att_ShowAttEvent (void);
 void Att_RecFormAttEvent (void);
-void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description);
-void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Description);
+void Att_CreateAttEvent (struct Att_Event *Event,const char *Description);
+void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod);
 bool Att_CheckIfAttEventIsAssociatedToGrp (long AsgCod,long GrpCod);
 void Att_RemoveGroupsOfType (long GrpTypCod);
@@ -116,7 +111,7 @@ void Att_RegisterStudentsInAttEvent (void);
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod);
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 
-void Att_ReqListUsrsAttendanceCrs (void);
+void Att_ReqListUsrsAttendanceCrs (void *Args);
 void Att_ListMyAttendanceCrs (void);
 void Att_PrintMyAttendanceCrs (void);
 void Att_ListUsrsAttendanceCrs (void);
