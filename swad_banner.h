@@ -58,7 +58,6 @@ struct Banner
 
 void Ban_SeeBanners (void);
 void Ban_EditBanners (void);
-void Ban_FreeListBanners (void);
 
 void Ban_PutIconToViewBanners (void);
 
@@ -74,6 +73,8 @@ void Ban_ChangeBannerWWW (void);
 void Ban_ContEditAfterChgBan (void);
 void Ban_RecFormNewBanner (void);
 void Ban_WriteMenuWithBanners (void);
+
 void Ban_ClickOnBanner (void);
+long Ban_GetBanCodClicked (void);
 
 #endif

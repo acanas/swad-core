@@ -316,11 +316,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Mails.Lst = NULL;
    Gbl.Mails.SelectedOrder = Mai_ORDER_DEFAULT;
 
-   Gbl.Banners.Num = 0;
-   Gbl.Banners.Lst = NULL;
-   Gbl.Banners.BanCodToEdit = -1L;
-   Gbl.Banners.BanCodClicked = 0L;
-
    Gbl.Links.Num = 0;
    Gbl.Links.Lst = NULL;
 

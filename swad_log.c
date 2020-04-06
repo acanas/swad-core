@@ -76,6 +76,7 @@ void Log_LogAccess (const char *Comments)
    long ActCod = Act_GetActCod (Gbl.Action.Act);
    size_t MaxLength;
    char *CommentsDB;
+   long BanCodClicked;
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
                                                             Gbl.Usrs.Me.Role.Logged;
 
@@ -159,14 +160,18 @@ void Log_LogAccess (const char *Comments)
                       " (%ld,%ld,%u)",
 	              LogCod,Gbl.WebService.PlgCod,
 		      (unsigned) Gbl.WebService.Function);
-   else if (Gbl.Banners.BanCodClicked > 0)
-      /* Log banner clicked */
-      DB_QueryINSERT ("can not log banner clicked",
-		      "INSERT INTO log_banners"
-	              " (LogCod,BanCod)"
-                      " VALUES"
-                      " (%ld,%ld)",
-	              LogCod,Gbl.Banners.BanCodClicked);
+   else
+     {
+      BanCodClicked = Ban_GetBanCodClicked ();
+      if (BanCodClicked > 0)
+	 /* Log banner clicked */
+	 DB_QueryINSERT ("can not log banner clicked",
+			 "INSERT INTO log_banners"
+			 " (LogCod,BanCod)"
+			 " VALUES"
+			 " (%ld,%ld)",
+			 LogCod,BanCodClicked);
+     }
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.Logged)
