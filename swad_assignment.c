@@ -187,7 +187,7 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
 				  &Pagination,
 				  (unsigned) Assignments->SelectedOrder,
-				  0);
+				  NULL,0);
 
    if (Assignments->Num)
      {
@@ -212,7 +212,7 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
 				  &Pagination,
 				  (unsigned) Assignments->SelectedOrder,
-				  0);
+				  NULL,0);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())

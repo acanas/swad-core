@@ -131,7 +131,8 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     struct UsrData *UsrDat,
-                                    long Cod,Ntf_Status_t Status);
+                                    long Cod,Ntf_Status_t Status,
+                                    long InsCod,long CtrCod,long DegCod,long CrsCod);
 void Ntf_SendPendingNotifByEMailToAllUsrs (void);
 Ntf_NotifyEvent_t Ntf_GetNotifyEventFromStr (const char *Str);
 void Ntf_MarkAllNotifAsSeen (void);

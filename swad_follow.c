@@ -1332,7 +1332,11 @@ static void Fol_FollowUsr (struct UsrData *UsrDat)
    if (CreateNotif)
       Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
 				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-								     0));
+								     0),
+				     Gbl.Hierarchy.Ins.InsCod,
+				     Gbl.Hierarchy.Ctr.CtrCod,
+				     Gbl.Hierarchy.Deg.DegCod,
+				     Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

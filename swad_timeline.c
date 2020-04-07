@@ -250,7 +250,8 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod);
 static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
 static void TL_WriteDateTime (time_t TimeUTC);
 static void TL_GetAndWritePost (long PstCod);
-static void TL_PutFormGoToAction (const struct TL_Note *SocNot);
+static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
+                                  const struct For_Forums *Forums);
 static void TL_GetNoteSummary (const struct TL_Note *SocNot,
                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
@@ -1536,6 +1537,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    struct Course Crs;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
+   struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
@@ -1605,6 +1607,9 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	 TL_GetAndWritePost (SocNot->Cod);
       else
 	{
+	 /* Reset forums */
+         For_ResetForums (&Forums);
+
 	 /* Get location in hierarchy */
 	 if (!SocNot->Unavailable)
 	    switch (SocNot->NoteType)
@@ -1637,16 +1642,15 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Gbl.Forum.ForumSelected);
-		  For_SetForumName (&Gbl.Forum.ForumSelected,
-		                    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Forums.ForumSelected);
+		  For_SetForumName (&Forums.ForumSelected,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 		  break;
 	       default:
 		  break;
 	      }
 
 	 /* Write note type */
-	 TL_PutFormGoToAction (SocNot);
+	 TL_PutFormGoToAction (SocNot,&Forums);
 
 	 /* Write location in hierarchy */
 	 if (!SocNot->Unavailable)
@@ -1921,7 +1925,8 @@ static void TL_GetAndWritePost (long PstCod)
 /************* Put form to go to an action depending on the note *************/
 /*****************************************************************************/
 
-static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
+static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
+                                  const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
@@ -2038,13 +2043,13 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	 case TL_NOTE_POST:	// Not applicable
 	    return;
 	 case TL_NOTE_FORUM_POST:
-	    Frm_StartFormUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
+	    Frm_StartFormUnique (For_ActionsSeeFor[Forums->ForumSelected.Type]);
 	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                          1,	// Page of posts   = first
-                                         Gbl.Forum.ForumSet,
-					 Gbl.Forum.ThreadsOrder,
-					 Gbl.Forum.ForumSelected.Location,
-					 Gbl.Forum.ForumSelected.ThrCod,
+                                         Forums->ForumSet,
+					 Forums->ThreadsOrder,
+					 Forums->ForumSelected.Location,
+					 Forums->ForumSelected.ThrCod,
 					 -1L);
 	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -3929,7 +3934,11 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
       if (CreateNotif)
 	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
 					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-									0));
+									0),
+					Gbl.Hierarchy.Ins.InsCod,
+					Gbl.Hierarchy.Ctr.CtrCod,
+					Gbl.Hierarchy.Deg.DegCod,
+					Gbl.Hierarchy.Crs.CrsCod);
      }
 
    /***** Free memory used for user's data *****/
@@ -5409,7 +5418,11 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TIMELINE_MENTION));
 		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
 						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										    0));
+										    0),
+						    Gbl.Hierarchy.Ins.InsCod,
+						    Gbl.Hierarchy.Ctr.CtrCod,
+						    Gbl.Hierarchy.Deg.DegCod,
+						    Gbl.Hierarchy.Crs.CrsCod);
 		    }
 		 }
 	      }

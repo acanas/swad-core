@@ -434,7 +434,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Args)
       Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
 				     &Pagination,
 				     (unsigned) Gbl.Prjs.SelectedOrder,
-				     0);
+				     NULL,0);
 
       /***** Allocate memory for the project *****/
       Prj_AllocMemProject (&Prj);
@@ -480,7 +480,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Args)
       Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
 				     &Pagination,
 				     (unsigned) Gbl.Prjs.SelectedOrder,
-				     0);
+				     NULL,0);
      }
    else	// No projects created
       Ale_ShowAlert (Ale_INFO,Txt_No_projects);

@@ -3250,7 +3250,7 @@ int swad__getNotifications (struct soap *soap,
    struct Degree Deg;
    struct Course Crs;
    long Cod;
-   struct Forum ForumSelected;
+   struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;

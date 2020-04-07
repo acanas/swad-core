@@ -235,7 +235,7 @@ static void Svy_ListAllSurveys (void)
    Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
 				  &Pagination,
 				  (unsigned) Gbl.Svys.SelectedOrder,
-				  0);
+				  NULL,0);
 
    if (Gbl.Svys.Num)
      {
@@ -291,7 +291,7 @@ static void Svy_ListAllSurveys (void)
    Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
 				  &Pagination,
 				  (unsigned) Gbl.Svys.SelectedOrder,
-				  0);
+				  NULL,0);
 
    /***** Button to create a new survey *****/
    if (Svy_CheckIfICanCreateSvy ())

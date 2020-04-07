@@ -31,7 +31,7 @@
 #include "swad_degree.h"
 #include "swad_institution.h"
 #include "swad_notification.h"
-#include "swad_pagination.h"
+// #include "swad_pagination.h"
 #include "swad_scope.h"
 #include "swad_string.h"
 
@@ -65,12 +65,22 @@ typedef enum
    For_FORUM_UNKNOWN		= 12,	// TODO: Change to  0 (also in database)
   } For_ForumType_t;	// Don't change numbers (used in database)
 
-struct Forum
+struct For_Forum
   {
    For_ForumType_t Type;	// Type of forum
    long Location;		// Code of institution, centre, degree or course
    long ThrCod;			// Optional thread code
    long PstCod;			// Optional post code
+  };
+
+struct For_Forums
+  {
+   For_ForumSet_t ForumSet;
+   Dat_StartEndTime_t ThreadsOrder;
+   unsigned CurrentPageThrs;
+   unsigned CurrentPagePsts;
+   struct For_Forum ForumSelected;	// Forum type, location, thread and post
+   long ThreadToMove;
   };
 
 struct ForumThread
@@ -96,10 +106,12 @@ struct ForumThread
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void For_ResetForums (struct For_Forums *Forums);
+
 void For_EnablePost (void);
 void For_DisablePost (void);
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *Forum);
+void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
 
 unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
@@ -116,7 +128,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   long ThrCod,
                                   long PstCod);
 
-void For_SetForumName (struct Forum *Forum,
+void For_SetForumName (const struct For_Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Lan_Language_t Language,bool UseHTMLEntities);
 

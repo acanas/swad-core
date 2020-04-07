@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_forum.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -76,11 +78,11 @@ void Pag_CalculatePagination (struct Pagination *Pagination);
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
                                     struct Pagination *Pagination,
                                     unsigned SelectedOrder,
-                                    long ThrCod);
+                                    const struct For_Forums *Forums,long ThrCod);
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pagination *Pagination,
                             unsigned SelectedOrder,
-                            long ThrCod,
+                            const struct For_Forums *Forums,long ThrCod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent);

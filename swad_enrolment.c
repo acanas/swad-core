@@ -363,7 +363,11 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    if (CreateNotif)
       Ntf_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
 				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-					                             0));
+					                             0),
+				     Gbl.Hierarchy.Ins.InsCod,
+				     Gbl.Hierarchy.Ctr.CtrCod,
+				     Gbl.Hierarchy.Deg.DegCod,
+				     Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

@@ -542,15 +542,6 @@ struct Globals
      } Timeline;
    struct
      {
-      For_ForumSet_t ForumSet;
-      Dat_StartEndTime_t ThreadsOrder;
-      unsigned CurrentPageThrs;
-      unsigned CurrentPagePsts;
-      struct Forum ForumSelected;	// Forum type, location, thread and post
-      long ThreadToMove;
-     } Forum;
-   struct
-     {
       Msg_TypeOfMessages_t TypeOfMessages;
       unsigned NumMsgs;
       int MsgId;

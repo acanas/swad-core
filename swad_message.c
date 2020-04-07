@@ -46,6 +46,7 @@
 #include "swad_ID.h"
 #include "swad_message.h"
 #include "swad_notification.h"
+#include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
@@ -814,7 +815,11 @@ void Msg_RecMsgFromUsr (void)
             if (CreateNotif)
                Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_MESSAGE,&UsrDstData,NewMsgCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-                                        	                              0));
+                                        	                              0),
+                                              Gbl.Hierarchy.Ins.InsCod,
+                                              Gbl.Hierarchy.Ctr.CtrCod,
+                                              Gbl.Hierarchy.Deg.DegCod,
+                                              Gbl.Hierarchy.Crs.CrsCod);
 
             /***** Show an alert indicating that the message has been sent successfully *****/
             Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
@@ -1835,7 +1840,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
       Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
 				     &Pagination,
 				     (unsigned) Dat_START_TIME,	// Not used
-				     0);
+				     NULL,0);
 
       /***** Show received / sent messages in this page *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -1859,7 +1864,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
       Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
 				     &Pagination,
 				     (unsigned) Dat_START_TIME,	// Not used
-				     0);
+				     NULL,0);
      }
 
    /***** End box *****/

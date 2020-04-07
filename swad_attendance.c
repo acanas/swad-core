@@ -270,7 +270,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
 				  (unsigned) Events->SelectedOrder,
-				  0);
+				  NULL,0);
 
    if (Events->Num)
      {
@@ -324,7 +324,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
    Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
 				  &Pagination,
 				  (unsigned) Events->SelectedOrder,
-				  0);
+				  NULL,0);
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)

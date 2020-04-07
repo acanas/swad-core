@@ -473,7 +473,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
 				  &Pagination,
 				  (unsigned) Gbl.Agenda.SelectedOrder,
-				  0);
+				  NULL,0);
 
    if (Gbl.Agenda.Num)
      {
@@ -499,7 +499,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
 				  &Pagination,
 				  (unsigned) Gbl.Agenda.SelectedOrder,
-				  0);
+				  NULL,0);
 
    /***** Button to create a new event *****/
    if (AgendaType == Agd_MY_AGENDA)

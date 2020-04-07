@@ -40,6 +40,7 @@
 #include "swad_exam.h"
 #include "swad_follow.h"
 #include "swad_form.h"
+#include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_mark.h"
@@ -267,7 +268,8 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
 
 static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                     long CrsCod,struct UsrData *UsrDat,long Cod);
+                                     long CrsCod,struct UsrData *UsrDat,long Cod,
+                                     const struct For_Forums *Forums);
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
 static void Ntf_UpdateMyLastAccessToNotifications (void);
@@ -321,6 +323,7 @@ void Ntf_ShowMyNotifications (void)
    struct Degree Deg;
    struct Course Crs;
    long Cod;
+   struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
@@ -428,8 +431,9 @@ void Ntf_ShowMyNotifications (void)
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
-            For_GetForumTypeAndLocationOfAPost (Cod,&Gbl.Forum.ForumSelected);
-            For_SetForumName (&Gbl.Forum.ForumSelected,
+            For_ResetForums (&Forums);
+            For_GetForumTypeAndLocationOfAPost (Cod,&Forums.ForumSelected);
+            For_SetForumName (&Forums.ForumSelected,
                               ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
            }
 
@@ -472,7 +476,7 @@ void Ntf_ShowMyNotifications (void)
 
          HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
          if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
 
          if (PutLink)
            {
@@ -489,7 +493,7 @@ void Ntf_ShowMyNotifications (void)
          HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (PutLink)
            {
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
             HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             HTM_BUTTON_End ();
@@ -514,7 +518,7 @@ void Ntf_ShowMyNotifications (void)
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
 
             if (PutLink)
                HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
@@ -532,7 +536,7 @@ void Ntf_ShowMyNotifications (void)
          else
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
 
             if (PutLink)
                HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
@@ -653,7 +657,8 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 // Return the value of Gbl.Form.Inside (true if form is started)
 
 static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                     long CrsCod,struct UsrData *UsrDat,long Cod)
+                                     long CrsCod,struct UsrData *UsrDat,long Cod,
+                                     const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct FileMetadata FileMetadata;
@@ -734,13 +739,13 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Frm_StartForm (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
+	 Frm_StartForm (For_ActionsSeeFor[Forums->ForumSelected.Type]);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
-                                      Gbl.Forum.ForumSet,
-				      Gbl.Forum.ThreadsOrder,
-				      Gbl.Forum.ForumSelected.Location,
-				      Gbl.Forum.ForumSelected.ThrCod,
+                                      Forums->ForumSet,
+				      Forums->ThreadsOrder,
+				      Forums->ForumSelected.Location,
+				      Forums->ForumSelected.ThrCod,
 				      -1L);
 	 break;
       case Ntf_EVENT_NOTICE:
@@ -1145,7 +1150,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    unsigned long NumRow;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
-   struct Forum ForumSelected;
+   struct For_Forum ForumSelected;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
+   long CrsCod;
    unsigned NumUsrsToBeNotifiedByEMail = 0;
    unsigned NotifyEventMask = (1 << NotifyEvent);
 
@@ -1299,6 +1308,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_FORUM_POST_COURSE:
 	 // Check if forum is for users or for all users in the course
 	 For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
+
 	 switch (ForumSelected.Type)
 	   {
 	    case For_FORUM_COURSE_USRS:
@@ -1367,6 +1377,40 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          break;
      }
 
+   if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
+       NotifyEvent == Ntf_EVENT_FORUM_REPLY)
+     {
+      InsCod = CtrCod = DegCod = CrsCod = -1L;
+      switch (ForumSelected.Type)
+        {
+	 case For_FORUM_INSTIT_USRS:
+	 case For_FORUM_INSTIT_TCHS:
+            InsCod = ForumSelected.Location;
+            break;
+	 case For_FORUM_CENTRE_USRS:
+	 case For_FORUM_CENTRE_TCHS:
+            CtrCod = ForumSelected.Location;
+            break;
+	 case For_FORUM_DEGREE_USRS:
+	 case For_FORUM_DEGREE_TCHS:
+            DegCod = ForumSelected.Location;
+            break;
+	 case For_FORUM_COURSE_USRS:
+	 case For_FORUM_COURSE_TCHS:
+            CrsCod = ForumSelected.Location;
+            break;
+	 default:
+	    break;
+        }
+     }
+   else
+     {
+      InsCod = Gbl.Hierarchy.Ins.InsCod;
+      CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
+      DegCod = Gbl.Hierarchy.Deg.DegCod;
+      CrsCod = Gbl.Hierarchy.Crs.CrsCod;
+     }
+
    if (NumRows) // Users found
      {
       /***** Initialize structure with user's data *****/
@@ -1389,11 +1433,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
 		 {
 		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,
-						 (Ntf_Status_t) Ntf_STATUS_BIT_EMAIL);
+						 (Ntf_Status_t) Ntf_STATUS_BIT_EMAIL,
+						 InsCod,CtrCod,DegCod,CrsCod);
 		  NumUsrsToBeNotifiedByEMail++;
 		 }
 	       else							// Don't send notification by email
-		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,(Ntf_Status_t) 0);
+		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,(Ntf_Status_t) 0,
+						 InsCod,CtrCod,DegCod,CrsCod);
               }
         }
 
@@ -1413,47 +1459,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 
 void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     struct UsrData *UsrDat,
-                                    long Cod,Ntf_Status_t Status)
+                                    long Cod,Ntf_Status_t Status,
+                                    long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
-
-   if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-       NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-     {
-      InsCod = CtrCod = DegCod = CrsCod = -1L;
-      switch (Gbl.Forum.ForumSelected.Type)
-        {
-	 case For_FORUM_INSTIT_USRS:
-	 case For_FORUM_INSTIT_TCHS:
-            InsCod = Gbl.Forum.ForumSelected.Location;
-            break;
-	 case For_FORUM_CENTRE_USRS:
-	 case For_FORUM_CENTRE_TCHS:
-            CtrCod = Gbl.Forum.ForumSelected.Location;
-            break;
-	 case For_FORUM_DEGREE_USRS:
-	 case For_FORUM_DEGREE_TCHS:
-            DegCod = Gbl.Forum.ForumSelected.Location;
-            break;
-	 case For_FORUM_COURSE_USRS:
-	 case For_FORUM_COURSE_TCHS:
-            CrsCod = Gbl.Forum.ForumSelected.Location;
-            break;
-	 default:
-	    break;
-        }
-     }
-   else
-     {
-      InsCod = Gbl.Hierarchy.Ins.InsCod;
-      CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
-      DegCod = Gbl.Hierarchy.Deg.DegCod;
-      CrsCod = Gbl.Hierarchy.Crs.CrsCod;
-     }
-
    /***** Store notify event *****/
    DB_QueryINSERT ("can not create new notification event",
 		   "INSERT INTO notif"
@@ -1578,7 +1586,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    struct Degree Deg;
    struct Course Crs;
    long Cod;
-   struct Forum ForumSelected;
+   struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +

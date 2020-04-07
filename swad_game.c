@@ -222,7 +222,7 @@ static void Gam_ListAllGames (void)
    Pag_WriteLinksToPagesCentered (Pag_GAMES,
 				  &Pagination,
 				  (unsigned) Gbl.Games.SelectedOrder,
-				  0);
+				  NULL,0);
 
    if (Gbl.Games.Num)
      {
@@ -282,7 +282,7 @@ static void Gam_ListAllGames (void)
    Pag_WriteLinksToPagesCentered (Pag_GAMES,
 				  &Pagination,
 				  (unsigned) Gbl.Games.SelectedOrder,
-				  0);
+				  NULL,0);
 
    /***** Button to create a new game *****/
    if (Gam_CheckIfICanEditGames ())

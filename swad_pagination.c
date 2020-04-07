@@ -36,6 +36,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_project.h"
@@ -131,12 +132,12 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
                                     struct Pagination *Pagination,
                                     unsigned SelectedOrder,
-                                    long ThrCod)
+                                    const struct For_Forums *Forums,long ThrCod)
   {
    if (Pagination->MoreThanOnePage)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Pag_WriteLinksToPages (WhatPaginate,Pagination,SelectedOrder,ThrCod,
+      Pag_WriteLinksToPages (WhatPaginate,Pagination,SelectedOrder,Forums,ThrCod,
 			     true,NULL,"PAG_TXT",false);
       HTM_DIV_End ();
      }
@@ -149,7 +150,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pagination *Pagination,
                             unsigned SelectedOrder,
-                            long ThrCod,
+                            const struct For_Forums *Forums,long ThrCod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
@@ -205,24 +206,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
 	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                             1,	// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    -1L,
 					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                             1,				// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    ThrCod,
 					    -1L);
 	       break;
@@ -323,24 +324,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
 	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                             1,	// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    -1L,
 					    -1L);
 	       break;
             case Pag_POSTS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                             1,				// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    ThrCod,
 					    -1L);
 	       break;
@@ -427,24 +428,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
 	       For_PutAllHiddenParamsForum (Pagination->LeftPage,	// Page of threads = left
                                             1,				// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    -1L,
 					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                             Pagination->LeftPage,	// Page of posts   = left
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    ThrCod,
 					    -1L);
 	       break;
@@ -543,24 +544,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_THREADS_FORUM:
-                  Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+                  Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                        Pagination->Anchor);
 		  For_PutAllHiddenParamsForum (NumPage,	// Page of threads = number of page
                                                1,	// Page of posts   = first
-                                               Gbl.Forum.ForumSet,
+                                               Forums->ForumSet,
 					       (Dat_StartEndTime_t) SelectedOrder,
-					       Gbl.Forum.ForumSelected.Location,
+					       Forums->ForumSelected.Location,
 					       -1L,
 					       -1L);
                   break;
                case Pag_POSTS_FORUM:
-                  Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+                  Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                        Pagination->Anchor);
-		  For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+		  For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                                NumPage,				// Page of posts   = number of page
-                                               Gbl.Forum.ForumSet,
+                                               Forums->ForumSet,
 					       (Dat_StartEndTime_t) SelectedOrder,
-					       Gbl.Forum.ForumSelected.Location,
+					       Forums->ForumSelected.Location,
 					       ThrCod,
 					       -1L);
                   break;
@@ -646,24 +647,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
 	       For_PutAllHiddenParamsForum (Pagination->RightPage,	// Page of threads = right
                                             1,				// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    -1L,
 					    -1L);
 	       break;
             case Pag_POSTS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                             Pagination->RightPage,	// Page of posts   = right
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    ThrCod,
 					    -1L);
                break;
@@ -750,24 +751,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
 	       For_PutAllHiddenParamsForum (Pagination->NumPags,	// Page of threads = last
                                             1,				// Page of posts   = first
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    -1L,
 					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Frm_StartFormAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+               Frm_StartFormAnchor (For_ActionsSeePstFor[Forums->ForumSelected.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                             Pagination->NumPags,	// Page of posts   = last
-                                            Gbl.Forum.ForumSet,
+                                            Forums->ForumSet,
 					    (Dat_StartEndTime_t) SelectedOrder,
-					    Gbl.Forum.ForumSelected.Location,
+					    Forums->ForumSelected.Location,
 					    ThrCod,
 					    -1L);
                break;

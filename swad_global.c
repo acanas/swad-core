@@ -343,15 +343,6 @@ void Gbl_InitializeGlobals (void)
    /* Public activity */
    Gbl.Timeline.Who = TL_DEFAULT_WHO;
 
-   /* Forums */
-   Gbl.Forum.ForumSet = For_DEFAULT_FORUM_SET;
-   Gbl.Forum.ForumSelected.Type = For_FORUM_UNKNOWN;
-   Gbl.Forum.ForumSelected.Location = -1L;
-   Gbl.Forum.ForumSelected.ThrCod = -1L;
-   Gbl.Forum.ForumSelected.PstCod = -1L;
-   Gbl.Forum.ThreadsOrder = For_DEFAULT_ORDER;
-   Gbl.Forum.ThreadToMove = -1L;
-
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 

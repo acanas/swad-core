@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.167 (2020-04-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.168 (2020-04-07)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -550,6 +550,7 @@ Función API getLocations
 
 // TODO: Bug en SWADroid: loginByUserPasswordKey falla cuando se le pasa como parámetro un DNI
 
+	Version 19.168:   Apr 07, 2020	Code refactoring in forums. (284866 lines)
 	Version 19.167:   Apr 06, 2020	Code refactoring in figures. (284772 lines)
 	Version 19.166.1: Apr 06, 2020	Fixed bug in API function loginByUserPasswordKey, reported by Javier Bueno López. (? lines)
 	Version 19.166:   Apr 06, 2020	Code refactoring in banners. (284805 lines)
