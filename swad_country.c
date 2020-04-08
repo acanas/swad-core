@@ -1588,7 +1588,7 @@ static void Cty_PutParamGoToCty (void *CtyCod)
   {
    if (CtyCod)
       /***** Put parameter *****/
-      Cty_PutParamCtyCod (*(long *) CtyCod);
+      Cty_PutParamCtyCod (*((long *) CtyCod));
   }
 
 /*****************************************************************************/

@@ -330,7 +330,7 @@ void Plc_PutIconToViewPlaces (void)
    extern const char *Txt_Places;
 
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
-                                  Ins_PutParamCurrentInsCod,&Gbl,
+                                  Ins_PutParamCurrentInsCod,&Gbl.Hierarchy.Ins.InsCod,
 				  "map-marker-alt.svg",
 				  Txt_Places);
   }

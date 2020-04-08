@@ -67,7 +67,7 @@ static struct Department *Dpt_EditingDpt = NULL;	// Static variable to keep the 
 /*****************************************************************************/
 
 static void Dpt_GetParamDptOrder (void);
-static void Dpt_PutIconToEditDpts (void *Args);
+static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
 static void Dpt_EditDepartmentsInternal (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
@@ -114,7 +114,7 @@ void Dpt_SeeDepts (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
 						  Gbl.Hierarchy.Ins.FullName),
-			 Dpt_PutIconToEditDpts,&Gbl,
+			 Dpt_PutIconToEditDpts,NULL,
 			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
@@ -230,11 +230,10 @@ static void Dpt_GetParamDptOrder (void)
 /************************ Put icon to edit departments ***********************/
 /*****************************************************************************/
 
-static void Dpt_PutIconToEditDpts (void *Args)
+static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
-				   NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/

@@ -611,29 +611,7 @@ struct Globals
       Dat_StartEndTime_t SelectedOrder;
       unsigned CurrentPage;
      } Svys;
-   struct
-     {
-      Sta_ClicksGroupedBy_t ClicksGroupedBy;
-      Sta_Role_t Role;
-      Sta_CountType_t CountType;
-      Act_Action_t NumAction;
-      unsigned long FirstRow;
-      unsigned long LastRow;
-      unsigned RowsPerPage;
-      long DegTypCod;
-      long DptCod;
-      char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
-      bool IndicatorsSelected[1 + Ind_NUM_INDICATORS];
-      struct
-        {
-         Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
-         Pho_HowComputePhotoSize_t HowComputePhotoSize;
-         Pho_HowOrderDegrees_t HowOrderDegrees;
-         int MaxStds;
-         int MaxStdsWithPhoto;
-         double MaxPercent;
-        } DegPhotos;
-     } Stat;
+   struct Sta_Stats Stat;
 
    /* Cache */
    struct

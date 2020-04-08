@@ -68,7 +68,7 @@ static void Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
-static void Ind_PutParamsConfirmIWantToSeeBigList (void *Args);
+static void Ind_PutParamsConfirmIWantToSeeBigList (void *Stats);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -566,21 +566,21 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
-                           Ind_PutParamsConfirmIWantToSeeBigList,&Gbl,
+                           Ind_PutParamsConfirmIWantToSeeBigList,&Gbl.Stat,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
   }
 
-static void Ind_PutParamsConfirmIWantToSeeBigList (void *Args)
+static void Ind_PutParamsConfirmIWantToSeeBigList (void *Stats)
   {
-   if (Args)
+   if (Stats)
      {
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutHiddenParamLong (NULL,"OthDegTypCod",Gbl.Stat.DegTypCod);
-      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
-      if (Gbl.Stat.StrIndicatorsSelected[0])
-	 Par_PutHiddenParamString (NULL,"Indicators",Gbl.Stat.StrIndicatorsSelected);
+      Par_PutHiddenParamLong (NULL,"OthDegTypCod",((struct Sta_Stats *) Stats)->DegTypCod);
+      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,((struct Sta_Stats *) Stats)->DptCod);
+      if (((struct Sta_Stats *) Stats)->StrIndicatorsSelected[0])
+	 Par_PutHiddenParamString (NULL,"Indicators",((struct Sta_Stats *) Stats)->StrIndicatorsSelected);
       Par_PutHiddenParamChar ("ShowBigList",'Y');
      }
   }

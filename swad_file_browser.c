@@ -1285,7 +1285,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
-static void Brw_PutIconsFileBrowser (void *Args);
+static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_PutButtonToShowEdit (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
@@ -3696,7 +3696,7 @@ static void Brw_ShowFileBrowser (void)
 	     Gbl.FileBrowser.Id);
    HTM_SECTION_Begin (FileBrowserSectionId);
    Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-                 Brw_PutIconsFileBrowser,&Gbl,
+                 Brw_PutIconsFileBrowser,NULL,
                  Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
    /***** Subtitle *****/
@@ -3734,37 +3734,34 @@ static void Brw_ShowFileBrowser (void)
 /******************* Put contextual icons in file browser ********************/
 /*****************************************************************************/
 
-static void Brw_PutIconsFileBrowser (void *Args)
+static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
   {
-   if (Args)
+   /***** Put icon to view / edit file browser *****/
+   switch (Gbl.FileBrowser.IconViewEdit)
      {
-      /***** Put icon to view / edit file browser *****/
-      switch (Gbl.FileBrowser.IconViewEdit)
-	{
-	 case Brw_ICON_NONE:
-	    break;
-	 case Brw_ICON_VIEW:
-	    Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
-					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
-	    break;
-	 case Brw_ICON_EDIT:
-	    Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],NULL,
-					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
-	    break;
-	}
+      case Brw_ICON_NONE:
+	 break;
+      case Brw_ICON_VIEW:
+	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+				      Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
+	 break;
+      case Brw_ICON_EDIT:
+	 Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],NULL,
+				      Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
+	 break;
+     }
 
-      /***** Put icon to show a figure *****/
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_ADMI_WRK_CRS:
-	 case Brw_ADMI_ASG_CRS:
-	 case Brw_ADMI_DOC_PRJ:
-	 case Brw_ADMI_ASS_PRJ:
-	    break;
-	 default:
-	    Brw_PutIconShowFigure (NULL);
-	    break;
-	}
+   /***** Put icon to show a figure *****/
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_WRK_CRS:
+      case Brw_ADMI_ASG_CRS:
+      case Brw_ADMI_DOC_PRJ:
+      case Brw_ADMI_ASS_PRJ:
+	 break;
+      default:
+	 Brw_PutIconShowFigure (NULL);
+	 break;
      }
   }
 

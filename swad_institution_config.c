@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void InsCfg_Configuration (bool PrintView);
-static void InsCfg_PutIconsToPrintAndUpload (void *Args);
+static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Title (bool PutLink);
 static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
@@ -132,7 +132,7 @@ static void InsCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    InsCfg_PutIconsToPrintAndUpload,&Gbl,
+                    InsCfg_PutIconsToPrintAndUpload,NULL,
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
 
@@ -211,21 +211,18 @@ static void InsCfg_Configuration (bool PrintView)
 /********* Put contextual icons in configuration of an institution ***********/
 /*****************************************************************************/
 
-static void InsCfg_PutIconsToPrintAndUpload (void *Args)
+static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Icon to print info about institution *****/
-      Ico_PutContextualIconToPrint (ActPrnInsInf,
-				    NULL,NULL);
+   /***** Icon to print info about institution *****/
+   Ico_PutContextualIconToPrint (ActPrnInsInf,
+				 NULL,NULL);
 
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 /***** Icon to upload logo of institution *****/
-	 Lgo_PutIconToChangeLogo (Hie_INS);
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      /***** Icon to upload logo of institution *****/
+      Lgo_PutIconToChangeLogo (Hie_INS);
 
-      /***** Put icon to view places *****/
-      Plc_PutIconToViewPlaces ();
-     }
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
   }
 
 /*****************************************************************************/

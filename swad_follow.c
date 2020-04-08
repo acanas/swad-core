@@ -79,7 +79,7 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 					  Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
 					  MYSQL_RES **mysql_res);
 
-static void Fol_PutIconsWhoToFollow (void *Args);
+static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
@@ -98,7 +98,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
-static void Fol_PutHiddenParSelectedUsrsCods (void *Args);
+static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
@@ -149,7 +149,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin ("560px",Txt_Who_to_follow,
-                         Fol_PutIconsWhoToFollow,&Gbl,
+                         Fol_PutIconsWhoToFollow,NULL,
                          Hlp_START_Profiles_who_to_follow,Box_NOT_CLOSABLE,2);
 
       /***** Initialize structure with user's data *****/
@@ -419,16 +419,13 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 /****************** Put contextual icons in "who to follow" ******************/
 /*****************************************************************************/
 
-static void Fol_PutIconsWhoToFollow (void *Args)
+static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to update who to follow *****/
-      Fol_PutIconToUpdateWhoToFollow ();
+   /***** Put icon to update who to follow *****/
+   Fol_PutIconToUpdateWhoToFollow ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_FOLLOW);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_FOLLOW);
   }
 
 /*****************************************************************************/
@@ -1083,12 +1080,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl,
+				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl,
+				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
@@ -1127,12 +1124,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl,
+				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl,
+				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
@@ -1142,10 +1139,10 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
-static void Fol_PutHiddenParSelectedUsrsCods (void *Args)
+static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs)
   {
-   if (Args)
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+   if (SelectedUsrs)
+      Usr_PutHiddenParSelectedUsrsCods ((struct SelectedUsrs *) SelectedUsrs);
   }
 
 /*****************************************************************************/

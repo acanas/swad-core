@@ -64,7 +64,7 @@ static struct Holiday *Hld_EditingHld = NULL;	// Static variable to keep the hol
 /*****************************************************************************/
 
 static void Hld_GetParamHldOrder (void);
-static void Hld_PutIconsSeeHolidays (void *Args);
+static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
@@ -111,7 +111,7 @@ void Hld_SeeHolidays (void)
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Holidays,
-                    Hld_PutIconsSeeHolidays,&Gbl,
+                    Hld_PutIconsSeeHolidays,NULL,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
@@ -221,18 +221,15 @@ static void Hld_GetParamHldOrder (void)
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Hld_PutIconsSeeHolidays (void *Args)
+static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Edit holidays calendar *****/
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 Ico_PutContextualIconToEdit (ActEdiHld,NULL,
-				      NULL,NULL);
+   /***** Edit holidays calendar *****/
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      Ico_PutContextualIconToEdit (ActEdiHld,NULL,
+				   NULL,NULL);
 
-      /***** View calendar *****/
-      Cal_PutIconToSeeCalendar (NULL);
-     }
+   /***** View calendar *****/
+   Cal_PutIconToSeeCalendar (NULL);
   }
 
 /*****************************************************************************/

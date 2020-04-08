@@ -2740,7 +2740,7 @@ void Att_ReqListUsrsAttendanceCrs (void *TypeOfView)
    extern const char *Txt_View_attendance;
    struct Att_Events Events;
 
-   switch (*(Att_TypeOfView_t *) TypeOfView)
+   switch (*((Att_TypeOfView_t *) TypeOfView))
      {
       case Att_VIEW_SEL_USR:
       case Att_PRNT_SEL_USR:
@@ -2896,7 +2896,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
 
-   switch (*(Att_TypeOfView_t *) TypeOfView)
+   switch (*((Att_TypeOfView_t *) TypeOfView))
      {
       case Att_VIEW_SEL_USR:
       case Att_PRNT_SEL_USR:
@@ -2934,7 +2934,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	    Att_GetListSelectedAttCods (&Events);
 
 	    /***** Begin box *****/
-	    switch (*(Att_TypeOfView_t *) TypeOfView)
+	    switch (*((Att_TypeOfView_t *) TypeOfView))
 	      {
 	       case Att_VIEW_SEL_USR:
 		  Box_BoxBegin (NULL,Txt_Attendance_list,
@@ -2951,13 +2951,14 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	      }
 
 	    /***** List events to select *****/
-	    Att_ListEventsToSelect (&Events,*(Att_TypeOfView_t *) TypeOfView);
+	    Att_ListEventsToSelect (&Events,*((Att_TypeOfView_t *) TypeOfView));
 
 	    /***** Get my preference about photos in users' list for current course *****/
 	    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
 	    /***** Show table with attendances for every student in list *****/
-	    Att_ListUsrsAttendanceTable (&Events,*(Att_TypeOfView_t *) TypeOfView,NumUsrsInList,LstSelectedUsrCods);
+	    Att_ListUsrsAttendanceTable (&Events,*((Att_TypeOfView_t *) TypeOfView),
+	                                 NumUsrsInList,LstSelectedUsrCods);
 
 	    /***** Show details or put button to show details *****/
 	    if (Events.ShowDetails)

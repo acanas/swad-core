@@ -75,7 +75,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,
                                 DT_Order_t SelectedOrder);
 
 static void DT_EditDegreeTypesInternal (void);
-static void DT_PutIconsEditingDegreeTypes (void *Args);
+static void DT_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args);
 
 static void DT_ListDegreeTypesForSeeing (void);
 static void DT_PutIconsListingDegTypes (__attribute__((unused)) void *Args);
@@ -265,7 +265,7 @@ static void DT_EditDegreeTypesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,
-                 DT_PutIconsEditingDegreeTypes,&Gbl,
+                 DT_PutIconsEditingDegreeTypes,NULL,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
@@ -286,19 +286,16 @@ static void DT_EditDegreeTypesInternal (void)
 /************ Put contextual icons when editing degree types *****************/
 /*****************************************************************************/
 
-static void DT_PutIconsEditingDegreeTypes (void *Args)
+static void DT_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to view degree types *****/
-      DT_PutIconToViewDegreeTypes ();
+   /***** Put icon to view degree types *****/
+   DT_PutIconToViewDegreeTypes ();
 
-      /***** Put icon to view degrees *****/
-      Deg_PutIconToViewDegrees ();
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
   }
 
 /*****************************************************************************/

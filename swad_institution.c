@@ -63,14 +63,14 @@ static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the inst
 
 static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanCreateInstitutions (void);
-static void Ins_PutIconsListingInstitutions (void *Args);
+static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
 static void Ins_EditInstitutionsInternal (void);
-static void Ins_PutIconsEditingInstitutions (void *Args);
+static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToViewInstitutions (void);
 
 static void Ins_GetDataOfInstitFromRow (struct Instit *Ins,MYSQL_ROW row);
@@ -89,7 +89,7 @@ static long Ins_GetParamOtherInsCod (void);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 
 static void Ins_ShowAlertAndButtonToGoToIns (void);
-static void Ins_PutParamGoToIns (void *Args);
+static void Ins_PutParamGoToIns (void *InsCod);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
@@ -302,7 +302,7 @@ static void Ins_ListInstitutions (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsListingInstitutions,&Gbl,
+		 Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -349,17 +349,14 @@ static bool Ins_CheckIfICanCreateInstitutions (void)
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsListingInstitutions (void *Args)
+static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to edit institutions *****/
-      if (Ins_CheckIfICanCreateInstitutions ())
-	 Ins_PutIconToEditInstitutions ();
+   /***** Put icon to edit institutions *****/
+   if (Ins_CheckIfICanCreateInstitutions ())
+      Ins_PutIconToEditInstitutions ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_INSTITS);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_INSTITS);
   }
 
 /*****************************************************************************/
@@ -564,7 +561,7 @@ static void Ins_EditInstitutionsInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsEditingInstitutions,&Gbl,
+		 Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -586,16 +583,13 @@ static void Ins_EditInstitutionsInternal (void)
 /************ Put contextual icons in edition of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsEditingInstitutions (void *Args)
+static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to view institutions *****/
-      Ins_PutIconToViewInstitutions ();
+   /***** Put icon to view institutions *****/
+   Ins_PutIconToViewInstitutions ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_INSTITS);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_INSTITS);
   }
 
 /*****************************************************************************/
@@ -1298,10 +1292,10 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt)
 /************* Write parameter with code of current institution **************/
 /*****************************************************************************/
 
-void Ins_PutParamCurrentInsCod (void *Args)
+void Ins_PutParamCurrentInsCod (void *InsCod)
   {
-   if (Args)
-      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+   if (InsCod)
+      Ins_PutParamInsCod (*((long *) InsCod));
   }
 
 /*****************************************************************************/
@@ -1678,7 +1672,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
      {
       /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
-                                  Ins_PutParamGoToIns,&Gbl,
+                                  Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Ins_EditingIns->ShrtName));
       Hie_FreeGoToMsg ();
@@ -1688,11 +1682,11 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Ins_PutParamGoToIns (void *Args)
+static void Ins_PutParamGoToIns (void *InsCod)
   {
-   if (Args)
+   if (InsCod)
       /***** Put parameter *****/
-      Ins_PutParamInsCod (Ins_EditingIns->InsCod);
+      Ins_PutParamInsCod (*((long *) InsCod));
   }
 
 /*****************************************************************************/
@@ -2128,7 +2122,7 @@ static void Ins_FormToGoToMap (struct Instit *Ins)
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
-                                     Ins_PutParamGoToIns,&Gbl,
+                                     Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }

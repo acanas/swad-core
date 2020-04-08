@@ -1229,8 +1229,8 @@ static void Mch_PutParamsPlay (void *MchCod)
   {
    if (MchCod)
      {
-      if (*(long *) MchCod > 0)
-	 Mch_PutParamMchCod (*(long *) MchCod);
+      if (*((long *) MchCod) > 0)
+	 Mch_PutParamMchCod (*((long *) MchCod));
      }
   }
 

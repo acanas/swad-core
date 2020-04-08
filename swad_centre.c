@@ -1581,7 +1581,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 static void Ctr_PutParamGoToCtr (void *CtrCod)
   {
    if (CtrCod)
-      Ctr_PutParamCtrCod (*(long *) CtrCod);
+      Ctr_PutParamCtrCod (*((long *) CtrCod));
   }
 
 /*****************************************************************************/

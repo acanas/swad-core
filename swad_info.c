@@ -269,7 +269,7 @@ extern const char *Hlp_ASSESSMENT_System_edit;
 /*****************************************************************************/
 
 static void Inf_PutButtonToEditInfo (void);
-static void Inf_PutIconToViewInfo (void *Args);
+static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_CheckIfIHaveReadInfo (void);
@@ -414,7 +414,7 @@ void Inf_ShowInfo (void)
      {
       if (ICanEdit)
 	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,&Gbl,
+		       Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -444,17 +444,17 @@ static void Inf_PutButtonToEditInfo (void)
 /************************ Put icon to edit course info ***********************/
 /*****************************************************************************/
 
-static void Inf_PutIconToViewInfo (void *Args)
+static void Inf_PutIconToViewInfo (void *Type)
   {
-   if (Args)
-      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type],
+   if (Type)
+      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[*((Inf_InfoType_t *) Type)],
 				   NULL,NULL);
   }
 
-void Inf_PutIconToEditInfo (void *Args)
+void Inf_PutIconToEditInfo (void *Type)
   {
-   if (Args)
-      Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.Crs.Info.Type],NULL,
+   if (Type)
+      Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[*((Inf_InfoType_t *) Type)],NULL,
 				   NULL,NULL);
   }
 
@@ -942,7 +942,7 @@ static void Inf_ShowPage (const char *URL)
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		    Inf_PutIconToEditInfo,&Gbl,
+		    Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -1030,7 +1030,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Begin box and table */
    Box_BoxTableBegin (NULL,Txt_Source_of_information,
-                      Inf_PutIconToViewInfo,&Gbl,
+                      Inf_PutIconToViewInfo,&Gbl.Crs.Info.Type,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
@@ -1691,7 +1691,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       /***** Begin box *****/
       if (ICanEdit)
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,&Gbl,
+		       Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -1779,7 +1779,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Begin box *****/
       if (ICanEdit)
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,&Gbl,
+		       Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       else
 	 Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],

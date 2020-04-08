@@ -79,12 +79,12 @@ static void Deg_CreateDegree (unsigned Status);
 
 static void Deg_ListDegrees (void);
 static bool Deg_CheckIfICanCreateDegrees (void);
-static void Deg_PutIconsListingDegrees (void *Args);
+static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
 static void Deg_EditDegreesInternal (void);
-static void Deg_PutIconsEditingDegrees (void *Args);
+static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
@@ -94,7 +94,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
-static void Deg_PutParamGoToDeg (void *Args);
+static void Deg_PutParamGoToDeg (void *DegCod);
 
 static void Deg_EditingDegreeConstructor (void);
 static void Deg_EditingDegreeDestructor (void);
@@ -767,7 +767,7 @@ static void Deg_ListDegrees (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsListingDegrees,&Gbl,
+		 Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -815,20 +815,17 @@ static bool Deg_CheckIfICanCreateDegrees (void)
 /***************** Put contextual icons in list of degrees *******************/
 /*****************************************************************************/
 
-static void Deg_PutIconsListingDegrees (void *Args)
+static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to edit degrees *****/
-      if (Deg_CheckIfICanCreateDegrees ())
-	 Deg_PutIconToEditDegrees ();
+   /***** Put icon to edit degrees *****/
+   if (Deg_CheckIfICanCreateDegrees ())
+      Deg_PutIconToEditDegrees ();
 
-      /***** Put icon to view degree types *****/
-      DT_PutIconToViewDegreeTypes ();
+   /***** Put icon to view degree types *****/
+   DT_PutIconToViewDegreeTypes ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_HIERARCHY);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_HIERARCHY);
   }
 
 /*****************************************************************************/
@@ -953,7 +950,7 @@ static void Deg_EditDegreesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsEditingDegrees,&Gbl,
+		 Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -990,19 +987,16 @@ static void Deg_EditDegreesInternal (void)
 /**************** Put contextual icons in edition of degrees *****************/
 /*****************************************************************************/
 
-static void Deg_PutIconsEditingDegrees (void *Args)
+static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to view degrees *****/
-      Deg_PutIconToViewDegrees ();
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
 
-      /***** Put icon to view types of degree *****/
-      DT_PutIconToViewDegreeTypes ();
+   /***** Put icon to view types of degree *****/
+   DT_PutIconToViewDegreeTypes ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_HIERARCHY);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_HIERARCHY);
   }
 
 /*****************************************************************************/
@@ -1809,7 +1803,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
      {
       /***** Alert with button to go to degree *****/
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
-                                  Deg_PutParamGoToDeg,&Gbl,
+                                  Deg_PutParamGoToDeg,&Deg_EditingDeg->DegCod,
                                   Btn_CONFIRM_BUTTON,
 				  Hie_BuildGoToMsg (Deg_EditingDeg->ShrtName));
       Hie_FreeGoToMsg ();
@@ -1819,10 +1813,10 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Deg_PutParamGoToDeg (void *Args)
+static void Deg_PutParamGoToDeg (void *DegCod)
   {
-   if (Args)
-      Deg_PutParamDegCod (Deg_EditingDeg->DegCod);
+   if (DegCod)
+      Deg_PutParamDegCod (*((long *) DegCod));
   }
 
 /*****************************************************************************/

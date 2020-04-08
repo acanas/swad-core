@@ -9328,7 +9328,7 @@ unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
 /******* Get total number of users of one or several roles in courses ********/
 /*****************************************************************************/
 
-#define Usr_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES*(10+1)-1)
+#define Usr_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
 unsigned Usr_GetNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles)
   {

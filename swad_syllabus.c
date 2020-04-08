@@ -512,7 +512,7 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
    /***** Begin box and table *****/
    if (PutIconToEdit)
       Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-			 Inf_PutIconToEditInfo,&Gbl,
+			 Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
 							Hlp_COURSE_Syllabus,
 			 Box_NOT_CLOSABLE,0);
