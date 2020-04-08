@@ -3143,7 +3143,7 @@ static void Brw_ShowFileBrowserNormal (void)
 static void Brw_ShowFileBrowserProject (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
-   struct Project Prj;
+   struct Prj_Project Prj;
    unsigned MyRolesInProject;
 
    /***** Allocate memory for the project *****/
@@ -6839,7 +6839,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
-   struct Project Prj;
+   struct Prj_Project Prj;
    struct UsrData UsrDat;
    char TxtClipboardZone[1024 +
 			 Hie_MAX_BYTES_SHRT_NAME +

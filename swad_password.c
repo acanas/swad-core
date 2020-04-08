@@ -74,7 +74,7 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 
 static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat);
 
-static void Pwd_PutLinkToSendNewPasswdParams (void *Args);
+static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
@@ -248,15 +248,15 @@ void Pwd_PutLinkToSendNewPasswd (void)
    extern const char *Txt_Forgotten_password;
 
    Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
-				  Pwd_PutLinkToSendNewPasswdParams,&Gbl,
+				  Pwd_PutLinkToSendNewPasswdParams,Gbl.Usrs.Me.UsrIdLogin,
 				  "key.svg",
 				  Txt_Forgotten_password);
   }
 
-static void Pwd_PutLinkToSendNewPasswdParams (void *Args)
+static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin)
   {
-   if (Args)
-      Par_PutHiddenParamString (NULL,"UsrId",Gbl.Usrs.Me.UsrIdLogin);
+   if (UsrIdLogin)
+      Par_PutHiddenParamString (NULL,"UsrId",(char *) Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/

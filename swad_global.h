@@ -519,20 +519,7 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct
-     {
-      struct
-        {
-	 bool Editable;
-        } Config;
-      struct Prj_Filter Filter;
-      bool LstIsRead;		// Is the list already read from database, or it needs to be read?
-      unsigned Num;		// Number of projects
-      long *LstPrjCods;		// List of project codes
-      Prj_Order_t SelectedOrder;
-      unsigned CurrentPage;
-      long PrjCod;		// Current project
-     } Prjs;
+   struct Prj_Projects Prjs;
    struct
      {
       Usr_Who_t Who;

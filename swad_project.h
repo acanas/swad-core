@@ -132,8 +132,24 @@ typedef enum
    Prj_ROLE_EVL	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
+/***** Struct to store context/status of projects *****/
+struct Prj_Projects
+  {
+   struct
+     {
+      bool Editable;
+     } Config;
+   struct Prj_Filter Filter;
+   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   unsigned Num;		// Number of projects
+   long *LstPrjCods;		// List of project codes
+   Prj_Order_t SelectedOrder;
+   unsigned CurrentPage;
+   long PrjCod;		// Current project
+  };
+
 /***** Struct to store a project *****/
-struct Project
+struct Prj_Project
   {
    long PrjCod;
    long CrsCod;
@@ -165,16 +181,16 @@ void Prj_PutParams (struct Prj_Filter *Filter,
                     unsigned NumPage,
                     long PrjCod);
 
-void Prj_ShowOneUniqueProject (struct Project *Prj);
+void Prj_ShowOneUniqueProject (struct Prj_Project *Prj);
 
 void Prj_PrintOneProject (void);
 
 void Prj_FlushCacheMyRolesInProject (void);
 Prj_RoleInProject_t Prj_GetMyRolesInProject (long PrjCod);
 
-void Prj_ReqAddStds (void *Args);
-void Prj_ReqAddTuts (void *Args);
-void Prj_ReqAddEvls (void *Args);
+void Prj_ReqAddStds (void);
+void Prj_ReqAddTuts (void);
+void Prj_ReqAddEvls (void);
 
 void Prj_GetSelectedUsrsAndAddStds (void);
 void Prj_GetSelectedUsrsAndAddTuts (void);
@@ -195,10 +211,10 @@ bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject);
 void Prj_RequestCreatePrj (void);
 void Prj_RequestEditPrj (void);
 
-void Prj_AllocMemProject (struct Project *Prj);
-void Prj_FreeMemProject (struct Project *Prj);
+void Prj_AllocMemProject (struct Prj_Project *Prj);
+void Prj_FreeMemProject (struct Prj_Project *Prj);
 
-void Prj_GetDataOfProjectByCod (struct Project *Prj);
+void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
 long Prj_GetCourseOfProject (long PrjCod);
 void Prj_FreeListProjects (void);
 

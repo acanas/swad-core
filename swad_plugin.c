@@ -71,7 +71,7 @@ static struct Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plug
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (void *Args);
+static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
 static void Plg_ListPluginsForEdition (void);
 static void Plg_PutParamPlgCod (long PlgCod);
@@ -109,7 +109,7 @@ void Plg_ListPlugins (void)
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Txt_Plugins,
-			 Plg_PutIconToEditPlugins,&Gbl,
+			 Plg_PutIconToEditPlugins,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Txt_Plugins,
@@ -171,11 +171,10 @@ void Plg_ListPlugins (void)
 /*************************** Put icon to edit plugins ************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (void *Args)
+static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToEdit (ActEdiPlg,NULL,
-				   NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlg,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/

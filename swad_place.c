@@ -65,10 +65,10 @@ static struct Place *Plc_EditingPlc = NULL;	// Static variable to keep the place
 
 static void Plc_GetParamPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
-static void Plc_PutIconsListingPlaces (void *Args);
+static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_EditPlacesInternal (void);
-static void Plc_PutIconsEditingPlaces (void *Args);
+static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
 
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
@@ -112,7 +112,7 @@ void Plc_SeePlaces (void)
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Places,
-                    Plc_PutIconsListingPlaces,&Gbl,
+                    Plc_PutIconsListingPlaces,NULL,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
       HTM_TR_Begin (NULL);
@@ -238,17 +238,14 @@ static bool Plc_CheckIfICanCreatePlaces (void)
 /****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
-static void Plc_PutIconsListingPlaces (void *Args)
+static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to edit places *****/
-      if (Plc_CheckIfICanCreatePlaces ())
-	 Plc_PutIconToEditPlaces ();
+   /***** Put icon to edit places *****/
+   if (Plc_CheckIfICanCreatePlaces ())
+      Plc_PutIconToEditPlaces ();
 
-      /***** Put icon to view centres *****/
-      Ctr_PutIconToViewCentres ();
-     }
+   /***** Put icon to view centres *****/
+   Ctr_PutIconToViewCentres ();
   }
 
 /*****************************************************************************/
@@ -287,7 +284,7 @@ static void Plc_EditPlacesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Places,
-                 Plc_PutIconsEditingPlaces,&Gbl,
+                 Plc_PutIconsEditingPlaces,NULL,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
@@ -309,16 +306,13 @@ static void Plc_EditPlacesInternal (void)
 /**************** Put contextual icons in edition of places *****************/
 /*****************************************************************************/
 
-static void Plc_PutIconsEditingPlaces (void *Args)
+static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to view places *****/
-      Plc_PutIconToViewPlaces ();
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
 
-      /***** Put icon to view centres *****/
-      Ctr_PutIconToViewCentres ();
-     }
+   /***** Put icon to view centres *****/
+   Ctr_PutIconToViewCentres ();
   }
 
 /*****************************************************************************/
