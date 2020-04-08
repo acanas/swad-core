@@ -513,7 +513,7 @@ struct Globals
       bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
       const char *TxtStyle;
       const char *InputStyle;
-      struct Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone
+      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone
       struct
         {
 	 bool CreateZIP;
@@ -603,19 +603,6 @@ struct Globals
       struct DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[Dat_NUM_START_END_TIME];
      } DateRange;
-   struct
-     {
-      bool LstIsRead;			// Is the list already read from database...
-					// ...or it needs to be read?
-      unsigned Num;			// Total number of games
-      unsigned NumSelected;		// Number of games selected
-      struct GameSelected *Lst;		// List of games
-      Gam_Order_t SelectedOrder;
-      unsigned CurrentPage;
-      char *ListQuestions;
-      long MchCodBeingPlayed;	// Used to refresh game via AJAX
-      char *GamCodsSelected;	// String with selected game codes separated by separator multiple
-     } Games;
    struct
      {
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?

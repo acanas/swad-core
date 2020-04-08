@@ -337,9 +337,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
-   /* Games for remote control */
-   Gbl.Games.ListQuestions = NULL;
-
    /* Public activity */
    Gbl.Timeline.Who = TL_DEFAULT_WHO;
 

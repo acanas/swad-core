@@ -47,7 +47,7 @@ typedef enum
    Agd_END_TIME   = 1,
   } Agd_StartOrEndTime_t;
 
-struct AgendaEvent
+struct Agd_Event
   {
    long AgdCod;
    long UsrCod;

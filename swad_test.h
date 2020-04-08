@@ -166,10 +166,10 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_RequestEditTests (void);
-void Tst_RequestSelectTestsForGame (void);
+void Tst_RequestSelectTestsForGame (struct Gam_Games *Games);
 
 void Tst_ListQuestionsToEdit (void);
-void Tst_ListQuestionsToSelect (void);
+void Tst_ListQuestionsToSelect (struct Gam_Games *Games);
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);

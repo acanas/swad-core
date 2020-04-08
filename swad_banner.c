@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 struct Ban_Banners
   {
    unsigned Num;	// Number of banners
-   struct Banner *Lst;	// List of banners
+   struct Ban_Banner *Lst;	// List of banners
    long BanCodToEdit;	// Used as parameter in contextual links
    long BanCodClicked;	// Banned clicked, used to log it
   };
@@ -67,57 +67,57 @@ struct Ban_Banners
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Banner *Ban_EditingBan;
+static struct Ban_Banner *Ban_EditingBan;
 static long Ban_BanCodClicked;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ban_SetEditingBanner (struct Banner *Ban);
-static struct Banner *Ban_GetEditingBanner (void);
+static void Ban_SetEditingBanner (struct Ban_Banner *Ban);
+static struct Ban_Banner *Ban_GetEditingBanner (void);
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners);
-static void Ban_PutIconsListingBanners (void *Args);
+static void Ban_PutIconsListingBanners (void *Banners);
 static void Ban_PutIconToEditBanners (void);
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
-                                     const struct Banner *Ban);
+                                     const struct Ban_Banner *Ban);
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
                                 MYSQL_RES **mysql_res,unsigned long NumRows);
 static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 
-static void Ban_PutIconsEditingBanners (void *Args);
+static void Ban_PutIconsEditingBanners (void *Banners);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
 static void Ban_PutParamBanCodToEdit (void *BanCod);
 static void Ban_PutParamBanCod (long BanCod);
-static void Ban_ShowOrHideBanner (struct Banner *Ban,bool Hide);
+static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide);
 
-static void Ban_RenameBanner (struct Banner *Ban,
+static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
 static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
 				 const char *NewBanName);
 
-static void Ban_PutFormToCreateBanner (const struct Banner *Ban);
+static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban);
 static void Ban_PutHeadBanners (void);
-static void Ban_CreateBanner (const struct Banner *Ban);
+static void Ban_CreateBanner (const struct Ban_Banner *Ban);
 
 static void Ban_SetBanCodClicked (long BanCod);
 
 static void Ban_ResetBanners (struct Ban_Banners *Banners);
-static void Ban_ResetBanner (struct Banner *Ban);
+static void Ban_ResetBanner (struct Ban_Banner *Ban);
 
 /*****************************************************************************/
 /************************** Access to editing banner *************************/
 /*****************************************************************************/
 
-static void Ban_SetEditingBanner (struct Banner *Ban)
+static void Ban_SetEditingBanner (struct Ban_Banner *Ban)
   {
    Ban_EditingBan = Ban;
   }
 
-static struct Banner *Ban_GetEditingBanner (void)
+static struct Ban_Banner *Ban_GetEditingBanner (void)
   {
    return Ban_EditingBan;
   }
@@ -149,7 +149,7 @@ void Ban_SeeBanners (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsListingBanners,&Gbl,
+                 Ban_PutIconsListingBanners,&Banners,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
    /***** Write all banners *****/
@@ -208,9 +208,9 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
 /***************** Put contextual icons in list of banners *******************/
 /*****************************************************************************/
 
-static void Ban_PutIconsListingBanners (void *Args)
+static void Ban_PutIconsListingBanners (void *Banners)
   {
-   if (Args)
+   if (Banners)	// Not used
      {
       /***** Put icon to view banners *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -238,7 +238,7 @@ static void Ban_PutIconToEditBanners (void)
 void Ban_EditBanners (void)
   {
    struct Ban_Banners Banners;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banners *****/
    Ban_ResetBanners (&Banners);
@@ -251,7 +251,7 @@ void Ban_EditBanners (void)
   }
 
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
-                                     const struct Banner *Ban)
+                                     const struct Ban_Banner *Ban)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
@@ -266,7 +266,7 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsEditingBanners,&Gbl,
+                 Ban_PutIconsEditingBanners,Banners,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new banner *****/
@@ -292,7 +292,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
   {
    MYSQL_ROW row;
    unsigned NumBan;
-   struct Banner *Ban;
+   struct Ban_Banner *Ban;
 
    /***** Get banners from database *****/
    if (NumRows) // Banners found...
@@ -300,8 +300,8 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
       Banners->Num = (unsigned) NumRows;
 
       /***** Create list with banners *****/
-      if ((Banners->Lst = (struct Banner *)
-			  calloc (NumRows,sizeof (struct Banner))) == NULL)
+      if ((Banners->Lst = (struct Ban_Banner *)
+			  calloc (NumRows,sizeof (struct Ban_Banner))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
 
       /***** Get the banners *****/
@@ -349,7 +349,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 /*************************** Get banner full name ****************************/
 /*****************************************************************************/
 
-void Ban_GetDataOfBannerByCod (struct Banner *Ban)
+void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -416,9 +416,9 @@ static void Ban_FreeListBanners (struct Ban_Banners *Banners)
 /**************** Put contextual icons in edition of banners *****************/
 /*****************************************************************************/
 
-static void Ban_PutIconsEditingBanners (void *Args)
+static void Ban_PutIconsEditingBanners (void *Banners)
   {
-   if (Args)
+   if (Banners)	// Not used
      {
       /***** Put icon to view banners *****/
       Ban_PutIconToViewBanners ();
@@ -449,7 +449,7 @@ void Ban_PutIconToViewBanners (void)
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
    unsigned NumBan;
-   struct Banner *Ban;
+   struct Ban_Banner *Ban;
    char *Anchor = NULL;
 
    /***** Begin table *****/
@@ -574,7 +574,7 @@ long Ban_GetParamBanCod (void)
 void Ban_RemoveBanner (void)
   {
    extern const char *Txt_Banner_X_removed;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -606,7 +606,7 @@ void Ban_RemoveBanner (void)
 
 void Ban_ShowBanner (void)
   {
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -624,7 +624,7 @@ void Ban_ShowBanner (void)
 
 void Ban_HideBanner (void)
   {
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -640,7 +640,7 @@ void Ban_HideBanner (void)
 /*************** Change hiddeness of banner in the database ******************/
 /*****************************************************************************/
 
-static void Ban_ShowOrHideBanner (struct Banner *Ban,bool Hide)
+static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
   {
    /***** Get banner code *****/
    if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
@@ -665,7 +665,7 @@ static void Ban_ShowOrHideBanner (struct Banner *Ban,bool Hide)
 
 void Ban_RenameBannerShort (void)
   {
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -683,7 +683,7 @@ void Ban_RenameBannerShort (void)
 
 void Ban_RenameBannerFull (void)
   {
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -699,7 +699,7 @@ void Ban_RenameBannerFull (void)
 /*********************** Change the name of a banner *************************/
 /*****************************************************************************/
 
-static void Ban_RenameBanner (struct Banner *Ban,
+static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_banner_X_already_exists;
@@ -809,7 +809,7 @@ void Ban_ChangeBannerImg (void)
   {
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
    /***** Reset banner *****/
@@ -858,7 +858,7 @@ void Ban_ChangeBannerImg (void)
 void Ban_ChangeBannerWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Reset banner *****/
@@ -906,7 +906,7 @@ void Ban_ChangeBannerWWW (void)
 void Ban_ContEditAfterChgBan (void)
   {
    struct Ban_Banners Banners;
-   struct Banner *Ban = Ban_GetEditingBanner ();
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banners *****/
    Ban_ResetBanners (&Banners);
@@ -922,7 +922,7 @@ void Ban_ContEditAfterChgBan (void)
 /********************* Put a form to create a new banner *********************/
 /*****************************************************************************/
 
-static void Ban_PutFormToCreateBanner (const struct Banner *Ban)
+static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_New_banner;
@@ -1019,7 +1019,7 @@ void Ban_RecFormNewBanner (void)
    extern const char *Txt_You_must_specify_the_URL_of_the_new_banner;
    extern const char *Txt_Created_new_banner_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Reset banner *****/
    Ban_ResetBanner (&Ban);
@@ -1074,7 +1074,7 @@ void Ban_RecFormNewBanner (void)
 /**************************** Create a new banner ****************************/
 /*****************************************************************************/
 
-static void Ban_CreateBanner (const struct Banner *Ban)
+static void Ban_CreateBanner (const struct Ban_Banner *Ban)
   {
    /***** Create a new banner *****/
    DB_QueryINSERT ("can not create banner",
@@ -1136,7 +1136,7 @@ void Ban_WriteMenuWithBanners (void)
 
 void Ban_ClickOnBanner (void)
   {
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Get banner code *****/
    if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
@@ -1184,7 +1184,7 @@ static void Ban_ResetBanners (struct Ban_Banners *Banners)
 /************************* Reset banner/destructor **********************/
 /*****************************************************************************/
 
-static void Ban_ResetBanner (struct Banner *Ban)
+static void Ban_ResetBanner (struct Ban_Banner *Ban)
   {
    /***** Reset banner *****/
    Ban->BanCod      = -1L;

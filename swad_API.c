@@ -4939,7 +4939,7 @@ int swad__getMatches (struct soap *soap,
                       struct swad__getMatchesOutput *getMatchesOut)	// output
   {
    int ReturnCode;
-   struct Game Game;
+   struct Gam_Game Game;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -5119,8 +5119,8 @@ int swad__getMatchStatus (struct soap *soap,
                           struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
   {
    int ReturnCode;
-   struct Match Match;
-   struct Game Game;
+   struct Mch_Match Match;
+   struct Gam_Game Game;
    bool ICanPlayThisMatchBasedOnGrps;
    unsigned NumOptions;
    struct Mch_UsrAnswer UsrAnswer;

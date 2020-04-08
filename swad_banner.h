@@ -42,7 +42,7 @@
 #define Ban_MAX_CHARS_IMAGE	NAME_MAX		// 255
 #define Ban_MAX_BYTES_IMAGE	Ban_MAX_CHARS_IMAGE	// 255
 
-struct Banner
+struct Ban_Banner
   {
    long BanCod;
    bool Hidden;
@@ -61,7 +61,7 @@ void Ban_EditBanners (void);
 
 void Ban_PutIconToViewBanners (void);
 
-void Ban_GetDataOfBannerByCod (struct Banner *Ban);
+void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban);
 long Ban_GetParamLnkCod (void);
 void Ban_RemoveBanner (void);
 void Ban_ShowBanner (void);

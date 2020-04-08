@@ -70,55 +70,40 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MchRes_ListMyMchResultsInCrs (void);
-static void MchRes_ListMyMchResultsInGam (long GamCod);
-static void MchRes_ListMyMchResultsInMch (long MchCod);
-static void MchRes_ShowAllMchResultsInSelectedGames (void *Args);
-static void MchRes_ListAllMchResultsInSelectedGames (void);
-static void MchRes_ListAllMchResultsInGam (long GamCod);
-static void MchRes_ListAllMchResultsInMch (long MchCod);
+static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
 
-static void MchRes_ShowResultsBegin (const char *Title,bool ListGamesToSelect);
+static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games);
+static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games,long GamCod);
+static void MchRes_ListMyMchResultsInMch (struct Gam_Games *Games,long MchCod);
+static void MchRes_ShowAllMchResultsInSelectedGames (void *Games);
+static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games);
+static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod);
+static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod);
+
+static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
+                                     const char *Title,bool ListGamesToSelect);
 static void MchRes_ShowResultsEnd (void);
 
-static void MchRes_ListGamesToSelect (void);
+static void MchRes_ListGamesToSelect (struct Gam_Games *Games);
 static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
 
-static void MchRes_BuildGamesSelectedCommas (char **GamesSelectedCommas);
-static void MchRes_ShowMchResults (Usr_MeOrOther_t MeOrOther,
-				long MchCod,	// <= 0 ==> any
-				long GamCod,	// <= 0 ==> any
-				const char *GamesSelectedCommas);
+static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
+                                             char **GamesSelectedCommas);
+static void MchRes_ShowMchResults (struct Gam_Games *Games,
+                                   Usr_MeOrOther_t MeOrOther,
+				   long MchCod,	// <= 0 ==> any
+				   long GamCod,	// <= 0 ==> any
+				   const char *GamesSelectedCommas);
 static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
-                                          unsigned NumTotalQsts,
-                                          unsigned NumTotalQstsNotBlank,
-                                          double TotalScoreOfAllResults,
-					  double TotalGrade);
+                                             unsigned NumTotalQsts,
+                                             unsigned NumTotalQstsNotBlank,
+                                             double TotalScoreOfAllResults,
+					     double TotalGrade);
 static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
                                             struct TstExa_Exam *Exam);
 
-static bool MchRes_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod);
+static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod);
 static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
-
-/*****************************************************************************/
-/*********** Select users and dates to show their matches results ************/
-/*****************************************************************************/
-
-void MchRes_SelUsrsToViewMchResults (void *Args)
-  {
-   extern const char *Hlp_ASSESSMENT_Games_results;
-   extern const char *Txt_Results;
-   extern const char *Txt_View_matches_results;
-
-   if (Args)
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeAllMchResCrs,
-					NULL,NULL,
-					Txt_Results,
-					Hlp_ASSESSMENT_Games_results,
-					Txt_View_matches_results,
-					false);	// Do not put form with date range
-  }
 
 /*****************************************************************************/
 /*************************** Show my matches results *************************/
@@ -127,22 +112,26 @@ void MchRes_SelUsrsToViewMchResults (void *Args)
 void MchRes_ShowMyMchResultsInCrs (void)
   {
    extern const char *Txt_Results;
+   struct Gam_Games Games;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get list of games *****/
-   Gam_GetListGames (Gam_ORDER_BY_TITLE);
-   Gam_GetListSelectedGamCods ();
+   Gam_GetListGames (&Games,Gam_ORDER_BY_TITLE);
+   Gam_GetListSelectedGamCods (&Games);
 
    /***** List my matches results in the current course *****/
-   MchRes_ShowResultsBegin (Txt_Results,true);	// List games to select
-   MchRes_ListMyMchResultsInCrs ();
+   MchRes_ShowResultsBegin (&Games,Txt_Results,true);	// List games to select
+   MchRes_ListMyMchResultsInCrs (&Games);
    MchRes_ShowResultsEnd ();
 
    /***** Free list of games *****/
-   free (Gbl.Games.GamCodsSelected);
-   Gam_FreeListGames ();
+   free (Games.GamCodsSelected);
+   Gam_FreeListGames (&Games);
   }
 
-static void MchRes_ListMyMchResultsInCrs (void)
+static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games)
   {
    char *GamesSelectedCommas = NULL;	// Initialized to avoid warning
 
@@ -151,8 +140,8 @@ static void MchRes_ListMyMchResultsInCrs (void)
 
    /***** List my matches results in the current course *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
-   MchRes_BuildGamesSelectedCommas (&GamesSelectedCommas);
-   MchRes_ShowMchResults (Usr_ME,-1L,-1L,GamesSelectedCommas);
+   MchRes_BuildGamesSelectedCommas (Games,&GamesSelectedCommas);
+   MchRes_ShowMchResults (Games,Usr_ME,-1L,-1L,GamesSelectedCommas);
    free (GamesSelectedCommas);
   }
 
@@ -163,37 +152,42 @@ static void MchRes_ListMyMchResultsInCrs (void)
 void MchRes_ShowMyMchResultsInGam (void)
   {
    extern const char *Txt_Results_of_game_X;
-   struct Game Game;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Lay_ShowErrorAndExit ("Code of game is missing.");
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,&Game,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in game *****/
-   MchRes_ShowResultsBegin (Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
-			 false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,
+                            Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
+			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListMyMchResultsInGam (Game.GamCod);
+   MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListMyMchResultsInGam (long GamCod)
+static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games,long GamCod)
   {
    /***** Table header *****/
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
-   MchRes_ShowMchResults (Usr_ME,-1L,GamCod,NULL);
+   MchRes_ShowMchResults (Games,Usr_ME,-1L,GamCod,NULL);
   }
 
 /*****************************************************************************/
@@ -203,41 +197,45 @@ static void MchRes_ListMyMchResultsInGam (long GamCod)
 void MchRes_ShowMyMchResultsInMch (void)
   {
    extern const char *Txt_Results_of_match_X;
-   struct Game Game;
-   struct Match Match;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
+   if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of match is missing.");
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,&Game,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in match *****/
-   MchRes_ShowResultsBegin (Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
-			 false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
+			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListMyMchResultsInMch (Match.MchCod);
+   MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListMyMchResultsInMch (long MchCod)
+static void MchRes_ListMyMchResultsInMch (struct Gam_Games *Games,long MchCod)
   {
    /***** Table header *****/
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
-   MchRes_ShowMchResults (Usr_ME,MchCod,-1L,NULL);
+   MchRes_ShowMchResults (Games,Usr_ME,MchCod,-1L,NULL);
   }
 
 /*****************************************************************************/
@@ -246,37 +244,45 @@ static void MchRes_ListMyMchResultsInMch (long MchCod)
 
 void MchRes_ShowAllMchResultsInCrs (void)
   {
+   struct Gam_Games Games;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
+
+   /***** Get users and show their matches results *****/
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  MchRes_ShowAllMchResultsInSelectedGames,&Gbl,
-                                  MchRes_SelUsrsToViewMchResults,&Gbl);
+				  MchRes_ShowAllMchResultsInSelectedGames,&Games,
+                                  MchRes_PutFormToSelUsrsToViewMchResults,&Games);
   }
 
 /*****************************************************************************/
 /****************** Show matches results for several users *******************/
 /*****************************************************************************/
 
-static void MchRes_ShowAllMchResultsInSelectedGames (void *Args)
+static void MchRes_ShowAllMchResultsInSelectedGames (void *Games)
   {
    extern const char *Txt_Results;
 
-   if (!Args)
+   if (!Games)
       return;
 
    /***** Get list of games *****/
-   Gam_GetListGames (Gam_ORDER_BY_TITLE);
-   Gam_GetListSelectedGamCods ();
+   Gam_GetListGames ((struct Gam_Games *) Games,Gam_ORDER_BY_TITLE);
+   Gam_GetListSelectedGamCods ((struct Gam_Games *) Games);
 
    /***** List the matches results of the selected users *****/
-   MchRes_ShowResultsBegin (Txt_Results,true);	// List games to select
-   MchRes_ListAllMchResultsInSelectedGames ();
+   MchRes_ShowResultsBegin ((struct Gam_Games *) Games,
+                            Txt_Results,
+                            true);	// List games to select
+   MchRes_ListAllMchResultsInSelectedGames ((struct Gam_Games *) Games);
    MchRes_ShowResultsEnd ();
 
    /***** Free list of games *****/
-   free (Gbl.Games.GamCodsSelected);
-   Gam_FreeListGames ();
+   free (((struct Gam_Games *) Games)->GamCodsSelected);
+   Gam_FreeListGames ((struct Gam_Games *) Games);
   }
 
-static void MchRes_ListAllMchResultsInSelectedGames (void)
+static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
   {
    char *GamesSelectedCommas = NULL;	// Initialized to avoid warning
    const char *Ptr;
@@ -285,7 +291,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (void)
    MchRes_ShowHeaderMchResults (Usr_OTHER);
 
    /***** List the matches results of the selected users *****/
-   MchRes_BuildGamesSelectedCommas (&GamesSelectedCommas);
+   MchRes_BuildGamesSelectedCommas (Games,&GamesSelectedCommas);
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
@@ -297,10 +303,41 @@ static void MchRes_ListAllMchResultsInSelectedGames (void)
 	   {
 	    /***** Show matches results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	    MchRes_ShowMchResults (Usr_OTHER,-1L,-1L,GamesSelectedCommas);
+	    MchRes_ShowMchResults (Games,Usr_OTHER,-1L,-1L,GamesSelectedCommas);
 	   }
      }
    free (GamesSelectedCommas);
+  }
+
+/*****************************************************************************/
+/**************** Select users to show their matches results *****************/
+/*****************************************************************************/
+
+void MchRes_SelUsrsToViewMchResults (void)
+  {
+   struct Gam_Games Games;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
+
+   /***** Put form to select users *****/
+   MchRes_PutFormToSelUsrsToViewMchResults (&Games);
+  }
+
+static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Txt_Results;
+   extern const char *Txt_View_matches_results;
+
+   if (Games)	// Not used
+      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+					ActSeeAllMchResCrs,
+					NULL,NULL,
+					Txt_Results,
+					Hlp_ASSESSMENT_Games_results,
+					Txt_View_matches_results,
+					false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -310,30 +347,35 @@ static void MchRes_ListAllMchResultsInSelectedGames (void)
 void MchRes_ShowAllMchResultsInGam (void)
   {
    extern const char *Txt_Results_of_game_X;
-   struct Game Game;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Lay_ShowErrorAndExit ("Code of game is missing.");
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,&Game,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in game *****/
-   MchRes_ShowResultsBegin (Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
-			 false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,
+                            Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
+			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListAllMchResultsInGam (Game.GamCod);
+   MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListAllMchResultsInGam (long GamCod)
+static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -375,7 +417,7 @@ static void MchRes_ListAllMchResultsInGam (long GamCod)
 		 {
 		  /***** Show matches results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  MchRes_ShowMchResults (Usr_OTHER,-1L,GamCod,NULL);
+		  MchRes_ShowMchResults (Games,Usr_OTHER,-1L,GamCod,NULL);
 		 }
 	}
      }
@@ -391,34 +433,39 @@ static void MchRes_ListAllMchResultsInGam (long GamCod)
 void MchRes_ShowAllMchResultsInMch (void)
   {
    extern const char *Txt_Results_of_match_X;
-   struct Game Game;
-   struct Match Match;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
+   if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of match is missing.");
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,&Game,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in match *****/
-   MchRes_ShowResultsBegin (Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
-			 false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,
+                            Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
+			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListAllMchResultsInMch (Match.MchCod);
+   MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListAllMchResultsInMch (long MchCod)
+static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -460,7 +507,7 @@ static void MchRes_ListAllMchResultsInMch (long MchCod)
 		 {
 		  /***** Show matches results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  MchRes_ShowMchResults (Usr_OTHER,MchCod,-1L,NULL);
+		  MchRes_ShowMchResults (Games,Usr_OTHER,MchCod,-1L,NULL);
 		 }
 	}
      }
@@ -473,7 +520,8 @@ static void MchRes_ListAllMchResultsInMch (long MchCod)
 /************************ Show results (begin / end) *************************/
 /*****************************************************************************/
 
-static void MchRes_ShowResultsBegin (const char *Title,bool ListGamesToSelect)
+static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
+                                     const char *Title,bool ListGamesToSelect)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
 
@@ -485,7 +533,7 @@ static void MchRes_ShowResultsBegin (const char *Title,bool ListGamesToSelect)
 
    /***** List games to select *****/
    if (ListGamesToSelect)
-      MchRes_ListGamesToSelect ();
+      MchRes_ListGamesToSelect (Games);
 
    /***** Begin match results table *****/
    HTM_SECTION_Begin (MchRes_RESULTS_TABLE_ID);
@@ -507,7 +555,7 @@ static void MchRes_ShowResultsEnd (void)
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
 
-static void MchRes_ListGamesToSelect (void)
+static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
@@ -516,7 +564,7 @@ static void MchRes_ListGamesToSelect (void)
    extern const char *Txt_Update_results;
    unsigned UniqueId;
    unsigned NumGame;
-   struct Game Game;
+   struct Gam_Game Game;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Games,
@@ -542,11 +590,11 @@ static void MchRes_ListGamesToSelect (void)
 
    /***** List the events *****/
    for (NumGame = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
-	NumGame < Gbl.Games.Num;
+	NumGame < Games->Num;
 	NumGame++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       /* Get data of this game */
-      Game.GamCod = Gbl.Games.Lst[NumGame].GamCod;
+      Game.GamCod = Games->Lst[NumGame].GamCod;
       Gam_GetDataOfGameByCod (&Game);
 
       /* Write a row for this event */
@@ -555,9 +603,9 @@ static void MchRes_ListGamesToSelect (void)
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_INPUT_CHECKBOX ("GamCod",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"Gam%u\" value=\"%ld\"%s",
-			  NumGame,Gbl.Games.Lst[NumGame].GamCod,
-			  Gbl.Games.Lst[NumGame].Selected ? " checked=\"checked\"" :
-				                            "");
+			  NumGame,Games->Lst[NumGame].GamCod,
+			  Games->Lst[NumGame].Selected ? " checked=\"checked\"" :
+				                         "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -633,25 +681,26 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 /******* from list of selected games                                  ********/
 /*****************************************************************************/
 
-static void MchRes_BuildGamesSelectedCommas (char **GamesSelectedCommas)
+static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
+                                             char **GamesSelectedCommas)
   {
    size_t MaxLength;
    unsigned NumGame;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Allocate memory for subquery of games selected *****/
-   MaxLength = (size_t) Gbl.Games.NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxLength = (size_t) Games->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*GamesSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected games *****/
    (*GamesSelectedCommas)[0] = '\0';
    for (NumGame = 0;
-	NumGame < Gbl.Games.Num;
+	NumGame < Games->Num;
 	NumGame++)
-      if (Gbl.Games.Lst[NumGame].Selected)
+      if (Games->Lst[NumGame].Selected)
 	{
-	 sprintf (LongStr,"%ld",Gbl.Games.Lst[NumGame].GamCod);
+	 sprintf (LongStr,"%ld",Games->Lst[NumGame].GamCod);
 	 if ((*GamesSelectedCommas)[0])
 	    Str_Concat (*GamesSelectedCommas,",",MaxLength);
 	 Str_Concat (*GamesSelectedCommas,LongStr,MaxLength);
@@ -662,10 +711,11 @@ static void MchRes_BuildGamesSelectedCommas (char **GamesSelectedCommas)
 /********* Show the matches results of a user in the current course **********/
 /*****************************************************************************/
 
-static void MchRes_ShowMchResults (Usr_MeOrOther_t MeOrOther,
-				long MchCod,	// <= 0 ==> any
-				long GamCod,	// <= 0 ==> any
-				const char *GamesSelectedCommas)
+static void MchRes_ShowMchResults (struct Gam_Games *Games,
+                                   Usr_MeOrOther_t MeOrOther,
+				   long MchCod,	// <= 0 ==> any
+				   long GamCod,	// <= 0 ==> any
+				   const char *GamesSelectedCommas)
   {
    extern const char *Txt_Match_result;
    char *MchSubQuery;
@@ -679,7 +729,7 @@ static void MchRes_ShowMchResults (Usr_MeOrOther_t MeOrOther,
    unsigned NumResult;
    static unsigned UniqueId = 0;
    char *Id;
-   struct Match Match;
+   struct Mch_Match Match;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
    unsigned NumQstsNotBlankInThisResult;
@@ -888,17 +938,17 @@ static void MchRes_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewResult)
 	   {
-	    Gam_SetCurrentGamCod (Match.GamCod);	// Used to pass parameter
-	    Mch_SetCurrentMchCod (Match.MchCod);	// Used to pass parameter
+	    Games->GamCod = Match.GamCod;
+	    Games->MchCod = Match.MchCod;
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
 		  Frm_StartForm (ActSeeOneMchResMe);
-		  Mch_PutParamsEdit (&Gbl);
+		  Mch_PutParamsEdit (Games);
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
-		  Mch_PutParamsEdit (&Gbl);
+		  Mch_PutParamsEdit (Games);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
@@ -935,10 +985,10 @@ static void MchRes_ShowMchResults (Usr_MeOrOther_t MeOrOther,
 /*****************************************************************************/
 
 static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
-                                          unsigned NumTotalQsts,
-                                          unsigned NumTotalQstsNotBlank,
-                                          double TotalScoreOfAllResults,
-					  double TotalGrade)
+                                             unsigned NumTotalQsts,
+                                             unsigned NumTotalQstsNotBlank,
+                                             double TotalScoreOfAllResults,
+					     double TotalGrade)
   {
    extern const char *Txt_Matches;
 
@@ -1003,8 +1053,9 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
-   struct Game Game;
-   struct Match Match;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
@@ -1015,8 +1066,11 @@ void MchRes_ShowOneMchResult (void)
    bool ICanViewResult;
    bool ICanViewScore;
 
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
+
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Game,&Match);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
@@ -1353,7 +1407,7 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 /********************** Get if I can see match result ************************/
 /*****************************************************************************/
 
-static bool MchRes_CheckIfICanSeeMatchResult (struct Match *Match,long UsrCod)
+static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod)
   {
    bool ItsMe;
 

@@ -675,13 +675,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeMyMchResCrs	] = {1796,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowMyMchResultsInCrs	,NULL},
    [ActSeeMyMchResGam	] = {1810,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowMyMchResultsInGam	,NULL},
    [ActSeeMyMchResMch	] = {1812,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowMyMchResultsInMch	,NULL},
-   [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult		,NULL},
+   [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult	,NULL},
 
    [ActReqSeeAllMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_SelUsrsToViewMchResults	,NULL},
    [ActSeeAllMchResCrs	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInCrs	,NULL},
    [ActSeeAllMchResGam	] = {1811,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInGam	,NULL},
    [ActSeeAllMchResMch	] = {1813,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInMch	,NULL},
-   [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult		,NULL},
+   [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult	,NULL},
 
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 

@@ -37,29 +37,6 @@
 #define Gam_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct GameSelected
-  {
-   long GamCod;		// Game code
-   bool Selected;	// Is this game selected when seeing match results?
-  };
-
-struct Game
-  {
-   long GamCod;			// Game code
-   long CrsCod;			// Course code
-   long UsrCod;			// Author code
-   double MaxGrade;		// Score range [0...max.score]
-				// will be converted to
-				// grade range [0...max.grade]
-   unsigned Visibility;		// Visibility of results
-   char Title[Gam_MAX_BYTES_TITLE + 1];
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Hidden;			// Game is hidden
-   unsigned NumQsts;		// Number of questions in the game
-   unsigned NumMchs;		// Number of matches in the game
-   unsigned NumUnfinishedMchs;	// Number of unfinished matches in the game
-  };
-
 #define Gam_NUM_ORDERS 3
 typedef enum
   {
@@ -77,33 +54,74 @@ typedef enum
   } Gam_AnswerType_t;
 #define Gam_ANSWER_TYPE_DEFAULT Gam_ANS_UNIQUE_CHOICE
 
+struct Gam_GameSelected
+  {
+   long GamCod;		// Game code
+   bool Selected;	// Is this game selected when seeing match results?
+  };
+
+struct Gam_Games
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Total number of games
+   unsigned NumSelected;	// Number of games selected
+   struct Gam_GameSelected *Lst;// List of games
+   Gam_Order_t SelectedOrder;
+   unsigned CurrentPage;
+   char *ListQuestions;
+   char *GamCodsSelected;	// String with selected game codes separated by separator multiple
+   long GamCod;			// Selected/current game code
+   long MchCod;			// Selected/current match code
+   unsigned QstInd;		// Current question index
+  };
+
+struct Gam_Game
+  {
+   long GamCod;			// Game code
+   long CrsCod;			// Course code
+   long UsrCod;			// Author code
+   double MaxGrade;		// Score range [0...max.score]
+				// will be converted to
+				// grade range [0...max.grade]
+   unsigned Visibility;		// Visibility of results
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Hidden;			// Game is hidden
+   unsigned NumQsts;		// Number of questions in the game
+   unsigned NumMchs;		// Number of matches in the game
+   unsigned NumUnfinishedMchs;	// Number of unfinished matches in the game
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Gam_ResetGames (struct Gam_Games *Games);
+
 void Gam_SeeAllGames (void);
 void Gam_SeeOneGame (void);
-void Gam_ShowOnlyOneGame (struct Game *Game,
+void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
+			  struct Gam_Game *Game,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch);
-void Gam_ShowOnlyOneGameBegin (struct Game *Game,
+void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
+			       struct Gam_Game *Game,
 			       bool ListGameQuestions,
 			       bool PutFormNewMatch);
 void Gam_ShowOnlyOneGameEnd (void);
-void Gam_PutHiddenParamGameOrder (void);
-void Gam_RequestCreatOrEditGame (void);
 
 void Gam_SetCurrentGamCod (long GamCod);
-void Gam_PutParams (void *Args);
+void Gam_PutParams (void *Games);
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
-long Gam_GetParams (void);
+long Gam_GetParams (struct Gam_Games *Games);
 
-void Gam_GetListGames (Gam_Order_t SelectedOrder);
-void Gam_GetListSelectedGamCods (void);
-void Gam_GetDataOfGameByCod (struct Game *Gam);
-void Gam_GetDataOfGameByFolder (struct Game *Gam);
-void Gam_FreeListGames (void);
+void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder);
+void Gam_GetListSelectedGamCods (struct Gam_Games *Games);
+void Gam_GetDataOfGameByCod (struct Gam_Game *Gam);
+void Gam_GetDataOfGameByFolder (struct Gam_Game *Gam);
+void Gam_FreeListGames (struct Gam_Games *Games);
 
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
@@ -111,8 +129,11 @@ void Gam_RemoveGamesCrs (long CrsCod);
 
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);
+
+void Gam_RequestCreatOrEditGame (void);
+
 void Gam_RecFormGame (void);
-bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
+bool Mch_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
 
 unsigned Gam_GetNumQstsGame (long GamCod);
 
@@ -133,7 +154,7 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_PutButtonNewMatch (long GamCod);
+void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod);
 void Gam_RequestNewMatch (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);

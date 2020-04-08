@@ -83,35 +83,35 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments);
 static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
                                   bool PrintView);
 static bool Asg_CheckIfICanCreateAssignments (void);
-static void Asg_PutIconsListAssignments (void *Args);
+static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_PutButtonToCreateNewAsg (void *Assignments);
-static void Asg_ParamsWhichGroupsToShow (void *Args);
+static void Asg_ParamsWhichGroupsToShow (void *Assignments);
 static void Asg_ShowOneAssignment (long AsgCod,bool PrintView);
-static void Asg_WriteAsgAuthor (struct Assignment *Asg);
-static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView);
+static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
+static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView);
 static Dat_StartEndTime_t Asg_GetParamAsgOrder (void);
 
-static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
+static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
                                          const char *Anchor);
 static void Asg_PutParams (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
-static void Asg_GetDataOfAssignment (struct Assignment *Asg,
+static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
                                      MYSQL_RES **mysql_res,
 				     unsigned long NumRows);
-static void Asg_ResetAssignment (struct Assignment *Asg);
+static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Asg_PutParamAsgCod (long AsgCod);
 static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail);
-static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt);
-static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt);
+static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
+static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod);
 static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod);
 static void Asg_CreateGrps (long AsgCod);
-static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg);
+static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
 static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
 
 /*****************************************************************************/
@@ -395,7 +395,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -521,7 +521,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 /********************* Write the author of an assignment *********************/
 /*****************************************************************************/
 
-static void Asg_WriteAsgAuthor (struct Assignment *Asg)
+static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg)
   {
    Usr_WriteAuthor1Line (Asg->UsrCod,Asg->Hidden);
   }
@@ -530,7 +530,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 /********************* Write the folder of an assignment *********************/
 /*****************************************************************************/
 
-static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
+static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView)
   {
    extern const char *Txt_Upload_file_or_create_folder;
    extern const char *Txt_Folder;
@@ -611,7 +611,7 @@ static Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
 /***************** Put a link (form) to edit one assignment ******************/
 /*****************************************************************************/
 
-static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
+static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
                                          const char *Anchor)
   {
    struct Asg_Assignments Assignments;
@@ -760,7 +760,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
+void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -793,7 +793,7 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
 /*************** Get assignment data using its folder name *******************/
 /*****************************************************************************/
 
-void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
+void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -826,7 +826,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
 /************************* Get assignment data *******************************/
 /*****************************************************************************/
 
-static void Asg_GetDataOfAssignment (struct Assignment *Asg,
+static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
                                      MYSQL_RES **mysql_res,
 				     unsigned long NumRows)
   {
@@ -880,7 +880,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,
 /************************* Clear all assignment data **************************/
 /*****************************************************************************/
 
-static void Asg_ResetAssignment (struct Assignment *Asg)
+static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
   {
    if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
       Asg->AsgCod = -1L;
@@ -1022,7 +1022,7 @@ void Asg_ReqRemAssignment (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
    extern const char *Txt_Remove_assignment;
    struct Asg_Assignments Assignments;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1059,7 +1059,7 @@ void Asg_RemoveAssignment (void)
   {
    extern const char *Txt_Assignment_X_removed;
    struct Asg_Assignments Assignments;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1101,7 +1101,7 @@ void Asg_RemoveAssignment (void)
 void Asg_HideAssignment (void)
   {
    struct Asg_Assignments Assignments;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1130,7 +1130,7 @@ void Asg_HideAssignment (void)
 void Asg_ShowAssignment (void)
   {
    struct Asg_Assignments Assignments;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1184,7 +1184,7 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Txt_Create_assignment;
    extern const char *Txt_Save_changes;
    struct Asg_Assignments Assignments;
-   struct Assignment Asg;
+   struct Asg_Assignment Asg;
    bool ItsANewAssignment;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -1398,8 +1398,8 @@ void Asg_RecFormAssignment (void)
    extern const char *Txt_The_assignment_has_been_modified;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Asg_Assignments Assignments;
-   struct Assignment OldAsg;	// Current assigment data in database
-   struct Assignment NewAsg;	// Assignment data received from form
+   struct Asg_Assignment OldAsg;	// Current assigment data in database
+   struct Asg_Assignment NewAsg;	// Assignment data received from form
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
@@ -1557,7 +1557,7 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
 /************************ Create a new assignment ****************************/
 /*****************************************************************************/
 
-static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
+static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
   {
    /***** Create a new assignment *****/
    Asg->AsgCod =
@@ -1584,7 +1584,7 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 /********************* Update an existing assignment *************************/
 /*****************************************************************************/
 
-static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
+static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
   {
    /***** Update the data of the assignment *****/
    DB_QueryUPDATE ("can not update assignment",
@@ -1702,7 +1702,7 @@ static void Asg_CreateGrps (long AsgCod)
 /********* Get and write the names of the groups of an assignment ************/
 /*****************************************************************************/
 
-static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
+static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;

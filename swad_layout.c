@@ -48,6 +48,7 @@
 #include "swad_language.h"
 #include "swad_log.h"
 #include "swad_logo.h"
+#include "swad_match.h"
 #include "swad_MFU.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -898,7 +899,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
 	           "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		   Act_GetActCod (ActRefMchStd),
-		   Gbl.Games.MchCodBeingPlayed);
+		   Mch_GetMchCodBeingPlayed ());
 	 break;
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMch:
@@ -915,7 +916,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
 		   "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		   Act_GetActCod (ActRefMchTch),
-		   Gbl.Games.MchCodBeingPlayed);
+		   Mch_GetMchCodBeingPlayed ());
 	 break;
       /* Parameter related with clicks refreshing */
       case ActLstClk:
@@ -1387,6 +1388,15 @@ void Lay_WrongScopeExit (void)
 void Lay_WrongOrderExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong order.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong order *****************/
+/*****************************************************************************/
+
+void Lay_WrongTypeOfViewExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong type of view.");
   }
 
 /*****************************************************************************/

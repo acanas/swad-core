@@ -46,7 +46,7 @@ typedef enum
    Asg_SEND_WORK        = 1,
   } Asg_SendWork_t;
 
-struct Assignment
+struct Asg_Assignment
   {
    long AsgCod;
    bool Hidden;
@@ -72,8 +72,8 @@ void Asg_SeeAssignments (void);
 void Asg_PrintOneAssignment (void);
 
 void Asg_RequestCreatOrEditAsg (void);
-void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
-void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg);
+void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg);
+void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,

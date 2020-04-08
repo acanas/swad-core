@@ -111,7 +111,7 @@ void Att_RegisterStudentsInAttEvent (void);
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod);
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 
-void Att_ReqListUsrsAttendanceCrs (void *Args);
+void Att_ReqListUsrsAttendanceCrs (void *TypeOfView);
 void Att_ListMyAttendanceCrs (void);
 void Att_PrintMyAttendanceCrs (void);
 void Att_ListUsrsAttendanceCrs (void);

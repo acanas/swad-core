@@ -1718,7 +1718,7 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
                AssociatedToGrp = Svy_CheckIfSvyIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
             case Grp_MATCH:
-               AssociatedToGrp = Gam_CheckIfMatchIsAssociatedToGrp (Cod,Grp->GrpCod);
+               AssociatedToGrp = Mch_CheckIfMatchIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
            }
 

@@ -3182,7 +3182,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
    double MaxClicks = 0.0;
    double TotalClicks = 0.0;
    MYSQL_ROW row;
-   struct Banner Ban;
+   struct Ban_Banner Ban;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);

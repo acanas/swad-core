@@ -108,18 +108,18 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_GetParamEventOrder (void);
-static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
+static void Agd_PutFormsToRemEditOneEvent (struct Agd_Event *AgdEvent,
                                            const char *Anchor);
 
 static void Agd_PutCurrentParamsMyAgenda (void *Agenda);
 static void Agd_GetParams (Agd_AgendaType_t AgendaType);
 
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
-static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
-static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
+static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent);
+static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
                                    char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
-static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
+static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt);
+static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt);
 
 /*****************************************************************************/
 /********** Put form to log in and then show another user's agenda ***********/
@@ -739,7 +739,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -845,7 +845,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 /******************* Put a link (form) to edit one event *********************/
 /*****************************************************************************/
 
-static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
+static void Agd_PutFormsToRemEditOneEvent (struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
@@ -1145,7 +1145,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
+static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1240,7 +1240,7 @@ void Agd_FreeListEvents (void)
 /*********************** Get event text from database ************************/
 /*****************************************************************************/
 
-static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
+static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
                                    char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
@@ -1289,7 +1289,7 @@ void Agd_AskRemEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
@@ -1321,7 +1321,7 @@ void Agd_AskRemEvent (void)
 void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1350,7 +1350,7 @@ void Agd_RemoveEvent (void)
 
 void Agd_HideEvent (void)
   {
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1376,7 +1376,7 @@ void Agd_HideEvent (void)
 
 void Agd_UnhideEvent (void)
   {
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1403,7 +1403,7 @@ void Agd_UnhideEvent (void)
 void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1434,7 +1434,7 @@ void Agd_MakeEventPrivate (void)
 void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1473,7 +1473,7 @@ void Agd_RequestCreatOrEditEvent (void)
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
    extern const char *Txt_Save_changes;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
    bool ItsANewEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -1606,7 +1606,7 @@ void Agd_RecFormEvent (void)
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct AgendaEvent AgdEvent;
+   struct Agd_Event AgdEvent;
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
    char EventTxt[Cns_MAX_BYTES_TEXT + 1];
@@ -1684,7 +1684,7 @@ void Agd_RecFormEvent (void)
 /************************** Create a new event *******************************/
 /*****************************************************************************/
 
-static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
+static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt)
   {
    /***** Create a new event *****/
    AgdEvent->AgdCod =
@@ -1706,7 +1706,7 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 /************************ Update an existing event ***************************/
 /*****************************************************************************/
 
-static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
+static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
   {
    /***** Update the data of the event *****/
    DB_QueryUPDATE ("can not update event",

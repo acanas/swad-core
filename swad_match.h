@@ -48,7 +48,7 @@ typedef enum
   } Mch_Showing_t;
 #define Mch_SHOWING_DEFAULT Mch_START
 
-struct Match
+struct Mch_Match
   {
    long MchCod;
    long GamCod;
@@ -82,8 +82,12 @@ struct Mch_UsrAnswer
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch);
-void Mch_GetDataOfMatchByCod (struct Match *Match);
+long Mch_GetMchCodBeingPlayed (void);
+
+void Mch_ListMatches (struct Gam_Games *Games,
+                      struct Gam_Game *Game,
+                      bool PutFormNewMatch);
+void Mch_GetDataOfMatchByCod (struct Mch_Match *Match);
 
 void Mch_ToggleVisibilResultsMchUsr (void);
 
@@ -94,8 +98,10 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
 void Mch_RemoveMatchInCourseFromAllTables (long CrsCod);
 void Mch_RemoveUsrFromMatchTablesInCrs (long UsrCod,long CrsCod);
 
-void Mch_PutParamsEdit (void *Args);
-void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match);
+void Mch_PutParamsEdit (void *Games);
+void Mch_GetAndCheckParameters (struct Gam_Games *Games,
+                                struct Gam_Game *Game,
+                                struct Mch_Match *Match);
 long Mch_GetParamMchCod (void);
 
 void Mch_CreateNewMatchTch (void);
@@ -115,13 +121,13 @@ void Mch_ForwardMatch (void);
 unsigned Mch_GetNumMchsInGame (long GamCod);
 unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod);
 
-bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Match *Match);
+bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
 
-void Mch_WriteChoiceAnsViewMatch (const struct Match *Match,
+void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
                                   const struct Tst_Question *Question,
                                   const char *Class,bool ShowResult);
 
-bool Mch_RegisterMeAsPlayerInMatch (struct Match *Match);
+bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);
@@ -138,7 +144,5 @@ void Mch_ReceiveQuestionAnswer (void);
 unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
 unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
-
-void Mch_SetCurrentMchCod (long MchCod);
 
 #endif

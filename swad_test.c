@@ -159,7 +159,8 @@ static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
-static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test);
+static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
+                                                   struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
 static void Tst_PutIconsTests (void *TestPtr);
 static void Tst_PutButtonToAddQuestion (void);
@@ -192,7 +193,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
 static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
-static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
+static void Tst_ListOneOrMoreQuestionsForSelection (struct Gam_Games *Games,
+						    unsigned NumQsts,
                                                     MYSQL_RES *mysql_res);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
@@ -1285,7 +1287,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 /******************* Select test questions for a game ************************/
 /*****************************************************************************/
 
-void Tst_RequestSelectTestsForGame (void)
+void Tst_RequestSelectTestsForGame (struct Gam_Games *Games)
   {
    struct Tst_Test Test;
 
@@ -1293,7 +1295,7 @@ void Tst_RequestSelectTestsForGame (void)
    Tst_TstConstructor (&Test);
 
    /***** Show form to select test for game *****/
-   Tst_ShowFormRequestSelectTestsForGame (&Test);	// No tags selected
+   Tst_ShowFormRequestSelectTestsForGame (Games,&Test);	// No tags selected
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -1303,7 +1305,8 @@ void Tst_RequestSelectTestsForGame (void)
 /************** Show form to select test questions for a game ****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test)
+static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
+                                                   struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_No_test_questions;
@@ -1325,7 +1328,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Tst_Test *Test)
    if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
-      Gam_PutParams (&Gbl);
+      Gam_PutParams (Games);
 
       HTM_TABLE_BeginPadding (2);
 
@@ -2215,7 +2218,7 @@ void Tst_ListQuestionsToEdit (void)
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToSelect (void)
+void Tst_ListQuestionsToSelect (struct Gam_Games *Games)
   {
    struct Tst_Test Test;
    MYSQL_RES *mysql_res;
@@ -2229,14 +2232,14 @@ void Tst_ListQuestionsToSelect (void)
       Tst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForSelection (Test.NumQsts,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelection (Games,Test.NumQsts,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /* Show the form again */
-      Tst_ShowFormRequestSelectTestsForGame (&Test);
+      Tst_ShowFormRequestSelectTestsForGame (Games,&Test);
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -2926,7 +2929,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 /*************** List for selection one or more test questions ***************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
+static void Tst_ListOneOrMoreQuestionsForSelection (struct Gam_Games *Games,
+						    unsigned NumQsts,
                                                     MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
@@ -2950,7 +2954,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned NumQsts,
 
    /***** Begin form *****/
    Frm_StartForm (ActAddTstQstToGam);
-   Gam_PutParams (&Gbl);
+   Gam_PutParams (Games);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
