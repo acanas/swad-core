@@ -136,7 +136,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    /***** Begin box *****/
    HTM_DIV_Begin ("class=\"CM\"");
    Box_BoxBegin (NULL,Txt_Search,
-                 Crs_PutIconToSelectMyCourses,&Gbl,
+                 Crs_PutIconToSelectMyCourses,NULL,
                  Hlp_START_Search,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -1168,3 +1168,14 @@ static void Sch_SaveLastSearchIntoSession (void)
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
   }
+
+/*****************************************************************************/
+/*************** Write parameters for link to search courses *****************/
+/*****************************************************************************/
+
+void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args)
+  {
+   Sco_PutParamScope ("ScopeSch",Hie_SYS);
+   Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+  }
+

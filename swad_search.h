@@ -83,4 +83,6 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                            const char *FieldName,
                            const char *CharSet,const char *Collate);
 
+void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args);
+
 #endif

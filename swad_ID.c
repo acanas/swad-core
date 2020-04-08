@@ -519,7 +519,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_ID,
-                 Acc_PutLinkToRemoveMyAccount,&Gbl,
+                 Acc_PutLinkToRemoveMyAccount,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/

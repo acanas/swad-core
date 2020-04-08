@@ -1166,7 +1166,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Email,
-                 Acc_PutLinkToRemoveMyAccount,&Gbl,
+                 Acc_PutLinkToRemoveMyAccount,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/

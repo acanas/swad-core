@@ -1275,6 +1275,7 @@ static void Brw_SetAndCheckQuota (void);
 static void Brw_SetMaxQuota (void);
 static bool Brw_CheckIfQuotaExceded (void);
 
+static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowserNormal (void);
 static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
@@ -1282,6 +1283,7 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 static void Brw_FormToChangeCrsGrpZone (void);
 static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError);
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
+static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconsFileBrowser (void *Args);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
@@ -3099,7 +3101,12 @@ static bool Brw_CheckIfQuotaExceded (void)
 /************** Request edition of works of users of the course **************/
 /*****************************************************************************/
 
-void Brw_AskEditWorksCrs (void *Args)
+void Brw_AskEditWorksCrs (void)
+  {
+   Brw_AskEditWorksCrsInternal (NULL);
+  }
+
+static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
@@ -3460,24 +3467,26 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Brw_ShowFileBrowserOrWorks,&Gbl,	// when user(s) selected
-                                  Brw_AskEditWorksCrs,&Gbl);		// when no user selected
+				  Brw_ShowFileBrowserOrWorksInternal,NULL,	// when user(s) selected
+                                  Brw_AskEditWorksCrsInternal,NULL);		// when no user selected
   }
 
 /*****************************************************************************/
 /******************** Show a file browser or users' works  *******************/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserOrWorks (void *Args)
+void Brw_ShowFileBrowserOrWorks (void)
   {
-   if (Args)
-     {
-      /***** Get parameters related to file browser *****/
-      Brw_GetParAndInitFileBrowser ();
+   Brw_ShowFileBrowserOrWorksInternal (NULL);
+  }
 
-      /***** Show the file browser or works *****/
-      Brw_ShowAgainFileBrowserOrWorks ();
-     }
+static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args)
+  {
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Show the file browser or works *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
   }
 
 /*****************************************************************************/

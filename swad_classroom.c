@@ -62,9 +62,9 @@ static struct Classroom *Cla_EditingCla = NULL;	// Static variable to keep the c
 
 static void Cla_GetParamClaOrder (void);
 static bool Cla_CheckIfICanCreateClassrooms (void);
-static void Cla_PutIconsListingClassrooms (void *Args);
+static void Cla_PutIconsListingClassrooms (__attribute__((unused)) void *Args);
 static void Cla_PutIconToEditClassrooms (void);
-static void Cla_PutIconsEditingClassrooms (void *Args);
+static void Cla_PutIconsEditingClassrooms (__attribute__((unused)) void *Args);
 
 static void Cla_EditClassroomsInternal (void);
 
@@ -114,7 +114,7 @@ void Cla_SeeClassrooms (void)
 
    /***** Table head *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
-                 Cla_PutIconsListingClassrooms,&Gbl,
+                 Cla_PutIconsListingClassrooms,NULL,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
@@ -212,12 +212,11 @@ static bool Cla_CheckIfICanCreateClassrooms (void)
 /**************** Put contextual icons in list of classrooms *****************/
 /*****************************************************************************/
 
-static void Cla_PutIconsListingClassrooms (void *Args)
+static void Cla_PutIconsListingClassrooms (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to edit classrooms *****/
-      if (Cla_CheckIfICanCreateClassrooms ())
-	 Cla_PutIconToEditClassrooms ();
+   /***** Put icon to edit classrooms *****/
+   if (Cla_CheckIfICanCreateClassrooms ())
+      Cla_PutIconToEditClassrooms ();
   }
 
 /*****************************************************************************/
@@ -256,7 +255,7 @@ static void Cla_EditClassroomsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
-                 Cla_PutIconsEditingClassrooms,&Gbl,
+                 Cla_PutIconsEditingClassrooms,NULL,
                  Hlp_CENTRE_Classrooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new classroom *****/
@@ -277,11 +276,10 @@ static void Cla_EditClassroomsInternal (void)
 /*************** Put contextual icons in edition of classrooms ***************/
 /*****************************************************************************/
 
-static void Cla_PutIconsEditingClassrooms (void *Args)
+static void Cla_PutIconsEditingClassrooms (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to view classrooms *****/
-      Cla_PutIconToViewClassrooms ();
+   /***** Put icon to view classrooms *****/
+   Cla_PutIconToViewClassrooms ();
   }
 
 /*****************************************************************************/

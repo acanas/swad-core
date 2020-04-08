@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_info.h"
 #include "swad_logo.h"
+#include "swad_search.h"
 #include "swad_test_exam.h"
 
 /*****************************************************************************/
@@ -71,12 +72,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static bool Crs_CheckIfICanCreateCourses (void);
-static void Crs_PutIconsListCourses (void *Args);
+static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCoursesInternal (void);
-static void Crs_PutIconsEditingCourses (void *Args);
+static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
 static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
@@ -103,8 +104,7 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
-static void Crs_PutIconToSearchCourses (void *Args);
-static void Sch_PutLinkToSearchCoursesParams (void *Args);
+static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
@@ -178,7 +178,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
-                 Crs_PutIconToSearchCourses,&Gbl,
+                 Crs_PutIconToSearchCourses,NULL,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    HTM_UL_Begin ("class=\"LIST_TREE\"");
 
@@ -803,7 +803,7 @@ static void Crs_ListCourses (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsListCourses,&Gbl,
+		 Crs_PutIconsListCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -853,17 +853,14 @@ static bool Crs_CheckIfICanCreateCourses (void)
 /***************** Put contextual icons in list of courses *******************/
 /*****************************************************************************/
 
-static void Crs_PutIconsListCourses (void *Args)
+static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to edit courses *****/
-      if (Crs_CheckIfICanCreateCourses ())
-	 Crs_PutIconToEditCourses ();
+   /***** Put icon to edit courses *****/
+   if (Crs_CheckIfICanCreateCourses ())
+      Crs_PutIconToEditCourses ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_HIERARCHY);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_HIERARCHY);
   }
 
 /*****************************************************************************/
@@ -1019,7 +1016,7 @@ static void Crs_EditCoursesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsEditingCourses,&Gbl,
+		 Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
@@ -1044,16 +1041,13 @@ static void Crs_EditCoursesInternal (void)
 /**************** Put contextual icons in edition of courses *****************/
 /*****************************************************************************/
 
-static void Crs_PutIconsEditingCourses (void *Args)
+static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to view degrees *****/
-      Crs_PutIconToViewCourses ();
+   /***** Put icon to view degrees *****/
+   Crs_PutIconToViewCourses ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_HIERARCHY);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_HIERARCHY);
   }
 
 /*****************************************************************************/
@@ -2369,25 +2363,15 @@ void Crs_ReqSelectOneOfMyCourses (void)
 /******************* Put an icon (form) to search courses ********************/
 /*****************************************************************************/
 
-static void Crs_PutIconToSearchCourses (void *Args)
+static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Search_courses;
 
-   if (Args)
-      /***** Put form to search / select courses *****/
-      Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
-				     Sch_PutLinkToSearchCoursesParams,&Gbl,
-				     "search.svg",
-				     Txt_Search_courses);
-  }
-
-static void Sch_PutLinkToSearchCoursesParams (void *Args)	// TODO: Move to search module
-  {
-   if (Args)
-     {
-      Sco_PutParamScope ("ScopeSch",Hie_SYS);
-      Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
-     }
+   /***** Put form to search / select courses *****/
+   Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
+				  Sch_PutLinkToSearchCoursesParams,NULL,
+				  "search.svg",
+				  Txt_Search_courses);
   }
 
 /*****************************************************************************/
@@ -2422,17 +2406,16 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 /****************** Put an icon (form) to select my courses ******************/
 /*****************************************************************************/
 
-void Crs_PutIconToSelectMyCourses (void *Args)
+void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_My_courses;
 
-   if (Args)
-      if (Gbl.Usrs.Me.Logged)		// I am logged
-	 /***** Put icon with link *****/
-	 Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
-					NULL,NULL,
-					"sitemap.svg",
-					Txt_My_courses);
+   if (Gbl.Usrs.Me.Logged)		// I am logged
+      /***** Put icon with link *****/
+      Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
+				     NULL,NULL,
+				     "sitemap.svg",
+				     Txt_My_courses);
   }
 
 /*****************************************************************************/

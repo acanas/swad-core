@@ -550,16 +550,15 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 /************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
-void Acc_PutLinkToRemoveMyAccount (void *Args)
+void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Remove_account;
 
-   if (Args)
-      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
-	 Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
-					Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
-					"trash.svg",
-					Txt_Remove_account);
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
+      Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
+				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+				     "trash.svg",
+				     Txt_Remove_account);
   }
 
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)

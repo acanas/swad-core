@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CtrCfg_Configuration (bool PrintView);
-static void CtrCfg_PutIconsCtrConfig (void *Args);
+static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Title (bool PutLink);
 static void CtrCfg_Map (void);
@@ -160,7 +160,7 @@ static void CtrCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,NULL,
-                    CtrCfg_PutIconsCtrConfig,&Gbl,
+                    CtrCfg_PutIconsCtrConfig,NULL,
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -257,27 +257,24 @@ static void CtrCfg_Configuration (bool PrintView)
 /************ Put contextual icons in configuration of a centre **************/
 /*****************************************************************************/
 
-static void CtrCfg_PutIconsCtrConfig (void *Args)
+static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
   {
-   if (Args)
+   /***** Put icon to print info about centre *****/
+   Ico_PutContextualIconToPrint (ActPrnCtrInf,
+				 NULL,NULL);
+
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
+
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // have permission to upload logo and photo of the centre
      {
-      /***** Put icon to print info about centre *****/
-      Ico_PutContextualIconToPrint (ActPrnCtrInf,
-				    NULL,NULL);
+      /***** Put icon to upload logo of centre *****/
+      Lgo_PutIconToChangeLogo (Hie_CTR);
 
-      /***** Put icon to view places *****/
-      Plc_PutIconToViewPlaces ();
-
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins
-	 // have permission to upload logo and photo of the centre
-	{
-	 /***** Put icon to upload logo of centre *****/
-	 Lgo_PutIconToChangeLogo (Hie_CTR);
-
-	 /***** Put icon to upload photo of centre *****/
-	 CtrCfg_PutIconToChangePhoto ();
-	}
+      /***** Put icon to upload photo of centre *****/
+      CtrCfg_PutIconToChangePhoto ();
      }
   }
 

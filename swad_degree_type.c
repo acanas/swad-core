@@ -78,8 +78,8 @@ static void DT_EditDegreeTypesInternal (void);
 static void DT_PutIconsEditingDegreeTypes (void *Args);
 
 static void DT_ListDegreeTypesForSeeing (void);
-static void DT_PutIconsListingDegTypes (void *Args);
-static void DT_PutIconToEditDegTypes (void *Args);
+static void DT_PutIconsListingDegTypes (__attribute__((unused)) void *Args);
+static void DT_PutIconToEditDegTypes (__attribute__((unused)) void *Args);
 static void DT_ListDegreeTypesForEdition (void);
 
 static void DT_PutFormToCreateDegreeType (void);
@@ -199,12 +199,12 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,
      {
       case ActSeeDegTyp:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
-	               DT_PutIconsListingDegTypes,&Gbl,
+	               DT_PutIconsListingDegTypes,NULL,
 		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
-	               DT_PutIconToEditDegTypes,&Gbl,
+	               DT_PutIconToEditDegTypes,NULL,
 		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
       default:	// Bad call
@@ -360,32 +360,28 @@ static void DT_ListDegreeTypesForSeeing (void)
 /************** Put contextual icons in list of degree types *****************/
 /*****************************************************************************/
 
-static void DT_PutIconsListingDegTypes (void *Args)
+static void DT_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to edit degree types *****/
-      DT_PutIconToEditDegTypes (&Gbl);
+   /***** Put icon to edit degree types *****/
+   DT_PutIconToEditDegTypes (NULL);
 
-      /***** Put icon to view degrees *****/
-      Deg_PutIconToViewDegrees ();
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
   }
 
 /*****************************************************************************/
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
-static void DT_PutIconToEditDegTypes (void *Args)
+static void DT_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
-	  DT_CheckIfICanCreateDegreeTypes ())
-	 Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
-				      NULL,NULL);
+   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
+       DT_CheckIfICanCreateDegreeTypes ())
+      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/

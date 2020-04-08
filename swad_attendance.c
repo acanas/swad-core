@@ -98,7 +98,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events);
 static void Att_ParamsWhichGroupsToShow (void *Events);
 static void Att_PutIconsInListOfAttEvents (void *Events);
 static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events);
-static void Att_PutButtonToCreateNewAttEvent (void);
+static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events);
 static void Att_PutParamsToCreateNewAttEvent (void *Events);
 static void Att_PutParamsToListUsrsAttendance (void *Events);
 
@@ -254,7 +254,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Events,
-                 Att_PutIconsInListOfAttEvents,&Gbl,
+                 Att_PutIconsInListOfAttEvents,Events,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -328,7 +328,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)
-      Att_PutButtonToCreateNewAttEvent ();
+      Att_PutButtonToCreateNewAttEvent (Events);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -408,12 +408,12 @@ static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events)
 /**************** Put button to create a new attendance event ****************/
 /*****************************************************************************/
 
-static void Att_PutButtonToCreateNewAttEvent (void)
+static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
   {
    extern const char *Txt_New_event;
 
    Frm_StartForm (ActFrmNewAtt);
-   Att_PutParamsToCreateNewAttEvent (&Gbl);
+   Att_PutParamsToCreateNewAttEvent (Events);
    Btn_PutConfirmButton (Txt_New_event);
    Frm_EndForm ();
   }
@@ -2822,7 +2822,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	   {
 	    case Att_VIEW_ONLY_ME:
 	       Box_BoxBegin (NULL,Txt_Attendance,
-			     Att_PutIconsMyAttList,&Gbl,
+			     Att_PutIconsMyAttList,&Events,
 			     Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 	       break;
 	    case Att_PRNT_ONLY_ME:

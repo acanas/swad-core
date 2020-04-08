@@ -231,7 +231,7 @@ static void Hld_PutIconsSeeHolidays (void *Args)
 				      NULL,NULL);
 
       /***** View calendar *****/
-      Cal_PutIconToSeeCalendar (&Gbl);
+      Cal_PutIconToSeeCalendar (NULL);
      }
   }
 
@@ -560,7 +560,7 @@ static void Hld_ListHolidaysForEdition (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Holidays,
-                      Cal_PutIconToSeeCalendar,&Gbl,
+                      Cal_PutIconToSeeCalendar,NULL,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

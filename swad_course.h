@@ -136,7 +136,7 @@ void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);
 
 void Crs_PutIconToSelectMyCoursesInBreadcrumb (void);
-void Crs_PutIconToSelectMyCourses (void *Args);
+void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args);
 void Crs_PutParamCrsCod (long CrsCod);
 
 void Crs_ReqSelectOneOfMyCourses (void);

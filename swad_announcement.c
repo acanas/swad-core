@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (void *Args);
+static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args);
 static void Ann_PutButtonToAddNewAnnouncement (void);
 static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
@@ -184,12 +184,12 @@ void Ann_ShowAllAnnouncements (void)
 /******************** Put icon to add a new announcement *********************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (void *Args)
+static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_New_announcement;
 
    Ico_PutContextualIconToAdd (ActWriAnn,NULL,
-                               NULL,Args,
+                               NULL,NULL,
 			       Txt_New_announcement);
   }
 

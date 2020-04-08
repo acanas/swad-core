@@ -70,7 +70,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
                               void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                               bool PrintView);
-static void Cal_PutIconsCalendar (void *Args);
+static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
@@ -238,7 +238,7 @@ void Cal_DrawCurrentMonth (void)
 void Cal_ShowCalendar (void)
   {
    Cal_DrawCalendar (ActSeeCal,ActChgCal1stDay,
-                     Cal_PutIconsCalendar,&Gbl,
+                     Cal_PutIconsCalendar,NULL,
                      false);
   }
 
@@ -314,33 +314,29 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Cal_PutIconsCalendar (void *Args)
+static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Print calendar *****/
-      Ico_PutContextualIconToPrint (ActPrnCal,
-				    NULL,NULL);
+   /***** Print calendar *****/
+   Ico_PutContextualIconToPrint (ActPrnCal,
+				 NULL,NULL);
 
-      /***** View holidays *****/
-      if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
-	  (Gbl.Hlds.Num ||					// There are holidays
-	   Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
-	 Hld_PutIconToSeeHlds ();
-     }
+   /***** View holidays *****/
+   if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
+       (Gbl.Hlds.Num ||					// There are holidays
+	Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
+      Hld_PutIconToSeeHlds ();
   }
 
 /*****************************************************************************/
 /************************** Put icon to see calendar *************************/
 /*****************************************************************************/
 
-void Cal_PutIconToSeeCalendar (void *Args)
+void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Calendar;
 
-   if (Args)
-      Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
-				     NULL,NULL,
-				     "calendar.svg",
-				     Txt_Calendar);
+   Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
+				  NULL,NULL,
+				  "calendar.svg",
+				  Txt_Calendar);
   }
