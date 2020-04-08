@@ -94,7 +94,7 @@ static const unsigned Dat_NumDaysMonth[1 + 12] =
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (void *Args);
+static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
 static unsigned Dat_GetParamDateFormat (void);
 
 /*****************************************************************************/
@@ -109,7 +109,7 @@ void Dat_PutBoxToSelectDateFormat (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Dates,
-                 Dat_PutIconsDateFormat,&Gbl,
+                 Dat_PutIconsDateFormat,NULL,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
@@ -147,11 +147,10 @@ void Dat_PutBoxToSelectDateFormat (void)
 /*************** Put contextual icons in date-format setting *****************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (void *Args)
+static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_DATE_FORMAT);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_DATE_FORMAT);
   }
 
 /*****************************************************************************/

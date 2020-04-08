@@ -195,7 +195,7 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod);
 void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveUsrFilesFromDB (long UsrCod);
 
-void Brw_PutHiddenParamFullTreeIfSelected (void *Args);
+void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree);
 
 void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void *Args);

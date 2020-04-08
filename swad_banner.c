@@ -78,7 +78,7 @@ static void Ban_SetEditingBanner (struct Ban_Banner *Ban);
 static struct Ban_Banner *Ban_GetEditingBanner (void);
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners);
-static void Ban_PutIconsListingBanners (void *Banners);
+static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args);
 static void Ban_PutIconToEditBanners (void);
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
                                      const struct Ban_Banner *Ban);
@@ -86,7 +86,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
                                 MYSQL_RES **mysql_res,unsigned long NumRows);
 static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 
-static void Ban_PutIconsEditingBanners (void *Banners);
+static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
 static void Ban_PutParamBanCodToEdit (void *BanCod);
@@ -149,7 +149,7 @@ void Ban_SeeBanners (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsListingBanners,&Banners,
+                 Ban_PutIconsListingBanners,NULL,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
    /***** Write all banners *****/
@@ -208,17 +208,14 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
 /***************** Put contextual icons in list of banners *******************/
 /*****************************************************************************/
 
-static void Ban_PutIconsListingBanners (void *Banners)
+static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args)
   {
-   if (Banners)	// Not used
-     {
-      /***** Put icon to view banners *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 Ban_PutIconToEditBanners ();
+   /***** Put icon to view banners *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ban_PutIconToEditBanners ();
 
-      /***** Put icon to view links *****/
-      Lnk_PutIconToViewLinks ();
-     }
+   /***** Put icon to view links *****/
+   Lnk_PutIconToViewLinks ();
   }
 
 /*****************************************************************************/
@@ -266,7 +263,7 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsEditingBanners,Banners,
+                 Ban_PutIconsEditingBanners,NULL,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new banner *****/
@@ -416,16 +413,13 @@ static void Ban_FreeListBanners (struct Ban_Banners *Banners)
 /**************** Put contextual icons in edition of banners *****************/
 /*****************************************************************************/
 
-static void Ban_PutIconsEditingBanners (void *Banners)
+static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
   {
-   if (Banners)	// Not used
-     {
-      /***** Put icon to view banners *****/
-      Ban_PutIconToViewBanners ();
+   /***** Put icon to view banners *****/
+   Ban_PutIconToViewBanners ();
 
-      /***** Put icon to view links *****/
-      Lnk_PutIconToViewLinks ();
-     }
+   /***** Put icon to view links *****/
+   Lnk_PutIconToViewLinks ();
   }
 
 /*****************************************************************************/

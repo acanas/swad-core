@@ -6388,7 +6388,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          if (NextAction == ActAdmAsgWrkCrs)
            {
             Gbl.FileBrowser.FullTree = true;	// By default, show all files
-            Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+            Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
            }
          if (FuncParams)
             FuncParams (Args);

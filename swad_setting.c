@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Set_PutIconsToSelectSideCols (void);
-static void Set_PutIconsSideColumns (void *Args);
+static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
 static void Set_UpdateSideColsOnUsrDataTable (void);
 
 /*****************************************************************************/
@@ -249,7 +249,7 @@ static void Set_PutIconsToSelectSideCols (void)
    char Icon[32 + 1];
 
    Box_BoxBegin (NULL,Txt_Columns,
-                 Set_PutIconsSideColumns,&Gbl,
+                 Set_PutIconsSideColumns,NULL,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -277,11 +277,10 @@ static void Set_PutIconsToSelectSideCols (void)
 /************** Put contextual icons in side-columns setting *****************/
 /*****************************************************************************/
 
-static void Set_PutIconsSideColumns (void *Args)
+static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_SIDE_COLUMNS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_SIDE_COLUMNS);
   }
 
 /*****************************************************************************/

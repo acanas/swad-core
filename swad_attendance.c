@@ -171,8 +171,8 @@ static void Att_PutParamsToPrintStdsList (void *Events);
 static void Att_PutButtonToShowDetails (const struct Att_Events *Events);
 static void Att_ListEventsToSelect (const struct Att_Events *Events,
                                     Att_TypeOfView_t TypeOfView);
-static void Att_PutIconToViewAttEvents (void *Events);
-static void Att_PutIconToEditAttEvents (void *Events);
+static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args);
+static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args);
 static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
                                          Att_TypeOfView_t TypeOfView,
 	                                 unsigned NumUsrsInList,
@@ -3202,12 +3202,12 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
      {
       case Att_VIEW_ONLY_ME:
 	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToViewAttEvents,&Events,
+		       Att_PutIconToViewAttEvents,NULL,
 		       NULL,Box_NOT_CLOSABLE);
 	 break;
       case Att_VIEW_SEL_USR:
 	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToEditAttEvents,&Events,
+		       Att_PutIconToEditAttEvents,NULL,
 		       NULL,Box_NOT_CLOSABLE);
 	 break;
       case Att_PRNT_ONLY_ME:
@@ -3319,22 +3319,20 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 /*********** Put icon to list (without edition) attendance events ************/
 /*****************************************************************************/
 
-static void Att_PutIconToViewAttEvents (void *Events)
+static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
   {
-   if (Events)	// Not used
-      Ico_PutContextualIconToView (ActSeeAtt,
-                                   NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeAtt,
+				NULL,NULL);
   }
 
 /*****************************************************************************/
 /************ Put icon to list (with edition) attendance events **************/
 /*****************************************************************************/
 
-static void Att_PutIconToEditAttEvents (void *Events)
+static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
   {
-   if (Events)	// Not used
-      Ico_PutContextualIconToEdit (ActSeeAtt,NULL,
-				   NULL,NULL);
+   Ico_PutContextualIconToEdit (ActSeeAtt,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/

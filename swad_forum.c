@@ -344,7 +344,7 @@ static void For_PutHiddenParamThrCod (long ThrCod);
 static void For_PutHiddenParamPstCod (long PstCod);
 
 static void For_ShowForumList (struct For_Forums *Forums);
-static void For_PutIconsForums (void *Args);
+static void For_PutIconsForums (__attribute__((unused)) void *Args);
 static void For_PutFormWhichForums (const struct For_Forums *Forums);
 
 static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
@@ -1593,7 +1593,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,
-                 For_PutIconsForums,&Gbl,
+                 For_PutIconsForums,NULL,
                  Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
@@ -1760,11 +1760,10 @@ static void For_ShowForumList (struct For_Forums *Forums)
 /********************** Put contextual icons in forums ***********************/
 /*****************************************************************************/
 
-static void For_PutIconsForums (void *Args)
+static void For_PutIconsForums (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_FORUMS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_FORUMS);
   }
 
 /*****************************************************************************/

@@ -176,7 +176,7 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Mnu_PutIconsMenu (void *Args);
+static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /******* When I change to another tab, go to the first option allowed ********/
@@ -276,7 +276,7 @@ void Mnu_PutIconsToSelectMenu (void)
    Mnu_Menu_t Menu;
 
    Box_BoxBegin (NULL,Txt_Menu,
-                 Mnu_PutIconsMenu,&Gbl,
+                 Mnu_PutIconsMenu,NULL,
                  Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -301,11 +301,10 @@ void Mnu_PutIconsToSelectMenu (void)
 /******************* Put contextual icons in menu setting ********************/
 /*****************************************************************************/
 
-static void Mnu_PutIconsMenu (void *Args)
+static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_MENUS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_MENUS);
   }
 
 /*****************************************************************************/

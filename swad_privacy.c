@@ -66,7 +66,7 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pri_PutIconsPrivacy (void *Args);
+static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args);
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParamName,
@@ -98,7 +98,7 @@ void Pri_EditMyPrivacy (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Privacy,
-                      Pri_PutIconsPrivacy,&Gbl,
+                      Pri_PutIconsPrivacy,NULL,
                       Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Edit photo visibility *****/
@@ -136,11 +136,10 @@ void Pri_EditMyPrivacy (void)
 /****************** Put contextual icons in privacy setting ******************/
 /*****************************************************************************/
 
-static void Pri_PutIconsPrivacy (void *Args)
+static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_PRIVACY);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_PRIVACY);
   }
 
 /*****************************************************************************/

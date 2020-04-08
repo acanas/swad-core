@@ -634,10 +634,6 @@ struct Globals
          double MaxPercent;
         } DegPhotos;
      } Stat;
-   struct
-     {
-      char *Str;
-     } QR;
 
    /* Cache */
    struct

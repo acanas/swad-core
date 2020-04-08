@@ -66,7 +66,7 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (void *Args);
+static void Ico_PutIconsIconSet (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /*********** Get icon with extension from icon without extension *************/
@@ -147,11 +147,10 @@ void Ico_PutIconsToSelectIconSet (void)
 /***************** Put contextual icons in icon-set setting *******************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (void *Args)
+static void Ico_PutIconsIconSet (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_ICON_SETS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_ICON_SETS);
   }
 
 /*****************************************************************************/

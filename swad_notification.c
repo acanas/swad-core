@@ -262,7 +262,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ntf_PutIconsNotif (void *Args);
+static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
@@ -372,7 +372,7 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,&Gbl,
+                 Ntf_PutIconsNotif,NULL,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
    /***** List my notifications *****/
@@ -619,11 +619,10 @@ void Ntf_ShowMyNotifications (void)
 /****************** Put contextual icons in notifications ********************/
 /*****************************************************************************/
 
-static void Ntf_PutIconsNotif (void *Args)
+static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_NOTIFY_EVENTS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_NOTIFY_EVENTS);
   }
 
 /*****************************************************************************/

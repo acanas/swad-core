@@ -220,7 +220,7 @@ static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
 
 static void TL_ShowTimeline (char *Query,
                              const char *Title,long NotCodToHighlight);
-static void TL_PutIconsTimeline (void *Args);
+static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 
 static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
 static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
@@ -1088,7 +1088,7 @@ static void TL_ShowTimeline (char *Query,
 				Query);
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
-                 TL_PutIconsTimeline,&Gbl,
+                 TL_PutIconsTimeline,NULL,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
@@ -1161,11 +1161,10 @@ static void TL_ShowTimeline (char *Query,
 /********************* Put contextual icons in timeline **********************/
 /*****************************************************************************/
 
-static void TL_PutIconsTimeline (void *Args)
+static void TL_PutIconsTimeline (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_TIMELINE);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_TIMELINE);
   }
 
 /*****************************************************************************/

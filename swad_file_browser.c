@@ -1284,7 +1284,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconsFileBrowser (void *Args);
-static void Brw_PutIconShowFigure (void *Args);
+static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_PutButtonToShowEdit (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
@@ -2341,7 +2341,7 @@ static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolL
      }
 
    /***** If full tree selected? *****/
-   Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+   Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
    /***** Path and file *****/
    if (PathInTree)
@@ -3206,7 +3206,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin ("100%",Txt_Assignments_and_other_works,
-		      Brw_PutIconShowFigure,&Gbl,
+		      Brw_PutIconShowFigure,NULL,
 		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
 
    /***** List the assignments and works of the selected users *****/
@@ -3296,7 +3296,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
    /***** Begin form *****/
    Frm_StartForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
-   Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+   Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
    /***** List start *****/
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
@@ -3736,11 +3736,11 @@ static void Brw_PutIconsFileBrowser (void *Args)
 	    break;
 	 case Brw_ICON_VIEW:
 	    Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
-					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl);
+					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
 	    break;
 	 case Brw_ICON_EDIT:
 	    Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],NULL,
-					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl);
+					 Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
 	    break;
 	}
 
@@ -3753,16 +3753,16 @@ static void Brw_PutIconsFileBrowser (void *Args)
 	 case Brw_ADMI_ASS_PRJ:
 	    break;
 	 default:
-	    Brw_PutIconShowFigure (&Gbl);
+	    Brw_PutIconShowFigure (NULL);
 	    break;
 	}
      }
   }
 
-static void Brw_PutIconShowFigure (void *Args)
+static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Fig_PutIconToShowFigure (Fig_FOLDERS_AND_FILES);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_FOLDERS_AND_FILES);
   }
 
 /*****************************************************************************/
@@ -3782,7 +3782,7 @@ static void Brw_PutButtonToShowEdit (void)
          if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
            {
 	    Frm_StartForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
-	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 	    Btn_PutConfirmButton (Txt_View);
             Frm_EndForm ();
            }
@@ -3791,7 +3791,7 @@ static void Brw_PutButtonToShowEdit (void)
          if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
            {
 	    Frm_StartForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
-	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 	    Btn_PutConfirmButton (Txt_Edit);
             Frm_EndForm ();
            }
@@ -4986,10 +4986,10 @@ static void Brw_PutParamsFullTree (void)
 /********* Put hidden parameter "full tree" if full tree is selected *********/
 /*****************************************************************************/
 
-void Brw_PutHiddenParamFullTreeIfSelected (void *Args)
+void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree)
   {
-   if (Args)
-      if (Gbl.FileBrowser.FullTree)	// if not full tree selected ==> do not put hidden parameter
+   if (FullTree)
+      if (*((bool *) FullTree))	// Put hidden parameter only if full tree selected
 	 Par_PutHiddenParamChar ("FullTree",'Y');
   }
 
@@ -12138,7 +12138,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
    extern const char *Txt_Remove_old_files;
 
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
-				  Brw_PutHiddenParamFullTreeIfSelected,&Gbl,
+				  Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree,
 				  "trash.svg",
 				  Txt_Remove_old_files);
   }
@@ -12161,7 +12161,7 @@ void Brw_AskRemoveOldFiles (void)
 
    /***** Begin form *****/
    Frm_StartForm (ActRemOldBrf);
-   Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+   Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Remove_old_files,

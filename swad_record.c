@@ -2643,7 +2643,7 @@ static void Rec_PutParamsWorks (void *Args)
       Rec_PutParamsStudent (&Gbl);
       Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
       Gbl.FileBrowser.FullTree = true;
-      Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+      Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
      }
   }
 

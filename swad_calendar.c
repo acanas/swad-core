@@ -62,7 +62,7 @@ const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (void *Args);
+static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args);
 
 static unsigned Cal_GetParamFirstDayOfWeek (void);
 
@@ -82,7 +82,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Txt_Calendar;
 
    Box_BoxBegin (NULL,Txt_Calendar,
-                 Cal_PutIconsFirstDayOfWeek,&Gbl,
+                 Cal_PutIconsFirstDayOfWeek,NULL,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
@@ -95,11 +95,10 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 /************ Put contextual icons in first-day-of-week setting **************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (void *Args)
+static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_FIRST_DAY_OF_WEEK);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_FIRST_DAY_OF_WEEK);
   }
 
 /*****************************************************************************/

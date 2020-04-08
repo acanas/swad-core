@@ -103,7 +103,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (void *Args)
    if (Args)
      {
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Brw_PutHiddenParamFullTreeIfSelected (&Gbl);
+      Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
       Par_PutHiddenParamChar ("CreateZIP",'Y');
      }
   }

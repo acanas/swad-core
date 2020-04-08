@@ -65,7 +65,7 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (void *Args);
+static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args);
 
 static void Lan_PutParamLanguage (void *Args);
 
@@ -91,7 +91,7 @@ void Lan_PutBoxToSelectLanguage (void)
    extern const char *Txt_Language;
 
    Box_BoxBegin (NULL,Txt_Language,
-                 Lan_PutIconsLanguage,&Gbl,
+                 Lan_PutIconsLanguage,NULL,
                  Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
    Lan_PutSelectorToSelectLanguage ();
    Box_BoxEnd ();
@@ -101,11 +101,10 @@ void Lan_PutBoxToSelectLanguage (void)
 /**************** Put contextual icons in language setting *******************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (void *Args)
+static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_LANGUAGES);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_LANGUAGES);
   }
 
 /*****************************************************************************/

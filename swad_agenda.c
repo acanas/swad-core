@@ -676,7 +676,6 @@ static void Agd_PutIconToShowQR (void)
              Cfg_URL_SWAD_CGI,
              Lan_STR_LANG_ID[Gbl.Prefs.Language],
              Gbl.Usrs.Me.UsrDat.Nickname);
-   Gbl.QR.Str = URL;
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,
                             QR_PutParamQRString,URL);
   }

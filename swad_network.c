@@ -195,7 +195,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
 static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title);
 
-static void Net_PutIconsWebsSocialNetworks (void *Args);
+static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args);
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
@@ -287,7 +287,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	     "%upx",
 	     Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
-	         Net_PutIconsWebsSocialNetworks,&Gbl,
+	         Net_PutIconsWebsSocialNetworks,NULL,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
    /***** Begin table *****/
@@ -364,11 +364,10 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 /************** Put contextual icons in my web / social networks *************/
 /*****************************************************************************/
 
-static void Net_PutIconsWebsSocialNetworks (void *Args)
+static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_SOCIAL_NETWORKS);
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_SOCIAL_NETWORKS);
   }
 
 /*****************************************************************************/
