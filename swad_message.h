@@ -54,6 +54,35 @@ typedef enum
    Msg_STATUS_NOTIFIED,
   } Msg_Status_t;
 
+struct Msg_Messages
+  {
+   Msg_TypeOfMessages_t TypeOfMessages;
+   unsigned NumMsgs;
+   int MsgId;
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   unsigned NumCourses;
+   struct
+     {
+      long CrsCod;
+      char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+     } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
+   long FilterCrsCod;	// Show only messages sent from this course code
+   char FilterCrsShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
+   char FilterContent[Msg_MAX_BYTES_FILTER_CONTENT + 1];	// Show only messages that match this content
+   bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
+   long ExpandedMsgCod;	// The current expanded message code
+   struct
+     {
+      bool IsReply;			// Is the message I am editing a reply?
+      long OriginalMsgCod;		// Original message code when I am editing a reply
+     } Reply;
+   bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
+   char FileNameMail[PATH_MAX + 1];
+   FILE *FileMail;
+   unsigned CurrentPage;
+   long MsgCod;	// Used as parameter with message to be removed
+  };
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -90,7 +119,7 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod);
 unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 
-void Msg_PutHiddenParamsMsgsFilters (void *Args);
+void Msg_PutHiddenParamsMsgsFilters (void *Messages);
 void Msg_GetDistinctCoursesInMyMessages (void);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
 void Msg_ShowFormToFilterMsgs (void);

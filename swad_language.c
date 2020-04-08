@@ -67,7 +67,7 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 
 static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args);
 
-static void Lan_PutParamLanguage (void *Args);
+static void Lan_PutParamLanguage (void *Language);
 
 /*****************************************************************************/
 /*************** Put link to change language (edit settings) *****************/
@@ -149,7 +149,7 @@ void Lan_AskChangeLanguage (void)
 
    /***** Request confirmation *****/
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
-                           Lan_PutParamLanguage,&Gbl,
+                           Lan_PutParamLanguage,&Gbl.Prefs.Language,
                            Btn_CONFIRM_BUTTON,
                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
@@ -165,10 +165,10 @@ void Lan_AskChangeLanguage (void)
 /******************************* Change language *****************************/
 /*****************************************************************************/
 
-static void Lan_PutParamLanguage (void *Args)
+static void Lan_PutParamLanguage (void *Language)
   {
-   if (Args)
-      Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Gbl.Prefs.Language);
+   if (Language)
+      Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) *((Lan_Language_t *) Language));
   }
 
 /*****************************************************************************/

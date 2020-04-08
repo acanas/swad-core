@@ -445,7 +445,6 @@ struct Globals
 	} Records;
       struct
 	{
-	 long NotCod;		// Notice to be edited, removed... used as parameter
 	 long HighlightNotCod;	// Notice code of a notice to be highlighted
 	} Notices;
      } Crs;
@@ -540,35 +539,7 @@ struct Globals
       long NotCod;		// Used as parameter about social note to be edited, removed...
       long PubCod;		// Used as parameter about social publishing to be edited, removed...
      } Timeline;
-   struct
-     {
-      Msg_TypeOfMessages_t TypeOfMessages;
-      unsigned NumMsgs;
-      int MsgId;
-      char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-      unsigned NumCourses;
-      struct
-        {
-         long CrsCod;
-         char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-        } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
-      long FilterCrsCod;	// Show only messages sent from this course code
-      char FilterCrsShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-      char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
-      char FilterContent[Msg_MAX_BYTES_FILTER_CONTENT + 1];	// Show only messages that match this content
-      bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
-      long ExpandedMsgCod;	// The current expanded message code
-      struct
-        {
-         bool IsReply;			// Is the message I am editing a reply?
-         long OriginalMsgCod;		// Original message code when I am editing a reply
-        } Reply;
-      bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
-      char FileNameMail[PATH_MAX + 1];
-      FILE *FileMail;
-      unsigned CurrentPage;
-      long MsgCod;	// Used as parameter with message to be removed
-     } Msg;
+   struct Msg_Messages Msg;
    struct
      {
       struct

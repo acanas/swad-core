@@ -64,9 +64,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (void *Args);
-static void Lgo_PutIconToRemoveLogoCtr (void *Args);
-static void Lgo_PutIconToRemoveLogoDeg (void *Args);
+static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) void *Args);
+static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) void *Args);
+static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args);
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 
 /*****************************************************************************/
@@ -302,7 +302,7 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Logo,
-                 FunctionToDrawContextualIcons,&Gbl,
+                 FunctionToDrawContextualIcons,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Begin form to upload logo *****/
@@ -329,22 +329,19 @@ void Lgo_RequestLogo (Hie_Level_t Scope)
 /************** Put a link to request the removal of the logo ****************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (void *Args)
+static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Lgo_PutIconToRemoveLogo (ActRemInsLog);
+   Lgo_PutIconToRemoveLogo (ActRemInsLog);
   }
 
-static void Lgo_PutIconToRemoveLogoCtr (void *Args)
+static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Lgo_PutIconToRemoveLogo (ActRemCtrLog);
+   Lgo_PutIconToRemoveLogo (ActRemCtrLog);
   }
 
-static void Lgo_PutIconToRemoveLogoDeg (void *Args)
+static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Lgo_PutIconToRemoveLogo (ActRemDegLog);
+   Lgo_PutIconToRemoveLogo (ActRemDegLog);
   }
 
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)

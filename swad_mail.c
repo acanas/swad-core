@@ -71,7 +71,7 @@ static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail d
 /*****************************************************************************/
 
 static void Mai_GetParamMaiOrder (void);
-static void Mai_PutIconToEditMailDomains (void *Args);
+static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args);
 static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -88,7 +88,8 @@ static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
 
-static void Mai_ListEmails (void *Args);
+static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args);
+static void Mai_ListEmails (__attribute__((unused)) void *Args);
 
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 				        bool IMustFillInEmail,bool IShouldConfirmEmail);
@@ -124,7 +125,7 @@ void Mai_SeeMailDomains (void)
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-			 Mai_PutIconToEditMailDomains,&Gbl,
+			 Mai_PutIconToEditMailDomains,NULL,
 			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
@@ -201,11 +202,10 @@ static void Mai_GetParamMaiOrder (void)
 /************************ Put icon to edit mail domains **********************/
 /*****************************************************************************/
 
-static void Mai_PutIconToEditMailDomains (void *Args)
+static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToEdit (ActEdiMai,NULL,
-				   NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiMai,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -865,24 +865,28 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
   }
 
 /*****************************************************************************/
-/************** Request edition of works of users of the course **************/
+/************************ Request users to list emails ***********************/
 /*****************************************************************************/
 
-void Mai_ReqUsrsToListEmails (void *Args)
+void Mai_ReqUsrsToListEmails (void)
+  {
+   Mai_PutFormToSelectUsrsToListEmails (NULL);
+  }
+
+static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_MESSAGES_Email;
    extern const char *Txt_Email;
    extern const char *Txt_View_email_addresses;
 
-   if (Args)
-      /***** List users to select some of them *****/
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActMaiUsr,
-					NULL,NULL,
-					Txt_Email,
-					Hlp_MESSAGES_Email,
-					Txt_View_email_addresses,
-					false);	// Do not put form with date range
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActMaiUsr,
+				     NULL,NULL,
+				     Txt_Email,
+				     Hlp_MESSAGES_Email,
+				     Txt_View_email_addresses,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -892,8 +896,8 @@ void Mai_ReqUsrsToListEmails (void *Args)
 void Mai_GetSelectedUsrsAndListEmails (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Mai_ListEmails,&Gbl,			// when user(s) selected
-                                  Mai_ReqUsrsToListEmails,&Gbl);	// when no user selected
+				  Mai_ListEmails,NULL,				// when user(s) selected
+                                  Mai_PutFormToSelectUsrsToListEmails,NULL);	// when no user selected
   }
 
 /*****************************************************************************/
@@ -902,7 +906,7 @@ void Mai_GetSelectedUsrsAndListEmails (void)
 
 #define Mai_MAX_BYTES_STR_ADDR (256 * 1024 - 1)
 
-static void Mai_ListEmails (void *Args)
+static void Mai_ListEmails (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_MESSAGES_Email;
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
@@ -916,9 +920,6 @@ static void Mai_ListEmails (void *Args)
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
    const char *Ptr;
-
-   if (!Args)
-      return;
 
    /***** Start the box used to list the emails *****/
    Box_BoxBegin (NULL,Txt_Email_addresses,

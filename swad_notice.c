@@ -72,7 +72,7 @@ static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /*****************************************************************************/
 
 static bool Not_CheckIfICanEditNotices (void);
-static void Not_PutIconsListNotices (void *Args);
+static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
@@ -84,11 +84,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Not_Status_t Status);
 static long Not_InsertNoticeInDB (const char *Content);
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
-static void Not_PutParams (void *Args);
+static void Not_PutParams (void *NotCod);
 static long Not_GetParamNotCod (void);
-
-static void Not_SetNotCodToEdit (long NotCod);
-static long Not_GetNotCodToEdit (void);
 
 /*****************************************************************************/
 /***************************** Write a new notice ****************************/
@@ -303,9 +300,8 @@ void Not_RequestRemNotice (void)
    Not_GetDataAndShowNotice (NotCod);
 
    /* End alert */
-   Not_SetNotCodToEdit (NotCod);	// To be used as parameter
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,
-                            Not_PutParams,&Gbl,
+                            Not_PutParams,&NotCod,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
@@ -414,7 +410,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 		"%upx",
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
       Box_BoxBegin (StrWidth,Txt_Notices,
-		    Not_PutIconsListNotices,&Gbl,
+		    Not_PutIconsListNotices,NULL,
 		    Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
       if (!NumNotices)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_notices);
@@ -511,17 +507,14 @@ static bool Not_CheckIfICanEditNotices (void)
 /****************** Put contextual icons in list of notices ******************/
 /*****************************************************************************/
 
-static void Not_PutIconsListNotices (void *Args)
+static void Not_PutIconsListNotices (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      /***** Put icon to add a new notice *****/
-      if (Not_CheckIfICanEditNotices ())
-	 Not_PutIconToAddNewNotice ();
+   /***** Put icon to add a new notice *****/
+   if (Not_CheckIfICanEditNotices ())
+      Not_PutIconToAddNewNotice ();
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_NOTICES);
-     }
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_NOTICES);
   }
 
 /*****************************************************************************/
@@ -667,22 +660,20 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
       if (Not_CheckIfICanEditNotices ())
 	{
-         Not_SetNotCodToEdit (NotCod);	// To be used as parameter
-
 	 /***** Put form to remove announcement *****/
          Ico_PutContextualIconToRemove (ActReqRemNot,
-                                        Not_PutParams,&Gbl);
+                                        Not_PutParams,&NotCod);
 
 	 /***** Put form to change the status of the notice *****/
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
 	       Ico_PutContextualIconToHide (ActHidNot,NULL,
-	                                    Not_PutParams,&Gbl);
+	                                    Not_PutParams,&NotCod);
                break;
             case Not_OBSOLETE_NOTICE:
 	       Ico_PutContextualIconToUnhide (ActRevNot,NULL,
-	                                      Not_PutParams,&Gbl);
+	                                      Not_PutParams,&NotCod);
                break;
            }
          Frm_EndForm ();
@@ -722,9 +713,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Put form to view full notice */
       HTM_DIV_Begin ("class=\"CM\"");
-      Not_SetNotCodToEdit (NotCod);	// To be used as parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
-                                     Not_PutParams,&Gbl,
+                                     Not_PutParams,&NotCod,
 				     "ellipsis-h.svg",
 				     Txt_See_full_notice);
       HTM_DIV_End ();
@@ -1006,10 +996,10 @@ unsigned Not_GetNumNoticesDeleted (Hie_Level_t Scope,unsigned *NumNotif)
 /*************** Put parameter with the code of a notice *********************/
 /*****************************************************************************/
 
-static void Not_PutParams (void *Args)
+static void Not_PutParams (void *NotCod)
   {
-   if (Args)
-      Not_PutHiddenParamNotCod (Not_GetNotCodToEdit ());
+   if (NotCod)
+      Not_PutHiddenParamNotCod (*((long *) NotCod));
   }
 
 /*****************************************************************************/
@@ -1029,18 +1019,4 @@ static long Not_GetParamNotCod (void)
   {
    /***** Get notice code *****/
    return Par_GetParToLong ("NotCod");
-  }
-
-/*****************************************************************************/
-/********** Set/get code of a notice to be removed/enable/disable ************/
-/*****************************************************************************/
-
-static void Not_SetNotCodToEdit (long NotCod)
-  {
-   Gbl.Crs.Notices.NotCod = NotCod;
-  }
-
-static long Not_GetNotCodToEdit (void)
-  {
-   return Gbl.Crs.Notices.NotCod;
   }

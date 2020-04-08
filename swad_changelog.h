@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.169.3 (2020-04-08)"
+#define Log_PLATFORM_VERSION	"SWAD 19.169.4 (2020-04-08)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.153.js"
 /*
@@ -548,6 +548,7 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.169.4: Apr 08, 2020	Mark some parameters as unused (functions from I to N). (284903 lines)
 	Version 19.169.3: Apr 08, 2020	Mark some parameters as unused (functions from D to I). (284929 lines)
 	Version 19.169.2: Apr 08, 2020	Mark some parameters as unused (functions from A to C). (284969 lines)
 	Version 19.169.1: Apr 08, 2020	Mark some parameters as unused. (284999 lines)

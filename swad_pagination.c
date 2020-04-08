@@ -230,12 +230,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_MESSAGES_RECEIVED:
                Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MESSAGES_SENT:
                Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MY_AGENDA:
                Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -348,12 +348,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_MESSAGES_RECEIVED:
                Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MESSAGES_SENT:
                Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MY_AGENDA:
                Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -452,12 +452,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_MESSAGES_RECEIVED:
                Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MESSAGES_SENT:
                Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MY_AGENDA:
                Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -568,12 +568,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_MESSAGES_RECEIVED:
                   Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Msg_PutHiddenParamsMsgsFilters (&Gbl);
+                  Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                   break;
                case Pag_MESSAGES_SENT:
                   Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Msg_PutHiddenParamsMsgsFilters (&Gbl);
+                  Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                   break;
                case Pag_MY_AGENDA:
                   Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -671,12 +671,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_MESSAGES_RECEIVED:
                Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MESSAGES_SENT:
                Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -775,12 +775,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_MESSAGES_RECEIVED:
                Frm_StartFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
             case Pag_MESSAGES_SENT:
                Frm_StartFormAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Msg_PutHiddenParamsMsgsFilters (&Gbl);
+               Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_StartFormAnchor (ActSeeMyAgd,Pagination->Anchor);

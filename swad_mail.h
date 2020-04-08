@@ -72,7 +72,7 @@ void Mai_RenameMailDomainFull (void);
 void Mai_ContEditAfterChgMai (void);
 void Mai_RecFormNewMailDomain (void);
 
-void Mai_ReqUsrsToListEmails (void *Args);
+void Mai_ReqUsrsToListEmails (void);
 void Mai_GetSelectedUsrsAndListEmails (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
