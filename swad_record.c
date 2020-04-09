@@ -1304,8 +1304,8 @@ static void Rec_ShowRecordOneTchCrs (void)
    if (ShowOfficeHours)
      {
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-      Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+      Gbl.Timetable.Type = TT_TUTORING_TIMETABLE;
+      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
                     NULL,NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -1426,8 +1426,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
             if (ShowOfficeHours)
               {
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-               Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+               Gbl.Timetable.Type = TT_TUTORING_TIMETABLE;
+	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
 	                     NULL,NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       TT_ShowTimeTable (UsrDat.UsrCod);

@@ -520,55 +520,16 @@ struct Globals
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
    struct Prj_Projects Prjs;
-   struct
-     {
-      Usr_Who_t Who;
-      long NotCod;		// Used as parameter about social note to be edited, removed...
-      long PubCod;		// Used as parameter about social publishing to be edited, removed...
-     } Timeline;
+   struct TL_Timeline Timeline;
    struct Msg_Messages Msg;
-   struct
-     {
-      struct
-        {
-	 struct TT_Range Range;
-	 unsigned HoursPerDay;		// From start hour to end hour
-	 unsigned SecondsPerInterval;
-	 unsigned IntervalsPerHour;
-	 unsigned IntervalsPerDay;
-	 unsigned IntervalsBeforeStartHour;
-        } Config;
-      TT_TimeTableType_t Type;
-      TT_TimeTableView_t View;
-      unsigned Weekday;
-      unsigned Interval;
-      unsigned Column;
-      TT_ClassType_t ClassType;
-      unsigned DurationIntervals;
-      char Info[TT_MAX_BYTES_INFO + 1];
-      // char Place[TT_MAX_BYTES_PLACE + 1];
-      long GrpCod;		// Group code (-1 if no group selected)
-      struct
-        {
-	 bool PutIconEditCrsTT;
-	 bool PutIconEditOfficeHours;
-	 bool PutIconPrint;
-        } ContextualIcons;
-     } TimeTable;
+   struct TT_Timetable Timetable;
    struct
      {
       struct DateTime DateIni;	// TODO: Remove in future versions
       struct DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[Dat_NUM_START_END_TIME];
      } DateRange;
-   struct
-     {
-      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of surveys
-      long *LstSvyCods;	// List of survey codes
-      Dat_StartEndTime_t SelectedOrder;
-      unsigned CurrentPage;
-     } Svys;
+   struct Svy_Surveys Svys;
    struct Sta_Stats Stat;
 
    /* Cache */

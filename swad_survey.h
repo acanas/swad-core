@@ -43,7 +43,18 @@ typedef enum
    Svy_END_TIME   = 1,
   } Svy_StartOrEndTime_t;
 
-struct Survey
+struct Svy_Surveys
+  {
+   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+   unsigned Num;	// Number of surveys
+   long *LstSvyCods;	// List of survey codes
+   Dat_StartEndTime_t SelectedOrder;
+   unsigned CurrentPage;
+   long SvyCod;
+   long QstCod;
+  };
+
+struct Svy_Survey
   {
    long SvyCod;
    Hie_Level_t Scope;
@@ -83,10 +94,10 @@ typedef enum
 
 void Svy_SeeAllSurveys (void);
 void Svy_SeeOneSurvey (void);
-void Svy_PutHiddenParamSvyOrder (void);
+void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_RequestCreatOrEditSvy (void);
-void Svy_GetDataOfSurveyByCod (struct Survey *Svy);
-void Svy_GetDataOfSurveyByFolder (struct Survey *Svy);
+void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy);
+void Svy_GetDataOfSurveyByFolder (struct Svy_Survey *Svy);
 void Svy_FreeListSurveys (void);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,

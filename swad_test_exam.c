@@ -145,7 +145,9 @@ static void TstExa_StoreOneExamQstInDB (const struct TstExa_Exam *Exam,
                                         unsigned NumQst);
 static void Tst_UpdateQstScoreInDB (const struct TstExa_Exam *Exam,unsigned NumQst);
 
-static void TstExa_ShowUsrsExams (void *Args);
+static void TstExa_PutFormToSelectUsrsToViewUsrsExams (__attribute__((unused)) void *Args);
+
+static void TstExa_ShowUsrsExams (__attribute__((unused)) void *Args);
 static void TstExa_ShowHeaderExams (void);
 static void TstExa_ShowExams (struct UsrData *UsrDat);
 static void TstExa_ShowExamsSummaryRow (bool ItsMe,
@@ -1451,20 +1453,24 @@ static void Tst_UpdateQstScoreInDB (const struct TstExa_Exam *Exam,unsigned NumQ
 /************* Select users and dates to show their test exams ***************/
 /*****************************************************************************/
 
-void TstExa_SelUsrsToViewUsrsExams (void *Args)
+void TstExa_SelUsrsToViewUsrsExams (void)
+  {
+   TstExa_PutFormToSelectUsrsToViewUsrsExams (NULL);
+  }
+
+static void TstExa_PutFormToSelectUsrsToViewUsrsExams (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_test_results;
 
-   if (Args)
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeUsrTstRes,
-					NULL,NULL,
-					Txt_Results,
-					Hlp_ASSESSMENT_Tests_results,
-					Txt_View_test_results,
-					true);	// Put form with date range
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeUsrTstRes,
+				     NULL,NULL,
+				     Txt_Results,
+				     Hlp_ASSESSMENT_Tests_results,
+				     Txt_View_test_results,
+				     true);	// Put form with date range
   }
 
 /*****************************************************************************/
@@ -1533,22 +1539,19 @@ void TstExa_ShowMyExams (void)
 void TstExa_GetUsrsAndShowExams (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  TstExa_ShowUsrsExams,&Gbl,
-                                  TstExa_SelUsrsToViewUsrsExams,&Gbl);
+				  TstExa_ShowUsrsExams,NULL,
+                                  TstExa_PutFormToSelectUsrsToViewUsrsExams,NULL);
   }
 
 /*****************************************************************************/
 /********************* Show test exams for several users *********************/
 /*****************************************************************************/
 
-static void TstExa_ShowUsrsExams (void *Args)
+static void TstExa_ShowUsrsExams (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
    const char *Ptr;
-
-   if (!Args)
-      return;
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();

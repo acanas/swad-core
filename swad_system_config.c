@@ -67,7 +67,7 @@ extern struct Globals Gbl;	// All the global parameters and variables must be in
 /*****************************************************************************/
 
 static void SysCfg_Configuration (bool PrintView);
-static void SysCfg_PutIconToPrint (void *Args);
+static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
@@ -117,7 +117,7 @@ static void SysCfg_Configuration (bool PrintView)
 		    NULL,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
-                    SysCfg_PutIconToPrint,&Gbl,
+                    SysCfg_PutIconToPrint,NULL,
 		    Hlp_SYSTEM_Information,Box_NOT_CLOSABLE);
 
    /**************************** Left part ***********************************/
@@ -185,11 +185,10 @@ static void SysCfg_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
-static void SysCfg_PutIconToPrint (void *Args)
+static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToPrint (ActPrnSysInf,
-				    NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnSysInf,
+				 NULL,NULL);
   }
 
 /*****************************************************************************/

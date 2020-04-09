@@ -333,7 +333,7 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                     Ntf_NotifyEvent_t NotifyEvent);
 
 static void TL_RequestRemovalNote (void);
-static void TL_PutParamsRemoveNote (void *Args);
+static void TL_PutParamsRemoveNote (void *Timeline);
 static void TL_RemoveNote (void);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
@@ -341,7 +341,7 @@ static long TL_GetNotCodOfPublication (long PubCod);
 static long TL_GetPubCodOfOriginalNote (long NotCod);
 
 static void TL_RequestRemovalComment (void);
-static void TL_PutParamsRemoveCommment (void *Args);
+static void TL_PutParamsRemoveComment (void *Timeline);
 static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
@@ -4071,11 +4071,11 @@ static void TL_RequestRemovalNote (void)
 	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveNote,&Gbl,
+	                             TL_PutParamsRemoveNote,&Gbl.Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
-	                             TL_PutParamsRemoveNote,&Gbl,
+	                             TL_PutParamsRemoveNote,&Gbl.Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4087,15 +4087,15 @@ static void TL_RequestRemovalNote (void)
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void TL_PutParamsRemoveNote (void *Args)
+static void TL_PutParamsRemoveNote (void *Timeline)
   {
-   if (Args)
+   if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       else
-	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
-      TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
+	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
+      TL_PutHiddenParamNotCod (((struct TL_Timeline *) Timeline)->NotCod);
      }
   }
 
@@ -4384,11 +4384,11 @@ static void TL_RequestRemovalComment (void)
 	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveCommment,&Gbl,
+	                             TL_PutParamsRemoveComment,&Gbl.Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
-	                             TL_PutParamsRemoveCommment,&Gbl,
+	                             TL_PutParamsRemoveComment,&Gbl.Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4403,15 +4403,15 @@ static void TL_RequestRemovalComment (void)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TL_PutParamsRemoveCommment (void *Args)
+static void TL_PutParamsRemoveComment (void *Timeline)
   {
-   if (Args)
+   if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       else
-	 Usr_PutHiddenParamWho (Gbl.Timeline.Who);
-      TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);
+	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
+      TL_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
      }
   }
 

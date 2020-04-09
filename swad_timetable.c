@@ -129,11 +129,11 @@ static void TT_FreeTimeTable (void);
 
 static void TT_ShowTimeTableGrpsSelected (void);
 static void TT_GetParamsTimeTable (void);
-static void TT_PutContextualIcons (void *Args);
+static void TT_PutContextualIcons (void *Timetable);
 static void TT_PutFormToSelectWhichGroupsToShow (void);
 
-static void TT_PutIconToViewCrsTT (void *Args);
-static void TT_PutIconToViewMyTT (void *Args);
+static void TT_PutIconToViewCrsTT (__attribute__((unused)) void *Args);
+static void TT_PutIconToViewMyTT (__attribute__((unused)) void *Args);
 
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod);
 static void TT_WriteTutTimeTableIntoDB (long UsrCod);
@@ -163,38 +163,38 @@ static void TT_TimeTableConfigureIntervalsAndAllocateTimeTable (void)
   {
    unsigned Weekday;
 
-   if (Gbl.TimeTable.Config.Range.Hours.End >
-       Gbl.TimeTable.Config.Range.Hours.Start)
+   if (Gbl.Timetable.Config.Range.Hours.End >
+       Gbl.Timetable.Config.Range.Hours.Start)
      {
       /***** Configuration of timetable depending on hours and resolution *****/
-      Gbl.TimeTable.Config.HoursPerDay              = Gbl.TimeTable.Config.Range.Hours.End -
-						      Gbl.TimeTable.Config.Range.Hours.Start;	// From start hour to end hour
-      Gbl.TimeTable.Config.SecondsPerInterval       = Gbl.TimeTable.Config.Range.MinutesPerInterval *
+      Gbl.Timetable.Config.HoursPerDay              = Gbl.Timetable.Config.Range.Hours.End -
+						      Gbl.Timetable.Config.Range.Hours.Start;	// From start hour to end hour
+      Gbl.Timetable.Config.SecondsPerInterval       = Gbl.Timetable.Config.Range.MinutesPerInterval *
 						      TT_SECONDS_PER_MINUTE;
-      Gbl.TimeTable.Config.IntervalsPerHour         = TT_MINUTES_PER_HOUR /
-						      Gbl.TimeTable.Config.Range.MinutesPerInterval;
-      Gbl.TimeTable.Config.IntervalsPerDay          = Gbl.TimeTable.Config.IntervalsPerHour *
-						      Gbl.TimeTable.Config.HoursPerDay;
-      Gbl.TimeTable.Config.IntervalsBeforeStartHour = Gbl.TimeTable.Config.IntervalsPerHour *
-						      Gbl.TimeTable.Config.Range.Hours.Start;
+      Gbl.Timetable.Config.IntervalsPerHour         = TT_MINUTES_PER_HOUR /
+						      Gbl.Timetable.Config.Range.MinutesPerInterval;
+      Gbl.Timetable.Config.IntervalsPerDay          = Gbl.Timetable.Config.IntervalsPerHour *
+						      Gbl.Timetable.Config.HoursPerDay;
+      Gbl.Timetable.Config.IntervalsBeforeStartHour = Gbl.Timetable.Config.IntervalsPerHour *
+						      Gbl.Timetable.Config.Range.Hours.Start;
 
       /***** Allocate memory for timetable *****/
       for (Weekday = 0;
 	   Weekday < TT_DAYS_PER_WEEK;
 	   Weekday++)
 	 if ((TT_TimeTable[Weekday] = (struct TT_Cell *)
-				      malloc (Gbl.TimeTable.Config.IntervalsPerDay *
+				      malloc (Gbl.Timetable.Config.IntervalsPerDay *
 					      sizeof (struct TT_Cell))) == NULL)
 	    Lay_ShowErrorAndExit ("Error allocating memory for timetable.");
      }
    else
      {
       /***** Table is empty *****/
-      Gbl.TimeTable.Config.HoursPerDay              = 0;
-      Gbl.TimeTable.Config.SecondsPerInterval       = 0;
-      Gbl.TimeTable.Config.IntervalsPerHour         = 0;
-      Gbl.TimeTable.Config.IntervalsPerDay          = 0;
-      Gbl.TimeTable.Config.IntervalsBeforeStartHour = 0;
+      Gbl.Timetable.Config.HoursPerDay              = 0;
+      Gbl.Timetable.Config.SecondsPerInterval       = 0;
+      Gbl.Timetable.Config.IntervalsPerHour         = 0;
+      Gbl.Timetable.Config.IntervalsPerDay          = 0;
+      Gbl.Timetable.Config.IntervalsBeforeStartHour = 0;
 
       /***** Clear timetable in order to not try to free it *****/
       for (Weekday = 0;
@@ -257,21 +257,21 @@ static void TT_GetParamsTimeTable (void)
    unsigned Minutes;
 
    /***** Get day (0: monday, 1: tuesday,..., 6: sunday *****/
-   Gbl.TimeTable.Weekday = (unsigned)
+   Gbl.Timetable.Weekday = (unsigned)
 	                   Par_GetParToUnsignedLong ("TTDay",
                                                      0,
                                                      TT_DAYS_PER_WEEK - 1,
                                                      0);
 
    /***** Get hour *****/
-   Gbl.TimeTable.Interval = (unsigned)
+   Gbl.Timetable.Interval = (unsigned)
 	                    Par_GetParToUnsignedLong ("TTInt",
                                                       0,
-                                                      Gbl.TimeTable.Config.IntervalsPerDay - 1,
+                                                      Gbl.Timetable.Config.IntervalsPerDay - 1,
                                                       0);
 
    /***** Get number of column *****/
-   Gbl.TimeTable.Column = (unsigned)
+   Gbl.Timetable.Column = (unsigned)
 	                  Par_GetParToUnsignedLong ("TTCol",
                                                     0,
                                                     TT_MAX_COLUMNS_PER_CELL - 1,
@@ -279,26 +279,26 @@ static void TT_GetParamsTimeTable (void)
 
    /***** Get class type *****/
    Par_GetParToText ("TTTyp",StrClassType,TT_MAX_BYTES_STR_CLASS_TYPE);
-   for (Gbl.TimeTable.ClassType  = (TT_ClassType_t) 0;
-	Gbl.TimeTable.ClassType <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
-	Gbl.TimeTable.ClassType++)
-      if (!strcmp (StrClassType,TT_ClassTypeDB[Gbl.TimeTable.ClassType]))
+   for (Gbl.Timetable.ClassType  = (TT_ClassType_t) 0;
+	Gbl.Timetable.ClassType <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
+	Gbl.Timetable.ClassType++)
+      if (!strcmp (StrClassType,TT_ClassTypeDB[Gbl.Timetable.ClassType]))
          break;
-   if (Gbl.TimeTable.ClassType > (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1))
+   if (Gbl.Timetable.ClassType > (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1))
       Lay_ShowErrorAndExit ("Type of timetable cell is missing.");
 
    /***** Get class duration *****/
    Par_GetParToText ("TTDur",StrDuration,TT_MAX_BYTES_STR_DURATION);
    if (sscanf (StrDuration,"%u:%u",&Hours,&Minutes) != 2)
       Lay_ShowErrorAndExit ("Duration is missing.");
-   Gbl.TimeTable.DurationIntervals = Hours * Gbl.TimeTable.Config.IntervalsPerHour +
-	                             Minutes / Gbl.TimeTable.Config.Range.MinutesPerInterval;
+   Gbl.Timetable.DurationIntervals = Hours * Gbl.Timetable.Config.IntervalsPerHour +
+	                             Minutes / Gbl.Timetable.Config.Range.MinutesPerInterval;
 
    /***** Get group code *****/
-   Gbl.TimeTable.GrpCod = Par_GetParToLong ("TTGrp");
+   Gbl.Timetable.GrpCod = Par_GetParToLong ("TTGrp");
 
    /***** Get info *****/
-   Par_GetParToText ("TTInf",Gbl.TimeTable.Info,TT_MAX_BYTES_INFO);
+   Par_GetParToText ("TTInf",Gbl.Timetable.Info,TT_MAX_BYTES_INFO);
   }
 
 /*****************************************************************************/
@@ -332,42 +332,42 @@ void TT_ShowClassTimeTable (void)
       case ActSeeCrsTT:
       case ActPrnCrsTT:
       case ActChgCrsTT1stDay:
-         Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
+         Gbl.Timetable.Type = TT_COURSE_TIMETABLE;
 	 break;
       case ActSeeMyTT:
       case ActPrnMyTT:
       case ActChgMyTT1stDay:
-         Gbl.TimeTable.Type = TT_MY_TIMETABLE;
+         Gbl.Timetable.Type = TT_MY_TIMETABLE;
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
      }
 
-   Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT = (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
+   Gbl.Timetable.ContextualIcons.PutIconEditCrsTT = (Gbl.Timetable.Type == TT_COURSE_TIMETABLE &&
 	                                             !PrintView &&
                                                      Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-   Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours = (Gbl.TimeTable.Type == TT_MY_TIMETABLE &&
+   Gbl.Timetable.ContextualIcons.PutIconEditOfficeHours = (Gbl.Timetable.Type == TT_MY_TIMETABLE &&
 	                                                   !PrintView &&
                                                            (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH)));
-   Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
+   Gbl.Timetable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGroups ();
 
    /***** Begin box *****/
-   if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
-       Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
-       Gbl.TimeTable.ContextualIcons.PutIconPrint)
-      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-		    TT_PutContextualIcons,&Gbl,
-		    Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
+   if (Gbl.Timetable.ContextualIcons.PutIconEditCrsTT ||
+       Gbl.Timetable.ContextualIcons.PutIconEditOfficeHours ||
+       Gbl.Timetable.ContextualIcons.PutIconPrint)
+      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
+		    TT_PutContextualIcons,&Gbl.Timetable,
+		    Help[Gbl.Timetable.Type],Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
 		    NULL,NULL,
-		    Help[Gbl.TimeTable.Type],Box_NOT_CLOSABLE);
+		    Help[Gbl.Timetable.Type],Box_NOT_CLOSABLE);
 
    /***** Start time table drawing *****/
-   if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
+   if (Gbl.Timetable.Type == TT_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (PrintView,false,
 				 Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
@@ -380,14 +380,14 @@ void TT_ShowClassTimeTable (void)
       Set_StartSettingsHead ();
 
       /* Select whether show only my groups or all groups */
-      if ( Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
-          (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
+      if ( Gbl.Timetable.Type == TT_MY_TIMETABLE ||
+          (Gbl.Timetable.Type == TT_COURSE_TIMETABLE &&
            Gbl.Crs.Grps.NumGrps))
          TT_PutFormToSelectWhichGroupsToShow ();
 
       /* Show form to change first day of week */
       WhichGroups = Grp_GetParamWhichGroups ();
-      Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
+      Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.Timetable.Type],
                                        Grp_PutParamWhichGroups,&WhichGroups);
 
       Set_EndSettingsHead ();
@@ -404,24 +404,25 @@ void TT_ShowClassTimeTable (void)
 /***************** Put contextual icons above the time table *****************/
 /*****************************************************************************/
 
-static void TT_PutContextualIcons (void *Args)
+static void TT_PutContextualIcons (void *Timetable)
   {
    Grp_WhichGroups_t WhichGroups;
 
-   if (Args)
+   if (Timetable)
      {
       WhichGroups = Grp_GetParamWhichGroups ();
-      if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
+
+      if (((struct TT_Timetable *) Timetable)->ContextualIcons.PutIconEditCrsTT)
 	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
 				      Grp_PutParamWhichGroups,&WhichGroups);
 
-      if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
+      if (((struct TT_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,
 				      NULL,NULL);
 
-      if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
-	 Ico_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-										   ActPrnMyTT,
+      if (((struct TT_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
+	 Ico_PutContextualIconToPrint (((struct TT_Timetable *) Timetable)->Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+										                          ActPrnMyTT,
 				       Grp_PutParamWhichGroups,&WhichGroups);
      }
   }
@@ -439,7 +440,7 @@ static void TT_PutFormToSelectWhichGroupsToShow (void)
       [TT_TUTORING_TIMETABLE] = ActUnk,
      };
 
-   Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.TimeTable.Type],
+   Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.Timetable.Type],
                                NULL,NULL);
   }
 
@@ -453,9 +454,9 @@ void TT_EditCrsTimeTable (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Editable time table *****/
-   Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                 TT_PutIconToViewCrsTT,&Gbl,
+   Gbl.Timetable.Type = TT_COURSE_TIMETABLE;
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
+                 TT_PutIconToViewCrsTT,NULL,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
@@ -471,9 +472,9 @@ void TT_EditMyTutTimeTable (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Time table *****/
-   Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                 TT_PutIconToViewMyTT,&Gbl,
+   Gbl.Timetable.Type = TT_TUTORING_TIMETABLE;
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
+                 TT_PutIconToViewMyTT,NULL,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
@@ -483,22 +484,20 @@ void TT_EditMyTutTimeTable (void)
 /********************** Put icon to view course timetable ********************/
 /*****************************************************************************/
 
-static void TT_PutIconToViewCrsTT (void *Args)
+static void TT_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToView (ActSeeCrsTT,
-				   NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeCrsTT,
+				NULL,NULL);
   }
 
 /*****************************************************************************/
 /************************ Put icon to view my timetable **********************/
 /*****************************************************************************/
 
-static void TT_PutIconToViewMyTT (void *Args)
+static void TT_PutIconToViewMyTT (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Ico_PutContextualIconToView (ActSeeMyTT,
-				   NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeMyTT,
+				NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -510,31 +509,31 @@ void TT_ShowTimeTable (long UsrCod)
    extern const char *Txt_The_timetable_is_empty;
 
    /***** Set type of view depending on current action *****/
-   Gbl.TimeTable.View = TT_CRS_VIEW;
+   Gbl.Timetable.View = TT_CRS_VIEW;
    switch (Gbl.Action.Act)
      {
       case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
-	 Gbl.TimeTable.View = TT_CRS_VIEW;
+	 Gbl.Timetable.View = TT_CRS_VIEW;
 	 break;
       case ActSeeRecOneTch:	case ActSeeRecSevTch:
-	 Gbl.TimeTable.View = TT_TUT_VIEW;
+	 Gbl.Timetable.View = TT_TUT_VIEW;
 	 break;
       case ActEdiCrsTT:		case ActChgCrsTT:
-	 Gbl.TimeTable.View = TT_CRS_EDIT;
+	 Gbl.Timetable.View = TT_CRS_EDIT;
 	 break;
       case ActEdiTut:		case ActChgTut:
-	 Gbl.TimeTable.View = TT_TUT_EDIT;
+	 Gbl.Timetable.View = TT_TUT_EDIT;
 	 break;
      }
 
    /***** If editing ==> configure and allocate timetable *****/
-   if (Gbl.TimeTable.View == TT_CRS_EDIT ||
-       Gbl.TimeTable.View == TT_TUT_EDIT)
+   if (Gbl.Timetable.View == TT_CRS_EDIT ||
+       Gbl.Timetable.View == TT_TUT_EDIT)
      {
-      Gbl.TimeTable.Config.Range.Hours.Start          = TT_START_HOUR;		// Day starts at this hour
-      Gbl.TimeTable.Config.Range.Hours.End	      = TT_END_HOUR;		// Day  ends  at this hour
-      Gbl.TimeTable.Config.Range.MinutesPerInterval = TT_MinutesPerInterval[0];	// The smallest interval
+      Gbl.Timetable.Config.Range.Hours.Start          = TT_START_HOUR;		// Day starts at this hour
+      Gbl.Timetable.Config.Range.Hours.End	      = TT_END_HOUR;		// Day  ends  at this hour
+      Gbl.Timetable.Config.Range.MinutesPerInterval = TT_MinutesPerInterval[0];	// The smallest interval
       TT_TimeTableConfigureIntervalsAndAllocateTimeTable ();
      }
    /* If viewing (not editing) ==>
@@ -554,7 +553,7 @@ void TT_ShowTimeTable (long UsrCod)
       TT_ModifTimeTable ();
 
       /* Write a new timetable in database */
-      switch (Gbl.TimeTable.Type)
+      switch (Gbl.Timetable.Type)
         {
          case TT_COURSE_TIMETABLE:
             TT_WriteCrsTimeTableIntoDB (Gbl.Hierarchy.Crs.CrsCod);
@@ -571,7 +570,7 @@ void TT_ShowTimeTable (long UsrCod)
      }
 
    /***** Draw timetable *****/
-   if (Gbl.TimeTable.Config.HoursPerDay)
+   if (Gbl.Timetable.Config.HoursPerDay)
       TT_DrawTimeTable ();
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_timetable_is_empty);
@@ -601,11 +600,11 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    for (Weekday = 0;
 	Weekday < TT_DAYS_PER_WEEK;
 	Weekday++)
-      for (Interval = 0, Hour = Gbl.TimeTable.Config.Range.Hours.Start, Min = 0;
-	   Interval < Gbl.TimeTable.Config.IntervalsPerDay;
+      for (Interval = 0, Hour = Gbl.Timetable.Config.Range.Hours.Start, Min = 0;
+	   Interval < Gbl.Timetable.Config.IntervalsPerDay;
 	   Interval++,
-	   Hour += (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) / TT_SECONDS_PER_MINUTE,
-	   Min   = (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) % TT_SECONDS_PER_MINUTE)
+	   Hour += (Min + Gbl.Timetable.Config.Range.MinutesPerInterval) / TT_SECONDS_PER_MINUTE,
+	   Min   = (Min + Gbl.Timetable.Config.Range.MinutesPerInterval) % TT_SECONDS_PER_MINUTE)
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
@@ -623,7 +622,7 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
 			       Weekday,
 			       Hour,Min,
 			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			       Gbl.TimeTable.Config.SecondsPerInterval,
+			       Gbl.Timetable.Config.SecondsPerInterval,
 			       TT_ClassTypeDB[TT_TimeTable[Weekday][Interval].Columns[Column].ClassType],
 			       TT_TimeTable[Weekday][Interval].Columns[Column].Info);
   }
@@ -649,11 +648,11 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
    for (Weekday = 0;
 	Weekday < TT_DAYS_PER_WEEK;
 	Weekday++)
-      for (Interval = 0, Hour = Gbl.TimeTable.Config.Range.Hours.Start, Min = 0;
-	   Interval < Gbl.TimeTable.Config.IntervalsPerDay;
+      for (Interval = 0, Hour = Gbl.Timetable.Config.Range.Hours.Start, Min = 0;
+	   Interval < Gbl.Timetable.Config.IntervalsPerDay;
 	   Interval++,
-	   Hour += (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) / TT_SECONDS_PER_MINUTE,
-	   Min   = (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) % TT_SECONDS_PER_MINUTE)
+	   Hour += (Min + Gbl.Timetable.Config.Range.MinutesPerInterval) / TT_SECONDS_PER_MINUTE,
+	   Min   = (Min + Gbl.Timetable.Config.Range.MinutesPerInterval) % TT_SECONDS_PER_MINUTE)
 	 for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
@@ -668,7 +667,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
 			       Weekday,
 			       Hour,Min,
 			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			       Gbl.TimeTable.Config.SecondsPerInterval,
+			       Gbl.Timetable.Config.SecondsPerInterval,
 			       TT_TimeTable[Weekday][Interval].Columns[Column].Info);
   }
 
@@ -699,7 +698,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
    bool Found;
 
    /***** Get timetable from database *****/
-   switch (Gbl.TimeTable.Type)
+   switch (Gbl.Timetable.Type)
      {
       case TT_MY_TIMETABLE:
          switch (Gbl.Crs.Grps.WhichGrps)
@@ -829,13 +828,13 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 
    /***** If viewing (not editing) ==>
           calculate range of hours and resolution *****/
-   if (Gbl.TimeTable.View == TT_CRS_VIEW ||
-       Gbl.TimeTable.View == TT_TUT_VIEW)
+   if (Gbl.Timetable.View == TT_CRS_VIEW ||
+       Gbl.Timetable.View == TT_TUT_VIEW)
      {
       /* Initialize hours and resolution for timetable */
-      Gbl.TimeTable.Config.Range.Hours.Start = TT_END_HOUR;		// Initialized to maximum hour
-      Gbl.TimeTable.Config.Range.Hours.End   = TT_START_HOUR;		// Initialized to minimum hour
-      Gbl.TimeTable.Config.Range.MinutesPerInterval = TT_MinutesPerInterval[TT_NUM_RESOLUTIONS - 1];	// The longest interval
+      Gbl.Timetable.Config.Range.Hours.Start = TT_END_HOUR;		// Initialized to maximum hour
+      Gbl.Timetable.Config.Range.Hours.End   = TT_START_HOUR;		// Initialized to minimum hour
+      Gbl.Timetable.Config.Range.MinutesPerInterval = TT_MinutesPerInterval[TT_NUM_RESOLUTIONS - 1];	// The longest interval
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -854,12 +853,12 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 
 	 /* Compute hours and resolution */
 	 TT_CalculateRangeCell (StartTimeSeconds,EndTimeSeconds,&RangeCell);
-	 if (RangeCell.Hours.Start < Gbl.TimeTable.Config.Range.Hours.Start)
-            Gbl.TimeTable.Config.Range.Hours.Start = RangeCell.Hours.Start;
-	 if (RangeCell.Hours.End > Gbl.TimeTable.Config.Range.Hours.End)
-            Gbl.TimeTable.Config.Range.Hours.End = RangeCell.Hours.End;
-	 if (RangeCell.MinutesPerInterval < Gbl.TimeTable.Config.Range.MinutesPerInterval)
-            Gbl.TimeTable.Config.Range.MinutesPerInterval = RangeCell.MinutesPerInterval;
+	 if (RangeCell.Hours.Start < Gbl.Timetable.Config.Range.Hours.Start)
+            Gbl.Timetable.Config.Range.Hours.Start = RangeCell.Hours.Start;
+	 if (RangeCell.Hours.End > Gbl.Timetable.Config.Range.Hours.End)
+            Gbl.Timetable.Config.Range.Hours.End = RangeCell.Hours.End;
+	 if (RangeCell.MinutesPerInterval < Gbl.Timetable.Config.Range.MinutesPerInterval)
+            Gbl.Timetable.Config.Range.MinutesPerInterval = RangeCell.MinutesPerInterval;
 
 	}
       mysql_data_seek (mysql_res,0);
@@ -869,14 +868,14 @@ static void TT_FillTimeTableFromDB (long UsrCod)
      }
 
    /***** Build the table by filling it from database *****/
-   if (Gbl.TimeTable.Config.HoursPerDay)
+   if (Gbl.Timetable.Config.HoursPerDay)
      {
       /***** Initialize timetable to all free *****/
       for (Weekday = 0;
 	   Weekday < TT_DAYS_PER_WEEK;
 	   Weekday++)
 	 for (Interval = 0;
-	      Interval < Gbl.TimeTable.Config.IntervalsPerDay;
+	      Interval < Gbl.Timetable.Config.IntervalsPerDay;
 	      Interval++)
 	   {
 	    TT_TimeTable[Weekday][Interval].NumColumns = 0;
@@ -911,20 +910,20 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 	 if (sscanf (row[1],"%u",&StartTimeSeconds) != 1)
 	    Lay_ShowErrorAndExit ("Wrong start time in timetable.");
 	 Interval = StartTimeSeconds /
-	            Gbl.TimeTable.Config.SecondsPerInterval;
-	 if (Interval < Gbl.TimeTable.Config.IntervalsBeforeStartHour)
+	            Gbl.Timetable.Config.SecondsPerInterval;
+	 if (Interval < Gbl.Timetable.Config.IntervalsBeforeStartHour)
 	    Lay_ShowErrorAndExit ("Wrong start time in timetable.");
-	 Interval -= Gbl.TimeTable.Config.IntervalsBeforeStartHour;
+	 Interval -= Gbl.Timetable.Config.IntervalsBeforeStartHour;
 
 	 /* Duration formatted as seconds (row[2])
 	    --> Duration in number of intervals */
 	 if (sscanf (row[2],"%u",&DurationSeconds) != 1)
 	    Lay_ShowErrorAndExit ("Wrong duration in timetable.");
 	 DurationNumIntervals = DurationSeconds /
-	                        Gbl.TimeTable.Config.SecondsPerInterval;
+	                        Gbl.Timetable.Config.SecondsPerInterval;
 
 	 /* Type of class (row[4]) */
-	 switch (Gbl.TimeTable.Type)
+	 switch (Gbl.Timetable.Type)
 	   {
 	    case TT_COURSE_TIMETABLE:
 	    case TT_MY_TIMETABLE:
@@ -966,7 +965,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 	       TimeTableHasSpaceForThisClass = true;
 	       for (i = Interval + 1;
 		    i < Interval + DurationNumIntervals &&
-		    i < Gbl.TimeTable.Config.IntervalsPerDay;
+		    i < Gbl.Timetable.Config.IntervalsPerDay;
 		    i++)
 		  if (TT_TimeTable[Weekday][i].Columns[FirstFreeColumn].IntervalType != TT_FREE_INTERVAL)
 		   {
@@ -981,7 +980,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 		  TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].IntervalType      = TT_FIRST_INTERVAL;
 		  for (i = Interval + 1;
 		       i < Interval + DurationNumIntervals &&
-		       i < Gbl.TimeTable.Config.IntervalsPerDay;
+		       i < Gbl.Timetable.Config.IntervalsPerDay;
 		       i++)
 		    {
 		     TT_TimeTable[Weekday][i].Columns[FirstFreeColumn].IntervalType = TT_NEXT_INTERVAL;
@@ -989,19 +988,19 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 		    }
 
 		  /* Course (row[6]) and info (row[3])*/
-		  switch (Gbl.TimeTable.Type)
+		  switch (Gbl.Timetable.Type)
 		    {
 		     case TT_MY_TIMETABLE:
 		     case TT_COURSE_TIMETABLE:
 			/* Group code (row[5]) */
-			if (Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
-			    Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
+			if (Gbl.Timetable.Type == TT_MY_TIMETABLE ||
+			    Gbl.Timetable.Type == TT_COURSE_TIMETABLE)
 			   if (sscanf (row[5],"%ld",&TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod) != 1)
 			      TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod = -1;
 
 			/* Course code (row[6]) */
 			TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
-			   (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
+			   (Gbl.Timetable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
 								    Gbl.Hierarchy.Crs.CrsCod);
 			/* falls through */
 			/* no break */
@@ -1103,29 +1102,29 @@ static unsigned TT_CalculateMinutesPerInterval (unsigned Seconds)
 
 static void TT_ModifTimeTable (void)
   {
-   if (TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].IntervalType == TT_FIRST_INTERVAL)
+   if (TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].IntervalType == TT_FIRST_INTERVAL)
      {
       /***** Free this cell *****/
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].GrpCod            = -1L;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].IntervalType      = TT_FREE_INTERVAL;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].ClassType         = TT_FREE;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].DurationIntervals = 0;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Info[0]          = '\0';
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].NumColumns--;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].GrpCod            = -1L;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].IntervalType      = TT_FREE_INTERVAL;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].ClassType         = TT_FREE;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].DurationIntervals = 0;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].Info[0]          = '\0';
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].NumColumns--;
      }
 
-   if (Gbl.TimeTable.ClassType != TT_FREE &&
-       Gbl.TimeTable.DurationIntervals > 0 &&
-       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].NumColumns < TT_MAX_COLUMNS_PER_CELL)
+   if (Gbl.Timetable.ClassType != TT_FREE &&
+       Gbl.Timetable.DurationIntervals > 0 &&
+       TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].NumColumns < TT_MAX_COLUMNS_PER_CELL)
      {
       /***** Change this cell *****/
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].NumColumns++;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].GrpCod            = Gbl.TimeTable.GrpCod;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].IntervalType      = TT_FIRST_INTERVAL;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].ClassType         = Gbl.TimeTable.ClassType;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].DurationIntervals = Gbl.TimeTable.DurationIntervals;
-      Str_Copy (TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Info,
-                Gbl.TimeTable.Info,
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].NumColumns++;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].GrpCod            = Gbl.Timetable.GrpCod;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].IntervalType      = TT_FIRST_INTERVAL;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].ClassType         = Gbl.Timetable.ClassType;
+      TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].DurationIntervals = Gbl.Timetable.DurationIntervals;
+      Str_Copy (TT_TimeTable[Gbl.Timetable.Weekday][Gbl.Timetable.Interval].Columns[Gbl.Timetable.Column].Info,
+                Gbl.Timetable.Info,
                 TT_MAX_BYTES_INFO);
      }
   }
@@ -1156,7 +1155,7 @@ static void TT_DrawTimeTable (void)
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   HTM_TxtF ("%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
+   HTM_TxtF ("%02u:00",Gbl.Timetable.Config.Range.Hours.Start);
    HTM_TD_End ();
 
    TT_DrawCellAlignTimeTable ();
@@ -1165,7 +1164,7 @@ static void TT_DrawTimeTable (void)
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   HTM_TxtF ("%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
+   HTM_TxtF ("%02u:00",Gbl.Timetable.Config.Range.Hours.Start);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1176,18 +1175,18 @@ static void TT_DrawTimeTable (void)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Write the table row by row *****/
-   for (Interval = 0, Min = Gbl.TimeTable.Config.Range.MinutesPerInterval;
-	Interval < Gbl.TimeTable.Config.IntervalsPerDay;
+   for (Interval = 0, Min = Gbl.Timetable.Config.Range.MinutesPerInterval;
+	Interval < Gbl.Timetable.Config.IntervalsPerDay;
 	Interval++,
-	Min = (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) %
+	Min = (Min + Gbl.Timetable.Config.Range.MinutesPerInterval) %
 	      TT_SECONDS_PER_MINUTE)
      {
       HTM_TR_Begin (NULL);
 
       /* Left hour:minutes cell */
       if (Interval % 2)
-	 TT_TimeTableDrawHourCell (Gbl.TimeTable.Config.Range.Hours.Start +
-	                           (Interval + 2) / Gbl.TimeTable.Config.IntervalsPerHour,
+	 TT_TimeTableDrawHourCell (Gbl.Timetable.Config.Range.Hours.Start +
+	                           (Interval + 2) / Gbl.Timetable.Config.IntervalsPerHour,
 	                           Min,
 	                           "RM");
 
@@ -1210,15 +1209,15 @@ static void TT_DrawTimeTable (void)
          ColumnsToDraw = TT_CalculateColsToDrawInCell (true,	// Top call, non recursive
                                                        Weekday,Interval);
          if (ColumnsToDraw == 0 &&
-             (Gbl.TimeTable.View == TT_CRS_VIEW ||
-              Gbl.TimeTable.View == TT_TUT_VIEW))
+             (Gbl.Timetable.View == TT_CRS_VIEW ||
+              Gbl.Timetable.View == TT_TUT_VIEW))
             ColumnsToDraw = 1;
 	 // If editing and there's place for more columns,
          // a potential new column is added at the end of each day
          ColumnsToDrawIncludingExtraColumn = ColumnsToDraw;
          if (ColumnsToDraw < TT_MAX_COLUMNS_PER_CELL &&
-             (Gbl.TimeTable.View == TT_CRS_EDIT ||
-              Gbl.TimeTable.View == TT_TUT_EDIT))
+             (Gbl.Timetable.View == TT_CRS_EDIT ||
+              Gbl.Timetable.View == TT_TUT_EDIT))
             ColumnsToDrawIncludingExtraColumn++;
 
          /* Draw cells */
@@ -1256,8 +1255,8 @@ static void TT_DrawTimeTable (void)
 
       /* Right hour:minutes cell */
       if (Interval % 2)
-	 TT_TimeTableDrawHourCell (Gbl.TimeTable.Config.Range.Hours.Start +
-	                           (Interval + 2) / Gbl.TimeTable.Config.IntervalsPerHour,
+	 TT_TimeTableDrawHourCell (Gbl.Timetable.Config.Range.Hours.Start +
+	                           (Interval + 2) / Gbl.Timetable.Config.IntervalsPerHour,
 	                           Min,
 	                           "LM");
 
@@ -1372,7 +1371,7 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
    if (TopCall)	// Top call, non recursive call
       /****** Allocate space to store list of intervals already checked
               and initialize to false by using calloc *****/
-      if ((TT_IntervalsChecked = (bool *) calloc (Gbl.TimeTable.Config.IntervalsPerDay,
+      if ((TT_IntervalsChecked = (bool *) calloc (Gbl.Timetable.Config.IntervalsPerDay,
                                                   sizeof (bool))) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for timetable.");
 
@@ -1498,8 +1497,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
    /***** If group code > 0, a group is selected ==> get group data *****/
    if (IntervalType == TT_FIRST_INTERVAL &&
-       (Gbl.TimeTable.View == TT_CRS_VIEW ||
-        Gbl.TimeTable.View == TT_CRS_EDIT) &&
+       (Gbl.Timetable.View == TT_CRS_VIEW ||
+        Gbl.Timetable.View == TT_CRS_EDIT) &&
        GrpCod > 0)
      {
       /* Get group data */
@@ -1549,13 +1548,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    free (ClassStr);
 
    /***** Form to modify this cell *****/
-   if (Gbl.TimeTable.View == TT_CRS_EDIT)
+   if (Gbl.Timetable.View == TT_CRS_EDIT)
       Frm_StartForm (ActChgCrsTT);
-   else if (Gbl.TimeTable.View == TT_TUT_EDIT)
+   else if (Gbl.Timetable.View == TT_TUT_EDIT)
       Frm_StartForm (ActChgTut);
 
    /***** Draw cell depending on type of view *****/
-   switch (Gbl.TimeTable.View)
+   switch (Gbl.Timetable.View)
      {
       case TT_CRS_VIEW:	// View course timetable
       case TT_TUT_VIEW:	// View tutoring timetable
@@ -1565,7 +1564,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    HTM_DIV_Begin ("class=\"TT_CELL TT_TXT\"");
 
 	    /***** Course name *****/
-	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)
+	    if (Gbl.Timetable.Type == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
                Crs_GetDataOfCourseByCod (&Crs);
@@ -1581,12 +1580,12 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    /***** Type of class and duration *****/
 	    HTM_TxtF ("%s (%u:%02u)",
 		      Txt_TIMETABLE_CLASS_TYPES[ClassType],
-	              (DurationNumIntervals / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-	              (DurationNumIntervals % Gbl.TimeTable.Config.IntervalsPerHour) *
-	              Gbl.TimeTable.Config.Range.MinutesPerInterval);			// Minutes
+	              (DurationNumIntervals / Gbl.Timetable.Config.IntervalsPerHour),	// Hours
+	              (DurationNumIntervals % Gbl.Timetable.Config.IntervalsPerHour) *
+	              Gbl.Timetable.Config.Range.MinutesPerInterval);			// Minutes
 
 	    /***** Group *****/
-	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
+	    if (Gbl.Timetable.View == TT_CRS_VIEW &&
 		GrpCod > 0)
 	      {
 	       HTM_BR ();
@@ -1631,8 +1630,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      CT <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
 	      CT++)
 	    if ((CT == TT_FREE) ||
-		((Gbl.TimeTable.View == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
-		((Gbl.TimeTable.View == TT_TUT_EDIT) && (CT == TT_TUTORING)))
+		((Gbl.Timetable.View == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
+		((Gbl.Timetable.View == TT_TUT_EDIT) && (CT == TT_TUTORING)))
 	       HTM_OPTION (HTM_Type_STRING,TT_ClassTypeDB[CT],
 			   CT == ClassType,false,
 			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
@@ -1641,17 +1640,17 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 if (IntervalType == TT_FREE_INTERVAL)
 	   {
             for (i = Interval + 1;
-        	 i < Gbl.TimeTable.Config.IntervalsPerDay;
+        	 i < Gbl.Timetable.Config.IntervalsPerDay;
         	 i++)
               if (TT_TimeTable[Weekday][i].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
             MaxDuration = i - Interval;
-	    Dur = (MaxDuration >= Gbl.TimeTable.Config.IntervalsPerHour) ? Gbl.TimeTable.Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
+	    Dur = (MaxDuration >= Gbl.Timetable.Config.IntervalsPerHour) ? Gbl.Timetable.Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
 	                                                                   MaxDuration;					// MaxDuration  < 1h ==> Dur = MaxDuration
 	    if (asprintf (&TTDur,"%u:%02u",
-		          (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-		          (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
-		          Gbl.TimeTable.Config.Range.MinutesPerInterval) < 0)	// Minutes
+		          (Dur / Gbl.Timetable.Config.IntervalsPerHour),	// Hours
+		          (Dur % Gbl.Timetable.Config.IntervalsPerHour) *
+		          Gbl.Timetable.Config.Range.MinutesPerInterval) < 0)	// Minutes
 	       Lay_NotEnoughMemoryExit ();
 	    Par_PutHiddenParamString (NULL,"TTDur",TTDur);
 	    free (TTDur);
@@ -1662,7 +1661,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    HTM_SELECT_Begin (true,
 			      "name=\"TTDur\" class=\"TT_DUR\"");
             for (i = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
-        	 i < Gbl.TimeTable.Config.IntervalsPerDay;
+        	 i < Gbl.Timetable.Config.IntervalsPerDay;
         	 i++)
                if (TT_TimeTable[Weekday][i].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
@@ -1674,9 +1673,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		 Dur++)
 	      {
 	       if (asprintf (&TTDur,"%u:%02u",
-			     (Dur / Gbl.TimeTable.Config.IntervalsPerHour),		// Hours
-			     (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
-			     Gbl.TimeTable.Config.Range.MinutesPerInterval) < 0)	// Minutes
+			     (Dur / Gbl.Timetable.Config.IntervalsPerHour),		// Hours
+			     (Dur % Gbl.Timetable.Config.IntervalsPerHour) *
+			     Gbl.Timetable.Config.Range.MinutesPerInterval) < 0)	// Minutes
 		  Lay_NotEnoughMemoryExit ();
 	       HTM_OPTION (HTM_Type_STRING,TTDur,
 			   Dur == DurationNumIntervals,false,
@@ -1685,7 +1684,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      }
 	    HTM_SELECT_End ();
 
-	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
+	    if (Gbl.Timetable.View == TT_CRS_EDIT)
 	      {
 	       /***** Group *****/
 	       HTM_BR ();
@@ -1758,8 +1757,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
      }
 
    /***** End form *****/
-   if (Gbl.TimeTable.View == TT_CRS_EDIT ||
-       Gbl.TimeTable.View == TT_TUT_EDIT)
+   if (Gbl.Timetable.View == TT_CRS_EDIT ||
+       Gbl.Timetable.View == TT_TUT_EDIT)
       Frm_EndForm ();
 
    /***** End cell *****/

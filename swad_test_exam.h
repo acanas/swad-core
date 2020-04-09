@@ -86,7 +86,7 @@ void TstExa_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstExa_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 void TstExa_ShowGrade (double Grade,double MaxGrade);
 
-void TstExa_SelUsrsToViewUsrsExams (void *Args);
+void TstExa_SelUsrsToViewUsrsExams (void);
 void TstExa_SelDatesToSeeMyExams (void);
 void TstExa_ShowMyExams (void);
 void TstExa_GetUsrsAndShowExams (void);

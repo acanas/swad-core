@@ -1906,7 +1906,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,&Gbl,
+                 Ntf_PutIconsNotif,NULL,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/

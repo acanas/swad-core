@@ -155,7 +155,7 @@ extern struct Globals Gbl;
 /****************************** Private variables ****************************/
 /*****************************************************************************/
 
-static void (*Usr_FuncParamsBigList) ();	// Used to pass pointer to function
+static void (*Usr_FuncParamsBigList) (void *Args);	// Used to pass pointer to function
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -179,7 +179,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
 static void Usr_SetMyPrefsAndRoles (void);
 
-static void Usr_PutLinkToLogOut (void *Args);
+static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
 
 static void Usr_InsertMyLastData (void);
 
@@ -257,9 +257,9 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
 
-static void Usr_PutIconsListGsts (void *Args);
-static void Usr_PutIconsListStds (void *Args);
-static void Usr_PutIconsListTchs (void *Args);
+static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args);
+static void Usr_PutIconsListStds (__attribute__((unused)) void *Args);
+static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args);
 
 static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
@@ -267,9 +267,9 @@ static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
-static void Usr_ShowGstsAllDataParams (void *Args);
-static void Usr_ShowStdsAllDataParams (void *Args);
-static void Usr_ShowTchsAllDataParams (void *Args);
+static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args);
+static void Usr_ShowStdsAllDataParams (__attribute__((unused)) void *Args);
+static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
@@ -3527,7 +3527,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Session,
-                 Usr_PutLinkToLogOut,&Gbl,
+                 Usr_PutLinkToLogOut,NULL,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
@@ -3557,16 +3557,15 @@ void Usr_ShowFormsLogoutAndRole (void)
 /************** Put an icon (form) to close the current session **************/
 /*****************************************************************************/
 
-static void Usr_PutLinkToLogOut (void *Args)
+static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Log_out;
 
-   if (Args)
-      /***** Put form to log out *****/
-      Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
-				     NULL,NULL,
-				     "sign-out-alt-red.svg",
-				     Txt_Log_out);
+   /***** Put form to log out *****/
+   Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
+				  NULL,NULL,
+				  "sign-out-alt-red.svg",
+				  Txt_Log_out);
   }
 
 /*****************************************************************************/
@@ -5686,7 +5685,7 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
       Grp_PutParamsCodGrps ();
       Usr_PutParamsPrefsAboutUsrList ();
       if (Usr_FuncParamsBigList)
-	 Usr_FuncParamsBigList ();
+	 Usr_FuncParamsBigList (Args);
       Par_PutHiddenParamChar ("ShowBigList",'Y');
      }
   }
@@ -7568,7 +7567,7 @@ void Usr_ListDataAdms (void)
       HTM_DIV_Begin ("class=\"PREF_CONT\"");
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_StartForm (ActLstOth);
-      Sco_PutParamCurrentScope (&Gbl);
+      Sco_PutParamCurrentScope (&Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -8016,7 +8015,7 @@ void Usr_SeeGuests (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListGsts,&Gbl,
+                 Usr_PutIconsListGsts,NULL,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8039,11 +8038,11 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-	                        Sco_PutParamCurrentScope,&Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl.Scope.Current,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
          /***** Draw a class photo with guests *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8159,7 +8158,7 @@ void Usr_SeeStudents (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListStds,&Gbl,
+                 Usr_PutIconsListStds,NULL,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8185,7 +8184,7 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl,
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -8194,11 +8193,11 @@ void Usr_SeeStudents (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-	                        Sco_PutParamCurrentScope,&Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl.Scope.Current,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
          /***** Draw a class photo with students of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8346,7 +8345,7 @@ void Usr_SeeTeachers (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListTchs,&Gbl,
+                 Usr_PutIconsListTchs,NULL,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8362,7 +8361,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl,
+      Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -8371,11 +8370,11 @@ void Usr_SeeTeachers (void)
    if (NumUsrs)
      {
       if (Usr_GetIfShowBigList (NumUsrs,
-	                        Sco_PutParamCurrentScope,&Gbl,
+	                        Sco_PutParamCurrentScope,&Gbl.Scope.Current,
 	                        NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl);
+	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
          /***** Draw a class photo with teachers of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8763,35 +8762,32 @@ static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultA
 /***************** Put contextual icons in list of guests ********************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListGsts (void *Args)
+static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args)
   {
-   if (Args)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      switch (Gbl.Usrs.Me.ListType)
-	{
-	 case Usr_LIST_AS_CLASS_PHOTO:
-	    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
-	       /***** Put icon to print guests *****/
-	       Usr_PutIconToPrintGsts ();
-	    break;
-	 case Usr_LIST_AS_LISTING:
-	    /***** Put icon to show all data of guests *****/
-	    Usr_PutIconToShowGstsAllData ();
-	    break;
-	 default:
-	    break;
-	}
-
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_USERS);
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
+	    /***** Put icon to print guests *****/
+	    Usr_PutIconToPrintGsts ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of guests *****/
+	 Usr_PutIconToShowGstsAllData ();
+	 break;
+      default:
+	 break;
      }
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_USERS);
   }
 
 /*****************************************************************************/
 /**************** Put contextual icons in list of students *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListStds (void *Args)
+static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
   {
    if (Args)
      {
@@ -8819,7 +8815,7 @@ static void Usr_PutIconsListStds (void *Args)
 /**************** Put contextual icons in list of teachers *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListTchs (void *Args)
+static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
   {
    if (Args)
      {
@@ -8850,19 +8846,19 @@ static void Usr_PutIconsListTchs (void *Args)
 static void Usr_PutIconToPrintGsts (void)
   {
    Ico_PutContextualIconToPrint (ActPrnGstPho,
-                                 Usr_ShowGstsAllDataParams,&Gbl);
+                                 Usr_ShowGstsAllDataParams,NULL);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
    Ico_PutContextualIconToPrint (ActPrnStdPho,
-                                 Usr_ShowStdsAllDataParams,&Gbl);
+                                 Usr_ShowStdsAllDataParams,NULL);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
    Ico_PutContextualIconToPrint (ActPrnTchPho,
-                                 Usr_ShowTchsAllDataParams,&Gbl);
+                                 Usr_ShowTchsAllDataParams,NULL);
   }
 
 /*****************************************************************************/
@@ -8874,7 +8870,7 @@ static void Usr_PutIconToShowGstsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
-                                  Usr_ShowGstsAllDataParams,&Gbl,
+                                  Usr_ShowGstsAllDataParams,NULL,
 				  "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8884,7 +8880,7 @@ static void Usr_PutIconToShowStdsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
-                                  Usr_ShowStdsAllDataParams,&Gbl,
+                                  Usr_ShowStdsAllDataParams,NULL,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
@@ -8894,33 +8890,26 @@ static void Usr_PutIconToShowTchsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
-                                  Usr_ShowTchsAllDataParams,&Gbl,
+                                  Usr_ShowTchsAllDataParams,NULL,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
   }
 
-static void Usr_ShowGstsAllDataParams (void *Args)
+static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args)
   {
-   if (Args)
-      Usr_PutParamListWithPhotos ();
+   Usr_PutParamListWithPhotos ();
   }
 
-static void Usr_ShowStdsAllDataParams (void *Args)
+static void Usr_ShowStdsAllDataParams (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      Grp_PutParamsCodGrps ();
-      Usr_PutParamListWithPhotos ();
-     }
+   Grp_PutParamsCodGrps ();
+   Usr_PutParamListWithPhotos ();
   }
 
-static void Usr_ShowTchsAllDataParams (void *Args)
+static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args)
   {
-   if (Args)
-     {
-      Sco_PutParamCurrentScope (&Gbl);
-      Usr_PutParamListWithPhotos ();
-     }
+   Sco_PutParamCurrentScope (&Gbl.Scope.Current);
+   Usr_PutParamListWithPhotos ();
   }
 
 /*****************************************************************************/

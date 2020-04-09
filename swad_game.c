@@ -1897,7 +1897,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
    Games->GamCod = Game->GamCod;
    if (ICanEditQuestions)
       Box_BoxBegin (NULL,Txt_Questions,
-		    Gam_PutIconToAddNewQuestions,&Gbl,
+		    Gam_PutIconToAddNewQuestions,Games,
 		    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Questions,
@@ -2119,11 +2119,10 @@ static void Gam_PutIconToAddNewQuestions (void *Games)
   {
    extern const char *Txt_Add_questions;
 
-   if (Games)
-      /***** Put form to create a new question *****/
-      Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,
-				  Gam_PutParams,Games,
-				  Txt_Add_questions);
+   /***** Put form to create a new question *****/
+   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,
+			       Gam_PutParams,Games,
+			       Txt_Add_questions);
   }
 
 /*****************************************************************************/
@@ -2289,7 +2288,7 @@ void Gam_RequestRemoveQst (void)
       Games.GamCod = Game.GamCod;
       Games.QstInd = QstInd;
       Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
-                              Gam_PutParamsOneQst,&Gbl,
+                              Gam_PutParamsOneQst,&Games,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      QstInd);

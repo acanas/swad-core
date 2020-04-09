@@ -177,10 +177,10 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParamCurrentScope (void *Args)
+void Sco_PutParamCurrentScope (void *Scope)
   {
-   if (Args)
-      Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
+   if (Scope)
+      Sco_PutParamScope ("ScopeUsr",*((Hie_Level_t *) Scope));
   }
 
 void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope)

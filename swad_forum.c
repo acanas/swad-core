@@ -392,7 +392,7 @@ static void For_GetParamsForums (struct For_Forums *Forums);
 static void For_SetForumType (struct For_Forums *Forums);
 static void For_RestrictAccess (const struct For_Forums *Forums);
 
-static void For_WriteFormForumPst (const struct For_Forums *Forums,
+static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    bool IsReply,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
@@ -1024,7 +1024,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
    Box_BoxBegin (NULL,FrameTitle,
-                 For_PutIconNewPost,&Gbl,
+                 For_PutIconNewPost,Forums,
                  Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
@@ -1167,7 +1167,7 @@ static void For_PutIconNewPost (void *Forums)
    if (Forums)
       Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->ForumSelected.Type],
 				  For_NEW_POST_SECTION_ID,
-				  For_PutAllHiddenParamsNewPost,&Gbl,
+				  For_PutAllHiddenParamsNewPost,Forums,
 				  Txt_New_post);
   }
 
@@ -3847,7 +3847,7 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
 /********************** Show an area to write a message **********************/
 /*****************************************************************************/
 
-static void For_WriteFormForumPst (const struct For_Forums *Forums,
+static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    bool IsReply,const char *Subject)
   {
    extern const char *Hlp_MESSAGES_Forums_new_post;
@@ -3874,13 +3874,13 @@ static void For_WriteFormForumPst (const struct For_Forums *Forums,
      {
       Frm_StartFormAnchor (For_ActionsRecRepFor[Forums->ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewPost (&Gbl);
+      For_PutAllHiddenParamsNewPost (Forums);
      }
    else		// Form to write the first post of a new thread
      {
       Frm_StartFormAnchor (For_ActionsRecThrFor[Forums->ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewThread (&Gbl);
+      For_PutAllHiddenParamsNewThread (Forums);
      }
 
    /***** Subject and content *****/
@@ -4173,14 +4173,14 @@ void For_RequestRemoveThread (void)
    if (Subject[0])
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,&Gbl,
+			      For_PutAllHiddenParamsRemThread,&Forums,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                               Subject);
    else
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,&Gbl,
+			      For_PutAllHiddenParamsRemThread,&Forums,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();

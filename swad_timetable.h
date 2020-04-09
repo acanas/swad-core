@@ -78,6 +78,34 @@ struct TT_Range
    unsigned MinutesPerInterval;	// 5, 15 or 30 minutes
   };
 
+struct TT_Timetable
+  {
+   struct
+     {
+      struct TT_Range Range;
+      unsigned HoursPerDay;		// From start hour to end hour
+      unsigned SecondsPerInterval;
+      unsigned IntervalsPerHour;
+      unsigned IntervalsPerDay;
+      unsigned IntervalsBeforeStartHour;
+     } Config;
+   TT_TimeTableType_t Type;
+   TT_TimeTableView_t View;
+   unsigned Weekday;
+   unsigned Interval;
+   unsigned Column;
+   TT_ClassType_t ClassType;
+   unsigned DurationIntervals;
+   char Info[TT_MAX_BYTES_INFO + 1];
+   long GrpCod;		// Group code (-1 if no group selected)
+   struct
+     {
+      bool PutIconEditCrsTT;
+      bool PutIconEditOfficeHours;
+      bool PutIconPrint;
+     } ContextualIcons;
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

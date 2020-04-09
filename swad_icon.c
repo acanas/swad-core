@@ -117,7 +117,7 @@ void Ico_PutIconsToSelectIconSet (void)
    char Icon[PATH_MAX + 1];
 
    Box_BoxBegin (NULL,Txt_Icons,
-                 Ico_PutIconsIconSet,&Gbl,
+                 Ico_PutIconsIconSet,NULL,
                  Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();

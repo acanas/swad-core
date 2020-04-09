@@ -107,6 +107,13 @@ struct TL_Publication
    TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
   };
 
+struct TL_Timeline
+  {
+   Usr_Who_t Who;
+   long NotCod;		// Used as parameter about social note to be edited, removed...
+   long PubCod;		// Used as parameter about social publishing to be edited, removed...
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
