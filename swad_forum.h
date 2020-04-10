@@ -74,10 +74,10 @@ struct For_Forum
 struct For_Thread
   {
    long ThrCod;			// Thread code
-   long PstCod[2];
-   long UsrCod[2];
-   time_t WriteTime[2];
-   bool Enabled[2];
+   long PstCod[Dat_NUM_START_END_TIME];
+   long UsrCod[Dat_NUM_START_END_TIME];
+   time_t WriteTime[Dat_NUM_START_END_TIME];
+   bool Enabled[Dat_NUM_START_END_TIME];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    unsigned NumPosts;
    unsigned NumUnreadPosts;	// Number of my unread posts in thread

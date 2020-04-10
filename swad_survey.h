@@ -42,6 +42,7 @@ typedef enum
    Svy_START_TIME = 0,
    Svy_END_TIME   = 1,
   } Svy_StartOrEndTime_t;
+#define Svy_ORDER_DEFAULT Dat_START_TIME
 
 struct Svy_Surveys
   {
@@ -78,8 +79,6 @@ struct Svy_Survey
      } Status;
   };
 
-#define Svy_ORDER_DEFAULT Dat_START_TIME
-
 #define Svy_NUM_ANS_TYPES	2
 typedef enum
   {
@@ -98,7 +97,7 @@ void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_RequestCreatOrEditSvy (void);
 void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Svy_Survey *Svy);
-void Svy_FreeListSurveys (void);
+void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent);

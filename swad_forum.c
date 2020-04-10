@@ -413,6 +413,8 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod);
 
 void For_ResetForums (struct For_Forums *Forums)
   {
+   Dat_StartEndTime_t StartEndTime;
+
    Forums->ForumSet               = For_DEFAULT_FORUM_SET;
    Forums->ThreadsOrder           = For_DEFAULT_ORDER;
    Forums->CurrentPageThrs        = 0;
@@ -422,14 +424,15 @@ void For_ResetForums (struct For_Forums *Forums)
    Forums->Forum.Location         = -1L;
 
    Forums->Thread.ThrCod          = -1L;
-   Forums->Thread.PstCod[0]       =
-   Forums->Thread.PstCod[1]       = -1L;
-   Forums->Thread.UsrCod[0]       =
-   Forums->Thread.UsrCod[1]       = -1L;
-   Forums->Thread.WriteTime[0]    =
-   Forums->Thread.WriteTime[1]    = (time_t) 0;
-   Forums->Thread.Enabled[0]      =
-   Forums->Thread.Enabled[1]      = false;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      Forums->Thread.PstCod[StartEndTime]    = -1L;
+      Forums->Thread.UsrCod[StartEndTime]    = -1L;
+      Forums->Thread.WriteTime[StartEndTime] = (time_t) 0;
+      Forums->Thread.Enabled[StartEndTime]   = false;
+     }
    Forums->Thread.Subject[0]      = '\0';
    Forums->Thread.NumPosts        =
    Forums->Thread.NumUnreadPosts  =

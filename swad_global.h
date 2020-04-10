@@ -515,7 +515,6 @@ struct Globals
       struct DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[Dat_NUM_START_END_TIME];
      } DateRange;
-   struct Svy_Surveys Svys;
    struct Sta_Stats Stat;
 
    /* Cache */
