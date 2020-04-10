@@ -233,6 +233,7 @@ void Prf_RequestUserProfile (void)
 
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
+   struct TL_Timeline Timeline;
    bool ItsMe;
    bool ProfileShown = false;
 
@@ -249,9 +250,12 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
+	    /* Reset timeline context */
+            TL_ResetTimeline (&Timeline);
+
 	    /* Show timeline */
 	    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-   	    TL_ShowTimelineUsr ();
+   	    TL_ShowTimelineUsr (&Timeline);
 	    HTM_SECTION_End ();
 	   }
 	}

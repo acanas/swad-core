@@ -506,7 +506,6 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct TL_Timeline Timeline;
    struct Msg_Messages Msg;
    struct TT_Timetable Timetable;
    struct

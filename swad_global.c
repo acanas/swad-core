@@ -321,9 +321,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
-   /* Public activity */
-   Gbl.Timeline.Who = TL_DEFAULT_WHO;
-
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 

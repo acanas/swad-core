@@ -870,7 +870,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	           "var RefreshParamWho = \"Who=%u\";\n",
 		   Act_GetActCod (ActRefNewSocPubGbl),
 		   Act_GetActCod (ActRefOldSocPubGbl),
-		   (unsigned) Gbl.Timeline.Who);
+		   (unsigned) TL_GetGlobalWho ());	// Global variable got in a priori function
 	 break;
       /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:

@@ -118,9 +118,10 @@ struct TL_Timeline
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_ShowTimelineGbl1 (void);
-void TL_ShowTimelineGbl2 (void);
-void TL_ShowTimelineUsr (void);
+void TL_ResetTimeline (struct TL_Timeline *Timeline);
+void TL_ShowTimelineGbl (void);
+
+void TL_ShowTimelineUsr (struct TL_Timeline *Timeline);
 
 void TL_RefreshNewTimelineGbl (void);
 
@@ -128,6 +129,9 @@ void TL_RefreshOldTimelineGbl (void);
 void TL_RefreshOldTimelineUsr (void);
 
 void TL_MarkMyNotifAsSeen (void);
+
+void TL_GetParamWho (void);
+Usr_Who_t TL_GetGlobalWho (void);
 
 void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub);
 void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod);

@@ -201,16 +201,25 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
+Usr_Who_t TL_GlobalWho;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_ShowTimelineGblHighlightingNot (long NotCod);
-static void TL_ShowTimelineUsrHighlightingNot (long NotCod);
+static void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
+static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
 
-static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
+	                                       long NotCod);
+static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
+                                               long NotCod);
 
-static void TL_BuildQueryToGetTimeline (char **Query,
+static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline,
+                                      TL_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+
+static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
+	                                char **Query,
                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
@@ -218,34 +227,41 @@ static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
 
-static void TL_ShowTimeline (char *Query,
+static void TL_ShowTimeline (struct TL_Timeline *Timeline,
+			     char *Query,
                              const char *Title,long NotCodToHighlight);
 static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 
-static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
+static void TL_FormStart (const struct TL_Timeline *Timeline,
+	                  Act_Action_t ActionGbl,
+                          Act_Action_t ActionUsr);
 static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			   const char *ParamCod,
 			   const char *Icon,const char *Title);
 
-static void TL_PutFormWho (void);
-static void TL_GetParamWho (void);
+static void TL_PutFormWho (struct TL_Timeline *Timeline);
 static Usr_Who_t TL_GetWhoFromDB (void);
-static void TL_SaveWhichUsersInDB (void);
+static void Set_GlobalWho (Usr_Who_t Who);
+
+static void TL_SaveWhoInDB (struct TL_Timeline *Timeline);
 
 static void TL_ShowWarningYouDontFollowAnyUser (void);
 
-static void TL_InsertNewPubsInTimeline (char *Query);
-static void TL_ShowOldPubsInTimeline (char *Query);
+static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
+                                        char *Query);
+static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
+                                      char *Query);
 
 static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
 
 static void TL_PutLinkToViewNewPublications (void);
 static void TL_PutLinkToViewOldPublications (void);
 
-static void TL_WriteNote (const struct TL_Note *SocNot,
+static void TL_WriteNote (struct TL_Timeline *Timeline,
+	                  const struct TL_Note *SocNot,
                           TL_TopMessage_t TopMessage,long UsrCod,
-                          bool Highlight,
-                          bool ShowNoteAlone);
+                          bool Highlight,	// Highlight note
+                          bool ShowNoteAlone);	// Note is shown alone, not in a list
 static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod);
 static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
 static void TL_WriteDateTime (time_t TimeUTC);
@@ -256,37 +272,43 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
-static void TL_PutFormToWriteNewPost (void);
+static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
 static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 static long TL_ReceivePost (void);
 
 static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
 static void TL_PutIconCommentDisabled (void);
-static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
+static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *Timeline,
+	                                             long NotCod,
                                                      const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long TL_GetNumCommentsInNote (long NotCod);
-static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
+static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
+				    const struct TL_Note *SocNot,
 				    unsigned NumComments);
 static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			                 long NotCod,
 					 char IdComments[Frm_MAX_BYTES_ID + 1],
 					 unsigned NumInitialComments);
-static unsigned TL_WriteHiddenComments (long NotCod,
-					char IdComments[Frm_MAX_BYTES_ID + 1],
+static unsigned TL_WriteHiddenComments (struct TL_Timeline *Timeline,
+                                        long NotCod,
+				        char IdComments[Frm_MAX_BYTES_ID + 1],
 					unsigned NumInitialCommentsToGet);
-static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res);
+static void TL_WriteOneCommentInList (struct TL_Timeline *Timeline,
+                                      MYSQL_RES *mysql_res);
 static void TL_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1]);
 static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
 				           unsigned NumInitialComments);
 static void TL_PutIconToToggleComments (const char *UniqueId,
                                         const char *Icon,const char *Text);
-static void TL_WriteComment (struct TL_Comment *SocCom,
+static void TL_WriteComment (struct TL_Timeline *Timeline,
+	                     struct TL_Comment *SocCom,
                              TL_TopMessage_t TopMessage,long UsrCod,
-                             bool ShowCommentAlone);
+                             bool ShowCommentAlone);	// Comment is shown alone, not in a list
 static void TL_WriteAuthorComment (struct UsrData *UsrDat);
 
-static void TL_PutFormToRemoveComment (long PubCod);
+static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
+	                               long PubCod);
 
 static void TL_PutDisabledIconShare (unsigned NumShared);
 static void TL_PutDisabledIconFav (unsigned NumFavs);
@@ -306,7 +328,8 @@ static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
 static void TL_PutFormToFavComment (const struct TL_Comment *SocCom);
 static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom);
 
-static void TL_PutFormToRemovePublication (long NotCod);
+static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
+                                           long NotCod);
 
 static void TL_PutHiddenParamNotCod (long NotCod);
 static long TL_GetParamNotCod (void);
@@ -332,7 +355,7 @@ static void TL_UnfComment (struct TL_Comment *SocCom);
 static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                     Ntf_NotifyEvent_t NotifyEvent);
 
-static void TL_RequestRemovalNote (void);
+static void TL_RequestRemovalNote (struct TL_Timeline *Timeline);
 static void TL_PutParamsRemoveNote (void *Timeline);
 static void TL_RemoveNote (void);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
@@ -340,7 +363,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 static long TL_GetNotCodOfPublication (long PubCod);
 static long TL_GetPubCodOfOriginalNote (long NotCod);
 
-static void TL_RequestRemovalComment (void);
+static void TL_RequestRemovalComment (struct TL_Timeline *Timeline);
 static void TL_PutParamsRemoveComment (void *Timeline);
 static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
@@ -381,23 +404,51 @@ static void TL_AddNotesJustRetrievedToTimelineThisSession (void);
 static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);
 
 /*****************************************************************************/
-/************** Show timeline including all the users I follow ***************/
+/************************ Initialize global timeline *************************/
 /*****************************************************************************/
 
-void TL_ShowTimelineGbl1 (void)
+static void TL_InitTimelineGbl (struct TL_Timeline *Timeline)
   {
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (Timeline);
+
    /***** Mark all my notifications about timeline as seen *****/
    TL_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   TL_GetParamWho ();
-
-   /***** Save which users in database *****/
-   if (Gbl.Action.Act == ActSeeSocTmlGbl)	// Only in action to see global timeline
-      TL_SaveWhichUsersInDB ();
+   Timeline->Who = TL_GetGlobalWho ();
   }
 
-void TL_ShowTimelineGbl2 (void)
+/*****************************************************************************/
+/*************************** Reset timeline context **************************/
+/*****************************************************************************/
+
+void TL_ResetTimeline (struct TL_Timeline *Timeline)
+  {
+   Timeline->Who    = TL_DEFAULT_WHO;
+   Timeline->NotCod = -1L;
+   Timeline->PubCod = -1L;
+  }
+
+/*****************************************************************************/
+/**************************** See global timeline ****************************/
+/*****************************************************************************/
+
+void TL_ShowTimelineGbl (void)
+  {
+   struct TL_Timeline Timeline;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
+
+   /***** Save which users in database *****/
+   TL_SaveWhoInDB (&Timeline);
+
+   /***** Show timeline *****/
+   TL_ShowNoteAndTimelineGbl (&Timeline);
+  }
+
+static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
   {
    long PubCod;
    struct TL_Note SocNot;
@@ -462,27 +513,28 @@ void TL_ShowTimelineGbl2 (void)
 
       /***** Show the note highlighted *****/
       TL_GetDataOfNoteByCod (&SocNot);
-      TL_WriteNote (&SocNot,
+      TL_WriteNote (Timeline,&SocNot,
 		    TopMessages[NotifyEvent],UsrDat.UsrCod,
 		    true,true);
      }
 
    /***** Show timeline with possible highlighted note *****/
-   TL_ShowTimelineGblHighlightingNot (SocNot.NotCod);
+   TL_ShowTimelineGblHighlightingNot (Timeline,SocNot.NotCod);
   }
 
-static void TL_ShowTimelineGblHighlightingNot (long NotCod)
+static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
+	                                       long NotCod)
   {
    extern const char *Txt_Timeline;
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   TL_BuildQueryToGetTimeline (&Query,
+   TL_BuildQueryToGetTimeline (Timeline,&Query,
 	                       TL_TIMELINE_GBL,
                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Query,Txt_Timeline,NotCod);
+   TL_ShowTimeline (Timeline,Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -492,23 +544,25 @@ static void TL_ShowTimelineGblHighlightingNot (long NotCod)
 /********************* Show timeline of a selected user **********************/
 /*****************************************************************************/
 
-void TL_ShowTimelineUsr (void)
+void TL_ShowTimelineUsr (struct TL_Timeline *Timeline)
   {
-   TL_ShowTimelineUsrHighlightingNot (-1L);
+   TL_ShowTimelineUsrHighlightingNot (Timeline,-1L);
   }
 
-static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
+static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
+                                               long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
    char *Query = NULL;
 
    /***** Build query to show timeline with publications of a unique user *****/
-   TL_BuildQueryToGetTimeline (&Query,
+   TL_BuildQueryToGetTimeline (Timeline,&Query,
 	                       TL_TIMELINE_USR,
                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Query,Str_BuildStringStr (Txt_Timeline_OF_A_USER,
+   TL_ShowTimeline (Timeline,
+                    Query,Str_BuildStringStr (Txt_Timeline_OF_A_USER,
 					      Gbl.Usrs.Other.UsrDat.FirstName),
 		    NotCod);
    Str_FreeString ();
@@ -523,20 +577,24 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
 
 void TL_RefreshNewTimelineGbl (void)
   {
+   struct TL_Timeline Timeline;
    char *Query = NULL;
 
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
      {
+      /***** Reset timeline context *****/
+      TL_ResetTimeline (&Timeline);
+
       /***** Get which users *****/
-      TL_GetParamWho ();
+      Timeline.Who = TL_GetGlobalWho ();
 
       /***** Build query to get timeline *****/
-      TL_BuildQueryToGetTimeline (&Query,
+      TL_BuildQueryToGetTimeline (&Timeline,&Query,
 	                          TL_TIMELINE_GBL,
 				  TL_GET_ONLY_NEW_PUBS);
 
       /***** Show new timeline *****/
-      TL_InsertNewPubsInTimeline (Query);
+      TL_InsertNewPubsInTimeline (&Timeline,Query);
 
       /***** Drop temporary tables *****/
       TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -549,36 +607,49 @@ void TL_RefreshNewTimelineGbl (void)
 
 void TL_RefreshOldTimelineGbl (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
+
    /***** Get which users *****/
-   TL_GetParamWho ();
+   Timeline.Who = TL_GetGlobalWho ();
 
    /***** Show old publications *****/
-   TL_GetAndShowOldTimeline (TL_TIMELINE_GBL);
+   TL_GetAndShowOldTimeline (&Timeline,TL_TIMELINE_GBL);
   }
 
 void TL_RefreshOldTimelineUsr (void)
   {
+   struct TL_Timeline Timeline;
+
    /***** Get user whom profile is displayed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// Existing user
+     {
+      /***** Reset timeline context *****/
+      TL_ResetTimeline (&Timeline);
+
       /***** If user exists, show old publications *****/
-      TL_GetAndShowOldTimeline (TL_TIMELINE_USR);
+      TL_GetAndShowOldTimeline (&Timeline,TL_TIMELINE_USR);
+     }
   }
 
 /*****************************************************************************/
 /**************** Get and show old publications in timeline ******************/
 /*****************************************************************************/
 
-static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
+static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline,
+                                      TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   TL_BuildQueryToGetTimeline (&Query,
+   TL_BuildQueryToGetTimeline (Timeline,&Query,
 	                       TimelineUsrOrGbl,
                                TL_GET_ONLY_OLD_PUBS);
 
    /***** Show old timeline *****/
-   TL_ShowOldPubsInTimeline (Query);
+   TL_ShowOldPubsInTimeline (Timeline,Query);
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
@@ -603,7 +674,8 @@ void TL_MarkMyNotifAsSeen (void)
 
 #define TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
-static void TL_BuildQueryToGetTimeline (char **Query,
+static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
+	                                char **Query,
                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline)
   {
@@ -661,7 +733,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
       case TL_TIMELINE_GBL:	// Show the global timeline
-	 switch (Gbl.Timeline.Who)
+	 switch (Timeline->Who)
 	   {
 	    case Usr_WHO_ME:	// Show my timeline
 	       sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
@@ -799,7 +871,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		        RangePubsToGet.Bottom);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Timeline.Who)
+	       switch (Timeline->Who)
 		 {
 		  case Usr_WHO_ME:	// Show my timeline
 		  case Usr_WHO_ALL:	// Show the timeline of all users
@@ -827,7 +899,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		        RangePubsToGet.Top);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Timeline.Who)
+	       switch (Timeline->Who)
 		 {
 		  case Usr_WHO_ME:	// Show my timeline
 		  case Usr_WHO_ALL:	// Show the timeline of all users
@@ -863,7 +935,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 				       SubQueryAlreadyExists);
 	    break;
 	 case TL_TIMELINE_GBL:	// Show the global timeline
-	    switch (Gbl.Timeline.Who)
+	    switch (Timeline->Who)
 	      {
 	       case Usr_WHO_ME:		// Show my timeline
 		  NumPubs =
@@ -1069,7 +1141,8 @@ static void TL_DropTemporaryTablesUsedToQueryTimeline (void)
            |  |_____|
             \ |_____|
 */
-static void TL_ShowTimeline (char *Query,
+static void TL_ShowTimeline (struct TL_Timeline *Timeline,
+			     char *Query,
                              const char *Title,long NotCodToHighlight)
   {
    extern const char *Hlp_START_Timeline;
@@ -1093,11 +1166,11 @@ static void TL_ShowTimeline (char *Query,
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
-      TL_PutFormWho ();
+      TL_PutFormWho (Timeline);
 
    /***** Form to write a new post *****/
    if (GlobalTimeline || ItsMe)
-      TL_PutFormToWriteNewPost ();
+      TL_PutFormToWriteNewPost (Timeline);
 
    /***** New publications refreshed dynamically via AJAX *****/
    if (GlobalTimeline)
@@ -1130,7 +1203,7 @@ static void TL_ShowTimeline (char *Query,
       TL_GetDataOfNoteByCod (&SocNot);
 
       /* Write note */
-      TL_WriteNote (&SocNot,
+      TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
 		    SocNot.NotCod == NotCodToHighlight,
 		    false);
@@ -1171,7 +1244,9 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args)
 /***************** Start a form in global or user timeline *******************/
 /*****************************************************************************/
 
-static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
+static void TL_FormStart (const struct TL_Timeline *Timeline,
+	                  Act_Action_t ActionGbl,
+                          Act_Action_t ActionUsr)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -1181,7 +1256,7 @@ static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
    else
      {
       Frm_StartForm (ActionGbl);
-      Usr_PutHiddenParamWho (Gbl.Timeline.Who);
+      Usr_PutHiddenParamWho (Timeline->Who);
      }
   }
 
@@ -1246,7 +1321,7 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 /******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
-static void TL_PutFormWho (void)
+static void TL_PutFormWho (struct TL_Timeline *Timeline)
   {
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME       |
@@ -1262,8 +1337,8 @@ static void TL_PutFormWho (void)
       if (Mask & (1 << Who))
 	{
 	 HTM_DIV_Begin ("class=\"%s\"",
-			Who == Gbl.Timeline.Who ? "PREF_ON" :
-						  "PREF_OFF");
+			Who == Timeline->Who ? "PREF_ON" :
+					       "PREF_OFF");
 	 Frm_StartForm (ActSeeSocTmlGbl);
 	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
 	 Usr_PutWhoIcon (Who);
@@ -1274,7 +1349,7 @@ static void TL_PutFormWho (void)
    Set_EndSettingsHead ();
 
    /***** Show warning if I do not follow anyone *****/
-   if (Gbl.Timeline.Who == Usr_WHO_FOLLOWED)
+   if (Timeline->Who == Usr_WHO_FOLLOWED)
       TL_ShowWarningYouDontFollowAnyUser ();
   }
 
@@ -1282,22 +1357,27 @@ static void TL_PutFormWho (void)
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-static void TL_GetParamWho (void)
+void TL_GetParamWho (void)
   {
+   Usr_Who_t Who;
+
    /***** Get which users I want to see *****/
-   Gbl.Timeline.Who = Usr_GetHiddenParamWho ();
+   Who = Usr_GetHiddenParamWho ();
 
    /***** If parameter Who is not present, get it from database *****/
-   if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
-      Gbl.Timeline.Who = TL_GetWhoFromDB ();
+   if (Who == Usr_WHO_UNKNOWN)
+      Who = TL_GetWhoFromDB ();
 
    /***** If parameter Who is unknown, set it to default *****/
-   if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
-      Gbl.Timeline.Who = TL_DEFAULT_WHO;
+   if (Who == Usr_WHO_UNKNOWN)
+      Who = TL_DEFAULT_WHO;
+
+   /***** Set global variable *****/
+   Set_GlobalWho (Who);
   }
 
 /*****************************************************************************/
-/********** Get user's last data from database giving a user's code **********/
+/********* Get which users to view in global timeline from database **********/
 /*****************************************************************************/
 
 static Usr_Who_t TL_GetWhoFromDB (void)
@@ -1328,24 +1408,38 @@ static Usr_Who_t TL_GetWhoFromDB (void)
   }
 
 /*****************************************************************************/
-/********************** Save which users into database ***********************/
+/******** Save which users to view in global timeline into database **********/
 /*****************************************************************************/
 
-static void TL_SaveWhichUsersInDB (void)
+static void TL_SaveWhoInDB (struct TL_Timeline *Timeline)
   {
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Timeline.Who == Usr_WHO_UNKNOWN)
-	 Gbl.Timeline.Who = TL_DEFAULT_WHO;
+      if (Timeline->Who == Usr_WHO_UNKNOWN)
+	 Timeline->Who = TL_DEFAULT_WHO;
 
       /***** Update which users in database *****/
       // Who is stored in usr_last for next time I log in
       DB_QueryUPDATE ("can not update timeline users in user's last data",
 		      "UPDATE usr_last SET TimelineUsrs=%u"
 		      " WHERE UsrCod=%ld",
-		      (unsigned) Gbl.Timeline.Who,
+		      (unsigned) Timeline->Who,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
+  }
+
+/*****************************************************************************/
+/**** Set/get global variable with which users to view in global timeline ****/
+/*****************************************************************************/
+
+static void Set_GlobalWho (Usr_Who_t Who)
+  {
+   TL_GlobalWho = Who;
+  }
+
+Usr_Who_t TL_GetGlobalWho (void)
+  {
+   return TL_GlobalWho;
   }
 
 /*****************************************************************************/
@@ -1377,7 +1471,8 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-static void TL_InsertNewPubsInTimeline (char *Query)
+static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
+                                        char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1405,7 +1500,7 @@ static void TL_InsertNewPubsInTimeline (char *Query)
       TL_GetDataOfNoteByCod (&SocNot);
 
       /* Write note */
-      TL_WriteNote (&SocNot,
+      TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
                     false,false);
      }
@@ -1419,7 +1514,8 @@ static void TL_InsertNewPubsInTimeline (char *Query)
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-static void TL_ShowOldPubsInTimeline (char *Query)
+static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
+                                      char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1447,7 +1543,7 @@ static void TL_ShowOldPubsInTimeline (char *Query)
       TL_GetDataOfNoteByCod (&SocNot);
 
       /* Write note */
-      TL_WriteNote (&SocNot,
+      TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
                     false,false);
      }
@@ -1518,7 +1614,8 @@ static void TL_PutLinkToViewOldPublications (void)
 /******************************** Write note *********************************/
 /*****************************************************************************/
 
-static void TL_WriteNote (const struct TL_Note *SocNot,
+static void TL_WriteNote (struct TL_Timeline *Timeline,
+	                  const struct TL_Note *SocNot,
                           TL_TopMessage_t TopMessage,long UsrCod,
                           bool Highlight,	// Highlight note
                           bool ShowNoteAlone)	// Note is shown alone, not in a list
@@ -1741,7 +1838,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       /* Foot column 3: Icon to remove this note */
       HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor)
-	 TL_PutFormToRemovePublication (SocNot->NotCod);
+	 TL_PutFormToRemovePublication (Timeline,
+	                                SocNot->NotCod);
       HTM_DIV_End ();
 
       /* End foot container */
@@ -1749,13 +1847,14 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
       /* Comments */
       if (NumComments)
-	 TL_WriteCommentsInNote (SocNot,NumComments);
+	 TL_WriteCommentsInNote (Timeline,SocNot,NumComments);
 
       /* End container for buttons and comments */
       HTM_DIV_End ();
 
       /* Put hidden form to write a new comment */
-      TL_PutHiddenFormToWriteNewCommentToNote (SocNot->NotCod,IdNewComment);
+      TL_PutHiddenFormToWriteNewCommentToNote (Timeline,
+                                               SocNot->NotCod,IdNewComment);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2348,7 +2447,7 @@ static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub)
 /********************** Form to write a new publication **********************/
 /*****************************************************************************/
 
-static void TL_PutFormToWriteNewPost (void)
+static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_New_TIMELINE_post;
    bool ShowPhoto;
@@ -2374,7 +2473,7 @@ static void TL_PutFormToWriteNewPost (void)
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-   TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
+   TL_FormStart (Timeline,ActRcvSocPstGbl,ActRcvSocPstUsr);
    TL_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -2431,7 +2530,11 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 
 void TL_ReceivePostUsr (void)
   {
+   struct TL_Timeline Timeline;
    long NotCod;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -2445,7 +2548,7 @@ void TL_ReceivePostUsr (void)
    /***** Receive and store post, and
           write updated timeline after publication (user) *****/
    NotCod = TL_ReceivePost ();
-   TL_ShowTimelineUsrHighlightingNot (NotCod);
+   TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -2453,13 +2556,17 @@ void TL_ReceivePostUsr (void)
 
 void TL_ReceivePostGbl (void)
   {
+   struct TL_Timeline Timeline;
    long NotCod;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
 
    /***** Receive and store post *****/
    NotCod = TL_ReceivePost ();
 
    /***** Write updated timeline after publication (global) *****/
-   TL_ShowTimelineGblHighlightingNot (NotCod);
+   TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
   }
 
 // Returns the code of the note just created
@@ -2550,7 +2657,8 @@ static void TL_PutIconCommentDisabled (void)
 /********************** Form to comment a publication ************************/
 /*****************************************************************************/
 
-static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
+static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *Timeline,
+	                                             long NotCod,
                                                      const char IdNewComment[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_New_TIMELINE_comment;
@@ -2575,7 +2683,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
    /* Begin form to write the post */
-   TL_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
+   TL_FormStart (Timeline,ActRcvSocComGbl,ActRcvSocComUsr);
    TL_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
@@ -2608,7 +2716,8 @@ static unsigned long TL_GetNumCommentsInNote (long NotCod)
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
+static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
+				    const struct TL_Note *SocNot,
 				    unsigned NumComments)
   {
    MYSQL_RES *mysql_res;
@@ -2722,7 +2831,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot,
       for (NumCom = 0;
 	   NumCom < NumFinalCommentsGot;
 	   NumCom++)
-	 TL_WriteOneCommentInList (mysql_res);
+	 TL_WriteOneCommentInList (Timeline,mysql_res);
       HTM_UL_End ();
      }
 
@@ -2812,10 +2921,14 @@ void TL_ShowHiddenCommentsUsr (void)
 
 void TL_ShowHiddenCommentsGbl (void)
   {
+   struct TL_Timeline Timeline;
    long NotCod;
    char IdComments[Frm_MAX_BYTES_ID + 1];
    unsigned NumInitialCommentsToGet;
    unsigned NumInitialCommentsGot;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
 
    /***** Get parameters *****/
    /* Get note code */
@@ -2828,7 +2941,8 @@ void TL_ShowHiddenCommentsGbl (void)
    NumInitialCommentsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
 
    /***** Write HTML inside DIV with hidden comments *****/
-   NumInitialCommentsGot = TL_WriteHiddenComments (NotCod,IdComments,NumInitialCommentsToGet);
+   NumInitialCommentsGot = TL_WriteHiddenComments (&Timeline,
+                                                   NotCod,IdComments,NumInitialCommentsToGet);
 
    /***** Link to show the first comments *****/
    TL_LinkToShowPreviousComments (IdComments,NumInitialCommentsGot);
@@ -2839,7 +2953,8 @@ void TL_ShowHiddenCommentsGbl (void)
 /*****************************************************************************/
 // Returns the number of comments got
 
-static unsigned TL_WriteHiddenComments (long NotCod,
+static unsigned TL_WriteHiddenComments (struct TL_Timeline *Timeline,
+                                        long NotCod,
 				        char IdComments[Frm_MAX_BYTES_ID + 1],
 					unsigned NumInitialCommentsToGet)
   {
@@ -2871,7 +2986,7 @@ static unsigned TL_WriteHiddenComments (long NotCod,
    for (NumCom = 0;
 	NumCom < NumInitialCommentsGot;
 	NumCom++)
-      TL_WriteOneCommentInList (mysql_res);
+      TL_WriteOneCommentInList (Timeline,mysql_res);
    HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
@@ -2884,7 +2999,8 @@ static unsigned TL_WriteHiddenComments (long NotCod,
 /************************* Write a comment in list ***************************/
 /*****************************************************************************/
 
-static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
+static void TL_WriteOneCommentInList (struct TL_Timeline *Timeline,
+                                      MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
    struct TL_Comment SocCom;
@@ -2897,7 +3013,7 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
    TL_GetDataOfCommentFromRow (row,&SocCom);
 
    /***** Write comment *****/
-   TL_WriteComment (&SocCom,
+   TL_WriteComment (Timeline,&SocCom,
 		    TL_TOP_MESSAGE_NONE,-1L,
 		    false);	// Not alone
 
@@ -2967,7 +3083,8 @@ static void TL_PutIconToToggleComments (const char *UniqueId,
 /******************************** Write comment ******************************/
 /*****************************************************************************/
 
-static void TL_WriteComment (struct TL_Comment *SocCom,
+static void TL_WriteComment (struct TL_Timeline *Timeline,
+	                     struct TL_Comment *SocCom,
                              TL_TopMessage_t TopMessage,long UsrCod,
                              bool ShowCommentAlone)	// Comment is shown alone, not in a list
   {
@@ -3059,7 +3176,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       /* Put icon to remove this comment */
       HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor && !ShowCommentAlone)
-	 TL_PutFormToRemoveComment (SocCom->PubCod);
+	 TL_PutFormToRemoveComment (Timeline,SocCom->PubCod);
       HTM_DIV_End ();
 
       /* End foot container */
@@ -3105,12 +3222,13 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
 /************************* Form to remove comment ****************************/
 /*****************************************************************************/
 
-static void TL_PutFormToRemoveComment (long PubCod)
+static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
+	                               long PubCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
+   TL_FormStart (Timeline,ActReqRemSocComGbl,ActReqRemSocComUsr);
    TL_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -3302,12 +3420,13 @@ static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom)
 /************************ Form to remove publication *************************/
 /*****************************************************************************/
 
-static void TL_PutFormToRemovePublication (long NotCod)
+static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
+                                           long NotCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
+   TL_FormStart (Timeline,ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    TL_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -3357,7 +3476,11 @@ static long TL_GetParamPubCod (void)
 
 void TL_ReceiveCommentUsr (void)
   {
+   struct TL_Timeline Timeline;
    long NotCod;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -3371,7 +3494,7 @@ void TL_ReceiveCommentUsr (void)
    /***** Receive comment in a note
           and write updated timeline after commenting (user) *****/
    NotCod = TL_ReceiveComment ();
-   TL_ShowTimelineUsrHighlightingNot (NotCod);
+   TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -3379,13 +3502,17 @@ void TL_ReceiveCommentUsr (void)
 
 void TL_ReceiveCommentGbl (void)
   {
+   struct TL_Timeline Timeline;
    long NotCod;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
 
    /***** Receive comment in a note *****/
    NotCod = TL_ReceiveComment ();
 
    /***** Write updated timeline after commenting (global) *****/
-   TL_ShowTimelineGblHighlightingNot (NotCod);
+   TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
   }
 
 static long TL_ReceiveComment (void)
@@ -4013,6 +4140,11 @@ static void TL_UnsNote (struct TL_Note *SocNot)
 
 void TL_RequestRemNoteUsr (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -4023,10 +4155,10 @@ void TL_RequestRemNoteUsr (void)
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Request the removal of note *****/
-   TL_RequestRemovalNote ();
+   TL_RequestRemovalNote (&Timeline);
 
    /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr ();
+   TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -4034,14 +4166,19 @@ void TL_RequestRemNoteUsr (void)
 
 void TL_RequestRemNoteGbl (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
+
    /***** Request the removal of note *****/
-   TL_RequestRemovalNote ();
+   TL_RequestRemovalNote (&Timeline);
 
    /***** Write timeline again (global) *****/
-   TL_ShowTimelineGbl2 ();
+   TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TL_RequestRemovalNote (void)
+static void TL_RequestRemovalNote (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
@@ -4063,19 +4200,19 @@ static void TL_RequestRemovalNote (void)
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show note */
-	 TL_WriteNote (&SocNot,
+	 TL_WriteNote (Timeline,&SocNot,
 		       TL_TOP_MESSAGE_NONE,-1L,
 		       false,true);
 
 	 /* End alert */
-	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed
+	 Timeline->NotCod = SocNot.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveNote,&Gbl.Timeline,
+	                             TL_PutParamsRemoveNote,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
-	                             TL_PutParamsRemoveNote,&Gbl.Timeline,
+	                             TL_PutParamsRemoveNote,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4105,6 +4242,11 @@ static void TL_PutParamsRemoveNote (void *Timeline)
 
 void TL_RemoveNoteUsr (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -4118,7 +4260,7 @@ void TL_RemoveNoteUsr (void)
    TL_RemoveNote ();
 
    /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr ();
+   TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -4126,11 +4268,16 @@ void TL_RemoveNoteUsr (void)
 
 void TL_RemoveNoteGbl (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
+
    /***** Remove a note *****/
    TL_RemoveNote ();
 
    /***** Write updated timeline after removing (global) *****/
-   TL_ShowTimelineGbl2 ();
+   TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
 static void TL_RemoveNote (void)
@@ -4323,6 +4470,11 @@ static long TL_GetPubCodOfOriginalNote (long NotCod)
 
 void TL_RequestRemComUsr (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -4333,10 +4485,10 @@ void TL_RequestRemComUsr (void)
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Request the removal of comment in note *****/
-   TL_RequestRemovalComment ();
+   TL_RequestRemovalComment (&Timeline);
 
    /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr ();
+   TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -4344,14 +4496,19 @@ void TL_RequestRemComUsr (void)
 
 void TL_RequestRemComGbl (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
+
    /***** Request the removal of comment in note *****/
-   TL_RequestRemovalComment ();
+   TL_RequestRemovalComment (&Timeline);
 
    /***** Write timeline again (global) *****/
-   TL_ShowTimelineGbl2 ();
+   TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TL_RequestRemovalComment (void)
+static void TL_RequestRemovalComment (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
@@ -4376,19 +4533,19 @@ static void TL_RequestRemovalComment (void)
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show comment */
-	 TL_WriteComment (&SocCom,
+	 TL_WriteComment (Timeline,&SocCom,
 			  TL_TOP_MESSAGE_NONE,-1L,
 			  true);	// Alone
 
 	 /* End alert */
-	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed
+	 Timeline->PubCod = SocCom.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveComment,&Gbl.Timeline,
+	                             TL_PutParamsRemoveComment,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
-	                             TL_PutParamsRemoveComment,&Gbl.Timeline,
+	                             TL_PutParamsRemoveComment,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4421,6 +4578,11 @@ static void TL_PutParamsRemoveComment (void *Timeline)
 
 void TL_RemoveComUsr (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Reset timeline context *****/
+   TL_ResetTimeline (&Timeline);
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -4434,7 +4596,7 @@ void TL_RemoveComUsr (void)
    TL_RemoveComment ();
 
    /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr ();
+   TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -4442,11 +4604,16 @@ void TL_RemoveComUsr (void)
 
 void TL_RemoveComGbl (void)
   {
+   struct TL_Timeline Timeline;
+
+   /***** Initialize timeline *****/
+   TL_InitTimelineGbl (&Timeline);
+
    /***** Remove a comment *****/
    TL_RemoveComment ();
 
    /***** Write updated timeline after removing (global) *****/
-   TL_ShowTimelineGbl2 ();
+   TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
 static void TL_RemoveComment (void)
