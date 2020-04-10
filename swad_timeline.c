@@ -1641,8 +1641,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Forums.ForumSelected);
-		  For_SetForumName (&Forums.ForumSelected,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Forums.Forum);
+		  For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 		  break;
 	       default:
 		  break;
@@ -2042,13 +2042,13 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
 	 case TL_NOTE_POST:	// Not applicable
 	    return;
 	 case TL_NOTE_FORUM_POST:
-	    Frm_StartFormUnique (For_ActionsSeeFor[Forums->ForumSelected.Type]);
+	    Frm_StartFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
 	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                          1,	// Page of posts   = first
                                          Forums->ForumSet,
 					 Forums->ThreadsOrder,
-					 Forums->ForumSelected.Location,
-					 Forums->ForumSelected.ThrCod,
+					 Forums->Forum.Location,
+					 Forums->Thread.ThrCod,
 					 -1L);
 	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course

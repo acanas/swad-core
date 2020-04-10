@@ -140,6 +140,21 @@ typedef enum
    Grp_MATCH,
   } Grp_AsgAttSvyGam_t;
 
+struct Grp_Groups
+  {
+   unsigned NumGrps;
+   struct GroupTypes GrpTypes;
+   struct GroupType GrpTyp;
+   long GrpCod;		// Group to be edited, removed...
+   char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+   long ClaCod;
+   unsigned MaxStudents;
+   bool Open;
+   bool FileZones;
+   struct ListCodGrps LstGrpsSel;
+   Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

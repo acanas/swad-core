@@ -432,8 +432,8 @@ void Ntf_ShowMyNotifications (void)
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
             For_ResetForums (&Forums);
-            For_GetForumTypeAndLocationOfAPost (Cod,&Forums.ForumSelected);
-            For_SetForumName (&Forums.ForumSelected,
+            For_GetForumTypeAndLocationOfAPost (Cod,&Forums.Forum);
+            For_SetForumName (&Forums.Forum,
                               ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
            }
 
@@ -634,7 +634,8 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    extern const char *Txt_Show_all_notifications;
    extern const char *Txt_Show_all_NOTIFICATIONS;
 
-   Lay_PutContextualCheckbox (ActSeeNtf,NULL,
+   Lay_PutContextualCheckbox (ActSeeNtf,
+                              NULL,
                               "All",
                               AllNotifications,false,
                               Txt_Show_all_notifications,
@@ -738,13 +739,13 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Frm_StartForm (For_ActionsSeeFor[Forums->ForumSelected.Type]);
+	 Frm_StartForm (For_ActionsSeeFor[Forums->Forum.Type]);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
-				      Forums->ForumSelected.Location,
-				      Forums->ForumSelected.ThrCod,
+				      Forums->Forum.Location,
+				      Forums->Thread.ThrCod,
 				      -1L);
 	 break;
       case Ntf_EVENT_NOTICE:

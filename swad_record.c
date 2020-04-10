@@ -1502,7 +1502,8 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
   {
    extern const char *Txt_Show_office_hours;
 
-   Lay_PutContextualCheckbox (ActSeeRecOneTch,Rec_PutParamsShowOfficeHoursOneTch,
+   Lay_PutContextualCheckbox (ActSeeRecOneTch,
+                              Rec_PutParamsShowOfficeHoursOneTch,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_office_hours,
@@ -1513,7 +1514,8 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
   {
    extern const char *Txt_Show_office_hours;
 
-   Lay_PutContextualCheckbox (ActSeeRecSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
+   Lay_PutContextualCheckbox (ActSeeRecSevTch,
+                              Rec_PutParamsShowOfficeHoursSeveralTchs,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_office_hours,

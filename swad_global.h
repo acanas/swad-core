@@ -417,20 +417,7 @@ struct Globals
       char PathPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course
       char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
       char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
-      struct
-	{
-	 unsigned NumGrps;
-	 struct GroupTypes GrpTypes;
-	 struct GroupType GrpTyp;
-	 long GrpCod;		// Group to be edited, removed...
-	 char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-	 long ClaCod;
-	 unsigned MaxStudents;
-	 bool Open;
-	 bool FileZones;
-	 struct ListCodGrps LstGrpsSel;
-	 Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
-	} Grps;
+      struct Grp_Groups Grps;
       struct
 	{
 	 Inf_InfoType_t Type;
@@ -519,7 +506,6 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct Prj_Projects Prjs;
    struct TL_Timeline Timeline;
    struct Msg_Messages Msg;
    struct TT_Timetable Timetable;

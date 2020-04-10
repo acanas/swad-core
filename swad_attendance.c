@@ -72,18 +72,6 @@ typedef enum
    Att_PRNT_SEL_USR,	// Print selected users
   } Att_TypeOfView_t;
 
-struct Att_Events
-  {
-   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-   unsigned Num;	// Number of attendance events
-   struct Att_Event *Lst;	// List of attendance events
-   Dat_StartEndTime_t SelectedOrder;
-   long AttCod;
-   bool ShowDetails;
-   char *StrAttCodsSelected;
-   unsigned CurrentPage;
-  };
-
 /*****************************************************************************/
 /****************************** Private variables ****************************/
 /*****************************************************************************/
@@ -267,10 +255,8 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
      }
 
    /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-				  &Pagination,
-				  (unsigned) Events->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
+				  Events,-1L);
 
    if (Events->Num)
      {
@@ -321,10 +307,8 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
-				  &Pagination,
-				  (unsigned) Events->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
+				  Events,-1L);
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)

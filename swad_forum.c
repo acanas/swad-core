@@ -382,11 +382,11 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 static void For_PutIconNewThread (void *Forums);
 static void For_PutAllHiddenParamsNewThread (void *Forums);
 static unsigned For_GetNumThrsInForum (struct For_Forum *Forum);
-static void For_ListForumThrs (const struct For_Forums *Forums,
+static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs);
-static void For_GetThrData (struct ForumThread *Thr);
+static void For_GetThreadData (struct For_Thread *Thr);
 
 static void For_GetParamsForums (struct For_Forums *Forums);
 static void For_SetForumType (struct For_Forums *Forums);
@@ -417,10 +417,28 @@ void For_ResetForums (struct For_Forums *Forums)
    Forums->ThreadsOrder           = For_DEFAULT_ORDER;
    Forums->CurrentPageThrs        = 0;
    Forums->CurrentPagePsts        = 0;
-   Forums->ForumSelected.Type     = For_FORUM_UNKNOWN;
-   Forums->ForumSelected.Location = -1L;
-   Forums->ForumSelected.ThrCod   = -1L;
-   Forums->ForumSelected.PstCod   = -1L;
+
+   Forums->Forum.Type             = For_FORUM_UNKNOWN;
+   Forums->Forum.Location         = -1L;
+
+   Forums->Thread.ThrCod          = -1L;
+   Forums->Thread.PstCod[0]       =
+   Forums->Thread.PstCod[1]       = -1L;
+   Forums->Thread.UsrCod[0]       =
+   Forums->Thread.UsrCod[1]       = -1L;
+   Forums->Thread.WriteTime[0]    =
+   Forums->Thread.WriteTime[1]    = (time_t) 0;
+   Forums->Thread.Enabled[0]      =
+   Forums->Thread.Enabled[1]      = false;
+   Forums->Thread.Subject[0]      = '\0';
+   Forums->Thread.NumPosts        =
+   Forums->Thread.NumUnreadPosts  =
+   Forums->Thread.NumMyPosts      =
+   Forums->Thread.NumWriters      =
+   Forums->Thread.NumReaders      = 0;
+
+   Forums->Post.PstCod            = -1L;
+
    Forums->ThreadToMove           = -1L;
   }
 
@@ -440,7 +458,7 @@ void For_EnablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Delete post from table of disabled posts *****/
-   For_DeletePstFromDisabledPstTable (Forums.ForumSelected.PstCod);
+   For_DeletePstFromDisabledPstTable (Forums.Post.PstCod);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -465,10 +483,10 @@ void For_DisablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Check if post really exists, if it has not been removed *****/
-   if (For_GetIfForumPstExists (Forums.ForumSelected.PstCod))
+   if (For_GetIfForumPstExists (Forums.Post.PstCod))
      {
       /***** Insert post into table of banned posts *****/
-      For_InsertPstIntoBannedPstTable (Forums.ForumSelected.PstCod);
+      For_InsertPstIntoBannedPstTable (Forums.Post.PstCod);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -645,8 +663,8 @@ static long For_InsertForumThread (const struct For_Forums *Forums,
 				" (ForumType,Location,FirstPstCod,LastPstCod)"
 				" VALUES"
 				" (%u,%ld,%ld,%ld)",
-				(unsigned) Forums->ForumSelected.Type,
-				Forums->ForumSelected.Location,
+				(unsigned) Forums->Forum.Type,
+				Forums->Forum.Location,
 				FirstPstCod,FirstPstCod);
   }
 
@@ -985,7 +1003,6 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
   {
    extern const char *Hlp_MESSAGES_Forums_posts;
    extern const char *Txt_Thread;
-   struct ForumThread Thr;
    char LastSubject[Cns_MAX_BYTES_SUBJECT + 1];
    char FrameTitle[128 + Cns_MAX_BYTES_SUBJECT];
    MYSQL_RES *mysql_res;
@@ -1002,15 +1019,14 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
    bool ICanModerateForum = false;
 
    /***** Get data of the thread *****/
-   Thr.ThrCod = Forums->ForumSelected.ThrCod;
-   For_GetThrData (&Thr);
+   For_GetThreadData (&Forums->Thread);
 
    /***** Get if there is a thread ready to be moved *****/
    if (For_CheckIfICanMoveThreads ())
       Forums->ThreadToMove = For_GetThrInMyClipboard ();
 
    /***** Get thread read time for the current user *****/
-   ReadTimeUTC = For_GetThrReadTime (Forums->ForumSelected.ThrCod);
+   ReadTimeUTC = For_GetThrReadTime (Forums->Thread.ThrCod);
 
    /***** Show alert after action *****/
    HTM_SECTION_Begin (For_FORUM_POSTS_SECTION_ID);
@@ -1022,7 +1038,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
    /***** Begin box *****/
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
-	     Txt_Thread,Thr.Subject);
+	     Txt_Thread,Forums->Thread.Subject);
    Box_BoxBegin (NULL,FrameTitle,
                  For_PutIconNewPost,Forums,
                  Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
@@ -1032,14 +1048,14 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 			     "SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
 			     " FROM forum_post"
 			     " WHERE ThrCod=%ld ORDER BY PstCod",
-			     Forums->ForumSelected.ThrCod);
+			     Forums->Thread.ThrCod);
 
    NumPsts = (unsigned) NumRows;
    LastSubject[0] = '\0';
    if (NumPsts)		// If there are posts...
      {
       /***** Check if I can moderate posts in forum *****/
-      switch (Forums->ForumSelected.Type)
+      switch (Forums->Forum.Type)
         {
          case For_FORUM_GLOBAL_USRS:
          case For_FORUM_GLOBAL_TCHS:
@@ -1076,17 +1092,15 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
       Forums->CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
-				     &PaginationPsts,
-				     (unsigned) Forums->ThreadsOrder,
-				     Forums,Forums->ForumSelected.ThrCod);
+      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
+				     Forums,Forums->Thread.ThrCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
 
       /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
-      for (NumRow = PaginationPsts.FirstItemVisible;
+      for (NumRow  = PaginationPsts.FirstItemVisible;
            NumRow <= PaginationPsts.LastItemVisible;
            NumRow++)
         {
@@ -1107,7 +1121,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
                Note that database is not updated with the current time,
                but with the creation time of the most recent post
                in this page of threads. */
-            For_UpdateThrReadTime (Forums->ForumSelected.ThrCod,
+            For_UpdateThrReadTime (Forums->Thread.ThrCod,
                                    CreatTimeUTC);
 
          /* Show post */
@@ -1116,7 +1130,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
                              NewPst,ICanModerateForum);
 
          /* Mark possible notification as seen */
-         switch (Forums->ForumSelected.Type)
+         switch (Forums->Forum.Type)
            {
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
@@ -1127,7 +1141,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
             default:
                break;
            }
-         if (Thr.NumMyPosts)
+         if (Forums->Thread.NumMyPosts)
             Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
         	                 PstCod,-1L,
         	                 Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1137,10 +1151,8 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
       HTM_TABLE_End ();
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,
-				     &PaginationPsts,
-				     (unsigned) Forums->ThreadsOrder,
-				     Forums,Forums->ForumSelected.ThrCod);
+      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
+				     Forums,Forums->Thread.ThrCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1165,7 +1177,7 @@ static void For_PutIconNewPost (void *Forums)
    extern const char *Txt_New_post;
 
    if (Forums)
-      Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->ForumSelected.Type],
+      Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_POST_SECTION_ID,
 				  For_PutAllHiddenParamsNewPost,Forums,
 				  Txt_New_post);
@@ -1178,8 +1190,8 @@ static void For_PutAllHiddenParamsNewPost (void *Forums)
 				   UINT_MAX,						// Page of posts   = last
 				   ((struct For_Forums *) Forums)->ForumSet,
 				   ((struct For_Forums *) Forums)->ThreadsOrder,
-				   ((struct For_Forums *) Forums)->ForumSelected.Location,
-				   ((struct For_Forums *) Forums)->ForumSelected.ThrCod,
+				   ((struct For_Forums *) Forums)->Forum.Location,
+				   ((struct For_Forums *) Forums)->Thread.ThrCod,
 				   -1L);
   }
 
@@ -1268,15 +1280,15 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
    HTM_TD_Begin ("class=\"CONTEXT_COL\"");
    if (ICanModerateForum)
      {
-      Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->ForumSelected.Type] :
-				     For_ActionsEnbPstFor[Forums->ForumSelected.Type],
+      Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
+				     For_ActionsEnbPstFor[Forums->Forum.Type],
 			   For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                    Forums->CurrentPagePsts,	// Page of posts   = current
                                    Forums->ForumSet,
 				   Forums->ThreadsOrder,
-				   Forums->ForumSelected.Location,
-				   Forums->ForumSelected.ThrCod,
+				   Forums->Forum.Location,
+				   Forums->Thread.ThrCod,
 				   PstCod);
       Ico_PutIconLink (Enabled ? "eye-green.svg" :
 			         "eye-slash-red.svg",
@@ -1305,17 +1317,17 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
 	{
 	 // Post can be removed if post is the last (without answers) and it's mine
 	 if (PstNum == 1)	// First and unique post in thread
-	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->ForumSelected.Type],
+	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->Forum.Type],
 				 For_FORUM_THREADS_SECTION_ID);
 	 else		// Last of several posts in thread
-	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->ForumSelected.Type],
+	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
 				      Forums->CurrentPagePsts,	// Page of posts   = current
 				      Forums->ForumSet,
 				      Forums->ThreadsOrder,
-				      Forums->ForumSelected.Location,
-				      Forums->ForumSelected.ThrCod,
+				      Forums->Forum.Location,
+				      Forums->Thread.ThrCod,
 				      PstCod);
 	 Ico_PutIconRemove ();
 	 Frm_EndForm ();
@@ -1470,9 +1482,9 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
    HTM_DIV_Begin ("class=\"AUTHOR_TXT LT\"");
 
    /***** Get number of posts from database *****/
-   if (Forums->ForumSelected.Location > 0)
+   if (Forums->Forum.Location > 0)
       sprintf (SubQuery," AND forum_thread.Location=%ld",
-               Forums->ForumSelected.Location);
+               Forums->Forum.Location);
    else
       SubQuery[0] = '\0';
    NumPsts =
@@ -1483,7 +1495,7 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 			     " AND forum_post.ThrCod=forum_thread.ThrCod"
 			     " AND forum_thread.ForumType=%u%s",
 			     UsrCod,
-			     (unsigned) Forums->ForumSelected.Type,SubQuery);
+			     (unsigned) Forums->Forum.Type,SubQuery);
 
    /***** Write number of threads and number of posts *****/
    HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
@@ -1823,7 +1835,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
    Forum.Location = -1L;
-   Highlight = (Forums->ForumSelected.Type == For_FORUM_GLOBAL_USRS);
+   Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS);
    IsLastItemInLevel[1] = false;
    For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
 
@@ -1833,7 +1845,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
       Forum.Location = -1L;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM_GLOBAL_TCHS);
+      Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS);
       IsLastItemInLevel[1] = false;
       For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
      }
@@ -1860,7 +1872,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
    Forum.Location = -1L;
-   Highlight = (Forums->ForumSelected.Type == For_FORUM__SWAD__USRS);
+   Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
    For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
 
@@ -1869,7 +1881,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM__SWAD__TCHS;
       Forum.Location = -1L;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM__SWAD__TCHS);
+      Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS);
       IsLastItemInLevel[1] = IsLastForum;
       For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
      }
@@ -1899,8 +1911,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
       /***** Link to the forum of users from this institution *****/
       Forum.Type = For_FORUM_INSTIT_USRS;
       Forum.Location = InsCod;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM_INSTIT_USRS &&
-	           Forums->ForumSelected.Location == InsCod);
+      Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
+	           Forums->Forum.Location == InsCod);
       IsLastItemInLevel[1] = (IsLastIns && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
@@ -1909,8 +1921,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_INSTIT_TCHS;
 	 Forum.Location = InsCod;
-	 Highlight = (Forums->ForumSelected.Type == For_FORUM_INSTIT_TCHS &&
-		      Forums->ForumSelected.Location == InsCod);
+	 Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
+		      Forums->Forum.Location == InsCod);
          IsLastItemInLevel[1] = IsLastIns;
          For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
         }
@@ -1942,8 +1954,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
       /***** Link to the forum of users from this centre *****/
       Forum.Type = For_FORUM_CENTRE_USRS;
       Forum.Location = CtrCod;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM_CENTRE_USRS &&
-	           Forums->ForumSelected.Location == CtrCod);
+      Highlight = (Forums->Forum.Type == For_FORUM_CENTRE_USRS &&
+	           Forums->Forum.Location == CtrCod);
       IsLastItemInLevel[2] = (IsLastCtr && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
@@ -1952,8 +1964,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_CENTRE_TCHS;
 	 Forum.Location = CtrCod;
-	 Highlight = (Forums->ForumSelected.Type == For_FORUM_CENTRE_TCHS &&
-		      Forums->ForumSelected.Location == CtrCod);
+	 Highlight = (Forums->Forum.Type == For_FORUM_CENTRE_TCHS &&
+		      Forums->Forum.Location == CtrCod);
          IsLastItemInLevel[2] = IsLastCtr;
          For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
         }
@@ -1985,8 +1997,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
       /***** Link to the forum of users from this degree *****/
       Forum.Type = For_FORUM_DEGREE_USRS;
       Forum.Location = DegCod;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM_DEGREE_USRS &&
-	           Forums->ForumSelected.Location == DegCod);
+      Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
+	           Forums->Forum.Location == DegCod);
       IsLastItemInLevel[3] = (IsLastDeg && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
 
@@ -1995,8 +2007,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_DEGREE_TCHS;
 	 Forum.Location = DegCod;
-	 Highlight = (Forums->ForumSelected.Type == For_FORUM_DEGREE_TCHS &&
-		      Forums->ForumSelected.Location == DegCod);
+	 Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
+		      Forums->Forum.Location == DegCod);
 	 IsLastItemInLevel[3] = IsLastDeg;
          For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
         }
@@ -2028,8 +2040,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
       /***** Link to the forum of users from this course *****/
       Forum.Type = For_FORUM_COURSE_USRS;
       Forum.Location = CrsCod;
-      Highlight = (Forums->ForumSelected.Type == For_FORUM_COURSE_USRS &&
-	           Forums->ForumSelected.Location == CrsCod);
+      Highlight = (Forums->Forum.Type == For_FORUM_COURSE_USRS &&
+	           Forums->Forum.Location == CrsCod);
       IsLastItemInLevel[4] = (IsLastCrs && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
 
@@ -2038,8 +2050,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_COURSE_TCHS;
 	 Forum.Location = CrsCod;
-	 Highlight = (Forums->ForumSelected.Type == For_FORUM_COURSE_TCHS &&
-		      Forums->ForumSelected.Location == CrsCod);
+	 Highlight = (Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
+		      Forums->Forum.Location == CrsCod);
          IsLastItemInLevel[4] = IsLastCrs;
          For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
         }
@@ -2448,13 +2460,13 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    struct Pagination PaginationThrs;
 
    /***** Set forum name *****/
-   For_SetForumName (&Forums->ForumSelected,
+   For_SetForumName (&Forums->Forum,
 	             ForumName,Gbl.Prefs.Language,true);
 
    /***** Get threads of a forum from database *****/
-   if (Forums->ForumSelected.Location > 0)
+   if (Forums->Forum.Location > 0)
       sprintf (SubQuery," AND forum_thread.Location=%ld",
-	       Forums->ForumSelected.Location);
+	       Forums->Forum.Location);
    else
       SubQuery[0] = '\0';
    switch (Forums->ThreadsOrder)
@@ -2466,7 +2478,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 					      " WHERE forum_thread.ForumType=%u%s"
 					      " AND forum_thread.FirstPstCod=forum_post.PstCod"
 					      " ORDER BY forum_post.CreatTime DESC",
-					      (unsigned) Forums->ForumSelected.Type,SubQuery);
+					      (unsigned) Forums->Forum.Type,SubQuery);
          break;
       case Dat_END_TIME:	// Last post time
          NumThrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
@@ -2475,7 +2487,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 					      " WHERE forum_thread.ForumType=%u%s"
 					      " AND forum_thread.LastPstCod=forum_post.PstCod"
 					      " ORDER BY forum_post.CreatTime DESC",
-					      (unsigned) Forums->ForumSelected.Type,SubQuery);
+					      (unsigned) Forums->Forum.Type,SubQuery);
          break;
       default:	// Impossible
 	 return;
@@ -2522,10 +2534,8 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    if (NumThrs)
      {
       /***** Write links to all the pages in the listing of threads *****/
-      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
-				     &PaginationThrs,
-				     (unsigned) Forums->ThreadsOrder,
-				     Forums,0);
+      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
+				     Forums,-1L);
 
       /***** Heading row *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -2541,13 +2551,13 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	{
 	 HTM_TH_Begin (1,2,"CM");
 
-         Frm_StartFormAnchor (For_ActionsSeeFor[Forums->ForumSelected.Type],
+         Frm_StartFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Forums->ForumSet,
 				      Order,
-				      Forums->ForumSelected.Location,
+				      Forums->Forum.Location,
 				      -1L,
 				      -1L);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
@@ -2570,16 +2580,14 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
       HTM_TR_End ();
 
       /***** List the threads *****/
-      For_ListForumThrs (Forums,ThrCods,Forums->ForumSelected.ThrCod,&PaginationThrs);
+      For_ListForumThrs (Forums,ThrCods,Forums->Thread.ThrCod,&PaginationThrs);
 
       /***** End table *****/
       HTM_TABLE_End ();
 
       /***** Write links to all the pages in the listing of threads *****/
-      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,
-				     &PaginationThrs,
-				     (unsigned) Forums->ThreadsOrder,
-				     Forums,0);
+      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
+				     Forums,-1L);
      }
 
    /***** Put a form to write the first post of a new thread *****/
@@ -2601,7 +2609,7 @@ static void For_PutIconNewThread (void *Forums)
    extern const char *Txt_New_thread;
 
    if (Forums)
-      Ico_PutContextualIconToAdd (For_ActionsSeeFor[((struct For_Forums *) Forums)->ForumSelected.Type],
+      Ico_PutContextualIconToAdd (For_ActionsSeeFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_THREAD_SECTION_ID,
 				  For_PutAllHiddenParamsNewThread,Forums,
 				  Txt_New_thread);
@@ -2614,7 +2622,7 @@ static void For_PutAllHiddenParamsNewThread (void *Forums)
 				   1,	// Page of posts = first
 				   ((struct For_Forums *)Forums)->ForumSet,
 				   ((struct For_Forums *)Forums)->ThreadsOrder,
-				   ((struct For_Forums *)Forums)->ForumSelected.Location,
+				   ((struct For_Forums *)Forums)->Forum.Location,
 				   -1L,
 				   -1L);
   }
@@ -3299,7 +3307,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 /************************ List the threads of a forum ************************/
 /*****************************************************************************/
 
-static void For_ListForumThrs (const struct For_Forums *Forums,
+static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
@@ -3313,7 +3321,6 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    unsigned UniqueId;
    char *Id;
-   struct ForumThread Thr;
    struct UsrData UsrDat;
    Dat_StartEndTime_t Order;
    time_t TimeUTC;
@@ -3336,19 +3343,19 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
         NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       /***** Get the data of this thread *****/
-      Thr.ThrCod = ThrCods[NumThrInScreen];
-      For_GetThrData (&Thr);
-      Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
-	                            "AUTHOR_TXT");
-      BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
-	        ((Thr.ThrCod == ThrCodHighlighted)   ? "LIGHT_BLUE" :
-                                                       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Forums->Thread.ThrCod = ThrCods[NumThrInScreen];
+      For_GetThreadData (&Forums->Thread);
+      Style = (Forums->Thread.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
+	                                       "AUTHOR_TXT");
+      BgColor =  (Forums->Thread.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
+	        ((Forums->Thread.ThrCod == ThrCodHighlighted)   ? "LIGHT_BLUE" :
+                                                                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Show my photo if I have any posts in this thread *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"BT %s\"",BgColor);
-      if (Thr.NumMyPosts)
+      if (Forums->Thread.NumMyPosts)
          HTM_IMG (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
                                             Cfg_URL_ICON_PUBLIC,
 		  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
@@ -3359,25 +3366,25 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
 
       /***** Put an icon with thread status *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
-      Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
-        	                        "envelope-open-text.svg",
-		   Thr.NumUnreadPosts ? Txt_There_are_new_posts :
-                                        Txt_No_new_posts,
+      Ico_PutIcon (Forums->Thread.NumUnreadPosts ? "envelope.svg" :
+        	                                   "envelope-open-text.svg",
+		   Forums->Thread.NumUnreadPosts ? Txt_There_are_new_posts :
+                                                   Txt_No_new_posts,
 		   "ICO16x16");
 
       /***** Put button to remove the thread *****/
-      if (PermissionThreadDeletion[Forums->ForumSelected.Type] &
+      if (PermissionThreadDeletion[Forums->Forum.Type] &
 	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
         {
          HTM_BR ();
-         Frm_StartFormAnchor (For_ActionsReqDelThr[Forums->ForumSelected.Type],
+         Frm_StartFormAnchor (For_ActionsReqDelThr[Forums->Forum.Type],
                               For_REMOVE_THREAD_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
-				      Forums->ForumSelected.Location,
-				      Thr.ThrCod,
+				      Forums->Forum.Location,
+				      Forums->Thread.ThrCod,
 				      -1L);
          Ico_PutIconRemove ();
          Frm_EndForm ();
@@ -3387,14 +3394,14 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
       if (ICanMoveThreads)
         {
          HTM_BR ();
-         Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->ForumSelected.Type],
+         Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
-				      Forums->ForumSelected.Location,
-				      Thr.ThrCod,
+				      Forums->Forum.Location,
+				      Forums->Thread.ThrCod,
 				      -1L);
          Ico_PutIconCut ();
          Frm_EndForm ();
@@ -3404,18 +3411,17 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
 
       /***** Write subject and links to thread pages *****/
       HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      PaginationPsts.NumItems = Thr.NumPosts;
+      PaginationPsts.NumItems = Forums->Thread.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
       PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,
                              &PaginationPsts,
-                             (unsigned) Forums->ThreadsOrder,
-                             Forums,Thr.ThrCod,
-                             Thr.Enabled[Dat_START_TIME],
-                             Thr.Subject,
-                             Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
-                                                  The_ClassFormInBox[Gbl.Prefs.Theme],
+                             Forums,Forums->Thread.ThrCod,
+                             Forums->Thread.Enabled[Dat_START_TIME],
+                             Forums->Thread.Subject,
+                             Forums->Thread.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
+                                                             The_ClassFormInBox[Gbl.Prefs.Theme],
                              true);
       HTM_TD_End ();
 
@@ -3424,17 +3430,17 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
 	   Order <= Dat_END_TIME;
 	   Order++)
         {
-         if (Order == Dat_START_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
+         if (Order == Dat_START_TIME || Forums->Thread.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
            {
             /* Write the author of first or last message */
-            UsrDat.UsrCod = Thr.UsrCod[Order];
+            UsrDat.UsrCod = Forums->Thread.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 	    HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
-            Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
+            Msg_WriteMsgAuthor (&UsrDat,Forums->Thread.Enabled[Order],BgColor);
 	    HTM_TD_End ();
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
-            TimeUTC = Thr.WriteTime[Order];
+            TimeUTC = Forums->Thread.WriteTime[Order];
 	    UniqueId++;
 	    if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
 	       Lay_NotEnoughMemoryExit ();
@@ -3457,22 +3463,22 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
 
       /***** Write number of posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
+      HTM_TxtF ("%u&nbsp;",Forums->Thread.NumPosts);
       HTM_TD_End ();
 
       /***** Write number of new posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
+      HTM_TxtF ("%u&nbsp;",Forums->Thread.NumUnreadPosts);
       HTM_TD_End ();
 
       /***** Write number of users who have write posts in this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
+      HTM_TxtF ("%u&nbsp;",Forums->Thread.NumWriters);
       HTM_TD_End ();
 
       /***** Write number of users who have read this thread *****/
       HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
+      HTM_TxtF ("%u&nbsp;",Forums->Thread.NumReaders);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3486,7 +3492,7 @@ static void For_ListForumThrs (const struct For_Forums *Forums,
 /***************************** Get data of a thread **************************/
 /*****************************************************************************/
 
-static void For_GetThrData (struct ForumThread *Thr)
+static void For_GetThreadData (struct For_Thread *Thr)
   {
    extern const char *Txt_no_subject;
    MYSQL_RES *mysql_res;
@@ -3606,7 +3612,7 @@ static void For_GetParamsForums (struct For_Forums *Forums)
    For_SetForumType (Forums);
 
    /***** Get parameter with code of course, degree, centre or institution *****/
-   switch (Forums->ForumSelected.Type)
+   switch (Forums->Forum.Type)
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -3616,18 +3622,18 @@ static void For_GetParamsForums (struct For_Forums *Forums)
       case For_FORUM_DEGREE_TCHS:
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-	 Forums->ForumSelected.Location = Par_GetParToLong ("Location");
+	 Forums->Forum.Location = Par_GetParToLong ("Location");
          break;
       default:
-	 Forums->ForumSelected.Location = -1L;
+	 Forums->Forum.Location = -1L;
          break;
      }
 
    /***** Get optional parameter with code of a selected thread *****/
-   Forums->ForumSelected.ThrCod = Par_GetParToLong ("ThrCod");
+   Forums->Thread.ThrCod = Par_GetParToLong ("ThrCod");
 
    /***** Get optional parameter with code of a selected post *****/
-   Forums->ForumSelected.PstCod = Par_GetParToLong ("PstCod");
+   Forums->Post.PstCod = Par_GetParToLong ("PstCod");
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)
@@ -3666,7 +3672,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForGenUsr:	case ActPasThrForGenUsr:
       case ActDelPstForGenUsr:
       case ActEnbPstForGenUsr:	case ActDisPstForGenUsr:
-         Forums->ForumSelected.Type = For_FORUM_GLOBAL_USRS;
+         Forums->Forum.Type = For_FORUM_GLOBAL_USRS;
          break;
       case ActSeeForGenTch:	case ActSeePstForGenTch:
       case ActRcvThrForGenTch:	case ActRcvRepForGenTch:
@@ -3674,7 +3680,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForGenTch:	case ActPasThrForGenTch:
       case ActDelPstForGenTch:
       case ActEnbPstForGenTch:	case ActDisPstForGenTch:
-         Forums->ForumSelected.Type = For_FORUM_GLOBAL_TCHS;
+         Forums->Forum.Type = For_FORUM_GLOBAL_TCHS;
          break;
       case ActSeeForSWAUsr:	case ActSeePstForSWAUsr:
       case ActRcvThrForSWAUsr:	case ActRcvRepForSWAUsr:
@@ -3682,7 +3688,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForSWAUsr:	case ActPasThrForSWAUsr:
       case ActDelPstForSWAUsr:
       case ActEnbPstForSWAUsr:	case ActDisPstForSWAUsr:
-         Forums->ForumSelected.Type = For_FORUM__SWAD__USRS;
+         Forums->Forum.Type = For_FORUM__SWAD__USRS;
          break;
       case ActSeeForSWATch:	case ActSeePstForSWATch:
       case ActRcvThrForSWATch:	case ActRcvRepForSWATch:
@@ -3690,7 +3696,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForSWATch:	case ActPasThrForSWATch:
       case ActDelPstForSWATch:
       case ActEnbPstForSWATch:	case ActDisPstForSWATch:
-         Forums->ForumSelected.Type = For_FORUM__SWAD__TCHS;
+         Forums->Forum.Type = For_FORUM__SWAD__TCHS;
          break;
       case ActSeeForInsUsr:	case ActSeePstForInsUsr:
       case ActRcvThrForInsUsr:	case ActRcvRepForInsUsr:
@@ -3698,7 +3704,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForInsUsr:	case ActPasThrForInsUsr:
       case ActDelPstForInsUsr:
       case ActEnbPstForInsUsr:	case ActDisPstForInsUsr:
-         Forums->ForumSelected.Type = For_FORUM_INSTIT_USRS;
+         Forums->Forum.Type = For_FORUM_INSTIT_USRS;
          break;
       case ActSeeForInsTch:	case ActSeePstForInsTch:
       case ActRcvThrForInsTch:	case ActRcvRepForInsTch:
@@ -3706,7 +3712,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForInsTch:	case ActPasThrForInsTch:
       case ActDelPstForInsTch:
       case ActEnbPstForInsTch:	case ActDisPstForInsTch:
-	 Forums->ForumSelected.Type = For_FORUM_INSTIT_TCHS;
+	 Forums->Forum.Type = For_FORUM_INSTIT_TCHS;
 	 break;
       case ActSeeForCtrUsr:	case ActSeePstForCtrUsr:
       case ActRcvThrForCtrUsr:	case ActRcvRepForCtrUsr:
@@ -3714,7 +3720,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCtrUsr:	case ActPasThrForCtrUsr:
       case ActDelPstForCtrUsr:
       case ActEnbPstForCtrUsr:	case ActDisPstForCtrUsr:
-         Forums->ForumSelected.Type = For_FORUM_CENTRE_USRS;
+         Forums->Forum.Type = For_FORUM_CENTRE_USRS;
          break;
       case ActSeeForCtrTch:	case ActSeePstForCtrTch:
       case ActRcvThrForCtrTch:	case ActRcvRepForCtrTch:
@@ -3722,7 +3728,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCtrTch:	case ActPasThrForCtrTch:
       case ActDelPstForCtrTch:
       case ActEnbPstForCtrTch:	case ActDisPstForCtrTch:
-	 Forums->ForumSelected.Type = For_FORUM_CENTRE_TCHS;
+	 Forums->Forum.Type = For_FORUM_CENTRE_TCHS;
 	 break;
       case ActSeeForDegUsr:	case ActSeePstForDegUsr:
       case ActRcvThrForDegUsr:	case ActRcvRepForDegUsr:
@@ -3730,7 +3736,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForDegUsr:	case ActPasThrForDegUsr:
       case ActDelPstForDegUsr:
       case ActEnbPstForDegUsr:	case ActDisPstForDegUsr:
-         Forums->ForumSelected.Type = For_FORUM_DEGREE_USRS;
+         Forums->Forum.Type = For_FORUM_DEGREE_USRS;
          break;
       case ActSeeForDegTch:	case ActSeePstForDegTch:
       case ActRcvThrForDegTch:	case ActRcvRepForDegTch:
@@ -3738,7 +3744,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForDegTch:	case ActPasThrForDegTch:
       case ActDelPstForDegTch:
       case ActEnbPstForDegTch:	case ActDisPstForDegTch:
-	 Forums->ForumSelected.Type = For_FORUM_DEGREE_TCHS;
+	 Forums->Forum.Type = For_FORUM_DEGREE_TCHS;
 	 break;
       case ActSeeForCrsUsr:	case ActSeePstForCrsUsr:
       case ActRcvThrForCrsUsr:	case ActRcvRepForCrsUsr:
@@ -3746,7 +3752,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCrsUsr:	case ActPasThrForCrsUsr:
       case ActDelPstForCrsUsr:
       case ActEnbPstForCrsUsr:	case ActDisPstForCrsUsr:
-         Forums->ForumSelected.Type = For_FORUM_COURSE_USRS;
+         Forums->Forum.Type = For_FORUM_COURSE_USRS;
          break;
       case ActSeeForCrsTch:	case ActSeePstForCrsTch:
       case ActRcvThrForCrsTch:	case ActRcvRepForCrsTch:
@@ -3754,10 +3760,10 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCrsTch:	case ActPasThrForCrsTch:
       case ActDelPstForCrsTch:
       case ActEnbPstForCrsTch:	case ActDisPstForCrsTch:
-         Forums->ForumSelected.Type = For_FORUM_COURSE_TCHS;
+         Forums->Forum.Type = For_FORUM_COURSE_TCHS;
          break;
       default:
-	 Forums->ForumSelected.Type = For_FORUM_UNKNOWN;
+	 Forums->Forum.Type = For_FORUM_UNKNOWN;
      }
   }
 
@@ -3771,7 +3777,7 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
    bool ICanSeeForum;
 
    /***** Restrict access *****/
-   switch (Forums->ForumSelected.Type)
+   switch (Forums->Forum.Type)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
@@ -3784,53 +3790,53 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
                                                             (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_USRS:
-	 MaxRole = Rol_GetMyRoleInCrs (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_TCHS:
-	 MaxRole = Rol_GetMyRoleInCrs (Forums->ForumSelected.Location);
+	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
@@ -3872,13 +3878,13 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    /***** Begin form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread
      {
-      Frm_StartFormAnchor (For_ActionsRecRepFor[Forums->ForumSelected.Type],
+      Frm_StartFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewPost (Forums);
      }
    else		// Form to write the first post of a new thread
      {
-      Frm_StartFormAnchor (For_ActionsRecThrFor[Forums->ForumSelected.Type],
+      Frm_StartFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewThread (Forums);
      }
@@ -3985,26 +3991,26 @@ void For_ReceiveForumPost (void)
    /***** Create a new message *****/
    if (IsReply)	// This post is a reply to another posts in the thread
      {
-      // For_Forum.ForumSelected.ThrCod has been received from form
+      // Forums.Thread.ThrCod has been received from form
 
       /***** Create last message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.ForumSelected.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      PstCod = For_InsertForumPst (Forums.Thread.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Gbl.Msg.Subject,Content,&Media);
 
       /***** Modify last message of the thread *****/
-      For_UpdateThrLastPst (Forums.ForumSelected.ThrCod,PstCod);
+      For_UpdateThrLastPst (Forums.Thread.ThrCod,PstCod);
      }
    else			// This post is the first of a new thread
      {
       /***** Create new thread with unknown first and last message codes *****/
-      Forums.ForumSelected.ThrCod = For_InsertForumThread (&Forums,-1L);
+      Forums.Thread.ThrCod = For_InsertForumThread (&Forums,-1L);
 
       /***** Create first (and last) message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.ForumSelected.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      PstCod = For_InsertForumPst (Forums.Thread.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Gbl.Msg.Subject,Content,&Media);
 
       /***** Update first and last posts of new thread *****/
-      For_UpdateThrFirstAndLastPst (Forums.ForumSelected.ThrCod,PstCod,PstCod);
+      For_UpdateThrFirstAndLastPst (Forums.Thread.ThrCod,PstCod,PstCod);
      }
 
    /***** Free media *****/
@@ -4014,7 +4020,7 @@ void For_ReceiveForumPost (void)
    Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Notify the new post to users in course *****/
-   switch (Forums.ForumSelected.Type)
+   switch (Forums.Forum.Type)
      {
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -4031,7 +4037,7 @@ void For_ReceiveForumPost (void)
          For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Insert forum post into public social activity *****/
-   switch (Forums.ForumSelected.Type)	// Only if forum is public for any logged user
+   switch (Forums.Forum.Type)	// Only if forum is public for any logged user
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
@@ -4091,12 +4097,12 @@ void For_RemovePost (void)
    Med_MediaConstructor (&Media);
 
    /***** Get forum post data *****/
-   For_GetPstData (Forums.ForumSelected.PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
+   For_GetPstData (Forums.Post.PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Media);
 
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
-   if (!For_GetIfForumPstExists (Forums.ForumSelected.PstCod))
+   if (!For_GetIfForumPstExists (Forums.Post.PstCod))
       Lay_ShowErrorAndExit ("The post to remove no longer exists.");
 
    /* Check if I am the author of the message */
@@ -4105,25 +4111,25 @@ void For_RemovePost (void)
       Lay_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
-   if (Forums.ForumSelected.PstCod != For_GetLastPstCod (Forums.ForumSelected.ThrCod))
+   if (Forums.Post.PstCod != For_GetLastPstCod (Forums.Thread.ThrCod))
       Lay_NoPermissionExit ();
 
    /***** Remove the post *****/
-   ThreadDeleted = For_RemoveForumPst (Forums.ForumSelected.PstCod,Media.MedCod);
+   ThreadDeleted = For_RemoveForumPst (Forums.Post.PstCod,Media.MedCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Media);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,Forums.ForumSelected.PstCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_REPLY,Forums.ForumSelected.PstCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,Forums.Post.PstCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_REPLY,Forums.Post.PstCod);
 
    /***** Mark possible social note as unavailable *****/
-   switch (Forums.ForumSelected.Type)	// Only if forum is public for any logged user
+   switch (Forums.Forum.Type)	// Only if forum is public for any logged user
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_FORUM_POST,Forums.ForumSelected.PstCod);
+         TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_FORUM_POST,Forums.Post.PstCod);
          break;
       default:
 	 break;
@@ -4163,7 +4169,7 @@ void For_RequestRemoveThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of the thread to delete *****/
-   For_GetThrSubject (Forums.ForumSelected.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.ThrCod,Subject);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -4171,14 +4177,14 @@ void For_RequestRemoveThread (void)
    /***** Show question and button to remove the thread *****/
    HTM_SECTION_Begin (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
-      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.ForumSelected.Type],
+      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
 			      For_PutAllHiddenParamsRemThread,&Forums,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                               Subject);
    else
-      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.ForumSelected.Type],
+      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
 			      For_PutAllHiddenParamsRemThread,&Forums,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
@@ -4196,8 +4202,8 @@ static void For_PutAllHiddenParamsRemThread (void *Forums)
 				   1,				// Page of posts   = first
 				   ((struct For_Forums *) Forums)->ForumSet,
 				   ((struct For_Forums *) Forums)->ThreadsOrder,
-				   ((struct For_Forums *) Forums)->ForumSelected.Location,
-				   ((struct For_Forums *) Forums)->ForumSelected.ThrCod,
+				   ((struct For_Forums *) Forums)->Forum.Location,
+				   ((struct For_Forums *) Forums)->Thread.ThrCod,
 				   -1L);
   }
 
@@ -4219,14 +4225,14 @@ void For_RemoveThread (void)
    /***** Get parameters related to forum *****/
    For_GetParamsForums (&Forums);
 
-   if (PermissionThreadDeletion[Forums.ForumSelected.Type] &
+   if (PermissionThreadDeletion[Forums.Forum.Type] &
        (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
      {
       /***** Get subject of thread to delete *****/
-      For_GetThrSubject (Forums.ForumSelected.ThrCod,Subject);
+      For_GetThrSubject (Forums.Thread.ThrCod,Subject);
 
       /***** Remove the thread and all its posts *****/
-      For_RemoveThreadAndItsPsts (Forums.ForumSelected.ThrCod);
+      For_RemoveThreadAndItsPsts (Forums.Thread.ThrCod);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4264,10 +4270,10 @@ void For_CutThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to cut *****/
-   For_GetThrSubject (Forums.ForumSelected.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.ThrCod,Subject);
 
    /***** Mark the thread as cut *****/
-   For_InsertThrInClipboard (Forums.ForumSelected.ThrCod);
+   For_InsertThrInClipboard (Forums.Thread.ThrCod);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -4305,10 +4311,10 @@ void For_PasteThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to paste *****/
-   For_GetThrSubject (Forums.ForumSelected.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.ThrCod,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
-   if (For_CheckIfThrBelongsToForum (Forums.ForumSelected.ThrCod,&Forums.ForumSelected))
+   if (For_CheckIfThrBelongsToForum (Forums.Thread.ThrCod,&Forums.Forum))
      {
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4412,7 +4418,7 @@ static bool For_CheckIfThrBelongsToForum (long ThrCod,struct For_Forum *Forum)
 static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
   {
    /***** Move a thread to current forum *****/
-   switch (Forums->ForumSelected.Type)
+   switch (Forums->Forum.Type)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
@@ -4422,8 +4428,8 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=-1"
 			 " WHERE ThrCod=%ld",
-                         (unsigned) Forums->ForumSelected.Type,
-                         Forums->ForumSelected.ThrCod);
+                         (unsigned) Forums->Forum.Type,
+                         Forums->Thread.ThrCod);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -4431,9 +4437,9 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=%ld"
 			 " WHERE ThrCod=%ld",
-		         (unsigned) Forums->ForumSelected.Type,
-		         Forums->ForumSelected.Location,
-		         Forums->ForumSelected.ThrCod);
+		         (unsigned) Forums->Forum.Type,
+		         Forums->Forum.Location,
+		         Forums->Thread.ThrCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
@@ -4441,9 +4447,9 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=%ld"
 			 " WHERE ThrCod=%ld",
-                         (unsigned) Forums->ForumSelected.Type,
-                         Forums->ForumSelected.Location,
-                         Forums->ForumSelected.ThrCod);
+                         (unsigned) Forums->Forum.Type,
+                         Forums->Forum.Location,
+                         Forums->Thread.ThrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
@@ -4451,9 +4457,9 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=%ld"
 			 " WHERE ThrCod=%ld",
-		         (unsigned) Forums->ForumSelected.Type,
-		         Forums->ForumSelected.Location,
-		         Forums->ForumSelected.ThrCod);
+		         (unsigned) Forums->Forum.Type,
+		         Forums->Forum.Location,
+		         Forums->Thread.ThrCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -4461,9 +4467,9 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=%ld"
 			 " WHERE ThrCod=%ld",
-		         (unsigned) Forums->ForumSelected.Type,
-		         Forums->ForumSelected.Location,
-		         Forums->ForumSelected.ThrCod);
+		         (unsigned) Forums->Forum.Type,
+		         Forums->Forum.Location,
+		         Forums->Thread.ThrCod);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong forum.");

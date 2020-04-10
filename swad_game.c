@@ -244,10 +244,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_GAMES,
-				  &Pagination,
-				  (unsigned) Games->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
+				  Games,-1L);
 
    if (Games->Num)
      {
@@ -305,10 +303,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
    /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_GAMES,
-				  &Pagination,
-				  (unsigned) Games->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
+				  Games,-1L);
 
    /***** Button to create a new game *****/
    if (Gam_CheckIfICanEditGames ())

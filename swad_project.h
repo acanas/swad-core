@@ -172,6 +172,9 @@ struct Prj_Project
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Prj_SetPrjCod (long PrjCod);
+long Prj_GetPrjCod (void);
+
 void Prj_ListUsrsToSelect (void);
 void Prj_SeeProjects (void);
 void Prj_ShowTableSelectedPrjs (void);
@@ -204,8 +207,6 @@ void Prj_RemStd (void);
 void Prj_RemTut (void);
 void Prj_RemEvl (void);
 
-void Prj_PutHiddenParamPrjOrder (void);
-
 bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject);
 
 void Prj_RequestCreatePrj (void);
@@ -216,7 +217,7 @@ void Prj_FreeMemProject (struct Prj_Project *Prj);
 
 void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
 long Prj_GetCourseOfProject (long PrjCod);
-void Prj_FreeListProjects (void);
+void Prj_FreeListProjects (struct Prj_Projects *Projects);
 
 void Prj_PutParamPrjCod (long PrjCod);
 long Prj_GetParamPrjCod (void);

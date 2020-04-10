@@ -470,10 +470,8 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    Gbl.Agenda.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
-				  &Pagination,
-				  (unsigned) Gbl.Agenda.SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],&Pagination,
+				  &Gbl.Agenda,-1L);
 
    if (Gbl.Agenda.Num)
      {
@@ -496,10 +494,8 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],
-				  &Pagination,
-				  (unsigned) Gbl.Agenda.SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],&Pagination,
+				  &Gbl.Agenda,-1L);
 
    /***** Button to create a new event *****/
    if (AgendaType == Agd_MY_AGENDA)

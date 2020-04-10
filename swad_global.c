@@ -296,22 +296,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Search.Str[0] = '\0';
    Gbl.Search.LogSearch = false;
 
-   /* Projects */
-   Gbl.Prjs.Config.Editable = Prj_EDITABLE_DEFAULT;
-   Gbl.Prjs.Filter.Who    = Prj_FILTER_WHO_DEFAULT;
-   Gbl.Prjs.Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
-	                    Prj_FILTER_NONASSIG_DEFAULT;
-   Gbl.Prjs.Filter.Hidden = Prj_FILTER_HIDDEN_DEFAULT |
-	                    Prj_FILTER_VISIBL_DEFAULT;
-   Gbl.Prjs.Filter.Faulti = Prj_FILTER_FAULTY_DEFAULT |
-	                    Prj_FILTER_FAULTLESS_DEFAULT;
-   Gbl.Prjs.Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
-   Gbl.Prjs.LstIsRead = false;	// List is not read
-   Gbl.Prjs.Num = 0;
-   Gbl.Prjs.LstPrjCods = NULL;
-   Gbl.Prjs.SelectedOrder = Prj_ORDER_DEFAULT;
-   Gbl.Prjs.PrjCod = -1L;
-
    Gbl.Mails.Num = 0;
    Gbl.Mails.Lst = NULL;
    Gbl.Mails.SelectedOrder = Mai_ORDER_DEFAULT;

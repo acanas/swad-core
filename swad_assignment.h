@@ -46,6 +46,17 @@ typedef enum
    Asg_SEND_WORK        = 1,
   } Asg_SendWork_t;
 
+struct Asg_Assignments
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Number of assignments
+   long *LstAsgCods;		// List of assigment codes
+   Dat_StartEndTime_t SelectedOrder;
+   long AsgCodToEdit;		// Used as parameter in contextual links
+   unsigned CurrentPage;
+  };
+
 struct Asg_Assignment
   {
    long AsgCod;

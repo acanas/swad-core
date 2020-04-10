@@ -77,12 +77,10 @@ struct Pagination	// Used for threads and messages pagination
 void Pag_CalculatePagination (struct Pagination *Pagination);
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
                                     struct Pagination *Pagination,
-                                    unsigned SelectedOrder,
-                                    const struct For_Forums *Forums,long ThrCod);
+                                    const void *Context,long Cod);
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pagination *Pagination,
-                            unsigned SelectedOrder,
-                            const struct For_Forums *Forums,long ThrCod,
+                            const void *Context,long Cod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent);

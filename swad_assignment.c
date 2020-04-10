@@ -62,17 +62,6 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-struct Asg_Assignments
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Number of assignments
-   long *LstAsgCods;		// List of assigment codes
-   Dat_StartEndTime_t SelectedOrder;
-   long AsgCodToEdit;		// Used as parameter in contextual links
-   unsigned CurrentPage;
-  };
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -184,10 +173,8 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
      }
 
    /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-				  &Pagination,
-				  (unsigned) Assignments->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
+				  Assignments,-1L);
 
    if (Assignments->Num)
      {
@@ -209,10 +196,8 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
    /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,
-				  &Pagination,
-				  (unsigned) Assignments->SelectedOrder,
-				  NULL,0);
+   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
+				  Assignments,-1L);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())

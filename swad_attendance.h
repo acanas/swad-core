@@ -44,6 +44,15 @@ typedef enum
    Att_END_TIME   = 1,
   } Att_StartOrEndTime_t;
 
+#define Att_NUM_ORDERS_NEWEST_OLDEST 2
+typedef enum
+  {
+   Att_NEWEST_FIRST,
+   Att_OLDEST_FIRST,
+  } Att_OrderNewestOldest_t;
+
+#define Att_ORDER_DEFAULT Dat_START_TIME
+
 struct Att_Event
   {
    /* Fields stored in database */
@@ -62,14 +71,17 @@ struct Att_Event
    bool Selected;		// I have selected this attendance event
   };
 
-#define Att_NUM_ORDERS_NEWEST_OLDEST 2
-typedef enum
+struct Att_Events
   {
-   Att_NEWEST_FIRST,
-   Att_OLDEST_FIRST,
-  } Att_OrderNewestOldest_t;
-
-#define Att_ORDER_DEFAULT Dat_START_TIME
+   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+   unsigned Num;	// Number of attendance events
+   struct Att_Event *Lst;	// List of attendance events
+   Dat_StartEndTime_t SelectedOrder;
+   long AttCod;
+   bool ShowDetails;
+   char *StrAttCodsSelected;
+   unsigned CurrentPage;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

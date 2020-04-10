@@ -2087,7 +2087,7 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get other parameters *****/
    if (Brw_GetIfProjectFileBrowser ())
       /* Get project code */
-      Gbl.Prjs.PrjCod = Prj_GetParamPrjCod ();
+      Prj_SetPrjCod (Prj_GetParamPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */
@@ -2334,7 +2334,7 @@ static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolL
       Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
-      Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
+      Prj_PutParamPrjCod (Prj_GetPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Users selected *****/
@@ -2456,6 +2456,7 @@ void Brw_InitializeFileBrowser (void)
 
 static void Brw_SetPathFileBrowser (void)
   {
+   long PrjCod;
    char Path[PATH_MAX * 2 + 128];
 
    /***** Reset paths. An empty path means that
@@ -2621,6 +2622,8 @@ static void Brw_SetPathFileBrowser (void)
          break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
+	 PrjCod = Prj_GetPrjCod ();
+
 	 /* Create a directory for projects inside the current course */
          snprintf (Path,sizeof (Path),
                    "%s/%s",
@@ -2632,15 +2635,15 @@ static void Brw_SetPathFileBrowser (void)
 	 snprintf (Path,sizeof (Path),
 	           "%s/%s/%02u",
 		   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) (Gbl.Prjs.PrjCod % 100));
+                   (unsigned) (PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
          snprintf (Path,sizeof (Path),
                    "%s/%s/%02u/%ld",
                    Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) (Gbl.Prjs.PrjCod % 100),
-                   Gbl.Prjs.PrjCod);
+                   (unsigned) (PrjCod % 100),
+                   PrjCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
         	   Path,
                    PATH_MAX);
@@ -3150,9 +3153,8 @@ static void Brw_ShowFileBrowserProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get project data *****/
-   Prj.PrjCod = Prj_GetParamPrjCod ();
+   Prj.PrjCod = Prj_GetPrjCod ();
    Prj_GetDataOfProjectByCod (&Prj);
-   Gbl.Prjs.PrjCod = Prj.PrjCod;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Prj.Title,
@@ -3163,7 +3165,7 @@ static void Brw_ShowFileBrowserProject (void)
    Prj_ShowOneUniqueProject (&Prj);
 
    /***** Show project file browsers *****/
-   MyRolesInProject = Prj_GetMyRolesInProject (Gbl.Prjs.PrjCod);
+   MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
    if (Prj_CheckIfICanViewProjectFiles (MyRolesInProject))
      {
       Brw_WriteTopBeforeShowingFileBrowser ();
@@ -4983,7 +4985,7 @@ static void Brw_PutParamsFullTree (void)
    if (Brw_GetIfGroupFileBrowser ())
       Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
-      Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
+      Prj_PutParamPrjCod (Prj_GetPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
@@ -5186,7 +5188,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
          break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
-	 Cod = Gbl.Prjs.PrjCod;
+	 Cod = Prj_GetPrjCod ();
          break;
       case Brw_ADMI_BRF_USR:
 	 Cod = -1L;
@@ -7196,7 +7198,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
             break;
 	 case Brw_ADMI_DOC_PRJ:
 	 case Brw_ADMI_ASS_PRJ:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Prjs.PrjCod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Prj_GetPrjCod ())
                return true;		// I am in the project of the clipboard
 	    break;
 	 case Brw_ADMI_BRF_USR:
@@ -7282,7 +7284,7 @@ static long Brw_GetCodForClipboard (void)
 	 return Gbl.Crs.Grps.GrpCod;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
-	 return Gbl.Prjs.PrjCod;
+	 return Prj_GetPrjCod ();
       default:
          return -1L;
      }
@@ -7767,7 +7769,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 "DELETE FROM clipboard"
 			 " WHERE FileBrowser=%u AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Prjs.PrjCod);
+                         Prj_GetPrjCod ());
 	 break;
       case Brw_ADMI_BRF_USR:
          DB_QueryDELETE ("can not remove source of copy",
@@ -11012,7 +11014,7 @@ long Brw_GetCodForFiles (void)
 	 return Gbl.Crs.Grps.GrpCod;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
-	 return Gbl.Prjs.PrjCod;
+	 return Prj_GetPrjCod ();
       default:
          return -1L;
      }
@@ -11548,7 +11550,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 MyRolesInProject = Prj_GetMyRolesInProject (Gbl.Prjs.PrjCod);
+	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if (MyRolesInProject)	// I am a member
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
 	 return false;
@@ -11577,7 +11579,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 MyRolesInProject = Prj_GetMyRolesInProject (Gbl.Prjs.PrjCod);
+	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if ((MyRolesInProject & (1 << Prj_ROLE_TUT |	// Tutor...
 	                          1 << Prj_ROLE_EVL)))	// ...or evaluator
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?

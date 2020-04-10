@@ -69,23 +69,11 @@ struct For_Forum
   {
    For_ForumType_t Type;	// Type of forum
    long Location;		// Code of institution, centre, degree or course
-   long ThrCod;			// Optional thread code
-   long PstCod;			// Optional post code
   };
 
-struct For_Forums
+struct For_Thread
   {
-   For_ForumSet_t ForumSet;
-   Dat_StartEndTime_t ThreadsOrder;
-   unsigned CurrentPageThrs;
-   unsigned CurrentPagePsts;
-   struct For_Forum ForumSelected;	// Forum type, location, thread and post
-   long ThreadToMove;
-  };
-
-struct ForumThread
-  {
-   long ThrCod;
+   long ThrCod;			// Thread code
    long PstCod[2];
    long UsrCod[2];
    time_t WriteTime[2];
@@ -96,6 +84,23 @@ struct ForumThread
    unsigned NumMyPosts;		// Number of posts written by me in thread
    unsigned NumWriters;
    unsigned NumReaders;
+  };
+
+struct For_Post
+  {
+   long PstCod;			// Post code
+  };
+
+struct For_Forums
+  {
+   For_ForumSet_t ForumSet;
+   Dat_StartEndTime_t ThreadsOrder;
+   unsigned CurrentPageThrs;
+   unsigned CurrentPagePsts;
+   struct For_Forum Forum;	// Forum selected
+   struct For_Thread Thread;	// Thread selected
+   struct For_Post Post;	// Post selected
+   long ThreadToMove;
   };
 
 #define For_DEFAULT_ORDER Dat_END_TIME

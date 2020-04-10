@@ -5414,9 +5414,9 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Initialize path to private directory */
    Gbl.Hierarchy.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
-	                                          -1L;
+	                                         -1L;
    Gbl.Crs.Grps.GrpCod = (groupCode > 0) ? (long) groupCode :
-	                                          -1L;
+	                                   -1L;
 
    snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),
 	     "%s/%ld",
