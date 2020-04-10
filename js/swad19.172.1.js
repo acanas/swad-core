@@ -620,7 +620,8 @@ function readMatchTchData () {
 					evalScriptsInElem (div);
 
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);	// old versions
+					MathJax.typeset();
 				}
 			}
 			
@@ -729,7 +730,8 @@ function readNewTimelineData () {
 					evalScriptsInElem (justNowTimeline);
 
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub,justNowTimeline]);
+					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,justNowTimeline]);	// old versions
+					MathJax.typeset();
 
 					// Move just received timeline to top of new timeline
 					var newTimeline = document.getElementById('new_timeline_list');		// Access to UL with the new timeline
@@ -821,7 +823,8 @@ function readOldTimelineData () {
 					evalScriptsInElem (oldTimeline);
 
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub,oldTimeline]);
+					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,oldTimeline]);	// old versions
+					MathJax.typeset();
 
 					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
 					var timeline = document.getElementById("timeline_list");
@@ -877,7 +880,8 @@ function updateDivHiddenComments (form,Params) {
 							evalScriptsInElem (div);
 	
 							// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-							MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);
+							// MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);	// old versions
+							MathJax.typeset();
 						}
 					}
 			}
