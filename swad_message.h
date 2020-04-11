@@ -58,7 +58,6 @@ struct Msg_Messages
   {
    Msg_TypeOfMessages_t TypeOfMessages;
    unsigned NumMsgs;
-   int MsgId;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    unsigned NumCourses;
    struct
@@ -83,23 +82,18 @@ struct Msg_Messages
    unsigned CurrentPage;
    long MsgCod;	// Used as parameter with message to be removed
   };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
 void Msg_FormMsgUsrs (void);
-void Msg_PutHiddenParamsSubjectAndContent (void);
-void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
-void Msg_PutHiddenParamOtherRecipients (void);
 void Msg_RecMsgFromUsr (void);
 
 void Msg_ReqDelAllRecMsgs (void);
 void Msg_ReqDelAllSntMsgs (void);
 void Msg_DelAllRecMsgs (void);
 void Msg_DelAllSntMsgs (void);
-void Msg_GetParamMsgsCrsCod (void);
-void Msg_GetParamFilterFromTo (void);
-void Msg_GetParamFilterContent (void);
 void Msg_DelSntMsg (void);
 void Msg_DelRecMsg (void);
 void Msg_ExpSntMsg (void);
@@ -120,17 +114,11 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void *Messages);
-void Msg_GetDistinctCoursesInMyMessages (void);
-void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
-void Msg_ShowFormToFilterMsgs (void);
-void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,bool GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor);
-bool Msg_WriteCrsOrgMsg (long CrsCod);
-void Msg_WriteListUsrsDstMsg (long MsgCod);
 void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground);
 void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks,bool ChangeBRToRet);
 

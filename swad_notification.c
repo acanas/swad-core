@@ -1588,6 +1588,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
+   char FileNameMail[PATH_MAX + 1];
+   FILE *FileMail;
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +
 		Cns_MAX_BYTES_EMAIL_ADDRESS +
@@ -1627,17 +1629,17 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    ToUsrLanguage = Gbl.Prefs.Language;
 
 	 /***** Create temporary file for mail content *****/
-	 Mai_CreateFileNameMail ();
+	 Mai_CreateFileNameMail (FileNameMail,&FileMail);
 
 	 /***** Welcome note *****/
-	 Mai_WriteWelcomeNoteEMail (ToUsrDat);
+	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat);
 	 if (NumRows == 1)
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
+	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
 	 else
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrLanguage],
+	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrLanguage],
 		     (unsigned) NumRows,Cfg_PLATFORM_SHORT_NAME);
-	 fprintf (Gbl.Msg.FileMail,": \n");
+	 fprintf (FileMail,": \n");
 
 	 /***** Initialize structure with origin user's data *****/
 	 Usr_UsrDataConstructor (&FromUsrDat);
@@ -1682,9 +1684,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
 
 	    /* Information about the type of this event */
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrLanguage],
+	    fprintf (FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
-	    fprintf (Gbl.Msg.FileMail,"\n");
+	    fprintf (FileMail,"\n");
 
 	    /* Course/forum: */
 	    switch (NotifyEvent)
@@ -1710,7 +1712,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_MESSAGE:
 	       case Ntf_EVENT_SURVEY:
 		  if (Crs.CrsCod > 0)
-		     fprintf (Gbl.Msg.FileMail,"%s: %s\n",
+		     fprintf (FileMail,"%s: %s\n",
 			      Txt_Course_NO_HTML[ToUsrLanguage],
 			      Crs.FullName);
 		  break;
@@ -1718,13 +1720,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_FORUM_REPLY:
 		  For_SetForumName (&ForumSelected,
 				    ForumName,ToUsrLanguage,false);	// Set forum name in recipient's language
-		  fprintf (Gbl.Msg.FileMail,"%s: %s\n",
+		  fprintf (FileMail,"%s: %s\n",
 			   Txt_Forum_NO_HTML[ToUsrLanguage],
 			   ForumName);
 		  break;
 	      }
 	    /* From: */
-	    fprintf (Gbl.Msg.FileMail,"%s: %s\n",
+	    fprintf (FileMail,"%s: %s\n",
 		     Txt_MSG_From_NO_HTML[ToUsrLanguage],
 		     FromUsrDat.FullName);
 	   }
@@ -1733,20 +1735,20 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	 Usr_UsrDataDestructor (&FromUsrDat);
 
 	 /* Go to: */
-	 fprintf (Gbl.Msg.FileMail,"%s: %s/ > %s > %s\n",
+	 fprintf (FileMail,"%s: %s/ > %s > %s\n",
 		  Txt_Go_to_NO_HTML[ToUsrLanguage],
 		  Cfg_URL_SWAD_CGI,
 		  Txt_TAB_Messages_NO_HTML[ToUsrLanguage],
 		  Txt_Notifications_NO_HTML[ToUsrLanguage]);
 
 	 /* Disclaimer */
-	 fprintf (Gbl.Msg.FileMail,"\n%s\n",
+	 fprintf (FileMail,"\n%s\n",
 		  Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[ToUsrLanguage]);
 
 	 /* Footer note */
-	 Mai_WriteFootNoteEMail (ToUsrLanguage);
+	 Mai_WriteFootNoteEMail (FileMail,ToUsrLanguage);
 
-	 fclose (Gbl.Msg.FileMail);
+	 fclose (FileMail);
 
 	 /***** Call the command to send an email *****/
 	 snprintf (Command,sizeof (Command),
@@ -1759,13 +1761,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		   ToUsrDat->Email,
 		   Cfg_PLATFORM_SHORT_NAME,
 		   Txt_Notifications_NO_HTML[ToUsrLanguage],
-		   Gbl.Msg.FileNameMail);
+		   FileNameMail);
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)
 	    Lay_ShowErrorAndExit ("Error when running script to send email.");
 
 	 /***** Remove temporary file *****/
-	 unlink (Gbl.Msg.FileNameMail);
+	 unlink (FileNameMail);
 
 	 /***** Update number of notifications, number of mails and statistics *****/
 	 ReturnCode = WEXITSTATUS(ReturnCode);

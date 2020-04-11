@@ -414,6 +414,8 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
    extern const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   char FileNameMail[PATH_MAX + 1];
+   FILE *FileMail;
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +
 		Cns_MAX_BYTES_EMAIL_ADDRESS +
@@ -421,25 +423,25 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
-   Mai_CreateFileNameMail ();
+   Mai_CreateFileNameMail (FileNameMail,&FileMail);
 
    /***** Create a new random password *****/
    Pwd_CreateANewPassword (NewRandomPlainPassword);
 
    /***** Write mail content into file and close file *****/
    /* Welcome note */
-   Mai_WriteWelcomeNoteEMail (&Gbl.Usrs.Me.UsrDat);
+   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat);
 
    /* Message body */
-   fprintf (Gbl.Msg.FileMail,Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML,
+   fprintf (FileMail,Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML,
 	    Cfg_PLATFORM_SHORT_NAME,NewRandomPlainPassword,Cfg_URL_SWAD_CGI,
 	    (unsigned) (Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS / (24L * 60L * 60L)),
 	    Gbl.Usrs.Me.UsrDat.Email);
 
    /* Footer note */
-   Mai_WriteFootNoteEMail (Gbl.Prefs.Language);
+   Mai_WriteFootNoteEMail (FileMail,Gbl.Prefs.Language);
 
-   fclose (Gbl.Msg.FileMail);
+   fclose (FileMail);
 
    /***** Call the script to send an email *****/
    snprintf (Command,sizeof (Command),
@@ -452,13 +454,13 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
 	     Gbl.Usrs.Me.UsrDat.Email,
 	     Cfg_PLATFORM_SHORT_NAME,
 	     Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	     Gbl.Msg.FileNameMail);
+	     FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
-   unlink (Gbl.Msg.FileNameMail);
+   unlink (FileNameMail);
 
    /***** Write message depending on return code *****/
    return WEXITSTATUS (ReturnCode);

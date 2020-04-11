@@ -91,9 +91,9 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
 bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 
-void Mai_CreateFileNameMail (void);
-void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat);
-void Mai_WriteFootNoteEMail (Lan_Language_t Language);
+void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail);
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct UsrData *UsrDat);
+void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language);
 
 bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat);
 

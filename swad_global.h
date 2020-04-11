@@ -506,7 +506,6 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct Msg_Messages Msg;
    struct
      {
       struct DateTime DateIni;	// TODO: Remove in future versions

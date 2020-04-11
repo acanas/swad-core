@@ -211,10 +211,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.ExamAnns.HighlightExaCod = -1L;
    Gbl.ExamAnns.HighlightDate[0] = '\0';	// No exam announcements highlighted
 
-   Gbl.Msg.Subject[0] = '\0';
-   Gbl.Msg.ShowOnlyUnreadMsgs = false;
-   Gbl.Msg.ExpandedMsgCod = -1L;
-
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 

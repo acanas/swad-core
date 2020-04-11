@@ -1643,6 +1643,8 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
+   char FileNameMail[PATH_MAX + 1];
+   FILE *FileMail;
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +
 		Cns_MAX_BYTES_EMAIL_ADDRESS +
@@ -1650,26 +1652,26 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
-   Mai_CreateFileNameMail ();
+   Mai_CreateFileNameMail (FileNameMail,&FileMail);
 
    /***** Write mail content into file and close file *****/
    /* Welcome note */
-   Mai_WriteWelcomeNoteEMail (&Gbl.Usrs.Me.UsrDat);
+   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat);
 
    /* Store encrypted key in database */
    Mai_InsertMailKey (Gbl.Usrs.Me.UsrDat.Email,Gbl.UniqueNameEncrypted);
 
    /* Message body */
-   fprintf (Gbl.Msg.FileMail,
+   fprintf (FileMail,
 	    Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML,
 	    Cfg_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
             Cfg_URL_SWAD_CGI,Act_GetActCod (ActCnfMai),Gbl.UniqueNameEncrypted,
             Cfg_URL_SWAD_CGI);
 
    /* Footer note */
-   Mai_WriteFootNoteEMail (Gbl.Prefs.Language);
+   Mai_WriteFootNoteEMail (FileMail,Gbl.Prefs.Language);
 
-   fclose (Gbl.Msg.FileMail);
+   fclose (FileMail);
 
    /***** Call the script to send an email *****/
    snprintf (Command,sizeof (Command),
@@ -1681,13 +1683,13 @@ bool Mai_SendMailMsgToConfirmEmail (void)
              Gbl.Config.SMTPPassword,
              Gbl.Usrs.Me.UsrDat.Email,
              Cfg_PLATFORM_SHORT_NAME,Txt_Confirmation_of_your_email_NO_HTML,
-             Gbl.Msg.FileNameMail);
+             FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
-   unlink (Gbl.Msg.FileNameMail);
+   unlink (FileNameMail);
 
    /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
@@ -1836,12 +1838,12 @@ void Mai_ConfirmEmail (void)
 /****************** Create temporary file for mail content *******************/
 /*****************************************************************************/
 
-void Mai_CreateFileNameMail (void)
+void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
   {
-   snprintf (Gbl.Msg.FileNameMail,sizeof (Gbl.Msg.FileNameMail),
+   snprintf (FileNameMail,PATH_MAX + 1,
 	     "%s/%s_mail.txt",
              Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
-   if ((Gbl.Msg.FileMail = fopen (Gbl.Msg.FileNameMail,"wb")) == NULL)
+   if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open file to send email.");
   }
 
@@ -1849,12 +1851,12 @@ void Mai_CreateFileNameMail (void)
 /************ Write a welcome note heading the automatic email ***************/
 /*****************************************************************************/
 
-void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct UsrData *UsrDat)
   {
    extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
 
-   fprintf (Gbl.Msg.FileMail,"%s %s:\n",
+   fprintf (FileMail,"%s %s:\n",
             Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
             UsrDat->FirstName[0] ? UsrDat->FirstName :
                                    Txt_user_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language]);
@@ -1864,13 +1866,13 @@ void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
 /****************** Write a foot note in the automatic email *****************/
 /*****************************************************************************/
 
-void Mai_WriteFootNoteEMail (Lan_Language_t Language)
+void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
   {
    extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Lan_NUM_LANGUAGES];
 
-   fprintf (Gbl.Msg.FileMail,"%s\n"
-                             "%s\n"
-                             "%s\n",
+   fprintf (FileMail,"%s\n"
+                     "%s\n"
+                     "%s\n",
             Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[Language],
             Cfg_PLATFORM_SHORT_NAME,
             Cfg_URL_SWAD_CGI);

@@ -59,7 +59,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,
 				    const char *Text);
 void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
-					    void (*FuncParams) (void),
+					    void (*FuncParams) (const void *Args),const void *Args,
 					    const char *Icon,
 					    const char *Text,
 					    const char *OnSubmit);

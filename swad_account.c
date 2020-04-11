@@ -1082,7 +1082,6 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);
 
    /***** Delete user's messages sent and received *****/
-   Gbl.Msg.FilterContent[0] = '\0';
    Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Messages_of_THE_USER_X_have_been_deleted,

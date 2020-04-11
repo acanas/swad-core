@@ -3956,6 +3956,7 @@ void For_ReceiveForumPost (void)
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
    struct TL_Publication SocPub;
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
 
@@ -3975,7 +3976,7 @@ void For_ReceiveForumPost (void)
       IsReply = true;
 
    /***** Get message subject *****/
-   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParToHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
 
    /***** Get message body *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -3998,7 +3999,7 @@ void For_ReceiveForumPost (void)
 
       /***** Create last message of the thread *****/
       PstCod = For_InsertForumPst (Forums.Thread.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Gbl.Msg.Subject,Content,&Media);
+                                   Subject,Content,&Media);
 
       /***** Modify last message of the thread *****/
       For_UpdateThrLastPst (Forums.Thread.ThrCod,PstCod);
@@ -4010,7 +4011,7 @@ void For_ReceiveForumPost (void)
 
       /***** Create first (and last) message of the thread *****/
       PstCod = For_InsertForumPst (Forums.Thread.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Gbl.Msg.Subject,Content,&Media);
+                                   Subject,Content,&Media);
 
       /***** Update first and last posts of new thread *****/
       For_UpdateThrFirstAndLastPst (Forums.Thread.ThrCod,PstCod,PstCod);

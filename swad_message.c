@@ -86,36 +86,56 @@ static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+static void Msg_ResetMessages (struct Msg_Messages *Messages);
 
-static void Msg_ShowSentOrReceivedMessages (void);
+static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
+                                char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+
+static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
-static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
-						long FilterCrsCod,
+static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
+						long UsrCod,
 						const char *FilterFromToSubquery,
 						MYSQL_RES **mysql_res);
 
-static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs);
+static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
+                               char **NumMsgsStr,unsigned NumUnreadMsgs);
 
 static void Msg_PutIconsListMsgs (void *Messages);
 static void Msg_PutHiddenParamsOneMsg (void *Messages);
 
-static void Msg_ShowFormToShowOnlyUnreadMessages (void);
-static void Msg_GetParamOnlyUnreadMsgs (void);
-static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod);
+static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages);
+static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages);
+static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages);
+
+static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages);
+static bool Msg_GetParamOnlyUnreadMsgs (void);
+static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
+                                            long MsgNum,long MsgCod);
 static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded);
 static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
-static void Msg_PutLinkToShowMorePotentialRecipients (void);
-static void Msg_PutParamsShowMorePotentialRecipients (void);
+static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages);
+static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages);
 static void Msg_PutParamsWriteMsg (void *Messages);
+static void Msg_PutHiddenParamsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
+                                                     char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+
+static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
+static void Msg_PutHiddenParamOtherRecipients (void);
+
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
-static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
+static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages);
+static void Msg_GetParamFilterFromTo (struct Msg_Messages *Messages);
+static void Msg_GetParamFilterContent (struct Msg_Messages *Messages);
+
+static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
+                                          char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
 
 static void Msg_ExpandSentMsg (long MsgCod);
 static void Msg_ExpandReceivedMsg (long MsgCod);
@@ -125,8 +145,9 @@ static void Msg_ContractReceivedMsg (long MsgCod);
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
                               struct Media *Media);
 
-static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
-                                                 long FilterCrsCod,const char *FilterFromToSubquery);
+static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
+                                                 Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
+                                                 const char *FilterFromToSubquery);
 static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail);
 static void Msg_SetReceivedMsgAsReplied (long MsgCod);
 static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod);
@@ -134,25 +155,59 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod);
 static void Msg_MoveMsgContentToDeleted (long MsgCod);
 static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod);
 static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
-static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery);
+static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                      const char *FilterFromToSubquery);
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
+static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Media *Media);
 
-static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,bool Open,bool Expanded);
+static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
+					       long MsgCod,const char *Subject,
+                                               bool Open,bool Expanded);
+
+static bool Msg_WriteCrsOrgMsg (long CrsCod);
+
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                                   bool ThisCrs,bool Replied,
                                   const struct UsrData *UsrDat);
-static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted);
-static void Msg_WriteMsgTo (long MsgCod);
+static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
+                              struct UsrData *UsrDat,bool Deleted);
+static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod);
 
-static void Msg_PutFormToBanSender (struct UsrData *UsrDat);
-static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat);
+static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
+                                    struct UsrData *UsrDat);
+static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
+                                      struct UsrData *UsrDat);
 static void Msg_UnbanSender (void);
+
+/*****************************************************************************/
+/**************************** Reset messages context *************************/
+/*****************************************************************************/
+
+static void Msg_ResetMessages (struct Msg_Messages *Messages)
+  {
+   Messages->NumMsgs              = 0;
+   Messages->Subject[0]           = '\0';
+   Messages->NumCourses           = 0;
+   Messages->FilterCrsCod         = -1L;
+   Messages->FilterCrsShrtName[0] = '\0';
+   Messages->FilterFromTo[0]      = '\0';
+   Messages->FilterContent[0]     = '\0';
+   Messages->ShowOnlyUnreadMsgs   = false;
+   Messages->ExpandedMsgCod       = -1L;
+   Messages->Reply.IsReply        = false;
+   Messages->Reply.OriginalMsgCod = -1L;
+   Messages->ShowOnlyOneRecipient = false;
+   Messages->FileNameMail[0]      = '\0';
+   Messages->FileMail             = NULL;
+   Messages->CurrentPage          = 0;
+   Messages->MsgCod               = -1L;
+  }
 
 /*****************************************************************************/
 /***************** Put a form to write a new message to users ****************/
@@ -160,22 +215,27 @@ static void Msg_UnbanSender (void);
 
 void Msg_FormMsgUsrs (void)
   {
+   struct Msg_Messages Messages;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
 
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get possible hidden subject and content of the message *****/
-   Par_GetParToHTML ("HiddenSubject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParToHTML ("HiddenSubject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
    Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_TEXT,false);
 
    /***** Show a form to compose a message to users *****/
-   Msg_PutFormMsgUsrs (Content);
+   Msg_PutFormMsgUsrs (&Messages,Content);
   }
 
 /*****************************************************************************/
 /***************** Put a form to write a new message to users ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
+static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
+                                char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_MESSAGES_Write;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -192,9 +252,9 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
-   if ((Gbl.Msg.Reply.IsReply = Par_GetParToBool ("IsReply")))
+   if ((Messages->Reply.IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
-      if ((Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
+      if ((Messages->Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
          Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Get user's code of possible preselected recipient *****/
@@ -202,11 +262,11 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       /* Get who to show as potential recipients:
          - only the selected recipient
          - any user (default) */
-      Gbl.Msg.ShowOnlyOneRecipient = Par_GetParToBool ("ShowOnlyOneRecipient");
+      Messages->ShowOnlyOneRecipient = Par_GetParToBool ("ShowOnlyOneRecipient");
    else
-      Gbl.Msg.ShowOnlyOneRecipient = false;
+      Messages->ShowOnlyOneRecipient = false;
 
-   GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&	// Show list of potential recipients
+   GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&	// Show list of potential recipients
 	          (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    if (GetUsrsInCrs)
@@ -229,21 +289,21 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
-					      Txt_New_message,
+   Box_BoxBegin (NULL,Messages->Reply.IsReply ? Txt_Reply_message :
+					        Txt_New_message,
 		 NULL,NULL,
 		 Hlp_MESSAGES_Write,Box_NOT_CLOSABLE);
 
-   if (Gbl.Msg.ShowOnlyOneRecipient)
+   if (Messages->ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
-      Msg_PutLinkToShowMorePotentialRecipients ();
+      Msg_PutLinkToShowMorePotentialRecipients (Messages);
    else
      {
       /***** Get list of users belonging to the current course *****/
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,&Gbl.Msg,
+	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,Messages,
 	                                    Grp_MY_GROUPS);
 
 	 /***** Start section with user list *****/
@@ -252,14 +312,14 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,&Gbl.Msg);
+	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,Messages);
 
 	    /***** Put link to register students *****/
 	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** Check if it's a big list *****/
 	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-	                                          Msg_PutParamsWriteMsg,&Gbl.Msg,
+	                                          Msg_PutParamsWriteMsg,Messages,
 		                                  "CopyMessageToHiddenFields();");
 
 	    if (ShowUsrsInCrs)
@@ -277,15 +337,15 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 
    /***** Begin form to select recipients and write the message *****/
    Frm_StartForm (ActRcvMsgUsr);
-   if (Gbl.Msg.Reply.IsReply)
+   if (Messages->Reply.IsReply)
      {
       Par_PutHiddenParamChar ("IsReply",'Y');
-      Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
+      Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-      if (Gbl.Msg.ShowOnlyOneRecipient)
+      if (Messages->ShowOnlyOneRecipient)
 	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
      }
 
@@ -300,7 +360,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   if (Gbl.Msg.ShowOnlyOneRecipient)
+   if (Messages->ShowOnlyOneRecipient)
       /***** Show only one user as recipient *****/
       Msg_ShowOneUniqueRecipient ();
    else
@@ -321,7 +381,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    HTM_TR_End ();
 
    /***** Subject and content sections *****/
-   Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
+   Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -363,14 +423,14 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 /********** Put contextual link to show more potential recipients ************/
 /*****************************************************************************/
 
-static void Msg_PutLinkToShowMorePotentialRecipients (void)
+static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages)
   {
    extern const char *Txt_Show_more_recipients;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
    Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
-					  Msg_PutParamsShowMorePotentialRecipients,
+					  Msg_PutParamsShowMorePotentialRecipients,Messages,
 					  "users.svg",
 					  Txt_Show_more_recipients,
 					  "CopyMessageToHiddenFields();");	// Shor more potential recipients
@@ -381,12 +441,12 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
 /************ Put parameters to show more potential recipients ***************/
 /*****************************************************************************/
 
-static void Msg_PutParamsShowMorePotentialRecipients (void)
+static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages)
   {
-   if (Gbl.Msg.Reply.IsReply)
+   if (((struct Msg_Messages *) Messages)->Reply.IsReply)
      {
       Par_PutHiddenParamChar ("IsReply",'Y');
-      Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
+      Msg_PutHiddenParamMsgCod (((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
@@ -424,7 +484,7 @@ static void Msg_PutParamsWriteMsg (void *Messages)
 /********** Put hidden parameters with message subject and content ***********/
 /*****************************************************************************/
 
-void Msg_PutHiddenParamsSubjectAndContent (void)
+static void Msg_PutHiddenParamsSubjectAndContent (void)
   {
    /***** Hidden params to send subject and content.
           When the user edit the subject or the content,
@@ -523,7 +583,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 /****** Write form fields with subject and content of a message to users *****/
 /*****************************************************************************/
 
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
+                                                     char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
@@ -533,7 +594,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    MYSQL_ROW row;
    unsigned long NumRows;
    long MsgCod;
-   bool SubjectAndContentComeFromForm = (Gbl.Msg.Subject[0] || Content[0]);
+   bool SubjectAndContentComeFromForm = (Messages->Subject[0] || Content[0]);
 
    /***** Get possible code (of original message if it's a reply) *****/
    MsgCod = Msg_GetParamMsgCod ();
@@ -566,7 +627,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get subject */
-	 Str_Copy (Gbl.Msg.Subject,row[0],
+	 Str_Copy (Messages->Subject,row[0],
 	           Cns_MAX_BYTES_SUBJECT);
 
 	 /* Get content */
@@ -580,7 +641,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /* Write subject */
       if (!SubjectAndContentComeFromForm)
 	 HTM_Txt ("Re: ");
-      HTM_Txt (Gbl.Msg.Subject);
+      HTM_Txt (Messages->Subject);
 
       HTM_TEXTAREA_End ();
       HTM_TD_End ();
@@ -612,7 +673,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    else	// It's not a reply
      {
       /* End message subject */
-      HTM_Txt (Gbl.Msg.Subject);
+      HTM_Txt (Messages->Subject);
 
       HTM_TEXTAREA_End ();
       HTM_TD_End ();
@@ -647,7 +708,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 /********* Put hidden parameter for another recipient (one nickname) *********/
 /*****************************************************************************/
 
-void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
+static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
@@ -661,7 +722,7 @@ void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
 /********* Put hidden parameter for another recipient (one nickname) *********/
 /*****************************************************************************/
 
-void Msg_PutHiddenParamOtherRecipients (void)
+static void Msg_PutHiddenParamOtherRecipients (void)
   {
    if (Gbl.Usrs.ListOtherRecipients)
       if (Gbl.Usrs.ListOtherRecipients[0])
@@ -684,6 +745,7 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_The_message_has_been_sent_to_1_recipient;
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
    extern const char *Txt_There_have_been_X_errors_in_sending_the_message;
+   struct Msg_Messages Messages;
    bool IsReply;
    bool RecipientHasBannedMe;
    bool Replied = false;
@@ -701,9 +763,12 @@ void Msg_RecMsgFromUsr (void)
    struct Media Media;
    bool Error = false;
 
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get data from form *****/
    /* Get subject */
-   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParToHTML ("Subject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
 
    /* Get body */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -748,7 +813,7 @@ void Msg_RecMsgFromUsr (void)
       /* Show the form again, with the subject and the message filled */
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
                         Content,Cns_MAX_BYTES_LONG_TEXT,true);
-      Msg_PutFormMsgUsrs (Content);
+      Msg_PutFormMsgUsrs (&Messages,Content);
       return;
      }
 
@@ -791,7 +856,7 @@ void Msg_RecMsgFromUsr (void)
             if (!MsgAlreadyInserted)
               {
                // The message is inserted only once in the table of messages sent
-               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content,&Media);
+               NewMsgCod = Msg_InsertNewMsg (Messages.Subject,Content,&Media);
                MsgAlreadyInserted = true;
               }
 
@@ -884,49 +949,53 @@ void Msg_ReqDelAllRecMsgs (void)
    extern const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y;
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y;
    extern const char *Txt_Delete_messages_received;
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
 
    /***** Get parameters *****/
-   Msg_GetParamMsgsCrsCod ();
-   Msg_GetParamFilterFromTo ();
-   Msg_GetParamFilterContent ();
-   Msg_GetParamOnlyUnreadMsgs ();
+   Msg_GetParamMsgsCrsCod (&Messages);
+   Msg_GetParamFilterFromTo (&Messages);
+   Msg_GetParamFilterContent (&Messages);
+   Messages.ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
 
    /***** Show question and button to remove messages received *****/
    /* Start alert */
-   if (Gbl.Msg.FilterContent[0])
+   if (Messages.FilterContent[0])
      {
-      if (Gbl.Msg.ShowOnlyUnreadMsgs)
+      if (Messages.ShowOnlyUnreadMsgs)
          Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							    Txt_any_user,
-				  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							     Txt_any_user,
+				  Messages.FilterCrsShrtName,Messages.FilterContent);
       else
          Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							    Txt_any_user,
-				  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							     Txt_any_user,
+				  Messages.FilterCrsShrtName,Messages.FilterContent);
      }
    else
      {
-      if (Gbl.Msg.ShowOnlyUnreadMsgs)
+      if (Messages.ShowOnlyUnreadMsgs)
          Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
-				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							    Txt_any_user,
-				  Gbl.Msg.FilterCrsShrtName);
+				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							     Txt_any_user,
+				  Messages.FilterCrsShrtName);
       else
          Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
-				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							    Txt_any_user,
-				  Gbl.Msg.FilterCrsShrtName);
+				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							     Txt_any_user,
+				  Messages.FilterCrsShrtName);
      }
 
    /* Show received messages again */
-   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_RECEIVED;
-   Msg_ShowSentOrReceivedMessages ();
+   Messages.TypeOfMessages = Msg_MESSAGES_RECEIVED;
+   Msg_ShowSentOrReceivedMessages (&Messages);
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
-                            Msg_PutHiddenParamsMsgsFilters,&Gbl.Msg,
+                            Msg_PutHiddenParamsMsgsFilters,&Messages,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
@@ -940,32 +1009,36 @@ void Msg_ReqDelAllSntMsgs (void)
    extern const char *Txt_any_user;
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y;
    extern const char *Txt_Delete_messages_sent;
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
 
    /***** Get parameters *****/
-   Msg_GetParamMsgsCrsCod ();
-   Msg_GetParamFilterFromTo ();
-   Msg_GetParamFilterContent ();
+   Msg_GetParamMsgsCrsCod (&Messages);
+   Msg_GetParamFilterFromTo (&Messages);
+   Msg_GetParamFilterContent (&Messages);
 
    /***** Show question and button to remove messages received *****/
    /* Start alert */
-   if (Gbl.Msg.FilterContent[0])
+   if (Messages.FilterContent[0])
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-			       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							 Txt_any_user,
-			       Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							  Txt_any_user,
+			       Messages.FilterCrsShrtName,Messages.FilterContent);
    else
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
-			       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-							 Txt_any_user,
-			       Gbl.Msg.FilterCrsShrtName);
+			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							  Txt_any_user,
+			       Messages.FilterCrsShrtName);
 
    /* Show sent messages again */
-   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_SENT;
-   Msg_ShowSentOrReceivedMessages ();
+   Messages.TypeOfMessages = Msg_MESSAGES_SENT;
+   Msg_ShowSentOrReceivedMessages (&Messages);
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
-                            Msg_PutHiddenParamsMsgsFilters,&Gbl.Msg,
+                            Msg_PutHiddenParamsMsgsFilters,&Messages,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
 
@@ -975,18 +1048,25 @@ void Msg_ReqDelAllSntMsgs (void)
 
 void Msg_DelAllRecMsgs (void)
   {
+   struct Msg_Messages Messages;
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get parameters *****/
-   Msg_GetParamMsgsCrsCod ();
-   Msg_GetParamFilterFromTo ();
-   Msg_GetParamFilterContent ();
-   Msg_GetParamOnlyUnreadMsgs ();
-   Msg_MakeFilterFromToSubquery (FilterFromToSubquery);
+   Msg_GetParamMsgsCrsCod (&Messages);
+   Msg_GetParamFilterFromTo (&Messages);
+   Msg_GetParamFilterContent (&Messages);
+   Messages.ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
+   Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
-   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (Msg_MESSAGES_RECEIVED,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
+   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
+                                         Msg_MESSAGES_RECEIVED,
+                                         Gbl.Usrs.Me.UsrDat.UsrCod,
+                                         FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
    Msg_ShowRecMsgs ();
   }
@@ -997,17 +1077,24 @@ void Msg_DelAllRecMsgs (void)
 
 void Msg_DelAllSntMsgs (void)
   {
+   struct Msg_Messages Messages;
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get parameters *****/
-   Msg_GetParamMsgsCrsCod ();
-   Msg_GetParamFilterFromTo ();
-   Msg_GetParamFilterContent ();
-   Msg_MakeFilterFromToSubquery (FilterFromToSubquery);
+   Msg_GetParamMsgsCrsCod (&Messages);
+   Msg_GetParamFilterFromTo (&Messages);
+   Msg_GetParamFilterContent (&Messages);
+   Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
-   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (Msg_MESSAGES_SENT,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
+   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
+                                         Msg_MESSAGES_SENT,
+                                         Gbl.Usrs.Me.UsrDat.UsrCod,
+                                         FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
    Msg_ShowSntMsgs ();
   }
@@ -1032,22 +1119,22 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 /**************** Get parameter with course origin of messages ***************/
 /*****************************************************************************/
 
-void Msg_GetParamMsgsCrsCod (void)
+static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
   {
    extern const char *Txt_any_course;
    struct Course Crs;
 
-   if ((Gbl.Msg.FilterCrsCod = Par_GetParToLong ("FilterCrsCod")) > 0)	// If origin course specified
+   if ((Messages->FilterCrsCod = Par_GetParToLong ("FilterCrsCod")) > 0)	// If origin course specified
      {
       /* Get data of course */
-      Crs.CrsCod = Gbl.Msg.FilterCrsCod;
+      Crs.CrsCod = Messages->FilterCrsCod;
       Crs_GetDataOfCourseByCod (&Crs);
 
-      Str_Copy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName,
+      Str_Copy (Messages->FilterCrsShrtName,Crs.ShrtName,
                 Hie_MAX_BYTES_SHRT_NAME);
      }
    else
-      Str_Copy (Gbl.Msg.FilterCrsShrtName,Txt_any_course,
+      Str_Copy (Messages->FilterCrsShrtName,Txt_any_course,
                 Hie_MAX_BYTES_SHRT_NAME);
   }
 
@@ -1055,10 +1142,10 @@ void Msg_GetParamMsgsCrsCod (void)
 /******************* Get parameter with "from"/"to" filter ********************/
 /*****************************************************************************/
 
-void Msg_GetParamFilterFromTo (void)
+static void Msg_GetParamFilterFromTo (struct Msg_Messages *Messages)
   {
    /***** Get "from"/"to" filter *****/
-   Par_GetParToText ("FilterFromTo",Gbl.Msg.FilterFromTo,
+   Par_GetParToText ("FilterFromTo",Messages->FilterFromTo,
                      Usr_MAX_BYTES_FULL_NAME);
   }
 
@@ -1066,10 +1153,10 @@ void Msg_GetParamFilterFromTo (void)
 /********************* Get parameter with content filter *********************/
 /*****************************************************************************/
 
-void Msg_GetParamFilterContent (void)
+static void Msg_GetParamFilterContent (struct Msg_Messages *Messages)
   {
    /***** Get content filter *****/
-   Par_GetParToText ("FilterContent",Gbl.Msg.FilterContent,
+   Par_GetParToText ("FilterContent",Messages->FilterContent,
                      Msg_MAX_BYTES_FILTER_CONTENT);
   }
 
@@ -1077,15 +1164,16 @@ void Msg_GetParamFilterContent (void)
 /************************* Make "from"/"to" subquery *************************/
 /*****************************************************************************/
 
-static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1])
+static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
+                                          char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1])
   {
    const char *Ptr;
    char SearchWord[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
 
    /***** Split "from"/"to" string into words *****/
-   if (Gbl.Msg.FilterFromTo[0])
+   if (Messages->FilterFromTo[0])
      {
-      Ptr = Gbl.Msg.FilterFromTo;
+      Ptr = Messages->FilterFromTo;
       Str_Copy (FilterFromToSubquery,
                 " AND CONCAT(usr_data.FirstName,' ',usr_data.Surname1,' ',usr_data.Surname2) LIKE '",
                 Msg_MAX_BYTES_MESSAGES_QUERY);
@@ -1157,12 +1245,17 @@ void Msg_DelRecMsg (void)
 
 void Msg_ExpSntMsg (void)
   {
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get the code of the message to expand *****/
-   if ((Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
+   if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Expand the message *****/
-   Msg_ExpandSentMsg (Gbl.Msg.ExpandedMsgCod);
+   Msg_ExpandSentMsg (Messages.ExpandedMsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowSntMsgs ();
@@ -1174,17 +1267,22 @@ void Msg_ExpSntMsg (void)
 
 void Msg_ExpRecMsg (void)
   {
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Get the code of the message to expand *****/
-   if ((Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
+   if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Expand the message *****/
-   Msg_ExpandReceivedMsg (Gbl.Msg.ExpandedMsgCod);
+   Msg_ExpandReceivedMsg (Messages.ExpandedMsgCod);
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
-	               Gbl.Msg.ExpandedMsgCod,-1L,
-	               Gbl.Usrs.Me.UsrDat.UsrCod);
+	                Messages.ExpandedMsgCod,-1L,
+	                Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show again the messages *****/
    Msg_ShowRecMsgs ();
@@ -1347,8 +1445,9 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 /************** Delete some received or sent messages of a user **************/
 /*****************************************************************************/
 
-static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
-                                                 long FilterCrsCod,const char *FilterFromToSubquery)
+static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
+                                                 Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
+                                                 const char *FilterFromToSubquery)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1357,8 +1456,8 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMess
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
-   NumMsgs = Msg_GetSentOrReceivedMsgs (UsrCod,
-				        FilterCrsCod,
+   NumMsgs = Msg_GetSentOrReceivedMsgs (Messages,
+                                        UsrCod,
 					FilterFromToSubquery,
 				        &mysql_res);
 
@@ -1592,13 +1691,14 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 /******** Get number of received messages that haven't been read by me *******/
 /*****************************************************************************/
 
-static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
+static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                      const char *FilterFromToSubquery)
   {
    char *SubQuery;
    unsigned NumMsgs;
 
    /***** Get number of unread messages from database *****/
-   if (FilterCrsCod >= 0)	// If origin course selected
+   if (Messages->FilterCrsCod >= 0)	// If origin course selected
      {
       if (FilterFromToSubquery[0])
 	{
@@ -1608,7 +1708,7 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
 				 " AND msg_snt.CrsCod=%ld"
 				 " AND msg_snt.UsrCod=usr_data.UsrCod%s",
 			Gbl.Usrs.Me.UsrDat.UsrCod,
-			FilterCrsCod,
+			Messages->FilterCrsCod,
 			FilterFromToSubquery) < 0)
             Lay_NotEnoughMemoryExit ();
 	}
@@ -1619,7 +1719,7 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
 				 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
 				 " AND msg_snt.CrsCod=%ld",
 			Gbl.Usrs.Me.UsrDat.UsrCod,
-			FilterCrsCod) < 0)
+			Messages->FilterCrsCod) < 0)
             Lay_NotEnoughMemoryExit ();
         }
      }
@@ -1644,14 +1744,14 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
         }
      }
 
-   if (Gbl.Msg.FilterContent[0])
+   if (Messages->FilterContent[0])
       NumMsgs =
       (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
 				"SELECT COUNT(*) FROM msg_content"
 				" WHERE MsgCod IN (%s)"
 				" AND MATCH (Subject,Content) AGAINST ('%s')",
 				SubQuery,
-				Gbl.Msg.FilterContent);
+				Messages->FilterContent);
    else
       NumMsgs =
       (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
@@ -1669,9 +1769,14 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
 
 void Msg_ShowSntMsgs (void)
   {
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    /***** Show the sent messages *****/
-   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_SENT;
-   Msg_ShowSentOrReceivedMessages ();
+   Messages.TypeOfMessages = Msg_MESSAGES_SENT;
+   Msg_ShowSentOrReceivedMessages (&Messages);
   }
 
 /*****************************************************************************/
@@ -1680,6 +1785,11 @@ void Msg_ShowSntMsgs (void)
 
 void Msg_ShowRecMsgs (void)
   {
+   struct Msg_Messages Messages;
+
+   /***** Reset messages context *****/
+   Msg_ResetMessages (&Messages);
+
    if (Msg_GetNumUsrsBannedByMe ())
      {
       /***** Contextual menu *****/
@@ -1689,15 +1799,15 @@ void Msg_ShowRecMsgs (void)
      }
 
    /***** Show the received messages *****/
-   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_RECEIVED;
-   Msg_ShowSentOrReceivedMessages ();
+   Messages.TypeOfMessages = Msg_MESSAGES_RECEIVED;
+   Msg_ShowSentOrReceivedMessages (&Messages);
   }
 
 /*****************************************************************************/
 /************************ Show sent or received messages *********************/
 /*****************************************************************************/
 
-static void Msg_ShowSentOrReceivedMessages (void)
+static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
   {
    extern const char *Hlp_MESSAGES_Received;
    extern const char *Hlp_MESSAGES_Received_filter;
@@ -1738,21 +1848,22 @@ static void Msg_ShowSentOrReceivedMessages (void)
      };
 
    /***** Get the page number *****/
-   Gbl.Msg.CurrentPage = Pag_GetParamPagNum (WhatPaginate[Gbl.Msg.TypeOfMessages]);
+   Messages->CurrentPage = Pag_GetParamPagNum (WhatPaginate[Messages->TypeOfMessages]);
 
    /***** Get other parameters *****/
-   Msg_GetParamMsgsCrsCod ();
-   Msg_GetParamFilterFromTo ();
-   Msg_GetParamFilterContent ();
-   Msg_MakeFilterFromToSubquery (FilterFromToSubquery);
-   Msg_GetDistinctCoursesInMyMessages ();
+   Msg_GetParamMsgsCrsCod (Messages);
+   Msg_GetParamFilterFromTo (Messages);
+   Msg_GetParamFilterContent (Messages);
+   Msg_MakeFilterFromToSubquery (Messages,FilterFromToSubquery);
+   Msg_GetDistinctCoursesInMyMessages (Messages);
 
    /***** Get number of unread messages *****/
-   switch (Gbl.Msg.TypeOfMessages)
+   switch (Messages->TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
-         Msg_GetParamOnlyUnreadMsgs ();
-         NumUnreadMsgs = Msg_GetNumUnreadMsgs (Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
+         Messages->ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
+         NumUnreadMsgs = Msg_GetNumUnreadMsgs (Messages,
+                                               FilterFromToSubquery);
          break;
       case Msg_MESSAGES_SENT:
          NumUnreadMsgs = 0;
@@ -1760,34 +1871,34 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** Get messages from database *****/
-   NumRows = Msg_GetSentOrReceivedMsgs (Gbl.Usrs.Me.UsrDat.UsrCod,
-					Gbl.Msg.FilterCrsCod,
+   NumRows = Msg_GetSentOrReceivedMsgs (Messages,
+                                        Gbl.Usrs.Me.UsrDat.UsrCod,
 					FilterFromToSubquery,
 				        &mysql_res);
-   Gbl.Msg.NumMsgs = (unsigned) NumRows;
+   Messages->NumMsgs = (unsigned) NumRows;
 
    /***** Begin box with messages *****/
-   Msg_SetNumMsgsStr (&NumMsgsStr,NumUnreadMsgs);
+   Msg_SetNumMsgsStr (Messages,&NumMsgsStr,NumUnreadMsgs);
    Box_BoxBegin ("97%",NumMsgsStr,
-                 Msg_PutIconsListMsgs,&Gbl.Msg,
-                 Help[Gbl.Msg.TypeOfMessages],Box_NOT_CLOSABLE);
+                 Msg_PutIconsListMsgs,Messages,
+                 Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
    /***** Filter messages *****/
    /* Begin box with filter */
    Box_BoxBegin (NULL,Txt_Filter,
                  NULL,NULL,
-                 HelpFilter[Gbl.Msg.TypeOfMessages],Box_CLOSABLE);
+                 HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
 
    /* Form to see messages again */
-   Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
+   Frm_StartForm (ActionSee[Messages->TypeOfMessages]);
 
    HTM_DIV_Begin ("class=\"CM\"");
-   Msg_ShowFormSelectCourseSentOrRecMsgs ();
-   if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
-      Msg_ShowFormToShowOnlyUnreadMessages ();
+   Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
+   if (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED)
+      Msg_ShowFormToShowOnlyUnreadMessages (Messages);
    HTM_DIV_End ();
-   Msg_ShowFormToFilterMsgs ();
+   Msg_ShowFormToFilterMsgs (Messages);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -1804,7 +1915,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Box_BoxEnd ();
 
 
-   if (Gbl.Msg.NumMsgs)		// If there are messages...
+   if (Messages->NumMsgs)		// If there are messages...
      {
       if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
 						// from a notification of received message, so show the page where the message is inside
@@ -1818,27 +1929,27 @@ static void Msg_ShowSentOrReceivedMessages (void)
             if (sscanf (row[0],"%ld",&MsgCod) != 1)
                Lay_ShowErrorAndExit ("Wrong code of message when searching for a page.");
 
-            if (MsgCod == Gbl.Msg.ExpandedMsgCod)	// Expanded message found
+            if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
               {
-               Gbl.Msg.CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
+               Messages->CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
                break;
               }
            }
         }
 
       /***** Compute variables related to pagination *****/
-      Pagination.NumItems = Gbl.Msg.NumMsgs;
-      Pagination.CurrentPage = (int) Gbl.Msg.CurrentPage;
+      Pagination.NumItems = Messages->NumMsgs;
+      Pagination.CurrentPage = (int) Messages->CurrentPage;
       Pag_CalculatePagination (&Pagination);
-      Gbl.Msg.CurrentPage = (unsigned) Pagination.CurrentPage;
+      Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
 
       /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
-      Pag_SaveLastPageMsgIntoSession (WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                              Gbl.Msg.CurrentPage);
+      Pag_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
+	                              Messages->CurrentPage);
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],&Pagination,
-				     &Gbl.Msg,-1L);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+				     Messages,-1L);
 
       /***** Show received / sent messages in this page *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -1853,14 +1964,14 @@ static void Msg_ShowSentOrReceivedMessages (void)
          if (sscanf (row[0],"%ld",&MsgCod) != 1)
             Lay_ShowErrorAndExit ("Wrong code of message when listing the messages in a page.");
          NumMsg = NumRows - NumRow + 1;
-         Msg_ShowASentOrReceivedMessage (NumMsg,MsgCod);
+         Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
         }
 
       HTM_TABLE_End ();
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],&Pagination,
-				     &Gbl.Msg,-1L);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+				     Messages,-1L);
      }
 
    /***** End box *****/
@@ -1901,8 +2012,8 @@ static void Msg_PutLinkToViewBannedUsers(void)
 /********* Generate a query to select messages received or sent **************/
 /*****************************************************************************/
 
-static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
-						long FilterCrsCod,
+static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
+						long UsrCod,
 						const char *FilterFromToSubquery,
 						MYSQL_RES **mysql_res)
   {
@@ -1910,12 +2021,12 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
    const char *StrUnreadMsg;
    unsigned long NumMsgs;
 
-   if (FilterCrsCod > 0)	// If origin course selected
-      switch (Gbl.Msg.TypeOfMessages)
+   if (Messages->FilterCrsCod > 0)	// If origin course selected
+      switch (Messages->TypeOfMessages)
         {
          case Msg_MESSAGES_RECEIVED:
-            StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
-        	                                         "");
+            StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
+        	                                           "");
             if (FilterFromToSubquery[0])
               {
                if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
@@ -1931,8 +2042,8 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 				       " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
 				       " AND msg_snt_deleted.CrsCod=%ld"
 				       " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
-			     UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery,
-			     UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery) < 0)
+			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery,
+			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
                   Lay_NotEnoughMemoryExit ();
               }
             else
@@ -1948,8 +2059,8 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 				       " WHERE msg_rcv.UsrCod=%ld%s"
 				       " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
 				       " AND msg_snt_deleted.CrsCod=%ld)",
-			     UsrCod,StrUnreadMsg,FilterCrsCod,
-			     UsrCod,StrUnreadMsg,FilterCrsCod) < 0)
+			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,
+			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod) < 0)
                   Lay_NotEnoughMemoryExit ();
               }
             break;
@@ -1969,8 +2080,8 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 				       " AND msg_snt.CrsCod=%ld"
 				       " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 				       " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
-			     UsrCod,FilterCrsCod,FilterFromToSubquery,
-			     UsrCod,FilterCrsCod,FilterFromToSubquery) < 0)
+			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery,
+			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
                   Lay_NotEnoughMemoryExit ();
               }
             else
@@ -1978,7 +2089,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
                if (asprintf (&SubQuery,"SELECT MsgCod"
 				       " FROM msg_snt"
 				       " WHERE UsrCod=%ld AND CrsCod=%ld",
-			     UsrCod,FilterCrsCod) < 0)
+			     UsrCod,Messages->FilterCrsCod) < 0)
                   Lay_NotEnoughMemoryExit ();
               }
             break;
@@ -1986,13 +2097,13 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
             break;
         }
    else	// If no origin course selected
-      switch (Gbl.Msg.TypeOfMessages)
+      switch (Messages->TypeOfMessages)
         {
          case Msg_MESSAGES_RECEIVED:
             if (FilterFromToSubquery[0])
               {
-               StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
-        	                                            "");
+               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
+        	                                              "");
                if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
 				       " FROM msg_rcv,msg_snt,usr_data"
 				       " WHERE msg_rcv.UsrCod=%ld%s"
@@ -2010,8 +2121,8 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
               }
             else
               {
-               StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND Open='N'" :
-        	                                            "");
+               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND Open='N'" :
+        	                                              "");
                if (asprintf (&SubQuery,"SELECT MsgCod"
 				       " FROM msg_rcv"
 				       " WHERE UsrCod=%ld%s",
@@ -2050,7 +2161,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
             break;
         }
 
-   if (Gbl.Msg.FilterContent[0])
+   if (Messages->FilterContent[0])
       /* Match against the content written in filter form */
       NumMsgs = DB_QuerySELECT (mysql_res,"can not get messages",
 				"SELECT MsgCod"
@@ -2058,7 +2169,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 				" WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
 				" AND MATCH (Subject,Content) AGAINST ('%s')"
 				" ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
-				SubQuery,Gbl.Msg.FilterContent);
+				SubQuery,Messages->FilterContent);
    else
       NumMsgs = DB_QuerySELECT (mysql_res,"can not get messages",
 				"%s"
@@ -2444,7 +2555,8 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 /*****************************************************************************/
 // The string must be deallocated after calling this function
 
-static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs)
+static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
+                               char **NumMsgsStr,unsigned NumUnreadMsgs)
   {
    extern const char *Txt_message_received;
    extern const char *Txt_message_sent;
@@ -2453,10 +2565,10 @@ static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs)
    extern const char *Txt_unread_MESSAGE;
    extern const char *Txt_unread_MESSAGES;
 
-   switch (Gbl.Msg.TypeOfMessages)
+   switch (Messages->TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
-	 if (Gbl.Msg.NumMsgs == 1)
+	 if (Messages->NumMsgs == 1)
 	   {
 	    if (NumUnreadMsgs)
 	      {
@@ -2475,27 +2587,27 @@ static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs)
 	    if (NumUnreadMsgs == 0)
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s",
-			     Gbl.Msg.NumMsgs,Txt_messages_received) < 0)
+			     Messages->NumMsgs,Txt_messages_received) < 0)
                   Lay_NotEnoughMemoryExit ();
 	      }
 	    else if (NumUnreadMsgs == 1)
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s, 1 %s",
-			     Gbl.Msg.NumMsgs,Txt_messages_received,
+			     Messages->NumMsgs,Txt_messages_received,
 			     Txt_unread_MESSAGE) < 0)
                   Lay_NotEnoughMemoryExit ();
 	      }
 	    else
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s, %u %s",
-			     Gbl.Msg.NumMsgs,Txt_messages_received,
+			     Messages->NumMsgs,Txt_messages_received,
 			     NumUnreadMsgs,Txt_unread_MESSAGES) < 0)
                   Lay_NotEnoughMemoryExit ();
 	      }
 	   }
 	 break;
       case Msg_MESSAGES_SENT:
-	 if (Gbl.Msg.NumMsgs == 1)
+	 if (Messages->NumMsgs == 1)
 	   {
 	    if (asprintf (NumMsgsStr,"1 %s",Txt_message_sent) < 0)
                Lay_NotEnoughMemoryExit ();
@@ -2503,7 +2615,7 @@ static void Msg_SetNumMsgsStr (char **NumMsgsStr,unsigned NumUnreadMsgs)
 	 else
 	   {
 	    if (asprintf (NumMsgsStr,"%u %s",
-			  Gbl.Msg.NumMsgs,Txt_messages_sent) < 0)
+			  Messages->NumMsgs,Txt_messages_sent) < 0)
                Lay_NotEnoughMemoryExit ();
 	   }
 	 break;
@@ -2571,7 +2683,7 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
 /********************* Get dictinct courses in my messages *******************/
 /*****************************************************************************/
 
-void Msg_GetDistinctCoursesInMyMessages (void)
+static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2580,7 +2692,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
    struct Course Crs;
 
    /***** Get distinct courses in my messages from database *****/
-   switch (Gbl.Msg.TypeOfMessages)
+   switch (Messages->TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
@@ -2608,7 +2720,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
      }
 
    /***** Get distinct courses in messages from database *****/
-   Gbl.Msg.NumCourses = 0;
+   Messages->NumCourses = 0;
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)
@@ -2616,13 +2728,13 @@ void Msg_GetDistinctCoursesInMyMessages (void)
       /* Get next course */
       row = mysql_fetch_row (mysql_res);
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (Crs.CrsCod >= 0 && Gbl.Msg.NumCourses < Crs_MAX_COURSES_PER_USR)
+      if (Crs.CrsCod >= 0 && Messages->NumCourses < Crs_MAX_COURSES_PER_USR)
          if (Crs_GetDataOfCourseByCod (&Crs))
            {
-            Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
-            Str_Copy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName,
+            Messages->Courses[Messages->NumCourses].CrsCod = Crs.CrsCod;
+            Str_Copy (Messages->Courses[Messages->NumCourses].ShrtName,Crs.ShrtName,
                       Hie_MAX_BYTES_SHRT_NAME);
-            Gbl.Msg.NumCourses++;
+            Messages->NumCourses++;
            }
      }
 
@@ -2634,7 +2746,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
 /********* Show form to select course for sent or received messages **********/
 /*****************************************************************************/
 
-void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
+static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
@@ -2649,20 +2761,20 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;",TxtSelector[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
    HTM_SELECT_Begin (false,
 		     "name=\"FilterCrsCod\"");
    HTM_OPTION (HTM_Type_STRING,"",
-	       Gbl.Msg.FilterCrsCod < 0,false,
+	       Messages->FilterCrsCod < 0,false,
 	       "%s",Txt_any_course);
 
    /***** Write an option for each origin course *****/
    for (NumOriginCrs = 0;
-	NumOriginCrs < Gbl.Msg.NumCourses;
+	NumOriginCrs < Messages->NumCourses;
 	NumOriginCrs++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Msg.Courses[NumOriginCrs].CrsCod,
-		  Gbl.Msg.Courses[NumOriginCrs].CrsCod == Gbl.Msg.FilterCrsCod,false,
-		  "%s",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Messages->Courses[NumOriginCrs].CrsCod,
+		  Messages->Courses[NumOriginCrs].CrsCod == Messages->FilterCrsCod,false,
+		  "%s",Messages->Courses[NumOriginCrs].ShrtName);
    HTM_SELECT_End ();
    HTM_LABEL_End ();
   }
@@ -2671,7 +2783,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
 /***** Show form to filter "from" and "to" for received or sent messages *****/
 /*****************************************************************************/
 
-void Msg_ShowFormToFilterMsgs (void)
+static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
@@ -2691,9 +2803,9 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (TxtFromTo[Gbl.Msg.TypeOfMessages]);
+   HTM_TxtColonNBSP (TxtFromTo[Messages->TypeOfMessages]);
    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
-		     Gbl.Msg.FilterFromTo,
+		     Messages->FilterFromTo,
 	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2703,7 +2815,7 @@ void Msg_ShowFormToFilterMsgs (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_MSG_Content);
    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
-		     Gbl.Msg.FilterContent,
+		     Messages->FilterContent,
 	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2718,7 +2830,7 @@ void Msg_ShowFormToFilterMsgs (void)
 /**** Show form to select whether to show only unread (received) messages ****/
 /*****************************************************************************/
 
-static void Msg_ShowFormToShowOnlyUnreadMessages (void)
+static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_only_unread_messages;
@@ -2727,8 +2839,8 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "value=\"Y\"%s",
-		       Gbl.Msg.ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
-			                            "");
+		       Messages->ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
+			                              "");
    HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
   }
@@ -2737,10 +2849,10 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 /*********** Get parameter to show only unread (received) messages ***********/
 /*****************************************************************************/
 
-static void Msg_GetParamOnlyUnreadMsgs (void)
+static bool Msg_GetParamOnlyUnreadMsgs (void)
   {
    /***** Get parameter to show only unread (received) messages *****/
-   Gbl.Msg.ShowOnlyUnreadMsgs = Par_GetParToBool ("OnlyUnreadMsgs");
+   return Par_GetParToBool ("OnlyUnreadMsgs");
   }
 
 /*****************************************************************************/
@@ -2801,7 +2913,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 /************************ Get the subject of a message ***********************/
 /*****************************************************************************/
 
-void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
+static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2933,7 +3045,8 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
 /******** Show a sent or a received message (from a user to another) *********/
 /*****************************************************************************/
 
-static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
+static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
+                                            long MsgNum,long MsgCod)
   {
    extern const char *Txt_MSG_Replied;
    extern const char *Txt_MSG_Not_replied;
@@ -2965,7 +3078,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
    /***** Get data of message *****/
    Msg_GetMsgSntData (MsgCod,&CrsCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
-   switch (Gbl.Msg.TypeOfMessages)
+   switch (Messages->TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
          Msg_GetStatusOfReceivedMsg (MsgCod,&Open,&Replied,&Expanded);
@@ -2976,7 +3089,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
      }
 
    /***** Put an icon with message status *****/
-   switch (Gbl.Msg.TypeOfMessages)
+   switch (Messages->TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
          Title = (Open ? (Replied ? Txt_MSG_Replied :
@@ -2991,20 +3104,20 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
-		 Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
-									   "BG_MSG_GREEN") :
-								   "BG_MSG_BLUE");
-   Ico_PutIcon (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
-        	                                                                     "envelope-open-text.svg") :
-                                                                           "envelope.svg") :
-                                                                   "share.svg",
+		 Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
+									     "BG_MSG_GREEN") :
+								      "BG_MSG_BLUE");
+   Ico_PutIcon (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
+        	                                                                       "envelope-open-text.svg") :
+                                                                             "envelope.svg") :
+                                                                    "share.svg",
 		Title,"ICO16x16");
 
    /***** Form to delete message *****/
    HTM_BR ();
-   Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
-   Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
-                                  Msg_PutHiddenParamsOneMsg,&Gbl.Msg);
+   Messages->MsgCod = MsgCod;	// Message to be deleted
+   Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],
+                                  Msg_PutHiddenParamsOneMsg,Messages);
    HTM_TD_End ();
 
    /***** Write message number *****/
@@ -3014,12 +3127,12 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
    HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
-			                        "MSG_AUT_BG_NEW");
+			                  "MSG_AUT_BG_NEW");
    Msg_WriteMsgAuthor (&UsrDat,true,NULL);
    HTM_TD_End ();
 
    /***** Write subject *****/
-   Msg_WriteSentOrReceivedMsgSubject (MsgCod,Subject,Open,Expanded);
+   Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
 
    /***** Write date-time *****/
    Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
@@ -3044,7 +3157,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       /***** Form to reply message *****/
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"LM\"");
-      if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED &&
+      if (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
@@ -3060,7 +3173,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      Msg_WriteMsgFrom (&UsrDat,Deleted);
+      Msg_WriteMsgFrom (Messages,&UsrDat,Deleted);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3073,7 +3186,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       HTM_TD_End ();
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      Msg_WriteMsgTo (MsgCod);
+      Msg_WriteMsgTo (Messages,MsgCod);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3175,7 +3288,9 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
 /******************** Write subject of a received message ********************/
 /*****************************************************************************/
 
-static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,bool Open,bool Expanded)
+static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
+					       long MsgCod,const char *Subject,
+                                               bool Open,bool Expanded)
   {
    extern const char *Txt_Hide_message;
    extern const char *Txt_See_message;
@@ -3186,12 +3301,12 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
         	                                "MSG_TIT_BG_NEW");
 
    /***** Begin form to expand/contract the message *****/
-   Frm_StartForm (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
-	                                                                        ActExpRcvMsg) :
-                                                                    (Expanded ? ActConSntMsg :
-                                                        	                ActExpSntMsg));
-   Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
-   Msg_PutHiddenParamsOneMsg (&Gbl.Msg);
+   Frm_StartForm (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
+	                                                                          ActExpRcvMsg) :
+                                                                      (Expanded ? ActConSntMsg :
+                                                        	                  ActExpSntMsg));
+   Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
+   Msg_PutHiddenParamsOneMsg (Messages);
    HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
 				       Txt_See_message,
 			    Open ? "BT_LINK LT MSG_TIT" :
@@ -3285,7 +3400,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 /*****************************************************************************/
 // Returns true if the origin course is the current course
 
-bool Msg_WriteCrsOrgMsg (long CrsCod)
+static bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
@@ -3376,7 +3491,8 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 /************************** Write author of a message ************************/
 /*****************************************************************************/
 
-static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
+static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
+                              struct UsrData *UsrDat,bool Deleted)
   {
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
@@ -3414,10 +3530,10 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
          HTM_NBSP ();
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned
-            Msg_PutFormToUnbanSender (UsrDat);
+            Msg_PutFormToUnbanSender (Messages,UsrDat);
          else
             // Sender is not banned
-            Msg_PutFormToBanSender (UsrDat);
+            Msg_PutFormToBanSender (Messages,UsrDat);
 	}
      }
    else
@@ -3435,7 +3551,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 #define Msg_MAX_RECIPIENTS_TO_SHOW 10	// If number of recipients <= Msg_MAX_RECIPIENTS_TO_SHOW, show all recipients
 #define Msg_DEF_RECIPIENTS_TO_SHOW  5	// If number of recipients  > Msg_MAX_RECIPIENTS_TO_SHOW, show only Msg_DEF_RECIPIENTS_TO_SHOW
 
-static void Msg_WriteMsgTo (long MsgCod)
+static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
   {
    extern const char *Txt_MSG_Open_and_deleted;
    extern const char *Txt_MSG_Open;
@@ -3597,9 +3713,9 @@ static void Msg_WriteMsgTo (long MsgCod)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
-         Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
-         Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
-         Msg_PutHiddenParamsOneMsg (&Gbl.Msg);
+         Frm_StartForm (ActionSee[Messages->TypeOfMessages]);
+         Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
+         Msg_PutHiddenParamsOneMsg (Messages);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
          HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
          HTM_TxtF (Txt_and_X_other_recipients,
@@ -3691,15 +3807,16 @@ static long Msg_GetParamMsgCod (void)
 /***************** Put a form to ban the sender of a message *****************/
 /*****************************************************************************/
 
-static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
+static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
+                                    struct UsrData *UsrDat)
   {
    extern const char *Txt_Sender_permitted_click_to_ban_him;
 
    Frm_StartForm (ActBanUsrMsg);
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                     Gbl.Msg.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
+   Msg_PutHiddenParamsMsgsFilters (Messages);
    Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
@@ -3708,15 +3825,16 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
 /**************** Put a form to unban the sender of a message ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
+static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
+                                      struct UsrData *UsrDat)
   {
    extern const char *Txt_Sender_banned_click_to_unban_him;
 
    Frm_StartForm (ActUnbUsrMsg);
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                     Gbl.Msg.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Msg_PutHiddenParamsMsgsFilters (&Gbl.Msg);
+   Msg_PutHiddenParamsMsgsFilters (Messages);
    Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }
