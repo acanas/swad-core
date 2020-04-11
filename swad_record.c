@@ -1256,6 +1256,7 @@ static void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
+   struct TT_Timetable Timetable;
    char Width[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    bool ShowOfficeHours;
 
@@ -1304,11 +1305,11 @@ static void Rec_ShowRecordOneTchCrs (void)
    if (ShowOfficeHours)
      {
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-      Gbl.Timetable.Type = TT_TUTORING_TIMETABLE;
-      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
+      Timetable.Type = TT_TUTORING_TIMETABLE;
+      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
                     NULL,NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
-      TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
+      TT_ShowTimeTable (&Timetable,Gbl.Usrs.Other.UsrDat.UsrCod);
       Box_BoxEnd ();
       HTM_DIV_End ();
      }
@@ -1337,6 +1338,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
+   struct TT_Timetable Timetable;
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
@@ -1426,11 +1428,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
             if (ShowOfficeHours)
               {
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-               Gbl.Timetable.Type = TT_TUTORING_TIMETABLE;
-	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.Timetable.Type],
+               Timetable.Type = TT_TUTORING_TIMETABLE;
+	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
 	                     NULL,NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
-	       TT_ShowTimeTable (UsrDat.UsrCod);
+	       TT_ShowTimeTable (&Timetable,UsrDat.UsrCod);
 	       Box_BoxEnd ();
                HTM_DIV_End ();
               }

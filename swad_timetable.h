@@ -113,6 +113,6 @@ struct TT_Timetable
 void TT_ShowClassTimeTable (void);
 void TT_EditCrsTimeTable (void);
 void TT_EditMyTutTimeTable (void);
-void TT_ShowTimeTable (long UsrCod);
+void TT_ShowTimeTable (struct TT_Timetable *Timetable,long UsrCod);
 
 #endif
