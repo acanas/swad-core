@@ -383,7 +383,7 @@ struct tm *Dat_GetLocalTimeFromClock (const time_t *timep)
 /********* Convert a struct with Day, Month and Year to a date string ********/
 /*****************************************************************************/
 
-void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1])
+void Dat_ConvDateToDateStr (const struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1])
   {
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
 

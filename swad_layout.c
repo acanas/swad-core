@@ -488,6 +488,7 @@ static void Lay_WriteScripts (void)
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
+   struct Exa_ExamAnnouncements ExamAnns;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
@@ -533,8 +534,11 @@ static void Lay_WriteScripts (void)
 	 Hld_GetListHolidays ();
 	}
 
-      /***** Create list of calls for examination *****/
-      Exa_CreateListDatesOfExamAnnouncements ();
+      /***** Reset exam announcements context *****/
+      Exa_ResetExamAnnouncements (&ExamAnns);
+
+      /***** Create list of exam announcements *****/
+      Exa_CreateListExamAnnouncements (&ExamAnns);
 
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
@@ -567,18 +571,18 @@ static void Lay_WriteScripts (void)
 
       HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
-	   NumExamAnnouncement < Gbl.ExamAnns.NumExaAnns;
+	   NumExamAnnouncement < ExamAnns.NumExaAnns;
 	   NumExamAnnouncement++)
 	 HTM_TxtF ("LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
-		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExaCod,
-		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
-		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
-		   Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
+		   ExamAnns.Lst[NumExamAnnouncement].ExaCod,
+		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
+		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
+		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
 
       HTM_SCRIPT_End ();
 
-      /***** Free list of dates of exam announcements *****/
-      Exa_FreeListExamAnnouncements ();
+      /***** Free list of exam announcements *****/
+      Exa_FreeListExamAnnouncements (&ExamAnns);
      }
 
    /***** Scripts depending on action *****/

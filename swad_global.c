@@ -205,12 +205,6 @@ void Gbl_InitializeGlobals (void)
      }
    Gbl.Usrs.ListOtherRecipients = NULL;
 
-   Gbl.ExamAnns.NumExaAnns = 0;
-   Gbl.ExamAnns.Lst = NULL;
-   Gbl.ExamAnns.NewExaCod = -1L;
-   Gbl.ExamAnns.HighlightExaCod = -1L;
-   Gbl.ExamAnns.HighlightDate[0] = '\0';	// No exam announcements highlighted
-
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
@@ -415,8 +409,6 @@ void Gbl_Cleanup (void)
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
-   Exa_FreeMemExamAnnouncement ();
-   Exa_FreeListExamAnnouncements ();
    if (Gbl.F.Tmp)
       fclose (Gbl.F.Tmp);
    Fil_CloseXMLFile ();

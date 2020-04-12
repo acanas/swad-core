@@ -430,17 +430,6 @@ struct Globals
      } Crs;
    struct
      {
-      struct Exa_ExamCodeAndDate *Lst;	// List of exam announcements
-      unsigned NumExaAnns;	// Number of announcements of exam in the list
-      long NewExaCod;		// New exam announcement just created
-      long HighlightExaCod;	// Exam announcement to be highlighted
-      char HighlightDate[4 + 2 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYYMMDD format)
-      long ExaCod;		// Used to put contextual icons
-      const char *Anchor;	// Used to put contextual icons
-      struct ExamData ExaDat;
-     } ExamAnns;
-   struct
-     {
       unsigned Id;		// Each file browser in the page has a unique identifier
       Brw_FileBrowser_t Type;
       bool FullTree;		// Show full tree?

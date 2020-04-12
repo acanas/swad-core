@@ -57,7 +57,7 @@ typedef enum
 #define Exa_MAX_CHARS_SESSION	(128 - 1)	// 127
 #define Exa_MAX_BYTES_SESSION	((Exa_MAX_CHARS_SESSION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct ExamData
+struct Exa_ExamAnnouncement
   {
    long CrsCod;
    Exa_ExamAnnouncementStatus_t Status;
@@ -83,9 +83,23 @@ struct Exa_ExamCodeAndDate
    struct Date ExamDate;
   };
 
+struct Exa_ExamAnnouncements
+  {
+   unsigned NumExaAnns;	// Number of announcements of exam in the list
+   struct Exa_ExamCodeAndDate *Lst;	// List of exam announcements
+   long NewExaCod;		// New exam announcement just created
+   long HighlightExaCod;	// Exam announcement to be highlighted
+   char HighlightDate[4 + 2 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYYMMDD format)
+   long ExaCod;		// Used to put contextual icons
+   const char *Anchor;	// Used to put contextual icons
+   struct Exa_ExamAnnouncement ExamAnn;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+void Exa_ResetExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
 
 void Exa_PutFrmEditAExamAnnouncement (void);
 void Exa_ReceiveExamAnnouncement1 (void);
@@ -97,15 +111,14 @@ void Exa_RemoveExamAnnouncement2 (void);
 void Exa_HideExamAnnouncement (void);
 void Exa_UnhideExamAnnouncement (void);
 
-void Exa_FreeMemExamAnnouncement (void);
-void Exa_FreeListExamAnnouncements (void);
+void Exa_FreeListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
 void Exa_ListExamAnnouncementsSee (void);
 void Exa_ListExamAnnouncementsEdit (void);
 
-void Exa_GetExaCodToHighlight (void);
-void Exa_GetDateToHighlight (void);
+void Exa_ListExamAnnouncementsCod (void);
+void Exa_ListExamAnnouncementsDay (void);
 
-void Exa_CreateListDatesOfExamAnnouncements (void);
+void Exa_CreateListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
 void Exa_PutHiddenParamExaCod (long ExaCod);
 
 void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
