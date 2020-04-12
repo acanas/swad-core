@@ -418,13 +418,7 @@ struct Globals
       char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
       char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
       struct Grp_Groups Grps;
-      struct
-	{
-	 Inf_InfoType_t Type;
-	 char URL[Cns_MAX_BYTES_WWW + 1];
-	 bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
-	 bool ShowMsgMustBeRead;
-	} Info;
+      struct Inf_Info Info;
       struct
 	{
 	 struct RecordField Field;
@@ -435,14 +429,6 @@ struct Globals
 	 long HighlightNotCod;	// Notice code of a notice to be highlighted
 	} Notices;
      } Crs;
-   struct
-     {
-      char PathDir[PATH_MAX + 1];
-      unsigned NumItem;		// Item being edited
-      unsigned ParamNumItem;	// Used as parameter in forms
-      bool EditionIsActive;
-      Syl_WhichSyllabus_t WhichSyllabus;
-     } Syllabus;
    struct
      {
       struct Exa_ExamCodeAndDate *Lst;	// List of exam announcements

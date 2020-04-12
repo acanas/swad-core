@@ -69,20 +69,30 @@ struct MoveSubtrees
    bool MovAllowed;
   };
 
+struct Syl_Syllabus
+  {
+   char PathDir[PATH_MAX + 1];
+   unsigned NumItem;		// Item being edited
+   unsigned ParamNumItem;	// Used as parameter in forms
+   bool EditionIsActive;
+   Syl_WhichSyllabus_t WhichSyllabus;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Syl_GetParamWhichSyllabus (void);
-void Syl_PutFormWhichSyllabus (void);
+void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
-void Syl_GetParamItemNumber (void);
+Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void);
+void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected);
 
-bool Syl_CheckSyllabus (long CrsCod,Inf_InfoType_t InfoType);
-bool Syl_CheckAndEditSyllabus (void);
+bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod);
+bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus);
 void Syl_EditSyllabus (void);
 
-void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod);
+void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
+                                          long CrsCod);
 void Syl_FreeListItemsSyllabus (void);
 
 int Syl_ReadLevelItemSyllabus (void);
@@ -92,16 +102,16 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
 void Syl_RemoveItemSyllabus (void);
 void Syl_UpItemSyllabus (void);
 void Syl_DownItemSyllabus (void);
-void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos);
+
 void Syl_CalculateUpSubtreeSyllabus (struct MoveSubtrees *Subtree,unsigned NumItem);
 void Syl_CalculateDownSubtreeSyllabus (struct MoveSubtrees *Subtree,unsigned NumItem);
 void Syl_RightItemSyllabus (void);
 void Syl_LeftItemSyllabus (void);
-void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel);
+
 void Syl_InsertItemSyllabus (void);
 void Syl_ModifyItemSyllabus (void);
-void Syl_BuildPathFileSyllabus (char *PathFile);
-void Syl_OpenSyllabusFile (const char *PathDir,char *PathFile);
+void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
+                                char *PathFile);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteAllItemsFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text);

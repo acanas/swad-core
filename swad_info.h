@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_constant.h"
+#include "swad_syllabus.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -63,6 +64,14 @@ typedef enum
    Inf_INFO_SRC_URL		= 5,
   } Inf_InfoSrc_t;
 
+struct Inf_Info
+  {
+   Inf_InfoType_t Type;
+   char URL[Cns_MAX_BYTES_WWW + 1];
+   bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
+   bool ShowMsgMustBeRead;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -86,7 +95,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc);
 Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void);
 void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc);
 Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType);
-void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
+void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
+                                   long CrsCod,
                                    Inf_InfoType_t InfoType,
                                    Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
 Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);

@@ -203,8 +203,6 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->Reply.IsReply        = false;
    Messages->Reply.OriginalMsgCod = -1L;
    Messages->ShowOnlyOneRecipient = false;
-   Messages->FileNameMail[0]      = '\0';
-   Messages->FileMail             = NULL;
    Messages->CurrentPage          = 0;
    Messages->MsgCod               = -1L;
   }

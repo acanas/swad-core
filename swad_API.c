@@ -231,6 +231,7 @@ static int API_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewEncryptedPassword);	// Output
 
 static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+                                            struct Syl_Syllabus *Syllabus,
                                             char **HTMLBuffer);
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                              char **HTMLBuffer);
@@ -1369,6 +1370,7 @@ int swad__getCourseInfo (struct soap *soap,
                          struct swad__getCourseInfoOutput *getCourseInfo)	// output
   {
    int ReturnCode;
+   struct Syl_Syllabus Syllabus;
    Inf_InfoType_t InfoType;
    size_t Length;
    Inf_InfoSrc_t InfoSrc;
@@ -1430,6 +1432,9 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
+   /***** Reset syllabus context *****/
+   Syl_ResetSyllabus (&Syllabus);
+
    /***** Get info source *****/
    for (InfoType  = (Inf_InfoType_t) 0;
 	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
@@ -1441,7 +1446,10 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
-   Inf_GetAndCheckInfoSrcFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,&InfoSrc,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
+                                 Gbl.Hierarchy.Crs.CrsCod,
+                                 Gbl.Crs.Info.Type,
+                                 &InfoSrc,&MustBeRead);
    Length = strlen (NamesInWSForInfoSrc[InfoSrc]);
    getCourseInfo->infoSrc = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc],
@@ -1461,7 +1469,7 @@ int swad__getCourseInfo (struct soap *soap,
 	   {
 	    case Inf_LECTURES:		// Syllabus (lectures)
 	    case Inf_PRACTICALS:	// Syllabys (practicals)
-	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
+	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&Syllabus,&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1495,6 +1503,7 @@ int swad__getCourseInfo (struct soap *soap,
 /*****************************************************************************/
 
 static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+                                            struct Syl_Syllabus *Syllabus,
                                             char **HTMLBuffer)
   {
    extern struct LstItemsSyllabus Syl_LstItemsSyllabus;
@@ -1506,7 +1515,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Crs.CrsCod);
 
    if (Syl_LstItemsSyllabus.NumItems)
      {

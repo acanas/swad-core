@@ -259,7 +259,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.DegTypes.Lst = NULL;
 
    Gbl.Crs.Info.ShowMsgMustBeRead = 0;
+
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
+
    Gbl.Crs.Grps.NumGrps = 0;
    Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
@@ -278,15 +280,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
+
    Gbl.Crs.Records.Field.Name[0] = '\0';
    Gbl.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
    Gbl.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
    Gbl.Crs.Records.LstFields.Lst = NULL;
    Gbl.Crs.Records.LstFields.Num = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
-
-   Gbl.Syllabus.EditionIsActive = false;
-   Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
 
    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    Gbl.Search.Str[0] = '\0';

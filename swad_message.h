@@ -77,8 +77,6 @@ struct Msg_Messages
       long OriginalMsgCod;		// Original message code when I am editing a reply
      } Reply;
    bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
-   char FileNameMail[PATH_MAX + 1];
-   FILE *FileMail;
    unsigned CurrentPage;
    long MsgCod;	// Used as parameter with message to be removed
   };
