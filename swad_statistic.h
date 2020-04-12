@@ -137,26 +137,16 @@ struct Sta_Stats
    unsigned long FirstRow;
    unsigned long LastRow;
    unsigned RowsPerPage;
-   long DegTypCod;
-   long DptCod;
-   char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
-   bool IndicatorsSelected[1 + Ind_NUM_INDICATORS];
-   struct
-     {
-      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
-      Pho_HowComputePhotoSize_t HowComputePhotoSize;
-      Pho_HowOrderDegrees_t HowOrderDegrees;
-      int MaxStds;
-      int MaxStdsWithPhoto;
-      double MaxPercent;
-     } DegPhotos;
   };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Sta_ResetStats (struct Sta_Stats *Stats);
+
 void Sta_GetRemoteAddr (void);
+
 void Sta_AskShowCrsHits (void);
 void Sta_AskShowGblHits (void);
 void Sta_PutLinkToCourseHits (void);

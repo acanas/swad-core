@@ -300,13 +300,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.ClassPhoto.AllGroups = true;
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
-   /* Statistics */
-   Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
-   Gbl.Stat.CountType       = Sta_COUNT_TYPE_DEFAULT;
-   Gbl.Stat.Role            = Sta_ROLE_DEFAULT;
-   Gbl.Stat.NumAction       = Sta_NUM_ACTION_DEFAULT;
-   Gbl.Stat.RowsPerPage     = Sta_DEF_ROWS_PER_PAGE;
-
    Gbl.Scope.Current = Hie_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;

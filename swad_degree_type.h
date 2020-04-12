@@ -58,7 +58,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void DT_WriteSelectorDegreeTypes (void);
+void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod);
 
 void DT_SeeDegreeTypesInDegTab (void);
 void DT_SeeDegreeTypesInStaTab (void);

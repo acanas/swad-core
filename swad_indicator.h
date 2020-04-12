@@ -59,6 +59,14 @@ struct Ind_IndicatorsCrs
    bool CourseAllOK;
   };
 
+struct Ind_Indicators
+  {
+   long DegTypCod;
+   long DptCod;
+   char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
+   bool IndicatorsSelected[1 + Ind_NUM_INDICATORS];
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -67,6 +75,6 @@ void Ind_ReqIndicatorsCourses (void);
 void Ind_ShowIndicatorsCourses (void);
 int Ind_GetNumIndicatorsCrsFromDB (long CrsCod);
 void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
-                                       struct Ind_IndicatorsCrs *Indicators);
+                                       struct Ind_IndicatorsCrs *IndicatorsCrs);
 
 #endif

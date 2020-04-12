@@ -100,25 +100,34 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Sta_WriteSelectorCountType (void);
-static void Sta_WriteSelectorAction (void);
+static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
+static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
-static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
+                                          unsigned long NumRows,
+                                          MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
-static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res);
-static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
+                                   unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
+                                   unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
+                                                unsigned long NumRows,
+                                                MYSQL_RES *mysql_res);
 static void Sta_PutHiddenParamScopeSta (void);
 static Sta_ColorType_t Sta_GetStatColorType (void);
 static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax);
 static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,double HitsNum[24],double HitsMax);
 static void Sta_SetColor (Sta_ColorType_t ColorType,double HitsNum,double HitsMax,
                           unsigned *R,unsigned *G,unsigned *B);
-static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
+static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
+                                    unsigned long NumRows,
+                                    MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
+                                     unsigned long NumRows,
                                      MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
-                                      MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
+static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
+                                    unsigned long NumRows,
                                     MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
                                     MYSQL_RES *mysql_res);
@@ -126,35 +135,58 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLabelsXAxisAccMin (double IncX,const char *Format);
 static void Sta_WriteAccessMinute (unsigned Minute,double HitsNum,double MaxX);
-static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
+static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountTypes,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
+static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
+static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
+                                          unsigned long NumRows,
                                           MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
+static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
+                                       unsigned long NumRows,
                                        MYSQL_RES *mysql_res);
 static void Sta_WriteCountry (long CtyCod);
-static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
+static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
+                                           unsigned long NumRows,
                                            MYSQL_RES *mysql_res);
 static void Sta_WriteInstit (long InsCod);
-static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 static void Sta_WriteCentre (long CtrCod);
-static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
+static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 static void Sta_WriteDegree (long DegCod);
-static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 
 static void Sta_DrawBarNumHits (char Color,
 				double HitsNum,double HitsMax,double HitsTotal,
 				unsigned MaxBarWidth);
+/*****************************************************************************/
+/**************************** Reset stats context ****************************/
+/*****************************************************************************/
+
+void Sta_ResetStats (struct Sta_Stats *Stats)
+  {
+   Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+   Stats->Role            = Sta_ROLE_DEFAULT;
+   Stats->CountType       = Sta_COUNT_TYPE_DEFAULT;
+   Stats->NumAction       = Sta_NUM_ACTION_DEFAULT;
+   Stats->FirstRow        = 0;
+   Stats->LastRow         = 0;
+   Stats->RowsPerPage     = Sta_DEF_ROWS_PER_PAGE;
+  }
 
 /*****************************************************************************/
-/*************** Read CGI environment variable REMOTE_ADDR *******************/
+/**************** Read CGI environment variable REMOTE_ADDR ******************/
 /*****************************************************************************/
 /*
 CGI Environment Variables:
@@ -202,11 +234,15 @@ void Sta_AskShowCrsHits (void)
       Sta_MAX_ROWS_PER_PAGE,
      };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
+   struct Sta_Stats Stats;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -296,7 +332,7 @@ void Sta_AskShowCrsHits (void)
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
          /***** Selection of action *****/
-         Sta_WriteSelectorAction ();
+         Sta_WriteSelectorAction (&Stats);
 
          /***** Option a) Listing of clicks distributed by some metric *****/
          HTM_TR_Begin (NULL);
@@ -307,18 +343,19 @@ void Sta_AskShowCrsHits (void)
 
 	 HTM_TD_Begin ("class=\"LM\"");
 
-         if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
-              Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
-              Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+         if ((Stats.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
+              Stats.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
+              Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+            Stats.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
 	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
 			  "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
 			  (unsigned) Sta_CLICKS_GROUPED,
-			  Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" : " checked=\"checked\"");
+			  Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+				                                                  " checked=\"checked\"");
 
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
-         Sta_WriteSelectorCountType ();
+         Sta_WriteSelectorCountType (&Stats);
 
          HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
@@ -330,7 +367,7 @@ void Sta_AskShowCrsHits (void)
            {
             ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
             HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-			ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy,false,
+			ClicksGroupedBy == Stats.ClicksGroupedBy,false,
 	                "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
          HTM_SELECT_End ();
@@ -344,7 +381,8 @@ void Sta_AskShowCrsHits (void)
 	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
 			  "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
 			  (unsigned) Sta_CLICKS_DETAILED,
-			  Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" : "");
+			  Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
+				                                                  "");
          HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();
 
@@ -357,13 +395,13 @@ void Sta_AskShowCrsHits (void)
          HTM_TxtF ("(%s: ",Txt_results_per_page);
          HTM_SELECT_Begin (false,
 		           "id=\"RowsPage\" name=\"RowsPage\"%s",
-                           Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-                        	                                                      " disabled=\"disabled\"");
+                           Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+                        	                                                   " disabled=\"disabled\"");
          for (i = 0;
               i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
             HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-			RowsPerPage[i] == Gbl.Stat.RowsPerPage,false,
+			RowsPerPage[i] == Stats.RowsPerPage,false,
 	                "%u",RowsPerPage[i]);
          HTM_SELECT_End ();
          HTM_Txt (")");
@@ -417,11 +455,15 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
+   struct Sta_Stats Stats;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    Sta_Role_t RoleStat;
    unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -466,7 +508,7 @@ void Sta_AskShowGblHits (void)
      {
       RoleStatUnsigned = (unsigned) RoleStat;
       HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-		  RoleStat == Gbl.Stat.Role,false,
+		  RoleStat == Stats.Role,false,
 		  "%s",Txt_ROLE_STATS[RoleStat]);
      }
    HTM_SELECT_End ();
@@ -475,7 +517,7 @@ void Sta_AskShowGblHits (void)
    HTM_TR_End ();
 
    /***** Selection of action *****/
-   Sta_WriteSelectorAction ();
+   Sta_WriteSelectorAction (&Stats);
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    HTM_TR_Begin (NULL);
@@ -506,15 +548,15 @@ void Sta_AskShowGblHits (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Sta_WriteSelectorCountType ();
+   Sta_WriteSelectorCountType (&Stats);
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
-   if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
-       Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
-      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
+   if (Stats.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
+       Stats.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
+      Stats.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
    HTM_SELECT_Begin (false,
 		     "name=\"GroupedBy\"");
@@ -524,7 +566,7 @@ void Sta_AskShowGblHits (void)
      {
       ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
       HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-		  ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy,false,
+		  ClicksGroupedBy == Stats.ClicksGroupedBy,false,
 		  "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
    HTM_SELECT_End ();
@@ -588,7 +630,7 @@ void Sta_PutLinkToGlobalHits (void)
 /****** Put selectors for type of access count and for degree or course ******/
 /*****************************************************************************/
 
-static void Sta_WriteSelectorCountType (void)
+static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
   {
    extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    Sta_CountType_t StatCountType;
@@ -603,7 +645,7 @@ static void Sta_WriteSelectorCountType (void)
      {
       StatCountTypeUnsigned = (unsigned) StatCountType;
       HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
-		  StatCountType == Gbl.Stat.CountType,false,
+		  StatCountType == Stats->CountType,false,
 		  "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
      }
    HTM_SELECT_End ();
@@ -613,7 +655,7 @@ static void Sta_WriteSelectorCountType (void)
 /******************** Put selector for type of action ************************/
 /*****************************************************************************/
 
-static void Sta_WriteSelectorAction (void)
+static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Action;
@@ -632,7 +674,7 @@ static void Sta_WriteSelectorAction (void)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_SELECT_Begin (false,
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
-   HTM_OPTION (HTM_Type_STRING,"0",Gbl.Stat.NumAction == 0,false,
+   HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
 	       "%s",Txt_Any_action);
    for (Action  = (Act_Action_t) 1;
 	Action <= (Act_Action_t) (Act_NUM_ACTIONS - 1);
@@ -641,7 +683,7 @@ static void Sta_WriteSelectorAction (void)
       Tab = Act_GetTab (Act_GetSuperAction (Action));
       ActionUnsigned = (unsigned) Action;
       HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-		  Action == Gbl.Stat.NumAction,false,
+		  Action == Stats->NumAction,false,
 		  "%u: %s &gt; %s",
 		  (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
      }
@@ -693,6 +735,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
+   struct Sta_Stats Stats;
    char *Query = NULL;
    char QueryAux[512];
    long LengthQuery;
@@ -708,6 +751,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    char StrQueryCountType[Sta_MAX_BYTES_COUNT_TYPE + 1];
    unsigned NumDays;
    bool ICanQueryWholeRange;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
 
    /***** Get initial and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
@@ -730,38 +776,38 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	                                         (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
 
    if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
-      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
+      Stats.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
    else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
-      Gbl.Stat.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
-			         Par_GetParToUnsignedLong ("GroupedBy",
-						           0,
-						           Sta_NUM_CLICKS_GROUPED_BY - 1,
-						           (unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
+      Stats.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
+			      Par_GetParToUnsignedLong ("GroupedBy",
+							0,
+							Sta_NUM_CLICKS_GROUPED_BY - 1,
+							(unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
 
    /***** Get the type of count of clicks *****/
-   if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-      Gbl.Stat.CountType = (Sta_CountType_t)
-	                   Par_GetParToUnsignedLong ("CountType",
-	                                             0,
-	                                             Sta_NUM_COUNT_TYPES - 1,
-	                                             (unsigned long) Sta_COUNT_TYPE_DEFAULT);
+   if (Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+      Stats.CountType = (Sta_CountType_t)
+			Par_GetParToUnsignedLong ("CountType",
+						  0,
+						  Sta_NUM_COUNT_TYPES - 1,
+						  (unsigned long) Sta_COUNT_TYPE_DEFAULT);
 
    /***** Get action *****/
-   Gbl.Stat.NumAction = (Act_Action_t)
-			Par_GetParToUnsignedLong ("StatAct",
-					          0,
-					          Act_NUM_ACTIONS - 1,
-					          (unsigned long) Sta_NUM_ACTION_DEFAULT);
+   Stats.NumAction = (Act_Action_t)
+		     Par_GetParToUnsignedLong ("StatAct",
+					       0,
+					       Act_NUM_ACTIONS - 1,
+					       (unsigned long) Sta_NUM_ACTION_DEFAULT);
 
    switch (GlobalOrCourse)
      {
       case Sta_SHOW_GLOBAL_ACCESSES:
 	 /***** Get the type of user of clicks *****/
-	 Gbl.Stat.Role = (Sta_Role_t)
-			 Par_GetParToUnsignedLong ("Role",
-				                   0,
-					           Sta_NUM_ROLES_STAT - 1,
-				                   (unsigned long) Sta_ROLE_DEFAULT);
+	 Stats.Role = (Sta_Role_t)
+		      Par_GetParToUnsignedLong ("Role",
+						0,
+						Sta_NUM_ROLES_STAT - 1,
+						(unsigned long) Sta_ROLE_DEFAULT);
 
 	 /***** Get users range for access statistics *****/
 	 Gbl.Scope.Allowed = 1 << Hie_SYS |
@@ -780,10 +826,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
-	 if ((Gbl.Stat.Role == Sta_ROLE_ALL_USRS ||
-	      Gbl.Stat.Role == Sta_ROLE_UNKNOWN_USRS) &&
-	     (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
-	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
+	 if ((Stats.Role == Sta_ROLE_ALL_USRS ||
+	      Stats.Role == Sta_ROLE_UNKNOWN_USRS) &&
+	     (Stats.CountType == Sta_DISTINCT_USRS ||
+	      Stats.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
 	   {
 	    /* Write warning message and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
@@ -791,22 +837,22 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
-	 if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+	 if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	   {
 	    /****** Get the number of the first row to show ******/
-	    Gbl.Stat.FirstRow = Par_GetParToUnsignedLong ("FirstRow",
-	                                                  1,
-	                                                  ULONG_MAX,
-	                                                  0);
+	    Stats.FirstRow = Par_GetParToUnsignedLong ("FirstRow",
+						       1,
+						       ULONG_MAX,
+						       0);
 
 	    /****** Get the number of the last row to show ******/
-	    Gbl.Stat.LastRow = Par_GetParToUnsignedLong ("LastRow",
-	                                                 1,
-	                                                 ULONG_MAX,
-	                                                 0);
+	    Stats.LastRow = Par_GetParToUnsignedLong ("LastRow",
+						      1,
+						      ULONG_MAX,
+						      0);
 
 	    /****** Get the number of rows per page ******/
-	    Gbl.Stat.RowsPerPage =
+	    Stats.RowsPerPage =
 	    (unsigned) Par_GetParToUnsignedLong ("RowsPage",
 	                                         Sta_MIN_ROWS_PER_PAGE,
 	                                         Sta_MAX_ROWS_PER_PAGE,
@@ -856,7 +902,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
 
    /***** Query depending on the type of count *****/
-   switch (Gbl.Stat.CountType)
+   switch (Stats.CountType)
      {
       case Sta_TOTAL_CLICKS:
          Str_Copy (StrQueryCountType,"COUNT(*)",
@@ -882,7 +928,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Lay_NotEnoughMemoryExit ();
 
    /* Start the query */
-   switch (Gbl.Stat.ClicksGroupedBy)
+   switch (Stats.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
    	 snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
@@ -1078,14 +1124,14 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 
          /* Type of users */
-	 switch (Gbl.Stat.Role)
+	 switch (Stats.Role)
 	   {
 	    case Sta_ROLE_IDENTIFIED_USRS:
                sprintf (StrRole," AND %s.Role<>%u",
                         LogTable,(unsigned) Rol_UNK);
 	       break;
 	    case Sta_ROLE_ALL_USRS:
-               switch (Gbl.Stat.CountType)
+               switch (Stats.CountType)
                  {
                   case Sta_TOTAL_CLICKS:
                   case Sta_GENERATION_TIME:
@@ -1143,7 +1189,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          Str_Concat (Query,StrRole,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 
-         switch (Gbl.Stat.ClicksGroupedBy)
+         switch (Stats.ClicksGroupedBy)
            {
             case Sta_CLICKS_GBL_PER_PLUGIN:
             case Sta_CLICKS_GBL_PER_API_FUNCTION:
@@ -1202,16 +1248,16 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
 
    /* Select action */
-   if (Gbl.Stat.NumAction != ActAll)
+   if (Stats.NumAction != ActAll)
      {
       sprintf (QueryAux," AND %s.ActCod=%ld",
-               LogTable,Act_GetActCod (Gbl.Stat.NumAction));
+               LogTable,Act_GetActCod (Stats.NumAction));
       Str_Concat (Query,QueryAux,
                   Sta_MAX_BYTES_QUERY_ACCESS);
      }
 
    /* End the query */
-   switch (Gbl.Stat.ClicksGroupedBy)
+   switch (Stats.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
 	 Str_Concat (Query," ORDER BY F",
@@ -1317,43 +1363,43 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    else
      {
       /***** Put the table with the clicks *****/
-      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+      if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Box_BoxBegin ("100%",Txt_List_of_detailed_clicks,
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
       else
-	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],
+	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Stats.CountType],
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
-      HTM_TABLE_BeginPadding (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);
-      switch (Gbl.Stat.ClicksGroupedBy)
+      HTM_TABLE_BeginPadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
+      switch (Stats.ClicksGroupedBy)
 	{
 	 case Sta_CLICKS_CRS_DETAILED_LIST:
-	    Sta_ShowDetailedAccessesList (NumRows,mysql_res);
+	    Sta_ShowDetailedAccessesList (&Stats,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_USR:
-	    Sta_ShowNumHitsPerUsr (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerUsr (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_DAY:
 	 case Sta_CLICKS_GBL_PER_DAY:
-	    Sta_ShowNumHitsPerDay (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerDay (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
 	 case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-	    Sta_ShowDistrAccessesPerDayAndHour (NumRows,mysql_res);
+	    Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_WEEK:
 	 case Sta_CLICKS_GBL_PER_WEEK:
-	    Sta_ShowNumHitsPerWeek (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerWeek (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_MONTH:
 	 case Sta_CLICKS_GBL_PER_MONTH:
-	    Sta_ShowNumHitsPerMonth (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerMonth (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_YEAR:
 	 case Sta_CLICKS_GBL_PER_YEAR:
-	    Sta_ShowNumHitsPerYear (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerYear (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_HOUR:
 	 case Sta_CLICKS_GBL_PER_HOUR:
@@ -1365,31 +1411,31 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    break;
 	 case Sta_CLICKS_CRS_PER_ACTION:
 	 case Sta_CLICKS_GBL_PER_ACTION:
-	    Sta_ShowNumHitsPerAction (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerAction (Stats.CountType,NumRows,mysql_res);
 	    break;
          case Sta_CLICKS_GBL_PER_PLUGIN:
-            Sta_ShowNumHitsPerPlugin (NumRows,mysql_res);
+            Sta_ShowNumHitsPerPlugin (Stats.CountType,NumRows,mysql_res);
             break;
          case Sta_CLICKS_GBL_PER_API_FUNCTION:
-            Sta_ShowNumHitsPerWSFunction (NumRows,mysql_res);
+            Sta_ShowNumHitsPerWSFunction (Stats.CountType,NumRows,mysql_res);
             break;
          case Sta_CLICKS_GBL_PER_BANNER:
-            Sta_ShowNumHitsPerBanner (NumRows,mysql_res);
+            Sta_ShowNumHitsPerBanner (Stats.CountType,NumRows,mysql_res);
             break;
          case Sta_CLICKS_GBL_PER_COUNTRY:
-	    Sta_ShowNumHitsPerCountry (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerCountry (Stats.CountType,NumRows,mysql_res);
 	    break;
          case Sta_CLICKS_GBL_PER_INSTITUTION:
-	    Sta_ShowNumHitsPerInstitution (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerInstitution (Stats.CountType,NumRows,mysql_res);
 	    break;
          case Sta_CLICKS_GBL_PER_CENTRE:
-	    Sta_ShowNumHitsPerCentre (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerCentre (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_GBL_PER_DEGREE:
-	    Sta_ShowNumHitsPerDegree (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerDegree (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_GBL_PER_COURSE:
-	    Sta_ShowNumHitsPerCourse (NumRows,mysql_res);
+	    Sta_ShowNumHitsPerCourse (Stats.CountType,NumRows,mysql_res);
 	    break;
 	}
       HTM_TABLE_End ();
@@ -1407,7 +1453,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Write time zone used in the calculation of these statistics *****/
-   switch (Gbl.Stat.ClicksGroupedBy)
+   switch (Stats.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
@@ -1436,7 +1482,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 /******************* Show a listing of detailed clicks ***********************/
 /*****************************************************************************/
 
-static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
+                                          unsigned long NumRows,
+                                          MYSQL_RES *mysql_res)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Show_previous_X_clicks;
@@ -1472,31 +1520,31 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Compute the first and the last row to show *****/
-   FirstRow = Gbl.Stat.FirstRow;
-   LastRow  = Gbl.Stat.LastRow;
+   FirstRow = Stats->FirstRow;
+   LastRow  = Stats->LastRow;
    if (FirstRow == 0 && LastRow == 0) // Call from main form
      {
       // Show last clicks
-      FirstRow = (NumRows / Gbl.Stat.RowsPerPage - 1) * Gbl.Stat.RowsPerPage + 1;
-      if ((FirstRow + Gbl.Stat.RowsPerPage - 1) < NumRows)
-	 FirstRow += Gbl.Stat.RowsPerPage;
+      FirstRow = (NumRows / Stats->RowsPerPage - 1) * Stats->RowsPerPage + 1;
+      if ((FirstRow + Stats->RowsPerPage - 1) < NumRows)
+	 FirstRow += Stats->RowsPerPage;
       LastRow = NumRows;
      }
    if (FirstRow < 1) // For security reasons; really it should never be less than 1
       FirstRow = 1;
    if (LastRow > NumRows)
       LastRow = NumRows;
-   if ((LastRow - FirstRow) >= Gbl.Stat.RowsPerPage) // For if there have been clicks that have increased the number of rows
-      LastRow = FirstRow + Gbl.Stat.RowsPerPage - 1;
+   if ((LastRow - FirstRow) >= Stats->RowsPerPage) // For if there have been clicks that have increased the number of rows
+      LastRow = FirstRow + Stats->RowsPerPage - 1;
 
    /***** Compute the number total of pages *****/
    /* Number of pages before the current one */
-   NumPagesBefore = (FirstRow-1) / Gbl.Stat.RowsPerPage;
-   if (NumPagesBefore * Gbl.Stat.RowsPerPage < (FirstRow-1))
+   NumPagesBefore = (FirstRow-1) / Stats->RowsPerPage;
+   if (NumPagesBefore * Stats->RowsPerPage < (FirstRow-1))
       NumPagesBefore++;
    /* Number of pages after the current one */
-   NumPagesAfter = (NumRows - LastRow) / Gbl.Stat.RowsPerPage;
-   if (NumPagesAfter * Gbl.Stat.RowsPerPage < (NumRows - LastRow))
+   NumPagesAfter = (NumRows - LastRow) / Stats->RowsPerPage;
+   if (NumPagesAfter * Stats->RowsPerPage < (NumRows - LastRow))
       NumPagesAfter++;
    /* Count the total number of pages */
    NumPagsTotal = NumPagesBefore + 1 + NumPagesAfter;
@@ -1514,17 +1562,17 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
-      Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+      Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
       Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
-      Par_PutHiddenParamUnsigned (NULL,"RowsPage",Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
    HTM_TD_Begin ("class=\"LM\"");
    if (FirstRow > 1)
      {
       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
-						    (long) Gbl.Stat.RowsPerPage),
+						    (long) Stats->RowsPerPage),
 			       "BT_LINK TIT_TBL",NULL);
       Str_FreeString ();
       HTM_STRONG_Begin ();
@@ -1552,17 +1600,17 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
       Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
-      Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
-      Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
+      Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
    HTM_TD_Begin ("class=\"RM\"");
    if (LastRow < NumRows)
      {
       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
-						    (long) Gbl.Stat.RowsPerPage),
+						    (long) Stats->RowsPerPage),
 			       "BT_LINK TIT_TBL",NULL);
       Str_FreeString ();
       HTM_STRONG_Begin ();
@@ -1694,7 +1742,8 @@ static void Sta_WriteLogComments (long LogCod)
 /********* Show a listing of with the number of clicks of each user **********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
+                                   unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Photo;
@@ -1722,7 +1771,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
    HTM_TH (1,1,"LT",Txt_ID);
    HTM_TH (1,1,"LT",Txt_Name);
    HTM_TH (1,1,"CT",Txt_Role);
-   HTM_TH (1,2,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,2,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -1806,7 +1855,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 /********** Show a listing of with the number of clicks in each date *********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
+                                   unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Date;
    extern const char *Txt_Day;
@@ -1831,7 +1881,7 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
    HTM_TH (1,1,"CT",Txt_Date);
    HTM_TH (1,1,"LT",Txt_Day);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -1936,7 +1986,9 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 #define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 25
 #define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH * 24)
 
-static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
+                                                unsigned long NumRows,
+                                                MYSQL_RES *mysql_res)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
@@ -1974,14 +2026,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
    Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Dat_WriteParamsIniEndDates ();
-   Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
-   Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Gbl.Stat.CountType);
-   Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+   Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
+   Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
+   Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    else // Gbl.Action.Act == ActSeeAccGbl
      {
-      Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Gbl.Stat.Role);
+      Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
       Sta_PutHiddenParamScopeSta ();
      }
 
@@ -2021,7 +2073,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
    HTM_TH (3,1,"CT",Txt_Date);
    HTM_TH (3,1,"LT",Txt_Day);
-   HTM_TH (1,24,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,24,"LT",Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType]);
 
    HTM_TR_End ();
 
@@ -2384,8 +2436,9 @@ static void Sta_SetColor (Sta_ColorType_t ColorType,double HitsNum,double HitsMa
 /********** Show listing with number of pages generated per week *************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
-                                     MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
+                                    unsigned long NumRows,
+                                    MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Week;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
@@ -2406,7 +2459,7 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LT",Txt_Week);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -2485,8 +2538,9 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
 /********** Show a graph with the number of clicks in each month *************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
-                                      MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
+                                     unsigned long NumRows,
+                                     MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Month;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
@@ -2506,7 +2560,7 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LT",Txt_Month);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -2585,7 +2639,8 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
 /*********** Show a graph with the number of clicks in each year *************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
+static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
+                                    unsigned long NumRows,
                                     MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Year;
@@ -2606,7 +2661,7 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LT",Txt_Year);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3010,7 +3065,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,double HitsNum,double MaxX)
 /**** Show a listing of accesses with the number of clicks a each action *****/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
+static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
@@ -3025,7 +3081,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"RT",Txt_Action);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3065,7 +3121,8 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
 /*************** Show number of clicks distributed by plugin *****************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
+static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Plugin;
@@ -3079,7 +3136,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"RT",Txt_Plugin);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3120,7 +3177,8 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
 /******** Show number of clicks distributed by web service function **********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
+static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
+                                          unsigned long NumRows,
                                           MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Function;
@@ -3134,7 +3192,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LT",Txt_Function);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3172,7 +3230,8 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
 /******** Show number of clicks distributed by web service function **********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
+static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Banner;
@@ -3188,7 +3247,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"CT",Txt_Banner);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3241,7 +3300,8 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
 /******* Show a listing with the number of hits distributed by country *******/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
+                                       unsigned long NumRows,
                                        MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3258,7 +3318,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Country);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3331,7 +3391,8 @@ static void Sta_WriteCountry (long CtyCod)
 /***** Show a listing with the number of hits distributed by institution *****/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
+static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
+                                           unsigned long NumRows,
                                            MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3348,7 +3409,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Institution);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3423,7 +3484,8 @@ static void Sta_WriteInstit (long InsCod)
 /******* Show a listing with the number of hits distributed by centre ********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3440,7 +3502,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Centre);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3515,7 +3577,8 @@ static void Sta_WriteCentre (long CtrCod)
 /******* Show a listing with the number of hits distributed by degree ********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
+static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3532,7 +3595,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Degree);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
@@ -3607,7 +3670,8 @@ static void Sta_WriteDegree (long DegCod)
 /********* Show a listing with the number of clicks to each course ***********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
+static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
+                                      unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3630,7 +3694,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    HTM_TH (1,1,"CT",Txt_Degree);
    HTM_TH (1,1,"CT",Txt_Year_OF_A_DEGREE);
    HTM_TH (1,1,"CT",Txt_Course);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 

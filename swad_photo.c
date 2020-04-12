@@ -87,6 +87,8 @@ static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+struct Pho_DegPhotos DegPhotos;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -1350,7 +1352,7 @@ void Pho_CalcPhotoDegree (void)
    long TotalTimeToComputeAvgPhotoInMicroseconds,PartialTimeToComputeAvgPhotoInMicroseconds;
 
    /***** Get type of average *****/
-   Gbl.Stat.DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
+   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
 
    /***** Create public directories for average photos if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
@@ -1685,7 +1687,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 void Pho_ShowPhotoDegree (void)
   {
    /***** Get type of average *****/
-   Gbl.Stat.DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
+   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
 
    Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
   }
@@ -1697,7 +1699,7 @@ void Pho_ShowPhotoDegree (void)
 void Pho_PrintPhotoDegree (void)
   {
    /***** Get type of average *****/
-   Gbl.Stat.DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
+   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
 
    Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_PRINT);
   }
@@ -1712,10 +1714,10 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Degrees;
 
    /***** Get photo size from form *****/
-   Gbl.Stat.DegPhotos.HowComputePhotoSize = Pho_GetHowComputePhotoSizeFromForm ();
+   DegPhotos.HowComputePhotoSize = Pho_GetHowComputePhotoSizeFromForm ();
 
    /***** Get how to order degrees from form *****/
-   Gbl.Stat.DegPhotos.HowOrderDegrees = Pho_GetHowOrderDegreesFromForm ();
+   DegPhotos.HowOrderDegrees = Pho_GetHowOrderDegreesFromForm ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -1819,7 +1821,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
      {
       TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
       HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-		  TypeOfAvg == Gbl.Stat.DegPhotos.TypeOfAverage,false,
+		  TypeOfAvg == DegPhotos.TypeOfAverage,false,
 		  "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    HTM_SELECT_End ();
@@ -1835,7 +1837,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
 void Pho_PutHiddenParamTypeOfAvg (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) Gbl.Stat.DegPhotos.TypeOfAverage);
+   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) DegPhotos.TypeOfAverage);
   }
 
 /*****************************************************************************/
@@ -1883,7 +1885,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
      {
       PhoSiUnsigned = (unsigned) PhoSi;
       HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-		  PhoSi == Gbl.Stat.DegPhotos.HowComputePhotoSize,false,
+		  PhoSi == DegPhotos.HowComputePhotoSize,false,
 		  "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
    HTM_SELECT_End ();
@@ -1899,7 +1901,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
 void Pho_PutHiddenParamPhotoSize (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) Gbl.Stat.DegPhotos.HowComputePhotoSize);
+   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) DegPhotos.HowComputePhotoSize);
   }
 
 /*****************************************************************************/
@@ -1947,7 +1949,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
      {
       OrderUnsigned = (unsigned) Order;
       HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-		  Order == Gbl.Stat.DegPhotos.HowOrderDegrees,false,
+		  Order == DegPhotos.HowOrderDegrees,false,
 		  "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
    HTM_SELECT_End ();
@@ -1963,7 +1965,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
 void Pho_PutHiddenParamOrderDegrees (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Stat.DegPhotos.HowOrderDegrees);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) DegPhotos.HowOrderDegrees);
   }
 
 /*****************************************************************************/
@@ -2101,27 +2103,27 @@ static void Pho_GetMaxStdsPerDegree (void)
       row = mysql_fetch_row (mysql_res);
 
       if (row[0] == NULL)
-	 Gbl.Stat.DegPhotos.MaxStds = -1;
-      else if (sscanf (row[0],"%d",&Gbl.Stat.DegPhotos.MaxStds) != 1)
-	 Gbl.Stat.DegPhotos.MaxStds = -1;
+	 DegPhotos.MaxStds = -1;
+      else if (sscanf (row[0],"%d",&DegPhotos.MaxStds) != 1)
+	 DegPhotos.MaxStds = -1;
 
       if (row[1] == NULL)
-	 Gbl.Stat.DegPhotos.MaxStdsWithPhoto = -1;
-      else if (sscanf (row[1],"%d",&Gbl.Stat.DegPhotos.MaxStdsWithPhoto) != 1)
-	 Gbl.Stat.DegPhotos.MaxStdsWithPhoto = -1;
+	 DegPhotos.MaxStdsWithPhoto = -1;
+      else if (sscanf (row[1],"%d",&DegPhotos.MaxStdsWithPhoto) != 1)
+	 DegPhotos.MaxStdsWithPhoto = -1;
 
       if (row[2] == NULL)
-	 Gbl.Stat.DegPhotos.MaxPercent = -1.0;
-      else if (sscanf (row[2],"%lf",&Gbl.Stat.DegPhotos.MaxPercent) != 1)
-	 Gbl.Stat.DegPhotos.MaxPercent = -1.0;
+	 DegPhotos.MaxPercent = -1.0;
+      else if (sscanf (row[2],"%lf",&DegPhotos.MaxPercent) != 1)
+	 DegPhotos.MaxPercent = -1.0;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
      {
-      Gbl.Stat.DegPhotos.MaxStds = Gbl.Stat.DegPhotos.MaxStdsWithPhoto = -1;
-      Gbl.Stat.DegPhotos.MaxPercent = -1.0;
+      DegPhotos.MaxStds = DegPhotos.MaxStdsWithPhoto = -1;
+      DegPhotos.MaxPercent = -1.0;
      }
   }
 
@@ -2314,7 +2316,7 @@ static unsigned long Pho_BuildQueryOfDegrees (MYSQL_RES **mysql_res)
   {
    unsigned long NumDegs = 0;	// Initialized to avoid warning
 
-   switch (Gbl.Stat.DegPhotos.HowOrderDegrees)
+   switch (DegPhotos.HowOrderDegrees)
      {
       case Pho_NUMBER_OF_STUDENTS:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
@@ -2485,14 +2487,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),
 	        "%s/%s/%ld_%s.jpg",
 	        Cfg_PATH_PHOTO_PUBLIC,
-	        Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+	        Pho_StrAvgPhotoDirs[DegPhotos.TypeOfAverage],
 	        Deg->DegCod,Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
 	{
 	 snprintf (PhotoURL,sizeof (PhotoURL),
 	           "%s/%s/%ld_%s.jpg",
 		   Cfg_URL_PHOTO_PUBLIC,
-		   Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+		   Pho_StrAvgPhotoDirs[DegPhotos.TypeOfAverage],
 		   Deg->DegCod,Usr_StringsSexDB[Sex]);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
@@ -2572,26 +2574,26 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
   {
    unsigned PhotoPixels = DEF_PIXELS_PHOTO;
 
-   switch (Gbl.Stat.DegPhotos.HowComputePhotoSize)
+   switch (DegPhotos.HowComputePhotoSize)
      {
       case Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS:
-         if (Gbl.Stat.DegPhotos.MaxStds > 0)
+         if (DegPhotos.MaxStds > 0)
             PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                       Gbl.Stat.DegPhotos.MaxStds) * NumStds +
+        	                       DegPhotos.MaxStds) * NumStds +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
       case Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS:
-         if (Gbl.Stat.DegPhotos.MaxStdsWithPhoto > 0)
+         if (DegPhotos.MaxStdsWithPhoto > 0)
             PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                       Gbl.Stat.DegPhotos.MaxStdsWithPhoto) * NumStdsWithPhoto +
+        	                       DegPhotos.MaxStdsWithPhoto) * NumStdsWithPhoto +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
       case Pho_PROPORTIONAL_TO_PERCENT:
-         if (Gbl.Stat.DegPhotos.MaxPercent > 0.0)
+         if (DegPhotos.MaxPercent > 0.0)
            {
             if (NumStds)
                PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                          Gbl.Stat.DegPhotos.MaxPercent) *
+        	                          DegPhotos.MaxPercent) *
         	                         ((double) NumStdsWithPhoto / NumStds) +
         	                         MIN_PIXELS_PHOTO + 0.5);
             else

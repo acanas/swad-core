@@ -79,6 +79,16 @@ typedef enum
 
 #define Pho_MAX_CLICKS_WITHOUT_PHOTO	 50
 
+struct Pho_DegPhotos
+  {
+   Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
+   Pho_HowComputePhotoSize_t HowComputePhotoSize;
+   Pho_HowOrderDegrees_t HowOrderDegrees;
+   int MaxStds;
+   int MaxStdsWithPhoto;
+   double MaxPercent;
+  } DegPhotos;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

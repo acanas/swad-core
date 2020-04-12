@@ -448,13 +448,13 @@ static void CrsCfg_Indicators (void)
   {
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
-   struct Ind_IndicatorsCrs Indicators;
+   struct Ind_IndicatorsCrs IndicatorsCrs;
    int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
    char *Title;
 
    /***** Compute indicators ******/
    Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
-				     NumIndicatorsFromDB,&Indicators);
+				     NumIndicatorsFromDB,&IndicatorsCrs);
 
    /***** Number of indicators *****/
    HTM_TR_Begin (NULL);
@@ -466,13 +466,13 @@ static void CrsCfg_Indicators (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartForm (ActReqStaCrs);
    if (asprintf (&Title,"%u %s %u",
-	         Indicators.NumIndicators,
+	         IndicatorsCrs.NumIndicators,
 	         Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
       Lay_NotEnoughMemoryExit ();
    HTM_BUTTON_SUBMIT_Begin (Title,"BT_LINK DAT",NULL);
    HTM_TxtF ("%s&nbsp;",Title);
-   Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
-								   "exclamation-triangle.svg",
+   Ico_PutIcon ((IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
+								      "exclamation-triangle.svg",
 		Title,"ICO16x16");
    HTM_BUTTON_End ();
    free (Title);

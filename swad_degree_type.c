@@ -103,7 +103,7 @@ static void DT_EditingDegreeTypeDestructor (void);
 /************** Show selector of degree types for statistics *****************/
 /*****************************************************************************/
 
-void DT_WriteSelectorDegreeTypes (void)
+void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod)
   {
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
@@ -116,13 +116,13 @@ void DT_WriteSelectorDegreeTypes (void)
    HTM_SELECT_Begin (true,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\"");
    HTM_OPTION (HTM_Type_STRING,"-1",
-	       Gbl.Stat.DegTypCod == -1L,false,
+	       SelectedDegTypCod == -1L,false,
 	       "%s",Txt_Any_type_of_degree);
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
       HTM_OPTION (HTM_Type_LONG,&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod,
-		  Gbl.DegTypes.Lst[NumDegTyp].DegTypCod  == Gbl.Stat.DegTypCod,false,
+		  Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == SelectedDegTypCod,false,
 		  "%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
    HTM_SELECT_End ();
 
