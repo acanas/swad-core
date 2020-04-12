@@ -87,8 +87,6 @@ static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-struct Pho_DegPhotos DegPhotos;
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -111,29 +109,38 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
 static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
-static void Pho_PutSelectorForTypeOfAvg (void);
+static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
+                                         Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void);
-static void Pho_PutSelectorForHowComputePhotoSize (void);
+static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos);
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
-static void Pho_PutSelectorForHowOrderDegrees (void);
+static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPhotos);
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
 
-static void Pho_PutIconToPrintDegreeStats (__attribute__((unused)) void *Args);
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (__attribute__((unused)) void *Args);
+static void Pho_PutIconToPrintDegreeStats (void *DegPhotos);
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos);
 
-static void Pho_PutLinkToCalculateDegreeStats (void);
-static void Pho_GetMaxStdsPerDegree (void);
-static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static unsigned long Pho_BuildQueryOfDegrees (MYSQL_RES **mysql_res);
+static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos);
+static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
+static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPhotos,
+                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static void Pho_ShowOrPrintListDegrees (const struct Pho_DegPhotos *DegPhotos,
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                              MYSQL_RES **mysql_res);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Degree *Deg,
+                                           const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
                                            int NumStds,int NumStdsWithPhoto);
-static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight);
+static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
+                                  int NumStds,int NumStdsWithPhoto,
+                                  unsigned *PhotoWidth,unsigned *PhotoHeight);
 
 /*****************************************************************************/
 /************** Check if I can change the photo of another user **************/
@@ -1351,9 +1358,6 @@ void Pho_CalcPhotoDegree (void)
    Usr_Sex_t Sex;
    long TotalTimeToComputeAvgPhotoInMicroseconds,PartialTimeToComputeAvgPhotoInMicroseconds;
 
-   /***** Get type of average *****/
-   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
-
    /***** Create public directories for average photos if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
    for (TypeOfAverage = (Pho_AvgPhotoTypeOfAverage_t) 0;
@@ -1405,7 +1409,8 @@ void Pho_CalcPhotoDegree (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Show photos *****/
-   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
+   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
+                               Pho_DEGREES_SEE);
   }
 
 /*****************************************************************************/
@@ -1686,10 +1691,8 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 
 void Pho_ShowPhotoDegree (void)
   {
-   /***** Get type of average *****/
-   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
-
-   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
+   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
+                               Pho_DEGREES_SEE);
   }
 
 /*****************************************************************************/
@@ -1698,20 +1701,20 @@ void Pho_ShowPhotoDegree (void)
 
 void Pho_PrintPhotoDegree (void)
   {
-   /***** Get type of average *****/
-   DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
-
-   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_PRINT);
+   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
+                               Pho_DEGREES_PRINT);
   }
 
 /*****************************************************************************/
 /*** Show class photo with average photos of all students from each degree ***/
 /*****************************************************************************/
 
-void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Hlp_ANALYTICS_Degrees;
    extern const char *Txt_Degrees;
+   struct Pho_DegPhotos DegPhotos;
 
    /***** Get photo size from form *****/
    DegPhotos.HowComputePhotoSize = Pho_GetHowComputePhotoSizeFromForm ();
@@ -1729,23 +1732,23 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       case Pho_DEGREES_SEE:
 	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Degrees,
-	               Pho_PutIconToPrintDegreeStats,NULL,
+	               Pho_PutIconToPrintDegreeStats,&DegPhotos,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	 /***** Put a selector for the type of average *****/
-	 Pho_PutSelectorForTypeOfAvg ();
+	 Pho_PutSelectorForTypeOfAvg (&DegPhotos,TypeOfAverage);
 
 	 /***** Put a selector for the size of photos *****/
-	 Pho_PutSelectorForHowComputePhotoSize ();
+	 Pho_PutSelectorForHowComputePhotoSize (&DegPhotos);
 
 	 /***** Put a selector for the order of degrees *****/
-	 Pho_PutSelectorForHowOrderDegrees ();
+	 Pho_PutSelectorForHowOrderDegrees (&DegPhotos);
 
 	 HTM_TABLE_End ();
 
 	 /***** Link to compute average photos *****/
-	 Pho_PutLinkToCalculateDegreeStats ();
+	 Pho_PutLinkToCalculateDegreeStats (&DegPhotos);
 
 	 break;
       case Pho_DEGREES_PRINT:
@@ -1759,16 +1762,16 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get maximum number of students
           and maximum number of students with photo
           in all degrees *****/
-   Pho_GetMaxStdsPerDegree ();
+   Pho_GetMaxStdsPerDegree (&DegPhotos);
 
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
      {
       case Usr_LIST_AS_CLASS_PHOTO:
-         Pho_ShowOrPrintClassPhotoDegrees (SeeOrPrint);
+         Pho_ShowOrPrintClassPhotoDegrees (&DegPhotos,SeeOrPrint);
          break;
       case Usr_LIST_AS_LISTING:
-         Pho_ShowOrPrintListDegrees (SeeOrPrint);
+         Pho_ShowOrPrintListDegrees (&DegPhotos,SeeOrPrint);
          break;
       default:
 	 break;
@@ -1782,18 +1785,19 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /**************** Put parameter for degree average photos ********************/
 /*****************************************************************************/
 
-void Pho_PutParamsDegPhoto (__attribute__((unused)) void *Args)
+void Pho_PutParamsDegPhoto (void *DegPhotos)
   {
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamPhotoSize ();
-   Pho_PutHiddenParamOrderDegrees ();
+   Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
+   Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
+   Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
   }
 
 /*****************************************************************************/
 /******************* Put a selector for the type of average ******************/
 /*****************************************************************************/
 
-static void Pho_PutSelectorForTypeOfAvg (void)
+static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
+                                         Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Average_type;
@@ -1810,8 +1814,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
-   Pho_PutHiddenParamPhotoSize ();
-   Pho_PutHiddenParamOrderDegrees ();
+   Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+   Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"AvgType\" name=\"AvgType\"");
@@ -1821,7 +1825,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
      {
       TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
       HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-		  TypeOfAvg == DegPhotos.TypeOfAverage,false,
+		  TypeOfAvg == TypeOfAverage,false,
 		  "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    HTM_SELECT_End ();
@@ -1835,9 +1839,9 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 /**************** Put hidden parameter for the type of average ***************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamTypeOfAvg (void)
+void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
   {
-   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) DegPhotos.TypeOfAverage);
+   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) TypeOfAverage);
   }
 
 /*****************************************************************************/
@@ -1857,7 +1861,7 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 /****************** Put a selector for the size of photos ********************/
 /*****************************************************************************/
 
-static void Pho_PutSelectorForHowComputePhotoSize (void)
+static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
@@ -1874,8 +1878,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamOrderDegrees ();
+   Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+   Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"PhotoSize\" name=\"PhotoSize\"");
@@ -1885,7 +1889,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
      {
       PhoSiUnsigned = (unsigned) PhoSi;
       HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-		  PhoSi == DegPhotos.HowComputePhotoSize,false,
+		  PhoSi == DegPhotos->HowComputePhotoSize,false,
 		  "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
    HTM_SELECT_End ();
@@ -1899,9 +1903,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 /**************** Put hidden parameter for the size of photos ****************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamPhotoSize (void)
+void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
   {
-   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) DegPhotos.HowComputePhotoSize);
+   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) HowComputePhotoSize);
   }
 
 /*****************************************************************************/
@@ -1921,7 +1925,7 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 /****************** Put a selector for the order of degrees ******************/
 /*****************************************************************************/
 
-static void Pho_PutSelectorForHowOrderDegrees (void)
+static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
@@ -1938,8 +1942,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    Frm_StartForm (ActSeePhoDeg);
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamPhotoSize ();
+   Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+   Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_SELECT_Begin (true,
 		     "id=\"Order\" name=\"Order\"");
@@ -1949,7 +1953,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
      {
       OrderUnsigned = (unsigned) Order;
       HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-		  Order == DegPhotos.HowOrderDegrees,false,
+		  Order == DegPhotos->HowOrderDegrees,false,
 		  "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
    HTM_SELECT_End ();
@@ -1963,9 +1967,9 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 /**************** Put hidden parameter for the order of degrees **************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamOrderDegrees (void)
+void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) DegPhotos.HowOrderDegrees);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) HowOrderDegrees);
   }
 
 /*****************************************************************************/
@@ -1985,17 +1989,17 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 /*************** Put icon to print view the stats of degrees ***************/
 /*****************************************************************************/
 
-static void Pho_PutIconToPrintDegreeStats (__attribute__((unused)) void *Args)
+static void Pho_PutIconToPrintDegreeStats (void *DegPhotos)
   {
    Ico_PutContextualIconToPrint (ActPrnPhoDeg,
-				 Pho_PutLinkToPrintViewOfDegreeStatsParams,NULL);
+				 Pho_PutLinkToPrintViewOfDegreeStatsParams,DegPhotos);
   }
 
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (__attribute__((unused)) void *Args)
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
   {
-   Pho_PutHiddenParamTypeOfAvg ();
-   Pho_PutHiddenParamPhotoSize ();
-   Pho_PutHiddenParamOrderDegrees ();
+   Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
+   Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
+   Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
   }
 
@@ -2003,7 +2007,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (__attribute__((unused)) v
 /*************** Put a link to calculate the stats of degrees ****************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToCalculateDegreeStats (void)
+static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
@@ -2030,9 +2034,9 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
 
       /* Begin form */
       Frm_StartForm (ActCalPhoDeg);
-      Pho_PutHiddenParamTypeOfAvg ();
-      Pho_PutHiddenParamPhotoSize ();
-      Pho_PutHiddenParamOrderDegrees ();
+      Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+      Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+      Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 	                         The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
@@ -2083,7 +2087,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
-static void Pho_GetMaxStdsPerDegree (void)
+static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2103,27 +2107,27 @@ static void Pho_GetMaxStdsPerDegree (void)
       row = mysql_fetch_row (mysql_res);
 
       if (row[0] == NULL)
-	 DegPhotos.MaxStds = -1;
-      else if (sscanf (row[0],"%d",&DegPhotos.MaxStds) != 1)
-	 DegPhotos.MaxStds = -1;
+	 DegPhotos->MaxStds = -1;
+      else if (sscanf (row[0],"%d",&DegPhotos->MaxStds) != 1)
+	 DegPhotos->MaxStds = -1;
 
       if (row[1] == NULL)
-	 DegPhotos.MaxStdsWithPhoto = -1;
-      else if (sscanf (row[1],"%d",&DegPhotos.MaxStdsWithPhoto) != 1)
-	 DegPhotos.MaxStdsWithPhoto = -1;
+	 DegPhotos->MaxStdsWithPhoto = -1;
+      else if (sscanf (row[1],"%d",&DegPhotos->MaxStdsWithPhoto) != 1)
+	 DegPhotos->MaxStdsWithPhoto = -1;
 
       if (row[2] == NULL)
-	 DegPhotos.MaxPercent = -1.0;
-      else if (sscanf (row[2],"%lf",&DegPhotos.MaxPercent) != 1)
-	 DegPhotos.MaxPercent = -1.0;
+	 DegPhotos->MaxPercent = -1.0;
+      else if (sscanf (row[2],"%lf",&DegPhotos->MaxPercent) != 1)
+	 DegPhotos->MaxPercent = -1.0;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
      {
-      DegPhotos.MaxStds = DegPhotos.MaxStdsWithPhoto = -1;
-      DegPhotos.MaxPercent = -1.0;
+      DegPhotos->MaxStds = DegPhotos->MaxStdsWithPhoto = -1;
+      DegPhotos->MaxPercent = -1.0;
      }
   }
 
@@ -2131,7 +2135,8 @@ static void Pho_GetMaxStdsPerDegree (void)
 /************ Show or print the stats of degrees as class photo **************/
 /*****************************************************************************/
 
-static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPhotos,
+                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2144,7 +2149,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_BuildQueryOfDegrees (&mysql_res);
+   NumDegs = Pho_BuildQueryOfDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2181,7 +2186,10 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	    /***** Show average photo of students belonging to this degree *****/
 	    HTM_TD_Begin ("class=\"CLASSPHOTO CM\"");
-	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto);
+	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
+	                                   SeeOrPrint,
+	                                   Usr_SEX_ALL,
+	                                   NumStds,NumStdsWithPhoto);
 	    HTM_TD_End ();
 
 	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
@@ -2208,7 +2216,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 /**************** Show or print the stats of degrees as list *****************/
 /*****************************************************************************/
 
-static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+static void Pho_ShowOrPrintListDegrees (const struct Pho_DegPhotos *DegPhotos,
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
@@ -2224,7 +2233,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_BuildQueryOfDegrees (&mysql_res);
+   NumDegs = Pho_BuildQueryOfDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2288,7 +2297,9 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
 	    HTM_TD_Begin ("class=\"CLASSPHOTO RM COLOR%u\"",Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
-	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
+	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
+	                                      SeeOrPrint,Sex,
+	                                      NumStds,NumStdsWithPhoto);
 	    else
 	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
 	    HTM_TD_End ();
@@ -2312,11 +2323,12 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /****** Build a query to get the degrees ordered by different criteria *******/
 /*****************************************************************************/
 
-static unsigned long Pho_BuildQueryOfDegrees (MYSQL_RES **mysql_res)
+static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                              MYSQL_RES **mysql_res)
   {
    unsigned long NumDegs = 0;	// Initialized to avoid warning
 
-   switch (DegPhotos.HowOrderDegrees)
+   switch (HowOrderDegrees)
      {
       case Pho_NUMBER_OF_STUDENTS:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
@@ -2441,7 +2453,8 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
 /******************* Show the average photo of a degree **********************/
 /*****************************************************************************/
 
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Degree *Deg,
+                                           const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
                                            int NumStds,int NumStdsWithPhoto)
@@ -2464,7 +2477,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 
    /***** Compute photo width and height
           to be proportional to number of students *****/
-   Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
+   Pho_ComputePhotoSize (DegPhotos,
+                         NumStds,NumStdsWithPhoto,
+                         &PhotoWidth,&PhotoHeight);
 
    /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2487,14 +2502,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),
 	        "%s/%s/%ld_%s.jpg",
 	        Cfg_PATH_PHOTO_PUBLIC,
-	        Pho_StrAvgPhotoDirs[DegPhotos.TypeOfAverage],
+	        Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
 	        Deg->DegCod,Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
 	{
 	 snprintf (PhotoURL,sizeof (PhotoURL),
 	           "%s/%s/%ld_%s.jpg",
 		   Cfg_URL_PHOTO_PUBLIC,
-		   Pho_StrAvgPhotoDirs[DegPhotos.TypeOfAverage],
+		   Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
 		   Deg->DegCod,Usr_StringsSexDB[Sex]);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
@@ -2570,30 +2585,32 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 #define MAX_HEIGHT_PHOTO	120
 #define MAX_PIXELS_PHOTO	(MAX_WIDTH_PHOTO * MAX_HEIGHT_PHOTO)
 
-static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight)
+static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
+                                  int NumStds,int NumStdsWithPhoto,
+                                  unsigned *PhotoWidth,unsigned *PhotoHeight)
   {
    unsigned PhotoPixels = DEF_PIXELS_PHOTO;
 
-   switch (DegPhotos.HowComputePhotoSize)
+   switch (DegPhotos->HowComputePhotoSize)
      {
       case Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS:
-         if (DegPhotos.MaxStds > 0)
+         if (DegPhotos->MaxStds > 0)
             PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                       DegPhotos.MaxStds) * NumStds +
+        	                       DegPhotos->MaxStds) * NumStds +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
       case Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS:
-         if (DegPhotos.MaxStdsWithPhoto > 0)
+         if (DegPhotos->MaxStdsWithPhoto > 0)
             PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                       DegPhotos.MaxStdsWithPhoto) * NumStdsWithPhoto +
+        	                       DegPhotos->MaxStdsWithPhoto) * NumStdsWithPhoto +
         	                      MIN_PIXELS_PHOTO + 0.5);
          break;
       case Pho_PROPORTIONAL_TO_PERCENT:
-         if (DegPhotos.MaxPercent > 0.0)
+         if (DegPhotos->MaxPercent > 0.0)
            {
             if (NumStds)
                PhotoPixels = (unsigned) (((double) (MAX_PIXELS_PHOTO - MIN_PIXELS_PHOTO) /
-        	                          DegPhotos.MaxPercent) *
+        	                          DegPhotos->MaxPercent) *
         	                         ((double) NumStdsWithPhoto / NumStds) +
         	                         MIN_PIXELS_PHOTO + 0.5);
             else

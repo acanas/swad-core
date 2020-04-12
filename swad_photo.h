@@ -87,7 +87,7 @@ struct Pho_DegPhotos
    int MaxStds;
    int MaxStdsWithPhoto;
    double MaxPercent;
-  } DegPhotos;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -129,11 +129,10 @@ void Pho_CalcPhotoDegree (void);
 void Pho_RemoveObsoleteStatDegrees (void);
 void Pho_ShowPhotoDegree (void);
 void Pho_PrintPhotoDegree (void);
-void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 
-void Pho_PutParamsDegPhoto (__attribute__((unused)) void *Args);
-void Pho_PutHiddenParamTypeOfAvg (void);
-void Pho_PutHiddenParamPhotoSize (void);
-void Pho_PutHiddenParamOrderDegrees (void);
+void Pho_PutParamsDegPhoto (void *DegPhotos);
+void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
+void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize);
+void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees);
 
 #endif

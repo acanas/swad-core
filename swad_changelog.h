@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.179 (2020-04-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.180 (2020-04-12)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,6 +548,7 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.180:   Apr 12, 2020	Code refactoring in photo of degree. (285603 lines)
 	Version 19.179:   Apr 12, 2020	Code refactoring in indicators. (285582 lines)
 	Version 19.178:   Apr 12, 2020	Code refactoring in statistics. (285569 lines)
 	Version 19.177:   Apr 12, 2020	Code refactoring in exam announcements. (285509 lines)
