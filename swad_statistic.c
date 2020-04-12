@@ -456,7 +456,11 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
    struct Sta_Stats Stats;
-   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_START_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME  ] = Dat_HMS_TO_235959
+     };
    Sta_Role_t RoleStat;
    unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
@@ -480,16 +484,6 @@ void Sta_AskShowGblHits (void)
                       Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
-   if (Gbl.Action.Act == ActReqAccCrs)
-     {
-      SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
-      SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
-     }
-   else
-     {
-      SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
-      SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
-     }
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
    /***** Users' roles whose accesses we want to see *****/

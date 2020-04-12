@@ -992,9 +992,9 @@ void Dat_GetIniEndDatesFromForm (void)
       tm.tm_min   =  0;
       tm.tm_sec   =  0;
       tm.tm_isdst = -1;	// a negative value means that mktime() should
-				// (use timezone information and system databases to)
-				// attempt to determine whether DST
-				// is in effect at the specified time.
+			// (use timezone information and system databases to)
+			// attempt to determine whether DST
+			// is in effect at the specified time.
       if ((Gbl.DateRange.TimeUTC[Dat_START_TIME] = mktime (&tm)) < 0)
 	 Gbl.DateRange.TimeUTC[Dat_START_TIME] = (time_t) 0;
       tm_ptr = &tm;

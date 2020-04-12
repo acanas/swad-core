@@ -1224,6 +1224,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    unsigned long NumRows;
    unsigned long NumRow;
    unsigned ReadYear;
+   unsigned FirstYear;
    unsigned LastYear;
    unsigned Year;
 
@@ -1251,7 +1252,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 			     SubQueryRol);
 
    /***** Initialize first year *****/
-   Gbl.DateRange.DateIni.Date.Year = 1900 + Report->tm_FirstClickTime.tm_year;
+   FirstYear = 1900 + Report->tm_FirstClickTime.tm_year;
 
    /***** Initialize LastYear *****/
    LastYear = Gbl.Now.Date.Year;
@@ -1302,8 +1303,8 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Finally, show the oldest years without clicks *****/
-   for (Year = LastYear;
-        Year >= Gbl.DateRange.DateIni.Date.Year;
+   for (Year  = LastYear;
+        Year >= FirstYear;
         Year--)
      {
       /* Write the year */
