@@ -59,24 +59,27 @@ typedef enum
    Ind_INDICATORS_FULL,
   } Ind_IndicatorsLayout_t;
 
-struct Ind_Indicators Indicators;
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ind_GetParamsIndicators (void);
-static void Ind_GetParamNumIndicators (void);
-static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
-static bool Ind_GetIfShowBigList (unsigned NumCrss);
-static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
+static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators);
+static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators);
+static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
+                                       MYSQL_RES **mysql_res);
+static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+                                  unsigned NumCrss);
+static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
+                                                     unsigned NumCrss);
 static void Ind_PutParamsConfirmIWantToSeeBigList (void *Indicators);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
-static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
+static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indicators,
+                                              unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm);
-static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
+static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *Indicators,
+	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
 static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators);
@@ -101,6 +104,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_No_of_indicators;
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
+   struct Ind_Indicators Indicators;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
@@ -108,7 +112,7 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned Ind;
 
    /***** Get parameters *****/
-   Ind_GetParamsIndicators ();
+   Ind_GetParamsIndicators (&Indicators);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Indicators_of_courses,
@@ -173,7 +177,7 @@ void Ind_ReqIndicatorsCourses (void)
       If Indicators.NumIndicators >= 0 ==> only those courses in result
                                          with Indicators.NumIndicators set to yes
                                          will be listed */
-   NumCrss = Ind_GetTableOfCourses (&mysql_res);
+   NumCrss = Ind_GetTableOfCourses (&Indicators,&mysql_res);
 
    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
@@ -186,7 +190,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
+   Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -201,10 +205,10 @@ void Ind_ReqIndicatorsCourses (void)
 	Ind++)
       if (Indicators.IndicatorsSelected[Ind])
          NumCrssToList += NumCrssWithIndicatorYes[Ind];
-   if (Ind_GetIfShowBigList (NumCrssToList))
+   if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
      {
       /* Show table */
-      Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
+      Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
       /* Button to show more details */
       Frm_StartForm (ActSeeAllStaCrs);
@@ -228,7 +232,7 @@ void Ind_ReqIndicatorsCourses (void)
 /************* Get parameters related to indicators of courses ***************/
 /*****************************************************************************/
 
-static void Ind_GetParamsIndicators (void)
+static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
   {
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Hie_SYS |
@@ -241,15 +245,15 @@ static void Ind_GetParamsIndicators (void)
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Indicators.DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
-	                DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
-                        -1L;
+   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
+	                   DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
+                           -1L;
 
    /***** Get department code *****/
-   Indicators.DptCod = Dpt_GetAndCheckParamDptCod (-1L);	// -1L (any department) is allowed here
+   Indicators->DptCod = Dpt_GetAndCheckParamDptCod (-1L);	// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
-   Ind_GetParamNumIndicators ();
+   Ind_GetParamNumIndicators (Indicators);
   }
 
 /*****************************************************************************/
@@ -258,24 +262,25 @@ static void Ind_GetParamsIndicators (void)
 
 void Ind_ShowIndicatorsCourses (void)
   {
+   struct Ind_Indicators Indicators;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
 
    /***** Get parameters *****/
-   Ind_GetParamsIndicators ();
+   Ind_GetParamsIndicators (&Indicators);
 
    /***** Get courses from database *****/
-   NumCrss = Ind_GetTableOfCourses (&mysql_res);
+   NumCrss = Ind_GetTableOfCourses (&Indicators,&mysql_res);
 
    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,false);
+   Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,false);
 
    /***** Show the stats of courses *****/
-   Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_FULL,NumCrss,mysql_res);
+   Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_FULL,NumCrss,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -285,7 +290,7 @@ void Ind_ShowIndicatorsCourses (void)
 /*************** Get parameter with the number of indicators *****************/
 /*****************************************************************************/
 
-static void Ind_GetParamNumIndicators (void)
+static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators)
   {
    unsigned Ind;
    const char *Ptr;
@@ -293,19 +298,19 @@ static void Ind_GetParamNumIndicators (void)
    long Indicator;
 
    /***** Get parameter multiple with list of indicators selected *****/
-   Par_GetParMultiToText ("Indicators",Indicators.StrIndicatorsSelected,Ind_MAX_SIZE_INDICATORS_SELECTED);
+   Par_GetParMultiToText ("Indicators",Indicators->StrIndicatorsSelected,Ind_MAX_SIZE_INDICATORS_SELECTED);
 
    /***** Set which indicators have been selected (checkboxes on) *****/
-   if (Indicators.StrIndicatorsSelected[0])
+   if (Indicators->StrIndicatorsSelected[0])
      {
       /* Reset all indicators */
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators.IndicatorsSelected[Ind] = false;
+	 Indicators->IndicatorsSelected[Ind] = false;
 
       /* Set indicators selected */
-      for (Ptr = Indicators.StrIndicatorsSelected;
+      for (Ptr = Indicators->StrIndicatorsSelected;
 	   *Ptr;
 	   )
 	{
@@ -318,7 +323,7 @@ static void Ind_GetParamNumIndicators (void)
 	      Ind <= Ind_NUM_INDICATORS;
 	      Ind++)
 	    if ((long) Ind == Indicator)
-	       Indicators.IndicatorsSelected[Ind] = true;
+	       Indicators->IndicatorsSelected[Ind] = true;
 	}
      }
    else
@@ -326,7 +331,7 @@ static void Ind_GetParamNumIndicators (void)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators.IndicatorsSelected[Ind] = true;
+	 Indicators->IndicatorsSelected[Ind] = true;
   }
 
 /*****************************************************************************/
@@ -334,16 +339,17 @@ static void Ind_GetParamNumIndicators (void)
 /*****************************************************************************/
 // Return the number of courses found
 
-static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
+static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
+                                       MYSQL_RES **mysql_res)
   {
    unsigned NumCrss = 0;	// Initialized to avoid warning
 
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
            {
-            if (Indicators.DegTypCod > 0)
+            if (Indicators->DegTypCod > 0)
                NumCrss =
                (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 					  "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -355,9 +361,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 					  " AND crs_usr.UsrCod=usr_data.UsrCod"
 					  " AND usr_data.DptCod=%ld"
 					  " ORDER BY degrees.FullName,courses.FullName",
-					  Indicators.DegTypCod,
+					  Indicators->DegTypCod,
 					  (unsigned) Rol_TCH,
-					  Indicators.DptCod);
+					  Indicators->DptCod);
             else
                NumCrss =
                (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -370,11 +376,11 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 					  " AND usr_data.DptCod=%ld"
 					  " ORDER BY degrees.FullName,courses.FullName",
 					  (unsigned) Rol_TCH,
-					  Indicators.DptCod);
+					  Indicators->DptCod);
            }
          else
            {
-            if (Indicators.DegTypCod > 0)
+            if (Indicators->DegTypCod > 0)
                NumCrss =
                (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 					  "SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -382,7 +388,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 					  " WHERE degrees.DegTypCod=%ld"
 					  " AND degrees.DegCod=courses.DegCod"
 					  " ORDER BY degrees.FullName,courses.FullName",
-					  Indicators.DegTypCod);
+					  Indicators->DegTypCod);
             else
                NumCrss =
                (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -393,7 +399,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
            }
          break;
       case Hie_CTY:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 				       "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -409,7 +415,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Cty.CtyCod,
 				       (unsigned) Rol_TCH,
-				       Indicators.DptCod);
+				       Indicators->DptCod);
          else
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -423,7 +429,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 				       "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -438,7 +444,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Ins.InsCod,
 				       (unsigned) Rol_TCH,
-				       Indicators.DptCod);
+				       Indicators->DptCod);
          else
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -451,7 +457,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 				       "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -465,7 +471,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Ctr.CtrCod,
 				       (unsigned) Rol_TCH,
-				       Indicators.DptCod);
+				       Indicators->DptCod);
          else
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -477,7 +483,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_DEG:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 				       "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -491,7 +497,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Deg.DegCod,
 				       (unsigned) Rol_TCH,
-				       Indicators.DptCod);
+				       Indicators->DptCod);
          else
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -503,7 +509,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_CRS:
-         if (Indicators.DptCod >= 0)	// 0 means another department
+         if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
 				       "SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -519,7 +525,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       Gbl.Hierarchy.Crs.CrsCod,
 				       Gbl.Hierarchy.Crs.CrsCod,
 				       (unsigned) Rol_TCH,
-				       Indicators.DptCod);
+				       Indicators->DptCod);
          else
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -542,7 +548,8 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 /******* Show form to confirm that I want to see a big list of courses *******/
 /*****************************************************************************/
 
-static bool Ind_GetIfShowBigList (unsigned NumCrss)
+static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+                                  unsigned NumCrss)
   {
    bool ShowBigList;
 
@@ -552,7 +559,7 @@ static bool Ind_GetIfShowBigList (unsigned NumCrss)
 
    /***** Get parameter with user's confirmation to see a big list of courses *****/
    if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
-      Ind_PutButtonToConfirmIWantToSeeBigList (NumCrss);
+      Ind_PutButtonToConfirmIWantToSeeBigList (Indicators,NumCrss);
 
    return ShowBigList;
   }
@@ -561,14 +568,15 @@ static bool Ind_GetIfShowBigList (unsigned NumCrss)
 /****** Show form to confirm that I want to see a big list of courses ********/
 /*****************************************************************************/
 
-static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
+static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
+                                                     unsigned NumCrss)
   {
    extern const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
-                           Ind_PutParamsConfirmIWantToSeeBigList,&Indicators,
+                           Ind_PutParamsConfirmIWantToSeeBigList,Indicators,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
@@ -628,7 +636,8 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
 /** Show table with numbers of courses with 0, 1, 2... indicators set to yes */
 /*****************************************************************************/
 
-static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
+static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indicators,
+                                              unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
    extern const char *Txt_Indicators;
@@ -655,8 +664,8 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
      {
-      Class = Indicators.IndicatorsSelected[Ind] ? ClassHighlight :
-                                                 ClassNormal;
+      Class = Indicators->IndicatorsSelected[Ind] ? ClassHighlight :
+                                                    ClassNormal;
       HTM_TR_Begin (NULL);
 
       if (PutForm)
@@ -665,7 +674,8 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 	 HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
 			     "id=\"Indicators%u\" value=\"%u\"%s",
 			     Ind,Ind,
-			     Indicators.IndicatorsSelected[Ind] ? " checked=\"checked\"" : "");
+			     Indicators->IndicatorsSelected[Ind] ? " checked=\"checked\"" :
+				                                   "");
 	 HTM_TD_End ();
 	}
 
@@ -716,7 +726,8 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 /****************** Get and show total number of courses *********************/
 /*****************************************************************************/
 
-static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
+static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *Indicators,
+	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Degree;
@@ -885,13 +896,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
       /* Get stored number of indicators of this course */
       NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
-      if (Indicators.IndicatorsSelected[NumIndicators])
+      if (Indicators->IndicatorsSelected[NumIndicators])
 	{
 	 /* Compute and store indicators */
 	 Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
 
 	 /* The number of indicators may have changed */
-	 if (Indicators.IndicatorsSelected[IndicatorsCrs.NumIndicators])
+	 if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators])
 	   {
             ActCod = Act_GetActCod (ActReqStaCrs);
 
