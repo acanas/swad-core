@@ -326,16 +326,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
-   /* Agenda */
-   Gbl.Agenda.Past__FutureEvents = Agd_DEFAULT_PAST___EVENTS |
-	                           Agd_DEFAULT_FUTURE_EVENTS;
-   Gbl.Agenda.PrivatPublicEvents = Agd_DEFAULT_PRIVAT_EVENTS |
-	                           Agd_DEFAULT_PUBLIC_EVENTS;
-   Gbl.Agenda.HiddenVisiblEvents = Agd_DEFAULT_HIDDEN_EVENTS |
-	                           Agd_DEFAULT_VISIBL_EVENTS;
-   Gbl.Agenda.SelectedOrder = Agd_ORDER_DEFAULT;
-   Gbl.Agenda.AgdCodToEdit = -1L;
-
    /* To alternate colors where listing rows */
    Gbl.RowEvenOdd = 0;
    Gbl.ColorRows[0] = "COLOR0";	// Darker

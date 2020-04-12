@@ -405,7 +405,6 @@ struct Globals
       struct UsrData *UsrDat;
       Rec_SharedRecordViewType_t TypeOfView;
      } Record;
-   struct Agd_Agenda Agenda;
    struct
      {
       Hie_Level_t Current;
