@@ -213,7 +213,7 @@ bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod)
   }
 
 /*****************************************************************************/
-/****************************** Edit a syllabus ******************************/
+/************** Load syllabus from file to memoruy and edit it ***************/
 /*****************************************************************************/
 // Return true if info available
 
@@ -230,9 +230,22 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Gbl.Action.Act == ActEditorSylLec ||
-       Gbl.Action.Act == ActEditorSylPra)
-      Syllabus->EditionIsActive = true;
+   switch (Gbl.Action.Act)
+     {
+      case ActEditorSylLec:	case ActEditorSylPra:
+      case ActDelItmSylLec:	case ActDelItmSylPra:
+      case ActUp_IteSylLec:	case ActUp_IteSylPra:
+      case ActDwnIteSylLec:	case ActDwnIteSylPra:
+      case ActRgtIteSylLec:	case ActRgtIteSylPra:
+      case ActLftIteSylLec:	case ActLftIteSylPra:
+      case ActInsIteSylLec:	case ActInsIteSylPra:
+      case ActModIteSylLec:	case ActModIteSylPra:
+         Syllabus->EditionIsActive = true;
+         break;
+      default:
+         Syllabus->EditionIsActive = false;
+         break;
+     }
 
    if (Syllabus->EditionIsActive || Syl_LstItemsSyllabus.NumItems)
      {
@@ -962,7 +975,7 @@ void Syl_RemoveItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   Syl_EditSyllabus ();
+   (void) Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1068,7 +1081,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   Syl_EditSyllabus ();
+   (void) Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1237,7 +1250,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   Syl_EditSyllabus ();
+   (void) Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1308,7 +1321,7 @@ void Syl_InsertItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   Syl_EditSyllabus ();
+   (void) Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1360,7 +1373,7 @@ void Syl_ModifyItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   Syl_EditSyllabus ();
+   (void) Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
