@@ -39,7 +39,7 @@
 #define Plc_MAX_CHARS_PLACE_FULL_NAME	(128 - 1)	// 127
 #define Plc_MAX_BYTES_PLACE_FULL_NAME	((Plc_MAX_CHARS_PLACE_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct Place
+struct Plc_Place
   {
    long PlcCod;
    long InsCod;
@@ -56,16 +56,25 @@ typedef enum
   } Plc_Order_t;
 #define Plc_ORDER_DEFAULT Plc_ORDER_BY_NUM_CTRS
 
+struct Plc_Places
+  {
+   unsigned Num;		// Number of places
+   struct Plc_Place *Lst;	// List of places
+   Plc_Order_t SelectedOrder;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Plc_ResetPlaces (struct Plc_Places *Places);
+
 void Plc_SeePlaces (void);
 void Plc_EditPlaces (void);
 void Plc_PutIconToViewPlaces (void);
-void Plc_GetListPlaces (void);
-void Plc_FreeListPlaces (void);
-void Plc_GetDataOfPlaceByCod (struct Place *Plc);
+void Plc_GetListPlaces (struct Plc_Places *Places);
+void Plc_FreeListPlaces (struct Plc_Places *Places);
+void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc);
 long Plc_GetParamPlcCod (void);
 void Plc_RemovePlace (void);
 void Plc_RenamePlaceShort (void);

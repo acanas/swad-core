@@ -57,20 +57,20 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Place *Plc_EditingPlc = NULL;	// Static variable to keep the place being edited
+static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the place being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plc_GetParamPlcOrder (void);
+static Plc_Order_t Plc_GetParamPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_EditPlacesInternal (void);
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
 
-static void Plc_ListPlacesForEdition (void);
+static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
 static void Plc_PutParamPlcCod (long PlcCod);
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -79,10 +79,21 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
 
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
-static void Plc_CreatePlace (struct Place *Plc);
+static void Plc_CreatePlace (struct Plc_Place *Plc);
 
 static void Plc_EditingPlaceConstructor (void);
 static void Plc_EditingPlaceDestructor (void);
+
+/*****************************************************************************/
+/**************************** Reset places context ***************************/
+/*****************************************************************************/
+
+void Plc_ResetPlaces (struct Plc_Places *Places)
+  {
+   Places->Num = 0;
+   Places->Lst = NULL;
+   Places->SelectedOrder = Plc_ORDER_DEFAULT;
+  }
 
 /*****************************************************************************/
 /*************************** List all the places *****************************/
@@ -97,6 +108,7 @@ void Plc_SeePlaces (void)
    extern const char *Txt_Other_places;
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_New_place;
+   struct Plc_Places Places;
    Plc_Order_t Order;
    unsigned NumPlc;
    unsigned NumCtrsWithPlc = 0;
@@ -104,11 +116,14 @@ void Plc_SeePlaces (void)
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
+      /***** Reset places context *****/
+      Plc_ResetPlaces (&Places);
+
       /***** Get parameter with the type of order in the list of places *****/
-      Plc_GetParamPlcOrder ();
+      Places.SelectedOrder = Plc_GetParamPlcOrder ();
 
       /***** Get list of places *****/
-      Plc_GetListPlaces ();
+      Plc_GetListPlaces (&Places);
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Places,
@@ -125,10 +140,10 @@ void Plc_SeePlaces (void)
 	 Frm_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Gbl.Plcs.SelectedOrder)
+	 if (Order == Places.SelectedOrder)
 	    HTM_U_Begin ();
 	 HTM_Txt (Txt_PLACES_ORDER[Order]);
-	 if (Order == Gbl.Plcs.SelectedOrder)
+	 if (Order == Places.SelectedOrder)
 	    HTM_U_End ();
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -139,22 +154,22 @@ void Plc_SeePlaces (void)
 
       /***** Write all places and their nuber of centres *****/
       for (NumPlc = 0;
-	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc < Places.Num;
 	   NumPlc++)
 	{
 	 /* Write data of this place */
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 HTM_Txt (Gbl.Plcs.Lst[NumPlc].FullName);
+	 HTM_Txt (Places.Lst[NumPlc].FullName);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (Gbl.Plcs.Lst[NumPlc].NumCtrs);
+	 HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
-	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
+	 NumCtrsWithPlc += Places.Lst[NumPlc].NumCtrs;
 	}
 
       /***** Separation row *****/
@@ -208,7 +223,7 @@ void Plc_SeePlaces (void)
       Box_BoxEnd ();
 
       /***** Free list of places *****/
-      Plc_FreeListPlaces ();
+      Plc_FreeListPlaces (&Places);
      }
   }
 
@@ -216,13 +231,12 @@ void Plc_SeePlaces (void)
 /********** Get parameter with the type or order in list of places ***********/
 /*****************************************************************************/
 
-static void Plc_GetParamPlcOrder (void)
+static Plc_Order_t Plc_GetParamPlcOrder (void)
   {
-   Gbl.Plcs.SelectedOrder = (Plc_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-                                                      0,
-                                                      Plc_NUM_ORDERS - 1,
-                                                      (unsigned long) Plc_ORDER_DEFAULT);
+   return (Plc_Order_t) Par_GetParToUnsignedLong ("Order",
+						  0,
+						  Plc_NUM_ORDERS - 1,
+						  (unsigned long) Plc_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -278,9 +292,13 @@ static void Plc_EditPlacesInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_Places;
+   struct Plc_Places Places;
+
+   /***** Reset places context *****/
+   Plc_ResetPlaces (&Places);
 
    /***** Get list of places *****/
-   Plc_GetListPlaces ();
+   Plc_GetListPlaces (&Places);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Places,
@@ -291,16 +309,15 @@ static void Plc_EditPlacesInternal (void)
    Plc_PutFormToCreatePlace ();
 
    /***** Forms to edit current places *****/
-   if (Gbl.Plcs.Num)
-      Plc_ListPlacesForEdition ();
+   if (Places.Num)
+      Plc_ListPlacesForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces ();
+   Plc_FreeListPlaces (&Places);
   }
-
 
 /*****************************************************************************/
 /**************** Put contextual icons in edition of places *****************/
@@ -333,7 +350,7 @@ void Plc_PutIconToViewPlaces (void)
 /**************************** List all the places ****************************/
 /*****************************************************************************/
 
-void Plc_GetListPlaces (void)
+void Plc_GetListPlaces (struct Plc_Places *Places)
   {
    static const char *OrderBySubQuery[Plc_NUM_ORDERS] =
      {
@@ -344,7 +361,7 @@ void Plc_GetListPlaces (void)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumPlc;
-   struct Place *Plc;
+   struct Plc_Place *Plc;
 
    /***** Get places from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
@@ -372,23 +389,23 @@ void Plc_GetListPlaces (void)
 			     Gbl.Hierarchy.Ins.InsCod,
 			     Gbl.Hierarchy.Ins.InsCod,
 			     Gbl.Hierarchy.Ins.InsCod,
-			     OrderBySubQuery[Gbl.Plcs.SelectedOrder]);
+			     OrderBySubQuery[Places->SelectedOrder]);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Places found...
      {
-      Gbl.Plcs.Num = (unsigned) NumRows;
+      Places->Num = (unsigned) NumRows;
 
       /***** Create list with courses in centre *****/
-      if ((Gbl.Plcs.Lst = (struct Place *) calloc (NumRows,sizeof (struct Place))) == NULL)
+      if ((Places->Lst = (struct Plc_Place *) calloc (NumRows,sizeof (struct Plc_Place))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the places *****/
       for (NumPlc = 0;
-	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc < Places->Num;
 	   NumPlc++)
         {
-         Plc = &(Gbl.Plcs.Lst[NumPlc]);
+         Plc = &(Places->Lst[NumPlc]);
 
          /* Get next place */
          row = mysql_fetch_row (mysql_res);
@@ -411,7 +428,7 @@ void Plc_GetListPlaces (void)
         }
      }
    else
-      Gbl.Plcs.Num = 0;
+      Places->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -421,7 +438,7 @@ void Plc_GetListPlaces (void)
 /**************************** Get place full name ****************************/
 /*****************************************************************************/
 
-void Plc_GetDataOfPlaceByCod (struct Place *Plc)
+void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
   {
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
@@ -501,14 +518,14 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
 /**************************** Free list of places ****************************/
 /*****************************************************************************/
 
-void Plc_FreeListPlaces (void)
+void Plc_FreeListPlaces (struct Plc_Places *Places)
   {
-   if (Gbl.Plcs.Lst)
+   if (Places->Lst)
      {
       /***** Free memory used by the list of places in institution *****/
-      free (Gbl.Plcs.Lst);
-      Gbl.Plcs.Lst = NULL;
-      Gbl.Plcs.Num = 0;
+      free (Places->Lst);
+      Places->Lst = NULL;
+      Places->Num = 0;
      }
   }
 
@@ -516,10 +533,10 @@ void Plc_FreeListPlaces (void)
 /*************************** List all the places *****************************/
 /*****************************************************************************/
 
-static void Plc_ListPlacesForEdition (void)
+static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
    unsigned NumPlc;
-   struct Place *Plc;
+   struct Plc_Place *Plc;
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -527,10 +544,10 @@ static void Plc_ListPlacesForEdition (void)
 
    /***** Write all the places *****/
    for (NumPlc = 0;
-	NumPlc < Gbl.Plcs.Num;
+	NumPlc < Places->Num;
 	NumPlc++)
      {
-      Plc = &Gbl.Plcs.Lst[NumPlc];
+      Plc = &Places->Lst[NumPlc];
 
       HTM_TR_Begin (NULL);
 
@@ -912,7 +929,7 @@ void Plc_RecFormNewPlace (void)
 /**************************** Create a new place *****************************/
 /*****************************************************************************/
 
-static void Plc_CreatePlace (struct Place *Plc)
+static void Plc_CreatePlace (struct Plc_Place *Plc)
   {
    /***** Create a new place *****/
    DB_QueryINSERT ("can not create place",
@@ -934,7 +951,7 @@ static void Plc_EditingPlaceConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing place.");
 
    /***** Allocate memory for place *****/
-   if ((Plc_EditingPlc = (struct Place *) malloc (sizeof (struct Place))) == NULL)
+   if ((Plc_EditingPlc = (struct Plc_Place *) malloc (sizeof (struct Plc_Place))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for place.");
 
    /***** Reset place *****/

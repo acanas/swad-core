@@ -66,9 +66,11 @@ static struct Dpt_Department *Dpt_EditingDpt = NULL;	// Static variable to keep 
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
+
 static Dpt_Order_t Dpt_GetParamDptOrder (void);
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
-static void Dpt_EditDepartmentsInternal (struct Dpt_Departments *Departments);
+static void Dpt_EditDepartmentsInternal (void);
 
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
 
@@ -90,7 +92,7 @@ static void Dpt_EditingDepartmentDestructor (void);
 /************************* Reset departments context *************************/
 /*****************************************************************************/
 
-void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
+static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
   {
    Departments->Num           = 0;
    Departments->Lst           = NULL;
@@ -259,35 +261,34 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
 
 void Dpt_EditDepartments (void)
   {
-   struct Dpt_Departments Departments;
-
-   /***** Reset departments context *****/
-   Dpt_ResetDepartments (&Departments);
-
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
 
    /***** Edit departments *****/
-   Dpt_EditDepartmentsInternal (&Departments);
+   Dpt_EditDepartmentsInternal ();
 
    /***** Department destructor *****/
    Dpt_EditingDepartmentDestructor ();
   }
 
-static void Dpt_EditDepartmentsInternal (struct Dpt_Departments *Departments)
+static void Dpt_EditDepartmentsInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_Departments_of_INSTITUTION_X;
+   struct Dpt_Departments Departments;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// An institution must be selected
       return;
 
+   /***** Reset departments context *****/
+   Dpt_ResetDepartments (&Departments);
+
    /***** Get list of institutions *****/
    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (Departments,Gbl.Hierarchy.Ins.InsCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
@@ -300,14 +301,14 @@ static void Dpt_EditDepartmentsInternal (struct Dpt_Departments *Departments)
    Dpt_PutFormToCreateDepartment ();
 
    /***** Forms to edit current departments *****/
-   if (Departments->Num)
-      Dpt_ListDepartmentsForEdition (Departments);
+   if (Departments.Num)
+      Dpt_ListDepartmentsForEdition (&Departments);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments (Departments);
+   Dpt_FreeListDepartments (&Departments);
 
    /***** Free list of institutions *****/
    Ins_FreeListInstitutions ();
@@ -896,16 +897,11 @@ void Dpt_ChangeDptWWW (void)
 
 void Dpt_ContEditAfterChgDpt (void)
   {
-   struct Dpt_Departments Departments;
-
-   /***** Reset departments context *****/
-   Dpt_ResetDepartments (&Departments);
-
    /***** Write message to show the change made *****/
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Dpt_EditDepartmentsInternal (&Departments);
+   Dpt_EditDepartmentsInternal ();
 
    /***** Department destructor *****/
    Dpt_EditingDepartmentDestructor ();

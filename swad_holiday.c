@@ -72,10 +72,10 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
 
 static Hld_HolidayType_t Hld_GetParamHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
-static void Hld_ListHolidaysForEdition (void);
+static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places);
 static void Hld_PutParamHldCod (long HldCod);
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
-static void Hld_PutFormToCreateHoliday (void);
+static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places);
 static void Hld_PutHeadHolidays (void);
 static void Hld_CreateHoliday (struct Holiday *Hld);
 
@@ -264,24 +264,29 @@ void Hld_EditHolidays (void)
 
 static void Hld_EditHolidaysInternal (void)
   {
+   struct Plc_Places Places;
+
+   /***** Reset places context *****/
+   Plc_ResetPlaces (&Places);
+
    /***** Get list of places *****/
-   Plc_GetListPlaces ();
+   Plc_GetListPlaces (&Places);
 
    /***** Get list of holidays *****/
    Hld_GetListHolidays ();
 
    /***** Put a form to create a new holiday *****/
-   Hld_PutFormToCreateHoliday ();
+   Hld_PutFormToCreateHoliday (&Places);
 
    /***** Forms to edit current holidays *****/
    if (Gbl.Hlds.Num)
-      Hld_ListHolidaysForEdition ();
+      Hld_ListHolidaysForEdition (&Places);
 
    /***** Free list of holidays *****/
    Hld_FreeListHolidays ();
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces ();
+   Plc_FreeListPlaces (&Places);
   }
 
 /*****************************************************************************/
@@ -543,7 +548,7 @@ void Hld_FreeListHolidays (void)
 /********************* List all the holidays for edition *********************/
 /*****************************************************************************/
 
-static void Hld_ListHolidaysForEdition (void)
+static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_Holidays;
@@ -594,11 +599,11 @@ static void Hld_ListHolidaysForEdition (void)
       HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
 		  "%s",Txt_All_places);
       for (NumPlc = 0;
-	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc < Places->Num;
 	   NumPlc++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-		     Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod,false,
-		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+		     Places->Lst[NumPlc].PlcCod == Hld->PlcCod,false,
+		     "%s",Places->Lst[NumPlc].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -716,7 +721,7 @@ void Hld_RemoveHoliday (void)
 void Hld_ChangeHolidayPlace (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
-   struct Place NewPlace;
+   struct Plc_Place NewPlace;
 
    /***** Holiday constructor *****/
    Hld_EditingHolidayConstructor ();
@@ -946,7 +951,7 @@ void Hld_ContEditAfterChgHld (void)
 /********************* Put a form to create a new holiday ********************/
 /*****************************************************************************/
 
-static void Hld_PutFormToCreateHoliday (void)
+static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_All_places;
@@ -989,11 +994,11 @@ static void Hld_PutFormToCreateHoliday (void)
    HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
 	       "%s",Txt_All_places);
    for (NumPlc = 0;
-	NumPlc < Gbl.Plcs.Num;
+	NumPlc < Places->Num;
 	NumPlc++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-		  Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod,false,
-		  "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+		  Places->Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod,false,
+		  "%s",Places->Lst[NumPlc].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 

@@ -648,8 +648,12 @@ static void CtrCfg_Place (bool PutForm)
   {
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
-   struct Place Plc;
+   struct Plc_Places Places;
+   struct Plc_Place Plc;
    unsigned NumPlc;
+
+   /***** Reset places context *****/
+   Plc_ResetPlaces (&Places);
 
    /***** Get data of place *****/
    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
@@ -668,8 +672,8 @@ static void CtrCfg_Place (bool PutForm)
    if (PutForm)
      {
       /* Get list of places of the current institution */
-      Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
-      Plc_GetListPlaces ();
+      Places.SelectedOrder = Plc_ORDER_BY_PLACE;
+      Plc_GetListPlaces (&Places);
 
       /* Put form to select place */
       Frm_StartForm (ActChgCtrPlcCfg);
@@ -679,16 +683,16 @@ static void CtrCfg_Place (bool PutForm)
 		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
 		  "%s",Txt_Another_place);
       for (NumPlc = 0;
-	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc < Places.Num;
 	   NumPlc++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-		     Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
-		     "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+	 HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
+		     Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
+		     "%s",Places.Lst[NumPlc].ShrtName);
       HTM_SELECT_End ();
       Frm_EndForm ();
 
       /* Free list of places */
-      Plc_FreeListPlaces ();
+      Plc_FreeListPlaces (&Places);
      }
    else	// I can not change centre place
       HTM_Txt (Plc.FullName);

@@ -74,7 +74,7 @@ static void Ctr_PutIconsEditingCentres (__attribute__((unused)) void *Args);
 
 static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row);
 
-static void Ctr_ListCentresForEdition (void);
+static void Ctr_ListCentresForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
@@ -86,7 +86,7 @@ static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *N
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 static void Ctr_PutParamGoToCtr (void *CtrCod);
 
-static void Ctr_PutFormToCreateCentre (void);
+static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentresForEdition (void);
 static void Ctr_RecFormRequestOrCreateCtr (unsigned Status);
@@ -351,7 +351,7 @@ static void Ctr_PutIconToEditCentres (void)
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
   {
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
-   struct Place Plc;
+   struct Plc_Place Plc;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
@@ -460,10 +460,14 @@ static void Ctr_EditCentresInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
+   struct Plc_Places Places;
+
+   /***** Reset places context *****/
+   Plc_ResetPlaces (&Places);
 
    /***** Get list of places *****/
-   Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
-   Plc_GetListPlaces ();
+   Places.SelectedOrder = Plc_ORDER_BY_PLACE;
+   Plc_GetListPlaces (&Places);
 
    /***** Get list of centres *****/
    Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
@@ -480,11 +484,11 @@ static void Ctr_EditCentresInternal (void)
    Str_FreeString ();
 
    /***** Put a form to create a new centre *****/
-   Ctr_PutFormToCreateCentre ();
+   Ctr_PutFormToCreateCentre (&Places);
 
    /***** List current centres *****/
    if (Gbl.Hierarchy.Ctrs.Num)
-      Ctr_ListCentresForEdition ();
+      Ctr_ListCentresForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -493,7 +497,7 @@ static void Ctr_EditCentresInternal (void)
    Ctr_FreeListCentres ();
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces ();
+   Plc_FreeListPlaces (&Places);
   }
 
 /*****************************************************************************/
@@ -920,7 +924,7 @@ void Ctr_WriteSelectorOfCentre (void)
 /*************************** List all the centres ****************************/
 /*****************************************************************************/
 
-static void Ctr_ListCentresForEdition (void)
+static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -995,20 +999,20 @@ static void Ctr_ListCentresForEdition (void)
 		     Ctr->PlcCod == 0,false,
 		     "%s",Txt_Another_place);
 	 for (NumPlc = 0;
-	      NumPlc < Gbl.Plcs.Num;
+	      NumPlc < Places->Num;
 	      NumPlc++)
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-			Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
-			"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+	    HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+			Places->Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
+			"%s",Places->Lst[NumPlc].ShrtName);
 	 HTM_SELECT_End ();
 	 Frm_EndForm ();
 	}
       else
 	 for (NumPlc = 0;
-	      NumPlc < Gbl.Plcs.Num;
+	      NumPlc < Places->Num;
 	      NumPlc++)
-	    if (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod)
-	       HTM_Txt (Gbl.Plcs.Lst[NumPlc].ShrtName);
+	    if (Places->Lst[NumPlc].PlcCod == Ctr->PlcCod)
+	       HTM_Txt (Places->Lst[NumPlc].ShrtName);
       HTM_TD_End ();
 
       /* Centre short name */
@@ -1588,7 +1592,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod)
 /********************* Put a form to create a new centre *********************/
 /*****************************************************************************/
 
-static void Ctr_PutFormToCreateCentre (void)
+static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
   {
    extern const char *Txt_New_centre;
    extern const char *Txt_Another_place;
@@ -1634,11 +1638,11 @@ static void Ctr_PutFormToCreateCentre (void)
 	       Ctr_EditingCtr->PlcCod == 0,false,
 	       "%s",Txt_Another_place);
    for (NumPlc = 0;
-	NumPlc < Gbl.Plcs.Num;
+	NumPlc < Places->Num;
 	NumPlc++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Plcs.Lst[NumPlc].PlcCod,
-		  Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
-		  "%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+		  Places->Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
+		  "%s",Places->Lst[NumPlc].ShrtName);
    HTM_SELECT_End ();
    HTM_TD_End ();
 

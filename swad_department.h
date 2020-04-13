@@ -64,8 +64,6 @@ struct Dpt_Departments
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
-
 void Dpt_SeeDepts (void);
 void Dpt_EditDepartments (void);
 void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
