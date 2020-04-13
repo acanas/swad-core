@@ -1484,8 +1484,8 @@ void TstExa_SelDatesToSeeMyExams (void)
    extern const char *Txt_View_test_results;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_DO_NOT_SET,
-      Dat_HMS_DO_NOT_SET
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin form *****/

@@ -3115,15 +3115,14 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_View_homework;
 
-   if (Args)
-      /***** List users to select some of them *****/
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActAdmAsgWrkCrs,
-					NULL,NULL,
-					Txt_Assignments_and_other_works,
-					Hlp_FILES_Homework_for_teachers,
-					Txt_View_homework,
-					false);	// Do not put form with date range
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActAdmAsgWrkCrs,
+				     NULL,NULL,
+				     Txt_Assignments_and_other_works,
+				     Hlp_FILES_Homework_for_teachers,
+				     Txt_View_homework,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/

@@ -708,9 +708,12 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"
-	     "adjustDateForm('%s');",
-	     Id,(long) TimeUTC,Id);
+   HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"	// Set date-time form from UTC time
+	     "adjustDateForm('%s');\n"			// Adjust date-time form
+	     "setUTCFromLocalDateTimeForm('%s');\n",	// Adjust UTC time from date-time form
+	     Id,(long) TimeUTC,
+	     Id,
+	     Id);
    switch (SetHMS)
      {
       case Dat_HMS_TO_000000:

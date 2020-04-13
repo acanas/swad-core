@@ -1812,8 +1812,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    struct ProgramItem Item;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_TO_000000,
-      Dat_HMS_TO_235959
+      [Dat_START_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME  ] = Dat_HMS_TO_235959
      };
 
    /***** Get data of the parent program item from database *****/
@@ -1861,8 +1861,8 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_DO_NOT_SET,
-      Dat_HMS_DO_NOT_SET
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Get data of the program item from database *****/

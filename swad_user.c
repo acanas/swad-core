@@ -5680,14 +5680,11 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
 
 static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
   {
-   if (Args)
-     {
-      Grp_PutParamsCodGrps ();
-      Usr_PutParamsPrefsAboutUsrList ();
-      if (Usr_FuncParamsBigList)
-	 Usr_FuncParamsBigList (Args);
-      Par_PutHiddenParamChar ("ShowBigList",'Y');
-     }
+   Grp_PutParamsCodGrps ();
+   Usr_PutParamsPrefsAboutUsrList ();
+   if (Usr_FuncParamsBigList)
+      Usr_FuncParamsBigList (Args);
+   Par_PutHiddenParamChar ("ShowBigList",'Y');
   }
 
 /*****************************************************************************/
@@ -6329,8 +6326,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    unsigned NumTotalUsrs;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_DO_NOT_SET,
-      Dat_HMS_DO_NOT_SET
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin box *****/
@@ -8789,26 +8786,23 @@ static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args)
 
 static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
   {
-   if (Args)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      switch (Gbl.Usrs.Me.ListType)
-	{
-	 case Usr_LIST_AS_CLASS_PHOTO:
-	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
-	       /***** Put icon to print students *****/
-	       Usr_PutIconToPrintStds ();
-	    break;
-	 case Usr_LIST_AS_LISTING:
-	    /***** Put icon to show all data of students *****/
-	    Usr_PutIconToShowStdsAllData ();
-	    break;
-	 default:
-	    break;
-	}
-
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_USERS);
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+	    /***** Put icon to print students *****/
+	    Usr_PutIconToPrintStds ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of students *****/
+	 Usr_PutIconToShowStdsAllData ();
+	 break;
+      default:
+	 break;
      }
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_USERS);
   }
 
 /*****************************************************************************/
@@ -8817,26 +8811,23 @@ static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
 
 static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
   {
-   if (Args)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      switch (Gbl.Usrs.Me.ListType)
-	{
-	 case Usr_LIST_AS_CLASS_PHOTO:
-	    if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
-	       /***** Put icon to print teachers *****/
-	       Usr_PutIconToPrintTchs ();
-	    break;
-	 case Usr_LIST_AS_LISTING:
-	    /***** Put icon to show all data of teachers *****/
-	    Usr_PutIconToShowTchsAllData ();
-	    break;
-	 default:
-	    break;
-	}
-
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_USERS);
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
+	    /***** Put icon to print teachers *****/
+	    Usr_PutIconToPrintTchs ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of teachers *****/
+	 Usr_PutIconToShowTchsAllData ();
+	 break;
+      default:
+	 break;
      }
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_USERS);
   }
 
 /*****************************************************************************/

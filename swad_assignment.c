@@ -1172,10 +1172,15 @@ void Asg_RequestCreatOrEditAsg (void)
    struct Asg_Assignment Asg;
    bool ItsANewAssignment;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_TO_000000,
-      Dat_HMS_TO_235959
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+     };
+   static const Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_START_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME  ] = Dat_HMS_TO_235959
      };
 
    /***** Reset assignments *****/
@@ -1255,7 +1260,8 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,
 					    Dat_FORM_SECONDS_ON,
-					    SetHMS);
+					    Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
+						                             SetHMSDontSet);
 
    /***** Send work? *****/
    HTM_TR_Begin (NULL);

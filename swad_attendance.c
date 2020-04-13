@@ -145,6 +145,7 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
+static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView);
 static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView);
@@ -1094,8 +1095,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_DO_NOT_SET,
-      Dat_HMS_DO_NOT_SET
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Get parameters *****/
@@ -2717,7 +2718,14 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 /********** Request listing attendance of users to several events ************/
 /*****************************************************************************/
 
-void Att_ReqListUsrsAttendanceCrs (void *TypeOfView)
+void Att_ReqListUsrsAttendanceCrs (void)
+  {
+   Att_TypeOfView_t TypeOfView = Att_VIEW_SEL_USR;
+
+   Att_ReqListOrPrintUsrsAttendanceCrs (&TypeOfView);
+  }
+
+static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
@@ -2868,7 +2876,7 @@ static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  Att_ListOrPrintUsrsAttendanceCrs,&TypeOfView,
-                                  Att_ReqListUsrsAttendanceCrs,&TypeOfView);
+                                  Att_ReqListOrPrintUsrsAttendanceCrs,&TypeOfView);
   }
 
 static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)

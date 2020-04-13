@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.180.3 (2020-04-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.180.4 (2020-04-13)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,6 +548,9 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.180.4: Apr 13, 2020	Fixed bug in attendance.
+					Fixed bug in lists of users.
+					Fixed bug in dates (assignments, agenda). (285622 lines)
 	Version 19.180.3: Apr 13, 2020	Fixed bug in course info. (285614 lines)
 	Version 19.180.2: Apr 13, 2020	Fixed bugs in syllabus. (285613 lines)
 	Version 19.180.1: Apr 12, 2020	Changes in stats of clicks. (285599 lines)

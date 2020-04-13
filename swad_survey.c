@@ -1880,8 +1880,8 @@ void Svy_RequestCreatOrEditSvy (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      Dat_HMS_TO_000000,
-      Dat_HMS_TO_235959
+      [Dat_START_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME  ] = Dat_HMS_TO_235959
      };
 
    /***** Reset surveys *****/
