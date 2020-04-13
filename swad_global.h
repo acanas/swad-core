@@ -234,13 +234,6 @@ struct Globals
      } Classrooms;
    struct
      {
-      bool LstIsRead;		// Is the list already read from database, or it needs to be read?
-      unsigned Num;		// Number of holidays
-      struct Holiday *Lst;	// List of holidays
-      Hld_Order_t SelectedOrder;
-     } Hlds;
-   struct
-     {
       unsigned Num;		// Number of mail domains
       struct Mail *Lst;		// List of mail domains
       Mai_DomainsOrder_t SelectedOrder;

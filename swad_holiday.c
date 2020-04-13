@@ -57,30 +57,43 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Holiday *Hld_EditingHld = NULL;	// Static variable to keep the holiday being edited
+static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the holiday being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Hld_GetParamHldOrder (void);
+static Hld_Order_t Hld_GetParamHldOrder (void);
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
-static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
+static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld);
 
 static Hld_HolidayType_t Hld_GetParamHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
-static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places);
+static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
+					const struct Plc_Places *Places);
 static void Hld_PutParamHldCod (long HldCod);
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places);
 static void Hld_PutHeadHolidays (void);
-static void Hld_CreateHoliday (struct Holiday *Hld);
+static void Hld_CreateHoliday (struct Hld_Holiday *Hld);
 
 static void Hld_EditingHolidayConstructor (void);
 static void Hld_EditingHolidayDestructor (void);
+
+/*****************************************************************************/
+/************************* Reset departments context *************************/
+/*****************************************************************************/
+
+void Hld_ResetHolidays (struct Hld_Holidays *Holidays)
+  {
+   Holidays->LstIsRead     = false;	// List is not read
+   Holidays->Num           = 0;
+   Holidays->Lst           = NULL;
+   Holidays->SelectedOrder = Hld_DEFAULT_ORDER_TYPE;
+  }
 
 /*****************************************************************************/
 /*************************** List all the holidays ***************************/
@@ -100,20 +113,24 @@ void Hld_SeeHolidays (void)
    Hld_Order_t Order;
    unsigned NumHld;
    char StrDate[Cns_MAX_BYTES_DATE + 1];
+   struct Hld_Holidays Holidays;
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
+      /***** Reset places context *****/
+      Hld_ResetHolidays (&Holidays);
+
       /***** Get parameter with the type of order in the list of holidays *****/
-      Hld_GetParamHldOrder ();
+      Holidays.SelectedOrder = Hld_GetParamHldOrder ();
 
       /***** Get list of holidays *****/
-      Hld_GetListHolidays ();
+      Hld_GetListHolidays (&Holidays);
 
       /***** Table head *****/
       Box_BoxBegin (NULL,Txt_Holidays,
                     Hld_PutIconsSeeHolidays,NULL,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
-      if (Gbl.Hlds.Num)
+      if (Holidays.Num)
 	 {
          HTM_TABLE_BeginWideMarginPadding (2);
          HTM_TR_Begin (NULL);
@@ -127,10 +144,10 @@ void Hld_SeeHolidays (void)
 	    Frm_StartForm (ActSeeHld);
 	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-	    if (Order == Gbl.Hlds.SelectedOrder)
+	    if (Order == Holidays.SelectedOrder)
 	       HTM_U_Begin ();
 	    HTM_Txt (Txt_HOLIDAYS_ORDER[Order]);
-	    if (Order == Gbl.Hlds.SelectedOrder)
+	    if (Order == Holidays.SelectedOrder)
 	       HTM_U_End ();
 	    HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -148,37 +165,37 @@ void Hld_SeeHolidays (void)
 
 	 /***** Write all the holidays *****/
 	 for (NumHld = 0;
-	      NumHld < Gbl.Hlds.Num;
+	      NumHld < Holidays.Num;
 	      NumHld++)
 	   {
 	    /* Write data of this holiday */
 	    HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_Txt (Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
-							Gbl.Hlds.Lst[NumHld].PlaceFullName);
+	    HTM_Txt (Holidays.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
+							Holidays.Lst[NumHld].PlaceFullName);
 	    HTM_TD_End ();
 
-	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
+	    Dat_ConvDateToDateStr (&Holidays.Lst[NumHld].StartDate,StrDate);
 	    HTM_TD_Begin ("class=\"DAT LM\"");
 	    HTM_TxtF ("&nbsp;%s",StrDate);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
 	    HTM_NBSP ();
-	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
+	    switch (Holidays.Lst[NumHld].HldTyp)
 	      {
 	       case Hld_HOLIDAY:
 		  break;
 	       case Hld_NON_SCHOOL_PERIOD:
-	          Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].EndDate,StrDate);
+	          Dat_ConvDateToDateStr (&Holidays.Lst[NumHld].EndDate,StrDate);
 		  HTM_Txt (StrDate);
 		  break;
 	      }
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_TxtF ("&nbsp;%s",Gbl.Hlds.Lst[NumHld].Name);
+	    HTM_TxtF ("&nbsp;%s",Holidays.Lst[NumHld].Name);
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -200,7 +217,7 @@ void Hld_SeeHolidays (void)
       Box_BoxEnd ();
 
       /***** Free list of holidays *****/
-      Hld_FreeListHolidays ();
+      Hld_FreeListHolidays (&Holidays);
      }
   }
 
@@ -208,13 +225,12 @@ void Hld_SeeHolidays (void)
 /********* Get parameter with the type or order in list of holidays **********/
 /*****************************************************************************/
 
-static void Hld_GetParamHldOrder (void)
+static Hld_Order_t Hld_GetParamHldOrder (void)
   {
-   Gbl.Hlds.SelectedOrder = (Hld_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-	                                              0,
-	                                              Hld_NUM_ORDERS - 1,
-	                                              (unsigned long) Hld_DEFAULT_ORDER_TYPE);
+   return (Hld_Order_t) Par_GetParToUnsignedLong ("Order",
+						  0,
+						  Hld_NUM_ORDERS - 1,
+						  (unsigned long) Hld_DEFAULT_ORDER_TYPE);
   }
 
 /*****************************************************************************/
@@ -264,7 +280,11 @@ void Hld_EditHolidays (void)
 
 static void Hld_EditHolidaysInternal (void)
   {
+   struct Hld_Holidays Holidays;
    struct Plc_Places Places;
+
+   /***** Reset places context *****/
+   Hld_ResetHolidays (&Holidays);
 
    /***** Reset places context *****/
    Plc_ResetPlaces (&Places);
@@ -273,17 +293,17 @@ static void Hld_EditHolidaysInternal (void)
    Plc_GetListPlaces (&Places);
 
    /***** Get list of holidays *****/
-   Hld_GetListHolidays ();
+   Hld_GetListHolidays (&Holidays);
 
    /***** Put a form to create a new holiday *****/
    Hld_PutFormToCreateHoliday (&Places);
 
    /***** Forms to edit current holidays *****/
-   if (Gbl.Hlds.Num)
-      Hld_ListHolidaysForEdition (&Places);
+   if (Holidays.Num)
+      Hld_ListHolidaysForEdition (&Holidays,&Places);
 
    /***** Free list of holidays *****/
-   Hld_FreeListHolidays ();
+   Hld_FreeListHolidays (&Holidays);
 
    /***** Free list of places *****/
    Plc_FreeListPlaces (&Places);
@@ -293,7 +313,7 @@ static void Hld_EditHolidaysInternal (void)
 /*************************** List all the holidays ***************************/
 /*****************************************************************************/
 
-void Hld_GetListHolidays (void)
+void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
   {
    static const char *OrderBySubQuery[Hld_NUM_ORDERS] =
      {
@@ -303,15 +323,15 @@ void Hld_GetListHolidays (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumHld;
-   struct Holiday *Hld;
+   struct Hld_Holiday *Hld;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
-      if (Gbl.Hlds.LstIsRead)
-	 Hld_FreeListHolidays ();
+      if (Holidays->LstIsRead)
+	 Hld_FreeListHolidays (Holidays);
 
       /***** Get holidays from database *****/
-      Gbl.Hlds.Num =
+      Holidays->Num =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get holidays",
 				 "(SELECT holidays.HldCod,"
 				         "holidays.PlcCod,"
@@ -342,19 +362,21 @@ void Hld_GetListHolidays (void)
 				 Gbl.Hierarchy.Ins.InsCod,
 				 Gbl.Hierarchy.Ins.InsCod,
 				 Gbl.Hierarchy.Ins.InsCod,
-				 OrderBySubQuery[Gbl.Hlds.SelectedOrder]);
-      if (Gbl.Hlds.Num) // Holidays found...
+				 OrderBySubQuery[Holidays->SelectedOrder]);
+      if (Holidays->Num) // Holidays found...
 	{
 	 /***** Create list of holidays *****/
-	 if ((Gbl.Hlds.Lst = (struct Holiday *) calloc ((size_t) Gbl.Hlds.Num,sizeof (struct Holiday))) == NULL)
+	 if ((Holidays->Lst = (struct Hld_Holiday *)
+		              calloc ((size_t) Holidays->Num,
+	                              sizeof (struct Hld_Holiday))) == NULL)
 	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the holidays *****/
 	 for (NumHld = 0;
-	      NumHld < Gbl.Hlds.Num;
+	      NumHld < Holidays->Num;
 	      NumHld++)
 	   {
-	    Hld = &(Gbl.Hlds.Lst[NumHld]);
+	    Hld = &(Holidays->Lst[NumHld]);
 
 	    /* Get next holiday */
 	    row = mysql_fetch_row (mysql_res);
@@ -400,7 +422,7 @@ void Hld_GetListHolidays (void)
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
-      Gbl.Hlds.LstIsRead = true;
+      Holidays->LstIsRead = true;
      }
   }
 
@@ -408,7 +430,7 @@ void Hld_GetListHolidays (void)
 /************************* Get holiday data by code **************************/
 /*****************************************************************************/
 
-static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
+static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -532,15 +554,15 @@ static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr)
 /**************************** Free list of holidays **************************/
 /*****************************************************************************/
 
-void Hld_FreeListHolidays (void)
+void Hld_FreeListHolidays (struct Hld_Holidays *Holidays)
   {
-   if (Gbl.Hlds.LstIsRead && Gbl.Hlds.Lst)
+   if (Holidays->LstIsRead && Holidays->Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hlds.Lst);
-      Gbl.Hlds.Lst = NULL;
-      Gbl.Hlds.Num = 0;
-      Gbl.Hlds.LstIsRead = false;
+      free (Holidays->Lst);
+      Holidays->Lst = NULL;
+      Holidays->Num = 0;
+      Holidays->LstIsRead = false;
      }
   }
 
@@ -548,7 +570,8 @@ void Hld_FreeListHolidays (void)
 /********************* List all the holidays for edition *********************/
 /*****************************************************************************/
 
-static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
+static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
+					const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_Holidays;
@@ -556,7 +579,7 @@ static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    unsigned NumHld;
    unsigned NumPlc;
-   struct Holiday *Hld;
+   struct Hld_Holiday *Hld;
    Hld_HolidayType_t HolidayType;
    unsigned HolidayTypeUnsigned;
 
@@ -570,10 +593,10 @@ static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
 
    /***** Write all the holidays *****/
    for (NumHld = 0;
-	NumHld < Gbl.Hlds.Num;
+	NumHld < Holidays->Num;
 	NumHld++)
      {
-      Hld = &Gbl.Hlds.Lst[NumHld];
+      Hld = &Holidays->Lst[NumHld];
 
       HTM_TR_Begin (NULL);
 
@@ -634,7 +657,7 @@ static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	                 Gbl.Now.Date.Year + 1,
 	                 "Start",
-                         &(Gbl.Hlds.Lst[NumHld].StartDate),
+                         &(Holidays->Lst[NumHld].StartDate),
                          true,false);
       Frm_EndForm ();
       HTM_TD_End ();
@@ -646,7 +669,7 @@ static void Hld_ListHolidaysForEdition (const struct Plc_Places *Places)
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	                 Gbl.Now.Date.Year + 1,
 	                 "End",
-                         &(Gbl.Hlds.Lst[NumHld].EndDate),
+                         &(Holidays->Lst[NumHld].EndDate),
                          true,(Hld->HldTyp == Hld_HOLIDAY));
       Frm_EndForm ();
       HTM_TD_End ();
@@ -1150,7 +1173,7 @@ void Hld_RecFormNewHoliday (void)
 /**************************** Create a new holiday ***************************/
 /*****************************************************************************/
 
-static void Hld_CreateHoliday (struct Holiday *Hld)
+static void Hld_CreateHoliday (struct Hld_Holiday *Hld)
   {
    /***** Create a new holiday or no school period *****/
    DB_QueryINSERT ("can not create holiday",
@@ -1179,7 +1202,7 @@ static void Hld_EditingHolidayConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing holiday.");
 
    /***** Allocate memory for holiday *****/
-   if ((Hld_EditingHld = (struct Holiday *) malloc (sizeof (struct Holiday))) == NULL)
+   if ((Hld_EditingHld = (struct Hld_Holiday *) malloc (sizeof (struct Hld_Holiday))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for holiday.");
 
    /***** Reset place *****/

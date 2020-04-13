@@ -51,7 +51,7 @@ typedef enum
    Hld_END_DATE
   } Hld_StartOrEndDate_t;
 
-struct Holiday
+struct Hld_Holiday
   {
    long HldCod;
    long PlcCod;
@@ -70,15 +70,25 @@ typedef enum
   } Hld_Order_t;
 #define Hld_DEFAULT_ORDER_TYPE Hld_ORDER_BY_START_DATE
 
+struct Hld_Holidays
+  {
+   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   unsigned Num;		// Number of holidays
+   struct Hld_Holiday *Lst;	// List of holidays
+   Hld_Order_t SelectedOrder;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Hld_ResetHolidays (struct Hld_Holidays *Holidays);
+
 void Hld_SeeHolidays (void);
 void Hld_PutIconToSeeHlds (void);
 void Hld_EditHolidays (void);
-void Hld_GetListHolidays (void);
-void Hld_FreeListHolidays (void);
+void Hld_GetListHolidays (struct Hld_Holidays *Holidays);
+void Hld_FreeListHolidays (struct Hld_Holidays *Holidays);
 
 long Hld_GetParamHldCod (void);
 

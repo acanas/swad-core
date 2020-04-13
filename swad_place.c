@@ -90,8 +90,8 @@ static void Plc_EditingPlaceDestructor (void);
 
 void Plc_ResetPlaces (struct Plc_Places *Places)
   {
-   Places->Num = 0;
-   Places->Lst = NULL;
+   Places->Num           = 0;
+   Places->Lst           = NULL;
    Places->SelectedOrder = Plc_ORDER_DEFAULT;
   }
 

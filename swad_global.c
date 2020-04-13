@@ -236,11 +236,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Crs.ShrtName[0] =
    Gbl.Hierarchy.Crs.FullName[0] = '\0';
 
-   Gbl.Hlds.LstIsRead = false;	// List is not read
-   Gbl.Hlds.Num = 0;
-   Gbl.Hlds.Lst = NULL;
-   Gbl.Hlds.SelectedOrder = Hld_DEFAULT_ORDER_TYPE;
-
    Gbl.DegTypes.Num = 0;
    Gbl.DegTypes.Lst = NULL;
 
@@ -380,7 +375,6 @@ void Gbl_Cleanup (void)
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();
    Cty_FreeListCountries ();
-   Hld_FreeListHolidays ();
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();
 

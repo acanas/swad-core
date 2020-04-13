@@ -203,13 +203,6 @@ void Cal_DrawCurrentMonth (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
-   /***** Get list of holidays *****/
-   if (!Gbl.Hlds.LstIsRead)
-     {
-      Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
-      Hld_GetListHolidays ();
-     }
-
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
    HTM_DIV_Begin ("id=\"CurrentMonth\"");
@@ -257,13 +250,6 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    extern const char *Hlp_START_Calendar;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
-
-   /***** Get list of holidays *****/
-   if (!Gbl.Hlds.LstIsRead)
-     {
-      Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
-      Hld_GetListHolidays ();
-     }
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
@@ -321,9 +307,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 				 NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
-       (Gbl.Hlds.Num ||					// There are holidays
-	Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
+   if (Gbl.Hierarchy.Level == Hie_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 

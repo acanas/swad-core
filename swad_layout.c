@@ -488,6 +488,7 @@ static void Lay_WriteScripts (void)
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
+   struct Hld_Holidays Holidays;
    struct Exa_ExamAnnouncements ExamAnns;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
@@ -527,12 +528,12 @@ static void Lay_WriteScripts (void)
          Gbl.Action.Act == ActPrnCal ||			// Printing calendar
          Gbl.Action.Act == ActChgCal1stDay)))		// Changing first day
      {
+      /***** Reset places context *****/
+      Hld_ResetHolidays (&Holidays);
+
       /***** Get list of holidays *****/
-      if (!Gbl.Hlds.LstIsRead)
-	{
-	 Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
-	 Hld_GetListHolidays ();
-	}
+      Holidays.SelectedOrder = Hld_ORDER_BY_START_DATE;
+      Hld_GetListHolidays (&Holidays);
 
       /***** Reset exam announcements context *****/
       Exa_ResetExamAnnouncements (&ExamAnns);
@@ -559,15 +560,16 @@ static void Lay_WriteScripts (void)
       HTM_Txt ("';\n");
 
       HTM_Txt ("\tvar Hlds = [];\n");
+
       for (NumHld = 0;
-	   NumHld < Gbl.Hlds.Num;
+	   NumHld < Holidays.Num;
 	   NumHld++)
 	 HTM_TxtF ("\tHlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
-		   Gbl.Hlds.Lst[NumHld].PlcCod,
-		   (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
-		   Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
-		   Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
-		   Gbl.Hlds.Lst[NumHld].Name);
+		   Holidays.Lst[NumHld].PlcCod,
+		   (unsigned) Holidays.Lst[NumHld].HldTyp,
+		   Holidays.Lst[NumHld].StartDate.YYYYMMDD,
+		   Holidays.Lst[NumHld].EndDate.YYYYMMDD,
+		   Holidays.Lst[NumHld].Name);
 
       HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
@@ -583,6 +585,9 @@ static void Lay_WriteScripts (void)
 
       /***** Free list of exam announcements *****/
       Exa_FreeListExamAnnouncements (&ExamAnns);
+
+      /***** Free list of holidays *****/
+      Hld_FreeListHolidays (&Holidays);
      }
 
    /***** Scripts depending on action *****/
