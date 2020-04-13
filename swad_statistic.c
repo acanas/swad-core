@@ -100,6 +100,9 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Sta_PutFormCrsHits (struct Sta_Stats *Stats);
+static void Sta_PutFormGblHits (struct Sta_Stats *Stats);
+
 static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
@@ -208,6 +211,17 @@ void Sta_GetRemoteAddr (void)
 
 void Sta_AskShowCrsHits (void)
   {
+   struct Sta_Stats Stats;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
+
+   /***** Show form to select global hits *****/
+   Sta_PutFormCrsHits (&Stats);
+  }
+
+static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
+  {
    extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
@@ -234,15 +248,11 @@ void Sta_AskShowCrsHits (void)
       Sta_MAX_ROWS_PER_PAGE,
      };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
-   struct Sta_Stats Stats;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
-
-   /***** Reset stats context *****/
-   Sta_ResetStats (&Stats);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -332,7 +342,7 @@ void Sta_AskShowCrsHits (void)
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
          /***** Selection of action *****/
-         Sta_WriteSelectorAction (&Stats);
+         Sta_WriteSelectorAction (Stats);
 
          /***** Option a) Listing of clicks distributed by some metric *****/
          HTM_TR_Begin (NULL);
@@ -343,19 +353,19 @@ void Sta_AskShowCrsHits (void)
 
 	 HTM_TD_Begin ("class=\"LM\"");
 
-         if ((Stats.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
-              Stats.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
-              Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            Stats.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+         if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
+              Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
+              Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+            Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
 	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
 			  "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
 			  (unsigned) Sta_CLICKS_GROUPED,
-			  Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-				                                                  " checked=\"checked\"");
+			  Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+				                                                   " checked=\"checked\"");
 
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
-         Sta_WriteSelectorCountType (&Stats);
+         Sta_WriteSelectorCountType (Stats);
 
          HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
@@ -367,7 +377,7 @@ void Sta_AskShowCrsHits (void)
            {
             ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
             HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-			ClicksGroupedBy == Stats.ClicksGroupedBy,false,
+			ClicksGroupedBy == Stats->ClicksGroupedBy,false,
 	                "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
          HTM_SELECT_End ();
@@ -381,8 +391,8 @@ void Sta_AskShowCrsHits (void)
 	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
 			  "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
 			  (unsigned) Sta_CLICKS_DETAILED,
-			  Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
-				                                                  "");
+			  Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
+				                                                   "");
          HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();
 
@@ -395,13 +405,13 @@ void Sta_AskShowCrsHits (void)
          HTM_TxtF ("(%s: ",Txt_results_per_page);
          HTM_SELECT_Begin (false,
 		           "id=\"RowsPage\" name=\"RowsPage\"%s",
-                           Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-                        	                                                   " disabled=\"disabled\"");
+                           Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+                        	                                                    " disabled=\"disabled\"");
          for (i = 0;
               i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
             HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-			RowsPerPage[i] == Stats.RowsPerPage,false,
+			RowsPerPage[i] == Stats->RowsPerPage,false,
 	                "%u",RowsPerPage[i]);
          HTM_SELECT_End ();
          HTM_Txt (")");
@@ -445,6 +455,17 @@ void Sta_AskShowCrsHits (void)
 
 void Sta_AskShowGblHits (void)
   {
+   struct Sta_Stats Stats;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
+
+   /***** Show form to select global hits *****/
+   Sta_PutFormGblHits (&Stats);
+  }
+
+static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
+  {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
@@ -455,7 +476,6 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
-   struct Sta_Stats Stats;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_START_TIME] = Dat_HMS_TO_000000,
@@ -465,9 +485,6 @@ void Sta_AskShowGblHits (void)
    unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
-
-   /***** Reset stats context *****/
-   Sta_ResetStats (&Stats);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -502,7 +519,7 @@ void Sta_AskShowGblHits (void)
      {
       RoleStatUnsigned = (unsigned) RoleStat;
       HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-		  RoleStat == Stats.Role,false,
+		  RoleStat == Stats->Role,false,
 		  "%s",Txt_ROLE_STATS[RoleStat]);
      }
    HTM_SELECT_End ();
@@ -511,7 +528,7 @@ void Sta_AskShowGblHits (void)
    HTM_TR_End ();
 
    /***** Selection of action *****/
-   Sta_WriteSelectorAction (&Stats);
+   Sta_WriteSelectorAction (Stats);
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    HTM_TR_Begin (NULL);
@@ -542,15 +559,15 @@ void Sta_AskShowGblHits (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Sta_WriteSelectorCountType (&Stats);
+   Sta_WriteSelectorCountType (Stats);
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
-   if (Stats.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
-       Stats.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
-      Stats.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
+   if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
+       Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
+      Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
    HTM_SELECT_Begin (false,
 		     "name=\"GroupedBy\"");
@@ -560,7 +577,7 @@ void Sta_AskShowGblHits (void)
      {
       ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
       HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-		  ClicksGroupedBy == Stats.ClicksGroupedBy,false,
+		  ClicksGroupedBy == Stats->ClicksGroupedBy,false,
 		  "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
    HTM_SELECT_End ();
@@ -704,11 +721,13 @@ void Sta_SetIniEndDates (void)
 
 void Sta_SeeGblAccesses (void)
   {
+   /***** Show hits *****/
    Sta_ShowHits (Sta_SHOW_GLOBAL_ACCESSES);
   }
 
 void Sta_SeeCrsAccesses (void)
   {
+   /***** Show hits *****/
    Sta_ShowHits (Sta_SHOW_COURSE_ACCESSES);
   }
 
@@ -814,7 +833,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sco_GetScope ("ScopeSta");
 
 	 /***** Show form again *****/
-	 Sta_AskShowGblHits ();
+	 Sta_PutFormGblHits (&Stats);
 
 	 /***** Start results section *****/
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
@@ -857,7 +876,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Show the form again *****/
-	 Sta_AskShowCrsHits ();
+	 Sta_PutFormCrsHits (&Stats);
 
 	 /***** Start results section *****/
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);

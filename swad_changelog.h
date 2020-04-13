@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.180.4 (2020-04-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.180.5 (2020-04-13)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,6 +548,7 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.180.5: Apr 13, 2020	Fixed bug in statistics. (285637 lines)
 	Version 19.180.4: Apr 13, 2020	Fixed bug in attendance.
 					Fixed bug in lists of users.
 					Fixed bug in dates (assignments, agenda). (285622 lines)
@@ -598,8 +599,10 @@ INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2016;
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2017;
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2018;
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2019;
+
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) = 2020;
 INSERT INTO log SELECT * FROM log_full WHERE YEAR(ClickTime) > 2020;
+
 RENAME TABLE log_full TO log_old;
 
 	Version 19.162:   Apr 04, 2020	Code refactoring in tests. (284492 lines)
@@ -613,8 +616,8 @@ sudo cp icon/filext32x32/m4a32x32.gif /var/www/html/swad/icon/filext32x32/
 	Version 19.159:   Apr 03, 2020	Code refactoring and bug fixing in tests. (285052 lines)
 	Version 19.158:   Apr 02, 2020	Lot of code refactoring in tests. (285031 lines)
 					5 changes necessary in database:
-ALTER TABLE tst_exams RENAME INDEX TstCod TO ExaCod;
 ALTER TABLE tst_exams CHANGE COLUMN TstCod ExaCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE tst_exams DROP INDEX TstCod,ADD UNIQUE INDEX(ExaCod);
 
 DROP INDEX TstCod ON tst_exam_questions;
 ALTER TABLE tst_exam_questions CHANGE COLUMN TstCod ExaCod INT NOT NULL;
