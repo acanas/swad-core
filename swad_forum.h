@@ -98,8 +98,8 @@ struct For_Forums
    unsigned CurrentPageThrs;
    unsigned CurrentPagePsts;
    struct For_Forum Forum;	// Forum selected
-   struct For_Thread Thread;	// Thread selected
-   struct For_Post Post;	// Post selected
+   long ThrCod;			// Thread selected
+   long PstCod;			// Post selected
    long ThreadToMove;
   };
 

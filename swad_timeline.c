@@ -2147,7 +2147,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
                                          Forums->ForumSet,
 					 Forums->ThreadsOrder,
 					 Forums->Forum.Location,
-					 Forums->Thread.ThrCod,
+					 Forums->ThrCod,
 					 -1L);
 	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
