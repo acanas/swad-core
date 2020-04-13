@@ -236,10 +236,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Crs.ShrtName[0] =
    Gbl.Hierarchy.Crs.FullName[0] = '\0';
 
-   Gbl.Dpts.Num = 0;
-   Gbl.Dpts.Lst = NULL;
-   Gbl.Dpts.SelectedOrder = Dpt_ORDER_DEFAULT;
-
    Gbl.Plcs.Num = 0;
    Gbl.Plcs.Lst = NULL;
    Gbl.Plcs.SelectedOrder = Plc_ORDER_DEFAULT;
@@ -388,7 +384,6 @@ void Gbl_Cleanup (void)
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();
    Cty_FreeListCountries ();
-   Dpt_FreeListDepartments ();
    Plc_FreeListPlaces ();
    Hld_FreeListHolidays ();
    Lnk_FreeListLinks ();

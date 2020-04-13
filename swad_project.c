@@ -1766,7 +1766,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
                                           Prj_ProjectView_t ProjectView)
   {
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
    bool PutLink;
    const char *ClassData;
 
@@ -1804,7 +1804,7 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   {
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
    const char *ClassData;
 
    /***** Set CSS classes *****/

@@ -3611,7 +3611,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
 static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Department;
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
 
    /***** Department *****/
    HTM_TR_Begin (NULL);
@@ -4248,7 +4248,7 @@ void Rec_UpdateMyCentre (void)
 
 void Rec_UpdateMyDepartment (void)
   {
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
 
    /***** Get my department *****/
    /* Get department code */

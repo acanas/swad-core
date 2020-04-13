@@ -60,16 +60,19 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Department *Dpt_EditingDpt = NULL;	// Static variable to keep the department being edited
+static struct Dpt_Department *Dpt_EditingDpt = NULL;	// Static variable to keep the department being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dpt_GetParamDptOrder (void);
+static Dpt_Order_t Dpt_GetParamDptOrder (void);
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
-static void Dpt_EditDepartmentsInternal (void);
-static void Dpt_ListDepartmentsForEdition (void);
+static void Dpt_EditDepartmentsInternal (struct Dpt_Departments *Departments);
+
+static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
+
+static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
 static void Dpt_PutParamDptCod (long DptCod);
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -78,10 +81,21 @@ static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *N
 
 static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
-static void Dpt_CreateDepartment (struct Department *Dpt);
+static void Dpt_CreateDepartment (struct Dpt_Department *Dpt);
 
 static void Dpt_EditingDepartmentConstructor (void);
 static void Dpt_EditingDepartmentDestructor (void);
+
+/*****************************************************************************/
+/************************* Reset departments context *************************/
+/*****************************************************************************/
+
+void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
+  {
+   Departments->Num           = 0;
+   Departments->Lst           = NULL;
+   Departments->SelectedOrder = Dpt_ORDER_DEFAULT;
+  }
 
 /*****************************************************************************/
 /************************* List all the departments **************************/
@@ -95,6 +109,7 @@ void Dpt_SeeDepts (void)
    extern const char *Txt_DEPARTMENTS_ORDER[2];
    extern const char *Txt_Other_departments;
    extern const char *Txt_Department_unspecified;
+   struct Dpt_Departments Departments;
    Dpt_Order_t Order;
    unsigned NumDpt;
    unsigned NumTchsInsInOtherDpts;
@@ -104,11 +119,14 @@ void Dpt_SeeDepts (void)
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
       return;
 
+   /***** Reset departments context *****/
+   Dpt_ResetDepartments (&Departments);
+
    /***** Get parameter with the type of order in the list of departments *****/
-   Dpt_GetParamDptOrder ();
+   Departments.SelectedOrder = Dpt_GetParamDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -135,10 +153,10 @@ void Dpt_SeeDepts (void)
       Frm_StartForm (ActSeeDpt);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Gbl.Dpts.SelectedOrder)
+      if (Order == Departments.SelectedOrder)
 	 HTM_U_Begin ();
       HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
-      if (Order == Gbl.Dpts.SelectedOrder)
+      if (Order == Departments.SelectedOrder)
 	 HTM_U_End ();
       HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -147,9 +165,9 @@ void Dpt_SeeDepts (void)
      }
    HTM_TR_End ();
 
-   /***** Write all the departments and their nuber of teachers *****/
+   /***** Write all the Dpt_GetListDepartmentsdepartments and their nuber of teachers *****/
    for (NumDpt = 0;
-	NumDpt < Gbl.Dpts.Num;
+	NumDpt < Departments.Num;
 	NumDpt++)
      {
       /* Write data of this department */
@@ -157,13 +175,13 @@ void Dpt_SeeDepts (void)
 
       HTM_TD_Begin ("class=\"LM\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Gbl.Dpts.Lst[NumDpt].WWW);
-      HTM_Txt (Gbl.Dpts.Lst[NumDpt].FullName);
+	           Departments.Lst[NumDpt].WWW);
+      HTM_Txt (Departments.Lst[NumDpt].FullName);
       HTM_A_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Gbl.Dpts.Lst[NumDpt].NumTchs);
+      HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -210,20 +228,19 @@ void Dpt_SeeDepts (void)
    Box_BoxTableEnd ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments ();
+   Dpt_FreeListDepartments (&Departments);
   }
 
 /*****************************************************************************/
 /******** Get parameter with the type or order in list of departments ********/
 /*****************************************************************************/
 
-static void Dpt_GetParamDptOrder (void)
+static Dpt_Order_t Dpt_GetParamDptOrder (void)
   {
-   Gbl.Dpts.SelectedOrder = (Dpt_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-                                                      0,
-                                                      Dpt_NUM_ORDERS - 1,
-                                                      (unsigned long) Dpt_ORDER_DEFAULT);
+   return (Dpt_Order_t) Par_GetParToUnsignedLong ("Order",
+						  0,
+						  Dpt_NUM_ORDERS - 1,
+						  (unsigned long) Dpt_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -242,17 +259,22 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
 
 void Dpt_EditDepartments (void)
   {
+   struct Dpt_Departments Departments;
+
+   /***** Reset departments context *****/
+   Dpt_ResetDepartments (&Departments);
+
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
 
    /***** Edit departments *****/
-   Dpt_EditDepartmentsInternal ();
+   Dpt_EditDepartmentsInternal (&Departments);
 
    /***** Department destructor *****/
    Dpt_EditingDepartmentDestructor ();
   }
 
-static void Dpt_EditDepartmentsInternal (void)
+static void Dpt_EditDepartmentsInternal (struct Dpt_Departments *Departments)
   {
    extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_Departments_of_INSTITUTION_X;
@@ -265,7 +287,7 @@ static void Dpt_EditDepartmentsInternal (void)
    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
+   Dpt_GetListDepartments (Departments,Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Departments_of_INSTITUTION_X,
@@ -278,14 +300,14 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_PutFormToCreateDepartment ();
 
    /***** Forms to edit current departments *****/
-   if (Gbl.Dpts.Num)
-      Dpt_ListDepartmentsForEdition ();
+   if (Departments->Num)
+      Dpt_ListDepartmentsForEdition (Departments);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments ();
+   Dpt_FreeListDepartments (Departments);
 
    /***** Free list of institutions *****/
    Ins_FreeListInstitutions ();
@@ -297,7 +319,7 @@ static void Dpt_EditDepartmentsInternal (void)
 // If InsCod  > 0 ==> get departments of an institution
 // If InsCod <= 0 ==> an empty list is returned
 
-void Dpt_GetListDepartments (long InsCod)
+static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod)
   {
    static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
      {
@@ -307,47 +329,59 @@ void Dpt_GetListDepartments (long InsCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDpt;
-   struct Department *Dpt;
+   struct Dpt_Department *Dpt;
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments ();	// List is initialized to empty
+   Dpt_FreeListDepartments (Departments);	// List is initialized to empty
 
    if (InsCod > 0)	// Institution specified
      {
       /***** Get departments from database *****/
-      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get departments",
-						"(SELECT departments.DptCod,departments.InsCod,"
-						"departments.ShortName,departments.FullName,departments.WWW,"
-						"COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-						" FROM departments,usr_data,crs_usr"
-						" WHERE departments.InsCod=%ld"
-						" AND departments.DptCod=usr_data.DptCod"
-						" AND usr_data.UsrCod=crs_usr.UsrCod"
-						" AND crs_usr.Role IN (%u,%u)"
-						" GROUP BY departments.DptCod)"
-						" UNION "
-						"(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
-						" FROM departments"
-						" WHERE InsCod=%ld AND DptCod NOT IN"
-						" (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-						" WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
-						" ORDER BY %s",
-						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-						OrderBySubQuery[Gbl.Dpts.SelectedOrder]);
-      if (Gbl.Dpts.Num) // Departments found...
+      Departments->Num = (unsigned)
+	                 DB_QuerySELECT (&mysql_res,"can not get departments",
+				         "(SELECT departments.DptCod,"		// row[0]
+				                 "departments.InsCod,"		// row[1]
+				                 "departments.ShortName,"	// row[2]
+				                 "departments.FullName,"	// row[3]
+				                 "departments.WWW,"		// row[4]
+				                 "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
+				         " FROM departments,usr_data,crs_usr"
+				         " WHERE departments.InsCod=%ld"
+				         " AND departments.DptCod=usr_data.DptCod"
+				         " AND usr_data.UsrCod=crs_usr.UsrCod"
+				         " AND crs_usr.Role IN (%u,%u)"
+				         " GROUP BY departments.DptCod)"
+				         " UNION "
+				         "(SELECT DptCod,"			// row[0]
+				                 "InsCod,"			// row[1]
+				                 "ShortName,"			// row[2]
+				                 "FullName,"			// row[3]
+				                 "WWW,"				// row[4]
+				                 "0 AS NumTchs"			// row[5]
+				         " FROM departments"
+				         " WHERE InsCod=%ld AND DptCod NOT IN"
+				         " (SELECT DISTINCT usr_data.DptCod"
+				         " FROM usr_data,crs_usr"
+				         " WHERE crs_usr.Role IN (%u,%u)"
+				         " AND crs_usr.UsrCod=usr_data.UsrCod))"
+				         " ORDER BY %s",
+				         InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+				         InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+				         OrderBySubQuery[Departments->SelectedOrder]);
+      if (Departments->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
-	 if ((Gbl.Dpts.Lst = (struct Department *) calloc ((size_t) Gbl.Dpts.Num,
-	                                                   sizeof (struct Department))) == NULL)
+	 if ((Departments->Lst = (struct Dpt_Department *)
+		                 calloc ((size_t) Departments->Num,
+	                                 sizeof (struct Dpt_Department))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the departments *****/
 	 for (NumDpt = 0;
-	      NumDpt < Gbl.Dpts.Num;
+	      NumDpt < Departments->Num;
 	      NumDpt++)
 	   {
-	    Dpt = &(Gbl.Dpts.Lst[NumDpt]);
+	    Dpt = &(Departments->Lst[NumDpt]);
 
 	    /* Get next department */
 	    row = mysql_fetch_row (mysql_res);
@@ -387,7 +421,7 @@ void Dpt_GetListDepartments (long InsCod)
 /************************** Get department full name *************************/
 /*****************************************************************************/
 
-void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
+void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
   {
    extern const char *Txt_Another_department;
    MYSQL_RES *mysql_res;
@@ -461,14 +495,14 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
 /************************** Free list of departments *************************/
 /*****************************************************************************/
 
-void Dpt_FreeListDepartments (void)
+void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
   {
-   if (Gbl.Dpts.Lst)
+   if (Departments->Lst)
       /***** Free memory used by the list of departments *****/
-      free (Gbl.Dpts.Lst);
+      free (Departments->Lst);
 
-   Gbl.Dpts.Lst = NULL;
-   Gbl.Dpts.Num = 0;
+   Departments->Lst = NULL;
+   Departments->Num = 0;
   }
 
 /*****************************************************************************/
@@ -490,11 +524,11 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
 /************************** List all the departments *************************/
 /*****************************************************************************/
 
-static void Dpt_ListDepartmentsForEdition (void)
+static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
-   struct Department *Dpt;
+   struct Dpt_Department *Dpt;
    struct Instit Ins;
    unsigned NumIns;
 
@@ -506,10 +540,10 @@ static void Dpt_ListDepartmentsForEdition (void)
 
    /***** Write all the departments *****/
    for (NumDpt = 0;
-	NumDpt < Gbl.Dpts.Num;
+	NumDpt < Departments->Num;
 	NumDpt++)
      {
-      Dpt = &Gbl.Dpts.Lst[NumDpt];
+      Dpt = &Departments->Lst[NumDpt];
 
       /* Get data of institution of this department */
       Ins.InsCod = Dpt->InsCod;
@@ -862,11 +896,16 @@ void Dpt_ChangeDptWWW (void)
 
 void Dpt_ContEditAfterChgDpt (void)
   {
+   struct Dpt_Departments Departments;
+
+   /***** Reset departments context *****/
+   Dpt_ResetDepartments (&Departments);
+
    /***** Write message to show the change made *****/
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Dpt_EditDepartmentsInternal ();
+   Dpt_EditDepartmentsInternal (&Departments);
 
    /***** Department destructor *****/
    Dpt_EditingDepartmentDestructor ();
@@ -1037,7 +1076,7 @@ void Dpt_RecFormNewDpt (void)
 /************************** Create a new department **************************/
 /*****************************************************************************/
 
-static void Dpt_CreateDepartment (struct Department *Dpt)
+static void Dpt_CreateDepartment (struct Dpt_Department *Dpt)
   {
    /***** Create a new department *****/
    DB_QueryINSERT ("can not create a new department",
@@ -1100,11 +1139,15 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
                                   bool SubmitFormOnChange)
   {
    extern const char *Txt_Another_department;
+   struct Dpt_Departments Departments;
    unsigned NumDpt;
    bool NoDptSelectable;
 
+   /***** Reset departments context *****/
+   Dpt_ResetDepartments (&Departments);
+
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (InsCod);
+   Dpt_GetListDepartments (&Departments,InsCod);
 
    /***** Selector to select department *****/
    /* Start selector */
@@ -1133,17 +1176,17 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /* List all departments */
    for (NumDpt = 0;
-	NumDpt < Gbl.Dpts.Num;
+	NumDpt < Departments.Num;
 	NumDpt++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Dpts.Lst[NumDpt].DptCod,
-		  Gbl.Dpts.Lst[NumDpt].DptCod == DptCod,false,
-		  "%s",Gbl.Dpts.Lst[NumDpt].FullName);
+      HTM_OPTION (HTM_Type_LONG,&Departments.Lst[NumDpt].DptCod,
+		  Departments.Lst[NumDpt].DptCod == DptCod,false,
+		  "%s",Departments.Lst[NumDpt].FullName);
 
    /* End selector */
    HTM_SELECT_End ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments ();
+   Dpt_FreeListDepartments (&Departments);
   }
 
 /*****************************************************************************/
@@ -1157,7 +1200,7 @@ static void Dpt_EditingDepartmentConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing department.");
 
    /***** Allocate memory for department *****/
-   if ((Dpt_EditingDpt = (struct Department *) malloc (sizeof (struct Department))) == NULL)
+   if ((Dpt_EditingDpt = (struct Dpt_Department *) malloc (sizeof (struct Dpt_Department))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for department.");
 
    /***** Reset department *****/

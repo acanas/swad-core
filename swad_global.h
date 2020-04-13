@@ -228,12 +228,6 @@ struct Globals
      } DegTypes;
    struct
      {
-      unsigned Num;		// Number of departments
-      struct Department *Lst;	// List of departments
-      Dpt_Order_t SelectedOrder;
-     } Dpts;
-   struct
-     {
       unsigned Num;		// Number of places
       struct Place *Lst;	// List of places
       Plc_Order_t SelectedOrder;

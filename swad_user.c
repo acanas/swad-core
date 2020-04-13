@@ -3744,7 +3744,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    bool ShowPhoto;
    struct Instit Ins;
    struct Centre Ctr;
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -3965,7 +3965,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    struct Centre Ctr;
-   struct Department Dpt;
+   struct Dpt_Department Dpt;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);

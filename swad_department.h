@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-struct Department
+struct Dpt_Department
   {
    long DptCod;
    long InsCod;
@@ -53,16 +53,24 @@ typedef enum
 
 #define Dpt_PARAM_DPT_COD_NAME	"DptCod"
 
+struct Dpt_Departments
+  {
+   unsigned Num;		// Number of departments
+   struct Dpt_Department *Lst;	// List of departments
+   Dpt_Order_t SelectedOrder;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
+
 void Dpt_SeeDepts (void);
 void Dpt_EditDepartments (void);
-void Dpt_GetListDepartments (long InsCod);
-void Dpt_FreeListDepartments (void);
+void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
 unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod);
-void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt);
+void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt);
 long Dpt_GetAndCheckParamDptCod (long MinCodAllowed);
 void Dpt_RemoveDepartment (void);
 void Dpt_ChangeDepartIns (void);
@@ -77,8 +85,8 @@ void Dpt_FlushCacheNumDptsInIns (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
-                                  const char *SelectClass,
-                                  long FirstOptionSelectable,
+		                  const char *SelectClass,
+                                  long FirstOption,
                                   const char *TextWhenNoDptSelected,
                                   bool SubmitFormOnChange);
 
