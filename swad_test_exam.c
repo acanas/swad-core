@@ -1811,7 +1811,7 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
      }
    else
      {
-      HTM_TD_ColouredEmpty (7);
+      HTM_TD_ColouredEmpty (8);
       HTM_TR_End ();
      }
 
@@ -2296,10 +2296,11 @@ void TstExa_GetExamQuestionsFromDB (struct TstExa_Exam *Exam)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumQsts;
    unsigned NumQst;
 
    /***** Get questions of a test exam from database *****/
-   Exam->NumQsts =
+   NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test exam",
 			      "SELECT QstCod,"	// row[0]
@@ -2310,33 +2311,39 @@ void TstExa_GetExamQuestionsFromDB (struct TstExa_Exam *Exam)
 			      " ORDER BY QstInd",
 			      Exam->ExaCod);
 
-   /***** Get questions codes *****/
-   for (NumQst = 0;
-	NumQst < Exam->NumQsts;
-	NumQst++)
-     {
-      row = mysql_fetch_row (mysql_res);
+   /***** List questions *****/
+   // The number of questions in table of exam questions
+   // should match the number of questions got from exam
+   if (NumQsts == Exam->NumQsts)
+      for (NumQst = 0;
+	   NumQst < NumQsts;
+	   NumQst++)
+	{
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get question code */
-      if ((Exam->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
+	 /* Get question code */
+	 if ((Exam->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /* Get indexes for this question (row[1]) */
-      Str_Copy (Exam->Questions[NumQst].StrIndexes,row[1],
-                TstExa_MAX_BYTES_INDEXES_ONE_QST);
+	 /* Get indexes for this question (row[1]) */
+	 Str_Copy (Exam->Questions[NumQst].StrIndexes,row[1],
+		   TstExa_MAX_BYTES_INDEXES_ONE_QST);
 
-      /* Get answers selected by user for this question (row[2]) */
-      Str_Copy (Exam->Questions[NumQst].StrAnswers,row[2],
-                TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+	 /* Get answers selected by user for this question (row[2]) */
+	 Str_Copy (Exam->Questions[NumQst].StrAnswers,row[2],
+		   TstExa_MAX_BYTES_ANSWERS_ONE_QST);
 
-      /* Replace each comma by a separator of multiple parameters */
-      /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrIndexes);
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrAnswers);
-     }
+	 /* Replace each comma by a separator of multiple parameters */
+	 /* In database commas are used as separators instead of special chars */
+	 Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrIndexes);
+	 Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrAnswers);
+	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   if (NumQsts != Exam->NumQsts)
+      Lay_ShowErrorAndExit ("Wrong exam.");
   }
 
 /*****************************************************************************/

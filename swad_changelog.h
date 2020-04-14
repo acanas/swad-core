@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.183.1 (2020-04-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.183.2 (2020-04-14)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,6 +548,7 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.183.2: Apr 14, 2020	Fixed bug in test exams. (285684 lines)
 	Version 19.183.1: Apr 14, 2020	Fixed bug in forums, reported by Javier Fernández Baldomero. (285677 lines)
 	Version 19.183:   Apr 13, 2020	Code refactoring in holidays. (285689 lines)
 	Version 19.182:   Apr 13, 2020	Code refactoring in places. (285685 lines)
@@ -672,7 +673,7 @@ ALTER TABLE tst_exams CHANGE COLUMN EndTime EndTime DATETIME NOT NULL;
 	Version 19.148:   Mar 17, 2020	Code refactoring in tests.
 					New actions to remove several test questions. (282868 lines)
 	Version 19.147:   Mar 14, 2020	Change MathJax to version 3.0.1. (282550 lines)
-Install MathJax 3.0.1
+Install MathJax 3.0.1 or later
 					Copy the following JavaScript file to public directory:
 sudo cp js/mathjax-config.js /var/www/html/swad/
 

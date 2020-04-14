@@ -4546,7 +4546,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /* Get edition time (row[0] holds the start UTC time) */
-      Question->EditTime = Dat_GetUNIXTimeFromStr (row[3]);
+      Question->EditTime = Dat_GetUNIXTimeFromStr (row[0]);
 
       /* Get the type of answer (row[1]) */
       Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
