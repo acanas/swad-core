@@ -338,9 +338,17 @@ static void Tst_TstDestructor (struct Tst_Test *Test)
 
 static void Tst_ResetTags (struct Tst_Tags *Tags)
   {
+   unsigned IndTag;
+
    Tags->Num  = 0;
    Tags->All  = false;
    Tags->List = NULL;
+
+   /***** Initialize all tags in question to empty string *****/
+   for (IndTag = 0;
+	IndTag < Tst_MAX_TAGS_PER_QUESTION;
+	IndTag++)
+      Tags->Txt[IndTag][0] = '\0';
   }
 
 /*****************************************************************************/
@@ -3960,7 +3968,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
       HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
       mysql_data_seek (mysql_res,0);
       TagFound = false;
-      for (NumTag = 1;
+      for (NumTag  = 1;
 	   NumTag <= NumTags;
 	   NumTag++)
         {
