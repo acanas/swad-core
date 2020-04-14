@@ -54,13 +54,13 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Classroom *Cla_EditingCla = NULL;	// Static variable to keep the classroom being edited
+static struct Cla_Classroom *Cla_EditingCla = NULL;	// Static variable to keep the classroom being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cla_GetParamClaOrder (void);
+static Cla_Order_t Cla_GetParamClaOrder (void);
 static bool Cla_CheckIfICanCreateClassrooms (void);
 static void Cla_PutIconsListingClassrooms (__attribute__((unused)) void *Args);
 static void Cla_PutIconToEditClassrooms (void);
@@ -68,7 +68,7 @@ static void Cla_PutIconsEditingClassrooms (__attribute__((unused)) void *Args);
 
 static void Cla_EditClassroomsInternal (void);
 
-static void Cla_ListClassroomsForEdition (void);
+static void Cla_ListClassroomsForEdition (const struct Cla_Classrooms *Classrooms);
 static void Cla_PutParamClaCod (long ClaCod);
 
 static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -79,16 +79,25 @@ static void Cla_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigne
 
 static void Cla_PutFormToCreateClassroom (void);
 static void Cla_PutHeadClassrooms (void);
-static void Cla_CreateClassroom (struct Classroom *Cla);
+static void Cla_CreateClassroom (struct Cla_Classroom *Cla);
 
 static void Cla_EditingClassroomConstructor (void);
 static void Cla_EditingClassroomDestructor (void);
 
 /*****************************************************************************/
-/************************* List all the classrooms ***************************/
+/************************* Reset classrooms context **************************/
 /*****************************************************************************/
 
-#define A SIZE_MAX
+void Cla_ResetClassrooms (struct Cla_Classrooms *Classrooms)
+  {
+   Classrooms->Num           = 0;	// Number of classrooms
+   Classrooms->Lst           = NULL;	// List of classrooms
+   Classrooms->SelectedOrder = Cla_ORDER_DEFAULT;
+  }
+
+/*****************************************************************************/
+/************************* List all the classrooms ***************************/
+/*****************************************************************************/
 
 void Cla_SeeClassrooms (void)
   {
@@ -97,6 +106,7 @@ void Cla_SeeClassrooms (void)
    extern const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS];
    extern const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS];
    extern const char *Txt_New_classroom;
+   struct Cla_Classrooms Classrooms;
    Cla_Order_t Order;
    unsigned NumCla;
    unsigned RowEvenOdd;
@@ -106,11 +116,14 @@ void Cla_SeeClassrooms (void)
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
       return;
 
+   /***** Reset classrooms context *****/
+   Cla_ResetClassrooms (&Classrooms);
+
    /***** Get parameter with the type of order in the list of classrooms *****/
-   Cla_GetParamClaOrder ();
+   Classrooms.SelectedOrder = Cla_GetParamClaOrder ();
 
    /***** Get list of classrooms *****/
-   Cla_GetListClassrooms (Cla_ALL_DATA);
+   Cla_GetListClassrooms (&Classrooms,Cla_ALL_DATA);
 
    /***** Table head *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
@@ -126,10 +139,10 @@ void Cla_SeeClassrooms (void)
       Frm_StartForm (ActSeeCla);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_CLASSROOMS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Gbl.Classrooms.SelectedOrder)
+      if (Order == Classrooms.SelectedOrder)
 	 HTM_U_Begin ();
       HTM_Txt (Txt_CLASSROOMS_ORDER[Order]);
-      if (Order == Gbl.Classrooms.SelectedOrder)
+      if (Order == Classrooms.SelectedOrder)
 	 HTM_U_End ();
       HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -139,30 +152,30 @@ void Cla_SeeClassrooms (void)
 
    /***** Write list of classrooms *****/
    for (NumCla = 0, RowEvenOdd = 1;
-	NumCla < Gbl.Classrooms.Num;
+	NumCla < Classrooms.Num;
 	NumCla++, RowEvenOdd = 1 - RowEvenOdd)
      {
       HTM_TR_Begin (NULL);
 
       /* Short name */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Gbl.Classrooms.Lst[NumCla].ShrtName);
+      HTM_Txt (Classrooms.Lst[NumCla].ShrtName);
       HTM_TD_End ();
 
       /* Full name */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Gbl.Classrooms.Lst[NumCla].FullName);
+      HTM_Txt (Classrooms.Lst[NumCla].FullName);
       HTM_TD_End ();
 
       /* Capacity */
       HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      Cla_WriteCapacity (StrCapacity,Gbl.Classrooms.Lst[NumCla].Capacity);
+      Cla_WriteCapacity (StrCapacity,Classrooms.Lst[NumCla].Capacity);
       HTM_Txt (StrCapacity);
       HTM_TD_End ();
 
       /* Location */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Gbl.Classrooms.Lst[NumCla].Location);
+      HTM_Txt (Classrooms.Lst[NumCla].Location);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -183,20 +196,19 @@ void Cla_SeeClassrooms (void)
    Box_BoxEnd ();
 
    /***** Free list of classrooms *****/
-   Cla_FreeListClassrooms ();
+   Cla_FreeListClassrooms (&Classrooms);
   }
 
 /*****************************************************************************/
 /******** Get parameter with the type or order in list of classrooms *********/
 /*****************************************************************************/
 
-static void Cla_GetParamClaOrder (void)
+static Cla_Order_t Cla_GetParamClaOrder (void)
   {
-   Gbl.Classrooms.SelectedOrder = (Cla_Order_t)
-	                          Par_GetParToUnsignedLong ("Order",
-                                                            0,
-                                                            Cla_NUM_ORDERS - 1,
-                                                            (unsigned long) Cla_ORDER_DEFAULT);
+   return (Cla_Order_t) Par_GetParToUnsignedLong ("Order",
+						  0,
+						  Cla_NUM_ORDERS - 1,
+						  (unsigned long) Cla_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -249,9 +261,13 @@ static void Cla_EditClassroomsInternal (void)
   {
    extern const char *Hlp_CENTRE_Classrooms_edit;
    extern const char *Txt_Classrooms;
+   struct Cla_Classrooms Classrooms;
+
+   /***** Reset classrooms context *****/
+   Cla_ResetClassrooms (&Classrooms);
 
    /***** Get list of classrooms *****/
-   Cla_GetListClassrooms (Cla_ALL_DATA);
+   Cla_GetListClassrooms (&Classrooms,Cla_ALL_DATA);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Classrooms,
@@ -262,14 +278,14 @@ static void Cla_EditClassroomsInternal (void)
    Cla_PutFormToCreateClassroom ();
 
    /***** Forms to edit current classrooms *****/
-   if (Gbl.Classrooms.Num)
-      Cla_ListClassroomsForEdition ();
+   if (Classrooms.Num)
+      Cla_ListClassroomsForEdition (&Classrooms);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of classrooms *****/
-   Cla_FreeListClassrooms ();
+   Cla_FreeListClassrooms (&Classrooms);
   }
 
 /*****************************************************************************/
@@ -300,7 +316,8 @@ void Cla_PutIconToViewClassrooms (void)
 /************************** List all the classrooms **************************/
 /*****************************************************************************/
 
-void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
+void Cla_GetListClassrooms (struct Cla_Classrooms *Classrooms,
+                            Cla_WhichData_t WhichData)
   {
    static const char *OrderBySubQuery[Cla_NUM_ORDERS] =
      {
@@ -313,7 +330,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumCla;
-   struct Classroom *Cla;
+   struct Cla_Classroom *Cla;
 
    /***** Get classrooms from database *****/
    switch (WhichData)
@@ -329,7 +346,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
-				   OrderBySubQuery[Gbl.Classrooms.SelectedOrder]);
+				   OrderBySubQuery[Classrooms->SelectedOrder]);
 	 break;
       case Cla_ONLY_SHRT_NAME:
       default:
@@ -346,18 +363,20 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
    /***** Count number of rows in result *****/
    if (NumRows) // Classrooms found...
      {
-      Gbl.Classrooms.Num = (unsigned) NumRows;
+      Classrooms->Num = (unsigned) NumRows;
 
       /***** Create list with courses in centre *****/
-      if ((Gbl.Classrooms.Lst = (struct Classroom *) calloc (NumRows,sizeof (struct Classroom))) == NULL)
+      if ((Classrooms->Lst = (struct Cla_Classroom *)
+	                     calloc (NumRows,
+	                             sizeof (struct Cla_Classroom))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the classrooms *****/
       for (NumCla = 0;
-	   NumCla < Gbl.Classrooms.Num;
+	   NumCla < Classrooms->Num;
 	   NumCla++)
         {
-         Cla = &(Gbl.Classrooms.Lst[NumCla]);
+         Cla = &Classrooms->Lst[NumCla];
 
          /* Get next classroom */
          row = mysql_fetch_row (mysql_res);
@@ -387,7 +406,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
         }
      }
    else
-      Gbl.Classrooms.Num = 0;
+      Classrooms->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -397,7 +416,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
 /************************** Get classroom full name **************************/
 /*****************************************************************************/
 
-void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
+void Cla_GetDataOfClassroomByCod (struct Cla_Classroom *Cla)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -454,14 +473,14 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
 /************************** Free list of classrooms **************************/
 /*****************************************************************************/
 
-void Cla_FreeListClassrooms (void)
+void Cla_FreeListClassrooms (struct Cla_Classrooms *Classrooms)
   {
-   if (Gbl.Classrooms.Lst)
+   if (Classrooms->Lst)
      {
       /***** Free memory used by the list of classrooms in institution *****/
-      free (Gbl.Classrooms.Lst);
-      Gbl.Classrooms.Lst = NULL;
-      Gbl.Classrooms.Num = 0;
+      free (Classrooms->Lst);
+      Classrooms->Lst = NULL;
+      Classrooms->Num = 0;
      }
   }
 
@@ -469,10 +488,10 @@ void Cla_FreeListClassrooms (void)
 /************************* List all the classrooms ***************************/
 /*****************************************************************************/
 
-static void Cla_ListClassroomsForEdition (void)
+static void Cla_ListClassroomsForEdition (const struct Cla_Classrooms *Classrooms)
   {
    unsigned NumCla;
-   struct Classroom *Cla;
+   struct Cla_Classroom *Cla;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write heading *****/
@@ -481,10 +500,10 @@ static void Cla_ListClassroomsForEdition (void)
 
    /***** Write all the classrooms *****/
    for (NumCla = 0;
-	NumCla < Gbl.Classrooms.Num;
+	NumCla < Classrooms->Num;
 	NumCla++)
      {
-      Cla = &Gbl.Classrooms.Lst[NumCla];
+      Cla = &Classrooms->Lst[NumCla];
 
       HTM_TR_Begin (NULL);
 
@@ -1022,7 +1041,7 @@ void Cla_RecFormNewClassroom (void)
 /************************** Create a new classroom ***************************/
 /*****************************************************************************/
 
-static void Cla_CreateClassroom (struct Classroom *Cla)
+static void Cla_CreateClassroom (struct Cla_Classroom *Cla)
   {
    /***** Create a new classroom *****/
    DB_QueryINSERT ("can not create classroom",
@@ -1045,7 +1064,7 @@ static void Cla_EditingClassroomConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing classroom.");
 
    /***** Allocate memory for classroom *****/
-   if ((Cla_EditingCla = (struct Classroom *) malloc (sizeof (struct Classroom))) == NULL)
+   if ((Cla_EditingCla = (struct Cla_Classroom *) malloc (sizeof (struct Cla_Classroom))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for classroom.");
 
    /***** Reset classroom *****/

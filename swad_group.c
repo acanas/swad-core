@@ -96,7 +96,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
                                         const char *AlertTextGroups);
 
 static void Grp_EditGroupTypes (void);
-static void Grp_EditGroups (void);
+static void Grp_EditGroups (const struct Cla_Classrooms *Classrooms);
 static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
 static void Grp_PutIconToCreateNewGroup (void);
 
@@ -116,7 +116,7 @@ static void Grp_PutIconToViewGroups (void);
 static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
-static void Grp_ListGroupsForEdition (void);
+static void Grp_ListGroupsForEdition (const struct Cla_Classrooms *Classrooms);
 static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
@@ -129,7 +129,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
 static void Grp_PutFormToCreateGroupType (void);
-static void Grp_PutFormToCreateGroup (void);
+static void Grp_PutFormToCreateGroup (const struct Cla_Classrooms *Classrooms);
 static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
@@ -235,9 +235,6 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ALL_GROUP_TYPES);
 
-   /***** Get list of classrooms in this centre *****/
-   Cla_GetListClassrooms (Cla_ONLY_SHRT_NAME);
-
    /***** Show optional alert *****/
    if (AlertTextGroupTypes)
       if (AlertTextGroupTypes[0])
@@ -256,20 +253,28 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
 static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
                                         const char *AlertTextGroups)
   {
+   struct Cla_Classrooms Classrooms;
+
+   /***** Reset classrooms context *****/
+   Cla_ResetClassrooms (&Classrooms);
+
    /***** Show optional alert *****/
    if (AlertTextGroups)
       if (AlertTextGroups[0])
          Ale_ShowAlert (AlertTypeGroups,AlertTextGroups);
 
+   /***** Get list of classrooms in this centre *****/
+   Cla_GetListClassrooms (&Classrooms,Cla_ONLY_SHRT_NAME);
+
    /***** Put form to edit groups *****/
    if (Gbl.Crs.Grps.GrpTypes.Num) // If there are group types...
-      Grp_EditGroups ();
+      Grp_EditGroups (&Classrooms);
 
    /***** End groups section *****/
    HTM_SECTION_End ();
 
    /***** Free list of classrooms in this centre *****/
-   Cla_FreeListClassrooms ();
+   Cla_FreeListClassrooms (&Classrooms);
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -308,7 +313,7 @@ static void Grp_EditGroupTypes (void)
 /**************************** Put forms to edit groups ***********************/
 /*****************************************************************************/
 
-static void Grp_EditGroups (void)
+static void Grp_EditGroups (const struct Cla_Classrooms *Classrooms)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
@@ -320,11 +325,11 @@ static void Grp_EditGroups (void)
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
-   Grp_PutFormToCreateGroup ();
+   Grp_PutFormToCreateGroup (Classrooms);
 
    /***** Forms to edit current groups *****/
    if (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
-      Grp_ListGroupsForEdition ();
+      Grp_ListGroupsForEdition (Classrooms);
    else	// There are group types, but there aren't groups
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
                      Gbl.Hierarchy.Crs.ShrtName);
@@ -1468,7 +1473,7 @@ static void Grp_WriteHeadingGroupTypes (void)
 /********************** List current groups for edition **********************/
 /*****************************************************************************/
 
-static void Grp_ListGroupsForEdition (void)
+static void Grp_ListGroupsForEdition (const struct Cla_Classrooms *Classrooms)
   {
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
@@ -1595,11 +1600,11 @@ static void Grp_ListGroupsForEdition (void)
 
 	 /* Options for classrooms */
 	 for (NumCla = 0;
-	      NumCla < Gbl.Classrooms.Num;
+	      NumCla < Classrooms->Num;
 	      NumCla++)
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Classrooms.Lst[NumCla].ClaCod,
-			Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->Classroom.ClaCod,false,
-			"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
+	    HTM_OPTION (HTM_Type_LONG,&Classrooms->Lst[NumCla].ClaCod,
+			Classrooms->Lst[NumCla].ClaCod == Grp->Classroom.ClaCod,false,
+			"%s",Classrooms->Lst[NumCla].ShrtName);
 
 	 /* End selector */
 	 HTM_SELECT_End ();
@@ -2569,7 +2574,7 @@ static void Grp_PutFormToCreateGroupType (void)
 /*********************** Put a form to create a new group ********************/
 /*****************************************************************************/
 
-static void Grp_PutFormToCreateGroup (void)
+static void Grp_PutFormToCreateGroup (const struct Cla_Classrooms *Classrooms)
   {
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
@@ -2651,11 +2656,11 @@ static void Grp_PutFormToCreateGroup (void)
 
    /* Options for classrooms */
    for (NumCla = 0;
-	NumCla < Gbl.Classrooms.Num;
+	NumCla < Classrooms->Num;
 	NumCla++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Classrooms.Lst[NumCla].ClaCod,
-		  Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod,false,
-		  "%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Classrooms->Lst[NumCla].ClaCod,
+		  Classrooms->Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod,false,
+		  "%s",Classrooms->Lst[NumCla].ShrtName);
 
    /* End selector */
    HTM_SELECT_End ();

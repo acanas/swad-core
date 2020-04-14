@@ -46,7 +46,7 @@
 #define Cla_MAX_CHARS_LOCATION	(128 - 1)	// 127
 #define Cla_MAX_BYTES_LOCATION	((Cla_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct Classroom
+struct Cla_Classroom
   {
    long ClaCod;
    long InsCod;
@@ -73,19 +73,29 @@ typedef enum
    Cla_ONLY_SHRT_NAME,
   } Cla_WhichData_t;
 
+struct Cla_Classrooms
+  {
+   unsigned Num;		// Number of classrooms
+   struct Cla_Classroom *Lst;	// List of classrooms
+   Cla_Order_t SelectedOrder;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Cla_ResetClassrooms (struct Cla_Classrooms *Classrooms);
+
 void Cla_SeeClassrooms (void);
 void Cla_EditClassrooms (void);
 void Cla_PutIconToViewClassrooms (void);
-void Cla_GetListClassrooms (Cla_WhichData_t WhichData);
-void Cla_FreeListClassrooms (void);
+void Cla_GetListClassrooms (struct Cla_Classrooms *Classrooms,
+                            Cla_WhichData_t WhichData);
+void Cla_FreeListClassrooms (struct Cla_Classrooms *Classrooms);
 
 void Cla_GetListClassroomsInThisCtr (void);
 
-void Cla_GetDataOfClassroomByCod (struct Classroom *Cla);
+void Cla_GetDataOfClassroomByCod (struct Cla_Classroom *Cla);
 long Cla_GetParamClaCod (void);
 
 void Cla_RemoveClassroom (void);

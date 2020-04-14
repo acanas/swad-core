@@ -228,12 +228,6 @@ struct Globals
      } DegTypes;
    struct
      {
-      unsigned Num;		// Number of classrooms
-      struct Classroom *Lst;	// List of classrooms
-      Cla_Order_t SelectedOrder;
-     } Classrooms;
-   struct
-     {
       unsigned Num;		// Number of mail domains
       struct Mail *Lst;		// List of mail domains
       Mai_DomainsOrder_t SelectedOrder;
