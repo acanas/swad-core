@@ -13332,3 +13332,10 @@ SELECT my_courses.CrsCod,COUNT(*) AS N FROM (SELECT CrsCod FROM crs_usr WHERE Us
  
  
  
+--------------------
+
+SELECT COUNT(*) FROM usr_data WHERE InsCod=25037;
+UPDATE usr_data SET InsCod=1130 WHERE InsCod=25037;
+
+ 
+ 

@@ -627,6 +627,48 @@ const char *Hlp_CENTRE_Degrees =
 	"CENTRE.Degrees.en";
 #endif
 
+const char *Hlp_CENTRE_Buildings =
+#if   L==1
+	"CENTRE.Buildings.es";
+#elif L==2
+	"CENTRE.Buildings.en";
+#elif L==3
+	"CENTRE.Buildings.en";
+#elif L==4
+	"CENTRE.Buildings.es";
+#elif L==5
+	"CENTRE.Buildings.en";
+#elif L==6
+	"CENTRE.Buildings.es";
+#elif L==7
+	"CENTRE.Buildings.en";
+#elif L==8
+	"CENTRE.Buildings.en";
+#elif L==9
+	"CENTRE.Buildings.en";
+#endif
+
+const char *Hlp_CENTRE_Buildings_edit =
+#if   L==1
+	"CENTRE.Buildings.es#editar";
+#elif L==2
+	"CENTRE.Buildings.en#edit";
+#elif L==3
+	"CENTRE.Buildings.en#edit";
+#elif L==4
+	"CENTRE.Buildings.es#editar";
+#elif L==5
+	"CENTRE.Buildings.en#edit";
+#elif L==6
+	"CENTRE.Buildings.es#editar";
+#elif L==7
+	"CENTRE.Buildings.en#edit";
+#elif L==8
+	"CENTRE.Buildings.en#edit";
+#elif L==9
+	"CENTRE.Buildings.en#edit";
+#endif
+
 const char *Hlp_CENTRE_Rooms =
 #if   L==1
 	"CENTRE.Rooms.es";

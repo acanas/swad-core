@@ -490,7 +490,7 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 
 static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms)
   {
-   unsigned NumCla;
+   unsigned NumRoom;
    struct Roo_Room *Room;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -499,11 +499,11 @@ static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms)
    Roo_PutHeadRooms ();
 
    /***** Write all the rooms *****/
-   for (NumCla = 0;
-	NumCla < Rooms->Num;
-	NumCla++)
+   for (NumRoom = 0;
+	NumRoom < Rooms->Num;
+	NumRoom++)
      {
-      Room = &Rooms->Lst[NumCla];
+      Room = &Rooms->Lst[NumRoom];
 
       HTM_TR_Begin (NULL);
 

@@ -416,6 +416,29 @@ mysql> DESCRIBE birthdays_today;
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(Today))");
 
+   /***** Table buildings *****/
+/*
+mysql> DESCRIBE buildings;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| BldCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| Location  | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS buildings ("
+			"BldCod INT NOT NULL AUTO_INCREMENT,"
+			"CtrCod INT NOT NULL,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Bld_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Bld_MAX_BYTES_FULL_NAME
+			"Location VARCHAR(2047) NOT NULL,"	// Bld_MAX_BYTES_LOCATION
+		   "UNIQUE INDEX(BldCod),"
+		   "INDEX(CtrCod))");
+
    /***** Table centres *****/
 /*
 mysql> DESCRIBE centres;

@@ -94,7 +94,8 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
    [TabCtr] =  {
 		[ 0] = ActSeeCtrInf,
 		[ 1] = ActSeeDeg,
-		[ 2] = ActSeeRoo,
+		[ 2] = ActSeeBld,
+		[ 3] = ActSeeRoo,
 	       },
    [TabDeg] =  {
 		[ 0] = ActSeeDegInf,

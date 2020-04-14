@@ -154,6 +154,17 @@ CREATE TABLE IF NOT EXISTS birthdays_today (
 	UNIQUE INDEX(UsrCod),
 	INDEX(Today));
 --
+-- Table buildings: buildings in a centre
+--
+CREATE TABLE IF NOT EXISTS buildings (
+	BldCod INT NOT NULL AUTO_INCREMENT,
+	CtrCod INT NOT NULL,
+	ShortName VARCHAR(511) NOT NULL,
+	FullName VARCHAR(2047) NOT NULL,
+	Location VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(BldCod),
+	INDEX(CtrCod));
+--
 -- Table centres: centres (faculties, schools...)
 --
 CREATE TABLE IF NOT EXISTS centres (

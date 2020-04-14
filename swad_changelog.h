@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.185 (2020-04-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.186 (2020-04-14)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,13 +548,16 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 
+	Version 19.186:   Apr 14, 2020	New module swad_building for buildings in a centre. (287372 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS buildings (BldCod INT NOT NULL AUTO_INCREMENT,CtrCod INT NOT NULL,ShortName VARCHAR(511) NOT NULL,FullName VARCHAR(2047) NOT NULL,Location VARCHAR(2047) NOT NULL,UNIQUE INDEX(BldCod),INDEX(CtrCod));
+
 	Version 19.185:   Apr 14, 2020	Module swad_classroom is renamed as swad_room.
 				        Improvement in querying the database in the usage report. (285813 lines)
 					5 changes necessary in database:
 RENAME TABLE classrooms TO rooms;
 ALTER TABLE rooms CHANGE COLUMN ClaCod RooCod INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE rooms DROP INDEX ClaCod,ADD UNIQUE INDEX(RooCod);
-
 ALTER TABLE crs_grp CHANGE COLUMN ClaCod RooCod INT NOT NULL DEFAULT -1;
 ALTER TABLE crs_grp DROP INDEX ClaCod,ADD INDEX(RooCod);
 

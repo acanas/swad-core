@@ -30,6 +30,7 @@
 #include "swad_announcement.h"
 #include "swad_attendance.h"
 #include "swad_banner.h"
+#include "swad_building.h"
 #include "swad_calendar.h"
 #include "swad_centre_config.h"
 #include "swad_config.h"
@@ -315,6 +316,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ShowConfiguration	,"info"			},
    [ActSeeDeg		] = {1011, 1,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"graduation-cap"	},
+   [ActSeeBld		] = {1838, 2,TabCtr,ActSeeBld		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Bld_SeeBuildings		,"building"		},
    [ActSeeRoo		] = {1744, 2,TabCtr,ActSeeRoo		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_SeeRooms			,"classroom"		},
 
    // Actions not in menu:
@@ -350,13 +352,20 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgDegWWW	] = { 554,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegWWW		,Deg_ContEditAfterChgDeg	,NULL},
    [ActChgDegSta	] = {1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegStatus		,Deg_ContEditAfterChgDeg	,NULL},
 
-   [ActEdiRoo		] = {1745,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_EditRooms		,NULL},
-   [ActNewRoo		] = {1746,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RecFormNewRoom	,Roo_ContEditAfterChgRoom	,NULL},
-   [ActRemRoo		] = {1747,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RemoveRoom		,Roo_ContEditAfterChgRoom	,NULL},
-   [ActRenRooSho	] = {1748,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomShort	,Roo_ContEditAfterChgRoom	,NULL},
-   [ActRenRooFul	] = {1749,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomFull	,Roo_ContEditAfterChgRoom	,NULL},
+   [ActEdiBld		] = {1839,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Bld_EditBuildings		,NULL},
+   [ActNewBld		] = {1840,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RecFormNewBuilding		,Bld_ContEditAfterChgBuilding	,NULL},
+   [ActRemBld		] = {1841,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RemoveBuilding		,Bld_ContEditAfterChgBuilding	,NULL},
+   [ActRenBldSho	] = {1842,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RenameBuildingShort	,Bld_ContEditAfterChgBuilding	,NULL},
+   [ActRenBldFul	] = {1843,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RenameBuildingFull		,Bld_ContEditAfterChgBuilding	,NULL},
+   [ActRenBldLoc	] = {1844,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_ChangeBuildingLocation	,Bld_ContEditAfterChgBuilding	,NULL},
+
+   [ActEdiRoo		] = {1745,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_EditRooms			,NULL},
+   [ActNewRoo		] = {1746,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RecFormNewRoom		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRemRoo		] = {1747,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RemoveRoom			,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooSho	] = {1748,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomShort		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooFul	] = {1749,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomFull		,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooMaxUsr	] = {1750,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeCapacity		,Roo_ContEditAfterChgRoom	,NULL},
-   [ActRenRooLoc	] = {1751,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeRoomLocation	,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooLoc	] = {1751,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeRoomLocation		,Roo_ContEditAfterChgRoom	,NULL},
 
    // TabDeg ******************************************************************
    // Actions in menu:
@@ -3575,6 +3584,13 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemSevTstQst,	// #1835
 	ActRemSevTstQst,	// #1836
 	ActReqAssTst,		// #1837
+	ActSeeBld,		// #1838
+	ActEdiBld,		// #1839
+	ActNewBld,		// #1840
+	ActRemBld,		// #1841
+	ActRenBldSho,		// #1842
+	ActRenBldFul,		// #1843
+	ActRenBldLoc,		// #1844
 	};
 
 /*****************************************************************************/
