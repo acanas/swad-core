@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.184 (2020-04-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.185 (2020-04-14)"
 #define CSS_FILE		"swad19.146.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -547,6 +547,16 @@ Función API getLocations
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
+
+	Version 19.185:   Apr 14, 2020	Module swad_classroom is renamed as swad_room.
+				        Improvement in querying the database in the usage report. (285813 lines)
+					5 changes necessary in database:
+RENAME TABLE classrooms TO rooms;
+ALTER TABLE rooms CHANGE COLUMN ClaCod RooCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE rooms DROP INDEX ClaCod,ADD UNIQUE INDEX(RooCod);
+
+ALTER TABLE crs_grp CHANGE COLUMN ClaCod RooCod INT NOT NULL DEFAULT -1;
+ALTER TABLE crs_grp DROP INDEX ClaCod,ADD INDEX(RooCod);
 
 	Version 19.184:   Apr 14, 2020	Code refactoring in classrooms. (285706 lines)
 	Version 19.183.2: Apr 14, 2020	Fixed bug in test exams. (285684 lines)

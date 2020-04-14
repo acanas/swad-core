@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"
@@ -45,6 +46,7 @@
 #include "swad_program.h"
 #include "swad_project.h"
 #include "swad_setting.h"
+#include "swad_survey.h"
 
 /*****************************************************************************/
 /*************************** Private constants *******************************/
@@ -96,7 +98,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
                                         const char *AlertTextGroups);
 
 static void Grp_EditGroupTypes (void);
-static void Grp_EditGroups (const struct Cla_Classrooms *Classrooms);
+static void Grp_EditGroups (const struct Roo_Rooms *Rooms);
 static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
 static void Grp_PutIconToCreateNewGroup (void);
 
@@ -116,7 +118,7 @@ static void Grp_PutIconToViewGroups (void);
 static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
-static void Grp_ListGroupsForEdition (const struct Cla_Classrooms *Classrooms);
+static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
 static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
@@ -129,7 +131,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
 static void Grp_PutFormToCreateGroupType (void);
-static void Grp_PutFormToCreateGroup (const struct Cla_Classrooms *Classrooms);
+static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
@@ -253,28 +255,28 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
 static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
                                         const char *AlertTextGroups)
   {
-   struct Cla_Classrooms Classrooms;
+   struct Roo_Rooms Rooms;
 
-   /***** Reset classrooms context *****/
-   Cla_ResetClassrooms (&Classrooms);
+   /***** Reset rooms context *****/
+   Roo_ResetRooms (&Rooms);
 
    /***** Show optional alert *****/
    if (AlertTextGroups)
       if (AlertTextGroups[0])
          Ale_ShowAlert (AlertTypeGroups,AlertTextGroups);
 
-   /***** Get list of classrooms in this centre *****/
-   Cla_GetListClassrooms (&Classrooms,Cla_ONLY_SHRT_NAME);
+   /***** Get list of rooms in this centre *****/
+   Roo_GetListRooms (&Rooms,Roo_ONLY_SHRT_NAME);
 
    /***** Put form to edit groups *****/
    if (Gbl.Crs.Grps.GrpTypes.Num) // If there are group types...
-      Grp_EditGroups (&Classrooms);
+      Grp_EditGroups (&Rooms);
 
    /***** End groups section *****/
    HTM_SECTION_End ();
 
-   /***** Free list of classrooms in this centre *****/
-   Cla_FreeListClassrooms (&Classrooms);
+   /***** Free list of rooms in this centre *****/
+   Roo_FreeListRooms (&Rooms);
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -313,7 +315,7 @@ static void Grp_EditGroupTypes (void)
 /**************************** Put forms to edit groups ***********************/
 /*****************************************************************************/
 
-static void Grp_EditGroups (const struct Cla_Classrooms *Classrooms)
+static void Grp_EditGroups (const struct Roo_Rooms *Rooms)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
@@ -325,11 +327,11 @@ static void Grp_EditGroups (const struct Cla_Classrooms *Classrooms)
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
-   Grp_PutFormToCreateGroup (Classrooms);
+   Grp_PutFormToCreateGroup (Rooms);
 
    /***** Forms to edit current groups *****/
    if (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
-      Grp_ListGroupsForEdition (Classrooms);
+      Grp_ListGroupsForEdition (Rooms);
    else	// There are group types, but there aren't groups
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
                      Gbl.Hierarchy.Crs.ShrtName);
@@ -977,7 +979,7 @@ static void Grp_LockTables (void)
 	     "crs_grp WRITE,"
 	     "crs_grp_usr WRITE,"
 	     "crs_usr READ,"
-	     "classrooms READ");
+	     "rooms READ");
    Gbl.DB.LockedTables = true;
   }
 
@@ -1473,14 +1475,14 @@ static void Grp_WriteHeadingGroupTypes (void)
 /********************** List current groups for edition **********************/
 /*****************************************************************************/
 
-static void Grp_ListGroupsForEdition (const struct Cla_Classrooms *Classrooms)
+static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
    extern const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them;
-   extern const char *Txt_No_assigned_classroom;
-   extern const char *Txt_Another_classroom;
+   extern const char *Txt_No_assigned_room;
+   extern const char *Txt_Another_room;
    unsigned NumGrpTyp;
    unsigned NumTipGrpAux;
    unsigned NumGrpThisType;
@@ -1580,31 +1582,31 @@ static void Grp_ListGroupsForEdition (const struct Cla_Classrooms *Classrooms)
          Frm_EndForm ();
          HTM_TD_End ();
 
-	 /***** Classroom *****/
+	 /***** Room *****/
 	 /* Start selector */
 	 HTM_TD_Begin ("class=\"CM\"");
-         Frm_StartFormAnchor (ActChgGrpCla,Grp_GROUPS_SECTION_ID);
+         Frm_StartFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          HTM_SELECT_Begin (true,
-			   "name=\"ClaCod\" style=\"width:100px;\"");
+			   "name=\"RooCod\" style=\"width:100px;\"");
 
-	 /* Option for no assigned classroom */
+	 /* Option for no assigned room */
 	 HTM_OPTION (HTM_Type_STRING,"-1",
-		     Grp->Classroom.ClaCod < 0,false,
-		     "%s",Txt_No_assigned_classroom);
+		     Grp->Room.RooCod < 0,false,
+		     "%s",Txt_No_assigned_room);
 
-	 /* Option for another classroom */
+	 /* Option for another room */
 	 HTM_OPTION (HTM_Type_STRING,"0",
-		     Grp->Classroom.ClaCod == 0,false,
-		     "%s",Txt_Another_classroom);
+		     Grp->Room.RooCod == 0,false,
+		     "%s",Txt_Another_room);
 
-	 /* Options for classrooms */
+	 /* Options for rooms */
 	 for (NumCla = 0;
-	      NumCla < Classrooms->Num;
+	      NumCla < Rooms->Num;
 	      NumCla++)
-	    HTM_OPTION (HTM_Type_LONG,&Classrooms->Lst[NumCla].ClaCod,
-			Classrooms->Lst[NumCla].ClaCod == Grp->Classroom.ClaCod,false,
-			"%s",Classrooms->Lst[NumCla].ShrtName);
+	    HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumCla].RooCod,
+			Rooms->Lst[NumCla].RooCod == Grp->Room.RooCod,false,
+			"%s",Rooms->Lst[NumCla].ShrtName);
 
 	 /* End selector */
 	 HTM_SELECT_End ();
@@ -1648,7 +1650,7 @@ static void Grp_WriteHeadingGroups (void)
    extern const char *Txt_Type_BR_of_group;
    extern const char *Txt_Group_name;
    extern const char *Txt_eg_A_B;
-   extern const char *Txt_Classroom;
+   extern const char *Txt_Room;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Max_BR_students;
    Rol_Role_t Role;
@@ -1664,7 +1666,7 @@ static void Grp_WriteHeadingGroups (void)
    HTM_BR ();
    HTM_TxtF ("(%s)",Txt_eg_A_B);
    HTM_TH_End ();
-   HTM_TH (1,1,"CM",Txt_Classroom);
+   HTM_TH (1,1,"CM",Txt_Room);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
@@ -2308,7 +2310,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   /* Classroom */
+   /* Room */
    HTM_TD_Begin ("class=\"DAT LM\"");
    HTM_TD_End ();
 
@@ -2336,7 +2338,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
   {
    extern const char *Txt_Opening_of_groups;
    extern const char *Txt_Group;
-   extern const char *Txt_Classroom;
+   extern const char *Txt_Room;
    extern const char *Txt_Max_BR_students;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Vacants;
@@ -2371,7 +2373,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
    HTM_TH_Empty (2);
    HTM_TH (1,1,"LM",Txt_Group);
-   HTM_TH (1,1,"LM",Txt_Classroom);
+   HTM_TH (1,1,"LM",Txt_Room);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
@@ -2417,12 +2419,12 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   /***** Classroom *****/
+   /***** Room *****/
    if (Highlight)
       HTM_TD_Begin ("class=\"DAT LM LIGHT_BLUE\"");
    else
       HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (Grp->Classroom.ShrtName);
+   HTM_Txt (Grp->Room.ShrtName);
    HTM_TD_End ();
 
    /***** Current number of users in this group *****/
@@ -2574,13 +2576,13 @@ static void Grp_PutFormToCreateGroupType (void)
 /*********************** Put a form to create a new group ********************/
 /*****************************************************************************/
 
-static void Grp_PutFormToCreateGroup (const struct Cla_Classrooms *Classrooms)
+static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
   {
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
-   extern const char *Txt_No_assigned_classroom;
-   extern const char *Txt_Another_classroom;
+   extern const char *Txt_No_assigned_room;
+   extern const char *Txt_Another_room;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
    unsigned NumCla;
@@ -2640,27 +2642,27 @@ static void Grp_PutFormToCreateGroup (const struct Cla_Classrooms *Classrooms)
 		   "size=\"20\" required=\"required\"");
    HTM_TD_End ();
 
-   /***** Classroom *****/
+   /***** Room *****/
    /* Start selector */
    HTM_TD_Begin ("class=\"CM\"");
    HTM_SELECT_Begin (false,
-		     "name=\"ClaCod\" style=\"width:100px;\"");
+		     "name=\"RooCod\" style=\"width:100px;\"");
 
-   /* Option for no assigned classroom */
-   HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.ClaCod < 0,false,
-	       "%s",Txt_No_assigned_classroom);
+   /* Option for no assigned room */
+   HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.RooCod < 0,false,
+	       "%s",Txt_No_assigned_room);
 
-   /* Option for another classroom */
-   HTM_OPTION (HTM_Type_STRING,"0",Gbl.Crs.Grps.ClaCod == 0,false,
-	       "%s",Txt_Another_classroom);
+   /* Option for another room */
+   HTM_OPTION (HTM_Type_STRING,"0",Gbl.Crs.Grps.RooCod == 0,false,
+	       "%s",Txt_Another_room);
 
-   /* Options for classrooms */
+   /* Options for rooms */
    for (NumCla = 0;
-	NumCla < Classrooms->Num;
+	NumCla < Rooms->Num;
 	NumCla++)
-      HTM_OPTION (HTM_Type_LONG,&Classrooms->Lst[NumCla].ClaCod,
-		  Classrooms->Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod,false,
-		  "%s",Classrooms->Lst[NumCla].ShrtName);
+      HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumCla].RooCod,
+		  Rooms->Lst[NumCla].RooCod == Gbl.Crs.Grps.RooCod,false,
+		  "%s",Rooms->Lst[NumCla].ShrtName);
 
    /* End selector */
    HTM_SELECT_End ();
@@ -2915,15 +2917,15 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Str_Copy (Grp->GrpName,row[1],
                          Grp_MAX_BYTES_GROUP_NAME);
 
-               /* Get classroom code (row[2]) */
-               Grp->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[2]);
+               /* Get room code (row[2]) */
+               Grp->Room.RooCod = Str_ConvertStrCodToLongCod (row[2]);
 
-               /* Get classroom short name (row[3]) */
+               /* Get room short name (row[3]) */
                if (row[3])	// May be NULL because of LEFT JOIN
-		  Str_Copy (Grp->Classroom.ShrtName,row[3],
-			    Cla_MAX_BYTES_SHRT_NAME);
+		  Str_Copy (Grp->Room.ShrtName,row[3],
+			    Roo_MAX_BYTES_SHRT_NAME);
                else		// NULL
-        	  Grp->Classroom.ShrtName[0] = '\0';
+        	  Grp->Room.ShrtName[0] = '\0';
 
                /* Get number of current users in group */
 	       for (Role = Rol_TCH;
@@ -3021,18 +3023,18 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
 unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
   {
    /***** Get groups of a type from database *****/
-   // Don't use INNER JOIN because there are groups without assigned classroom
+   // Don't use INNER JOIN because there are groups without assigned room
    return DB_QuerySELECT (mysql_res,"can not get groups of a type",
 			  "SELECT crs_grp.GrpCod,"
 			         "crs_grp.GrpName,"
-			         "crs_grp.ClaCod,"
-			         "classrooms.ShortName,"
+			         "crs_grp.RooCod,"
+			         "rooms.ShortName,"
 			         "crs_grp.MaxStudents,"
 			         "crs_grp.Open,"
 			         "crs_grp.FileZones"
 			  " FROM crs_grp"
-			  " LEFT JOIN classrooms"
-			  " ON crs_grp.ClaCod=classrooms.ClaCod"
+			  " LEFT JOIN rooms"
+			  " ON crs_grp.RooCod=rooms.RooCod"
 			  " WHERE crs_grp.GrpTypCod=%ld"
 			  " ORDER BY crs_grp.GrpName",
 			  GrpTypCod);
@@ -3116,8 +3118,8 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    GrpDat->CrsCod                = -1L;
    GrpDat->GrpTypName[0]         = '\0';
    GrpDat->GrpName[0]            = '\0';
-   GrpDat->Classroom.ClaCod      = -1L;
-   GrpDat->Classroom.ShrtName[0] = '\0';
+   GrpDat->Room.RooCod      = -1L;
+   GrpDat->Room.ShrtName[0] = '\0';
    GrpDat->MaxStudents           = 0;
    GrpDat->Vacant                = 0;
    GrpDat->Open                  = false;
@@ -3133,14 +3135,14 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 				       "crs_grp_types.GrpTypName,"	// row[2]
 				       "crs_grp_types.Multiple,"	// row[3]
 				       "crs_grp.GrpName,"		// row[4]
-				       "crs_grp.ClaCod,"		// row[5]
-				       "classrooms.ShortName,"		// row[6]
+				       "crs_grp.RooCod,"		// row[5]
+				       "rooms.ShortName,"		// row[6]
 				       "crs_grp.MaxStudents,"		// row[7]
 				       "crs_grp.Open,"			// row[8]
 				       "crs_grp.FileZones"		// row[9]
 				" FROM (crs_grp,crs_grp_types)"
-				" LEFT JOIN classrooms"
-				" ON crs_grp.ClaCod=classrooms.ClaCod"
+				" LEFT JOIN rooms"
+				" ON crs_grp.RooCod=rooms.RooCod"
 				" WHERE crs_grp.GrpCod=%ld"
 				" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
 				GrpDat->GrpCod);
@@ -3170,14 +3172,14 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	           Grp_MAX_BYTES_GROUP_NAME);
 
 	 /* Get the code of the course (row[5]) */
-	 GrpDat->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[5]);
+	 GrpDat->Room.RooCod = Str_ConvertStrCodToLongCod (row[5]);
 
-	 /* Get the name of the classroom (row[6]) */
+	 /* Get the name of the room (row[6]) */
 	 if (row[6])	// May be NULL because of LEFT JOIN
-	    Str_Copy (GrpDat->Classroom.ShrtName,row[6],
-		      Cla_MAX_BYTES_SHRT_NAME);
+	    Str_Copy (GrpDat->Room.ShrtName,row[6],
+		      Roo_MAX_BYTES_SHRT_NAME);
 	 else		// NULL
-	    GrpDat->Classroom.ShrtName[0] = '\0';
+	    GrpDat->Room.ShrtName[0] = '\0';
 
 	 /* Get maximum number of students (row[7]) */
 	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[7]);
@@ -3783,8 +3785,8 @@ void Grp_RecFormNewGrp (void)
       Par_GetParToText ("GrpName",Gbl.Crs.Grps.GrpName,
                         Grp_MAX_BYTES_GROUP_NAME);
 
-      /* Get classroom */
-      Gbl.Crs.Grps.ClaCod = Cla_GetParamClaCod ();
+      /* Get room */
+      Gbl.Crs.Grps.RooCod = Roo_GetParamRooCod ();
 
       /* Get maximum number of students */
       Gbl.Crs.Grps.MaxStudents = (unsigned)
@@ -3895,12 +3897,12 @@ static void Grp_CreateGroup (void)
    /***** Create a new group *****/
    DB_QueryINSERT ("can not create group",
 		   "INSERT INTO crs_grp"
-		   " (GrpTypCod,GrpName,ClaCod,MaxStudents,Open,FileZones)"
+		   " (GrpTypCod,GrpName,RooCod,MaxStudents,Open,FileZones)"
 		   " VALUES"
 		   " (%ld,'%s',%ld,%u,'N','N')",
 	           Gbl.Crs.Grps.GrpTyp.GrpTypCod,
 	           Gbl.Crs.Grps.GrpName,
-	           Gbl.Crs.Grps.ClaCod,
+	           Gbl.Crs.Grps.RooCod,
 	           Gbl.Crs.Grps.MaxStudents);
   }
 
@@ -4373,13 +4375,13 @@ void Grp_ChangeGroupType (void)
   }
 
 /*****************************************************************************/
-/*********************** Change the classroom of a group *********************/
+/************************* Change the room of a group ************************/
 /*****************************************************************************/
 
-void Grp_ChangeGroupClassroom (void)
+void Grp_ChangeGroupRoom (void)
   {
-   extern const char *Txt_The_classroom_assigned_to_the_group_X_has_changed;
-   long NewClaCod;
+   extern const char *Txt_The_room_assigned_to_the_group_X_has_changed;
+   long NewRooCod;
    struct GroupData GrpDat;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -4389,26 +4391,26 @@ void Grp_ChangeGroupClassroom (void)
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
-   /* Get the new classroom */
-   NewClaCod = Cla_GetParamClaCod ();
+   /* Get the new room */
+   NewRooCod = Roo_GetParamRooCod ();
 
    /* Get from the database the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
-   /***** Update the table of groups changing old classroom by new classroom *****/
-   DB_QueryUPDATE ("can not update the classroom of a group",
-		   "UPDATE crs_grp SET ClaCod=%ld WHERE GrpCod=%ld",
-		   NewClaCod,Gbl.Crs.Grps.GrpCod);
+   /***** Update the table of groups changing old room by new room *****/
+   DB_QueryUPDATE ("can not update the room of a group",
+		   "UPDATE crs_grp SET RooCod=%ld WHERE GrpCod=%ld",
+		   NewRooCod,Gbl.Crs.Grps.GrpCod);
 
    /* Create message to show the change made */
    AlertType = Ale_SUCCESS;
    snprintf (AlertTxt,sizeof (AlertTxt),
-	     Txt_The_classroom_assigned_to_the_group_X_has_changed,
+	     Txt_The_room_assigned_to_the_group_X_has_changed,
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Crs.Grps.ClaCod = NewClaCod;
+   Gbl.Crs.Grps.RooCod = NewRooCod;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
   }

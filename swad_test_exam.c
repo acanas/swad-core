@@ -38,6 +38,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_photo.h"
 #include "swad_test.h"
 #include "swad_test_exam.h"
 #include "swad_test_visibility.h"

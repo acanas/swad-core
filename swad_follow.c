@@ -30,11 +30,13 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_notification.h"
+#include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_user.h"

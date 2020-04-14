@@ -3569,15 +3569,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeCla] =
+	[ActSeeRoo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List classrooms in a centre"
+	"List rooms in a centre"
 #elif L==4	// es
-	""
+	"Listar salas de un centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4199,15 +4199,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActEdiCla] =
+	[ActEdiRoo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit classrooms"
+	"Edit rooms"
 #elif L==4	// es
-	""
+	"Editar salas"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4220,15 +4220,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActNewCla] =
+	[ActNewRoo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the creation of a classroom"
+	"Request the creation of a room"
 #elif L==4	// es
-	""
+	"Solicitar la creaci&oacute;n de una sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4241,15 +4241,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRemCla] =
+	[ActRemRoo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a classroom"
+	"Remove a room"
 #elif L==4	// es
-	""
+	"Eliminar sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4262,15 +4262,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRenClaSho] =
+	[ActRenRooSho] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change short name of a classroom"
+	"Change short name of a room"
 #elif L==4	// es
-	""
+	"Cambiar nombre breve de sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4283,15 +4283,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRenClaFul] =
+	[ActRenRooFul] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change full name of a classroom"
+	"Change full name of a room"
 #elif L==4	// es
-	""
+	"Cambiar nombre completo de sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4304,15 +4304,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActChgClaMaxStd] =
+	[ActChgRooMaxUsr] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change number of students in a classroom"
+	"Change number of usuarios in a room"
 #elif L==4	// es
-	""
+	"Cambiar n&uacute;mero de usuarios de una sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -4325,15 +4325,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRenClaLoc] =
+	[ActRenRooLoc] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change location of a classroom"
+	"Change location of a room"
 #elif L==4	// es
-	""
+	"Cambiar ubicaci&oacute;n de una sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -21020,15 +21020,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActChgGrpCla] =
+	[ActChgGrpRoo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change the classroom of a group"
+	"Change the room of a group"
 #elif L==4	// es
-	""
+	"Cambiar la sala de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

@@ -37,9 +37,9 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
+#include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-// struct Ban_Banners Ban_Banners;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

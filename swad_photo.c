@@ -51,6 +51,7 @@
 #include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_setting.h"
+#include "swad_statistic.h"
 #include "swad_theme.h"
 #include "swad_user.h"
 

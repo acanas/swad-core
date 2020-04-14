@@ -181,18 +181,6 @@ CREATE TABLE IF NOT EXISTS chat (
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --
--- Table classrooms: stores the classrooms associated to each centre
---
-CREATE TABLE IF NOT EXISTS classrooms (
-	ClaCod INT NOT NULL AUTO_INCREMENT,
-	CtrCod INT NOT NULL,
-	ShortName VARCHAR(511) NOT NULL,
-	FullName VARCHAR(2047) NOT NULL,
-	Capacity INT NOT NULL,
-	Location VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(ClaCod),
-	INDEX(CtrCod));
---
 -- Table clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
 --
 CREATE TABLE IF NOT EXISTS clicks_without_photo (
@@ -283,13 +271,13 @@ CREATE TABLE IF NOT EXISTS crs_grp (
 	GrpCod INT NOT NULL AUTO_INCREMENT,
 	GrpTypCod INT NOT NULL,
 	GrpName VARCHAR(2047) NOT NULL,
-	ClaCod INT NOT NULL DEFAULT -1,
+	RooCod INT NOT NULL DEFAULT -1,
 	MaxStudents INT NOT NULL,
 	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
 	FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(GrpCod),
 	INDEX(GrpTypCod),
-	INDEX(ClaCod));
+	INDEX(RooCod));
 --
 -- Table crs_grp_types: stores the types of groups in courses
 --
@@ -1130,6 +1118,18 @@ CREATE TABLE IF NOT EXISTS projects (
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod));
+--
+-- Table rooms: stores the classrooms associated to each centre
+--
+CREATE TABLE IF NOT EXISTS rooms (
+	RooCod INT NOT NULL AUTO_INCREMENT,
+	CtrCod INT NOT NULL,
+	ShortName VARCHAR(511) NOT NULL,
+	FullName VARCHAR(2047) NOT NULL,
+	Capacity INT NOT NULL,
+	Location VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(RooCod),
+	INDEX(CtrCod));
 --
 -- Table sessions: stores the information of open sessions
 --

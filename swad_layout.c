@@ -31,6 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_API.h"
+#include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_changelog.h"
@@ -44,8 +45,10 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
+#include "swad_link.h"
 #include "swad_log.h"
 #include "swad_logo.h"
 #include "swad_match.h"

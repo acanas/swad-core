@@ -1495,7 +1495,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
    struct Course Crs;
    struct GroupType *GrpTyp;
    struct Group *Grp;
-   char *Classroom;
+   char *Room;
 
    /***** Compute row span and background color depending on hour type *****/
    switch (IntervalType)
@@ -1611,10 +1611,10 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	       HTM_Txt (GrpDat.GrpTypName);
 	       HTM_BR ();
 	       HTM_Txt (GrpDat.GrpName);
-	       if (GrpDat.Classroom.ClaCod > 0)
+	       if (GrpDat.Room.RooCod > 0)
 		 {
 		  HTM_BR ();
-		  HTM_TxtF ("(%s)",GrpDat.Classroom.ShrtName);
+		  HTM_TxtF ("(%s)",GrpDat.Room.ShrtName);
 		 }
 	      }
 
@@ -1727,21 +1727,21 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
                        NumGrp++)
                     {
                      Grp = &GrpTyp->LstGrps[NumGrp];
-		     if (Grp->Classroom.ClaCod > 0)
+		     if (Grp->Room.RooCod > 0)
 		       {
-			if (asprintf (&Classroom," (%s)",Grp->Classroom.ShrtName) < 0)
+			if (asprintf (&Room," (%s)",Grp->Room.ShrtName) < 0)
 			   Lay_NotEnoughMemoryExit ();
 		       }
 		     else
 		       {
-			if (asprintf (&Classroom,"%s","") < 0)
+			if (asprintf (&Room,"%s","") < 0)
 			   Lay_NotEnoughMemoryExit ();
 		       }
 		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
 				 GrpCod == Grp->GrpCod,false,
 				 "%s %s%s",
-				 GrpTyp->GrpTypName,Grp->GrpName,Classroom);
-	             free (Classroom);
+				 GrpTyp->GrpTypName,Grp->GrpName,Room);
+	             free (Room);
                     }
                  }
 	       HTM_SELECT_End ();

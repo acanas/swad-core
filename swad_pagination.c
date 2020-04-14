@@ -31,16 +31,20 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_agenda.h"
 #include "swad_attendance.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_forum.h"
+#include "swad_game.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_message.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_project.h"
+#include "swad_survey.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/

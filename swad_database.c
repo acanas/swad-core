@@ -471,31 +471,6 @@ mysql> DESCRIBE chat;
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
 
-   /***** Table classrooms *****/
-/*
-mysql> DESCRIBE classrooms;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| ClaCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
-| ShortName | varchar(511)  | NO   |     | NULL    |                |
-| FullName  | varchar(2047) | NO   |     | NULL    |                |
-| Capacity  | int(11)       | NO   |     | NULL    |                |
-| Location  | varchar(2047) | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS classrooms ("
-			"ClaCod INT NOT NULL AUTO_INCREMENT,"
-			"CtrCod INT NOT NULL,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Cla_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Cla_MAX_BYTES_FULL_NAME
-			"Capacity INT NOT NULL,"
-			"Location VARCHAR(2047) NOT NULL,"	// Cla_MAX_BYTES_LOCATION
-		   "UNIQUE INDEX(ClaCod),"
-		   "INDEX(CtrCod))");
-
    /***** Table clicks_without_photo *****/
 /*
 mysql> DESCRIBE clicks_without_photo;
@@ -666,7 +641,7 @@ mysql> DESCRIBE crs_grp;
 | GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
 | GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
 | GrpName     | varchar(2047) | NO   |     | NULL    |                |
-| ClaCod      | int(11)       | NO   | MUL | -1      |                |
+| RooCod      | int(11)       | NO   | MUL | -1      |                |
 | MaxStudents | int(11)       | NO   |     | NULL    |                |
 | Open        | enum('N','Y') | NO   |     | N       |                |
 | FileZones   | enum('N','Y') | NO   |     | N       |                |
@@ -678,12 +653,12 @@ mysql> DESCRIBE crs_grp;
 			"GrpTypCod INT NOT NULL,"
 			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
 			"MaxStudents INT NOT NULL,"
-			"ClaCod INT NOT NULL DEFAULT -1,"
+			"RooCod INT NOT NULL DEFAULT -1,"
 			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(GrpCod),"
 		   "INDEX(GrpTypCod),"
-		   "INDEX(ClaCod))");
+		   "INDEX(RooCod))");
 
    /***** Table crs_grp_types *****/
 /*
@@ -2352,6 +2327,31 @@ mysql> DESCRIBE projects;
 		   "INDEX(CrsCod,CreatTime),"
 		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod))");
+
+   /***** Table rooms *****/
+/*
+mysql> DESCRIBE rooms;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| RooCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| Capacity  | int(11)       | NO   |     | NULL    |                |
+| Location  | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rooms ("
+			"RooCod INT NOT NULL AUTO_INCREMENT,"
+			"CtrCod INT NOT NULL,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Roo_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_FULL_NAME
+			"Capacity INT NOT NULL,"
+			"Location VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_LOCATION
+		   "UNIQUE INDEX(RooCod),"
+		   "INDEX(CtrCod))");
 
    /***** Table sessions *****/
 /*

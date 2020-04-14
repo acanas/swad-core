@@ -41,6 +41,7 @@
 #include "swad_ID.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
+#include "swad_photo.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 

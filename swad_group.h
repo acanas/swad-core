@@ -27,8 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_classroom.h"
 #include "swad_info.h"
+#include "swad_room.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -65,9 +65,9 @@ struct GroupData
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
    struct
      {
-      long ClaCod;					// Classroom code
-      char ShrtName[Cla_MAX_BYTES_SHRT_NAME + 1];	// Classroom short name
-     } Classroom;
+      long RooCod;					// Room code
+      char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];	// Room short name
+     } Room;
    unsigned MaxStudents;
    int  Vacant;
    bool Open;					// Group is open?
@@ -81,9 +81,9 @@ struct Group
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
    struct
      {
-      long ClaCod;					// Classroom code
-      char ShrtName[Cla_MAX_BYTES_SHRT_NAME + 1];	// Classroom short name
-     } Classroom;
+      long RooCod;					// Room code
+      char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];	// Room short name
+     } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStudents;			// Maximum number of students in the group
    bool Open;					// Group is open?
@@ -147,7 +147,7 @@ struct Grp_Groups
    struct GroupType GrpTyp;
    long GrpCod;		// Group to be edited, removed...
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-   long ClaCod;
+   long RooCod;
    unsigned MaxStudents;
    bool Open;
    bool FileZones;
@@ -217,7 +217,7 @@ void Grp_EnableFileZonesGrp (void);
 void Grp_DisableFileZonesGrp (void);
 
 void Grp_ChangeGroupType (void);
-void Grp_ChangeGroupClassroom (void);
+void Grp_ChangeGroupRoom (void);
 
 void Grp_ChangeMandatGrpTyp (void);
 void Grp_ChangeMultiGrpTyp (void);

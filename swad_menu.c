@@ -27,6 +27,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -93,7 +94,7 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
    [TabCtr] =  {
 		[ 0] = ActSeeCtrInf,
 		[ 1] = ActSeeDeg,
-		[ 2] = ActSeeCla,
+		[ 2] = ActSeeRoo,
 	       },
    [TabDeg] =  {
 		[ 0] = ActSeeDegInf,

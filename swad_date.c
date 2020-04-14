@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"

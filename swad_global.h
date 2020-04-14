@@ -33,53 +33,32 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_alert.h"
-#include "swad_agenda.h"
 #include "swad_API.h"
 #include "swad_assignment.h"
-#include "swad_attendance.h"
-#include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_centre.h"
-#include "swad_classroom.h"
 #include "swad_connected.h"
 #include "swad_config.h"
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_cryptography.h"
-#include "swad_department.h"
 #include "swad_degree_type.h"
 #include "swad_enrolment.h"
-#include "swad_exam.h"
-#include "swad_figure.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
-#include "swad_forum.h"
-#include "swad_game.h"
-#include "swad_holiday.h"
 #include "swad_icon.h"
-#include "swad_indicator.h"
 #include "swad_institution.h"
 #include "swad_layout.h"
-#include "swad_link.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_media.h"
 #include "swad_menu.h"
-#include "swad_message.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
-#include "swad_photo.h"
-#include "swad_place.h"
 #include "swad_plugin.h"
-#include "swad_project.h"
 #include "swad_record.h"
 #include "swad_search.h"
 #include "swad_session.h"
-#include "swad_survey.h"
-#include "swad_syllabus.h"
-#include "swad_test.h"
-#include "swad_timeline.h"
-#include "swad_timetable.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -448,7 +427,8 @@ struct Globals
       bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
       const char *TxtStyle;
       const char *InputStyle;
-      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone
+      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone.
+				        // TODO: Remove from global?
       struct
         {
 	 bool CreateZIP;

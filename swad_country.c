@@ -34,9 +34,11 @@
 
 #include "swad_country_config.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_survey.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

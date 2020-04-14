@@ -34,6 +34,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"

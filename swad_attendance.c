@@ -1559,10 +1559,10 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
    NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
 				        "SELECT crs_grp_types.GrpTypName,"
 				               "crs_grp.GrpName,"
-				               "classrooms.ShortName"
+				               "rooms.ShortName"
 					" FROM (att_grp,crs_grp,crs_grp_types)"
-				        " LEFT JOIN classrooms"
-				        " ON crs_grp.ClaCod=classrooms.ClaCod"
+				        " LEFT JOIN rooms"
+				        " ON crs_grp.RooCod=rooms.RooCod"
 					" WHERE att_grp.AttCod=%ld"
 					" AND att_grp.GrpCod=crs_grp.GrpCod"
 					" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
@@ -1589,7 +1589,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
          /* Write group type name (row[0]) and group name (row[1]) */
          HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         /* Write the name of the classroom (row[2]) */
+         /* Write the name of the room (row[2]) */
 	 if (row[2])	// May be NULL because of LEFT JOIN
 	    if (row[2][0])
                HTM_TxtF ("&nbsp;(%s)",row[2]);

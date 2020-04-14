@@ -28,6 +28,7 @@
 #include "swad_action.h"
 #include "swad_agenda.h"
 #include "swad_announcement.h"
+#include "swad_attendance.h"
 #include "swad_banner.h"
 #include "swad_calendar.h"
 #include "swad_centre_config.h"
@@ -42,23 +43,28 @@
 #include "swad_date.h"
 #include "swad_degree_config.h"
 #include "swad_degree_type.h"
+#include "swad_department.h"
 #include "swad_duplicate.h"
 #include "swad_exam.h"
 #include "swad_enrolment.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
+#include "swad_forum.h"
 #include "swad_game.h"
 #include "swad_global.h"
+#include "swad_holiday.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
 #include "swad_institution_config.h"
 #include "swad_language.h"
+#include "swad_link.h"
 #include "swad_log.h"
 #include "swad_mail.h"
 #include "swad_maintenance.h"
 #include "swad_mark.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
+#include "swad_message.h"
 #include "swad_MFU.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
@@ -67,6 +73,7 @@
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_photo.h"
+#include "swad_place.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_program.h"
@@ -76,10 +83,12 @@
 #include "swad_role.h"
 #include "swad_search.h"
 #include "swad_setting.h"
+#include "swad_survey.h"
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_test_import.h"
 #include "swad_timeline.h"
+#include "swad_timetable.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -306,7 +315,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    [ActSeeCtrInf	] = {1151, 0,TabCtr,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ShowConfiguration	,"info"			},
    [ActSeeDeg		] = {1011, 1,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"graduation-cap"	},
-   [ActSeeCla		] = {1744, 2,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom"		},
+   [ActSeeRoo		] = {1744, 2,TabCtr,ActSeeRoo		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_SeeRooms			,"classroom"		},
 
    // Actions not in menu:
    [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtrCfg_PrintConfiguration	,NULL},
@@ -341,13 +350,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgDegWWW	] = { 554,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegWWW		,Deg_ContEditAfterChgDeg	,NULL},
    [ActChgDegSta	] = {1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegStatus		,Deg_ContEditAfterChgDeg	,NULL},
 
-   [ActEdiCla		] = {1745,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_EditClassrooms		,NULL},
-   [ActNewCla		] = {1746,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RecFormNewClassroom	,Cla_ContEditAfterChgCla	,NULL},
-   [ActRemCla		] = {1747,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RemoveClassroom		,Cla_ContEditAfterChgCla	,NULL},
-   [ActRenClaSho	] = {1748,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RenameClassroomShort	,Cla_ContEditAfterChgCla	,NULL},
-   [ActRenClaFul	] = {1749,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RenameClassroomFull	,Cla_ContEditAfterChgCla	,NULL},
-   [ActChgClaMaxStd	] = {1750,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_ChangeCapacity		,Cla_ContEditAfterChgCla	,NULL},
-   [ActRenClaLoc	] = {1751,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_ChangeClassroomLocation	,Cla_ContEditAfterChgCla	,NULL},
+   [ActEdiRoo		] = {1745,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_EditRooms		,NULL},
+   [ActNewRoo		] = {1746,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RecFormNewRoom	,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRemRoo		] = {1747,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RemoveRoom		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooSho	] = {1748,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomShort	,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooFul	] = {1749,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomFull	,Roo_ContEditAfterChgRoom	,NULL},
+   [ActChgRooMaxUsr	] = {1750,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeCapacity		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActRenRooLoc	] = {1751,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeRoomLocation	,Roo_ContEditAfterChgRoom	,NULL},
 
    // TabDeg ******************************************************************
    // Actions in menu:
@@ -1241,7 +1250,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDisFilZonGrp	] = { 496,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_DisableFileZonesGrp	,NULL},
    [ActChgGrpTyp	] = { 167,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeGroupType		,NULL},
    [ActRenGrp		] = { 121,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RenameGroup		,NULL},
-   [ActChgGrpCla	] = {1752,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeGroupClassroom	,NULL},
+   [ActChgGrpRoo	] = {1752,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeGroupRoom		,NULL},
    [ActChgMaxStdGrp	] = { 106,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeMaxStdsGrp		,NULL},
 
    [ActLstGst		] = { 587,-1,TabUnk,ActLstOth		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_SeeGuests			,NULL},
@@ -3472,15 +3481,15 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgNicOth,		// #1741
 	ActChgNicStd,		// #1742
 	ActChgNicTch,		// #1743
-	ActSeeCla,		// #1744
-	ActEdiCla,		// #1745
-	ActNewCla,		// #1746
-	ActRemCla,		// #1747
-	ActRenClaSho,		// #1748
-	ActRenClaFul,		// #1749
-	ActChgClaMaxStd,	// #1750
-	ActRenClaLoc,		// #1751
-	ActChgGrpCla,		// #1752
+	ActSeeRoo,		// #1744
+	ActEdiRoo,		// #1745
+	ActNewRoo,		// #1746
+	ActRemRoo,		// #1747
+	ActRenRooSho,		// #1748
+	ActRenRooFul,		// #1749
+	ActChgRooMaxUsr,	// #1750
+	ActRenRooLoc,		// #1751
+	ActChgGrpRoo,		// #1752
 	ActDoActOnSevGst,	// #1753
 	ActDoActOnSevStd,	// #1754
 	ActDoActOnSevTch,	// #1755

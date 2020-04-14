@@ -30,8 +30,8 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_announcement.o swad_API.o swad_assignment.o swad_attendance.o \
        swad_banner.o swad_box.o swad_button.o \
        swad_calendar.o swad_centre.o swad_centre_config.o swad_chat.o \
-       swad_classroom.o swad_config.o swad_connected.o swad_cookie.o \
-       swad_country.o swad_country_config.o swad_course.o \
+       swad_config.o swad_connected.o swad_cookie.o swad_country.o \
+       swad_country_config.o swad_course.o \
        swad_course_config.o swad_cryptography.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_config.o \
        swad_degree_type.o swad_department.o swad_duplicate.o \
@@ -53,7 +53,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_place.o swad_plugin.o swad_privacy.o swad_profile.o \
        swad_program.o swad_project.o \
        swad_QR.o \
-       swad_record.o swad_report.o swad_role.o swad_RSS.o \
+       swad_record.o swad_report.o swad_role.o swad_room.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_setting.o \
        swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_system_config.o \

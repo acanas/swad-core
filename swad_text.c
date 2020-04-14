@@ -59,7 +59,6 @@
 #include "swad_action.h"
 #include "swad_assignment.h"
 #include "swad_centre.h"
-#include "swad_classroom.h"
 #include "swad_config.h"
 #include "swad_country.h"
 #include "swad_course.h"
@@ -83,6 +82,7 @@
 #include "swad_project.h"
 #include "swad_record.h"
 #include "swad_role.h"
+#include "swad_room.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
@@ -1653,25 +1653,25 @@ const char *Txt_Another_centre =
 	"Outro centro";
 #endif
 
-const char *Txt_Another_classroom =
+const char *Txt_Another_room =
 #if   L==1	// ca
-	"Una altra aula";
+	"Una altra sala";
 #elif L==2	// de
-	"Eine weitere Klassenzimmer";
+	"Eine weitere Raum";
 #elif L==3	// en
-	"Another classroom";
+	"Another room";
 #elif L==4	// es
-	"Otra aula";
+	"Otra sala";
 #elif L==5	// fr
-	"Un autre salle de classe";
+	"Un autre salle";
 #elif L==6	// gn
-	"Otra aula";	// Okoteve traducción
+	"Otra sala";	// Okoteve traducción
 #elif L==7	// it
 	"Un'altra aula";
 #elif L==8	// pl
 	"Kolejna klasa";
 #elif L==9	// pt
-	"Outra sala de aula";
+	"Outra sala";
 #endif
 
 const char *Txt_Another_country =
@@ -3204,7 +3204,7 @@ const char *Txt_Can_not_rename_a_folder_of_assignment =
 	"N&atilde;o &eacute; poss&iacute;vel renomear um diret&oacute;rio de actividade.";
 #endif
 
-const char *Txt_Capacity_OF_A_CLASSROOM =
+const char *Txt_Capacity_OF_A_ROOM =
 #if   L==1	// ca
 	"Aforo";
 #elif L==2	// de
@@ -3904,243 +3904,6 @@ const char *Txt_Check_marks_in_the_file =
 	"Sprawd&zacute; oceny w pliku";
 #elif L==9	// pt
 	"Verifique as notas no arquivo";
-#endif
-
-const char *Txt_Classroom =
-#if   L==1	// ca
-	"Aula";
-#elif L==2	// de
-	"Klassenzimmer";
-#elif L==3	// en
-	"Classroom";
-#elif L==4	// es
-	"Aula";
-#elif L==5	// fr
-	"Salle de classe";
-#elif L==6	// gn
-	"Mbo'ehakoty";
-#elif L==7	// it
-	"Aula";
-#elif L==8	// pl
-	"Klasa";
-#elif L==9	// pt
-	"Sala de aula";
-#endif
-
-const char *Txt_Classroom_X_removed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Aula <strong>%s</strong> eliminada.";
-#elif L==2	// de
-	"Klassenzimmer <strong>%s</strong> entfernt.";
-#elif L==3	// en
-	"Classroom <strong>%s</strong> removed.";
-#elif L==4	// es
-	"Aula <strong>%s</strong> eliminada.";
-#elif L==5	// fr
-	"Salle de classe <strong>%s</strong> supprim&eacute;e.";
-#elif L==6	// gn
-	"Aula <strong>%s</strong> eliminada.";		// Okoteve traducción
-#elif L==7	// it
-	"Aula <strong>%s</strong> rimossa.";
-#elif L==8	// pl
-	"Klasa <strong>%s</strong> usuniete.";
-#elif L==9	// pt
-	"Sala de aula <strong>%s</strong> removida.";
-#endif
-
-const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
-	{
-	[Cla_ORDER_BY_SHRT_NAME] =
-#if   L==1	// ca
-	"Ordenar per nom breu"
-#elif L==2	// de
-	"Nach Kurzname sortieren"
-#elif L==3	// en
-	"Sort by short name"
-#elif L==4	// es
-	"Ordenar por nombre breve"
-#elif L==5	// fr
-	"Trier par nom abr&eacute;g&eacute;"
-#elif L==6	// gn
-	"Ordenar por nombre breve"	// Okoteve traducción
-#elif L==7	// it
-	"Ordina per nome breve"
-#elif L==8	// pl
-	"Sortuj wed&lstrok;ug kr&oacute;tkiej nazwy"
-#elif L==9	// pt
-	"Classificar por nome abreviado"
-#endif
-	,
-	[Cla_ORDER_BY_FULL_NAME] =
-#if   L==1	// ca
-	"Ordenar per nom complet"
-#elif L==2	// de
-	"Nach vollst&auml;ndiger Name sortieren"
-#elif L==3	// en
-	"Sort by full name"
-#elif L==4	// es
-	"Ordenar por nombre completo"
-#elif L==5	// fr
-	"Trier par nom complet"
-#elif L==6	// gn
-	"Ordenar por nombre completo"	// Okoteve traducción
-#elif L==7	// it
-	"Ordina per nome completo"
-#elif L==8	// pl
-	"Sortuj wed&lstrok;ug pe&lstrok;na nazwa"
-#elif L==9	// pt
-	"Classificar por nome completo"
-#endif
-	,
-	[Cla_ORDER_BY_CAPACITY] =
-#if   L==1	// ca
-	"Ordenar per aforo"
-#elif L==2	// de
-	"Sortieren nach Sitzplatzkapazit&auml;t"
-#elif L==3	// en
-	"Sort by seating capacity"
-#elif L==4	// es
-	"Ordenar por aforo"
-#elif L==5	// fr
-	"Trier par nombre de places"
-#elif L==6	// gn
-	"Ordenar por aforo"	// Okoteve traducción
-#elif L==7	// it
-	"Ordina per capacit&agrave; di posti"
-#elif L==8	// pl
-	"Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
-#elif L==9	// pt
-	"Ordenar por capacidade"
-#endif
-	,
-	[Cla_ORDER_BY_LOCATION] =
-#if   L==1	// ca
-	"Ordenar per ubicaci&oacute;"
-#elif L==2	// de
-	"Nach Standort sortieren"
-#elif L==3	// en
-	"Sort by location"
-#elif L==4	// es
-	"Ordenar por ubicaci&oacute;n"
-#elif L==5	// fr
-	"Trier par emplacement"
-#elif L==6	// gn
-	"Ordenar por ubicaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Ordina per posizione"
-#elif L==8	// pl
-	"Sortuj wed&lstrok;ug lokacja"
-#elif L==9	// pt
-	"Classificar por localiza&ccedil;&atilde;o"
-#endif
-  };
-
-const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
-	{
-	[Cla_ORDER_BY_SHRT_NAME] =
-#if   L==1	// ca
-	"Nom breu"
-#elif L==2	// de
-	"Kurzname"
-#elif L==3	// en
-	"Short name"
-#elif L==4	// es
-	"Nombre breve"
-#elif L==5	// fr
-	"Nom abr&eacute;g&eacute;"
-#elif L==6	// gn
-	"Nombre breve"	// Okoteve traducción
-#elif L==7	// it
-	"Nome breve"
-#elif L==8	// pl
-	"Kr&oacute;tkiej nazwy"
-#elif L==9	// pt
-	"Nome abreviado"
-#endif
-	,
-	[Cla_ORDER_BY_FULL_NAME] =
-#if   L==1	// ca
-	"Nom complet"
-#elif L==2	// de
-	"Vollst&auml;ndiger Name"
-#elif L==3	// en
-	"Full name"
-#elif L==4	// es
-	"Nombre completo"
-#elif L==5	// fr
-	"Nom complet"
-#elif L==6	// gn
-	"Nombre completo"	// Okoteve traducción
-#elif L==7	// it
-	"Nome completo"
-#elif L==8	// pl
-	"Pe&lstrok;na nazwa"
-#elif L==9	// pt
-	"Nome completo"
-#endif
-	,
-	[Cla_ORDER_BY_CAPACITY] =
-#if   L==1	// ca
-	"Aforo"
-#elif L==2	// de
-	"Kapazit&auml;t"
-#elif L==3	// en
-	"Capacity"
-#elif L==4	// es
-	"Aforo"
-#elif L==5	// fr
-	"Capacit&eacute;"
-#elif L==6	// gn
-	"Aforo"				// Okoteve traducción
-#elif L==7	// it
-	"Capacit&agrave;"
-#elif L==8	// pl
-	"Pojemno&sacute;&cacute;"
-#elif L==9	// pt
-	"Capacidade"
-#endif
-	,
-	[Cla_ORDER_BY_LOCATION] =
-#if   L==1	// ca
-	"Ubicaci&oacute;"
-#elif L==2	// de
-	"Standort"
-#elif L==3	// en
-	"Location"
-#elif L==4	// es
-	"Ubicaci&oacute;n"
-#elif L==5	// fr
-	"Emplacement"
-#elif L==6	// gn
-	"&Ntilde;emohenda"
-#elif L==7	// it
-	"Posizione"
-#elif L==8	// pl
-	"Lokacja"
-#elif L==9	// pt
-	"Localiza&ccedil;&atilde;o"
-#endif
-	};
-
-const char *Txt_Classrooms =
-#if   L==1	// ca
-	"Aules";
-#elif L==2	// de
-	"Klassenzimmer";
-#elif L==3	// en
-	"Classrooms";
-#elif L==4	// es
-	"Aulas";
-#elif L==5	// fr
-	"Salles de classe";
-#elif L==6	// gn
-	"Mbo'ehakoty";
-#elif L==7	// it
-	"Aule";
-#elif L==8	// pl
-	"Klasy";
-#elif L==9	// pt
-	"Salas de aula";
 #endif
 
 const char *Txt_Click =
@@ -5710,25 +5473,25 @@ const char *Txt_Create_centre =
 	"Criar centro";
 #endif
 
-const char *Txt_Create_classroom =
+const char *Txt_Create_room =
 #if   L==1	// ca
-	"Crear aula";
+	"Crear sala";
 #elif L==2	// de
-	"Klassenzimmer eingeben";
+	"Raum eingeben";
 #elif L==3	// en
-	"Create classroom";
+	"Create room";
 #elif L==4	// es
-	"Crear aula";
+	"Crear sala";
 #elif L==5	// fr
-	"Cr&eacute;er salle de classe";
+	"Cr&eacute;er salle";
 #elif L==6	// gn
-	"Crear aula";	// Okoteve traducción
+	"Crear sala";	// Okoteve traducción
 #elif L==7	// it
 	"Crea aula";
 #elif L==8	// pl
 	"Utw&oacute;rz klasa";
 #elif L==9	// pt
-	"Criar sala de aula";
+	"Criar sala";
 #endif
 
 const char *Txt_Create_country =
@@ -6361,25 +6124,25 @@ const char *Txt_Created_new_centre_X =	// Warning: it is very important to inclu
 	"Criado novo centro <strong>%s</strong>.";
 #endif
 
-const char *Txt_Created_new_classroom_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Created_new_room_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Creada nova aula <strong>%s</strong>.";
+	"Creada nova sala <strong>%s</strong>.";
 #elif L==2	// de
-	"Neuer Klassenzimmer <strong>%s</strong> eingegeben.";
+	"Neuer Raum <strong>%s</strong> eingegeben.";
 #elif L==3	// en
-	"Created new classroom <strong>%s</strong>.";
+	"Created new room <strong>%s</strong>.";
 #elif L==4	// es
-	"Creada nueva aula <strong>%s</strong>.";
+	"Creada nueva sala <strong>%s</strong>.";
 #elif L==5	// fr
-	"Cr&eacute;&eacute; nouvelle salle de classe <strong>%s</strong>.";
+	"Cr&eacute;&eacute; nouvelle salle <strong>%s</strong>.";
 #elif L==6	// gn
-	"Creada nueva aula <strong>%s</strong>.";	// Okoteve traducción
+	"Creada nueva sala <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Creata nuova aula <strong>%s</strong>.";
 #elif L==8	// pl
 	"Utworzono nowe klasa <strong>%s</strong>.";
 #elif L==9	// pt
-	"Criada nova sala de aula <strong>%s</strong>.";
+	"Criada nova sala <strong>%s</strong>.";
 #endif
 
 const char *Txt_Created_new_country_X =	// Warning: it is very important to include %s in the following sentences
@@ -19259,15 +19022,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Graus"
 #endif
 	,
-	//  2: ActSeeCla
+	//  2: ActSeeRoo
 #if   L==1	// ca
-	"Aules"
+	"Sales"
 #elif L==2	// de
-	"Klassenzimmer"
+	"R&auml;ume"
 #elif L==3	// en
-	"Classrooms"
+	"Rooms"
 #elif L==4	// es
-	"Aulas"
+	"Salas"
 #elif L==5	// fr
 	"Salles"
 #elif L==6	// gn
@@ -21115,25 +20878,25 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Graus"
 #endif
 	,
-	//  2: ActSeeCla
+	//  2: ActSeeRoo
 #if   L==1	// ca
-	"Aules, laboratoris o altres llocs on s'imparteixen classes"
+	"Aules, laboratoris o altres llocs"
 #elif L==2	// de
 	"Klassenzimmer, Laboratorien oder andere Unterrichtsorte"
 #elif L==3	// en
-	"Classrooms, laboratories or other places where classes are taught"
+	"Classrooms, laboratories or other places"
 #elif L==4	// es
-	"Aulas, laboratorios u otros lugares donde se imparten clases"
+	"Aulas, laboratorios u otros lugares"
 #elif L==5	// fr
-	"Salles de classe, laboratoires ou autres lieux de cours"
+	"Salles de classe, laboratoires ou autres lieux"
 #elif L==6	// gn
 	"Mbo'ehakoty"
 #elif L==7	// it
-	"Aule, laboratori o altri luoghi in cui vengono insegnate le lezioni"
+	"Aule, laboratori o altri luoghi"
 #elif L==8	// pl
 	"Klasy, laboratoria lub inne miejsca, w kt&oacute;rych odbywaj&aogon; si&eogon; zaj&eogon;cia"
 #elif L==9	// pt
-	"Salas de aula, laborat&oacute;rios ou outros locais onde as aulas s&atilde;o ministradas"
+	"Salas de aula, laborat&oacute;rios ou outros locais"
 #endif
 	,
 	NULL,	//  3
@@ -24337,25 +24100,25 @@ const char *Txt_New_centre =
 	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
 #endif
 
-const char *Txt_New_classroom =
+const char *Txt_New_room =
 #if   L==1	// ca
-	"Nova aula";
+	"Nova sala";
 #elif L==2	// de
-	"Neue Klassenzimmer";
+	"Neue Raum";
 #elif L==3	// en
-	"New classroom";
+	"New room";
 #elif L==4	// es
-	"Nueva aula";
+	"Nueva sala";
 #elif L==5	// fr
-	"Nouvelle salle de classe";
+	"Nouvelle salle";
 #elif L==6	// gn
-	"Nueva aula";	// Okoteve traducción
+	"Nueva sala";	// Okoteve traducción
 #elif L==7	// it
 	"Nuova aula";
 #elif L==8	// pl
 	"Nowe klasa";
 #elif L==9	// pt
-	"Nova sala de aula";
+	"Nova sala";
 #endif
 
 const char *Txt_New_country =
@@ -25240,25 +25003,25 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
 #endif
 
-const char *Txt_No_assigned_classroom =
+const char *Txt_No_assigned_room =
 #if   L==1	// ca
-	"Sense aula assignada";
+	"Sense sala assignada";
 #elif L==2	// de
-	"Kein zugewiesenes Klassenzimmer";
+	"Kein zugewiesenes Raum";
 #elif L==3	// en
-	"No assigned classroom";
+	"No assigned room";
 #elif L==4	// es
-	"Sin aula asignada";
+	"Sin sala asignada";
 #elif L==5	// fr
-	"Aucune classe assign&eacute;e";
+	"Aucune salle assign&eacute;e";
 #elif L==6	// gn
-	"Sin aula asignada";	// Okoteve traducción
+	"Sin sala asignada";	// Okoteve traducción
 #elif L==7	// it
 	"Nessuna aula assegnata";
 #elif L==8	// pl
 	"Brak przydzielonej sali lekcyjnej";
 #elif L==9	// pt
-	"Nenhuma sala de aula atribu&iacute;da";
+	"Nenhuma sala atribu&iacute;da";
 #endif
 
 const char *Txt_No_assignments =
@@ -37992,17 +37755,254 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	};
 
+const char *Txt_Room =
+#if   L==1	// ca
+	"Sala";
+#elif L==2	// de
+	"Raum";
+#elif L==3	// en
+	"Room";
+#elif L==4	// es
+	"Sala";
+#elif L==5	// fr
+	"Salle";
+#elif L==6	// gn
+	"Mbo'ehakoty";
+#elif L==7	// it
+	"Aula";
+#elif L==8	// pl
+	"Klasa";
+#elif L==9	// pt
+	"Sala";
+#endif
+
+const char *Txt_Room_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Sala <strong>%s</strong> eliminada.";
+#elif L==2	// de
+	"Raum <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Room <strong>%s</strong> removed.";
+#elif L==4	// es
+	"Sala <strong>%s</strong> eliminada.";
+#elif L==5	// fr
+	"Salle <strong>%s</strong> supprim&eacute;e.";
+#elif L==6	// gn
+	"Sala <strong>%s</strong> eliminada.";		// Okoteve traducción
+#elif L==7	// it
+	"Aula <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Klasa <strong>%s</strong> usuniete.";
+#elif L==9	// pt
+	"Sala <strong>%s</strong> removida.";
+#endif
+
+const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
+	{
+	[Roo_ORDER_BY_SHRT_NAME] =
+#if   L==1	// ca
+	"Ordenar per nom breu"
+#elif L==2	// de
+	"Nach Kurzname sortieren"
+#elif L==3	// en
+	"Sort by short name"
+#elif L==4	// es
+	"Ordenar por nombre breve"
+#elif L==5	// fr
+	"Trier par nom abr&eacute;g&eacute;"
+#elif L==6	// gn
+	"Ordenar por nombre breve"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per nome breve"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug kr&oacute;tkiej nazwy"
+#elif L==9	// pt
+	"Classificar por nome abreviado"
+#endif
+	,
+	[Roo_ORDER_BY_FULL_NAME] =
+#if   L==1	// ca
+	"Ordenar per nom complet"
+#elif L==2	// de
+	"Nach vollst&auml;ndiger Name sortieren"
+#elif L==3	// en
+	"Sort by full name"
+#elif L==4	// es
+	"Ordenar por nombre completo"
+#elif L==5	// fr
+	"Trier par nom complet"
+#elif L==6	// gn
+	"Ordenar por nombre completo"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per nome completo"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug pe&lstrok;na nazwa"
+#elif L==9	// pt
+	"Classificar por nome completo"
+#endif
+	,
+	[Roo_ORDER_BY_CAPACITY] =
+#if   L==1	// ca
+	"Ordenar per aforo"
+#elif L==2	// de
+	"Sortieren nach Sitzplatzkapazit&auml;t"
+#elif L==3	// en
+	"Sort by seating capacity"
+#elif L==4	// es
+	"Ordenar por aforo"
+#elif L==5	// fr
+	"Trier par nombre de places"
+#elif L==6	// gn
+	"Ordenar por aforo"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per capacit&agrave; di posti"
+#elif L==8	// pl
+	"Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
+#elif L==9	// pt
+	"Ordenar por capacidade"
+#endif
+	,
+	[Roo_ORDER_BY_LOCATION] =
+#if   L==1	// ca
+	"Ordenar per ubicaci&oacute;"
+#elif L==2	// de
+	"Nach Standort sortieren"
+#elif L==3	// en
+	"Sort by location"
+#elif L==4	// es
+	"Ordenar por ubicaci&oacute;n"
+#elif L==5	// fr
+	"Trier par emplacement"
+#elif L==6	// gn
+	"Ordenar por ubicaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per posizione"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug lokacja"
+#elif L==9	// pt
+	"Classificar por localiza&ccedil;&atilde;o"
+#endif
+  };
+
+const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
+	{
+	[Roo_ORDER_BY_SHRT_NAME] =
+#if   L==1	// ca
+	"Nom breu"
+#elif L==2	// de
+	"Kurzname"
+#elif L==3	// en
+	"Short name"
+#elif L==4	// es
+	"Nombre breve"
+#elif L==5	// fr
+	"Nom abr&eacute;g&eacute;"
+#elif L==6	// gn
+	"Nombre breve"	// Okoteve traducción
+#elif L==7	// it
+	"Nome breve"
+#elif L==8	// pl
+	"Kr&oacute;tkiej nazwy"
+#elif L==9	// pt
+	"Nome abreviado"
+#endif
+	,
+	[Roo_ORDER_BY_FULL_NAME] =
+#if   L==1	// ca
+	"Nom complet"
+#elif L==2	// de
+	"Vollst&auml;ndiger Name"
+#elif L==3	// en
+	"Full name"
+#elif L==4	// es
+	"Nombre completo"
+#elif L==5	// fr
+	"Nom complet"
+#elif L==6	// gn
+	"Nombre completo"	// Okoteve traducción
+#elif L==7	// it
+	"Nome completo"
+#elif L==8	// pl
+	"Pe&lstrok;na nazwa"
+#elif L==9	// pt
+	"Nome completo"
+#endif
+	,
+	[Roo_ORDER_BY_CAPACITY] =
+#if   L==1	// ca
+	"Aforo"
+#elif L==2	// de
+	"Kapazit&auml;t"
+#elif L==3	// en
+	"Capacity"
+#elif L==4	// es
+	"Aforo"
+#elif L==5	// fr
+	"Capacit&eacute;"
+#elif L==6	// gn
+	"Aforo"				// Okoteve traducción
+#elif L==7	// it
+	"Capacit&agrave;"
+#elif L==8	// pl
+	"Pojemno&sacute;&cacute;"
+#elif L==9	// pt
+	"Capacidade"
+#endif
+	,
+	[Roo_ORDER_BY_LOCATION] =
+#if   L==1	// ca
+	"Ubicaci&oacute;"
+#elif L==2	// de
+	"Standort"
+#elif L==3	// en
+	"Location"
+#elif L==4	// es
+	"Ubicaci&oacute;n"
+#elif L==5	// fr
+	"Emplacement"
+#elif L==6	// gn
+	"&Ntilde;emohenda"
+#elif L==7	// it
+	"Posizione"
+#elif L==8	// pl
+	"Lokacja"
+#elif L==9	// pt
+	"Localiza&ccedil;&atilde;o"
+#endif
+	};
+
+const char *Txt_Rooms =
+#if   L==1	// ca
+	"Sales";
+#elif L==2	// de
+	"R&auml;ume";
+#elif L==3	// en
+	"Rooms";
+#elif L==4	// es
+	"Salas";
+#elif L==5	// fr
+	"Salles";
+#elif L==6	// gn
+	"Mbo'ehakoty";
+#elif L==7	// it
+	"Aule";
+#elif L==8	// pl
+	"Klasy";
+#elif L==9	// pt
+	"Salas";
+#endif
+
 const char *Txt_Rooms_with_users =
 #if   L==1	// ca
-	"Salas con usuarios";		// Necessita traduccio
+	"Sales amb usuaris";
 #elif L==2	// de
-	"Rooms with users";		// Need Übersetzung
+	"R&auml;ume mit Benutzern";
 #elif L==3	// en
 	"Rooms with users";
 #elif L==4	// es
 	"Salas con usuarios";
 #elif L==5	// fr
-	"Rooms with users";		// Besoin de traduction
+	"Salles avec utilisateurs";
 #elif L==6	// gn
 	"Salas con usuarios";		// Okoteve traducción
 #elif L==7	// it
@@ -38010,7 +38010,7 @@ const char *Txt_Rooms_with_users =
 #elif L==8	// pl
 	"Rooms with users";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Quartos com usu&aacute;rios";
+	"Salas com usu&aacute;rios";
 #endif
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -44244,46 +44244,46 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O banner <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_capacity_of_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L'aforament de l'aula <strong>%s</strong> no ha canviat.";
+	"L'aforament de la sala <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"Die Kapazit&auml;t des Klassenzimmers <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+	"Die Kapazit&auml;t des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
-	"The capacity of classroom <strong>%s</strong> has not changed.";
+	"The capacity of room <strong>%s</strong> has not changed.";
 #elif L==4	// es
-	"El aforo del aula <strong>%s</strong> no ha cambiado.";
+	"El aforo de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"La capacit&eacute; de la salle de classe <strong>%s</strong> n'a pas chang&eacute;.";
+	"La capacit&eacute; de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
-	"El aforo del aula <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+	"El aforo de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"La capacit&agrave; della aula <strong>%s</strong> non &egrave; cambiata.";
 #elif L==8	// pl
 	"Pojemno&sacute;&cacute; klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"A capacidade da sala de aula <strong>%s</strong> n&atilde;o mudou.";
+	"A capacidade da sala <strong>%s</strong> n&atilde;o mudou.";
 #endif
 
-const char *Txt_The_capacity_of_classroom_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
+const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
 #if   L==1	// ca
-	"L'aforament de l'aula <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
+	"L'aforament de la sala <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
 #elif L==2	// de
-	"Die Kapazit&auml;t des Klassenzimmers <strong>%s</strong> betr&auml;gt jetzt <strong>%u</strong>.";
+	"Die Kapazit&auml;t des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%u</strong>.";
 #elif L==3	// en
-	"The capacity of classroom <strong>%s</strong> is now <strong>%u</strong>.";
+	"The capacity of room <strong>%s</strong> is now <strong>%u</strong>.";
 #elif L==4	// es
-	"El aforo del aula <strong>%s</strong> ahora es <strong>%u</strong>.";
+	"El aforo de la sala <strong>%s</strong> ahora es <strong>%u</strong>.";
 #elif L==5	// fr
-	"La capacit&eacute; de la salle de classe <strong>%s</strong> est maintenant de <strong>%u</strong>.";
+	"La capacit&eacute; de la salle <strong>%s</strong> est maintenant de <strong>%u</strong>.";
 #elif L==6	// gn
-	"El aforo del aula <strong>%s</strong> ahora es <strong>%u</strong>.";	// Okoteve traducción
+	"El aforo de la sala <strong>%s</strong> ahora es <strong>%u</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"La capacit&agrave; della aula <strong>%s</strong> &egrave; ora <strong>%u</strong>.";
 #elif L==8	// pl
 	"Pojemno&sacute;&cacute; klasy <strong>%s</strong> wynosi teraz <strong>%u</strong>.";
 #elif L==9	// pt
-	"A capacidade da sala de aula <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
+	"A capacidade da sala <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #endif
 
 const char *Txt_The_centre_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -44358,88 +44358,88 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_classroom_X_already_exists =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_room_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L'aula <strong>%s</strong> ja existeix.";
+	"La sala <strong>%s</strong> ja existeix.";
 #elif L==2	// de
-	"Das Klassenzimmer <strong>%s</strong> wurde bereits eingegeben.";
+	"Das Raum <strong>%s</strong> wurde bereits eingegeben.";
 #elif L==3	// en
-	"The classroom <strong>%s</strong> already exists.";
+	"The room <strong>%s</strong> already exists.";
 #elif L==4	// es
-	"El aula <strong>%s</strong> ya existe.";
+	"La sala <strong>%s</strong> ya existe.";
 #elif L==5	// fr
-	"La salle de classe <strong>%s</strong> existe d&eacute;j&agrave;.";
+	"La salle <strong>%s</strong> existe d&eacute;j&agrave;.";
 #elif L==6	// gn
-	"El aula <strong>%s</strong> ya existe.";		// Okoteve traducción
+	"La sala <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
 	"L'aula <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> ju&zdot; istnieje.";
 #elif L==9	// pt
-	"A sala de clase <strong>%s</strong> j&aacute; existe.";
+	"A sala <strong>%s</strong> j&aacute; existe.";
 #endif
 
-const char *Txt_The_classroom_X_does_not_have_a_limited_capacity_now =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L'aula <strong>%s</strong> ja no t&eacute; un aforament limitat.";
+	"La sala <strong>%s</strong> ja no t&eacute; un aforament limitat.";
 #elif L==2	// de
-	"Das Klassenzimmer <strong>%s</strong> hat jetzt keine begrenzte Kapazit&auml;t.";
+	"Das Raum <strong>%s</strong> hat jetzt keine begrenzte Kapazit&auml;t.";
 #elif L==3	// en
-	"The classroom <strong>%s</strong> does not have a limited capacity now.";
+	"The room <strong>%s</strong> does not have a limited capacity now.";
 #elif L==4	// es
-	"El aula <strong>%s</strong> ya no tiene un aforo limitado.";
+	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";
 #elif L==5	// fr
-	"La salle de classe <strong>%s</strong> n'a plus de capacit&eacute; limit&eacute;e.";
+	"La salle <strong>%s</strong> n'a plus de capacit&eacute; limit&eacute;e.";
 #elif L==6	// gn
-	"El aula <strong>%s</strong> ya no tiene un aforo limitado.";	// Okoteve traducción
+	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'aula <strong>%s</strong> non ha una capacit&agrave; limitata ora.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> nie ma teraz ograniczonej pojemno&sacute;ci.";
 #elif L==9	// pt
-	"A sala de clase <strong>%s</strong> n&atilde;o tem capacidade limitada agora.";
+	"A sala <strong>%s</strong> n&atilde;o tem capacidade limitada agora.";
 #endif
 
-const char *Txt_The_classroom_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_room_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"L'aula <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+	"La sala <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"Der Standort <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
+	"Das Raum <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"Das Klassenzimmer <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The room <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"El aula <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"La sala <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"La salle de classe <strong>%s</strong> a &eacute;t&eacute; renomm&eacute;e en <strong>%s</strong>.";
+	"La salle <strong>%s</strong> a &eacute;t&eacute; renomm&eacute;e en <strong>%s</strong>.";
 #elif L==6	// gn
-	"El aula <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"La sala <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"L'aula <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
-	"A sala de clase <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
+	"A sala <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_classroom_assigned_to_the_group_X_has_changed =
+const char *Txt_The_room_assigned_to_the_group_X_has_changed =
 #if   L==1	// ca
-	"L'aula assignada al grup <strong>%s</strong> ha canviat.";
+	"La sala assignada al grup <strong>%s</strong> ha canviat.";
 #elif L==2	// de
-	"Das der Gruppe <strong>%s</strong> zugeordnete Klassenzimmer hat sich ge&auml;ndert.";
+	"Das der Gruppe <strong>%s</strong> zugeordnete Raum hat sich ge&auml;ndert.";
 #elif L==3	// en
-	"The classroom assigned to the group <strong>%s</strong> has changed.";
+	"The room assigned to the group <strong>%s</strong> has changed.";
 #elif L==4	// es
-	"El aula asignada al grupo <strong>%s</strong> ha cambiado.";
+	"La sala asignada al grupo <strong>%s</strong> ha cambiado.";
 #elif L==5	// fr
-	"La salle de classe affect&eacute;e au groupe <strong>%s</strong> a chang&eacute;.";
+	"La salle affect&eacute;e au groupe <strong>%s</strong> a chang&eacute;.";
 #elif L==6	// gn
-	"El aula asignada al grupo <strong>%s</strong> ha cambiado.";		// Okoteve traducción
+	"La sala asignada al grupo <strong>%s</strong> ha cambiado.";		// Okoteve traducción
 #elif L==7	// it
 	"L'aula assegnata al gruppo <strong>%s</strong> &egrave; cambiata.";
 #elif L==8	// pl
 	"Klasa przypisana do grupy <strong>%s</strong> uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"A sala de aula atribu&iacute;da ao grupo <strong>%s</strong> mudou.";
+	"A sala atribu&iacute;da ao grupo <strong>%s</strong> mudou.";
 #endif
 
 const char *Txt_The_comment_no_longer_exists =
@@ -46302,24 +46302,24 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 	"A lista de %u usu&aacute;rios &eacute; muito grande para ser exibida.";
 #endif
 
-const char *Txt_The_location_of_the_classroom_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_location_of_the_room_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La ubicaci&oacute; de l'aula <strong>%s</strong>"
+	"La ubicaci&oacute; de la sala <strong>%s</strong>"
 	" ha canviat a <strong>%s</strong>.";
 #elif L==2	// de
-	"Der Standort des Klassenzimmer <strong>%s</strong>"
+	"Der Standort des Raum <strong>%s</strong>"
 	" wurde in <strong>%s</strong> ge&auml;ndert.";
 #elif L==3	// en
-	"The location of the classroom <strong>%s</strong>"
+	"The location of the room <strong>%s</strong>"
 	" has changed to <strong>%s</strong>.";
 #elif L==4	// es
-	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";
 #elif L==5	// fr
-	"L'emplacement de la salle de classe <strong>%s</strong>"
+	"L'emplacement de la salle <strong>%s</strong>"
 	" a &eacute;t&eacute; remplac&eacute; par <strong>%s</strong>.";
 #elif L==6	// gn
-	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"La posizione della aula <strong>%s</strong>"
@@ -46328,28 +46328,28 @@ const char *Txt_The_location_of_the_classroom_X_has_changed_to_Y =	// Warning: i
 	"Lokalizacja klasy <strong>%s</strong>"
 	" zmieni&lstrok;a si&eogon; na <strong>%s</strong>.";
 #elif L==9	// pt
-	"A localiza&ccedil;&atilde;o da sala de clase <strong>%s</strong>"
+	"A localiza&ccedil;&atilde;o da sala <strong>%s</strong>"
 	" mudou para <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_location_of_the_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_location_of_the_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La ubicaci&oacute; de l'aula <strong>%s</strong>"
+	"La ubicaci&oacute; de la sala <strong>%s</strong>"
 	" no ha canviat.";
 #elif L==2	// de
-	"Der Standort des Klassenzimmer <strong>%s</strong>"
+	"Der Standort des Raum <strong>%s</strong>"
 	" hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
-	"The location of the classroom <strong>%s</strong>"
+	"The location of the room <strong>%s</strong>"
 	" has not changed.";
 #elif L==4	// es
-	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
 	" no ha cambiado.";
 #elif L==5	// fr
-	"L'emplacement de la salle de classe <strong>%s</strong>"
+	"L'emplacement de la salle <strong>%s</strong>"
 	" n'a pas chang&eacute;.";
 #elif L==6	// gn
-	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
 	" no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"La posizione della aula <strong>%s</strong>"
@@ -46358,7 +46358,7 @@ const char *Txt_The_location_of_the_classroom_X_has_not_changed =	// Warning: it
 	"Lokalizacja klasy <strong>%s</strong>"
 	" nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"A localiza&ccedil;&atilde;o da sala de clase <strong>%s</strong>"
+	"A localiza&ccedil;&atilde;o da sala <strong>%s</strong>"
 	" n&atilde;o foi alterada.";
 #endif
 
@@ -46587,25 +46587,25 @@ const char *Txt_The_name_of_the_centre_X_has_not_changed =	// Warning: it is ver
 	"O nome do centro <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
-const char *Txt_The_name_of_the_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_name_of_the_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nom de l'aula <strong>%s</strong> no ha canviat.";
+	"El nom de la sala <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"Der Name des Klassenzimmer <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+	"Der Name des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
-	"The name of the classroom <strong>%s</strong> has not changed.";
+	"The name of the room <strong>%s</strong> has not changed.";
 #elif L==4	// es
-	"El nombre del aula <strong>%s</strong> no ha cambiado.";
+	"El nombre de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le nom de la salle de classe <strong>%s</strong> n'a pas chang&eacute;.";
+	"Le nom de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
-	"El nombre del aula <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+	"El nombre de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nome  della aula <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
 	"Nazwa klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"O nome da sala de clase <strong>%s</strong> n&atilde;o foi alterado.";
+	"O nome da sala <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_name_of_the_country_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -56812,25 +56812,25 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cen
 	" do novo centro.";
 #endif
 
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom =
+const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_room =
 #if   L==1	// ca
 	"Heu d'especificar el nom curt i el nom complet"
-	" de la nova aula.";
+	" de la nova sala.";
 #elif L==2	// de
 	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
-	" des neuen Klassenzimmers angeben.";
+	" des neuen Raum angeben.";
 #elif L==3	// en
 	"You must specify the short name and the full name"
-	" of the new classroom.";
+	" of the new room.";
 #elif L==4	// es
 	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva aula.";
+	" de la nueva sala.";
 #elif L==5	// fr
 	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
-	"  de la nouvelle salle de classe.";
+	"  de la nouvelle salle.";
 #elif L==6	// gn
 	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva aula.";		// Okoteve traducción
+	" de la nueva sala.";		// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare il nome breve e completo"
 	" della nuova aula.";
@@ -56839,7 +56839,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cla
 	" nowej klasy.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" da nova sala de aula.";
+	" da nova sala.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course =

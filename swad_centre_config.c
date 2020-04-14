@@ -41,6 +41,7 @@
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
+#include "swad_place.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

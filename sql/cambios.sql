@@ -13304,7 +13304,7 @@ ALTER TABLE log TRUNCATE PARTITION p2014;
 
 
 
-
+------------------------------------
 
 
 // Cambios realizados el 14 de abril de 2020
@@ -13321,5 +13321,14 @@ SELECT ExaCod,CrsCod FROM tst_exams WHERE ExaCod IN (138946,149939,153732,155072
 
 SELECT * FROM tst_exams WHERE ExaCod IN (138946,149939,153732,155072,158845,160028,163616,163617,165036,176633,177040,177140,177221,180469,182532,189061,189169,189179,189207,189245,189273,200335,200336,200337,203975,205562,206021,207224,215085,218272,218294,218300,218317,218665,218851,218869,218880,218955,219045,219074,219082,219086,219089,219092,219095,219097,219104,219107,219189,252548,252549,252550,259574,259825);
 
+-----------------------------------------
 
+
+SELECT my_courses.CrsCod,COUNT(*) AS N FROM (SELECT UsrCod,CrsCod,Role FROM crs_usr WHERE UsrCod=1346 AND Role=5) AS my_courses LEFT JOIN log ON (my_courses.UsrCod=log.UsrCod AND my_courses.CrsCod=log.CrsCod AND my_courses.Role=log.Role) GROUP BY my_courses.CrsCod ORDER BY N DESC,my_courses.CrsCod DESC;
+
+SELECT my_courses.CrsCod,COUNT(*) AS N FROM (SELECT CrsCod,UsrCod,Role FROM crs_usr WHERE UsrCod=1346 AND Role=5) AS my_courses LEFT JOIN log ON (my_courses.CrsCod=log.CrsCod AND my_courses.UsrCod=log.UsrCod AND my_courses.Role=log.Role) GROUP BY my_courses.CrsCod ORDER BY N DESC,my_courses.CrsCod DESC;
+ 
+SELECT my_courses.CrsCod,COUNT(*) AS N FROM (SELECT CrsCod FROM crs_usr WHERE UsrCod=1346 AND Role=5) AS my_courses LEFT JOIN log ON (my_courses.CrsCod=log.CrsCod) WHERE log.UsrCod=1346 AND log.Role=5 GROUP BY my_courses.CrsCod ORDER BY N DESC,my_courses.CrsCod DESC;
+ 
+ 
  

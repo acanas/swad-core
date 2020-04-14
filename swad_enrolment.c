@@ -32,6 +32,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
+#include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
@@ -41,8 +42,10 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_match.h"
+#include "swad_message.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_test_exam.h"
 #include "swad_user.h"

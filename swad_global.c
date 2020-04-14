@@ -36,18 +36,21 @@
 #include "swad_action.h"
 #include "swad_API.h"
 #include "swad_calendar.h"
-#include "swad_classroom.h"
+#include "swad_room.h"
 #include "swad_config.h"
 #include "swad_constant.h"
+#include "swad_department.h"
 #include "swad_exam.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_icon.h"
+#include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_setting.h"
+#include "swad_statistic.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -255,7 +258,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.Crs.Grps.GrpCod = -1L; // -1L stands for the whole course
    Gbl.Crs.Grps.GrpName[0] = '\0';
-   Gbl.Crs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
+   Gbl.Crs.Grps.RooCod = -1L; // -1L stands for no room assigned
    Gbl.Crs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
    Gbl.Crs.Grps.Open = false;
    Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;

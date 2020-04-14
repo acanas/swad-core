@@ -43,12 +43,17 @@
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
+#include "swad_message.h"
 #include "swad_network.h"
 #include "swad_notice.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_program.h"
+#include "swad_project.h"
 #include "swad_role.h"
+#include "swad_survey.h"
+#include "swad_test.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For getenv, malloc
 #include <string.h>		// For string functions
 
+#include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"

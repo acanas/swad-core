@@ -29,6 +29,7 @@
 
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_test.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 

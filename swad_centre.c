@@ -33,10 +33,15 @@
 #include "swad_centre.h"
 #include "swad_centre_config.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
+#include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
+#include "swad_message.h"
+#include "swad_place.h"
+#include "swad_survey.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1252,8 +1257,8 @@ void Ctr_RemoveCentre (void)
       /***** Remove information related to files in centre *****/
       Brw_RemoveCtrFilesFromDB (Ctr_EditingCtr->CtrCod);
 
-      /***** Remove all classrooms in centre *****/
-      Cla_RemoveAllClassroomsInCtr (Ctr_EditingCtr->CtrCod);
+      /***** Remove all rooms in centre *****/
+      Roo_RemoveAllRoomsInCtr (Ctr_EditingCtr->CtrCod);
 
       /***** Remove directories of the centre *****/
       snprintf (PathCtr,sizeof (PathCtr),

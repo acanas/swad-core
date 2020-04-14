@@ -1016,15 +1016,17 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
       /***** Get courses of a user from database *****/
       NumCrss =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-				 "SELECT crs_usr.CrsCod,log.CrsCod,COUNT(*) AS N"
-				 " FROM crs_usr LEFT JOIN log ON"
-				 " (crs_usr.CrsCod=log.CrsCod"
-				 " AND crs_usr.UsrCod=log.UsrCod"
-				 " AND crs_usr.Role=log.Role)"
-				 " WHERE crs_usr.UsrCod=%ld"
-				 " AND crs_usr.Role=%u"
-				 " GROUP BY crs_usr.CrsCod"
-				 " ORDER BY N DESC,log.CrsCod DESC",
+				 "SELECT my_courses.CrsCod,"		// row[0]
+                                        "COUNT(*) AS N"			// row[1]
+                                 " FROM"
+                                 " (SELECT CrsCod FROM crs_usr"
+                                 " WHERE UsrCod=%ld AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
+                                 " LEFT JOIN log"
+                                 " ON (my_courses.CrsCod=log.CrsCod)"
+                                 " WHERE log.UsrCod=%ld AND log.Role=%u"
+                                 " GROUP BY my_courses.CrsCod"
+                                 " ORDER BY N DESC,my_courses.CrsCod DESC",
+				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
 				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 
       /***** List the courses (one row per course) *****/

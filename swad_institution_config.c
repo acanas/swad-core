@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_database.h"
+#include "swad_department.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -39,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
+#include "swad_place.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

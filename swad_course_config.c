@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
+#include "swad_indicator.h"
 #include "swad_logo.h"
 #include "swad_role.h"
 

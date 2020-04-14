@@ -38,6 +38,7 @@
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"

@@ -31,16 +31,23 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_attendance.h"
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_database.h"
+#include "swad_exam.h"
+#include "swad_figure.h"
 #include "swad_form.h"
+#include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_HTML.h"
 #include "swad_info.h"
 #include "swad_logo.h"
+#include "swad_message.h"
+#include "swad_project.h"
 #include "swad_search.h"
+#include "swad_survey.h"
 #include "swad_test_exam.h"
 
 /*****************************************************************************/

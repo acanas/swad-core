@@ -37,6 +37,7 @@
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
 #include "swad_account.h"
+#include "swad_agenda.h"
 #include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
@@ -44,8 +45,10 @@
 #include "swad_connected.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_department.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -60,6 +63,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
+#include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"

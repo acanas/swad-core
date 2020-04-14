@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_department.h"
 #include "swad_enrolment.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -42,6 +43,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
+#include "swad_message.h"
 #include "swad_network.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -50,6 +52,7 @@
 #include "swad_record.h"
 #include "swad_role.h"
 #include "swad_setting.h"
+#include "swad_timetable.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

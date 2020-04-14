@@ -293,7 +293,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 // Actions in menu
 #define ActSeeCtrInf		(ActRenHld +  1)
 #define ActSeeDeg		(ActRenHld +  2)
-#define ActSeeCla		(ActRenHld +  3)
+#define ActSeeRoo		(ActRenHld +  3)
 
 // Secondary actions
 #define ActPrnCtrInf		(ActRenHld +  4)
@@ -328,40 +328,40 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChgDegWWW		(ActRenHld + 31)
 #define ActChgDegSta		(ActRenHld + 32)
 
-#define ActEdiCla		(ActRenHld + 33)
-#define ActNewCla		(ActRenHld + 34)
-#define ActRemCla		(ActRenHld + 35)
-#define ActRenClaSho		(ActRenHld + 36)
-#define ActRenClaFul		(ActRenHld + 37)
-#define ActChgClaMaxStd		(ActRenHld + 38)
-#define ActRenClaLoc		(ActRenHld + 39)
+#define ActEdiRoo		(ActRenHld + 33)
+#define ActNewRoo		(ActRenHld + 34)
+#define ActRemRoo		(ActRenHld + 35)
+#define ActRenRooSho		(ActRenHld + 36)
+#define ActRenRooFul		(ActRenHld + 37)
+#define ActChgRooMaxUsr		(ActRenHld + 38)
+#define ActRenRooLoc		(ActRenHld + 39)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActSeeDegInf		(ActRenClaLoc +  1)
-#define ActSeeCrs		(ActRenClaLoc +  2)
+#define ActSeeDegInf		(ActRenRooLoc +  1)
+#define ActSeeCrs		(ActRenRooLoc +  2)
 
 // Secondary actions
-#define ActPrnDegInf		(ActRenClaLoc +  3)
-#define ActChgDegCtrCfg		(ActRenClaLoc +  4)
-#define ActRenDegShoCfg		(ActRenClaLoc +  5)
-#define ActRenDegFulCfg		(ActRenClaLoc +  6)
-#define ActChgDegWWWCfg		(ActRenClaLoc +  7)
-#define ActReqDegLog		(ActRenClaLoc +  8)
-#define ActRecDegLog		(ActRenClaLoc +  9)
-#define ActRemDegLog		(ActRenClaLoc + 10)
+#define ActPrnDegInf		(ActRenRooLoc +  3)
+#define ActChgDegCtrCfg		(ActRenRooLoc +  4)
+#define ActRenDegShoCfg		(ActRenRooLoc +  5)
+#define ActRenDegFulCfg		(ActRenRooLoc +  6)
+#define ActChgDegWWWCfg		(ActRenRooLoc +  7)
+#define ActReqDegLog		(ActRenRooLoc +  8)
+#define ActRecDegLog		(ActRenRooLoc +  9)
+#define ActRemDegLog		(ActRenRooLoc + 10)
 
-#define ActEdiCrs		(ActRenClaLoc + 11)
-#define ActReqCrs		(ActRenClaLoc + 12)
-#define ActNewCrs		(ActRenClaLoc + 13)
-#define ActRemCrs		(ActRenClaLoc + 14)
-#define ActChgInsCrsCod		(ActRenClaLoc + 15)
-#define ActChgCrsYea		(ActRenClaLoc + 16)
-#define ActRenCrsSho		(ActRenClaLoc + 17)
-#define ActRenCrsFul		(ActRenClaLoc + 18)
-#define ActChgCrsSta		(ActRenClaLoc + 19)
+#define ActEdiCrs		(ActRenRooLoc + 11)
+#define ActReqCrs		(ActRenRooLoc + 12)
+#define ActNewCrs		(ActRenRooLoc + 13)
+#define ActRemCrs		(ActRenRooLoc + 14)
+#define ActChgInsCrsCod		(ActRenRooLoc + 15)
+#define ActChgCrsYea		(ActRenRooLoc + 16)
+#define ActRenCrsSho		(ActRenRooLoc + 17)
+#define ActRenCrsFul		(ActRenRooLoc + 18)
+#define ActChgCrsSta		(ActRenRooLoc + 19)
 
 /*****************************************************************************/
 /******************************** Course tab *********************************/
@@ -1210,7 +1210,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActDisFilZonGrp		(ActRemOldBrf +  24)
 #define ActChgGrpTyp		(ActRemOldBrf +  25)
 #define ActRenGrp		(ActRemOldBrf +  26)
-#define ActChgGrpCla		(ActRemOldBrf +  27)
+#define ActChgGrpRoo		(ActRemOldBrf +  27)
 #define ActChgMaxStdGrp		(ActRemOldBrf +  28)
 
 #define ActLstGst		(ActRemOldBrf +  29)
