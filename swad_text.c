@@ -1633,25 +1633,25 @@ const char *Txt_Announcements_of_exams =
 	"Chamadas para exames";
 #endif
 
-const char *Txt_Another_building =	// TODO: Translate
+const char *Txt_Another_building =
 #if   L==1	// ca
-	"Una altra sala";
+	"Un altre edifici";
 #elif L==2	// de
-	"Eine weitere Raum";
+	"Eine weitere Geb&auml;ude";
 #elif L==3	// en
-	"Another room";
+	"Another building";
 #elif L==4	// es
-	"Otra sala";
+	"Otro edificio";
 #elif L==5	// fr
-	"Un autre salle";
+	"Un autre b&acirc;timent";
 #elif L==6	// gn
-	"Otra sala";	// Okoteve traducción
+	"Otro edificio";	// Okoteve traducción
 #elif L==7	// it
-	"Un'altra aula";
+	"Un altro edificio";
 #elif L==8	// pl
-	"Kolejna klasa";
+	"Kolejna budynek";
 #elif L==9	// pt
-	"Outra sala";
+	"Outro edif&iacute;cio";
 #endif
 
 const char *Txt_Another_centre =
@@ -1685,7 +1685,7 @@ const char *Txt_Another_room =
 #elif L==4	// es
 	"Otra sala";
 #elif L==5	// fr
-	"Un autre salle";
+	"Une autre salle";
 #elif L==6	// gn
 	"Otra sala";	// Okoteve traducción
 #elif L==7	// it
@@ -25344,25 +25344,25 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
 #endif
 
-const char *Txt_No_assigned_building =	// TODO: Translate
+const char *Txt_No_assigned_building =
 #if   L==1	// ca
-	"Sense sala assignada";
+	"Sense edifici assignat";
 #elif L==2	// de
-	"Kein zugewiesenes Raum";
+	"Kein zugewiesenes Geb&auml;ude";
 #elif L==3	// en
-	"No assigned room";
+	"No assigned building";
 #elif L==4	// es
-	"Sin sala asignada";
+	"Sin edificio asignado";
 #elif L==5	// fr
-	"Aucune salle assign&eacute;e";
+	"Aucun b&acirc;timent assign&eacute;";
 #elif L==6	// gn
-	"Sin sala asignada";	// Okoteve traducción
+	"Sin edificio asignado";	// Okoteve traducción
 #elif L==7	// it
-	"Nessuna aula assegnata";
+	"Nessun edificio assegnato";
 #elif L==8	// pl
-	"Brak przydzielonej sali lekcyjnej";
+	"Brak przydzielonej budynek lekcyjnej";
 #elif L==9	// pt
-	"Nenhuma sala atribu&iacute;da";
+	"Nenhum edif&iacute;cio atribu&iacute;do";
 #endif
 
 const char *Txt_No_assigned_room =
@@ -38161,6 +38161,48 @@ const char *Txt_Room_X_removed =	// Warning: it is very important to include %s 
 
 const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 	{
+	[Roo_ORDER_BY_BUILDING] =
+#if   L==1	// ca
+	"Ordenar per edifici"
+#elif L==2	// de
+	"Nach Geb&auml;ude sortieren"
+#elif L==3	// en
+	"Sort by building"
+#elif L==4	// es
+	"Ordenar por edificio"
+#elif L==5	// fr
+	"Trier par b&acirc;timent"
+#elif L==6	// gn
+	"Ordenar por edificio"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per edificio"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug budynek"
+#elif L==9	// pt
+	"Classificar por edif&iacute;cio"
+#endif
+	,
+	[Roo_ORDER_BY_FLOOR] =
+#if   L==1	// ca
+	"Ordenar per planta"
+#elif L==2	// de
+	"Nach Stock sortieren"
+#elif L==3	// en
+	"Sort by floor"
+#elif L==4	// es
+	"Ordenar por planta"
+#elif L==5	// fr
+	"Trier par &eacute;tage"
+#elif L==6	// gn
+	"Ordenar por planta"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per piano"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug pi&eogon;trze"
+#elif L==9	// pt
+	"Classificar por andar"
+#endif
+	,
 	[Roo_ORDER_BY_SHRT_NAME] =
 #if   L==1	// ca
 	"Ordenar per nom breu"
@@ -38223,31 +38265,52 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Ordenar por capacidade"
 #endif
-	,
-	[Roo_ORDER_BY_LOCATION] =
-#if   L==1	// ca
-	"Ordenar per ubicaci&oacute;"
-#elif L==2	// de
-	"Nach Standort sortieren"
-#elif L==3	// en
-	"Sort by location"
-#elif L==4	// es
-	"Ordenar por ubicaci&oacute;n"
-#elif L==5	// fr
-	"Trier par emplacement"
-#elif L==6	// gn
-	"Ordenar por ubicaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Ordina per posizione"
-#elif L==8	// pl
-	"Sortuj wed&lstrok;ug lokacja"
-#elif L==9	// pt
-	"Classificar por localiza&ccedil;&atilde;o"
-#endif
   };
 
 const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 	{
+	[Roo_ORDER_BY_BUILDING] =
+#if   L==1	// ca
+	"Edifici"
+#elif L==2	// de
+	"Geb&auml;ude"
+#elif L==3	// en
+	"Building"
+#elif L==4	// es
+	"Edificio"
+#elif L==5	// fr
+	"B&acirc;timent"
+#elif L==6	// gn
+	"Edificio"	// Okoteve traducción
+#elif L==7	// it
+	"Edificio"
+#elif L==8	// pl
+	"Budynek"
+#elif L==9	// pt
+	"Edif&iacute;cio"
+#endif
+	,
+	[Roo_ORDER_BY_FLOOR] =
+#if   L==1	// ca
+	"Planta"
+#elif L==2	// de
+	"Stock"
+#elif L==3	// en
+	"Floor"
+#elif L==4	// es
+	"Planta"
+#elif L==5	// fr
+	"&Eacute;tage"
+#elif L==6	// gn
+	"Planta"	// Okoteve traducción
+#elif L==7	// it
+	"Piano"
+#elif L==8	// pl
+	"Pi&eogon;trze"
+#elif L==9	// pt
+	"Andar"
+#endif
+	,
 	[Roo_ORDER_BY_SHRT_NAME] =
 #if   L==1	// ca
 	"Nom breu"
@@ -38309,27 +38372,6 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 	"Pojemno&sacute;&cacute;"
 #elif L==9	// pt
 	"Capacidade"
-#endif
-	,
-	[Roo_ORDER_BY_LOCATION] =
-#if   L==1	// ca
-	"Ubicaci&oacute;"
-#elif L==2	// de
-	"Standort"
-#elif L==3	// en
-	"Location"
-#elif L==4	// es
-	"Ubicaci&oacute;n"
-#elif L==5	// fr
-	"Emplacement"
-#elif L==6	// gn
-	"&Ntilde;emohenda"
-#elif L==7	// it
-	"Posizione"
-#elif L==8	// pl
-	"Lokacja"
-#elif L==9	// pt
-	"Localiza&ccedil;&atilde;o"
 #endif
 	};
 
@@ -44648,6 +44690,48 @@ const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very im
 	"O edif&iacute;cio <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"L'edifici de la sala <strong>%s</strong> no ha canviat.";
+#elif L==2	// de
+	"Das Geb&auml;ude des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The building of room <strong>%s</strong> has not changed.";
+#elif L==4	// es
+	"El edificio de la sala <strong>%s</strong> no ha cambiado.";
+#elif L==5	// fr
+	"Le b&acirc;timent de la salle <strong>%s</strong> n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"El edificio de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"L'edificio della aula <strong>%s</strong> non &egrave; cambiata.";
+#elif L==8	// pl
+	"Budynek klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"O edif&iacute;cio da sala <strong>%s</strong> n&atilde;o mudou.";
+#endif
+
+const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"L'edifici de la sala <strong>%s</strong> ara &eacute;s <strong>%s</strong>.";
+#elif L==2	// de
+	"Das Geb&auml;ude des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%s</strong>.";
+#elif L==3	// en
+	"The building of room <strong>%s</strong> is now <strong>%s</strong>.";
+#elif L==4	// es
+	"El edificio de la sala <strong>%s</strong> ahora es <strong>%s</strong>.";
+#elif L==5	// fr
+	"Le b&acirc;timent de la salle <strong>%s</strong> est maintenant de <strong>%s</strong>.";
+#elif L==6	// gn
+	"El edificio de la sala <strong>%s</strong> ahora es <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"L'edificio della aula <strong>%s</strong> &egrave; ora <strong>%s</strong>.";
+#elif L==8	// pl
+	"Budynek klasy <strong>%s</strong> wynosi teraz <strong>%s</strong>.";
+#elif L==9	// pt
+	"O edif&iacute;cio da sala <strong>%s</strong> &eacute; agora <strong>%s</strong>.";
+#endif
+
 const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"L'aforament de la sala <strong>%s</strong> no ha canviat.";
@@ -45842,6 +45926,48 @@ const char *Txt_The_file_type_should_be_HTML_or_ZIP =
 	"O tipo de arquivo deve ser <em>HTML</em> ou <em>ZIP</em>.";
 #endif
 
+const char *Txt_The_floor_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"La planta de la sala <strong>%s</strong> no ha canviat.";
+#elif L==2	// de
+	"Der Stock des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The floor of room <strong>%s</strong> has not changed.";
+#elif L==4	// es
+	"La planta de la sala <strong>%s</strong> no ha cambiado.";
+#elif L==5	// fr
+	"L'&eacute;tage de la salle <strong>%s</strong> n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"La planta de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"Il piano della aula <strong>%s</strong> non &egrave; cambiata.";
+#elif L==8	// pl
+	"Pi&eogon;trze klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"O andar da sala <strong>%s</strong> n&atilde;o mudou.";
+#endif
+
+const char *Txt_The_floor_of_room_X_is_now_Y =	// Warning: it is very important to include %s and %d in the following sentences
+#if   L==1	// ca
+	"La planta de la sala <strong>%s</strong> ara &eacute;s <strong>%d</strong>.";
+#elif L==2	// de
+	"Der Stock des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%d</strong>.";
+#elif L==3	// en
+	"The floor of room <strong>%s</strong> is now <strong>%d</strong>.";
+#elif L==4	// es
+	"La planta de la sala <strong>%s</strong> ahora es <strong>%d</strong>.";
+#elif L==5	// fr
+	"L'&eacute;tage de la salle <strong>%s</strong> est maintenant de <strong>%d</strong>.";
+#elif L==6	// gn
+	"La planta de la sala <strong>%s</strong> ahora es <strong>%d</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Il piano della aula <strong>%s</strong> &egrave; ora <strong>%d</strong>.";
+#elif L==8	// pl
+	"Pi&eogon;trze klasy <strong>%s</strong> wynosi teraz <strong>%d</strong>.";
+#elif L==9	// pt
+	"O andar da sala <strong>%s</strong> &eacute; agora <strong>%d</strong>.";
+#endif
+
 const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"Se ha creado la carpeta <strong>%s</strong> dentro de la carpeta <strong>%s</strong>.";	// Necessita traduccio
@@ -46679,66 +46805,6 @@ const char *Txt_The_location_of_the_building_X_has_not_changed =	// Warning: it 
 	" nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o do edif&iacute;cio <strong>%s</strong>"
-	" n&atilde;o foi alterada.";
-#endif
-
-const char *Txt_The_location_of_the_room_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1	// ca
-	"La ubicaci&oacute; de la sala <strong>%s</strong>"
-	" ha canviat a <strong>%s</strong>.";
-#elif L==2	// de
-	"Der Standort des Raum <strong>%s</strong>"
-	" wurde in <strong>%s</strong> ge&auml;ndert.";
-#elif L==3	// en
-	"The location of the room <strong>%s</strong>"
-	" has changed to <strong>%s</strong>.";
-#elif L==4	// es
-	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
-	" ha cambiado a <strong>%s</strong>.";
-#elif L==5	// fr
-	"L'emplacement de la salle <strong>%s</strong>"
-	" a &eacute;t&eacute; remplac&eacute; par <strong>%s</strong>.";
-#elif L==6	// gn
-	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
-	" ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"La posizione della aula <strong>%s</strong>"
-	" &egrave; cambiata in <strong>%s</strong>.";
-#elif L==8	// pl
-	"Lokalizacja klasy <strong>%s</strong>"
-	" zmieni&lstrok;a si&eogon; na <strong>%s</strong>.";
-#elif L==9	// pt
-	"A localiza&ccedil;&atilde;o da sala <strong>%s</strong>"
-	" mudou para <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_location_of_the_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La ubicaci&oacute; de la sala <strong>%s</strong>"
-	" no ha canviat.";
-#elif L==2	// de
-	"Der Standort des Raum <strong>%s</strong>"
-	" hat sich nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The location of the room <strong>%s</strong>"
-	" has not changed.";
-#elif L==4	// es
-	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
-	" no ha cambiado.";
-#elif L==5	// fr
-	"L'emplacement de la salle <strong>%s</strong>"
-	" n'a pas chang&eacute;.";
-#elif L==6	// gn
-	"La ubicaci&oacute;n de la sala <strong>%s</strong>"
-	" no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"La posizione della aula <strong>%s</strong>"
-	" non &egrave; cambiata.";
-#elif L==8	// pl
-	"Lokalizacja klasy <strong>%s</strong>"
-	" nie uleg&lstrok;a zmianie.";
-#elif L==9	// pt
-	"A localiza&ccedil;&atilde;o da sala <strong>%s</strong>"
 	" n&atilde;o foi alterada.";
 #endif
 

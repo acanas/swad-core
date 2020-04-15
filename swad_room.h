@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_building.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -43,30 +44,29 @@
 #define Roo_UNLIMITED_CAPACITY	INT_MAX	// This number can be stored in database as an integer...
 					// ...and means that a room has no limited capacity
 
-#define Roo_MAX_CHARS_LOCATION	(128 - 1)	// 127
-#define Roo_MAX_BYTES_LOCATION	((Roo_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 struct Roo_Room
   {
-   long RooCod;
-   long CtrCod;
-   long BldCod;
-   int Floor;
-   char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Roo_MAX_BYTES_FULL_NAME + 1];
-   unsigned Capacity;				// Seating capacity (maximum number of people that fit in the room)
-   char Location[Roo_MAX_BYTES_LOCATION + 1];	// Examples: Ground floor, first floor, basement
+   long RooCod;						// Room code
+   long CtrCod;						// Centre code
+   long BldCod;						// Building code
+   char BldShrtName[Bld_MAX_BYTES_SHRT_NAME + 1];	// Building short name
+   int  Floor;						// Room floor
+   char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];		// Room short name
+   char FullName[Roo_MAX_BYTES_FULL_NAME + 1];		// Room full name
+   unsigned Capacity;		// Room seating capacity
+				// (maximum people who fit in the room)
   };
 
-#define Roo_NUM_ORDERS 4
+#define Roo_NUM_ORDERS 5
 typedef enum
   {
-   Roo_ORDER_BY_SHRT_NAME = 0,
-   Roo_ORDER_BY_FULL_NAME = 1,
-   Roo_ORDER_BY_CAPACITY  = 2,
-   Roo_ORDER_BY_LOCATION  = 3,
+   Roo_ORDER_BY_BUILDING  = 0,
+   Roo_ORDER_BY_FLOOR     = 1,
+   Roo_ORDER_BY_SHRT_NAME = 2,
+   Roo_ORDER_BY_FULL_NAME = 3,
+   Roo_ORDER_BY_CAPACITY  = 4,
   } Roo_Order_t;
-#define Roo_ORDER_DEFAULT Roo_ORDER_BY_LOCATION
+#define Roo_ORDER_DEFAULT Roo_ORDER_BY_BUILDING
 
 /***** Get all data or only short name *****/
 typedef enum
@@ -97,7 +97,6 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms);
 
 void Roo_GetListRoomsInThisCtr (void);
 
-void Roo_GetDataOfRoomByCod (struct Roo_Room *Roo);
 long Roo_GetParamRooCod (void);
 
 void Roo_RemoveRoom (void);
@@ -107,7 +106,6 @@ void Roo_ChangeFloor (void);
 void Roo_RenameRoomShort (void);
 void Roo_RenameRoomFull (void);
 void Roo_ChangeCapacity (void);
-void Roo_ChangeRoomLocation (void);
 void Roo_ContEditAfterChgRoom (void);
 
 void Roo_RecFormNewRoom (void);

@@ -4514,27 +4514,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActRenRooLoc] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Change location of a room"
-#elif L==4	// es
-	"Cambiar ubicaci&oacute;n de una sala"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
 	[ActSeeDegInf] =
 #if   L==1	// ca
 	""			// Necessita traducció

@@ -344,34 +344,33 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRenRooSho		(ActRenHld + 45)
 #define ActRenRooFul		(ActRenHld + 46)
 #define ActChgRooMaxUsr		(ActRenHld + 47)
-#define ActRenRooLoc		(ActRenHld + 48)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActSeeDegInf		(ActRenRooLoc +  1)
-#define ActSeeCrs		(ActRenRooLoc +  2)
+#define ActSeeDegInf		(ActChgRooMaxUsr +  1)
+#define ActSeeCrs		(ActChgRooMaxUsr +  2)
 
 // Secondary actions
-#define ActPrnDegInf		(ActRenRooLoc +  3)
-#define ActChgDegCtrCfg		(ActRenRooLoc +  4)
-#define ActRenDegShoCfg		(ActRenRooLoc +  5)
-#define ActRenDegFulCfg		(ActRenRooLoc +  6)
-#define ActChgDegWWWCfg		(ActRenRooLoc +  7)
-#define ActReqDegLog		(ActRenRooLoc +  8)
-#define ActRecDegLog		(ActRenRooLoc +  9)
-#define ActRemDegLog		(ActRenRooLoc + 10)
+#define ActPrnDegInf		(ActChgRooMaxUsr +  3)
+#define ActChgDegCtrCfg		(ActChgRooMaxUsr +  4)
+#define ActRenDegShoCfg		(ActChgRooMaxUsr +  5)
+#define ActRenDegFulCfg		(ActChgRooMaxUsr +  6)
+#define ActChgDegWWWCfg		(ActChgRooMaxUsr +  7)
+#define ActReqDegLog		(ActChgRooMaxUsr +  8)
+#define ActRecDegLog		(ActChgRooMaxUsr +  9)
+#define ActRemDegLog		(ActChgRooMaxUsr + 10)
 
-#define ActEdiCrs		(ActRenRooLoc + 11)
-#define ActReqCrs		(ActRenRooLoc + 12)
-#define ActNewCrs		(ActRenRooLoc + 13)
-#define ActRemCrs		(ActRenRooLoc + 14)
-#define ActChgInsCrsCod		(ActRenRooLoc + 15)
-#define ActChgCrsYea		(ActRenRooLoc + 16)
-#define ActRenCrsSho		(ActRenRooLoc + 17)
-#define ActRenCrsFul		(ActRenRooLoc + 18)
-#define ActChgCrsSta		(ActRenRooLoc + 19)
+#define ActEdiCrs		(ActChgRooMaxUsr + 11)
+#define ActReqCrs		(ActChgRooMaxUsr + 12)
+#define ActNewCrs		(ActChgRooMaxUsr + 13)
+#define ActRemCrs		(ActChgRooMaxUsr + 14)
+#define ActChgInsCrsCod		(ActChgRooMaxUsr + 15)
+#define ActChgCrsYea		(ActChgRooMaxUsr + 16)
+#define ActRenCrsSho		(ActChgRooMaxUsr + 17)
+#define ActRenCrsFul		(ActChgRooMaxUsr + 18)
+#define ActChgCrsSta		(ActChgRooMaxUsr + 19)
 
 /*****************************************************************************/
 /******************************** Course tab *********************************/

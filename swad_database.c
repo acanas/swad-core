@@ -2364,9 +2364,8 @@ mysql> DESCRIBE rooms;
 | ShortName | varchar(511)  | NO   |     | NULL    |                |
 | FullName  | varchar(2047) | NO   |     | NULL    |                |
 | Capacity  | int(11)       | NO   |     | NULL    |                |
-| Location  | varchar(2047) | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rooms ("
 			"RooCod INT NOT NULL AUTO_INCREMENT,"
@@ -2376,7 +2375,6 @@ mysql> DESCRIBE rooms;
 			"ShortName VARCHAR(511) NOT NULL,"	// Roo_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_FULL_NAME
 			"Capacity INT NOT NULL,"
-			"Location VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_LOCATION
 		   "UNIQUE INDEX(RooCod),"
 		   "INDEX(CtrCod,BldCod,Floor))");
 
