@@ -49,7 +49,9 @@
 struct Roo_Room
   {
    long RooCod;
-   long InsCod;
+   long CtrCod;
+   long BldCod;
+   int Floor;
    char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Roo_MAX_BYTES_FULL_NAME + 1];
    unsigned Capacity;				// Seating capacity (maximum number of people that fit in the room)
@@ -100,6 +102,8 @@ long Roo_GetParamRooCod (void);
 
 void Roo_RemoveRoom (void);
 void Roo_RemoveAllRoomsInCtr (long CtrCod);
+void Roo_ChangeBuilding (void);
+void Roo_ChangeFloor (void);
 void Roo_RenameRoomShort (void);
 void Roo_RenameRoomFull (void);
 void Roo_ChangeCapacity (void);

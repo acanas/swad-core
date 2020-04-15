@@ -1135,12 +1135,14 @@ CREATE TABLE IF NOT EXISTS projects (
 CREATE TABLE IF NOT EXISTS rooms (
 	RooCod INT NOT NULL AUTO_INCREMENT,
 	CtrCod INT NOT NULL,
+	BldCod INT NOT NULL DEFAULT -1,
+	Floor INT NOT NULL DEFAULT 0,
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
 	Capacity INT NOT NULL,
 	Location VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(RooCod),
-	INDEX(CtrCod));
+	INDEX(CtrCod,BldCod,Floor));
 --
 -- Table sessions: stores the information of open sessions
 --

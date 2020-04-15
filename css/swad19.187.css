@@ -1401,6 +1401,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:60px;
 	}
 
+/***************************** Buildings and rooms ***************************/
+.BLD_SEL
+	{
+	width:80px;
+	}
+
 /*********************************** Month ***********************************/
 .CALENDAR
 	{
@@ -4072,6 +4078,11 @@ a.PAG:hover, .PAG_CUR
 	{
 	box-sizing:border-box;
 	width:180px;
+	}
+.INPUT_LONG
+	{
+	box-sizing:border-box;
+	width:60px;
 	}
 .INPUT_WWW_NARROW
 	{

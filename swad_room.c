@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_building.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -68,7 +69,10 @@ static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
 
 static void Roo_EditRoomsInternal (void);
 
-static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms);
+static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
+                                     const struct Roo_Rooms *Rooms);
+static void Roo_PutSelectorBuilding (long BldCod,
+                                     const struct Bld_Buildings *Buildings);
 static void Roo_PutParamRooCod (long RooCod);
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -77,7 +81,7 @@ static void Roo_UpdateRoomNameDB (long RooCod,const char *FieldName,const char *
 
 static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
 
-static void Roo_PutFormToCreateRoom (void);
+static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings);
 static void Roo_PutHeadRooms (void);
 static void Roo_CreateRoom (struct Roo_Room *Room);
 
@@ -261,12 +265,15 @@ static void Roo_EditRoomsInternal (void)
   {
    extern const char *Hlp_CENTRE_Rooms_edit;
    extern const char *Txt_Rooms;
+   struct Bld_Buildings Buildings;
    struct Roo_Rooms Rooms;
 
-   /***** Reset rooms context *****/
+   /***** Reset context *****/
+   Bld_ResetBuildings (&Buildings);
    Roo_ResetRooms (&Rooms);
 
-   /***** Get list of rooms *****/
+   /***** Get lists of buildings and rooms *****/
+   Bld_GetListBuildings (&Buildings,Roo_ALL_DATA);
    Roo_GetListRooms (&Rooms,Roo_ALL_DATA);
 
    /***** Begin box *****/
@@ -275,17 +282,18 @@ static void Roo_EditRoomsInternal (void)
                  Hlp_CENTRE_Rooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new room *****/
-   Roo_PutFormToCreateRoom ();
+   Roo_PutFormToCreateRoom (&Buildings);
 
    /***** Forms to edit current rooms *****/
    if (Rooms.Num)
-      Roo_ListRoomsForEdition (&Rooms);
+      Roo_ListRoomsForEdition (&Buildings,&Rooms);
 
    /***** End box *****/
    Box_BoxEnd ();
 
-   /***** Free list of rooms *****/
+   /***** Free lists of rooms and buildings *****/
    Roo_FreeListRooms (&Rooms);
+   Bld_FreeListBuildings (&Buildings);
   }
 
 /*****************************************************************************/
@@ -337,11 +345,13 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      {
       case Roo_ALL_DATA:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT RooCod,"
-					  "ShortName,"
-					  "FullName,"
-					  "Capacity,"
-					  "Location"
+				   "SELECT RooCod,"	// row[0]
+					  "ShortName,"	// row[1]
+	                           	  "BldCod,"	// row[2]
+					  "Floor,"	// row[3]
+					  "FullName,"	// row[4]
+					  "Capacity,"	// row[5]
+					  "Location"	// row[6]
 				   " FROM rooms"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY %s",
@@ -351,8 +361,8 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
       case Roo_ONLY_SHRT_NAME:
       default:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT RooCod,"
-					  "ShortName"
+				   "SELECT RooCod,"	// row[0]
+					  "ShortName"	// row[1]
 				   " FROM rooms"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY ShortName",
@@ -367,8 +377,8 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 
       /***** Create list with courses in centre *****/
       if ((Rooms->Lst = (struct Roo_Room *)
-	                     calloc (NumRows,
-	                             sizeof (struct Roo_Room))) == NULL)
+		        calloc (NumRows,
+			        sizeof (struct Roo_Room))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the rooms *****/
@@ -391,16 +401,22 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 
          if (WhichData == Roo_ALL_DATA)
            {
-	    /* Get the full name of the room (row[2]) */
-	    Str_Copy (Room->FullName,row[2],
-		      Roo_MAX_BYTES_FULL_NAME);
+	    /* Get building code (row[2]) */
+	    Room->BldCod = Str_ConvertStrCodToLongCod (row[2]);
 
-	    /* Get seating capacity in this room (row[3]) */
-	    if (sscanf (row[3],"%u",&Room->Capacity) != 1)
-	       Room->Capacity = Roo_UNLIMITED_CAPACITY;
+	    /* Get floor (row[3]) */
+	    Room->Floor = Str_ConvertStrCodToLongCod (row[3]);
 
 	    /* Get the full name of the room (row[4]) */
-	    Str_Copy (Room->Location,row[4],
+	    Str_Copy (Room->FullName,row[4],
+		      Roo_MAX_BYTES_FULL_NAME);
+
+	    /* Get seating capacity in this room (row[5]) */
+	    if (sscanf (row[5],"%u",&Room->Capacity) != 1)
+	       Room->Capacity = Roo_UNLIMITED_CAPACITY;
+
+	    /* Get the full name of the room (row[6]) */
+	    Str_Copy (Room->Location,row[6],
 		      Roo_MAX_BYTES_LOCATION);
            }
         }
@@ -433,10 +449,12 @@ void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
      {
       /***** Get data of a room from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a room",
-			        "SELECT ShortName,"
-				       "FullName,"
-				       "Capacity,"
-				       "Location"
+			        "SELECT BldCod,"	// row[0]
+			               "Floor,"		// row[1]
+			               "ShortName,"	// row[2]
+				       "FullName,"	// row[3]
+				       "Capacity,"	// row[4]
+				       "Location"	// row[5]
 				" FROM rooms"
 				" WHERE RooCod=%ld",
 				Room->RooCod);
@@ -447,20 +465,26 @@ void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the room (row[0]) */
-         Str_Copy (Room->ShrtName,row[0],
+         /* Get building code (row[0]) */
+         Room->BldCod = Str_ConvertStrCodToLongCod (row[0]);
+
+         /* Get floor (row[1]) */
+         Room->Floor = Str_ConvertStrCodToLongCod (row[1]);
+
+         /* Get the short name of the room (row[2]) */
+         Str_Copy (Room->ShrtName,row[2],
                    Roo_MAX_BYTES_SHRT_NAME);
 
-         /* Get the full name of the room (row[1]) */
-         Str_Copy (Room->FullName,row[1],
+         /* Get the full name of the room (row[3]) */
+         Str_Copy (Room->FullName,row[3],
                    Roo_MAX_BYTES_FULL_NAME);
 
-         /* Get seating capacity in this room (row[2]) */
-         if (sscanf (row[2],"%u",&Room->Capacity) != 1)
+         /* Get seating capacity in this room (row[4]) */
+         if (sscanf (row[4],"%u",&Room->Capacity) != 1)
             Room->Capacity = Roo_UNLIMITED_CAPACITY;
 
-         /* Get the location of the room (row[3]) */
-         Str_Copy (Room->Location,row[3],
+         /* Get the location of the room (row[5]) */
+         Str_Copy (Room->Location,row[5],
                    Roo_MAX_BYTES_LOCATION);
         }
 
@@ -488,7 +512,8 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 /*************************** List all the rooms ******************************/
 /*****************************************************************************/
 
-static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms)
+static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
+                                     const struct Roo_Rooms *Rooms)
   {
    unsigned NumRoom;
    struct Roo_Room *Room;
@@ -518,6 +543,23 @@ static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms)
       /* Room code */
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Long (Room->RooCod);
+      HTM_TD_End ();
+
+      /* Building */
+      HTM_TD_Begin ("class=\"CM\"");
+      Frm_StartForm (ActChgRooBld);
+      Roo_PutParamRooCod (Room->RooCod);
+      Roo_PutSelectorBuilding (Room->BldCod,Buildings);
+      Frm_EndForm ();
+      HTM_TD_End ();
+
+      /* Floor */
+      HTM_TD_Begin ("class=\"LM\"");
+      Frm_StartForm (ActChgRooFlo);
+      Roo_PutParamRooCod (Room->RooCod);
+      HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,false,
+		      "class=\"INPUT_LONG\"");
+      Frm_EndForm ();
       HTM_TD_End ();
 
       /* Room short name */
@@ -562,6 +604,43 @@ static void Roo_ListRoomsForEdition (const struct Roo_Rooms *Rooms)
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Put building selector **************************/
+/*****************************************************************************/
+
+static void Roo_PutSelectorBuilding (long BldCod,
+                                     const struct Bld_Buildings *Buildings)
+  {
+   extern const char *Txt_No_assigned_building;
+   extern const char *Txt_Another_building;
+   unsigned NumBld;
+
+   /***** Begin selector *****/
+   HTM_SELECT_Begin (true,
+		     "name=\"BldCod\" class=\"BLD_SEL\"");
+
+   /***** Option for no assigned building *****/
+   HTM_OPTION (HTM_Type_STRING,"-1",
+	       BldCod < 0,false,
+	       "%s",Txt_No_assigned_building);
+
+   /***** Option for another room *****/
+   HTM_OPTION (HTM_Type_STRING,"0",
+	       BldCod == 0,false,
+	       "%s",Txt_Another_building);
+
+   /***** Options for buildings *****/
+   for (NumBld = 0;
+	NumBld < Buildings->Num;
+	NumBld++)
+      HTM_OPTION (HTM_Type_LONG,&Buildings->Lst[NumBld].BldCod,
+		  Buildings->Lst[NumBld].BldCod == BldCod,false,
+		  "%s",Buildings->Lst[NumBld].ShrtName);
+
+   /***** End selector *****/
+   HTM_SELECT_End ();
   }
 
 /*****************************************************************************/
@@ -629,6 +708,101 @@ void Roo_RemoveAllRoomsInCtr (long CtrCod)
 		   "DELETE FROM rooms"
                    " WHERE CtrCod=%ld",
 		   CtrCod);
+  }
+
+/*****************************************************************************/
+/********************* Change sitting capacity of a room *********************/
+/*****************************************************************************/
+
+void Roo_ChangeBuilding (void)
+  {
+   extern const char *Txt_The_capacity_of_room_X_has_not_changed;
+   extern const char *Txt_The_capacity_of_room_X_is_now_Y;
+   long NewBldCod;
+
+   /***** Room constructor *****/
+   Roo_EditingRoomConstructor ();
+
+   /***** Get parameters from form *****/
+   /* Get the code of the room */
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of room is missing.");
+
+   /* Get the building of the room */
+   NewBldCod = Par_GetParToLong ("BldCod");
+
+   /***** Get data of the room from database *****/
+   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+
+   /***** Check if the old capacity equals the new one
+          (this happens when return is pressed without changes) *****/
+   if (NewBldCod < 0)
+      NewBldCod = -1L;
+
+   if (NewBldCod == Roo_EditingRoom->BldCod)
+      /***** Message to show no changes made *****/
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_capacity_of_room_X_has_not_changed,	// TODO: Change
+		       Roo_EditingRoom->FullName);
+   else
+     {
+      /***** Update the table of rooms changing the old building to the new *****/
+      DB_QueryUPDATE ("can not update the capacity of a room",
+		      "UPDATE rooms SET BldCod=%ld WHERE RooCod=%ld",
+                      NewBldCod,Roo_EditingRoom->RooCod);
+      Roo_EditingRoom->BldCod = NewBldCod;
+
+      /***** Message to show the change made *****/
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_capacity_of_room_X_is_now_Y,		// TODO: Change
+		       Roo_EditingRoom->FullName,0);
+     }
+  }
+
+/*****************************************************************************/
+/********************* Change sitting capacity of a room *********************/
+/*****************************************************************************/
+
+void Roo_ChangeFloor (void)
+  {
+   extern const char *Txt_The_capacity_of_room_X_has_not_changed;
+   extern const char *Txt_The_capacity_of_room_X_is_now_Y;
+   int NewFloor;
+
+   /***** Room constructor *****/
+   Roo_EditingRoomConstructor ();
+
+   /***** Get parameters from form *****/
+   /* Get the code of the room */
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of room is missing.");
+
+   /* Get the floor of the room */
+   NewFloor = Par_GetParToLong ("Floor");
+
+   /***** Get data of the room from database *****/
+   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+
+   /***** Check if the old capacity equals the new one
+          (this happens when return is pressed without changes) *****/
+   if (NewFloor == Roo_EditingRoom->Floor)
+      /***** Message to show no changes made *****/
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_capacity_of_room_X_has_not_changed,	// TODO: Change
+		       Roo_EditingRoom->FullName);
+   else
+     {
+      /***** Update the table of rooms changing the old capacity to the new *****/
+      DB_QueryUPDATE ("can not update the capacity of a room",
+		      "UPDATE rooms SET Floor=%d WHERE RooCod=%ld",
+                      NewFloor,Roo_EditingRoom->RooCod);
+      Roo_EditingRoom->Floor = NewFloor;
+
+      /***** Message to show the change made *****/
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_capacity_of_room_X_is_now_Y,		// TODO: Change
+		       Roo_EditingRoom->FullName,0);
+     }
   }
 
 /*****************************************************************************/
@@ -794,14 +968,14 @@ void Roo_ChangeCapacity (void)
 
    /***** Check if the old capacity equals the new one
           (this happens when return is pressed without changes) *****/
-   if (Roo_EditingRoom->Capacity == NewCapacity)
+   if (NewCapacity == Roo_EditingRoom->Capacity)
       /***** Message to show no changes made *****/
       Ale_CreateAlert (Ale_INFO,NULL,
 	               Txt_The_capacity_of_room_X_has_not_changed,
 		       Roo_EditingRoom->FullName);
    else
      {
-      /***** Update the table of groups changing the old capacity to the new *****/
+      /***** Update the table of rooms changing the old capacity to the new *****/
       DB_QueryUPDATE ("can not update the capacity of a room",
 		      "UPDATE rooms SET Capacity=%u WHERE RooCod=%ld",
                       NewCapacity,Roo_EditingRoom->RooCod);
@@ -859,7 +1033,7 @@ void Roo_ChangeRoomLocation (void)
 
    /***** Check if old and new locations are the same
 	  (this happens when return is pressed without changes) *****/
-   if (strcmp (Roo_EditingRoom->Location,NewLocation))	// Different locations
+   if (strcmp (NewLocation,Roo_EditingRoom->Location))	// Different locations
      {
       /* Update the table changing old name by new name */
       Roo_UpdateRoomNameDB (Roo_EditingRoom->RooCod,"Location",NewLocation);
@@ -897,7 +1071,7 @@ void Roo_ContEditAfterChgRoom (void)
 /********************** Put a form to create a new room **********************/
 /*****************************************************************************/
 
-static void Roo_PutFormToCreateRoom (void)
+static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
    extern const char *Txt_New_room;
    extern const char *Txt_Create_room;
@@ -922,6 +1096,17 @@ static void Roo_PutFormToCreateRoom (void)
 
    /***** Room code *****/
    HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
+
+   /***** Building *****/
+   HTM_TD_Begin ("class=\"LM\"");
+   Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings);
+   HTM_TD_End ();
+
+   /***** Floor *****/
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,false,
+		   "class=\"INPUT_LONG\"");
    HTM_TD_End ();
 
    /***** Room short name *****/
@@ -965,6 +1150,8 @@ static void Roo_PutFormToCreateRoom (void)
 static void Roo_PutHeadRooms (void)
   {
    extern const char *Txt_Code;
+   extern const char *Txt_Building;
+   extern const char *Txt_Floor;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_Capacity_OF_A_ROOM;
@@ -974,6 +1161,8 @@ static void Roo_PutHeadRooms (void)
 
    HTM_TH (1,1,"BM",NULL);
    HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH (1,1,"LM",Txt_Building);
+   HTM_TH (1,1,"LM",Txt_Floor);
    HTM_TH (1,1,"LM",Txt_Short_name);
    HTM_TH (1,1,"LM",Txt_Full_name);
    HTM_TH (1,1,"LM",Txt_Capacity_OF_A_ROOM);
@@ -1069,7 +1258,9 @@ static void Roo_EditingRoomConstructor (void)
 
    /***** Reset room *****/
    Roo_EditingRoom->RooCod      = -1L;
-   Roo_EditingRoom->InsCod      = -1L;
+   Roo_EditingRoom->CtrCod      = -1L;
+   Roo_EditingRoom->BldCod      = -1L;
+   Roo_EditingRoom->Floor       = 0;
    Roo_EditingRoom->ShrtName[0] = '\0';
    Roo_EditingRoom->FullName[0] = '\0';
    Roo_EditingRoom->Capacity    = Roo_UNLIMITED_CAPACITY;

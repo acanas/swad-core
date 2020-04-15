@@ -1633,6 +1633,27 @@ const char *Txt_Announcements_of_exams =
 	"Chamadas para exames";
 #endif
 
+const char *Txt_Another_building =	// TODO: Translate
+#if   L==1	// ca
+	"Una altra sala";
+#elif L==2	// de
+	"Eine weitere Raum";
+#elif L==3	// en
+	"Another room";
+#elif L==4	// es
+	"Otra sala";
+#elif L==5	// fr
+	"Un autre salle";
+#elif L==6	// gn
+	"Otra sala";	// Okoteve traducción
+#elif L==7	// it
+	"Un'altra aula";
+#elif L==8	// pl
+	"Kolejna klasa";
+#elif L==9	// pt
+	"Outra sala";
+#endif
+
 const char *Txt_Another_centre =
 #if   L==1	// ca
 	"Un altre centre";
@@ -12611,6 +12632,27 @@ const char *Txt_First_name =
 	"Imi&eogon;";
 #elif L==9	// pt
 	"Nome";
+#endif
+
+const char *Txt_Floor =
+#if   L==1	// ca
+	"Planta";
+#elif L==2	// de
+	"Stock";
+#elif L==3	// en
+	"Floor";
+#elif L==4	// es
+	"Planta";
+#elif L==5	// fr
+	"&Eacute;tage";
+#elif L==6	// gn
+	"Planta";	// Okoteve traducción
+#elif L==7	// it
+	"Piano";
+#elif L==8	// pl
+	"Pi&eogon;trze";
+#elif L==9	// pt
+	"Andar";
 #endif
 
 const char *Txt_Folder =
@@ -25300,6 +25342,27 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 	"Brak ogloszen egzamin&oacute;w <strong>%s</strong>.";
 #elif L==9	// pt
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
+#endif
+
+const char *Txt_No_assigned_building =	// TODO: Translate
+#if   L==1	// ca
+	"Sense sala assignada";
+#elif L==2	// de
+	"Kein zugewiesenes Raum";
+#elif L==3	// en
+	"No assigned room";
+#elif L==4	// es
+	"Sin sala asignada";
+#elif L==5	// fr
+	"Aucune salle assign&eacute;e";
+#elif L==6	// gn
+	"Sin sala asignada";	// Okoteve traducción
+#elif L==7	// it
+	"Nessuna aula assegnata";
+#elif L==8	// pl
+	"Brak przydzielonej sali lekcyjnej";
+#elif L==9	// pt
+	"Nenhuma sala atribu&iacute;da";
 #endif
 
 const char *Txt_No_assigned_room =

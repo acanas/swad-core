@@ -4409,6 +4409,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActChgRooBld] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Change building of a room"
+#elif L==4	// es
+	"Cambiar edificio de una sala"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActChgRooMaxUsr] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Change number of users of a room"
+#elif L==4	// es
+	"Cambiar n&uacute;mero de usuarios de una sala"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActRenRooSho] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -4451,15 +4493,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActChgRooMaxUsr] =
+	[ActChgRooFlo] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change number of usuarios in a room"
+	"Change floor of a room"
 #elif L==4	// es
-	"Cambiar n&uacute;mero de usuarios de una sala"
+	"Cambiar planta de una sala"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

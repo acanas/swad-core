@@ -2359,22 +2359,26 @@ mysql> DESCRIBE rooms;
 +-----------+---------------+------+-----+---------+----------------+
 | RooCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CtrCod    | int(11)       | NO   | MUL | NULL    |                |
+| BldCod    | int(11)       | NO   |     | -1      |                |
+| Floor     | int(11)       | NO   |     | 0       |                |
 | ShortName | varchar(511)  | NO   |     | NULL    |                |
 | FullName  | varchar(2047) | NO   |     | NULL    |                |
 | Capacity  | int(11)       | NO   |     | NULL    |                |
 | Location  | varchar(2047) | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rooms ("
 			"RooCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
+	                "BldCod INT NOT NULL DEFAULT -1,"
+	                "Floor INT NOT NULL DEFAULT 0,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Roo_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_FULL_NAME
 			"Capacity INT NOT NULL,"
 			"Location VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_LOCATION
 		   "UNIQUE INDEX(RooCod),"
-		   "INDEX(CtrCod))");
+		   "INDEX(CtrCod,BldCod,Floor))");
 
    /***** Table sessions *****/
 /*

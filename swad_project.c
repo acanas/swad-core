@@ -3720,7 +3720,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,false,
-		     NULL);
+		   NULL);
    HTM_TD_End ();
 
    HTM_TR_End ();

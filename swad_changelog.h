@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.186.1 (2020-04-14)"
-#define CSS_FILE		"swad19.146.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.187 (2020-04-15)"
+#define CSS_FILE		"swad19.187.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
  *
@@ -547,6 +547,12 @@ Función API getLocations
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
+
+	Version 19.187:   Apr 15, 2020	New columns in rooms for building and floor. Not finished. (287671 lines)
+					3 changes necessary in database:
+ALTER TABLE rooms ADD COLUMN BldCod INT NOT NULL DEFAULT -1 AFTER CtrCod;
+ALTER TABLE rooms ADD COLUMN Floor INT NOT NULL DEFAULT 0 AFTER BldCod;
+ALTER TABLE rooms DROP INDEX CtrCod,ADD INDEX(CtrCod,BldCod,Floor);
 
 	Version 19.186.1: Apr 14, 2020	Fixed bug in edition of test questions. (287379 lines)
 	Version 19.186:   Apr 14, 2020	New module swad_building for buildings in a centre. (287372 lines)

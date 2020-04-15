@@ -1486,7 +1486,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    unsigned NumGrpTyp;
    unsigned NumTipGrpAux;
    unsigned NumGrpThisType;
-   unsigned NumCla;
+   unsigned NumRoo;
    struct GroupType *GrpTyp;
    struct GroupType *GrpTypAux;
    struct Group *Grp;
@@ -1601,12 +1601,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     "%s",Txt_Another_room);
 
 	 /* Options for rooms */
-	 for (NumCla = 0;
-	      NumCla < Rooms->Num;
-	      NumCla++)
-	    HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumCla].RooCod,
-			Rooms->Lst[NumCla].RooCod == Grp->Room.RooCod,false,
-			"%s",Rooms->Lst[NumCla].ShrtName);
+	 for (NumRoo = 0;
+	      NumRoo < Rooms->Num;
+	      NumRoo++)
+	    HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumRoo].RooCod,
+			Rooms->Lst[NumRoo].RooCod == Grp->Room.RooCod,false,
+			"%s",Rooms->Lst[NumRoo].ShrtName);
 
 	 /* End selector */
 	 HTM_SELECT_End ();
@@ -2585,7 +2585,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    extern const char *Txt_Another_room;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
-   unsigned NumCla;
+   unsigned NumRoo;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -2657,12 +2657,12 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       "%s",Txt_Another_room);
 
    /* Options for rooms */
-   for (NumCla = 0;
-	NumCla < Rooms->Num;
-	NumCla++)
-      HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumCla].RooCod,
-		  Rooms->Lst[NumCla].RooCod == Gbl.Crs.Grps.RooCod,false,
-		  "%s",Rooms->Lst[NumCla].ShrtName);
+   for (NumRoo = 0;
+	NumRoo < Rooms->Num;
+	NumRoo++)
+      HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumRoo].RooCod,
+		  Rooms->Lst[NumRoo].RooCod == Gbl.Crs.Grps.RooCod,false,
+		  "%s",Rooms->Lst[NumRoo].ShrtName);
 
    /* End selector */
    HTM_SELECT_End ();
