@@ -155,7 +155,7 @@ struct Tst_Stats
 
 void Tst_RequestTest (void);
 void Tst_ShowNewTest (void);
-void Tst_RequestAssessTest (void);
+void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);

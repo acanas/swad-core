@@ -56,14 +56,6 @@
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Tst_NUM_STATUS 2
-typedef enum
-  {
-   Tst_STATUS_SHOWN_BUT_NOT_ASSESSED	= 0,
-   Tst_STATUS_ASSESSED			= 1,
-   Tst_STATUS_ERROR			= 2,
-  } Tst_Status_t;
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -77,6 +69,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void TstExa_ResetExamExceptExaCod (struct TstExa_Exam *Exam);
 
 static void TstExa_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstExa_Exam *Exam,
@@ -164,12 +158,18 @@ static void TstExa_ShowTagsPresentInAnExam (long ExaCod);
 
 void TstExa_ResetExam (struct TstExa_Exam *Exam)
   {
-   Exam->ExaCod                  = -1L;
+   Exam->ExaCod = -1L;
+   TstExa_ResetExamExceptExaCod (Exam);
+  }
+
+static void TstExa_ResetExamExceptExaCod (struct TstExa_Exam *Exam)
+  {
    Exam->TimeUTC[Dat_START_TIME] =
    Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Exam->NumQsts                 =
    Exam->NumQstsNotBlank         = 0;
-   Exam->AllowTeachers           = false;
+   Exam->Sent                    = false;	// After creating an exam, it's not sent
+   Exam->AllowTeachers           = false;	// Teachers can't seen the exam if student don't allow it
    Exam->Score                   = 0.0;
   }
 
@@ -183,9 +183,11 @@ void TstExa_CreateExamInDB (struct TstExa_Exam *Exam)
    Exam->ExaCod =
    DB_QueryINSERTandReturnCode ("can not create new test exam",
 				"INSERT INTO tst_exams"
-				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,AllowTeachers,Score)"
+				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,"
+				"Sent,AllowTeachers,Score)"
 				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),%u,'N',0)",
+				" (%ld,%ld,NOW(),NOW(),%u,"
+				"'N','N',0)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Exam->NumQsts);
@@ -203,11 +205,14 @@ void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam)
 		   "UPDATE tst_exams"
 	           " SET EndTime=NOW(),"
 	                "NumQstsNotBlank=%u,"
+		        "Sent='%c',"
 		        "AllowTeachers='%c',"
 	                "Score='%.15lg'"
 	           " WHERE ExaCod=%ld"
 	           " AND CrsCod=%ld AND UsrCod=%ld",	// Extra checks
 		   Exam->NumQstsNotBlank,
+		   Exam->Sent ? 'Y' :
+			        'N',
 		   Exam->AllowTeachers ? 'Y' :
 			                 'N',
 		   Exam->Score,
@@ -395,7 +400,6 @@ void TstExa_ComputeScoresAndStoreExamQuestions (struct TstExa_Exam *Exam,
       Exam->Score += Exam->Questions[NumQst].Score;
       if (Exam->Questions[NumQst].AnswerIsNotBlank)
 	 Exam->NumQstsNotBlank++;
-
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
@@ -1634,8 +1638,12 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
    double TotalScoreOfAllTests = 0.0;
    unsigned NumExamsVisibleByTchs = 0;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   bool ICanViewTest;
-   bool ICanViewScore;
+   struct
+     {
+      bool NumQsts;
+      bool Score;
+      bool Exam;
+     } ICanView;
    char *ClassDat;
 
    /***** Make database query *****/
@@ -1651,8 +1659,9 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 			             "UNIX_TIMESTAMP(EndTime),"		// row[2]
 			             "NumQsts,"				// row[3]
 			             "NumQstsNotBlank,"			// row[4]
-			             "AllowTeachers,"			// row[5]
-			             "Score"				// row[6]
+			             "Sent,"				// row[5]
+			             "AllowTeachers,"			// row[6]
+			             "Score"				// row[7]
 			      " FROM tst_exams"
 			      " WHERE CrsCod=%ld AND UsrCod=%ld"
 			      " AND EndTime>=FROM_UNIXTIME(%ld)"
@@ -1681,34 +1690,41 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 	 if ((Exam.ExaCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
 
-	 /* Get if teachers are allowed to see this test exams (row[5]) */
-	 Exam.AllowTeachers = (row[5][0] == 'Y');
+	 /* Get if exam has been sent (row[5]) */
+	 Exam.Sent = (row[5][0] == 'Y');
+
+	 /* Get if teachers are allowed to see this test exam (row[6]) */
+	 Exam.AllowTeachers = (row[6][0] == 'Y');
 	 ClassDat = Exam.AllowTeachers ? "DAT" :
-	                                   "DAT_LIGHT";
+	                                 "DAT_LIGHT";
 
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       ICanViewTest  = ItsMe;
-	       ICanViewScore = ItsMe &&
-		               TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
+	       ICanView.NumQsts  = Exam.Sent && ItsMe;
+	       ICanView.Score    = Exam.Sent && ItsMe &&
+		                   TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
+	       ICanView.Exam     = Exam.Sent && ItsMe;
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_DEG_ADM:
 	    case Rol_CTR_ADM:
 	    case Rol_INS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe ||
-	                       Exam.AllowTeachers;
+	       ICanView.NumQsts  = Exam.Sent;	// If the exam has been sent,
+						// teachers can see the number of questions
+	       ICanView.Score    =
+	       ICanView.Exam     = Exam.Sent && (ItsMe || Exam.AllowTeachers);
 	       break;
 	    case Rol_SYS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = true;
+	       ICanView.NumQsts  =
+	       ICanView.Score    =
+	       ICanView.Exam     = true;
 	       break;
 	    default:
-	       ICanViewTest  =
-	       ICanViewScore = false;
+	       ICanView.NumQsts  =
+	       ICanView.Score    =
+	       ICanView.Exam     = false;
                break;
 	   }
 
@@ -1746,9 +1762,9 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 	 if (Exam.AllowTeachers)
 	    NumTotalQstsNotBlank += Exam.NumQstsNotBlank;
 
-         /* Get score (row[6]) */
+         /* Get score (row[7]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[6],"%lf",&Exam.Score) != 1)
+         if (sscanf (row[7],"%lf",&Exam.Score) != 1)
             Exam.Score = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
 	 if (Exam.AllowTeachers)
@@ -1756,25 +1772,25 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
+	 if (ICanView.NumQsts)
 	    HTM_Unsigned (Exam.NumQsts);
 	 HTM_TD_End ();
 
          /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
+	 if (ICanView.NumQsts)
 	    HTM_Unsigned (Exam.NumQstsNotBlank);
 	 HTM_TD_End ();
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Double2Decimals (Exam.Score);
 	 HTM_TD_End ();
 
          /* Write average score per question */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Double2Decimals (Exam.NumQsts ? Exam.Score /
 		                                (double) Exam.NumQsts :
 			                        0.0);
@@ -1782,15 +1798,15 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 
          /* Write grade */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
             TstExa_ComputeAndShowGrade (Exam.NumQsts,
-                                     Exam.Score,
-                                     TstExa_SCORE_MAX);
+                                        Exam.Score,
+                                        TstExa_SCORE_MAX);
 	 HTM_TD_End ();
 
 	 /* Link to show this test exam */
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewTest)
+	 if (ICanView.Exam)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
 						              ActSeeOneTstResOth);
@@ -1807,8 +1823,8 @@ static void TstExa_ShowExams (struct UsrData *UsrDat)
 
       /***** Write totals for this user *****/
       TstExa_ShowExamsSummaryRow (ItsMe,NumExamsVisibleByTchs,
-                                     NumTotalQsts,NumTotalQstsNotBlank,
-                                     TotalScoreOfAllTests);
+                                  NumTotalQsts,NumTotalQstsNotBlank,
+                                  TotalScoreOfAllTests);
      }
    else
      {
@@ -2242,8 +2258,9 @@ void TstExa_GetExamDataByExaCod (struct TstExa_Exam *Exam)
 			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
 		              "NumQsts,"			// row[3]
 		              "NumQstsNotBlank,"		// row[4]
-		              "AllowTeachers,"			// row[5]
-		              "Score"				// row[6]
+			      "Sent,"				// row[5]
+		              "AllowTeachers,"			// row[6]
+		              "Score"				// row[7]
 		       " FROM tst_exams"
 		       " WHERE ExaCod=%ld AND CrsCod=%ld",
 		       Exam->ExaCod,
@@ -2266,24 +2283,20 @@ void TstExa_GetExamDataByExaCod (struct TstExa_Exam *Exam)
       if (sscanf (row[4],"%u",&Exam->NumQstsNotBlank) != 1)
 	 Exam->NumQstsNotBlank = 0;
 
-      /* Get if teachers are allowed to see this test exam (row[5]) */
-      Exam->AllowTeachers = (row[5][0] == 'Y');
+      /* Get if exam has been sent (row[5]) */
+      Exam->Sent = (row[5][0] == 'Y');
 
-      /* Get score (row[6]) */
+      /* Get if teachers are allowed to see this test exam (row[6]) */
+      Exam->AllowTeachers = (row[6][0] == 'Y');
+
+      /* Get score (row[7]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[6],"%lf",&Exam->Score) != 1)
+      if (sscanf (row[7],"%lf",&Exam->Score) != 1)
 	 Exam->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
-     {
-      Exam->TimeUTC[Dat_START_TIME] =
-      Exam->TimeUTC[Dat_END_TIME  ] = 0;
-      Exam->NumQsts                 = 0;
-      Exam->NumQstsNotBlank         = 0;
-      Exam->AllowTeachers           = false;
-      Exam->Score                   = 0.0;
-     }
+      TstExa_ResetExamExceptExaCod (Exam);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

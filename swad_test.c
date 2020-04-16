@@ -102,14 +102,6 @@ static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Tst_NUM_STATUS 2
-typedef enum
-  {
-   Tst_STATUS_SHOWN_BUT_NOT_ASSESSED	= 0,
-   Tst_STATUS_ASSESSED			= 1,
-   Tst_STATUS_ERROR			= 2,
-  } Tst_Status_t;
-
 #define Tst_NUM_REQUEST_OR_CONFIRM 2
 typedef enum
   {
@@ -143,8 +135,6 @@ static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
 static void Tst_GetAnswersFromForm (struct TstExa_Exam *Exam);
 
 static bool Tst_CheckIfNextTstAllowed (void);
-static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
-static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
 static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
                                       unsigned NumExamsGeneratedByMe,
@@ -482,9 +472,6 @@ void Tst_ShowNewTest (void)
             /***** Show test exam to be answered *****/
             Tst_ShowTestExamToFillIt (&Exam,NumExamsGeneratedByMe,Tst_REQUEST);
 
-            /***** Set test status *****/
-            Tst_SetTstStatus (NumExamsGeneratedByMe,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
-
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
                Tst_UpdateLastAccTst (Test.NumQsts);
@@ -525,13 +512,12 @@ static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers)
   }
 
 /*****************************************************************************/
-/********************* Request the assessment of a test **********************/
+/** Receive the draft of a test exam already (total or partially) answered ***/
 /*****************************************************************************/
 
-void Tst_RequestAssessTest (void)
+void Tst_ReceiveTestDraft (void)
   {
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
-   extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
    struct TstExa_Exam Exam;
 
@@ -547,37 +533,32 @@ void Tst_RequestAssessTest (void)
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
+   /***** Get test exam from database *****/
+   TstExa_GetExamDataByExaCod (&Exam);
+
    /****** Get test status in database for this session-course-num.test *****/
-   switch (Tst_GetTstStatus (NumTst))
+   if (Exam.Sent)
+      Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
+	             NumTst);
+   else // Exam not yet sent
      {
-      case Tst_STATUS_SHOWN_BUT_NOT_ASSESSED:
-	 /***** Get test exam from database *****/
-	 TstExa_GetExamDataByExaCod (&Exam);
-	 TstExa_GetExamQuestionsFromDB (&Exam);
+      /***** Get test exam questions from database *****/
+      TstExa_GetExamQuestionsFromDB (&Exam);
 
-         /***** Get answers from form to assess a test *****/
-	 Tst_GetAnswersFromForm (&Exam);
+      /***** Get answers from form to assess a test *****/
+      Tst_GetAnswersFromForm (&Exam);
 
-	 /***** Update test exam in database *****/
-	 TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
-	                                            false);	// Don't update question score
-	 TstExa_UpdateExamInDB (&Exam);
+      /***** Update test exam in database *****/
+      TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
+						 false);	// Don't update question score
+      TstExa_UpdateExamInDB (&Exam);
 
-	 /***** Show question and button to send the test *****/
-	 /* Start alert */
-	 Ale_ShowAlert (Ale_WARNING,"Por favor, revise sus respuestas antes de enviar el examen:");	// TODO: Need translation!!!
+      /***** Show question and button to send the test *****/
+      /* Start alert */
+      Ale_ShowAlert (Ale_WARNING,"Por favor, revise sus respuestas antes de enviar el examen:");	// TODO: Need translation!!!
 
-	 /* Show the same test exam to be answered */
-	 Tst_ShowTestExamToFillIt (&Exam,NumTst,Tst_CONFIRM);
-         break;
-      case Tst_STATUS_ASSESSED:
-         Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
-                        NumTst);
-         break;
-      case Tst_STATUS_ERROR:
-         Ale_ShowAlert (Ale_WARNING,Txt_There_was_an_error_in_assessing_the_test_X,
-                        NumTst);
-         break;
+      /* Show the same test exam to be answered */
+      Tst_ShowTestExamToFillIt (&Exam,NumTst,Tst_CONFIRM);
      }
   }
 
@@ -593,7 +574,6 @@ void Tst_AssessTest (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
-   extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
    struct TstExa_Exam Exam;
 
@@ -609,73 +589,66 @@ void Tst_AssessTest (void)
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
+   /***** Get test exam from database *****/
+   TstExa_GetExamDataByExaCod (&Exam);
+
    /****** Get test status in database for this session-course-num.test *****/
-   switch (Tst_GetTstStatus (NumTst))
+   if (Exam.Sent)
+      Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
+		     NumTst);
+   else	// Exam not yet sent
      {
-      case Tst_STATUS_SHOWN_BUT_NOT_ASSESSED:
-	 /***** Get test exam from database *****/
-	 TstExa_GetExamDataByExaCod (&Exam);
-	 TstExa_GetExamQuestionsFromDB (&Exam);
+      /***** Get test exam questions from database *****/
+      TstExa_GetExamQuestionsFromDB (&Exam);
 
-	 /***** Get answers from form to assess a test *****/
-	 Tst_GetAnswersFromForm (&Exam);
+      /***** Get answers from form to assess a test *****/
+      Tst_GetAnswersFromForm (&Exam);
 
-	 /***** Get if test exam will be visible by teachers *****/
-	 Exam.AllowTeachers = Par_GetParToBool ("AllowTchs");
+      /***** Get if test exam will be visible by teachers *****/
+      Exam.Sent          = true;	// The exam has been finished and sent by student
+      Exam.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
-	 /***** Update test exam in database *****/
-	 TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
-	                                            Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
-	 TstExa_UpdateExamInDB (&Exam);
+      /***** Update test exam in database *****/
+      TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
+						 Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
+      TstExa_UpdateExamInDB (&Exam);
 
-	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Test_result,
-	               NULL,NULL,
-	               Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Ins.InsCod,
-				    Gbl.Hierarchy.Deg.DegCod,
-				    Gbl.Hierarchy.Crs.CrsCod);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Test_result,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
 
-	 /***** Header *****/
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-	   {
-	    HTM_DIV_Begin ("class=\"TEST_SUBTITLE\"");
-	    HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
-	    HTM_DIV_End ();
-	   }
+      /***** Header *****/
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	{
+	 HTM_DIV_Begin ("class=\"TEST_SUBTITLE\"");
+	 HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
+	 HTM_DIV_End ();
+	}
 
-	 /***** Write answers and solutions *****/
-	 TstExa_ShowExamAfterAssess (&Exam);
+      /***** Write answers and solutions *****/
+      TstExa_ShowExamAfterAssess (&Exam);
 
-	 /***** Write total score and grade *****/
-	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
-	   {
-	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	    HTM_TxtColonNBSP (Txt_Score);
-	    HTM_Double2Decimals (Exam.Score);
-	    HTM_BR ();
-	    HTM_TxtColonNBSP (Txt_Grade);
-	    TstExa_ComputeAndShowGrade (Exam.NumQsts,
-	                             Exam.Score,
-	                             TstExa_SCORE_MAX);
-	    HTM_DIV_End ();
-	   }
+      /***** Write total score and grade *****/
+      if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
+	{
+	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
+	 HTM_TxtColonNBSP (Txt_Score);
+	 HTM_Double2Decimals (Exam.Score);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Grade);
+	 TstExa_ComputeAndShowGrade (Exam.NumQsts,
+				     Exam.Score,
+				     TstExa_SCORE_MAX);
+	 HTM_DIV_End ();
+	}
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-
-         /***** Set test status *****/
-         Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
-         break;
-      case Tst_STATUS_ASSESSED:
-         Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
-                        NumTst);
-         break;
-      case Tst_STATUS_ERROR:
-         Ale_ShowAlert (Ale_WARNING,Txt_There_was_an_error_in_assessing_the_test_X,
-                        NumTst);
-         break;
+      /***** End box *****/
+      Box_BoxEnd ();
      }
   }
 
@@ -762,62 +735,6 @@ static bool Tst_CheckIfNextTstAllowed (void)
       return false;
      }
    return true;
-  }
-
-/*****************************************************************************/
-/****************************** Update test status ***************************/
-/*****************************************************************************/
-
-static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
-  {
-   /***** Delete old status from expired sessions *****/
-   DB_QueryDELETE ("can not remove old status of tests",
-		   "DELETE FROM tst_status"
-                   " WHERE SessionId NOT IN"
-                   " (SELECT SessionId FROM sessions)");
-
-   /***** Update database *****/
-   DB_QueryREPLACE ("can not update status of test",
-		    "REPLACE INTO tst_status"
-	            " (SessionId,CrsCod,NumTst,Status)"
-	            " VALUES"
-	            " ('%s',%ld,%u,%u)",
-		    Gbl.Session.Id,Gbl.Hierarchy.Crs.CrsCod,
-		    NumTst,(unsigned) TstStatus);
-  }
-
-/*****************************************************************************/
-/****************************** Update test status ***************************/
-/*****************************************************************************/
-
-static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned UnsignedNum;
-   Tst_Status_t TstStatus = Tst_STATUS_ERROR;
-
-   /***** Get status of test from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get status of test",
-		       "SELECT Status"		// row[0]
-		       " FROM tst_status"
-		       " WHERE SessionId='%s'"
-		       " AND CrsCod=%ld"
-		       " AND NumTst=%u",
-		       Gbl.Session.Id,Gbl.Hierarchy.Crs.CrsCod,NumTst) == 1)
-     {
-      /* Get number of hits */
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-            if (UnsignedNum < Tst_NUM_STATUS)
-               TstStatus = (Tst_Status_t) UnsignedNum;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return TstStatus;
   }
 
 /*****************************************************************************/
@@ -5968,16 +5885,11 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/******************* Remove all test exams made in a course ******************/
+/******************* Remove all test questions in a course *******************/
 /*****************************************************************************/
 
 void Tst_RemoveCrsTests (long CrsCod)
   {
-   /***** Remove tests status in the course *****/
-   DB_QueryDELETE ("can not remove status of tests of a course",
-		   "DELETE FROM tst_status WHERE CrsCod=%ld",
-		   CrsCod);
-
    /***** Remove test configuration of the course *****/
    DB_QueryDELETE ("can not remove configuration of tests of a course",
 		   "DELETE FROM tst_config WHERE CrsCod=%ld",

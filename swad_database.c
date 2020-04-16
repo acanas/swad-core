@@ -2876,10 +2876,11 @@ mysql> DESCRIBE tst_exams;
 | EndTime         | datetime      | NO   |     | NULL    |                |
 | NumQsts         | int(11)       | NO   |     | 0       |                |
 | NumQstsNotBlank | int(11)       | NO   |     | 0       |                |
+| Sent            | enum('N','Y') | NO   |     | N       |                |
 | AllowTeachers   | enum('N','Y') | NO   |     | N       |                |
 | Score           | double        | NO   |     | 0       |                |
 +-----------------+---------------+------+-----+---------+----------------+
-9 rows in set (0.00 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exams ("
 			"ExaCod INT NOT NULL AUTO_INCREMENT,"
@@ -2889,6 +2890,7 @@ mysql> DESCRIBE tst_exams;
 			"EndTime DATETIME NOT NULL,"
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
+			"Sent ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(ExaCod),"
@@ -2947,26 +2949,6 @@ mysql> DESCRIBE tst_questions;
 		   "UNIQUE INDEX(QstCod),"
 		   "INDEX(CrsCod,EditTime),"
 		   "INDEX(MedCod))");
-
-   /***** Table tst_status *****/
-/*
-mysql> DESCRIBE tst_status;
-+-----------+------------+------+-----+---------+-------+
-| Field     | Type       | Null | Key | Default | Extra |
-+-----------+------------+------+-----+---------+-------+
-| SessionId | char(43)   | NO   | PRI | NULL    |       |
-| CrsCod    | int(11)    | NO   | PRI | NULL    |       |
-| NumTst    | int(11)    | NO   | PRI | NULL    |       |
-| Status    | tinyint(4) | NO   |     | NULL    |       |
-+-----------+------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_status ("
-			"SessionId CHAR(43) NOT NULL,"
-			"CrsCod INT NOT NULL,"
-			"NumTst INT NOT NULL,"
-			"Status TINYINT NOT NULL,"
-		   "UNIQUE INDEX(SessionId,CrsCod,NumTst))");
 
    /***** Table tst_tags *****/
 /*

@@ -176,6 +176,11 @@ void Roo_SeeRooms (void)
       HTM_Int (Rooms.Lst[NumRoom].Floor);
       HTM_TD_End ();
 
+      /* Type */
+      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
+      HTM_TD_End ();
+
       /* Short name */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
@@ -341,9 +346,10 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      {
       [Roo_ORDER_BY_BUILDING ] = "buildings.ShortName,rooms.Floor,rooms.ShortName",
       [Roo_ORDER_BY_FLOOR    ] = "rooms.Floor,buildings.ShortName,rooms.ShortName",
+      [Roo_ORDER_BY_TYPE     ] = "rooms.Floor,buildings.ShortName,rooms.ShortName",
       [Roo_ORDER_BY_SHRT_NAME] = "rooms.ShortName,rooms.FullName",
       [Roo_ORDER_BY_FULL_NAME] = "rooms.FullName,rooms.ShortName",
-      [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,rooms.ShortName",
+      [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,buildings.ShortName,rooms.Floor,rooms.ShortName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -599,6 +605,15 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       Roo_PutParamRooCod (Room->RooCod);
       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,false,
 		      "class=\"INPUT_LONG\"");
+      Frm_EndForm ();
+      HTM_TD_End ();
+
+      /* Room type */
+      HTM_TD_Begin ("class=\"LM\"");
+      Frm_StartForm (ActRenRooSho);
+      Roo_PutParamRooCod (Room->RooCod);
+      HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,true,
+		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1112,6 +1127,12 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 		   "class=\"INPUT_LONG\"");
    HTM_TD_End ();
 
+   /***** Room type *****/
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,false,
+		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
+   HTM_TD_End ();
+
    /***** Room short name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,false,
@@ -1149,6 +1170,7 @@ static void Roo_PutHeadRooms (void)
    extern const char *Txt_Code;
    extern const char *Txt_Building;
    extern const char *Txt_Floor;
+   extern const char *Txt_Type;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_Capacity_OF_A_ROOM;
@@ -1159,6 +1181,7 @@ static void Roo_PutHeadRooms (void)
    HTM_TH (1,1,"RM",Txt_Code);
    HTM_TH (1,1,"LM",Txt_Building);
    HTM_TH (1,1,"LM",Txt_Floor);
+   HTM_TH (1,1,"LM",Txt_Type);
    HTM_TH (1,1,"LM",Txt_Short_name);
    HTM_TH (1,1,"LM",Txt_Full_name);
    HTM_TH (1,1,"LM",Txt_Capacity_OF_A_ROOM);

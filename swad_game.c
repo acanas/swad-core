@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 
 #define Gam_MAX_ANSWERS_PER_QUESTION	10
 
-#define Gam_MAX_SELECTED_QUESTIONS		1000
+#define Gam_MAX_SELECTED_QUESTIONS		10000
 #define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
 /* Score range [0...max.score]
@@ -2150,6 +2150,9 @@ void Gam_AddTstQuestionsToGame (void)
    long QstCod;
    unsigned MaxQstInd;
 
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
+
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Lay_ShowErrorAndExit ("Code of game is missing.");
@@ -2214,7 +2217,7 @@ static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games)
    if (!Games->ListQuestions)
      {
       if ((Games->ListQuestions = (char *) malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();;
+         Lay_NotEnoughMemoryExit ();
       Games->ListQuestions[0] = '\0';
      }
   }
@@ -2428,6 +2431,9 @@ void Gam_MoveDownQst (void)
    unsigned QstIndTop;
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
+
+   /***** Reset games *****/
+   Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)

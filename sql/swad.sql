@@ -1385,6 +1385,7 @@ CREATE TABLE IF NOT EXISTS tst_exams (
 	EndTime DATETIME NOT NULL,
 	NumQsts INT NOT NULL DEFAULT 0,
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	Sent ENUM('N','Y') NOT NULL DEFAULT 'N',
 	AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(ExaCod),
@@ -1415,15 +1416,6 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	UNIQUE INDEX(QstCod),
 	INDEX(CrsCod,EditTime),
 	INDEX(MedCod));
---
--- Table tst_status: stores the status of tests for each session
---
-CREATE TABLE IF NOT EXISTS tst_status (
-	SessionId CHAR(43) NOT NULL,
-	CrsCod INT NOT NULL,
-	NumTst INT NOT NULL,
-	Status TINYINT NOT NULL,
-	UNIQUE INDEX(SessionId,CrsCod,NumTst));
 --
 -- Table tst_tags: stores the tags of test questions
 --

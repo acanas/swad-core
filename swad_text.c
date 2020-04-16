@@ -38203,6 +38203,27 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 	"Classificar por andar"
 #endif
 	,
+	[Roo_ORDER_BY_TYPE] =
+#if   L==1	// ca
+	"Ordenar per tipus"
+#elif L==2	// de
+	"Nach Art sortieren"
+#elif L==3	// en
+	"Sort by type"
+#elif L==4	// es
+	"Ordenar por tipo"
+#elif L==5	// fr
+	"Trier par type"
+#elif L==6	// gn
+	"Ordenar por tipo"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per tipo"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug typ"
+#elif L==9	// pt
+	"Classificar por tipo"
+#endif
+	,
 	[Roo_ORDER_BY_SHRT_NAME] =
 #if   L==1	// ca
 	"Ordenar per nom breu"
@@ -38309,6 +38330,27 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 	"Pi&eogon;trze"
 #elif L==9	// pt
 	"Andar"
+#endif
+	,
+	[Roo_ORDER_BY_TYPE] =
+#if   L==1	// ca
+	"Tipus"
+#elif L==2	// de
+	"Art"
+#elif L==3	// en
+	"Type"
+#elif L==4	// es
+	"Tipo"
+#elif L==5	// fr
+	"Type"
+#elif L==6	// gn
+	"Teko"
+#elif L==7	// it
+	"Tipo"
+#elif L==8	// pl
+	"Typ"
+#elif L==9	// pt
+	"Tipo"
 #endif
 	,
 	[Roo_ORDER_BY_SHRT_NAME] =
@@ -50304,27 +50346,6 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 	"There was a problem sending an email automatically.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Ocorreu um problema ao enviar um email automaticamente.";
-#endif
-
-const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Se ha producido un error al evaluar el test %u.";	// Necessita traduccio
-#elif L==2	// de
-	"There was an error in assessing the test %u.";		// Need Übersetzung
-#elif L==3	// en
-	"There was an error in assessing the test %u.";
-#elif L==4	// es
-	"Se ha producido un error al evaluar el test %u.";
-#elif L==5	// fr
-	"There was an error in assessing the test %u.";		// Besoin de traduction
-#elif L==6	// gn
-	"Se ha producido un error al evaluar el test %u.";	// Okoteve traducción
-#elif L==7	// it
-	"C'&egrave; stato un errore nel valutare il test %u.";
-#elif L==8	// pl
-	"There was an error in assessing the test %u.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Houve um erro ao avaliar o teste %u.";
 #endif
 
 const char *Txt_This_game_has_no_questions =

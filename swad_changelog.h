@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.188.2 (2020-04-16)"
+#define Log_PLATFORM_VERSION	"SWAD 19.189 (2020-04-16)"
 #define CSS_FILE		"swad19.187.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -547,7 +547,16 @@ Función API getLocations
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
-// TODO: Cambiar icono de inicio a "house-user.svg", notificaciones nuevas con "bell-on.svg"
+// TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
+
+	Version 19.189:   Apr 16, 2020	Fixed security issue in test exams.
+				        Removed table with test status. (287719 lines)
+					3/4 changes necessary in database:
+ALTER TABLE tst_exams ADD COLUMN Sent ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER NumQstsNotBlank;
+UPDATE tst_exams SET Sent='Y';
+DROP TABLE IF EXISTS tst_status;
+Only if you use MyISAM:
+ALTER TABLE buildings ENGINE=MyISAM;
 
 	Version 19.188.2: Apr 16, 2020	Changed some icons. (287754 lines)
 					Copy the following icons to icon public directory:

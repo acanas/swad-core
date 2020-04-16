@@ -85,14 +85,15 @@ struct Roo_Room
 				// (maximum people who fit in the room)
   };
 
-#define Roo_NUM_ORDERS 5
+#define Roo_NUM_ORDERS 6
 typedef enum
   {
    Roo_ORDER_BY_BUILDING  = 0,
    Roo_ORDER_BY_FLOOR     = 1,
-   Roo_ORDER_BY_SHRT_NAME = 2,
-   Roo_ORDER_BY_FULL_NAME = 3,
-   Roo_ORDER_BY_CAPACITY  = 4,
+   Roo_ORDER_BY_TYPE      = 2,
+   Roo_ORDER_BY_SHRT_NAME = 3,
+   Roo_ORDER_BY_FULL_NAME = 4,
+   Roo_ORDER_BY_CAPACITY  = 5,
   } Roo_Order_t;
 #define Roo_ORDER_DEFAULT Roo_ORDER_BY_BUILDING
 

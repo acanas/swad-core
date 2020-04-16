@@ -51,6 +51,8 @@ struct TstExa_Exam
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;		// Number of questions
    unsigned NumQstsNotBlank;	// Number of questions not blank
+   bool Sent;			// This test exam has been sent or not?
+				// "Sent" means that user has clicked "Send" button after finishing
    bool AllowTeachers;		// Are teachers allowed to see this test exam?
    double Score;		// Total score of the test exam
    struct
