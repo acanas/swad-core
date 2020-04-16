@@ -1668,7 +1668,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeMyTT		] = { 408, 2,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
    [ActSeeMyAgd		] = {1602, 3,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_GetParamsAndShowMyAgenda	,"calendar"		},
    [ActFrmMyAcc		] = {  36, 4,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},
-   [ActReqEdiRecSha	] = { 285, 5,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"card"			},
+   [ActReqEdiRecSha	] = { 285, 5,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"address-card"		},
    [ActReqEdiSet	] = { 673, 6,TabPrf,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Set_EditSettings		,"cog"			},
 
    // Actions not in menu:

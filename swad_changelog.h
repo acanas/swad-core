@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.188 (2020-04-15)"
+#define Log_PLATFORM_VERSION	"SWAD 19.188.1 (2020-04-16)"
 #define CSS_FILE		"swad19.187.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -547,6 +547,13 @@ Función API getLocations
 // TODO: Miguel Damas: al principio de los exámenes tendría que poner cuánto resta cada pregunta
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
+// TODO: Cambiar icono de inicio a "house-user.svg", notificaciones nuevas con "bell-on.svg"
+
+	Version 19.188.1: Apr 16, 2020	Changed some icons. (287746 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/address-card.svg /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/address-card.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/address-card.svg /var/www/html/swad/icon/iconset/nuvola/
 
 	Version 19.188:   Apr 15, 2020	Changes in listing and edition of rooms. (287713 lines)
 					1 change necessary in database:

@@ -44,6 +44,34 @@
 #define Roo_UNLIMITED_CAPACITY	INT_MAX	// This number can be stored in database as an integer...
 					// ...and means that a room has no limited capacity
 
+typedef enum
+  {
+   Roo_ADMINISTRATION =  0,	// "user-tie.svg"					// "Administración"
+   Roo_AUDITORIUM     =  1,	// "landmark.svg" "university.svg" "theater-masks.svg"	// "Auditorio"
+   Roo_CAFETERIA      =  2,	// "coffee.svg" "mug-hot.svg"				// "Cafetería"
+   Roo_CANTEEN        =  3,	// "utensils.svg"					// "Comedor"
+   Roo_CLASSROOM      =  4,	// "chalkboard-teacher.svg" "chalkboard.svg"		// "Aula"
+   Roo_CONCIERGE      =  5,	// "concierge-bell" "user-cog.svg" "house-user.svg" 	// "Conserjería/Portería"
+   Roo_CORRIDOR       =  6,	// "walking.svg" "map-signs.svg" "door-open.svg"	// "Pasillo"
+   Roo_GYM            =  7,	// "dumbbell.svg"					// "Gimnasio"
+   Roo_HALL           =  8,	// "map-signs.svg" "archway.svg" "hotel.svg" "concierge-bell.svg" "door-open.svg" "street-view.svg"	// "Vestíbulo"
+   Roo_KINDERGARTEN   =  9,	// "child.svg" "baby.svg" "baby-carriage.svg"		// "Guardería"
+   Roo_LABORATORY     = 10,	// "flask.svg" "microscope.svg"				// "Laboratorio"
+   Roo_LIBRARY        = 11,	// "book.svg" "book-reader.svg"				// "Biblioteca"
+   Roo_OFFICE         = 12,	// "house-user.svg" "door-open.svg"			// "Oficina/Despacho"
+   Roo_OUTDOORS       = 13,	// "cloud-sun.svg"					// "Exteriores"
+   Roo_PARKING        = 14,	// "car.svg"						// "Parking"
+   Roo_PAVILION       = 15,	// "volleyball-ball.svg" "running.svg"			// "Pabellón"
+   Roo_ROOM           = 16,	//							// "Sala"
+   Roo_SECRETARIAT    = 17,	// "stamp.svg" "pen-alt.svg" "file-alt.svg" "user-tie.svg"	// "Secretaría"
+   Roo_SEMINAR        = 18,	// "chalkboard-teacher.svg" "chalkboard.svg"		// "Seminario"
+   Roo_SHOP           = 19,	// "shopping-cart.svg" "shopping-basket.svg" "store-alt.svg" shopping-bag	// "Tienda"
+   Roo_STORE          = 20,	// "daily.svg" "boxes.svg" "box-open.svg" "box.svg"	// "Almacén"
+   Roo_TOILETS        = 21,	// "toilet.svg"						// "Aseos"
+   Roo_VIRTUAL        = 22,	// "laptop-house.svg" "cloud.svg"			// "Virtual"
+   Roo_YARD           = 23,	// "canadian-mapple-leaf.svg"				// "Patio/Jardín"
+  } Roo_RoomType_t;
+
 struct Roo_Room
   {
    long RooCod;						// Room code

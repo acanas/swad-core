@@ -750,12 +750,12 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
       /* View student's records: common record card and course record card */
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "card.svg",
+			             "address-card.svg",
 			             Txt_View_record_for_this_course);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 			             Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "card.svg",
+			             "address-card.svg",
 			             Txt_View_record_and_office_hours);
   }
 

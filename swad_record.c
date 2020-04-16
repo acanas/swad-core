@@ -2474,12 +2474,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	 /* View student's records: common record card and course record card */
 	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					Rec_PutParamUsrCodEncrypted,NULL,
-					"card.svg",
+					"address-card.svg",
 					Txt_View_record_for_this_course);
       else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					Rec_PutParamUsrCodEncrypted,NULL,
-					"card.svg",
+					"address-card.svg",
 					Txt_View_record_and_office_hours);
 
       /***** Button to view user's agenda *****/
