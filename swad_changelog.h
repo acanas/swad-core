@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.188.1 (2020-04-16)"
+#define Log_PLATFORM_VERSION	"SWAD 19.188.2 (2020-04-16)"
 #define CSS_FILE		"swad19.187.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -548,6 +548,15 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono de inicio a "house-user.svg", notificaciones nuevas con "bell-on.svg"
+
+	Version 19.188.2: Apr 16, 2020	Changed some icons. (287754 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/house-user.svg /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/house-user.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/house-user.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/user-circle.svg /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/user-circle.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/user-circle.svg /var/www/html/swad/icon/iconset/nuvola/
 
 	Version 19.188.1: Apr 16, 2020	Changed some icons. (287746 lines)
 					Copy the following icons to icon public directory:

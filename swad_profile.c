@@ -162,7 +162,7 @@ void Prf_PutLinkMyPublicProfile (void)
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
 				  Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
-				  "user.svg",
+				  "user-circle.svg",
 				  Txt_My_public_profile);
   }
 
@@ -176,7 +176,7 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
 
    Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,
                                   NULL,NULL,
-				  "user.svg",
+				  "user-circle.svg",
 				  Txt_Another_user_s_profile);
   }
 

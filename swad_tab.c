@@ -186,7 +186,7 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
    static const char *Tab_TabIcons[Tab_NUM_TABS] =
      {
       [TabUnk] = NULL,
-      [TabStr] = "home",
+      [TabStr] = "house-user",
       [TabSys] = "sitemap",
       [TabCty] = "globe",
       [TabIns] = "university",
