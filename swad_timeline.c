@@ -36,7 +36,7 @@
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -2137,7 +2137,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
 	    Frm_StartFormUniqueAnchor (TL_DefaultActions[SocNot->NoteType],
 		                       Anchor);	// Locate on this specific exam
             Frm_FreeAnchorStr (Anchor);
-	    Exa_PutHiddenParamExaCod (SocNot->Cod);
+	    ExaAnn_PutHiddenParamExaCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
@@ -2209,7 +2209,7 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
 	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case TL_NOTE_EXAM_ANNOUNCEMENT:
-         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,false);
+         ExaAnn_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case TL_NOTE_POST:
 	 // Not applicable

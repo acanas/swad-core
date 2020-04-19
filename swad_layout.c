@@ -38,7 +38,7 @@
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_firewall.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -492,7 +492,7 @@ static void Lay_WriteScripts (void)
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
    struct Hld_Holidays Holidays;
-   struct Exa_ExamAnnouncements ExamAnns;
+   struct ExaAnn_ExamAnnouncements ExamAnns;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
@@ -539,10 +539,10 @@ static void Lay_WriteScripts (void)
       Hld_GetListHolidays (&Holidays);
 
       /***** Reset exam announcements context *****/
-      Exa_ResetExamAnnouncements (&ExamAnns);
+      ExaAnn_ResetExamAnnouncements (&ExamAnns);
 
       /***** Create list of exam announcements *****/
-      Exa_CreateListExamAnnouncements (&ExamAnns);
+      ExaAnn_CreateListExamAnnouncements (&ExamAnns);
 
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
@@ -587,7 +587,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_End ();
 
       /***** Free list of exam announcements *****/
-      Exa_FreeListExamAnnouncements (&ExamAnns);
+      ExaAnn_FreeListExamAnnouncements (&ExamAnns);
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays (&Holidays);

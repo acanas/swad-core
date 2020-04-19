@@ -119,8 +119,8 @@ long Gam_GetParams (struct Gam_Games *Games);
 
 void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder);
 void Gam_GetListSelectedGamCods (struct Gam_Games *Games);
-void Gam_GetDataOfGameByCod (struct Gam_Game *Gam);
-void Gam_GetDataOfGameByFolder (struct Gam_Game *Gam);
+void Gam_GetDataOfGameByCod (struct Gam_Game *Game);
+void Gam_GetDataOfGameByFolder (struct Gam_Game *Game);
 void Gam_FreeListGames (struct Gam_Games *Games);
 
 void Gam_AskRemGame (void);

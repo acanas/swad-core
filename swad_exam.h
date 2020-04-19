@@ -1,9 +1,9 @@
-// swad_exam.h: exam announcements
+// swad_exam.h: exams
 
 #ifndef _SWAD_EXA
 #define _SWAD_EXA
 /*
-    SWAD (Shared Workspace At a Distance in Spanish),
+    SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -11,7 +11,7 @@
     Copyright (C) 1999-2020 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -23,106 +23,147 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*****************************************************************************/
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
-#include "swad_constant.h"
-#include "swad_course.h"
 #include "swad_date.h"
-#include "swad_notification.h"
+#include "swad_scope.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Exa_NUM_VIEWS 3
+#define Exa_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define Exa_MAX_BYTES_TITLE	((Exa_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+#define Exa_NUM_ORDERS 3
 typedef enum
   {
-   Exa_NORMAL_VIEW,
-   Exa_PRINT_VIEW,
-   Exa_FORM_VIEW,
-  } Exa_TypeViewExamAnnouncement_t;
+   Exa_ORDER_BY_START_DATE = 0,
+   Exa_ORDER_BY_END_DATE   = 1,
+   Exa_ORDER_BY_TITLE      = 2,
+  } Exa_Order_t;
+#define Exa_ORDER_DEFAULT Exa_ORDER_BY_START_DATE
 
-#define Exa_NUM_STATUS 3
+#define Exa_NUM_ANS_TYPES	2
 typedef enum
   {
-   Exa_VISIBLE_EXAM_ANNOUNCEMENT = 0,
-   Exa_HIDDEN_EXAM_ANNOUNCEMENT  = 1,
-   Exa_DELETED_EXAM_ANNOUNCEMENT = 2,
-  } Exa_ExamAnnouncementStatus_t;	// Don't change these numbers because they are used in database
+   Exa_ANS_UNIQUE_CHOICE   = 0,
+   Exa_ANS_MULTIPLE_CHOICE = 1,
+  } Exa_AnswerType_t;
+#define Exa_ANSWER_TYPE_DEFAULT Exa_ANS_UNIQUE_CHOICE
 
-#define Exa_MAX_CHARS_SESSION	(128 - 1)	// 127
-#define Exa_MAX_BYTES_SESSION	((Exa_MAX_CHARS_SESSION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-struct Exa_ExamAnnouncement
+struct Exa_ExamSelected
   {
-   long CrsCod;
-   Exa_ExamAnnouncementStatus_t Status;
-   char CrsFullName[Hie_MAX_BYTES_FULL_NAME + 1];
-   unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
-   char Session[Exa_MAX_BYTES_SESSION + 1];	// Exam session is june, september, etc.
-   struct Date CallDate;
-   struct Date ExamDate;
-   struct Hour StartTime;
-   struct Hour Duration;
-   char *Place;
-   char *Mode;
-   char *Structure;
-   char *DocRequired;
-   char *MatRequired;
-   char *MatAllowed;
-   char *OtherInfo;
+   long ExaCod;		// Exam code
+   bool Selected;	// Is this exam selected when seeing match results?
   };
 
-struct Exa_ExamCodeAndDate
+struct Exa_Exams
   {
-   long ExaCod;
-   struct Date ExamDate;
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Total number of exams
+   unsigned NumSelected;	// Number of exams selected
+   struct Exa_ExamSelected *Lst;// List of exams
+   Exa_Order_t SelectedOrder;
+   unsigned CurrentPage;
+   char *ListQuestions;
+   char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
+   long ExaCod;			// Selected/current exam code
+   long EvtCod;			// Selected/current match code
+   unsigned QstInd;		// Current question index
   };
 
-struct Exa_ExamAnnouncements
+struct Exa_Exam
   {
-   unsigned NumExaAnns;	// Number of announcements of exam in the list
-   struct Exa_ExamCodeAndDate *Lst;	// List of exam announcements
-   long NewExaCod;		// New exam announcement just created
-   long HighlightExaCod;	// Exam announcement to be highlighted
-   char HighlightDate[4 + 2 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYYMMDD format)
-   long ExaCod;		// Used to put contextual icons
-   const char *Anchor;	// Used to put contextual icons
-   struct Exa_ExamAnnouncement ExamAnn;
+   long ExaCod;			// Exam code
+   long CrsCod;			// Course code
+   long UsrCod;			// Author code
+   double MaxGrade;		// Score range [0...max.score]
+				// will be converted to
+				// grade range [0...max.grade]
+   unsigned Visibility;		// Visibility of results
+   char Title[Exa_MAX_BYTES_TITLE + 1];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Hidden;			// Exam is hidden
+   unsigned NumQsts;		// Number of questions in the exam
+   unsigned NumEves;		// Number of events in the exam
+   unsigned NumUnfinishedEves;	// Number of unfinished events in the exam
   };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Exa_ResetExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
+void Exa_ResetExams (struct Exa_Exams *Exams);
 
-void Exa_PutFrmEditAExamAnnouncement (void);
-void Exa_ReceiveExamAnnouncement1 (void);
-void Exa_ReceiveExamAnnouncement2 (void);
-void Exa_PrintExamAnnouncement (void);
-void Exa_ReqRemoveExamAnnouncement (void);
-void Exa_RemoveExamAnnouncement1 (void);
-void Exa_RemoveExamAnnouncement2 (void);
-void Exa_HideExamAnnouncement (void);
-void Exa_UnhideExamAnnouncement (void);
+void Exa_SeeAllExams (void);
+void Exa_SeeOneExam (void);
+void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
+			  struct Exa_Exam *Exam,
+			  bool ListExamQuestions,
+			  bool PutFormNewMatch);
+void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
+			       struct Exa_Exam *Exam,
+			       bool ListExamQuestions,
+			       bool PutFormNewMatch);
+void Exa_ShowOnlyOneExamEnd (void);
 
-void Exa_FreeListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
-void Exa_ListExamAnnouncementsSee (void);
-void Exa_ListExamAnnouncementsEdit (void);
+void Exa_SetCurrentExaCod (long ExaCod);
+void Exa_PutParams (void *Exams);
+void Exa_PutParamExamCod (long ExaCod);
+long Exa_GetParamExamCod (void);
+long Exa_GetParams (struct Exa_Exams *Exams);
 
-void Exa_ListExamAnnouncementsCod (void);
-void Exa_ListExamAnnouncementsDay (void);
+void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder);
+void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams);
+void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam);
+void Exa_GetDataOfExamByFolder (struct Exa_Exam *Exam);
+void Exa_FreeListExams (struct Exa_Exams *Exams);
 
-void Exa_CreateListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns);
-void Exa_PutHiddenParamExaCod (long ExaCod);
+void Exa_AskRemExam (void);
+void Exa_RemoveExam (void);
+void Exa_RemoveExamsCrs (long CrsCod);
 
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                               char **ContentStr,
-                                               long ExaCod,bool GetContent);
+void Exa_HideExam (void);
+void Exa_UnhideExam (void);
+
+void Exa_RequestCreatOrEditExam (void);
+
+void Exa_RecFormExam (void);
+bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
+
+unsigned Exa_GetNumQstsExam (long ExaCod);
+
+void Exa_RequestNewQuestion (void);
+void Exa_ListTstQuestionsToSelect (void);
+
+void Exa_PutParamQstInd (unsigned QstInd);
+unsigned Exa_GetParamQstInd (void);
+long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);
+unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd);
+unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
+
+void Exa_AddTstQuestionsToExam (void);
+
+void Exa_RequestRemoveQst (void);
+void Exa_RemoveQst (void);
+
+void Exa_MoveUpQst (void);
+void Exa_MoveDownQst (void);
+
+void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod);
+void Exa_RequestNewMatch (void);
+
+unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);
+unsigned Exa_GetNumExams (Hie_Level_t Scope);
+double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope);
+
+void Exa_ShowTstTagsPresentInAnExam (long ExaCod);
+
+void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore);
 
 #endif

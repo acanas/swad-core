@@ -1,20 +1,15 @@
-// swad_exam.c: exam announcements
+// swad_exam.c: exams
 
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
-    Copyright (C) 1999-2014
-        SWAD core (1999-2014):
-            Antonio Cañas Vargas
-        Photo processing (2006-2014):
-            Daniel J. Calandria Hernández
-        Chat (2009-2014):
-            Daniel J. Calandria Hernández
+    This file is part of SWAD core.
+    Copyright (C) 1999-2020 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -26,30 +21,31 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*****************************************************************************/
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <float.h>		// For DBL_MAX
+#include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For sscanf, asprintf, etc.
-#include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
+#include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
-#include "swad_box.h"
-#include "swad_config.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
-#include "swad_logo.h"
-#include "swad_notification.h"
-#include "swad_parameter.h"
-#include "swad_QR.h"
-#include "swad_RSS.h"
-#include "swad_string.h"
-#include "swad_timeline.h"
+#include "swad_match.h"
+#include "swad_match_result.h"
+#include "swad_pagination.h"
+#include "swad_role.h"
+#include "swad_test.h"
+#include "swad_test_visibility.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -60,6 +56,46 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
+
+#define Exa_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
+#define Exa_MAX_BYTES_ANSWER	((Exa_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+
+#define Exa_MAX_ANSWERS_PER_QUESTION	10
+
+#define Exa_MAX_SELECTED_QUESTIONS		10000
+#define Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Exa_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
+
+/* Score range [0...max.score]
+   will be converted to
+   grade range [0...max.grade]
+   Example: Exam with 5 questions, unique-choice, 4 options per question
+            max.score = 5 *   1     =  5
+            min.score = 5 * (-0.33) = -1,67
+            max.grade given by teacher = 0.2 ==> min.grade = -0,067
+
+              grade
+                ^
+                |          /
+   max.grade--> +---------+
+                |        /|
+                |       / |
+                |      /  |
+                |     /   |
+                |    /    |
+                |   /     |
+                |  /      |
+                | /       |
+                |/        |
+    ------+---0-+---------+---------> score
+          ^    /0         ^
+     min.score/ |      max.score
+          |  /  |   (num.questions)
+          | /   |
+          |/    |
+          +-----+ <--min.grade
+         /      |
+*/
+#define Exa_MAX_GRADE_DEFAULT 1.0
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -73,1726 +109,2804 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static struct Exa_ExamAnnouncements *Exa_GetGlobalExamAnnouncements (void);
+static void Exa_ListAllExams (struct Exa_Exams *Exams);
+static bool Exa_CheckIfICanEditExams (void);
+static void Exa_PutIconsListExams (void *Exams);
+static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
+static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams);
+static void Exa_PutParamsToCreateNewExam (void *Exams);
 
-static long Exa_GetParamsExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns);
+static void Exa_ShowOneExam (struct Exa_Exams *Exams,
+                             struct Exa_Exam *Exam,bool ShowOnlyThisExam);
 
-static void Exa_AllocMemExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns);
-static void Exa_FreeMemExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns);
+static void Exa_PutIconToShowResultsOfExam (void *Exams);
+static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
-static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
+static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder);
 
-static void Exa_GetExaCodToHighlight (struct Exa_ExamAnnouncements *ExamAnns);
-static void Exa_GetDateToHighlight (struct Exa_ExamAnnouncements *ExamAnns);
+static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
+					  const struct Exa_Exam *Exam,
+					  const char *Anchor);
 
-static void Exa_ListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns,
-                                       Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
-static void Exa_PutIconToCreateNewExamAnnouncement (__attribute__((unused)) void *Args);
-static void Exa_PutButtonToCreateNewExamAnnouncement (void);
+static void Exa_PutParamsOneQst (void *Exams);
+static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
+static Exa_Order_t Exa_GetParamOrder (void);
 
-static long Exa_AddExamAnnouncementToDB (const struct Exa_ExamAnnouncements *ExamAnns);
-static void Exa_ModifyExamAnnouncementInDB (const struct Exa_ExamAnnouncements *ExamAnns,
-                                            long ExaCod);
-static void Exa_GetDataExamAnnouncementFromDB (struct Exa_ExamAnnouncements *ExamAnns,
-                                               long ExaCod);
-static void Exa_ShowExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns,
-                                      long ExaCod,
-				      Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
-				      bool HighLight);
-static void Exa_PutIconsExamAnnouncement (void *ExamAnns);
-static void Exa_PutParamExaCodToEdit (void *ExaCod);
-static long Exa_GetParamExaCod (void);
+static void Exa_ResetExam (struct Exa_Exam *Exam);
 
-static void Exa_GetNotifContentExamAnnouncement (const struct Exa_ExamAnnouncements *ExamAnns,
-                                                 char **ContentStr);
+static void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+
+static void Exa_RemoveExamFromAllTables (long ExaCod);
+
+static bool Exa_CheckIfSimilarExamExists (const struct Exa_Exam *Exam);
+
+static void Exa_PutFormsEditionExam (struct Exa_Exams *Exams,
+				     struct Exa_Exam *Exam,
+				     char Txt[Cns_MAX_BYTES_TEXT + 1],
+				     bool ItsANewExam);
+static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
+				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
+
+static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
+static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
+
+static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd);
+
+static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod);
+static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam);
+static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
+						  long ExaCod,unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res,
+						  bool ICanEditQuestions);
+static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
+                                        unsigned QstInd,bool QuestionExists);
+static void Exa_PutIconToAddNewQuestions (void *Exams);
+static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
+
+static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
+static void Exa_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
+static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams);
+
+static void Exa_ExchangeQuestions (long ExaCod,
+                                   unsigned QstIndTop,unsigned QstIndBottom);
+
+static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
 /*****************************************************************************/
-/******************* Get global exam announcements context *******************/
+/******************************* Reset exams *********************************/
 /*****************************************************************************/
 
-static struct Exa_ExamAnnouncements *Exa_GetGlobalExamAnnouncements (void)
+void Exa_ResetExams (struct Exa_Exams *Exams)
   {
-   static struct Exa_ExamAnnouncements Exa_GlobalExamAnns;	// Used to preserve information between priori and posteriori functions
-
-   return &Exa_GlobalExamAnns;
+   Exams->LstIsRead         = false;	// List not read from database...
+   Exams->Num               = 0;	// Total number of exams
+   Exams->NumSelected       = 0;	// Number of exams selected
+   Exams->Lst               = NULL;	// List of exams
+   Exams->SelectedOrder     = Exa_ORDER_DEFAULT;
+   Exams->CurrentPage       = 0;
+   Exams->ListQuestions     = NULL;
+   Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
+   Exams->ExaCod            = -1L;	// Selected/current exam code
+   Exams->EvtCod            = -1L;	// Selected/current match code
+   Exams->QstInd            = 0;	// Current question index
   }
 
 /*****************************************************************************/
-/********************** Reset exam announcements context *********************/
+/***************************** List all exams ********************************/
 /*****************************************************************************/
 
-void Exa_ResetExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns)
+void Exa_SeeAllExams (void)
   {
-   ExamAnns->NumExaAnns       = 0;
-   ExamAnns->Lst              = NULL;
-   ExamAnns->NewExaCod        = -1L;
-   ExamAnns->HighlightExaCod  = -1L;
-   ExamAnns->HighlightDate[0] = '\0';	// No exam announcements highlighted
-   ExamAnns->ExaCod           = -1L;
-   ExamAnns->Anchor           = NULL;
+   struct Exa_Exams Exams;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);	// Return value ignored
+
+   /***** Show all exams *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
-/********************** Form to edit an exam announcement ********************/
+/**************************** Show all the exams *****************************/
 /*****************************************************************************/
 
-void Exa_PutFrmEditAExamAnnouncement (void)
+static void Exa_ListAllExams (struct Exa_Exams *Exams)
   {
-   struct Exa_ExamAnnouncements ExamAnns;
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Allocate memory for the exam announcement *****/
-   Exa_AllocMemExamAnnouncement (&ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   ExaCod = Exa_GetParamsExamAnnouncement (&ExamAnns);
-
-   if (ExaCod > 0)	// -1 indicates that this is a new exam announcement
-      /***** Read exam announcement from the database *****/
-      Exa_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
-
-   /***** Show exam announcement *****/
-   Exa_ShowExamAnnouncement (&ExamAnns,ExaCod,Exa_FORM_VIEW,
-			     false);	// Don't highlight
-
-   /***** Free memory of the exam announcement *****/
-   Exa_FreeMemExamAnnouncement (&ExamAnns);
-  }
-
-/*****************************************************************************/
-/**************** Get parameters of an exam announcement *********************/
-/*****************************************************************************/
-
-static long Exa_GetParamsExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   long ExaCod;
-
-   /***** Get the code of the exam announcement *****/
-   ExaCod = Exa_GetParamExaCod ();
-
-   /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParToText ("CrsName",ExamAnns->ExamAnn.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
-   // If the parameter is not present or is empty, initialize the string to the full name of the current course
-   if (!ExamAnns->ExamAnn.CrsFullName[0])
-      Str_Copy (ExamAnns->ExamAnn.CrsFullName,Gbl.Hierarchy.Crs.FullName,
-                Hie_MAX_BYTES_FULL_NAME);
-
-   /***** Get the year *****/
-   ExamAnns->ExamAnn.Year = (unsigned)
-			    Par_GetParToUnsignedLong ("Year",
-						      0,	// N.A.
-						      Deg_MAX_YEARS_PER_DEGREE,
-						      (unsigned long) Gbl.Hierarchy.Crs.Year);
-
-   /***** Get the type of exam announcement *****/
-   Par_GetParToText ("ExamSession",ExamAnns->ExamAnn.Session,Exa_MAX_BYTES_SESSION);
-
-   /***** Get the data of the exam *****/
-   Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",
-                        &ExamAnns->ExamAnn.ExamDate.Day,
-                        &ExamAnns->ExamAnn.ExamDate.Month,
-                        &ExamAnns->ExamAnn.ExamDate.Year);
-   if (ExamAnns->ExamAnn.ExamDate.Day   == 0 ||
-       ExamAnns->ExamAnn.ExamDate.Month == 0 ||
-       ExamAnns->ExamAnn.ExamDate.Year  == 0)
-     {
-      ExamAnns->ExamAnn.ExamDate.Day   = Gbl.Now.Date.Day;
-      ExamAnns->ExamAnn.ExamDate.Month = Gbl.Now.Date.Month;
-      ExamAnns->ExamAnn.ExamDate.Year  = Gbl.Now.Date.Year;
-     }
-
-   /***** Get the hour of the exam *****/
-   ExamAnns->ExamAnn.StartTime.Hour   = (unsigned) Par_GetParToUnsignedLong ("ExamHour",
-                                                                             0,23,0);
-   ExamAnns->ExamAnn.StartTime.Minute = (unsigned) Par_GetParToUnsignedLong ("ExamMinute",
-                                                                             0,59,0);
-
-   /***** Get the duration of the exam *****/
-   ExamAnns->ExamAnn.Duration.Hour    = (unsigned) Par_GetParToUnsignedLong ("DurationHour",
-                                                                             0,23,0);
-   ExamAnns->ExamAnn.Duration.Minute  = (unsigned) Par_GetParToUnsignedLong ("DurationMinute",
-                                                                             0,59,0);
-
-   /***** Get the place where the exam will happen *****/
-   Par_GetParToHTML ("Place",ExamAnns->ExamAnn.Place,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the modality of exam *****/
-   Par_GetParToHTML ("ExamMode",ExamAnns->ExamAnn.Mode,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the structure of exam *****/
-   Par_GetParToHTML ("Structure",ExamAnns->ExamAnn.Structure,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the mandatory documentation *****/
-   Par_GetParToHTML ("DocRequired",ExamAnns->ExamAnn.DocRequired,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the mandatory material *****/
-   Par_GetParToHTML ("MatRequired",ExamAnns->ExamAnn.MatRequired,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the allowed material *****/
-   Par_GetParToHTML ("MatAllowed",ExamAnns->ExamAnn.MatAllowed,Cns_MAX_BYTES_TEXT);
-
-   /***** Get other information *****/
-   Par_GetParToHTML ("OtherInfo",ExamAnns->ExamAnn.OtherInfo,Cns_MAX_BYTES_TEXT);
-
-   return ExaCod;
-  }
-
-/*****************************************************************************/
-/* Allocate memory for those parameters of an exam anno. with a lot of text **/
-/*****************************************************************************/
-
-static void Exa_AllocMemExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   if ((ExamAnns->ExamAnn.Place       = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.Mode        = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.Structure   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.DocRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.MatRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.MatAllowed  = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
-   if ((ExamAnns->ExamAnn.OtherInfo   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-  }
-
-/*****************************************************************************/
-/* Free memory of those parameters of an exam announcem. with a lot of text **/
-/*****************************************************************************/
-
-static void Exa_FreeMemExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   if (ExamAnns->ExamAnn.Place)
-     {
-      free (ExamAnns->ExamAnn.Place);
-      ExamAnns->ExamAnn.Place = NULL;
-     }
-   if (ExamAnns->ExamAnn.Mode)
-     {
-      free (ExamAnns->ExamAnn.Mode);
-      ExamAnns->ExamAnn.Mode = NULL;
-     }
-   if (ExamAnns->ExamAnn.Structure)
-     {
-      free (ExamAnns->ExamAnn.Structure);
-      ExamAnns->ExamAnn.Structure = NULL;
-     }
-   if (ExamAnns->ExamAnn.DocRequired)
-     {
-      free (ExamAnns->ExamAnn.DocRequired);
-      ExamAnns->ExamAnn.DocRequired = NULL;
-     }
-   if (ExamAnns->ExamAnn.MatRequired)
-     {
-      free (ExamAnns->ExamAnn.MatRequired);
-      ExamAnns->ExamAnn.MatRequired = NULL;
-     }
-   if (ExamAnns->ExamAnn.MatAllowed)
-     {
-      free (ExamAnns->ExamAnn.MatAllowed);
-      ExamAnns->ExamAnn.MatAllowed = NULL;
-     }
-   if (ExamAnns->ExamAnn.OtherInfo)
-     {
-      free (ExamAnns->ExamAnn.OtherInfo);
-      ExamAnns->ExamAnn.OtherInfo = NULL;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Receive an exam announcement ***********************/
-/*****************************************************************************/
-// This function is splitted into a-priori and a-posteriori functions
-// in order to view updated links in month of left column
-
-void Exa_ReceiveExamAnnouncement1 (void)
-  {
-   extern const char *Txt_Created_new_announcement_of_exam;
-   extern const char *Txt_The_announcement_of_exam_has_been_successfully_updated;
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-   long ExaCod;
-   bool NewExamAnnouncement;
-   char *Anchor = NULL;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (ExamAnns);
-
-   /***** Allocate memory for the exam announcement *****/
-   Exa_AllocMemExamAnnouncement (ExamAnns);
-
-   /***** Get parameters of the exam announcement *****/
-   ExaCod = Exa_GetParamsExamAnnouncement (ExamAnns);
-   NewExamAnnouncement = (ExaCod < 0);
-
-   /***** Add the exam announcement to the database and read it again from the database *****/
-   if (NewExamAnnouncement)
-      ExamAnns->NewExaCod = ExaCod = Exa_AddExamAnnouncementToDB (ExamAnns);
-   else
-      Exa_ModifyExamAnnouncementInDB (ExamAnns,ExaCod);
-
-   /***** Free memory of the exam announcement *****/
-   Exa_FreeMemExamAnnouncement (ExamAnns);
-
-   /***** Create alert to show the change made *****/
-   Frm_SetAnchorStr (ExaCod,&Anchor);
-   Ale_CreateAlert (Ale_SUCCESS,Anchor,
-                    NewExamAnnouncement ? Txt_Created_new_announcement_of_exam :
-                                          Txt_The_announcement_of_exam_has_been_successfully_updated);
-   Frm_FreeAnchorStr (Anchor);
-
-   /***** Set exam to be highlighted *****/
-   ExamAnns->HighlightExaCod = ExaCod;
-  }
-
-void Exa_ReceiveExamAnnouncement2 (void)
-  {
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-   unsigned NumUsrsToBeNotifiedByEMail;
-   struct TL_Publication SocPub;
-
-   /***** Notify by email about the new exam announcement *****/
-   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod)))
-      Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
-
-   /***** Create a new social note about the new exam announcement *****/
-   TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod,&SocPub);
-
-   /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
-
-   /***** Show exam announcements *****/
-   Exa_ListExamAnnouncementsEdit ();
-  }
-
-/*****************************************************************************/
-/***** Update number of users notified in table of exam announcements ********/
-/*****************************************************************************/
-
-static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   /***** Update number of users notified *****/
-   DB_QueryUPDATE ("can not update the number of notifications"
-		   " of an exam announcement",
-		   "UPDATE exam_announcements SET NumNotif=NumNotif+%u"
-		   " WHERE ExaCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,ExaCod);
-  }
-
-/*****************************************************************************/
-/************************* Print an exam announcement ************************/
-/*****************************************************************************/
-
-void Exa_PrintExamAnnouncement (void)
-  {
-   struct Exa_ExamAnnouncements ExamAnns;
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Allocate memory for the exam announcement *****/
-   Exa_AllocMemExamAnnouncement (&ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
-
-   /***** Read exam announcement from the database *****/
-   Exa_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
-
-   /***** Show exam announcement *****/
-   Exa_ShowExamAnnouncement (&ExamAnns,ExaCod,Exa_PRINT_VIEW,
-			     false);	// Don't highlight
-
-   /***** Free memory of the exam announcement *****/
-   Exa_FreeMemExamAnnouncement (&ExamAnns);
-  }
-
-/*****************************************************************************/
-/************************ Remove an exam announcement ************************/
-/*****************************************************************************/
-
-void Exa_ReqRemoveExamAnnouncement (void)
-  {
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam;
-   extern const char *Txt_Remove;
-   struct Exa_ExamAnnouncements ExamAnns;
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
-
-   /***** Show question and button to remove exam announcement *****/
-   /* Start alert */
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
-
-   /* Show announcement */
-   Exa_AllocMemExamAnnouncement (&ExamAnns);
-   Exa_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
-   Exa_ShowExamAnnouncement (&ExamAnns,ExaCod,Exa_NORMAL_VIEW,
-			     false);	// Don't highlight
-   Exa_FreeMemExamAnnouncement (&ExamAnns);
-
-   /* End alert */
-
-   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,NULL,
-                            Exa_PutParamExaCodToEdit,&ExamAnns.ExaCod,
-			    Btn_REMOVE_BUTTON,Txt_Remove);
-  }
-
-/*****************************************************************************/
-/************************ Remove an exam announcement ************************/
-/*****************************************************************************/
-// This function is splitted into a-priori and a-posteriori functions
-// in order to view updated links in month of left column
-
-void Exa_RemoveExamAnnouncement1 (void)
-  {
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
-
-   /***** Mark the exam announcement as deleted in the database *****/
-   DB_QueryUPDATE ("can not remove exam announcement",
-		   "UPDATE exam_announcements SET Status=%u"
-		   " WHERE ExaCod=%ld AND CrsCod=%ld",
-                   (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
-
-   /***** Mark possible social note as unavailable *****/
-   TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
-
-   /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
-  }
-
-void Exa_RemoveExamAnnouncement2 (void)
-  {
-   extern const char *Txt_Announcement_of_exam_removed;
-
-   /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_of_exam_removed);
-
-   /***** List again all the remaining exam announcements *****/
-   Exa_ListExamAnnouncementsEdit ();
-  }
-
-/*****************************************************************************/
-/************************ Hide an exam announcement **************************/
-/*****************************************************************************/
-// This function is splitted into a-priori and a-posteriori functions
-// in order to view updated links in month of left column
-
-void Exa_HideExamAnnouncement (void)
-  {
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
-
-   /***** Mark the exam announcement as hidden in the database *****/
-   DB_QueryUPDATE ("can not hide exam announcement",
-		   "UPDATE exam_announcements SET Status=%u"
-		   " WHERE ExaCod=%ld AND CrsCod=%ld",
-                   (unsigned) Exa_HIDDEN_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Set exam to be highlighted *****/
-   ExamAnns->HighlightExaCod = ExaCod;
-  }
-
-/*****************************************************************************/
-/************************ Unhide an exam announcement ************************/
-/*****************************************************************************/
-// This function is splitted into a-priori and a-posteriori functions
-// in order to view updated links in month of left column
-
-void Exa_UnhideExamAnnouncement (void)
-  {
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-   long ExaCod;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (ExamAnns);
-
-   /***** Get the code of the exam announcement *****/
-   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
-
-   /***** Mark the exam announcement as visible in the database *****/
-   DB_QueryUPDATE ("can not unhide exam announcement",
-		   "UPDATE exam_announcements SET Status=%u"
-		   " WHERE ExaCod=%ld AND CrsCod=%ld",
-                   (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Set exam to be highlighted *****/
-   ExamAnns->HighlightExaCod = ExaCod;
-  }
-
-/*****************************************************************************/
-/*************** List all the exam announcements to see them *****************/
-/*****************************************************************************/
-
-void Exa_ListExamAnnouncementsSee (void)
-  {
-   struct Exa_ExamAnnouncements ExamAnns;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** List all exam announcements *****/
-   Exa_ListExamAnnouncements (&ExamAnns,Exa_NORMAL_VIEW);
-
-   /***** Mark possible notifications as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
-	                -1L,Gbl.Hierarchy.Crs.CrsCod,
-	                Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/********** List all the exam announcements to edit or remove them ***********/
-/*****************************************************************************/
-
-void Exa_ListExamAnnouncementsEdit (void)
-  {
-   struct Exa_ExamAnnouncements *ExamAnns = Exa_GetGlobalExamAnnouncements ();
-
-   Exa_ListExamAnnouncements (ExamAnns,Exa_NORMAL_VIEW);
-  }
-
-/*****************************************************************************/
-/********** List exam announcement given an exam announcement code ***********/
-/*****************************************************************************/
-
-void Exa_ListExamAnnouncementsCod (void)
-  {
-   struct Exa_ExamAnnouncements ExamAnns;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Get exam announcement code *****/
-   Exa_GetExaCodToHighlight (&ExamAnns);
-
-   /***** List all exam announcements *****/
-   Exa_ListExamAnnouncements (&ExamAnns,Exa_NORMAL_VIEW);
-  }
-
-/*****************************************************************************/
-/***************** List exam announcements on a given date *******************/
-/*****************************************************************************/
-
-void Exa_ListExamAnnouncementsDay (void)
-  {
-   struct Exa_ExamAnnouncements ExamAnns;
-
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Get date *****/
-   Exa_GetDateToHighlight (&ExamAnns);
-
-   /***** List all exam announcements *****/
-   Exa_ListExamAnnouncements (&ExamAnns,Exa_NORMAL_VIEW);
-  }
-
-/*****************************************************************************/
-/*********** Get date of exam announcements to show highlighted **************/
-/*****************************************************************************/
-
-static void Exa_GetExaCodToHighlight (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   /***** Get the exam announcement code
-          of the exam announcement to highlight *****/
-   ExamAnns->HighlightExaCod = Exa_GetParamExaCod ();
-  }
-
-/*****************************************************************************/
-/*********** Get date of exam announcements to show highlighted **************/
-/*****************************************************************************/
-
-static void Exa_GetDateToHighlight (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   /***** Get the date (in YYYYMMDD format)
-          of the exam announcements to highlight *****/
-   Par_GetParToText ("Date",ExamAnns->HighlightDate,4 + 2 + 2);
-  }
-
-/*****************************************************************************/
-/******************** List all the exam announcements ************************/
-/*****************************************************************************/
-
-static void Exa_ListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns,
-                                       Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
-  {
-   extern const char *Hlp_ASSESSMENT_Announcements;
-   extern const char *Txt_Announcements_of_exams;
-   extern const char *Txt_No_announcements_of_exams_of_X;
-   char SubQueryStatus[64];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumExaAnn;
-   unsigned long NumExaAnns;
-   long ExaCod;
-   bool HighLight;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-
-   /***** Build subquery about status depending on my role *****/
-   if (ICanEdit)
-      sprintf (SubQueryStatus,"Status<>%u",
-	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
-   else
-      sprintf (SubQueryStatus,"Status=%u",
-	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
-
-   /***** Get exam announcements (the most recent first)
-          in current course from database *****/
-   NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get exam announcements"
-	                                   " in this course for listing",
-				"SELECT ExaCod"
-				" FROM exam_announcements"
-				" WHERE CrsCod=%ld AND %s"
-				" ORDER BY ExamDate DESC",
-				Gbl.Hierarchy.Crs.CrsCod,SubQueryStatus);
+   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Txt_Exams;
+   extern const char *Txt_EXAMS_ORDER_HELP[Exa_NUM_ORDERS];
+   extern const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS];
+   extern const char *Txt_Matches;
+   extern const char *Txt_No_exams;
+   Exa_Order_t Order;
+   struct Pagination Pagination;
+   unsigned NumExam;
+   struct Exa_Exam Exam;
+
+   /***** Get number of groups in current course *****/
+   if (!Gbl.Crs.Grps.NumGrps)
+      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+
+   /***** Get list of exams *****/
+   Exa_GetListExams (Exams,Exams->SelectedOrder);
+
+   /***** Compute variables related to pagination *****/
+   Pagination.NumItems = Exams->Num;
+   Pagination.CurrentPage = (int) Exams->CurrentPage;
+   Pag_CalculatePagination (&Pagination);
+   Exams->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   if (ICanEdit)
-      Box_BoxBegin (NULL,Txt_Announcements_of_exams,
-		    Exa_PutIconToCreateNewExamAnnouncement,NULL,
-		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Announcements_of_exams,
-		    NULL,NULL,
-		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
+   Box_BoxBegin ("100%",Txt_Exams,
+                 Exa_PutIconsListExams,Exams,
+                 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
-   /***** The result of the query may be empty *****/
-   if (!NumExaAnns)
-      Ale_ShowAlert (Ale_INFO,Txt_No_announcements_of_exams_of_X,
-                     Gbl.Hierarchy.Crs.FullName);
+   /***** Write links to pages *****/
+   Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
+				  Exams,-1L);
 
-   /***** List the existing exam announcements *****/
-   for (NumExaAnn = 0;
-	NumExaAnn < NumExaAnns;
-	NumExaAnn++)
+   if (Exams->Num)
      {
-      /***** Get the code of the exam announcement (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
+      /***** Table head *****/
+      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TR_Begin (NULL);
+      if (Exa_CheckIfICanEditExams ())
+         HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 
-      if (sscanf (row[0],"%ld",&ExaCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
+      for (Order  = (Exa_Order_t) 0;
+	   Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
+	   Order++)
+	{
+	 HTM_TH_Begin (1,1,"LM");
 
-      /***** Allocate memory for the exam announcement *****/
-      Exa_AllocMemExamAnnouncement (ExamAnns);
+	 /* Form to change order */
+	 Frm_StartForm (ActSeeAllExa);
+	 Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_EXAMS_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	 if (Order == Exams->SelectedOrder)
+	    HTM_U_Begin ();
+	 HTM_Txt (Txt_EXAMS_ORDER[Order]);
+	 if (Order == Exams->SelectedOrder)
+	    HTM_U_End ();
+	 HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
-      /***** Read the data of the exam announcement *****/
-      Exa_GetDataExamAnnouncementFromDB (ExamAnns,ExaCod);
+	 HTM_TH_End ();
+	}
 
-      /***** Show exam announcement *****/
-      HighLight = false;
-      if (ExaCod == ExamAnns->HighlightExaCod)
-	 HighLight = true;
-      else if (ExamAnns->HighlightDate[0])
-        {
-	 if (!strcmp (ExamAnns->ExamAnn.ExamDate.YYYYMMDD,
-	              ExamAnns->HighlightDate))
-	    HighLight = true;
-        }
-      Exa_ShowExamAnnouncement (ExamAnns,ExaCod,TypeViewExamAnnouncement,
-	                        HighLight);
+      HTM_TH (1,1,"RM",Txt_Matches);
 
-      /***** Free memory of the exam announcement *****/
-      Exa_FreeMemExamAnnouncement (ExamAnns);
+      HTM_TR_End ();
+
+      /***** Write all exams *****/
+      for (NumExam  = Pagination.FirstItemVisible;
+	   NumExam <= Pagination.LastItemVisible;
+	   NumExam++)
+	{
+	 /* Get data of this exam */
+	 Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
+	 Exa_GetDataOfExamByCod (&Exam);
+
+	 /* Show exam */
+	 Exa_ShowOneExam (Exams,
+	                  &Exam,
+	                  false);	// Do not show only this exam
+	}
+
+      /***** End table *****/
+      HTM_TABLE_End ();
      }
+   else	// No exams created
+      Ale_ShowAlert (Ale_INFO,Txt_No_exams);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Write again links to pages *****/
+   Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
+				  Exams,-1L);
 
-   /***** Button to create a new exam announcement *****/
-   if (ICanEdit)
-      Exa_PutButtonToCreateNewExamAnnouncement ();
+   /***** Button to create a new exam *****/
+   if (Exa_CheckIfICanEditExams ())
+      Exa_PutButtonToCreateNewExam (Exams);
 
    /***** End box *****/
    Box_BoxEnd ();
+
+   /***** Free list of exams *****/
+   Exa_FreeListExams (Exams);
   }
 
 /*****************************************************************************/
-/***************** Put icon to create a new exam announcement ****************/
+/************************ Check if I can edit exams **************************/
 /*****************************************************************************/
 
-static void Exa_PutIconToCreateNewExamAnnouncement (__attribute__((unused)) void *Args)
+static bool Exa_CheckIfICanEditExams (void)
   {
-   extern const char *Txt_New_announcement_OF_EXAM;
-
-   Ico_PutContextualIconToAdd (ActEdiExaAnn,NULL,
-			       NULL,NULL,
-			       Txt_New_announcement_OF_EXAM);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
   }
 
 /*****************************************************************************/
-/**************** Put button to create a new exam announcement ***************/
+/***************** Put contextual icons in list of exams *******************/
 /*****************************************************************************/
 
-static void Exa_PutButtonToCreateNewExamAnnouncement (void)
+static void Exa_PutIconsListExams (void *Exams)
   {
-   extern const char *Txt_New_announcement_OF_EXAM;
+   if (Exams)
+     {
+      /***** Put icon to create a new exam *****/
+      if (Exa_CheckIfICanEditExams ())
+	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
-   Frm_StartForm (ActEdiExaAnn);
-   Btn_PutConfirmButton (Txt_New_announcement_OF_EXAM);
+      /***** Put icon to view matches results *****/
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    Ico_PutContextualIconToShowResults (ActSeeMyExaEvtResCrs,NULL,
+	                                        NULL,NULL);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Ico_PutContextualIconToShowResults (ActReqSeeAllExaEvtRes,NULL,
+	                                        NULL,NULL);
+	    break;
+	 default:
+	    break;
+	}
+
+      /***** Put icon to show a figure *****/
+      Fig_PutIconToShowFigure (Fig_EXAMS);
+     }
+  }
+
+/*****************************************************************************/
+/********************** Put icon to create a new exam **********************/
+/*****************************************************************************/
+
+static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
+  {
+   extern const char *Txt_New_exam;
+
+   Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,
+                               Exa_PutParamsToCreateNewExam,Exams,
+			       Txt_New_exam);
+  }
+
+/*****************************************************************************/
+/********************* Put button to create a new exam *********************/
+/*****************************************************************************/
+
+static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
+  {
+   extern const char *Txt_New_exam;
+
+   Frm_StartForm (ActFrmNewExa);
+   Exa_PutParamsToCreateNewExam (Exams);
+   Btn_PutConfirmButton (Txt_New_exam);
    Frm_EndForm ();
   }
 
 /*****************************************************************************/
-/****************** Add an exam announcement to the database *****************/
+/******************* Put parameters to create a new exam *******************/
 /*****************************************************************************/
-// Return the code of the exam announcement just added
 
-static long Exa_AddExamAnnouncementToDB (const struct Exa_ExamAnnouncements *ExamAnns)
+static void Exa_PutParamsToCreateNewExam (void *Exams)
   {
-   long ExaCod;
-
-   /***** Add exam announcement *****/
-   ExaCod =
-   DB_QueryINSERTandReturnCode ("can not create a new exam announcement",
-				"INSERT INTO exam_announcements "
-				"(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
-				"CallDate,ExamDate,Duration,"
-				"Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
-				" VALUES "
-				"(%ld,%u,0,'%s',%u,'%s',"
-				"NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
-				"'%s','%s','%s','%s','%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				(unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
-				ExamAnns->ExamAnn.CrsFullName,
-				ExamAnns->ExamAnn.Year,
-				ExamAnns->ExamAnn.Session,
-				ExamAnns->ExamAnn.ExamDate.Year,
-				ExamAnns->ExamAnn.ExamDate.Month,
-				ExamAnns->ExamAnn.ExamDate.Day,
-				ExamAnns->ExamAnn.StartTime.Hour,
-				ExamAnns->ExamAnn.StartTime.Minute,
-				ExamAnns->ExamAnn.Duration.Hour,
-				ExamAnns->ExamAnn.Duration.Minute,
-				ExamAnns->ExamAnn.Place,
-				ExamAnns->ExamAnn.Mode,
-				ExamAnns->ExamAnn.Structure,
-				ExamAnns->ExamAnn.DocRequired,
-				ExamAnns->ExamAnn.MatRequired,
-				ExamAnns->ExamAnn.MatAllowed,
-				ExamAnns->ExamAnn.OtherInfo);
-
-   return ExaCod;
-  }
-
-/*****************************************************************************/
-/*************** Modify an exam announcement in the database *****************/
-/*****************************************************************************/
-
-static void Exa_ModifyExamAnnouncementInDB (const struct Exa_ExamAnnouncements *ExamAnns,
-                                            long ExaCod)
-  {
-   /***** Modify exam announcement *****/
-   DB_QueryUPDATE ("can not update an exam announcement",
-		   "UPDATE exam_announcements"
-		   " SET CrsFullName='%s',Year=%u,ExamSession='%s',"
-		   "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
-		   "Duration='%02u:%02u:00',"
-		   "Place='%s',ExamMode='%s',Structure='%s',"
-		   "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'"
-		   " WHERE ExaCod=%ld",
-	           ExamAnns->ExamAnn.CrsFullName,
-	           ExamAnns->ExamAnn.Year,
-	           ExamAnns->ExamAnn.Session,
-	           ExamAnns->ExamAnn.ExamDate.Year,
-	           ExamAnns->ExamAnn.ExamDate.Month,
-	           ExamAnns->ExamAnn.ExamDate.Day,
-	           ExamAnns->ExamAnn.StartTime.Hour,
-	           ExamAnns->ExamAnn.StartTime.Minute,
-	           ExamAnns->ExamAnn.Duration.Hour,
-	           ExamAnns->ExamAnn.Duration.Minute,
-	           ExamAnns->ExamAnn.Place,
-	           ExamAnns->ExamAnn.Mode,
-	           ExamAnns->ExamAnn.Structure,
-	           ExamAnns->ExamAnn.DocRequired,
-	           ExamAnns->ExamAnn.MatRequired,
-	           ExamAnns->ExamAnn.MatAllowed,
-	           ExamAnns->ExamAnn.OtherInfo,
-	           ExaCod);
-  }
-
-/*****************************************************************************/
-/******* Create a list with the dates of all the exam announcements **********/
-/*****************************************************************************/
-
-void Exa_CreateListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumExaAnn;
-   unsigned long NumExaAnns;
-
-   if (Gbl.DB.DatabaseIsOpen)
+   if (Exams)
      {
-      /***** Get exam dates (ordered from more recent to older)
-             of visible exam announcements
-             in current course from database *****/
-      NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get exam announcements"
-	                                      " in this course",
-				   "SELECT ExaCod,DATE(ExamDate)"
-				   " FROM exam_announcements"
-				   " WHERE CrsCod=%ld AND Status=%u"
-				   " ORDER BY ExamDate DESC",
-				   Gbl.Hierarchy.Crs.CrsCod,
-				   (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
-
-      /***** The result of the query may be empty *****/
-      ExamAnns->Lst = NULL;
-      ExamAnns->NumExaAnns = 0;
-      if (NumExaAnns)
-	{
-	 /***** Allocate memory for the list *****/
-	 if ((ExamAnns->Lst = (struct Exa_ExamCodeAndDate *) calloc (NumExaAnns,sizeof (struct Exa_ExamCodeAndDate))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
-
-	 /***** Get the dates of the existing exam announcements *****/
-	 for (NumExaAnn = 0;
-	      NumExaAnn < NumExaAnns;
-	      NumExaAnn++)
-	   {
-	    /***** Get next exam announcement *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get exam code (row[0]) */
-	    ExamAnns->Lst[ExamAnns->NumExaAnns].ExaCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	    /* Read the date of the exam (row[1]) */
-	    if (sscanf (row[1],"%04u-%02u-%02u",
-			&ExamAnns->Lst[ExamAnns->NumExaAnns].ExamDate.Year,
-			&ExamAnns->Lst[ExamAnns->NumExaAnns].ExamDate.Month,
-			&ExamAnns->Lst[ExamAnns->NumExaAnns].ExamDate.Day) != 3)
-	       Lay_ShowErrorAndExit ("Wrong date of exam.");
-
-	    /***** Increment number of elements in list *****/
-	    ExamAnns->NumExaAnns++;
-	   }
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      Exa_PutHiddenParamExamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
+      Pag_PutHiddenParamPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
      }
   }
 
 /*****************************************************************************/
-/***************** Free list of dates of exam announcements ******************/
+/****************************** Show one exam ******************************/
 /*****************************************************************************/
 
-void Exa_FreeListExamAnnouncements (struct Exa_ExamAnnouncements *ExamAnns)
+void Exa_SeeOneExam (void)
   {
-   if (ExamAnns->Lst)
-     {
-      free (ExamAnns->Lst);
-      ExamAnns->Lst = NULL;
-      ExamAnns->NumExaAnns = 0;
-     }
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Show exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        false,	// Do not list exam questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
-/******** Read the data of an exam announcement from the database ************/
+/******************************* Show one exam *******************************/
 /*****************************************************************************/
 
-static void Exa_GetDataExamAnnouncementFromDB (struct Exa_ExamAnnouncements *ExamAnns,
-                                               long ExaCod)
+void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
+			  struct Exa_Exam *Exam,
+			  bool ListExamQuestions,
+			  bool PutFormNewMatch)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumExaAnns;
-   unsigned UnsignedNum;
-   unsigned Hour;
-   unsigned Minute;
-   unsigned Second;
-
-   /***** Get data of an exam announcement from database *****/
-   NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get data"
-					   " of an exam announcement",
-	                        "SELECT CrsCod,Status,CrsFullName,Year,ExamSession,"
-				"CallDate,ExamDate,Duration,Place,ExamMode,"
-				"Structure,DocRequired,MatRequired,MatAllowed,OtherInfo"
-				" FROM exam_announcements WHERE ExaCod=%ld",
-				ExaCod);
-
-   /***** The result of the query must have one row *****/
-   if (NumExaAnns != 1)
-      Lay_ShowErrorAndExit ("Error when getting data of an exam announcement.");
-
-   /***** Get the data of the exam announcement *****/
-   row = mysql_fetch_row (mysql_res);
-
-   /* Code of the course in which the exam announcement is inserted (row[0]) */
-   ExamAnns->ExamAnn.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-
-   /* Status of the exam announcement (row[1]) */
-   if (sscanf (row[1],"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Wrong status.");
-   if (UnsignedNum >= Exa_NUM_STATUS)
-      Lay_ShowErrorAndExit ("Wrong status.");
-   ExamAnns->ExamAnn.Status = (Exa_ExamAnnouncementStatus_t) UnsignedNum;
-
-   /* Name of the course (row[2]) */
-   Str_Copy (ExamAnns->ExamAnn.CrsFullName,row[2],
-             Hie_MAX_BYTES_FULL_NAME);
-
-   /* Year (row[3]) */
-   if (sscanf (row[3],"%u",&ExamAnns->ExamAnn.Year) != 1)
-      Lay_ShowErrorAndExit ("Wrong year.");
-
-   /* Exam session (row[4]) */
-   Str_Copy (ExamAnns->ExamAnn.Session,row[4],
-             Exa_MAX_BYTES_SESSION);
-
-   /* Date of exam announcement (row[5]) */
-   if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",
-               &ExamAnns->ExamAnn.CallDate.Year,
-               &ExamAnns->ExamAnn.CallDate.Month,
-               &ExamAnns->ExamAnn.CallDate.Day,
-               &Hour,
-	       &Minute,
-	       &Second) != 6)
-      Lay_ShowErrorAndExit ("Wrong date of exam announcement.");
-
-   /* Date of exam (row[6]) */
-   if (sscanf (row[6],"%04u-%02u-%02u %02u:%02u:%02u",
-   	       &ExamAnns->ExamAnn.ExamDate.Year,
-	       &ExamAnns->ExamAnn.ExamDate.Month,
-	       &ExamAnns->ExamAnn.ExamDate.Day,
-               &ExamAnns->ExamAnn.StartTime.Hour,
-	       &ExamAnns->ExamAnn.StartTime.Minute,
-	       &Second) != 6)
-      Lay_ShowErrorAndExit ("Wrong date of exam.");
-   snprintf (ExamAnns->ExamAnn.ExamDate.YYYYMMDD,sizeof (ExamAnns->ExamAnn.ExamDate.YYYYMMDD),
-	     "%04u%02u%02u",
-             ExamAnns->ExamAnn.ExamDate.Year,
-	     ExamAnns->ExamAnn.ExamDate.Month,
-	     ExamAnns->ExamAnn.ExamDate.Day);
-
-   /* Approximate duration (row[7]) */
-   if (sscanf (row[7],"%02u:%02u:%02u",&ExamAnns->ExamAnn.Duration.Hour,&ExamAnns->ExamAnn.Duration.Minute,&Second) != 3)
-      Lay_ShowErrorAndExit ("Wrong duration of exam.");
-
-   /* Place (row[8]) */
-   Str_Copy (ExamAnns->ExamAnn.Place,row[8],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Exam mode (row[9]) */
-   Str_Copy (ExamAnns->ExamAnn.Mode,row[9],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Structure (row[10]) */
-   Str_Copy (ExamAnns->ExamAnn.Structure,row[10],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Documentation required (row[11]) */
-   Str_Copy (ExamAnns->ExamAnn.DocRequired,row[11],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Material required (row[12]) */
-   Str_Copy (ExamAnns->ExamAnn.MatRequired,row[12],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Material allowed (row[13]) */
-   Str_Copy (ExamAnns->ExamAnn.MatAllowed,row[13],
-             Cns_MAX_BYTES_TEXT);
-
-   /* Other information for students (row[14]) */
-   Str_Copy (ExamAnns->ExamAnn.OtherInfo,row[14],
-             Cns_MAX_BYTES_TEXT);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   Exa_ShowOnlyOneExamBegin (Exams,Exam,ListExamQuestions,PutFormNewMatch);
+   Exa_ShowOnlyOneExamEnd ();
   }
 
-/*****************************************************************************/
-/************ Show a form with the data of an exam announcement **************/
-/*****************************************************************************/
-
-static void Exa_ShowExamAnnouncement (struct Exa_ExamAnnouncements *ExamAnns,
-                                      long ExaCod,
-				      Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
-				      bool HighLight)
+void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
+			       struct Exa_Exam *Exam,
+			       bool ListExamQuestions,
+			       bool PutFormNewMatch)
   {
-   extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
-   extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
-   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_EXAM_ANNOUNCEMENT;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Session;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Exam_date;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Start_time;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Approximate_duration;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Place_of_exam;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Mode;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Documentation_required;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Material_required;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Other_information;
-   extern const char *Txt_hours_ABBREVIATION;
-   extern const char *Txt_hour;
-   extern const char *Txt_hours;
-   extern const char *Txt_minute;
-   extern const char *Txt_minutes;
-   extern const char *Txt_Publish_announcement_OF_EXAM;
-   struct Instit Ins;
-   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
-   unsigned Year;
-   unsigned Hour;
-   unsigned Minute;
-   char *Anchor = NULL;
-   const char *Width;
-   void (*FunctionToDrawContextualIcons) (void *Args);
-   const char *HelpLink;
-   static const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
-     {
-      [Exa_NORMAL_VIEW][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
-      [Exa_NORMAL_VIEW][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_HIDDEN",
-      [Exa_NORMAL_VIEW][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
-
-      [Exa_PRINT_VIEW ][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
-      [Exa_PRINT_VIEW ][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_VISIBLE",
-      [Exa_PRINT_VIEW ][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
-
-      [Exa_FORM_VIEW  ][Exa_VISIBLE_EXAM_ANNOUNCEMENT] = "EXA_ANN_VISIBLE",
-      [Exa_FORM_VIEW  ][Exa_HIDDEN_EXAM_ANNOUNCEMENT ] = "EXA_ANN_VISIBLE",
-      [Exa_FORM_VIEW  ][Exa_DELETED_EXAM_ANNOUNCEMENT] = NULL,	// Not applicable here
-     };
-
-   /***** Get data of institution of this degree *****/
-   Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins);
-
-   /***** Build anchor string *****/
-   Frm_SetAnchorStr (ExaCod,&Anchor);
-
-   /***** Begin article *****/
-   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      HTM_ARTICLE_Begin (Anchor);
+   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Txt_Exam;
 
    /***** Begin box *****/
-   Width = "625px";
-   ExamAnns->Anchor = Anchor;	// Used to put contextual icons
-   ExamAnns->ExaCod = ExaCod;	// Used to put contextual icons
-   FunctionToDrawContextualIcons = TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
-									         NULL;
-   HelpLink = TypeViewExamAnnouncement == Exa_FORM_VIEW ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
-									  Hlp_ASSESSMENT_Announcements_new_announcement) :
-						          NULL;
-   if (HighLight)
-     {
-      /* Show pending alerts */
-      Ale_ShowAlerts (Anchor);
+   Exams->ExaCod = Exam->ExaCod;
+   Box_BoxBegin (NULL,Txt_Exam,
+                 Exa_PutIconToShowResultsOfExam,Exams,
+		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
-      /* Start highlighted box */
-      Box_BoxShadowBegin (Width,NULL,
-                          FunctionToDrawContextualIcons,ExamAnns,
-                          HelpLink);
+   /***** Show exam *****/
+   Exa_ShowOneExam (Exams,
+                    Exam,
+		    true);	// Show only this exam
+
+   if (ListExamQuestions)
+       /***** Write questions of this exam *****/
+      Exa_ListExamQuestions (Exams,Exam);
+   else
+      /***** List matches *****/
+      ExaEvt_ListEvents (Exams,Exam,PutFormNewMatch);
+  }
+
+void Exa_ShowOnlyOneExamEnd (void)
+  {
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+static void Exa_ShowOneExam (struct Exa_Exams *Exams,
+                             struct Exa_Exam *Exam,bool ShowOnlyThisExam)
+  {
+   extern const char *Txt_View_exam;
+   extern const char *Txt_No_of_questions;
+   extern const char *Txt_Maximum_grade;
+   extern const char *Txt_Result_visibility;
+   extern const char *Txt_Matches;
+   char *Anchor = NULL;
+   static unsigned UniqueId = 0;
+   char *Id;
+   Dat_StartEndTime_t StartEndTime;
+   const char *Color;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Exam->ExaCod,&Anchor);
+
+   /***** Begin box and table *****/
+   if (ShowOnlyThisExam)
+      HTM_TABLE_BeginWidePadding (2);
+
+   /***** Start first row of this exam *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Icons related to this exam *****/
+   if (Exa_CheckIfICanEditExams ())
+     {
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+      else
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+
+      /* Icons to remove/edit this exam */
+      Exa_PutFormsToRemEditOneExam (Exams,Exam,Anchor);
+
+      HTM_TD_End ();
      }
-   else	// Don't highlight
-      /* Start normal box */
-      Box_BoxBegin (Width,NULL,
-                    FunctionToDrawContextualIcons,ExamAnns,
-                    HelpLink,Box_NOT_CLOSABLE);
 
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
+   /***** Start/end date/time *****/
+   UniqueId++;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
      {
-      /***** Begin form *****/
-      Frm_StartFormAnchor (ActRcvExaAnn,Anchor);
-      if (ExaCod > 0)	// Existing announcement of exam
-         Exa_PutHiddenParamExaCod (ExaCod);
+      if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Color = Exam->NumUnfinishedEves ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
+							"DATE_GREEN") :
+					(Exam->Hidden ? "DATE_RED_LIGHT":
+							"DATE_RED");
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,Color);
+      else
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,Color,Gbl.RowEvenOdd);
+      if (Exam->TimeUTC[Dat_START_TIME])
+	 Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
+      HTM_TD_End ();
+      free (Id);
      }
 
-   /***** Begin table *****/
-   HTM_TABLE_Begin ("%s CELLS_PAD_2",
-                    ClassExaAnnouncement[TypeViewExamAnnouncement][ExamAnns->ExamAnn.Status]);
-
-   /***** Institution logo *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      HTM_SPAN_Begin ("class=\"EXAM_TIT\"");
-   else
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-                   Ins.WWW);
-   Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Ins.FullName);
-   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      HTM_SPAN_End ();
-   else
-      HTM_A_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   /***** Degree *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM_TIT CM\"");
-   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-                   Gbl.Hierarchy.Deg.WWW);
-   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      HTM_A_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   /***** Title *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM CM\"");
-   HTM_NBSP ();
-   HTM_BR ();
-   HTM_STRONG_Begin ();
-   HTM_Txt (Txt_EXAM_ANNOUNCEMENT);
-   HTM_STRONG_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM LM\"");
-   HTM_NBSP ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   /***** Name of the course *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "CrsName" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Course);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,false,
-		      "id=\"CrsName\" size=\"30\"");
-   else
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (ExamAnns->ExamAnn.CrsFullName);
-      HTM_STRONG_End ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Year" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (false,
-			"id=\"Year\" name=\"Year\"");
-      for (Year = 0;
-	   Year <= Deg_MAX_YEARS_PER_DEGREE;
-	   Year++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		     ExamAnns->ExamAnn.Year == Year,false,
-		     "%s",Txt_YEAR_OF_DEGREE[Year]);
-      HTM_SELECT_End ();
-     }
-   else
-      HTM_Txt (Txt_YEAR_OF_DEGREE[ExamAnns->ExamAnn.Year]);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Exam session *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "ExamSession" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Session);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      HTM_INPUT_TEXT ("ExamSession",Exa_MAX_CHARS_SESSION,ExamAnns->ExamAnn.Session,false,
-		      "id=\"ExamSession\" size=\"30\"");
-   else
-      HTM_Txt (ExamAnns->ExamAnn.Session);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Date of the exam *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Exam_date);
-
-   /* Data */
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
+   /***** Exam title and main data *****/
+   if (ShowOnlyThisExam)
       HTM_TD_Begin ("class=\"LT\"");
-      Dat_WriteFormDate (ExamAnns->ExamAnn.ExamDate.Year < Gbl.Now.Date.Year ? ExamAnns->ExamAnn.ExamDate.Year :
-                                                                               Gbl.Now.Date.Year,
-                         Gbl.Now.Date.Year + 1,"Exam",
-                         &(ExamAnns->ExamAnn.ExamDate),
-                         false,false);
-      HTM_TD_End ();
-     }
    else
-     {
-      Dat_ConvDateToDateStr (&ExamAnns->ExamAnn.ExamDate,
-                             StrExamDate);
-      HTM_TD_Begin ("class=\"EXAM LT\"");
-      HTM_Txt (StrExamDate);
-      HTM_TD_End ();
-     }
-   HTM_TR_End ();
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /***** Start time *****/
-   HTM_TR_Begin (NULL);
+   /* Exam title */
+   Exams->ExaCod = Exam->ExaCod;
+   HTM_ARTICLE_Begin (Anchor);
+   Frm_StartForm (ActSeeExa);
+   Exa_PutParams (Exams);
+   HTM_BUTTON_SUBMIT_Begin (Txt_View_exam,
+			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+					   "BT_LINK LT ASG_TITLE",
+			    NULL);
+   HTM_Txt (Exam->Title);
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
+   HTM_ARTICLE_End ();
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Start_time);
+   /* Number of questions, maximum grade, visibility of results */
+   HTM_DIV_Begin ("class=\"%s\"",Exam->Hidden ? "ASG_GRP_LIGHT" :
+        	                                "ASG_GRP");
+   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_Unsigned (Exam->NumQsts);
+   HTM_BR ();
+   HTM_TxtColonNBSP (Txt_Maximum_grade);
+   HTM_Double (Exam->MaxGrade);
+   HTM_BR ();
+   HTM_TxtColonNBSP (Txt_Result_visibility);
+   TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
+   HTM_DIV_End ();
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (false,
-			"name=\"ExamHour\"");
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  ExamAnns->ExamAnn.StartTime.Hour == 0,false,
-		  "-");
-      for (Hour = 7;
-	   Hour <= 22;
-	   Hour++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		     ExamAnns->ExamAnn.StartTime.Hour == Hour,false,
-		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
-      HTM_SELECT_End ();
+   /***** Number of matches in exam *****/
+   if (ShowOnlyThisExam)
+      HTM_TD_Begin ("class=\"RT\"");
+   else
+      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
-      HTM_SELECT_Begin (false,
-			"name=\"ExamMinute\"");
-      for (Minute = 0;
-	   Minute <= 59;
-	   Minute++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		     ExamAnns->ExamAnn.StartTime.Minute == Minute,false,
-		     "%02u &prime;",Minute);
-      HTM_SELECT_End ();
-     }
-   else if (ExamAnns->ExamAnn.StartTime.Hour)
-      HTM_TxtF ("%2u:%02u",ExamAnns->ExamAnn.StartTime.Hour,
-                           ExamAnns->ExamAnn.StartTime.Minute);
+   Exams->ExaCod = Exam->ExaCod;
+   Frm_StartForm (ActSeeExa);
+   Exa_PutParams (Exams);
+   HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
+			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+				           "BT_LINK LT ASG_TITLE",
+			    NULL);
+   if (ShowOnlyThisExam)
+      HTM_TxtColonNBSP (Txt_Matches);
+   HTM_Unsigned (Exam->NumEves);
+   HTM_BUTTON_End ();
+   Frm_EndForm ();
+
    HTM_TD_End ();
 
+   /***** End 1st row of this exam *****/
    HTM_TR_End ();
 
-   /***** Approximate duration of the exam *****/
+   /***** Start 2nd row of this exam *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (false,
-			"name=\"DurationHour\"");
-      for (Hour = 0;
-	   Hour <= 8;
-	   Hour++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		     ExamAnns->ExamAnn.Duration.Hour == Hour,false,
-		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
-      HTM_SELECT_End ();
-
-      HTM_SELECT_Begin (false,
-			"name=\"DurationMinute\"");
-      for (Minute = 0;
-	   Minute <= 59;
-	   Minute++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		     ExamAnns->ExamAnn.Duration.Minute == Minute,false,
-		     "%02u &prime;",Minute);
-      HTM_SELECT_End ();
-     }
-   else if (ExamAnns->ExamAnn.Duration.Hour ||
-            ExamAnns->ExamAnn.Duration.Minute)
-     {
-      if (ExamAnns->ExamAnn.Duration.Hour)
-        {
-         if (ExamAnns->ExamAnn.Duration.Minute)
-            HTM_TxtF ("%u %s %u &prime;",ExamAnns->ExamAnn.Duration.Hour,
-                                       Txt_hours_ABBREVIATION,
-                                       ExamAnns->ExamAnn.Duration.Minute);
-         else
-            HTM_TxtF ("%u&nbsp;%s",ExamAnns->ExamAnn.Duration.Hour,
-				   ExamAnns->ExamAnn.Duration.Hour == 1 ? Txt_hour :
-					                                  Txt_hours);
-        }
-      else if (ExamAnns->ExamAnn.Duration.Minute)
-        {
-         HTM_TxtF ("%u&nbsp;%s",ExamAnns->ExamAnn.Duration.Minute,
-			        ExamAnns->ExamAnn.Duration.Minute == 1 ? Txt_minute :
-				                                         Txt_minutes);
-        }
-     }
+   /***** Author of the exam *****/
+   if (ShowOnlyThisExam)
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+   else
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   Exa_WriteAuthor (Exam);
    HTM_TD_End ();
 
-   HTM_TR_End ();
-
-   /***** Place where the exam will be made *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Place" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (ExamAnns->ExamAnn.Place);
-      HTM_TEXTAREA_End ();
-     }
+   /***** Text of the exam *****/
+   if (ShowOnlyThisExam)
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.Place,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.Place);
-     }
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   Exa_GetExamTxtFromDB (Exam->ExaCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   HTM_DIV_Begin ("class=\"PAR %s\"",Exam->Hidden ? "DAT_LIGHT" :
+        	                                    "DAT");
+   HTM_Txt (Txt);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
+   /***** End 2nd row of this exam *****/
    HTM_TR_End ();
 
-   /***** Exam mode *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "ExamMode" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Mode);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
-      HTM_Txt (ExamAnns->ExamAnn.Mode);
-      HTM_TEXTAREA_End ();
-     }
+   /***** End table *****/
+   if (ShowOnlyThisExam)
+      HTM_TABLE_End ();
    else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.Mode,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.Mode);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Structure of the exam *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "Structure" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
-      HTM_Txt (ExamAnns->ExamAnn.Structure);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.Structure,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.Structure);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Documentation required *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "DocRequired" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Documentation_required);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
-      HTM_Txt (ExamAnns->ExamAnn.DocRequired);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.DocRequired,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.DocRequired);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Material required *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "MatRequired" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Material_required);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (ExamAnns->ExamAnn.MatRequired);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.MatRequired,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.MatRequired);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Material allowed *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "MatAllowed" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Material_allowed);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (ExamAnns->ExamAnn.MatAllowed);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.MatAllowed,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.MatAllowed);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Other information to students *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewExamAnnouncement == Exa_FORM_VIEW ? "OtherInfo" :
-			                                        NULL,
-		    Txt_EXAM_ANNOUNCEMENT_Other_information);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
-      HTM_Txt (ExamAnns->ExamAnn.OtherInfo);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        ExamAnns->ExamAnn.OtherInfo,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (ExamAnns->ExamAnn.OtherInfo);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** End table, send button and end box *****/
-   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Box_BoxTableWithButtonEnd ((ExaCod > 0) ? Btn_CONFIRM_BUTTON :
-	                                        Btn_CREATE_BUTTON,
-	                         Txt_Publish_announcement_OF_EXAM);
-   else
-      Box_BoxTableEnd ();
-
-   /***** Show QR code *****/
-   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      QR_ExamAnnnouncement ();
-
-   /***** End article *****/
-   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      HTM_ARTICLE_End ();
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
-/********* Put icons to remove / edit / print an exam announcement ***********/
+/************* Put icon to show results of matches in an exam *****************/
 /*****************************************************************************/
 
-static void Exa_PutIconsExamAnnouncement (void *ExamAnns)
+static void Exa_PutIconToShowResultsOfExam (void *Exams)
   {
-   if (ExamAnns)
+   if (Exams)
      {
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      /***** Put icon to view matches results *****/
+      switch (Gbl.Usrs.Me.Role.Logged)
 	{
-	 /***** Link to remove this exam announcement *****/
-	 Ico_PutContextualIconToRemove (ActReqRemExaAnn,
-					Exa_PutParamExaCodToEdit,&((struct Exa_ExamAnnouncements *) ExamAnns)->ExaCod);
-
-	 /***** Put form to hide/show exam announement *****/
-	 switch (((struct Exa_ExamAnnouncements *) ExamAnns)->ExamAnn.Status)
-	   {
-	    case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
-	       Ico_PutContextualIconToHide (ActHidExaAnn,((struct Exa_ExamAnnouncements *) ExamAnns)->Anchor,
-					    Exa_PutParamExaCodToEdit,&((struct Exa_ExamAnnouncements *) ExamAnns)->ExaCod);
-	       break;
-	    case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
-	       Ico_PutContextualIconToUnhide (ActShoExaAnn,((struct Exa_ExamAnnouncements *) ExamAnns)->Anchor,
-					      Exa_PutParamExaCodToEdit,&((struct Exa_ExamAnnouncements *) ExamAnns)->ExaCod);
-	       break;
-	    case Exa_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here
-	       break;
-	   }
-
-	 /***** Link to edit this exam announcement *****/
-	 Ico_PutContextualIconToEdit (ActEdiExaAnn,NULL,
-				      Exa_PutParamExaCodToEdit,&((struct Exa_ExamAnnouncements *) ExamAnns)->ExaCod);
+	 case Rol_STD:
+	    Ico_PutContextualIconToShowResults (ActSeeMyEveResExa,ExaRes_RESULTS_BOX_ID,
+						Exa_PutParams,Exams);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Ico_PutContextualIconToShowResults (ActSeeAllEveResExa,ExaRes_RESULTS_BOX_ID,
+						Exa_PutParams,Exams);
+	    break;
+	 default:
+	    break;
 	}
-
-      /***** Link to print view *****/
-      Ico_PutContextualIconToPrint (ActPrnExaAnn,
-				    Exa_PutParamExaCodToEdit,&((struct Exa_ExamAnnouncements *) ExamAnns)->ExaCod);
      }
   }
 
 /*****************************************************************************/
-/*************** Param with the code of an exam announcement *****************/
+/*********************** Write the author of an exam ************************/
 /*****************************************************************************/
 
-static void Exa_PutParamExaCodToEdit (void *ExaCod)
+static void Exa_WriteAuthor (struct Exa_Exam *Exam)
   {
-   if (ExaCod)
-      Exa_PutHiddenParamExaCod (*((long *) ExaCod));
+   Usr_WriteAuthor1Line (Exam->UsrCod,Exam->Hidden);
   }
 
-void Exa_PutHiddenParamExaCod (long ExaCod)
+/*****************************************************************************/
+/****** Put a hidden parameter with the type of order in list of exams *******/
+/*****************************************************************************/
+
+static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+  }
+
+/*****************************************************************************/
+/******************** Put a link (form) to edit one exam *********************/
+/*****************************************************************************/
+
+static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
+					  const struct Exa_Exam *Exam,
+					  const char *Anchor)
+  {
+   Exams->ExaCod = Exam->ExaCod;
+
+   /***** Put icon to remove exam *****/
+   Ico_PutContextualIconToRemove (ActReqRemExa,
+                                  Exa_PutParams,Exams);
+
+   /***** Put icon to unhide/hide exam *****/
+   if (Exam->Hidden)
+      Ico_PutContextualIconToUnhide (ActShoExa,Anchor,
+                                     Exa_PutParams,Exams);
+   else
+      Ico_PutContextualIconToHide (ActHidExa,Anchor,
+                                   Exa_PutParams,Exams);
+
+   /***** Put icon to edit exam *****/
+   Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
+                                Exa_PutParams,Exams);
+  }
+
+/*****************************************************************************/
+/**************** Put parameter to move/remove one question ******************/
+/*****************************************************************************/
+
+static void Exa_PutParamsOneQst (void *Exams)
+  {
+   if (Exams)
+     {
+      Exa_PutParams (Exams);
+      Exa_PutParamQstInd (((struct Exa_Exams *) Exams)->QstInd);
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Params used to edit an exam **************************/
+/*****************************************************************************/
+
+void Exa_PutParams (void *Exams)
+  {
+   Grp_WhichGroups_t WhichGroups;
+
+   if (Exams)
+     {
+      if (((struct Exa_Exams *) Exams)->ExaCod > 0)
+	 Exa_PutParamExamCod (((struct Exa_Exams *) Exams)->ExaCod);
+      Exa_PutHiddenParamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
+      Pag_PutHiddenParamPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with code of exam **********************/
+/*****************************************************************************/
+
+void Exa_PutParamExamCod (long ExaCod)
   {
    Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
   }
 
 /*****************************************************************************/
-/********** Get parameter with the code of an exam announcement **************/
+/********************* Get parameter with code of exam ***********************/
 /*****************************************************************************/
 
-static long Exa_GetParamExaCod (void)
+long Exa_GetParamExamCod (void)
   {
-   /* Get notice code */
+   /***** Get code of exam *****/
    return Par_GetParToLong ("ExaCod");
   }
 
 /*****************************************************************************/
-/************ Get summary and content about an exam announcement *************/
+/******************* Get parameters used to edit an exam **********************/
 /*****************************************************************************/
 
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                               char **ContentStr,
-                                               long ExaCod,bool GetContent)
+long Exa_GetParams (struct Exa_Exams *Exams)
   {
-   extern const char *Txt_hours_ABBREVIATION;
-   struct Exa_ExamAnnouncements ExamAnns;
-   char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 7) + 1];
-   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+   /***** Get other parameters *****/
+   Exams->SelectedOrder = Exa_GetParamOrder ();
+   Exams->CurrentPage = Pag_GetParamPagNum (Pag_EXAMS);
 
-   /***** Reset exam announcements context *****/
-   Exa_ResetExamAnnouncements (&ExamAnns);
-
-   /***** Initializations *****/
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Allocate memory for the exam announcement *****/
-   Exa_AllocMemExamAnnouncement (&ExamAnns);
-
-   /***** Get data of an exam announcement from database *****/
-   Exa_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
-
-   /***** Content *****/
-   if (GetContent)
-      Exa_GetNotifContentExamAnnouncement (&ExamAnns,ContentStr);
-
-   /***** Summary *****/
-   /* Name of the course and date of exam */
-   Dat_ConvDateToDateStr (&ExamAnns.ExamAnn.ExamDate,StrExamDate);
-   snprintf (CrsNameAndDate,sizeof (CrsNameAndDate),
-	     "%s, %s, %2u:%02u",
-             ExamAnns.ExamAnn.CrsFullName,
-             StrExamDate,
-             ExamAnns.ExamAnn.StartTime.Hour,
-             ExamAnns.ExamAnn.StartTime.Minute);
-   Str_Copy (SummaryStr,CrsNameAndDate,
-             Ntf_MAX_BYTES_SUMMARY);
-
-   /***** Free memory of the exam announcement *****/
-   Exa_FreeMemExamAnnouncement (&ExamAnns);
+   /***** Get exam code *****/
+   return Exa_GetParamExamCod ();
   }
 
 /*****************************************************************************/
-/************ Show a form with the data of an exam announcement **************/
+/****** Put a hidden parameter with the type of order in list of exams *******/
 /*****************************************************************************/
 
-static void Exa_GetNotifContentExamAnnouncement (const struct Exa_ExamAnnouncements *ExamAnns,
-                                                 char **ContentStr)
+static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder)
   {
-   extern const char *Txt_Institution;
-   extern const char *Txt_Degree;
-   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Session;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Exam_date;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Start_time;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Approximate_duration;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Place_of_exam;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Mode;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Documentation_required;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Material_required;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Other_information;
-   extern const char *Txt_hours_ABBREVIATION;
-   struct Course Crs;
-   struct Degree Deg;
-   struct Instit Ins;
-   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+   if (SelectedOrder != Exa_ORDER_DEFAULT)
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+  }
 
-   /***** Get data of course *****/
-   Crs.CrsCod = ExamAnns->ExamAnn.CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+/*****************************************************************************/
+/********** Get parameter with the type or order in list of exams ************/
+/*****************************************************************************/
 
-   /***** Get data of degree *****/
-   Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
+static Exa_Order_t Exa_GetParamOrder (void)
+  {
+   return (Exa_Order_t) Par_GetParToUnsignedLong ("Order",
+						  0,
+						  Exa_NUM_ORDERS - 1,
+						  (unsigned long) Exa_ORDER_DEFAULT);
+  }
 
-   /***** Get data of institution *****/
-   Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
-   Ins_GetDataOfInstitutionByCod (&Ins);
+/*****************************************************************************/
+/*********************** Get list of all the exams *************************/
+/*****************************************************************************/
 
-   /***** Convert struct date to a date string *****/
-   Dat_ConvDateToDateStr (&ExamAnns->ExamAnn.ExamDate,StrExamDate);
+void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
+  {
+   static const char *OrderBySubQuery[Exa_NUM_ORDERS] =
+     {
+      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,exa_exams.Title DESC",
+      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,exa_exams.Title DESC",
+      [Exa_ORDER_BY_TITLE     ] = "exa_exams.Title",
+     };
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   char *HiddenSubQuery;
+   unsigned long NumRows = 0;	// Initialized to avoid warning
+   unsigned NumExam;
 
-   /***** Fill content string *****/
-   if (asprintf (ContentStr,"%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %2u:%02u %s<br />"
-                            "%s: %2u:%02u %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s",
-                 Txt_Institution,Ins.FullName,
-                 Txt_Degree,Deg.FullName,
-                 Txt_EXAM_ANNOUNCEMENT_Course,ExamAnns->ExamAnn.CrsFullName,
-                 Txt_EXAM_ANNOUNCEMENT_Year_or_semester,Txt_YEAR_OF_DEGREE[ExamAnns->ExamAnn.Year],
-                 Txt_EXAM_ANNOUNCEMENT_Session,ExamAnns->ExamAnn.Session,
-                 Txt_EXAM_ANNOUNCEMENT_Exam_date,StrExamDate,
-                 Txt_EXAM_ANNOUNCEMENT_Start_time,ExamAnns->ExamAnn.StartTime.Hour,
-                                                  ExamAnns->ExamAnn.StartTime.Minute,
-                 Txt_hours_ABBREVIATION,
-                 Txt_EXAM_ANNOUNCEMENT_Approximate_duration,ExamAnns->ExamAnn.Duration.Hour,
-                                                            ExamAnns->ExamAnn.Duration.Minute,
-                 Txt_hours_ABBREVIATION,
-                 Txt_EXAM_ANNOUNCEMENT_Place_of_exam,ExamAnns->ExamAnn.Place,
-                 Txt_EXAM_ANNOUNCEMENT_Mode,ExamAnns->ExamAnn.Mode,
-                 Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,ExamAnns->ExamAnn.Structure,
-                 Txt_EXAM_ANNOUNCEMENT_Documentation_required,ExamAnns->ExamAnn.DocRequired,
-                 Txt_EXAM_ANNOUNCEMENT_Material_required,ExamAnns->ExamAnn.MatRequired,
-                 Txt_EXAM_ANNOUNCEMENT_Material_allowed,ExamAnns->ExamAnn.MatAllowed,
-                 Txt_EXAM_ANNOUNCEMENT_Other_information,ExamAnns->ExamAnn.OtherInfo) < 0)
+   /***** Free list of exams *****/
+   if (Exams->LstIsRead)
+      Exa_FreeListExams (Exams);
+
+   /***** Subquery: get hidden exams depending on user's role *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         if (asprintf (&HiddenSubQuery," AND exa_exams.Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:
+	 Rol_WrongRoleExit ();
+	 break;
+     }
+
+   /***** Get list of exams from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get exams",
+			     "SELECT exa_exams.ExaCod,"				// row[0]
+			            "MIN(exa_events.StartTime) AS StartTime,"	// row[1]
+			            "MAX(exa_events.EndTime) AS EndTime"	// row[2]
+			     " FROM exa_exams"
+			     " LEFT JOIN exa_events"
+			     " ON exa_exams.ExaCod=exa_events.ExaCod"
+			     " WHERE exa_exams.CrsCod=%ld"
+			     "%s"
+			     " GROUP BY exa_exams.ExaCod"
+			     " ORDER BY %s",
+			     Gbl.Hierarchy.Crs.CrsCod,
+			     HiddenSubQuery,
+			     OrderBySubQuery[SelectedOrder]);
+
+   /***** Free allocated memory for subquery *****/
+   free (HiddenSubQuery);
+
+   if (NumRows) // Exams found...
+     {
+      Exams->Num = (unsigned) NumRows;
+
+      /***** Create list of exams *****/
+      if ((Exams->Lst = (struct Exa_ExamSelected *) malloc (NumRows * sizeof (struct Exa_ExamSelected))) == NULL)
+         Lay_NotEnoughMemoryExit ();
+
+      /***** Get the exams codes *****/
+      for (NumExam = 0;
+	   NumExam < Exams->Num;
+	   NumExam++)
+        {
+         /* Get next exam code (row[0]) */
+         row = mysql_fetch_row (mysql_res);
+         if ((Exams->Lst[NumExam].ExaCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_ShowErrorAndExit ("Error: wrong exam code.");
+        }
+     }
+   else
+      Exams->Num = 0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   Exams->LstIsRead = true;
+  }
+
+/*****************************************************************************/
+/********************* Get list of exam events selected **********************/
+/*****************************************************************************/
+
+void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
+  {
+   unsigned MaxSizeListExaCodsSelected;
+   unsigned NumExam;
+   const char *Ptr;
+   long ExaCod;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+
+   /***** Allocate memory for list of exams selected *****/
+   MaxSizeListExaCodsSelected = Exams->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   if ((Exams->ExaCodsSelected = (char *) malloc (MaxSizeListExaCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
+
+   /***** Get parameter multiple with list of exams selected *****/
+   Par_GetParMultiToText ("ExaCod",Exams->ExaCodsSelected,MaxSizeListExaCodsSelected);
+
+   /***** Set which exams will be shown as selected (checkboxes on) *****/
+   if (Exams->ExaCodsSelected[0])	// Some exams selected
+     {
+      /* Reset selection */
+      for (NumExam = 0;
+	   NumExam < Exams->Num;
+	   NumExam++)
+	 Exams->Lst[NumExam].Selected = false;
+      Exams->NumSelected = 0;
+
+      /* Set some exams as selected */
+      for (Ptr = Exams->ExaCodsSelected;
+	   *Ptr;
+	   )
+	{
+	 /* Get next exam selected */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 ExaCod = Str_ConvertStrCodToLongCod (LongStr);
+
+	 /* Set each exam in *StrExaCodsSelected as selected */
+	 for (NumExam = 0;
+	      NumExam < Exams->Num;
+	      NumExam++)
+	    if (Exams->Lst[NumExam].ExaCod == ExaCod)
+	      {
+	       Exams->Lst[NumExam].Selected = true;
+	       Exams->NumSelected++;
+	       break;
+	      }
+	}
+     }
+   else					// No exams selected
+     {
+      /***** Set all exams as selected *****/
+      for (NumExam = 0;
+	   NumExam < Exams->Num;
+	   NumExam++)
+	 Exams->Lst[NumExam].Selected = true;
+      Exams->NumSelected = Exams->Num;
+     }
+  }
+
+/*****************************************************************************/
+/********************** Get exam data using its code *************************/
+/*****************************************************************************/
+
+void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+
+   /***** Get data of exam from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
+			     "SELECT exa_exams.ExaCod,"		// row[0]
+			            "exa_exams.CrsCod,"		// row[1]
+			            "exa_exams.Hidden,"		// row[2]
+			            "exa_exams.UsrCod,"		// row[3]
+			            "exa_exams.MaxGrade,"	// row[4]
+			            "exa_exams.Visibility,"	// row[5]
+			            "exa_exams.Title"		// row[6]
+			     " FROM exa_exams"
+			     " LEFT JOIN exa_events"
+			     " ON exa_exams.ExaCod=exa_events.ExaCod"
+			     " WHERE exa_exams.ExaCod=%ld",
+			     Exam->ExaCod);
+   if (NumRows) // Exam found...
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get code of the exam (row[0]) */
+      Exam->ExaCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get code of the course (row[1]) */
+      Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /* Get whether the exam is hidden (row[2]) */
+      Exam->Hidden = (row[2][0] == 'Y');
+
+      /* Get author of the exam (row[3]) */
+      Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get maximum grade (row[4]) */
+      Exam->MaxGrade = Str_GetDoubleFromStr (row[4]);
+      if (Exam->MaxGrade < 0.0)	// Only positive values allowed
+	 Exam->MaxGrade = 0.0;
+
+      /* Get visibility (row[5]) */
+      Exam->Visibility = TstVis_GetVisibilityFromStr (row[5]);
+
+      /* Get the title of the exam (row[6]) */
+      Str_Copy (Exam->Title,row[6],
+                Exa_MAX_BYTES_TITLE);
+
+      /* Get number of questions */
+      Exam->NumQsts = Exa_GetNumQstsExam (Exam->ExaCod);
+
+      /* Get number of matches */
+      Exam->NumEves = ExaEve_GetNumEvesInExam (Exam->ExaCod);
+
+      /* Get number of unfinished matches */
+      Exam->NumUnfinishedEves = ExaEvt_GetNumUnfinishedEvtsInExam (Exam->ExaCod);
+     }
+   else
+      /* Initialize to empty exam */
+      Exa_ResetExam (Exam);
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (Exam->ExaCod > 0)
+     {
+      /***** Get start and end times from database *****/
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
+				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+				" FROM exa_events"
+				" WHERE ExaCod=%ld",
+				Exam->ExaCod);
+      if (NumRows)
+	{
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get start date (row[0] holds the start UTC time) */
+	 Exam->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
+
+	 /* Get end   date (row[1] holds the end   UTC time) */
+	 Exam->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
+	}
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+     {
+      Exam->TimeUTC[Dat_START_TIME] =
+      Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+     }
+  }
+
+/*****************************************************************************/
+/*************************** Initialize exam to empty ************************/
+/*****************************************************************************/
+
+static void Exa_ResetExam (struct Exa_Exam *Exam)
+  {
+   /***** Initialize to empty exam *****/
+   Exam->ExaCod                  = -1L;
+   Exam->CrsCod                  = -1L;
+   Exam->UsrCod                  = -1L;
+   Exam->MaxGrade                = Exa_MAX_GRADE_DEFAULT;
+   Exam->Visibility              = TstVis_VISIBILITY_DEFAULT;
+   Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Exam->Title[0]                = '\0';
+   Exam->NumQsts                 = 0;
+   Exam->NumEves                 = 0;
+   Exam->NumUnfinishedEves       = 0;
+   Exam->Hidden                  = false;
+  }
+
+/*****************************************************************************/
+/***************************** Free list of exams ****************************/
+/*****************************************************************************/
+
+void Exa_FreeListExams (struct Exa_Exams *Exams)
+  {
+   if (Exams->LstIsRead && Exams->Lst)
+     {
+      /***** Free memory used by the list of exams *****/
+      free (Exams->Lst);
+      Exams->Lst       = NULL;
+      Exams->Num       = 0;
+      Exams->LstIsRead = false;
+     }
+  }
+
+/*****************************************************************************/
+/********************** Get exam text from database ************************/
+/*****************************************************************************/
+
+static void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+
+   /***** Get text of exam from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get exam text",
+			     "SELECT Txt FROM exa_exams WHERE ExaCod=%ld",
+			     ExaCod);
+
+   /***** The result of the query must have one row or none *****/
+   if (NumRows == 1)
+     {
+      /* Get info text */
+      row = mysql_fetch_row (mysql_res);
+      Str_Copy (Txt,row[0],
+                Cns_MAX_BYTES_TEXT);
+     }
+   else
+      Txt[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (NumRows > 1)
+      Lay_ShowErrorAndExit ("Error when getting exam text.");
+  }
+
+/*****************************************************************************/
+/*************** Ask for confirmation of removing of an exam ******************/
+/*****************************************************************************/
+
+void Exa_AskRemExam (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_exam_X;
+   extern const char *Txt_Remove_exam;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+
+   /***** Get data of the exam from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Show question and button to remove exam *****/
+   Exams.ExaCod = Exam.ExaCod;
+   Ale_ShowAlertAndButton (ActRemExa,NULL,NULL,
+                           Exa_PutParams,&Exams,
+			   Btn_REMOVE_BUTTON,Txt_Remove_exam,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_exam_X,
+                           Exam.Title);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
+  }
+
+/*****************************************************************************/
+/******************************* Remove an exam *******************************/
+/*****************************************************************************/
+
+void Exa_RemoveExam (void)
+  {
+   extern const char *Txt_Exam_X_removed;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get exam code *****/
+   if ((Exam.ExaCod = Exa_GetParamExamCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+
+   /***** Get data of the exam from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Remove exam from all tables *****/
+   Exa_RemoveExamFromAllTables (Exam.ExaCod);
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Exam_X_removed,
+                  Exam.Title);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
+  }
+
+/*****************************************************************************/
+/*********************** Remove exam from all tables *************************/
+/*****************************************************************************/
+
+static void Exa_RemoveExamFromAllTables (long ExaCod)
+  {
+   /***** Remove all matches in this exam *****/
+   ExaEvt_RemoveEventsInExamFromAllTables (ExaCod);
+
+   /***** Remove exam question *****/
+   DB_QueryDELETE ("can not remove exam questions",
+		   "DELETE FROM exa_questions WHERE ExaCod=%ld",
+		   ExaCod);
+
+   /***** Remove exam *****/
+   DB_QueryDELETE ("can not remove exam",
+		   "DELETE FROM exa_exams WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all the exams of a course ***********************/
+/*****************************************************************************/
+
+void Exa_RemoveExamsCrs (long CrsCod)
+  {
+   /***** Remove all matches in this course *****/
+   ExaEvt_RemoveEventInCourseFromAllTables (CrsCod);
+
+   /***** Remove the questions in exams *****/
+   DB_QueryDELETE ("can not remove questions in course exams",
+		   "DELETE FROM exa_questions"
+		   " USING exa_exams,exa_questions"
+		   " WHERE exa_exams.CrsCod=%ld"
+		   " AND exa_exams.ExaCod=exa_questions.ExaCod",
+                   CrsCod);
+
+   /***** Remove the exams *****/
+   DB_QueryDELETE ("can not remove course exams",
+		   "DELETE FROM exa_exams"
+		   " WHERE CrsCod=%ld",
+                   CrsCod);
+  }
+
+/*****************************************************************************/
+/******************************** Hide an exam ******************************/
+/*****************************************************************************/
+
+void Exa_HideExam (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+
+   /***** Get data of the exam from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Hide exam *****/
+   DB_QueryUPDATE ("can not hide exam",
+		   "UPDATE exa_exams SET Hidden='Y' WHERE ExaCod=%ld",
+		   Exam.ExaCod);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
+  }
+
+/*****************************************************************************/
+/******************************** Show an exam ******************************/
+/*****************************************************************************/
+
+void Exa_UnhideExam (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+
+   /***** Get data of the exam from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Show exam *****/
+   DB_QueryUPDATE ("can not show exam",
+		   "UPDATE exa_exams SET Hidden='N' WHERE ExaCod=%ld",
+		   Exam.ExaCod);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
+  }
+
+/*****************************************************************************/
+/******************* Check if the title of an exam exists *******************/
+/*****************************************************************************/
+
+static bool Exa_CheckIfSimilarExamExists (const struct Exa_Exam *Exam)
+  {
+   /***** Get number of exams with a field value from database *****/
+   return (DB_QueryCOUNT ("can not get similar exams",
+			  "SELECT COUNT(*) FROM exa_exams"
+			  " WHERE CrsCod=%ld AND Title='%s'"
+			  " AND ExaCod<>%ld",
+			  Gbl.Hierarchy.Crs.CrsCod,Exam->Title,
+			  Exam->ExaCod) != 0);
+  }
+
+/*****************************************************************************/
+/**************** Request the creation or edition of an exam ******************/
+/*****************************************************************************/
+
+void Exa_RequestCreatOrEditExam (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   bool ItsANewExam;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Check if I can edit exams *****/
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Get parameters *****/
+   ItsANewExam = ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0);
+
+   /***** Get exam data *****/
+   if (ItsANewExam)
+     {
+      /* Initialize to empty exam */
+      Exa_ResetExam (&Exam);
+      Txt[0] = '\0';
+     }
+   else
+     {
+      /* Get exam data from database */
+      Exa_GetDataOfExamByCod (&Exam);
+      Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
+     }
+
+   /***** Put forms to create/edit an exam *****/
+   Exa_PutFormsEditionExam (&Exams,&Exam,Txt,ItsANewExam);
+
+   /***** Show exams or questions *****/
+   if (ItsANewExam)
+      /* Show exams again */
+      Exa_ListAllExams (&Exams);
+   else
+      /* Show questions of the exam ready to be edited */
+      Exa_ListExamQuestions (&Exams,&Exam);
+
+  }
+
+/*****************************************************************************/
+/********************* Put a form to create/edit an exam **********************/
+/*****************************************************************************/
+
+static void Exa_PutFormsEditionExam (struct Exa_Exams *Exams,
+				     struct Exa_Exam *Exam,
+				     char Txt[Cns_MAX_BYTES_TEXT + 1],
+				     bool ItsANewExam)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_new_exam;
+   extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_New_exam;
+   extern const char *Txt_Edit_exam;
+   extern const char *Txt_Title;
+   extern const char *Txt_Maximum_grade;
+   extern const char *Txt_Result_visibility;
+   extern const char *Txt_Description;
+   extern const char *Txt_Create_exam;
+   extern const char *Txt_Save_changes;
+
+   /***** Begin form *****/
+   Exams->ExaCod = Exam->ExaCod;
+   Frm_StartForm (ItsANewExam ? ActNewExa :
+				ActChgExa);
+   Exa_PutParams (Exams);
+
+   /***** Begin box and table *****/
+   if (ItsANewExam)
+      Box_BoxTableBegin (NULL,Txt_New_exam,
+                         NULL,NULL,
+			 Hlp_ASSESSMENT_Exams_new_exam,Box_NOT_CLOSABLE,2);
+   else
+      Box_BoxTableBegin (NULL,
+			 Exam->Title[0] ? Exam->Title :
+					  Txt_Edit_exam,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
+
+   /***** Exam title *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT","Title",Txt_Title);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"LT\"");
+   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,false,
+		   "id=\"Title\" required=\"required\""
+		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Maximum grade *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Maximum_grade);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
+		    "required=\"required\"");
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Visibility of results *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TxtF ("%s:",Txt_Result_visibility);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"LB\"");
+   TstVis_PutVisibilityCheckboxes (Exam->Visibility);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Exam text *****/
+   HTM_TR_Begin (NULL);
+
+   /* Label */
+   Frm_LabelColumn ("RT","Txt",Txt_Description);
+
+   /* Data */
+   HTM_TD_Begin ("class=\"LT\"");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
+   HTM_Txt (Txt);
+   HTM_TEXTAREA_End ();
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** End table, send button and end box *****/
+   if (ItsANewExam)
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_exam);
+   else
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/********************** Receive form to create a new exam ********************/
+/*****************************************************************************/
+
+void Exa_RecFormExam (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   bool ItsANewExam;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Check if I can edit exams *****/
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Get parameters *****/
+   ItsANewExam = ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0);
+
+   /***** If I can edit exams ==> receive exam from form *****/
+   if (Exa_CheckIfICanEditExams ())
+     {
+      Exa_ReceiveExamFieldsFromForm (&Exam,Txt);
+      if (Exa_CheckExamFieldsReceivedFromForm (&Exam))
+	{
+         /***** Create a new exam or update an existing one *****/
+	 if (ItsANewExam)
+	    Exa_CreateExam (&Exam,Txt);	// Add new exam to database
+	 else
+	    Exa_UpdateExam (&Exam,Txt);	// Update exam data in database
+
+         /***** Put forms to edit the exam created or updated *****/
+         Exa_PutFormsEditionExam (&Exams,&Exam,Txt,
+                                  false);	// No new exam
+
+         /***** Show questions of the exam ready to be edited ******/
+         Exa_ListExamQuestions (&Exams,&Exam);
+	}
+      else
+	{
+         /***** Put forms to create/edit the exam *****/
+         Exa_PutFormsEditionExam (&Exams,&Exam,Txt,ItsANewExam);
+
+         /***** Show exams or questions *****/
+         if (ItsANewExam)
+            /* Show exams again */
+            Exa_ListAllExams (&Exams);
+         else
+            /* Show questions of the exam ready to be edited */
+            Exa_ListExamQuestions (&Exams,&Exam);
+	}
+     }
+   else
+      Lay_NoPermissionExit ();
+  }
+
+static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
+				           char Txt[Cns_MAX_BYTES_TEXT + 1])
+  {
+   char MaxGradeStr[64];
+
+   /***** Get exam title *****/
+   Par_GetParToText ("Title",Exam->Title,Exa_MAX_BYTES_TITLE);
+
+   /***** Get maximum grade *****/
+   Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
+   Exam->MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
+   if (Exam->MaxGrade < 0.0)	// Only positive values allowed
+      Exam->MaxGrade = 0.0;
+
+   /***** Get visibility *****/
+   Exam->Visibility = TstVis_GetVisibilityFromForm ();
+
+   /***** Get exam text *****/
+   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+  }
+
+static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
+  {
+   extern const char *Txt_Already_existed_an_exam_with_the_title_X;
+   extern const char *Txt_You_must_specify_the_title_of_the_exam;
+   bool NewExamIsCorrect;
+
+   /***** Check if title is correct *****/
+   NewExamIsCorrect = true;
+   if (Exam->Title[0])	// If there's an exam title
+     {
+      /* If title of exam was in database... */
+      if (Exa_CheckIfSimilarExamExists (Exam))
+	{
+	 NewExamIsCorrect = false;
+	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_exam_with_the_title_X,
+			Exam->Title);
+	}
+     }
+   else	// If there is not an exam title
+     {
+      NewExamIsCorrect = false;
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_exam);
+     }
+
+   return NewExamIsCorrect;
+  }
+
+/*****************************************************************************/
+/**************************** Create a new exam ******************************/
+/*****************************************************************************/
+
+static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt)
+  {
+   extern const char *Txt_Created_new_exam_X;
+
+   /***** Create a new exam *****/
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   Exam->ExaCod =
+   DB_QueryINSERTandReturnCode ("can not create new exam",
+				"INSERT INTO exa_exams"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,Title,Txt)"
+				" VALUES"
+				" (%ld,'N',%ld,%.15lg,%u,'%s','%s')",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Exam->MaxGrade,
+				Exam->Visibility,
+				Exam->Title,
+				Txt);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+
+   /***** Write success message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_exam_X,
+                  Exam->Title);
+  }
+
+/*****************************************************************************/
+/************************* Update an existing exam *************************/
+/*****************************************************************************/
+
+static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
+  {
+   extern const char *Txt_The_exam_has_been_modified;
+
+   /***** Update the data of the exam *****/
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update exam",
+		   "UPDATE exa_exams"
+		   " SET CrsCod=%ld,"
+		        "MaxGrade=%.15lg,"
+		        "Visibility=%u,"
+		        "Title='%s',"
+		        "Txt='%s'"
+		   " WHERE ExaCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Exam->MaxGrade,
+		   Exam->Visibility,
+	           Exam->Title,
+	           Txt,
+	           Exam->ExaCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+
+   /***** Write success message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_exam_has_been_modified);
+  }
+
+/*****************************************************************************/
+/******************* Get number of questions of an exam *********************/
+/*****************************************************************************/
+
+unsigned Exa_GetNumQstsExam (long ExaCod)
+  {
+   /***** Get nuumber of questions in an exam from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of questions of an exam",
+			     "SELECT COUNT(*) FROM exa_questions"
+			     " WHERE ExaCod=%ld",
+			     ExaCod);
+  }
+
+/*****************************************************************************/
+/*************** Put a form to edit/create a question in exam ****************/
+/*****************************************************************************/
+
+void Exa_RequestNewQuestion (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Show form to create a new question in this exam *****/
+      Exams.ExaCod = Exam.ExaCod;
+      Tst_RequestSelectTestsForExam (&Exams);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/**************** List several test questions for selection ******************/
+/*****************************************************************************/
+
+void Exa_ListTstQuestionsToSelect (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** List several test questions for selection *****/
+      Exams.ExaCod = Exam.ExaCod;
+      Tst_ListQuestionsToSelect (&Exams);
+     }
+   else
+      Lay_NoPermissionExit ();
+  }
+
+/*****************************************************************************/
+/****************** Write parameter with index of question *******************/
+/*****************************************************************************/
+
+void Exa_PutParamQstInd (unsigned QstInd)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"QstInd",QstInd);
+  }
+
+/*****************************************************************************/
+/******************* Get parameter with index of question ********************/
+/*****************************************************************************/
+
+unsigned Exa_GetParamQstInd (void)
+  {
+   long QstInd;
+
+   QstInd = Par_GetParToLong ("QstInd");
+   if (QstInd < 0)
+      Lay_ShowErrorAndExit ("Wrong question index.");
+
+   return (unsigned) QstInd;
+  }
+
+/*****************************************************************************/
+/********************** Remove answers of an exam question ********************/
+/*****************************************************************************/
+
+static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd)
+  {
+   /***** Remove answers from all matches of this exam *****/
+   DB_QueryDELETE ("can not remove the answers of a question",
+		   "DELETE FROM exa_answers"
+		   " USING exa_events,exa_answers"
+		   " WHERE exa_events.ExaCod=%ld"	// From all matches of this exam...
+		   " AND exa_events.EvtCod=exa_answers.EvtCod"
+		   " AND exa_answers.QstInd=%u",	// ...remove only answers to this question
+		   ExaCod,QstInd);
+  }
+
+/*****************************************************************************/
+/************ Get question code given exam and index of question *************/
+/*****************************************************************************/
+
+long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long QstCod;
+
+   /***** Get question code of thw question to be moved up *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get question code",
+			"SELECT QstCod FROM exa_questions"
+			" WHERE ExaCod=%ld AND QstInd=%u",
+			ExaCod,QstInd))
+      Lay_ShowErrorAndExit ("Error: wrong question index.");
+
+   /***** Get question code (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Error: wrong question code.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return QstCod;
+  }
+
+/*****************************************************************************/
+/****************** Get maximum question index in an exam *********************/
+/*****************************************************************************/
+// Question index can be 1, 2, 3...
+// Return 0 if no questions
+
+static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned QstInd = 0;
+
+   /***** Get maximum question index in an exam from database *****/
+   DB_QuerySELECT (&mysql_res,"can not get last question index",
+		   "SELECT MAX(QstInd)"
+		   " FROM exa_questions"
+		   " WHERE ExaCod=%ld",
+                   ExaCod);
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])	// There are questions
+      if (sscanf (row[0],"%u",&QstInd) != 1)
+         Lay_ShowErrorAndExit ("Error when getting last question index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return QstInd;
+  }
+
+/*****************************************************************************/
+/*********** Get previous question index to a given index in an exam **********/
+/*****************************************************************************/
+// Input question index can be 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
+
+unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned PrevQstInd = 0;
+
+   /***** Get previous question index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
+			"SELECT MAX(QstInd) FROM exa_questions"
+			" WHERE ExaCod=%ld AND QstInd<%u",
+			ExaCod,QstInd))
+      Lay_ShowErrorAndExit ("Error: previous question index not found.");
+
+   /***** Get previous question index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&PrevQstInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting previous question index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return PrevQstInd;
+  }
+
+/*****************************************************************************/
+/************* Get next question index to a given index in an exam ************/
+/*****************************************************************************/
+// Input question index can be 0, 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if next question exists, or 0 if no next question
+
+unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NextQstInd = ExaEvt_AFTER_LAST_QUESTION;	// End of questions has been reached
+
+   /***** Get next question index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
+			"SELECT MIN(QstInd) FROM exa_questions"
+			" WHERE ExaCod=%ld AND QstInd>%u",
+			ExaCod,QstInd))
+      Lay_ShowErrorAndExit ("Error: next question index not found.");
+
+   /***** Get next question index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&NextQstInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting next question index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NextQstInd;
+  }
+
+/*****************************************************************************/
+/************************ List the questions of an exam ***********************/
+/*****************************************************************************/
+
+static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_questions;
+   extern const char *Txt_Questions;
+   extern const char *Txt_This_exam_has_no_questions;
+   MYSQL_RES *mysql_res;
+   unsigned NumQsts;
+   bool ICanEditQuestions = Exa_CheckIfEditable (Exam);
+
+   /***** Get data of questions from database *****/
+   NumQsts = (unsigned)
+             DB_QuerySELECT (&mysql_res,"can not get exam questions",
+			      "SELECT QstInd,"	// row[0]
+				     "QstCod"	// row[1]
+			      " FROM exa_questions"
+			      " WHERE ExaCod=%ld"
+			      " ORDER BY QstInd",
+			      Exam->ExaCod);
+
+   /***** Begin box *****/
+   Exams->ExaCod = Exam->ExaCod;
+   if (ICanEditQuestions)
+      Box_BoxBegin (NULL,Txt_Questions,
+		    Exa_PutIconToAddNewQuestions,Exams,
+		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_Questions,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+
+   /***** Show table with questions *****/
+   if (NumQsts)
+      Exa_ListOneOrMoreQuestionsForEdition (Exams,
+                                            Exam->ExaCod,NumQsts,mysql_res,
+					    ICanEditQuestions);
+   else	// This exam has no questions
+      Ale_ShowAlert (Ale_INFO,Txt_This_exam_has_no_questions);
+
+   /***** Put button to add a new question in this exam *****/
+   if (ICanEditQuestions)		// I can edit questions
+      Exa_PutButtonToAddNewQuestions (Exams);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********************* List exam questions for edition ***********************/
+/*****************************************************************************/
+
+static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
+						  long ExaCod,unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res,
+						  bool ICanEditQuestions)
+  {
+   extern const char *Txt_Questions;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Question;
+   extern const char *Txt_Move_up_X;
+   extern const char *Txt_Move_down_X;
+   extern const char *Txt_Movement_not_allowed;
+   unsigned NumQst;
+   MYSQL_ROW row;
+   struct Tst_Question Question;
+   unsigned QstInd;
+   unsigned MaxQstInd;
+   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   bool QuestionExists;
+
+   /***** Get maximum question index *****/
+   MaxQstInd = Exa_GetMaxQuestionIndexInExam (ExaCod);
+
+   /***** Write the heading *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TR_Begin (NULL);
+
+   HTM_TH_Empty (1);
+
+   HTM_TH (1,1,"CT",Txt_No_INDEX);
+   HTM_TH (1,1,"CT",Txt_Code);
+   HTM_TH (1,1,"CT",Txt_Tags);
+   HTM_TH (1,1,"CT",Txt_Question);
+
+   HTM_TR_End ();
+
+   /***** Write rows *****/
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+
+      /***** Get question data *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstInd
+      row[1] QstCod
+      */
+
+      /* Get question index (row[0]) */
+      QstInd = Str_ConvertStrToUnsigned (row[0]);
+      snprintf (StrQstInd,sizeof (StrQstInd),
+	        "%u",
+		QstInd);
+
+      /* Get question code (row[1]) */
+      Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /***** Icons *****/
+      Exams->ExaCod = ExaCod;
+      Exams->QstInd = QstInd;
+      HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+      /* Put icon to remove the question */
+      if (ICanEditQuestions)
+	{
+	 Frm_StartForm (ActReqRemExaQst);
+	 Exa_PutParams (Exams);
+	 Exa_PutParamQstInd (QstInd);
+	 Ico_PutIconRemove ();
+	 Frm_EndForm ();
+	}
+      else
+         Ico_PutIconRemovalNotAllowed ();
+
+      /* Put icon to move up the question */
+      if (ICanEditQuestions && QstInd > 1)
+	{
+	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaQst,NULL,
+	                                Exa_PutParamsOneQst,Exams,
+				        "arrow-up.svg",
+					Str_BuildStringStr (Txt_Move_up_X,
+							    StrQstInd));
+	 Str_FreeString ();
+	}
+      else
+         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+
+      /* Put icon to move down the question */
+      if (ICanEditQuestions && QstInd < MaxQstInd)
+	{
+	 Lay_PutContextualLinkOnlyIcon (ActDwnExaQst,NULL,
+	                                Exa_PutParamsOneQst,Exams,
+				        "arrow-down.svg",
+					Str_BuildStringStr (Txt_Move_down_X,
+							    StrQstInd));
+	 Str_FreeString ();
+	}
+      else
+         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+
+      /* Put icon to edit the question */
+      if (ICanEditQuestions)
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+	                              Tst_PutParamQstCod,&Question.QstCod);
+
+      HTM_TD_End ();
+
+      /***** Question *****/
+      QuestionExists = Tst_GetQstDataFromDB (&Question);
+      Exa_ListQuestionForEdition (&Question,QstInd,QuestionExists);
+
+      HTM_TR_End ();
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********************** List exam question for edition ***********************/
+/*****************************************************************************/
+
+static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
+                                        unsigned QstInd,bool QuestionExists)
+  {
+   extern const char *Txt_Question_removed;
+
+   /***** Number of question and answer type (row[1]) *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (QstInd);
+   if (QuestionExists)
+      Tst_WriteAnswerType (Question->Answer.Type);
+   HTM_TD_End ();
+
+   /***** Write question code *****/
+   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+   HTM_TD_End ();
+
+   /***** Write the question tags *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   if (QuestionExists)
+      Tst_GetAndWriteTagsQst (Question->QstCod);
+   HTM_TD_End ();
+
+   /***** Write stem (row[3]) and media *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   if (QuestionExists)
+     {
+      /* Write stem */
+      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+			true);	// Visible
+
+      /* Show media */
+      Med_ShowMedia (&Question->Media,
+		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		     "TEST_MED_EDIT_LIST_STEM");
+
+      /* Show feedback */
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+
+      /* Show answers */
+      Tst_WriteAnswersListing (Question);
+     }
+   else
+     {
+      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+      HTM_Txt (Txt_Question_removed);
+      HTM_SPAN_End ();
+     }
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/***************** Put icon to add a new questions to exam *******************/
+/*****************************************************************************/
+
+static void Exa_PutIconToAddNewQuestions (void *Exams)
+  {
+   extern const char *Txt_Add_questions;
+
+   /***** Put form to create a new question *****/
+   Ico_PutContextualIconToAdd (ActAddOneExaQst,NULL,
+			       Exa_PutParams,Exams,
+			       Txt_Add_questions);
+  }
+
+/*****************************************************************************/
+/***************** Put button to add new questions to exam *******************/
+/*****************************************************************************/
+
+static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
+  {
+   extern const char *Txt_Add_questions;
+
+   Frm_StartForm (ActAddOneExaQst);
+   Exa_PutParams (Exams);
+   Btn_PutConfirmButton (Txt_Add_questions);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/******************** Add selected test questions to exam ********************/
+/*****************************************************************************/
+
+void Exa_AddTstQuestionsToExam (void)
+  {
+   extern const char *Txt_No_questions_have_been_added;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   const char *Ptr;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   long QstCod;
+   unsigned MaxQstInd;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Get selected questions *****/
+      /* Allocate space for selected question codes */
+      Exa_AllocateListSelectedQuestions (&Exams);
+
+      /* Get question codes */
+      Par_GetParMultiToText ("QstCods",Exams.ListQuestions,
+			     Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS);
+
+      /* Check number of questions */
+      if (Exa_CountNumQuestionsInList (&Exams))	// If questions selected...
+	{
+	 /***** Insert questions in database *****/
+	 Ptr = Exams.ListQuestions;
+	 while (*Ptr)
+	   {
+	    /* Get next code */
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	    if (sscanf (LongStr,"%ld",&QstCod) != 1)
+	       Lay_ShowErrorAndExit ("Wrong question code.");
+
+	    /* Get current maximum index */
+	    MaxQstInd = Exa_GetMaxQuestionIndexInExam (Exam.ExaCod);	// -1 if no questions
+
+	    /* Insert question in the table of questions */
+	    DB_QueryINSERT ("can not create question",
+			    "INSERT INTO exa_questions"
+			    " (ExaCod,QstCod,QstInd)"
+			    " VALUES"
+			    " (%ld,%ld,%u)",
+			    Exam.ExaCod,QstCod,MaxQstInd + 1);
+	   }
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
+
+      /***** Free space for selected question codes *****/
+      Exa_FreeListsSelectedQuestions (&Exams);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/****************** Allocate memory for list of questions ********************/
+/*****************************************************************************/
+
+static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
+  {
+   if (!Exams->ListQuestions)
+     {
+      if ((Exams->ListQuestions = (char *) malloc (Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Exams->ListQuestions[0] = '\0';
+     }
+  }
+
+/*****************************************************************************/
+/*********** Free memory used by list of selected question codes *************/
+/*****************************************************************************/
+
+static void Exa_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
+  {
+   if (Exams->ListQuestions)
+     {
+      free (Exams->ListQuestions);
+      Exams->ListQuestions = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/**** Count the number of questions in the list of selected question codes ***/
+/*****************************************************************************/
+
+static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams)
+  {
+   const char *Ptr;
+   unsigned NumQuestions = 0;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   long QstCod;
+
+   /***** Go over list of questions counting the number of questions *****/
+   Ptr = Exams->ListQuestions;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      if (sscanf (LongStr,"%ld",&QstCod) != 1)
+         Lay_ShowErrorAndExit ("Wrong question code.");
+      NumQuestions++;
+     }
+   return NumQuestions;
+  }
+
+/*****************************************************************************/
+/********************** Request the removal of a question ********************/
+/*****************************************************************************/
+
+void Exa_RequestRemoveQst (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
+   extern const char *Txt_Remove_question;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   unsigned QstInd;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Get question index *****/
+      QstInd = Exa_GetParamQstInd ();
+
+      /***** Show question and button to remove question *****/
+      Exams.ExaCod = Exam.ExaCod;
+      Exams.QstInd = QstInd;
+      Ale_ShowAlertAndButton (ActRemExaQst,NULL,NULL,
+                              Exa_PutParamsOneQst,&Exams,
+			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			      QstInd);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/****************************** Remove a question ****************************/
+/*****************************************************************************/
+
+void Exa_RemoveQst (void)
+  {
+   extern const char *Txt_Question_removed;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   unsigned QstInd;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Get question index *****/
+      QstInd = Exa_GetParamQstInd ();
+
+      /***** Remove the question from all the tables *****/
+      /* Remove answers from this test question */
+      Exa_RemAnswersOfAQuestion (Exam.ExaCod,QstInd);
+
+      /* Remove the question itself */
+      DB_QueryDELETE ("can not remove a question",
+		      "DELETE FROM exa_questions"
+		      " WHERE ExaCod=%ld AND QstInd=%u",
+		      Exam.ExaCod,QstInd);
+      if (!mysql_affected_rows (&Gbl.mysql))
+	 Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+
+      /* Change index of questions greater than this */
+      DB_QueryUPDATE ("can not update indexes of questions in table of answers",
+		      "UPDATE exa_answers,exa_events"
+		      " SET exa_answers.QstInd=exa_answers.QstInd-1"
+		      " WHERE exa_events.ExaCod=%ld"
+		      " AND exa_events.EvtCod=exa_answers.EvtCod"
+		      " AND exa_answers.QstInd>%u",
+		      Exam.ExaCod,QstInd);
+      DB_QueryUPDATE ("can not update indexes of questions",
+		      "UPDATE exa_questions SET QstInd=QstInd-1"
+		      " WHERE ExaCod=%ld AND QstInd>%u",
+		      Exam.ExaCod,QstInd);
+
+      /***** Write message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/***************** Move up position of a question in an exam ******************/
+/*****************************************************************************/
+
+void Exa_MoveUpQst (void)
+  {
+   extern const char *Txt_The_question_has_been_moved_up;
+   extern const char *Txt_Movement_not_allowed;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   unsigned QstIndTop;
+   unsigned QstIndBottom;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Get question index *****/
+      QstIndBottom = Exa_GetParamQstInd ();
+
+      /***** Move up question *****/
+      if (QstIndBottom > 1)
+	{
+	 /* Indexes of questions to be exchanged */
+	 QstIndTop = Exa_GetPrevQuestionIndexInExam (Exam.ExaCod,QstIndBottom);
+	 if (!QstIndTop)
+	    Lay_ShowErrorAndExit ("Wrong index of question.");
+
+	 /* Exchange questions */
+	 Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
+
+	 /* Success alert */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/**************** Move down position of a question in an exam *****************/
+/*****************************************************************************/
+
+void Exa_MoveDownQst (void)
+  {
+   extern const char *Txt_The_question_has_been_moved_down;
+   extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_This_exam_has_no_questions;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   unsigned QstIndTop;
+   unsigned QstIndBottom;
+   unsigned MaxQstInd;	// 0 if no questions
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has matches *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Get question index *****/
+      QstIndTop = Exa_GetParamQstInd ();
+
+      /***** Get maximum question index *****/
+      MaxQstInd = Exa_GetMaxQuestionIndexInExam (Exam.ExaCod);
+
+      /***** Move down question *****/
+      if (MaxQstInd)
+	{
+	 if (QstIndTop < MaxQstInd)
+	   {
+	    /* Indexes of questions to be exchanged */
+	    QstIndBottom = Exa_GetNextQuestionIndexInExam (Exam.ExaCod,QstIndTop);
+	    if (!QstIndBottom)
+	       Lay_ShowErrorAndExit ("Wrong index of question.");
+
+	    /* Exchange questions */
+	    Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
+
+	    /* Success alert */
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
+	   }
+	 else
+	    Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_This_exam_has_no_questions);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/********* Exchange the order of two consecutive questions in an exam *********/
+/*****************************************************************************/
+
+static void Exa_ExchangeQuestions (long ExaCod,
+                                   unsigned QstIndTop,unsigned QstIndBottom)
+  {
+   long QstCodTop;
+   long QstCodBottom;
+
+   /***** Lock table to make the move atomic *****/
+   DB_Query ("can not lock tables to move exam question",
+	     "LOCK TABLES exa_questions WRITE");
+   Gbl.DB.LockedTables = true;
+
+   /***** Get question code of the questions to be moved *****/
+   QstCodTop    = Exa_GetQstCodFromQstInd (ExaCod,QstIndTop);
+   QstCodBottom = Exa_GetQstCodFromQstInd (ExaCod,QstIndBottom);
+
+   /***** Exchange indexes of questions *****/
+   /*
+   Example:
+   QstIndTop    = 1; QstCodTop    = 218
+   QstIndBottom = 2; QstCodBottom = 220
+   +--------+--------+		+--------+--------+	+--------+--------+
+   | QstInd | QstCod |		| QstInd | QstCod |	| QstInd | QstCod |
+   +--------+--------+		+--------+--------+	+--------+--------+
+   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
+   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
+   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
+   +--------+--------+		+--------+--------+	+--------+--------+
+ */
+   DB_QueryUPDATE ("can not exchange indexes of questions",
+		   "UPDATE exa_questions SET QstInd=%u"
+		   " WHERE ExaCod=%ld AND QstCod=%ld",
+	           QstIndBottom,
+	           ExaCod,QstCodTop);
+
+   DB_QueryUPDATE ("can not exchange indexes of questions",
+		   "UPDATE exa_questions SET QstInd=%u"
+		   " WHERE ExaCod=%ld AND QstCod=%ld",
+	           QstIndTop,
+	           ExaCod,QstCodBottom);
+
+   /***** Unlock table *****/
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after moving exam questions",
+	     "UNLOCK TABLES");
+  }
+
+/*****************************************************************************/
+/*********** Get number of matches and check is edition is possible **********/
+/*****************************************************************************/
+// Before calling this function, number of matches must be calculated
+
+static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
+  {
+   if (Exa_CheckIfICanEditExams ())
+      /***** Questions are editable only if exam has no matches *****/
+      return (bool) (Exam->NumEves == 0);	// Exams with matches should not be edited
+   else
+      return false;	// Questions are not editable
+  }
+
+/*****************************************************************************/
+/********************* Put button to create a new match **********************/
+/*****************************************************************************/
+
+void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod)
+  {
+   extern const char *Txt_New_match;
+
+   Exams->ExaCod = ExaCod;
+   Frm_StartFormAnchor (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID);
+   Exa_PutParams (Exams);
+   Btn_PutConfirmButton (Txt_New_match);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/************* Request the creation of a new match as a teacher **************/
+/*****************************************************************************/
+
+void Exa_RequestNewMatch (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Show exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        false,	// Do not list exam questions
+                        true);	// Put form to start new match
+  }
+
+/*****************************************************************************/
+/********************* Get number of courses with exams **********************/
+/*****************************************************************************/
+// Returns the number of courses with exams in this location
+
+unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCourses;
+
+   /***** Get number of courses with exams from database *****/
+   switch (Scope)
+     {
+      case Hie_SYS:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT CrsCod)"
+			 " FROM exa_exams");
+         break;
+      case Hie_CTY:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+			 " FROM institutions,centres,degrees,courses,exa_exams"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+                         Gbl.Hierarchy.Ins.InsCod);
+         break;
+      case Hie_INS:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+			 " FROM centres,degrees,courses,exa_exams"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Ins.InsCod);
+         break;
+      case Hie_CTR:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+			 " FROM degrees,courses,exa_exams"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+                         Gbl.Hierarchy.Ctr.CtrCod);
+         break;
+      case Hie_DEG:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+			 " FROM courses,exa_exams"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Deg.DegCod);
+         break;
+      case Hie_CRS:
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
+			 "SELECT COUNT(DISTINCT CrsCod)"
+			 " FROM exa_exams"
+			 " WHERE CrsCod=%ld",
+                         Gbl.Hierarchy.Crs.CrsCod);
+         break;
+      default:
+	 Lay_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Get number of exams *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%u",&NumCourses) != 1)
+      Lay_ShowErrorAndExit ("Error when getting number of courses with exams.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumCourses;
+  }
+
+/*****************************************************************************/
+/**************************** Get number of exams ****************************/
+/*****************************************************************************/
+// Returns the number of exams in this location
+
+unsigned Exa_GetNumExams (Hie_Level_t Scope)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumExams;
+
+   /***** Get number of exams from database *****/
+   switch (Scope)
+     {
+      case Hie_SYS:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM exa_exams");
+         break;
+      case Hie_CTY:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM institutions,centres,degrees,courses,exa_exams"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Cty.CtyCod);
+         break;
+      case Hie_INS:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM centres,degrees,courses,exa_exams"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Ins.InsCod);
+         break;
+      case Hie_CTR:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM degrees,courses,exa_exams"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Ctr.CtrCod);
+         break;
+      case Hie_DEG:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM courses,exa_exams"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=exa_exams.CrsCod",
+		         Gbl.Hierarchy.Deg.DegCod);
+         break;
+      case Hie_CRS:
+         DB_QuerySELECT (&mysql_res,"can not get number of exams",
+                         "SELECT COUNT(*)"
+			 " FROM exa_exams"
+			 " WHERE CrsCod=%ld",
+                         Gbl.Hierarchy.Crs.CrsCod);
+         break;
+      default:
+	 Lay_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Get number of exams *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%u",&NumExams) != 1)
+      Lay_ShowErrorAndExit ("Error when getting number of exams.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumExams;
+  }
+
+/*****************************************************************************/
+/************* Get average number of questions per course exam ***************/
+/*****************************************************************************/
+
+double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   double NumQstsPerExam;
+
+   /***** Get number of questions per exam from database *****/
+   switch (Scope)
+     {
+      case Hie_SYS:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM exa_exams,exa_questions"
+			 " WHERE exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable");
+         break;
+      case Hie_CTY:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM institutions,centres,degrees,courses,exa_exams,exa_questions"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod"
+			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+                         Gbl.Hierarchy.Cty.CtyCod);
+         break;
+      case Hie_INS:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM centres,degrees,courses,exa_exams,exa_questions"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod"
+			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+		         Gbl.Hierarchy.Ins.InsCod);
+         break;
+      case Hie_CTR:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM degrees,courses,exa_exams,exa_questions"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=exa_exams.CrsCod"
+			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+                         Gbl.Hierarchy.Ctr.CtrCod);
+         break;
+      case Hie_DEG:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM courses,exa_exams,exa_questions"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=exa_exams.CrsCod"
+			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+		         Gbl.Hierarchy.Deg.DegCod);
+         break;
+      case Hie_CRS:
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
+			 " FROM exa_exams,exa_questions"
+			 " WHERE exa_exams.Cod=%ld"
+			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
+			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+                         Gbl.Hierarchy.Crs.CrsCod);
+         break;
+      default:
+	 Lay_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Get average number of questions per exam *****/
+   row = mysql_fetch_row (mysql_res);
+   NumQstsPerExam = Str_GetDoubleFromStr (row[0]);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumQstsPerExam;
+  }
+
+/*****************************************************************************/
+/************************* Show test tags in an exam **************************/
+/*****************************************************************************/
+
+void Exa_ShowTstTagsPresentInAnExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumTags;
+
+   /***** Get all tags of questions in this exam *****/
+   NumTags = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get tags"
+					" present in a match result",
+			     "SELECT tst_tags.TagTxt"	// row[0]
+			     " FROM"
+			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
+			     " FROM tst_question_tags,exa_questions"
+			     " WHERE exa_questions.ExaCod=%ld"
+			     " AND exa_questions.QstCod=tst_question_tags.QstCod)"
+			     " AS TagsCods,tst_tags"
+			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
+			     " ORDER BY tst_tags.TagTxt",
+			     ExaCod);
+   Tst_ShowTagList (NumTags,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*************** Get maximum score of an exam from database *******************/
+/*****************************************************************************/
+
+void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumRow;
+   unsigned NumAnswers;
+
+   /***** Get maximum score of an exam from database *****/
+   NumRows = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			     "SELECT COUNT(tst_answers.AnsInd) AS N"
+			     " FROM tst_answers,exa_questions"
+			     " WHERE exa_questions.ExaCod=%ld"
+			     " AND exa_questions.QstCod=tst_answers.QstCod"
+			     " GROUP BY tst_answers.QstCod",
+			     ExaCod);
+   for (NumRow = 0, *MinScore = *MaxScore = 0.0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get min answers (row[0]) */
+      if (sscanf (row[0],"%u",&NumAnswers) != 1)
+         NumAnswers = 0;
+
+      /* Accumulate minimum and maximum score */
+      if (NumAnswers < 2)
+	 Lay_ShowErrorAndExit ("Wrong number of answers.");
+      *MinScore += -1.0 / (double) (NumAnswers - 1);
+      *MaxScore +=  1.0;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }

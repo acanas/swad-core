@@ -40,7 +40,7 @@
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_department.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_icon.h"

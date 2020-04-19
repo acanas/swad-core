@@ -2496,9 +2496,6 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       Frm_StartFormOnSubmit (ActUnk,OnSubmit);
 
      }
-   else
-     {
-     }
 
    /***** Put icon *****/
    HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");

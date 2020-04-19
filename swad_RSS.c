@@ -31,7 +31,7 @@
 
 #include "swad_changelog.h"
 #include "swad_database.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_global.h"
 #include "swad_notice.h"
 #include "swad_RSS.h"
@@ -264,7 +264,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 					     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
 					     " ORDER BY T",
 					     Gbl.Hierarchy.Crs.CrsCod,
-					     (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
+					     (unsigned) ExaAnn_VISIBLE_EXAM_ANNOUNCEMENT);
 
       /***** Write items with notices *****/
       if (NumExamAnnouncements)

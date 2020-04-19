@@ -37,7 +37,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -859,7 +859,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
          Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
-         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,ContentStr,Cod,GetContent);
+         ExaAnn_GetSummaryAndContentExamAnnouncement (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);

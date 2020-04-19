@@ -35,7 +35,7 @@
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_database.h"
-#include "swad_exam.h"
+#include "swad_exam_announcement.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -1835,7 +1835,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       DB_QueryUPDATE ("can not remove exam announcements of a course",
 		      "UPDATE exam_announcements SET Status=%u"
 		      " WHERE CrsCod=%ld",
-	              (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
+	              (unsigned) ExaAnn_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
