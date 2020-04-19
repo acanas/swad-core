@@ -112,6 +112,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
 static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static void Pho_PutParamsDegPhoto (void *DegPhotos);
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
                                          Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void);
@@ -125,9 +126,9 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos);
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos);
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
-static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPhotos,
+static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_ShowOrPrintListDegrees (const struct Pho_DegPhotos *DegPhotos,
+static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
                                               MYSQL_RES **mysql_res);
@@ -1786,11 +1787,14 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverag
 /**************** Put parameter for degree average photos ********************/
 /*****************************************************************************/
 
-void Pho_PutParamsDegPhoto (void *DegPhotos)
+static void Pho_PutParamsDegPhoto (void *DegPhotos)
   {
-   Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
-   Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
-   Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
+   if (DegPhotos)
+     {
+      Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
+      Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
+      Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
+     }
   }
 
 /*****************************************************************************/
@@ -2136,7 +2140,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 /************ Show or print the stats of degrees as class photo **************/
 /*****************************************************************************/
 
-static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPhotos,
+static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    MYSQL_RES *mysql_res;
@@ -2156,7 +2160,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPho
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,NULL);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
+
       HTM_TABLE_BeginCenter ();
 
       /***** Get and print degrees *****/
@@ -2217,7 +2222,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (const struct Pho_DegPhotos *DegPho
 /**************** Show or print the stats of degrees as list *****************/
 /*****************************************************************************/
 
-static void Pho_ShowOrPrintListDegrees (const struct Pho_DegPhotos *DegPhotos,
+static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_No_INDEX;
@@ -2241,7 +2246,7 @@ static void Pho_ShowOrPrintListDegrees (const struct Pho_DegPhotos *DegPhotos,
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,NULL);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
