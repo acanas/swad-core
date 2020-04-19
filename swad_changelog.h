@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.190.2 (2020-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.190.3 (2020-04-18)"
 #define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -549,6 +549,8 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 
+	Version 19.190.4: Apr 18, 2020	Icons for room types. (? lines)
+	Version 19.190.3: Apr 18, 2020	Fixed bug in creation of a new room. (288489 lines)
 	Version 19.190.2: Apr 18, 2020	Fixed bugs in degree photo. (288485 lines)
 	Version 19.190.1: Apr 18, 2020	Fixed bugs in degree photo, reported by Adrián José Martínez Navarro. (288491 lines)
 	Version 19.190:   Apr 18, 2020	Changes in rooms. (288488 lines)

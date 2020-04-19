@@ -913,11 +913,11 @@ void Roo_ChangeBuilding (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get the code of the room */
+   /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
-   /* Get the building of the room */
+   /* Get room building */
    NewBldCod = Bld_GetParamBldCod ();
 
    /***** Get data of the room from database *****/
@@ -963,11 +963,11 @@ void Roo_ChangeFloor (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get the code of the room */
+   /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
-   /* Get the floor of the room */
+   /* Get room floor */
    NewFloor = Roo_GetParamFloor ();
 
    /***** Get data of the room from database *****/
@@ -1012,11 +1012,11 @@ void Roo_ChangeType (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get the code of the room */
+   /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
-   /* Get the type of the room */
+   /* Get room type */
    NewType = Roo_GetParamType ();
 
    /***** Get data of the room from database *****/
@@ -1107,7 +1107,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Get parameters from form *****/
-   /* Get the code of the room */
+   /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
@@ -1196,7 +1196,7 @@ void Roo_ChangeCapacity (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get the code of the room */
+   /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
@@ -1391,6 +1391,9 @@ void Roo_RecFormNewRoom (void)
 
    /* Get room floor */
    Roo_EditingRoom->Floor = Roo_GetParamFloor ();
+
+   /* Get room type */
+   Roo_EditingRoom->Type = Roo_GetParamType ();
 
    /* Get room short name */
    Par_GetParToText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);
