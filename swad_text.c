@@ -38446,13 +38446,13 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==2	// de
 	""
 #elif L==3	// en
-	"Administration"
+	"Administration/Management"
 #elif L==4	// es
-	"Administraci&oacute;n"
+	"Administraci&oacute;n/Direcci&oacute;n"
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Administraci&oacute;n"		// Okoteve traducción
+	"Administraci&oacute;n/Direcci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl

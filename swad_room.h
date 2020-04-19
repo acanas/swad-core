@@ -60,18 +60,18 @@ typedef enum
    Roo_KINDERGARTEN   = 10,	// "child.svg" "baby.svg" "baby-carriage.svg"		// "Guardería"
    Roo_LABORATORY     = 11,	// "flask.svg" "microscope.svg"				// "Laboratorio"
    Roo_LIBRARY        = 12,	// "book.svg" "book-reader.svg"				// "Biblioteca"
-   Roo_OFFICE         = 13,	// "house-user.svg" "door-open.svg"			// "Despacho/Oficina"
+   Roo_OFFICE         = 13,	// "door-closed.svg" "house-user.svg" "door-open.svg"	// "Despacho/Oficina"
    Roo_OUTDOORS       = 14,	// "cloud-sun.svg"					// "Exteriores"
    Roo_PARKING        = 15,	// "car.svg"						// "Aparcamiento"
    Roo_PAVILION       = 16,	// "volleyball-ball.svg" "running.svg"			// "Pabellón"
-   Roo_ROOM           = 17,	// "chalkboard.svg"					// "Sala"
+   Roo_ROOM           = 17,	// "door-open.svg" "chalkboard.svg"					// "Sala"
    Roo_SECRETARIAT    = 18,	// "stamp.svg" "pen-alt.svg" "file-alt.svg" "user-tie.svg"	// "Secretaría"
    Roo_SEMINAR        = 19,	// "chalkboard-teacher.svg" "chalkboard.svg"		// "Seminario"
    Roo_SHOP           = 20,	// "shopping-cart.svg" "shopping-basket.svg" "store-alt.svg" "shopping-bag.svg"	// "Tienda"
-   Roo_STORE          = 21,	// "daily.svg" "boxes.svg" "box-open.svg" "box.svg"	// "Almacén"
+   Roo_STORE          = 21,	// "dolly.svg" "boxes.svg" "box-open.svg" "box.svg"	// "Almacén"
    Roo_TOILETS        = 22,	// "toilet.svg"						// "Aseos"
    Roo_VIRTUAL        = 23,	// "laptop-house.svg" "cloud.svg"			// "Virtual"
-   Roo_YARD           = 24,	// "canadian-mapple-leaf.svg"				// "Patio/Jardín"
+   Roo_YARD           = 24,	// "tree.svg" "leaf.svg" "canadian-mapple-leaf.svg"	// "Patio/Jardín"
   } Roo_RoomType_t;
 
 struct Roo_Room

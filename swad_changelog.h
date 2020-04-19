@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.190.3 (2020-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.190.4 (2020-04-18)"
 #define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -535,7 +535,9 @@ Función API getLocations
     - que devolveria las filas de la tabla de ubicaciones asociadas a esa MAC
 
 
-
+// TODO: Sugerencia de Jesús García Miranda. En las preguntas de tipo test de elección única (o un nuevo tipo con un nuevo nombre),
+                                             poner por ejemplo 10 o 20 opciones, con 3 o 4 verdaderas y las demás falsas,
+                                             y que swad saque una pregunta de 4 cogiendo una verdadera y 3 falsas al azar.
 // TODO: Laura García: "Ahora estoy utilizando la plataforma SWAD más que nunca, evidentemente, debido a las circunstancias, e incluso les he hecho un examencillo a los alumnos utilizando los test de autoevaluación.
                         Pero quería preguntarte un par de cosas:
                         - lo primero es si se pueden borrar los test realizados por cualquier usuario, incluido profesores. Yo misma he hecho un montón para simular el examen, y ya me están sobrando.
@@ -549,7 +551,32 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 
-	Version 19.190.4: Apr 18, 2020	Icons for room types. (? lines)
+	Version 19.190.4: Apr 18, 2020	Icons for room types. (288516 lines)
+					Copy the following 23 icons to icon public directory:
+sudo cp icon/book.svg /var/www/html/swad/icon/
+sudo cp icon/car.svg /var/www/html/swad/icon/
+sudo cp icon/chalkboard.svg /var/www/html/swad/icon/
+sudo cp icon/child.svg /var/www/html/swad/icon/
+sudo cp icon/cloud-sun.svg /var/www/html/swad/icon/
+sudo cp icon/coffee.svg /var/www/html/swad/icon/
+sudo cp icon/concierge-bell.svg /var/www/html/swad/icon/
+sudo cp icon/dolly.svg /var/www/html/swad/icon/
+sudo cp icon/door-closed.svg /var/www/html/swad/icon/
+sudo cp icon/door-open.svg /var/www/html/swad/icon/
+sudo cp icon/dumbbell.svg /var/www/html/swad/icon/
+sudo cp icon/flask.svg /var/www/html/swad/icon/
+sudo cp icon/landmark.svg /var/www/html/swad/icon/
+sudo cp icon/laptop-house.svg /var/www/html/swad/icon/
+sudo cp icon/map-signs.svg /var/www/html/swad/icon/
+sudo cp icon/shopping-basket.svg /var/www/html/swad/icon/
+sudo cp icon/shopping-cart.svg /var/www/html/swad/icon/
+sudo cp icon/stamp.svg /var/www/html/swad/icon/
+sudo cp icon/toilet.svg /var/www/html/swad/icon/
+sudo cp icon/tree.svg /var/www/html/swad/icon/
+sudo cp icon/utensils.svg /var/www/html/swad/icon/
+sudo cp icon/volleyball-ball.svg /var/www/html/swad/icon/
+sudo cp icon/walking.svg /var/www/html/swad/icon/
+
 	Version 19.190.3: Apr 18, 2020	Fixed bug in creation of a new room. (288489 lines)
 	Version 19.190.2: Apr 18, 2020	Fixed bugs in degree photo. (288485 lines)
 	Version 19.190.1: Apr 18, 2020	Fixed bugs in degree photo, reported by Adrián José Martínez Navarro. (288491 lines)
