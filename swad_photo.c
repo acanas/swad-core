@@ -110,11 +110,9 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
 static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
-static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
-                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static void Pho_PutParamsDegPhoto (void *DegPhotos);
-static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
-                                         Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
+static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos);
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void);
 static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos);
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
@@ -1411,8 +1409,7 @@ void Pho_CalcPhotoDegree (void)
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Show photos *****/
-   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
-                               Pho_DEGREES_SEE);
+   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
   }
 
 /*****************************************************************************/
@@ -1693,8 +1690,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 
 void Pho_ShowPhotoDegree (void)
   {
-   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
-                               Pho_DEGREES_SEE);
+   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
   }
 
 /*****************************************************************************/
@@ -1703,26 +1699,23 @@ void Pho_ShowPhotoDegree (void)
 
 void Pho_PrintPhotoDegree (void)
   {
-   Pho_ShowOrPrintPhotoDegree (Pho_GetPhotoAvgTypeFromForm (),
-                               Pho_DEGREES_PRINT);
+   Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_PRINT);
   }
 
 /*****************************************************************************/
 /*** Show class photo with average photos of all students from each degree ***/
 /*****************************************************************************/
 
-static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
-                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Hlp_ANALYTICS_Degrees;
    extern const char *Txt_Degrees;
    struct Pho_DegPhotos DegPhotos;
 
-   /***** Get photo size from form *****/
+   /***** Get parameters from form *****/
+   DegPhotos.TypeOfAverage       = Pho_GetPhotoAvgTypeFromForm ();
    DegPhotos.HowComputePhotoSize = Pho_GetHowComputePhotoSizeFromForm ();
-
-   /***** Get how to order degrees from form *****/
-   DegPhotos.HowOrderDegrees = Pho_GetHowOrderDegreesFromForm ();
+   DegPhotos.HowOrderDegrees     = Pho_GetHowOrderDegreesFromForm ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -1739,7 +1732,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoTypeOfAverage_t TypeOfAverag
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	 /***** Put a selector for the type of average *****/
-	 Pho_PutSelectorForTypeOfAvg (&DegPhotos,TypeOfAverage);
+	 Pho_PutSelectorForTypeOfAvg (&DegPhotos);
 
 	 /***** Put a selector for the size of photos *****/
 	 Pho_PutSelectorForHowComputePhotoSize (&DegPhotos);
@@ -1801,8 +1794,7 @@ static void Pho_PutParamsDegPhoto (void *DegPhotos)
 /******************* Put a selector for the type of average ******************/
 /*****************************************************************************/
 
-static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
-                                         Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
+static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Average_type;
@@ -1830,7 +1822,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos,
      {
       TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
       HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-		  TypeOfAvg == TypeOfAverage,false,
+		  TypeOfAvg == DegPhotos->TypeOfAverage,false,
 		  "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    HTM_SELECT_End ();
@@ -2161,7 +2153,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
-
       HTM_TABLE_BeginCenter ();
 
       /***** Get and print degrees *****/
