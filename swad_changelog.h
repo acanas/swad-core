@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.190.4 (2020-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.190.5 (2020-04-19)"
 #define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -551,7 +551,8 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 
-	Version 19.190.4: Apr 18, 2020	Icons for room types. (288516 lines)
+	Version 19.190.5: Apr 19, 2020	Anchors in forms to edit buildings and rooms. (288527 lines)
+	Version 19.190.4: Apr 19, 2020	Icons for room types. (288516 lines)
 					Copy the following 23 icons to icon public directory:
 sudo cp icon/book.svg /var/www/html/swad/icon/
 sudo cp icon/car.svg /var/www/html/swad/icon/
