@@ -1402,7 +1402,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /***************************** Buildings and rooms ***************************/
-.BLD_SEL
+.BLD_SEL, .ROOM_TYPE_SEL
 	{
 	width:80px;
 	}

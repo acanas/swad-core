@@ -364,6 +364,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemRoo		] = {1747,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RemoveRoom			,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooBld	] = {1845,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeBuilding		,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooFlo	] = {1846,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeFloor		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActChgRooTyp	] = {1847,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeType			,Roo_ContEditAfterChgRoom	,NULL},
    [ActRenRooSho	] = {1748,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomShort		,Roo_ContEditAfterChgRoom	,NULL},
    [ActRenRooFul	] = {1749,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomFull		,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooMaxUsr	] = {1750,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeCapacity		,Roo_ContEditAfterChgRoom	,NULL},
@@ -3594,6 +3595,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRenBldLoc,		// #1844
 	ActChgRooBld,		// #1845
 	ActChgRooFlo,		// #1846
+	ActChgRooTyp,		// #1847
 	};
 
 /*****************************************************************************/

@@ -2354,24 +2354,51 @@ mysql> DESCRIBE projects;
    /***** Table rooms *****/
 /*
 mysql> DESCRIBE rooms;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| RooCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
-| BldCod    | int(11)       | NO   |     | -1      |                |
-| Floor     | int(11)       | NO   |     | 0       |                |
-| ShortName | varchar(511)  | NO   |     | NULL    |                |
-| FullName  | varchar(2047) | NO   |     | NULL    |                |
-| Capacity  | int(11)       | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                                                                                                                                                                                                                                                        | Null | Key | Default | Extra          |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| RooCod    | int(11)                                                                                                                                                                                                                                                                     | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int(11)                                                                                                                                                                                                                                                                     | NO   | MUL | NULL    |                |
+| BldCod    | int(11)                                                                                                                                                                                                                                                                     | NO   |     | -1      |                |
+| Floor     | int(11)                                                                                                                                                                                                                                                                     | NO   |     | 0       |                |
+| Type      | enum('no_type','administration','auditorium','cafeteria','canteen','classroom','concierge','corridor','gym','hall','kindergarten','laboratory','library','office','outdoors','parking','pavilion','room','secretariat','seminar','shop','store','toilets','virtual','yard') | NO   |     | no_type |                |
+| ShortName | varchar(511)                                                                                                                                                                                                                                                                | NO   |     | NULL    |                |
+| FullName  | varchar(2047)                                                                                                                                                                                                                                                               | NO   |     | NULL    |                |
+| Capacity  | int(11)                                                                                                                                                                                                                                                                     | NO   |     | NULL    |                |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rooms ("
 			"RooCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
 	                "BldCod INT NOT NULL DEFAULT -1,"
 	                "Floor INT NOT NULL DEFAULT 0,"
+			"Type ENUM("
+			"'no_type',"
+			"'administration',"
+			"'auditorium',"
+			"'cafeteria',"
+			"'canteen',"
+			"'classroom',"
+			"'concierge',"
+			"'corridor',"
+			"'gym',"
+			"'hall',"
+			"'kindergarten',"
+			"'laboratory',"
+			"'library',"
+			"'office',"
+			"'outdoors',"
+			"'parking',"
+			"'pavilion',"
+			"'room',"
+			"'secretariat',"
+			"'seminar',"
+			"'shop',"
+			"'store',"
+			"'toilets',"
+			"'virtual',"
+			"'yard') NOT NULL DEFAULT 'no_type',"
 			"ShortName VARCHAR(511) NOT NULL,"	// Roo_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_FULL_NAME
 			"Capacity INT NOT NULL,"

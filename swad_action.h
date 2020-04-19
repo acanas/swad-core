@@ -64,7 +64,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1846
+#define Act_MAX_ACTION_COD		1847
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -341,9 +341,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRemRoo		(ActRenHld + 42)
 #define ActChgRooBld		(ActRenHld + 43)
 #define ActChgRooFlo		(ActRenHld + 44)
-#define ActRenRooSho		(ActRenHld + 45)
-#define ActRenRooFul		(ActRenHld + 46)
-#define ActChgRooMaxUsr		(ActRenHld + 47)
+#define ActChgRooTyp		(ActRenHld + 45)
+#define ActRenRooSho		(ActRenHld + 46)
+#define ActRenRooFul		(ActRenHld + 47)
+#define ActChgRooMaxUsr		(ActRenHld + 48)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/

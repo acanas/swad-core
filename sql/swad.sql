@@ -1137,6 +1137,7 @@ CREATE TABLE IF NOT EXISTS rooms (
 	CtrCod INT NOT NULL,
 	BldCod INT NOT NULL DEFAULT -1,
 	Floor INT NOT NULL DEFAULT 0,
+	Type ENUM('no_type','administration','auditorium','cafeteria','canteen','classroom','concierge','corridor','gym','hall','kindergarten','laboratory','library','office','outdoors','parking','pavilion','room','secretariat','seminar','shop','store','toilets','virtual','yard') NOT NULL DEFAULT 'no_type',
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
 	Capacity INT NOT NULL,

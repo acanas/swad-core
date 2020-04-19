@@ -47,6 +47,64 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+static const char *Roo_TypesDB[Roo_NUM_TYPES] =
+  {
+   [Roo_NO_TYPE       ] = "no_type",
+   [Roo_ADMINISTRATION] = "administration",
+   [Roo_AUDITORIUM    ] = "auditorium",
+   [Roo_CAFETERIA     ] = "cafeteria",
+   [Roo_CANTEEN       ] = "canteen",
+   [Roo_CLASSROOM     ] = "classroom",
+   [Roo_CONCIERGE     ] = "concierge",
+   [Roo_CORRIDOR      ] = "corridor",
+   [Roo_GYM           ] = "gym",
+   [Roo_HALL          ] = "hall",
+   [Roo_KINDERGARTEN  ] = "kindergarten",
+   [Roo_LABORATORY    ] = "laboratory",
+   [Roo_LIBRARY       ] = "library",
+   [Roo_OFFICE        ] = "office",
+   [Roo_OUTDOORS      ] = "outdoors",
+   [Roo_PARKING       ] = "parking",
+   [Roo_PAVILION      ] = "pavilion",
+   [Roo_ROOM          ] = "room",
+   [Roo_SECRETARIAT   ] = "secretariat",
+   [Roo_SEMINAR       ] = "seminar",
+   [Roo_SHOP          ] = "shop",
+   [Roo_STORE         ] = "store",
+   [Roo_TOILETS       ] = "toilets",
+   [Roo_VIRTUAL       ] = "virtual",
+   [Roo_YARD          ] = "yard",
+  };
+
+static const char *Roo_TypesIcons[Roo_NUM_TYPES] =
+  {
+   [Roo_NO_TYPE       ] = "question.svg",
+   [Roo_ADMINISTRATION] = "user-tie.svg",
+   [Roo_AUDITORIUM    ] = "landmark.svg",
+   [Roo_CAFETERIA     ] = "coffee.svg",
+   [Roo_CANTEEN       ] = "utensils.svg",
+   [Roo_CLASSROOM     ] = "chalkboard-teacher.svg",
+   [Roo_CONCIERGE     ] = "concierge-bell",
+   [Roo_CORRIDOR      ] = "walking.svg",
+   [Roo_GYM           ] = "dumbbell.svg",
+   [Roo_HALL          ] = "map-signs.svg",
+   [Roo_KINDERGARTEN  ] = "child.svg",
+   [Roo_LABORATORY    ] = "flask.svg",
+   [Roo_LIBRARY       ] = "book.svg",
+   [Roo_OFFICE        ] = "house-user.svg",
+   [Roo_OUTDOORS      ] = "cloud-sun.svg",
+   [Roo_PARKING       ] = "car.svg",
+   [Roo_PAVILION      ] = "volleyball-ball.svg",
+   [Roo_ROOM          ] = "chalkboard.svg",
+   [Roo_SECRETARIAT   ] = "stamp.svg",
+   [Roo_SEMINAR       ] = "chalkboard-teacher.svg",
+   [Roo_SHOP          ] = "shopping-cart.svg",
+   [Roo_STORE         ] = "daily.svg",
+   [Roo_TOILETS       ] = "toilet.svg",
+   [Roo_VIRTUAL       ] = "laptop-house.svg",
+   [Roo_YARD          ] = "canadian-mapple-leaf.svg",
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -69,6 +127,7 @@ static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
 
 static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room);
 static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFromDB);
+static Roo_RoomType_t Roo_GetTypeFromString (const char *Str);
 
 static void Roo_EditRoomsInternal (void);
 
@@ -77,8 +136,11 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
                                      bool SubmitOnChange);
+static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
+                                 bool SubmitOnChange);
 static void Roo_PutParamRooCod (long RooCod);
 static int Roo_GetParamFloor (void);
+static Roo_RoomType_t Roo_GetParamType (void);
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Roo_CheckIfRoomNameExists (const char *FieldName,const char *Name,long RooCod);
@@ -88,7 +150,7 @@ static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigne
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings);
 static void Roo_PutHeadRooms (void);
-static void Roo_CreateRoom (const struct Roo_Room *Room);
+static void Roo_CreateRoom (struct Roo_Room *Room);
 
 static void Roo_EditingRoomConstructor (void);
 static void Roo_EditingRoomDestructor (void);
@@ -114,6 +176,7 @@ void Roo_SeeRooms (void)
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
+   extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    extern const char *Txt_New_room;
    struct Roo_Rooms Rooms;
    Roo_Order_t Order;
@@ -178,7 +241,7 @@ void Roo_SeeRooms (void)
 
       /* Type */
       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
+      Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
       HTM_TD_End ();
 
       /* Short name */
@@ -346,7 +409,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      {
       [Roo_ORDER_BY_BUILDING ] = "buildings.ShortName,rooms.Floor,rooms.ShortName",
       [Roo_ORDER_BY_FLOOR    ] = "rooms.Floor,buildings.ShortName,rooms.ShortName",
-      [Roo_ORDER_BY_TYPE     ] = "rooms.Floor,buildings.ShortName,rooms.ShortName",
+      [Roo_ORDER_BY_TYPE     ] = "rooms.Type,buildings.ShortName,rooms.Floor,rooms.ShortName",
       [Roo_ORDER_BY_SHRT_NAME] = "rooms.ShortName,rooms.FullName",
       [Roo_ORDER_BY_FULL_NAME] = "rooms.FullName,rooms.ShortName",
       [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,buildings.ShortName,rooms.Floor,rooms.ShortName",
@@ -366,9 +429,10 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	                           	  "rooms.BldCod,"		// row[1]
 	                                  "buildings.ShortName,"	// row[2]
 					  "rooms.Floor,"		// row[3]
-					  "rooms.ShortName,"		// row[4]
-					  "rooms.FullName,"		// row[5]
-					  "rooms.Capacity"		// row[6]
+					  "rooms.Type,"			// row[4]
+					  "rooms.ShortName,"		// row[5]
+					  "rooms.FullName,"		// row[6]
+					  "rooms.Capacity"		// row[7]
 				   " FROM rooms LEFT JOIN buildings"
 				   " ON rooms.BldCod=buildings.BldCod"
 				   " WHERE rooms.CtrCod=%ld"
@@ -427,16 +491,19 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	       /* Get floor (row[3]) */
 	       Room->Floor = Str_ConvertStrCodToLongCod (row[3]);
 
-	       /* Get the short name of the room (row[4]) */
-	       Str_Copy (Room->ShrtName,row[4],
+	       /* Get type (row[4]) */
+	       Room->Type = Roo_GetTypeFromString (row[4]);
+
+	       /* Get the short name of the room (row[5]) */
+	       Str_Copy (Room->ShrtName,row[5],
 			 Roo_MAX_BYTES_SHRT_NAME);
 
-	       /* Get the full name of the room (row[5]) */
-	       Str_Copy (Room->FullName,row[5],
+	       /* Get the full name of the room (row[6]) */
+	       Str_Copy (Room->FullName,row[6],
 			 Roo_MAX_BYTES_FULL_NAME);
 
-	       /* Get seating capacity in this room (row[6]) */
-	       if (sscanf (row[6],"%u",&Room->Capacity) != 1)
+	       /* Get seating capacity in this room (row[7]) */
+	       if (sscanf (row[7],"%u",&Room->Capacity) != 1)
 		  Room->Capacity = Roo_UNLIMITED_CAPACITY;
 	       break;
 	    case Roo_ONLY_SHRT_NAME:
@@ -474,9 +541,10 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
 			     "SELECT rooms.BldCod,"		// row[0]
 	                            "buildings.ShortName,"	// row[1]
 				    "rooms.Floor,"		// row[2]
-				    "rooms.ShortName,"		// row[3]
-				    "rooms.FullName,"		// row[4]
-				    "rooms.Capacity"		// row[5]
+				    "rooms.Type,"		// row[3]
+				    "rooms.ShortName,"		// row[4]
+				    "rooms.FullName,"		// row[5]
+				    "rooms.Capacity"		// row[6]
 			     " FROM rooms LEFT JOIN buildings"
 			     " ON rooms.BldCod=buildings.BldCod"
 			     " WHERE rooms.RooCod=%ld",
@@ -497,16 +565,19 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
       /* Get floor (row[2]) */
       Room->Floor = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get the short name of the room (row[3]) */
-      Str_Copy (Room->ShrtName,row[3],
+      /* Get type (row[3]) */
+      Room->Type = Roo_GetTypeFromString (row[3]);
+
+      /* Get the short name of the room (row[4]) */
+      Str_Copy (Room->ShrtName,row[4],
 		Roo_MAX_BYTES_SHRT_NAME);
 
-      /* Get the full name of the room (row[4]) */
-      Str_Copy (Room->FullName,row[4],
+      /* Get the full name of the room (row[5]) */
+      Str_Copy (Room->FullName,row[5],
 		Roo_MAX_BYTES_FULL_NAME);
 
-      /* Get seating capacity in this room (row[5]) */
-      if (sscanf (row[5],"%u",&Room->Capacity) != 1)
+      /* Get seating capacity in this room (row[6]) */
+      if (sscanf (row[6],"%u",&Room->Capacity) != 1)
 	 Room->Capacity = Roo_UNLIMITED_CAPACITY;
      }
 
@@ -536,6 +607,24 @@ static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFro
 	 Str_Copy (Room->BldShrtName,BldShrtNameFromDB,
 		   Bld_MAX_BYTES_SHRT_NAME);
      }
+  }
+
+/*****************************************************************************/
+/********************** Convert from string to type **************************/
+/*****************************************************************************/
+
+static Roo_RoomType_t Roo_GetTypeFromString (const char *Str)
+  {
+   Roo_RoomType_t Type;
+
+   /***** Compare string with all string types *****/
+   for (Type  = (Roo_RoomType_t) 0;
+	Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
+	Type++)
+      if (!strcmp (Roo_TypesDB[Type],Str))
+	 return Type;
+
+   return Roo_NO_TYPE;
   }
 
 /*****************************************************************************/
@@ -609,11 +698,11 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Room type */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartForm (ActRenRooSho);
+      HTM_TD_Begin ("class=\"CM\"");
+      Frm_StartForm (ActChgRooTyp);
       Roo_PutParamRooCod (Room->RooCod);
-      HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,true,
-		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
+      Roo_PutSelectorType (Room->Type,
+                           true);	// Submit on change
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -653,7 +742,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
   }
 
 /*****************************************************************************/
-/**************************** Put building selector **************************/
+/********** Put selector of the building to which the room belongs ***********/
 /*****************************************************************************/
 
 static void Roo_PutSelectorBuilding (long BldCod,
@@ -683,8 +772,34 @@ static void Roo_PutSelectorBuilding (long BldCod,
 	NumBld < Buildings->Num;
 	NumBld++)
       HTM_OPTION (HTM_Type_LONG,&Buildings->Lst[NumBld].BldCod,
-		  Buildings->Lst[NumBld].BldCod == BldCod,false,
+		  BldCod == Buildings->Lst[NumBld].BldCod,false,
 		  "%s",Buildings->Lst[NumBld].ShrtName);
+
+   /***** End selector *****/
+   HTM_SELECT_End ();
+  }
+
+/*****************************************************************************/
+/************************ Put selector of room type **************************/
+/*****************************************************************************/
+
+static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
+                                 bool SubmitOnChange)
+  {
+   extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
+   Roo_RoomType_t Type;
+
+   /***** Begin selector *****/
+   HTM_SELECT_Begin (SubmitOnChange,
+		     "name=\"Type\" class=\"ROOM_TYPE_SEL\"");
+
+   /***** Options for types *****/
+   for (Type  = (Roo_RoomType_t) 0;
+	Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
+	Type++)
+      HTM_OPTION (HTM_Type_UNSIGNED,&Type,
+		  Type == RoomType,false,
+		  "%s",Txt_ROOM_TYPES[Type]);
 
    /***** End selector *****/
    HTM_SELECT_End ();
@@ -715,8 +830,25 @@ long Roo_GetParamRooCod (void)
 
 static int Roo_GetParamFloor (void)
   {
-   /***** Get code of room *****/
+   /***** Get floor *****/
    return (int) Par_GetParToLong ("Floor");
+  }
+
+/*****************************************************************************/
+/************************** Get parameter with type **************************/
+/*****************************************************************************/
+
+static Roo_RoomType_t Roo_GetParamType (void)
+  {
+   long TypeLong;
+
+   /***** Get type string *****/
+   TypeLong = Par_GetParToLong ("Type");
+   if (TypeLong >= 0 && TypeLong < Roo_NUM_TYPES)
+      return (Roo_RoomType_t) TypeLong;	// Correc type
+
+   /***** Default type when no type or wrong type *****/
+   return Roo_NO_TYPE;
   }
 
 /*****************************************************************************/
@@ -791,11 +923,10 @@ void Roo_ChangeBuilding (void)
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
 
-   /***** Check if the old capacity equals the new one
+   /***** Check if the old building equals the new one
           (this happens when return is pressed without changes) *****/
    if (NewBldCod < 0)
       NewBldCod = -1L;
-
    if (NewBldCod == Roo_EditingRoom->BldCod)
       /***** Message to show no changes made *****/
       Ale_CreateAlert (Ale_INFO,NULL,
@@ -803,8 +934,8 @@ void Roo_ChangeBuilding (void)
 		       Roo_EditingRoom->FullName);
    else
      {
-      /***** Update the table of rooms changing the old building to the new *****/
-      DB_QueryUPDATE ("can not update the capacity of a room",
+      /***** Update the table of rooms changing the old building for the new one *****/
+      DB_QueryUPDATE ("can not update the building of a room",
 		      "UPDATE rooms SET BldCod=%ld WHERE RooCod=%ld",
                       NewBldCod,Roo_EditingRoom->RooCod);
 
@@ -819,7 +950,7 @@ void Roo_ChangeBuilding (void)
   }
 
 /*****************************************************************************/
-/********************* Change sitting capacity of a room *********************/
+/************************ Change the floor of a room *************************/
 /*****************************************************************************/
 
 void Roo_ChangeFloor (void)
@@ -842,7 +973,7 @@ void Roo_ChangeFloor (void)
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
 
-   /***** Check if the old capacity equals the new one
+   /***** Check if the old floor equals the new one
           (this happens when return is pressed without changes) *****/
    if (NewFloor == Roo_EditingRoom->Floor)
       /***** Message to show no changes made *****/
@@ -851,7 +982,7 @@ void Roo_ChangeFloor (void)
 		       Roo_EditingRoom->FullName);
    else
      {
-      /***** Update the table of rooms changing the old capacity to the new *****/
+      /***** Update the table of rooms changing the old floor for the new one *****/
       DB_QueryUPDATE ("can not update the capacity of a room",
 		      "UPDATE rooms SET Floor=%d WHERE RooCod=%ld",
                       NewFloor,Roo_EditingRoom->RooCod);
@@ -863,6 +994,58 @@ void Roo_ChangeFloor (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 		       Txt_The_floor_of_room_X_is_now_Y,
 		       Roo_EditingRoom->FullName,Roo_EditingRoom->Floor);
+     }
+  }
+
+/*****************************************************************************/
+/************************* Change the type of a room *************************/
+/*****************************************************************************/
+
+void Roo_ChangeType (void)
+  {
+   extern const char *Txt_The_type_of_room_X_has_not_changed;
+   extern const char *Txt_The_type_of_room_X_is_now_Y;
+   extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
+   Roo_RoomType_t NewType;
+
+   /***** Room constructor *****/
+   Roo_EditingRoomConstructor ();
+
+   /***** Get parameters from form *****/
+   /* Get the code of the room */
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of room is missing.");
+
+   /* Get the type of the room */
+   NewType = Roo_GetParamType ();
+
+   /***** Get data of the room from database *****/
+   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+
+   /***** Check if the old type equals the new one
+          (this happens when return is pressed without changes) *****/
+   if ((unsigned) NewType >= Roo_NUM_TYPES)
+      NewType = Roo_NO_TYPE;
+   if (NewType == Roo_EditingRoom->Type)
+      /***** Message to show no changes made *****/
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_type_of_room_X_has_not_changed,
+		       Roo_EditingRoom->FullName);
+   else
+     {
+      /***** Update the table of rooms changing the old type for the new one *****/
+      DB_QueryUPDATE ("can not update the type of a room",
+		      "UPDATE rooms SET Type='%s' WHERE RooCod=%ld",
+                      Roo_TypesDB[NewType],
+                      Roo_EditingRoom->RooCod);
+
+      /***** Get updated data of the room from database *****/
+      Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+
+      /***** Message to show the change made *****/
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_type_of_room_X_is_now_Y,
+		       Roo_EditingRoom->FullName,Txt_ROOM_TYPES[Roo_EditingRoom->Type]);
      }
   }
 
@@ -1036,7 +1219,7 @@ void Roo_ChangeCapacity (void)
 		       Roo_EditingRoom->FullName);
    else
      {
-      /***** Update the table of rooms changing the old capacity to the new *****/
+      /***** Update the table of rooms changing the old capacity for the new one *****/
       DB_QueryUPDATE ("can not update the capacity of a room",
 		      "UPDATE rooms SET Capacity=%u WHERE RooCod=%ld",
                       NewCapacity,Roo_EditingRoom->RooCod);
@@ -1129,8 +1312,8 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 
    /***** Room type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,false,
-		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
+   Roo_PutSelectorType (Roo_EditingRoom->Type,
+                        false);	// Don't submit on change
    HTM_TD_End ();
 
    /***** Room short name *****/
@@ -1251,17 +1434,22 @@ void Roo_RecFormNewRoom (void)
 /**************************** Create a new room ******************************/
 /*****************************************************************************/
 
-static void Roo_CreateRoom (const struct Roo_Room *Room)
+static void Roo_CreateRoom (struct Roo_Room *Room)
   {
+   /***** Correct wrong room type *****/
+   if ((unsigned) Room->Type >= Roo_NUM_TYPES)
+      Room->Type = Roo_NO_TYPE;
+
    /***** Create a new room *****/
    DB_QueryINSERT ("can not create room",
 		   "INSERT INTO rooms"
-		   " (CtrCod,BldCod,Floor,ShortName,FullName,Capacity)"
+		   " (CtrCod,BldCod,Floor,Type,ShortName,FullName,Capacity)"
 		   " VALUES"
-		   " (%ld,%ld,%d,'%s','%s',%u)",
+		   " (%ld,%ld,%d,'%s','%s','%s',%u)",
                    Gbl.Hierarchy.Ctr.CtrCod,
                    Room->BldCod,
                    Room->Floor,
+                   Roo_TypesDB[Room->Type],
 		   Room->ShrtName,
 		   Room->FullName,
 		   Room->Capacity);

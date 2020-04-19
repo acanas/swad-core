@@ -497,8 +497,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.189 (2020-04-16)"
-#define CSS_FILE		"swad19.187.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.190 (2020-04-18)"
+#define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
  *
@@ -548,6 +548,12 @@ Función API getLocations
 // TODO: Oresti Baños: cambiar ojos por candados en descriptores para prohibir/permitir y dejar los ojos para poder elegir descriptores
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
+
+	Version 19.190.1: Apr 18, 2020	Fixed bug in degree photo, reported by Adrián José Martínez Navarro. (? lines)
+	Version 19.190:   Apr 18, 2020	Changes in rooms. (288488 lines)
+					2 changes necessary in database:
+ALTER TABLE rooms ADD COLUMN Type ENUM('no_type','administration','auditorium','cafeteria','canteen','classroom','concierge','corridor','gym','hall','kindergarten','laboratory','library','office','outdoors','parking','pavilion','room','secretariat','seminar','shop','store','toilets','virtual','yard') NOT NULL DEFAULT 'no_type' AFTER Floor;
+DROP TABLE IF EXISTS log_old;
 
 	Version 19.189:   Apr 16, 2020	Fixed security issue in test exams.
 				        Removed table with test status. (287719 lines)

@@ -287,7 +287,7 @@ void Syl_EditSyllabus (void)
    Syl_ResetSyllabus (&Syllabus);
 
    /***** Edit syllabus *****/
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   Syl_CheckAndEditSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/

@@ -38417,6 +38417,534 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #endif
 	};
 
+const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
+	{
+	[Roo_NO_TYPE] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"No type"
+#elif L==4	// es
+	"Sin tipo"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Sin tipo"	// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_ADMINISTRATION] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Administration"
+#elif L==4	// es
+	"Administraci&oacute;n"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Administraci&oacute;n"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_AUDITORIUM] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Auditorium"
+#elif L==4	// es
+	"Auditorio"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Auditorio"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_CAFETERIA] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Cafeteria"
+#elif L==4	// es
+	"Cafeter&iacute;a"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Cafeter&iacute;a"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_CANTEEN] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Canteen"
+#elif L==4	// es
+	"Comedor"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Comedor"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_CLASSROOM] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Classroom"
+#elif L==4	// es
+	"Aula"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Aula"				// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_CONCIERGE] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Concierge"
+#elif L==4	// es
+	"Conserjer&iacute;a/Porter&iacute;a"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Conserjer&iacute;a/Porter&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_CORRIDOR] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Corridor"
+#elif L==4	// es
+	"Pasillo"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Pasillo"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_GYM] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Gym"
+#elif L==4	// es
+	"Gimnasio"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Gimnasio"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_HALL] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Hall"
+#elif L==4	// es
+	"Vest&iacute;bulo"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Vest&iacute;bulo"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_KINDERGARTEN] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Kindergarten"
+#elif L==4	// es
+	"Guarder&iacute;a"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Guarder&iacute;a"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_LABORATORY] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Laboratory"
+#elif L==4	// es
+	"Laboratorio"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Laboratorio"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_LIBRARY] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Library"
+#elif L==4	// es
+	"Biblioteca"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Biblioteca"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_OFFICE] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Office"
+#elif L==4	// es
+	"Despacho/Oficina"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Despacho/Oficina"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_OUTDOORS] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Outdoors"
+#elif L==4	// es
+	"Exteriores"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Exteriores"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_PARKING] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Parking"
+#elif L==4	// es
+	"Aparcamiento"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Aparcamiento"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_PAVILION] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Pavilion"
+#elif L==4	// es
+	"Pabellón"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Pabellón"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_ROOM] =
+#if   L==1	// ca
+	"Sala"
+#elif L==2	// de
+	"Raum"
+#elif L==3	// en
+	"Room"
+#elif L==4	// es
+	"Sala"
+#elif L==5	// fr
+	"Salle"
+#elif L==6	// gn
+	"Mbo'ehakoty"
+#elif L==7	// it
+	"Aula"
+#elif L==8	// pl
+	"Klasa"
+#elif L==9	// pt
+	"Sala"
+#endif
+	,
+	[Roo_SECRETARIAT] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Secretariat"
+#elif L==4	// es
+	"Secretar&iacute;a"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Secretar&iacute;a"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_SEMINAR] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Seminar"
+#elif L==4	// es
+	"Seminario"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Seminario"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_SHOP] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Shop"
+#elif L==4	// es
+	"Tienda"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Tienda"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_STORE] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Store"
+#elif L==4	// es
+	"Almac&eacute;n"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Almac&eacute;n"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_TOILETS] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Toilets"
+#elif L==4	// es
+	"Aseos"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Aseos"				// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_VIRTUAL] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Virtual"
+#elif L==4	// es
+	"Virtual"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Virtual"			// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	,
+	[Roo_YARD] =
+#if   L==1	// ca
+	""
+#elif L==2	// de
+	""
+#elif L==3	// en
+	"Yard"
+#elif L==4	// es
+	"Patio/Jard&iacute;n"
+#elif L==5	// fr
+	""
+#elif L==6	// gn
+	"Patio/Jard&iacute;n"		// Okoteve traducción
+#elif L==7	// it
+	""
+#elif L==8	// pl
+	""
+#elif L==9	// pt
+	""
+#endif
+	};
+
 const char *Txt_Rooms =
 #if   L==1	// ca
 	"Sales";
@@ -48972,6 +49500,48 @@ const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed =	/
 	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O tipo de inscri&ccedil;&atilde;o do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
+#endif
+
+const char *Txt_The_type_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"El tipus de la sala <strong>%s</strong> no ha canviat.";
+#elif L==2	// de
+	"Der Art des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The type of room <strong>%s</strong> has not changed.";
+#elif L==4	// es
+	"El tipo de la sala <strong>%s</strong> no ha cambiado.";
+#elif L==5	// fr
+	"Le type de la salle <strong>%s</strong> n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"El tipo de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"Il tipo della aula <strong>%s</strong> non &egrave; cambiata.";
+#elif L==8	// pl
+	"Typ klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"O tipo da sala <strong>%s</strong> n&atilde;o mudou.";
+#endif
+
+const char *Txt_The_type_of_room_X_is_now_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"El tipus de la sala <strong>%s</strong> ara &eacute;s <strong>%s</strong>.";
+#elif L==2	// de
+	"Der Art des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%s</strong>.";
+#elif L==3	// en
+	"The type of room <strong>%s</strong> is now <strong>%s</strong>.";
+#elif L==4	// es
+	"El tipo de la sala <strong>%s</strong> ahora es <strong>%s</strong>.";
+#elif L==5	// fr
+	"Le type de la salle <strong>%s</strong> est maintenant de <strong>%s</strong>.";
+#elif L==6	// gn
+	"El tipo de la sala <strong>%s</strong> ahora es <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Il tipo della aula <strong>%s</strong> &egrave; ora <strong>%s</strong>.";
+#elif L==8	// pl
+	"Typ klasy <strong>%s</strong> wynosi teraz <strong>%s</strong>.";
+#elif L==9	// pt
+	"O tipo da sala <strong>%s</strong> &eacute; agora <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very important to include %s in the following sentences
