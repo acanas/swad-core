@@ -201,7 +201,7 @@ static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Event *Event);
 static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Event *Event,
                                             const struct Tst_Question *Question,
                                             const char *Class,bool ShowResult);
-static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
+static void ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 					      const struct ExaEvt_UsrAnswer *UsrAnswer,
 					      ExaEvt_Update_t Update);
 
@@ -255,8 +255,8 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                         struct Exa_Exam *Exam,
                         bool PutFormNewEvent)
   {
-   extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *Txt_Matches;
+   extern const char *Hlp_ASSESSMENT_Exams_events;
+   extern const char *Txt_Events;
    char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumEvents;
@@ -307,16 +307,16 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 
    /***** Begin box *****/
    Exams->ExaCod = Exam->ExaCod;
-   Box_BoxBegin ("100%",Txt_Matches,
+   Box_BoxBegin ("100%",Txt_Events,
                  ExaEvt_PutIconsInListOfEvents,Exams,
-                 Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Exams_events,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeGam,
-                                  Gam_PutParams,Exams);
+      Grp_ShowFormToSelWhichGrps (ActSeeExa,
+                                  Exa_PutParams,Exams);
       Set_EndSettingsHead ();
      }
 
@@ -431,12 +431,12 @@ static void ExaEvt_PutIconsInListOfEvents (void *Exams)
 
 static void ExaEvt_PutIconToCreateNewEvent (struct Exa_Exams *Exams)
   {
-   extern const char *Txt_New_match;
+   extern const char *Txt_New_event;
 
    /***** Put form to create a new exam event *****/
    Ico_PutContextualIconToAdd (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID,
-                               Gam_PutParams,Exams,
-			       Txt_New_match);
+                               Exa_PutParams,Exams,
+			       Txt_New_event);
   }
 
 /*****************************************************************************/
@@ -522,8 +522,8 @@ static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents)
 
    /***** The rest of columns *****/
    HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]);
+   HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]);
+   HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]);
    HTM_TH (1,1,"LT",Txt_Match);
    HTM_TH (1,1,"RT",Txt_Players);
    HTM_TH (1,1,"CT",Txt_Status);
@@ -1081,8 +1081,8 @@ mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'e
 static void ExaEvt_RemoveEventFromAllTables (long EvtCod)
   {
    /***** Remove exam event from secondary tables *****/
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_players");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_playing");
+   ExaEvt_RemoveEventFromTable (EvtCod,"exa_participants");
+   ExaEvt_RemoveEventFromTable (EvtCod,"exa_happening");
    ExaEvt_RemoveEventFromTable (EvtCod,"exa_results");
    ExaEvt_RemoveEventFromTable (EvtCod,"exa_answers");
    ExaEvt_RemoveEventFromTable (EvtCod,"exa_times");
@@ -1111,8 +1111,8 @@ static void ExaEvt_RemoveEventFromTable (long EvtCod,const char *TableName)
 void ExaEvt_RemoveEventsInExamFromAllTables (long ExaCod)
   {
    /***** Remove events from secondary tables *****/
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_players");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_playing");
+   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_participants");
+   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_happening");
    ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_results");
    ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_answers");
    ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_times");
@@ -1146,8 +1146,8 @@ static void ExaEvt_RemoveEventsInExamFromTable (long ExaCod,const char *TableNam
 void ExaEvt_RemoveEventInCourseFromAllTables (long CrsCod)
   {
    /***** Remove events from secondary tables *****/
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_players");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_playing");
+   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_participants");
+   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_happening");
    ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_results");
    ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_answers");
    ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_times");
@@ -1185,7 +1185,7 @@ static void ExaEvt_RemoveEventInCourseFromTable (long CrsCod,const char *TableNa
 void ExaEvt_RemoveUsrFromEventTablesInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove student from secondary tables *****/
-   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_players");
+   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_participants");
    ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_results");
    ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_answers");
   }
@@ -1216,7 +1216,7 @@ void ExaEvt_PutParamsEdit (void *Exams)
   {
    if (Exams)
      {
-      Gam_PutParams (Exams);
+      Exa_PutParams (Exams);
       ExaEvt_PutParamEvtCod (((struct Exa_Exams *) Exams)->EvtCod);
      }
   }
@@ -1286,8 +1286,8 @@ long ExaEvt_GetParamEvtCod (void)
 
 static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
   {
-   extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *Txt_New_match;
+   extern const char *Hlp_ASSESSMENT_Exams_events;
+   extern const char *Txt_New_event;
    extern const char *Txt_Title;
    extern const char *Txt_Play;
 
@@ -1296,13 +1296,13 @@ static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
 
    /***** Begin form *****/
    Frm_StartForm (ActNewExaEvt);
-   Gam_PutParamGameCod (Exam->ExaCod);
-   Gam_PutParamQstInd (0);	// Start by first question in exam
+   Exa_PutParamExamCod (Exam->ExaCod);
+   Exa_PutParamQstInd (0);	// Start by first question in exam
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_match,
+   Box_BoxTableBegin (NULL,Txt_New_event,
                       NULL,NULL,
-		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
+		      Hlp_ASSESSMENT_Exams_events,Box_NOT_CLOSABLE,2);
 
    /***** Event title *****/
    HTM_TR_Begin (NULL);
@@ -1312,7 +1312,7 @@ static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Exam->Title,false,
+   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,false,
 		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
@@ -1409,8 +1409,8 @@ void ExaEvt_CreateNewEventTch (void)
    char Title[Exa_MAX_BYTES_TITLE + 1];
 
    /***** Get form parameters *****/
-   /* Get exam event code */
-   if ((ExaCod = Gam_GetParamGameCod ()) == -1L)
+   /* Get exam code */
+   if ((ExaCod = Exa_GetParamExamCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
 
    /* Get exam event title */
@@ -2056,11 +2056,11 @@ static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Event *Event)
 static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Event *Event)
   {
    /***** Get index of the previous question *****/
-   Event->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Event->ExaCod,
+   Event->Status.QstInd = Exa_GetPrevQuestionIndexInExam (Event->ExaCod,
 							  Event->Status.QstInd);
    if (Event->Status.QstInd)		// Start of questions not reached
      {
-      Event->Status.QstCod = Gam_GetQstCodFromQstInd (Event->ExaCod,
+      Event->Status.QstCod = Exa_GetQstCodFromQstInd (Event->ExaCod,
 						      Event->Status.QstInd);
       Event->Status.Showing = Event->Status.ShowQstResults ? ExaEvt_RESULTS :
 							     ExaEvt_ANSWERS;
@@ -2119,13 +2119,13 @@ static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Event *Event)
 static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Event *Event)
   {
    /***** Get index of the next question *****/
-   Event->Status.QstInd = Gam_GetNextQuestionIndexInGame (Event->ExaCod,
+   Event->Status.QstInd = Exa_GetNextQuestionIndexInExam (Event->ExaCod,
 							  Event->Status.QstInd);
 
    /***** Get question code *****/
    if (Event->Status.QstInd < ExaEvt_AFTER_LAST_QUESTION)	// End of questions not reached
      {
-      Event->Status.QstCod = Gam_GetQstCodFromQstInd (Event->ExaCod,
+      Event->Status.QstCod = Exa_GetQstCodFromQstInd (Event->ExaCod,
 						      Event->Status.QstInd);
       Event->Status.Showing = ExaEvt_STEM;
      }
@@ -2624,8 +2624,7 @@ static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Event *Event,
 	   {
 	    if (Event->Status.Showing == ExaEvt_ANSWERS)	// Teacher's screen is showing question answers
 	       /* Show current question and possible answers */
-	       if (!ExaEvt_ShowQuestionAndAnswersStd (Event,UsrAnswer,Update))
-                  Ale_ShowAlert (Ale_ERROR,"Wrong question.");
+	       ExaEvt_ShowQuestionAndAnswersStd (Event,UsrAnswer,Update);
 	   }
 	 else
 	    Ale_ShowAlert (Ale_ERROR,"You can not join this exam event.");
@@ -2648,7 +2647,7 @@ static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
-   unsigned NumQsts = Gam_GetNumQstsGame (Event->ExaCod);
+   unsigned NumQsts = Exa_GetNumQstsExam (Event->ExaCod);
 
    HTM_DIV_Begin ("class=\"EXA_NUM_QST\"");
    switch (Event->Status.Showing)
@@ -2893,7 +2892,7 @@ static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Event *Event)
    /***** Start form *****/
    Frm_StartForm (ActRemExaEvtAnsQstStd);
    ExaEvt_PutParamEvtCod (Event->EvtCod);	// Current exam event being played
-   Gam_PutParamQstInd (Event->Status.QstInd);	// Current question index shown
+   Exa_PutParamQstInd (Event->Status.QstInd);	// Current question index shown
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"EXA_BIGBUTTON_CONT\"");
@@ -3121,17 +3120,13 @@ void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Event *Event,
 /*****************************************************************************/
 // Return true on valid question, false on invalid question
 
-static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
+static void ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 					      const struct ExaEvt_UsrAnswer *UsrAnswer,
 					      ExaEvt_Update_t Update)
   {
    unsigned NumOptions;
    unsigned NumOpt;
    char *Class;
-
-   /***** Trivial check: this question must be valid for exams *****/
-   if (!Tst_CheckIfQuestionIsValidForGame (Event->Status.QstCod))
-      return false;
 
    /***** Get number of options in this question *****/
    NumOptions = Tst_GetNumAnswersQst (Event->Status.QstCod);
@@ -3156,7 +3151,7 @@ static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 	 and not lose clicks due to refresh */
       Frm_StartForm (ActAnsExaEvtQstStd);
       ExaEvt_PutParamEvtCod (Event->EvtCod);		// Current exam event being played
-      Gam_PutParamQstInd (Event->Status.QstInd);	// Current question index shown
+      Exa_PutParamQstInd (Event->Status.QstInd);	// Current question index shown
       ExaEvt_PutParamNumOpt (NumOpt);		// Number of button
 
       if (asprintf (&Class,"EXA_STD_BUTTON%s BT_%c",
@@ -3181,8 +3176,6 @@ static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 
    /***** End table *****/
    HTM_TABLE_End ();
-
-   return true;
   }
 
 /*****************************************************************************/
@@ -3208,7 +3201,7 @@ static void ExaEvt_ShowEventScore (const struct ExaEvt_Event *Event)
    unsigned NumRow;
 
    /***** Get minimum and maximum scores *****/
-   Gam_GetScoreRange (Event->ExaCod,&MinScore,&MaxScore);
+   Exa_GetScoreRange (Event->ExaCod,&MinScore,&MaxScore);
    Range = MaxScore - MinScore;
    if (Range == 0.0)
       return;
@@ -3508,13 +3501,13 @@ static void ExaEvt_RemoveOldPlayers (void)
   {
    /***** Delete events not being played by teacher *****/
    DB_QueryDELETE ("can not update events as not being played",
-		   "DELETE FROM exa_playing"
+		   "DELETE FROM exa_happening"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
 
    /***** Delete players (students) who have left events *****/
    DB_QueryDELETE ("can not update exam event players",
-		   "DELETE FROM exa_players"
+		   "DELETE FROM exa_participants"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
   }
@@ -3527,7 +3520,7 @@ static void ExaEvt_UpdateEventAsBeingPlayed (long EvtCod)
   {
    /***** Insert exam event as being played *****/
    DB_QueryREPLACE ("can not set exam event as being played",
-		    "REPLACE exa_playing (EvtCod) VALUE (%ld)",
+		    "REPLACE exa_happening (EvtCod) VALUE (%ld)",
 		    EvtCod);
   }
 
@@ -3539,13 +3532,13 @@ static void ExaEvt_SetEventAsNotBeingPlayed (long EvtCod)
   {
    /***** Delete all exam event players ******/
    DB_QueryDELETE ("can not update exam event players",
-		    "DELETE FROM exa_players"
+		    "DELETE FROM exa_participants"
 		    " WHERE EvtCod=%ld",
 		    EvtCod);
 
    /***** Delete exam event as being played ******/
    DB_QueryDELETE ("can not set exam event as not being played",
-		    "DELETE FROM exa_playing"
+		    "DELETE FROM exa_happening"
 		    " WHERE EvtCod=%ld",
 		    EvtCod);
   }
@@ -3559,7 +3552,7 @@ static bool ExaEvt_GetIfEventIsBeingPlayed (long EvtCod)
    /***** Get if an exam event is being played or not *****/
    return
    (bool) (DB_QueryCOUNT ("can not get if exam event is being played",
-			  "SELECT COUNT(*) FROM exa_playing"
+			  "SELECT COUNT(*) FROM exa_happening"
 			  " WHERE EvtCod=%ld",
 			  EvtCod) != 0);
   }
@@ -3573,7 +3566,7 @@ static void ExaEvt_GetNumPlayers (struct ExaEvt_Event *Event)
    /***** Get number of players who are playing an exam event *****/
    Event->Status.NumPlayers =
    (unsigned) DB_QueryCOUNT ("can not get number of players",
-			     "SELECT COUNT(*) FROM exa_players"
+			     "SELECT COUNT(*) FROM exa_participants"
 			     " WHERE EvtCod=%ld",
 			     Event->EvtCod);
   }
@@ -3603,7 +3596,7 @@ bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event)
 
    /***** Insert me as exam event player *****/
    DB_QueryREPLACE ("can not insert exam event player",
-		    "REPLACE exa_players (EvtCod,UsrCod) VALUES (%ld,%ld)",
+		    "REPLACE exa_participants (EvtCod,UsrCod) VALUES (%ld,%ld)",
 		    Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return true;
   }

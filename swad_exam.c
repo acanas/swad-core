@@ -190,7 +190,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->ListQuestions     = NULL;
    Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
    Exams->ExaCod            = -1L;	// Selected/current exam code
-   Exams->EvtCod            = -1L;	// Selected/current match code
+   Exams->EvtCod            = -1L;	// Selected/current event code
    Exams->QstInd            = 0;	// Current question index
   }
 
@@ -222,7 +222,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
    extern const char *Txt_Exams;
    extern const char *Txt_EXAMS_ORDER_HELP[Exa_NUM_ORDERS];
    extern const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS];
-   extern const char *Txt_Matches;
+   extern const char *Txt_Events;
    extern const char *Txt_No_exams;
    Exa_Order_t Order;
    struct Pagination Pagination;
@@ -281,7 +281,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,"RM",Txt_Matches);
+      HTM_TH (1,1,"RM",Txt_Events);
 
       HTM_TR_End ();
 
@@ -432,7 +432,7 @@ void Exa_SeeOneExam (void)
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         false,	// Do not list exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -488,7 +488,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
-   extern const char *Txt_Matches;
+   extern const char *Txt_Events;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -588,12 +588,12 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    Exams->ExaCod = Exam->ExaCod;
    Frm_StartForm (ActSeeExa);
    Exa_PutParams (Exams);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
+   HTM_BUTTON_SUBMIT_Begin (Txt_Events,
 			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
 				           "BT_LINK LT ASG_TITLE",
 			    NULL);
    if (ShowOnlyThisExam)
-      HTM_TxtColonNBSP (Txt_Matches);
+      HTM_TxtColonNBSP (Txt_Events);
    HTM_Unsigned (Exam->NumEvts);
    HTM_BUTTON_End ();
    Frm_EndForm ();
@@ -1674,7 +1674,7 @@ void Exa_RequestNewQuestion (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2208,7 +2208,7 @@ void Exa_AddTstQuestionsToExam (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2302,7 +2302,7 @@ void Exa_RequestRemoveQst (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2364,7 +2364,7 @@ void Exa_RemoveQst (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2417,7 +2417,7 @@ void Exa_MoveUpQst (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2480,7 +2480,7 @@ void Exa_MoveDownQst (void)
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
-	                false);	// Do not put form to start new match
+	                false);	// Do not put form to start new event
   }
 
 /*****************************************************************************/
@@ -2549,17 +2549,17 @@ static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
   }
 
 /*****************************************************************************/
-/********************* Put button to create a new match **********************/
+/********************* Put button to create a new event **********************/
 /*****************************************************************************/
 
 void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod)
   {
-   extern const char *Txt_New_match;
+   extern const char *Txt_New_event;
 
    Exams->ExaCod = ExaCod;
    Frm_StartFormAnchor (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID);
    Exa_PutParams (Exams);
-   Btn_PutConfirmButton (Txt_New_match);
+   Btn_PutConfirmButton (Txt_New_event);
    Frm_EndForm ();
   }
 
@@ -2583,7 +2583,7 @@ void Exa_RequestNewEvent (void)
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         false,	// Do not list exam questions
-                        true);	// Put form to start new match
+                        true);	// Put form to start new event
   }
 
 /*****************************************************************************/
@@ -2854,7 +2854,7 @@ void Exa_ShowTstTagsPresentInAnExam (long ExaCod)
    /***** Get all tags of questions in this exam *****/
    NumTags = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get tags"
-					" present in a match result",
+					" present in an event result",
 			     "SELECT tst_tags.TagTxt"	// row[0]
 			     " FROM"
 			     " (SELECT DISTINCT(tst_question_tags.TagCod)"

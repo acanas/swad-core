@@ -979,6 +979,227 @@ mysql> DESCRIBE departments;
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
 
+   /***** Table exa_answers *****/
+/*
+mysql> DESCRIBE exa_answers;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| EvtCod | int(11)    | NO   | PRI | NULL    |       |
+| UsrCod | int(11)    | NO   | PRI | NULL    |       |
+| QstInd | int(11)    | NO   | PRI | NULL    |       |
+| NumOpt | tinyint(4) | NO   |     | NULL    |       |
+| AnsInd | tinyint(4) | NO   |     | NULL    |       |
++--------+------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_answers ("
+			"EvtCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
+			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
+		   "UNIQUE INDEX(EvtCod,UsrCod,QstInd))");
+
+   /***** Table exa_groups *****/
+/*
+mysql> DESCRIBE exa_groups;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| EvtCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_groups ("
+			"EvtCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(EvtCod,GrpCod))");
+
+   /***** Table exa_events *****/
+/*
+mysql> DESCRIBE exa_events;
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| Field          | Type                                           | Null | Key | Default | Extra          |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| EvtCod         | int(11)                                        | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int(11)                                        | NO   | MUL | NULL    |                |
+| UsrCod         | int(11)                                        | NO   |     | NULL    |                |
+| StartTime      | datetime                                       | NO   |     | NULL    |                |
+| EndTime        | datetime                                       | NO   |     | NULL    |                |
+| Title          | varchar(2047)                                  | NO   |     | NULL    |                |
+| QstInd         | int(11)                                        | NO   |     | 0       |                |
+| QstCod         | int(11)                                        | NO   |     | -1      |                |
+| Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
+| Countdown      | int(11)                                        | NO   |     | -1      |                |
+| NumCols        | int(11)                                        | NO   |     | 1       |                |
+| ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
+| ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_events ("
+			"EvtCod INT NOT NULL AUTO_INCREMENT,"
+			"ExaCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
+			"QstInd INT NOT NULL DEFAULT 0,"
+			"QstCod INT NOT NULL DEFAULT -1,"
+			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"
+			"Countdown INT NOT NULL DEFAULT -1,"
+		        "NumCols INT NOT NULL DEFAULT 1,"
+			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(EvtCod),"
+		   "INDEX(ExaCod))");
+
+   /***** Table exa_exams *****/
+/*
+mysql> DESCRIBE exa_exams;
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| ExaCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod     | int(11)       | NO   | MUL | -1      |                |
+| Hidden     | enum('N','Y') | NO   |     | N       |                |
+| UsrCod     | int(11)       | NO   |     | NULL    |                |
+| MaxGrade   | double        | NO   |     | 1       |                |
+| Visibility | int(11)       | NO   |     | 31      |                |
+| Title      | varchar(2047) | NO   |     | NULL    |                |
+| Txt        | text          | NO   |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_exams ("
+			"ExaCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"UsrCod INT NOT NULL,"
+			"MaxGrade DOUBLE PRECISION NOT NULL DEFAULT 1,"	// Scale from score [0...num.answers] to grade [0...MaxGrade]
+			"Visibility INT NOT NULL DEFAULT 0x1f,"
+			"Title VARCHAR(2047) NOT NULL,"	// Exa_MAX_BYTES_TITLE
+			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(ExaCod),"
+		   "INDEX(CrsCod))");
+
+   /***** Table exa_happening *****/
+/*
+mysql> DESCRIBE exa_happening;
++--------+-----------+------+-----+-------------------+-----------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                       |
++--------+-----------+------+-----+-------------------+-----------------------------+
+| EvtCod | int(11)   | NO   | PRI | NULL              |                             |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_happening ("
+			"EvtCod INT NOT NULL,"
+		        "TS TIMESTAMP,"
+		   "UNIQUE INDEX(EvtCod))");
+
+   /***** Table exa_indexes *****/
+/*
+mysql> DESCRIBE exa_indexes;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| EvtCod  | int(11) | NO   | PRI | NULL    |       |
+| QstInd  | int(11) | NO   | PRI | NULL    |       |
+| Indexes | text    | NO   |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_indexes ("
+			"EvtCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"Indexes TEXT NOT NULL,"	// ExaRes_MAX_BYTES_INDEXES_ONE_QST
+		   "UNIQUE INDEX(EvtCod,QstInd))");
+
+   /***** Table exa_participants *****/
+/*
+mysql> DESCRIBE exa_participants;
++--------+-----------+------+-----+-------------------+-----------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                       |
++--------+-----------+------+-----+-------------------+-----------------------------+
+| EvtCod | int(11)   | NO   | PRI | NULL              |                             |
+| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_participants ("
+			"EvtCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
+		        "TS TIMESTAMP,"
+		   "UNIQUE INDEX(EvtCod,UsrCod))");
+
+   /***** Table exa_questions *****/
+/*
+mysql> DESCRIBE exa_questions;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| ExaCod | int(11) | NO   | MUL | NULL    |       |
+| QstCod | int(11) | NO   | MUL | NULL    |       |
+| QstInd | int(11) | NO   |     | 0       |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_questions ("
+			"ExaCod INT NOT NULL,"
+			"QstCod INT NOT NULL,"
+			"QstInd INT NOT NULL DEFAULT 0,"
+		   "INDEX(ExaCod),"
+		   "INDEX(QstCod))");
+
+   /***** Table exa_results *****/
+/*
+mysql> DESCRIBE exa_results;
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| EvtCod          | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
+| StartTime       | datetime | NO   |     | NULL    |       |
+| EndTime         | datetime | NO   |     | NULL    |       |
+| NumQsts         | int(11)  | NO   |     | 0       |       |
+| NumQstsNotBlank | int(11)  | NO   |     | 0       |       |
+| Score           | double   | NO   |     | 0       |       |
++-----------------+----------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_results ("
+			"EvtCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"	// Time this user started to answer
+			"EndTime DATETIME NOT NULL,"	// Time this user finished to answer
+			"NumQsts INT NOT NULL DEFAULT 0,"
+			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(EvtCod,UsrCod))");
+
+      /***** Table exa_times *****/
+/*
+mysql> DESCRIBE exa_times;
++-------------+---------+------+-----+----------+-------+
+| Field       | Type    | Null | Key | Default  | Extra |
++-------------+---------+------+-----+----------+-------+
+| EvtCod      | int(11) | NO   | PRI | NULL     |       |
+| QstInd      | int(11) | NO   | PRI | NULL     |       |
+| ElapsedTime | time    | NO   |     | 00:00:00 |       |
++-------------+---------+------+-----+----------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_times ("
+			"EvtCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"ElapsedTime TIME NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(EvtCod,QstInd))");
+
    /***** Table exam_announcements *****/
 /*
 mysql> DESCRIBE exam_announcements;
@@ -1307,7 +1528,6 @@ mysql> DESCRIBE forum_thread;
 		   "UNIQUE INDEX(FirstPstCod),"
 		   "UNIQUE INDEX(LastPstCod))");
 
-
    /***** Table gam_games *****/
 /*
 mysql> DESCRIBE gam_games;
@@ -1336,6 +1556,25 @@ mysql> DESCRIBE gam_games;
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
 		   "INDEX(CrsCod))");
+
+   /***** Table gam_questions *****/
+/*
+mysql> DESCRIBE gam_questions;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| GamCod | int(11) | NO   | MUL | NULL    |       |
+| QstCod | int(11) | NO   | MUL | NULL    |       |
+| QstInd | int(11) | NO   |     | 0       |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
+			"GamCod INT NOT NULL,"
+			"QstCod INT NOT NULL,"
+			"QstInd INT NOT NULL DEFAULT 0,"
+		   "INDEX(GamCod),"
+		   "INDEX(QstCod))");
 
    /***** Table mch_answers *****/
 /*
@@ -1491,25 +1730,6 @@ mysql> DESCRIBE mch_results;
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(MchCod,UsrCod))");
-
-   /***** Table gam_questions *****/
-/*
-mysql> DESCRIBE gam_questions;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| GamCod | int(11) | NO   | MUL | NULL    |       |
-| QstCod | int(11) | NO   | MUL | NULL    |       |
-| QstInd | int(11) | NO   |     | 0       |       |
-+--------+---------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
-			"GamCod INT NOT NULL,"
-			"QstCod INT NOT NULL,"
-			"QstInd INT NOT NULL DEFAULT 0,"
-		   "INDEX(GamCod),"
-		   "INDEX(QstCod))");
 
       /***** Table mch_times *****/
 /*

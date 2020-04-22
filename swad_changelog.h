@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.192.1 (2020-04-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.193 (2020-04-22)"
 #define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -551,6 +551,19 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
+
+	Version 19.193:   Apr 22, 2020	Created database tables related to exams. (297127 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS exa_answers (EvtCod INT NOT NULL,UsrCod INT NOT NULL,QstInd INT NOT NULL,NumOpt TINYINT NOT NULL,AnsInd TINYINT NOT NULL,UNIQUE INDEX(EvtCod,UsrCod,QstInd));
+CREATE TABLE IF NOT EXISTS exa_groups (EvtCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(EvtCod,GrpCod));
+CREATE TABLE IF NOT EXISTS exa_events (EvtCod INT NOT NULL AUTO_INCREMENT,ExaCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',Countdown INT NOT NULL DEFAULT -1,NumCols INT NOT NULL DEFAULT 1,ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',UNIQUE INDEX(EvtCod),INDEX(ExaCod));
+CREATE TABLE IF NOT EXISTS exa_exams (ExaCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,MaxGrade DOUBLE PRECISION NOT NULL DEFAULT 1,Visibility INT NOT NULL DEFAULT 0x1f,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(ExaCod),INDEX(CrsCod));
+CREATE TABLE IF NOT EXISTS exa_happening (EvtCod INT NOT NULL,TS TIMESTAMP,UNIQUE INDEX(EvtCod));
+CREATE TABLE IF NOT EXISTS exa_indexes (EvtCod INT NOT NULL,QstInd INT NOT NULL,Indexes TEXT NOT NULL,UNIQUE INDEX(EvtCod,QstInd));
+CREATE TABLE IF NOT EXISTS exa_participants (EvtCod INT NOT NULL,UsrCod INT NOT NULL,TS TIMESTAMP,UNIQUE INDEX(EvtCod,UsrCod));
+CREATE TABLE IF NOT EXISTS exa_questions (ExaCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,INDEX(ExaCod),INDEX(QstCod));
+CREATE TABLE IF NOT EXISTS exa_results (EvtCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(EvtCod,UsrCod));
+CREATE TABLE IF NOT EXISTS exa_times (EvtCod INT NOT NULL,QstInd INT NOT NULL,ElapsedTime TIME NOT NULL DEFAULT 0,UNIQUE INDEX(EvtCod,QstInd));
 
 	Version 19.192.1: Apr 22, 2020	Changed icon for exams. (296807 lines)
 					Copy the following 2 icons to icon public directory:

@@ -992,14 +992,14 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade)
   {
-   extern const char *Txt_Matches;
+   extern const char *Txt_Events;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Matches);
+   HTM_TxtColonNBSP (Txt_Events);
    HTM_Unsigned (NumResults);
    HTM_TD_End ();
 

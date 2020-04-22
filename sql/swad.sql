@@ -439,6 +439,108 @@ CREATE TABLE IF NOT EXISTS departments (
 	UNIQUE INDEX(DptCod),
 	INDEX(InsCod));
 --
+-- Table exa_answers: stores the users' answers to the exam events
+--
+CREATE TABLE IF NOT EXISTS exa_answers (
+	EvtCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	NumOpt TINYINT NOT NULL,
+	AnsInd TINYINT NOT NULL,
+	UNIQUE INDEX(EvtCod,UsrCod,QstInd));
+--
+-- Table exa_groups: stores the groups associated to each event in an exam
+--
+CREATE TABLE IF NOT EXISTS exa_groups (
+	EvtCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(EvtCod,GrpCod));
+--
+-- Table exa_events: stores the events (exams instances) that have already taken place
+--
+CREATE TABLE IF NOT EXISTS exa_events (
+	EvtCod INT NOT NULL AUTO_INCREMENT,
+	ExaCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	QstInd INT NOT NULL DEFAULT 0,
+	QstCod INT NOT NULL DEFAULT -1,
+	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
+	Countdown INT NOT NULL DEFAULT -1,
+	NumCols INT NOT NULL DEFAULT 1,
+	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
+	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(EvtCod),
+	INDEX(ExaCod));
+--
+-- Table exa_exams: stores the exams
+--
+CREATE TABLE IF NOT EXISTS exa_exams (
+	ExaCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UsrCod INT NOT NULL,
+	MaxGrade DOUBLE PRECISION NOT NULL DEFAULT 1,
+	Visibility INT NOT NULL DEFAULT 0x1f,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(ExaCod),
+	INDEX(CrsCod));
+--
+-- Table exa_happening: stores the current events taking place right now
+--
+CREATE TABLE IF NOT EXISTS exa_happening (
+	EvtCod INT NOT NULL,
+	TS TIMESTAMP,
+	UNIQUE INDEX(EvtCod));
+--
+-- Table exa_indexes: stores the order of answers in an event
+--
+CREATE TABLE IF NOT EXISTS exa_indexes (
+	EvtCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	Indexes TEXT NOT NULL,
+	UNIQUE INDEX(EvtCod,QstInd));
+--
+-- Table exa_participants: stores the current exam event participants
+--
+CREATE TABLE IF NOT EXISTS exa_participants (
+	EvtCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	TS TIMESTAMP,
+	UNIQUE INDEX(EvtCod,UsrCod));
+--
+-- Table exa_questions: stores the questions in the exams
+--
+CREATE TABLE IF NOT EXISTS exa_questions (
+	ExaCod INT NOT NULL,
+	QstCod INT NOT NULL,
+	QstInd INT NOT NULL DEFAULT 0,
+	INDEX(ExaCod),
+	INDEX(QstCod));
+--
+-- Table exa_results: stores exam results
+--
+CREATE TABLE IF NOT EXISTS exa_results (
+	EvtCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	NumQsts INT NOT NULL DEFAULT 0,
+	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(EvtCod,UsrCod));
+--
+-- Table exa_times: stores the elapsed time in every question in every exam event
+--
+CREATE TABLE IF NOT EXISTS exa_times (
+	EvtCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	ElapsedTime TIME NOT NULL DEFAULT 0,
+	UNIQUE INDEX(EvtCod,QstInd));
+--
 -- Table exam_announcements: stores the calls for examination
 --
 CREATE TABLE IF NOT EXISTS exam_announcements (
@@ -673,7 +775,7 @@ CREATE TABLE IF NOT EXISTS mch_indexes (
 	Indexes TEXT NOT NULL,
 	UNIQUE INDEX(MchCod,QstInd));
 --
--- Table mch_results: stores the current match results
+-- Table mch_results: stores match results
 --
 CREATE TABLE IF NOT EXISTS mch_results (
 	MchCod INT NOT NULL,
