@@ -34,32 +34,32 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define TstExa_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+#define TstRes_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
 
-#define TstExa_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
-#define TstExa_MAX_BYTES_ANSWERS_ONE_QST	((TstExa_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define TstRes_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
+#define TstRes_MAX_BYTES_ANSWERS_ONE_QST	((TstRes_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define TstExa_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
+#define TstRes_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct TstExa_Exam
+struct TstRes_Result
   {
-   long ExaCod;			// Test exam code
+   long ResCod;			// Test result code
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;		// Number of questions
    unsigned NumQstsNotBlank;	// Number of questions not blank
-   bool Sent;			// This test exam has been sent or not?
+   bool Sent;			// This test result has been sent or not?
 				// "Sent" means that user has clicked "Send" button after finishing
-   bool AllowTeachers;		// Are teachers allowed to see this test exam?
-   double Score;		// Total score of the test exam
+   bool AllowTeachers;		// Are teachers allowed to see this test result?
+   double Score;		// Total score of the test result
    struct
      {
       long QstCod;		// Question code
-      char StrIndexes[TstExa_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-      char StrAnswers[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+      char StrIndexes[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+      char StrAnswers[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
       double Score;		// Question score
       bool AnswerIsNotBlank;	// Answer not blank?
      } Questions[TstCfg_MAX_QUESTIONS_PER_TEST];
@@ -69,43 +69,43 @@ struct TstExa_Exam
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TstExa_ResetExam (struct TstExa_Exam *Exam);
-void TstExa_CreateExamInDB (struct TstExa_Exam *Exam);
-void TstExa_UpdateExamInDB (const struct TstExa_Exam *Exam);
+void TstRes_ResetResult (struct TstRes_Result *Result);
+void TstRes_CreateExamInDB (struct TstRes_Result *Exam);
+void TstRes_UpdateExamInDB (const struct TstRes_Result *Exam);
 
-void TstExa_ShowExamAfterAssess (struct TstExa_Exam *Exam);
+void TstRes_ShowExamAfterAssess (struct TstRes_Result *Exam);
 
-void TstExa_ComputeScoresAndStoreExamQuestions (struct TstExa_Exam *Exam,
+void TstRes_ComputeScoresAndStoreExamQuestions (struct TstRes_Result *Exam,
                                                 bool UpdateQstScore);
-void TstExa_ComputeChoiceAnsScore (struct TstExa_Exam *Result,
+void TstRes_ComputeChoiceAnsScore (struct TstRes_Result *Result,
 				   unsigned NumQst,
 				   struct Tst_Question *Question);
-void TstExa_GetIndexesFromStr (const char StrIndexesOneQst[TstExa_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+void TstRes_GetIndexesFromStr (const char StrIndexesOneQst[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
-void TstExa_GetAnswersFromStr (const char StrAnswersOneQst[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1],
+void TstRes_GetAnswersFromStr (const char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1],
 			       bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION]);
 
-void TstExa_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
-double TstExa_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
-void TstExa_ShowGrade (double Grade,double MaxGrade);
+void TstRes_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
+double TstRes_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
+void TstRes_ShowGrade (double Grade,double MaxGrade);
 
-void TstExa_SelUsrsToViewUsrsExams (void);
-void TstExa_SelDatesToSeeMyExams (void);
-void TstExa_ShowMyExams (void);
-void TstExa_GetUsrsAndShowExams (void);
+void TstRes_SelUsrsToViewUsrsExams (void);
+void TstRes_SelDatesToSeeMyExams (void);
+void TstRes_ShowMyExams (void);
+void TstRes_GetUsrsAndShowExams (void);
 
-void TstExa_PutParamExaCod (long ExaCod);
-long TstExa_GetParamExaCod (void);
+void TstRes_PutParamExaCod (long ExaCod);
+long TstRes_GetParamExaCod (void);
 
-void TstExa_ShowOneExam (void);
-void TstExa_ShowExamAnswers (struct UsrData *UsrDat,
-			     struct TstExa_Exam *Exam,
+void TstRes_ShowOneExam (void);
+void TstRes_ShowExamAnswers (struct UsrData *UsrDat,
+			     struct TstRes_Result *Result,
 			     unsigned Visibility);
-void TstExa_GetExamDataByExaCod (struct TstExa_Exam *Exam);
+void TstRes_GetExamDataByExaCod (struct TstRes_Result *Result);
 
-void TstExa_GetExamQuestionsFromDB (struct TstExa_Exam *Exam);
-void TstExa_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
-void TstExa_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void TstExa_RemoveCrsExams (long CrsCod);
+void TstRes_GetExamQuestionsFromDB (struct TstRes_Result *Result);
+void TstRes_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
+void TstRes_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void TstRes_RemoveCrsExams (long CrsCod);
 
 #endif

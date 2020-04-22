@@ -1507,6 +1507,27 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
+const char *Txt_Already_existed_an_exam_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Ja existia un examen amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2	// de
+	"Es gibt bereits einen Pr&uuml;fung mit dem Namen <strong>%s</strong>.";
+#elif L==3	// en
+	"Already existed an exam with the title <strong>%s</strong>.";
+#elif L==4	// es
+	"Ya exist&iacute;a un examen con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5	// fr
+	"Il existe d&eacute;j&agrave; un examen du titre <strong>%s</strong>.";
+#elif L==6	// gn
+	"Ya exist&iacute;a un examen con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Esiste gi&agrave; un esame con il titolo <strong>%s</strong>.";
+#elif L==8	// pl
+	"Istniala juz egzamin z tytulu <strong>%s</strong>.";
+#elif L==9	// pt
+	"J&aacute; existe um exame com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Altitude =
 #if   L==1	// ca
 	"Altitud";
@@ -5858,6 +5879,27 @@ const char *Txt_Create_event =
 	"Criar evento";
 #endif
 
+const char *Txt_Create_exam =
+#if   L==1	// ca
+	"Crear examen";
+#elif L==2	// de
+	"Pr&uuml;fung erstellen";
+#elif L==3	// en
+	"Create exam";
+#elif L==4	// es
+	"Crear examen";
+#elif L==5	// fr
+	"Cr&eacute;er exam";
+#elif L==6	// gn
+	"Crear examen";	// Okoteve traducción
+#elif L==7	// it
+	"Crea esame";
+#elif L==8	// pl
+	"Utw&oacute;rz egzamin";
+#elif L==9	// pt
+	"Criar exame";
+#endif
+
 const char *Txt_Create_folder =
 #if   L==1	// ca
 	"Crear carpeta";	// Necessita traduccio
@@ -6490,7 +6532,7 @@ const char *Txt_Created_new_email_domain_X =	// Warning: it is very important to
 
 const char *Txt_Created_new_event_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Creado nuevo evento <strong>%s</strong>.";	// Necessita traduccio
+	"reat nou esdeveniment <strong>%s</strong>.";
 #elif L==2	// de
 	"Neues Ereignis <strong>%s</strong> eingegeben.";
 #elif L==3	// en
@@ -6507,6 +6549,27 @@ const char *Txt_Created_new_event_X =	// Warning: it is very important to includ
 	"Utworzono nowe wydarzenie <strong>%s</strong>.";
 #elif L==9	// pt
 	"Criado novo evento <strong>%s</strong>.";
+#endif
+
+const char *Txt_Created_new_exam_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"reat nou examen <strong>%s</strong>.";
+#elif L==2	// de
+	"Neues Pr&uuml;fung <strong>%s</strong> eingegeben.";
+#elif L==3	// en
+	"Created new exam <strong>%s</strong>.";
+#elif L==4	// es
+	"Creado nuevo examen <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouveau examen <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creado nuevo examen <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creato nuovo esame <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono nowe egzaminu <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criado novo exame <strong>%s</strong>.";
 #endif
 
 const char *Txt_Created_new_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -8799,6 +8862,27 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 	"Voc&ecirc; realmente deseja remover o evento <strong>%s</strong>?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar l'examen <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie der Pr&uuml;fung <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the exam <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el examen <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer l'examen <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el examen <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere l'esame <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usunac egzaminu <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o exame <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_ =	// Warning: it is very important to include two %s and one %u in the following sentences
 #if   L==1	// ca
 	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
@@ -9979,6 +10063,27 @@ const char *Txt_Edit_event =
 	"Edytuj wydarzenie";
 #elif L==9	// pt
 	"Editar evento";
+#endif
+
+const char *Txt_Edit_exam =
+#if   L==1	// ca
+	"Editar exam";
+#elif L==2	// de
+	"Editar exam";
+#elif L==3	// en
+	"Editar exam";
+#elif L==4	// es
+	"Editar examen";
+#elif L==5	// fr
+	"Editar exam";
+#elif L==6	// gn
+	"Editar examen";	// Okoteve traducción
+#elif L==7	// it
+	"Editar exam";
+#elif L==8	// pl
+	"Editar exam";
+#elif L==9	// pt
+	"Editar exam";
 #endif
 
 const char *Txt_Edit_game =
@@ -11248,7 +11353,7 @@ const char *Txt_Events =
 
 const char *Txt_Exam =
 #if   L==1	// ca
-	"ex&agrave;men";
+	"Ex&agrave;men";
 #elif L==2	// de
 	"Pr&uuml;fung";
 #elif L==3	// en
@@ -11581,6 +11686,180 @@ const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in th
 #elif L==9	// pt
 	"Exame de %s";
 #endif
+
+const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Examen <strong>%s</strong> eliminat.";
+#elif L==2	// de
+	"Pr&uuml;fung <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Exam <strong>%s</strong> removed.";
+#elif L==4	// es
+	"Examen <strong>%s</strong> eliminado.";
+#elif L==5	// fr
+	"Examen <strong>%s</strong> supprim&eacute;.";
+#elif L==6	// gn
+	"Examen <strong>%s</strong> eliminado.";	// Okoteve traducción
+#elif L==7	// it
+	"Esame <strong>%s</strong> rimosso.";
+#elif L==8	// pl
+	"Egzamin <strong>%s</strong> usuniete.";
+#elif L==9	// pt
+	"Exame <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Exams =
+#if   L==1	// ca
+	"Ex&agrave;mens";
+#elif L==2	// de
+	"Pr&uuml;fungen";
+#elif L==3	// en
+	"Exams";
+#elif L==4	// es
+	"Ex&aacute;menes";
+#elif L==5	// fr
+	"Examens";
+#elif L==6	// gn
+	"Ex&aacute;menes";		// Okoteve traducción
+#elif L==7	// it
+	"Esami";
+#elif L==8	// pl
+	"Egzaminy";
+#elif L==9	// pt
+	"Exames";
+#endif
+
+const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
+	{
+	[Exa_ORDER_BY_START_DATE] =
+#if   L==1	// ca
+	"Inici"
+#elif L==2	// de
+	"Start"
+#elif L==3	// en
+	"Start"
+#elif L==4	// es
+	"Inicio"
+#elif L==5	// fr
+	"D&eacute;but"
+#elif L==6	// gn
+	"&Ntilde;epyr&utilde;"
+#elif L==7	// it
+	"Inizio"
+#elif L==8	// pl
+	"Pocz&aogon;tek"
+#elif L==9	// pt
+	"In&iacute;cio"
+#endif
+	,
+	[Exa_ORDER_BY_END_DATE] =
+#if   L==1	// ca
+	"Final"
+#elif L==2	// de
+	"Ende"
+#elif L==3	// en
+	"End"
+#elif L==4	// es
+	"Final"
+#elif L==5	// fr
+	"Fin"
+#elif L==6	// gn
+	"Paha"
+#elif L==7	// it
+	"Fine"
+#elif L==8	// pl
+	"Koniec"
+#elif L==9	// pt
+	"Fim"
+#endif
+	,
+	[Exa_ORDER_BY_TITLE] =
+#if   L==1	// ca
+	"Ex&agrave;men"
+#elif L==2	// de
+	"Pr&uuml;fung"
+#elif L==3	// en
+	"Exam"
+#elif L==4	// es
+	"Examen"
+#elif L==5	// fr
+	"Examen"
+#elif L==6	// gn
+	"Kuaara'&atilde;"
+#elif L==7	// it
+	"Esame"
+#elif L==8	// pl
+	"Egzamin"
+#elif L==9	// pt
+	"Exame"
+#endif
+	};
+
+const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
+	{
+	[Exa_ORDER_BY_START_DATE] =
+#if   L==1	// ca
+	"Ordenar per data de comen&ccedil;ament"
+#elif L==2	// de
+	"Sortieren nach Startdatum"
+#elif L==3	// en
+	"Sort by start date"
+#elif L==4	// es
+	"Ordenar por fecha de comienzo"
+#elif L==5	// fr
+	"Trier par date de d&eacute;but"
+#elif L==6	// gn
+	"Ordenar por fecha de comienzo"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per data di inizio"
+#elif L==8	// pl
+	"Sortuj wedlug daty rozpoczecia"
+#elif L==9	// pt
+	"Classificar por data de in&iacute;cio"
+#endif
+	,
+	[Exa_ORDER_BY_END_DATE] =
+#if   L==1	// ca
+	"Ordenar per data de finalitzaci&oacute;"
+#elif L==2	// de
+	"Sortieren nach Enddatum"
+#elif L==3	// en
+	"Sort by end date"
+#elif L==4	// es
+	"Ordenar por fecha de finalizaci&oacute;n"
+#elif L==5	// fr
+	"Trier par date de fin"
+#elif L==6	// gn
+	"Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per data di fine"
+#elif L==8	// pl
+	"Sortuj wedlug daty zakonczenia"
+#elif L==9	// pt
+	"Classificar por data de t&eacute;rmino"
+#endif
+	,
+	[Exa_ORDER_BY_TITLE] =
+#if   L==1	// ca
+	"Ordenar per t&iacute;tol del ex&agrave;men"
+#elif L==2	// de
+	"Sortieren nach Pr&uuml;fungtitel"
+#elif L==3	// en
+	"Sort by exam title"
+#elif L==4	// es
+	"Ordenar por t&iacute;tulo del examen"
+#elif L==5	// fr
+	"Trier par titre de l'examen"
+#elif L==6	// gn
+	"Ordenar por t&iacute;tulo del examen"	// Okoteve traducción
+#elif L==7	// it
+	"Ordina per titolo del gioco"
+#elif L==8	// pl
+	"Sortuj wed&lstrok;ug tytu&lstrok;u egzamin"
+#elif L==9	// pt
+	"Classificar por t&iacute;tulo do exame"
+#endif
+	};
 
 const char *Txt_Existing_question =
 #if   L==1	// ca
@@ -19672,7 +19951,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  4: ActSeeAllGam
+	//  4: ActSeeAllExa
+#if   L==1	// ca
+	"Ex&agrave;mens"
+#elif L==2	// de
+	"Pr&uuml;fungen"
+#elif L==3	// en
+	"Exams"
+#elif L==4	// es
+	"Ex&aacute;menes"
+#elif L==5	// fr
+	"Examens"
+#elif L==6	// gn
+	"Ex&aacute;menes"	// Okoteve traducción
+#elif L==7	// it
+	"Esami"
+#elif L==8	// pl
+	"Egzaminy"
+#elif L==9	// pt
+	"Exames"
+#endif
+	,
+	//  5: ActSeeAllGam
 #if   L==1	// ca
 	"Jocs"
 #elif L==2	// de
@@ -19693,7 +19993,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Jogos"
 #endif
 	,
-	//  5: ActSeeAllSvy
+	//  6: ActSeeAllSvy
 #if   L==1	// ca
 	"Enquestes"
 #elif L==2	// de
@@ -19714,7 +20014,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  6: ActSeeAllExaAnn
+	//  7: ActSeeAllExaAnn
 #if   L==1	// ca
 	"Convocat&ograve;ries"
 #elif L==2	// de
@@ -19735,7 +20035,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -24588,6 +24887,27 @@ const char *Txt_New_event =
 	"Novo evento";
 #endif
 
+const char *Txt_New_exam =
+#if   L==1	// ca
+	"Nou examen";
+#elif L==2	// de
+	"Neue Pr&uuml;fung";
+#elif L==3	// en
+	"New exam";
+#elif L==4	// es
+	"Nuevo examen";
+#elif L==5	// fr
+	"Nouveau examen";
+#elif L==6	// gn
+	"Nuevo examen";	// Okoteve traducción
+#elif L==7	// it
+	"Nuovo esame";
+#elif L==8	// pl
+	"Nowe egzamin";
+#elif L==9	// pt
+	"Novo exame";
+#endif
+
 const char *Txt_New_FILE_OR_FOLDER =
 #if   L==1	// ca
 	"Nou";
@@ -25594,6 +25914,27 @@ const char *Txt_No_events =
 	"Brak wydarzen.";
 #elif L==9	// pt
 	"N&atilde;o h&aacute; eventos.";
+#endif
+
+const char *Txt_No_exams =
+#if   L==1	// ca
+	"No hi ha ex&agrave;mens.";
+#elif L==2	// de
+	"Keine Pr&uuml;fung.";
+#elif L==3	// en
+	"No exams.";
+#elif L==4	// es
+	"No hay ex&aacute;menes.";
+#elif L==5	// fr
+	"Il n'y a pas d'examens.";
+#elif L==6	// gn
+	"No hay ex&aacute;menes.";	// Okoteve traducción
+#elif L==7	// it
+	"Non ci sono esame.";
+#elif L==8	// pl
+	"Brak egzamin&oacute;w.";
+#elif L==9	// pt
+	"N&atilde;o h&aacute; exames.";
 #endif
 
 const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file =
@@ -33087,6 +33428,27 @@ const char *Txt_Remove_event =
 	"Usu&nacute; wydarzenie";
 #elif L==9	// pt
 	"Remover evento";
+#endif
+
+const char *Txt_Remove_exam =
+#if   L==1	// ca
+	"Eliminar examen";
+#elif L==2	// de
+	"Ereignis Pr&uuml;fung";
+#elif L==3	// en
+	"Remove exam";
+#elif L==4	// es
+	"Eliminar examen";
+#elif L==5	// fr
+	"Supprimer examen";
+#elif L==6	// gn
+	"Eliminar examen";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere esame";
+#elif L==8	// pl
+	"Usu&nacute; egzamin";
+#elif L==9	// pt
+	"Remover exame";
 #endif
 
 const char *Txt_Remove_file =
@@ -43014,6 +43376,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Testes"
 #endif
 	,
+	[Fig_EXAMS] =
+#if   L==1	// ca
+	"Ex&agrave;mens"
+#elif L==2	// de
+	"Pr&uuml;fungen"
+#elif L==3	// en
+	"Exams"
+#elif L==4	// es
+	"Ex&aacute;menes"
+#elif L==5	// fr
+	"Examens"
+#elif L==6	// gn
+	"Ex&aacute;menes"	// Okoteve traducción
+#elif L==7	// it
+	"Esami"
+#elif L==8	// pl
+	"Egzaminy"
+#elif L==9	// pt
+	"Exames"
+#endif
+	,
 	[Fig_GAMES] =
 #if   L==1	// ca
 	"Jocs"
@@ -46359,6 +46742,27 @@ const char *Txt_The_event_has_been_modified =
 	"The event has been modified.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O evento foi modificado.";
+#endif
+
+const char *Txt_The_exam_has_been_modified =
+#if   L==1	// ca
+	"El examen ha sido modificado.";	// Necessita traduccio
+#elif L==2	// de
+	"Der Ereignis wurde ge&auml;ndert.";
+#elif L==3	// en
+	"The exam has been modified.";
+#elif L==4	// es
+	"El examen ha sido modificado.";
+#elif L==5	// fr
+	"L'examen a &eacute;t&eacute; modifi&eacute;.";
+#elif L==6	// gn
+	"El examen ha sido modificado.";	// Okoteve traducción
+#elif L==7	// it
+	"L'esame &egrave; stata modificato.";
+#elif L==8	// pl
+	"Egzamin zosta&lstrok; zmodyfikowany.";
+#elif L==9	// pt
+	"O exame foi modificado.";
 #endif
 
 const char *Txt_The_file_could_not_be_processed_successfully =
@@ -50918,6 +51322,27 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 	"Ocorreu um problema ao enviar um email automaticamente.";
 #endif
 
+const char *Txt_This_exam_has_no_questions =
+#if   L==1	// ca
+	"Aquest examen no t&eacute; preguntes.";
+#elif L==2	// de
+	"Dieses Pr&uuml;fung hat keine Fragen.";
+#elif L==3	// en
+	"This exam has no questions.";
+#elif L==4	// es
+	"Este examen no tiene preguntas.";
+#elif L==5	// fr
+	"Cet examen n'a pas de questions.";
+#elif L==6	// gn
+	"Este examen no tiene preguntas.";	// Okoteve traducción
+#elif L==7	// it
+	"Questo esame non ha domande.";
+#elif L==8	// pl
+	"Ten egzamin nie ma pytania.";
+#elif L==9	// pt
+	"Este exame n&atilde;o tem perguntas.";
+#endif
+
 const char *Txt_This_game_has_no_questions =
 #if   L==1	// ca
 	"Aquest joc no t&eacute; preguntes.";
@@ -54919,6 +55344,27 @@ const char *Txt_View_event =
 	"Ver evento";
 #endif
 
+const char *Txt_View_exam =
+#if   L==1	// ca
+	"Veure examen";
+#elif L==2	// de
+	"Anzeigen Pr&uuml;fung";
+#elif L==3	// en
+	"View exam";
+#elif L==4	// es
+	"Ver examen";
+#elif L==5	// fr
+	"Voir examen";
+#elif L==6	// gn
+	"Ver examen";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi esame";
+#elif L==8	// pl
+	"Zobacz egzaminu";
+#elif L==9	// pt
+	"Ver exame";
+#endif
+
 const char *Txt_View_game =
 #if   L==1	// ca
 	"Veure joc";
@@ -58259,11 +58705,32 @@ const char *Txt_You_must_specify_the_title_of_the_event =
 #elif L==6	// gn
 	"Debe especificar el t&iacute;tulo del evento.";	// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; necessario specificare il titolo del evento.";
+	"&Egrave; necessario specificare il titolo dell'evento.";
 #elif L==8	// pl
 	"Musisz poda&cacute; tytu&lstrok; wydarzenia.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o t&iacute;tulo do evento.";
+#endif
+
+const char *Txt_You_must_specify_the_title_of_the_exam =
+#if   L==1	// ca
+	"Cal especificar el t&iacute;tol de l'examen.";
+#elif L==2	// de
+	"Der Pr&uuml;fung muss angegeben werden.";
+#elif L==3	// en
+	"You must specify the title of the exam.";
+#elif L==4	// es
+	"Debe especificar el t&iacute;tulo del examen.";
+#elif L==5	// fr
+	"Vous devez sp&eacute;cifier le titre de l'examen.";
+#elif L==6	// gn
+	"Debe especificar el t&iacute;tulo del examen.";	// Okoteve traducción
+#elif L==7	// it
+	"&Egrave; necessario specificare il titolo dell'esame.";
+#elif L==8	// pl
+	"Musisz poda&cacute; tytu&lstrok; egzaminu.";
+#elif L==9	// pt
+	"Voc&ecirc; deve especificar o t&iacute;tulo do exame.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_game =

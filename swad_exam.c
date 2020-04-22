@@ -36,6 +36,8 @@
 
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_exam_event.h"
+#include "swad_exam_result.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -348,7 +350,7 @@ static void Exa_PutIconsListExams (void *Exams)
       if (Exa_CheckIfICanEditExams ())
 	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
-      /***** Put icon to view matches results *****/
+      /***** Put icon to view events results *****/
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
@@ -469,7 +471,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
        /***** Write questions of this exam *****/
       Exa_ListExamQuestions (Exams,Exam);
    else
-      /***** List matches *****/
+      /***** List events *****/
       ExaEvt_ListEvents (Exams,Exam,PutFormNewMatch);
   }
 
@@ -526,7 +528,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
      {
       if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Color = Exam->NumUnfinishedEves ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
+      Color = Exam->NumUnfinishedEvts ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
 							"DATE_GREEN") :
 					(Exam->Hidden ? "DATE_RED_LIGHT":
 							"DATE_RED");
@@ -577,7 +579,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
    HTM_DIV_End ();
 
-   /***** Number of matches in exam *****/
+   /***** Number of events in exam *****/
    if (ShowOnlyThisExam)
       HTM_TD_Begin ("class=\"RT\"");
    else
@@ -592,7 +594,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 			    NULL);
    if (ShowOnlyThisExam)
       HTM_TxtColonNBSP (Txt_Matches);
-   HTM_Unsigned (Exam->NumEves);
+   HTM_Unsigned (Exam->NumEvts);
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
@@ -641,24 +643,24 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/************* Put icon to show results of matches in an exam *****************/
+/************* Put icon to show results of events in an exam *****************/
 /*****************************************************************************/
 
 static void Exa_PutIconToShowResultsOfExam (void *Exams)
   {
    if (Exams)
      {
-      /***** Put icon to view matches results *****/
+      /***** Put icon to view events results *****/
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyEveResExa,ExaRes_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeMyExaEvtResExa,ExaRes_RESULTS_BOX_ID,
 						Exa_PutParams,Exams);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeAllEveResExa,ExaRes_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeAllExaEvtResExa,ExaRes_RESULTS_BOX_ID,
 						Exa_PutParams,Exams);
 	    break;
 	 default:
@@ -1007,11 +1009,11 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       /* Get number of questions */
       Exam->NumQsts = Exa_GetNumQstsExam (Exam->ExaCod);
 
-      /* Get number of matches */
-      Exam->NumEves = ExaEve_GetNumEvesInExam (Exam->ExaCod);
+      /* Get number of events */
+      Exam->NumEvts = ExaEvt_GetNumEventsInExam (Exam->ExaCod);
 
-      /* Get number of unfinished matches */
-      Exam->NumUnfinishedEves = ExaEvt_GetNumUnfinishedEvtsInExam (Exam->ExaCod);
+      /* Get number of unfinished events */
+      Exam->NumUnfinishedEvts = ExaEvt_GetNumUnfinishedEventsInExam (Exam->ExaCod);
      }
    else
       /* Initialize to empty exam */
@@ -1067,8 +1069,8 @@ static void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Exam->Title[0]                = '\0';
    Exam->NumQsts                 = 0;
-   Exam->NumEves                 = 0;
-   Exam->NumUnfinishedEves       = 0;
+   Exam->NumEvts                 = 0;
+   Exam->NumUnfinishedEvts       = 0;
    Exam->Hidden                  = false;
   }
 
@@ -1195,7 +1197,7 @@ void Exa_RemoveExam (void)
 
 static void Exa_RemoveExamFromAllTables (long ExaCod)
   {
-   /***** Remove all matches in this exam *****/
+   /***** Remove all events in this exam *****/
    ExaEvt_RemoveEventsInExamFromAllTables (ExaCod);
 
    /***** Remove exam question *****/
@@ -1215,7 +1217,7 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
 
 void Exa_RemoveExamsCrs (long CrsCod)
   {
-   /***** Remove all matches in this course *****/
+   /***** Remove all events in this course *****/
    ExaEvt_RemoveEventInCourseFromAllTables (CrsCod);
 
    /***** Remove the questions in exams *****/
@@ -1659,7 +1661,7 @@ void Exa_RequestNewQuestion (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Show form to create a new question in this exam *****/
@@ -1692,12 +1694,12 @@ void Exa_ListTstQuestionsToSelect (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** List several test questions for selection *****/
       Exams.ExaCod = Exam.ExaCod;
-      Tst_ListQuestionsToSelect (&Exams);
+      Tst_ListQuestionsToSelectForExam (&Exams);
      }
    else
       Lay_NoPermissionExit ();
@@ -1733,11 +1735,11 @@ unsigned Exa_GetParamQstInd (void)
 
 static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd)
   {
-   /***** Remove answers from all matches of this exam *****/
+   /***** Remove answers from all events of this exam *****/
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM exa_answers"
 		   " USING exa_events,exa_answers"
-		   " WHERE exa_events.ExaCod=%ld"	// From all matches of this exam...
+		   " WHERE exa_events.ExaCod=%ld"	// From all events of this exam...
 		   " AND exa_events.EvtCod=exa_answers.EvtCod"
 		   " AND exa_answers.QstInd=%u",	// ...remove only answers to this question
 		   ExaCod,QstInd);
@@ -2159,7 +2161,7 @@ void Exa_AddTstQuestionsToExam (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Get selected questions *****/
@@ -2279,7 +2281,7 @@ void Exa_RequestRemoveQst (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Get question index *****/
@@ -2322,7 +2324,7 @@ void Exa_RemoveQst (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Get question index *****/
@@ -2386,7 +2388,7 @@ void Exa_MoveUpQst (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Get question index *****/
@@ -2441,7 +2443,7 @@ void Exa_MoveDownQst (void)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Exa_GetDataOfExamByCod (&Exam);
 
-   /***** Check if exam has matches *****/
+   /***** Check if exam has events *****/
    if (Exa_CheckIfEditable (&Exam))
      {
       /***** Get question index *****/
@@ -2533,15 +2535,15 @@ static void Exa_ExchangeQuestions (long ExaCod,
   }
 
 /*****************************************************************************/
-/*********** Get number of matches and check is edition is possible **********/
+/*********** Get number of events and check is edition is possible **********/
 /*****************************************************************************/
-// Before calling this function, number of matches must be calculated
+// Before calling this function, number of events must be calculated
 
 static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
   {
    if (Exa_CheckIfICanEditExams ())
-      /***** Questions are editable only if exam has no matches *****/
-      return (bool) (Exam->NumEves == 0);	// Exams with matches should not be edited
+      /***** Questions are editable only if exam has no events *****/
+      return (bool) (Exam->NumEvts == 0);	// Exams with events should not be edited
    else
       return false;	// Questions are not editable
   }
@@ -2562,10 +2564,10 @@ void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod)
   }
 
 /*****************************************************************************/
-/************* Request the creation of a new match as a teacher **************/
+/************* Request the creation of a new event as a teacher **************/
 /*****************************************************************************/
 
-void Exa_RequestNewMatch (void)
+void Exa_RequestNewEvent (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;

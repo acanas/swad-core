@@ -51,6 +51,6 @@ void MchRes_ShowAllMchResultsInMch (void);
 
 void MchRes_ShowOneMchResult (void);
 void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				           struct TstExa_Exam *Exam);
+				           struct TstRes_Result *Result);
 
 #endif

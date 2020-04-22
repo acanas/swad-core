@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fig_NUM_FIGURES 29
+#define Fig_NUM_FIGURES 30
 typedef enum
   {
    Fig_USERS,			// Number of users
@@ -47,6 +47,7 @@ typedef enum
    Fig_ASSIGNMENTS,		// Number of assignments
    Fig_PROJECTS,		// Number of projects
    Fig_TESTS,			// Number of test questions
+   Fig_EXAMS,			// Number of exams
    Fig_GAMES,			// Number of games
    Fig_SURVEYS,			// Number of surveys
    Fig_TIMELINE,		// Number of timeline notes

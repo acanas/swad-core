@@ -2528,7 +2528,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
 	   {
 	    /***** Button to view student's test exams *****/
-	    if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
 		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,

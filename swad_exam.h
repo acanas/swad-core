@@ -90,8 +90,8 @@ struct Exa_Exam
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Hidden;			// Exam is hidden
    unsigned NumQsts;		// Number of questions in the exam
-   unsigned NumEves;		// Number of events in the exam
-   unsigned NumUnfinishedEves;	// Number of unfinished events in the exam
+   unsigned NumEvts;		// Number of events in the exam
+   unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
   };
 
 /*****************************************************************************/
@@ -156,7 +156,7 @@ void Exa_MoveUpQst (void);
 void Exa_MoveDownQst (void);
 
 void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod);
-void Exa_RequestNewMatch (void);
+void Exa_RequestNewEvent (void);
 
 unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);
 unsigned Exa_GetNumExams (Hie_Level_t Scope);

@@ -27,10 +27,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_exam.h"
 #include "swad_game.h"
 #include "swad_media.h"
 #include "swad_test_config.h"
-// #include "swad_test_exam.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -166,10 +166,12 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_RequestEditTests (void);
+void Tst_RequestSelectTestsForExam (struct Exa_Exams *Exams);
 void Tst_RequestSelectTestsForGame (struct Gam_Games *Games);
 
 void Tst_ListQuestionsToEdit (void);
-void Tst_ListQuestionsToSelect (struct Gam_Games *Games);
+void Tst_ListQuestionsToSelectForExam (struct Exa_Exams *Exams);
+void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);

@@ -116,9 +116,10 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 1] = ActSeeAsg,
 		[ 2] = ActSeePrj,
 		[ 3] = ActReqTst,
-		[ 4] = ActSeeAllGam,
-		[ 5] = ActSeeAllSvy,
-		[ 6] = ActSeeAllExaAnn,
+		[ 4] = ActSeeAllExa,
+		[ 5] = ActSeeAllGam,
+		[ 6] = ActSeeAllSvy,
+		[ 7] = ActSeeAllExaAnn,
 	       },
    [TabFil] =  {
 		[ 0] = ActSeeAdmDocIns,

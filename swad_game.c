@@ -1696,7 +1696,7 @@ void Gam_ListTstQuestionsToSelect (void)
      {
       /***** List several test questions for selection *****/
       Games.GamCod = Game.GamCod;
-      Tst_ListQuestionsToSelect (&Games);
+      Tst_ListQuestionsToSelectForGame (&Games);
      }
    else
       Lay_NoPermissionExit ();

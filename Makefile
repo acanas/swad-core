@@ -35,7 +35,8 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_course_config.o swad_cryptography.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_config.o \
        swad_degree_type.o swad_department.o swad_duplicate.o \
-       swad_enrolment.o swad_exam_announcement.o \
+       swad_enrolment.o swad_exam.o swad_exam_announcement.o \
+       swad_exam_event.o swad_exam_result.o \
        swad_figure.o swad_file.o swad_file_browser.o swad_file_extension.o \
        swad_file_MIME.o swad_firewall.o swad_follow.o swad_form.o \
        swad_forum.o \

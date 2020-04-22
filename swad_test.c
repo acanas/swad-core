@@ -132,15 +132,15 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
 static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
 
-static void Tst_GetAnswersFromForm (struct TstExa_Exam *Exam);
+static void Tst_GetAnswersFromForm (struct TstRes_Result *Result);
 
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
-static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
+static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
                                       unsigned NumExamsGeneratedByMe,
                                       Tst_RequestOrConfirm_t RequestOrConfirm);
 
-static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question);
 
@@ -150,6 +150,8 @@ static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
+static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
+                                                   struct Tst_Test *Test);
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
@@ -174,8 +176,8 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res);
 static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
-                                              struct TstExa_Exam *Exam);
-static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstExa_Exam *Exam,
+                                              struct TstRes_Result *Result);
+static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *Result,
 							 unsigned NumQst,
 							 bool Shuffle);
 
@@ -184,34 +186,37 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
 static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
-static void Tst_ListOneOrMoreQuestionsForSelection (struct Gam_Games *Games,
+static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exams,
+						           unsigned NumQsts,
+                                                           MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Games,
 						    unsigned NumQsts,
                                                     MYSQL_RES *mysql_res);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
-static void Tst_WriteAnswersSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteAnswersSeeing (const struct TstRes_Result *Result,
                                     unsigned NumQst,
                                     const struct Tst_Question *Question);
 
 static void Tst_WriteIntAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteIntAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Result,
 				   unsigned NumQst);
 
 static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question);
-static void Tst_WriteFloatAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Result,
 				     unsigned NumQst);
 
 static void Tst_WriteTFAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteTFAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Result,
 	                          unsigned NumQst);
 
 static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteChoiceAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteChoiceAnsSeeing (const struct TstRes_Result *Result,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question);
 
-static void Tst_WriteTextAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
 	                            unsigned NumQst);
 
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
@@ -441,7 +446,7 @@ void Tst_ShowNewTest (void)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    struct Tst_Test Test;
-   struct TstExa_Exam Exam;
+   struct TstRes_Result Exam;
    unsigned NumExamsGeneratedByMe;
 
    /***** Create test *****/
@@ -456,7 +461,7 @@ void Tst_ShowNewTest (void)
       if (Tst_GetParamsTst (&Test,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
-	 TstExa_ResetExam (&Exam);
+	 TstRes_ResetResult (&Exam);
 	 Tst_GetQuestionsForNewTestFromDB (&Test,&Exam);
          if (Exam.NumQsts)
            {
@@ -465,8 +470,8 @@ void Tst_ShowNewTest (void)
             NumExamsGeneratedByMe = Tst_GetNumExamsGeneratedByMe ();
 
 	    /***** Create new test exam in database *****/
-	    TstExa_CreateExamInDB (&Exam);
-	    TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
+	    TstRes_CreateExamInDB (&Exam);
+	    TstRes_ComputeScoresAndStoreExamQuestions (&Exam,
 	                                               false);	// Don't update question score
 
             /***** Show test exam to be answered *****/
@@ -519,46 +524,46 @@ void Tst_ReceiveTestDraft (void)
   {
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    unsigned NumTst;
-   struct TstExa_Exam Exam;
+   struct TstRes_Result Result;
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstExa_ResetExam (&Exam);
-   if ((Exam.ExaCod = TstExa_GetParamExaCod ()) <= 0)
+   TstRes_ResetResult (&Result);
+   if ((Result.ResCod = TstRes_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
    /***** Get test exam from database *****/
-   TstExa_GetExamDataByExaCod (&Exam);
+   TstRes_GetExamDataByExaCod (&Result);
 
    /****** Get test status in database for this session-course-num.test *****/
-   if (Exam.Sent)
+   if (Result.Sent)
       Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
 	             NumTst);
    else // Exam not yet sent
      {
       /***** Get test exam questions from database *****/
-      TstExa_GetExamQuestionsFromDB (&Exam);
+      TstRes_GetExamQuestionsFromDB (&Result);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Exam);
+      Tst_GetAnswersFromForm (&Result);
 
       /***** Update test exam in database *****/
-      TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
+      TstRes_ComputeScoresAndStoreExamQuestions (&Result,
 						 false);	// Don't update question score
-      TstExa_UpdateExamInDB (&Exam);
+      TstRes_UpdateExamInDB (&Result);
 
       /***** Show question and button to send the test *****/
       /* Start alert */
       Ale_ShowAlert (Ale_WARNING,"Por favor, revise sus respuestas antes de enviar el examen:");	// TODO: Need translation!!!
 
       /* Show the same test exam to be answered */
-      Tst_ShowTestExamToFillIt (&Exam,NumTst,Tst_CONFIRM);
+      Tst_ShowTestExamToFillIt (&Result,NumTst,Tst_CONFIRM);
      }
   }
 
@@ -575,43 +580,43 @@ void Tst_AssessTest (void)
    extern const char *Txt_Grade;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    unsigned NumTst;
-   struct TstExa_Exam Exam;
+   struct TstRes_Result Result;
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstExa_ResetExam (&Exam);
-   if ((Exam.ExaCod = TstExa_GetParamExaCod ()) <= 0)
+   TstRes_ResetResult (&Result);
+   if ((Result.ResCod = TstRes_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
    /***** Get test exam from database *****/
-   TstExa_GetExamDataByExaCod (&Exam);
+   TstRes_GetExamDataByExaCod (&Result);
 
    /****** Get test status in database for this session-course-num.test *****/
-   if (Exam.Sent)
+   if (Result.Sent)
       Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
 		     NumTst);
    else	// Exam not yet sent
      {
       /***** Get test exam questions from database *****/
-      TstExa_GetExamQuestionsFromDB (&Exam);
+      TstRes_GetExamQuestionsFromDB (&Result);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Exam);
+      Tst_GetAnswersFromForm (&Result);
 
       /***** Get if test exam will be visible by teachers *****/
-      Exam.Sent          = true;	// The exam has been finished and sent by student
-      Exam.AllowTeachers = Par_GetParToBool ("AllowTchs");
+      Result.Sent          = true;	// The exam has been finished and sent by student
+      Result.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
       /***** Update test exam in database *****/
-      TstExa_ComputeScoresAndStoreExamQuestions (&Exam,
+      TstRes_ComputeScoresAndStoreExamQuestions (&Result,
 						 Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
-      TstExa_UpdateExamInDB (&Exam);
+      TstRes_UpdateExamInDB (&Result);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,
@@ -631,19 +636,19 @@ void Tst_AssessTest (void)
 	}
 
       /***** Write answers and solutions *****/
-      TstExa_ShowExamAfterAssess (&Exam);
+      TstRes_ShowExamAfterAssess (&Result);
 
       /***** Write total score and grade *****/
       if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Exam.Score);
+	 HTM_Double2Decimals (Result.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-	 TstExa_ComputeAndShowGrade (Exam.NumQsts,
-				     Exam.Score,
-				     TstExa_SCORE_MAX);
+	 TstRes_ComputeAndShowGrade (Result.NumQsts,
+				     Result.Score,
+				     TstRes_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -656,22 +661,22 @@ void Tst_AssessTest (void)
 /*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
-static void Tst_GetAnswersFromForm (struct TstExa_Exam *Exam)
+static void Tst_GetAnswersFromForm (struct TstRes_Result *Result)
   {
    unsigned NumQst;
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Loop for every question getting user's answers *****/
    for (NumQst = 0;
-	NumQst < Exam->NumQsts;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       /* Get answers selected by user for this question */
       snprintf (StrAns,sizeof (StrAns),
 	        "Ans%010u",
 		NumQst);
-      Par_GetParMultiToText (StrAns,Exam->Questions[NumQst].StrAnswers,
-                             TstExa_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+      Par_GetParMultiToText (StrAns,Result->Questions[NumQst].StrAnswers,
+                             TstRes_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
   }
 
@@ -783,7 +788,7 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
 /************************ Show a test exam to be answered ********************/
 /*****************************************************************************/
 
-static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
+static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
                                       unsigned NumExamsGeneratedByMe,
                                       Tst_RequestOrConfirm_t RequestOrConfirm)
   {
@@ -806,11 +811,11 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Exam->NumQsts)
+   if (Result->NumQsts)
      {
       /***** Begin form *****/
       Frm_StartForm (Action[RequestOrConfirm]);
-      TstExa_PutParamExaCod (Exam->ExaCod);
+      TstRes_PutParamExaCod (Result->ResCod);
       Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
 
       /***** Begin table *****/
@@ -818,21 +823,21 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
 
       /***** Write one row for each question *****/
       for (NumQst = 0;
-	   NumQst < Exam->NumQsts;
+	   NumQst < Result->NumQsts;
 	   NumQst++)
 	{
 	 Gbl.RowEvenOdd = NumQst % 2;
 
 	 /* Create test question */
 	 Tst_QstConstructor (&Question);
-	 Question.QstCod = Exam->Questions[NumQst].QstCod;
+	 Question.QstCod = Result->Questions[NumQst].QstCod;
 
 	 /* Show question */
 	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
 	    Lay_ShowErrorAndExit ("Wrong question.");
 
 	 /* Write question and answers */
-	 Tst_WriteQstAndAnsSeeing (Exam,NumQst,&Question);
+	 Tst_WriteQstAndAnsSeeing (Result,NumQst,&Question);
 
 	 /* Destroy test question */
 	 Tst_QstDestructor (&Question);
@@ -846,7 +851,7 @@ static void Tst_ShowTestExamToFillIt (struct TstExa_Exam *Exam,
         {
 	 case Tst_REQUEST:
             /* Send button */
-            Btn_PutConfirmButton ("He terminado");	// TODO: Need translation!!!
+            Btn_PutConfirmButton ("Continuar");	// TODO: Need translation!!!
 	    break;
 	 case Tst_CONFIRM:
 	    /* Will the test exam be visible by teachers? */
@@ -896,7 +901,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question)
   {
@@ -924,7 +929,7 @@ static void Tst_WriteQstAndAnsSeeing (const struct TstExa_Exam *Exam,
 		  "TEST_MED_SHOW");
 
    /* Answers */
-   Tst_WriteAnswersSeeing (Exam,NumQst,Question);
+   Tst_WriteAnswersSeeing (Result,NumQst,Question);
 
    HTM_TD_End ();
 
@@ -1213,6 +1218,24 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 /******************* Select test questions for a game ************************/
 /*****************************************************************************/
 
+void Tst_RequestSelectTestsForExam (struct Exa_Exams *Exams)
+  {
+   struct Tst_Test Test;
+
+   /***** Create test *****/
+   Tst_TstConstructor (&Test);
+
+   /***** Show form to select test for exam *****/
+   Tst_ShowFormRequestSelectTestsForExam (Exams,&Test);	// No tags selected
+
+   /***** Destroy test *****/
+   Tst_TstDestructor (&Test);
+  }
+
+/*****************************************************************************/
+/******************* Select test questions for a game ************************/
+/*****************************************************************************/
+
 void Tst_RequestSelectTestsForGame (struct Gam_Games *Games)
   {
    struct Tst_Test Test;
@@ -1225,6 +1248,65 @@ void Tst_RequestSelectTestsForGame (struct Gam_Games *Games)
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
+  }
+
+/*****************************************************************************/
+/************** Show form to select test questions for a exam ****************/
+/*****************************************************************************/
+
+static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
+                                                   struct Tst_Test *Test)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_questions;
+   extern const char *Txt_No_test_questions;
+   extern const char *Txt_Select_questions;
+   extern const char *Txt_Show_questions;
+   MYSQL_RES *mysql_res;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+     };
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Select_questions,
+                 NULL,NULL,
+                 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+
+   /***** Get tags already present in the table of questions *****/
+   if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+     {
+      Frm_StartForm (ActExaLstTstQst);
+      Exa_PutParams (Exams);
+
+      HTM_TABLE_BeginPadding (2);
+
+      /***** Selection of tags *****/
+      Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
+
+      /***** Starting and ending dates in the search *****/
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+
+      HTM_TABLE_End ();
+
+      /***** Send button *****/
+      Btn_PutConfirmButton (Txt_Show_questions);
+      Frm_EndForm ();
+     }
+   else	// No test questions
+     {
+      /***** Warning message *****/
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+
+      /***** Button to create a new question *****/
+      Tst_PutButtonToAddQuestion ();
+     }
+
+   /***** End box *****/
+   Box_BoxEnd ();
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -2141,10 +2223,10 @@ void Tst_ListQuestionsToEdit (void)
   }
 
 /*****************************************************************************/
-/**************** List several test questions for selection ******************/
+/************ List several test questions for selection for exam *************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToSelect (struct Gam_Games *Games)
+void Tst_ListQuestionsToSelectForExam (struct Exa_Exams *Exams)
   {
    struct Tst_Test Test;
    MYSQL_RES *mysql_res;
@@ -2158,7 +2240,38 @@ void Tst_ListQuestionsToSelect (struct Gam_Games *Games)
       Tst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForSelection (Games,Test.NumQsts,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelectionForExam (Exams,Test.NumQsts,mysql_res);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+      /* Show the form again */
+      Tst_ShowFormRequestSelectTestsForExam (Exams,&Test);
+
+   /***** Destroy test *****/
+   Tst_TstDestructor (&Test);
+  }
+
+/*****************************************************************************/
+/************ List several test questions for selection for game *************/
+/*****************************************************************************/
+
+void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
+  {
+   struct Tst_Test Test;
+   MYSQL_RES *mysql_res;
+
+   /***** Create test *****/
+   Tst_TstConstructor (&Test);
+
+   /***** Get parameters, query the database and list the questions *****/
+   if (Tst_GetParamsTst (&Test,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+     {
+      Tst_GetQuestions (&Test,&mysql_res);	// Query database
+      if (Test.NumQsts)
+	 /* Show the table with the questions */
+         Tst_ListOneOrMoreQuestionsForSelectionForGame (Games,Test.NumQsts,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -2335,7 +2448,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
-                                              struct TstExa_Exam *Exam)
+                                              struct TstRes_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2448,14 +2561,14 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   Exam->NumQsts =
+   Result->NumQsts =
    Test->NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions",
 			                      "%s",
 			                      Query);
 
    /***** Get questions and answers from database *****/
    for (NumQst = 0;
-	NumQst < Exam->NumQsts;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       /* Get question row */
@@ -2467,7 +2580,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       */
 
       /* Get question code (row[0]) */
-      if ((Exam->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
@@ -2483,13 +2596,13 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 case Tst_ANS_FLOAT:
 	 case Tst_ANS_TRUE_FALSE:
 	 case Tst_ANS_TEXT:
-	    Exam->Questions[NumQst].StrIndexes[0] = '\0';
+	    Result->Questions[NumQst].StrIndexes[0] = '\0';
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexesDependingOnShuffle (Exam,NumQst,Shuffle);
+	    Tst_GenerateChoiceIndexesDependingOnShuffle (Result,NumQst,Shuffle);
 	    break;
 	 default:
 	    break;
@@ -2499,18 +2612,18 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
          Initially user has not answered the question ==> initially all the answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Exam->Questions[NumQst].StrAnswers[0] = '\0';
+      Result->Questions[NumQst].StrAnswers[0] = '\0';
      }
 
    /***** Get if test exam will be visible by teachers *****/
-   Exam->AllowTeachers = Par_GetParToBool ("AllowTchs");
+   Result->AllowTeachers = Par_GetParToBool ("AllowTchs");
   }
 
 /*****************************************************************************/
 /********* Get single or multiple choice answer when seeing a test ***********/
 /*****************************************************************************/
 
-static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstExa_Exam *Exam,
+static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *Result,
 							 unsigned NumQst,
 							 bool Shuffle)
   {
@@ -2525,7 +2638,7 @@ static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstExa_Exam *Exa
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
-   Question.QstCod = Exam->Questions[NumQst].QstCod;
+   Question.QstCod = Result->Questions[NumQst].QstCod;
 
    /***** Get answers of question from database *****/
    Tst_GetAnswersQst (&Question,&mysql_res,Shuffle);
@@ -2562,8 +2675,8 @@ static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstExa_Exam *Exa
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
       else
 	 snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
-      Str_Concat (Exam->Questions[NumQst].StrIndexes,StrInd,
-                  TstExa_MAX_BYTES_INDEXES_ONE_QST);
+      Str_Concat (Result->Questions[NumQst].StrIndexes,StrInd,
+                  TstRes_MAX_BYTES_INDEXES_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -2851,13 +2964,96 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
      }
   }
 
+
 /*****************************************************************************/
 /*************** List for selection one or more test questions ***************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForSelection (struct Gam_Games *Games,
-						    unsigned NumQsts,
-                                                    MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exams,
+						           unsigned NumQsts,
+                                                           MYSQL_RES *mysql_res)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_questions;
+   extern const char *Txt_Questions;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Date;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Type;
+   extern const char *Txt_Shuffle;
+   extern const char *Txt_Question;
+   extern const char *Txt_Add_questions;
+   unsigned NumQst;
+   struct Tst_Question Question;
+   MYSQL_ROW row;
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Questions,
+                 NULL,NULL,
+		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+
+   /***** Begin form *****/
+   Frm_StartForm (ActAddTstQstToExa);
+   Exa_PutParams (Exams);
+
+   /***** Write the heading *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TR_Begin (NULL);
+
+   HTM_TH_Empty (1);
+
+   HTM_TH (1,1,"CT",Txt_No_INDEX);
+   HTM_TH (1,1,"CT",Txt_Code);
+   HTM_TH (1,1,"CT",Txt_Date);
+   HTM_TH (1,1,"LT",Txt_Tags);
+   HTM_TH (1,1,"CT",Txt_Type);
+   HTM_TH (1,1,"CT",Txt_Shuffle);
+   HTM_TH (1,1,"CT",Txt_Question);
+
+   HTM_TR_End ();
+
+   /***** Write rows *****/
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /* Create test question */
+      Tst_QstConstructor (&Question);
+
+      /* Get question code (row[0]) */
+      row = mysql_fetch_row (mysql_res);
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         Lay_ShowErrorAndExit ("Wrong code of question.");
+
+      /* Write question row */
+      Tst_WriteQuestionRowForSelection (NumQst,&Question);
+
+      /* Destroy test question */
+      Tst_QstDestructor (&Question);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** Button to add questions *****/
+   Btn_PutConfirmButton (Txt_Add_questions);
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/*************** List for selection one or more test questions ***************/
+/*****************************************************************************/
+
+static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Games,
+						           unsigned NumQsts,
+                                                           MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
@@ -3100,7 +3296,7 @@ void Tst_WriteAnswersListing (const struct Tst_Question *Question)
 /************** Write answers of a question when seeing a test ***************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteAnswersSeeing (const struct TstRes_Result *Result,
                                     unsigned NumQst,
                                     const struct Tst_Question *Question)
   {
@@ -3108,20 +3304,20 @@ static void Tst_WriteAnswersSeeing (const struct TstExa_Exam *Exam,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsSeeing (Exam,NumQst);
+         Tst_WriteIntAnsSeeing (Result,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsSeeing (Exam,NumQst);
+         Tst_WriteFloatAnsSeeing (Result,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsSeeing (Exam,NumQst);
+         Tst_WriteTFAnsSeeing (Result,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsSeeing (Exam,NumQst,Question);
+         Tst_WriteChoiceAnsSeeing (Result,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsSeeing (Exam,NumQst);
+         Tst_WriteTextAnsSeeing (Result,NumQst);
          break;
       default:
          break;
@@ -3157,7 +3353,7 @@ static void Tst_WriteIntAnsListing (const struct Tst_Question *Question)
 /****************** Write integer answer when seeing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Exam,
 				   unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3189,7 +3385,7 @@ static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question)
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Exam,
 				     unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3220,7 +3416,7 @@ static void Tst_WriteTFAnsListing (const struct Tst_Question *Question)
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Exam,
 	                          unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
@@ -3353,7 +3549,7 @@ static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question)
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteChoiceAnsSeeing (const struct TstRes_Result *Exam,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question)
   {
@@ -3363,10 +3559,10 @@ static void Tst_WriteChoiceAnsSeeing (const struct TstExa_Exam *Exam,
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Get indexes for this question from string *****/
-   TstExa_GetIndexesFromStr (Exam->Questions[NumQst].StrIndexes,Indexes);
+   TstRes_GetIndexesFromStr (Exam->Questions[NumQst].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstExa_GetAnswersFromStr (Exam->Questions[NumQst].StrAnswers,UsrAnswers);
+   TstRes_GetAnswersFromStr (Exam->Questions[NumQst].StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -3494,7 +3690,7 @@ void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsSeeing (const struct TstExa_Exam *Exam,
+static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
 	                            unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3503,7 +3699,7 @@ static void Tst_WriteTextAnsSeeing (const struct TstExa_Exam *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,TstExa_MAX_CHARS_ANSWERS_ONE_QST,Exam->Questions[NumQst].StrAnswers,false,
+   HTM_INPUT_TEXT (StrAns,TstRes_MAX_CHARS_ANSWERS_ONE_QST,Result->Questions[NumQst].StrAnswers,false,
 		   "size=\"40\"");
   }
 
@@ -4761,7 +4957,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrMultiAns[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrMultiAns[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
@@ -4913,7 +5109,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
            }
       	 else if (Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
            {
-	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,TstRes_MAX_BYTES_ANSWERS_ONE_QST);
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {

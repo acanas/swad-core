@@ -112,24 +112,24 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
                                         MYSQL_RES *mysql_res);
 static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents);
 static bool ExaEvt_CheckIfICanEditEvents (void);
-static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Match *Event);
+static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
-                                             const struct ExaEvt_Match *Event);
-static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Match *Event);
-static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Match *Event,unsigned UniqueId);
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Match *Event);
-static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Match *Event);
-static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Match *Event);
-static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Match *Event,unsigned NumQsts);
+                                             const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId);
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event);
+static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Event *Event,unsigned NumQsts);
 static void ExaEvt_ListOneOrMoreEventsResult (struct Exa_Exams *Exams,
-                                              const struct ExaEvt_Match *Event);
+                                              const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsResultStd (struct Exa_Exams *Exams,
-                                                 const struct ExaEvt_Match *Event);
+                                                 const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsResultTch (struct Exa_Exams *Exams,
-                                                 const struct ExaEvt_Match *Event);
+                                                 const struct ExaEvt_Event *Event);
 
 static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
-				        struct ExaEvt_Match *Event);
+				        struct ExaEvt_Event *Event);
 static ExaEvt_Showing_t ExaEvt_GetShowingFromStr (const char *Str);
 
 static void ExaEvt_RemoveEventFromAllTables (long EvtCod);
@@ -149,63 +149,63 @@ static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod);
 static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 			          const struct Tst_Question *Question);
 static void ExaEvt_CreateGrps (long EvtCod);
-static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Match *Event);
+static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event);
 
-static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Match *Event);
-static void ExaEvt_GetElapsedTimeInQuestion (const struct ExaEvt_Match *Event,
+static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Event *Event);
+static void ExaEvt_GetElapsedTimeInQuestion (const struct ExaEvt_Event *Event,
 				          struct Time *Time);
-static void ExaEvt_GetElapsedTimeInMatch (const struct ExaEvt_Match *Event,
+static void ExaEvt_GetElapsedTimeInMatch (const struct ExaEvt_Event *Event,
 				       struct Time *Time);
 static void ExaEvt_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 				   struct Time *Time);
 
-static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Match *Event);
-static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Match *Event);
-static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Match *Event);
+static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Event *Event);
+static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Event *Event);
+static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Event *Event);
 
-static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Match *Event);
-static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Match *Event);
-static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Match *Event);
+static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Event *Event);
+static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Event *Event);
+static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Event *Event);
 
-static void ExaEvt_ShowMatchStatusForTch (struct ExaEvt_Match *Event);
-static void ExaEvt_ShowMatchStatusForStd (struct ExaEvt_Match *Event,ExaEvt_Update_t Update);
+static void ExaEvt_ShowMatchStatusForTch (struct ExaEvt_Event *Event);
+static void ExaEvt_ShowMatchStatusForStd (struct ExaEvt_Event *Event,ExaEvt_Update_t Update);
 
-static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Match *Event);
-static void ExaEvt_ShowRefreshablePartTch (struct ExaEvt_Match *Event);
-static void ExaEvt_WriteElapsedTimeInEvt (struct ExaEvt_Match *Event);
-static void ExaEvt_WriteElapsedTimeInQst (struct ExaEvt_Match *Event);
-static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Match *Event);
-static void ExaEvt_PutFormCountdown (struct ExaEvt_Match *Event,long Seconds,const char *Color);
-static void ExaEvt_PutCountdownAndHourglassIcon (struct ExaEvt_Match *Event);
-static void ExaEvt_PutFormsCountdown (struct ExaEvt_Match *Event);
+static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Event *Event);
+static void ExaEvt_ShowRefreshablePartTch (struct ExaEvt_Event *Event);
+static void ExaEvt_WriteElapsedTimeInEvt (struct ExaEvt_Event *Event);
+static void ExaEvt_WriteElapsedTimeInQst (struct ExaEvt_Event *Event);
+static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Event *Event);
+static void ExaEvt_PutFormCountdown (struct ExaEvt_Event *Event,long Seconds,const char *Color);
+static void ExaEvt_PutCountdownAndHourglassIcon (struct ExaEvt_Event *Event);
+static void ExaEvt_PutFormsCountdown (struct ExaEvt_Event *Event);
 
-static void ExaEvt_ShowRightColumnTch (const struct ExaEvt_Match *Event);
-static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Match *Event,
+static void ExaEvt_ShowRightColumnTch (const struct ExaEvt_Event *Event);
+static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Event *Event,
 				      const struct ExaEvt_UsrAnswer *UsrAnswer);
-static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Match *Event,
+static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Event *Event,
 				       const struct ExaEvt_UsrAnswer *UsrAnswer,
 				       ExaEvt_Update_t Update);
 
-static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Match *Event);
-static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Match *Event);
-static void ExaEvt_ShowFormColumns (const struct ExaEvt_Match *Event);
+static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Event *Event);
+static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Event *Event);
+static void ExaEvt_ShowFormColumns (const struct ExaEvt_Event *Event);
 static void ExaEvt_PutParamNumCols (unsigned NumCols);
 
-static void ExaEvt_ShowEventTitleTch (const struct ExaEvt_Match *Event);
-static void ExaEvt_ShowEventTitleStd (const struct ExaEvt_Match *Event);
+static void ExaEvt_ShowEventTitleTch (const struct ExaEvt_Event *Event);
+static void ExaEvt_ShowEventTitleStd (const struct ExaEvt_Event *Event);
 
-static void ExaEvt_PutCheckboxResult (const struct ExaEvt_Match *Event);
-static void ExaEvt_PutIfAnswered (const struct ExaEvt_Match *Event,bool Answered);
-static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Match *Event);
-static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Match *Event);
-static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Match *Event,
+static void ExaEvt_PutCheckboxResult (const struct ExaEvt_Event *Event);
+static void ExaEvt_PutIfAnswered (const struct ExaEvt_Event *Event,bool Answered);
+static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Event *Event);
+static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Event *Event);
+static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Event *Event,
                                             const struct Tst_Question *Question,
                                             const char *Class,bool ShowResult);
-static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Match *Event,
+static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 					      const struct ExaEvt_UsrAnswer *UsrAnswer,
 					      ExaEvt_Update_t Update);
 
-static void ExaEvt_ShowEventScore (const struct ExaEvt_Match *Event);
+static void ExaEvt_ShowEventScore (const struct ExaEvt_Event *Event);
 static void ExaEvt_DrawEmptyScoreRow (unsigned NumRow,double MinScore,double MaxScore);
 static void ExaEvt_DrawScoreRow (double Score,double MinScore,double MaxScore,
 			      unsigned NumRow,unsigned NumUsrs,unsigned MaxUsrs);
@@ -225,11 +225,11 @@ static void ExaEvt_RemoveOldPlayers (void);
 static void ExaEvt_UpdateEventAsBeingPlayed (long EvtCod);
 static void ExaEvt_SetEventAsNotBeingPlayed (long EvtCod);
 static bool ExaEvt_GetIfEventIsBeingPlayed (long EvtCod);
-static void ExaEvt_GetNumPlayers (struct ExaEvt_Match *Event);
+static void ExaEvt_GetNumPlayers (struct ExaEvt_Event *Event);
 
-static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Match *Event);
+static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Event *Event);
 
-static void ExaEvt_ComputeScore (struct TstExa_Exam *Result);
+static void ExaEvt_ComputeScore (struct TstRes_Result *Result);
 
 static unsigned ExaEvt_GetNumUsrsWhoHaveAnswerEvt (long EvtCod);
 
@@ -350,7 +350,7 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 /******************** Get exam event data using its code *********************/
 /*****************************************************************************/
 
-void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Match *Event)
+void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -434,7 +434,7 @@ static void ExaEvt_PutIconToCreateNewEvent (struct Exa_Exams *Exams)
    extern const char *Txt_New_match;
 
    /***** Put form to create a new exam event *****/
-   Ico_PutContextualIconToAdd (ActReqNewExaEvt,ExaEvt_NEW_MATCH_SECTION_ID,
+   Ico_PutContextualIconToAdd (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID,
                                Gam_PutParams,Exams,
 			       Txt_New_match);
   }
@@ -450,7 +450,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
   {
    unsigned NumEvent;
    unsigned UniqueId;
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
    bool ICanEditEvents = ExaEvt_CheckIfICanEditEvents ();
 
    /***** Write the heading *****/
@@ -554,7 +554,7 @@ static bool ExaEvt_CheckIfICanEditEvents (void)
 /************** Check if I can edit (remove/resume) an exam event ************/
 /*****************************************************************************/
 
-static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Match *Event)
+static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Event *Event)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -573,7 +573,7 @@ static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Match *Event)
 /*****************************************************************************/
 
 static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
-                                             const struct ExaEvt_Match *Event)
+                                             const struct ExaEvt_Event *Event)
   {
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
@@ -597,7 +597,7 @@ static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
 /*********** Put a column for teacher who created the exam event *************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Match *Event)
+static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event)
   {
    /***** Event author (teacher) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -609,7 +609,7 @@ static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Match *Event)
 /*************** Put a column for exam event start and end times *************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Match *Event,unsigned UniqueId)
+static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId)
   {
    Dat_StartEndTime_t StartEndTime;
    char *Id;
@@ -637,7 +637,7 @@ static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Match *Event,un
 /*************** Put a column for exam event title and grous *****************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Match *Event)
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -666,7 +666,7 @@ static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Match *Even
 /********** Get and write the names of the groups of an exam event ***********/
 /*****************************************************************************/
 
-static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Match *Event)
+static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -742,7 +742,7 @@ bool ExaEvt_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod)
 /******************* Put a column for number of players **********************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Match *Event)
+static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Event *Event)
   {
    /***** Number of players who have answered any question in the exam event ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -754,7 +754,7 @@ static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Match *Eve
 /******************** Put a column for exam event status *********************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Match *Event,unsigned NumQsts)
+static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Event *Event,unsigned NumQsts)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -787,7 +787,7 @@ static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Match *Event,unsigne
 /*****************************************************************************/
 
 static void ExaEvt_ListOneOrMoreEventsResult (struct Exa_Exams *Exams,
-                                              const struct ExaEvt_Match *Event)
+                                              const struct ExaEvt_Event *Event)
   {
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
@@ -810,7 +810,7 @@ static void ExaEvt_ListOneOrMoreEventsResult (struct Exa_Exams *Exams,
   }
 
 static void ExaEvt_ListOneOrMoreEventsResultStd (struct Exa_Exams *Exams,
-                                                 const struct ExaEvt_Match *Event)
+                                                 const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Results;
 
@@ -831,7 +831,7 @@ static void ExaEvt_ListOneOrMoreEventsResultStd (struct Exa_Exams *Exams,
   }
 
 static void ExaEvt_ListOneOrMoreEventsResultTch (struct Exa_Exams *Exams,
-                                                 const struct ExaEvt_Match *Event)
+                                                 const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
@@ -873,7 +873,7 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Reset games *****/
    Gam_ResetGames (&Exams);
@@ -906,7 +906,7 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
 /*****************************************************************************/
 
 static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
-				        struct ExaEvt_Match *Event)
+				        struct ExaEvt_Event *Event)
   {
    MYSQL_ROW row;
    Dat_StartEndTime_t StartEndTime;
@@ -1015,7 +1015,7 @@ void ExaEvt_RequestRemoveEvent (void)
    extern const char *Txt_Remove_event;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Reset games *****/
    Gam_ResetGames (&Exams);
@@ -1047,7 +1047,7 @@ void ExaEvt_RemoveEvent (void)
    extern const char *Txt_Match_X_removed;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Reset games *****/
    Gam_ResetGames (&Exams);
@@ -1249,7 +1249,7 @@ static void ExaEvt_PutParamEvtCod (long EvtCod)
 
 void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct Exa_Exam *Exam,
-                                   struct ExaEvt_Match *Event)
+                                   struct ExaEvt_Event *Event)
   {
    /***** Get parameters *****/
    /* Get parameters of exam */
@@ -1292,7 +1292,7 @@ static void ExaEvt_PutFormNewMatch (const struct Exa_Exam *Exam)
    extern const char *Txt_Play;
 
    /***** Start section for a new exam event *****/
-   HTM_SECTION_Begin (ExaEvt_NEW_MATCH_SECTION_ID);
+   HTM_SECTION_Begin (ExaEvt_NEW_EVENT_SECTION_ID);
 
    /***** Begin form *****/
    Frm_StartForm (ActNewExaEvt);
@@ -1432,7 +1432,7 @@ void ExaEvt_CreateNewEventTch (void)
 
 void ExaEvt_ResumeEvent (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -1589,7 +1589,7 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
@@ -1622,9 +1622,9 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
       /* Concatenate answer index to list of answers */
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+		     TstRes_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+		  TstRes_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1648,7 +1648,7 @@ void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[TstExa_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1661,14 +1661,14 @@ void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     TstExa_MAX_BYTES_INDEXES_ONE_QST);
+	     TstRes_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
-   TstExa_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   TstRes_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -1725,7 +1725,7 @@ void ExaEvt_RemoveGroupsOfType (long GrpTypCod)
 /************** Insert/update an exam exam event being played ****************/
 /*****************************************************************************/
 
-static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Match *Event)
+static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event)
   {
    char *EvtSubQuery;
 
@@ -1775,7 +1775,7 @@ static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Match *Event)
 /********** Update elapsed time in current question (by a teacher) ***********/
 /*****************************************************************************/
 
-static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Match *Event)
+static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Event *Event)
   {
    /***** Update elapsed time in current question in database *****/
    if (Event->Status.Playing &&		// Event is being played
@@ -1795,7 +1795,7 @@ static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Match *Event
 /**************** Get elapsed time in an exam event question *****************/
 /*****************************************************************************/
 
-static void ExaEvt_GetElapsedTimeInQuestion (const struct ExaEvt_Match *Event,
+static void ExaEvt_GetElapsedTimeInQuestion (const struct ExaEvt_Event *Event,
 					  struct Time *Time)
   {
    MYSQL_RES *mysql_res;
@@ -1819,7 +1819,7 @@ static void ExaEvt_GetElapsedTimeInQuestion (const struct ExaEvt_Match *Event,
 /******************** Get elapsed time in an exam event **********************/
 /*****************************************************************************/
 
-static void ExaEvt_GetElapsedTimeInMatch (const struct ExaEvt_Match *Event,
+static void ExaEvt_GetElapsedTimeInMatch (const struct ExaEvt_Event *Event,
 				       struct Time *Time)
   {
    MYSQL_RES *mysql_res;
@@ -1872,7 +1872,7 @@ static void ExaEvt_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 
 void ExaEvt_PlayPauseEvent (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -1906,7 +1906,7 @@ void ExaEvt_PlayPauseEvent (void)
 
 void ExaEvt_ChangeNumColsEvt (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -1939,7 +1939,7 @@ void ExaEvt_ChangeNumColsEvt (void)
 
 void ExaEvt_ToggleVisibilResultsEvtQst (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -1971,7 +1971,7 @@ void ExaEvt_ToggleVisibilResultsEvtQst (void)
 
 void ExaEvt_BackEvent (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -2000,7 +2000,7 @@ void ExaEvt_BackEvent (void)
 
 void ExaEvt_ForwardEvent (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -2027,7 +2027,7 @@ void ExaEvt_ForwardEvent (void)
 /************ Set exam event status to previous (backward) status ************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Event *Event)
   {
    /***** What to show *****/
    switch (Event->Status.Showing)
@@ -2053,7 +2053,7 @@ static void ExaEvt_SetMatchStatusToPrev (struct ExaEvt_Match *Event)
 /**************** Set exam event status to previous question *****************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Event *Event)
   {
    /***** Get index of the previous question *****/
    Event->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Event->ExaCod,
@@ -2073,7 +2073,7 @@ static void ExaEvt_SetMatchStatusToPrevQst (struct ExaEvt_Match *Event)
 /********************** Set exam event status to start ***********************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Event *Event)
   {
    Event->Status.QstInd  = 0;				// Before first question
    Event->Status.QstCod  = -1L;
@@ -2085,7 +2085,7 @@ static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Match *Event)
 /************** Set exam event status to next (forward) status ***************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Event *Event)
   {
    /***** What to show *****/
    switch (Event->Status.Showing)
@@ -2116,7 +2116,7 @@ static void ExaEvt_SetMatchStatusToNext (struct ExaEvt_Match *Event)
 /**************** Set exam event status to next question *********************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Event *Event)
   {
    /***** Get index of the next question *****/
    Event->Status.QstInd = Gam_GetNextQuestionIndexInGame (Event->ExaCod,
@@ -2137,7 +2137,7 @@ static void ExaEvt_SetMatchStatusToNextQst (struct ExaEvt_Match *Event)
 /********************** Set exam event status to end *************************/
 /*****************************************************************************/
 
-static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Match *Event)
+static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Event *Event)
   {
    Event->Status.QstInd  = ExaEvt_AFTER_LAST_QUESTION;	// After last question
    Event->Status.QstCod  = -1L;
@@ -2149,7 +2149,7 @@ static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Match *Event)
 /***** Show current exam event status (number, question, answers, button) ****/
 /*****************************************************************************/
 
-static void ExaEvt_ShowMatchStatusForTch (struct ExaEvt_Match *Event)
+static void ExaEvt_ShowMatchStatusForTch (struct ExaEvt_Event *Event)
   {
    /***** Left column *****/
    ExaEvt_ShowLeftColumnTch (Event);
@@ -2162,7 +2162,7 @@ static void ExaEvt_ShowMatchStatusForTch (struct ExaEvt_Match *Event)
 /************ Show current question being played for a student ***************/
 /*****************************************************************************/
 
-static void ExaEvt_ShowMatchStatusForStd (struct ExaEvt_Match *Event,ExaEvt_Update_t Update)
+static void ExaEvt_ShowMatchStatusForStd (struct ExaEvt_Event *Event,ExaEvt_Update_t Update)
   {
    bool ICanPlayThisMatchBasedOnGrps;
    struct ExaEvt_UsrAnswer UsrAnswer;
@@ -2226,7 +2226,7 @@ unsigned ExaEvt_GetNumUnfinishedEventsInExam (long ExaCod)
 /********* Check if I belong to any of the groups of an exam event ***********/
 /*****************************************************************************/
 
-bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Match *Event)
+bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -2262,7 +2262,7 @@ bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Match *Even
 /******** Show left column when playing an exam event (as a teacher) *********/
 /*****************************************************************************/
 
-static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Match *Event)
+static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Event *Event)
   {
    /***** Start left container *****/
    HTM_DIV_Begin ("class=\"EXA_LEFT_TCH\"");
@@ -2294,7 +2294,7 @@ static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Match *Event)
 /***************** Show left refreshable part for teachers *******************/
 /*****************************************************************************/
 
-static void ExaEvt_ShowRefreshablePartTch (struct ExaEvt_Match *Event)
+static void ExaEvt_ShowRefreshablePartTch (struct ExaEvt_Event *Event)
   {
    /***** Write elapsed time in exam event *****/
    ExaEvt_WriteElapsedTimeInEvt (Event);
@@ -2316,7 +2316,7 @@ static void ExaEvt_ShowRefreshablePartTch (struct ExaEvt_Match *Event)
 /****************** Write elapsed time in current exam event *****************/
 /*****************************************************************************/
 
-static void ExaEvt_WriteElapsedTimeInEvt (struct ExaEvt_Match *Event)
+static void ExaEvt_WriteElapsedTimeInEvt (struct ExaEvt_Event *Event)
   {
    struct Time Time;
 
@@ -2335,7 +2335,7 @@ static void ExaEvt_WriteElapsedTimeInEvt (struct ExaEvt_Match *Event)
 /****************** Write elapsed time in current question *******************/
 /*****************************************************************************/
 
-static void ExaEvt_WriteElapsedTimeInQst (struct ExaEvt_Match *Event)
+static void ExaEvt_WriteElapsedTimeInQst (struct ExaEvt_Event *Event)
   {
    struct Time Time;
 
@@ -2360,7 +2360,7 @@ static void ExaEvt_WriteElapsedTimeInQst (struct ExaEvt_Match *Event)
 /************ Write number of responders to an exam event question ***********/
 /*****************************************************************************/
 
-static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Match *Event)
+static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Event *Event)
   {
    extern const char *Txt_MATCH_respond;
 
@@ -2402,7 +2402,7 @@ static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Match *Event)
 /*************** Write current countdown and hourglass icon ******************/
 /*****************************************************************************/
 
-static void ExaEvt_PutCountdownAndHourglassIcon (struct ExaEvt_Match *Event)
+static void ExaEvt_PutCountdownAndHourglassIcon (struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Countdown;
    const char *Class;
@@ -2459,7 +2459,7 @@ static void ExaEvt_PutCountdownAndHourglassIcon (struct ExaEvt_Match *Event)
 /******************** Put all forms to start countdowns **********************/
 /*****************************************************************************/
 
-static void ExaEvt_PutFormsCountdown (struct ExaEvt_Match *Event)
+static void ExaEvt_PutFormsCountdown (struct ExaEvt_Event *Event)
   {
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"EXA_SHOW_HOURGLASS\"");
@@ -2478,7 +2478,7 @@ static void ExaEvt_PutFormsCountdown (struct ExaEvt_Match *Event)
 /****** Put a form to start a countdown with a given number of seconds *******/
 /*****************************************************************************/
 
-static void ExaEvt_PutFormCountdown (struct ExaEvt_Match *Event,long Seconds,const char *Color)
+static void ExaEvt_PutFormCountdown (struct ExaEvt_Event *Event,long Seconds,const char *Color)
   {
    extern const char *Txt_Countdown;
    char *OnSubmit;
@@ -2536,7 +2536,7 @@ static void ExaEvt_PutFormCountdown (struct ExaEvt_Match *Event,long Seconds,con
 /******* Show right column when playing an exam event (as a teacher) *********/
 /*****************************************************************************/
 
-static void ExaEvt_ShowRightColumnTch (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowRightColumnTch (const struct ExaEvt_Event *Event)
   {
    /***** Start right container *****/
    HTM_DIV_Begin ("class=\"EXA_RIGHT_TCH\"");
@@ -2558,7 +2558,7 @@ static void ExaEvt_ShowRightColumnTch (const struct ExaEvt_Match *Event)
 /******** Show left column when playing an exam event (as a student) *********/
 /*****************************************************************************/
 
-static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Match *Event,
+static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Event *Event,
 				      const struct ExaEvt_UsrAnswer *UsrAnswer)
   {
    bool Answered = UsrAnswer->NumOpt >= 0;
@@ -2598,7 +2598,7 @@ static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Match *Event,
 /******* Show right column when playing an exam event (as a student) *********/
 /*****************************************************************************/
 
-static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Match *Event,
+static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Event *Event,
 				       const struct ExaEvt_UsrAnswer *UsrAnswer,
 				       ExaEvt_Update_t Update)
   {
@@ -2644,7 +2644,7 @@ static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Match *Event,
 /********************* Show number of question in exam ***********************/
 /*****************************************************************************/
 
-static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
@@ -2670,7 +2670,7 @@ static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Match *Event)
 /******************* Put buttons to control an exam event ********************/
 /*****************************************************************************/
 
-static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Match *Event)
+static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Go_back;
    extern const char *Txt_Go_forward;
@@ -2743,7 +2743,7 @@ static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Match *Event)
 /** Show form to choice whether to show answers in one column or two columns */
 /*****************************************************************************/
 
-static void ExaEvt_ShowFormColumns (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowFormColumns (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_column;
    extern const char *Txt_columns;
@@ -2805,7 +2805,7 @@ static void ExaEvt_PutParamNumCols (unsigned NumCols)	// Number of columns
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void ExaEvt_PutCheckboxResult (const struct ExaEvt_Match *Event)
+static void ExaEvt_PutCheckboxResult (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_View_results;
 
@@ -2835,7 +2835,7 @@ static void ExaEvt_PutCheckboxResult (const struct ExaEvt_Match *Event)
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void ExaEvt_PutIfAnswered (const struct ExaEvt_Match *Event,bool Answered)
+static void ExaEvt_PutIfAnswered (const struct ExaEvt_Event *Event,bool Answered)
   {
    extern const char *Txt_View_my_answer;
    extern const char *Txt_MATCH_QUESTION_Answered;
@@ -2883,7 +2883,7 @@ static void ExaEvt_PutIfAnswered (const struct ExaEvt_Match *Event,bool Answered
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Match *Event)
+static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_Delete_my_answer;
 
@@ -2913,7 +2913,7 @@ static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Match *Event)
 /***************************** Show exam event title ******************************/
 /*****************************************************************************/
 
-static void ExaEvt_ShowEventTitleTch (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowEventTitleTch (const struct ExaEvt_Event *Event)
   {
    /***** Event title *****/
    HTM_DIV_Begin ("class=\"EXA_TOP LT\"");
@@ -2921,7 +2921,7 @@ static void ExaEvt_ShowEventTitleTch (const struct ExaEvt_Match *Event)
    HTM_DIV_End ();
   }
 
-static void ExaEvt_ShowEventTitleStd (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowEventTitleStd (const struct ExaEvt_Event *Event)
   {
    /***** Event title *****/
    HTM_DIV_Begin ("class=\"EXA_TOP CT\"");
@@ -2933,7 +2933,7 @@ static void ExaEvt_ShowEventTitleStd (const struct ExaEvt_Match *Event)
 /***** Show question and its answers when playing an exam event (as a teacher) *****/
 /*****************************************************************************/
 
-static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_MATCH_Paused;
    extern const char *Txt_Question_removed;
@@ -3012,7 +3012,7 @@ static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Match *Event)
 /************* Write answers of a question when seeing an exam event ***************/
 /*****************************************************************************/
 
-static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Match *Event,
+static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Event *Event,
                                             const struct Tst_Question *Question,
                                             const char *Class,bool ShowResult)
   {
@@ -3029,7 +3029,7 @@ static void ExaEvt_WriteAnswersEventResult (const struct ExaEvt_Match *Event,
 /******** Write single or multiple choice answer when seeing an exam event *********/
 /*****************************************************************************/
 
-void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Match *Event,
+void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Event *Event,
                                      const struct Tst_Question *Question,
                                      const char *Class,bool ShowResult)
   {
@@ -3121,7 +3121,7 @@ void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Match *Event,
 /*****************************************************************************/
 // Return true on valid question, false on invalid question
 
-static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Match *Event,
+static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
 					      const struct ExaEvt_UsrAnswer *UsrAnswer,
 					      ExaEvt_Update_t Update)
   {
@@ -3191,7 +3191,7 @@ static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Match *Event,
 
 #define ExaEvt_NUM_ROWS_SCORE 50
 
-static void ExaEvt_ShowEventScore (const struct ExaEvt_Match *Event)
+static void ExaEvt_ShowEventScore (const struct ExaEvt_Event *Event)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3568,7 +3568,7 @@ static bool ExaEvt_GetIfEventIsBeingPlayed (long EvtCod)
 /*************************** Get number of players ***************************/
 /*****************************************************************************/
 
-static void ExaEvt_GetNumPlayers (struct ExaEvt_Match *Event)
+static void ExaEvt_GetNumPlayers (struct ExaEvt_Event *Event)
   {
    /***** Get number of players who are playing an exam event *****/
    Event->Status.NumPlayers =
@@ -3583,7 +3583,7 @@ static void ExaEvt_GetNumPlayers (struct ExaEvt_Match *Event)
 /*****************************************************************************/
 // Return true on success
 
-bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Match *Event)
+bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event)
   {
    /***** Trivial check: exam event code must be > 0 *****/
    if (Event->EvtCod <= 0)
@@ -3629,7 +3629,7 @@ void ExaEvt_GetEventBeingPlayed (void)
 
 void ExaEvt_JoinEventAsStd (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3647,7 +3647,7 @@ void ExaEvt_JoinEventAsStd (void)
 
 void ExaEvt_RemoveMyQuestionAnswer (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
    unsigned QstInd;
 
    /***** Get data of the exam event from database *****/
@@ -3677,7 +3677,7 @@ void ExaEvt_RemoveMyQuestionAnswer (void)
 
 void ExaEvt_StartCountdown (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
    long NewCountdown;
 
    /***** Get countdown parameter ****/
@@ -3708,7 +3708,7 @@ void ExaEvt_StartCountdown (void)
 
 void ExaEvt_RefreshEventTch (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
    enum {REFRESH_LEFT,REFRESH_ALL} WhatToRefresh;
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
@@ -3766,7 +3766,7 @@ void ExaEvt_RefreshEventTch (void)
 
 void ExaEvt_RefreshEventStd (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
@@ -3826,12 +3826,12 @@ void ExaEvt_GetQstAnsFromDB (long EvtCod,long UsrCod,unsigned QstInd,
 
 void ExaEvt_ReceiveQuestionAnswer (void)
   {
-   struct ExaEvt_Match Event;
+   struct ExaEvt_Event Event;
    unsigned QstInd;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct ExaEvt_UsrAnswer PreviousUsrAnswer;
    struct ExaEvt_UsrAnswer UsrAnswer;
-   struct TstExa_Exam Result;
+   struct TstRes_Result Result;
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3937,7 +3937,7 @@ void ExaEvt_ReceiveQuestionAnswer (void)
 /********************* Remove answer to exam event question ***********************/
 /*****************************************************************************/
 
-static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Match *Event)
+static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Event *Event)
   {
    DB_QueryDELETE ("can not remove your answer to the exam event question",
 		    "DELETE FROM exa_answers"
@@ -3949,7 +3949,7 @@ static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Match *Eve
 /******************** Compute exam event score for a student **********************/
 /*****************************************************************************/
 
-static void ExaEvt_ComputeScore (struct TstExa_Exam *Result)
+static void ExaEvt_ComputeScore (struct TstRes_Result *Result)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3964,7 +3964,7 @@ static void ExaEvt_ComputeScore (struct TstExa_Exam *Result)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstExa_ComputeChoiceAnsScore (Result,NumQst,&Question);
+      TstRes_ComputeChoiceAnsScore (Result,NumQst,&Question);
 
       /***** Update total score *****/
       Result->Score += Result->Questions[NumQst].Score;

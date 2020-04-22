@@ -34,7 +34,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define ExaEvt_NEW_MATCH_SECTION_ID	"new_match"
+#define ExaEvt_NEW_EVENT_SECTION_ID	"new_event"
 
 #define ExaEvt_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a event is finished
 
@@ -49,7 +49,7 @@ typedef enum
   } ExaEvt_Showing_t;
 #define ExaEvt_SHOWING_DEFAULT ExaEvt_START
 
-struct ExaEvt_Match
+struct ExaEvt_Event
   {
    long EvtCod;
    long ExaCod;
@@ -88,7 +88,7 @@ long ExaEvt_GetEvtCodBeingPlayed (void);
 void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                         struct Exa_Exam *Exam,
                         bool PutFormNewEvent);
-void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Match *Event);
+void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event);
 
 void ExaEvt_ToggleVisibilResultsEvtUsr (void);
 
@@ -102,7 +102,7 @@ void ExaEvt_RemoveUsrFromEventTablesInCrs (long UsrCod,long CrsCod);
 void ExaEvt_PutParamsEdit (void *Exams);
 void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct Exa_Exam *Exam,
-                                   struct ExaEvt_Match *Event);
+                                   struct ExaEvt_Event *Event);
 long ExaEvt_GetParamEvtCod (void);
 
 void ExaEvt_CreateNewEventTch (void);
@@ -122,13 +122,13 @@ void ExaEvt_ForwardEvent (void);
 unsigned ExaEvt_GetNumEventsInExam (long ExaCod);
 unsigned ExaEvt_GetNumUnfinishedEventsInExam (long ExaCod);
 
-bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Match *Event);
+bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
 
-void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Match *Event,
+void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Event *Event,
                                      const struct Tst_Question *Question,
                                      const char *Class,bool ShowResult);
 
-bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Match *Event);
+bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event);
 
 void ExaEvt_GetEventBeingPlayed (void);
 void ExaEvt_JoinEventAsStd (void);

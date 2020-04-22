@@ -1463,7 +1463,7 @@ mysql> DESCRIBE mch_indexes;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_indexes ("
 			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
-			"Indexes TEXT NOT NULL,"	// TstExa_MAX_BYTES_INDEXES_ONE_QST
+			"Indexes TEXT NOT NULL,"	// TstRes_MAX_BYTES_INDEXES_ONE_QST
 		   "UNIQUE INDEX(MchCod,QstInd))");
 
    /***** Table mch_results *****/
@@ -2886,8 +2886,8 @@ mysql> DESCRIBE tst_exam_questions;
 			"QstCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-			"Indexes TEXT NOT NULL,"	// TstExa_MAX_BYTES_INDEXES_ONE_QST
-			"Answers TEXT NOT NULL,"	// TstExa_MAX_BYTES_ANSWERS_ONE_QST
+			"Indexes TEXT NOT NULL,"	// TstRes_MAX_BYTES_INDEXES_ONE_QST
+			"Answers TEXT NOT NULL,"	// TstRes_MAX_BYTES_ANSWERS_ONE_QST
 		   "UNIQUE INDEX(ExaCod,QstCod))");
 
    /***** Table tst_exams *****/

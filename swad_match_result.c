@@ -101,7 +101,7 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade);
 static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-                                            struct TstExa_Exam *Exam);
+                                               struct TstRes_Result *Result);
 
 static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod);
 static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
@@ -300,7 +300,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show matches results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -414,7 +414,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 	 /* Get match code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
 		  /***** Show matches results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -504,7 +504,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	 /* Get match code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
 		  /***** Show matches results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -927,8 +927,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	   {
-            Grade = TstExa_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
-	    TstExa_ShowGrade (Grade,MaxGrade);
+            Grade = TstRes_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
+	    TstRes_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
 	   }
 	 else
@@ -1061,7 +1061,7 @@ void MchRes_ShowOneMchResult (void)
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct TstExa_Exam Exam;
+   struct TstRes_Result Result;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ICanViewResult;
@@ -1089,8 +1089,8 @@ void MchRes_ShowOneMchResult (void)
      }
 
    /***** Get match result data *****/
-   TstExa_ResetExam (&Exam);
-   MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Exam);
+   TstRes_ResetResult (&Result);
+   MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Result);
 
    /***** Check if I can view this match result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1121,7 +1121,7 @@ void MchRes_ShowOneMchResult (void)
      {
       /***** Get questions and user's answers of the match result from database *****/
       MchRes_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
-					 &Exam);
+					    &Result);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Match.Title,
@@ -1139,7 +1139,7 @@ void MchRes_ShowOneMchResult (void)
       /* Get data of the user who answer the match */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
-      if (!Usr_CheckIfICanViewTst (UsrDat))
+      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
          Lay_NoPermissionExit ();
 
       /* User */
@@ -1179,7 +1179,7 @@ void MchRes_ShowOneMchResult (void)
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Exam.TimeUTC[StartEndTime],
+	 Dat_WriteLocalDateHMSFromUTC (Id,Result.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
@@ -1197,8 +1197,8 @@ void MchRes_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-                Exam.NumQsts,
-                Exam.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+                Result.NumQsts,
+                Result.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1212,7 +1212,7 @@ void MchRes_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         HTM_Double2Decimals (Exam.Score);
+         HTM_Double2Decimals (Result.Score);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1228,9 +1228,8 @@ void MchRes_ShowOneMchResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         TstExa_ComputeAndShowGrade (Exam.NumQsts,
-                                  Exam.Score,
-                                  Game.MaxGrade);
+         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+                                     Game.MaxGrade);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1251,7 +1250,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstExa_ShowExamAnswers (UsrDat,&Exam,Game.Visibility);
+      TstRes_ShowExamAnswers (UsrDat,&Result,Game.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1261,10 +1260,11 @@ void MchRes_ShowOneMchResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Exam.Score);
+	 HTM_Double2Decimals (Result.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         TstExa_ComputeAndShowGrade (Exam.NumQsts,Exam.Score,Game.MaxGrade);
+         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+                                     Game.MaxGrade);
          HTM_DIV_End ();
 	}
 
@@ -1280,7 +1280,7 @@ void MchRes_ShowOneMchResult (void)
 /*****************************************************************************/
 
 void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				           struct TstExa_Exam *Exam)
+				           struct TstRes_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1290,27 +1290,27 @@ void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
-   Exam->NumQsts = (unsigned)
-		   DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-					      " of a match result",
-				   "SELECT gam_questions.QstCod,"	// row[0]
-					  "gam_questions.QstInd,"	// row[1]
-					  "mch_indexes.Indexes"	// row[2]
-				   " FROM mch_matches,gam_questions,mch_indexes"
-				   " WHERE mch_matches.MchCod=%ld"
-				   " AND mch_matches.GamCod=gam_questions.GamCod"
-				   " AND mch_matches.MchCod=mch_indexes.MchCod"
-				   " AND gam_questions.QstInd=mch_indexes.QstInd"
-				   " ORDER BY gam_questions.QstInd",
-				   MchCod);
-   for (NumQst = 0, Exam->NumQstsNotBlank = 0;
-	NumQst < Exam->NumQsts;
+   Result->NumQsts = (unsigned)
+		     DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+					        " of a match result",
+				     "SELECT gam_questions.QstCod,"	// row[0]
+					    "gam_questions.QstInd,"	// row[1]
+					    "mch_indexes.Indexes"	// row[2]
+				     " FROM mch_matches,gam_questions,mch_indexes"
+				     " WHERE mch_matches.MchCod=%ld"
+				     " AND mch_matches.GamCod=gam_questions.GamCod"
+				     " AND mch_matches.MchCod=mch_indexes.MchCod"
+				     " AND gam_questions.QstInd=mch_indexes.QstInd"
+				     " ORDER BY gam_questions.QstInd",
+				     MchCod);
+   for (NumQst = 0, Result->NumQstsNotBlank = 0;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Exam->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1319,24 +1319,24 @@ void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Exam->Questions[NumQst].StrIndexes,row[2],
-                TstExa_MAX_BYTES_INDEXES_ONE_QST);
+      Str_Copy (Result->Questions[NumQst].StrIndexes,row[2],
+                TstRes_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Exam->Questions[NumQst].StrAnswers,TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Result->Questions[NumQst].StrAnswers,TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
-         Exam->NumQstsNotBlank++;
+         Result->NumQstsNotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Exam->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
+	 Result->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrIndexes);
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrAnswers);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1348,7 +1348,7 @@ void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 /*****************************************************************************/
 
 static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-                                               struct TstExa_Exam *Exam)
+                                               struct TstRes_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1377,27 +1377,27 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-         Exam->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
+         Result->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Exam->NumQsts) != 1)
-	 Exam->NumQsts = 0;
+      if (sscanf (row[2],"%u",&Result->NumQsts) != 1)
+	 Result->NumQsts = 0;
 
       /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Exam->NumQstsNotBlank) != 1)
-	 Exam->NumQstsNotBlank = 0;
+      if (sscanf (row[3],"%u",&Result->NumQstsNotBlank) != 1)
+	 Result->NumQstsNotBlank = 0;
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Exam->Score) != 1)
-	 Exam->Score = 0.0;
+      if (sscanf (row[4],"%lf",&Result->Score) != 1)
+	 Result->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
      {
-      Exam->NumQsts = 0;
-      Exam->NumQstsNotBlank = 0;
-      Exam->Score = 0.0;
+      Result->NumQsts = 0;
+      Result->NumQstsNotBlank = 0;
+      Result->Score = 0.0;
      }
 
    /***** Free structure that stores the query result *****/

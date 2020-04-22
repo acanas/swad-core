@@ -229,7 +229,7 @@ static void Mch_GetNumPlayers (struct Mch_Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
 
-static void Mch_ComputeScore (struct TstExa_Exam *Result);
+static void Mch_ComputeScore (struct TstRes_Result *Result);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -1589,7 +1589,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
@@ -1622,9 +1622,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       /* Concatenate answer index to list of answers */
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+		     TstRes_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  TstExa_MAX_BYTES_ANSWERS_ONE_QST);
+		  TstRes_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1648,7 +1648,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[TstExa_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1661,14 +1661,14 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     TstExa_MAX_BYTES_INDEXES_ONE_QST);
+	     TstRes_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
-   TstExa_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   TstRes_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -3828,7 +3828,7 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   struct TstExa_Exam Result;
+   struct TstRes_Result Result;
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -3946,7 +3946,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static void Mch_ComputeScore (struct TstExa_Exam *Result)
+static void Mch_ComputeScore (struct TstRes_Result *Result)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -3961,7 +3961,7 @@ static void Mch_ComputeScore (struct TstExa_Exam *Result)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstExa_ComputeChoiceAnsScore (Result,NumQst,&Question);
+      TstRes_ComputeChoiceAnsScore (Result,NumQst,&Question);
 
       /***** Update total score *****/
       Result->Score += Result->Questions[NumQst].Score;

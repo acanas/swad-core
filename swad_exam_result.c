@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_exam.h"
+#include "swad_exam_event.h"
 #include "swad_exam_result.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -74,15 +75,15 @@ extern struct Globals Gbl;
 static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams);
 
 static void ExaRes_ListMyEvtResultsInCrs (struct Exa_Exams *Exams);
-static void ExaRes_ListMyEvtResultsInGam (struct Exa_Exams *Exams,long ExaCod);
-static void ExaRes_ListMyEvtResultsInMch (struct Exa_Exams *Exams,long EvtCod);
+static void ExaRes_ListMyEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod);
+static void ExaRes_ListMyEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod);
 static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams);
 static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams);
 static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod);
 static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod);
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
-                                     const char *Title,bool ListGamesToSelect);
+                                     const char *Title,bool ListExamsToSelect);
 static void ExaRes_ShowResultsEnd (void);
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams);
@@ -101,7 +102,7 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade);
 static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstExa_Exam *Exam);
+                                               struct TstRes_Result *Result);
 
 static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
@@ -115,21 +116,21 @@ void ExaRes_ShowMyExaResultsInCrs (void)
    extern const char *Txt_Results;
    struct Exa_Exams Exams;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
-   /***** Get list of games *****/
-   Gam_GetListGames (&Exams,Gam_ORDER_BY_TITLE);
-   Gam_GetListSelectedGamCods (&Exams);
+   /***** Get list of exams *****/
+   Exa_GetListExams (&Exams,Exa_ORDER_BY_TITLE);
+   Exa_GetListSelectedExaCods (&Exams);
 
    /***** List my events results in the current course *****/
-   ExaRes_ShowResultsBegin (&Exams,Txt_Results,true);	// List games to select
+   ExaRes_ShowResultsBegin (&Exams,Txt_Results,true);	// List exams to select
    ExaRes_ListMyEvtResultsInCrs (&Exams);
    ExaRes_ShowResultsEnd ();
 
-   /***** Free list of games *****/
-   free (Exams.GamCodsSelected);
-   Gam_FreeListGames (&Exams);
+   /***** Free list of exams *****/
+   free (Exams.ExaCodsSelected);
+   Exa_FreeListExams (&Exams);
   }
 
 static void ExaRes_ListMyEvtResultsInCrs (struct Exa_Exams *Exams)
@@ -156,32 +157,32 @@ void ExaRes_ShowMyExaResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Gam_GetParams (&Exams)) <= 0)
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
-   Gam_GetDataOfGameByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exam);
 
    /***** Exam begin *****/
-   Gam_ShowOnlyOneGameBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
                              false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_game_X,Exam.Title),
-			    false);	// Do not list games to select
+			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListMyEvtResultsInGam (&Exams,Exam.ExaCod);
+   ExaRes_ListMyEvtResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
-   Gam_ShowOnlyOneGameEnd ();
+   Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyEvtResultsInGam (struct Exa_Exams *Exams,long ExaCod)
+static void ExaRes_ListMyEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderEvtResults (Usr_ME);
@@ -195,41 +196,41 @@ static void ExaRes_ListMyEvtResultsInGam (struct Exa_Exams *Exams,long ExaCod)
 /***************** Show my events results in a given event ******************/
 /*****************************************************************************/
 
-void ExaRes_ShowMyExaResultsInEve (void)
+void ExaRes_ShowMyExaResultsInEvt (void)
   {
    extern const char *Txt_Results_of_match_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Gam_GetParams (&Exams)) <= 0)
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
-   if ((Event.EvtCod = Mch_GetParamEvtCod ()) <= 0)
+   if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of event is missing.");
-   Gam_GetDataOfGameByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exam);
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
-   Gam_ShowOnlyOneGameBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
                              false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in event *****/
    ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_match_X,Event.Title),
-			    false);	// Do not list games to select
+			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListMyEvtResultsInMch (&Exams,Event.EvtCod);
+   ExaRes_ListMyEvtResultsInEvt (&Exams,Event.EvtCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
-   Gam_ShowOnlyOneGameEnd ();
+   Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyEvtResultsInMch (struct Exa_Exams *Exams,long EvtCod)
+static void ExaRes_ListMyEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderEvtResults (Usr_ME);
@@ -247,8 +248,8 @@ void ExaRes_ShowAllExaResultsInCrs (void)
   {
    struct Exa_Exams Exams;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get users and show their events results *****/
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
@@ -267,20 +268,20 @@ static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams)
    if (!Exams)
       return;
 
-   /***** Get list of games *****/
-   Gam_GetListGames ((struct Exa_Exams *) Exams,Gam_ORDER_BY_TITLE);
-   Gam_GetListSelectedGamCods ((struct Exa_Exams *) Exams);
+   /***** Get list of exams *****/
+   Exa_GetListExams ((struct Exa_Exams *) Exams,Exa_ORDER_BY_TITLE);
+   Exa_GetListSelectedExaCods ((struct Exa_Exams *) Exams);
 
    /***** List the events results of the selected users *****/
    ExaRes_ShowResultsBegin ((struct Exa_Exams *) Exams,
                             Txt_Results,
-                            true);	// List games to select
+                            true);	// List exams to select
    ExaRes_ListAllEvtResultsInSelectedExams ((struct Exa_Exams *) Exams);
    ExaRes_ShowResultsEnd ();
 
-   /***** Free list of games *****/
-   free (((struct Exa_Exams *) Exams)->GamCodsSelected);
-   Gam_FreeListGames ((struct Exa_Exams *) Exams);
+   /***** Free list of exams *****/
+   free (((struct Exa_Exams *) Exams)->ExaCodsSelected);
+   Exa_FreeListExams ((struct Exa_Exams *) Exams);
   }
 
 static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams)
@@ -300,7 +301,7 @@ static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams)
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show events results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -318,8 +319,8 @@ void ExaRes_SelUsrsToViewExaResults (void)
   {
    struct Exa_Exams Exams;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Put form to select users *****/
    ExaRes_PutFormToSelUsrsToViewEvtResults (&Exams);
@@ -327,16 +328,16 @@ void ExaRes_SelUsrsToViewExaResults (void)
 
 static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams)
   {
-   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_matches_results;
 
    if (Exams)	// Not used
       Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeAllMchResCrs,
+					ActSeeAllExaEvtResCrs,
 					NULL,NULL,
 					Txt_Results,
-					Hlp_ASSESSMENT_Games_results,
+					Hlp_ASSESSMENT_Exams_results,
 					Txt_View_matches_results,
 					false);	// Do not put form with date range
   }
@@ -351,29 +352,29 @@ void ExaRes_ShowAllExaResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Gam_GetParams (&Exams)) <= 0)
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
-   Gam_GetDataOfGameByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exam);
 
    /***** Exam begin *****/
-   Gam_ShowOnlyOneGameBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
                              false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List events results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_game_X,Exam.Title),
-			    false);	// Do not list games to select
+			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListAllEvtResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
-   Gam_ShowOnlyOneGameEnd ();
+   Exa_ShowOnlyOneExamEnd ();
   }
 
 static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
@@ -414,7 +415,7 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 	 /* Get event code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
 		  /***** Show events results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -431,39 +432,39 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 /** Show events results of a event for the users who answered in that event */
 /*****************************************************************************/
 
-void ExaRes_ShowAllExaResultsInEve (void)
+void ExaRes_ShowAllExaResultsInEvt (void)
   {
    extern const char *Txt_Results_of_match_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Gam_GetParams (&Exams)) <= 0)
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
-   if ((Event.EvtCod = Mch_GetParamEvtCod ()) <= 0)
+   if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of event is missing.");
-   Gam_GetDataOfGameByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exam);
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
-   Gam_ShowOnlyOneGameBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
                              false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List events results in event *****/
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_match_X,Event.Title),
-			    false);	// Do not list games to select
+			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListAllEvtResultsInEvt (&Exams,Event.EvtCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
-   Gam_ShowOnlyOneGameEnd ();
+   Exa_ShowOnlyOneExamEnd ();
   }
 
 static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
@@ -504,7 +505,7 @@ static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
 	 /* Get event code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
 		  /***** Show events results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -522,18 +523,18 @@ static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
 /*****************************************************************************/
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
-                                     const char *Title,bool ListGamesToSelect)
+                                     const char *Title,bool ListExamsToSelect)
   {
-   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Hlp_ASSESSMENT_Exams_results;
 
    /***** Begin box *****/
    HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
    Box_BoxBegin ("100%",Title,
                  NULL,NULL,
-		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
-   /***** List games to select *****/
-   if (ListGamesToSelect)
+   /***** List exams to select *****/
+   if (ListExamsToSelect)
       ExaRes_ListExamsToSelect (Exams);
 
    /***** Begin event results table *****/
@@ -558,22 +559,22 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
-   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
-   extern const char *Txt_Games;
-   extern const char *Txt_Game;
+   extern const char *Txt_Exams;
+   extern const char *Txt_Exam;
    extern const char *Txt_Update_results;
    unsigned UniqueId;
    unsigned NumExam;
    struct Exa_Exam Exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Games,
+   Box_BoxBegin (NULL,Txt_Exams,
                  NULL,NULL,
-                 Hlp_ASSESSMENT_Games_results,Box_CLOSABLE);
+                 Hlp_ASSESSMENT_Exams_results,Box_CLOSABLE);
 
    /***** Begin form to update the results
-	  depending on the games selected *****/
+	  depending on the exams selected *****/
    Frm_StartFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -585,7 +586,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,2,NULL,NULL);
-   HTM_TH (1,1,"LM",Txt_Game);
+   HTM_TH (1,1,"LM",Txt_Exam);
 
    HTM_TR_End ();
 
@@ -596,7 +597,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
      {
       /* Get data of this exam */
       Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
-      Gam_GetDataOfGameByCod (&Exam);
+      Exa_GetDataOfExamByCod (&Exam);
 
       /* Write a row for this event */
       HTM_TR_Begin (NULL);
@@ -678,8 +679,8 @@ static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther)
   }
 
 /*****************************************************************************/
-/******* Build string with list of selected games separated by commas ********/
-/******* from list of selected games                                  ********/
+/******* Build string with list of selected exams separated by commas ********/
+/******* from list of selected exams                                  ********/
 /*****************************************************************************/
 
 static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
@@ -689,12 +690,12 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
    unsigned NumExam;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   /***** Allocate memory for subquery of games selected *****/
+   /***** Allocate memory for subquery of exams selected *****/
    MaxLength = (size_t) Exams->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*ExamsSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   /***** Build subquery with list of selected games *****/
+   /***** Build subquery with list of selected exams *****/
    (*ExamsSelectedCommas)[0] = '\0';
    for (NumExam = 0;
 	NumExam < Exams->Num;
@@ -760,7 +761,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	 Lay_NotEnoughMemoryExit ();
      }
 
-   /***** Build games subquery *****/
+   /***** Build exams subquery *****/
    if (ExaCod > 0)
      {
       if (asprintf (&ExaSubQuery," AND exa_events.ExaCod=%ld",ExaCod) < 0)
@@ -927,8 +928,8 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	   {
-            Grade = TstExa_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
-	    TstExa_ShowGrade (Grade,MaxGrade);
+            Grade = TstRes_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
+	    TstRes_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
 	   }
 	 else
@@ -944,12 +945,12 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
-		  Frm_StartForm (ActSeeOneMchResMe);
-		  Mch_PutParamsEdit (Exams);
+		  Frm_StartForm (ActSeeOneExaEvtResMe);
+		  ExaEvt_PutParamsEdit (Exams);
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
-		  Mch_PutParamsEdit (Exams);
+		  ExaEvt_PutParamsEdit (Exams);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
@@ -965,9 +966,9 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 
       /***** Write totals for this user *****/
       ExaRes_ShowEvtResultsSummaryRow (NumResults,
-				    NumTotalQsts,NumTotalQstsNotBlank,
-				    TotalScoreOfAllResults,
-				    TotalGrade);
+				       NumTotalQsts,NumTotalQstsNotBlank,
+				       TotalScoreOfAllResults,
+				       TotalGrade);
      }
    else
      {
@@ -1045,7 +1046,7 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
 
 void ExaRes_ShowOneExaResult (void)
   {
-   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -1061,17 +1062,17 @@ void ExaRes_ShowOneExaResult (void)
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct TstExa_Exam Exam;
+   struct TstRes_Result Result;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ICanViewResult;
    bool ICanViewScore;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Exams,&Exam,&Event);
+   ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
@@ -1089,8 +1090,8 @@ void ExaRes_ShowOneExaResult (void)
      }
 
    /***** Get event result data *****/
-   TstExa_ResetExam (&Exam);
-   ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Exam);
+   TstRes_ResetResult (&Result);
+   ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Result);
 
    /***** Check if I can view this event result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1121,12 +1122,12 @@ void ExaRes_ShowOneExaResult (void)
      {
       /***** Get questions and user's answers of the event result from database *****/
       ExaRes_GetExamResultQuestionsFromDB (Event.EvtCod,UsrDat->UsrCod,
-					 &Exam);
+					   &Exam);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Event.Title,
                     NULL,NULL,
-                    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,
 				 Gbl.Hierarchy.Deg.DegCod,
@@ -1139,7 +1140,7 @@ void ExaRes_ShowOneExaResult (void)
       /* Get data of the user who answer the event */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
-      if (!Usr_CheckIfICanViewTst (UsrDat))
+      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
          Lay_NoPermissionExit ();
 
       /* User */
@@ -1197,8 +1198,8 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-                Exam.NumQsts,
-                Exam.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+                Result.NumQsts,
+                Result.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1212,7 +1213,7 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         HTM_Double2Decimals (Exam.Score);
+         HTM_Double2Decimals (Result.Score);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1228,9 +1229,8 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         TstExa_ComputeAndShowGrade (Exam.NumQsts,
-                                  Exam.Score,
-                                  Exam.MaxGrade);
+         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+                                     Exam.MaxGrade);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1245,13 +1245,13 @@ void ExaRes_ShowOneExaResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      Gam_ShowTstTagsPresentInAGame (Event.ExaCod);
+      Exa_ShowTstTagsPresentInAnExam (Event.ExaCod);
       HTM_TD_End ();
 
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstExa_ShowExamAnswers (UsrDat,&Exam,Exam.Visibility);
+      TstRes_ShowExamAnswers (UsrDat,&Result,Exam.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1261,10 +1261,11 @@ void ExaRes_ShowOneExaResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Exam.Score);
+	 HTM_Double2Decimals (Result.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         TstExa_ComputeAndShowGrade (Exam.NumQsts,Exam.Score,Exam.MaxGrade);
+         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+                                     Exam.MaxGrade);
          HTM_DIV_End ();
 	}
 
@@ -1280,37 +1281,37 @@ void ExaRes_ShowOneExaResult (void)
 /*****************************************************************************/
 
 void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
-				          struct TstExa_Exam *Exam)
+				          struct TstRes_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
    long LongNum;
    unsigned QstInd;
-   struct Mch_UsrAnswer UsrAnswer;
+   struct ExaEvt_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a event result *****/
-   Exam->NumQsts = (unsigned)
-		   DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-					      " of a event result",
-				   "SELECT gam_questions.QstCod,"	// row[0]
-					  "gam_questions.QstInd,"	// row[1]
-					  "mch_indexes.Indexes"	// row[2]
-				   " FROM exa_events,gam_questions,mch_indexes"
-				   " WHERE exa_events.EvtCod=%ld"
-				   " AND exa_events.ExaCod=gam_questions.ExaCod"
-				   " AND exa_events.EvtCod=mch_indexes.EvtCod"
-				   " AND gam_questions.QstInd=mch_indexes.QstInd"
-				   " ORDER BY gam_questions.QstInd",
-				   EvtCod);
-   for (NumQst = 0, Exam->NumQstsNotBlank = 0;
-	NumQst < Exam->NumQsts;
+   Result->NumQsts = (unsigned)
+		     DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+						" of a event result",
+				     "SELECT exa_questions.QstCod,"	// row[0]
+					    "exa_questions.QstInd,"	// row[1]
+					    "exa_indexes.Indexes"	// row[2]
+				     " FROM exa_events,exa_questions,exa_indexes"
+				     " WHERE exa_events.EvtCod=%ld"
+				     " AND exa_events.ExaCod=exa_questions.ExaCod"
+				     " AND exa_events.EvtCod=exa_indexes.EvtCod"
+				     " AND exa_questions.QstInd=exa_indexes.QstInd"
+				     " ORDER BY exa_questions.QstInd",
+				     EvtCod);
+   for (NumQst = 0, Result->NumQstsNotBlank = 0;
+	NumQst < Result->NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Exam->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1319,24 +1320,24 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Exam->Questions[NumQst].StrIndexes,row[2],
-                TstExa_MAX_BYTES_INDEXES_ONE_QST);
+      Str_Copy (Result->Questions[NumQst].StrIndexes,row[2],
+                TstRes_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
-      Mch_GetQstAnsFromDB (EvtCod,UsrCod,QstInd,&UsrAnswer);
+      ExaEvt_GetQstAnsFromDB (EvtCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Exam->Questions[NumQst].StrAnswers,TstExa_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Result->Questions[NumQst].StrAnswers,TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
-         Exam->NumQstsNotBlank++;
+         Result->NumQstsNotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Exam->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
+	 Result->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrIndexes);
-      Par_ReplaceCommaBySeparatorMultiple (Exam->Questions[NumQst].StrAnswers);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
+      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1348,7 +1349,7 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
 /*****************************************************************************/
 
 static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstExa_Exam *Exam)
+                                               struct TstRes_Result *Result)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1357,11 +1358,11 @@ static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data"
 				  " of a event result of a user",
-		       "SELECT UNIX_TIMESTAMP(exa_results.StartTime),"		// row[1]
-			      "UNIX_TIMESTAMP(exa_results.EndTime),"		// row[2]
-		              "exa_results.NumQsts,"				// row[3]
-		              "exa_results.NumQstsNotBlank,"			// row[4]
-		              "exa_results.Score"				// row[5]
+		       "SELECT UNIX_TIMESTAMP(exa_results.StartTime),"	// row[1]
+			      "UNIX_TIMESTAMP(exa_results.EndTime),"	// row[2]
+		              "exa_results.NumQsts,"			// row[3]
+		              "exa_results.NumQstsNotBlank,"		// row[4]
+		              "exa_results.Score"			// row[5]
 		       " FROM exa_results,exa_events,exa_exams"
 		       " WHERE exa_results.EvtCod=%ld"
 		       " AND exa_results.UsrCod=%ld"
@@ -1377,27 +1378,27 @@ static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-         Exam->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
+         Result->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Exam->NumQsts) != 1)
-	 Exam->NumQsts = 0;
+      if (sscanf (row[2],"%u",&Result->NumQsts) != 1)
+	 Result->NumQsts = 0;
 
       /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Exam->NumQstsNotBlank) != 1)
-	 Exam->NumQstsNotBlank = 0;
+      if (sscanf (row[3],"%u",&Result->NumQstsNotBlank) != 1)
+	 Result->NumQstsNotBlank = 0;
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Exam->Score) != 1)
-	 Exam->Score = 0.0;
+      if (sscanf (row[4],"%lf",&Result->Score) != 1)
+	 Result->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
      {
-      Exam->NumQsts = 0;
-      Exam->NumQstsNotBlank = 0;
-      Exam->Score = 0.0;
+      Result->NumQsts = 0;
+      Result->NumQstsNotBlank = 0;
+      Result->Score = 0.0;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1417,7 +1418,7 @@ static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long Us
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
 	 if (ItsMe && Event->Status.ShowUsrResults)
-	    return Mch_CheckIfICanPlayThisMatchBasedOnGrps (Event);
+	    return ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (Event);
          return false;
       case Rol_NET:
       case Rol_TCH:

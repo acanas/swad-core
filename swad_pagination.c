@@ -34,6 +34,7 @@
 #include "swad_agenda.h"
 #include "swad_attendance.h"
 #include "swad_database.h"
+#include "swad_exam.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_game.h"
@@ -62,6 +63,7 @@ static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
    [Pag_ASSIGNMENTS      ] = "NumPagAsg",
    [Pag_PROJECTS         ] = "NumPagPrj",
+   [Pag_EXAMS            ] = "NumPagExa",
    [Pag_GAMES            ] = "NumPagGam",
    [Pag_SURVEYS          ] = "NumPagSvy",
    [Pag_ATT_EVENTS       ] = "NumPagAtt",
@@ -187,6 +189,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                               1,
                               Cod);
                break;
+            case Pag_EXAMS:
+               Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+               WhichGroups = Grp_GetParamWhichGroups ();
+               Grp_PutParamWhichGroups (&WhichGroups);
+               break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -305,6 +314,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                               1,
                               Cod);
                break;
+            case Pag_EXAMS:
+               Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+               WhichGroups = Grp_GetParamWhichGroups ();
+               Grp_PutParamWhichGroups (&WhichGroups);
+               break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -408,6 +424,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                               ((struct Prj_Projects *) Context)->SelectedOrder,
                               Pagination->LeftPage,
                               Cod);
+               break;
+            case Pag_EXAMS:
+               Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+               WhichGroups = Grp_GetParamWhichGroups ();
+               Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -525,6 +548,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                  NumPage,
                                  Cod);
 		  break;
+               case Pag_EXAMS:
+                  Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+                  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+                  WhichGroups = Grp_GetParamWhichGroups ();
+                  Grp_PutParamWhichGroups (&WhichGroups);
+                  break;
                case Pag_GAMES:
                   Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
@@ -628,6 +658,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			      Pagination->RightPage,
 			      Cod);
 	       break;
+            case Pag_EXAMS:
+               Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+               WhichGroups = Grp_GetParamWhichGroups ();
+               Grp_PutParamWhichGroups (&WhichGroups);
+               break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
@@ -732,6 +769,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			      Pagination->NumPags,
 			      Cod);
 	       break;
+            case Pag_EXAMS:
+               Frm_StartFormAnchor (ActSeeAllExa,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+               WhichGroups = Grp_GetParamWhichGroups ();
+               Grp_PutParamWhichGroups (&WhichGroups);
+               break;
             case Pag_GAMES:
                Frm_StartFormAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);

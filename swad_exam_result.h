@@ -42,15 +42,15 @@
 
 void ExaRes_ShowMyExaResultsInCrs (void);
 void ExaRes_ShowMyExaResultsInExa (void);
-void ExaRes_ShowMyExaResultsInEve (void);
+void ExaRes_ShowMyExaResultsInEvt (void);
 
 void ExaRes_ShowAllExaResultsInCrs (void);
 void ExaRes_SelUsrsToViewExaResults (void);
 void ExaRes_ShowAllExaResultsInExa (void);
-void ExaRes_ShowAllExaResultsInEve (void);
+void ExaRes_ShowAllExaResultsInEvt (void);
 
 void ExaRes_ShowOneExaResult (void);
 void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
-				          struct TstExa_Exam *Exam);
+				          struct TstRes_Result *Result);
 
 #endif

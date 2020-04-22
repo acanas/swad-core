@@ -1891,7 +1891,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Svy_RemoveSurveys (Hie_CRS,CrsCod);
 
       /***** Remove all test exams made in the course *****/
-      TstExa_RemoveCrsExams (CrsCod);
+      TstRes_RemoveCrsExams (CrsCod);
 
       /***** Remove all tests questions in the course *****/
       Tst_RemoveCrsTests (CrsCod);

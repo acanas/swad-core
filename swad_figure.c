@@ -161,6 +161,7 @@ static void Fig_GetAndShowCourseProgramStats (void); // TODO: Change function fr
 static void Fig_GetAndShowAssignmentsStats (void);
 static void Fig_GetAndShowProjectsStats (void);
 static void Fig_GetAndShowTestsStats (void);
+static void Fig_GetAndShowExamsStats (void);
 static void Fig_GetAndShowGamesStats (void);
 
 static void Fig_GetAndShowTimelineActivityStats (void);
@@ -335,6 +336,7 @@ void Fig_ShowFigures (void)
       [Fig_ASSIGNMENTS      ] = Fig_GetAndShowAssignmentsStats,
       [Fig_PROJECTS         ] = Fig_GetAndShowProjectsStats,
       [Fig_TESTS            ] = Fig_GetAndShowTestsStats,
+      [Fig_EXAMS            ] = Fig_GetAndShowExamsStats,
       [Fig_GAMES            ] = Fig_GetAndShowGamesStats,
       [Fig_SURVEYS          ] = Fig_GetAndShowSurveysStats,
       [Fig_TIMELINE         ] = Fig_GetAndShowTimelineActivityStats,
@@ -3281,6 +3283,61 @@ static void Fig_GetAndShowTestsStats (void)
 
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/*************************** Show stats about exams **************************/
+/*****************************************************************************/
+
+static void Fig_GetAndShowExamsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_games;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_games;
+   extern const char *Txt_Number_of_BR_courses_with_BR_games;
+   extern const char *Txt_Average_number_BR_of_games_BR_per_course;
+   unsigned NumGames;
+   unsigned NumCoursesWithGames = 0;
+   double NumGamesPerCourse = 0.0;
+
+   /***** Get the number of games from this location *****/
+   if ((NumGames = Gam_GetNumGames (Gbl.Scope.Current)))
+      if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
+         NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_GAMES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
+
+   /***** Write table heading *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+
+   HTM_TR_End ();
+
+   /***** Write number of games *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumGames);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumCoursesWithGames);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Double2Decimals (NumGamesPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();

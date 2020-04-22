@@ -497,7 +497,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.191 (2020-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 19.192 (2020-04-22)"
 #define CSS_FILE		"swad19.190.css"
 #define JS_FILE			"swad19.172.1.js"
 /*
@@ -551,6 +551,13 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
+
+	Version 19.192:   Apr 22, 2020	Changes in exams. (296803 lines)
+					Copy the following 4 icons to icon public directory:
+sudo cp icon/iconset/awesome/file-contract.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/file-invoice.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/nuvola/file-contract.png /var/www/html/swad/icon/iconset/nuvola
+sudo cp icon/iconset/nuvola/file-invoice.png /var/www/html/swad/icon/iconset/nuvola
 
 	Version 19.191:   Apr 20, 2020	Module swad_exam for exam announcements is renamed as swad_exam_announcement.
 					New modules swad_exam, swad_exam_event and swad_exam_result to make exams. (295885 lines)
