@@ -2552,7 +2552,7 @@ static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 /********************* Put button to create a new match **********************/
 /*****************************************************************************/
 
-void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod)
+void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod)
   {
    extern const char *Txt_New_match;
 

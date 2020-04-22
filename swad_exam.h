@@ -155,7 +155,7 @@ void Exa_RemoveQst (void);
 void Exa_MoveUpQst (void);
 void Exa_MoveDownQst (void);
 
-void Exa_PutButtonNewMatch (struct Exa_Exams *Exams,long ExaCod);
+void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
 void Exa_RequestNewEvent (void);
 
 unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);

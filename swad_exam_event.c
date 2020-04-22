@@ -141,7 +141,7 @@ static void ExaEvt_RemoveUsrEvtResultsInCrs (long UsrCod,long CrsCod,const char 
 static void ExaEvt_PutParamsPlay (void *EvtCod);
 static void ExaEvt_PutParamEvtCod (long EvtCod);
 
-static void ExaEvt_PutFormNewMatch (const struct Exa_Exam *Exam);
+static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam);
 static void ExaEvt_ShowLstGrpsToCreateEvent (void);
 
 static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1]);
@@ -334,9 +334,9 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 if (PutFormNewEvent)
-	    ExaEvt_PutFormNewMatch (Exam);			// Form to fill in data and start playing a new exam event
+	    ExaEvt_PutFormNewEvent (Exam);			// Form to fill in data and start playing a new exam event
 	 else
-	    Gam_PutButtonNewMatch (Exams,Exam->ExaCod);	// Button to create a new exam event
+	    Exa_PutButtonNewEvent (Exams,Exam->ExaCod);	// Button to create a new exam event
 	 break;
       default:
 	 break;
@@ -875,8 +875,8 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -896,7 +896,7 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
 		   Event.EvtCod);
 
    /***** Show current exam *****/
-   Gam_ShowOnlyOneGame (&Exams,&Exam,
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
                         false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
@@ -1017,8 +1017,8 @@ void ExaEvt_RequestRemoveEvent (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -1033,7 +1033,7 @@ void ExaEvt_RequestRemoveEvent (void)
 	                   Event.Title);
 
    /***** Show current exam *****/
-   Gam_ShowOnlyOneGame (&Exams,&Exam,
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
                         false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
@@ -1049,8 +1049,8 @@ void ExaEvt_RemoveEvent (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset games *****/
-   Gam_ResetGames (&Exams);
+   /***** Reset exams *****/
+   Exa_ResetExams (&Exams);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -1067,7 +1067,7 @@ void ExaEvt_RemoveEvent (void)
 		  Event.Title);
 
    /***** Show current exam *****/
-   Gam_ShowOnlyOneGame (&Exams,&Exam,
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
                         false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
@@ -1253,10 +1253,10 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
   {
    /***** Get parameters *****/
    /* Get parameters of exam */
-   if ((Exam->ExaCod = Gam_GetParams (Exams)) <= 0)
+   if ((Exam->ExaCod = Exa_GetParams (Exams)) <= 0)
       Lay_ShowErrorAndExit ("Code of exam is missing.");
    Grp_GetParamWhichGroups ();
-   Gam_GetDataOfGameByCod (Exam);
+   Exa_GetDataOfExamByCod (Exam);
 
    /* Get exam event code */
    if ((Event->EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
@@ -1284,7 +1284,7 @@ long ExaEvt_GetParamEvtCod (void)
 /* Put a big button to play exam event (start a new exam event) as a teacher */
 /*****************************************************************************/
 
-static void ExaEvt_PutFormNewMatch (const struct Exa_Exam *Exam)
+static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_New_match;
@@ -1416,7 +1416,7 @@ void ExaEvt_CreateNewEventTch (void)
    /* Get exam event title */
    Par_GetParToText ("Title",Title,Exa_MAX_BYTES_TITLE);
 
-   /* Get groups for this games */
+   /* Get groups for this exams */
    Grp_GetParCodsSeveralGrps ();
 
    /***** Create a new exam event *****/
@@ -3129,7 +3129,7 @@ static bool ExaEvt_ShowQuestionAndAnswersStd (const struct ExaEvt_Event *Event,
    unsigned NumOpt;
    char *Class;
 
-   /***** Trivial check: this question must be valid for games *****/
+   /***** Trivial check: this question must be valid for exams *****/
    if (!Tst_CheckIfQuestionIsValidForGame (Event->Status.QstCod))
       return false;
 

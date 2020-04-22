@@ -1122,7 +1122,7 @@ void ExaRes_ShowOneExaResult (void)
      {
       /***** Get questions and user's answers of the event result from database *****/
       ExaRes_GetExamResultQuestionsFromDB (Event.EvtCod,UsrDat->UsrCod,
-					   &Exam);
+					   &Result);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Event.Title,
