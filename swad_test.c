@@ -794,6 +794,8 @@ static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
+   extern const char *Txt_Continue;
+   extern const char *Txt_Send;
    unsigned NumQst;
    struct Tst_Question Question;
    static const Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
@@ -851,14 +853,14 @@ static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
         {
 	 case Tst_REQUEST:
             /* Send button */
-            Btn_PutConfirmButton ("Continuar");	// TODO: Need translation!!!
+            Btn_PutConfirmButton (Txt_Continue);
 	    break;
 	 case Tst_CONFIRM:
 	    /* Will the test exam be visible by teachers? */
             Tst_PutCheckBoxAllowTeachers (true);
 
             /* Send button */
-            Btn_PutCreateButton ("Enviar");		// TODO: Need translation!!!
+            Btn_PutCreateButton (Txt_Send);
 	    break;
         }
       Frm_EndForm ();

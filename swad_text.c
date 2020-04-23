@@ -40672,7 +40672,7 @@ const char *Txt_Send =
 #elif L==7	// it
 	"Invia";
 #elif L==8	// pl
-	"Send";		// Potrzebujesz tlumaczenie
+	"Wy&sacute;lij";
 #elif L==9	// pt
 	"Enviar";
 #endif
