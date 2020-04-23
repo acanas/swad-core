@@ -282,6 +282,16 @@ void Lay_WriteStartOfPage (void)
 	 HTM_Txt ("<body onload=\"init();\"");
 	 switch (Gbl.Action.Act)
 	   {
+	    case ActNewExaEvt:
+	    case ActResExaEvt:
+	    case ActBckExaEvt:
+	    case ActPlyPauExaEvt:
+	    case ActFwdExaEvt:
+	    case ActChgNumColExaEvt:
+	    case ActChgVisResExaEvtQst:
+	    case ActExaEvtCntDwn:
+	       HTM_Txt (" class=\"EXA_BG\"");
+	       break;
 	    case ActNewMch:
 	    case ActResMch:
 	    case ActBckMch:
