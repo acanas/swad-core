@@ -131,8 +131,6 @@ static void Gam_PutParamsOneQst (void *Games);
 static void Gam_PutHiddenParamOrder (Gam_Order_t SelectedOrder);
 static Gam_Order_t Gam_GetParamOrder (void);
 
-static void Gam_ResetGame (struct Gam_Game *Game);
-
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
@@ -173,7 +171,7 @@ static void Gam_ExchangeQuestions (long GamCod,
 static bool Gam_CheckIfEditable (const struct Gam_Game *Game);
 
 /*****************************************************************************/
-/******************************* Reset games *********************************/
+/*************************** Reset games context *****************************/
 /*****************************************************************************/
 
 void Gam_ResetGames (struct Gam_Games *Games)
@@ -192,6 +190,27 @@ void Gam_ResetGames (struct Gam_Games *Games)
   }
 
 /*****************************************************************************/
+/*************************** Initialize game to empty ************************/
+/*****************************************************************************/
+
+void Gam_ResetGame (struct Gam_Game *Game)
+  {
+   /***** Initialize to empty game *****/
+   Game->GamCod                  = -1L;
+   Game->CrsCod                  = -1L;
+   Game->UsrCod                  = -1L;
+   Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
+   Game->Visibility              = TstVis_VISIBILITY_DEFAULT;
+   Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Game->Title[0]                = '\0';
+   Game->NumQsts                 = 0;
+   Game->NumMchs                 = 0;
+   Game->NumUnfinishedMchs       = 0;
+   Game->Hidden                  = false;
+  }
+
+/*****************************************************************************/
 /***************************** List all games ********************************/
 /*****************************************************************************/
 
@@ -199,7 +218,7 @@ void Gam_SeeAllGames (void)
   {
    struct Gam_Games Games;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
@@ -225,6 +244,9 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
    struct Pagination Pagination;
    unsigned NumGame;
    struct Gam_Game Game;
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
@@ -418,8 +440,11 @@ void Gam_SeeOneGame (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -1051,27 +1076,6 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
   }
 
 /*****************************************************************************/
-/*************************** Initialize game to empty ************************/
-/*****************************************************************************/
-
-static void Gam_ResetGame (struct Gam_Game *Game)
-  {
-   /***** Initialize to empty game *****/
-   Game->GamCod                  = -1L;
-   Game->CrsCod                  = -1L;
-   Game->UsrCod                  = -1L;
-   Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
-   Game->Visibility              = TstVis_VISIBILITY_DEFAULT;
-   Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Game->Title[0]                = '\0';
-   Game->NumQsts                 = 0;
-   Game->NumMchs                 = 0;
-   Game->NumUnfinishedMchs       = 0;
-   Game->Hidden                  = false;
-  }
-
-/*****************************************************************************/
 /***************************** Free list of games ****************************/
 /*****************************************************************************/
 
@@ -1131,8 +1135,11 @@ void Gam_AskRemGame (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -1165,8 +1172,11 @@ void Gam_RemoveGame (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
@@ -1241,8 +1251,11 @@ void Gam_HideGame (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -1271,8 +1284,11 @@ void Gam_UnhideGame (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -1318,8 +1334,11 @@ void Gam_RequestCreatOrEditGame (void)
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
@@ -1473,8 +1492,11 @@ void Gam_RecFormGame (void)
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
@@ -1650,8 +1672,11 @@ void Gam_RequestNewQuestion (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -1683,8 +1708,11 @@ void Gam_ListTstQuestionsToSelect (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2150,8 +2178,11 @@ void Gam_AddTstQuestionsToGame (void)
    long QstCod;
    unsigned MaxQstInd;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2270,8 +2301,11 @@ void Gam_RequestRemoveQst (void)
    struct Gam_Game Game;
    unsigned QstInd;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2313,8 +2347,11 @@ void Gam_RemoveQst (void)
    struct Gam_Game Game;
    unsigned QstInd;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2377,8 +2414,11 @@ void Gam_MoveUpQst (void)
    unsigned QstIndTop;
    unsigned QstIndBottom;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2432,8 +2472,11 @@ void Gam_MoveDownQst (void)
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -2569,8 +2612,11 @@ void Gam_RequestNewMatch (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)

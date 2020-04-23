@@ -248,6 +248,31 @@ long Mch_GetMchCodBeingPlayed (void)
   }
 
 /*****************************************************************************/
+/********************************* Reset match *******************************/
+/*****************************************************************************/
+
+void Mch_ResetMatch (struct Mch_Match *Match)
+  {
+   /***** Initialize to empty match *****/
+   Match->MchCod                  = -1L;
+   Match->GamCod                  = -1L;
+   Match->UsrCod                  = -1L;
+   Match->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Match->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Match->Title[0]                = '\0';
+   Match->Status.QstInd           = 0;
+   Match->Status.QstCod           = -1L;
+   Match->Status.QstStartTimeUTC  = (time_t) 0;
+   Match->Status.Showing          = Mch_SHOWING_DEFAULT;
+   Match->Status.Countdown        = 0;
+   Match->Status.NumCols          = 1;
+   Match->Status.ShowQstResults   = false;
+   Match->Status.ShowUsrResults   = false;
+   Match->Status.Playing          = false;
+   Match->Status.NumPlayers       = 0;
+  };
+
+/*****************************************************************************/
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
 
@@ -452,6 +477,9 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    unsigned UniqueId;
    struct Mch_Match Match;
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -875,8 +903,12 @@ void Mch_ToggleVisibilResultsMchUsr (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Games,&Game,&Match);
@@ -1017,8 +1049,12 @@ void Mch_RequestRemoveMatch (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Games,&Game,&Match);
@@ -1049,8 +1085,12 @@ void Mch_RemoveMatch (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Games,&Game,&Match);
@@ -1433,6 +1473,9 @@ void Mch_CreateNewMatchTch (void)
 void Mch_ResumeMatch (void)
   {
    struct Mch_Match Match;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -1874,6 +1917,9 @@ void Mch_PlayPauseMatch (void)
   {
    struct Mch_Match Match;
 
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
+
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
@@ -1908,6 +1954,9 @@ void Mch_ChangeNumColsMch (void)
   {
    struct Mch_Match Match;
 
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
+
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
@@ -1941,6 +1990,9 @@ void Mch_ToggleVisibilResultsMchQst (void)
   {
    struct Mch_Match Match;
 
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
+
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
@@ -1973,6 +2025,9 @@ void Mch_BackMatch (void)
   {
    struct Mch_Match Match;
 
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
+
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
@@ -2001,6 +2056,9 @@ void Mch_BackMatch (void)
 void Mch_ForwardMatch (void)
   {
    struct Mch_Match Match;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -3628,6 +3686,9 @@ void Mch_JoinMatchAsStd (void)
   {
    struct Mch_Match Match;
 
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
+
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
    Mch_GetDataOfMatchByCod (&Match);
@@ -3646,6 +3707,9 @@ void Mch_RemoveMyQuestionAnswer (void)
   {
    struct Mch_Match Match;
    unsigned QstInd;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -3676,6 +3740,9 @@ void Mch_StartCountdown (void)
   {
    struct Mch_Match Match;
    long NewCountdown;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Get countdown parameter ****/
    NewCountdown = Par_GetParToLong ("Countdown");
@@ -3710,6 +3777,9 @@ void Mch_RefreshMatchTch (void)
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Remove old players.
           This function must be called by a teacher
@@ -3767,6 +3837,9 @@ void Mch_RefreshMatchStd (void)
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -3829,6 +3902,9 @@ void Mch_ReceiveQuestionAnswer (void)
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
    struct TstRes_Result Result;
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();

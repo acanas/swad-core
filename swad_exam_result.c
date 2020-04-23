@@ -116,7 +116,7 @@ void ExaRes_ShowMyExaResultsInCrs (void)
    extern const char *Txt_Results;
    struct Exa_Exams Exams;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
    /***** Get list of exams *****/
@@ -157,8 +157,11 @@ void ExaRes_ShowMyExaResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -203,8 +206,12 @@ void ExaRes_ShowMyExaResultsInEvt (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -248,7 +255,7 @@ void ExaRes_ShowAllExaResultsInCrs (void)
   {
    struct Exa_Exams Exams;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
    /***** Get users and show their events results *****/
@@ -319,7 +326,7 @@ void ExaRes_SelUsrsToViewExaResults (void)
   {
    struct Exa_Exams Exams;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
    /***** Put form to select users *****/
@@ -352,8 +359,11 @@ void ExaRes_ShowAllExaResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -439,8 +449,12 @@ void ExaRes_ShowAllExaResultsInEvt (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -567,6 +581,9 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
    unsigned UniqueId;
    unsigned NumExam;
    struct Exa_Exam Exam;
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Exams,
@@ -744,6 +761,9 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    double TotalGrade = 0.0;
    unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
@@ -1068,8 +1088,12 @@ void ExaRes_ShowOneExaResult (void)
    bool ICanViewResult;
    bool ICanViewScore;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);

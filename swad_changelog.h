@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.193.3 (2020-04-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.193.4 (2020-04-23)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.193.4: Apr 23, 2020	Fixed bugs in exams, exam events, games and matches. (297860 lines)
 	Version 19.193.3: Apr 23, 2020	Added new MIME type, reported by Jesús Garrido Manrique.
 					Changed text in test configuration. (297640 lines)
 					1 change necessary in database:

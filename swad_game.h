@@ -98,6 +98,7 @@ struct Gam_Game
 /*****************************************************************************/
 
 void Gam_ResetGames (struct Gam_Games *Games);
+void Gam_ResetGame (struct Gam_Game *Game);
 
 void Gam_SeeAllGames (void);
 void Gam_SeeOneGame (void);

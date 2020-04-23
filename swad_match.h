@@ -85,6 +85,8 @@ struct Mch_UsrAnswer
 
 long Mch_GetMchCodBeingPlayed (void);
 
+void Mch_ResetMatch (struct Mch_Match *Match);
+
 void Mch_ListMatches (struct Gam_Games *Games,
                       struct Gam_Game *Game,
                       bool PutFormNewMatch);

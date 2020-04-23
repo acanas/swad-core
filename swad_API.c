@@ -4973,6 +4973,9 @@ int swad__getMatches (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
+
    /***** Get game data from database *****/
    Game.GamCod = (long) gameCode;
    if (Game.GamCod <= 0)
@@ -5130,8 +5133,8 @@ int swad__getMatchStatus (struct soap *soap,
                           struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
   {
    int ReturnCode;
-   struct Mch_Match Match;
    struct Gam_Game Game;
+   struct Mch_Match Match;
    bool ICanPlayThisMatchBasedOnGrps;
    unsigned NumOptions;
    struct Mch_UsrAnswer UsrAnswer;
@@ -5147,6 +5150,10 @@ int swad__getMatchStatus (struct soap *soap,
       return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get match data from database *****/
    Match.MchCod = (long) matchCode;

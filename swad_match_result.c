@@ -115,7 +115,7 @@ void MchRes_ShowMyMchResultsInCrs (void)
    extern const char *Txt_Results;
    struct Gam_Games Games;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Get list of games *****/
@@ -156,8 +156,11 @@ void MchRes_ShowMyMchResultsInGam (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -202,8 +205,12 @@ void MchRes_ShowMyMchResultsInMch (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -247,7 +254,7 @@ void MchRes_ShowAllMchResultsInCrs (void)
   {
    struct Gam_Games Games;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Get users and show their matches results *****/
@@ -318,7 +325,7 @@ void MchRes_SelUsrsToViewMchResults (void)
   {
    struct Gam_Games Games;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Put form to select users *****/
@@ -351,8 +358,11 @@ void MchRes_ShowAllMchResultsInGam (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -438,8 +448,12 @@ void MchRes_ShowAllMchResultsInMch (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
@@ -566,6 +580,9 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
    unsigned UniqueId;
    unsigned NumGame;
    struct Gam_Game Game;
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Games,
@@ -743,6 +760,9 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    double TotalGrade = 0.0;
    unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
+
+   /***** Reset match *****/
+   Mch_ResetMatch (&Match);
 
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
@@ -1067,8 +1087,12 @@ void MchRes_ShowOneMchResult (void)
    bool ICanViewResult;
    bool ICanViewScore;
 
-   /***** Reset games *****/
+   /***** Reset games context *****/
    Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Games,&Game,&Match);

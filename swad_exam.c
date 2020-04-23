@@ -134,8 +134,6 @@ static void Exa_PutParamsOneQst (void *Exams);
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParamOrder (void);
 
-static void Exa_ResetExam (struct Exa_Exam *Exam);
-
 static void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Exa_RemoveExamFromAllTables (long ExaCod);
@@ -195,6 +193,27 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
   }
 
 /*****************************************************************************/
+/*************************** Initialize exam to empty ************************/
+/*****************************************************************************/
+
+void Exa_ResetExam (struct Exa_Exam *Exam)
+  {
+   /***** Initialize to empty exam *****/
+   Exam->ExaCod                  = -1L;
+   Exam->CrsCod                  = -1L;
+   Exam->UsrCod                  = -1L;
+   Exam->MaxGrade                = Exa_MAX_GRADE_DEFAULT;
+   Exam->Visibility              = TstVis_VISIBILITY_DEFAULT;
+   Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Exam->Title[0]                = '\0';
+   Exam->NumQsts                 = 0;
+   Exam->NumEvts                 = 0;
+   Exam->NumUnfinishedEvts       = 0;
+   Exam->Hidden                  = false;
+  }
+
+/*****************************************************************************/
 /***************************** List all exams ********************************/
 /*****************************************************************************/
 
@@ -202,7 +221,7 @@ void Exa_SeeAllExams (void)
   {
    struct Exa_Exams Exams;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
@@ -421,8 +440,11 @@ void Exa_SeeOneExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -1054,27 +1076,6 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
   }
 
 /*****************************************************************************/
-/*************************** Initialize exam to empty ************************/
-/*****************************************************************************/
-
-static void Exa_ResetExam (struct Exa_Exam *Exam)
-  {
-   /***** Initialize to empty exam *****/
-   Exam->ExaCod                  = -1L;
-   Exam->CrsCod                  = -1L;
-   Exam->UsrCod                  = -1L;
-   Exam->MaxGrade                = Exa_MAX_GRADE_DEFAULT;
-   Exam->Visibility              = TstVis_VISIBILITY_DEFAULT;
-   Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Exam->Title[0]                = '\0';
-   Exam->NumQsts                 = 0;
-   Exam->NumEvts                 = 0;
-   Exam->NumUnfinishedEvts       = 0;
-   Exam->Hidden                  = false;
-  }
-
-/*****************************************************************************/
 /***************************** Free list of exams ****************************/
 /*****************************************************************************/
 
@@ -1134,8 +1135,11 @@ void Exa_AskRemExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -1168,8 +1172,11 @@ void Exa_RemoveExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get exam code *****/
    if ((Exam.ExaCod = Exa_GetParamExamCod ()) == -1L)
@@ -1244,8 +1251,11 @@ void Exa_HideExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -1274,8 +1284,11 @@ void Exa_UnhideExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -1321,8 +1334,11 @@ void Exa_RequestCreatOrEditExam (void)
    bool ItsANewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1476,8 +1492,11 @@ void Exa_RecFormExam (void)
    bool ItsANewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1653,8 +1672,11 @@ void Exa_RequestNewQuestion (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -1686,8 +1708,11 @@ void Exa_ListTstQuestionsToSelect (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2153,8 +2178,11 @@ void Exa_AddTstQuestionsToExam (void)
    long QstCod;
    unsigned MaxQstInd;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2273,8 +2301,11 @@ void Exa_RequestRemoveQst (void)
    struct Exa_Exam Exam;
    unsigned QstInd;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2316,8 +2347,11 @@ void Exa_RemoveQst (void)
    struct Exa_Exam Exam;
    unsigned QstInd;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2380,8 +2414,11 @@ void Exa_MoveUpQst (void)
    unsigned QstIndTop;
    unsigned QstIndBottom;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2435,8 +2472,11 @@ void Exa_MoveDownQst (void)
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
@@ -2572,8 +2612,11 @@ void Exa_RequestNewEvent (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
    if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)

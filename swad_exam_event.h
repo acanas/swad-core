@@ -85,6 +85,8 @@ struct ExaEvt_UsrAnswer
 
 long ExaEvt_GetEvtCodBeingPlayed (void);
 
+void ExaEvt_ResetEvent (struct ExaEvt_Event *Event);
+
 void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                         struct Exa_Exam *Exam,
                         bool PutFormNewEvent);

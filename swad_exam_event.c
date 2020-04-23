@@ -248,6 +248,31 @@ long ExaEvt_GetEvtCodBeingPlayed (void)
   }
 
 /*****************************************************************************/
+/****************************** Reset exam event *****************************/
+/*****************************************************************************/
+
+void ExaEvt_ResetEvent (struct ExaEvt_Event *Event)
+  {
+   /***** Initialize to empty match *****/
+   Event->EvtCod                  = -1L;
+   Event->ExaCod                  = -1L;
+   Event->UsrCod                  = -1L;
+   Event->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Event->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Event->Title[0]                = '\0';
+   Event->Status.QstInd           = 0;
+   Event->Status.QstCod           = -1L;
+   Event->Status.QstStartTimeUTC  = (time_t) 0;
+   Event->Status.Showing          = ExaEvt_SHOWING_DEFAULT;
+   Event->Status.Countdown        = 0;
+   Event->Status.NumCols          = 1;
+   Event->Status.ShowQstResults   = false;
+   Event->Status.ShowUsrResults   = false;
+   Event->Status.Happening        = false;
+   Event->Status.NumParticipants  = 0;
+  };
+
+/*****************************************************************************/
 /************************* List the events of an exam ************************/
 /*****************************************************************************/
 
@@ -452,6 +477,9 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
    unsigned UniqueId;
    struct ExaEvt_Event Event;
    bool ICanEditEvents = ExaEvt_CheckIfICanEditEvents ();
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -875,8 +903,12 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -1017,8 +1049,12 @@ void ExaEvt_RequestRemoveEvent (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -1049,8 +1085,12 @@ void ExaEvt_RemoveEvent (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
 
-   /***** Reset exams *****/
+   /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
@@ -1433,6 +1473,9 @@ void ExaEvt_CreateNewEventTch (void)
 void ExaEvt_ResumeEvent (void)
   {
    struct ExaEvt_Event Event;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Remove old participants.
           This function must be called by a teacher
@@ -1874,6 +1917,9 @@ void ExaEvt_PlayPauseEvent (void)
   {
    struct ExaEvt_Event Event;
 
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
+
    /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
@@ -1908,6 +1954,9 @@ void ExaEvt_ChangeNumColsEvt (void)
   {
    struct ExaEvt_Event Event;
 
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
+
    /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
@@ -1941,6 +1990,9 @@ void ExaEvt_ToggleVisibilResultsEvtQst (void)
   {
    struct ExaEvt_Event Event;
 
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
+
    /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
@@ -1973,6 +2025,9 @@ void ExaEvt_BackEvent (void)
   {
    struct ExaEvt_Event Event;
 
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
+
    /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
@@ -2001,6 +2056,9 @@ void ExaEvt_BackEvent (void)
 void ExaEvt_ForwardEvent (void)
   {
    struct ExaEvt_Event Event;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Remove old participants.
           This function must be called by a teacher
@@ -3624,6 +3682,9 @@ void ExaEvt_JoinEventAsStd (void)
   {
    struct ExaEvt_Event Event;
 
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
+
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
    ExaEvt_GetDataOfEventByCod (&Event);
@@ -3642,6 +3703,9 @@ void ExaEvt_RemoveMyQuestionAnswer (void)
   {
    struct ExaEvt_Event Event;
    unsigned QstInd;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3672,6 +3736,9 @@ void ExaEvt_StartCountdown (void)
   {
    struct ExaEvt_Event Event;
    long NewCountdown;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get countdown parameter ****/
    NewCountdown = Par_GetParToLong ("Countdown");
@@ -3706,6 +3773,9 @@ void ExaEvt_RefreshEventTch (void)
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Remove old participants.
           This function must be called by a teacher
@@ -3763,6 +3833,9 @@ void ExaEvt_RefreshEventStd (void)
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3825,6 +3898,9 @@ void ExaEvt_ReceiveQuestionAnswer (void)
    struct ExaEvt_UsrAnswer PreviousUsrAnswer;
    struct ExaEvt_UsrAnswer UsrAnswer;
    struct TstRes_Result Result;
+
+   /***** Reset event *****/
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();

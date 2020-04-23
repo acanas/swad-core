@@ -99,6 +99,7 @@ struct Exa_Exam
 /*****************************************************************************/
 
 void Exa_ResetExams (struct Exa_Exams *Exams);
+void Exa_ResetExam (struct Exa_Exam *Exam);
 
 void Exa_SeeAllExams (void);
 void Exa_SeeOneExam (void);
