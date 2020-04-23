@@ -1464,11 +1464,11 @@ static void Tst_PutButtonToAddQuestion (void)
 
 void Tst_ShowFormConfig (void)
   {
-   extern const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications;
+   extern const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications;
 
    /***** If current course has tests and pluggable is unknown... *****/
    if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications);
 
    /***** Form to configure test *****/
    Tst_ShowFormConfigTst ();
@@ -1668,7 +1668,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
       row = mysql_fetch_row (mysql_res);
 
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-      for (Pluggable = TstCfg_PLUGGABLE_NO;
+      for (Pluggable  = TstCfg_PLUGGABLE_NO;
 	   Pluggable <= TstCfg_PLUGGABLE_YES;
 	   Pluggable++)
          if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
@@ -1847,7 +1847,7 @@ static void Tst_ShowFormSelTags (const struct Tst_Tags *Tags,
 
 static void Tst_ShowFormEditTags (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
+   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -1862,7 +1862,7 @@ static void Tst_ShowFormEditTags (void)
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Tags,
                          NULL,NULL,
-                         Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE,2);
+                         Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE,2);
 
       /***** Show tags *****/
       for (NumTag = 0;
@@ -1952,7 +1952,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
 
 static void Tst_ShowFormConfigTst (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
@@ -1977,7 +1977,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_tests,
                  Tst_PutIconsTests,&Test,
-                 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvCfgTst);
@@ -1991,7 +1991,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
-   for (Pluggable = TstCfg_PLUGGABLE_NO;
+   for (Pluggable  = TstCfg_PLUGGABLE_NO;
 	Pluggable <= TstCfg_PLUGGABLE_YES;
 	Pluggable++)
      {
@@ -2000,7 +2000,7 @@ static void Tst_ShowFormConfigTst (void)
 		       "value=\"%u\"%s",
 		       (unsigned) Pluggable,
 		       Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :
-				                                "");
+				                                   "");
       HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
       HTM_LABEL_End ();
       HTM_BR ();

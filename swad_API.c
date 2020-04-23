@@ -4022,7 +4022,7 @@ int swad__getTestConfig (struct soap *soap,
    if ((ReturnCode = API_GetTstConfig ((long) courseCode)) != SOAP_OK)
       return ReturnCode;
    getTestConfigOut->pluggable = (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES) ? 1 :
-	                                                                               0;
+	                                                                                  0;
    getTestConfigOut->minQuestions = (int) TstCfg_GetConfigMin ();
    getTestConfigOut->defQuestions = (int) TstCfg_GetConfigDef ();
    getTestConfigOut->maxQuestions = (int) TstCfg_GetConfigMax ();

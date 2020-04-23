@@ -30687,34 +30687,25 @@ const char *Txt_Please_select_your_institution =
 	"Por favor, selecione sua institui&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications =
+const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications =
 #if   L==1	// ca
-	"Por favor, especifique si permite el acceso"
-	" a las preguntas de test desde aplicaciones m&oacute;viles.";	// Necessita traduccio
+	"Si us plau, especifiqui si permet la desc&agrave;rrega de el banc de preguntes des d'altres aplicacions.";
 #elif L==2	// de
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";			// Need Übersetzung
+	"Bitte geben Sie an, ob Sie das Herunterladen der Fragenbank aus anderen Anwendungen zulassen.";
 #elif L==3	// en
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";
+	"Please specify if you allow downloading the question bank from other applications.";
 #elif L==4	// es
-	"Por favor, especifique si permite el acceso"
-	" a las preguntas de test desde aplicaciones m&oacute;viles.";
+	"Por favor, especifique si permite la descarga del banco de preguntas desde otras aplicaciones.";
 #elif L==5	// fr
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";			// Besoin de traduction
+	"Veuillez indiquer si vous autorisez le t&eacute;l&eacute;chargement de la banque de questions &agrave; partir d'autres applications.";
 #elif L==6	// gn
-	"Por favor, especifique si permite el acceso"
-	" a las preguntas de test desde aplicaciones m&oacute;viles.";	// Okoteve traducción
+	"Por favor, especifique si permite la descarga del banco de preguntas desde otras aplicaciones.";	// Okoteve traducción
 #elif L==7	// it
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";			// Bisogno di traduzione
+	"Si prega di specificare se si consente il download della banca delle domande da altre applicazioni.";
 #elif L==8	// pl
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";			// Potrzebujesz tlumaczenie
+	"Okre&sacute;l, czy zezwalasz na pobieranie banku pyta&nacute; z innych aplikacji.";
 #elif L==9	// pt
-	"Por favor, especifique se voc&ecirc; permite acesso"
-	" para perguntas de teste de aplicativos para dispositivos m&oacute;veis.";
+	"Por favor, especifique se voc&ecirc; deseja baixar o banco de perguntas de outros aplicativos.";
 #endif
 
 const char *Txt_Please_wait_ =
@@ -52997,44 +52988,44 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 	"",
 	[TstCfg_PLUGGABLE_NO] =
 #if   L==1	// ca
-	"Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
+	"Banc de preguntes no descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
 #elif L==2	// de
-	"Tests nicht zum Download aus Handys (SWADroid, TriSWADos)"
+	"Fragenbank nicht herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
 #elif L==3	// en
-	"Tests not downloadable from mobile phones (SWADroid, TriSWADos)"
+	"Question bank not downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==4	// es
-	"Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"
+	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
 #elif L==5	// fr
-	"Tests non t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos)"
+	"Banque de questions non t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==6	// gn
-	"Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"	// Okoteve traducción
+	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
 #elif L==7	// it
-	"Test non scaricabili da cellulari (SWADroid, TriSWADos)"
+	"Banca di domande non scaricabile/visibile da altre applicazioni (SWADroid, iSWAD, TriSWADos)."
 #elif L==8	// pl
-	"Nie Testy pobrania z kom&oacute;rkowych (SWADroid, TriSWADos)"
+	"Bank pyta&nacute; nie do pobrania/widoczny z innych aplikacji (SWADroid, iSWAD, TriSWADos)."
 #elif L==9	// pt
-	"Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
+	"Banco de perguntas n&atilde;o dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
 #endif
 	,
 	[TstCfg_PLUGGABLE_YES] =
 #if   L==1	// ca
-	"Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
+	"Banc de preguntes descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
 #elif L==2	// de
-	"Tests zum Download aus Handys (SWADroid, TriSWADos), empfohlene Option"
+	"Fragenbank herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
 #elif L==3	// en
-	"Tests downloadable from mobile phones (SWADroid, TriSWADos), recommended option"
+	"Question bank downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==4	// es
-	"Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"
+	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
 #elif L==5	// fr
-	"Tests t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos), option recommand&eacute;e"
+	"Banque de questions t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==6	// gn
-	"Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"// Okoteve traducción
+	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
 #elif L==7	// it
-	"Test scaricabili da cellulari (SWADroid, TriSWADos), opzione consigliata"
+	"Banca di domande scaricabile/visibile da altre applicazioni (SWADroid, iSWAD, TriSWADos)."
 #elif L==8	// pl
-	"Testy do pobrania z kom&oacute;rkowych (SWADroid, TriSWADos), zalecana opcja"
+	"Bank pyta&nacute; do pobrania/widoczny z innych aplikacji (SWADroid, iSWAD, TriSWADos)."
 #elif L==9	// pt
-	"Testes para download de celulares (SWADroid, TriSWADos), op&ccedil;&atilde;o recomendada"
+	"Banco de perguntas dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
 #endif
 	};
 

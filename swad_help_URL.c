@@ -1369,6 +1369,27 @@ const char *Hlp_ASSESSMENT_Tests_writing_a_question =
 	"ASSESSMENT.Tests.en#writing-a-question";
 #endif
 
+const char *Hlp_ASSESSMENT_Tests_configuring_tests =
+#if   L==1
+	"ASSESSMENT.Tests.es#configurar-test";
+#elif L==2
+	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==3
+	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==4
+	"ASSESSMENT.Tests.es#configurar-test";
+#elif L==5
+	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==6
+	"ASSESSMENT.Tests.es#configurar-test";
+#elif L==7
+	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==8
+	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==9
+	"ASSESSMENT.Tests.en#configuring-tests";
+#endif
+
 const char *Hlp_ASSESSMENT_Tests_results =
 #if   L==1
 	"ASSESSMENT.Tests.es#resultados";

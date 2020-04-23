@@ -106,6 +106,7 @@ const char *MIM_MIMETypesAllowed[] =
    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",		// Excel Microsoft Office Open XML Format Spreadsheet .xlsx
    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",	// Word Microsoft Office Open XML Format Document .docx
    "application/vnd.pdf",		// PDF
+   "application/vnd.rar",		// RAR
    "application/vnd.wolfram.mathematica.package",		// Octave .m file
    "application/x-7z-compressed",	// 7 zip compressed file
    "application/x-bz2",			// Bzip 2 UNIX Compressed File

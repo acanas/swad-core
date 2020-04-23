@@ -479,33 +479,7 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: Al exportar tests, los & hay que exportarlos como &amp; o &#numero;, ya que un & no es correcto en XML.
 // TODO: Junto al enlace test.xml hay que indicar que se descarga con "Guardar enlace como..." porque si se abre, se copia y se pega, son incorrectos los <
 
-/*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
-
-// Size of photos:
-// find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
-// find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
-// Number of lines (includes comments but not blank lines) has been got with the following command:
-// nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
-/* Printing:
-En local:
-enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_1_columna.ps
-enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_1_columna.ps
-enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_2_columnas.ps
-enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_2_columnas.ps
-En OpenSWAD:
-ps2pdf source.ps destination.pdf
-*/
-#define Log_PLATFORM_VERSION	"SWAD 19.193.2 (2020-04-23)"
-#define CSS_FILE		"swad19.193.1.css"
-#define JS_FILE			"swad19.193.1.js"
-/*
- *
-    Call parameters:
-        userID: string (DNI/passport, @nickname or email of the user).
-// TODO: Geolocalización:
-
+/* TODO: Geolocalización:
 
 Función API sendCurrentLocation...
 Parámetros a enviar a la función:
@@ -533,15 +507,15 @@ Función API getLocations
 2. Añadir lista desplegable de MAC asociadas a una ubicación
 3. API: getLocations (como parámetro se pasa la MAC)
     - que devolveria las filas de la tabla de ubicaciones asociadas a esa MAC
-
+*/
 
 // TODO: Sugerencia de Jesús García Miranda. En las preguntas de tipo test de elección única (o un nuevo tipo con un nuevo nombre),
-                                             poner por ejemplo 10 o 20 opciones, con 3 o 4 verdaderas y las demás falsas,
-                                             y que swad saque una pregunta de 4 cogiendo una verdadera y 3 falsas al azar.
+//                                           poner por ejemplo 10 o 20 opciones, con 3 o 4 verdaderas y las demás falsas,
+//                                           y que swad saque una pregunta de 4 cogiendo una verdadera y 3 falsas al azar.
 // TODO: Laura García: "Ahora estoy utilizando la plataforma SWAD más que nunca, evidentemente, debido a las circunstancias, e incluso les he hecho un examencillo a los alumnos utilizando los test de autoevaluación.
-                        Pero quería preguntarte un par de cosas:
-                        - lo primero es si se pueden borrar los test realizados por cualquier usuario, incluido profesores. Yo misma he hecho un montón para simular el examen, y ya me están sobrando.
-                        - por otra parte, he buscado pero no he encontrado, la posibilidad de cambiar la manera de corregir los tes, quitar la penalización por respuesta negativa,, o cambiarla, etc.. La verdad es que si se puede hacer me facilitaría un montón el trabajo próximo que nos espera con los alumnos."
+//                      Pero quería preguntarte un par de cosas:
+//                      - lo primero es si se pueden borrar los test realizados por cualquier usuario, incluido profesores. Yo misma he hecho un montón para simular el examen, y ya me están sobrando.
+//                      - por otra parte, he buscado pero no he encontrado, la posibilidad de cambiar la manera de corregir los tes, quitar la penalización por respuesta negativa,, o cambiarla, etc.. La verdad es que si se puede hacer me facilitaría un montón el trabajo próximo que nos espera con los alumnos."
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: No se puede entrar con DNI '1' suponiendo que no tenga password ¿por qué?
@@ -551,6 +525,33 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
+
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+// Size of photos:
+// find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
+// find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
+// Number of lines (includes comments but not blank lines) has been got with the following command:
+// nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
+/* Printing:
+En local:
+enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_1_columna.ps
+enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_1_columna.ps
+enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_2_columnas.ps
+enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_2_columnas.ps
+En OpenSWAD:
+ps2pdf source.ps destination.pdf
+*/
+#define Log_PLATFORM_VERSION	"SWAD 19.193.3 (2020-04-23)"
+#define CSS_FILE		"swad19.193.1.css"
+#define JS_FILE			"swad19.193.1.js"
+/*
+	Version 19.193.3: Apr 23, 2020	Added new MIME type, reported by Jesús Garrido Manrique.
+					Changed text in test configuration. (297640 lines)
+					1 change necessary in database:
+UPDATE tst_config SET Pluggable='unknown' WHERE Pluggable='Y';
 
 	Version 19.193.2: Apr 23, 2020	Buttons translated in tests. (297626 lines)
 	Version 19.193.1: Apr 23, 2020	Changes in CSS for exams.

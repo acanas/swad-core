@@ -135,7 +135,7 @@ void TstCfg_GetConfigFromRow (MYSQL_ROW row)
 
    /***** Get whether test are visible via plugins or not *****/
    TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-   for (Pluggable = TstCfg_PLUGGABLE_NO;
+   for (Pluggable  = TstCfg_PLUGGABLE_NO;
 	Pluggable <= TstCfg_PLUGGABLE_YES;
 	Pluggable++)
       if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
