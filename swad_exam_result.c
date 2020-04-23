@@ -949,7 +949,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 		  ExaEvt_PutParamsEdit (Exams);
 		  break;
 	       case Usr_OTHER:
-		  Frm_StartForm (ActSeeOneMchResOth);
+		  Frm_StartForm (ActSeeOneExaEvtResOth);
 		  ExaEvt_PutParamsEdit (Exams);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
@@ -1075,8 +1075,8 @@ void ExaRes_ShowOneExaResult (void)
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
-	                                               Usr_OTHER;
+   MeOrOther = (Gbl.Action.Act == ActSeeOneExaEvtResMe) ? Usr_ME :
+	                                                  Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:

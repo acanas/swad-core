@@ -39,6 +39,7 @@
 #include "swad_connected.h"
 #include "swad_database.h"
 #include "swad_exam_announcement.h"
+#include "swad_exam_event.h"
 #include "swad_firewall.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -751,16 +752,24 @@ static void Lay_WriteScriptInit (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    bool RefreshConnected;
-   bool RefreshNewTimeline = false;
-   bool RefreshMatchStd    = false;
-   bool RefreshMatchTch    = false;
-   bool RefreshLastClicks  = false;
+   bool RefreshLastClicks   = false;
+   bool RefreshNewTimeline  = false;
+   bool RefreshExamEventStd = false;
+   bool RefreshExamEventTch = false;
+   bool RefreshMatchStd     = false;
+   bool RefreshMatchTch     = false;
 
    RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
 	              (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN);	// Right column visible
 
    switch (Gbl.Action.Act)
      {
+      /* Last clicks */
+      case ActLstClk:
+	 RefreshLastClicks = true;
+	 break;
+
+      /* Timeline */
       case ActSeeSocTmlGbl:
       case ActRcvSocPstGbl:
       case ActRcvSocComGbl:
@@ -770,6 +779,26 @@ static void Lay_WriteScriptInit (void)
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
 	 break;
+
+      /* Exam event */
+      case ActJoiExaEvt:
+      case ActSeeExaEvtAnsQstStd:
+      case ActRemExaEvtAnsQstStd:
+      case ActAnsExaEvtQstStd:
+	 RefreshExamEventStd = true;
+	 break;
+      case ActNewExaEvt:
+      case ActResExaEvt:
+      case ActBckExaEvt:
+      case ActPlyPauExaEvt:
+      case ActFwdExaEvt:
+      case ActChgNumColExaEvt:
+      case ActChgVisResExaEvtQst:
+      case ActExaEvtCntDwn:
+	 RefreshExamEventTch = true;
+	 break;
+
+      /* Match */
       case ActJoiMch:
       case ActSeeMchAnsQstStd:
       case ActRemMchAnsQstStd:
@@ -786,9 +815,7 @@ static void Lay_WriteScriptInit (void)
       case ActMchCntDwn:
 	 RefreshMatchTch = true;
 	 break;
-      case ActLstClk:
-	 RefreshLastClicks = true;
-	 break;
+
       default:
 	 break;
      }
@@ -797,11 +824,15 @@ static void Lay_WriteScriptInit (void)
 
    Dat_WriteScriptMonths ();
 
-   if (RefreshNewTimeline)	// Refresh new timeline via AJAX
+   if (RefreshNewTimeline)		// Refresh new timeline via AJAX
       HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshMatchStd)	// Refresh match via AJAX
+   else if (RefreshExamEventStd)	// Refresh exam event via AJAX
+      HTM_TxtF ("\tvar delayExamEvent = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
+   else if (RefreshExamEventTch)	// Refresh exam event via AJAX
+      HTM_TxtF ("\tvar delayExamEvent = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
+   else if (RefreshMatchStd)		// Refresh match via AJAX
       HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
-   else if (RefreshMatchTch)	// Refresh match via AJAX
+   else if (RefreshMatchTch)		// Refresh match via AJAX
       HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
    /***** Function init () ******/
@@ -816,15 +847,19 @@ static void Lay_WriteScriptInit (void)
 	        Gbl.Usrs.Connected.TimeToRefreshInMs);
      }
 
-   if (RefreshLastClicks)	// Refresh last clicks via AJAX
+   if (RefreshLastClicks)		// Refresh last clicks via AJAX
       HTM_TxtF ("\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
                 Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (RefreshMatchStd)	// Refresh match for a student via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
-   else if (RefreshMatchTch)	// Refresh match for a teacher via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
-   else if (RefreshNewTimeline)	// Refresh timeline via AJAX
+   else if (RefreshNewTimeline)		// Refresh timeline via AJAX
       HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
+   else if (RefreshExamEventStd)	// Refresh exam event for a student via AJAX
+      HTM_Txt ("\tsetTimeout(\"refreshExamEventStd()\",delayExamEvent);\n");
+   else if (RefreshExamEventTch)	// Refresh exam event for a teacher via AJAX
+      HTM_Txt ("\tsetTimeout(\"refreshExamEventTch()\",delayExamEvent);\n");
+   else if (RefreshMatchStd)		// Refresh match for a student via AJAX
+      HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
+   else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
+      HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
 
    HTM_Txt ("}\n");
 
@@ -901,6 +936,34 @@ static void Lay_WriteScriptParamsAJAX (void)
 		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		   Act_GetActCod (ActRefOldSocPubUsr),
 		   Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 break;
+      /* Parameters related with exam event refreshing (for students) */
+      case ActJoiExaEvt:
+      case ActSeeExaEvtAnsQstStd:
+      case ActRemExaEvtAnsQstStd:
+      case ActAnsExaEvtQstStd:
+	 // Refresh parameters
+	 HTM_TxtF ("var RefreshParamNxtActExaEvt = \"act=%ld\";\n"
+	           "var RefreshParamExaEvtCod = \"EvtCod=%ld\";\n",
+		   Act_GetActCod (ActRefExaEvtStd),
+		   ExaEvt_GetEvtCodBeingPlayed ());
+	 break;
+      /* Parameters related with exam event refreshing (for teachers) */
+      case ActNewExaEvt:
+      case ActResExaEvt:
+      case ActBckExaEvt:
+      case ActPlyPauExaEvt:
+      case ActFwdExaEvt:
+      case ActChgNumColExaEvt:
+      case ActChgVisResExaEvtQst:
+      case ActExaEvtCntDwn:
+	 // Handle keys in keyboard/presenter
+	 HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
+	 // Refresh parameters
+	 HTM_TxtF ("var RefreshParamNxtActExaEvt = \"act=%ld\";\n"
+		   "var RefreshParamExaEvtCod = \"EvtCod=%ld\";\n",
+		   Act_GetActCod (ActRefExaEvtTch),
+		   ExaEvt_GetEvtCodBeingPlayed ());
 	 break;
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:

@@ -497,9 +497,9 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.193 (2020-04-22)"
-#define CSS_FILE		"swad19.190.css"
-#define JS_FILE			"swad19.172.1.js"
+#define Log_PLATFORM_VERSION	"SWAD 19.193.1 (2020-04-23)"
+#define CSS_FILE		"swad19.193.1.css"
+#define JS_FILE			"swad19.193.1.js"
 /*
  *
     Call parameters:
@@ -552,6 +552,8 @@ Función API getLocations
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
 
+	Version 19.193.1: Apr 23, 2020	Changes in CSS for exams.
+					Changes in JavaScript for exams. (297623 lines)
 	Version 19.193:   Apr 22, 2020	Created database tables related to exams. (297127 lines)
 					2 changes necessary in database:
 CREATE TABLE IF NOT EXISTS exa_answers (EvtCod INT NOT NULL,UsrCod INT NOT NULL,QstInd INT NOT NULL,NumOpt TINYINT NOT NULL,AnsInd TINYINT NOT NULL,UNIQUE INDEX(EvtCod,UsrCod,QstInd));

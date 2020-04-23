@@ -119,7 +119,7 @@ static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId);
 static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event);
 static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Event *Event);
-static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsNumParticipants (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Event *Event,unsigned NumQsts);
 static void ExaEvt_ListOneOrMoreEventsResult (struct Exa_Exams *Exams,
                                               const struct ExaEvt_Event *Event);
@@ -221,11 +221,11 @@ static void ExaEvt_PutBigButtonClose (void);
 
 static void ExaEvt_ShowWaitImage (const char *Txt);
 
-static void ExaEvt_RemoveOldPlayers (void);
+static void ExaEvt_RemoveOldParticipants (void);
 static void ExaEvt_UpdateEventAsBeingPlayed (long EvtCod);
 static void ExaEvt_SetEventAsNotBeingPlayed (long EvtCod);
 static bool ExaEvt_GetIfEventIsBeingPlayed (long EvtCod);
-static void ExaEvt_GetNumPlayers (struct ExaEvt_Event *Event);
+static void ExaEvt_GetNumParticipants (struct ExaEvt_Event *Event);
 
 static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Event *Event);
 
@@ -397,8 +397,8 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
       Event->Status.QstStartTimeUTC  = (time_t) 0;
       Event->Status.Showing          = ExaEvt_START;
       Event->Status.Countdown        = -1L;
-      Event->Status.Playing          = false;
-      Event->Status.NumPlayers       = 0;
+      Event->Status.Happening          = false;
+      Event->Status.NumParticipants  = 0;
       Event->Status.NumCols          = ExaEvt_NUM_COLS_DEFAULT;
       Event->Status.ShowQstResults   = false;
       Event->Status.ShowUsrResults   = false;
@@ -476,7 +476,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	 if (ICanEditEvents)
 	    ExaEvt_ListOneOrMoreEventsIcons (Exams,&Event);
 
-	 /* Event player */
+	 /* Event participant */
 	 ExaEvt_ListOneOrMoreEventsAuthor (&Event);
 
 	 /* Start/end date/time */
@@ -485,8 +485,8 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	 /* Title and groups */
 	 ExaEvt_ListOneOrMoreEventsTitleGrps (&Event);
 
-	 /* Number of players who have answered any question in the exam event */
-	 ExaEvt_ListOneOrMoreEventsNumPlayers (&Event);
+	 /* Number of participants who have answered any question in the exam event */
+	 ExaEvt_ListOneOrMoreEventsNumParticipants (&Event);
 
 	 /* Event status */
 	 ExaEvt_ListOneOrMoreEventsStatus (&Event,Exam->NumQsts);
@@ -508,8 +508,8 @@ static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Match;
-   extern const char *Txt_Players;
+   extern const char *Txt_Event;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Status;
    extern const char *Txt_Results;
 
@@ -524,8 +524,8 @@ static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents)
    HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]);
-   HTM_TH (1,1,"LT",Txt_Match);
-   HTM_TH (1,1,"RT",Txt_Players);
+   HTM_TH (1,1,"LT",Txt_Event);
+   HTM_TH (1,1,"RT",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
    HTM_TH (1,1,"CT",Txt_Status);
    HTM_TH (1,1,"CT",Txt_Results);
 
@@ -739,12 +739,12 @@ bool ExaEvt_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod)
   }
 
 /*****************************************************************************/
-/******************* Put a column for number of players **********************/
+/**************** Put a column for number of participants ********************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsNumPlayers (const struct ExaEvt_Event *Event)
+static void ExaEvt_ListOneOrMoreEventsNumParticipants (const struct ExaEvt_Event *Event)
   {
-   /***** Number of players who have answered any question in the exam event ******/
+   /***** Number of participants who have answered any question in the exam event ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_Unsigned (ExaEvt_GetNumUsrsWhoHaveAnswerEvt (Event->EvtCod));
    HTM_TD_End ();
@@ -983,9 +983,9 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get whether the exam event is being played or not *****/
    if (Event->Status.Showing == ExaEvt_END)	// Event over
-      Event->Status.Playing = false;
+      Event->Status.Happening = false;
    else						// Event not over
-      Event->Status.Playing = ExaEvt_GetIfEventIsBeingPlayed (Event->EvtCod);
+      Event->Status.Happening = ExaEvt_GetIfEventIsBeingPlayed (Event->EvtCod);
   }
 
 /*****************************************************************************/
@@ -1434,10 +1434,10 @@ void ExaEvt_ResumeEvent (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -1451,7 +1451,7 @@ void ExaEvt_ResumeEvent (void)
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -1730,7 +1730,7 @@ static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event)
    char *EvtSubQuery;
 
    /***** Update end time only if exam event is currently being played *****/
-   if (Event->Status.Playing)	// Event is being played
+   if (Event->Status.Happening)	// Event is being played
      {
       if (asprintf (&EvtSubQuery,"exa_events.EndTime=NOW(),") < 0)
          Lay_NotEnoughMemoryExit ();
@@ -1763,7 +1763,7 @@ static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event)
 		   Event->EvtCod,Gbl.Hierarchy.Crs.CrsCod);
    free (EvtSubQuery);
 
-   if (Event->Status.Playing)	// Event is being played
+   if (Event->Status.Happening)	// Event is being played
       /* Update exam event as being played */
       ExaEvt_UpdateEventAsBeingPlayed (Event->EvtCod);
    else				// Event is paused, not being played
@@ -1778,7 +1778,7 @@ static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event)
 static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Event *Event)
   {
    /***** Update elapsed time in current question in database *****/
-   if (Event->Status.Playing &&		// Event is being played
+   if (Event->Status.Happening &&		// Event is being played
        Event->Status.Showing != ExaEvt_START &&
        Event->Status.Showing != ExaEvt_END)
       DB_QueryINSERT ("can not update elapsed time in question",
@@ -1874,28 +1874,28 @@ void ExaEvt_PlayPauseEvent (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Update status *****/
-   if (Event.Status.Playing)	// Event is being played             ==> pause it
-      Event.Status.Playing = false;		// Pause exam event
+   if (Event.Status.Happening)	// Event is being played             ==> pause it
+      Event.Status.Happening = false;		// Pause exam event
    else				// Event is paused, not being played ==> play it
       /* If not over, update status */
       if (Event.Status.Showing != ExaEvt_END)	// Event not over
-	 Event.Status.Playing = true;		// Start/resume exam event
+	 Event.Status.Happening = true;		// Start/resume exam event
 
    /***** Update exam event status in database *****/
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -1908,10 +1908,10 @@ void ExaEvt_ChangeNumColsEvt (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -1928,7 +1928,7 @@ void ExaEvt_ChangeNumColsEvt (void)
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -1941,10 +1941,10 @@ void ExaEvt_ToggleVisibilResultsEvtQst (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -1960,7 +1960,7 @@ void ExaEvt_ToggleVisibilResultsEvtQst (void)
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -1973,10 +1973,10 @@ void ExaEvt_BackEvent (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -1989,7 +1989,7 @@ void ExaEvt_BackEvent (void)
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -2002,10 +2002,10 @@ void ExaEvt_ForwardEvent (void)
   {
    struct ExaEvt_Event Event;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -2018,7 +2018,7 @@ void ExaEvt_ForwardEvent (void)
    ExaEvt_UpdateEventStatusInDB (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForTch (&Event);
    HTM_DIV_End ();
   }
@@ -2077,7 +2077,7 @@ static void ExaEvt_SetMatchStatusToStart (struct ExaEvt_Event *Event)
   {
    Event->Status.QstInd  = 0;				// Before first question
    Event->Status.QstCod  = -1L;
-   Event->Status.Playing = false;
+   Event->Status.Happening = false;
    Event->Status.Showing = ExaEvt_START;
   }
 
@@ -2141,7 +2141,7 @@ static void ExaEvt_SetMatchStatusToEnd (struct ExaEvt_Event *Event)
   {
    Event->Status.QstInd  = ExaEvt_AFTER_LAST_QUESTION;	// After last question
    Event->Status.QstCod  = -1L;
-   Event->Status.Playing = false;
+   Event->Status.Happening = false;
    Event->Status.Showing = ExaEvt_END;
   }
 
@@ -2268,7 +2268,7 @@ static void ExaEvt_ShowLeftColumnTch (struct ExaEvt_Event *Event)
    HTM_DIV_Begin ("class=\"EXA_LEFT_TCH\"");
 
    /***** Refreshable part *****/
-   HTM_DIV_Begin ("id=\"match_left\" class=\"EXA_REFRESHABLE_TEACHER\"");
+   HTM_DIV_Begin ("id=\"exam_event_left\" class=\"EXA_REFRESHABLE_TEACHER\"");
    ExaEvt_ShowRefreshablePartTch (Event);
    HTM_DIV_End ();
 
@@ -2383,14 +2383,14 @@ static void ExaEvt_WriteNumRespondersQst (struct ExaEvt_Event *Event)
 	 break;
      }
 
-   /***** Write number of players *****/
-   if (Event->Status.Playing)	// Event is being played
+   /***** Write number of participants *****/
+   if (Event->Status.Happening)	// Event is being played
      {
-      /* Get current number of players */
-      ExaEvt_GetNumPlayers (Event);
+      /* Get current number of participants */
+      ExaEvt_GetNumParticipants (Event);
 
-      /* Show current number of players */
-      HTM_TxtF ("/%u",Event->Status.NumPlayers);
+      /* Show current number of participants */
+      HTM_TxtF ("/%u",Event->Status.NumParticipants);
      }
 
    /***** End block *****/
@@ -2487,7 +2487,7 @@ static void ExaEvt_PutFormCountdown (struct ExaEvt_Event *Event,long Seconds,con
    if (PutForm)
      {
       /***** Start form *****/
-      if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
+      if (asprintf (&OnSubmit,"updateMatchTch('exam_event_left',"
 			      "'act=%ld&ses=%s&EvtCod=%ld&Countdown=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActExaEvtCntDwn),Gbl.Session.Id,
@@ -2582,7 +2582,7 @@ static void ExaEvt_ShowLeftColumnStd (const struct ExaEvt_Event *Event,
 	 /***** Write whether question is answered or not *****/
 	 ExaEvt_PutIfAnswered (Event,Answered);
 
-	 if (Event->Status.Playing &&			// Event is being played
+	 if (Event->Status.Happening &&			// Event is being played
 	     Event->Status.Showing == ExaEvt_ANSWERS &&	// Teacher's screen is showing question answers
 	     Answered)				// I have answered this question
 	    /***** Put icon to remove my answet *****/
@@ -2611,7 +2611,7 @@ static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Event *Event,
    ExaEvt_ShowEventTitleStd (Event);
 
    /***** Bottom row *****/
-   if (Event->Status.Playing)			// Event is being played
+   if (Event->Status.Happening)			// Event is being played
      {
       if (Event->Status.Showing == ExaEvt_END)	// Event over
 	 ExaEvt_ShowWaitImage (Txt_Please_wait_);
@@ -2619,8 +2619,8 @@ static void ExaEvt_ShowRightColumnStd (struct ExaEvt_Event *Event,
 	{
 	 HTM_DIV_Begin ("class=\"EXA_BOTTOM\"");
 
-	 /***** Update players ******/
-	 if (ExaEvt_RegisterMeAsPlayerInEvent (Event))
+	 /***** Update participants ******/
+	 if (ExaEvt_RegisterMeAsParticipantInEvent (Event))
 	   {
 	    if (Event->Status.Showing == ExaEvt_ANSWERS)	// Teacher's screen is showing question answers
 	       /* Show current question and possible answers */
@@ -2698,7 +2698,7 @@ static void ExaEvt_PutMatchControlButtons (const struct ExaEvt_Event *Event)
 
    /***** Center button *****/
    HTM_DIV_Begin ("class=\"EXA_BUTTON_CENTER_CONT\"");
-   if (Event->Status.Playing)					// Event is being played
+   if (Event->Status.Happening)					// Event is being played
       /* Put button to pause exam event */
       ExaEvt_PutBigButton (ActPlyPauExaEvt,"play_pause",Event->EvtCod,
 			   ExaEvt_ICON_PAUSE,Txt_Pause);
@@ -2844,7 +2844,7 @@ static void ExaEvt_PutIfAnswered (const struct ExaEvt_Event *Event,bool Answered
    HTM_DIV_Begin ("class=\"EXA_SHOW_ANSWERED\"");
 
    /***** Put icon with link *****/
-   if (Event->Status.Playing &&			// Event is being played
+   if (Event->Status.Happening &&			// Event is being played
        Event->Status.Showing == ExaEvt_ANSWERS &&	// Teacher's screen is showing question answers
        Answered)				// I have answered this question
      {
@@ -2976,7 +2976,7 @@ static void ExaEvt_ShowQuestionAndAnswersTch (const struct ExaEvt_Event *Event)
       switch (Event->Status.Showing)
 	{
 	 case ExaEvt_ANSWERS:
-	    if (Event->Status.Playing)			// Event is being played
+	    if (Event->Status.Happening)			// Event is being played
 	       /* Write answers */
 	       ExaEvt_WriteAnswersEventResult (Event,
 	                                       &Question,
@@ -3494,10 +3494,10 @@ static void ExaEvt_ShowWaitImage (const char *Txt)
   }
 
 /*****************************************************************************/
-/**************************** Remove old players *****************************/
+/************************** Remove old participants **************************/
 /*****************************************************************************/
 
-static void ExaEvt_RemoveOldPlayers (void)
+static void ExaEvt_RemoveOldParticipants (void)
   {
    /***** Delete events not being played by teacher *****/
    DB_QueryDELETE ("can not update events as not being played",
@@ -3505,8 +3505,8 @@ static void ExaEvt_RemoveOldPlayers (void)
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
 
-   /***** Delete players (students) who have left events *****/
-   DB_QueryDELETE ("can not update exam event players",
+   /***** Delete participants (students) who have left events *****/
+   DB_QueryDELETE ("can not update exam event participants",
 		   "DELETE FROM exa_participants"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
@@ -3530,8 +3530,8 @@ static void ExaEvt_UpdateEventAsBeingPlayed (long EvtCod)
 
 static void ExaEvt_SetEventAsNotBeingPlayed (long EvtCod)
   {
-   /***** Delete all exam event players ******/
-   DB_QueryDELETE ("can not update exam event players",
+   /***** Delete all exam event participants ******/
+   DB_QueryDELETE ("can not update exam event participants",
 		    "DELETE FROM exa_participants"
 		    " WHERE EvtCod=%ld",
 		    EvtCod);
@@ -3558,32 +3558,32 @@ static bool ExaEvt_GetIfEventIsBeingPlayed (long EvtCod)
   }
 
 /*****************************************************************************/
-/*************************** Get number of players ***************************/
+/************************** Get number of participants ***********************/
 /*****************************************************************************/
 
-static void ExaEvt_GetNumPlayers (struct ExaEvt_Event *Event)
+static void ExaEvt_GetNumParticipants (struct ExaEvt_Event *Event)
   {
-   /***** Get number of players who are playing an exam event *****/
-   Event->Status.NumPlayers =
-   (unsigned) DB_QueryCOUNT ("can not get number of players",
+   /***** Get number of participants who are playing an exam event *****/
+   Event->Status.NumParticipants =
+   (unsigned) DB_QueryCOUNT ("can not get number of participants",
 			     "SELECT COUNT(*) FROM exa_participants"
 			     " WHERE EvtCod=%ld",
 			     Event->EvtCod);
   }
 
 /*****************************************************************************/
-/******************* Register me as a player in an exam event **********************/
+/************** Register me as a participant in an exam event ****************/
 /*****************************************************************************/
 // Return true on success
 
-bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event)
+bool ExaEvt_RegisterMeAsParticipantInEvent (struct ExaEvt_Event *Event)
   {
    /***** Trivial check: exam event code must be > 0 *****/
    if (Event->EvtCod <= 0)
       return false;
 
    /***** Trivial check: exam event must be being played *****/
-   if (!Event->Status.Playing)				// Event is paused, not being played
+   if (!Event->Status.Happening)				// Event is paused, not being played
       return false;
 
    /***** Trivial check: exam event must not be over *****/
@@ -3594,8 +3594,8 @@ bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event)
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)		// I am not logged as student
       return false;
 
-   /***** Insert me as exam event player *****/
-   DB_QueryREPLACE ("can not insert exam event player",
+   /***** Insert me as exam event participant *****/
+   DB_QueryREPLACE ("can not insert exam event participant",
 		    "REPLACE exa_participants (EvtCod,UsrCod) VALUES (%ld,%ld)",
 		    Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return true;
@@ -3629,7 +3629,7 @@ void ExaEvt_JoinEventAsStd (void)
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForStd (&Event,ExaEvt_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
@@ -3652,14 +3652,14 @@ void ExaEvt_RemoveMyQuestionAnswer (void)
 
    /***** Check that teacher's screen is showing answers
           and question index is the current one being played *****/
-   if (Event.Status.Playing &&			// Event is being played
+   if (Event.Status.Happening &&			// Event is being played
        Event.Status.Showing == ExaEvt_ANSWERS &&	// Teacher's screen is showing answers
        QstInd == Event.Status.QstInd)		// Removing answer to the current question being played
       /***** Remove answer to this question *****/
       ExaEvt_RemoveMyAnswerToEventQuestion (&Event);
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForStd (&Event,ExaEvt_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
@@ -3676,10 +3676,10 @@ void ExaEvt_StartCountdown (void)
    /***** Get countdown parameter ****/
    NewCountdown = Par_GetParToLong ("Countdown");
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3707,10 +3707,10 @@ void ExaEvt_RefreshEventTch (void)
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
 
-   /***** Remove old players.
+   /***** Remove old participants.
           This function must be called by a teacher
           before getting exam event status. *****/
-   ExaEvt_RemoveOldPlayers ();
+   ExaEvt_RemoveOldParticipants ();
 
    /***** Get data of the exam event from database *****/
    Event.EvtCod = ExaEvt_GetEvtCodBeingPlayed ();
@@ -3719,7 +3719,7 @@ void ExaEvt_RefreshEventTch (void)
    /***** Update countdown *****/
    // If current countdown is < 0 ==> no countdown in progress
    WhatToRefresh = REFRESH_LEFT;
-   if (Event.Status.Playing &&		// Event is being played
+   if (Event.Status.Happening &&		// Event is being played
        Event.Status.Countdown >= 0)	// Countdown in progress
      {
       /* Decrease countdown */
@@ -3743,11 +3743,11 @@ void ExaEvt_RefreshEventTch (void)
    switch (WhatToRefresh)
      {
       case REFRESH_LEFT:	// Refresh only left part
-         HTM_Txt ("match_left|0|");	// 0 ==> do not evaluate MatJax scripts after updating HTML
+         HTM_Txt ("exam_event_left|0|");	// 0 ==> do not evaluate MatJax scripts after updating HTML
          ExaEvt_ShowRefreshablePartTch (&Event);
          break;
       case REFRESH_ALL:		// Refresh the whole page
-         HTM_Txt ("exam event|1|");		// 1 ==> evaluate MatJax scripts after updating HTML
+         HTM_Txt ("exam_event|1|");	// 1 ==> evaluate MatJax scripts after updating HTML
          ExaEvt_ShowMatchStatusForTch (&Event);
          break;
      }
@@ -3921,7 +3921,7 @@ void ExaEvt_ReceiveQuestionAnswer (void)
      }
 
    /***** Show current exam event status *****/
-   HTM_DIV_Begin ("id=\"exam event\" class=\"EXA_CONT\"");
+   HTM_DIV_Begin ("id=\"exam_event\" class=\"EXA_CONT\"");
    ExaEvt_ShowMatchStatusForStd (&Event,ExaEvt_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }

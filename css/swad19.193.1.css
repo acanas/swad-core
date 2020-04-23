@@ -2743,6 +2743,359 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	padding-bottom:20px;
 	}
 
+/*********************************** Exams ***********************************/
+.EXA_BG
+	{
+	background-image:url("/swad/icon/bg.jpg");
+	background-size:cover;
+	background-repeat:no-repeat;
+	height:100%;
+	background-color:white;
+	}
+.EXA_CONT
+	{
+	box-sizing:border-box;
+	display:table;
+	margin:2%;
+	width:96%;
+	}
+.EXA_LEFT_TCH
+	{
+	box-sizing:border-box;
+	float:left;
+	width:20%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.EXA_LEFT_STD
+	{
+	box-sizing:border-box;
+	float:left;
+	width:40%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.EXA_RIGHT_TCH
+	{
+	box-sizing:border-box;
+	display:table;
+	float:left;
+	width:80%;
+	}
+.EXA_RIGHT_STD
+	{
+	box-sizing:border-box;
+	display:table;
+	float:left;
+	width:60%;
+	}
+.EXA_TOP
+	{
+	box-sizing:border-box;
+	width:100%;
+	height:64px;
+	color:#404040;
+	font-size:16pt;
+	font-weight:bold;
+	text-overflow:ellipsis;
+	}
+.EXA_BOTTOM
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
+
+.EXA_REFRESHABLE_TEACHER
+	{
+	box-sizing:border-box;
+	width:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.EXA_NUM_QST
+	{
+	color:#404040;
+	font-size:32pt;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:top;
+	}
+.EXA_TIME_QST
+	{
+	color:#404040;
+	font-size:16pt;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:top;
+	}
+.EXA_SHOW_HOURGLASS, .EXA_SHOW_ANSWERED, .EXA_REM_MY_ANS, .EXA_SHOW_RESULTS
+	{
+	text-align:center;
+	padding:16pt 0;
+	}
+.EXA_NUM_ANSWERERS
+	{
+	text-align:center;
+	padding:8pt 0;
+	color:#404040;
+	font-size:16pt;
+	}
+
+.EXA_BUTTONS_CONT
+	{
+	display:table;
+	box-sizing:border-box;
+	width:100%;
+	padding:20px 0;
+	}
+.EXA_BUTTON_LEFT_CONT
+	{
+	display:table;
+	box-sizing:border-box;
+	float:left;
+	width:35%;
+	text-align:center;
+	}
+.EXA_BUTTON_CENTER_CONT
+	{
+	display:table;
+	box-sizing:border-box;
+	float:left;
+	width:30%;
+	text-align:center;
+	}
+.EXA_BUTTON_RIGHT_CONT
+	{
+	display:table;
+	box-sizing:border-box;
+	float:left;
+	width:35%;
+	text-align:center;
+	}
+
+.EXA_BIGBUTTON_CONT
+	{
+	box-sizing:border-box;
+	display:inline-block;
+	font-size:32pt;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+	vertical-align:middle;
+	}
+.EXA_SMALLBUTTON_CONT
+	{
+	box-sizing:border-box;
+	display:inline-block;
+	font-size:16pt;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+	vertical-align:middle;
+	}
+.EXA_BUTTON_ON, .EXA_BUTTON_OFF
+	{
+	display:table-cell;
+	width:100%;
+	text-align:center;
+	vertical-align:middle;
+	opacity:0.7;
+	}
+.EXA_BUTTON_ON:hover
+	{
+	opacity:1;
+	}
+
+.EXA_BUTTON_HIDDEN
+	{
+	display:table-cell;
+	width:100%;
+	text-align:center;
+	vertical-align:middle;
+	opacity:0.1;
+	}
+
+.EXA_RED	{color:#913b00;}
+.EXA_YELLOW	{color:#a27600;}
+.EXA_LIMEGREEN	{color:#636e00;}
+.EXA_GREEN	{color:#246600;}
+
+.EXA_TCH_STEM
+	{
+	color:#202020;
+	font-size:24pt;
+	padding-bottom:24pt;
+	}
+.EXA_TCH_ANS
+	{
+	color:#202020;
+	font-size:24pt;
+	}
+
+.EXA_WAIT_CONT
+	{
+	box-sizing:border-box;
+	margin-top:5%;
+	text-align:center;
+	}
+.EXA_WAIT_IMG
+	{
+	box-sizing:border-box;
+	width:100px;
+	}
+
+.EXA_SCO_SCO
+	{
+	width:5%;
+	text-align:right;
+	vertical-align:middle;
+	height:10px;
+	font-size:6pt;
+	font-weight:bold;
+	}
+.EXA_SCO_NUM
+	{
+	width:95%;
+	text-align:left;
+	vertical-align:middle;
+	background:white;
+	height:10px;
+	font-size:6pt;
+	font-weight:bold;
+	}
+.EXA_SCO_BAR
+	{
+	display:inline-block;
+	height:10px;
+	vertical-align:middle;
+	}
+.EXA_SCO_TOP
+	{
+	color:grey;
+	border-style:solid solid none solid;
+	border-width:1px;
+	}
+.EXA_SCO_MID
+	{
+	color:grey;
+	border-style:none solid none solid;
+	border-width:1px;
+	}
+.EXA_SCO_BOT
+	{
+	color:grey;
+	border-style:none solid solid solid;
+	border-width:1px;
+	}
+
+.EXA_TCH_BUTTON_TD
+	{
+	box-sizing:border-box;
+	width:84px;
+	text-align:center;
+	vertical-align:top;
+	}
+.EXA_TCH_BUTTON
+	{
+	box-sizing:border-box;
+	width:64px;
+	margin:0 16px;
+	padding:8px;
+	border-radius:2px;
+	border-width:1px;
+	border-style:solid;
+	color:rgba(255,255,255,0.75);
+	font-size:36pt;
+	font-weight:bold;
+	line-height:normal;
+	white-space:nowrap;
+	}
+	
+.EXA_NUM_COL_OFF
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	padding:6px;
+	text-align:center;
+	vertical-align:middle;
+	border:solid 1px;
+	border-color:transparent;
+	}
+.EXA_NUM_COL_ON
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	padding:6px;
+	text-align:center;
+	vertical-align:middle;
+	border:solid 1px;
+	border-color:#404040;
+	background-color:rgba(0,0,0,0.1);
+	}
+
+.EXA_STD_CELL
+	{
+	text-align:center;
+	vertical-align:middle;
+	}
+
+.EXA_STD_BUTTON
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:10px auto;
+	padding:20px;
+	border-radius:2px;
+	border-width:1px;
+	border-style:solid;
+	color:rgba(255,255,255,0.75);
+	font-size:44pt;
+	font-weight:bold;
+	line-height:normal;
+	white-space:nowrap;
+	}
+
+.EXA_STD_ANSWER_SELECTED
+	{
+	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
+	animation:fadeinshadow 1s ease forwards;
+	}
+@keyframes fadeinshadow
+	{
+	from {box-shadow:0px 0px 18px 12px rgba(0,128,0,1);}
+	to {box-shadow:none;}
+	} 
+
+.EXA_RESULT
+	{
+	padding:10px 0;
+	color:#404040;
+	font-size:16pt;
+	text-align:left;
+	vertical-align:top;
+	}
+.EXA_RES_TR
+	{
+	height:10px;
+	}
+.EXA_RES_CORRECT
+	{
+	width:1%;
+	background:green;
+	}
+.EXA_RES_WRONG
+	{
+	width:1%;
+	background:red;
+	}
+.EXA_RES_VOID
+	{
+	width:1%;
+	}
+
 /********************************** Matches **********************************/
 .MCH_BG
 	{

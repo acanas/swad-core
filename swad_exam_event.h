@@ -68,8 +68,8 @@ struct ExaEvt_Event
       unsigned NumCols;		// Number of columns for answers on teacher's screen
       bool ShowQstResults;	// Show global results of current question while playing
       bool ShowUsrResults;	// Show exam with results of all questions for the student
-      bool Playing;		// Is being played now?
-      unsigned NumPlayers;
+      bool Happening;		// Is being played now?
+      unsigned NumParticipants;
      } Status;			// Status related to event playing
   };
 
@@ -128,7 +128,7 @@ void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Event *Event,
                                      const struct Tst_Question *Question,
                                      const char *Class,bool ShowResult);
 
-bool ExaEvt_RegisterMeAsPlayerInEvent (struct ExaEvt_Event *Event);
+bool ExaEvt_RegisterMeAsParticipantInEvent (struct ExaEvt_Event *Event);
 
 void ExaEvt_GetEventBeingPlayed (void);
 void ExaEvt_JoinEventAsStd (void);
