@@ -130,6 +130,7 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor);
 
+static void Exa_PutParamsOneSet (void *Exams);
 static void Exa_PutParamsOneQst (void *Exams);
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParamOrder (void);
@@ -153,15 +154,26 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
 
 static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd);
 
+static unsigned Exa_GetMaxSetIndexInExam (long ExaCod);
 static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod);
+static void Exa_ListExamSets (struct Exa_Exams *Exams,struct Exa_Exam *Exam);
 static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam);
+static void Exa_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
+					     long ExaCod,unsigned NumSets,
+                                             MYSQL_RES *mysql_res,
+                                             bool ICanEditSets);
+static void Exa_SetConstructor (struct Exa_Set *Set);
+static void Exa_SetDestructor (struct Exa_Set *Set);
+static void Exa_PutParamSetCod (void *SetCod);
 static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						  long ExaCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
 static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
                                         unsigned QstInd,bool QuestionExists);
+static void Exa_PutIconToAddNewSets (void *Exams);
 static void Exa_PutIconToAddNewQuestions (void *Exams);
+static void Exa_PutButtonToAddNewSet (struct Exa_Exams *Exams);
 static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
 
 static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
@@ -189,6 +201,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
    Exams->ExaCod            = -1L;	// Selected/current exam code
    Exams->EvtCod            = -1L;	// Selected/current event code
+   Exams->SetInd            = 0;	// Current set index
    Exams->QstInd            = 0;	// Current question index
   }
 
@@ -734,6 +747,19 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
    /***** Put icon to edit exam *****/
    Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
                                 Exa_PutParams,Exams);
+  }
+
+/*****************************************************************************/
+/************** Put parameter to move/remove one question set ****************/
+/*****************************************************************************/
+
+static void Exa_PutParamsOneSet (void *Exams)
+  {
+   if (Exams)
+     {
+      Exa_PutParams (Exams);
+      Exa_PutParamSetInd (((struct Exa_Exams *) Exams)->SetInd);
+     }
   }
 
 /*****************************************************************************/
@@ -1369,9 +1395,13 @@ void Exa_RequestCreatOrEditExam (void)
       /* Show exams again */
       Exa_ListAllExams (&Exams);
    else
+     {
+      /* Show sets of the exam ready to be edited */
+      Exa_ListExamSets (&Exams,&Exam);
+
       /* Show questions of the exam ready to be edited */
       Exa_ListExamQuestions (&Exams,&Exam);
-
+     }
   }
 
 /*****************************************************************************/
@@ -1664,6 +1694,42 @@ unsigned Exa_GetNumQstsExam (long ExaCod)
   }
 
 /*****************************************************************************/
+/************* Put a form to edit/create a question set in exam **************/
+/*****************************************************************************/
+
+void Exa_RequestNewSet (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
+
+   /***** Get parameters *****/
+   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetDataOfExamByCod (&Exam);
+
+   /***** Check if exam has events *****/
+   if (Exa_CheckIfEditable (&Exam))
+     {
+      /***** Show form to create a new question in this exam *****/
+      Exams.ExaCod = Exam.ExaCod;
+      Tst_RequestSelectTestsForExam (&Exams);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true,	// List exam questions
+	                false);	// Do not put form to start new event
+  }
+
+/*****************************************************************************/
 /*************** Put a form to edit/create a question in exam ****************/
 /*****************************************************************************/
 
@@ -1703,7 +1769,7 @@ void Exa_RequestNewQuestion (void)
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Exa_ListTstQuestionsToSelect (void)
+void Exa_ListQuestionsToSelect (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -1728,6 +1794,15 @@ void Exa_ListTstQuestionsToSelect (void)
      }
    else
       Lay_NoPermissionExit ();
+  }
+
+/*****************************************************************************/
+/**************** Write parameter with index of question set *****************/
+/*****************************************************************************/
+
+void Exa_PutParamSetInd (unsigned SetInd)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"SetInd",SetInd);
   }
 
 /*****************************************************************************/
@@ -1799,6 +1874,35 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
   }
 
 /*****************************************************************************/
+/********************* Get maximum set index in an exam **********************/
+/*****************************************************************************/
+// Question index can be 1, 2, 3...
+// Return 0 if no questions
+
+static unsigned Exa_GetMaxSetIndexInExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned SetInd = 0;
+
+   /***** Get maximum set index in an exam from database *****/
+   DB_QuerySELECT (&mysql_res,"can not get max set index",
+		   "SELECT MAX(SetInd)"
+		   " FROM exa_sets"
+		   " WHERE ExaCod=%ld",
+                   ExaCod);
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])	// There are sets
+      if (sscanf (row[0],"%u",&SetInd) != 1)
+         Lay_ShowErrorAndExit ("Error when getting max set index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return SetInd;
+  }
+
+/*****************************************************************************/
 /****************** Get maximum question index in an exam *********************/
 /*****************************************************************************/
 // Question index can be 1, 2, 3...
@@ -1811,7 +1915,7 @@ static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod)
    unsigned QstInd = 0;
 
    /***** Get maximum question index in an exam from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get last question index",
+   DB_QuerySELECT (&mysql_res,"can not get max question index",
 		   "SELECT MAX(QstInd)"
 		   " FROM exa_questions"
 		   " WHERE ExaCod=%ld",
@@ -1819,7 +1923,7 @@ static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod)
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
       if (sscanf (row[0],"%u",&QstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting last question index.");
+         Lay_ShowErrorAndExit ("Error when getting max question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1896,6 +2000,59 @@ unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
   }
 
 /*****************************************************************************/
+/************************* List the sets of an exam **************************/
+/*****************************************************************************/
+
+static void Exa_ListExamSets (struct Exa_Exams *Exams,struct Exa_Exam *Exam)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_question_sets;
+   extern const char *Txt_Question_sets;
+   extern const char *Txt_This_exam_has_no_question_sets;
+   MYSQL_RES *mysql_res;
+   unsigned NumSets;
+   bool ICanEditSets = Exa_CheckIfEditable (Exam);
+
+   /***** Get data of question sets from database *****/
+   NumSets = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get exam question sets",
+			      "SELECT SetInd,"	// row[0]
+				     "SetCod"	// row[1]
+			      " FROM exa_sets"
+			      " WHERE ExaCod=%ld"
+			      " ORDER BY SetInd",
+			      Exam->ExaCod);
+
+   /***** Begin box *****/
+   Exams->ExaCod = Exam->ExaCod;
+   if (ICanEditSets)
+      Box_BoxBegin (NULL,Txt_Question_sets,
+		    Exa_PutIconToAddNewSets,Exams,
+		    Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_Question_sets,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
+
+   /***** Show table with sets *****/
+   if (NumSets)
+      Exa_ListOneOrMoreSetsForEdition (Exams,
+                                       Exam->ExaCod,NumSets,mysql_res,
+				       ICanEditSets);
+   else	// This exam has no sets
+      Ale_ShowAlert (Ale_INFO,Txt_This_exam_has_no_question_sets);
+
+   /***** Put button to add a new set in this exam *****/
+   if (ICanEditSets)		// I can edit question sets
+      Exa_PutButtonToAddNewSet (Exams);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
 /************************ List the questions of an exam ***********************/
 /*****************************************************************************/
 
@@ -1946,6 +2103,170 @@ static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************************* List exam sets for edition ************************/
+/*****************************************************************************/
+
+static void Exa_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
+					     long ExaCod,unsigned NumSets,
+                                             MYSQL_RES *mysql_res,
+                                             bool ICanEditSets)
+  {
+   extern const char *Txt_Question_sets;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Question_set;
+   extern const char *Txt_Move_up_X;
+   extern const char *Txt_Move_down_X;
+   extern const char *Txt_Movement_not_allowed;
+   unsigned NumSet;
+   MYSQL_ROW row;
+   struct Exa_Set Set;
+   unsigned SetInd;
+   unsigned MaxSetInd;
+   char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   // bool SetExists;
+
+   /***** Get maximum question index *****/
+   MaxSetInd = Exa_GetMaxSetIndexInExam (ExaCod);
+
+   /***** Write the heading *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TR_Begin (NULL);
+
+   HTM_TH_Empty (1);
+
+   HTM_TH (1,1,"CT",Txt_No_INDEX);
+   HTM_TH (1,1,"CT",Txt_Code);
+   HTM_TH (1,1,"CT",Txt_Tags);
+   HTM_TH (1,1,"CT",Txt_Question_set);
+
+   HTM_TR_End ();
+
+   /***** Write rows *****/
+   for (NumSet = 0;
+	NumSet < NumSets;
+	NumSet++)
+     {
+      Gbl.RowEvenOdd = NumSet % 2;
+
+      /***** Create question set *****/
+      Exa_SetConstructor (&Set);
+
+      /***** Get set data *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] SetInd
+      row[1] SetCod
+      */
+
+      /* Get set index (row[0]) */
+      SetInd = Str_ConvertStrToUnsigned (row[0]);
+      snprintf (StrSetInd,sizeof (SetInd),
+	        "%u",
+		SetInd);
+
+      /* Get set code (row[1]) */
+      Set.SetCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /***** Icons *****/
+      Exams->ExaCod = ExaCod;
+      Exams->SetInd = SetInd;
+      HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+      /* Put icon to remove the set */
+      if (ICanEditSets)
+	{
+	 Frm_StartForm (ActReqRemExaSet);
+	 Exa_PutParams (Exams);
+	 Exa_PutParamQstInd (SetInd);
+	 Ico_PutIconRemove ();
+	 Frm_EndForm ();
+	}
+      else
+         Ico_PutIconRemovalNotAllowed ();
+
+      /* Put icon to move up the question */
+      if (ICanEditSets && SetInd > 1)
+	{
+	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,NULL,
+	                                Exa_PutParamsOneSet,Exams,
+				        "arrow-up.svg",
+					Str_BuildStringStr (Txt_Move_up_X,
+							    StrSetInd));
+	 Str_FreeString ();
+	}
+      else
+         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+
+      /* Put icon to move down the set */
+      if (ICanEditSets && SetInd < MaxSetInd)
+	{
+	 Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,NULL,
+	                                Exa_PutParamsOneSet,Exams,
+				        "arrow-down.svg",
+					Str_BuildStringStr (Txt_Move_down_X,
+							    StrSetInd));
+	 Str_FreeString ();
+	}
+      else
+         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+
+      /* Put icon to edit the set */
+      if (ICanEditSets)
+	 // Ico_PutContextualIconToEdit (ActEdiOneExaSet,NULL,
+	 //                              Exa_PutParamSetCod,&Set.SetCod);
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,	// TODO: Change for ActEdiOneExaSet
+	                              Exa_PutParamSetCod,&Set.SetCod);
+
+      HTM_TD_End ();
+
+      /***** Set *****/
+      // SetExists = Exa_GetSetDataFromDB (&Set);
+      // Exa_ListSetForEdition (&Set,SetInd,SetExists);
+
+      HTM_TR_End ();
+
+      /***** Destroy question set *****/
+      Exa_SetDestructor (&Set);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/************************** Question set constructor *************************/
+/*****************************************************************************/
+
+static void Exa_SetConstructor (struct Exa_Set *Set)
+  {
+   Set->SetCod = -1L;
+  }
+
+/*****************************************************************************/
+/*************************** Question set destructor *************************/
+/*****************************************************************************/
+
+static void Exa_SetDestructor (struct Exa_Set *Set)
+  {
+   Set->SetCod = -1L;	// TODO: Remove
+  }
+
+/*****************************************************************************/
+/*************** Put parameter with set code to edit, remove... **************/
+/*****************************************************************************/
+
+static void Exa_PutParamSetCod (void *SetCod)	// Should be a pointer to long
+  {
+   if (SetCod)
+      if (*((long *) SetCod) > 0)	// If set exists
+	 Par_PutHiddenParamLong (NULL,"SetCod",*((long *) SetCod));
   }
 
 /*****************************************************************************/
@@ -2137,6 +2458,20 @@ static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
   }
 
 /*****************************************************************************/
+/*************** Put icon to add a new question set to exam ******************/
+/*****************************************************************************/
+
+static void Exa_PutIconToAddNewSets (void *Exams)
+  {
+   extern const char *Txt_Add_question_set;
+
+   /***** Put form to create a new question set *****/
+   Ico_PutContextualIconToAdd (ActAddOneExaSet,NULL,
+			       Exa_PutParams,Exams,
+			       Txt_Add_question_set);
+  }
+
+/*****************************************************************************/
 /***************** Put icon to add a new questions to exam *******************/
 /*****************************************************************************/
 
@@ -2148,6 +2483,20 @@ static void Exa_PutIconToAddNewQuestions (void *Exams)
    Ico_PutContextualIconToAdd (ActAddOneExaQst,NULL,
 			       Exa_PutParams,Exams,
 			       Txt_Add_questions);
+  }
+
+/*****************************************************************************/
+/*************** Put button to add new question set to exam ******************/
+/*****************************************************************************/
+
+static void Exa_PutButtonToAddNewSet (struct Exa_Exams *Exams)
+  {
+   extern const char *Txt_Add_question_set;
+
+   Frm_StartForm (ActAddOneExaSet);
+   Exa_PutParams (Exams);
+   Btn_PutConfirmButton (Txt_Add_question_set);
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2168,7 +2517,7 @@ static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
 /******************** Add selected test questions to exam ********************/
 /*****************************************************************************/
 
-void Exa_AddTstQuestionsToExam (void)
+void Exa_AddQuestionsToExam (void)
   {
    extern const char *Txt_No_questions_have_been_added;
    struct Exa_Exams Exams;
@@ -2287,6 +2636,39 @@ static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams)
       NumQuestions++;
      }
    return NumQuestions;
+  }
+
+/*****************************************************************************/
+/******************* Request the removal of a question set *******************/
+/*****************************************************************************/
+
+void Exa_RequestRemoveSet (void)
+  {
+  }
+
+/*****************************************************************************/
+/*************************** Remove a question set ***************************/
+/*****************************************************************************/
+
+void Exa_RemoveSet (void)
+  {
+  }
+
+
+/*****************************************************************************/
+/************** Move up position of a question set in an exam ****************/
+/*****************************************************************************/
+
+void Exa_MoveUpSet (void)
+  {
+  }
+
+/*****************************************************************************/
+/************* Move down position of a question set in an exam ***************/
+/*****************************************************************************/
+
+void Exa_MoveDownSet (void)
+  {
   }
 
 /*****************************************************************************/

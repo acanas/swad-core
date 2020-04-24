@@ -1182,6 +1182,25 @@ mysql> DESCRIBE exa_results;
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(EvtCod,UsrCod))");
 
+   /***** Table exa_sets *****/
+/*
+mysql> DESCRIBE exa_sets;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| ExaCod | int(11) | NO   | MUL | NULL    |       |
+| QstCod | int(11) | NO   | MUL | NULL    |       |
+| QstInd | int(11) | NO   |     | 0       |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sets ("
+			"SetCod INT NOT NULL AUTO_INCREMENT,"
+			"ExaCod INT NOT NULL,"
+			"SetInd INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(SetCod),"
+		   "INDEX(ExaCod,SetInd))");
+
       /***** Table exa_times *****/
 /*
 mysql> DESCRIBE exa_times;

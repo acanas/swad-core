@@ -533,6 +533,15 @@ CREATE TABLE IF NOT EXISTS exa_results (
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(EvtCod,UsrCod));
 --
+-- Table exa_sets: stores the question sets in the exams
+--
+CREATE TABLE IF NOT EXISTS exa_sets (
+	SetCod INT NOT NULL AUTO_INCREMENT,
+	ExaCod INT NOT NULL,
+	SetInd INT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(SetCod),
+	INDEX(ExaCod,SetInd));
+--
 -- Table exa_times: stores the elapsed time in every question in every exam event
 --
 CREATE TABLE IF NOT EXISTS exa_times (

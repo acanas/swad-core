@@ -544,10 +544,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.193.5 (2020-04-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.194 (2020-04-24)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.194:   Apr 24, 2020	New database table for question sets in exams. (298257 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS exa_sets (SetCod INT NOT NULL AUTO_INCREMENT,ExaCod INT NOT NULL,SetInd INT NOT NULL DEFAULT 0,UNIQUE INDEX(SetCod),INDEX(ExaCod,SetInd));
+
 	Version 19.193.5: Apr 23, 2020	Fixed bug in exam events. (297871 lines)
 	Version 19.193.4: Apr 23, 2020	Fixed bugs in exams, exam events, games and matches. (297860 lines)
 	Version 19.193.3: Apr 23, 2020	Added new MIME type, reported by Jesús Garrido Manrique.

@@ -1278,7 +1278,7 @@ static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Frm_StartForm (ActExaLstTstQst);
+      Frm_StartForm (ActLstTstQstForExa);
       Exa_PutParams (Exams);
 
       HTM_TABLE_BeginPadding (2);
@@ -2995,7 +2995,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exa
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActAddTstQstToExa);
+   Frm_StartForm (ActAddQstToExa);
    Exa_PutParams (Exams);
 
    /***** Write the heading *****/
@@ -5872,16 +5872,11 @@ static long Tst_GetQstCod (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Tst_PutParamQstCod (void *QstCodPtr)	// Should be a pointer to long
+void Tst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
   {
-   long QstCod;
-
-   if (QstCodPtr)
-     {
-      QstCod = *((long *) QstCodPtr);
-      if (QstCod > 0)	// If question exists
-	 Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
-     }
+   if (QstCod)
+      if (*((long *) QstCod) > 0)	// If question exists
+	 Par_PutHiddenParamLong (NULL,"QstCod",*((long *) QstCod));
   }
 
 /*****************************************************************************/

@@ -74,6 +74,7 @@ struct Exa_Exams
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    long ExaCod;			// Selected/current exam code
    long EvtCod;			// Selected/current match code
+   unsigned SetInd;		// Current set index
    unsigned QstInd;		// Current question index
   };
 
@@ -92,6 +93,11 @@ struct Exa_Exam
    unsigned NumQsts;		// Number of questions in the exam
    unsigned NumEvts;		// Number of events in the exam
    unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
+  };
+
+struct Exa_Set
+  {
+   long SetCod;
   };
 
 /*****************************************************************************/
@@ -139,16 +145,25 @@ bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 
 unsigned Exa_GetNumQstsExam (long ExaCod);
 
-void Exa_RequestNewQuestion (void);
-void Exa_ListTstQuestionsToSelect (void);
+void Exa_RequestNewSet (void);
 
+void Exa_RequestNewQuestion (void);
+void Exa_ListQuestionsToSelect (void);
+
+void Exa_PutParamSetInd (unsigned SetInd);
 void Exa_PutParamQstInd (unsigned QstInd);
 unsigned Exa_GetParamQstInd (void);
 long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);
 unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd);
 unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
 
-void Exa_AddTstQuestionsToExam (void);
+void Exa_AddQuestionsToExam (void);
+
+void Exa_RequestRemoveSet (void);
+void Exa_RemoveSet (void);
+
+void Exa_MoveUpSet (void);
+void Exa_MoveDownSet (void);
 
 void Exa_RequestRemoveQst (void);
 void Exa_RemoveQst (void);

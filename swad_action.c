@@ -717,9 +717,15 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemExa		] = {1882,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveExam			,NULL},
    [ActHidExa		] = {1883,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_HideExam			,NULL},
    [ActShoExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
+   [ActAddOneExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Exa_RequestNewSet		,NULL},
+   [ActReqRemExaSet	] = {1893,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestRemoveSet		,NULL},
+   [ActRemExaSet	] = {1894,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveSet			,NULL},
+   [ActUp_ExaSet	] = {1895,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_MoveUpSet			,NULL},
+   [ActDwnExaSet	] = {1896,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_MoveDownSet		,NULL},
+
    [ActAddOneExaQst	] = {1885,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Exa_RequestNewQuestion		,NULL},
-   [ActExaLstTstQst	] = {1886,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListTstQuestionsToSelect	,NULL},
-   [ActAddTstQstToExa	] = {1887,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_AddTstQuestionsToExam	,NULL},
+   [ActLstTstQstForExa	] = {1886,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListQuestionsToSelect	,NULL},
+   [ActAddQstToExa	] = {1887,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_AddQuestionsToExam		,NULL},
    [ActReqRemExaQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestRemoveQst		,NULL},
    [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveQst			,NULL},
    [ActUp_ExaQst	] = {1890,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_MoveUpQst			,NULL},
@@ -3688,12 +3694,17 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActHidExa,		// #1883
 	ActShoExa,		// #1884
 	ActAddOneExaQst,	// #1885
-	ActExaLstTstQst,	// #1886
-	ActAddTstQstToExa,	// #1887
+	ActLstTstQstForExa,	// #1886
+	ActAddQstToExa,		// #1887
 	ActReqRemExaQst,	// #1888
 	ActRemExaQst,		// #1889
 	ActUp_ExaQst,		// #1890
 	ActDwnExaQst,		// #1891
+	ActAddOneExaSet,	// #1892
+	ActReqRemExaSet,	// #1893
+	ActRemExaSet,		// #1894
+	ActUp_ExaSet,		// #1895
+	ActDwnExaSet,		// #1896
 	};
 
 /*****************************************************************************/

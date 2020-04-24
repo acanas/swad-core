@@ -1453,6 +1453,27 @@ const char *Hlp_ASSESSMENT_Exams_edit_exam =
 	"ASSESSMENT.Exams.en#edit-exam";
 #endif
 
+const char *Hlp_ASSESSMENT_Exams_question_sets =
+#if   L==1
+	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+#elif L==2
+	"ASSESSMENT.Exams.en#question-set";
+#elif L==3
+	"ASSESSMENT.Exams.en#question-set";
+#elif L==4
+	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+#elif L==5
+	"ASSESSMENT.Exams.en#question-set";
+#elif L==6
+	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+#elif L==7
+	"ASSESSMENT.Exams.en#question-set";
+#elif L==8
+	"ASSESSMENT.Exams.en#question-set";
+#elif L==9
+	"ASSESSMENT.Exams.en#question-set";
+#endif
+
 const char *Hlp_ASSESSMENT_Exams_events =
 #if   L==1
 	"ASSESSMENT.Exams.es#eventos";
