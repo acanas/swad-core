@@ -304,7 +304,7 @@ void Lnk_GetListLinks (void)
 
 	 /***** Create list with places *****/
 	 if ((Gbl.Links.Lst = (struct Link *) calloc (NumRows,sizeof (struct Link))) == NULL)
-	     Lay_NotEnoughMemoryExit ();;
+	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the links *****/
 	 for (NumLnk = 0;

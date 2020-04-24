@@ -4664,7 +4664,7 @@ static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long MedCod;;
+   long MedCod;
 
    /***** Remove media associated to comment *****/
    if (DB_QuerySELECT (&mysql_res,"can not get media",

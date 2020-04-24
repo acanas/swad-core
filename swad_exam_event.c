@@ -1292,22 +1292,22 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct ExaEvt_Event *Event)
   {
    /***** Get parameters *****/
-   /* Get parameters of exam */
-   if ((Exam->ExaCod = Exa_GetParams (Exams)) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetParams (Exams);
+   if (Exams->ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam->ExaCod = Exams->ExaCod;
    Grp_GetParamWhichGroups ();
-   Exa_GetDataOfExamByCod (Exam);
-
-   /* Get exam event code */
    if ((Event->EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam event is missing.");
+      Lay_WrongEventExit ();
+
+   /***** Get data of exam and event from database *****/
+   Exa_GetDataOfExamByCod (Exam);
    ExaEvt_GetDataOfEventByCod (Event);
 
    /***** Ensure parameters are correct *****/
-   if (Exam->ExaCod != Event->ExaCod)
-      Lay_ShowErrorAndExit ("Wrong exam code.");
-   if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_ShowErrorAndExit ("Event does not belong to this course.");
+   if (Exam->ExaCod != Event->ExaCod ||
+       Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
   }
 
 /*****************************************************************************/

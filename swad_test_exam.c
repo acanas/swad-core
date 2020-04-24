@@ -2352,7 +2352,7 @@ void TstRes_GetExamQuestionsFromDB (struct TstRes_Result *Result)
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumQsts != Result->NumQsts)
-      Lay_ShowErrorAndExit ("Wrong exam.");
+      Lay_WrongExamExit ();
   }
 
 /*****************************************************************************/

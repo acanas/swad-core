@@ -4361,7 +4361,7 @@ static long For_GetThrInMyClipboard (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   long ThrCod = -1L;;
+   long ThrCod = -1L;
 
    /***** Get if there is a thread ready to move in my clipboard from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not check if there is"

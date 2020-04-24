@@ -544,11 +544,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.194 (2020-04-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.195 (2020-04-25)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-	Version 19.194:   Apr 24, 2020	New database table for question sets in exams. (298257 lines)
+
+	Version 19.195:   Apr 25, 2020	Changes in sets of questions. (298699 lines)
+					2 changes necessary in database:
+ALTER TABLE exa_sets ADD COLUMN NumQstsToExam INT NOT NULL DEFAULT 0 AFTER SetInd;
+ALTER TABLE exa_sets ADD COLUMN Title VARCHAR(2047) NOT NULL AFTER NumQstsToExam;
+
+	Version 19.194.1: Apr 24, 2020	Translate messages related to sets of questions. (? lines)
+	Version 19.194:   Apr 24, 2020	New database table for set of questions in exams. (298257 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_sets (SetCod INT NOT NULL AUTO_INCREMENT,ExaCod INT NOT NULL,SetInd INT NOT NULL DEFAULT 0,UNIQUE INDEX(SetCod),INDEX(ExaCod,SetInd));
 

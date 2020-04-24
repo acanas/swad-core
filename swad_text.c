@@ -931,6 +931,69 @@ const char *Txt_Action =
 	"A&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Add_questions =
+#if   L==1	// ca
+	"Afegir preguntes";
+#elif L==2	// de
+	"F&uuml;gen Fragen";
+#elif L==3	// en
+	"Add questions";
+#elif L==4	// es
+	"A&ntilde;adir preguntas";
+#elif L==5	// fr
+	"Ajouter questions";
+#elif L==6	// gn
+	"A&ntilde;adir preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Aggiungere domande";
+#elif L==8	// pl
+	"Dodaj pytania";
+#elif L==9	// pt
+	"Adicionar perguntas";
+#endif
+
+const char *Txt_Add_this_ID =
+#if   L==1	// ca
+	"Afegir aquest ID";
+#elif L==2	// de
+	"F&uuml;gen Sie diese Ausweis-Nr.";
+#elif L==3	// en
+	"Add this ID";
+#elif L==4	// es
+	"A&ntilde;adir este ID";
+#elif L==5	// fr
+	"Ajouter ce num&eacute;ro d'identit&eacute;";
+#elif L==6	// gn
+	"A&ntilde;adir este ID";	// Okoteve traducción
+#elif L==7	// it
+	"Aggiungere questa carta d'identit&agrave;";
+#elif L==8	// pl
+	"Dodaj ten identyfikator";
+#elif L==9	// pt
+	"Adicionar este n&ordm; identif.";
+#endif
+
+const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Afegir %s";
+#elif L==2	// de
+	"F&uuml;gen %s";
+#elif L==3	// en
+	"Add %s";
+#elif L==4	// es
+	"A&ntilde;adir %s";
+#elif L==5	// fr
+	"Ajouter %s";
+#elif L==6	// gn
+	"A&ntilde;adir %s";	// Okoteve traducción
+#elif L==7	// it
+	"Aggiungere %s";
+#elif L==8	// pl
+	"Dodaj %s";
+#elif L==9	// pt
+	"Adicionar %s";
+#endif
+
 const char *Txt_Administer_me =
 #if   L==1	// ca
 	"Administrarme";
@@ -1841,69 +1904,6 @@ const char *Txt_Another_user_s_profile =
 	"Profil innego u&zdot;ytkownika";
 #elif L==9	// pt
 	"Perfil de outro usu&aacute;rio";
-#endif
-
-const char *Txt_Add_questions =
-#if   L==1	// ca
-	"Afegir preguntes";
-#elif L==2	// de
-	"F&uuml;gen Fragen";
-#elif L==3	// en
-	"Add questions";
-#elif L==4	// es
-	"A&ntilde;adir preguntas";
-#elif L==5	// fr
-	"Ajouter questions";
-#elif L==6	// gn
-	"A&ntilde;adir preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiungere domande";
-#elif L==8	// pl
-	"Dodaj pytania";
-#elif L==9	// pt
-	"Adicionar perguntas";
-#endif
-
-const char *Txt_Add_this_ID =
-#if   L==1	// ca
-	"Afegir aquest ID";
-#elif L==2	// de
-	"F&uuml;gen Sie diese Ausweis-Nr.";
-#elif L==3	// en
-	"Add this ID";
-#elif L==4	// es
-	"A&ntilde;adir este ID";
-#elif L==5	// fr
-	"Ajouter ce num&eacute;ro d'identit&eacute;";
-#elif L==6	// gn
-	"A&ntilde;adir este ID";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiungere questa carta d'identit&agrave;";
-#elif L==8	// pl
-	"Dodaj ten identyfikator";
-#elif L==9	// pt
-	"Adicionar este n&ordm; identif.";
-#endif
-
-const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Afegir %s";
-#elif L==2	// de
-	"F&uuml;gen %s";
-#elif L==3	// en
-	"Add %s";
-#elif L==4	// es
-	"A&ntilde;adir %s";
-#elif L==5	// fr
-	"Ajouter %s";
-#elif L==6	// gn
-	"A&ntilde;adir %s";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiungere %s";
-#elif L==8	// pl
-	"Dodaj %s";
-#elif L==9	// pt
-	"Adicionar %s";
 #endif
 
 const char *Txt_Announcement_created =
@@ -25328,6 +25328,27 @@ const char *Txt_New_room =
 	"Nova sala";
 #endif
 
+const char *Txt_New_set_of_questions =
+#if   L==1	// ca
+	"Nou conjunt de preguntes";
+#elif L==2	// de
+	"Neue Satz von Fragen";
+#elif L==3	// en
+	"New set of questions";
+#elif L==4	// es
+	"Nuevo conjunto de preguntas";
+#elif L==5	// fr
+	"Nouveau ensemble de questions";
+#elif L==6	// gn
+	"Nuevo conjunto de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova serie di domande";
+#elif L==8	// pl
+	"Nowy zestaw pyta&nacute;";
+#elif L==9	// pt
+	"Novo conjunto de perguntas";
+#endif
+
 const char *Txt_New_TIMELINE_comment =
 #if   L==1	// ca
 	"Nou comentari";
@@ -40836,6 +40857,27 @@ const char *Txt_sessions =
 	"sess&otilde;es";
 #endif
 
+const char *Txt_Set_of_questions =
+#if   L==1	// ca
+	"Conjunt de preguntes";
+#elif L==2	// de
+	"Satz von Fragen";
+#elif L==3	// en
+	"Set of questions";
+#elif L==4	// es
+	"Conjunto de preguntas";
+#elif L==5	// fr
+	"Ensemble de questions";
+#elif L==6	// gn
+	"Conjunto de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Serie di domande";
+#elif L==8	// pl
+	"Zestaw pyta&nacute;";
+#elif L==9	// pt
+	"Conjunto de perguntas";
+#endif
+
 const char *Txt_Set_password =
 #if   L==1	// ca
 	"Establir contrasenya";
@@ -40876,6 +40918,27 @@ const char *Txt_Set_up =
 	"Set up";
 #elif L==9	// pt
 	"Instalar";
+#endif
+
+const char *Txt_Sets_of_questions =
+#if   L==1	// ca
+	"Conjunts de preguntes";
+#elif L==2	// de
+	"S&auml;tze von Fragen";
+#elif L==3	// en
+	"Sets of questions";
+#elif L==4	// es
+	"Conjuntos de preguntas";
+#elif L==5	// fr
+	"Ensembles de questions";
+#elif L==6	// gn
+	"Conjuntos de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Serie di domande";
+#elif L==8	// pl
+	"Zestaw&oacute;w pyta&nacute;";
+#elif L==9	// pt
+	"Conjuntos de perguntas";
 #endif
 
 const char *Txt_Settings =
@@ -51311,6 +51374,27 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 	"There was a problem sending an email automatically.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Ocorreu um problema ao enviar um email automaticamente.";
+#endif
+
+const char *Txt_This_exam_has_no_sets_of_questions =
+#if   L==1	// ca
+	"Aquest examen no t&eacute; conjunts de preguntes.";
+#elif L==2	// de
+	"Dieses Pr&uuml;fung hat keine s&auml;tze von Fragen.";
+#elif L==3	// en
+	"This exam has no sets of questions.";
+#elif L==4	// es
+	"Este examen no tiene conjuntos de preguntas.";
+#elif L==5	// fr
+	"Cet examen n'a pas d'ensembles de questions.";
+#elif L==6	// gn
+	"Este examen no tiene conjuntos de preguntas.";	// Okoteve traducción
+#elif L==7	// it
+	"Questo esame non ha serie di domande.";
+#elif L==8	// pl
+	"Ten egzamin nie ma zestaw&oacute;w pyta&nacute;.";
+#elif L==9	// pt
+	"Este exame n&atilde;o tem conjuntos de perguntas.";
 #endif
 
 const char *Txt_This_exam_has_no_questions =

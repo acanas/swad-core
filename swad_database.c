@@ -1185,19 +1185,23 @@ mysql> DESCRIBE exa_results;
    /***** Table exa_sets *****/
 /*
 mysql> DESCRIBE exa_sets;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| ExaCod | int(11) | NO   | MUL | NULL    |       |
-| QstCod | int(11) | NO   | MUL | NULL    |       |
-| QstInd | int(11) | NO   |     | 0       |       |
-+--------+---------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
++---------------+---------------+------+-----+---------+----------------+
+| Field         | Type          | Null | Key | Default | Extra          |
++---------------+---------------+------+-----+---------+----------------+
+| SetCod        | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ExaCod        | int(11)       | NO   | MUL | NULL    |                |
+| SetInd        | int(11)       | NO   |     | 0       |                |
+| NumQstsToExam | int(11)       | NO   |     | 0       |                |
+| Title         | varchar(2047) | NO   |     | NULL    |                |
++---------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sets ("
 			"SetCod INT NOT NULL AUTO_INCREMENT,"
 			"ExaCod INT NOT NULL,"
 			"SetInd INT NOT NULL DEFAULT 0,"
+			"NumQstsToExam INT NOT NULL DEFAULT 0,"
+			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
 		   "INDEX(ExaCod,SetInd))");
 

@@ -329,7 +329,7 @@ void TT_ShowClassTimeTable (void)
      };
    struct TT_Timetable Timetable;
    bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
-	             Gbl.Action.Act == ActPrnMyTT);;
+	             Gbl.Action.Act == ActPrnMyTT);
    Grp_WhichGroups_t WhichGroups;
 
    /***** Initializations *****/

@@ -164,8 +164,12 @@ void ExaRes_ShowMyExaResultsInExa (void)
    Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
+
+   /***** Get data of exam from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Exam begin *****/
@@ -214,10 +218,12 @@ void ExaRes_ShowMyExaResultsInEvt (void)
    ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
    if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+      Lay_WrongEventExit ();
    Exa_GetDataOfExamByCod (&Exam);
    ExaEvt_GetDataOfEventByCod (&Event);
 
@@ -366,8 +372,10 @@ void ExaRes_ShowAllExaResultsInExa (void)
    Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Exam begin *****/
@@ -457,10 +465,14 @@ void ExaRes_ShowAllExaResultsInEvt (void)
    ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
-   if ((Exam.ExaCod = Exa_GetParams (&Exams)) <= 0)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
    if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+      Lay_WrongEventExit ();
+
+   /***** Get data of exam and event *****/
    Exa_GetDataOfExamByCod (&Exam);
    ExaEvt_GetDataOfEventByCod (&Event);
 

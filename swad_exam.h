@@ -38,6 +38,9 @@
 #define Exa_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Exa_MAX_BYTES_TITLE	((Exa_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+#define ExaSet_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define ExaSet_MAX_BYTES_TITLE	((ExaSet_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
 #define Exa_NUM_ORDERS 3
 typedef enum
   {
@@ -61,6 +64,7 @@ struct Exa_ExamSelected
    bool Selected;	// Is this exam selected when seeing match results?
   };
 
+/* Exams context */
 struct Exa_Exams
   {
    bool LstIsRead;		// Is the list already read from database...
@@ -73,6 +77,7 @@ struct Exa_Exams
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    long ExaCod;			// Selected/current exam code
+   long SetCod;			// Selected/current set code
    long EvtCod;			// Selected/current match code
    unsigned SetInd;		// Current set index
    unsigned QstInd;		// Current question index
@@ -95,9 +100,13 @@ struct Exa_Exam
    unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
   };
 
-struct Exa_Set
+struct ExaSet_Set
   {
-   long SetCod;
+   long ExaCod;			// Exam code
+   long SetCod;			// Set code
+   unsigned SetInd;		// Set index (position in the exam)
+   unsigned NumQstsToExam;	// Number of questions in this set taht will appear in the exam
+   char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
   };
 
 /*****************************************************************************/
@@ -123,7 +132,8 @@ void Exa_SetCurrentExaCod (long ExaCod);
 void Exa_PutParams (void *Exams);
 void Exa_PutParamExamCod (long ExaCod);
 long Exa_GetParamExamCod (void);
-long Exa_GetParams (struct Exa_Exams *Exams);
+long ExaSet_GetParamSetCod (void);
+void Exa_GetParams (struct Exa_Exams *Exams);
 
 void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder);
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams);
@@ -140,6 +150,7 @@ void Exa_UnhideExam (void);
 
 void Exa_RequestCreatOrEditExam (void);
 
+void ExaSet_RecFormSet (void);
 void Exa_RecFormExam (void);
 bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 
@@ -147,6 +158,7 @@ unsigned Exa_GetNumQstsExam (long ExaCod);
 
 void Exa_RequestNewSet (void);
 
+void ExaSet_RequestCreatOrEditSet (void);
 void Exa_RequestNewQuestion (void);
 void Exa_ListQuestionsToSelect (void);
 
@@ -159,11 +171,11 @@ unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
 
 void Exa_AddQuestionsToExam (void);
 
-void Exa_RequestRemoveSet (void);
-void Exa_RemoveSet (void);
+void ExaSet_RequestRemoveSet (void);
+void ExaSet_RemoveSet (void);
 
-void Exa_MoveUpSet (void);
-void Exa_MoveDownSet (void);
+void ExaSet_MoveUpSet (void);
+void ExaSet_MoveDownSet (void);
 
 void Exa_RequestRemoveQst (void);
 void Exa_RemoveQst (void);
