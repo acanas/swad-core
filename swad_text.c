@@ -26690,25 +26690,46 @@ const char *Txt_Number_of_BR_program_items =
 	"N.&ordm; de<br />itens de programas";
 #endif
 
-const char *Txt_Number_of_questions_in_this_set_that_will_appear_in_the_exam =
+const char *Txt_Number_of_questions =
 #if   L==1	// ca
-	"Nombre de preguntes d'aquest conjunt que apareixeran a l'examen";
+	"Nombre de preguntes";
 #elif L==2	// de
-	"Anzahl der Fragen in diesem Satz, die in der Pr&uuml;fung erscheinen";
+	"Anzahl der Fragen";
 #elif L==3	// en
-	"Number of questions in this set that will appear in the exam";
+	"Number of questions";
 #elif L==4	// es
-	"N.&ordm; de preguntas de este conjunto que aparecer&aacute;n en el examen";
+	"N.&ordm; de preguntas";
 #elif L==5	// fr
-	"Nombre de questions dans cet ensemble qui appara&icirc;tront dans l'examen";
+	"Nombre de questions";
 #elif L==6	// gn
-	"N.&ordm; de preguntas de este conjunto que aparecer&aacute;n en el examen";	// Okoteve traducción
+	"N.&ordm; de preguntas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di domande in questo set che appariranno nell'esame";
+	"Numero di domande";
 #elif L==8	// pl
-	"Liczba pyta&nacute; w tym zestawie, kt&oacute;re pojawi&aogon; si&eogon; na egzaminie";
+	"Liczba pyta&nacute;";
 #elif L==9	// pt
-	"N&uacute;mero de perguntas neste conjunto que aparecer&atilde;o no exame";
+	"N&uacute;mero de perguntas";
+#endif
+
+const char *Txt_Number_of_questions_in_the_exam =
+#if   L==1	// ca
+	"Nombre de preguntes a l'examen";
+#elif L==2	// de
+	"Anzahl der Fragen in der Pr&uuml;fung";
+#elif L==3	// en
+	"Number of questions in the exam";
+#elif L==4	// es
+	"N.&ordm; de preguntas en el examen";
+#elif L==5	// fr
+	"Nombre de questions dans l'examen";
+#elif L==6	// gn
+	"N.&ordm; de preguntas en el examen";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di domande nell'esame";
+#elif L==8	// pl
+	"Liczba pyta&nacute; na egzaminie";
+#elif L==9	// pt
+	"N&uacute;mero de perguntas no exame";
 #endif
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
