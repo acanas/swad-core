@@ -1513,15 +1513,13 @@ static void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    /***** Put form to create/edit an exam *****/
    Exa_PutFormEditionExam (Exams,Exam,Txt,ItsANewExam);
 
-   /***** Show list of sets *****/
-   if (!ItsANewExam)
-     {
-      /* Show sets of the exam ready to be edited */
+   /***** Show other lists *****/
+   if (ItsANewExam)
+      /* Show exams again */
+      Exa_ListAllExams (Exams);
+   else
+      /* Show list of sets */
       ExaSet_ListExamSets (Exams,Exam,Set);
-
-      /* Show questions of the exam ready to be edited */
-      Exa_ListExamQuestions (Exams,Exam);
-     }
   }
 
 /*****************************************************************************/
@@ -1794,6 +1792,7 @@ void Exa_RecFormExam (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
    bool ItsANewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1804,8 +1803,9 @@ void Exa_RecFormExam (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
-   /***** Reset exam *****/
+   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -1820,30 +1820,17 @@ void Exa_RecFormExam (void)
      {
       /***** Create a new exam or update an existing one *****/
       if (ItsANewExam)
+	{
 	 Exa_CreateExam (&Exam,Txt);	// Add new exam to database
+	 ItsANewExam = false;
+	}
       else
 	 Exa_UpdateExam (&Exam,Txt);	// Update exam data in database
-
-      /***** Put form to edit the exam created or updated *****/
-      Exa_PutFormEditionExam (&Exams,&Exam,Txt,
-			      false);	// No new exam
-
-      /***** Show questions of the exam ready to be edited ******/
-      Exa_ListExamQuestions (&Exams,&Exam);
      }
-   else
-     {
-      /***** Put form to create/edit the exam *****/
-      Exa_PutFormEditionExam (&Exams,&Exam,Txt,ItsANewExam);
 
-      /***** Show exams or questions *****/
-      if (ItsANewExam)
-	 /* Show exams again */
-	 Exa_ListAllExams (&Exams);
-      else
-	 /* Show questions of the exam ready to be edited */
-	 Exa_ListExamQuestions (&Exams,&Exam);
-     }
+   /***** Put form to create/edit an exam and show sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+			ItsANewExam);	// It's not a new exam
   }
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
