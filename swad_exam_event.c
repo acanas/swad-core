@@ -381,7 +381,7 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
    unsigned long NumRows;
    Dat_StartEndTime_t StartEndTime;
 
-   /***** Get data of exam event from database *****/
+   /***** Get exam data event from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get events",
 					"SELECT EvtCod,"			// row[ 0]
 					       "ExaCod,"			// row[ 1]
@@ -1300,7 +1300,7 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
    if ((Event->EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_WrongEventExit ();
 
-   /***** Get data of exam and event from database *****/
+   /***** Get exam data and event from database *****/
    Exa_GetDataOfExamByCod (Exam);
    ExaEvt_GetDataOfEventByCod (Event);
 

@@ -169,7 +169,7 @@ void ExaRes_ShowMyExaResultsInExa (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Exam begin *****/
@@ -472,7 +472,7 @@ void ExaRes_ShowAllExaResultsInEvt (void)
    if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_WrongEventExit ();
 
-   /***** Get data of exam and event *****/
+   /***** Get exam data and event *****/
    Exa_GetDataOfExamByCod (&Exam);
    ExaEvt_GetDataOfEventByCod (&Event);
 

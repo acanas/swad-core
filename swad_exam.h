@@ -162,7 +162,6 @@ void ExaSet_RequestCreatOrEditSet (void);
 void Exa_RequestNewQuestion (void);
 void Exa_ListQuestionsToSelect (void);
 
-void Exa_PutParamSetInd (unsigned SetInd);
 void Exa_PutParamQstInd (unsigned QstInd);
 unsigned Exa_GetParamQstInd (void);
 long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);

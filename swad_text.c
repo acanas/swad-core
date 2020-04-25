@@ -9438,6 +9438,27 @@ const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
        "Voc&ecirc; realmente deseja remover as perguntas selecionadas?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"&iquest;De veres voleu eliminar el conjunt de preguntes <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Satz von Fragen <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the set of questions <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el conjunto de preguntas <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer l'ensemble de questions <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el conjunto de preguntas <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere il set di domande <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usunac zestaw pyta&nacute; <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o conjunto de perguntas <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Realment voleu eliminar l'enquesta <strong>%s</strong>?";
@@ -34097,6 +34118,27 @@ const char *Txt_Remove_record_field =
 	"Usu&nacute; pola rekordu";
 #elif L==9	// pt
 	"Remover campo de cart&atilde;o";
+#endif
+
+const char *Txt_Remove_set_of_questions =
+#if   L==1	// ca
+	"Eliminar conjunt de preguntes";
+#elif L==2	// de
+	"Entfernen Satz von Fragen";
+#elif L==3	// en
+	"Remove set of questions";
+#elif L==4	// es
+	"Eliminar conjunto de preguntas";
+#elif L==5	// fr
+	"Supprimer ensemble de questions";
+#elif L==6	// gn
+	"Eliminar conjunto de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere set di domande";
+#elif L==8	// pl
+	"Usu&nacute; zestaw pyta&nacute;";
+#elif L==9	// pt
+	"Remover conjunto de perguntas";
 #endif
 
 const char *Txt_Remove_survey =

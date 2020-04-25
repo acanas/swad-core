@@ -130,7 +130,7 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor);
 
-static void Exa_PutParamsOneSet (void *Exams);
+static void ExaSet_PutParamsOneSet (void *Exams);
 static void Exa_PutParamsOneQst (void *Exams);
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParamOrder (void);
@@ -167,6 +167,8 @@ static void ExaSet_UpdateSet (struct ExaSet_Set *Set);
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
+
+static void ExaSet_PutParamSetCod (long SetCod);
 
 static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd);
 
@@ -484,7 +486,7 @@ void Exa_SeeOneExam (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam *****/
+   /***** Get exam data *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Show exam *****/
@@ -773,15 +775,15 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/************** Put parameter to move/remove one set of questions ****************/
+/************ Put parameter to move/remove one set of questions **************/
 /*****************************************************************************/
 
-static void Exa_PutParamsOneSet (void *Exams)
+static void ExaSet_PutParamsOneSet (void *Exams)
   {
    if (Exams)
      {
       Exa_PutParams (Exams);
-      Exa_PutParamSetInd (((struct Exa_Exams *) Exams)->SetInd);
+      ExaSet_PutParamSetCod (((struct Exa_Exams *) Exams)->SetCod);
      }
   }
 
@@ -1043,10 +1045,14 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
+   char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Get data of set from database *****/
+   /***** Get data of set of questions from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get set data",
-			     "SELECT SetInd"	// row[0]
+			      "SELECT SetCod,"		// row[0]
+			             "SetInd,"		// row[1]
+				     "NumQstsToExam,"	// row[2]
+				     "Title"		// row[3]
 			     " FROM exa_sets"
 			     " WHERE SetCod=%ld"
 			     " AND ExaCod=%ld",	// Extra check
@@ -1055,9 +1061,27 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] SetCod
+      row[1] SetInd
+      row[2] NumQstsToExam
+      row[3] Title
+      */
+      /* Get set code (row[0]) */
+      Set->SetCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get index of the set (row[0]) */
-      Set->SetInd = Str_ConvertStrToUnsigned (row[0]);
+      /* Get set index (row[1]) */
+      Set->SetInd = Str_ConvertStrToUnsigned (row[1]);
+      snprintf (StrSetInd,sizeof (Set->SetInd),
+	        "%u",
+		Set->SetInd);
+
+      /* Get set index (row[2]) */
+      Set->NumQstsToExam = Str_ConvertStrToUnsigned (row[2]);
+
+      /* Get the title of the set (row[3]) */
+      Str_Copy (Set->Title,row[3],
+                ExaSet_MAX_BYTES_TITLE);
      }
    else
       /* Initialize to empty set */
@@ -1077,7 +1101,7 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
 			     "SELECT exa_exams.ExaCod,"		// row[0]
 			            "exa_exams.CrsCod,"		// row[1]
@@ -1633,7 +1657,7 @@ void ExaSet_RecFormSet (void)
 	 ExaSet_UpdateSet (&Set);	// Update set data in database
      }
 
-   /***** Put form to create/edit an exam and show sets *****/
+   /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
                         false);	// It's not a new exam
   }
@@ -1828,7 +1852,7 @@ void Exa_RecFormExam (void)
 	 Exa_UpdateExam (&Exam,Txt);	// Update exam data in database
      }
 
-   /***** Put form to create/edit an exam and show sets *****/
+   /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
 			ItsANewExam);	// It's not a new exam
   }
@@ -2054,12 +2078,6 @@ void ExaSet_RequestCreatOrEditSet (void)
    /***** Put form to edit the exam created or updated *****/
    Exa_PutFormEditionExam (&Exams,&Exam,Txt,
 			   false);	// No new exam
-
-   /***** Show sets of the exam ready to be edited *****/
-   ExaSet_ListExamSets (&Exams,&Exam,&Set);
-
-   /* Show questions of the exam ready to be edited */
-   // Exa_ListExamQuestions (&Exams,&Exam);
   }
 
 /*****************************************************************************/
@@ -2083,7 +2101,7 @@ void Exa_RequestNewQuestion (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -2123,7 +2141,7 @@ void Exa_ListQuestionsToSelect (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -2141,9 +2159,9 @@ void Exa_ListQuestionsToSelect (void)
 /**************** Write parameter with index of set of questions *****************/
 /*****************************************************************************/
 
-void Exa_PutParamSetInd (unsigned SetInd)
+static void ExaSet_PutParamSetCod (long SetCod)
   {
-   Par_PutHiddenParamUnsigned (NULL,"SetInd",SetInd);
+   Par_PutHiddenParamUnsigned (NULL,"SetCod",SetCod);
   }
 
 /*****************************************************************************/
@@ -2359,13 +2377,13 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
    /***** Get maximum set index *****/
    MaxSetInd = ExaSet_GetMaxSetIndexInExam (Exam->ExaCod);
 
-   /***** Get data of set of questionss from database *****/
+   /***** Get data of set of questions from database *****/
    NumSets = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get exam set of questionss",
-			      "SELECT exa_sets.SetCod,"		// row[0]
-			             "exa_sets.SetInd,"		// row[1]
-				     "exa_sets.NumQstsToExam,"	// row[2]
-				     "exa_sets.Title"		// row[3]
+	     DB_QuerySELECT (&mysql_res,"can not get sets of questions",
+			      "SELECT SetCod,"		// row[0]
+			             "SetInd,"		// row[1]
+				     "NumQstsToExam,"	// row[2]
+				     "Title"		// row[3]
 			      " FROM exa_sets"
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
@@ -2383,7 +2401,7 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
                                           Exam->ExaCod,MaxSetInd,
                                           NumSets,mysql_res,
 				          ICanEditSets);
-   else	// This exam has no sets
+   else		// This exam has no sets
       Ale_ShowAlert (Ale_INFO,Txt_This_exam_has_no_sets_of_questions);
 
    /***** Free structure that stores the query result *****/
@@ -2519,8 +2537,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       if (ICanEditSets)
 	{
 	 Frm_StartForm (ActReqRemExaSet);
-	 Exa_PutParams (Exams);
-	 Exa_PutParamQstInd (Set.SetInd);
+	 ExaSet_PutParamsOneSet (Exams);
 	 Ico_PutIconRemove ();
 	 Frm_EndForm ();
 	}
@@ -2531,7 +2548,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       if (ICanEditSets && Set.SetInd > 1)
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,NULL,
-	                                Exa_PutParamsOneSet,Exams,
+	                                ExaSet_PutParamsOneSet,Exams,
 				        "arrow-up.svg",
 					Str_BuildStringStr (Txt_Move_up_X,
 							    StrSetInd));
@@ -2544,7 +2561,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       if (ICanEditSets && Set.SetInd < MaxSetInd)
 	{
 	 Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,NULL,
-	                                Exa_PutParamsOneSet,Exams,
+	                                ExaSet_PutParamsOneSet,Exams,
 				        "arrow-down.svg",
 					Str_BuildStringStr (Txt_Move_down_X,
 							    StrSetInd));
@@ -2881,7 +2898,7 @@ void Exa_AddQuestionsToExam (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -2990,6 +3007,46 @@ static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams)
 
 void ExaSet_RequestRemoveSet (void)
   {
+   extern const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X;
+   extern const char *Txt_Remove_set_of_questions;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Show question and button to remove question *****/
+   Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
+			   ExaSet_PutParamsOneSet,&Exams,
+			   Btn_REMOVE_BUTTON,Txt_Remove_set_of_questions,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_set_of_questions_X,
+			   Set.Title);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
@@ -2999,7 +3056,6 @@ void ExaSet_RequestRemoveSet (void)
 void ExaSet_RemoveSet (void)
   {
   }
-
 
 /*****************************************************************************/
 /************ Move up position of a set of questions in an exam **************/
@@ -3041,7 +3097,7 @@ void Exa_RequestRemoveQst (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -3091,7 +3147,7 @@ void Exa_RemoveQst (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -3162,7 +3218,7 @@ void Exa_MoveUpQst (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -3224,7 +3280,7 @@ void Exa_MoveDownQst (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Check if exam has events *****/
@@ -3368,7 +3424,7 @@ void Exa_RequestNewEvent (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
-   /***** Get data of exam from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
 
    /***** Show exam *****/

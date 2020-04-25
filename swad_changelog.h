@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.196.1 (2020-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.197 (2020-04-26)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.197:   Apr 26, 2020	Ask user to remove set of questions. (298954 lines)
 	Version 19.196.1: Apr 25, 2020	Changes in edition of exams. (298857 lines)
 	Version 19.196:   Apr 25, 2020	Changes in edition of sets of questions. (298866 lines)
 	Version 19.195.1: Apr 25, 2020	Translation of messages related to sets of questions. (298840 lines)
