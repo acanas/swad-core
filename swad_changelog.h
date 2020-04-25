@@ -548,8 +548,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-
-	Version 19.195.1: Apr 25, 2020	Translation of messages related to sets of questions. (? lines)
+	Version 19.195.1: Apr 25, 2020	Translation of messages related to sets of questions. (298840 lines)
 	Version 19.195:   Apr 25, 2020	Changes in sets of questions. (298699 lines)
 					2 changes necessary in database:
 ALTER TABLE exa_sets ADD COLUMN NumQstsToExam INT NOT NULL DEFAULT 0 AFTER SetInd;

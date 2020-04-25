@@ -1509,11 +1509,11 @@ static void ExaSet_PutFormsEditionSet (struct Exa_Exams *Exams,
    // extern const char *Hlp_ASSESSMENT_Exams_new_set;
    // extern const char *Hlp_ASSESSMENT_Exams_edit_set;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_New_set;
-   extern const char *Txt_Edit_set;
+   extern const char *Txt_New_set_of_questions;
+   extern const char *Txt_Edit_set_of_questions;
    extern const char *Txt_Title;
    extern const char *Txt_Number_of_questions_in_this_set_that_will_appear_in_the_exam;
-   extern const char *Txt_Create_set;
+   extern const char *Txt_Create_set_of_questions;
    extern const char *Txt_Save_changes;
 
    /***** Begin form *****/
@@ -1524,13 +1524,13 @@ static void ExaSet_PutFormsEditionSet (struct Exa_Exams *Exams,
 
    /***** Begin box and table *****/
    if (ItsANewSet)
-      Box_BoxTableBegin (NULL,Txt_New_set,
+      Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
                          NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,
 			 Exam->Title[0] ? Exam->Title :
-					  Txt_Edit_set,
+					  Txt_Edit_set_of_questions,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
@@ -1565,7 +1565,7 @@ static void ExaSet_PutFormsEditionSet (struct Exa_Exams *Exams,
 
    /***** End table, send button and end box *****/
    if (ItsANewSet)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_set);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_set_of_questions);
    else
       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 

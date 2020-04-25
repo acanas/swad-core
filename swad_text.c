@@ -1486,6 +1486,27 @@ const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is 
 	"J&aacute; existe um projeto com o diret&oacute;rio <strong>%s</strong>.";
 #endif
 
+const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Ja existia un conjunt de preguntes en aquest examen amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2	// de
+	"In dieser Pr&uuml;fung gab es bereits eine Reihe von Fragen mit dem Titel <strong>%s</strong>.";
+#elif L==3	// en
+	"Already existed a set of questions in this exam with the title <strong>%s</strong>.";
+#elif L==4	// es
+	"Ya exist&iacute;a un conjunto de preguntas en este examen con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5	// fr
+	"Il existe d&eacute;j&agrave; un ensemble de questions dans cet examen avec le titre <strong>%s</strong>.";
+#elif L==6	// gn
+	"Ya exist&iacute;a un conjunto de preguntas en este examen con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"In questo esame esisteva gi&agrave; un set di domande con il titolo <strong>%s</strong>.";
+#elif L==8	// pl
+	"Na tym egzaminie istnia&lstrok; ju&zdot; zestaw pyta&nacute; o tytule <strong>%s</strong>.";
+#elif L==9	// pt
+	"J&aacute; existia um conjunto de perguntas neste exame com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
@@ -2445,17 +2466,17 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #elif L==3	// en
 	"Average number<br />of assignments<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de actividades<br />por asignatura";
+	"N.&ordm; medio<br />de actividades<br />por asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />d'activit&eacute;s<br />par mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de actividades<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de actividades<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di attivit&agrave;<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />zadania<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de atividades<br />por disciplina";
+	"N.&ordm; medio<br />de atividades<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_games_BR_per_course =
@@ -2466,17 +2487,17 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 #elif L==3	// en
 	"Average number<br />of games<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de juegos<br />por asignatura";
+	"N.&ordm; medio<br />de juegos<br />por asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />de jeux<br />par mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de juegos<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de juegos<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di giochi<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />gry<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de jogos<br />por disciplina";
+	"N.&ordm; medio<br />de jogos<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_items_BR_per_course =
@@ -2487,17 +2508,17 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 #elif L==3	// en
 	"Average number<br />of items<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de items<br />por asignatura";
+	"N.&ordm; medio<br />de items<br />por asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />d'&eacute;l&eacute;ments<br />par mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de items<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de items<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di elementi<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />pozycji<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de itens<br />por disciplina";
+	"N.&ordm; medio<br />de itens<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_projects_BR_per_course =
@@ -2508,17 +2529,17 @@ const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #elif L==3	// en
 	"Average number<br />of projects<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de proyectos<br />por asignatura";
+	"N.&ordm; medio<br />de proyectos<br />por asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />de projets<br />par mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de proyectos<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de proyectos<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di progetti<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />projekty<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de projetos<br />por disciplina";
+	"N.&ordm; medio<br />de projetos<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_questions_BR_per_survey =
@@ -2529,17 +2550,17 @@ const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #elif L==3	// en
 	"Average number<br />of questions<br />per survey";
 #elif L==4	// es
-	"N&ordm; medio<br />de preguntas<br />por encuesta";
+	"N.&ordm; medio<br />de preguntas<br />por encuesta";
 #elif L==5	// fr
 	"Nombre moyen<br />de questions<br />par sondage";
 #elif L==6	// gn
-	"N&ordm; medio<br />de preguntas<br />por encuesta";	// Okoteve traducción
+	"N.&ordm; medio<br />de preguntas<br />por encuesta";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di domande<br />per sondaggio";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />pyta&nacute;<br />na ankiety";
 #elif L==9	// pt
-	"N&ordm; medio<br />de perguntas<br />por inqu&eacute;rito";
+	"N.&ordm; medio<br />de perguntas<br />por inqu&eacute;rito";
 #endif
 
 const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
@@ -2550,17 +2571,17 @@ const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 #elif L==3	// en
 	"Average<br />number<br />of test<br />questions<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de preguntas<br />de test por<br />asignatura";
+	"N.&ordm; medio<br />de preguntas<br />de test por<br />asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />de questions<br />de test par<br />mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de preguntas<br />de test por<br />asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de preguntas<br />de test por<br />asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di domande<br />di test<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />pyta&nacute;<br />testowych<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
+	"N.&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
 #endif
 
 const char *Txt_Average_number_BR_of_surveys_BR_per_course =
@@ -2571,17 +2592,17 @@ const char *Txt_Average_number_BR_of_surveys_BR_per_course =
 #elif L==3	// en
 	"Average number<br />of surveys<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de encuestas<br />por asignatura";
+	"N.&ordm; medio<br />de encuestas<br />por asignatura";
 #elif L==5	// fr
 	"Nombre moyen<br />de sondages<br />par mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio<br />de encuestas<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br />de encuestas<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio<br />di sondaggi<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />badania<br />na kurs";
 #elif L==9	// pt
-	"N&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
+	"N.&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
@@ -2592,59 +2613,59 @@ const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
 #elif L==3	// en
 	"Average number of courses to which a user belongs";
 #elif L==4	// es
-	"N&ordm; medio de asignaturas a las que pertenece cada usuario";
+	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";
 #elif L==5	// fr
 	"Nombre moyen de cours &agrave; qui appartient un utilisateur";
 #elif L==6	// gn
-	"N&ordm; medio de asignaturas a las que pertenece cada usuario";	// Okoteve traducción
+	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio di corsi a cui appartiene un utente";
 #elif L==8	// pl
 	"&Sacute;rednia liczba kurs&oacute;w do kt&oacute;rej nalezy uzytkownik";
 #elif L==9	// pt
-	"N&ordm; medio de disciplinas em que cada utilizador pertence";
+	"N.&ordm; medio de disciplinas em que cada utilizador pertence";
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded =
 #if   L==1	// ca
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Necessita traduccio
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Necessita traduccio
 #elif L==2	// de
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Need Übersetzung
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";
 #elif L==4	// es
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";
 #elif L==5	// fr
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Besoin de traduction
 #elif L==6	// gn
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Okoteve traducción
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Okoteve traducción
 #elif L==7	// it
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Bisogno di traduzione
 #elif L==8	// pl
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
+	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course =
 #if   L==1	// ca
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";	// Necessita traduccio
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";	// Necessita traduccio
 #elif L==2	// de
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Need Übersetzung
 #elif L==3	// en
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";
 #elif L==4	// es
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";
 #elif L==5	// fr
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Besoin de traduction
 #elif L==6	// gn
-	"N&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";			// Okoteve traducción
+	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";			// Okoteve traducción
 #elif L==7	// it
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Bisogno di traduzione
 #elif L==8	// pl
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
+	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_of_users_belonging_to_a_course =
@@ -2655,17 +2676,17 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #elif L==3	// en
 	"Average number of users belonging to a course";
 #elif L==4	// es
-	"N&ordm; medio de usuarios que pertenecen a cada asignatura";
+	"N.&ordm; medio de usuarios que pertenecen a cada asignatura";
 #elif L==5	// fr
 	"Nombre moyen d'utilisateurs appartenant &agrave; une mati&egrave;re";
 #elif L==6	// gn
-	"N&ordm; medio de usuarios que pertenecen a cada asignatura";	// Okoteve traducción
+	"N.&ordm; medio de usuarios que pertenecen a cada asignatura";	// Okoteve traducción
 #elif L==7	// it
 	"Numero medio di utenti appartenenti a un corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba uzytkownik&oacute;w nalezacych do kursu";
 #elif L==9	// pt
-	"N&ordm; medio de utilizadores que pertencem a uma disciplina";
+	"N.&ordm; medio de utilizadores que pertencem a uma disciplina";
 #endif
 
 const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
@@ -6236,6 +6257,27 @@ const char *Txt_Create_room =
 	"Criar sala";
 #endif
 
+const char *Txt_Create_set_of_questions =
+#if   L==1	// ca
+	"Crear conjunt de preguntes";
+#elif L==2	// de
+	"Satz von Fragen erstellen";
+#elif L==3	// en
+	"Create set of questions";
+#elif L==4	// es
+	"Crear conjunto de preguntas";
+#elif L==5	// fr
+	"Cr&eacute;er ensemble de questions";
+#elif L==6	// gn
+	"Crear conjunto de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Crea set di domande";
+#elif L==8	// pl
+	"Utw&oacute;rz zestaw pyta&nacute;";
+#elif L==9	// pt
+	"Criar conjunto de perguntas";
+#endif
+
 const char *Txt_Create_survey =
 #if   L==1	// ca
 	"Crear enquesta";
@@ -6782,6 +6824,27 @@ const char *Txt_Created_new_room_X =	// Warning: it is very important to include
 	"Criada nova sala <strong>%s</strong>.";
 #endif
 
+const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creat nou conjunt de preguntes <strong>%s</strong>.";
+#elif L==2	// de
+	"Neuer Satz von Fragen <strong>%s</strong> erstellt.";
+#elif L==3	// en
+	"Created new set of questions <strong>%s</strong>.";
+#elif L==4	// es
+	"Creado nuevo conjunto de preguntas <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouveau ensemble de questions <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creado nuevo conjunto de preguntas <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creato nuovo set di domande <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono nowe zestaw pyta&nacute; <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criado novo conjunto de perguntas <strong>%s</strong>.";
+#endif
+
 const char *Txt_Created_new_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Creada nova enquesta <strong>%s</strong>.";
@@ -6805,7 +6868,7 @@ const char *Txt_Created_new_survey_X =	// Warning: it is very important to inclu
 
 const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Creado nuevo tipo de titulaci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou tipus de titulaci&oacute; <strong>%s</strong>.";
 #elif L==2	// de
 	"Neue Abschlussart <strong>%s</strong> definiert.";
 #elif L==3	// en
@@ -10210,6 +10273,27 @@ const char *Txt_Edit_record_fields =
 	"Edycja rekord w dziedzinie";
 #elif L==9	// pt
 	"Editar campos cart&otilde;es";
+#endif
+
+const char *Txt_Edit_set_of_questions =
+#if   L==1	// ca
+	"Editar conjunt de preguntes";
+#elif L==2	// de
+	"Satz von Fragen bearbeiten";
+#elif L==3	// en
+	"Edit set of questions";
+#elif L==4	// es
+	"Editar conjunto de preguntas";
+#elif L==5	// fr
+	"&Eacute;diter ensemble de questions";
+#elif L==6	// gn
+	"Editar conjunto de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Editare set di domande";
+#elif L==8	// pl
+	"Edycja zestaw pyta&nacute;";
+#elif L==9	// pt
+	"Editar conjunto de perguntas";
 #endif
 
 const char *Txt_Edit_survey =
@@ -15705,7 +15789,7 @@ const char *Txt_ID =
 #elif L==8	// pl
 	"Dow&oacute;d osobisty";
 #elif L==9	// pt
-	"N&ordm; identif.";
+	"N.&ordm; identif.";
 #endif
 
 const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -17392,17 +17476,17 @@ const char *Txt_Integer_number =
 #elif L==3	// en
 	"Integer number";
 #elif L==4	// es
-	"N&ordm; entero";
+	"N.&ordm; entero";
 #elif L==5	// fr
 	"Nombre entier";
 #elif L==6	// gn
-	"N&ordm; entero";	// Okoteve traducción
+	"N.&ordm; entero";	// Okoteve traducción
 #elif L==7	// it
 	"Numero intero";
 #elif L==8	// pl
 	"Liczba calkowita";
 #elif L==9	// pt
-	"N&ordm; inteiro";
+	"N.&ordm; inteiro";
 #endif
 
 const char *Txt_Internal_code =
@@ -25342,7 +25426,7 @@ const char *Txt_New_set_of_questions =
 #elif L==6	// gn
 	"Nuevo conjunto de preguntas";	// Okoteve traducción
 #elif L==7	// it
-	"Nuova serie di domande";
+	"Nuovo set di domande";
 #elif L==8	// pl
 	"Nowy zestaw pyta&nacute;";
 #elif L==9	// pt
@@ -26104,13 +26188,13 @@ const char *Txt_No_image_video =	// Without any image
 
 const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...
 #if   L==1	// ca
-	"N&ordm;";	// Necessita traduccio
+	"N.&ordm;";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl";
 #elif L==3	// en
 	"#";
 #elif L==4	// es
-	"N&ordm;";
+	"N.&ordm;";
 #elif L==5	// fr
 	"Nombre";
 #elif L==6	// gn
@@ -26120,7 +26204,7 @@ const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...
 #elif L==8	// pl
 	"Numer";
 #elif L==9	// pt
-	"N&ordm;";
+	"N.&ordm;";
 #endif
 
 const char *Txt_No_information =
@@ -26188,23 +26272,23 @@ const char *Txt_No_links =
 
 const char *Txt_No_BR_msgs =
 #if   L==1	// ca
-	"N&ordm;<br />mens.";	// Necessita traduccio
+	"N.&ordm;<br />mens.";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl<br />Nachr.";
 #elif L==3	// en
 	"No.<br />msgs.";
 #elif L==4	// es
-	"N&ordm;<br />mens.";
+	"N.&ordm;<br />mens.";
 #elif L==5	// fr
 	"Nombre<br />msgs.";
 #elif L==6	// gn
-	"N&ordm;<br />mens.";	// Okoteve traducción
+	"N.&ordm;<br />mens.";	// Okoteve traducción
 #elif L==7	// it
 	"Num.<br />msg.";
 #elif L==8	// pl
 	"Numer<br />msgs.";
 #elif L==9	// pt
-	"N&ordm;<br />mens.";
+	"N.&ordm;<br />mens.";
 #endif
 
 const char *Txt_No_new_posts =
@@ -26257,17 +26341,17 @@ const char *Txt_No_of_files =
 #elif L==3	// en
 	"Number of files";
 #elif L==4	// es
-	"N&ordm; de archivos";
+	"N.&ordm; de archivos";
 #elif L==5	// fr
 	"Nombre de fichiers";
 #elif L==6	// gn
-	"N&ordm; de archivos";	// Okoteve traducción
+	"N.&ordm; de archivos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di file";
 #elif L==8	// pl
 	"Liczba pliki";
 #elif L==9	// pt
-	"N&ordm; de arquivos";
+	"N.&ordm; de arquivos";
 #endif
 
 const char *Txt_No_of_files_in_SHARE_zones =
@@ -26278,206 +26362,206 @@ const char *Txt_No_of_files_in_SHARE_zones =
 #elif L==3	// en
 	"Number of shared files";
 #elif L==4	// es
-	"N&ordm; de archivos compartidos";
+	"N.&ordm; de archivos compartidos";
 #elif L==5	// fr
 	"Nombre de fichiers partag&eacute;s";
 #elif L==6	// gn
-	"N&ordm; de archivos compartidos";		// Okoteve traducción
+	"N.&ordm; de archivos compartidos";		// Okoteve traducción
 #elif L==7	// it
 	"Numero di file condivisi";
 #elif L==8	// pl
 	"Liczba pliki udost&eogon;pnione";
 #elif L==9	// pt
-	"N&ordm; de arquivos compartilhados";
+	"N.&ordm; de arquivos compartilhados";
 #endif
 
 const char *Txt_No_of_files_in_DOCUM_zones =
 #if   L==1	// ca
-	"N&ordm; de archivos en zonas de documentos";	// Necessita traduccio
+	"N.&ordm; de archivos en zonas de documentos";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Dateien im Dokumente-Bereich";
 #elif L==3	// en
 	"Number of files in documents area";
 #elif L==4	// es
-	"N&ordm; de archivos en zonas de documentos";
+	"N.&ordm; de archivos en zonas de documentos";
 #elif L==5	// fr
 	"Nombre de fichiers dans les zones de documents";
 #elif L==6	// gn
-	"N&ordm; de archivos en zonas de documentos";	// Okoteve traducción
+	"N.&ordm; de archivos en zonas de documentos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di file nell'area documenti";
 #elif L==8	// pl
 	"Number of files in documents area";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; de arquivos em zonas de documentos";
+	"N.&ordm; de arquivos em zonas de documentos";
 #endif
 
 const char *Txt_No_of_forums =
 #if   L==1	// ca
-	"N&ordm; de foros";	// Necessita traduccio
+	"N.&ordm; de foros";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Foren";
 #elif L==3	// en
 	"No. of forums";
 #elif L==4	// es
-	"N&ordm; de foros";
+	"N.&ordm; de foros";
 #elif L==5	// fr
 	"Nombre de forums";
 #elif L==6	// gn
-	"N&ordm; de foros";	// Okoteve traducción
+	"N.&ordm; de foros";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di forum";
 #elif L==8	// pl
 	"Liczba forum";
 #elif L==9	// pt
-	"N&ordm; de f&oacute;runs";
+	"N.&ordm; de f&oacute;runs";
 #endif
 
 const char *Txt_No_of_BR_groups =
 #if   L==1	// ca
-	"N&ordm; de<br />grupos";	// Necessita traduccio
+	"N.&ordm; de<br />grupos";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der<br />Gruppen";
 #elif L==3	// en
 	"No. of<br />groups";
 #elif L==4	// es
-	"N&ordm; de<br />grupos";
+	"N.&ordm; de<br />grupos";
 #elif L==5	// fr
 	"Nombre de<br />groupes";
 #elif L==6	// gn
-	"N&ordm; de<br />grupos";	// Okoteve traducción
+	"N.&ordm; de<br />grupos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />gruppi";
 #elif L==8	// pl
 	"Liczba z<br />grupy";
 #elif L==9	// pt
-	"N&ordm; de<br />grupos";
+	"N.&ordm; de<br />grupos";
 #endif
 
 const char *Txt_No_of_indicators =
 #if   L==1	// ca
-	"N&ordm; de indicadores";	// Necessita traduccio
+	"N.&ordm; de indicadores";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Indikatoren";
 #elif L==3	// en
 	"No. of indicators";
 #elif L==4	// es
-	"N&ordm; de indicadores";
+	"N.&ordm; de indicadores";
 #elif L==5	// fr
 	"Nombre d'indicateurs";
 #elif L==6	// gn
-	"N&ordm; de indicadores";	// Okoteve traducción
+	"N.&ordm; de indicadores";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di indicatori";
 #elif L==8	// pl
 	"Liczba z wskazniki";
 #elif L==9	// pt
-	"N&ordm; de indocadores";
+	"N.&ordm; de indocadores";
 #endif
 
 const char *Txt_No_of_BR_lines =
 #if   L==1	// ca
-	"N&ordm; de<br />l&iacute;neas";	// Necessita traduccio
+	"N.&ordm; de<br />l&iacute;neas";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der<br />Zeilen";
 #elif L==3	// en
 	"No. of<br />lines";
 #elif L==4	// es
-	"N&ordm; de<br />l&iacute;neas";
+	"N.&ordm; de<br />l&iacute;neas";
 #elif L==5	// fr
 	"Nombre de<br />lignes";
 #elif L==6	// gn
-	"N&ordm; de<br />l&iacute;neas";	// Okoteve traducción
+	"N.&ordm; de<br />l&iacute;neas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />linee";
 #elif L==8	// pl
 	"Liczba z<br />linie";
 #elif L==9	// pt
-	"N&ordm; de<br />linhas";
+	"N.&ordm; de<br />linhas";
 #endif
 
 const char *Txt_No_of_posts =
 #if   L==1	// ca
-	"N&ordm; de comentarios";	// Necessita traduccio
+	"N.&ordm; de comentarios";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Nachrichten";
 #elif L==3	// en
 	"No. of posts";
 #elif L==4	// es
-	"N&ordm; de comentarios";
+	"N.&ordm; de comentarios";
 #elif L==5	// fr
 	"Nombre de posts";
 #elif L==6	// gn
-	"N&ordm; de comentarios";	// Okoteve traducción
+	"N.&ordm; de comentarios";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di post";
 #elif L==8	// pl
 	"Liczba wiadomosci";
 #elif L==9	// pt
-	"N&ordm; de posts";
+	"N.&ordm; de posts";
 #endif
 
 const char *Txt_No_of_posts_BR_per_forum =
 #if   L==1	// ca
-	"N&ordm; de comentarios<br />por foro";	// Necessita traduccio
+	"N.&ordm; de comentarios<br />por foro";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Nachrichten<br />pro Forum";
 #elif L==3	// en
 	"No. of posts<br />per forum";
 #elif L==4	// es
-	"N&ordm; de comentarios<br />por foro";
+	"N.&ordm; de comentarios<br />por foro";
 #elif L==5	// fr
 	"Nombre de posts<br />par forum";
 #elif L==6	// gn
-	"N&ordm; de comentarios<br />por foro";	// Okoteve traducción
+	"N.&ordm; de comentarios<br />por foro";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di post<br />per forum";
 #elif L==8	// pl
 	"Liczba wiadomosci<br />per forum";
 #elif L==9	// pt
-	"N&ordm; de posts<br />por f&oacute;rum";
+	"N.&ordm; de posts<br />por f&oacute;rum";
 #endif
 
 const char *Txt_No_of_posts_BR_per_user =
 #if   L==1	// ca
-	"N&ordm; de comentarios<br />por usuari";	// Necessita traduccio
+	"N.&ordm; de comentarios<br />por usuari";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Nachrichten<br />pro Benutzer";
 #elif L==3	// en
 	"No. of posts<br />per user";
 #elif L==4	// es
-	"N&ordm; de comentarios<br />por usuario";
+	"N.&ordm; de comentarios<br />por usuario";
 #elif L==5	// fr
 	"Nombre de posts<br />par utilisateur";
 #elif L==6	// gn
-	"N&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
+	"N.&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di post<br />per utente";
 #elif L==8	// pl
 	"Liczba wiadomosci<br />per u&zdot;ytkownik";
 #elif L==9	// pt
-	"N&ordm; de posts<br />por utilizador";
+	"N.&ordm; de posts<br />por utilizador";
 #endif
 
 const char *Txt_No_of_posts_BR_per_thread =
 #if   L==1	// ca
-	"N&ordm; de comentarios<br />por discusi&oacute;n";	// Necessita traduccio
+	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Nachrichten<br />pro Thread";
 #elif L==3	// en
 	"No. of posts<br />per thread";
 #elif L==4	// es
-	"N&ordm; de comentarios<br />por usuario";
+	"N.&ordm; de comentarios<br />por usuario";
 #elif L==5	// fr
 	"Nombre de posts<br />par fil";
 #elif L==6	// gn
-	"N&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
+	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di post<br />per discussione";
 #elif L==8	// pl
 	"Liczba wiadomosci<br />per watku";
 #elif L==9	// pt
-	"N&ordm; de posts<br />por discuss&atilde;o";
+	"N.&ordm; de posts<br />por discuss&atilde;o";
 #endif
 
 const char *Txt_No_of_private_files =
@@ -26488,17 +26572,17 @@ const char *Txt_No_of_private_files =
 #elif L==3	// en
 	"Number of private files";
 #elif L==4	// es
-	"N&ordm; de archivos privados";
+	"N.&ordm; de archivos privados";
 #elif L==5	// fr
 	"Nombre de fichiers priv&eacute;s";
 #elif L==6	// gn
-	"N&ordm; de archivos privados";	// Okoteve traducción
+	"N.&ordm; de archivos privados";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di file privati";
 #elif L==8	// pl
 	"Liczba prywatne pliki";
 #elif L==9	// pt
-	"N&ordm; de arquivos privados";
+	"N.&ordm; de arquivos privados";
 #endif
 
 const char *Txt_No_of_public_files =
@@ -26509,17 +26593,17 @@ const char *Txt_No_of_public_files =
 #elif L==3	// en
 	"Number of public files";
 #elif L==4	// es
-	"N&ordm; de archivos p&uacute;blicos";
+	"N.&ordm; de archivos p&uacute;blicos";
 #elif L==5	// fr
 	"Nombre de fichiers publics";
 #elif L==6	// gn
-	"N&ordm; de archivos p&uacute;blicos";	// Okoteve traducción
+	"N.&ordm; de archivos p&uacute;blicos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di file pubblici";
 #elif L==8	// pl
 	"Liczba publicznych pliki";
 #elif L==9	// pt
-	"N&ordm; de arquivos p&uacute;blicos";
+	"N.&ordm; de arquivos p&uacute;blicos";
 #endif
 
 const char *Txt_No_of_questions =
@@ -26530,59 +26614,59 @@ const char *Txt_No_of_questions =
 #elif L==3	// en
 	"No. of questions";
 #elif L==4	// es
-	"N&ordm; de preguntas";
+	"N.&ordm; de preguntas";
 #elif L==5	// fr
 	"Nombre de questions";
 #elif L==6	// gn
-	"N&ordm; de preguntas";	// Okoteve traducción
+	"N.&ordm; de preguntas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di domande";
 #elif L==8	// pl
 	"Liczba pyta&nacute;";
 #elif L==9	// pt
-	"N&ordm; de perguntas";
+	"N.&ordm; de perguntas";
 #endif
 
 const char *Txt_No_of_threads =
 #if   L==1	// ca
-	"N&ordm; de discusiones";	// Necessita traduccio
+	"N.&ordm; de discusiones";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Threads";
 #elif L==3	// en
 	"No. of threads";
 #elif L==4	// es
-	"N&ordm; de discusiones";
+	"N.&ordm; de discusiones";
 #elif L==5	// fr
 	"Nombre de fils";
 #elif L==6	// gn
-	"N&ordm; de discusiones";	// Okoteve traducción
+	"N.&ordm; de discusiones";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di discussioni";
 #elif L==8	// pl
 	"Liczba watk&oacute;w";
 #elif L==9	// pt
-	"N&ordm; de discuss&otilde;es";
+	"N.&ordm; de discuss&otilde;es";
 #endif
 
 const char *Txt_No_of_threads_BR_per_forum =
 #if   L==1	// ca
-	"N&ordm; de discusiones<br />por foro";	// Necessita traduccio
+	"N.&ordm; de discusiones<br />por foro";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Threads<br />pro Forum";
 #elif L==3	// en
 	"No. of threads<br />per forum";
 #elif L==4	// es
-	"N&ordm; de discusiones<br />por foro";
+	"N.&ordm; de discusiones<br />por foro";
 #elif L==5	// fr
 	"Nombre de fils<br />par forum";
 #elif L==6	// gn
-	"N&ordm; de discusiones<br />por foro";	// Okoteve traducción
+	"N.&ordm; de discusiones<br />por foro";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di discussioni<br />per forum";
 #elif L==8	// pl
 	"Liczba watk&oacute;w<br />per forum";
 #elif L==9	// pt
-	"N&ordm; de discuss&otilde;es<br />por f&oacute;rum";
+	"N.&ordm; de discuss&otilde;es<br />por f&oacute;rum";
 #endif
 
 const char *Txt_Number_of_BR_program_items =
@@ -26593,38 +26677,59 @@ const char *Txt_Number_of_BR_program_items =
 #elif L==3	// en
 	"Number of<br />program items";
 #elif L==4	// es
-	"N&ordm; de<br />items en programas";
+	"N.&ordm; de<br />items en programas";
 #elif L==5	// fr
 	"Nombre d'&eacute;l&eacute;ments<br />de programme";
 #elif L==6	// gn
-	"N&ordm; de<br />items en programas";	// Okoteve traducción
+	"N.&ordm; de<br />items en programas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di elementi<br />di programmi";
 #elif L==8	// pl
 	"Liczba<br />pozycji programu";
 #elif L==9	// pt
-	"N&ordm; de<br />itens de programas";
+	"N.&ordm; de<br />itens de programas";
+#endif
+
+const char *Txt_Number_of_questions_in_this_set_that_will_appear_in_the_exam =
+#if   L==1	// ca
+	"Nombre de preguntes d'aquest conjunt que apareixeran a l'examen";
+#elif L==2	// de
+	"Anzahl der Fragen in diesem Satz, die in der Pr&uuml;fung erscheinen";
+#elif L==3	// en
+	"Number of questions in this set that will appear in the exam";
+#elif L==4	// es
+	"N.&ordm; de preguntas de este conjunto que aparecer&aacute;n en el examen";
+#elif L==5	// fr
+	"Nombre de questions dans cet ensemble qui appara&icirc;tront dans l'examen";
+#elif L==6	// gn
+	"N.&ordm; de preguntas de este conjunto que aparecer&aacute;n en el examen";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di domande in questo set che appariranno nell'esame";
+#elif L==8	// pl
+	"Liczba pyta&nacute; w tym zestawie, kt&oacute;re pojawi&aogon; si&eogon; na egzaminie";
+#elif L==9	// pt
+	"N&uacute;mero de perguntas neste conjunto que aparecer&atilde;o no exame";
 #endif
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
 #if   L==1	// ca
-	"N&ordm; de<br />veces<br />que se ha<br />respondido";	// Necessita traduccio
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Necessita traduccio
 #elif L==2	// de
 	"Number of<br />times that<br />questions<br />have been<br />responded";	// Need Übersetzung
 #elif L==3	// en
 	"Number of<br />times that<br />questions<br />have been<br />responded";
 #elif L==4	// es
-	"N&ordm; de<br />veces<br />que se ha<br />respondido";
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";
 #elif L==5	// fr
 	"Number of<br />times that<br />questions<br />have been<br />responded";	// Besoin de traduction
 #elif L==6	// gn
-	"N&ordm; de<br />veces<br />que se ha<br />respondido";	// Okoteve traducción
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Okoteve traducción
 #elif L==7	// it
 	"Number of<br />times that<br />questions<br />have been<br />responded";	// Bisogno di traduzione
 #elif L==8	// pl
 	"Number of<br />times that<br />questions<br />have been<br />responded";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
+	"N.&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
 #endif
 
 const char *Txt_No_of_users =
@@ -26635,17 +26740,17 @@ const char *Txt_No_of_users =
 #elif L==3	// en
 	"No. of users";
 #elif L==4	// es
-	"N&ordm; de usuarios";
+	"N.&ordm; de usuarios";
 #elif L==5	// fr
 	"Nombre d'utilisateurs";
 #elif L==6	// gn
-	"N&ordm; de usuarios";	// Okoteve traducción
+	"N.&ordm; de usuarios";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di utenti";
 #elif L==8	// pl
 	"Liczba uzytkownik&oacute;w";
 #elif L==9	// pt
-	"N&ordm; de utilizadores";
+	"N.&ordm; de utilizadores";
 #endif
 
 const char *Txt_No_projects =
@@ -28618,17 +28723,17 @@ const char *Txt_Number_of_BR_assignments =
 #elif L==3	// en
 	"Number of<br />assignments";
 #elif L==4	// es
-	"N&ordm; de<br />actividades";
+	"N.&ordm; de<br />actividades";
 #elif L==5	// fr
 	"Nombre<br />d'activit&eacute;s";
 #elif L==6	// gn
-	"N&ordm; de<br />actividades";	// Okoteve traducción
+	"N.&ordm; de<br />actividades";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />attivit&agrave;";
 #elif L==8	// pl
 	"Number of<br />assignments";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; de<br />atividades";
+	"N.&ordm; de<br />atividades";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
@@ -28639,17 +28744,17 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #elif L==3	// en
 	"Number of<br />courses with<br />assignments";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con actividades";
+	"N.&ordm; de<br />asignaturas<br />con actividades";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec activit&eacute;s";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con actividades";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con actividades";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />attivit&agrave;";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w z<br />zadania";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com atividades";
+	"N.&ordm; de<br />disciplinas<br />com atividades";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
@@ -28660,17 +28765,17 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #elif L==3	// en
 	"Number of<br />courses with<br />exportable<br />test<br />questions";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";
+	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec questions<br />de test<br />exportables";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />domande<br />de test<br />esportabili";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z eksportowane<br />pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
+	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
@@ -28681,17 +28786,17 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 #elif L==3	// en
 	"Number of<br />courses with<br />games";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con juegos";
+	"N.&ordm; de<br />asignaturas<br />con juegos";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec jeux";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con juegos";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con juegos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />giochi";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w z<br />gry";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com jogos";
+	"N.&ordm; de<br />disciplinas<br />com jogos";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_program_items =
@@ -28702,17 +28807,17 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #elif L==3	// en
 	"Number of<br />courses with<br />program items";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas con<br />items de programas";
+	"N.&ordm; de<br />asignaturas con<br />items de programas";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res avec<br />d'&eacute;l&eacute;ments de programme";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas con<br />items de programas";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas con<br />items de programas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />elementi di programmi";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w z<br />pozycji programu";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas com<br />itens de programas";
+	"N.&ordm; de<br />disciplinas com<br />itens de programas";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
@@ -28723,17 +28828,17 @@ const char *Txt_Number_of_BR_courses_with_BR_projects =
 #elif L==3	// en
 	"Number of<br />courses with<br />projects";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con proyectos";
+	"N.&ordm; de<br />asignaturas<br />con proyectos";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec projets";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con proyectos";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con proyectos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />progetti";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w z<br />projekty";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com projetos";
+	"N.&ordm; de<br />disciplinas<br />com projetos";
 #endif
 
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
@@ -28744,17 +28849,17 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #elif L==3	// en
 	"Number of<br />courses<br />with test<br />questions";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con preguntas<br />de test";
+	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec questions<br />de test";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con preguntas<br />de test";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />domande<br />de test";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
+	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
@@ -28765,32 +28870,32 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #elif L==3	// en
 	"Number of<br />courses with<br />surveys";
 #elif L==4	// es
-	"N&ordm; de<br />asignaturas<br />con encuestas";
+	"N.&ordm; de<br />asignaturas<br />con encuestas";
 #elif L==5	// fr
 	"Nombre de<br />mati&egrave;res<br />avec sondages";
 #elif L==6	// gn
-	"N&ordm; de<br />asignaturas<br />con encuestas";	// Okoteve traducción
+	"N.&ordm; de<br />asignaturas<br />con encuestas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />corsi con<br />sondaggi";
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w z<br />badania";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
+	"N.&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
 #endif
 
 const char *Txt_Number_of_BR_events =
 #if   L==1	// ca
-	"N&ordm; d'<br />esdeveniments.";
+	"N.&ordm; d'<br />esdeveniments.";
 #elif L==2	// de
 	"Anzahl der<br />Ereignisse";
 #elif L==3	// en
 	"Number of<br />events";
 #elif L==4	// es
-	"N&ordm; de<br />eventos";
+	"N.&ordm; de<br />eventos";
 #elif L==5	// fr
 	"Nombre<br />d'&eacute;v&eacute;nements";
 #elif L==6	// gn
-	"N&ordm; de<br />eventos";	// Okoteve traducción
+	"N.&ordm; de<br />eventos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />eventi";
 #elif L==8	// pl
@@ -28801,17 +28906,17 @@ const char *Txt_Number_of_BR_events =
 
 const char *Txt_Number_of_BR_emails =
 #if   L==1	// ca
-	"N&ordm; de<br />correos";	// Necessita traduccio
+	"N.&ordm; de<br />correos";	// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der<br />E-Mails";
 #elif L==3	// en
 	"Number of<br />emails";
 #elif L==4	// es
-	"N&ordm; de<br />correos";
+	"N.&ordm; de<br />correos";
 #elif L==5	// fr
 	"Nombre<br />d'emails";
 #elif L==6	// gn
-	"N&ordm; de<br />correos";	// Okoteve traducción
+	"N.&ordm; de<br />correos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />email";
 #elif L==8	// pl
@@ -28828,11 +28933,11 @@ const char *Txt_Number_of_BR_games =
 #elif L==3	// en
 	"Number of<br />games";
 #elif L==4	// es
-	"N&ordm; de<br />juegos";
+	"N.&ordm; de<br />juegos";
 #elif L==5	// fr
 	"Nombre<br />de jeux";
 #elif L==6	// gn
-	"N&ordm; de<br />juegos";	// Okoteve traducción
+	"N.&ordm; de<br />juegos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />giochi";
 #elif L==8	// pl
@@ -28849,11 +28954,11 @@ const char *Txt_Number_of_BR_notifications =
 #elif L==3	// en
 	"Number of<br />notifications";
 #elif L==4	// es
-	"N&ordm; de<br />notificaciones";
+	"N.&ordm; de<br />notificaciones";
 #elif L==5	// fr
 	"Nombre de<br />notifications";
 #elif L==6	// gn
-	"N&ordm; de<br />notificaciones";	// Okoteve traducción
+	"N.&ordm; de<br />notificaciones";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />notifiche";
 #elif L==8	// pl
@@ -28870,11 +28975,11 @@ const char *Txt_Number_of_BR_projects =
 #elif L==3	// en
 	"Number of<br />projects";
 #elif L==4	// es
-	"N&ordm; de<br />proyectos";
+	"N.&ordm; de<br />proyectos";
 #elif L==5	// fr
 	"Nombre<br />de projets";
 #elif L==6	// gn
-	"N&ordm; de<br />proyectos";	// Okoteve traducción
+	"N.&ordm; de<br />proyectos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />progetti";
 #elif L==8	// pl
@@ -28891,17 +28996,17 @@ const char *Txt_Number_of_students =
 #elif L==3	// en
 	"Number of students";
 #elif L==4	// es
-	"N&ordm; de estudiantes";
+	"N.&ordm; de estudiantes";
 #elif L==5	// fr
 	"Nombre d'&eacute;tudiants";
 #elif L==6	// gn
-	"N&ordm; de estudiantes";	// Okoteve traducción
+	"N.&ordm; de estudiantes";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di studenti";
 #elif L==8	// pl
 	"Liczba studenci";
 #elif L==9	// pt
-	"N&ordm; de estudantes";
+	"N.&ordm; de estudantes";
 #endif
 
 const char *Txt_Number_of_BR_surveys =
@@ -28912,17 +29017,17 @@ const char *Txt_Number_of_BR_surveys =
 #elif L==3	// en
 	"Number of<br />surveys";
 #elif L==4	// es
-	"N&ordm; de<br />encuestas";
+	"N.&ordm; de<br />encuestas";
 #elif L==5	// fr
 	"Nombre de<br />sondages";
 #elif L==6	// gn
-	"N&ordm; de<br />encuestas";	// Okoteve traducción
+	"N.&ordm; de<br />encuestas";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />sondaggi";
 #elif L==8	// pl
 	"Liczba<br />badania";
 #elif L==9	// pt
-	"N&ordm; de<br />inqu&eacute;ritos";
+	"N.&ordm; de<br />inqu&eacute;ritos";
 #endif
 
 const char *Txt_Number_BR_of_test_BR_questions =
@@ -28933,17 +29038,17 @@ const char *Txt_Number_BR_of_test_BR_questions =
 #elif L==3	// en
 	"Number<br />of test<br />questions";
 #elif L==4	// es
-	"N&ordm; de<br />preguntas<br />de test";
+	"N.&ordm; de<br />preguntas<br />de test";
 #elif L==5	// fr
 	"Nombre de<br />questions<br />de test";
 #elif L==6	// gn
-	"N&ordm; de<br />preguntas<br />de test";	// Okoteve traducción
+	"N.&ordm; de<br />preguntas<br />de test";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di<br />domande<br />de test";
 #elif L==8	// pl
 	"Liczba<br />pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />perguntas<br />de test";
+	"N.&ordm; de<br />perguntas<br />de test";
 #endif
 
 const char *Txt_Number_of_users =
@@ -28954,17 +29059,17 @@ const char *Txt_Number_of_users =
 #elif L==3	// en
 	"Number of users";
 #elif L==4	// es
-	"N&ordm; de usuarios";
+	"N.&ordm; de usuarios";
 #elif L==5	// fr
 	"Nombre d'utilisateurs";
 #elif L==6	// gn
-	"N&ordm; de usuarios";	// Okoteve traducción
+	"N.&ordm; de usuarios";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di utenti";
 #elif L==8	// pl
 	"Liczba uzytkownik&oacute;w";
 #elif L==9	// pt
-	"N&ordm; de utilizadores";
+	"N.&ordm; de utilizadores";
 #endif
 
 const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
@@ -32601,17 +32706,17 @@ const char *Txt_Real_number_between_A_and_B_1 =
 #elif L==3	// en
 	"Real number between";
 #elif L==4	// es
-	"N&ordm; real entre";
+	"N.&ordm; real entre";
 #elif L==5	// fr
 	"Nombre r&eacute;el entre";
 #elif L==6	// gn
-	"N&ordm; real entre";	// Okoteve traducción
+	"N.&ordm; real entre";	// Okoteve traducción
 #elif L==7	// it
 	"Numero reale compreso tra";
 #elif L==8	// pl
 	"Prawdziwa liczbe miedzy";
 #elif L==9	// pt
-	"N&ordm; real entre";
+	"N.&ordm; real entre";
 #endif
 
 const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
@@ -40871,7 +40976,7 @@ const char *Txt_Set_of_questions =
 #elif L==6	// gn
 	"Conjunto de preguntas";	// Okoteve traducción
 #elif L==7	// it
-	"Serie di domande";
+	"Set di domande";
 #elif L==8	// pl
 	"Zestaw pyta&nacute;";
 #elif L==9	// pt
@@ -40934,7 +41039,7 @@ const char *Txt_Sets_of_questions =
 #elif L==6	// gn
 	"Conjuntos de preguntas";	// Okoteve traducción
 #elif L==7	// it
-	"Serie di domande";
+	"Set di domande";
 #elif L==8	// pl
 	"Zestaw&oacute;w pyta&nacute;";
 #elif L==9	// pt
@@ -42985,17 +43090,17 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	{
 	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
-	"N&ordm; total de clics"	// Necessita traduccio
+	"N.&ordm; total de clics"	// Necessita traduccio
 #elif L==2	// de
 	"Gesamtzahl der Klicks"
 #elif L==3	// en
 	"Total number of clicks"
 #elif L==4	// es
-	"N&ordm; total de clics"
+	"N.&ordm; total de clics"
 #elif L==5	// fr
 	"Nombre total de clics"
 #elif L==6	// gn
-	"N&ordm; total de clics"	// Okoteve traducción
+	"N.&ordm; total de clics"	// Okoteve traducción
 #elif L==7	// it
 	"Numero totale di scatti"
 #elif L==8	// pl
@@ -43006,17 +43111,17 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	,
 	[Sta_DISTINCT_USRS] =
 #if   L==1	// ca
-	"N&ordm; de usuarios distintos"		// Necessita traduccio
+	"N.&ordm; de usuarios distintos"		// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der unterschiedlichen Benutzer"
 #elif L==3	// en
 	"Number of distinct users"
 #elif L==4	// es
-	"N&ordm; de usuarios distintos"
+	"N.&ordm; de usuarios distintos"
 #elif L==5	// fr
 	"Nombre des diff&eacute;rents utilisateurs"
 #elif L==6	// gn
-	"N&ordm; de usuarios distintos"		// Okoteve traducción
+	"N.&ordm; de usuarios distintos"		// Okoteve traducción
 #elif L==7	// it
 	"Numero di utenti distinti"
 #elif L==8	// pl
@@ -43027,17 +43132,17 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	,
 	[Sta_CLICKS_PER_USR] =
 #if   L==1	// ca
-	"N&ordm; de clics por usuario"		// Necessita traduccio
+	"N.&ordm; de clics por usuario"		// Necessita traduccio
 #elif L==2	// de
 	"Anzahl der Klicks pro Benutzer"
 #elif L==3	// en
 	"Number of clicks per user"
 #elif L==4	// es
-	"N&ordm; de clics por usuario"
+	"N.&ordm; de clics por usuario"
 #elif L==5	// fr
 	"Nombre de clics par utilisateur"
 #elif L==6	// gn
-	"N&ordm; de clics por usuario"		// Okoteve traducción
+	"N.&ordm; de clics por usuario"		// Okoteve traducción
 #elif L==7	// it
 	"Numero di scatti per utente"
 #elif L==8	// pl
@@ -46779,7 +46884,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary
 
 const char *Txt_The_event_has_been_modified =
 #if   L==1	// ca
-	"El evento ha sido modificado.";	// Necessita traduccio
+	"L'esdeveniment ha estat modificat.";
 #elif L==2	// de
 	"Der Ereignis wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -46793,14 +46898,14 @@ const char *Txt_The_event_has_been_modified =
 #elif L==7	// it
 	"L'evento &egrave; stata modificato.";
 #elif L==8	// pl
-	"The event has been modified.";		// Potrzebujesz tlumaczenie
+	"Wydarzenie zosta&lstrok;o zmodyfikowane.";
 #elif L==9	// pt
 	"O evento foi modificado.";
 #endif
 
 const char *Txt_The_exam_has_been_modified =
 #if   L==1	// ca
-	"El examen ha sido modificado.";	// Necessita traduccio
+	"L'examen ha estat modificat.";
 #elif L==2	// de
 	"Der Ereignis wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -49531,6 +49636,27 @@ const char *Txt_The_session_has_expired =
 	"A sess&atilde;o expirou.";
 #endif
 
+const char *Txt_The_set_of_questions_has_been_modified =
+#if   L==1	// ca
+	"El conjunt de preguntes ha estat modificat.";
+#elif L==2	// de
+	"Der Satz von Fragen wurde ge&auml;ndert.";
+#elif L==3	// en
+	"The set of questions has been modified.";
+#elif L==4	// es
+	"El conjunto de preguntas ha sido modificado.";
+#elif L==5	// fr
+	"L'ensemble de questions a &eacute;t&eacute; modifi&eacute;.";
+#elif L==6	// gn
+	"El conjunto de preguntas ha sido modificado.";	// Okoteve traducción
+#elif L==7	// it
+	"Il set di domande &egrave; stato modificato.";
+#elif L==8	// pl
+	"Zestaw pyta&nacute; zosta&lstrok; zmodyfikowany.";
+#elif L==9	// pt
+	"O conjunto de perguntas foi modificado.";
+#endif
+
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La mida del fitxer"
@@ -51390,7 +51516,7 @@ const char *Txt_This_exam_has_no_sets_of_questions =
 #elif L==6	// gn
 	"Este examen no tiene conjuntos de preguntas.";	// Okoteve traducción
 #elif L==7	// it
-	"Questo esame non ha serie di domande.";
+	"Questo esame non ha set di domande.";
 #elif L==8	// pl
 	"Ten egzamin nie ma zestaw&oacute;w pyta&nacute;.";
 #elif L==9	// pt
@@ -53123,17 +53249,17 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==3	// en
 	"Integer number"
 #elif L==4	// es
-	"N&ordm; entero"
+	"N.&ordm; entero"
 #elif L==5	// fr
 	"Nombre entier"
 #elif L==6	// gn
-	"N&ordm; entero"	// Okoteve traducción
+	"N.&ordm; entero"	// Okoteve traducción
 #elif L==7	// it
 	"Numero intero"
 #elif L==8	// pl
 	"Integer number"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; inteiro"
+	"N.&ordm; inteiro"
 #endif
 	,
 	[Tst_ANS_FLOAT] =
@@ -53144,17 +53270,17 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==3	// en
 	"Real number"
 #elif L==4	// es
-	"N&ordm; real"
+	"N.&ordm; real"
 #elif L==5	// fr
 	"Nombre r&eacute;el"
 #elif L==6	// gn
-	"N&ordm; real"	// Okoteve traducción
+	"N.&ordm; real"	// Okoteve traducción
 #elif L==7	// it
 	"Numero reale"
 #elif L==8	// pl
 	"Liczba rzeczywista"
 #elif L==9	// pt
-	"N&ordm; real"
+	"N.&ordm; real"
 #endif
 	,
 	[Tst_ANS_TRUE_FALSE] =
@@ -53384,23 +53510,23 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	,
 	[Tst_ORDER_NUM_HITS] =
 #if   L==1	// ca
-	"N&ordm;<br />resp."			// Necessita traduccio
+	"N.&ordm;<br />resp."			// Necessita traduccio
 #elif L==2	// de
 	"Anzahl<br />Antw."
 #elif L==3	// en
 	"No.<br />ans."
 #elif L==4	// es
-	"N&ordm;<br />resp."
+	"N.&ordm;<br />resp."
 #elif L==5	// fr
 	"Nombre<br />r&eacute;p."
 #elif L==6	// gn
-	"N&ordm;<br />resp."			// Okoteve traducción
+	"N.&ordm;<br />resp."			// Okoteve traducción
 #elif L==7	// it
 	"Num.<br />risp."
 #elif L==8	// pl
 	"No.<br />ans."			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm;<br />resp."
+	"N.&ordm;<br />resp."
 #endif
 	,
 	[Tst_ORDER_AVERAGE_SCORE] =
@@ -53426,23 +53552,23 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	,
 	[Tst_ORDER_NUM_HITS_NOT_BLANK] =
 #if   L==1	// ca
-	"N&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
+	"N.&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
 #elif L==2	// de
 	"Anzahl<br />Antw.<br />nicht<br />leer"
 #elif L==3	// en
 	"No.<br />ans.<br />not<br />blank"
 #elif L==4	// es
-	"N&ordm;<br />resp.<br />no en<br />blanco"
+	"N.&ordm;<br />resp.<br />no en<br />blanco"
 #elif L==5	// fr
 	"Nombre<br />r&eacute;p.<br />non<br />vide"
 #elif L==6	// gn
-	"N&ordm;<br />resp.<br />no en<br />blanco"		// Okoteve traducción
+	"N.&ordm;<br />resp.<br />no en<br />blanco"		// Okoteve traducción
 #elif L==7	// it
 	"Num.<br />risp.<br />non<br />vuoto"
 #elif L==8	// pl
 	"No.<br />ans.<br />not<br />blank"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm;<br />resp.<br />n&atilde;o em<br />branco"
+	"N.&ordm;<br />resp.<br />n&atilde;o em<br />branco"
 #endif
 	,
 	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
@@ -54825,7 +54951,7 @@ const char *Txt_User_ID =
 #elif L==8	// pl
 	"User ID";					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&ordm; de identif. do utilizador";
+	"N.&ordm; de identif. do utilizador";
 #endif
 
 const char *Txt_USER_in_COURSE =	// Warning: it is very important to include %s in the following sentences
@@ -58848,6 +58974,27 @@ const char *Txt_You_must_specify_the_title_of_the_project =
 	"Musisz poda&cacute; tytu&lstrok; projektu.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o t&iacute;tulo do projeto.";
+#endif
+
+const char *Txt_You_must_specify_the_title_of_the_set_of_questions =
+#if   L==1	// ca
+	"Cal especificar el t&iacute;tol del conjunt de preguntes.";
+#elif L==2	// de
+	"Der Satz von Fragen muss angegeben werden.";
+#elif L==3	// en
+	"You must specify the title of the set of questions.";
+#elif L==4	// es
+	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";
+#elif L==5	// fr
+	"Vous devez sp&eacute;cifier le titre de l'ensemble de questions.";
+#elif L==6	// gn
+	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";	// Okoteve traducción
+#elif L==7	// it
+	"&Egrave; necessario specificare il titolo del set di domande.";
+#elif L==8	// pl
+	"Musisz poda&cacute; tytu&lstrok; zestaw pyta&nacute;.";
+#elif L==9	// pt
+	"Voc&ecirc; deve especificar o t&iacute;tulo do conjunto de perguntas.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_survey =
