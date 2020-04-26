@@ -1780,7 +1780,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
    MYSQL_ROW row;
    long QstCod;
 
-   /***** Get question code of thw question to be moved up *****/
+   /***** Get question code of the question to be moved up *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get question code",
 			"SELECT QstCod FROM gam_questions"
 			" WHERE GamCod=%ld AND QstInd=%u",

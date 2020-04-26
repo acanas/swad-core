@@ -165,6 +165,7 @@ void Exa_ListQuestionsToSelect (void);
 void Exa_PutParamQstInd (unsigned QstInd);
 unsigned Exa_GetParamQstInd (void);
 long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);
+
 unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd);
 unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
 

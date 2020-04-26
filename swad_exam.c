@@ -172,8 +172,15 @@ static void ExaSet_PutParamSetCod (long SetCod);
 
 static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd);
 
+static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod);
+static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
+
 static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod);
 static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod);
+
+static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
+static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
+
 static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
                                  struct Exa_Exam *Exam,
 				 struct ExaSet_Set *Set);
@@ -201,6 +208,8 @@ static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
 static void Exa_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams);
 
+static void ExaSet_ExchangeSets (long ExaCod,
+                                 unsigned SetIndTop,unsigned SetIndBottom);
 static void Exa_ExchangeQuestions (long ExaCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
@@ -2236,6 +2245,62 @@ static void Exa_RemAnswersOfAQuestion (long ExaCod,unsigned QstInd)
   }
 
 /*****************************************************************************/
+/****************** Get set index given exam and set code ********************/
+/*****************************************************************************/
+
+static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long SetInd;
+
+   /***** Get set index from set code *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get set index",
+			"SELECT SetInd FROM exa_sets"
+			" WHERE SetCod=%u"
+			" AND ExaCod=%ld",	// Extra check
+			SetCod,ExaCod))
+      Lay_ShowErrorAndExit ("Error: wrong set code.");
+
+   /***** Get set code (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   SetInd = Str_ConvertStrToUnsigned (row[0]);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return SetInd;
+  }
+
+/*****************************************************************************/
+/****************** Get set code given exam and set index ********************/
+/*****************************************************************************/
+
+static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long SetCod;
+
+   /***** Get set code from set index *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get set code",
+			"SELECT SetCod FROM exa_sets"
+			" WHERE ExaCod=%ld AND SetInd=%u",
+			ExaCod,SetInd))
+      Lay_ShowErrorAndExit ("Error: wrong set index.");
+
+   /***** Get set code (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if ((SetCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Error: wrong set code.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return SetCod;
+  }
+
+/*****************************************************************************/
 /************ Get question code given exam and index of question *************/
 /*****************************************************************************/
 
@@ -2245,7 +2310,7 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
    MYSQL_ROW row;
    long QstCod;
 
-   /***** Get question code of thw question to be moved up *****/
+   /***** Get question code of the question to be moved up *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get question code",
 			"SELECT QstCod FROM exa_questions"
 			" WHERE ExaCod=%ld AND QstInd=%u",
@@ -2319,6 +2384,74 @@ static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod)
    DB_FreeMySQLResult (&mysql_res);
 
    return QstInd;
+  }
+
+/*****************************************************************************/
+/*********** Get previous set index to a given set index in an exam **********/
+/*****************************************************************************/
+// Input set index can be 1, 2, 3... n-1
+// Return set index will be 1, 2, 3... n if previous set exists, or 0 if no previous set
+
+static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned PrevSetInd = 0;
+
+   /***** Get previous set index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get previous set index",
+			"SELECT MAX(SetInd) FROM exa_sets"
+			" WHERE ExaCod=%ld AND SetInd<%u",
+			ExaCod,SetInd))
+      Lay_ShowErrorAndExit ("Error: previous set index not found.");
+
+   /***** Get previous set index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&PrevSetInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting previous set index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return PrevSetInd;
+  }
+
+/*****************************************************************************/
+/*************** Get next set index to a given index in an exam **************/
+/*****************************************************************************/
+// Input set index can be 0, 1, 2, 3... n-1
+// Return set index will be 1, 2, 3... n if next set exists, or 0 if no next set
+
+static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NextSetInd = ExaEvt_AFTER_LAST_QUESTION;	// End of sets has been reached
+
+   /***** Get next set index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   if (!DB_QuerySELECT (&mysql_res,"can not get next set index",
+			"SELECT MIN(SetInd) FROM exa_sets"
+			" WHERE ExaCod=%ld AND SetInd>%u",
+			ExaCod,SetInd))
+      Lay_ShowErrorAndExit ("Error: next set index not found.");
+
+   /***** Get next set index (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row)
+      if (row[0])
+	 if (sscanf (row[0],"%u",&NextSetInd) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting next set index.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NextSetInd;
   }
 
 /*****************************************************************************/
@@ -3154,6 +3287,61 @@ void ExaSet_RemoveSet (void)
 
 void ExaSet_MoveUpSet (void)
   {
+   extern const char *Txt_The_set_of_questions_has_been_moved_up;
+   extern const char *Txt_Movement_not_allowed;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   unsigned SetIndTop;
+   unsigned SetIndBottom;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Get set index *****/
+   SetIndBottom = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+
+   /***** Move up set *****/
+   if (SetIndBottom > 1)
+     {
+      /* Indexes of sets to be exchanged */
+      SetIndTop = ExaSet_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
+      if (!SetIndTop)
+	 Lay_ShowErrorAndExit ("Wrong index of set.");
+
+      /* Exchange sets */
+      ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
+
+      /* Success alert */
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_moved_up);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
@@ -3162,6 +3350,71 @@ void ExaSet_MoveUpSet (void)
 
 void ExaSet_MoveDownSet (void)
   {
+   extern const char *Txt_The_set_of_questions_has_been_moved_down;
+   extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_This_exam_has_no_sets_of_questions;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   unsigned SetIndTop;
+   unsigned SetIndBottom;
+   unsigned MaxSetInd;	// 0 if no sets
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Get set index *****/
+   SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+
+   /***** Get maximum set index *****/
+   MaxSetInd = ExaSet_GetMaxSetIndexInExam (Exam.ExaCod);
+
+   /***** Move down set *****/
+   if (MaxSetInd)
+     {
+      if (SetIndTop < MaxSetInd)
+	{
+	 /* Indexes of sets to be exchanged */
+	 SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
+	 if (!SetIndBottom)
+	    Lay_ShowErrorAndExit ("Wrong index of set.");
+
+	 /* Exchange sets */
+	 ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
+
+	 /* Success alert */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_moved_down);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_This_exam_has_no_sets_of_questions);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
@@ -3412,6 +3665,57 @@ void Exa_MoveDownQst (void)
    Exa_ShowOnlyOneExam (&Exams,&Exam,
                         true,	// List exam questions
 	                false);	// Do not put form to start new event
+  }
+
+/*****************************************************************************/
+/*********** Exchange the order of two consecutive sets in an exam ***********/
+/*****************************************************************************/
+
+static void ExaSet_ExchangeSets (long ExaCod,
+                                 unsigned SetIndTop,unsigned SetIndBottom)
+  {
+   long SetCodTop;
+   long SetCodBottom;
+
+   /***** Lock table to make the move atomic *****/
+   DB_Query ("can not lock tables to exchange sets of questions",
+	     "LOCK TABLES exa_sets WRITE");
+   Gbl.DB.LockedTables = true;
+
+   /***** Get set codes of the sets to be moved *****/
+   SetCodTop    = ExaSet_GetSetCodFromSetInd (ExaCod,SetIndTop);
+   SetCodBottom = ExaSet_GetSetCodFromSetInd (ExaCod,SetIndBottom);
+
+   /***** Exchange indexes of sets *****/
+   /*
+   Example:
+   SetIndTop    = 1; SetCodTop    = 218
+   SetIndBottom = 2; SetCodBottom = 220
+   +--------+--------+		+--------+--------+	+--------+--------+
+   | SetInd | SetCod |		| SetInd | SetCod |	| SetInd | SetCod |
+   +--------+--------+		+--------+--------+	+--------+--------+
+   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
+   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
+   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
+   +--------+--------+		+--------+--------+	+--------+--------+
+ */
+   DB_QueryUPDATE ("can not exchange indexes of sets",
+		   "UPDATE exa_sets SET SetInd=%u"
+		   " WHERE ExaCod=%ld AND SetCod=%ld",
+	           SetIndBottom,
+	           ExaCod,SetCodTop);
+
+   DB_QueryUPDATE ("can not exchange indexes of sets",
+		   "UPDATE exa_sets SET SetInd=%u"
+		   " WHERE ExaCod=%ld AND SetCod=%ld",
+	           SetIndTop,
+	           ExaCod,SetCodBottom);
+
+   /***** Unlock table *****/
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after exchanging sets of questions",
+	     "UNLOCK TABLES");
   }
 
 /*****************************************************************************/

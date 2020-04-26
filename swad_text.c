@@ -49741,6 +49741,48 @@ const char *Txt_The_set_of_questions_has_been_modified =
 	"O conjunto de perguntas foi modificado.";
 #endif
 
+const char *Txt_The_set_of_questions_has_been_moved_down =
+#if   L==1	// ca
+	"El conjunt de preguntes ha estat mogut cap avall.";
+#elif L==2	// de
+	"Der Satz von Fragen wurde nach unten bewegt.";
+#elif L==3	// en
+	"The set of questions has been moved down.";
+#elif L==4	// es
+	"El conjunto de preguntas se ha movido hacia abajo.";
+#elif L==5	// fr
+	"L'ensemble de questions a &eacute;t&eacute; d&eacute;plac&eacute; vers le bas.";
+#elif L==6	// gn
+	"El conjunto de preguntas se ha movido hacia abajo.";	// Okoteve traducción
+#elif L==7	// it
+	"Il set di domande &egrave; stato abbattuto.";
+#elif L==8	// pl
+	"Zestaw pyta&nacute; zosta&lstrok;o przeniesione.";
+#elif L==9	// pt
+	"O conjunto de perguntas foi movido para baixo.";
+#endif
+
+const char *Txt_The_set_of_questions_has_been_moved_up =
+#if   L==1	// ca
+	"El conjunt de preguntes ha estat mogut cap amunt.";
+#elif L==2	// de
+	"Der Satz von Fragen wurde nach oben verschoben.";
+#elif L==3	// en
+	"The set of questions has been moved up.";
+#elif L==4	// es
+	"El conjunto de preguntas se ha movido hacia arriba.";
+#elif L==5	// fr
+	"L'ensemble de questions a &eacute;t&eacute; d&eacute;plac&eacute; vers le haut.";
+#elif L==6	// gn
+	"El conjunto de preguntas se ha movido hacia arriba.";	// Okoteve traducción
+#elif L==7	// it
+	"Il set di domande &egrave; stato spostato.";
+#elif L==8	// pl
+	"Zestaw pyta&nacute; zosta&lstrok;o poruszone.";
+#elif L==9	// pt
+	"O conjunto de perguntas foi movido para cima.";
+#endif
+
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La mida del fitxer"
