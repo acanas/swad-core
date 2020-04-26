@@ -241,6 +241,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Exam->Title[0]                = '\0';
+   Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
    Exam->NumEvts                 = 0;
    Exam->NumUnfinishedEvts       = 0;
@@ -545,7 +546,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
                              struct Exa_Exam *Exam,bool ShowOnlyThisExam)
   {
    extern const char *Txt_View_exam;
-   extern const char *Txt_No_of_questions;
+   extern const char *Txt_Set_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Events;
@@ -629,8 +630,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /* Number of questions, maximum grade, visibility of results */
    HTM_DIV_Begin ("class=\"%s\"",Exam->Hidden ? "ASG_GRP_LIGHT" :
         	                                "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_No_of_questions);
-   HTM_Unsigned (Exam->NumQsts);
+   HTM_TxtColonNBSP (Txt_Set_of_questions);
+   HTM_Unsigned (Exam->NumSets);
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Maximum_grade);
    HTM_Double (Exam->MaxGrade);
@@ -1044,20 +1045,18 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Get data of set of questions from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get set data",
-			      "SELECT SetCod,"		// row[0]
-			             "SetInd,"		// row[1]
-				     "NumQstsToExam,"	// row[2]
-				     "Title"		// row[3]
-			     " FROM exa_sets"
-			     " WHERE SetCod=%ld"
-			     " AND ExaCod=%ld",	// Extra check
-			     Set->SetCod,Set->ExaCod);
-   if (NumRows) // Set found...
+   if (DB_QuerySELECT (&mysql_res,"can not get set data",
+		       "SELECT SetCod,"		// row[0]
+			      "SetInd,"		// row[1]
+			      "NumQstsToExam,"	// row[2]
+			      "Title"		// row[3]
+		       " FROM exa_sets"
+		       " WHERE SetCod=%ld"
+		       " AND ExaCod=%ld",	// Extra check
+		       Set->SetCod,Set->ExaCod)) // Set found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1144,8 +1143,11 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       Str_Copy (Exam->Title,row[6],
                 Exa_MAX_BYTES_TITLE);
 
+      /* Get number of sets */
+      Exam->NumSets = ExaSet_GetNumSetsExam (Exam->ExaCod);
+
       /* Get number of questions */
-      Exam->NumQsts = Exa_GetNumQstsExam (Exam->ExaCod);
+      Exam->NumQsts = ExaSet_GetNumQstsExam (Exam->ExaCod);
 
       /* Get number of events */
       Exam->NumEvts = ExaEvt_GetNumEventsInExam (Exam->ExaCod);
@@ -1640,7 +1642,7 @@ void ExaSet_RecFormSet (void)
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -2023,14 +2025,42 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
 /******************* Get number of questions of an exam *********************/
 /*****************************************************************************/
 
-unsigned Exa_GetNumQstsExam (long ExaCod)
+unsigned ExaSet_GetNumSetsExam (long ExaCod)
   {
-   /***** Get nuumber of questions in an exam from database *****/
+   /***** Get number of sets in an exam from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of questions of an exam",
-			     "SELECT COUNT(*) FROM exa_questions"
+   (unsigned) DB_QueryCOUNT ("can not get number of sets in an exam",
+			     "SELECT COUNT(*) FROM exa_sets"
 			     " WHERE ExaCod=%ld",
 			     ExaCod);
+  }
+
+/*****************************************************************************/
+/******************* Get number of questions of an exam *********************/
+/*****************************************************************************/
+
+unsigned ExaSet_GetNumQstsExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQsts = 0;
+
+   /***** Get total number of questions to appear in exam *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get number of questions in an exam",
+			"SELECT SUM(NumQstsToExam) FROM exa_sets"
+			" WHERE ExaCod=%ld",
+			ExaCod))
+      Lay_ShowErrorAndExit ("Error: wrong question index.");
+
+   /***** Get number of questions (row[0]) *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])
+      NumQsts = Str_ConvertStrToUnsigned (row[0]);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumQsts;
   }
 
 /*****************************************************************************/
@@ -2061,7 +2091,8 @@ void ExaSet_RequestCreatOrEditSet (void)
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
-   ItsANewSet = ((Set.SetCod = ExaSet_GetParamSetCod ()) <= 0);
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
@@ -3025,7 +3056,7 @@ void ExaSet_RequestRemoveSet (void)
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    if (Set.SetCod <= 0)
       Lay_WrongSetExit ();
 
@@ -3055,6 +3086,66 @@ void ExaSet_RequestRemoveSet (void)
 
 void ExaSet_RemoveSet (void)
   {
+   extern const char *Txt_Set_of_questions_removed;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Remove the set from all the tables *****/
+   /* Remove questions associated to set */
+   DB_QueryDELETE ("can not remove questions associated to set",
+		   "DELETE FROM exa_questions"
+		   " USING exa_questions,exa_sets"
+		   " WHERE exa_questions.SetCod=%ld"
+                   " AND exa_questions.SetCod=exa_sets.SetCod"
+		   " AND exa_sets.ExaCod=%ld",	// Extra check
+		   Set.SetCod,Set.ExaCod);
+
+   /* Remove the set itself */
+   DB_QueryDELETE ("can not remove set",
+		   "DELETE FROM exa_sets"
+		   " WHERE SetCod=%ld"
+                   " AND ExaCod=%ld",		// Extra check
+		   Set.SetCod,Set.ExaCod);
+   if (!mysql_affected_rows (&Gbl.mysql))
+      Lay_ShowErrorAndExit ("The set to be removed does not exist.");
+
+   /* Change index of sets greater than this */
+   DB_QueryUPDATE ("can not update indexes of sets",
+		   "UPDATE exa_sets SET SetInd=SetInd-1"
+		   " WHERE ExaCod=%ld AND SetInd>%u",
+		   Set.ExaCod,Set.SetInd);
+
+   /***** Write message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/

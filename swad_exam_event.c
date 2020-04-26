@@ -2705,7 +2705,7 @@ static void ExaEvt_ShowNumQstInEvt (const struct ExaEvt_Event *Event)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
-   unsigned NumQsts = Exa_GetNumQstsExam (Event->ExaCod);
+   unsigned NumQsts = ExaSet_GetNumQstsExam (Event->ExaCod);
 
    HTM_DIV_Begin ("class=\"EXA_NUM_QST\"");
    switch (Event->Status.Showing)

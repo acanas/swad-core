@@ -95,6 +95,7 @@ struct Exa_Exam
    char Title[Exa_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Hidden;			// Exam is hidden
+   unsigned NumSets;		// Number of sets in the exam
    unsigned NumQsts;		// Number of questions in the exam
    unsigned NumEvts;		// Number of events in the exam
    unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
@@ -154,9 +155,8 @@ void ExaSet_RecFormSet (void);
 void Exa_RecFormExam (void);
 bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 
-unsigned Exa_GetNumQstsExam (long ExaCod);
-
-void Exa_RequestNewSet (void);
+unsigned ExaSet_GetNumSetsExam (long ExaCod);
+unsigned ExaSet_GetNumQstsExam (long ExaCod);
 
 void ExaSet_RequestCreatOrEditSet (void);
 void Exa_RequestNewQuestion (void);

@@ -41046,6 +41046,27 @@ const char *Txt_Set_of_questions =
 	"Conjunto de perguntas";
 #endif
 
+const char *Txt_Set_of_questions_removed =
+#if   L==1	// ca
+	"Conjunt de preguntes eliminat.";
+#elif L==2	// de
+	"Satz von Fragen entfernt.";
+#elif L==3	// en
+	"Set of questions removed.";
+#elif L==4	// es
+	"Conjunto de preguntas eliminado.";
+#elif L==5	// fr
+	"Ensemble de questions supprim&eacute;.";
+#elif L==6	// gn
+	"Conjunto de preguntas eliminado.";	// Okoteve traducción
+#elif L==7	// it
+	"Set di domande rimosso.";
+#elif L==8	// pl
+	"Zestaw pyta&nacute; usuniete.";
+#elif L==9	// pt
+	"Conjunto de perguntas removido.";
+#endif
+
 const char *Txt_Set_password =
 #if   L==1	// ca
 	"Establir contrasenya";

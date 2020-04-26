@@ -515,10 +515,10 @@ CREATE TABLE IF NOT EXISTS exa_participants (
 -- Table exa_questions: stores the questions in the exams
 --
 CREATE TABLE IF NOT EXISTS exa_questions (
-	ExaCod INT NOT NULL,
+	SetCod INT NOT NULL,
 	QstCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
-	INDEX(ExaCod),
+	INDEX(SetCod),
 	INDEX(QstCod));
 --
 -- Table exa_results: stores exam results
