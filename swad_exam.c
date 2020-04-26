@@ -2649,6 +2649,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    unsigned NumSet;
    MYSQL_ROW row;
    struct ExaSet_Set Set;
+   char *Anchor = NULL;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write the heading *****/
@@ -2689,12 +2690,18 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       Str_Copy (Set.Title,row[3],
                 ExaSet_MAX_BYTES_TITLE);
 
-      /***** Icons *****/
+      /* Initialize context */
       Exams->ExaCod = ExaCod;
       Exams->SetCod = Set.SetCod;
       Exams->SetInd = Set.SetInd;
+
+      /***** Build anchor string *****/
+      Frm_SetAnchorStr (Set.SetCod,&Anchor);
+
+      /***** Begin row *****/
       HTM_TR_Begin (NULL);
 
+      /***** Icons *****/
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Put icon to remove the set */
@@ -2711,7 +2718,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /* Put icon to move up the question */
       if (ICanEditSets && Set.SetInd > 1)
 	{
-	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 	                                ExaSet_PutParamsOneSet,Exams,
 				        "arrow-up.svg",
 					Str_BuildStringStr (Txt_Move_up_X,
@@ -2724,7 +2731,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /* Put icon to move down the set */
       if (ICanEditSets && Set.SetInd < MaxSetInd)
 	{
-	 Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 	                                ExaSet_PutParamsOneSet,Exams,
 				        "arrow-down.svg",
 					Str_BuildStringStr (Txt_Move_down_X,
@@ -2750,7 +2757,9 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** Title *****/
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_ARTICLE_Begin (Anchor);
       HTM_Txt (Set.Title);
+      HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /***** Current number of questions in set *****/
@@ -2765,6 +2774,9 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** End row *****/
       HTM_TR_End ();
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (Anchor);
      }
 
    /***** End table *****/
@@ -3287,7 +3299,6 @@ void ExaSet_RemoveSet (void)
 
 void ExaSet_MoveUpSet (void)
   {
-   extern const char *Txt_The_set_of_questions_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -3332,9 +3343,6 @@ void ExaSet_MoveUpSet (void)
 
       /* Exchange sets */
       ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
-
-      /* Success alert */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_moved_up);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
@@ -3350,7 +3358,6 @@ void ExaSet_MoveUpSet (void)
 
 void ExaSet_MoveDownSet (void)
   {
-   extern const char *Txt_The_set_of_questions_has_been_moved_down;
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_This_exam_has_no_sets_of_questions;
    struct Exa_Exams Exams;
@@ -3402,9 +3409,6 @@ void ExaSet_MoveDownSet (void)
 
 	 /* Exchange sets */
 	 ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
-
-	 /* Success alert */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_moved_down);
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
