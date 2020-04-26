@@ -544,10 +544,17 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.199.2 (2020-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.199.3 (2020-04-27)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.199.3: Apr 27, 2020	Changes moving sets of questions in an exam up and down. (? lines)
+					2 changes necessary in database:
+ALTER TABLE gam_questions CHANGE COLUMN QstInd QstInd INT NOT NULL;
+ALTER TABLE exa_sets CHANGE COLUMN SetInd SetInd INT NOT NULL;
+ALTER TABLE exa_sets DROP INDEX ExaCod;
+ALTER TABLE exa_sets ADD UNIQUE INDEX(ExaCod,SetInd);
+
 	Version 19.199.2: Apr 27, 2020	Changes moving questions in a game up and down. (299345 lines)
 					4 changes necessary in database:
 ALTER TABLE gam_questions CHANGE COLUMN QstInd QstInd INT NOT NULL DEFAULT 0 AFTER GamCod;

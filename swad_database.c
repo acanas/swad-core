@@ -1189,8 +1189,8 @@ mysql> DESCRIBE exa_sets;
 | Field         | Type          | Null | Key | Default | Extra          |
 +---------------+---------------+------+-----+---------+----------------+
 | SetCod        | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ExaCod        | int(11)       | NO   | MUL | NULL    |                |
-| SetInd        | int(11)       | NO   |     | 0       |                |
+| ExaCod        | int(11)       | NO   |     | NULL    |                |
+| SetInd        | int(11)       | NO   |     | NULL    |                |
 | NumQstsToExam | int(11)       | NO   |     | 0       |                |
 | Title         | varchar(2047) | NO   |     | NULL    |                |
 +---------------+---------------+------+-----+---------+----------------+
@@ -1199,11 +1199,11 @@ mysql> DESCRIBE exa_sets;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sets ("
 			"SetCod INT NOT NULL AUTO_INCREMENT,"
 			"ExaCod INT NOT NULL,"
-			"SetInd INT NOT NULL DEFAULT 0,"
+			"SetInd INT NOT NULL,"
 			"NumQstsToExam INT NOT NULL DEFAULT 0,"
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
-		   "INDEX(ExaCod,SetInd))");
+		   "UNIQUE INDEX(ExaCod,SetInd))");
 
       /***** Table exa_times *****/
 /*
@@ -1587,14 +1587,14 @@ mysql> DESCRIBE gam_questions;
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
 | GamCod | int(11) | NO   | PRI | NULL    |       |
-| QstInd | int(11) | NO   | PRI | 0       |       |
+| QstInd | int(11) | NO   | PRI | NULL    |       |
 | QstCod | int(11) | NO   |     | NULL    |       |
 +--------+---------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
 			"GamCod INT NOT NULL,"
-			"QstInd INT NOT NULL DEFAULT 0,"
+			"QstInd INT NOT NULL,"
 			"QstCod INT NOT NULL,"
 		   "UNIQUE INDEX(GamCod,QstInd),"
 		   "UNIQUE INDEX(GamCod,QstCod))");

@@ -3687,25 +3687,36 @@ static void ExaSet_ExchangeSets (long ExaCod,
    Example:
    SetIndTop    = 1; SetCodTop    = 218
    SetIndBottom = 2; SetCodBottom = 220
-   +--------+--------+		+--------+--------+	+--------+--------+
-   | SetInd | SetCod |		| SetInd | SetCod |	| SetInd | SetCod |
-   +--------+--------+		+--------+--------+	+--------+--------+
-   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
-   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
-   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
-   +--------+--------+		+--------+--------+	+--------+--------+
- */
+                     Step 1              Step 2              Step 3
++--------+--------+ +--------+--------+ +--------+--------+ +--------+--------+
+| SetInd | SetCod | | SetInd | SetCod | | SetInd | SetCod | | SetInd | SetCod |
++--------+--------+ +--------+--------+ +--------+--------+ +--------+--------+
+|      1 |    218 |>|     -2 |    218 |>|     -2 |    218 |>|      2 |    218 |
+|      2 |    220 | |      2 |    220 | |      1 |    220 | |      1 |    220 |
+|      3 |    232 | |      3 |    232 | |      3 |    232 | |      3 |    232 |
++--------+--------+ +--------+--------+ +--------+--------+ +--------+--------+
+   */
+   /* Step 1: change temporarily top index to minus bottom index
+              in order to not repeat unique index (ExaCod,SetInd) */
    DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets SET SetInd=%u"
+		   "UPDATE exa_sets SET SetInd=-%u"
 		   " WHERE ExaCod=%ld AND SetCod=%ld",
-	           SetIndBottom,
-	           ExaCod,SetCodTop);
+		   SetIndBottom,
+		   ExaCod,SetCodTop);
 
+   /* Step 2: change bottom index to old top index  */
    DB_QueryUPDATE ("can not exchange indexes of sets",
 		   "UPDATE exa_sets SET SetInd=%u"
 		   " WHERE ExaCod=%ld AND SetCod=%ld",
-	           SetIndTop,
-	           ExaCod,SetCodBottom);
+		   SetIndTop,
+		   ExaCod,SetCodBottom);
+
+   /* Step 3: change top index to old bottom index */
+   DB_QueryUPDATE ("can not exchange indexes of sets",
+		   "UPDATE exa_sets SET SetInd=%u"
+		   " WHERE ExaCod=%ld AND SetCod=%ld",
+		   SetIndBottom,
+		   ExaCod,SetCodTop);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...

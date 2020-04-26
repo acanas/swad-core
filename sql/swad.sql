@@ -538,11 +538,11 @@ CREATE TABLE IF NOT EXISTS exa_results (
 CREATE TABLE IF NOT EXISTS exa_sets (
 	SetCod INT NOT NULL AUTO_INCREMENT,
 	ExaCod INT NOT NULL,
-	SetInd INT NOT NULL DEFAULT 0,
+	SetInd INT NOT NULL,
 	NumQstsToExam INT NOT NULL DEFAULT 0,
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(SetCod),
-	INDEX(ExaCod,SetInd));
+	UNIQUE INDEX(ExaCod,SetInd));
 --
 -- Table exa_times: stores the elapsed time in every question in every exam event
 --
@@ -802,7 +802,7 @@ CREATE TABLE IF NOT EXISTS mch_results (
 --
 CREATE TABLE IF NOT EXISTS gam_questions (
 	GamCod INT NOT NULL,
-	QstInd INT NOT NULL DEFAULT 0,
+	QstInd INT NOT NULL,
 	QstCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,QstInd),
 	UNIQUE INDEX(GamCod,QstCod));
