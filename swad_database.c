@@ -1586,18 +1586,18 @@ mysql> DESCRIBE gam_questions;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
-| GamCod | int(11) | NO   | MUL | NULL    |       |
-| QstCod | int(11) | NO   | MUL | NULL    |       |
-| QstInd | int(11) | NO   |     | 0       |       |
+| GamCod | int(11) | NO   | PRI | NULL    |       |
+| QstInd | int(11) | NO   | PRI | 0       |       |
+| QstCod | int(11) | NO   |     | NULL    |       |
 +--------+---------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
+3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
 			"GamCod INT NOT NULL,"
-			"QstCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
-		   "INDEX(GamCod),"
-		   "INDEX(QstCod))");
+			"QstCod INT NOT NULL,"
+		   "UNIQUE INDEX(GamCod,QstInd),"
+		   "UNIQUE INDEX(GamCod,QstCod))");
 
    /***** Table mch_answers *****/
 /*

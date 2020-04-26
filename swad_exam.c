@@ -3547,7 +3547,6 @@ void Exa_RemoveQst (void)
 
 void Exa_MoveUpQst (void)
   {
-   extern const char *Txt_The_question_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -3585,9 +3584,6 @@ void Exa_MoveUpQst (void)
 
 	 /* Exchange questions */
 	 Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
-
-	 /* Success alert */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
@@ -3607,7 +3603,6 @@ void Exa_MoveUpQst (void)
 
 void Exa_MoveDownQst (void)
   {
-   extern const char *Txt_The_question_has_been_moved_down;
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_This_exam_has_no_questions;
    struct Exa_Exams Exams;
@@ -3652,9 +3647,6 @@ void Exa_MoveDownQst (void)
 
 	    /* Exchange questions */
 	    Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
-
-	    /* Success alert */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
 	   }
 	 else
 	    Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);

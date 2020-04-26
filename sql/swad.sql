@@ -802,10 +802,10 @@ CREATE TABLE IF NOT EXISTS mch_results (
 --
 CREATE TABLE IF NOT EXISTS gam_questions (
 	GamCod INT NOT NULL,
-	QstCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
-	INDEX(GamCod),
-	INDEX(QstCod));
+	QstCod INT NOT NULL,
+	UNIQUE INDEX(GamCod,QstInd),
+	UNIQUE INDEX(GamCod,QstCod));
 --
 -- Table mch_times: stores the elapsed time in every question in every match played
 --

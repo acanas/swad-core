@@ -291,11 +291,53 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 	" para confirmar esse endere&ccedil;o.";
 #endif
 
+const char *Txt_A_question_has_been_added =
+#if   L==1	// ca
+	"S'ha afegit una pregunta.";
+#elif L==2	// de
+	"Eine Frage wurde hinzugef&uuml;gt.";
+#elif L==3	// en
+	"A question has been added.";
+#elif L==4	// es
+	"Se ha a&ntilde;adido una pregunta.";
+#elif L==5	// fr
+	"Une question a &eacute;t&eacute; ajout%eacute;e.";
+#elif L==6	// gn
+	"Se ha a&ntilde;adido una pregunta.";	// Okoteve traducción
+#elif L==7	// it
+	"&Egrave; stata aggiunta una domanda.";
+#elif L==8	// pl
+	"Pytanie zosta&lstrok;o dodane.";
+#elif L==9	// pt
+	"Uma pergunta foi adicionada.";
+#endif
+
+const char *Txt_X_questions_have_been_added =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"S'han afegit %u preguntes.";
+#elif L==2	// de
+	"%u Fragen wurden hinzugef&uuml;gt.";
+#elif L==3	// en
+	"%u questions have been added.";
+#elif L==4	// es
+	"Se han a&ntilde;adido %u preguntas.";
+#elif L==5	// fr
+	"%u questions ont &eacute;t&eacute; ajout&eacute;es.";
+#elif L==6	// gn
+	"Se han a&ntilde;adido %u preguntas.";	// Okoteve traducción
+#elif L==7	// it
+	"Sono state aggiunte %u domande.";
+#elif L==8	// pl
+	"Dodano %u pyta&nacute;.";
+#elif L==9	// pt
+	"%u perguntas foram adicionadas.";
+#endif
+
 const char *Txt_A_student_can_belong_to_several_groups =
 #if   L==1	// ca
 	"Un estudiant pot pert&agrave;nyer a diversos grups";
 #elif L==2	// de
-	"Ein Student kann mehreren Gruppen angehören";
+	"Ein Student kann mehreren Gruppen angeh&ouml;ren";
 #elif L==3	// en
 	"A student can belong to several groups";
 #elif L==4	// es
@@ -391,7 +433,7 @@ const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_
 	" ou voc&ecirc; prefere para ser removido/a da disciplina?";
 #endif
 
-const char *Txt_A_user_can_not_have_more_than_X_IDs =
+const char *Txt_A_user_can_not_have_more_than_X_IDs =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"Un usuari no pot tenir m&eacute;s de %u IDs (DNI/c&egrave;dulas)";
 #elif L==2	// de
@@ -49418,48 +49460,6 @@ const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is ver
 	"The properties of file %s have been saved.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"As propriedades do arquivo %s foram salvas.";
-#endif
-
-const char *Txt_The_question_has_been_moved_down =
-#if   L==1	// ca
-	"La pregunta ha estat moguda cap avall.";
-#elif L==2	// de
-	"Die Frage wurde nach unten bewegt.";
-#elif L==3	// en
-	"The question has been moved down.";
-#elif L==4	// es
-	"La pregunta se ha movido hacia abajo.";
-#elif L==5	// fr
-	"La question a &eacute;t&eacute; d&eacute;plac&eacute;e vers le bas.";
-#elif L==6	// gn
-	"La pregunta se ha movido hacia abajo.";	// Okoteve traducción
-#elif L==7	// it
-	"La questione &egrave; stata abbattuta.";
-#elif L==8	// pl
-	"Pytanie zosta&lstrok;o przeniesione.";
-#elif L==9	// pt
-	"A pergunta foi movida para baixo.";
-#endif
-
-const char *Txt_The_question_has_been_moved_up =
-#if   L==1	// ca
-	"La pregunta ha estat moguda cap amunt.";
-#elif L==2	// de
-	"Die Frage wurde nach oben verschoben.";
-#elif L==3	// en
-	"The question has been moved up.";
-#elif L==4	// es
-	"La pregunta se ha movido hacia arriba.";
-#elif L==5	// fr
-	"La question a &eacute;t&eacute; d&eacute;plac&eacute;e vers le haut.";
-#elif L==6	// gn
-	"La pregunta se ha movido hacia arriba.";	// Okoteve traducción
-#elif L==7	// it
-	"La questione &egrave; stata spostata.";
-#elif L==8	// pl
-	"Pytanie zosta&lstrok;o poruszone.";
-#elif L==9	// pt
-	"A pergunta foi movida para cima.";
 #endif
 
 const char *Txt_The_record_field_X_already_exists =	// Warning: it is very important to include %s in the following sentences

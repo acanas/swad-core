@@ -150,6 +150,8 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
 
 static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
+static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod);
+
 static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod);
 static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
@@ -157,7 +159,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
 static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists);
+                                        unsigned QstInd,bool QuestionExists,
+                                        const char *Anchor);
 static void Gam_PutIconToAddNewQuestions (void *Games);
 static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games);
 
@@ -1684,14 +1687,12 @@ void Gam_RequestNewQuestion (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
-     {
-      /***** Show form to create a new question in this game *****/
-      Games.GamCod = Game.GamCod;
-      Tst_RequestSelectTestsForGame (&Games);
-     }
-   else
+   if (!Gam_CheckIfEditable (&Game))
       Lay_NoPermissionExit ();
+
+   /***** Show form to create a new question in this game *****/
+   Games.GamCod = Game.GamCod;
+   Tst_RequestSelectTestsForGame (&Games);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -1720,14 +1721,12 @@ void Gam_ListTstQuestionsToSelect (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
-     {
-      /***** List several test questions for selection *****/
-      Games.GamCod = Game.GamCod;
-      Tst_ListQuestionsToSelectForGame (&Games);
-     }
-   else
+   if (!Gam_CheckIfEditable (&Game))
       Lay_NoPermissionExit ();
+
+   /***** List several test questions for selection *****/
+   Games.GamCod = Game.GamCod;
+   Tst_ListQuestionsToSelectForGame (&Games);
   }
 
 /*****************************************************************************/
@@ -1768,6 +1767,35 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
 		   " AND mch_matches.MchCod=mch_answers.MchCod"
 		   " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
 		   GamCod,QstInd);
+  }
+
+/*****************************************************************************/
+/************ Get question index given game and code of question *************/
+/*****************************************************************************/
+
+static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned QstInd = 0;	// Return 0 is question is not present in game
+
+   /***** Get question index in a game given the question code *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get question index",
+			"SELECT QstInd FROM gam_questions"
+			" WHERE GamCod=%ld AND QstCod=%ld",
+			GamCod,QstCod))
+     {
+      /***** Get question code (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      QstInd = Str_ConvertStrToUnsigned (row[0]);
+      if (QstInd == 0)
+	 Lay_ShowErrorAndExit ("Error: wrong question index.");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return QstInd;
   }
 
 /*****************************************************************************/
@@ -1970,11 +1998,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    struct Tst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
+   char *Anchor = NULL;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
 
    /***** Get maximum question index *****/
-   MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);
+   MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -2015,11 +2044,19 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       /* Get question code (row[1]) */
       Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /***** Icons *****/
+      /* Initialize context */
       Games->GamCod = GamCod;
       Games->QstInd = QstInd;
+
+      /***** Build anchor string *****/
+      // The same question may appear more than once.
+      // In that case, the page will be positioned in the first occurrence.
+      Frm_SetAnchorStr (Question.QstCod,&Anchor);
+
+      /***** Begin row *****/
       HTM_TR_Begin (NULL);
 
+      /***** Icons *****/
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
@@ -2037,7 +2074,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       /* Put icon to move up the question */
       if (ICanEditQuestions && QstInd > 1)
 	{
-	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 	                                Gam_PutParamsOneQst,Games,
 				        "arrow-up.svg",
 					Str_BuildStringStr (Txt_Move_up_X,
@@ -2050,7 +2087,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       /* Put icon to move down the question */
       if (ICanEditQuestions && QstInd < MaxQstInd)
 	{
-	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 	                                Gam_PutParamsOneQst,Games,
 				        "arrow-down.svg",
 					Str_BuildStringStr (Txt_Move_down_X,
@@ -2069,9 +2106,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
       /***** Question *****/
       QuestionExists = Tst_GetQstDataFromDB (&Question);
-      Gam_ListQuestionForEdition (&Question,QstInd,QuestionExists);
+      Gam_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
 
+      /***** End row *****/
       HTM_TR_End ();
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (Anchor);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
@@ -2086,7 +2127,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 /*****************************************************************************/
 
 static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists)
+                                        unsigned QstInd,bool QuestionExists,
+                                        const char *Anchor)
   {
    extern const char *Txt_Question_removed;
 
@@ -2110,6 +2152,7 @@ static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
 
    /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_ARTICLE_Begin (Anchor);
    if (QuestionExists)
      {
       /* Write stem */
@@ -2133,6 +2176,7 @@ static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
       HTM_Txt (Txt_Question_removed);
       HTM_SPAN_End ();
      }
+   HTM_ARTICLE_End ();
    HTM_TD_End ();
   }
 
@@ -2171,12 +2215,15 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
 void Gam_AddTstQuestionsToGame (void)
   {
    extern const char *Txt_No_questions_have_been_added;
+   extern const char *Txt_A_question_has_been_added;
+   extern const char *Txt_X_questions_have_been_added;
    struct Gam_Games Games;
    struct Gam_Game Game;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
    unsigned MaxQstInd;
+   unsigned NumQstsAdded;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -2190,30 +2237,35 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Game))
+      Lay_NoPermissionExit ();
+
+   /***** Get selected questions *****/
+   /* Allocate space for selected question codes */
+   Gam_AllocateListSelectedQuestions (&Games);
+
+   /* Get question codes */
+   Par_GetParMultiToText ("QstCods",Games.ListQuestions,
+			  Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
+
+   /* Check number of questions */
+   NumQstsAdded = 0;
+   if (Gam_CountNumQuestionsInList (&Games))	// If questions selected...
      {
-      /***** Get selected questions *****/
-      /* Allocate space for selected question codes */
-      Gam_AllocateListSelectedQuestions (&Games);
-
-      /* Get question codes */
-      Par_GetParMultiToText ("QstCods",Games.ListQuestions,
-			     Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
-
-      /* Check number of questions */
-      if (Gam_CountNumQuestionsInList (&Games))	// If questions selected...
+      /***** Insert questions in database *****/
+      Ptr = Games.ListQuestions;
+      while (*Ptr)
 	{
-	 /***** Insert questions in database *****/
-	 Ptr = Games.ListQuestions;
-	 while (*Ptr)
-	   {
-	    /* Get next code */
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-	    if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	       Lay_ShowErrorAndExit ("Wrong question code.");
+	 /* Get next code */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
+	    Lay_ShowErrorAndExit ("Wrong question code.");
 
+	 /* Check if question is already present in game */
+	 if (Gam_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
+	   {
 	    /* Get current maximum index */
-	    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
+	    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
 	    /* Insert question in the table of questions */
 	    DB_QueryINSERT ("can not create question",
@@ -2222,16 +2274,22 @@ void Gam_AddTstQuestionsToGame (void)
 			    " VALUES"
 			    " (%ld,%ld,%u)",
 			    Game.GamCod,QstCod,MaxQstInd + 1);
+
+	    NumQstsAdded++;
 	   }
 	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
-
-      /***** Free space for selected question codes *****/
-      Gam_FreeListsSelectedQuestions (&Games);
      }
+
+   /***** Show warning in no questions added *****/
+   if (NumQstsAdded == 0)
+      Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
+   else if (NumQstsAdded == 1)
+      Ale_ShowAlert (Ale_SUCCESS,Txt_A_question_has_been_added);
    else
-      Lay_NoPermissionExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt_X_questions_have_been_added,NumQstsAdded);
+
+   /***** Free space for selected question codes *****/
+   Gam_FreeListsSelectedQuestions (&Games);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -2313,22 +2371,20 @@ void Gam_RequestRemoveQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
-     {
-      /***** Get question index *****/
-      QstInd = Gam_GetParamQstInd ();
-
-      /***** Show question and button to remove question *****/
-      Games.GamCod = Game.GamCod;
-      Games.QstInd = QstInd;
-      Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
-                              Gam_PutParamsOneQst,&Games,
-			      Btn_REMOVE_BUTTON,Txt_Remove_question,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			      QstInd);
-     }
-   else
+   if (!Gam_CheckIfEditable (&Game))
       Lay_NoPermissionExit ();
+
+   /***** Get question index *****/
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Show question and button to remove question *****/
+   Games.GamCod = Game.GamCod;
+   Games.QstInd = QstInd;
+   Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
+			   Gam_PutParamsOneQst,&Games,
+			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			   QstInd);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -2359,41 +2415,39 @@ void Gam_RemoveQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
-     {
-      /***** Get question index *****/
-      QstInd = Gam_GetParamQstInd ();
-
-      /***** Remove the question from all the tables *****/
-      /* Remove answers from this test question */
-      Gam_RemAnswersOfAQuestion (Game.GamCod,QstInd);
-
-      /* Remove the question itself */
-      DB_QueryDELETE ("can not remove a question",
-		      "DELETE FROM gam_questions"
-		      " WHERE GamCod=%ld AND QstInd=%u",
-		      Game.GamCod,QstInd);
-      if (!mysql_affected_rows (&Gbl.mysql))
-	 Lay_ShowErrorAndExit ("The question to be removed does not exist.");
-
-      /* Change index of questions greater than this */
-      DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		      "UPDATE mch_answers,mch_matches"
-		      " SET mch_answers.QstInd=mch_answers.QstInd-1"
-		      " WHERE mch_matches.GamCod=%ld"
-		      " AND mch_matches.MchCod=mch_answers.MchCod"
-		      " AND mch_answers.QstInd>%u",
-		      Game.GamCod,QstInd);
-      DB_QueryUPDATE ("can not update indexes of questions",
-		      "UPDATE gam_questions SET QstInd=QstInd-1"
-		      " WHERE GamCod=%ld AND QstInd>%u",
-		      Game.GamCod,QstInd);
-
-      /***** Write message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
-     }
-   else
+   if (!Gam_CheckIfEditable (&Game))
       Lay_NoPermissionExit ();
+
+   /***** Get question index *****/
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Remove the question from all the tables *****/
+   /* Remove answers from this test question */
+   Gam_RemAnswersOfAQuestion (Game.GamCod,QstInd);
+
+   /* Remove the question itself */
+   DB_QueryDELETE ("can not remove a question",
+		   "DELETE FROM gam_questions"
+		   " WHERE GamCod=%ld AND QstInd=%u",
+		   Game.GamCod,QstInd);
+   if (!mysql_affected_rows (&Gbl.mysql))
+      Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+
+   /* Change index of questions greater than this */
+   DB_QueryUPDATE ("can not update indexes of questions in table of answers",
+		   "UPDATE mch_answers,mch_matches"
+		   " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		   " WHERE mch_matches.GamCod=%ld"
+		   " AND mch_matches.MchCod=mch_answers.MchCod"
+		   " AND mch_answers.QstInd>%u",
+		   Game.GamCod,QstInd);
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE gam_questions SET QstInd=QstInd-1"
+		   " WHERE GamCod=%ld AND QstInd>%u",
+		   Game.GamCod,QstInd);
+
+   /***** Write message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -2407,7 +2461,6 @@ void Gam_RemoveQst (void)
 
 void Gam_MoveUpQst (void)
   {
-   extern const char *Txt_The_question_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct Gam_Games Games;
    struct Gam_Game Game;
@@ -2426,30 +2479,25 @@ void Gam_MoveUpQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Game))
+      Lay_NoPermissionExit ();
+
+   /***** Get question index *****/
+   QstIndBottom = Gam_GetParamQstInd ();
+
+   /***** Move up question *****/
+   if (QstIndBottom > 1)
      {
-      /***** Get question index *****/
-      QstIndBottom = Gam_GetParamQstInd ();
+      /* Indexes of questions to be exchanged */
+      QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
+      if (!QstIndTop)
+	 Lay_ShowErrorAndExit ("Wrong index of question.");
 
-      /***** Move up question *****/
-      if (QstIndBottom > 1)
-	{
-	 /* Indexes of questions to be exchanged */
-	 QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
-	 if (!QstIndTop)
-	    Lay_ShowErrorAndExit ("Wrong index of question.");
-
-	 /* Exchange questions */
-	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
-
-	 /* Success alert */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      /* Exchange questions */
+      Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
      }
    else
-      Lay_NoPermissionExit ();
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -2463,7 +2511,6 @@ void Gam_MoveUpQst (void)
 
 void Gam_MoveDownQst (void)
   {
-   extern const char *Txt_The_question_has_been_moved_down;
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_This_game_has_no_questions;
    struct Gam_Games Games;
@@ -2484,38 +2531,33 @@ void Gam_MoveDownQst (void)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
-   if (Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Game))
+      Lay_NoPermissionExit ();
+
+   /***** Get question index *****/
+   QstIndTop = Gam_GetParamQstInd ();
+
+   /***** Get maximum question index *****/
+   MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
+
+   /***** Move down question *****/
+   if (MaxQstInd)
      {
-      /***** Get question index *****/
-      QstIndTop = Gam_GetParamQstInd ();
-
-      /***** Get maximum question index *****/
-      MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);
-
-      /***** Move down question *****/
-      if (MaxQstInd)
+      if (QstIndTop < MaxQstInd)
 	{
-	 if (QstIndTop < MaxQstInd)
-	   {
-	    /* Indexes of questions to be exchanged */
-	    QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
-	    if (!QstIndBottom)
-	       Lay_ShowErrorAndExit ("Wrong index of question.");
+	 /* Indexes of questions to be exchanged */
+	 QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+	 if (!QstIndBottom)
+	    Lay_ShowErrorAndExit ("Wrong index of question.");
 
-	    /* Exchange questions */
-	    Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
-
-	    /* Success alert */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
-	   }
-	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+	 /* Exchange questions */
+	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
      }
    else
-      Lay_NoPermissionExit ();
+      Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -2547,25 +2589,36 @@ static void Gam_ExchangeQuestions (long GamCod,
    Example:
    QstIndTop    = 1; QstCodTop    = 218
    QstIndBottom = 2; QstCodBottom = 220
-   +--------+--------+		+--------+--------+	+--------+--------+
-   | QstInd | QstCod |		| QstInd | QstCod |	| QstInd | QstCod |
-   +--------+--------+		+--------+--------+	+--------+--------+
-   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
-   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
-   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
-   +--------+--------+		+--------+--------+	+--------+--------+
- */
+                          Step 1                Step 2                Step 3
+   +--------+--------+   +--------+--------+   +--------+--------+   +--------+--------+
+   | QstInd | QstCod |   | QstInd | QstCod |   | QstInd | QstCod |   | QstInd | QstCod |
+   +--------+--------+   +--------+--------+   +--------+--------+   +--------+--------+
+   |      1 |    218 |-->|     -2 |    218 |-->|     -2 |    218 |-->|      2 |    218 |
+   |      2 |    220 |   |      2 |    220 |   |      1 |    220 |   |      1 |    220 |
+   |      3 |    232 |   |      3 |    232 |   |      3 |    232 |   |      3 |    232 |
+   +--------+--------+   +--------+--------+   +--------+--------+   +--------+--------+
+   */
+   /* Step 1: change temporarily top index to minus bottom index
+              in order to not repeat unique index (GamCod,QstInd) */
    DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions SET QstInd=%u"
+		   "UPDATE gam_questions SET QstInd=-%u"
 		   " WHERE GamCod=%ld AND QstCod=%ld",
-	           QstIndBottom,
-	           GamCod,QstCodTop);
+		   QstIndBottom,
+		   GamCod,QstCodTop);
 
+   /* Step 2: change bottom index to old top index  */
    DB_QueryUPDATE ("can not exchange indexes of questions",
 		   "UPDATE gam_questions SET QstInd=%u"
 		   " WHERE GamCod=%ld AND QstCod=%ld",
-	           QstIndTop,
-	           GamCod,QstCodBottom);
+		   QstIndTop,
+		   GamCod,QstCodBottom);
+
+   /* Step 3: change top index to old bottom index */
+   DB_QueryUPDATE ("can not exchange indexes of questions",
+		   "UPDATE gam_questions SET QstInd=%u"
+		   " WHERE GamCod=%ld AND QstCod=%ld",
+		   QstIndBottom,
+		   GamCod,QstCodTop);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
