@@ -1018,10 +1018,10 @@ void Ins_WriteSelectorOfInstitution (void)
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCtr);
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
    HTM_OPTION (HTM_Type_STRING,"",
@@ -1142,7 +1142,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,true,
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -1156,7 +1157,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,true,
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -1170,7 +1172,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_URL ("WWW",Ins->WWW,true,
+	 HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	}
@@ -1217,7 +1219,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
@@ -1737,19 +1739,21 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,false,
+   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 

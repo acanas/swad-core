@@ -6309,7 +6309,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       HTM_NBSP ();
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
-	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,true,
+	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"%s %s\"",
 			 Gbl.FileBrowser.InputStyle,
 			 Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
@@ -8389,7 +8390,8 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    /***** Folder *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Folder);
-   HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",false,
+   HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"30\" required=\"required\"");
    HTM_LABEL_End ();
 
@@ -8486,7 +8488,9 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    /***** Form to upload one files using the classic way *****/
    Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",false,NULL);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+                   NULL);
 
    /* Button to send */
    Btn_PutCreateButton (Txt_Upload_file);
@@ -8562,7 +8566,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_URL ("NewLinkURL","",false,
+   HTM_INPUT_URL ("NewLinkURL","",HTM_DONT_SUBMIT_ON_CHANGE,
 		  "size=\"30\" required=\"required\"");
    HTM_TD_End ();
 
@@ -8579,7 +8583,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",false,
+   HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"NewLinkName\" size=\"30\"");
    HTM_TD_End ();
 
@@ -9633,7 +9638,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
-	    HTM_SELECT_Begin (false,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"PublicFile\" name=\"PublicFile\"");
 	    HTM_OPTION (HTM_Type_STRING,"N",
 			!FileMetadata.IsPublic,false,
@@ -9660,7 +9665,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_Begin ("class=\"DAT LT\"");
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    HTM_SELECT_Begin (false,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"License\" name=\"License\" class=\"LICENSE\"");
 	    for (License  = (Brw_License_t) 0;
 		 License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
@@ -12180,7 +12185,7 @@ void Brw_AskRemoveOldFiles (void)
    /***** Form to request number of months (to remove files older) *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Months\"");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
         Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;

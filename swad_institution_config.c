@@ -368,7 +368,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 
       /* Put form to select country */
       Frm_StartForm (ActChgInsCtyCfg);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtyCod\" name=\"OthCtyCod\""
 		        " class=\"INPUT_SHORT_NAME\"");
       for (NumCty = 0;

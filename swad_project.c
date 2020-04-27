@@ -3667,7 +3667,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,false,
+   HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -3700,7 +3701,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Assigned\"");
    HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
 	       "%s",Txt_Yes);
@@ -3719,7 +3720,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,false,
+   HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
+                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 		   NULL);
    HTM_TD_End ();
 
@@ -3733,7 +3735,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Proposal\" class=\"TITLE_DESCRIPTION_WIDTH\"");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
@@ -3772,7 +3774,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LT\"");
-   HTM_INPUT_URL ("URL",Prj->URL,false,
+   HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
 

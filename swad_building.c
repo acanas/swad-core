@@ -508,7 +508,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldSho,Anchor);
       Bld_PutParamBldCod (Building->BldCod);
-      HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,true,
+      HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -517,7 +518,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldFul,Anchor);
       Bld_PutParamBldCod (Building->BldCod);
-      HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,true,
+      HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -526,7 +528,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldLoc,Anchor);
       Bld_PutParamBldCod (Building->BldCod);
-      HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,true,
+      HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"15\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -831,19 +834,22 @@ static void Bld_PutFormToCreateBuilding (void)
 
    /***** Building short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Building full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Building location *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,false,
+   HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"15\" class=\"INPUT_FULL_NAME\"");
    HTM_TD_End ();
 

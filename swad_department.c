@@ -574,7 +574,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
       HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
 		  "%s",Txt_Another_institution);
@@ -592,7 +592,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,true,
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -601,7 +602,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,true,
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -610,7 +612,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_URL ("WWW",Dpt->WWW,true,
+      HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -944,7 +946,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Institution *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
    HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
 	       "%s",Txt_Another_institution);
@@ -959,19 +961,21 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,false,
+   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 

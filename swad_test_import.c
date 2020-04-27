@@ -172,7 +172,9 @@ void TsI_ShowFormImportQstsFromXML (void)
    Frm_StartForm (ActImpTstQst);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_XML_file);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",true,NULL);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",
+                   HTM_SUBMIT_ON_CHANGE,
+                   NULL);
    HTM_LABEL_End ();
    Frm_EndForm ();
 

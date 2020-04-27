@@ -872,7 +872,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
                         	                                 ActModIteSylPra));
    Syllabus->ParamNumItem = NumItem;
    Syl_PutParamNumItem (&Syllabus->ParamNumItem);
-   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,true,
+   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
+                   HTM_SUBMIT_ON_CHANGE,
 		   "size=\"60\" placeholder=\"%s\"%s",
 	           Txt_Enter_a_new_item_here,
                    NewItem ? " autofocus=\"autofocus\"" :

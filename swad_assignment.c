@@ -1250,7 +1250,8 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
+   HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1273,7 +1274,8 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
    HTM_TxtF ("%s:",Txt_Folder);
-   HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,false,
+   HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Folder\" size=\"30\"");
    HTM_LABEL_End ();
    HTM_TD_End ();

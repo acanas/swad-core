@@ -2761,7 +2761,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"FilterCrsCod\"");
    HTM_OPTION (HTM_Type_STRING,"",
 	       Messages->FilterCrsCod < 0,false,

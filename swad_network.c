@@ -338,7 +338,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      HTM_INPUT_URL (StrName,URL,false,
+      HTM_INPUT_URL (StrName,URL,HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",StrName);
       HTM_TD_End ();
 

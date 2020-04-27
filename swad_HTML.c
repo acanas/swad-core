@@ -977,7 +977,8 @@ void HTM_LABEL_End (void)
 /************************* Input text, email, url ****************************/
 /*****************************************************************************/
 
-void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+                     HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -1004,7 +1005,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
 	}
      }
 
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
 
@@ -1041,7 +1042,8 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_TEL (const char *Name,const char *Value,
+                    HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...)
   {
    va_list ap;
@@ -1068,7 +1070,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	}
      }
 
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
 
@@ -1105,7 +1107,8 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_URL (const char *Name,const char *Value,
+                    HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...)
   {
    va_list ap;
@@ -1132,14 +1135,15 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	}
      }
 
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
 
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
+void HTM_INPUT_FILE (const char *Name,const char *Accept,
+                     HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -1166,7 +1170,7 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
 	}
      }
 
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
    HTM_Txt (" />");
@@ -1229,7 +1233,8 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled,
+void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
+                     HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -1257,6 +1262,10 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled
 	 free (Attr);
 	}
      }
+
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
+      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
+	        Gbl.Form.Id);
 
    HTM_Txt (" />");
   }
@@ -1502,7 +1511,7 @@ void HTM_TEXTAREA_End (void)
 /********************************** Selectors ********************************/
 /*****************************************************************************/
 
-void HTM_SELECT_Begin (bool SubmitOnChange,
+void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
 		       const char *fmt,...)
   {
    va_list ap;
@@ -1530,8 +1539,7 @@ void HTM_SELECT_Begin (bool SubmitOnChange,
    else
       HTM_SELECT_BeginWithoutAttr ();
 
-
-   if (SubmitOnChange)
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
 	        Gbl.Form.Id);
 

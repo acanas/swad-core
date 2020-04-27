@@ -427,7 +427,8 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,true,
+      HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -436,7 +437,8 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,true,
+      HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"30\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -445,7 +447,8 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,true,
+      HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"4\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -454,7 +457,8 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,true,
+      HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"16\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -463,7 +467,7 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_URL ("URL",Plg->URL,true,
+      HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
 		     "size=\"15\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -472,7 +476,7 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,true,
+      HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -886,38 +890,43 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Plugin name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,false,
+   HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"10\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin description *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
-		   Plg_EditingPlg->Description,false,
+		   Plg_EditingPlg->Description,
+		   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"30\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin logo *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,false,
+   HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"4\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin application key *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,false,
+   HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"16\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin URL *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,false,
+   HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "size=\"15\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin IP address *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,false,
+   HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"10\" required=\"required\"");
    HTM_TD_End ();
 

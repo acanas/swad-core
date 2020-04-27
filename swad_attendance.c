@@ -1164,7 +1164,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,false,
+   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1184,7 +1185,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (false,"id=\"ComTchVisible\" name=\"ComTchVisible\"");
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+                     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
    HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
 	       "%s",Txt_Hidden_MALE_PLURAL);
    HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,

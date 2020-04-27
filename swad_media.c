@@ -432,7 +432,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Media file *****/
    HTM_DIV_Begin (NULL);
-   HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",false,	// <id>_fil
+   HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",	// <id>_fil
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"%s_fil\" class=\"%s\""
 		   " disabled=\"disabled\" style=\"display:none;\"",
 		   Id,ClassInput);
@@ -440,7 +441,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Media URL *****/
    HTM_DIV_Begin (NULL);
-   HTM_INPUT_URL (ParamUploadMedia.URL,"",false,		// <id>_url
+   HTM_INPUT_URL (ParamUploadMedia.URL,"",HTM_DONT_SUBMIT_ON_CHANGE,// <id>_url
 	          "id=\"%s_url\" class=\"%s\""
 		  " placeholder=\"%s\" maxlength=\"%u\""
 	          " disabled=\"disabled\" style=\"display:none;\"",
@@ -449,7 +450,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Media title *****/
    HTM_DIV_Begin (NULL);
-   HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",false,	// <id>_tit
+   HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",// <id>_tit
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 	           "id=\"%s_tit\" class=\"%s\""
 	           " placeholder=\"%s\""
 	           " disabled=\"disabled\" style=\"display:none;\"",

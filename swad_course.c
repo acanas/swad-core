@@ -577,10 +577,10 @@ void Crs_WriteSelectorOfCourse (void)
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrsInf);
    if (Gbl.Hierarchy.Deg.DegCod > 0)
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
    HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Crs.CrsCod < 0,true,
@@ -745,7 +745,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
                                                ActReqSch);
 
    /***** Start selector of courses *****/
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"my_courses\" name=\"crs\"");
 
    /***** Write an option when no course selected *****/
@@ -1160,7 +1160,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActChgInsCrsCod);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			    Crs->InstitutionalCrsCod,true,
+			    Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE\"");
 	    Frm_EndForm ();
 	   }
@@ -1174,7 +1174,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgCrsYea);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_SELECT_Begin (true,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
 	    for (YearAux = 0;
 		 YearAux <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1195,7 +1195,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActRenCrsSho);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,true,
+	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
+	                    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME\"");
 	    Frm_EndForm ();
 	   }
@@ -1209,7 +1210,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActRenCrsFul);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,true,
+	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
+	                    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME\"");
 	    Frm_EndForm ();
 	   }
@@ -1243,7 +1245,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgCrsSta);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_SELECT_Begin (true,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	    StatusUnsigned = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING);
@@ -1362,13 +1364,14 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Institutional code of the course *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-		   Crs_EditingCrs->InstitutionalCrsCod,false,
+		   Crs_EditingCrs->InstitutionalCrsCod,
+		   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_INS_CODE\"");
    HTM_TD_End ();
 
    /***** Year *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1381,13 +1384,15 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Course short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Course full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2793,7 +2798,7 @@ void Crs_AskRemoveOldCrss (void)
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Months\"");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;

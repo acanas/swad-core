@@ -1643,7 +1643,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
          Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
 
 	 /***** Class type *****/
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"TTTyp\" class=\"TT_TYP\"");
 	 for (CT  = (TT_ClassType_t) 0;
 	      CT <= (TT_ClassType_t) (TT_NUM_CLASS_TYPES - 1);
@@ -1677,7 +1677,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	 else
 	   {
 	    /***** Class duration *****/
-	    HTM_SELECT_Begin (true,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "name=\"TTDur\" class=\"TT_DUR\"");
             for (i = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
         	 i < Timetable->Config.IntervalsPerDay;
@@ -1710,7 +1710,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
 	       HTM_Txt (Txt_Group);
 	       HTM_LABEL_End ();
-	       HTM_SELECT_Begin (true,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"TTGrp%s\" name=\"TTGrp\""
 				 " class=\"TT_GRP\"",
 			         CellStr);
@@ -1752,7 +1752,8 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("TTInf",TT_MAX_CHARS_INFO,Info ? Info :
-			                                        "",true,
+			                                        "",
+			       HTM_SUBMIT_ON_CHANGE,
 	                       "id=\"TTInf%s\" size=\"1\" class=\"TT_INF\"",
 			       CellStr);
 	      }
@@ -1763,7 +1764,8 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
 	       HTM_Txt (Txt_Info);
 	       HTM_LABEL_End ();
-	       HTM_INPUT_TEXT ("TTInf",TT_MAX_CHARS_INFO,Info,true,
+	       HTM_INPUT_TEXT ("TTInf",TT_MAX_CHARS_INFO,Info,
+	                       HTM_SUBMIT_ON_CHANGE,
 	                       "id=\"TTInf%s\" size=\"12\" class=\"TT_INF\"",
 			       CellStr);
 	      }

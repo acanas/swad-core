@@ -392,7 +392,8 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
    HTM_TxtColonNBSP (Txt_nick_email_or_ID);
    HTM_LABEL_End ();
 
-   HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",false,
+   HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"OtherUsrIDNickOrEMail\" size=\"18\" required=\"required\"");
 
    /***** Send button*****/
@@ -819,7 +820,7 @@ void Enr_AskRemoveOldUsrs (void)
    /***** Form to request number of months without clicks *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Months\"");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -2289,7 +2290,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
-   Sco_PutSelectorScope ("ScopeEnr",true);
+   Sco_PutSelectorScope ("ScopeEnr",HTM_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    HTM_TR_End ();

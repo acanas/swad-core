@@ -276,7 +276,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
    /* Put form to change scope */
    Frm_StartForm (ActLstCon);
-   Sco_PutSelectorScope ("ScopeCon",true);
+   Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
    Frm_EndForm ();
 
    HTM_DIV_End ();

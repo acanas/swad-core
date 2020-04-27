@@ -168,6 +168,8 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set);
 static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
 static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
                                      const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
+static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
+                                          unsigned NumQstsToExam);
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
@@ -1603,7 +1605,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Title *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,false,
+   HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -1615,7 +1618,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Number of questions to appear in the exam *****/
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_INPUT_LONG ("NumQstsToExam",0,UINT_MAX,(long) Set->NumQstsToExam,false,
+   HTM_INPUT_LONG ("NumQstsToExam",0,UINT_MAX,(long) Set->NumQstsToExam,
+                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 		    "class=\"INPUT_LONG\" required=\"required\"");
    HTM_TD_End ();
 
@@ -1777,6 +1781,62 @@ void ExaSet_ChangeSetTitle (void)
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
                         false);	// It's not a new exam
   }
+/*****************************************************************************/
+/***** Receive form to change number of questions to appear in the exam ******/
+/*****************************************************************************/
+
+void ExaSet_ChangeNumQstsToExam (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   unsigned NumQstsToExam;
+
+   /***** Check if I can edit exams *****/
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+   Exams.SetCod = Set.SetCod;
+
+   /***** Get exam and set data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Get number of questions in set to appear in exam *****/
+   NumQstsToExam = (unsigned) Par_GetParToUnsignedLong ("NumQstsToExam",
+                                                        0,
+                                                        UINT_MAX,
+                                                        0);
+
+   /***** Check if title should be changed *****/
+   if (NumQstsToExam != Set.NumQstsToExam)
+     {
+      /* Update the table changing old number by new number */
+      ExaSet_UpdateNumQstsToExamDB (&Set,NumQstsToExam);
+
+      /* Update title */
+      Set.NumQstsToExam = NumQstsToExam;
+     }
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
+  }
 
 /*****************************************************************************/
 /********************* Put a form to create/edit an exam **********************/
@@ -1825,7 +1885,8 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,false,
+   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();
@@ -2050,6 +2111,22 @@ static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
 		   " WHERE SetCod=%ld"
 		   " AND ExaCod=%ld",	// Extra check
 	           NewTitle,
+	           Set->SetCod,Set->ExaCod);
+  }
+
+/*****************************************************************************/
+/********* Update number of questions to appear in exam in database **********/
+/*****************************************************************************/
+
+static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
+                                          unsigned NumQstsToExam)
+  {
+   /***** Update set of questions changing old number by new number *****/
+   DB_QueryUPDATE ("can not update the number of questions to appear in exam",
+		   "UPDATE exa_sets SET NumQstsToExam=%u"
+		   " WHERE SetCod=%ld"
+		   " AND ExaCod=%ld",	// Extra check
+	           NumQstsToExam,
 	           Set->SetCod,Set->ExaCod);
   }
 
@@ -2835,7 +2912,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       HTM_ARTICLE_Begin (Anchor);
       Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
       ExaSet_PutParamsOneSet (Exams);
-      HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,true,
+      HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "id=\"Title\" required=\"required\""
 		      " class=\"TITLE_DESCRIPTION_WIDTH\"");
       Frm_EndForm ();
@@ -2849,7 +2927,12 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** Number of questions to appear in exam *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Unsigned (Set.NumQstsToExam);
+      Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
+      ExaSet_PutParamsOneSet (Exams);
+      HTM_INPUT_LONG ("NumQstsToExam",0,UINT_MAX,(long) Set.NumQstsToExam,
+                      HTM_SUBMIT_ON_CHANGE,false,
+		       "class=\"INPUT_LONG\" required=\"required\"");
+      Frm_EndForm ();
       HTM_TD_End ();
 
       /***** End row *****/

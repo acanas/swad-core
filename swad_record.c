@@ -284,7 +284,8 @@ void Rec_ListFieldsRecordsForEdition (void)
       Frm_StartForm (ActRenFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
-		      Gbl.Crs.Records.LstFields.Lst[NumField].Name,true,
+		      Gbl.Crs.Records.LstFields.Lst[NumField].Name,
+		      HTM_SUBMIT_ON_CHANGE,
 		      "class=\"REC_FIELDNAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -296,7 +297,8 @@ void Rec_ListFieldsRecordsForEdition (void)
       snprintf (StrNumLines,sizeof (StrNumLines),
 		"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
-      HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,true,
+      HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"2\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -305,7 +307,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgVisFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"Visibility\"");
       for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 	   Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
@@ -356,7 +358,8 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Field name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,false,
+   HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"REC_FIELDNAME\" required=\"required\"");
    HTM_TD_End ();
 
@@ -365,13 +368,14 @@ void Rec_ShowFormCreateRecordField (void)
    snprintf (StrNumLines,sizeof (StrNumLines),
 	     "%u",
 	     Gbl.Crs.Records.Field.NumLines);
-   HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,false,
+   HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Visibility to students *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Visibility\"");
    for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 	Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
@@ -1473,7 +1477,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_Txt ("(");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"RecsPerPag\"");
    for (i = Rec_MIN_RECORDS_PER_PAGE;
         i <= Rec_MAX_RECORDS_PER_PAGE;
@@ -2909,7 +2913,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       DefaultRoleInForm = Rol_STD;	// Request sign up as a student
 
 	    /***** Selector of role *****/
-	    HTM_SELECT_Begin (false,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"Role\" name=\"Role\"");
 	    for (Role = Rol_STD;
 		 Role <= Rol_TCH;
@@ -2970,7 +2974,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 }
 
 	       /***** Selector of role *****/
-	       HTM_SELECT_Begin (false,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"Role\" name=\"Role\"");
 	       switch (Gbl.Usrs.Me.Role.Logged)
 		 {
@@ -3011,7 +3015,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 								               Rol_GST;		// If user don't belong to any course
 
 	       /***** Selector of role *****/
-	       HTM_SELECT_Begin (false,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"Role\" name=\"Role\"");
 	       RoleUnsigned = (unsigned) DefaultRoleInForm;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
@@ -3046,7 +3050,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		       }
 
 		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (false,
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				       "id=\"Role\" name=\"Role\"");
 		     for (Role = Rol_STD;
 			  Role <= Rol_TCH;
@@ -3067,7 +3071,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 {
 		  case Rol_SYS_ADM:
 		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (false,
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				       "id=\"Role\" name=\"Role\"");
 		     RoleUnsigned = (unsigned) Rol_GST;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
@@ -3146,7 +3150,8 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (PutForm)
-      HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,false,
+      HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
+                      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\""
 		      " required=\"required\"");
    else if (UsrDat->Surname1[0])
@@ -3179,7 +3184,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
    HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (PutForm)
       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-		      UsrDat->Surname2,false,
+		      UsrDat->Surname2,
+		      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
    else if (UsrDat->Surname2[0])
      {
@@ -3216,7 +3222,8 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
    if (PutForm)
       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-		      UsrDat->FirstName,false,
+		      UsrDat->FirstName,
+		      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
 		      " required=\"required\"");
    else if (UsrDat->FirstName[0])
@@ -3259,7 +3266,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 
    /* Data */
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
 	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
    HTM_OPTION (HTM_Type_STRING,"",false,false,
@@ -3300,7 +3307,8 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutFo
      {
       if (PutForm)
 	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->OriginPlace,false,
+			 UsrDat->OriginPlace,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"OriginPlace\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->OriginPlace[0])
 	 HTM_Txt (UsrDat->OriginPlace);
@@ -3366,7 +3374,8 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutF
      {
       if (PutForm)
 	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->LocalAddress,false,
+			 UsrDat->LocalAddress,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"LocalAddress\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalAddress[0])
 	 HTM_Txt (UsrDat->LocalAddress);
@@ -3397,7 +3406,8 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutFor
    if (ShowData)
      {
       if (PutForm)
-	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,false,
+	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,
+	                HTM_DONT_SUBMIT_ON_CHANGE,
 	                "id=\"LocalPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalPhone[0])
 	{
@@ -3433,7 +3443,8 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool Put
      {
       if (PutForm)
 	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->FamilyAddress,false,
+			 UsrDat->FamilyAddress,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"FamilyAddress\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyAddress[0])
 	 HTM_Txt (UsrDat->FamilyAddress);
@@ -3464,7 +3475,8 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutFo
    if (ShowData)
      {
       if (PutForm)
-	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,false,
+	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,
+	                HTM_DONT_SUBMIT_ON_CHANGE,
 	                "id=\"FamilyPhone\" class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyPhone[0])
 	{
@@ -3981,7 +3993,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /* Begin form to select the country of my institution */
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"InsCtyCod\" name=\"OthCtyCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
    HTM_OPTION (HTM_Type_STRING,"-1",
@@ -4017,7 +4029,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    /* Begin form to select institution */
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"OthInsCod\" name=\"OthInsCod\""
 		     " class=\"REC_C2_BOT_INPUT\"");
    HTM_OPTION (HTM_Type_STRING,"-1",
@@ -4058,7 +4070,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       /* Begin form to select centre */
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
 		        " class=\"REC_C2_BOT_INPUT\"");
       HTM_OPTION (HTM_Type_STRING,"-1",
@@ -4110,7 +4122,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
-      HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,true,
+      HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -4126,7 +4139,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
-      HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,true,
+      HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+                     HTM_SUBMIT_ON_CHANGE,
 		     "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");
       Frm_EndForm ();
       HTM_TD_End ();

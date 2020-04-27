@@ -121,24 +121,29 @@ void HTM_PARAM (const char *Name,
 void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
 
-void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+                     HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	               const char *fmt,...);
-void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_TEL (const char *Name,const char *Value,
+                    HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	              const char *fmt,...);
-void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_URL (const char *Name,const char *Value,
+                    HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...);
-void HTM_INPUT_FILE (const char *Name,const char *Accept,bool SubmitOnChange,
+void HTM_INPUT_FILE (const char *Name,const char *Accept,
+                     HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,bool Required,
 	                 const char *fmt,...);
-void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,bool Disabled,
+void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
+                     HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
 	             const char *fmt,...);
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
 	              const char *fmt,...);
@@ -156,7 +161,7 @@ void HTM_BUTTON_End (void);
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 
-void HTM_SELECT_Begin (bool SubmitOnChange,
+void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
 		       const char *fmt,...);
 void HTM_SELECT_End (void);
 void HTM_OPTGROUP_Begin (const char *Label);

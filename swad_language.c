@@ -119,7 +119,7 @@ void Lan_PutSelectorToSelectLanguage (void)
    unsigned LanUnsigned;
 
    Frm_StartForm (ActReqChgLan);
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "name=\"Lan\" style=\"width:112px; margin:0;\"");
    for (Lan  = (Lan_Language_t) 1;
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;

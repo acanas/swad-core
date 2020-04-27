@@ -1961,7 +1961,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TD_Begin ("class=\"LT\"");
    Svy_SetDefaultAndAllowedScope (&Svy);
    Sco_GetScope ("ScopeSvy");
-   Sco_PutSelectorScope ("ScopeSvy",false);
+   Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1974,7 +1974,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,false,
+   HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" required=\"required\""
 		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
    HTM_TD_End ();

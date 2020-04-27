@@ -1352,7 +1352,8 @@ static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,false,
+   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 

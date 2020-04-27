@@ -1200,7 +1200,8 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Data */
    HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
-      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,false,
+      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,
+                      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"CrsName\" size=\"30\"");
    else
      {
@@ -1225,7 +1226,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"Year\" name=\"Year\"");
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1253,7 +1254,8 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Data */
    HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
-      HTM_INPUT_TEXT ("ExamSession",ExaAnn_MAX_CHARS_SESSION,ExamAnns->ExamAnn.Session,false,
+      HTM_INPUT_TEXT ("ExamSession",ExaAnn_MAX_CHARS_SESSION,ExamAnns->ExamAnn.Session,
+                      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"ExamSession\" size=\"30\"");
    else
       HTM_Txt (ExamAnns->ExamAnn.Session);
@@ -1298,7 +1300,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"ExamHour\"");
       HTM_OPTION (HTM_Type_STRING,"0",
 		  ExamAnns->ExamAnn.StartTime.Hour == 0,false,
@@ -1311,7 +1313,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
       HTM_SELECT_End ();
 
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"ExamMinute\"");
       for (Minute = 0;
 	   Minute <= 59;
@@ -1338,7 +1340,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TD_Begin ("class=\"EXAM LT\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"DurationHour\"");
       for (Hour = 0;
 	   Hour <= 8;
@@ -1348,7 +1350,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
       HTM_SELECT_End ();
 
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"DurationMinute\"");
       for (Minute = 0;
 	   Minute <= 59;

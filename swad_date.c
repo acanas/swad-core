@@ -554,7 +554,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Year *****/
    HTM_TD_Begin ("class=\"RM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sYear\" name=\"%sYear\""
 			" onchange=\""
 			"adjustDateForm('%s');"
@@ -563,7 +563,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			Id,ParamName,Id,Id,
                         Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sYear\" name=\"%sYear\""
 			" onchange=\""
 			"adjustDateForm('%s');"
@@ -580,7 +580,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Month *****/
    HTM_TD_Begin ("class=\"CM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMonth\" name=\"%sMonth\""
                         " onchange=\""
                         "adjustDateForm('%s');"
@@ -589,7 +589,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	                Id,ParamName,Id,Id,
                         Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMonth\" name=\"%sMonth\""
                         " onchange=\""
                         "adjustDateForm('%s');"
@@ -606,14 +606,14 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Day *****/
    HTM_TD_Begin ("class=\"LM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sDay\" name=\"%sDay\""
 	                " onchange=\"setUTCFromLocalDateTimeForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
                         Id,ParamName,Id,
 			Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sDay\" name=\"%sDay\""
 	                " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
                         Id,ParamName,Id);
@@ -628,14 +628,14 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Hour *****/
    HTM_TD_Begin ("class=\"RM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sHour\" name=\"%sHour\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
                         Id,ParamName,Id,
                         Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sHour\" name=\"%sHour\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
                         Id,ParamName,Id);
@@ -650,14 +650,14 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Minute *****/
    HTM_TD_Begin ("class=\"CM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMinute\" name=\"%sMinute\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
 	                Id,ParamName,Id,
 			Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMinute\" name=\"%sMinute\""
                         " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 	                Id,ParamName,Id);
@@ -674,14 +674,14 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
      {
       HTM_TD_Begin ("class=\"LM\"");
       if (SubmitFormOnChange)
-	 HTM_SELECT_Begin (false,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"%sSecond\" name=\"%sSecond\""
 			   " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 	                   "document.getElementById('%s').submit();return false;\"",
 	                   Id,ParamName,Id,
 			   Gbl.Form.Id);
       else
-	 HTM_SELECT_Begin (false,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"%sSecond\" name=\"%sSecond\""
 			   " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 	                   Id,ParamName,Id);
@@ -856,7 +856,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Year *****/
    HTM_TD_Begin ("class=\"CM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sYear\" name=\"%sYear\"%s"
                         " onchange=\"adjustDateForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
@@ -865,7 +865,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 			Id,
 			Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sYear\" name=\"%sYear\"%s"
                         " onchange=\"adjustDateForm('%s');\"",
 	                Id,Id,
@@ -885,7 +885,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Month *****/
    HTM_TD_Begin ("class=\"CM\"");
    if (SubmitFormOnChange)
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMonth\" name=\"%sMonth\"%s"
                         " onchange=\"adjustDateForm('%s');"
                         "document.getElementById('%s').submit();return false;\"",
@@ -894,7 +894,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 			Id,
 			Gbl.Form.Id);
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"%sMonth\" name=\"%sMonth\"%s"
                         " onchange=\"adjustDateForm('%s');\"",
 	                Id,Id,

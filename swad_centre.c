@@ -877,10 +877,10 @@ void Ctr_WriteSelectorOfCentre (void)
    Frm_StartFormGoTo (ActSeeDeg);
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
    HTM_OPTION (HTM_Type_STRING,"",
@@ -998,7 +998,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"PlcCod\" class=\"PLC_SEL\"");
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     Ctr->PlcCod == 0,false,
@@ -1026,7 +1026,8 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,true,
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -1040,7 +1041,8 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,true,
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -1054,7 +1056,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_URL ("WWW",Ctr->WWW,true,
+	 HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	}
@@ -1101,7 +1103,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
@@ -1637,7 +1639,7 @@ static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
 
    /***** Place *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"PlcCod\" class=\"PLC_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",
 	       Ctr_EditingCtr->PlcCod == 0,false,
@@ -1653,19 +1655,21 @@ static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
 
    /***** Centre short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,false,
+   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 

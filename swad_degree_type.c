@@ -114,7 +114,7 @@ void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\"");
    HTM_OPTION (HTM_Type_STRING,"-1",
 	       SelectedDegTypCod == -1L,false,
@@ -424,7 +424,8 @@ static void DT_ListDegreeTypesForEdition (void)
       Frm_StartForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,
-		      Gbl.DegTypes.Lst[NumDegTyp].DegTypName,true,
+		      Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
+		      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"25\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -482,7 +483,8 @@ static void DT_PutFormToCreateDegreeType (void)
 
    /***** Degree type name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName,false,
+   HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"25\" required=\"required\"");
    HTM_TD_End ();
 

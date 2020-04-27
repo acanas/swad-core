@@ -3894,7 +3894,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 		   IsReply ? Subject :
-		             "",false,
+		             "",
+		   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
    HTM_TD_End ();
 

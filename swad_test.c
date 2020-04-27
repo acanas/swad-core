@@ -408,6 +408,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
 			 (long) TstCfg_GetConfigMin (),
 			 (long) TstCfg_GetConfigMax (),
 			 (long) TstCfg_GetConfigDef (),
+			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
 			 "id=\"NumQst\"");
          HTM_TD_End ();
@@ -1890,7 +1891,8 @@ static void Tst_ShowFormEditTags (void)
          HTM_TD_Begin ("class=\"LM\"");
          Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
-	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],true,
+	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"36\" required=\"required\"");
          Frm_EndForm ();
          HTM_TD_End ();
@@ -2041,7 +2043,8 @@ static void Tst_ShowFormConfigTst (void)
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
 	     TstCfg_GetConfigMinTimeNxtTstPerQst ());
-   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,false,
+   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2096,7 +2099,8 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    snprintf (StrValue,sizeof (StrValue),
 	     "%u",
 	     Value);
-   HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,false,
+   HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"%s\" size=\"3\" required=\"required\"",Field);
    HTM_TD_End ();
 
@@ -3364,7 +3368,8 @@ static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,Exam->Questions[NumQst].StrAnswers,false,
+   HTM_INPUT_TEXT (StrAns,11,Exam->Questions[NumQst].StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
 
@@ -3396,7 +3401,8 @@ static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Exam->Questions[NumQst].StrAnswers,false,
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Exam->Questions[NumQst].StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
 
@@ -3427,7 +3433,7 @@ static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Exam,
    /* Initially user has not answered the question ==> initially all the answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Ans%010u\"",NumQst);
    HTM_OPTION (HTM_Type_STRING,"" ,Exam->Questions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",Exam->Questions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
@@ -3701,7 +3707,8 @@ static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,TstRes_MAX_CHARS_ANSWERS_ONE_QST,Result->Questions[NumQst].StrAnswers,false,
+   HTM_INPUT_TEXT (StrAns,TstRes_MAX_CHARS_ANSWERS_ONE_QST,Result->Questions[NumQst].StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
   }
 
@@ -4076,7 +4083,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 
       /***** Write the tags already existing in a selector *****/
       HTM_TD_Begin ("class=\"LM\"");
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"SelTag%u\" name=\"SelTag%u\""
 	                " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
                         IndTag,IndTag,IndTag);
@@ -4120,7 +4127,8 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
       snprintf (StrTagTxt,sizeof (StrTagTxt),
 		"TagTxt%u",
 		IndTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],false,
+      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
+                      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
 	              StrTagTxt,IndTag);
       HTM_TD_End ();
@@ -4205,7 +4213,8 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
 	     Question->Answer.Integer);
-   HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,false,
+   HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\" required=\"required\"%s",
                    Question->Answer.Type == Tst_ANS_INT ? "" :
                                                           " disabled=\"disabled\"");
@@ -4412,7 +4421,8 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
    snprintf (StrDouble,sizeof (StrDouble),
 	     "%.15lg",
 	     Question->Answer.FloatingPoint[Index]);
-   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,false,
+   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\" required=\"required\"%s",
                    Question->Answer.Type == Tst_ANS_FLOAT ? "" :
                                                             " disabled=\"disabled\"");

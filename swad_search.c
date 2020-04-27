@@ -155,7 +155,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 		       1 << Hie_CRS;
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ("ScopeSch");
-   Sco_PutSelectorScope ("ScopeSch",false);
+   Sco_PutSelectorScope ("ScopeSch",HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_LABEL_End ();
    HTM_DIV_End ();
 
@@ -165,7 +165,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    /***** What to search? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\"");
    for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
         WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);

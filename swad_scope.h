@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -43,7 +44,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange);
+void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnChange);
 void Sco_PutParamCurrentScope (void *Scope);
 void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope);
 void Sco_GetScope (const char *ParamName);

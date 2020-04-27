@@ -370,7 +370,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
          HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
-         HTM_SELECT_Begin (false,
+         HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		           "id=\"GroupedBy\" name=\"GroupedBy\"");
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
               ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
@@ -404,7 +404,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
          // To use getElementById in Firefox, it's necessary to have the id attribute
          HTM_LABEL_Begin (NULL);
          HTM_TxtF ("(%s: ",Txt_results_per_page);
-         HTM_SELECT_Begin (false,
+         HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		           "id=\"RowsPage\" name=\"RowsPage\"%s",
                            Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
                         	                                                    " disabled=\"disabled\"");
@@ -512,7 +512,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
    for (RoleStat  = (Sta_Role_t) 0;
 	RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
@@ -547,7 +547,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		       1 << Hie_CRS;
    Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeSta");
-   Sco_PutSelectorScope ("ScopeSta",false);
+   Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -570,7 +570,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
        Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
       Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"GroupedBy\"");
    for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
@@ -649,7 +649,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    unsigned StatCountTypeUnsigned;
 
    /**** Count type *****/
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"CountType\" name=\"CountType\"");
    for (StatCountType  = (Sta_CountType_t) 0;
 	StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
@@ -684,7 +684,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
    Frm_LabelColumn ("RT","StatAct",Txt_Action);
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
 	       "%s",Txt_Any_action);
@@ -2053,7 +2053,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "name=\"ColorType\"");
    for (ColorType  = (Sta_ColorType_t) 0;
 	ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);

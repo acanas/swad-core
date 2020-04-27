@@ -99,7 +99,8 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
      {
       /* Form to change full name */
       Frm_StartForm (NextAction);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,FullName,true,
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,FullName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "id=\"FullName\" class=\"INPUT_FULL_NAME\""
 		      " required=\"required\"");
       Frm_EndForm ();
@@ -134,7 +135,8 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
      {
       /* Form to change short name */
       Frm_StartForm (NextAction);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,ShrtName,true,
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,ShrtName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
 		      " required=\"required\"");
       Frm_EndForm ();
@@ -169,7 +171,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
      {
       /* Form to change web */
       Frm_StartForm (NextAction);
-      HTM_INPUT_URL ("WWW",WWW,true,
+      HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
 		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
      }

@@ -236,14 +236,14 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		       1 << Hie_CRS;
    Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeFig");
-   Sco_PutSelectorScope ("ScopeFig",false);
+   Sco_PutSelectorScope ("ScopeFig",HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_LABEL_End ();
    HTM_BR ();
 
    /***** Type of statistic *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Statistic);
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"FigureType\"");
    for (FigType  = (Fig_FigureType_t) 0;
 	FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);

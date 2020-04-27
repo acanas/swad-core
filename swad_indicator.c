@@ -134,7 +134,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Sco_PutSelectorScope ("ScopeInd",true);
+   Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    HTM_TR_End ();

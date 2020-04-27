@@ -135,9 +135,9 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms);
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
-                                     bool SubmitOnChange);
+                                     HTM_SubmitOnChange_t SubmitOnChange);
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
-                                 bool SubmitOnChange);
+                                 HTM_SubmitOnChange_t SubmitOnChange);
 static void Roo_PutParamRooCod (long RooCod);
 static int Roo_GetParamFloor (void);
 static Roo_RoomType_t Roo_GetParamType (void);
@@ -690,7 +690,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       Frm_StartFormAnchor (ActChgRooBld,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_PutSelectorBuilding (Room->BldCod,Buildings,
-                               true);	// Submit on change
+                               HTM_SUBMIT_ON_CHANGE);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -698,7 +698,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActChgRooFlo,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
-      HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,false,
+      HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
+                      HTM_SUBMIT_ON_CHANGE,false,
 		      "class=\"INPUT_LONG\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -708,7 +709,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       Frm_StartFormAnchor (ActChgRooTyp,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_PutSelectorType (Room->Type,
-                           true);	// Submit on change
+                           HTM_SUBMIT_ON_CHANGE);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -716,7 +717,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenRooSho,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
-      HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,true,
+      HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -725,7 +727,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenRooFul,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
-      HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,true,
+      HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -735,7 +738,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       Frm_StartFormAnchor (ActChgRooMaxUsr,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_WriteCapacity (StrCapacity,Room->Capacity);
-      HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,true,
+      HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"3\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -753,7 +757,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
-                                     bool SubmitOnChange)
+                                     HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_No_assigned_building;
    extern const char *Txt_Another_building;
@@ -790,7 +794,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
 /*****************************************************************************/
 
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
-                                 bool SubmitOnChange)
+                                 HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    Roo_RoomType_t Type;
@@ -1307,37 +1311,41 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    /***** Building *****/
    HTM_TD_Begin ("class=\"LM\"");
    Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
-                            false);	// Don't submit on change
+                            HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    /***** Floor *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,false,
+   HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
+                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 		   "class=\"INPUT_LONG\"");
    HTM_TD_End ();
 
    /***** Room type *****/
    HTM_TD_Begin ("class=\"LM\"");
    Roo_PutSelectorType (Roo_EditingRoom->Type,
-                        false);	// Don't submit on change
+                        HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_TD_End ();
 
    /***** Room short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Room full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Seating capacity *****/
    HTM_TD_Begin ("class=\"LM\"");
    Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
-   HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,false,
+   HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"3\"");
    HTM_TD_End ();
 

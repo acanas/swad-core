@@ -254,10 +254,10 @@ void Deg_WriteSelectorOfDegree (void)
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrs);
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    else
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\""
 			" disabled=\"disabled\"");
    HTM_OPTION (HTM_Type_STRING,"",
@@ -395,7 +395,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,true,
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -409,7 +410,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,true,
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
@@ -423,7 +425,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
 	 for (NumDegTyp = 0;
 	      NumDegTyp < Gbl.DegTypes.Num;
@@ -452,7 +454,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_URL ("WWW",Deg->WWW,true,
+	 HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
 	}
@@ -489,7 +491,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_SELECT_Begin (true,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING);
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
@@ -610,19 +612,21 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
@@ -638,7 +642,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,false,
+   HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 

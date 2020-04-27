@@ -617,7 +617,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"PlcCod\" class=\"PLC_SEL\"");
       HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
 		  "%s",Txt_All_places);
@@ -635,7 +635,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"HldTyp\" style=\"width:62px;\"");
       for (HolidayType  = (Hld_HolidayType_t) 0;
 	   HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
@@ -678,7 +678,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,true,
+      HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"20\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -1012,7 +1013,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
    /***** Holiday place *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"PlcCod\" class=\"PLC_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
 	       "%s",Txt_All_places);
@@ -1027,7 +1028,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
    /***** Holiday type *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"HldTyp\" style=\"width:62px;\"");
    for (HolidayType  = (Hld_HolidayType_t) 0;
 	HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
@@ -1061,7 +1062,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
    /***** Holiday name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,false,
+   HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"20\" required=\"required\"");
    HTM_TD_End ();
 

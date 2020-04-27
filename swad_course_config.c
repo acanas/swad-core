@@ -237,7 +237,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 
       /* Put form to select degree */
       Frm_StartForm (ActChgCrsDegCfg);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthDegCod\" name=\"OthDegCod\""
 			" class=\"INPUT_SHORT_NAME\"");
       for (NumDeg = 0;
@@ -322,7 +322,7 @@ static void CrsCfg_Year (bool PutForm)
    if (PutForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCrsYear\" name=\"OthCrsYear\"");
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -363,7 +363,8 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
      {
       Frm_StartForm (ActChgInsCrsCodCfg);
       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-		      Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
+		      Gbl.Hierarchy.Crs.InstitutionalCrsCod,
+		      HTM_SUBMIT_ON_CHANGE,
 		      "id=\"InsCrsCod\" size=\"%u\" class=\"INPUT_INS_CODE\"",
 		      Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
       Frm_EndForm ();

@@ -2581,7 +2581,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_LABEL_Begin ("for=\"UsrId\"");
    Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
-   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,false,
+   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
 		   " autofocus=\"autofocus\" required=\"required\"",
 	           Txt_nick_email_or_ID);
@@ -7508,7 +7509,7 @@ void Usr_ListDataAdms (void)
    Usr_PutParamListWithPhotos ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
-   Sco_PutSelectorScope ("ScopeUsr",true);
+   Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
    HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -7978,7 +7979,7 @@ void Usr_SeeGuests (void)
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_TxtColonNBSP (Txt_Scope);
-      Sco_PutSelectorScope ("ScopeUsr",true);
+      Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
       HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -8125,7 +8126,7 @@ void Usr_SeeStudents (void)
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtColonNBSP (Txt_Scope);
-	 Sco_PutSelectorScope ("ScopeUsr",true);
+	 Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	 HTM_LABEL_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
@@ -8306,7 +8307,7 @@ void Usr_SeeTeachers (void)
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
-   Sco_PutSelectorScope ("ScopeUsr",true);
+   Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
    HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -9157,7 +9158,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** Start selector *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "name=\"ColsClassPhoto\"");
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/

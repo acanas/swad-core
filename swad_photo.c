@@ -349,7 +349,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    /***** Form to upload photo *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_File_with_the_photo);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",true,NULL);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
+                   HTM_SUBMIT_ON_CHANGE,NULL);
    HTM_LABEL_End ();
 
    /***** End form *****/
@@ -1814,7 +1815,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"AvgType\" name=\"AvgType\"");
    for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
@@ -1878,7 +1879,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"PhotoSize\" name=\"PhotoSize\"");
    for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
 	PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
@@ -1942,7 +1943,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
    Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (true,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"Order\" name=\"Order\"");
    for (Order  = (Pho_HowOrderDegrees_t) 0;
 	Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
@@ -2042,7 +2043,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       HTM_BUTTON_End ();
 
       /* Selector with all the degrees with students */
-      HTM_SELECT_Begin (false,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"OthDegCod\"");
       for (NumDeg = 0;
 	   NumDeg < Degs.Num;

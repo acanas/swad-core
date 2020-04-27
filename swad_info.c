@@ -1207,7 +1207,9 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_File);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",false,NULL);
+   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+                   NULL);
    HTM_LABEL_End ();
    HTM_DIV_End ();
 
@@ -1250,7 +1252,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_URL);
-   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,false,
+   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "size=\"50\"");
    HTM_LABEL_End ();
    HTM_DIV_End ();

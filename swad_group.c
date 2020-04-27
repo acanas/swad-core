@@ -1328,7 +1328,8 @@ static void Grp_ListGroupTypesForEdition (void)
       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
-		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,true,
+		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+		      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"12\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -1337,7 +1338,7 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"MandatoryEnrolment\""
 	                " style=\"width:150px;\"");
       HTM_OPTION (HTM_Type_STRING,"N",
@@ -1354,7 +1355,7 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      HTM_SELECT_Begin (true,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"MultipleEnrolment\""
 	                " style=\"width:150px;\"");
       HTM_OPTION (HTM_Type_STRING,"N",
@@ -1554,7 +1555,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         HTM_SELECT_Begin (true,
+         HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"GrpTypCod\" style=\"width:100px;\"");
 
          /* Options for group types */
@@ -1577,7 +1578,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,true,
+	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"20\"");
          Frm_EndForm ();
          HTM_TD_End ();
@@ -1587,7 +1589,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	 HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         HTM_SELECT_Begin (true,
+         HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"RooCod\" style=\"width:100px;\"");
 
 	 /* Option for no assigned room */
@@ -1628,7 +1630,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-	 HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,true,
+	 HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
+	                 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"3\"");
          Frm_EndForm ();
          HTM_TD_End ();
@@ -2499,13 +2502,13 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Name of group type *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
-		   Gbl.Crs.Grps.GrpTyp.GrpTypName,false,
+		   Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Is it mandatory to register in any groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"MandatoryEnrolment\" style=\"width:150px;\"");
    HTM_OPTION (HTM_Type_STRING,"N",
 	       !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
@@ -2518,7 +2521,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it possible to register in multiple groups of this type? *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"MultipleEnrolment\" style=\"width:150px;\"");
    HTM_OPTION (HTM_Type_STRING,"N",
 	       !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
@@ -2620,7 +2623,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    /***** Group type *****/
    /* Start selector */
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"GrpTypCod\" style=\"width:100px;\"");
 
    /* Options for group types */
@@ -2638,14 +2641,15 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 
    /***** Group name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,false,
+   HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"20\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Room *****/
    /* Start selector */
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (false,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"RooCod\" style=\"width:100px;\"");
 
    /* Option for no assigned room */
@@ -2681,7 +2685,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    /***** Maximum number of students *****/
    HTM_TD_Begin ("class=\"CM\"");
    Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
-   HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,false,
+   HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"3\"");
    HTM_TD_End ();
 

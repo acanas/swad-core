@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
+void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_System;
    extern const char *Txt_Country;
@@ -75,7 +75,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
    unsigned ScopeUnsigned;
    bool WriteScope;
 
-   HTM_SELECT_Begin (SendOnChange,
+   HTM_SELECT_Begin (SubmitOnChange,
 		     "id=\"%s\" name=\"%s\"",ParamName,ParamName);
 
    for (Scope  = (Hie_Level_t) 0;

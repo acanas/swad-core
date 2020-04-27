@@ -725,7 +725,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUp_ExaSet	] = {1895,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_MoveUpSet		,NULL},
    [ActDwnExaSet	] = {1896,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_MoveDownSet		,NULL},
    [ActChgTitExaSet	] = {1897,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ChangeSetTitle		,NULL},
-   [ActChgNumQstExaSet	] = {1899,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RecFormSet		,NULL},
+   [ActChgNumQstExaSet	] = {1899,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ChangeNumQstsToExam	,NULL},
 
    [ActAddOneExaQst	] = {1885,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Exa_RequestNewQuestion		,NULL},
    [ActLstTstQstForExa	] = {1886,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListQuestionsToSelect	,NULL},

@@ -494,7 +494,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanSho);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,true,
+      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -503,7 +504,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanFul);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,true,
+      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -512,7 +514,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanImg);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,true,
+      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+                      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"12\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -521,7 +524,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_URL ("WWW",Ban->WWW,true,
+      HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
@@ -946,25 +949,28 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 
    /***** Banner short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,false,
+   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,false,
+   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner image *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,false,
+   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Ban->WWW,false,
+   HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
