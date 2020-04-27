@@ -941,6 +941,64 @@ static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
   }
 
 /*****************************************************************************/
+/******************* List exam/game question for edition *********************/
+/*****************************************************************************/
+
+void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
+                                 unsigned QstInd,bool QuestionExists,
+                                 const char *Anchor)
+  {
+   extern const char *Txt_Question_removed;
+
+   /***** Number of question and answer type (row[1]) *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (QstInd);
+   if (QuestionExists)
+      Tst_WriteAnswerType (Question->Answer.Type);
+   HTM_TD_End ();
+
+   /***** Write question code *****/
+   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+   HTM_TD_End ();
+
+   /***** Write the question tags *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   if (QuestionExists)
+      Tst_GetAndWriteTagsQst (Question->QstCod);
+   HTM_TD_End ();
+
+   /***** Write stem (row[3]) and media *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_ARTICLE_Begin (Anchor);
+   if (QuestionExists)
+     {
+      /* Write stem */
+      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+			true);	// Visible
+
+      /* Show media */
+      Med_ShowMedia (&Question->Media,
+		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		     "TEST_MED_EDIT_LIST_STEM");
+
+      /* Show feedback */
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+
+      /* Show answers */
+      Tst_WriteAnswersListing (Question);
+     }
+   else
+     {
+      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+      HTM_Txt (Txt_Question_removed);
+      HTM_SPAN_End ();
+     }
+   HTM_ARTICLE_End ();
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
 /********************* Write the number of a test question *******************/
 /*****************************************************************************/
 // Number of question should be 1, 2, 3...

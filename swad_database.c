@@ -1144,16 +1144,13 @@ mysql> DESCRIBE exa_questions;
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
 | SetCod | int(11) | NO   | PRI | NULL    |       |
-| QstInd | int(11) | NO   | PRI | NULL    |       |
-| QstCod | int(11) | NO   |     | NULL    |       |
+| QstCod | int(11) | NO   | PRI | NULL    |       |
 +--------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_questions ("
 			"SetCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
 			"QstCod INT NOT NULL,"
-		   "UNIQUE INDEX(SetCod,QstInd),"
 		   "UNIQUE INDEX(SetCod,QstCod))");
 
    /***** Table exa_results *****/

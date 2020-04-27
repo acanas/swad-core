@@ -161,6 +161,9 @@ void Tst_AssessTest (void);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
+void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
+                                 unsigned QstInd,bool QuestionExists,
+                                 const char *Anchor);
 void Tst_WriteNumQst (unsigned NumQst);
 void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);

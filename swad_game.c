@@ -158,9 +158,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists,
-                                        const char *Anchor);
+
 static void Gam_PutIconToAddNewQuestions (void *Games);
 static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games);
 
@@ -1998,9 +1996,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    struct Tst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
-   char *Anchor = NULL;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
+   char *Anchor = NULL;
 
    /***** Get maximum question index *****/
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
@@ -2049,8 +2047,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       Games->QstInd = QstInd;
 
       /***** Build anchor string *****/
-      // The same question may appear more than once.
-      // In that case, the page will be positioned in the first occurrence.
       Frm_SetAnchorStr (Question.QstCod,&Anchor);
 
       /***** Begin row *****/
@@ -2106,7 +2102,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
       /***** Question *****/
       QuestionExists = Tst_GetQstDataFromDB (&Question);
-      Gam_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
+      Tst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
 
       /***** End row *****/
       HTM_TR_End ();
@@ -2120,64 +2116,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
    /***** End table *****/
    HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/********************** List game question for edition ***********************/
-/*****************************************************************************/
-
-static void Gam_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists,
-                                        const char *Anchor)
-  {
-   extern const char *Txt_Question_removed;
-
-   /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd);
-   if (QuestionExists)
-      Tst_WriteAnswerType (Question->Answer.Type);
-   HTM_TD_End ();
-
-   /***** Write question code *****/
-   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
-   HTM_TD_End ();
-
-   /***** Write the question tags *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QuestionExists)
-      Tst_GetAndWriteTagsQst (Question->QstCod);
-   HTM_TD_End ();
-
-   /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   if (QuestionExists)
-     {
-      /* Write stem */
-      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
-			true);	// Visible
-
-      /* Show media */
-      Med_ShowMedia (&Question->Media,
-		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		     "TEST_MED_EDIT_LIST_STEM");
-
-      /* Show feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
-
-      /* Show answers */
-      Tst_WriteAnswersListing (Question);
-     }
-   else
-     {
-      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-      HTM_Txt (Txt_Question_removed);
-      HTM_SPAN_End ();
-     }
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
   }
 
 /*****************************************************************************/

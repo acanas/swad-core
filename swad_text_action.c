@@ -11045,7 +11045,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqRemExaQst] =
+	[ActReqRemSetQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

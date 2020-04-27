@@ -544,10 +544,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.202 (2020-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.203 (2020-04-27)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.203:   Apr 27, 2020	List questions in every set of questions. (300606 lines)
+					3 changes necessary in database:
+ALTER TABLE exa_questions DROP INDEX SetCod,DROP INDEX SetCod_2;
+ALTER TABLE exa_questions DROP COLUMN QstInd;
+ALTER TABLE exa_questions ADD UNIQUE INDEX(SetCod,QstCod);
+
 	Version 19.202:   Apr 27, 2020	Form to add questions to set of questions. (300558 lines)
 					5 changes necessary in database:
 ALTER TABLE exa_questions CHANGE COLUMN QstInd QstInd INT NOT NULL AFTER SetCod;

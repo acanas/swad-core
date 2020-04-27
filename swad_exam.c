@@ -181,7 +181,6 @@ static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod);
 static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 
 static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod);
-static unsigned ExaSet_GetMaxQuestionIndexInSet (long SetCod);
 
 static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
 static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
@@ -189,9 +188,12 @@ static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
 static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
                                  struct Exa_Exam *Exam,
 				 struct ExaSet_Set *Set);
+static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
+                                     const struct Exa_Exam *Exam,
+                                     const struct ExaSet_Set *Set);
 static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam);
 static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
-					        long ExaCod,
+					        const struct Exa_Exam *Exam,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
@@ -200,12 +202,15 @@ static void ExaSet_PutTableHeadingForSets (void);
 
 static void ExaSet_ResetSet (struct ExaSet_Set *Set);
 // static void Exa_PutParamSetCod (void *SetCod);
+static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
+						     unsigned NumQsts,
+                                                     MYSQL_RES *mysql_res,
+						     bool ICanEditQuestions);
 static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						  long ExaCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
-static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists);
+
 static void Exa_PutIconToAddNewQuestions (void *Exams);
 static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
 
@@ -2538,35 +2543,6 @@ static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
   }
 
 /*****************************************************************************/
-/************ Get maximum question index in a set of questions ***************/
-/*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no questions
-
-static unsigned ExaSet_GetMaxQuestionIndexInSet (long SetCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned QstInd = 0;	// Default value if no questions in set
-
-   /***** Get maximum question index in an exam from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get max question index",
-		   "SELECT MAX(QstInd)"
-		   " FROM exa_questions"
-		   " WHERE SetCod=%ld",
-                   SetCod);
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are questions
-      if (sscanf (row[0],"%u",&QstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting max question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return QstInd;
-  }
-
-/*****************************************************************************/
 /*********** Get previous set index to a given set index in an exam **********/
 /*****************************************************************************/
 // Input set index can be 1, 2, 3... n-1
@@ -2741,8 +2717,8 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 
    /***** Show table with sets *****/
    if (NumSets)
-      ExaSet_ListOneOrMoreSetsForEdition (Exams,
-                                          Exam->ExaCod,MaxSetInd,
+      ExaSet_ListOneOrMoreSetsForEdition (Exams,Exam,
+                                          MaxSetInd,
                                           NumSets,mysql_res,
 				          ICanEditSets);
    else		// This exam has no sets
@@ -2753,6 +2729,56 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 
    /***** Put forms to create/edit a set *****/
    ExaSet_PutFormNewSet (Exams,Exam,Set,MaxSetInd);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************************ List the questions of an exam ***********************/
+/*****************************************************************************/
+
+static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
+                                     const struct Exa_Exam *Exam,
+                                     const struct ExaSet_Set *Set)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_questions;
+   extern const char *Txt_Questions;
+   MYSQL_RES *mysql_res;
+   unsigned NumQsts;
+   bool ICanEditQuestions = Exa_CheckIfEditable (Exam);
+
+   /***** Get data of questions from database *****/
+   NumQsts = (unsigned)
+             DB_QuerySELECT (&mysql_res,"can not get exam questions",
+			      "SELECT exa_questions.QstCod"	// row[0]
+			      " FROM exa_questions,tst_questions"
+			      " WHERE exa_questions.SetCod=%ld"
+			      " AND exa_questions.QstCod=tst_questions.QstCod"
+			      " ORDER BY tst_questions.Stem",
+			      Set->SetCod);
+
+   /***** Begin box *****/
+   if (ICanEditQuestions)
+      Box_BoxBegin (NULL,Txt_Questions,
+		    Exa_PutIconToAddNewQuestions,Exams,
+		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+   else
+      Box_BoxBegin (NULL,Txt_Questions,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+
+   /***** Show table with questions *****/
+   if (NumQsts)
+      ExaSet_ListOneOrMoreQuestionsForEdition (Exams,NumQsts,mysql_res,
+					       ICanEditQuestions);
+
+   /***** Put button to add a new question in this set *****/
+   if (ICanEditQuestions)		// I can edit questions
+      Exa_PutButtonToAddNewQuestions (Exams);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2816,7 +2842,7 @@ static void Exa_ListExamQuestions (struct Exa_Exams *Exams,struct Exa_Exam *Exam
 /*****************************************************************************/
 
 static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
-					        long ExaCod,
+					        const struct Exa_Exam *Exam,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
@@ -2827,8 +2853,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Move_down_X;
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
-   MYSQL_ROW row;
    struct ExaSet_Set Set;
+   MYSQL_ROW row;
    char *Anchor = NULL;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -2871,7 +2897,6 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
                 ExaSet_MAX_BYTES_TITLE);
 
       /* Initialize context */
-      Exams->ExaCod = ExaCod;
       Exams->SetCod = Set.SetCod;
       Exams->SetInd = Set.SetInd;
 
@@ -2964,7 +2989,10 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** Questions *****/
       HTM_TD_Begin ("colspan=\"3\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Exa_PutButtonToAddNewQuestions (Exams);
+
+      /* List questions */
+      ExaSet_ListSetQuestions (Exams,Exam,&Set);
+
       HTM_TD_End ();
 
       /***** End second row *****/
@@ -3027,6 +3055,104 @@ static void Exa_PutParamSetCod (void *SetCod)	// Should be a pointer to long
 	 Par_PutHiddenParamLong (NULL,"SetCod",*((long *) SetCod));
   }
 */
+
+/*****************************************************************************/
+/********************* List exam questions for edition ***********************/
+/*****************************************************************************/
+
+static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
+						     unsigned NumQsts,
+                                                     MYSQL_RES *mysql_res,
+						     bool ICanEditQuestions)
+  {
+   extern const char *Txt_Questions;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Question;
+   unsigned NumQst;
+   MYSQL_ROW row;
+   struct Tst_Question Question;
+   bool QuestionExists;
+   char *Anchor = NULL;
+
+   /***** Build anchor string *****/
+   Frm_SetAnchorStr (Exams->SetCod,&Anchor);
+
+   /***** Write the heading *****/
+   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TR_Begin (NULL);
+
+   HTM_TH_Empty (1);
+
+   HTM_TH (1,1,"CT",Txt_No_INDEX);
+   HTM_TH (1,1,"CT",Txt_Code);
+   HTM_TH (1,1,"CT",Txt_Tags);
+   HTM_TH (1,1,"CT",Txt_Question);
+
+   HTM_TR_End ();
+
+   /***** Write rows *****/
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+
+      /***** Get question data *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      */
+      /* Get question code (row[0]) */
+      Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /***** Begin row *****/
+      HTM_TR_Begin (NULL);
+
+      /***** Icons *****/
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+      /* Put icon to remove the question */
+      if (ICanEditQuestions)
+	{
+	 Frm_StartForm (ActReqRemSetQst);
+         ExaSet_PutParamsOneSet (Exams);
+	 Tst_PutParamQstCod (&Question.QstCod);
+	 Ico_PutIconRemove ();
+	 Frm_EndForm ();
+	}
+      else
+         Ico_PutIconRemovalNotAllowed ();
+
+      /* Put icon to edit the question */
+      if (ICanEditQuestions)
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+	                              Tst_PutParamQstCod,&Question.QstCod);
+
+      HTM_TD_End ();
+
+      /***** Question *****/
+      QuestionExists = Tst_GetQstDataFromDB (&Question);
+      Tst_ListQuestionForEdition (&Question,NumQst + 1,QuestionExists,Anchor);
+
+      /***** End row *****/
+      HTM_TR_End ();
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
+  }
+
 /*****************************************************************************/
 /********************* List exam questions for edition ***********************/
 /*****************************************************************************/
@@ -3097,7 +3223,7 @@ static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       /* Put icon to remove the question */
       if (ICanEditQuestions)
 	{
-	 Frm_StartForm (ActReqRemExaQst);
+	 Frm_StartForm (ActReqRemSetQst);
 	 Exa_PutParams (Exams);
 	 Exa_PutParamQstInd (QstInd);
 	 Ico_PutIconRemove ();
@@ -3115,7 +3241,7 @@ static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
       /***** Question *****/
       QuestionExists = Tst_GetQstDataFromDB (&Question);
-      Exa_ListQuestionForEdition (&Question,QstInd,QuestionExists);
+      Tst_ListQuestionForEdition (&Question,QstInd,QuestionExists,NULL);
 
       HTM_TR_End ();
 
@@ -3125,61 +3251,6 @@ static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
    /***** End table *****/
    HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/********************** List exam question for edition ***********************/
-/*****************************************************************************/
-
-static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
-                                        unsigned QstInd,bool QuestionExists)
-  {
-   extern const char *Txt_Question_removed;
-
-   /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd);
-   if (QuestionExists)
-      Tst_WriteAnswerType (Question->Answer.Type);
-   HTM_TD_End ();
-
-   /***** Write question code *****/
-   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
-   HTM_TD_End ();
-
-   /***** Write the question tags *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QuestionExists)
-      Tst_GetAndWriteTagsQst (Question->QstCod);
-   HTM_TD_End ();
-
-   /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QuestionExists)
-     {
-      /* Write stem */
-      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
-			true);	// Visible
-
-      /* Show media */
-      Med_ShowMedia (&Question->Media,
-		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		     "TEST_MED_EDIT_LIST_STEM");
-
-      /* Show feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
-
-      /* Show answers */
-      Tst_WriteAnswersListing (Question);
-     }
-   else
-     {
-      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-      HTM_Txt (Txt_Question_removed);
-      HTM_SPAN_End ();
-     }
-   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3224,7 +3295,6 @@ void ExaSet_AddQstsToSet (void)
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
-   unsigned MaxQstInd;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -3277,16 +3347,13 @@ void ExaSet_AddQstsToSet (void)
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	    Lay_ShowErrorAndExit ("Wrong question code.");
 
-	 /* Get current maximum index */
-	 MaxQstInd = ExaSet_GetMaxQuestionIndexInSet (Set.SetCod);	// 0 if no questions
-
 	 /* Insert question in the table of questions */
 	 DB_QueryINSERT ("can not add question to set",
 			 "INSERT INTO exa_questions"
-			 " (SetCod,QstInd,QstCod)"
+			 " (SetCod,QstCod)"
 			 " VALUES"
-			 " (%ld,%u,%ld)",
-			 Set.SetCod,MaxQstInd + 1,QstCod);
+			 " (%ld,%ld)",
+			 Set.SetCod,QstCod);
 	}
      }
    else
