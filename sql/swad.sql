@@ -512,14 +512,14 @@ CREATE TABLE IF NOT EXISTS exa_participants (
 	TS TIMESTAMP,
 	UNIQUE INDEX(EvtCod,UsrCod));
 --
--- Table exa_questions: stores the questions in the exams
+-- Table exa_questions: stores the questions in the set of questions for exams
 --
 CREATE TABLE IF NOT EXISTS exa_questions (
 	SetCod INT NOT NULL,
+	QstInd INT NOT NULL,
 	QstCod INT NOT NULL,
-	QstInd INT NOT NULL DEFAULT 0,
-	INDEX(SetCod),
-	INDEX(QstCod));
+	UNIQUE INDEX(SetCod,QstInd),
+	UNIQUE INDEX(SetCod,QstCod));
 --
 -- Table exa_results: stores exam results
 --

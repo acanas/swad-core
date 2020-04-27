@@ -10982,7 +10982,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActAddOneExaQst] =
+	[ActReqAddQstExaSet] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11003,7 +11003,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActLstTstQstForExa] =
+	[ActLstTstQstForSet] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11075,48 +11075,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam question"
 #elif L==4	// es
 	"Eliminar pregunta de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActUp_ExaQst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Move up exam question"
-#elif L==4	// es
-	"Mover hacia arriba pregunta de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActDwnExaQst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Move down exam question"
-#elif L==4	// es
-	"Mover hacia abajo pregunta de examen"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

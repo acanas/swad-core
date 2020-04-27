@@ -64,8 +64,8 @@ extern struct Globals Gbl;
 
 #define Exa_MAX_ANSWERS_PER_QUESTION	10
 
-#define Exa_MAX_SELECTED_QUESTIONS		10000
-#define Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Exa_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
+#define ExaSet_MAX_SELECTED_QUESTIONS			10000
+#define ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS	(ExaSet_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
 /* Score range [0...max.score]
    will be converted to
@@ -130,7 +130,6 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor);
 
-static void ExaSet_PutParamsOneSet (void *Exams);
 static void Exa_PutParamsOneQst (void *Exams);
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParamOrder (void);
@@ -182,7 +181,7 @@ static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod);
 static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 
 static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod);
-static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod);
+static unsigned ExaSet_GetMaxQuestionIndexInSet (long SetCod);
 
 static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
 static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
@@ -210,14 +209,11 @@ static void Exa_ListQuestionForEdition (const struct Tst_Question *Question,
 static void Exa_PutIconToAddNewQuestions (void *Exams);
 static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
 
-static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
-static void Exa_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
-static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams);
+static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
+static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 
 static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
-static void Exa_ExchangeQuestions (long ExaCod,
-                                   unsigned QstIndTop,unsigned QstIndBottom);
 
 static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
@@ -794,7 +790,7 @@ static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
 /************ Put parameter to move/remove one set of questions **************/
 /*****************************************************************************/
 
-static void ExaSet_PutParamsOneSet (void *Exams)
+void ExaSet_PutParamsOneSet (void *Exams)
   {
    if (Exams)
      {
@@ -2280,19 +2276,22 @@ void ExaSet_RequestCreatOrEditSet (void)
   }
 
 /*****************************************************************************/
-/*************** Put a form to edit/create a question in exam ****************/
+/*** Request the selection of questions to be added to a set of questions ****/
 /*****************************************************************************/
 
-void Exa_RequestNewQuestion (void)
+void ExaSet_ReqSelectQstsToAddToSet (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
-   /***** Reset exam *****/
+   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -2300,39 +2299,49 @@ void Exa_RequestNewQuestion (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
-
-   /***** Check if exam has events *****/
-   if (Exa_CheckIfEditable (&Exam))
-     {
-      /***** Show form to create a new question in this exam *****/
-      Exams.ExaCod = Exam.ExaCod;
-      Tst_RequestSelectTestsForExam (&Exams);
-     }
-   else
+   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
+   if (!Exa_CheckIfEditable (&Exam))
       Lay_NoPermissionExit ();
 
-   /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true,	// List exam questions
-	                false);	// Do not put form to start new event
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Show form to select questions for set *****/
+   Tst_RequestSelectTestsForSet (&Exams);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Exa_ListQuestionsToSelect (void)
+void ExaSet_ListQstsToAddToSet (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
-   /***** Reset exam *****/
+   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -2340,18 +2349,30 @@ void Exa_ListQuestionsToSelect (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
-
-   /***** Check if exam has events *****/
-   if (Exa_CheckIfEditable (&Exam))
-     {
-      /***** List several test questions for selection *****/
-      Exams.ExaCod = Exam.ExaCod;
-      Tst_ListQuestionsToSelectForExam (&Exams);
-     }
-   else
+   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
+   if (!Exa_CheckIfEditable (&Exam))
       Lay_NoPermissionExit ();
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** List several test questions for selection *****/
+   Tst_ListQuestionsToSelectForSet (&Exams);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
@@ -2517,23 +2538,23 @@ static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
   }
 
 /*****************************************************************************/
-/****************** Get maximum question index in an exam *********************/
+/************ Get maximum question index in a set of questions ***************/
 /*****************************************************************************/
 // Question index can be 1, 2, 3...
 // Return 0 if no questions
 
-static unsigned Exa_GetMaxQuestionIndexInExam (long ExaCod)
+static unsigned ExaSet_GetMaxQuestionIndexInSet (long SetCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned QstInd = 0;
+   unsigned QstInd = 0;	// Default value if no questions in set
 
    /***** Get maximum question index in an exam from database *****/
    DB_QuerySELECT (&mysql_res,"can not get max question index",
 		   "SELECT MAX(QstInd)"
 		   " FROM exa_questions"
-		   " WHERE ExaCod=%ld",
-                   ExaCod);
+		   " WHERE SetCod=%ld",
+                   SetCod);
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
       if (sscanf (row[0],"%u",&QstInd) != 1)
@@ -2857,11 +2878,11 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /***** Build anchor string *****/
       Frm_SetAnchorStr (Set.SetCod,&Anchor);
 
-      /***** Begin row *****/
+      /***** Begin first row *****/
       HTM_TR_Begin (NULL);
 
       /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("rowspan=\"2\" class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Put icon to remove the set */
       if (ICanEditSets)
@@ -2903,7 +2924,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /***** Index *****/
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("rowspan=\"2\" class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteNumQst (Set.SetInd);
       HTM_TD_End ();
 
@@ -2935,7 +2956,18 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       Frm_EndForm ();
       HTM_TD_End ();
 
-      /***** End row *****/
+      /***** End first row *****/
+      HTM_TR_End ();
+
+      /***** Begin second row *****/
+      HTM_TR_Begin (NULL);
+
+      /***** Questions *****/
+      HTM_TD_Begin ("colspan=\"3\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Exa_PutButtonToAddNewQuestions (Exams);
+      HTM_TD_End ();
+
+      /***** End second row *****/
       HTM_TR_End ();
 
       /***** Free anchor string *****/
@@ -3009,19 +3041,12 @@ static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Code;
    extern const char *Txt_Tags;
    extern const char *Txt_Question;
-   extern const char *Txt_Move_up_X;
-   extern const char *Txt_Move_down_X;
-   extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
    struct Tst_Question Question;
    unsigned QstInd;
-   unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
-
-   /***** Get maximum question index *****/
-   MaxQstInd = Exa_GetMaxQuestionIndexInExam (ExaCod);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -3080,32 +3105,6 @@ static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	}
       else
          Ico_PutIconRemovalNotAllowed ();
-
-      /* Put icon to move up the question */
-      if (ICanEditQuestions && QstInd > 1)
-	{
-	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaQst,NULL,
-	                                Exa_PutParamsOneQst,Exams,
-				        "arrow-up.svg",
-					Str_BuildStringStr (Txt_Move_up_X,
-							    StrQstInd));
-	 Str_FreeString ();
-	}
-      else
-         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
-
-      /* Put icon to move down the question */
-      if (ICanEditQuestions && QstInd < MaxQstInd)
-	{
-	 Lay_PutContextualLinkOnlyIcon (ActDwnExaQst,NULL,
-	                                Exa_PutParamsOneQst,Exams,
-				        "arrow-down.svg",
-					Str_BuildStringStr (Txt_Move_down_X,
-							    StrQstInd));
-	 Str_FreeString ();
-	}
-      else
-         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
       /* Put icon to edit the question */
       if (ICanEditQuestions)
@@ -3192,7 +3191,7 @@ static void Exa_PutIconToAddNewQuestions (void *Exams)
    extern const char *Txt_Add_questions;
 
    /***** Put form to create a new question *****/
-   Ico_PutContextualIconToAdd (ActAddOneExaQst,NULL,
+   Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
 			       Exa_PutParams,Exams,
 			       Txt_Add_questions);
   }
@@ -3205,21 +3204,23 @@ static void Exa_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
   {
    extern const char *Txt_Add_questions;
 
-   Frm_StartForm (ActAddOneExaQst);
-   Exa_PutParams (Exams);
-   Btn_PutConfirmButton (Txt_Add_questions);
+   Frm_StartForm (ActReqAddQstExaSet);
+   ExaSet_PutParamsOneSet (Exams);
+   Btn_PutConfirmButtonInline (Txt_Add_questions);
    Frm_EndForm ();
   }
 
 /*****************************************************************************/
-/******************** Add selected test questions to exam ********************/
+/************* Add selected test questions to set of questions ***************/
 /*****************************************************************************/
 
-void Exa_AddQuestionsToExam (void)
+void ExaSet_AddQstsToSet (void)
   {
    extern const char *Txt_No_questions_have_been_added;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
@@ -3228,8 +3229,9 @@ void Exa_AddQuestionsToExam (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
-   /***** Reset exam *****/
+   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -3237,68 +3239,76 @@ void Exa_AddQuestionsToExam (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
-
-   /***** Check if exam has events *****/
-   if (Exa_CheckIfEditable (&Exam))
-     {
-      /***** Get selected questions *****/
-      /* Allocate space for selected question codes */
-      Exa_AllocateListSelectedQuestions (&Exams);
-
-      /* Get question codes */
-      Par_GetParMultiToText ("QstCods",Exams.ListQuestions,
-			     Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS);
-
-      /* Check number of questions */
-      if (Exa_CountNumQuestionsInList (&Exams))	// If questions selected...
-	{
-	 /***** Insert questions in database *****/
-	 Ptr = Exams.ListQuestions;
-	 while (*Ptr)
-	   {
-	    /* Get next code */
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-	    if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	       Lay_ShowErrorAndExit ("Wrong question code.");
-
-	    /* Get current maximum index */
-	    MaxQstInd = Exa_GetMaxQuestionIndexInExam (Exam.ExaCod);	// -1 if no questions
-
-	    /* Insert question in the table of questions */
-	    DB_QueryINSERT ("can not create question",
-			    "INSERT INTO exa_questions"
-			    " (ExaCod,QstCod,QstInd)"
-			    " VALUES"
-			    " (%ld,%ld,%u)",
-			    Exam.ExaCod,QstCod,MaxQstInd + 1);
-	   }
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
-
-      /***** Free space for selected question codes *****/
-      Exa_FreeListsSelectedQuestions (&Exams);
-     }
-   else
+   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
+   if (!Exa_CheckIfEditable (&Exam))
       Lay_NoPermissionExit ();
 
-   /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true,	// List exam questions
-	                false);	// Do not put form to start new event
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Get selected questions *****/
+   /* Allocate space for selected question codes */
+   ExaSet_AllocateListSelectedQuestions (&Exams);
+
+   /* Get question codes */
+   Par_GetParMultiToText ("QstCods",Exams.ListQuestions,
+			  ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS);
+
+   /* Check number of questions */
+   if (Tst_CountNumQuestionsInList (Exams.ListQuestions))	// If questions selected...
+     {
+      /***** Insert questions in database *****/
+      Ptr = Exams.ListQuestions;
+      while (*Ptr)
+	{
+	 /* Get next code */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
+	    Lay_ShowErrorAndExit ("Wrong question code.");
+
+	 /* Get current maximum index */
+	 MaxQstInd = ExaSet_GetMaxQuestionIndexInSet (Set.SetCod);	// 0 if no questions
+
+	 /* Insert question in the table of questions */
+	 DB_QueryINSERT ("can not add question to set",
+			 "INSERT INTO exa_questions"
+			 " (SetCod,QstInd,QstCod)"
+			 " VALUES"
+			 " (%ld,%u,%ld)",
+			 Set.SetCod,MaxQstInd + 1,QstCod);
+	}
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
+
+   /***** Free space for selected question codes *****/
+   ExaSet_FreeListsSelectedQuestions (&Exams);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
 /****************** Allocate memory for list of questions ********************/
 /*****************************************************************************/
 
-static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
+static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
   {
    if (!Exams->ListQuestions)
      {
-      if ((Exams->ListQuestions = (char *) malloc (Exa_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+      if ((Exams->ListQuestions = (char *) malloc (ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       Exams->ListQuestions[0] = '\0';
      }
@@ -3308,36 +3318,13 @@ static void Exa_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
 /*********** Free memory used by list of selected question codes *************/
 /*****************************************************************************/
 
-static void Exa_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
+static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
   {
    if (Exams->ListQuestions)
      {
       free (Exams->ListQuestions);
       Exams->ListQuestions = NULL;
      }
-  }
-
-/*****************************************************************************/
-/**** Count the number of questions in the list of selected question codes ***/
-/*****************************************************************************/
-
-static unsigned Exa_CountNumQuestionsInList (const struct Exa_Exams *Exams)
-  {
-   const char *Ptr;
-   unsigned NumQuestions = 0;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   long QstCod;
-
-   /***** Go over list of questions counting the number of questions *****/
-   Ptr = Exams->ListQuestions;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-      if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong question code.");
-      NumQuestions++;
-     }
-   return NumQuestions;
   }
 
 /*****************************************************************************/
@@ -3705,128 +3692,6 @@ void Exa_RemoveQst (void)
   }
 
 /*****************************************************************************/
-/***************** Move up position of a question in an exam ******************/
-/*****************************************************************************/
-
-void Exa_MoveUpQst (void)
-  {
-   extern const char *Txt_Movement_not_allowed;
-   struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
-   unsigned QstIndTop;
-   unsigned QstIndBottom;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
-   Exa_ResetExam (&Exam);
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-
-   /***** Check if exam has events *****/
-   if (Exa_CheckIfEditable (&Exam))
-     {
-      /***** Get question index *****/
-      QstIndBottom = Exa_GetParamQstInd ();
-
-      /***** Move up question *****/
-      if (QstIndBottom > 1)
-	{
-	 /* Indexes of questions to be exchanged */
-	 QstIndTop = Exa_GetPrevQuestionIndexInExam (Exam.ExaCod,QstIndBottom);
-	 if (!QstIndTop)
-	    Lay_ShowErrorAndExit ("Wrong index of question.");
-
-	 /* Exchange questions */
-	 Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-     }
-   else
-      Lay_NoPermissionExit ();
-
-   /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true,	// List exam questions
-	                false);	// Do not put form to start new event
-  }
-
-/*****************************************************************************/
-/**************** Move down position of a question in an exam *****************/
-/*****************************************************************************/
-
-void Exa_MoveDownQst (void)
-  {
-   extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_This_exam_has_no_questions;
-   struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
-   unsigned QstIndTop;
-   unsigned QstIndBottom;
-   unsigned MaxQstInd;	// 0 if no questions
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
-   Exa_ResetExam (&Exam);
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-
-   /***** Check if exam has events *****/
-   if (Exa_CheckIfEditable (&Exam))
-     {
-      /***** Get question index *****/
-      QstIndTop = Exa_GetParamQstInd ();
-
-      /***** Get maximum question index *****/
-      MaxQstInd = Exa_GetMaxQuestionIndexInExam (Exam.ExaCod);
-
-      /***** Move down question *****/
-      if (MaxQstInd)
-	{
-	 if (QstIndTop < MaxQstInd)
-	   {
-	    /* Indexes of questions to be exchanged */
-	    QstIndBottom = Exa_GetNextQuestionIndexInExam (Exam.ExaCod,QstIndTop);
-	    if (!QstIndBottom)
-	       Lay_ShowErrorAndExit ("Wrong index of question.");
-
-	    /* Exchange questions */
-	    Exa_ExchangeQuestions (Exam.ExaCod,QstIndTop,QstIndBottom);
-	   }
-	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_This_exam_has_no_questions);
-     }
-   else
-      Lay_NoPermissionExit ();
-
-   /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true,	// List exam questions
-	                false);	// Do not put form to start new event
-  }
-
-/*****************************************************************************/
 /*********** Exchange the order of two consecutive sets in an exam ***********/
 /*****************************************************************************/
 
@@ -3885,57 +3750,6 @@ static void ExaSet_ExchangeSets (long ExaCod,
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				// ...to not retry the unlock if error in unlocking
    DB_Query ("can not unlock tables after exchanging sets of questions",
-	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
-/********* Exchange the order of two consecutive questions in an exam *********/
-/*****************************************************************************/
-
-static void Exa_ExchangeQuestions (long ExaCod,
-                                   unsigned QstIndTop,unsigned QstIndBottom)
-  {
-   long QstCodTop;
-   long QstCodBottom;
-
-   /***** Lock table to make the move atomic *****/
-   DB_Query ("can not lock tables to move exam question",
-	     "LOCK TABLES exa_questions WRITE");
-   Gbl.DB.LockedTables = true;
-
-   /***** Get question code of the questions to be moved *****/
-   QstCodTop    = Exa_GetQstCodFromQstInd (ExaCod,QstIndTop);
-   QstCodBottom = Exa_GetQstCodFromQstInd (ExaCod,QstIndBottom);
-
-   /***** Exchange indexes of questions *****/
-   /*
-   Example:
-   QstIndTop    = 1; QstCodTop    = 218
-   QstIndBottom = 2; QstCodBottom = 220
-   +--------+--------+		+--------+--------+	+--------+--------+
-   | QstInd | QstCod |		| QstInd | QstCod |	| QstInd | QstCod |
-   +--------+--------+		+--------+--------+	+--------+--------+
-   |      1 |    218 |  ----->	|      2 |    218 |  =	|      1 |    220 |
-   |      2 |    220 |		|      1 |    220 |	|      2 |    218 |
-   |      3 |    232 |		|      3 |    232 |	|      3 |    232 |
-   +--------+--------+		+--------+--------+	+--------+--------+
- */
-   DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE exa_questions SET QstInd=%u"
-		   " WHERE ExaCod=%ld AND QstCod=%ld",
-	           QstIndBottom,
-	           ExaCod,QstCodTop);
-
-   DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE exa_questions SET QstInd=%u"
-		   " WHERE ExaCod=%ld AND QstCod=%ld",
-	           QstIndTop,
-	           ExaCod,QstCodBottom);
-
-   /***** Unlock table *****/
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after moving exam questions",
 	     "UNLOCK TABLES");
   }
 

@@ -138,8 +138,8 @@ bool Mch_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
 
 unsigned Gam_GetNumQstsGame (long GamCod);
 
-void Gam_RequestNewQuestion (void);
-void Gam_ListTstQuestionsToSelect (void);
+void Gam_ReqSelectQstsToAddToGame (void);
+void Gam_ListQstsToAddToGame (void);
 
 void Gam_PutParamQstInd (unsigned QstInd);
 unsigned Gam_GetParamQstInd (void);
@@ -147,7 +147,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 
-void Gam_AddTstQuestionsToGame (void);
+void Gam_AddQstsToGame (void);
 
 void Gam_RequestRemoveQst (void);
 void Gam_RemoveQst (void);

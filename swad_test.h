@@ -133,6 +133,7 @@ typedef enum
    Tst_SHOW_TEST_TO_ANSWER,		// Showing a test to a student
    Tst_SHOW_TEST_RESULT,		// Showing the assessment of a test
    Tst_EDIT_TEST,			// Editing test questions
+   Tst_SELECT_QUESTIONS_FOR_EXAM,	// Selecting test questions for a set of questions in an exam
    Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
   } Tst_ActionToDoWithQuestions_t;
 
@@ -166,11 +167,11 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_RequestEditTests (void);
-void Tst_RequestSelectTestsForExam (struct Exa_Exams *Exams);
+void Tst_RequestSelectTestsForSet (struct Exa_Exams *Exams);
 void Tst_RequestSelectTestsForGame (struct Gam_Games *Games);
 
 void Tst_ListQuestionsToEdit (void);
-void Tst_ListQuestionsToSelectForExam (struct Exa_Exams *Exams);
+void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams);
 void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
@@ -192,6 +193,8 @@ void Tst_DisableTag (void);
 void Tst_RenameTag (void);
 
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
+
+unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
 
 void Tst_ShowFormEditOneQst (void);
 

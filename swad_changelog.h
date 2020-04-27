@@ -544,10 +544,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.201 (2020-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.202 (2020-04-27)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.202:   Apr 27, 2020	Form to add questions to set of questions. (300558 lines)
+					5 changes necessary in database:
+ALTER TABLE exa_questions CHANGE COLUMN QstInd QstInd INT NOT NULL AFTER SetCod;
+ALTER TABLE exa_questions DROP INDEX SetCod;
+ALTER TABLE exa_questions DROP INDEX QstCod;
+ALTER TABLE exa_questions ADD UNIQUE INDEX(SetCod,QstInd);
+ALTER TABLE exa_questions ADD UNIQUE INDEX(SetCod,QstCod);
+
 	Version 19.201:   Apr 27, 2020	Form to change number of questions in exam.
 				        Code refactoring in HTML forms. (300755 lines)
 	Version 19.200:   Apr 27, 2020	Text of actions related to exams.
@@ -560,7 +568,7 @@ ALTER TABLE exa_sets DROP INDEX ExaCod;
 ALTER TABLE exa_sets ADD UNIQUE INDEX(ExaCod,SetInd);
 
 	Version 19.199.2: Apr 27, 2020	Changes moving questions in a game up and down. (299345 lines)
-					4 changes necessary in database:
+					5 changes necessary in database:
 ALTER TABLE gam_questions CHANGE COLUMN QstInd QstInd INT NOT NULL DEFAULT 0 AFTER GamCod;
 ALTER TABLE gam_questions DROP INDEX GamCod;
 ALTER TABLE gam_questions DROP INDEX QstCod;

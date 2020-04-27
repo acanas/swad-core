@@ -150,8 +150,8 @@ static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
-static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
-                                                   struct Tst_Test *Test);
+static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
+                                                  struct Tst_Test *Test);
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
@@ -186,12 +186,12 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
 static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
-static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exams,
+static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exams,
+						          unsigned NumQsts,
+                                                          MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Games,
 						           unsigned NumQsts,
                                                            MYSQL_RES *mysql_res);
-static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Games,
-						    unsigned NumQsts,
-                                                    MYSQL_RES *mysql_res);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
@@ -1221,7 +1221,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 /******************* Select test questions for a game ************************/
 /*****************************************************************************/
 
-void Tst_RequestSelectTestsForExam (struct Exa_Exams *Exams)
+void Tst_RequestSelectTestsForSet (struct Exa_Exams *Exams)
   {
    struct Tst_Test Test;
 
@@ -1229,7 +1229,7 @@ void Tst_RequestSelectTestsForExam (struct Exa_Exams *Exams)
    Tst_TstConstructor (&Test);
 
    /***** Show form to select test for exam *****/
-   Tst_ShowFormRequestSelectTestsForExam (Exams,&Test);	// No tags selected
+   Tst_ShowFormRequestSelectTestsForSet (Exams,&Test);	// No tags selected
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -1257,8 +1257,8 @@ void Tst_RequestSelectTestsForGame (struct Gam_Games *Games)
 /************** Show form to select test questions for a exam ****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
-                                                   struct Tst_Test *Test)
+static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
+                                                  struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Exams_questions;
    extern const char *Txt_No_test_questions;
@@ -1279,13 +1279,16 @@ static void Tst_ShowFormRequestSelectTestsForExam (struct Exa_Exams *Exams,
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Frm_StartForm (ActLstTstQstForExa);
-      Exa_PutParams (Exams);
+      Frm_StartForm (ActLstTstQstForSet);
+      ExaSet_PutParamsOneSet (Exams);
 
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
       Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
+
+      /***** Selection of types of answers *****/
+      Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
 
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -2232,7 +2235,7 @@ void Tst_ListQuestionsToEdit (void)
 /************ List several test questions for selection for exam *************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToSelectForExam (struct Exa_Exams *Exams)
+void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams)
   {
    struct Tst_Test Test;
    MYSQL_RES *mysql_res;
@@ -2241,19 +2244,19 @@ void Tst_ListQuestionsToSelectForExam (struct Exa_Exams *Exams)
    Tst_TstConstructor (&Test);
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Test,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+   if (Tst_GetParamsTst (&Test,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
      {
       Tst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForSelectionForExam (Exams,Test.NumQsts,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelectionForSet (Exams,Test.NumQsts,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /* Show the form again */
-      Tst_ShowFormRequestSelectTestsForExam (Exams,&Test);
+      Tst_ShowFormRequestSelectTestsForSet (Exams,&Test);
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -2975,9 +2978,9 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 /*************** List for selection one or more test questions ***************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exams,
-						           unsigned NumQsts,
-                                                           MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exams,
+						          unsigned NumQsts,
+                                                          MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Exams_questions;
    extern const char *Txt_Questions;
@@ -3000,7 +3003,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForExam (struct Exa_Exams *Exa
 
    /***** Begin form *****/
    Frm_StartForm (ActAddQstToExa);
-   Exa_PutParams (Exams);
+   ExaSet_PutParamsOneSet (Exams);
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -3827,6 +3830,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
      {
       case Tst_SHOW_TEST_TO_ANSWER:
       case Tst_EDIT_TEST:
+      case Tst_SELECT_QUESTIONS_FOR_EXAM:
 	 /* Get parameter that indicates if all types of answer are selected */
 	 Test->AnswerTypes.All = Par_GetParToBool ("AllAnsTypes");
 
@@ -3877,6 +3881,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
 	 else
 	    Test->SelectedOrder = (Tst_QuestionsOrder_t) 0;
 	 break;
+      case Tst_SELECT_QUESTIONS_FOR_EXAM:
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* Get starting and ending dates */
 	 Dat_GetIniEndDatesFromForm ();
@@ -3955,6 +3960,29 @@ static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTy
       NumAnsTypes++;
      }
    return NumAnsTypes;
+  }
+
+/*****************************************************************************/
+/**** Count the number of questions in the list of selected question codes ***/
+/*****************************************************************************/
+
+unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
+  {
+   const char *Ptr;
+   unsigned NumQuestions = 0;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   long QstCod;
+
+   /***** Go over list of questions counting the number of questions *****/
+   Ptr = ListQuestions;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      if (sscanf (LongStr,"%ld",&QstCod) != 1)
+         Lay_ShowErrorAndExit ("Wrong question code.");
+      NumQuestions++;
+     }
+   return NumQuestions;
   }
 
 /*****************************************************************************/

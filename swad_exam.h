@@ -130,6 +130,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);
+void ExaSet_PutParamsOneSet (void *Exams);
 void Exa_PutParams (void *Exams);
 void Exa_PutParamExamCod (long ExaCod);
 long Exa_GetParamExamCod (void);
@@ -162,8 +163,8 @@ unsigned ExaSet_GetNumSetsExam (long ExaCod);
 unsigned ExaSet_GetNumQstsExam (long ExaCod);
 
 void ExaSet_RequestCreatOrEditSet (void);
-void Exa_RequestNewQuestion (void);
-void Exa_ListQuestionsToSelect (void);
+void ExaSet_ReqSelectQstsToAddToSet (void);
+void ExaSet_ListQstsToAddToSet (void);
 
 void Exa_PutParamQstInd (unsigned QstInd);
 unsigned Exa_GetParamQstInd (void);
@@ -172,7 +173,7 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);
 unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd);
 unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
 
-void Exa_AddQuestionsToExam (void);
+void ExaSet_AddQstsToSet (void);
 
 void ExaSet_RequestRemoveSet (void);
 void ExaSet_RemoveSet (void);
@@ -182,9 +183,6 @@ void ExaSet_MoveDownSet (void);
 
 void Exa_RequestRemoveQst (void);
 void Exa_RemoveQst (void);
-
-void Exa_MoveUpQst (void);
-void Exa_MoveDownQst (void);
 
 void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
 void Exa_RequestNewEvent (void);

@@ -166,7 +166,6 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games);
 
 static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games);
 static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games);
-static unsigned Gam_CountNumQuestionsInList (const struct Gam_Games *Games);
 
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
@@ -1671,7 +1670,7 @@ unsigned Gam_GetNumQstsGame (long GamCod)
 /*************** Put a form to edit/create a question in game ****************/
 /*****************************************************************************/
 
-void Gam_RequestNewQuestion (void)
+void Gam_ReqSelectQstsToAddToGame (void)
   {
    struct Gam_Games Games;
    struct Gam_Game Game;
@@ -1705,7 +1704,7 @@ void Gam_RequestNewQuestion (void)
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Gam_ListTstQuestionsToSelect (void)
+void Gam_ListQstsToAddToGame (void)
   {
    struct Gam_Games Games;
    struct Gam_Game Game;
@@ -2213,7 +2212,7 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
 /******************** Add selected test questions to game ********************/
 /*****************************************************************************/
 
-void Gam_AddTstQuestionsToGame (void)
+void Gam_AddQstsToGame (void)
   {
    extern const char *Txt_No_questions_have_been_added;
    extern const char *Txt_A_question_has_been_added;
@@ -2251,7 +2250,7 @@ void Gam_AddTstQuestionsToGame (void)
 
    /* Check number of questions */
    NumQstsAdded = 0;
-   if (Gam_CountNumQuestionsInList (&Games))	// If questions selected...
+   if (Tst_CountNumQuestionsInList (Games.ListQuestions))	// If questions selected...
      {
       /***** Insert questions in database *****/
       Ptr = Games.ListQuestions;
@@ -2269,12 +2268,12 @@ void Gam_AddTstQuestionsToGame (void)
 	    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
 	    /* Insert question in the table of questions */
-	    DB_QueryINSERT ("can not create question",
+	    DB_QueryINSERT ("can not add question to game",
 			    "INSERT INTO gam_questions"
-			    " (GamCod,QstCod,QstInd)"
+			    " (GamCod,QstInd,QstCod)"
 			    " VALUES"
-			    " (%ld,%ld,%u)",
-			    Game.GamCod,QstCod,MaxQstInd + 1);
+			    " (%ld,%u,%ld)",
+			    Game.GamCod,MaxQstInd + 1,QstCod);
 
 	    NumQstsAdded++;
 	   }
@@ -2323,29 +2322,6 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games)
       free (Games->ListQuestions);
       Games->ListQuestions = NULL;
      }
-  }
-
-/*****************************************************************************/
-/**** Count the number of questions in the list of selected question codes ***/
-/*****************************************************************************/
-
-static unsigned Gam_CountNumQuestionsInList (const struct Gam_Games *Games)
-  {
-   const char *Ptr;
-   unsigned NumQuestions = 0;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   long QstCod;
-
-   /***** Go over list of questions counting the number of questions *****/
-   Ptr = Games->ListQuestions;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-      if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong question code.");
-      NumQuestions++;
-     }
-   return NumQuestions;
   }
 
 /*****************************************************************************/
