@@ -223,6 +223,7 @@ void Tst_RemoveOneQst (void);
 
 void Tst_ChangeShuffleQst (void);
 
+long Tst_GetParamQstCod (void);
 void Tst_PutParamQstCod (void *QstCod);
 
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question);

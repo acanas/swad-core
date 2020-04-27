@@ -929,7 +929,6 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
 
@@ -1070,7 +1069,6 @@ void ExaEvt_RequestRemoveEvent (void)
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
 
@@ -1108,7 +1106,6 @@ void ExaEvt_RemoveEvent (void)
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        false,	// Do not list exam questions
 	                false);	// Do not put form to start new exam event
   }
 
@@ -1302,6 +1299,7 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
 
    /***** Get exam data and event from database *****/
    Exa_GetDataOfExamByCod (Exam);
+   Exams->ExaCod = Exam->ExaCod;
    ExaEvt_GetDataOfEventByCod (Event);
 
    /***** Ensure parameters are correct *****/

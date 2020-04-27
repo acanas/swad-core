@@ -149,8 +149,8 @@ unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 
 void Gam_AddQstsToGame (void);
 
-void Gam_RequestRemoveQst (void);
-void Gam_RemoveQst (void);
+void Gam_RequestRemoveQstFromGame (void);
+void Gam_RemoveQstFromGame (void);
 
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);

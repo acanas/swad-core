@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.203 (2020-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.204 (2020-04-27)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.204:   Apr 27, 2020	Remove question from set of questions. (300466 lines)
 	Version 19.203:   Apr 27, 2020	List questions in every set of questions. (300606 lines)
 					3 changes necessary in database:
 ALTER TABLE exa_questions DROP INDEX SetCod,DROP INDEX SetCod_2;

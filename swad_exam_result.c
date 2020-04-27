@@ -171,10 +171,10 @@ void ExaRes_ShowMyExaResultsInExa (void)
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
+   Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
-                             false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in exam *****/
@@ -225,11 +225,11 @@ void ExaRes_ShowMyExaResultsInEvt (void)
    if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_WrongEventExit ();
    Exa_GetDataOfExamByCod (&Exam);
+   Exams.ExaCod = Exam.ExaCod;
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
-                             false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in event *****/
@@ -377,10 +377,10 @@ void ExaRes_ShowAllExaResultsInExa (void)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    Exa_GetDataOfExamByCod (&Exam);
+   Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
-                             false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List events results in exam *****/
@@ -474,11 +474,11 @@ void ExaRes_ShowAllExaResultsInEvt (void)
 
    /***** Get exam data and event *****/
    Exa_GetDataOfExamByCod (&Exam);
+   Exams.ExaCod = Exam.ExaCod;
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
-                             false,	// Do not list exam questions
 	                     false);	// Do not put form to start new event
 
    /***** List events results in event *****/
@@ -627,6 +627,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
       /* Get data of this exam */
       Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
       Exa_GetDataOfExamByCod (&Exam);
+      Exams->ExaCod = Exam.ExaCod;
 
       /* Write a row for this event */
       HTM_TR_Begin (NULL);

@@ -730,8 +730,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqAddQstExaSet	] = {1885,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,ExaSet_ReqSelectQstsToAddToSet	,NULL},
    [ActLstTstQstForSet	] = {1886,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ListQstsToAddToSet	,NULL},
    [ActAddQstToExa	] = {1887,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_AddQstsToSet		,NULL},
-   [ActReqRemSetQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestRemoveQst		,NULL},
-   [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveQst			,NULL},
+   [ActReqRemSetQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveQstFromSet	,NULL},
+   [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveQstFromSet	,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
@@ -778,8 +778,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAddOneGamQst	] = {1662,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Gam_ReqSelectQstsToAddToGame	,NULL},
    [ActGamLstTstQst	] = {1666,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ListQstsToAddToGame	,NULL},
    [ActAddTstQstToGam	] = {1667,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AddQstsToGame		,NULL},
-   [ActReqRemGamQst	] = {1664,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestRemoveQst		,NULL},
-   [ActRemGamQst	] = {1665,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveQst			,NULL},
+   [ActReqRemGamQst	] = {1664,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestRemoveQstFromGame	,NULL},
+   [ActRemGamQst	] = {1665,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveQstFromGame		,NULL},
    [ActUp_GamQst	] = {1668,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveUpQst			,NULL},
    [ActDwnGamQst	] = {1669,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveDownQst		,NULL},
 

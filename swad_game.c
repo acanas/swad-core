@@ -2266,7 +2266,7 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games)
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
-void Gam_RequestRemoveQst (void)
+void Gam_RequestRemoveQstFromGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
@@ -2311,7 +2311,7 @@ void Gam_RequestRemoveQst (void)
 /****************************** Remove a question ****************************/
 /*****************************************************************************/
 
-void Gam_RemoveQst (void)
+void Gam_RemoveQstFromGame (void)
   {
    extern const char *Txt_Question_removed;
    struct Gam_Games Games;

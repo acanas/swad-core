@@ -80,7 +80,7 @@ struct Exa_Exams
    long SetCod;			// Selected/current set code
    long EvtCod;			// Selected/current match code
    unsigned SetInd;		// Current set index
-   unsigned QstInd;		// Current question index
+   long QstCod;			// Current question code
   };
 
 struct Exa_Exam
@@ -121,11 +121,9 @@ void Exa_SeeAllExams (void);
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct Exa_Exam *Exam,
-			  bool ListExamQuestions,
 			  bool PutFormNewMatch);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct Exa_Exam *Exam,
-			       bool ListExamQuestions,
 			       bool PutFormNewMatch);
 void Exa_ShowOnlyOneExamEnd (void);
 
@@ -181,8 +179,8 @@ void ExaSet_RemoveSet (void);
 void ExaSet_MoveUpSet (void);
 void ExaSet_MoveDownSet (void);
 
-void Exa_RequestRemoveQst (void);
-void Exa_RemoveQst (void);
+void ExaSet_RequestRemoveQstFromSet (void);
+void ExaSet_RemoveQstFromSet (void);
 
 void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
 void Exa_RequestNewEvent (void);

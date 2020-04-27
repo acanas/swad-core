@@ -155,7 +155,7 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
-static void Tst_PutIconsTests (void *TestPtr);
+static void Tst_PutIconsTests (void *Test);
 static void Tst_PutButtonToAddQuestion (void);
 
 static long Tst_GetParamTagCode (void);
@@ -252,13 +252,11 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
-static void Tst_PutParamsRemoveSelectedQsts (void *TestPtr);
-static void Tst_PutIconToRemoveOneQst (void *QstCodPtr);
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCodPtr);
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *TestPtr);
+static void Tst_PutParamsRemoveSelectedQsts (void *Test);
+static void Tst_PutIconToRemoveOneQst (void *QstCod);
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *Test);
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
-
-static long Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question);
 static void Tst_InsertTagsIntoDB (const struct Tst_Question *Question);
@@ -1446,65 +1444,62 @@ static bool Tst_CheckIfICanEditTests (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsTests (void *TestPtr)
+static void Tst_PutIconsTests (void *Test)
   {
    extern const char *Txt_New_question;
 
-   if (TestPtr)
+   if (Tst_CheckIfICanEditTests ())
      {
-      if (Tst_CheckIfICanEditTests ())
+      switch (Gbl.Action.Act)
 	{
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActLstTstQst:		// List selected test questions for edition
-	    case ActReqRemSevTstQst:	// Request removal of selected questions
-	    case ActReqRemOneTstQst:	// Request removal of a question
-	    case ActRemOneTstQst:		// Remove a question
-	    case ActChgShfTstQst:		// Change shuffle of a question
-	       /***** Put form to remove selected test questions *****/
-	       Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
-					      Tst_PutParamsRemoveSelectedQsts,TestPtr);
-	       break;
-	    default:
-	       break;
-	   }
-
-	 if (Gbl.Action.Act != ActEdiTstQst)
-	    /***** Put form to edit existing test questions *****/
-	    Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,
-					 NULL,NULL);
-
-	 if (Gbl.Action.Act != ActEdiOneTstQst)
-	    /***** Put form to create a new test question *****/
-	    Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
-					NULL,NULL,
-					Txt_New_question);
-
-	 /***** Put form to go to test configuration *****/
-	 Ico_PutContextualIconToConfigure (ActCfgTst,
-					   NULL,NULL);
-	}
-
-      /***** Put icon to view test exams *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,
-						NULL,NULL);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,
-						NULL,NULL);
+	 case ActLstTstQst:		// List selected test questions for edition
+	 case ActReqRemSevTstQst:	// Request removal of selected questions
+	 case ActReqRemOneTstQst:	// Request removal of a question
+	 case ActRemOneTstQst:		// Remove a question
+	 case ActChgShfTstQst:		// Change shuffle of a question
+	    /***** Put form to remove selected test questions *****/
+	    Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
+					   Tst_PutParamsRemoveSelectedQsts,Test);
 	    break;
 	 default:
 	    break;
 	}
 
-      /***** Put icon to show a figure *****/
-      Fig_PutIconToShowFigure (Fig_TESTS);
+      if (Gbl.Action.Act != ActEdiTstQst)
+	 /***** Put form to edit existing test questions *****/
+	 Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,
+				      NULL,NULL);
+
+      if (Gbl.Action.Act != ActEdiOneTstQst)
+	 /***** Put form to create a new test question *****/
+	 Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
+				     NULL,NULL,
+				     Txt_New_question);
+
+      /***** Put form to go to test configuration *****/
+      Ico_PutContextualIconToConfigure (ActCfgTst,
+					NULL,NULL);
      }
+
+   /***** Put icon to view test exams *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,
+					     NULL,NULL);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,
+					     NULL,NULL);
+	 break;
+      default:
+	 break;
+     }
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_TESTS);
   }
 
 /*****************************************************************************/
@@ -4057,7 +4052,7 @@ void Tst_ShowFormEditOneQst (void)
    Tst_QstConstructor (&Question);
 
    /***** Get question data *****/
-   Question.QstCod = Tst_GetQstCod ();
+   Question.QstCod = Tst_GetParamQstCod ();
    if (Question.QstCod > 0)	// Question already exists in the database
       PutFormToEditQuestion = Tst_GetQstDataFromDB (&Question);
    else				// New question
@@ -5061,7 +5056,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   Question->QstCod = Tst_GetQstCod ();
+   Question->QstCod = Tst_GetParamQstCod ();
 
    /***** Get answer type *****/
    Question->Answer.Type = (Tst_AnswerType_t)
@@ -5687,17 +5682,10 @@ void Tst_RequestRemoveSelectedQsts (void)
 /**************** Put parameters to remove selected questions ****************/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveSelectedQsts (void *TestPtr)
+static void Tst_PutParamsRemoveSelectedQsts (void *Test)
   {
-   struct Tst_Test *Test;
-
-   if (TestPtr)
-     {
-      Test = (struct Tst_Test *) TestPtr;
-
-      Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst (Test);
-     }
+   Dat_WriteParamsIniEndDates ();
+   Tst_WriteParamEditQst ((struct Tst_Test *) Test);
   }
 
 /*****************************************************************************/
@@ -5751,10 +5739,10 @@ void Tst_RemoveSelectedQsts (void)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToRemoveOneQst (void *QstCodPtr)
+static void Tst_PutIconToRemoveOneQst (void *QstCod)
   {
    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,
-                                  Tst_PutParamsRemoveOnlyThisQst,QstCodPtr);
+                                  Tst_PutParamsRemoveOnlyThisQst,QstCod);
   }
 
 /*****************************************************************************/
@@ -5773,7 +5761,7 @@ void Tst_RequestRemoveOneQst (void)
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   Test.Question.QstCod = Tst_GetQstCod ();
+   Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
@@ -5814,11 +5802,11 @@ void Tst_RequestRemoveOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCodPtr)
+static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
   {
-   if (QstCodPtr)
+   if (QstCod)
      {
-      Tst_PutParamQstCod (QstCodPtr);
+      Tst_PutParamQstCod (QstCod);
       Par_PutHiddenParamChar ("OnlyThisQst",'Y');
      }
   }
@@ -5827,17 +5815,13 @@ static void Tst_PutParamsRemoveOnlyThisQst (void *QstCodPtr)
 /***** Put parameters to remove question when editing several questions ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *TestPtr)
+static void Tst_PutParamsRemoveOneQstWhileEditing (void *Test)
   {
-   struct Tst_Test *Test;
-
-   if (TestPtr)
+   if (Test)
      {
-      Test = (struct Tst_Test *) TestPtr;
-
-      Tst_PutParamQstCod (&Test->Question.QstCod);
+      Tst_PutParamQstCod (&(((struct Tst_Test *) Test)->Question.QstCod));
       Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst (Test);
+      Tst_WriteParamEditQst ((struct Tst_Test *) Test);
      }
   }
 
@@ -5852,7 +5836,7 @@ void Tst_RemoveOneQst (void)
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
-   QstCod = Tst_GetQstCod ();
+   QstCod = Tst_GetParamQstCod ();
    if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
@@ -5920,7 +5904,7 @@ void Tst_ChangeShuffleQst (void)
    Tst_TstConstructor (&Test);
 
    /***** Get the question code *****/
-   Test.Question.QstCod = Tst_GetQstCod ();
+   Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
@@ -5958,7 +5942,7 @@ void Tst_ChangeShuffleQst (void)
 /************ Get the parameter with the code of a test question *************/
 /*****************************************************************************/
 
-static long Tst_GetQstCod (void)
+long Tst_GetParamQstCod (void)
   {
    /***** Get code of test question *****/
    return Par_GetParToLong ("QstCod");
@@ -5976,7 +5960,7 @@ void Tst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
   }
 
 /*****************************************************************************/
-/******** Insert or update question, tags and anser in the database **********/
+/******** Insert or update question, tags and answer in the database *********/
 /*****************************************************************************/
 
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
