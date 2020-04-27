@@ -134,6 +134,8 @@ static void ExaSet_PutParamsOneQst (void *Exams);
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParamOrder (void);
 
+static unsigned ExaSet_GetNumQstsInSet (long SetCod);
+
 static void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Exa_RemoveExamFromAllTables (long ExaCod);
@@ -1036,6 +1038,20 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 	 Exams->Lst[NumExam].Selected = true;
       Exams->NumSelected = Exams->Num;
      }
+  }
+
+/*****************************************************************************/
+/********************* Get number of questions in a set **********************/
+/*****************************************************************************/
+
+static unsigned ExaSet_GetNumQstsInSet (long SetCod)
+  {
+   /***** Get number of questions in set from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of questions in a set",
+			     "SELECT COUNT(*) FROM exa_questions"
+			     " WHERE SetCod=%ld",
+			     SetCod);
   }
 
 /*****************************************************************************/
@@ -2741,9 +2757,9 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    NumQsts = (unsigned)
              DB_QuerySELECT (&mysql_res,"can not get exam questions",
 			      "SELECT exa_questions.QstCod"	// row[0]
-			      " FROM exa_questions,tst_questions"
+			      " FROM exa_questions LEFT JOIN tst_questions"	// LEFT JOIN because the question could be removed in table of test questions
+			      " ON (exa_questions.QstCod=tst_questions.QstCod)"
 			      " WHERE exa_questions.SetCod=%ld"
-			      " AND exa_questions.QstCod=tst_questions.QstCod"
 			      " ORDER BY tst_questions.Stem",
 			      Set->SetCod);
 
@@ -2904,7 +2920,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** Current number of questions in set *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Unsigned (Set.NumQstsToExam);	// TODO: Change to current number of questions in set
+      HTM_Unsigned (ExaSet_GetNumQstsInSet (Set.SetCod));
       HTM_TD_End ();
 
       /***** Number of questions to appear in exam *****/
