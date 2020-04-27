@@ -719,13 +719,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActShoExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
 
    [ActFrmNewExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,ExaSet_RequestCreatOrEditSet	,NULL},
-   [ActEdiOneExaSet	] = {1897,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestCreatOrEditSet	,NULL},
    [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RecFormSet		,NULL},
-   [ActChgExaSet	] = {1899,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RecFormSet		,NULL},
    [ActReqRemExaSet	] = {1893,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveSet	,NULL},
    [ActRemExaSet	] = {1894,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveSet		,NULL},
    [ActUp_ExaSet	] = {1895,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_MoveUpSet		,NULL},
    [ActDwnExaSet	] = {1896,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_MoveDownSet		,NULL},
+   [ActChgTitExaSet	] = {1897,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ChangeSetTitle		,NULL},
+   [ActChgNumQstExaSet	] = {1899,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RecFormSet		,NULL},
 
    [ActAddOneExaQst	] = {1885,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Exa_RequestNewQuestion		,NULL},
    [ActLstTstQstForExa	] = {1886,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListQuestionsToSelect	,NULL},
@@ -3709,9 +3709,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemExaSet,		// #1894
 	ActUp_ExaSet,		// #1895
 	ActDwnExaSet,		// #1896
-	ActEdiOneExaSet,	// #1897
+	ActChgTitExaSet,	// #1897
 	ActNewExaSet,		// #1898
-	ActChgExaSet,		// #1899
+	ActChgNumQstExaSet,	// #1899
 	};
 
 /*****************************************************************************/

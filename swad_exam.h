@@ -152,6 +152,8 @@ void Exa_UnhideExam (void);
 void Exa_RequestCreatOrEditExam (void);
 
 void ExaSet_RecFormSet (void);
+void ExaSet_ChangeSetTitle (void);
+
 void Exa_RecFormExam (void);
 bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 

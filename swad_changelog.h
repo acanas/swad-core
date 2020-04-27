@@ -544,11 +544,13 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.199.3 (2020-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.200 (2020-04-27)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-	Version 19.199.3: Apr 27, 2020	Changes moving sets of questions in an exam up and down. (? lines)
+	Version 19.200:   Apr 27, 2020	Text of actions related to exams.
+					Form to edit title of set of questions. (300526 lines)
+	Version 19.199.3: Apr 27, 2020	Changes moving sets of questions in an exam up and down. (299361 lines)
 					2 changes necessary in database:
 ALTER TABLE gam_questions CHANGE COLUMN QstInd QstInd INT NOT NULL;
 ALTER TABLE exa_sets CHANGE COLUMN SetInd SetInd INT NOT NULL;

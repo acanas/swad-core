@@ -139,7 +139,8 @@ static void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Exa_RemoveExamFromAllTables (long ExaCod);
 
-static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set);
+static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+                                            const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
 static bool Exa_CheckIfSimilarExamExists (const struct Exa_Exam *Exam);
 
 static void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
@@ -152,7 +153,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd);
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set);
-static bool ExaSet_CheckSetFieldsReceivedFromForm (const struct ExaSet_Set *Set);
+static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
+                                                  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 
 static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				    struct Exa_Exam *Exam,
@@ -163,7 +165,9 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
-static void ExaSet_UpdateSet (struct ExaSet_Set *Set);
+static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
+static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
+                                     const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
@@ -194,7 +198,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 static void ExaSet_PutTableHeadingForSets (void);
 
 static void ExaSet_ResetSet (struct ExaSet_Set *Set);
-static void Exa_PutParamSetCod (void *SetCod);
+// static void Exa_PutParamSetCod (void *SetCod);
 static void Exa_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						  long ExaCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
@@ -1453,7 +1457,8 @@ void Exa_UnhideExam (void)
 /************** Check if the title of a set of questions exists **************/
 /*****************************************************************************/
 
-static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set)
+static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+                                            const char Title[ExaSet_MAX_BYTES_TITLE + 1])
   {
    /***** Get number of set of questions with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar sets of questions",
@@ -1462,7 +1467,7 @@ static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set)
 			  " AND exa_sets.SetCod<>%ld"
 			  " AND exa_sets.ExaCod=exa_exams.ExaCod"
 			  " AND exa_exams.CrsCod=%ld",	// Extra check
-			  Set->ExaCod,Set->Title,
+			  Set->ExaCod,Title,
 			  Set->SetCod,
 			  Gbl.Hierarchy.Crs.CrsCod) != 0);
   }
@@ -1659,7 +1664,7 @@ void ExaSet_RecFormSet (void)
 
    /***** If I can edit exams ==> receive set from form *****/
    ExaSet_ReceiveSetFieldsFromForm (&Set);
-   if (ExaSet_CheckSetFieldsReceivedFromForm (&Set))
+   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,Set.Title))
      {
       /***** Create a new exam or update an existing one *****/
       if (ItsANewSet)
@@ -1685,31 +1690,92 @@ static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
                                                              0);
   }
 
-static bool ExaSet_CheckSetFieldsReceivedFromForm (const struct ExaSet_Set *Set)
+static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
+                                                  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_set_of_questions;
-   bool NewSetIsCorrect;
+   bool NewTitleIsCorrect;
 
    /***** Check if title is correct *****/
-   NewSetIsCorrect = true;
-   if (Set->Title[0])	// If there's an set title
+   NewTitleIsCorrect = true;
+   if (NewTitle[0])	// If there's an set title
      {
-      /* If title of set was in database... */
-      if (ExaSet_CheckIfSimilarSetExists (Set))
+      /***** Check if old and new titles are the same
+	     (this happens when return is pressed without changes) *****/
+      if (strcmp (Set->Title,NewTitle))	// Different titles
 	{
-	 NewSetIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
-			Set->Title);
+	 /* If title of set was in database... */
+	 if (ExaSet_CheckIfSimilarSetExists (Set,NewTitle))
+	   {
+	    NewTitleIsCorrect = false;
+	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
+			   Set->Title);
+	   }
 	}
      }
    else	// If there is not a set title
      {
-      NewSetIsCorrect = false;
+      NewTitleIsCorrect = false;
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_set_of_questions);
      }
 
-   return NewSetIsCorrect;
+   return NewTitleIsCorrect;
+  }
+
+/*****************************************************************************/
+/************* Receive form to change title of set of questions **************/
+/*****************************************************************************/
+
+void ExaSet_ChangeSetTitle (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   char NewTitle[ExaSet_MAX_BYTES_TITLE + 1];
+
+   /***** Check if I can edit exams *****/
+   if (!Exa_CheckIfICanEditExams ())
+      Lay_NoPermissionExit ();
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and set *****/
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.SetCod = ExaSet_GetParamSetCod ();
+   if (Set.SetCod <= 0)
+      Lay_WrongSetExit ();
+   Exams.SetCod = Set.SetCod;
+
+   /***** Get exam and set data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   ExaSet_GetDataOfSetByCod (&Set);
+
+   /***** Receive new title from form *****/
+   Par_GetParToText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
+
+   /***** Check if title should be changed *****/
+   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle))
+     {
+      /* Update the table changing old title by new title */
+      ExaSet_UpdateSetTitleDB (&Set,NewTitle);
+
+      /* Update title */
+      Str_Copy (Set.Title,NewTitle,
+		ExaSet_MAX_BYTES_TITLE);
+     }
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/
@@ -1949,7 +2015,7 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
 /******************** Update an existing set of questions ********************/
 /*****************************************************************************/
 
-static void ExaSet_UpdateSet (struct ExaSet_Set *Set)
+static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
   {
    extern const char *Txt_The_set_of_questions_has_been_modified;
 
@@ -1969,6 +2035,22 @@ static void ExaSet_UpdateSet (struct ExaSet_Set *Set)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_modified);
+  }
+
+/*****************************************************************************/
+/************************ Update set title in database ***********************/
+/*****************************************************************************/
+
+static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
+                                     const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
+  {
+   /***** Update set of questions changing old title by new title *****/
+   DB_QueryUPDATE ("can not update the title of a set of questions",
+		   "UPDATE exa_sets SET Title='%s'"
+		   " WHERE SetCod=%ld"
+		   " AND ExaCod=%ld",	// Extra check
+	           NewTitle,
+	           Set->SetCod,Set->ExaCod);
   }
 
 /*****************************************************************************/
@@ -2741,13 +2823,6 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       else
          Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
-      /* Put icon to edit the set */
-      if (ICanEditSets)
-	 // Ico_PutContextualIconToEdit (ActEdiOneExaSet,NULL,
-	 //                              Exa_PutParamSetCod,&Set.SetCod);
-	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,	// TODO: Change for ActEdiOneExaSet
-	                              Exa_PutParamSetCod,&Set.SetCod);
-
       HTM_TD_End ();
 
       /***** Index *****/
@@ -2758,7 +2833,12 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /***** Title *****/
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_ARTICLE_Begin (Anchor);
-      HTM_Txt (Set.Title);
+      Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
+      ExaSet_PutParamsOneSet (Exams);
+      HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,true,
+		      "id=\"Title\" required=\"required\""
+		      " class=\"TITLE_DESCRIPTION_WIDTH\"");
+      Frm_EndForm ();
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
@@ -2824,14 +2904,14 @@ static void ExaSet_ResetSet (struct ExaSet_Set *Set)
 /*****************************************************************************/
 /*************** Put parameter with set code to edit, remove... **************/
 /*****************************************************************************/
-
+/*
 static void Exa_PutParamSetCod (void *SetCod)	// Should be a pointer to long
   {
    if (SetCod)
       if (*((long *) SetCod) > 0)	// If set exists
 	 Par_PutHiddenParamLong (NULL,"SetCod",*((long *) SetCod));
   }
-
+*/
 /*****************************************************************************/
 /********************* List exam questions for edition ***********************/
 /*****************************************************************************/
