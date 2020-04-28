@@ -1534,6 +1534,10 @@ void ExaEvt_CreateNewEventTch (void)
    /* Get event title */
    Par_GetParToText ("Title",Event.Title,Exa_MAX_BYTES_TITLE);
 
+   /* Get start/end date-times */
+   Event.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   Event.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+
    /* Get groups associated to the event */
    Grp_GetParCodsSeveralGrps ();
 
@@ -1606,8 +1610,8 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
 				" VALUES "
 				"(%ld,"		// ExaCod
 				"%ld,"		// UsrCod
-				"NOW(),"	// StartTime
-				"NOW(),"	// EndTime
+                                "FROM_UNIXTIME(%ld),"	// Start time
+                                "FROM_UNIXTIME(%ld),"	// End time
 				"'%s',"		// Title
 				"0,"		// QstInd: Event has not started, so not the first question yet
 				"-1,"		// QstCod: Non-existent question
@@ -1618,6 +1622,8 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
 				"'N')",		// ShowUsrResults: Don't show user results initially
 				Event->ExaCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,	// Event creator
+				Event->TimeUTC[Dat_START_TIME],	// Start time
+				Event->TimeUTC[Dat_END_TIME  ],	// End time
 				Event->Title,
 				ExaEvt_ShowingStringsDB[ExaEvt_SHOWING_DEFAULT],
 				ExaEvt_NUM_COLS_DEFAULT);

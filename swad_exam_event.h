@@ -42,10 +42,10 @@
 typedef enum
   {
    ExaEvt_START,	// Start: don't show anything
-   ExaEvt_STEM,	// Showing only the question stem
+   ExaEvt_STEM,		// Showing only the question stem
    ExaEvt_ANSWERS,	// Showing the question stem and the answers
    ExaEvt_RESULTS,	// Showing the results
-   ExaEvt_END,	// End: don't show anything
+   ExaEvt_END,		// End: don't show anything
   } ExaEvt_Showing_t;
 #define ExaEvt_SHOWING_DEFAULT ExaEvt_START
 

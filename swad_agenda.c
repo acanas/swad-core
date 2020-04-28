@@ -35,6 +35,7 @@
 #include "swad_agenda.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_date.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -1239,10 +1240,10 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
       AgdEvent->Hidden = (row[2][0] == 'Y');
 
       /* Get start date (row[3] holds the start UTC time) */
-      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      AgdEvent->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date   (row[4] holds the end   UTC time) */
-      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      AgdEvent->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the event is past, present or future (row(5), row[6]) */
       AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
@@ -1263,8 +1264,8 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
       AgdEvent->AgdCod = -1L;
       AgdEvent->Public = false;
       AgdEvent->Hidden = false;
-      AgdEvent->TimeUTC[Agd_START_TIME] =
-      AgdEvent->TimeUTC[Agd_END_TIME  ] = (time_t) 0;
+      AgdEvent->TimeUTC[Dat_START_TIME] =
+      AgdEvent->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
       AgdEvent->TimeStatus = Dat_FUTURE;
       AgdEvent->Event[0]    = '\0';
       AgdEvent->Location[0] = '\0';
@@ -1591,8 +1592,8 @@ void Agd_RequestCreatOrEditEvent (void)
      {
       /* Initialize to empty event */
       AgdEvent.AgdCod = -1L;
-      AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
-      AgdEvent.TimeUTC[Agd_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      AgdEvent.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+      AgdEvent.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       AgdEvent.TimeStatus = Dat_FUTURE;
       AgdEvent.Event[0]    = '\0';
       AgdEvent.Location[0] = '\0';
@@ -1724,23 +1725,23 @@ void Agd_RecFormEvent (void)
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
    /***** Get start/end date-times *****/
-   AgdEvent.TimeUTC[Agd_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   AgdEvent.TimeUTC[Agd_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   AgdEvent.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   AgdEvent.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
-   /***** Get event *****/
+   /***** Get event location *****/
    Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
 
-   /***** Get event *****/
+   /***** Get event title *****/
    Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
 
-   /***** Get text *****/
+   /***** Get event description *****/
    Par_GetParToHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (AgdEvent.TimeUTC[Agd_START_TIME] == 0)
-      AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (AgdEvent.TimeUTC[Agd_END_TIME] == 0)
-      AgdEvent.TimeUTC[Agd_END_TIME] = AgdEvent.TimeUTC[Agd_START_TIME] + 2 * 60 * 60;	// +2 hours
+   if (AgdEvent.TimeUTC[Dat_START_TIME] == 0)
+      AgdEvent.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (AgdEvent.TimeUTC[Dat_END_TIME] == 0)
+      AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Location[0])	// If there is no event
@@ -1801,8 +1802,8 @@ static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt)
 				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s','%s')",
 				AgdEvent->UsrCod,
-				AgdEvent->TimeUTC[Agd_START_TIME],
-				AgdEvent->TimeUTC[Agd_END_TIME  ],
+				AgdEvent->TimeUTC[Dat_START_TIME],
+				AgdEvent->TimeUTC[Dat_END_TIME  ],
 				AgdEvent->Event,
 				AgdEvent->Location,
 				Txt);
@@ -1821,8 +1822,8 @@ static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
 		   "EndTime=FROM_UNIXTIME(%ld),"
 		   "Event='%s',Location='%s',Txt='%s'"
 		   " WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent->TimeUTC[Agd_START_TIME],
-                   AgdEvent->TimeUTC[Agd_END_TIME  ],
+                   AgdEvent->TimeUTC[Dat_START_TIME],
+                   AgdEvent->TimeUTC[Dat_END_TIME  ],
                    AgdEvent->Event,AgdEvent->Location,Txt,
                    AgdEvent->AgdCod,AgdEvent->UsrCod);
   }

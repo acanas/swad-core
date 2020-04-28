@@ -40,20 +40,13 @@
 #define Agd_MAX_CHARS_LOCATION	(128 - 1)	// 127
 #define Agd_MAX_BYTES_LOCATION	((Agd_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Agd_NUM_DATES 2
-typedef enum
-  {
-   Agd_START_TIME = 0,
-   Agd_END_TIME   = 1,
-  } Agd_StartOrEndTime_t;
-
 struct Agd_Event
   {
    long AgdCod;
    long UsrCod;
    bool Public;
    bool Hidden;
-   time_t TimeUTC[Agd_NUM_DATES];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    Dat_TimeStatus_t TimeStatus;
    char Event[Agd_MAX_BYTES_EVENT + 1];
    char Location[Agd_MAX_BYTES_LOCATION + 1];
