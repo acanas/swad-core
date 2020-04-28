@@ -107,6 +107,8 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct ExaEvt_Event *Event);
 long ExaEvt_GetParamEvtCod (void);
 
+void ExaEvt_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
+void ExaEvt_RequestNewEvent (void);
 void ExaEvt_CreateNewEventTch (void);
 void ExaEvt_ResumeEvent (void);
 void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,

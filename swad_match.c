@@ -291,7 +291,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
      {
       if (asprintf (&SubQuery," AND"
-			      "(MchCod NOT IN"
+			      " (MchCod NOT IN"
 			      " (SELECT MchCod FROM mch_groups)"
 			      " OR"
 			      " MchCod IN"
@@ -1412,7 +1412,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
 			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);

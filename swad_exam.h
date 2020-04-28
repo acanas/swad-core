@@ -182,9 +182,6 @@ void ExaSet_MoveDownSet (void);
 void ExaSet_RequestRemoveQstFromSet (void);
 void ExaSet_RemoveQstFromSet (void);
 
-void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
-void Exa_RequestNewEvent (void);
-
 unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);
 unsigned Exa_GetNumExams (Hie_Level_t Scope);
 double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope);

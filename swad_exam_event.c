@@ -141,13 +141,13 @@ static void ExaEvt_RemoveUsrEvtResultsInCrs (long UsrCod,long CrsCod,const char 
 static void ExaEvt_PutParamsPlay (void *EvtCod);
 static void ExaEvt_PutParamEvtCod (long EvtCod);
 
-static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam);
+static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ShowLstGrpsToCreateEvent (void);
 
 static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1]);
-static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod);
-static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
-			          const struct Tst_Question *Question);
+// static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod);
+// static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
+// 			             const struct Tst_Question *Question);
 static void ExaEvt_CreateGrps (long EvtCod);
 static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event);
 
@@ -285,6 +285,7 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
    char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumEvents;
+   struct ExaEvt_Event Event;
 
    /***** Get data of events from database *****/
    /* Fill subquery for exam */
@@ -352,16 +353,27 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Put button to play a new exam event in this exam *****/
+   /***** Put button to create a new exam event in this exam *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 if (PutFormNewEvent)
-	    ExaEvt_PutFormNewEvent (Exam);			// Form to fill in data and start playing a new exam event
+	   {
+	    /* Reset event */
+	    ExaEvt_ResetEvent (&Event);
+	    Event.ExaCod = Exam->ExaCod;
+	    Event.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;			// Now
+	    Event.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
+            Str_Copy (Event.Title,Exam->Title,
+                      Exa_MAX_BYTES_TITLE);
+
+	    /* Put form to create new event */
+	    ExaEvt_PutFormNewEvent (&Event);			// Form to fill in data and start playing a new exam event
+	   }
 	 else
-	    Exa_PutButtonNewEvent (Exams,Exam->ExaCod);	// Button to create a new exam event
+	    ExaEvt_PutButtonNewEvent (Exams,Exam->ExaCod);	// Button to create a new exam event
 	 break;
       default:
 	 break;
@@ -1078,7 +1090,7 @@ void ExaEvt_RequestRemoveEvent (void)
 
 void ExaEvt_RemoveEvent (void)
   {
-   extern const char *Txt_Match_X_removed;
+   extern const char *Txt_Event_X_removed;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -1101,7 +1113,7 @@ void ExaEvt_RemoveEvent (void)
    ExaEvt_RemoveEventFromAllTables (Event.EvtCod);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
 		  Event.Title);
 
    /***** Show current exam *****/
@@ -1322,19 +1334,26 @@ long ExaEvt_GetParamEvtCod (void)
 /* Put a big button to play exam event (start a new exam event) as a teacher */
 /*****************************************************************************/
 
-static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
+static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
   {
    extern const char *Hlp_ASSESSMENT_Exams_events;
    extern const char *Txt_New_event;
    extern const char *Txt_Title;
-   extern const char *Txt_Play;
+   extern const char *Txt_Create_event;
+   extern const char *Txt_Save_changes;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+     };
+   bool ItsANewEvent = true;	// TODO: To be used also to edit existing events
 
    /***** Start section for a new exam event *****/
    HTM_SECTION_Begin (ExaEvt_NEW_EVENT_SECTION_ID);
 
    /***** Begin form *****/
    Frm_StartForm (ActNewExaEvt);
-   Exa_PutParamExamCod (Exam->ExaCod);
+   Exa_PutParamExamCod (Event->ExaCod);
    Exa_PutParamQstInd (0);	// Start by first question in exam
 
    /***** Begin box and table *****/
@@ -1350,25 +1369,26 @@ static void ExaEvt_PutFormNewEvent (const struct Exa_Exam *Exam)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
+   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Event->Title,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
 
+   /***** Start and end dates *****/
+   Dat_PutFormStartEndClientLocalDateTimes (Event->TimeUTC,
+                                            Dat_FORM_SECONDS_ON,
+					    SetHMS);
+
    /***** Groups *****/
    ExaEvt_ShowLstGrpsToCreateEvent ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** Put icon to submit the form *****/
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
-		    Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** End table, send button and end box *****/
+   if (ItsANewEvent)
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
+   else
+      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1410,7 +1430,7 @@ static void ExaEvt_ShowLstGrpsToCreateEvent (void)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
 			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1436,6 +1456,51 @@ static void ExaEvt_ShowLstGrpsToCreateEvent (void)
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
+
+/*****************************************************************************/
+/********************* Put button to create a new event **********************/
+/*****************************************************************************/
+
+void ExaEvt_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod)
+  {
+   extern const char *Txt_New_event;
+
+   Exams->ExaCod = ExaCod;
+   Frm_StartFormAnchor (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID);
+   Exa_PutParams (Exams);
+   Btn_PutConfirmButton (Txt_New_event);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/************* Request the creation of a new event as a teacher **************/
+/*****************************************************************************/
+
+void ExaEvt_RequestNewEvent (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam *****/
+   Exa_ResetExam (&Exam);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   Exams.ExaCod = Exam.ExaCod;
+
+   /***** Show exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+                        true);	// Put form to start new event
   }
 
 /*****************************************************************************/
@@ -1532,7 +1597,7 @@ static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1])
 					 ExaEvt_NUM_COLS_DEFAULT);
 
    /***** Create indexes for answers *****/
-   ExaEvt_CreateIndexes (ExaCod,EvtCod);
+   // ExaEvt_CreateIndexes (ExaCod,EvtCod);
 
    /***** Create groups associated to the exam event *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1548,7 +1613,7 @@ static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1])
    the answers of each shufflable question are shuffled.
    The shuffling is stored in a table of indexes
    that will be read when showing an exam event */
-
+/*
 static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod)
   {
    MYSQL_RES *mysql_res;
@@ -1559,7 +1624,7 @@ static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod)
    long LongNum;
    unsigned QstInd;
 
-   /***** Get questions of the exam *****/
+   ***** Get questions of the exam *****
    NumQsts = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get questions of an exam",
 			     "SELECT exa_questions.QstCod,"	// row[0]
@@ -1572,55 +1637,55 @@ static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod)
 			     " ORDER BY exa_questions.QstInd",
 			     ExaCod);
 
-   /***** For each question in exam... *****/
+   ***** For each question in exam... *****
    for (NumQst = 0;
 	NumQst < NumQsts;
 	NumQst++)
      {
-      /***** Create test question *****/
+      ***** Create test question *****
       Tst_QstConstructor (&Question);
 
-      /***** Get question data *****/
+      ***** Get question data *****
       row = mysql_fetch_row (mysql_res);
-      /*
+      *
       exa_questions.QstCod	row[0]
       exa_questions.QstInd	row[1]
       tst_questions.AnsType	row[2]
       tst_questions.Shuffle	row[3]
-      */
+      *
 
-      /* Get question code (row[0]) */
+      * Get question code (row[0]) *
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /* Get question index (row[1]) */
+      * Get question index (row[1]) *
       if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong question index.");
       QstInd = (unsigned) LongNum;
 
-      /* Get answer type (row[2]) */
+      * Get answer type (row[2]) *
       Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
 	 Lay_ShowErrorAndExit ("Wrong answer type.");
 
-      /* Get shuffle (row[3]) */
+      * Get shuffle (row[3]) *
       Question.Answer.Shuffle = (row[3][0] == 'Y');
 
-      /***** Reorder answer *****/
+      ***** Reorder answer *****
       ExaEvt_ReorderAnswer (EvtCod,QstInd,&Question);
 
-      /***** Destroy test question *****/
+      ***** Destroy test question *****
       Tst_QstDestructor (&Question);
      }
 
-   /***** Free structure that stores the query result *****/
+   ***** Free structure that stores the query result *****
    DB_FreeMySQLResult (&mysql_res);
   }
-
+*/
 /*****************************************************************************/
 /**************** Reorder answers of an exam event question ******************/
 /*****************************************************************************/
-
+/*
 static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 			          const struct Tst_Question *Question)
   {
@@ -1633,10 +1698,10 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
-   /***** Initialize list of answers to empty string *****/
+   ***** Initialize list of answers to empty string *****
    StrAnswersOneQst[0] = '\0';
 
-   /***** Get questions of the exam *****/
+   ***** Get questions of the exam *****
    NumAnss = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get questions of an exam",
 			     "SELECT AnsInd"	// row[0]
@@ -1647,21 +1712,21 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 			     Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
 				                        "AnsInd");
 
-   /***** For each answer in question... *****/
+   ***** For each answer in question... *****
    for (NumAns = 0;
 	NumAns < NumAnss;
 	NumAns++)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get answer index (row[0]) */
+      * Get answer index (row[0]) *
       if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong answer index.");
       AnsInd = (unsigned) LongNum;
       snprintf (StrOneAnswer,sizeof (StrOneAnswer),
 		"%u",AnsInd);
 
-      /* Concatenate answer index to list of answers */
+      * Concatenate answer index to list of answers *
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
 		     TstRes_MAX_BYTES_ANSWERS_ONE_QST);
@@ -1669,10 +1734,10 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 		  TstRes_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
-   /***** Free structure that stores the query result *****/
+   ***** Free structure that stores the query result *****
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Create entry for this question in table of exam event indexes *****/
+   ***** Create entry for this question in table of exam event indexes *****
    DB_QueryINSERT ("can not create exam event indexes",
 		   "INSERT INTO exa_indexes"
 		   " (EvtCod,QstInd,Indexes)"
@@ -1680,7 +1745,7 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 		   " (%ld,%u,'%s')",
 		   EvtCod,QstInd,StrAnswersOneQst);
   }
-
+*/
 /*****************************************************************************/
 /***************** Get indexes for a question from database ******************/
 /*****************************************************************************/

@@ -1519,8 +1519,6 @@ void Exa_RequestCreatOrEditExam (void)
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    ItsANewExam = (Exam.ExaCod <= 0);
 
@@ -3691,51 +3689,6 @@ static bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
       return (bool) (Exam->NumEvts == 0);	// Exams with events should not be edited
    else
       return false;	// Questions are not editable
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new event **********************/
-/*****************************************************************************/
-
-void Exa_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod)
-  {
-   extern const char *Txt_New_event;
-
-   Exams->ExaCod = ExaCod;
-   Frm_StartFormAnchor (ActReqNewExaEvt,ExaEvt_NEW_EVENT_SECTION_ID);
-   Exa_PutParams (Exams);
-   Btn_PutConfirmButton (Txt_New_event);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************* Request the creation of a new event as a teacher **************/
-/*****************************************************************************/
-
-void Exa_RequestNewEvent (void)
-  {
-   struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
-   Exa_ResetExam (&Exam);
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-
-   /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true);	// Put form to start new event
   }
 
 /*****************************************************************************/

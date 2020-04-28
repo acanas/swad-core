@@ -679,8 +679,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActReqRemExaEvt	] = {1850,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestRemoveEvent	,NULL},
    [ActRemExaEvt	] = {1851,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RemoveEvent		,NULL},
-   [ActReqNewExaEvt	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestNewEvent		,NULL},
-   [ActNewExaEvt	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_CreateNewEventTch	,ExaEvt_ResumeEvent		,NULL},
+   [ActReqNewExaEvt	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestNewEvent		,NULL},
+   [ActNewExaEvt	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_CreateNewEventTch	,NULL},
    [ActResExaEvt	] = {1854,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ResumeEvent		,NULL},
    [ActBckExaEvt	] = {1855,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_BackEvent		,NULL},
    [ActPlyPauExaEvt	] = {1856,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_PlayPauseEvent		,NULL},
@@ -707,7 +707,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeAllExaEvtResEvt] = {1874,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllExaResultsInEvt	,NULL},
    [ActSeeOneExaEvtResOth] = {1875,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
 
-   [ActChgVisResExaEvtUsr] = {1876,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_ToggleVisibilResultsEvtUsr	,NULL},
+   [ActChgVisResExaEvtUsr] = {1876,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_ToggleVisibilResultsEvtUsr,NULL},
 
    [ActFrmNewExa	] = {1877,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestCreatOrEditExam	,NULL},
    [ActEdiOneExa	] = {1878,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestCreatOrEditExam	,NULL},
