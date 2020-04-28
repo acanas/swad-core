@@ -144,7 +144,7 @@ static void ExaEvt_PutParamEvtCod (long EvtCod);
 static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ShowLstGrpsToCreateEvent (void);
 
-static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1]);
+static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event);
 // static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod);
 // static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 // 			             const struct Tst_Question *Question);
@@ -1509,25 +1509,48 @@ void ExaEvt_RequestNewEvent (void)
 
 void ExaEvt_CreateNewEventTch (void)
   {
-   long ExaCod;
-   char Title[Exa_MAX_BYTES_TITLE + 1];
+   extern const char *Txt_Created_new_event_X;
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
 
-   /***** Get form parameters *****/
-   /* Get exam code */
-   if ((ExaCod = Exa_GetParamExamCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
 
-   /* Get exam event title */
-   Par_GetParToText ("Title",Title,Exa_MAX_BYTES_TITLE);
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
-   /* Get groups for this exams */
+   /***** Get parameters *****/
+   /* Get context */
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Lay_WrongExamExit ();
+
+   /* Get event title */
+   Par_GetParToText ("Title",Event.Title,Exa_MAX_BYTES_TITLE);
+
+   /* Get groups associated to the event */
    Grp_GetParCodsSeveralGrps ();
 
+   /***** Get exam data from database *****/
+   Exam.ExaCod = Exams.ExaCod;
+   Exa_GetDataOfExamByCod (&Exam);
+   Event.ExaCod = Exams.ExaCod = Exam.ExaCod;
+
    /***** Create a new exam event *****/
-   ExaEvt_SetEvtCodBeingPlayed (ExaEvt_CreateEvent (ExaCod,Title));
+   ExaEvt_CreateEvent (&Event);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+
+   /***** Write message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+		  Event.Title);
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+	                false);	// Do not put form to start new exam event
   }
 
 /*****************************************************************************/
@@ -1567,43 +1590,40 @@ void ExaEvt_ResumeEvent (void)
 /******************* Create a new exam event in an exam **********************/
 /*****************************************************************************/
 
-static long ExaEvt_CreateEvent (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1])
+static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
   {
-   long EvtCod;
-
    /***** Insert this new exam event into database *****/
-   EvtCod = DB_QueryINSERTandReturnCode ("can not create exam event",
-				         "INSERT exa_events "
-				         "(ExaCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,Showing,Countdown,"
-				         "NumCols,ShowQstResults,ShowUsrResults)"
-				         " VALUES "
-				         "(%ld,"	// ExaCod
-				         "%ld,"		// UsrCod
-				         "NOW(),"	// StartTime
-				         "NOW(),"	// EndTime
-				         "'%s',"	// Title
-				         "0,"		// QstInd: Event has not started, so not the first question yet
-				         "-1,"		// QstCod: Non-existent question
-				         "'%s',"	// Showing: What is being shown
-					 "-1,"		// Countdown: No countdown
-					 "%u,"		// NumCols: Number of columns in answers
-				         "'N',"		// ShowQstResults: Don't show question results initially
-				         "'N')",	// ShowUsrResults: Don't show user results initially
-				         ExaCod,
-				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Exam creator
-				         Title,
-					 ExaEvt_ShowingStringsDB[ExaEvt_SHOWING_DEFAULT],
-					 ExaEvt_NUM_COLS_DEFAULT);
+   Event->EvtCod =
+   DB_QueryINSERTandReturnCode ("can not create exam event",
+				"INSERT exa_events "
+				"(ExaCod,UsrCod,StartTime,EndTime,Title,"
+				"QstInd,QstCod,Showing,Countdown,"
+				"NumCols,ShowQstResults,ShowUsrResults)"
+				" VALUES "
+				"(%ld,"		// ExaCod
+				"%ld,"		// UsrCod
+				"NOW(),"	// StartTime
+				"NOW(),"	// EndTime
+				"'%s',"		// Title
+				"0,"		// QstInd: Event has not started, so not the first question yet
+				"-1,"		// QstCod: Non-existent question
+				"'%s',	"	// Showing: What is being shown
+				"-1,"		// Countdown: No countdown
+				"%u,"		// NumCols: Number of columns in answers
+				"'N',"		// ShowQstResults: Don't show question results initially
+				"'N')",		// ShowUsrResults: Don't show user results initially
+				Event->ExaCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,	// Event creator
+				Event->Title,
+				ExaEvt_ShowingStringsDB[ExaEvt_SHOWING_DEFAULT],
+				ExaEvt_NUM_COLS_DEFAULT);
 
    /***** Create indexes for answers *****/
    // ExaEvt_CreateIndexes (ExaCod,EvtCod);
 
    /***** Create groups associated to the exam event *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      ExaEvt_CreateGrps (EvtCod);
-
-   return EvtCod;
+      ExaEvt_CreateGrps (Event->EvtCod);
   }
 
 /*****************************************************************************/

@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.204.2 (2020-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 19.204.3 (2020-04-28)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.204.3: Apr 28, 2020	List updated exam events after creation. (300521 lines)
 	Version 19.204.2: Apr 28, 2020	Changes in creation of exam events. (300503 lines)
 	Version 19.204.1: Apr 28, 2020	Fixed problem in listing of set questions when questions have been removed. (300480 lines)
 	Version 19.204:   Apr 27, 2020	Remove question from set of questions. (300466 lines)
