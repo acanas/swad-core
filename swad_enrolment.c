@@ -557,7 +557,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 		   "CtyCod=%ld,"
 		   "LocalAddress='%s',LocalPhone='%s',"
 		   "FamilyAddress='%s',FamilyPhone='%s',"
-		   "OriginPlace='%s',Birthday=%s,"
+		   "Birthday=%s,"
 		   "Comments='%s'"
 		   " WHERE UsrCod=%ld",
 	           UsrDat->Password,
@@ -566,7 +566,6 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	           UsrDat->CtyCod,
 	           UsrDat->LocalAddress,UsrDat->LocalPhone,
 	           UsrDat->FamilyAddress,UsrDat->FamilyPhone,
-	           UsrDat->OriginPlace,
 	           BirthdayStrDB,
 	           UsrDat->Comments ? UsrDat->Comments :
 				      "",

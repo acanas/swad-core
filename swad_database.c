@@ -3328,7 +3328,7 @@ mysql> DESCRIBE usr_data;
 			"LocalPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
 			"FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
 			"FamilyPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
-			"OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS	// TODO: Remove, not yet used
 			"Birthday DATE,"
 			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
 			"Menu TINYINT NOT NULL DEFAULT 0,"

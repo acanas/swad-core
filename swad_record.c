@@ -127,7 +127,6 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm);
-static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm);
@@ -2348,9 +2347,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Address rows *****/
       if (ShowAddressRows)
 	{
-	 /***** Origin place *****/
-         Rec_ShowOriginPlace (UsrDat,ShowData,ICanEdit);
-
 	 /***** Date of birth *****/
          Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
 
@@ -3286,39 +3282,6 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   }
 
 /*****************************************************************************/
-/************************ Show user's place of origin ************************/
-/*****************************************************************************/
-
-static void Rec_ShowOriginPlace (struct UsrData *UsrDat,bool ShowData,bool PutForm)
-  {
-   extern const char *Txt_Place_of_origin;
-
-   /***** Origin place *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "OriginPlace" :
-				              NULL,
-		    Txt_Place_of_origin);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->OriginPlace,
-			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"OriginPlace\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->OriginPlace[0])
-	 HTM_Txt (UsrDat->OriginPlace);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
 /************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
@@ -3835,9 +3798,6 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 
    /***** Get country code *****/
    UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");
-
-   Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Usr_MAX_BYTES_ADDRESS);
-   Str_ConvertToTitleType (UsrDat->OriginPlace);
 
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
                         &(UsrDat->Birthday.Day  ),

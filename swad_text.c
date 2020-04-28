@@ -30347,27 +30347,6 @@ const char *Txt_Place =		// A particular spot or area
 	"Localiza&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Place_of_origin =
-#if   L==1	// ca
-	"Lugar de origen";	// Necessita traduccio
-#elif L==2	// de
-	"Herkunftsort";
-#elif L==3	// en
-	"Place of origin";
-#elif L==4	// es
-	"Lugar de origen";
-#elif L==5	// fr
-	"Lieu d'origine";
-#elif L==6	// gn
-	"Lugar de origen";	// Okoteve traducción
-#elif L==7	// it
-	"Luogo d'origine";
-#elif L==8	// pl
-	"Miejsce pochodzenia";
-#elif L==9	// pt
-	"Lugar de origem";
-#endif
-
 const char *Txt_Place_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Lloc <strong>%s</strong> eliminat.";

@@ -761,7 +761,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				"CtyCod,"
 				"LocalAddress,LocalPhone,"
 				"FamilyAddress,FamilyPhone,"
-				"OriginPlace,Birthday,Comments,"
+				"Birthday,Comments,"
 				"Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 				" VALUES"
 				" ('%s','%s',"
@@ -787,7 +787,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				Pri_VisibilityDB[UsrDat->ExPrfVisibility],
 				UsrDat->CtyCod,
 				UsrDat->LocalAddress ,UsrDat->LocalPhone,
-				UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
+				UsrDat->FamilyAddress,UsrDat->FamilyPhone,
 				BirthdayStrDB,
 				CommentsLength ? UsrDat->Comments :
 						 "",

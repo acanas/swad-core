@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.204.5 (2020-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 19.205 (2020-04-29)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.205:   Apr 29, 2020	Removed origin place in user's data. (300399 lines)
 	Version 19.204.5: Apr 28, 2020	Save start and end dates on creation of exam event. (300471 lines)
 	Version 19.204.4: Apr 28, 2020	Fixed bug in creation of new exam. (300470 lines)
 	Version 19.204.3: Apr 28, 2020	List updated exam events after creation. (300521 lines)

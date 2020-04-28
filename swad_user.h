@@ -192,7 +192,6 @@ struct UsrData
    Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
    Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
    long CtyCod;		// Country
-   char OriginPlace	[Usr_MAX_BYTES_ADDRESS + 1];
    struct Date Birthday;
    char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
    char LocalAddress	[Usr_MAX_BYTES_ADDRESS + 1];
