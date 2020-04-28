@@ -51586,27 +51586,6 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 	"Ocorreu um problema ao enviar um email automaticamente.";
 #endif
 
-const char *Txt_This_exam_has_no_sets_of_questions =
-#if   L==1	// ca
-	"Aquest examen no t&eacute; conjunts de preguntes.";
-#elif L==2	// de
-	"Dieses Pr&uuml;fung hat keine s&auml;tze von Fragen.";
-#elif L==3	// en
-	"This exam has no sets of questions.";
-#elif L==4	// es
-	"Este examen no tiene conjuntos de preguntas.";
-#elif L==5	// fr
-	"Cet examen n'a pas d'ensembles de questions.";
-#elif L==6	// gn
-	"Este examen no tiene conjuntos de preguntas.";	// Okoteve traducción
-#elif L==7	// it
-	"Questo esame non ha set di domande.";
-#elif L==8	// pl
-	"Ten egzamin nie ma zestaw&oacute;w pyta&nacute;.";
-#elif L==9	// pt
-	"Este exame n&atilde;o tem conjuntos de perguntas.";
-#endif
-
 const char *Txt_This_exam_has_no_questions =
 #if   L==1	// ca
 	"Aquest examen no t&eacute; preguntes.";
@@ -51626,27 +51605,6 @@ const char *Txt_This_exam_has_no_questions =
 	"Ten egzamin nie ma pytania.";
 #elif L==9	// pt
 	"Este exame n&atilde;o tem perguntas.";
-#endif
-
-const char *Txt_This_game_has_no_questions =
-#if   L==1	// ca
-	"Aquest joc no t&eacute; preguntes.";
-#elif L==2	// de
-	"Dieses Spiel hat keine Fragen.";
-#elif L==3	// en
-	"This game has no questions.";
-#elif L==4	// es
-	"Este juego no tiene preguntas.";
-#elif L==5	// fr
-	"Ce jeu n'a pas de questions.";
-#elif L==6	// gn
-	"Este juego no tiene preguntas.";	// Okoteve traducción
-#elif L==7	// it
-	"Questo gioco non ha domande.";
-#elif L==8	// pl
-	"Ta gra nie ma pytania.";
-#elif L==9	// pt
-	"Este jogo n&atilde;o tem perguntas.";
 #endif
 
 const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =

@@ -478,6 +478,10 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    struct Mch_Match Match;
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
+   /***** Trivial check *****/
+   if (!NumMatches)
+      return;
+
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
 

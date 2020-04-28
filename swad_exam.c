@@ -1535,11 +1535,6 @@ void Exa_RequestCreatOrEditExam (void)
 
    /***** Put form to create/edit an exam and show sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,ItsANewExam);
-
-   /***** Show exams or questions *****/
-   if (ItsANewExam)
-      /* Show exams again */
-      Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -1983,8 +1978,6 @@ void Exa_RecFormExam (void)
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    ItsANewExam = (Exam.ExaCod <= 0);
 
@@ -2691,7 +2684,6 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams_question_sets;
    extern const char *Txt_Sets_of_questions;
-   extern const char *Txt_This_exam_has_no_sets_of_questions;
    MYSQL_RES *mysql_res;
    unsigned MaxSetInd;
    unsigned NumSets;
@@ -2724,8 +2716,6 @@ static void ExaSet_ListExamSets (struct Exa_Exams *Exams,
                                           MaxSetInd,
                                           NumSets,mysql_res,
 				          ICanEditSets);
-   else		// This exam has no sets
-      Ale_ShowAlert (Ale_INFO,Txt_This_exam_has_no_sets_of_questions);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2807,6 +2797,10 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    MYSQL_ROW row;
    char *Anchor;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+
+   /***** Trivial check *****/
+   if (!NumSets)
+      return;
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -3433,7 +3427,6 @@ void ExaSet_MoveUpSet (void)
 void ExaSet_MoveDownSet (void)
   {
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_This_exam_has_no_sets_of_questions;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
@@ -3474,23 +3467,18 @@ void ExaSet_MoveDownSet (void)
    MaxSetInd = ExaSet_GetMaxSetIndexInExam (Exam.ExaCod);
 
    /***** Move down set *****/
-   if (MaxSetInd)
+   if (SetIndTop < MaxSetInd)
      {
-      if (SetIndTop < MaxSetInd)
-	{
-	 /* Indexes of sets to be exchanged */
-	 SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
-	 if (!SetIndBottom)
-	    Lay_ShowErrorAndExit ("Wrong index of set.");
+      /* Indexes of sets to be exchanged */
+      SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
+      if (!SetIndBottom)
+	 Lay_ShowErrorAndExit ("Wrong index of set.");
 
-	 /* Exchange sets */
-	 ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      /* Exchange sets */
+      ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_This_exam_has_no_sets_of_questions);
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,

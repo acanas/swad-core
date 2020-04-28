@@ -490,6 +490,10 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
    struct ExaEvt_Event Event;
    bool ICanEditEvents = ExaEvt_CheckIfICanEditEvents ();
 
+   /***** Trivial check *****/
+   if (!NumEvents)
+      return;
+
    /***** Reset event *****/
    ExaEvt_ResetEvent (&Event);
 

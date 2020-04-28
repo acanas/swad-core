@@ -1929,7 +1929,6 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
-   extern const char *Txt_This_game_has_no_questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    bool ICanEditQuestions = Gam_CheckIfEditable (Game);
@@ -1960,8 +1959,6 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
       Gam_ListOneOrMoreQuestionsForEdition (Games,
                                             Game->GamCod,NumQsts,mysql_res,
 					    ICanEditQuestions);
-   else	// This game has no questions
-      Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
 
    /***** Put button to add a new question in this game *****/
    if (ICanEditQuestions)		// I can edit questions
@@ -1999,6 +1996,10 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
    char *Anchor = NULL;
+
+   /***** Trivial check *****/
+   if (!NumQsts)
+      return;
 
    /***** Get maximum question index *****/
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
@@ -2427,7 +2428,6 @@ void Gam_MoveUpQst (void)
 void Gam_MoveDownQst (void)
   {
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_This_game_has_no_questions;
    struct Gam_Games Games;
    struct Gam_Game Game;
    unsigned QstIndTop;
@@ -2456,23 +2456,18 @@ void Gam_MoveDownQst (void)
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
    /***** Move down question *****/
-   if (MaxQstInd)
+   if (QstIndTop < MaxQstInd)
      {
-      if (QstIndTop < MaxQstInd)
-	{
-	 /* Indexes of questions to be exchanged */
-	 QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
-	 if (!QstIndBottom)
-	    Lay_ShowErrorAndExit ("Wrong index of question.");
+      /* Indexes of questions to be exchanged */
+      QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+      if (!QstIndBottom)
+	 Lay_ShowErrorAndExit ("Wrong index of question.");
 
-	 /* Exchange questions */
-	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      /* Exchange questions */
+      Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
